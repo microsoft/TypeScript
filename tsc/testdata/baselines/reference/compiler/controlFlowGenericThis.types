@@ -1,0 +1,214 @@
+//// [tests/cases/compiler/controlFlowGenericThis.ts] ////
+
+=== controlFlowGenericThis.ts ===
+type Type = I32 | Str;
+>Type : Type
+
+interface Str { group: "none"; kind: "str"; }
+>group : "none"
+>kind : "str"
+
+interface I32 { group: "scalar"; kind: "i32"; }
+>group : "scalar"
+>kind : "i32"
+
+function testThis<T extends Type>(this: T) {
+>testThis : <T extends Type>(this: T) => void
+>this : T
+
+    switch (this.group) {
+>this.group : "none" | "scalar"
+>this : Type
+>group : "none" | "scalar"
+
+        case "none": return;
+>"none" : "none"
+
+        case "scalar":
+>"scalar" : "scalar"
+
+            switch (this.kind) {
+>this.kind : "i32"
+>this : I32
+>kind : "i32"
+
+                case "str": // Error, just as for an ordinary parameter.
+>"str" : "str"
+
+                case "i32":
+>"i32" : "i32"
+            }
+    }
+}
+
+function testParameter<T extends Type>(o: T) {
+>testParameter : <T extends Type>(o: T) => void
+>o : T
+
+    switch (o.group) {
+>o.group : "none" | "scalar"
+>o : Type
+>group : "none" | "scalar"
+
+        case "none": return;
+>"none" : "none"
+
+        case "scalar":
+>"scalar" : "scalar"
+
+            switch (o.kind) {
+>o.kind : "i32"
+>o : I32
+>kind : "i32"
+
+                case "str":
+>"str" : "str"
+
+                case "i32":
+>"i32" : "i32"
+            }
+    }
+}
+
+function testAliasedThis<T extends Type>(this: T) {
+>testAliasedThis : <T extends Type>(this: T) => void
+>this : T
+
+    const o = this;
+>o : T
+>this : T
+
+    switch (o.group) {
+>o.group : "none" | "scalar"
+>o : Type
+>group : "none" | "scalar"
+
+        case "none": return;
+>"none" : "none"
+
+        case "scalar":
+>"scalar" : "scalar"
+
+            switch (o.kind) {
+>o.kind : "i32"
+>o : I32
+>kind : "i32"
+
+                case "str":
+>"str" : "str"
+
+                case "i32":
+>"i32" : "i32"
+            }
+    }
+}
+
+function testAccess<T extends Type>(this: T): T {
+>testAccess : <T extends Type>(this: T) => T
+>this : T
+
+    if (this.group === "scalar") {
+>this.group === "scalar" : boolean
+>this.group : "none" | "scalar"
+>this : Type
+>group : "none" | "scalar"
+>"scalar" : "scalar"
+
+        const kind: "i32" = this.kind;
+>kind : "i32"
+>this.kind : "i32"
+>this : I32
+>kind : "i32"
+
+        const indexedKind: "i32" = this["kind"];
+>indexedKind : "i32"
+>this["kind"] : "i32"
+>this : I32
+>"kind" : "kind"
+
+        const arrow = () => {
+>arrow : () => void
+>() => {            const kind: "i32" = this.kind;        } : () => void
+
+            const kind: "i32" = this.kind;
+>kind : "i32"
+>this.kind : "i32"
+>this : I32
+>kind : "i32"
+
+        };
+        return this;
+>this : T
+    }
+    const kind: "str" = this.kind;
+>kind : "str"
+>this.kind : "str"
+>this : Str
+>kind : "str"
+
+    return this;
+>this : T
+}
+
+function testAliasedAccess<T extends Type>(this: T): T {
+>testAliasedAccess : <T extends Type>(this: T) => T
+>this : T
+
+    const o = this;
+>o : T
+>this : T
+
+    if (o.group === "scalar") {
+>o.group === "scalar" : boolean
+>o.group : "none" | "scalar"
+>o : Type
+>group : "none" | "scalar"
+>"scalar" : "scalar"
+
+        const kind: "i32" = o.kind;
+>kind : "i32"
+>o.kind : "i32"
+>o : I32
+>kind : "i32"
+
+        const indexedKind: "i32" = o["kind"];
+>indexedKind : "i32"
+>o["kind"] : "i32"
+>o : I32
+>"kind" : "kind"
+
+        const arrow = () => {
+>arrow : () => void
+>() => {            const kind: "i32" = o.kind;        } : () => void
+
+            const kind: "i32" = o.kind;
+>kind : "i32"
+>o.kind : "i32"
+>o : I32
+>kind : "i32"
+
+        };
+        return o;
+>o : T
+    }
+    const kind: "str" = o.kind;
+>kind : "str"
+>o.kind : "str"
+>o : Str
+>kind : "str"
+
+    return o;
+>o : T
+}
+
+function testGenericIndex<T extends Type, K extends keyof T>(this: T, key: K): T[K] {
+>testGenericIndex : <T extends Type, K extends keyof T>(this: T, key: K) => T[K]
+>this : T
+>key : K
+
+    return this[key];
+>this[key] : T[K]
+>this : T
+>key : K
+}
+
