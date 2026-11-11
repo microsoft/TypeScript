@@ -5,6 +5,7 @@ import (
 	"slices"
 	"strings"
 	"unicode"
+	"unicode/utf8"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/astnav"
@@ -394,7 +395,8 @@ func (t *Tracker) getAdjustedEndPosition(sourceFile *ast.SourceFile, node *ast.N
 
 	newEnd := scanner.SkipTriviaEx(sourceFile.Text(), node.End(), &scanner.SkipTriviaOptions{StopAfterLineBreak: true})
 
-	if newEnd != node.End() && (TrailingTriviaOption == TrailingTriviaOptionInclude || stringutil.IsLineBreak(rune(sourceFile.Text()[newEnd-1]))) {
+	lastRune, _ := utf8.DecodeLastRuneInString(sourceFile.Text()[:newEnd])
+	if newEnd != node.End() && (TrailingTriviaOption == TrailingTriviaOptionInclude || stringutil.IsLineBreak(lastRune)) {
 		return newEnd
 	}
 	return node.End()

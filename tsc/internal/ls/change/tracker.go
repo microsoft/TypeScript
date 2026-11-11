@@ -3,6 +3,7 @@ package change
 import (
 	"context"
 	"slices"
+	"unicode/utf8"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/astnav"
@@ -498,9 +499,13 @@ func (t *Tracker) InsertNodeInListAfter(sourceFile *ast.SourceFile, after *ast.N
 		indentation := format.FindFirstNonWhitespaceColumn(afterStartLinePosition, afterStart, sourceFile, t.formatSettings)
 		// insert element before the line break on the line that contains 'after' element
 		insertPos := scanner.SkipTriviaEx(sourceFile.Text(), end, &scanner.SkipTriviaOptions{StopAfterLineBreak: true, StopAtComments: false})
-		// find position before "\n" or "\r\n"
-		for insertPos != end && stringutil.IsLineBreak(rune(sourceFile.Text()[insertPos-1])) {
-			insertPos--
+		// find position before the line break
+		for insertPos != end {
+			lastRune, size := utf8.DecodeLastRuneInString(sourceFile.Text()[end:insertPos])
+			if !stringutil.IsLineBreak(lastRune) {
+				break
+			}
+			insertPos -= size
 		}
 		insertLSPos := core.TextPos(insertPos)
 		t.ReplaceRange(
