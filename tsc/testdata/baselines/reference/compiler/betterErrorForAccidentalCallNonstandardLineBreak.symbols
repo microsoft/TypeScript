@@ -1,0 +1,42 @@
+//// [tests/cases/compiler/betterErrorForAccidentalCallNonstandardLineBreak.ts] ////
+
+=== betterErrorForAccidentalCallNonstandardLineBreak.ts ===
+// Repro from #65433 with U+2028 (Line Separator)
+const a = (x: number) => x
+>a : Symbol(a, Decl(betterErrorForAccidentalCallNonstandardLineBreak.ts, 1, 5))
+>x : Symbol(x, Decl(betterErrorForAccidentalCallNonstandardLineBreak.ts, 1, 11))
+>x : Symbol(x, Decl(betterErrorForAccidentalCallNonstandardLineBreak.ts, 1, 11))
+
+(1);
+
+// With U+2029 (Paragraph Separator)
+const b = (x: number) => x
+>b : Symbol(b, Decl(betterErrorForAccidentalCallNonstandardLineBreak.ts, 5, 5))
+>x : Symbol(x, Decl(betterErrorForAccidentalCallNonstandardLineBreak.ts, 5, 11))
+>x : Symbol(x, Decl(betterErrorForAccidentalCallNonstandardLineBreak.ts, 5, 11))
+
+(1);
+
+declare function foo(): string;
+>foo : Symbol(foo, Decl(betterErrorForAccidentalCallNonstandardLineBreak.ts, 6, 4))
+
+foo()
+>foo : Symbol(foo, Decl(betterErrorForAccidentalCallNonstandardLineBreak.ts, 6, 4))
+
+(1 as number).toString();
+
+foo()
+>foo : Symbol(foo, Decl(betterErrorForAccidentalCallNonstandardLineBreak.ts, 6, 4))
+
+(1 as number).toString();
+
+foo()
+>foo : Symbol(foo, Decl(betterErrorForAccidentalCallNonstandardLineBreak.ts, 6, 4))
+
+   (1 + 2).toString();
+
+foo() // comment
+>foo : Symbol(foo, Decl(betterErrorForAccidentalCallNonstandardLineBreak.ts, 6, 4))
+
+(1 as number).toString();
+

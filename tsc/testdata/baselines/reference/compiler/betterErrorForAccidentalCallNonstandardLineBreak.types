@@ -1,0 +1,77 @@
+//// [tests/cases/compiler/betterErrorForAccidentalCallNonstandardLineBreak.ts] ////
+
+=== betterErrorForAccidentalCallNonstandardLineBreak.ts ===
+// Repro from #65433 with U+2028 (Line Separator)
+const a = (x: number) => x
+>a : (x: number) => any
+>(x: number) => x(1) : (x: number) => any
+>x : number
+>x(1) : any
+>x : number
+
+(1);
+>1 : 1
+
+// With U+2029 (Paragraph Separator)
+const b = (x: number) => x
+>b : (x: number) => any
+>(x: number) => x(1) : (x: number) => any
+>x : number
+>x(1) : any
+>x : number
+
+(1);
+>1 : 1
+
+declare function foo(): string;
+>foo : () => string
+
+foo()
+>foo()(1 as number).toString() : any
+>foo()(1 as number).toString : any
+>foo()(1 as number) : any
+>foo() : string
+>foo : () => string
+
+(1 as number).toString();
+>1 as number : number
+>1 : 1
+>toString : any
+
+foo()
+>foo()(1 as number).toString() : any
+>foo()(1 as number).toString : any
+>foo()(1 as number) : any
+>foo() : string
+>foo : () => string
+
+(1 as number).toString();
+>1 as number : number
+>1 : 1
+>toString : any
+
+foo()
+>foo()   (1 + 2).toString() : any
+>foo()   (1 + 2).toString : any
+>foo()   (1 + 2) : any
+>foo() : string
+>foo : () => string
+
+   (1 + 2).toString();
+>1 + 2 : number
+>1 : 1
+>2 : 2
+>toString : any
+
+foo() // comment
+>foo() // comment(1 as number).toString() : any
+>foo() // comment(1 as number).toString : any
+>foo() // comment(1 as number) : any
+>foo() : string
+>foo : () => string
+
+(1 as number).toString();
+>1 as number : number
+>1 : 1
+>toString : any
+

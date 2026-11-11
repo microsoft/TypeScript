@@ -2388,6 +2388,13 @@ func SkipTriviaEx(text string, pos int, options *SkipTriviaOptions) int {
 			}
 			canConsumeStar = options.InJSDoc
 			continue
+		case 0x2028, 0x2029:
+			pos += size
+			if options.StopAfterLineBreak {
+				return pos
+			}
+			canConsumeStar = options.InJSDoc
+			continue
 		case '\t', '\v', '\f', ' ':
 			pos++
 			continue

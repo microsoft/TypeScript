@@ -12,6 +12,7 @@ import (
 	"strings"
 	"sync"
 	"sync/atomic"
+	"unicode/utf8"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/binder"
@@ -8774,8 +8775,12 @@ func (c *Checker) resolveCallExpression(node *ast.Node, candidatesOutArray *[]*S
 			if len(node.Arguments()) == 1 {
 				text := ast.GetSourceFileOfNode(node).Text()
 				options := scanner.SkipTriviaOptions{StopAfterLineBreak: true}
-				if stringutil.IsLineBreak(rune(text[scanner.SkipTriviaEx(text, node.Expression().End(), &options)-1])) {
-					relatedInformation = createDiagnosticForNode(node.Expression(), diagnostics.Are_you_missing_a_semicolon)
+				pos := scanner.SkipTriviaEx(text, node.Expression().End(), &options)
+				if pos > node.Expression().End() {
+					prevRune, _ := utf8.DecodeLastRuneInString(text[:pos])
+					if stringutil.IsLineBreak(prevRune) {
+						relatedInformation = createDiagnosticForNode(node.Expression(), diagnostics.Are_you_missing_a_semicolon)
+					}
 				}
 			}
 			c.invocationError(node.Expression(), apparentType, SignatureKindCall, relatedInformation)

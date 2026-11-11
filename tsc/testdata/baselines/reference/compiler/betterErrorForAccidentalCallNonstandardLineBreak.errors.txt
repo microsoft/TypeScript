@@ -1,0 +1,61 @@
+betterErrorForAccidentalCallNonstandardLineBreak.ts(2,26): error TS2349: This expression is not callable.
+  Type 'Number' has no call signatures.
+betterErrorForAccidentalCallNonstandardLineBreak.ts(6,26): error TS2349: This expression is not callable.
+  Type 'Number' has no call signatures.
+betterErrorForAccidentalCallNonstandardLineBreak.ts(11,1): error TS2349: This expression is not callable.
+  Type 'String' has no call signatures.
+betterErrorForAccidentalCallNonstandardLineBreak.ts(14,1): error TS2349: This expression is not callable.
+  Type 'String' has no call signatures.
+betterErrorForAccidentalCallNonstandardLineBreak.ts(17,1): error TS2349: This expression is not callable.
+  Type 'String' has no call signatures.
+betterErrorForAccidentalCallNonstandardLineBreak.ts(20,1): error TS2349: This expression is not callable.
+  Type 'String' has no call signatures.
+
+
+==== betterErrorForAccidentalCallNonstandardLineBreak.ts (6 errors) ====
+    // Repro from #65433 with U+2028 (Line Separator)
+    const a = (x: number) => x
+                             ~
+!!! error TS2349: This expression is not callable.
+!!! error TS2349:   Type 'Number' has no call signatures.
+!!! related TS2734 betterErrorForAccidentalCallNonstandardLineBreak.ts:2:26: Are you missing a semicolon?
+    (1);
+    
+    // With U+2029 (Paragraph Separator)
+    const b = (x: number) => x
+                             ~
+!!! error TS2349: This expression is not callable.
+!!! error TS2349:   Type 'Number' has no call signatures.
+!!! related TS2734 betterErrorForAccidentalCallNonstandardLineBreak.ts:6:26: Are you missing a semicolon?
+    (1);
+    
+    declare function foo(): string;
+    
+    foo()
+    ~~~~~
+!!! error TS2349: This expression is not callable.
+!!! error TS2349:   Type 'String' has no call signatures.
+!!! related TS2734 betterErrorForAccidentalCallNonstandardLineBreak.ts:11:1: Are you missing a semicolon?
+    (1 as number).toString();
+    
+    foo()
+    ~~~~~
+!!! error TS2349: This expression is not callable.
+!!! error TS2349:   Type 'String' has no call signatures.
+!!! related TS2734 betterErrorForAccidentalCallNonstandardLineBreak.ts:14:1: Are you missing a semicolon?
+    (1 as number).toString();
+    
+    foo()
+    ~~~~~
+!!! error TS2349: This expression is not callable.
+!!! error TS2349:   Type 'String' has no call signatures.
+!!! related TS2734 betterErrorForAccidentalCallNonstandardLineBreak.ts:17:1: Are you missing a semicolon?
+       (1 + 2).toString();
+    
+    foo() // comment
+    ~~~~~
+!!! error TS2349: This expression is not callable.
+!!! error TS2349:   Type 'String' has no call signatures.
+!!! related TS2734 betterErrorForAccidentalCallNonstandardLineBreak.ts:20:1: Are you missing a semicolon?
+    (1 as number).toString();
+    

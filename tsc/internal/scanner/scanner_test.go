@@ -173,3 +173,34 @@ func TestRegExpLiteralReplacementCharacterInClassRange(t *testing.T) {
 		})
 	}
 }
+
+func TestSkipTriviaStopAfterLineBreak(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name     string
+		text     string
+		pos      int
+		expected int
+	}{
+		{name: "LF", text: "x\n(1)", pos: 1, expected: 2},
+		{name: "CRLF", text: "x\r\n(1)", pos: 1, expected: 3},
+		{name: "CR", text: "x\r(1)", pos: 1, expected: 2},
+		{name: "LineSeparator U+2028", text: "x\u2028(1)", pos: 1, expected: 4},
+		{name: "ParagraphSeparator U+2029", text: "x\u2029(1)", pos: 1, expected: 4},
+		{name: "U+2028 with trailing spaces", text: "x\u2028   (1)", pos: 1, expected: 4},
+		{name: "U+2029 with trailing spaces", text: "x\u2029   (1)", pos: 1, expected: 4},
+		{name: "spaces then U+2028", text: "x   \u2028(1)", pos: 1, expected: 7},
+		{name: "single line comment before U+2028", text: "x // note\u2028(1)", pos: 1, expected: 12},
+		{name: "spaces only", text: "x   (1)", pos: 1, expected: 4},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+			options := SkipTriviaOptions{StopAfterLineBreak: true}
+			actual := SkipTriviaEx(test.text, test.pos, &options)
+			assert.Equal(t, actual, test.expected)
+		})
+	}
+}
