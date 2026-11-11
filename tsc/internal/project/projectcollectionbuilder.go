@@ -256,6 +256,13 @@ func (b *ProjectCollectionBuilder) HandleAPIRequest(apiRequest *APISnapshotReque
 		}
 	}
 
+	// Projects that are still the default for API-opened files must be retained.
+	for path, file := range b.apiState.openFiles {
+		if entry := b.findDefaultConfiguredProject(file.fileName, path); entry != nil {
+			delete(projectsToClose, entry.Value().configFilePath)
+		}
+	}
+
 	for projectPath := range projectsToClose {
 		if entry, ok := b.configuredProjects.Load(ConfiguredProjectIDFromPathKey(projectPath)); ok {
 			b.deleteProject(entry, logger)
@@ -408,9 +415,19 @@ func (b *ProjectCollectionBuilder) DidChangeFiles(summary FileChangeSummary, log
 	deletedFiles := toPaths(summary.Deleted)
 	createdFiles := toPaths(summary.Created)
 	if b.contentMapperHost != nil {
-		allWatchChanges := slices.Concat(changedFiles, deletedFiles, createdFiles)
+		// Mapper processes read from disk, so overlay-only changes cannot affect their configuration.
+		allWatchChanges := toPaths(summary.DiskChanged)
+		for uri := range summary.Changed.Keys() {
+			path := uri.PathKey(b.base.caseSensitivity)
+			if _, hasOverlay := b.overlays[path]; !hasOverlay && !summary.DiskChanged.Has(uri) {
+				allWatchChanges = append(allWatchChanges, path)
+			}
+		}
+		allWatchChanges = append(allWatchChanges, deletedFiles...)
+		refreshAll := summary.InvalidateAll || len(allWatchChanges) > excessiveChangeThreshold
+		allWatchChanges = append(allWatchChanges, createdFiles...)
 		b.forEachProject(func(entry dirty.Value[*Project]) bool {
-			b.refreshContentMapperProjectForChanges(entry, allWatchChanges, summary.HasExcessiveNonCreateWatchEvents(), logger)
+			b.refreshContentMapperProjectForChanges(entry, allWatchChanges, refreshAll, logger)
 			return true
 		})
 	}
@@ -505,7 +522,7 @@ func (b *ProjectCollectionBuilder) refreshContentMapperProjectForChanges(entry d
 // solution tree built for a freshly opened overlay file). Every other configured
 // project is deleted, the inferred project roots are recomputed, and the config file
 // registry is cleaned up. This is the shared mechanism that keeps the set of loaded
-// projects minimal for both LSP file opens and API file opens/closes.
+// projects minimal for LSP file opens, idle cleanup, and API file opens/closes.
 func (b *ProjectCollectionBuilder) cleanupConfiguredProjects(retain *collections.Set[tspath.PathKey], logger *logging.LogTree) {
 	var toRemoveProjects collections.Set[tspath.PathKey]
 	b.configuredProjects.Range(func(entry *dirty.SyncMapEntry[ConfiguredProjectID, *Project]) bool {
@@ -745,7 +762,7 @@ func (b *ProjectCollectionBuilder) DidRequestProjectTrees(projectTreeRequest *Pr
 	})
 
 	var seenProjects collections.SyncSet[ConfiguredProjectID]
-	wg := core.NewWorkGroup(false)
+	wg := core.NewWorkGroup(0)
 	for _, projectId := range currentProjects {
 		wg.Queue(func() {
 			if entry, ok := b.configuredProjects.Load(projectId); ok {

@@ -108,6 +108,6 @@ func (h *compilerHost) ContentMapperProject() contentmapper.Project {
 }
 
 func (h *compilerHost) GetResolvedProjectReference(fileName tspath.RootedFilePath, path tspath.PathKey) *tsoptions.ParsedCommandLine {
-	commandLine, _ := tsoptions.GetParsedCommandLineOfConfigFilePath(fileName, path, nil, nil /*optionsRaw*/, h.fs, h.extendedConfigCache)
+	commandLine, _ := tsoptions.GetParsedCommandLineOfConfigFilePath(fileName, path, nil, nil /*optionsRaw*/, tsoptions.NewDefaultParseConfigHost(h.fs), h.extendedConfigCache)
 	return commandLine
 }

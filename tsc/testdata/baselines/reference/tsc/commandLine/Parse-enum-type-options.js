@@ -2,7 +2,7 @@ currentDirectory::/home/src/workspaces/project
 useCaseSensitiveFileNames::true
 Input::
 
-tsgo --moduleResolution nodenext  first.ts --module nodenext --target esnext --moduleDetection auto --jsx react --newLine crlf
+tsc --moduleResolution nodenext  first.ts --module nodenext --target esnext --moduleDetection auto --jsx react --newLine crlf
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [91merror[0m[90m TS6053: [0mFile 'first.ts' not found.

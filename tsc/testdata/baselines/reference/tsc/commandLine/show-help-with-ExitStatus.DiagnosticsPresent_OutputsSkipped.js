@@ -2,11 +2,11 @@ currentDirectory::/home/src/workspaces/project
 useCaseSensitiveFileNames::true
 Input::
 
-tsgo 
+tsc 
 ExitStatus:: DiagnosticsPresent_OutputsSkipped
 Output::
 Version FakeTSVersion
-tsc: The TypeScript Compiler - Version FakeTSVersion                                                                   [44m     [39;49m
+tsc: The TypeScript Compiler - Version FakeTSVersion                                                               [44m     [39;49m
                                                                                                                    [44m[97m  TS [39m[39;49m
 [1mCOMMON COMMANDS[22m
 

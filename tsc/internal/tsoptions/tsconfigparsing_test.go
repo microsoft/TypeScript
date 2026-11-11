@@ -7,7 +7,9 @@ import (
 	"path/filepath"
 	"slices"
 	"strings"
+	"sync/atomic"
 	"testing"
+	"time"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
@@ -25,6 +27,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/osvfs"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs/wrapvfs"
 	"gotest.tools/v3/assert"
 )
 
@@ -253,6 +256,48 @@ var parseJsonConfigFileTests = []parseJsonConfigTestCase{
 			jsonText: `{
                 "include": ["**/../*.ts"]
             }`,
+			configFileName: "/apath/tsconfig.json",
+			basePath:       "/apath",
+			allFileList:    map[string]string{"/apath/main.ts": ""},
+		}},
+	},
+	{
+		title:                  "reports errors for network paths",
+		includeCompilerOptions: true,
+		input: []testConfig{{
+			jsonText: `{
+                "extends": ["//server/share/base.json", "\\\\?\\UNC\\server\\share\\base.json"],
+                "compilerOptions": {
+                    "outDir": "\\\\server\\share\\out",
+                    "rootDir": "./src",
+                    "typeRoots": ["./types", "\\??\\UNC\\server\\share\\types"],
+                    "mapRoot": "//server/share/maps",
+                    "declarationDir": "/x/../??/UNC/server/share/decl",
+                    "baseUrl": "/??/../apath"
+                },
+                "files": ["main.ts", "//server/share/a.ts", "../??/UNC/server/share/b.ts"],
+                "include": ["src", "\\\\.\\GLOBALROOT\\Device\\Mup\\server\\share"],
+                "exclude": ["//server/share/excluded", "../??/*.ts"],
+                "references": [{ "path": "//server/share/project" }]
+            }`,
+			configFileName: "/apath/tsconfig.json",
+			basePath:       "/apath",
+			allFileList:    map[string]string{"/apath/main.ts": "", "/apath/src/index.ts": ""},
+		}},
+	},
+	{
+		title: "reports errors for network path in string extends",
+		input: []testConfig{{
+			jsonText:       `{ "extends": "\\\\server\\share\\base.json" }`,
+			configFileName: "/apath/tsconfig.json",
+			basePath:       "/apath",
+			allFileList:    map[string]string{"/apath/main.ts": ""},
+		}},
+	},
+	{
+		title: "reports errors for normalized network path in string extends",
+		input: []testConfig{{
+			jsonText:       `{ "extends": "/x/../??/UNC/server/share/base.json" }`,
 			configFileName: "/apath/tsconfig.json",
 			basePath:       "/apath",
 			allFileList:    map[string]string{"/apath/main.ts": ""},
@@ -871,7 +916,7 @@ func TestParseJsonConfigFileContentAcceptsJsonRepresentations(t *testing.T) {
 			t.Parallel()
 			parsed := tsoptions.ParseJsonConfigFileContent(
 				json,
-				fs,
+				tsoptions.NewDefaultParseConfigHost(fs),
 				"/project",
 				nil,
 				"/project/tsconfig.json",
@@ -898,7 +943,7 @@ func TestParseJsonConfigFileContentPreservesRaw(t *testing.T) {
 			"customSetting": map[string]any{"enabled": true},
 			"compileOnSave": true,
 		},
-		fs,
+		tsoptions.NewDefaultParseConfigHost(fs),
 		"/project",
 		nil,
 		"/project/tsconfig.json",
@@ -925,7 +970,7 @@ func TestParseJsonConfigFileContentHandlesNullArrayElements(t *testing.T) {
 			t.Parallel()
 			parsed := tsoptions.ParseJsonConfigFileContent(
 				map[string]any{property: []any{nil}},
-				fs,
+				tsoptions.NewDefaultParseConfigHost(fs),
 				"/project",
 				nil,
 				"/project/tsconfig.json",
@@ -946,7 +991,7 @@ func TestParseJsonConfigFileContentDefaultsCompileOnSaveToFalse(t *testing.T) {
 	}, tspath.CaseSensitive /*caseSensitivity*/)
 	parsed := tsoptions.ParseJsonConfigFileContent(
 		map[string]any{"files": []any{"index.ts"}},
-		fs,
+		tsoptions.NewDefaultParseConfigHost(fs),
 		"/project",
 		nil,
 		"/project/tsconfig.json",
@@ -963,7 +1008,7 @@ func getParsedWithJsonApi(config testConfig, fs vfs.FS, basePath tspath.RootedDi
 	parsed, _ := tsoptions.ParseConfigFileTextToJson(configFileName, path, config.jsonText)
 	return tsoptions.ParseJsonConfigFileContent(
 		parsed,
-		fs,
+		tsoptions.NewDefaultParseConfigHost(fs),
 		basePath,
 		config.existingOptions,
 		configFileName,
@@ -1002,7 +1047,7 @@ func TestParseJsonSourceFileConfigFileContentReportsInvalidExtendedConfig(t *tes
 
 	parsed := tsoptions.ParseJsonSourceFileConfigFileContent(
 		configFile,
-		fs,
+		tsoptions.NewDefaultParseConfigHost(fs),
 		"/project",
 		nil,
 		nil,
@@ -1025,6 +1070,40 @@ func TestParseJsonSourceFileConfigFileContentReportsInvalidExtendedConfig(t *tes
 	}
 }
 
+func TestParseJsonSourceFileConfigFileContentReportsCircularExtendsChain(t *testing.T) {
+	t.Parallel()
+	files := map[string]string{
+		"/project/tsconfig.json": `{ "extends": "./a.json" }`,
+		"/project/a.json":        `{ "extends": "./b.json" }`,
+		"/project/b.json":        `{ "extends": "./a.json" }`,
+		"/project/main.ts":       "export const x = 1;",
+	}
+	fs := tsoptionstest.NewVFS(files, tspath.CaseSensitive /*caseSensitivity*/)
+	configFileName := tspath.RootedFilePath("/project/tsconfig.json")
+	configFile := tsoptions.NewTsconfigSourceFileFromFilePath(
+		configFileName,
+		fs.CaseSensitivity().PathKey(tspath.RootedPath(configFileName)),
+		files[configFileName.AsString()],
+	)
+
+	parsed := tsoptions.ParseJsonSourceFileConfigFileContent(
+		configFile,
+		tsoptions.NewDefaultParseConfigHost(fs),
+		"/project",
+		nil,
+		nil,
+		nil,
+		nil,
+	)
+
+	circularity := core.Filter(parsed.Errors, func(diagnostic *ast.Diagnostic) bool {
+		return diagnostic.Code() == diagnostics.Circularity_detected_while_resolving_configuration_Colon_0.Code()
+	})
+	assert.DeepEqual(t, core.Map(circularity, (*ast.Diagnostic).MessageArgs), [][]string{
+		{"/project/a.json -> /project/b.json -> /project/a.json"},
+	})
+}
+
 // Extending an empty config file used to panic on nil Statements (#4265).
 func TestParseJsonSourceFileConfigFileContentWithEmptyExtendedConfig(t *testing.T) {
 	t.Parallel()
@@ -1045,7 +1124,7 @@ func TestParseJsonSourceFileConfigFileContentWithEmptyExtendedConfig(t *testing.
 
 	parsed := tsoptions.ParseJsonSourceFileConfigFileContent(
 		configFile,
-		fs,
+		tsoptions.NewDefaultParseConfigHost(fs),
 		"/project",
 		nil,
 		nil,
@@ -1314,6 +1393,58 @@ func TestContentMappersAreInheritedFromExtendedConfig(t *testing.T) {
 	}
 }
 
+func TestInheritedContentMapperPackagePathIsResolvedFromDeclaringConfig(t *testing.T) {
+	t.Parallel()
+	config := testConfig{
+		jsonText:       `{ "extends": "../config/middle.json" }`,
+		configFileName: "tsconfig.json",
+		basePath:       "/repo/app",
+		allFileList: map[string]string{
+			"/repo/config/middle.json": `{ "extends": "./base.json" }`,
+			"/repo/config/base.json": `{ "contentMappers": [
+				{ "package": "./mapper", "extensions": [".vue"] },
+				{ "package": "named-mapper", "extensions": [".view"] }
+			] }`,
+			"/repo/config/mapper/package.json": `{
+				"name": "config-mapper",
+				"typescript": { "contentMapper": { "exec": ["run"] } }
+			}`,
+			"/repo/config/node_modules/named-mapper/package.json": `{
+				"name": "config-named-mapper",
+				"typescript": { "contentMapper": { "exec": ["run"] } }
+			}`,
+			"/repo/app/mapper/package.json": `{
+				"name": "app-mapper",
+				"typescript": { "contentMapper": { "exec": ["run"] } }
+			}`,
+			"/repo/app/node_modules/named-mapper/package.json": `{
+				"name": "app-named-mapper",
+				"typescript": { "contentMapper": { "exec": ["run"] } }
+			}`,
+			"/repo/app/index.ts": "",
+		},
+		existingOptions: &core.CompilerOptions{RunExternalCode: core.TSTrue},
+	}
+
+	for name, getParsed := range map[string]func(testConfig, vfs.FS, tspath.RootedDirectoryPath) *tsoptions.ParsedCommandLine{
+		"json api":           getParsedWithJsonApi,
+		"jsonSourceFile api": getParsedWithJsonSourceFileApi,
+	} {
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+			fs := tsoptionstest.NewVFS(config.allFileList, tspath.CaseSensitive /*caseSensitivity*/)
+			parsed := getParsed(config, fs, config.basePath)
+			assert.Equal(t, len(parsed.Errors), 0)
+			assert.Equal(t, len(parsed.ContentMappers()), 2)
+			assert.Equal(t, parsed.ContentMappers()[0].PackageDirectory, tspath.RootedDirectoryPath("/repo/config/mapper"))
+			assert.Equal(t, parsed.ContentMappers()[0].Manifest.Name, "config-mapper")
+			assert.Equal(t, parsed.ContentMappers()[1].Package, "named-mapper")
+			assert.Equal(t, parsed.ContentMappers()[1].PackageDirectory, tspath.RootedDirectoryPath("/repo/config/node_modules/named-mapper"))
+			assert.Equal(t, parsed.ContentMappers()[1].Manifest.Name, "config-named-mapper")
+		})
+	}
+}
+
 func TestContentMappersRequireFlag(t *testing.T) {
 	t.Parallel()
 
@@ -1416,7 +1547,7 @@ func TestContentMappersValidation(t *testing.T) {
 		{
 			name:           "built-in extension",
 			contentMappers: `[{ "package": "x", "extensions": [".ts"] }]`,
-			expectedCode:   diagnostics.Content_mapper_file_extension_0_is_a_built_in_extension_and_cannot_be_registered_by_a_content_mapper.Code(),
+			expectedCode:   diagnostics.Content_mapper_file_extension_0_cannot_be_registered_because_it_ends_in_a_built_in_extension.Code(),
 		},
 		{
 			name:           "missing extensions",
@@ -1520,7 +1651,7 @@ func TestContentMapperExtensionValidationUsesHostCaseSensitivity(t *testing.T) {
 			name:            "built-in extension on case-insensitive host",
 			caseSensitivity: tspath.CaseInsensitive,
 			contentMappers:  `[{ "package": "mapper", "extensions": [".TS"] }]`,
-			expectedCode:    diagnostics.Content_mapper_file_extension_0_is_a_built_in_extension_and_cannot_be_registered_by_a_content_mapper.Code(),
+			expectedCode:    diagnostics.Content_mapper_file_extension_0_cannot_be_registered_because_it_ends_in_a_built_in_extension.Code(),
 		},
 		{
 			name:            "duplicate extension on case-insensitive host",
@@ -1532,7 +1663,7 @@ func TestContentMapperExtensionValidationUsesHostCaseSensitivity(t *testing.T) {
 			name:            "built-in extension on case-sensitive host",
 			caseSensitivity: tspath.CaseSensitive,
 			contentMappers:  `[{ "package": "mapper", "extensions": [".TS"] }]`,
-			expectedCode:    diagnostics.Content_mapper_file_extension_0_is_a_built_in_extension_and_cannot_be_registered_by_a_content_mapper.Code(),
+			expectedCode:    diagnostics.Content_mapper_file_extension_0_cannot_be_registered_because_it_ends_in_a_built_in_extension.Code(),
 		},
 		{
 			name:            "mapper extension casing is distinct on case-sensitive host",
@@ -1601,7 +1732,7 @@ func TestContentMapperCompoundExtensionValidation(t *testing.T) {
 					assert.DeepEqual(t, parsed.ContentMapperExtensions(), []string{extension})
 				} else {
 					assert.Equal(t, len(parsed.Errors), 1)
-					assert.Equal(t, parsed.Errors[0].Code(), diagnostics.Content_mapper_file_extension_0_is_a_built_in_extension_and_cannot_be_registered_by_a_content_mapper.Code())
+					assert.Equal(t, parsed.Errors[0].Code(), diagnostics.Content_mapper_file_extension_0_cannot_be_registered_because_it_ends_in_a_built_in_extension.Code())
 					assert.Equal(t, len(parsed.ContentMapperExtensions()), 0)
 				}
 			})
@@ -1621,7 +1752,7 @@ func getParsedWithJsonSourceFileApi(config testConfig, fs vfs.FS, basePath tspat
 	}
 	return tsoptions.ParseJsonSourceFileConfigFileContent(
 		tsConfigSourceFile,
-		fs,
+		tsoptions.NewDefaultParseConfigHost(fs),
 		basePath,
 		config.existingOptions,
 		nil,
@@ -1815,7 +1946,7 @@ func parseSrcCompiler(tb testing.TB) *tsoptions.ParsedCommandLine {
 	)
 	parsed := tsoptions.ParseJsonSourceFileConfigFileContent(
 		configFile,
-		fs,
+		tsoptions.NewDefaultParseConfigHost(fs),
 		compilerDir,
 		nil,
 		nil,
@@ -1858,7 +1989,7 @@ func BenchmarkParseSrcCompiler(b *testing.B) {
 	for b.Loop() {
 		tsoptions.ParseJsonSourceFileConfigFileContent(
 			configFile,
-			fs,
+			tsoptions.NewDefaultParseConfigHost(fs),
 			compilerDir,
 			nil,
 			nil,
@@ -1917,7 +2048,7 @@ func TestExtendedConfigErrorsAppearOnCacheHit(t *testing.T) {
 			}
 			return tsoptions.ParseJsonSourceFileConfigFileContent(
 				tsConfigSourceFile,
-				fs,
+				tsoptions.NewDefaultParseConfigHost(fs),
 				"/",
 				nil,
 				nil,
@@ -1960,7 +2091,7 @@ func TestExtendedConfigErrorsAppearOnCacheHit(t *testing.T) {
 			}
 			return tsoptions.ParseJsonSourceFileConfigFileContent(
 				tsConfigSourceFile,
-				fs,
+				tsoptions.NewDefaultParseConfigHost(fs),
 				"/",
 				nil,
 				nil,
@@ -2002,7 +2133,7 @@ func TestExtendedConfigConfigDirPathsAreNotCached(t *testing.T) {
 	cache := &memoCache{}
 
 	parseConfig := func(configFileName tspath.RootedFilePath) *tsoptions.ParsedCommandLine {
-		parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile(configFileName, nil, nil, fs, cache)
+		parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile(configFileName, nil, nil, tsoptions.NewDefaultParseConfigHost(fs), cache)
 		assert.Assert(t, len(errors) == 0, "unexpected errors parsing %s: %v", configFileName, errors)
 		return parsed
 	}
@@ -2010,4 +2141,43 @@ func TestExtendedConfigConfigDirPathsAreNotCached(t *testing.T) {
 	parseConfig("/packages/a/tsconfig.json")
 	paths := parseConfig("/packages/b/tsconfig.json").CompilerOptions().Paths
 	assert.DeepEqual(t, paths.GetOrZero("@pkg/*"), []string{"/packages/b/src/*"})
+}
+
+func TestParseJsonConfigFileContentSingleThreadedReadsDirectoriesSerially(t *testing.T) {
+	t.Parallel()
+
+	files := map[string]string{}
+	for i := range 16 {
+		files[fmt.Sprintf("/project/dir%d/index.ts", i)] = ""
+	}
+	base := tsoptionstest.NewVFS(files, tspath.CaseSensitive)
+	var inFlight, maxInFlight atomic.Int32
+	fs := wrapvfs.Wrap(base, wrapvfs.Replacements{
+		GetAccessibleEntries: func(path tspath.RootedDirectoryPath) vfs.Entries {
+			n := inFlight.Add(1)
+			for {
+				current := maxInFlight.Load()
+				if n <= current || maxInFlight.CompareAndSwap(current, n) {
+					break
+				}
+			}
+			// Give concurrent readers time to overlap.
+			time.Sleep(time.Millisecond)
+			defer inFlight.Add(-1)
+			return base.GetAccessibleEntries(path)
+		},
+	})
+
+	parsed := tsoptions.ParseJsonConfigFileContent(
+		map[string]any{},
+		tsoptions.NewDefaultParseConfigHost(fs),
+		"/project",
+		&core.CompilerOptions{SingleThreaded: core.TSTrue},
+		"/project/tsconfig.json",
+		nil, /*resolutionStack*/
+		nil, /*extendedConfigCache*/
+	)
+
+	assert.Equal(t, len(parsed.FileNames()), 16)
+	assert.Equal(t, maxInFlight.Load(), int32(1))
 }

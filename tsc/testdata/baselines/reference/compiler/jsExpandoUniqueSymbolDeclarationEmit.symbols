@@ -1,0 +1,27 @@
+//// [tests/cases/compiler/jsExpandoUniqueSymbolDeclarationEmit.ts] ////
+
+=== index.js ===
+const bar = function () {};
+>bar : Symbol(bar, Decl(index.js, 0, 5))
+
+/** @type {unique symbol} */
+bar.s = Symbol();
+>bar.s : Symbol(bar.s, Decl(index.js, 0, 27))
+>bar : Symbol(bar, Decl(index.js, 0, 5))
+>s : Symbol(bar.s, Decl(index.js, 0, 27))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+
+bar.g = () => bar.s;
+>bar.g : Symbol(bar.g, Decl(index.js, 2, 17))
+>bar : Symbol(bar, Decl(index.js, 0, 5))
+>g : Symbol(bar.g, Decl(index.js, 2, 17))
+>bar.s : Symbol(bar.s, Decl(index.js, 0, 27))
+>bar : Symbol(bar, Decl(index.js, 0, 5))
+>s : Symbol(bar.s, Decl(index.js, 0, 27))
+
+module.exports = bar;
+>module.exports : Symbol(exports, Decl(index.js, 0, 0))
+>module : Symbol(module, Decl(index.js, 0, 0))
+>exports : Symbol(exports, Decl(index.js, 0, 0))
+>bar : Symbol(bar, Decl(index.js, 0, 5))
+

@@ -39,7 +39,7 @@ foo.bar;`
 	fs = bundled.WrapFS(fs)
 
 	host := compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil)
-	parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile("/tsconfig.json", &core.CompilerOptions{}, nil, fs, nil)
+	parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile("/tsconfig.json", &core.CompilerOptions{}, nil, tsoptions.NewDefaultParseConfigHost(fs), nil)
 	assert.Equal(t, len(errors), 0, "Expected no errors in parsed command line")
 
 	p := compiler.NewProgram(compiler.ProgramOptions{
@@ -87,7 +87,7 @@ export type E = D;`,
 
 	host := compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil)
 
-	parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile("/tsconfig.json", &core.CompilerOptions{}, nil, fs, nil)
+	parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile("/tsconfig.json", &core.CompilerOptions{}, nil, tsoptions.NewDefaultParseConfigHost(fs), nil)
 	assert.Equal(t, len(errors), 0, "Expected no errors in parsed command line")
 
 	p := compiler.NewProgram(compiler.ProgramOptions{
@@ -121,7 +121,7 @@ func BenchmarkNewChecker(b *testing.B) {
 	fs := bundled.WrapFS(osvfs.FS())
 	rootPath := tspath.RootedDirectoryPathFromAbsolute(filepath.Join(repo.TestDataPath(), "fixtures/compiler"))
 	host := compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil)
-	parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile(rootPath.ResolveFile("tsconfig.json"), &core.CompilerOptions{}, nil, fs, nil)
+	parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile(rootPath.ResolveFile("tsconfig.json"), &core.CompilerOptions{}, nil, tsoptions.NewDefaultParseConfigHost(fs), nil)
 	assert.Equal(b, len(errors), 0, "Expected no errors in parsed command line")
 	program := compiler.NewProgram(compiler.ProgramOptions{
 		Config: parsed,
@@ -138,7 +138,7 @@ func BenchmarkCheck(b *testing.B) {
 	fs := bundled.WrapFS(osvfs.FS())
 	rootPath := tspath.RootedDirectoryPathFromAbsolute(filepath.Join(repo.TestDataPath(), "fixtures/compiler"))
 	host := compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil)
-	parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile(rootPath.ResolveFile("tsconfig.json"), &core.CompilerOptions{}, nil, fs, nil)
+	parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile(rootPath.ResolveFile("tsconfig.json"), &core.CompilerOptions{}, nil, tsoptions.NewDefaultParseConfigHost(fs), nil)
 	assert.Equal(b, len(errors), 0, "Expected no errors in parsed command line")
 	program := compiler.NewProgram(compiler.ProgramOptions{
 		Config: parsed,
@@ -161,7 +161,7 @@ func BenchmarkCheckFreshProgram(b *testing.B) {
 	fs := bundled.WrapFS(osvfs.FS())
 	rootPath := tspath.RootedDirectoryPathFromAbsolute(filepath.Join(repo.TestDataPath(), "fixtures/compiler"))
 	host := compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil)
-	parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile(rootPath.ResolveFile("tsconfig.json"), &core.CompilerOptions{}, nil, fs, nil)
+	parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile(rootPath.ResolveFile("tsconfig.json"), &core.CompilerOptions{}, nil, tsoptions.NewDefaultParseConfigHost(fs), nil)
 	assert.Equal(b, len(errors), 0, "Expected no errors in parsed command line")
 	ctx := b.Context()
 

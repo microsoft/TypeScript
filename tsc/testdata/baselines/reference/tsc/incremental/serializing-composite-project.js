@@ -14,7 +14,7 @@ export const b = 2;
     },
 }
 
-tsgo 
+tsc 
 ExitStatus:: Success
 Output::
 //// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*

@@ -80,7 +80,7 @@ export * from './dogconfig.js';
     },
 }
 
-tsgo -b src-types src-dogs --verbose
+tsc -b src-types src-dogs --verbose
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 

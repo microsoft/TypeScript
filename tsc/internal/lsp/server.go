@@ -1745,6 +1745,24 @@ func (s *Server) handleInitialized(ctx context.Context, params *lsproto.Initiali
 		s.logger.Logf("file watching: disabled (client lacks dynamic watch registration and builtin watcher backend is not fast-recursive)")
 	}
 
+	workspaceRoots := getInitialWorkspaceRoots(s.initializeParams)
+	var workspaceFolders []ls.WorkspaceFolder
+	if s.initializeParams.WorkspaceFolders != nil && s.initializeParams.WorkspaceFolders.WorkspaceFolders != nil {
+		for _, folder := range *s.initializeParams.WorkspaceFolders.WorkspaceFolders {
+			workspaceFolders = append(workspaceFolders, ls.WorkspaceFolder{
+				Path: tspath.RootedDirectoryPathFromPath(lsproto.DocumentUri(folder.Uri).Path()),
+				Name: folder.Name,
+			})
+		}
+	} else {
+		for _, root := range workspaceRoots {
+			workspaceFolders = append(workspaceFolders, ls.WorkspaceFolder{
+				Path: root,
+				Name: root.BaseName(),
+			})
+		}
+	}
+
 	cwd := s.cwd
 	if s.clientCapabilities.Workspace.WorkspaceFolders &&
 		s.initializeParams.WorkspaceFolders != nil &&
@@ -1768,16 +1786,18 @@ func (s *Server) handleInitialized(ctx context.Context, params *lsproto.Initiali
 	s.session = project.NewSession(&project.SessionInit{
 		BackgroundCtx: lsproto.WithClientCapabilities(s.backgroundCtx, &s.clientCapabilities),
 		Options: &project.SessionOptions{
-			CurrentDirectory:       cwd,
-			DefaultLibraryPath:     s.defaultLibraryPath,
-			TypingsLocation:        s.typingsLocation,
-			PositionEncoding:       s.positionEncoding,
-			WatchEnabled:           s.watchEnabled,
-			LoggingEnabled:         true,
-			TelemetryEnabled:       enableTelemetry,
-			DebounceDelay:          500 * time.Millisecond,
-			PushDiagnosticsEnabled: !disablePushDiagnostics,
-			RunExternalCode:        runExternalCode,
+			CurrentDirectory:        cwd,
+			DefaultLibraryPath:      s.defaultLibraryPath,
+			TypingsLocation:         s.typingsLocation,
+			PositionEncoding:        s.positionEncoding,
+			WatchEnabled:            s.watchEnabled,
+			LoggingEnabled:          true,
+			TelemetryEnabled:        enableTelemetry,
+			DebounceDelay:           500 * time.Millisecond,
+			PushDiagnosticsEnabled:  !disablePushDiagnostics,
+			RunExternalCode:         runExternalCode,
+			InitialWorkspaceRoots:   workspaceRoots,
+			InitialWorkspaceFolders: workspaceFolders,
 		},
 		FS:                  s.fs,
 		Logger:              s.logger,
@@ -1836,6 +1856,23 @@ func (s *Server) handleShutdown(ctx context.Context, _ lsproto.NoParams, _ *lspr
 
 func (s *Server) handleExit(ctx context.Context, _ lsproto.NoParams) error {
 	return io.EOF
+}
+
+func getInitialWorkspaceRoots(params *lsproto.InitializeParams) []tspath.RootedDirectoryPath {
+	workspaceRoots := []tspath.RootedDirectoryPath{}
+	if params.WorkspaceFolders != nil && params.WorkspaceFolders.WorkspaceFolders != nil {
+		for _, folder := range *params.WorkspaceFolders.WorkspaceFolders {
+			uri := lsproto.DocumentUri(folder.Uri)
+			if strings.HasPrefix(string(uri), "file://") {
+				workspaceRoots = append(workspaceRoots, tspath.RootedDirectoryPathFromPath(uri.Path()))
+			}
+		}
+	} else if params.RootUri.DocumentUri != nil && strings.HasPrefix(string(*params.RootUri.DocumentUri), "file://") {
+		workspaceRoots = append(workspaceRoots, tspath.RootedDirectoryPathFromPath(params.RootUri.DocumentUri.Path()))
+	} else if params.RootPath != nil && params.RootPath.String != nil && tspath.PathIsAbsolute(*params.RootPath.String) {
+		workspaceRoots = append(workspaceRoots, tspath.RootedDirectoryPathFromAbsolute(*params.RootPath.String))
+	}
+	return workspaceRoots
 }
 
 func (s *Server) handleDidChangeWorkspaceConfiguration(ctx context.Context, params *lsproto.DidChangeConfigurationParams) error {
@@ -2409,7 +2446,7 @@ func (s *Server) handleInitializeAPISession(ctx context.Context, params *lsproto
 func (s *Server) generateAPIPipeName() string {
 	now := time.Now().UnixNano()
 	rnd := rand.Uint64()
-	return fmt.Sprintf("tsgo-api-%x-%x", now, rnd)
+	return fmt.Sprintf("typescript-api-%x-%x", now, rnd)
 }
 
 func (s *Server) removeAPISession(id string) {

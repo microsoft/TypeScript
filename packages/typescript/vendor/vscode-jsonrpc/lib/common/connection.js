@@ -418,11 +418,16 @@ function createMessageConnection(messageReader, messageWriter, _logger, options)
             }
             finally {
                 if (result instanceof Promise) {
+                    // Both settlements must release the parallelism slot. Written as
+                    // .then(...).catch(...) the rejection path skipped the decrement, so
+                    // one failed dispatch left `inFlight` permanently elevated and
+                    // triggerMessageQueue() bailed out forever after.
                     result.then(() => {
-                        inFlight--;
-                        triggerMessageQueue();
                     }).catch((error) => {
                         logger.error(`Processing message queue failed: ${error.toString()}`);
+                    }).finally(() => {
+                        inFlight--;
+                        triggerMessageQueue();
                     });
                 }
                 else {
@@ -781,7 +786,8 @@ function createMessageConnection(messageReader, messageWriter, _logger, options)
                     }
                 }
             }
-            tracer.log(`Sending response '${method} - (${message.id})'. Processing request took ${Date.now() - startTime}ms`, data);
+            const error = message.error ? ` Request failed: ${message.error.message} (${message.error.code}).` : '';
+            tracer.log(`Sending response '${method} - (${message.id})'. Processing request took ${Date.now() - startTime}ms.${error}`, data);
         }
         else {
             logLSPMessage('send-response', message);
@@ -1145,7 +1151,6 @@ function createMessageConnection(messageReader, messageWriter, _logger, options)
                     responsePromises.delete(id);
                     responsePromise.reject(new messages_1.ResponseError(messages_1.ErrorCodes.MessageWriteError, error.message ? error.message : 'Unknown reason'));
                     logger.error(`Sending request failed.`);
-                    throw error;
                 }
             });
         },

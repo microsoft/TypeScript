@@ -160,12 +160,12 @@ declare let c3: {
     a: number;
     b: number;
 } | {
-    b?: undefined;
     a?: undefined;
+    b?: undefined;
 };
 declare let c4: {
-    b?: undefined;
     a?: undefined;
+    b?: undefined;
 } | {
     a: number;
     b: number;
@@ -173,22 +173,22 @@ declare let c4: {
 declare let d1: {
     kind: string;
     pos: {
-        b?: undefined;
-        a?: undefined;
         x: number;
         y: number;
+        a?: undefined;
+        b?: undefined;
     };
 } | {
     kind: string;
     pos: {
-        b?: undefined;
         x?: undefined;
         y?: undefined;
         a: string;
+        b?: undefined;
     } | {
-        a?: undefined;
         x?: undefined;
         y?: undefined;
+        a?: undefined;
         b: number;
     };
 };
@@ -209,11 +209,11 @@ declare let e1: {
     a?: undefined;
 };
 declare let e2: {
-    b?: undefined;
     a?: undefined;
-} | {
     b?: undefined;
+} | {
     a: string;
+    b?: undefined;
 } | {
     a: number;
     b: number;

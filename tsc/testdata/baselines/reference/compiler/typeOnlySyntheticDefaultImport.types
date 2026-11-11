@@ -1,0 +1,15 @@
+//// [tests/cases/compiler/typeOnlySyntheticDefaultImport.ts] ////
+
+=== library.d.ts ===
+export function render(): void;
+>render : () => void
+
+=== main.ts ===
+import type { default as Library } from "./library";
+>default : typeof Library
+>Library : any
+
+type LibraryType = typeof Library;
+>LibraryType : typeof Library
+>Library : typeof Library
+

@@ -10,7 +10,6 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/contentmapper"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
-	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/internal/glob"
 	"github.com/microsoft/TypeScript/tsc/internal/locale"
 	"github.com/microsoft/TypeScript/tsc/internal/module"
@@ -198,22 +197,10 @@ func (p *ParsedCommandLine) CommonSourceDirectory() tspath.RootedDirectoryPath {
 			files,
 			p.BaseDirectory(),
 			p.CaseSensitivity(),
-			p.checkSourceFilesBelongToPath,
+			nil,
 		)
 	})
 	return p.commonSourceDirectory
-}
-
-func (p *ParsedCommandLine) checkSourceFilesBelongToPath(sourceFiles []tspath.RootedFilePath, rootDirectory tspath.RootedDirectoryPath) bool {
-	allFilesBelongToPath := true
-	for _, file := range sourceFiles {
-		if !p.caseSensitivity.ContainsFilePath(rootDirectory, file) {
-			p.Errors = append(p.Errors, ast.NewCompilerDiagnostic(diagnostics.File_0_is_not_under_rootDir_1_rootDir_is_expected_to_contain_all_source_files, p.caseSensitivity.PathKey(tspath.RootedPath(file)), rootDirectory))
-			allFilesBelongToPath = false
-		}
-	}
-
-	return allFilesBelongToPath
 }
 
 func (p *ParsedCommandLine) BaseDirectory() tspath.RootedDirectoryPath {

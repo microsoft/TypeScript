@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
+	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"gotest.tools/v3/assert"
@@ -20,6 +21,46 @@ func TestGetPathComponentsForWatching(t *testing.T) {
 	assert.DeepEqual(t, getPathComponentsForWatching(tspath.ToRootedDirectoryPath("C:\\Users\\andrew\\project", "")), []string{"C:/Users/andrew", "project"})
 	assert.DeepEqual(t, getPathComponentsForWatching(tspath.ToRootedDirectoryPath("/home", "")), []string{"/home"})
 	assert.DeepEqual(t, getPathComponentsForWatching(tspath.ToRootedDirectoryPath("/home/andrew/project", "")), []string{"/home/andrew", "project"})
+	assert.DeepEqual(t, getPathComponentsForWatching(tspath.ToRootedDirectoryPath("/Users", "")), []string{"/Users"})
+	assert.DeepEqual(t, getPathComponentsForWatching(tspath.ToRootedDirectoryPath("/Users/andrew", "")), []string{"/Users/andrew"})
+	assert.DeepEqual(t, getPathComponentsForWatching(tspath.ToRootedDirectoryPath("/Users/andrew/project", "")), []string{"/Users/andrew", "project"})
+}
+
+func TestResolutionLookupWatcherOmitsMacOSHomeDirectories(t *testing.T) {
+	t.Parallel()
+
+	for _, caseSensitivity := range []tspath.CaseSensitivity{tspath.CaseSensitive, tspath.CaseInsensitive} {
+		usersDirectory := "/Users"
+		if caseSensitivity == tspath.CaseInsensitive {
+			usersDirectory = "/users"
+		}
+
+		var files collections.SyncMap[tspath.PathKey, tspath.RootedFilePath]
+		for _, fileName := range []tspath.RootedFilePath{
+			tspath.ToRootedFilePath(usersDirectory+"/package.json", ""),
+			tspath.ToRootedFilePath(usersDirectory+"/andrew/package.json", ""),
+			tspath.ToRootedFilePath(usersDirectory+"/andrew/project/package.json", ""),
+			tspath.ToRootedFilePath(usersDirectory+"/andrew/other/package.json", ""),
+		} {
+			files.Store(caseSensitivity.PathKey(tspath.RootedPath(fileName)), fileName)
+		}
+
+		result := createResolutionLookupGlobMapper(
+			tspath.ToRootedDirectoryPath(usersDirectory+"/andrew/project", ""),
+			"/lib",
+			"/dev/null",
+			caseSensitivity,
+		)(&files)
+
+		assert.DeepEqual(t, result.patternsInsideWorkspace, []string{usersDirectory + "/andrew/project/**/*"})
+		assert.DeepEqual(t, result.directoriesOutsideWorkspace, []tspath.RootedDirectoryPath{tspath.ToRootedDirectoryPath(usersDirectory+"/andrew/other", "")})
+		assert.DeepEqual(t, result.ignored, map[tspath.RootedDirectoryPath]struct{}{
+			tspath.ToRootedDirectoryPath(usersDirectory, ""):           {},
+			tspath.ToRootedDirectoryPath(usersDirectory+"/andrew", ""): {},
+		})
+		watcher := newRecursiveDirectoryWatcher(result.directoriesOutsideWorkspace[0], lsproto.WatchKindCreate, true)
+		assert.Equal(t, string(*watcher.GlobPattern.RelativePattern.BaseUri.URI), "file://"+usersDirectory+"/andrew/other")
+	}
 }
 
 func TestNilWatchedFilesClone(t *testing.T) {
@@ -28,6 +69,29 @@ func TestNilWatchedFilesClone(t *testing.T) {
 	var w *WatchedFiles[int]
 	result := w.Clone(42)
 	assert.Assert(t, result == nil, "clone on a nil `WatchedFiles` should return nil")
+}
+
+func TestWatchedFilesOmitsNetworkPaths(t *testing.T) {
+	t.Parallel()
+
+	files := []tspath.RootedFilePath{
+		"/workspace/a.ts",
+		"/external/b.ts",
+		"//server/share/c.ts",
+		"/??/UNC/server/share/d.ts",
+	}
+	for _, test := range []struct {
+		workspace tspath.RootedDirectoryPath
+		expected  []string
+	}{
+		{"/workspace", []string{"/workspace/a.ts", "file:///external/**/*"}},
+		{"//server/share", []string{"file:///external/**/*", "file:///workspace/**/*"}},
+	} {
+		w := NewWatchedFilesForPaths("test", lsproto.WatchKindCreate, true, test.workspace, tspath.CaseSensitive).Clone(files)
+		watchers := w.Watchers()
+		globs := core.Map(append(watchers.WorkspaceWatchers, watchers.OutsideWorkspaceWatchers...), fileSystemWatcherGlobString)
+		assert.DeepEqual(t, globs, test.expected)
+	}
 }
 
 func TestResolutionLookupWatcherPreservesDirectorySpelling(t *testing.T) {

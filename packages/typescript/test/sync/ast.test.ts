@@ -17,12 +17,16 @@ import type {
     ObjectBindingPattern,
     ObjectLiteralElement,
     ObjectLiteralExpression,
+    Scanner,
     SourceFile,
     StringLiteralLikeNode,
     TypeElement,
     VariableStatement,
 } from "@typescript/typescript/ast";
+import * as astModule from "@typescript/typescript/ast";
 import {
+    formatSyntaxKind,
+    getChildren,
     getCombinedModifierFlags,
     getNameOfDeclaration,
     getTokenAtPosition,
@@ -50,6 +54,7 @@ import {
     createFunctionDeclaration,
     createIdentifier,
     createIfStatement,
+    createIndexSignatureDeclaration,
     createMissingDeclaration,
     createNodeArray,
     createNumericLiteral,
@@ -57,15 +62,16 @@ import {
     createStringLiteral,
     createToken,
 } from "@typescript/typescript/ast/factory";
+import * as factory from "@typescript/typescript/ast/factory";
 import {
     visitEachChild,
     visitNode,
     visitNodes,
 } from "@typescript/typescript/ast/visitor";
 import {
-    API,
     Checker,
     isRemoteNode,
+    SignatureKind,
     TypeFlags,
 } from "@typescript/typescript/sync";
 import assert from "node:assert";
@@ -78,6 +84,7 @@ import {
     areTestsFiltered,
     createVirtualFileSystem,
 } from "../testUtils.ts";
+import { API } from "./api.testUtils.ts";
 import { runBenchmarks } from "./ast.bench.ts";
 
 const concurrency = areTestsFiltered();
@@ -99,6 +106,215 @@ describe("NodeObject + childrenIter", { concurrency }, () => {
     test("skips absent optional child lists", () => {
         const node = createMissingDeclaration();
         assert.deepStrictEqual([...node.childrenIter()], []);
+    });
+});
+
+test("index signatures allow an omitted type", () => {
+    using api = spawnAPI();
+    const source = api.createSourceFile("/repro.ts", "interface I { [key: string]; next: number; }").sourceFile;
+    const declaration = source.statements[0];
+    assert.ok(astModule.isInterfaceDeclaration(declaration));
+    const signature = declaration.members[0];
+    assert.ok(astModule.isIndexSignatureDeclaration(signature));
+    const type: astModule.TypeNode | undefined = signature.type;
+    assert.strictEqual(type, undefined);
+    assert.strictEqual(createIndexSignatureDeclaration(undefined, signature.parameters).type, undefined);
+    assert.strictEqual(declaration.members.length, 2);
+});
+
+describe("AST property contracts", { concurrency }, () => {
+    test("absent parser children have optional types", () => {
+        const absent: {
+            exportType: astModule.ExportAssignment["type"];
+            propertyType: astModule.PropertyAssignment["type"];
+            shorthandType: astModule.ShorthandPropertyAssignment["type"];
+            signatureType: astModule.PropertySignatureDeclaration["type"];
+            signatureInitializer: astModule.PropertySignatureDeclaration["initializer"];
+            questionDotToken: astModule.TaggedTemplateExpression["questionDotToken"];
+            constraint: astModule.JSDocTemplateTag["constraint"];
+            nameExpression: astModule.JSDocSeeTag["nameExpression"];
+        } = {
+            exportType: undefined,
+            propertyType: undefined,
+            shorthandType: undefined,
+            signatureType: undefined,
+            signatureInitializer: undefined,
+            questionDotToken: undefined,
+            constraint: undefined,
+            nameExpression: undefined,
+        };
+        using api = spawnAPI();
+        const seen: Record<string, unknown> = {};
+        function walk(node: Node): void {
+            if (astModule.isDefaultClause(node)) assert.strictEqual(Reflect.get(node, "expression"), undefined);
+            if (astModule.isExportAssignment(node)) seen.exportType = node.type;
+            if (astModule.isPropertyAssignment(node)) seen.propertyType = node.type;
+            if (astModule.isShorthandPropertyAssignment(node)) seen.shorthandType = node.type;
+            if (astModule.isPropertySignatureDeclaration(node)) {
+                seen.signatureType = node.type;
+                seen.signatureInitializer = node.initializer;
+            }
+            if (astModule.isTaggedTemplateExpression(node)) seen.questionDotToken = node.questionDotToken;
+            if (astModule.isJSDocTemplateTag(node)) seen.constraint = node.constraint;
+            if (astModule.isJSDocSeeTag(node)) seen.nameExpression = node.nameExpression;
+            node.forEachChild(walk);
+            node.jsDoc?.forEach(walk);
+        }
+        walk(
+            api.createSourceFile(
+                "/repro.ts",
+                `
+    switch (x) { default: break; }
+    export default 0;
+    const object = { x, y: 1 };
+    interface I { p; [key: string]; }
+    tag\`text\`;
+    `,
+            ).sourceFile,
+        );
+        walk(
+            api.createSourceFile(
+                "/repro.js",
+                `
+    /** @see */ function a() {}
+    /** @template T */ function b() {}
+    `,
+            ).sourceFile,
+        );
+        assert.deepStrictEqual(Object.keys(seen).sort(), Object.keys(absent).sort());
+        for (const name of Object.keys(absent)) {
+            assert.strictEqual(seen[name] === undefined, true, name);
+        }
+    });
+
+    test("synthesized arrows have an equalsGreaterThanToken", () => {
+        using programAPI = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/src/index.ts": "declare function f(): number;",
+        });
+        const [source, checker] = getRemoteSourceFileAndChecker(programAPI, "/tsconfig.json", "/src/index.ts");
+        const signature = checker.getSignaturesOfType(checker.getTypeAtLocation(source.statements[0]), SignatureKind.Call)[0];
+        const arrow = checker.signatureToSignatureDeclaration(signature, SyntaxKind.ArrowFunction);
+        assert.ok(arrow && astModule.isArrowFunction(arrow));
+        const remoteToken: astModule.EqualsGreaterThanToken = arrow.equalsGreaterThanToken;
+        assert.strictEqual(remoteToken.kind, SyntaxKind.EqualsGreaterThanToken);
+
+        const body = factory.createBlock([]);
+        const local = factory.createArrowFunction(undefined, undefined, [], undefined, undefined, body);
+        const localToken: astModule.EqualsGreaterThanToken = local.equalsGreaterThanToken;
+        assert.strictEqual(localToken.kind, SyntaxKind.EqualsGreaterThanToken);
+        assert.strictEqual(cloneNode(local).equalsGreaterThanToken, local.equalsGreaterThanToken);
+        const explicitToken = factory.createToken(SyntaxKind.EqualsGreaterThanToken);
+        const explicit = factory.createArrowFunction(undefined, undefined, [], undefined, explicitToken, body);
+        assert.strictEqual(explicit.equalsGreaterThanToken, explicitToken);
+    });
+
+    test("required parser children and binding holes retain their contracts", () => {
+        using api = spawnAPI();
+        const source = api.createSourceFile(
+            "/repro.ts",
+            `
+    switch (x) { case 0: break; }
+    type F = () => number;
+    type C = new () => object;
+    const [,, x] = value;
+    `,
+        ).sourceFile;
+        let cases = 0;
+        let returns = 0;
+        let holes = 0;
+        function walk(node: Node): void {
+            if (astModule.isCaseClause(node)) {
+                const expression: astModule.Expression = node.expression;
+                assert.strictEqual(expression.kind, SyntaxKind.NumericLiteral);
+                cases++;
+            }
+            if (astModule.isFunctionTypeNode(node) || astModule.isConstructorTypeNode(node)) {
+                const type: astModule.TypeNode = node.type;
+                assert.ok(type);
+                returns++;
+            }
+            if (astModule.isBindingElement(node) && !node.name) holes++;
+            node.forEachChild(walk);
+        }
+        walk(source);
+        const docs = api.createSourceFile("/repro.js", "/** @see */ function f() {}").sourceFile.statements[0].jsDoc;
+        assert.ok(docs && astModule.isJSDoc(docs[0]));
+        assert.strictEqual(docs[0].comment.length, 0);
+        assert.deepStrictEqual({ cases, returns, holes }, { cases: 1, returns: 2, holes: 2 });
+    });
+
+    test("factory scalar defaults agree with their declared types", () => {
+        const type = factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword);
+        assert.deepStrictEqual({
+            block: factory.createBlock([]).multiLine,
+            array: factory.createArrayLiteralExpression([]).multiLine,
+            object: factory.createObjectLiteralExpression([]).multiLine,
+            attributes: factory.createImportAttributes(SyntaxKind.WithKeyword, []).multiLine,
+            export: factory.createExportDeclaration().isTypeOnly,
+            spread: factory.createSyntheticExpression(type).isSpread,
+            whitespace: factory.createJsxText("text").containsOnlyTriviaWhiteSpaces,
+            arrayType: factory.createJSDocTypeLiteral().isArrayType,
+        }, {
+            block: false,
+            array: false,
+            object: false,
+            attributes: false,
+            export: false,
+            spread: false,
+            whitespace: false,
+            arrayType: false,
+        });
+        assert.strictEqual(factory.createNodeArray([]).transformFlags, 0);
+    });
+
+    test("factory modifierFlags are computed from modifiers", () => {
+        assert.strictEqual(factory.createExportDeclaration().modifierFlags, ModifierFlags.None);
+        const declaration = factory.createFunctionDeclaration(
+            [factory.createToken(SyntaxKind.ExportKeyword), factory.createToken(SyntaxKind.AsyncKeyword)],
+            undefined,
+            factory.createIdentifier("f"),
+            undefined,
+            [],
+        );
+        assert.strictEqual(declaration.modifierFlags, ModifierFlags.Export | ModifierFlags.Async);
+        assert.strictEqual(cloneNode(declaration).modifierFlags, declaration.modifierFlags);
+    });
+
+    test("factory scalar accessors preserve explicit values", () => {
+        assert.strictEqual(factory.createBlock([], true).multiLine, true);
+        assert.strictEqual(factory.createArrayLiteralExpression([], true).multiLine, true);
+        assert.strictEqual(factory.createObjectLiteralExpression([], true).multiLine, true);
+        assert.strictEqual(factory.createImportAttributes(SyntaxKind.WithKeyword, [], true).multiLine, true);
+        assert.strictEqual(factory.createJsxText(" ", true).containsOnlyTriviaWhiteSpaces, true);
+        assert.strictEqual(factory.createJSDocTypeLiteral(undefined, true).isArrayType, true);
+        assert.strictEqual(factory.createExportDeclaration(undefined, true).isTypeOnly, true);
+        assert.strictEqual(factory.createSyntheticExpression(factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword), true).isSpread, true);
+    });
+
+    test("optional factory children survive cloning and visiting", () => {
+        const name = factory.createIdentifier("p");
+        const property = factory.createPropertySignatureDeclaration(undefined, name);
+        assert.strictEqual(property.type, undefined);
+        assert.strictEqual(property.initializer, undefined);
+        assert.deepStrictEqual(collectKinds(getSynthesizedDeepClone(property)), [SyntaxKind.PropertySignature, SyntaxKind.Identifier]);
+
+        const clause = factory.createDefaultClause([]);
+        const hasExpression: "expression" extends keyof astModule.DefaultClause ? true : false = false;
+        assert.strictEqual(hasExpression, false);
+        assert.strictEqual(Reflect.get(clause, "expression"), undefined);
+        assert.deepStrictEqual([...clause.childrenIter()], []);
+        assert.strictEqual(visitEachChild(clause, node => node), clause);
+
+        const type = factory.createKeywordTypeNode(SyntaxKind.StringKeyword);
+        const initializer = factory.createStringLiteral("value", TokenFlags.None);
+        const populated = factory.createPropertySignatureDeclaration(undefined, name, undefined, type, initializer);
+        assert.deepStrictEqual(collectKinds(getSynthesizedDeepClone(populated)), [
+            SyntaxKind.PropertySignature,
+            SyntaxKind.Identifier,
+            SyntaxKind.StringKeyword,
+            SyntaxKind.StringLiteral,
+        ]);
     });
 });
 
@@ -1549,4 +1765,249 @@ describe("RemoteNode + child/token getters", { concurrency }, () => {
             checkSource(entry.source, { jsx: entry.jsx ?? false, js: entry.js ?? false });
         });
     }
+});
+
+describe("getChildren scanner reuse", { concurrency }, () => {
+    // Not part of the public declarations; reached through the module namespace for tests.
+    const getPooledScanners = (astModule as unknown as {
+        getPooledScannersForTesting(sourceFile: SourceFile): readonly Scanner[];
+    }).getPooledScannersForTesting;
+
+    type TreeSnapshot = [kind: string, pos: number, end: number, children: TreeSnapshot[]];
+
+    function snapshotTree(node: Node, sf: SourceFile): TreeSnapshot {
+        const children = node.getChildren(sf);
+        return [formatSyntaxKind(node.kind), node.pos, node.end, children.map(child => snapshotTree(child, sf))];
+    }
+
+    function leafTokenTexts(node: Node, sf: SourceFile): string[] {
+        const children = node.getChildren(sf);
+        if (children.length === 0) {
+            return [node.getText(sf)];
+        }
+        return children.flatMap(child => leafTokenTexts(child, sf));
+    }
+
+    function withSourceFiles(files: Record<string, string>, fn: (sourceFiles: SourceFile[]) => void): void {
+        const tsconfig = { compilerOptions: { jsx: "react-jsx", allowJs: true, checkJs: true } };
+        const api = spawnAPI({ "/tsconfig.json": JSON.stringify(tsconfig), ...files });
+        try {
+            const snapshot = api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+            const program = snapshot.getConfiguredProject("/tsconfig.json")!.program;
+            fn(Object.keys(files).map(fileName => program.getSourceFile(fileName)!));
+        }
+        finally {
+            api.close();
+        }
+    }
+
+    // Snapshots each file in isolation (its own API process) so results can't depend on pooling.
+    function referenceSnapshot(fileName: string, text: string): TreeSnapshot {
+        let result!: TreeSnapshot;
+        withSourceFiles({ [fileName]: text }, ([sf]) => {
+            result = snapshotTree(sf, sf);
+        });
+        return result;
+    }
+
+    // Wraps `node` so that `during` runs right after forEachChild visits its first child,
+    // i.e. while getChildren has a scanner checked out for the wrapped node mid-traversal.
+    // Methods are bound to the real node, so pass the wrapper to the free getChildren.
+    function interceptForEachChild(node: Node, during: () => void): Node {
+        return new Proxy(node, {
+            get(target, prop) {
+                if (prop === "forEachChild") {
+                    return <T>(visitor: (node: Node) => T, visitArray?: (nodes: NodeArray<Node>) => T) => {
+                        let ran = false;
+                        return target.forEachChild(child => {
+                            const result = visitor(child);
+                            if (!ran) {
+                                ran = true;
+                                during();
+                            }
+                            return result;
+                        }, visitArray);
+                    };
+                }
+                const value = Reflect.get(target, prop, target);
+                return typeof value === "function" ? value.bind(target) : value;
+            },
+        });
+    }
+
+    function assertIdle(scanner: Scanner, sf: SourceFile): void {
+        assert.strictEqual(scanner.getText(), sf.text);
+        assert.strictEqual(scanner.getToken(), SyntaxKind.Unknown);
+        assert.strictEqual(scanner.getTokenFullStart(), 0);
+        assert.strictEqual(scanner.getTokenEnd(), 0);
+        assert.strictEqual(scanner.getTokenValue(), undefined);
+        assert.strictEqual(scanner.getTokenFlags(), TokenFlags.None);
+        assert.strictEqual(scanner.getCommentDirectives(), undefined);
+    }
+
+    const sample = [
+        "/** docs */",
+        "export function f(a: number, b = [1, 2]): number {",
+        "    if (a) { return b[0]; } else { return a ?? 0; }",
+        "}",
+        "",
+    ].join("\n");
+
+    test("a full traversal and repeated cached calls reuse a single scanner", () => {
+        withSourceFiles({ "/src/a.ts": sample }, ([sf]) => {
+            assert.strictEqual(getPooledScanners(sf).length, 0);
+            const first = snapshotTree(sf, sf);
+            const pool = getPooledScanners(sf);
+            assert.strictEqual(pool.length, 1);
+            const scanner = pool[0];
+
+            assert.deepStrictEqual(snapshotTree(sf, sf), first);
+            const stmt = sf.statements[0];
+            assert.strictEqual(stmt.getChildren(sf), stmt.getChildren(sf));
+            assert.deepStrictEqual(getPooledScanners(sf), [scanner]);
+
+            // Token lookups that scan between AST children check out the same pooled scanner.
+            for (let pos = 0; pos <= sf.end; pos++) {
+                getTokenAtPosition(sf, pos);
+            }
+            assert.deepStrictEqual(getPooledScanners(sf), [scanner]);
+            assertIdle(scanner, sf);
+
+            assert.deepStrictEqual(first, referenceSnapshot("/src/a.ts", sample));
+        });
+    });
+
+    test("nested child creation uses a distinct scanner and does not disturb the outer one", () => {
+        const text = "if (a) { x(1, 2); } else { y[0] = 3; }\nwhile (b) { z(); }\n";
+        const reference = referenceSnapshot("/src/n.ts", text);
+        withSourceFiles({ "/src/n.ts": text }, ([sf]) => {
+            const [ifStmt, whileStmt] = sf.statements;
+            let nestedRuns = 0;
+            let poolSizeDuringNested = -1;
+            const wrapped = interceptForEachChild(ifStmt, () => {
+                nestedRuns++;
+                // The outer scanner is still checked out, so the pool is empty here.
+                poolSizeDuringNested = getPooledScanners(sf).length;
+                // Materialize a whole other subtree, including its own nested getChildren calls.
+                snapshotTree(whileStmt, sf);
+            });
+
+            const outerChildren = getChildren(wrapped, sf);
+            assert.strictEqual(nestedRuns, 1);
+            assert.strictEqual(poolSizeDuringNested, 0);
+            assert.deepStrictEqual(
+                outerChildren.map(c => [formatSyntaxKind(c.kind), c.pos, c.end]),
+                reference[3][0][3][0][3].map(([kind, pos, end]) => [kind, pos, end]),
+            );
+            assert.deepStrictEqual(snapshotTree(whileStmt, sf), reference[3][0][3][1]);
+
+            const pool = getPooledScanners(sf);
+            assert.strictEqual(pool.length, 2);
+            assert.notStrictEqual(pool[0], pool[1]);
+            for (const scanner of pool) {
+                assertIdle(scanner, sf);
+            }
+        });
+    });
+
+    test("a scanner is returned to the pool when child creation throws", () => {
+        const text = "if (a) { b(); } else { c(); }\n";
+        withSourceFiles({ "/src/t.ts": text }, ([sf]) => {
+            const stmt = sf.statements[0];
+            const throwing = interceptForEachChild(stmt, () => {
+                throw new Error("boom");
+            });
+            assert.throws(() => getChildren(throwing, sf), /boom/);
+            const pool = getPooledScanners(sf);
+            assert.strictEqual(pool.length, 1);
+            assertIdle(pool[0], sf);
+
+            // A failed attempt is not cached, and the pooled scanner works for later calls.
+            assert.throws(() => getChildren(throwing, sf), /boom/);
+            assert.strictEqual(getPooledScanners(sf).length, 1);
+            assert.deepStrictEqual(stmt.getChildren(sf).map(c => c.getText(sf)), ["if", "(", "a", ")", "{ b(); }", "else", "{ c(); }"]);
+            assert.strictEqual(getPooledScanners(sf).length, 1);
+        });
+    });
+
+    test("trivia, comment directives and JSDoc do not leak state between uses", () => {
+        const text = [
+            "/** leading doc */",
+            "function f(/* a */ a: number /* b */, b: string) // @ts-ignore",
+            "{",
+            "    // @ts-expect-error",
+            "    return a /* mid */ + 1;",
+            "}",
+            "/** @type {number} */",
+            "const x = /* @ts-ignore */ (1);",
+            "",
+        ].join("\n");
+        const reference = referenceSnapshot("/src/c.ts", text);
+        withSourceFiles({ "/src/c.ts": text }, ([sf]) => {
+            const fn = sf.statements[0];
+            assert.strictEqual(fn.getChildren(sf)[0].kind, SyntaxKind.JSDoc);
+            assert.strictEqual(sf.statements[1].getChildren(sf)[0].kind, SyntaxKind.JSDoc);
+            assert.deepStrictEqual(snapshotTree(sf, sf), reference);
+            // Leaf tokens absorb all interior trivia (including JSDoc, which is also exposed
+            // as its own child), so their full texts tile the file.
+            const leaves: Node[] = [];
+            const collect = (node: Node): void => {
+                if (node.kind === SyntaxKind.JSDoc) {
+                    return;
+                }
+                const children = node.getChildren(sf);
+                if (children.length === 0) {
+                    leaves.push(node);
+                    return;
+                }
+                children.forEach(collect);
+            };
+            collect(sf);
+            assert.strictEqual(leaves.map(leaf => leaf.getFullText(sf)).join(""), sf.text);
+
+            const pool = getPooledScanners(sf);
+            assert.strictEqual(pool.length, 1);
+            assertIdle(pool[0], sf);
+        });
+    });
+
+    test("token boundaries between adjacent tokens are exact", () => {
+        const text = "a?.b!(c)[d] ??= e=>f;x>>=y>>>z;q=<T,>(v:T)=>v\n";
+        withSourceFiles({ "/src/b.ts": text }, ([sf]) => {
+            const expected = "a ?. b ! ( c ) [ d ] ??= e => f ; x >>= y >>> z ; q = < T , > ( v : T ) => v".split(" ");
+            // The trailing EndOfFile token is empty.
+            assert.deepStrictEqual(leafTokenTexts(sf, sf), [...expected, ""]);
+            assert.strictEqual(getPooledScanners(sf).length, 1);
+        });
+    });
+
+    test("source files with different language variants keep independent scanners", () => {
+        const files = {
+            "/src/plain.ts": "const a = <number>x;\nconst f = <T,>(v: T) => v;\nlet c = a < b && b > c;\n",
+            "/src/element.tsx": 'const e = <div id="a" {...p}>hi {name}<br /></div>;\nconst g = <T,>(v: T) => v;\n',
+            "/src/component.jsx": "/** @param {string} s */\nexport const h = s => <span title={s}>{s}</span>;\n",
+        };
+        const references = Object.entries(files).map(([fileName, text]) => referenceSnapshot(fileName, text));
+        withSourceFiles(files, sourceFiles => {
+            // Interleave materialization across files so each file's scanner is used between
+            // uses of the others.
+            const queues = sourceFiles.map(sf => [sf as Node]);
+            while (queues.some(queue => queue.length > 0)) {
+                queues.forEach((queue, i) => {
+                    const node = queue.shift();
+                    if (node) {
+                        queue.push(...node.getChildren(sourceFiles[i]));
+                    }
+                });
+            }
+            sourceFiles.forEach((sf, i) => {
+                assert.deepStrictEqual(snapshotTree(sf, sf), references[i]);
+                const pool = getPooledScanners(sf);
+                assert.strictEqual(pool.length, 1);
+                assertIdle(pool[0], sf);
+            });
+            const scanners = new Set(sourceFiles.map(sf => getPooledScanners(sf)[0]));
+            assert.strictEqual(scanners.size, sourceFiles.length);
+        });
+    });
 });

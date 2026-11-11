@@ -12,12 +12,18 @@ steps:
 
   - bash: |
       cat > .npmrc << 'EOF'
-      registry=https://packagefeedproxy.microsoft.io/npm/
+      registry=https://pkgs.dev.azure.com/devdiv/devdiv/_packaging/devdiv_PublicPackages/npm/registry/
       EOF
       npm init -y
     condition: ${{ parameters.condition }}
     displayName: 'Set up npm'
 
-  - bash: npm install --no-save @vscode/vsce@4.0.0
+  - task: npmAuthenticate@0
+    condition: ${{ parameters.condition }}
+    inputs:
+      workingFile: .npmrc
+    displayName: 'Authenticate npm'
+
+  - bash: npm install --no-save @vscode/vsce@4.1.0
     condition: ${{ parameters.condition }}
     displayName: 'Install vsce'

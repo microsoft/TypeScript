@@ -1,0 +1,18 @@
+//// [tests/cases/compiler/bigintZeroIsDefinitelyFalsy.ts] ////
+
+=== bigintZeroIsDefinitelyFalsy.ts ===
+declare const x: 0n | 1n;
+>x : 0n | 1n
+
+const y = x && "a";
+>y : "a" | 0n
+>x && "a" : "a" | 0n
+>x : 0n | 1n
+>"a" : "a"
+
+const z: 0n | "a" = x && "a";
+>z : "a" | 0n
+>x && "a" : "a" | 0n
+>x : 0n | 1n
+>"a" : "a"
+

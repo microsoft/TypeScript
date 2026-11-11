@@ -370,7 +370,7 @@ func (b *fanotifyBackend) markDir(w *dirWatch, path string, markPath string) err
 }
 
 func maybeWrapUnsupportedFilesystem(err error) error {
-	if errors.Is(err, unix.EOPNOTSUPP) || errors.Is(err, unix.ENOTSUP) || errors.Is(err, unix.ENODEV) {
+	if errors.Is(err, unix.EOPNOTSUPP) || errors.Is(err, unix.ENOTSUP) || errors.Is(err, unix.ENODEV) || errors.Is(err, unix.EXDEV) {
 		return fmt.Errorf("%w: %w", err, ErrFilesystemUnsupported)
 	}
 	return err
@@ -396,6 +396,8 @@ func (b *fanotifyBackend) handleEvents() error {
 		metaSize := int(unsafe.Sizeof(unix.FanotifyEventMetadata{}))
 		data := buf[:n]
 		for len(data) >= metaSize {
+			// SAFETY: The kernel writes whole, suitably aligned event records into buf, and the
+			// loop condition guarantees a full metadata header remains.
 			meta := (*unix.FanotifyEventMetadata)(unsafe.Pointer(&data[0]))
 			if meta.Vers != unix.FANOTIFY_METADATA_VERSION {
 				return fmt.Errorf("unsupported fanotify metadata version: %d", meta.Vers)

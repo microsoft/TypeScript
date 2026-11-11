@@ -8,7 +8,7 @@ export const a = 10;
 //// [/home/src/workspaces/project/src/b.ts] *new* 
 export const b = 10;
 
-tsgo 
+tsc 
 ExitStatus:: DiagnosticsPresent_OutputsSkipped
 Output::
 Version FakeTSVersion

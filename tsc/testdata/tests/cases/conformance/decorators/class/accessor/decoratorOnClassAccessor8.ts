@@ -30,3 +30,37 @@ class E {
 class F {
     @dec set x(value: number) { }
 }
+
+class G {
+    @dec get x(): string { return ""; }
+    set x(value) { }
+}
+
+class H {
+    get x(): string { return ""; }
+    @dec set x(value) { }
+}
+
+class I {
+    @dec set x(value) { }
+    get x(): string { return ""; }
+}
+
+class J {
+    set x(value) { }
+    @dec get x(): string { return ""; }
+}
+
+class K {
+    @dec get x(): string { return ""; }
+}
+
+class L {
+    @dec get x(): string { return ""; }
+    set x(value: any) { }
+}
+
+class M {
+    @dec static get x(): number { return 0; }
+    static set x(value) { }
+}

@@ -303,6 +303,7 @@ func (b *fsEventsBackend) startStream(paths []string, watches []fseventsWatchSna
 	cfStrings := make([]uintptr, 0, len(paths))
 	for _, path := range paths {
 		dirCStr := append([]byte(path), 0)
+		// SAFETY: dirCStr is NUL-terminated and stays alive for the call, which copies it.
 		cfDir := cfStringCreate(0, unsafe.Pointer(&dirCStr[0]), cfStringEncodingUTF8)
 		if cfDir == 0 {
 			for _, cfString := range cfStrings {
@@ -318,6 +319,7 @@ func (b *fsEventsBackend) startStream(paths []string, watches []fseventsWatchSna
 		}
 	}()
 
+	// SAFETY: cfStrings is non-empty and stays alive for the call, which copies its elements.
 	pathsToWatch := cfArrayCreate(0, unsafe.Pointer(&cfStrings[0]), len(cfStrings), 0)
 	if pathsToWatch == 0 {
 		return nil, errCFArrayCreateNull
@@ -331,11 +333,13 @@ func (b *fsEventsBackend) startStream(paths []string, watches []fseventsWatchSna
 	state := &fseventsStream{cb: cb}
 	state.pinner.Pin(cb)
 
+	// SAFETY: cb is pinned until the stream is stopped, so FSEvents may hold its address.
 	ctx := fsEventStreamContext{info: uintptr(unsafe.Pointer(cb))}
 
 	stream := fsEventStreamCreate(
 		0,
 		fsEventsCallbackAsmAddr,
+		// SAFETY: ctx stays alive for the call, and FSEventStreamCreate copies it.
 		unsafe.Pointer(&ctx),
 		pathsToWatch,
 		eventIDSinceNow,
@@ -500,7 +504,10 @@ func fsEventsCallback(cb *streamCallback, payload *fsEventsCallbackPayload) {
 	touched := map[*dirWatch]struct{}{}
 
 	for i := range numEvents {
+		// SAFETY: flags and ids are non-nil C arrays of numEvents elements, owned by payload
+		// until it is closed.
 		flag := *(*uint32)(unsafe.Add(nil, flags+i*flagSize))
+		// SAFETY: ids has the same length and ownership as flags above.
 		eventID := *(*uint64)(unsafe.Add(nil, ids+i*idSize))
 		pathRef := cfArrayGetValueAtIndex(paths, int(i))
 		path := cfStringToNFC(pathRef)

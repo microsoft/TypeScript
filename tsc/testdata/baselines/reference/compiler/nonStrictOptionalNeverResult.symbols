@@ -1,0 +1,32 @@
+//// [tests/cases/compiler/nonStrictOptionalNeverResult.ts] ////
+
+=== nonStrictOptionalNeverResult.ts ===
+type Result = { error: string; details?: never } | { details: { link: string }; error?: never };
+>Result : Symbol(Result, Decl(nonStrictOptionalNeverResult.ts, 0, 0))
+>error : Symbol(error, Decl(nonStrictOptionalNeverResult.ts, 0, 15))
+>details : Symbol(details, Decl(nonStrictOptionalNeverResult.ts, 0, 30))
+>details : Symbol(details, Decl(nonStrictOptionalNeverResult.ts, 0, 52))
+>link : Symbol(link, Decl(nonStrictOptionalNeverResult.ts, 0, 63))
+>error : Symbol(error, Decl(nonStrictOptionalNeverResult.ts, 0, 79))
+
+function read(result: Result) {
+>read : Symbol(read, Decl(nonStrictOptionalNeverResult.ts, 0, 96))
+>result : Symbol(result, Decl(nonStrictOptionalNeverResult.ts, 1, 14))
+>Result : Symbol(Result, Decl(nonStrictOptionalNeverResult.ts, 0, 0))
+
+    if (result.error || !result.details) return;
+>result.error : Symbol(error, Decl(nonStrictOptionalNeverResult.ts, 0, 15), Decl(nonStrictOptionalNeverResult.ts, 0, 79))
+>result : Symbol(result, Decl(nonStrictOptionalNeverResult.ts, 1, 14))
+>error : Symbol(error, Decl(nonStrictOptionalNeverResult.ts, 0, 15), Decl(nonStrictOptionalNeverResult.ts, 0, 79))
+>result.details : Symbol(details, Decl(nonStrictOptionalNeverResult.ts, 0, 30), Decl(nonStrictOptionalNeverResult.ts, 0, 52))
+>result : Symbol(result, Decl(nonStrictOptionalNeverResult.ts, 1, 14))
+>details : Symbol(details, Decl(nonStrictOptionalNeverResult.ts, 0, 30), Decl(nonStrictOptionalNeverResult.ts, 0, 52))
+
+    return result.details.link;
+>result.details.link : Symbol(link, Decl(nonStrictOptionalNeverResult.ts, 0, 63))
+>result.details : Symbol(details, Decl(nonStrictOptionalNeverResult.ts, 0, 30), Decl(nonStrictOptionalNeverResult.ts, 0, 52))
+>result : Symbol(result, Decl(nonStrictOptionalNeverResult.ts, 1, 14))
+>details : Symbol(details, Decl(nonStrictOptionalNeverResult.ts, 0, 30), Decl(nonStrictOptionalNeverResult.ts, 0, 52))
+>link : Symbol(link, Decl(nonStrictOptionalNeverResult.ts, 0, 63))
+}
+

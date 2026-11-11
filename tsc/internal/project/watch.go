@@ -12,6 +12,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
+	"github.com/microsoft/TypeScript/tsc/internal/nativepath"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
@@ -215,6 +216,11 @@ func (w *WatchedFiles[T]) Watchers() Watchers {
 		w.mu.Lock()
 		defer w.mu.Unlock()
 		result := w.computeGlobPatterns(w.input)
+		// Never ask the client to watch network locations; see nativepath.IsNetworkPath.
+		result.patternsInsideWorkspace = slices.DeleteFunc(result.patternsInsideWorkspace, nativepath.IsNetworkPath)
+		result.directoriesOutsideWorkspace = slices.DeleteFunc(result.directoriesOutsideWorkspace, func(dir tspath.RootedDirectoryPath) bool {
+			return nativepath.IsNetworkPath(dir.AsString())
+		})
 		globs := slices.Compact(slices.Sorted(slices.Values(result.patternsInsideWorkspace)))
 
 		ignored := result.ignored
@@ -444,8 +450,8 @@ func perceivedOsRootLengthForWatching(pathComponents []string) int {
 		}
 		return 1
 	}
-	if pathComponents[1] == "home" {
-		// Group /home/username into a single component
+	if pathComponents[1] == "home" || strings.EqualFold(pathComponents[1], "Users") {
+		// Group /home/username or /Users/username into a single component
 		return min(3, length)
 	}
 	return 1

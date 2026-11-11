@@ -1,32 +1,27 @@
-import fs from "node:fs";
-import module from "node:module";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
+// Node modules are passed in rather than imported so that this file can be
+// loaded in any environment; callers choose how to obtain them.
+/** @typedef {import("./getExePath.d.ts").NodeModules} NodeModules */
 
 // NOTE: Keep VS Code extension's resolveTsdkPathToExe in sync with this function.
-export default function getExePath() {
-    const __dirname = path.dirname(fileURLToPath(import.meta.url));
+/** @param {NodeModules} modules */
+export default function getExePath({ fs, module, path, url }) {
+    const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
     const normalizedDirname = __dirname.replace(/\\/g, "/");
 
     const pkg = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "package.json"), "utf8"));
     const pkgName = pkg.name;
-    const baseName = pkgName.startsWith("@") ? pkgName.split("/")[1] : pkgName;
-    const expectedBinName = baseName === "typescript" ? "tsc" : "tsgo";
+    const [scope, baseName] = pkgName.startsWith("@") ? pkgName.split("/") : ["@typescript", pkgName];
     const binNames = pkg.bin && typeof pkg.bin === "object" ? Object.keys(pkg.bin) : [];
-    if (binNames.length !== 1 || binNames[0] !== expectedBinName) {
-        throw new Error(`Expected ${pkgName} to declare exactly one bin entry named ${expectedBinName}.`);
+    if (binNames.length !== 1 || binNames[0] !== "tsc") {
+        throw new Error(`Expected ${pkgName} to declare exactly one bin entry named tsc.`);
     }
-    let binName = expectedBinName;
     let exeDir;
 
     const expectedPackage = baseName + "-" + process.platform + "-" + process.arch;
 
     if (normalizedDirname.endsWith("/packages/" + baseName + "/lib")) {
         // We're running directly from source in the repo.
-        // The local repo build (`hereby build`) always produces `tsgo`, regardless
-        // of the published `bin` name, so don't use binName here.
         exeDir = path.resolve(__dirname, "..", "..", "..", "built", "local");
-        binName = "tsc";
     }
     else if (normalizedDirname.endsWith("/built/npm/" + baseName + "/lib")) {
         // We're running from the built output.
@@ -34,7 +29,7 @@ export default function getExePath() {
     }
     else {
         // We're actually running from an installed package.
-        const platformPackageName = "@typescript/" + expectedPackage;
+        const platformPackageName = scope + "/" + expectedPackage;
         try {
             if (typeof import.meta.resolve === "undefined") {
                 // v16.20.1
@@ -45,7 +40,7 @@ export default function getExePath() {
             else {
                 // v20.6.0, v18.19.0
                 const packageJson = import.meta.resolve(platformPackageName + "/package.json");
-                const packageJsonPath = fileURLToPath(packageJson);
+                const packageJsonPath = url.fileURLToPath(packageJson);
                 exeDir = path.join(path.dirname(packageJsonPath), "lib");
             }
         }
@@ -54,7 +49,7 @@ export default function getExePath() {
         }
     }
 
-    let exe = path.join(exeDir, binName);
+    let exe = path.join(exeDir, "tsc");
     if (process.platform === "win32") {
         exe += ".exe";
         if (exe.length >= 248) {

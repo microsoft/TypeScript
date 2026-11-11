@@ -22,6 +22,7 @@ import {
     SyntaxKind,
 } from "@typescript/typescript/ast";
 import { cloneNode } from "@typescript/typescript/ast/factory";
+import { createFileSystemFromSnapshot } from "@typescript/typescript/fs";
 import { toRootedFilePath } from "@typescript/typescript/path";
 import type {
     APIRequest,
@@ -141,7 +142,7 @@ export const missingValue = absent;
 };
 
 type GeneratorMethod<Args extends readonly unknown[], Result> = ((...args: Args) => Result) & {
-    gen(...args: Args): Generator<APIRequest, Result, APIResponse["result"]>;
+    gen(...args: Args): APIRequestGenerator<Result>;
 };
 
 type EquivalenceAssertion<Result> = (actual: Result, expected: Result, message?: string) => void;
@@ -149,7 +150,7 @@ type EquivalenceAssertion<Result> = (actual: Result, expected: Result, message?:
 interface ParityCase {
     readonly ownerName: string;
     readonly methodName: string;
-    readonly runGenerator: () => Generator<APIRequest, void, APIResponse["result"]>;
+    readonly runGenerator: () => APIRequestGenerator<void>;
     readonly assertEquivalent: (message?: string) => void;
 }
 
@@ -170,6 +171,7 @@ const privateGeneratorGetters = new Set([
     "Checker.getWellKnownSignatures",
     "Checker.getWellKnownSymbols",
     "NodeHandle.fetchOwnerFile",
+    "NodeHandle.resolveInFile",
     "Program.disposeWorker",
     "Program.fetchSourceFileMetadata",
     "Program.getSourceFileWorker",
@@ -297,6 +299,7 @@ function assertSignatureArraysEquivalent(actual: readonly Signature[], expected:
 function assertNodeHandlesEquivalent(actual: NodeHandle, expected: NodeHandle, message?: string): void {
     assert.equal(actual.index, expected.index, message);
     assert.equal(actual.kind, expected.kind, message);
+    assert.equal(actual.sourceFileId, expected.sourceFileId, message);
     assert.equal(actual.path, expected.path, message);
 }
 
@@ -443,6 +446,24 @@ function assertPublicGeneratorCoverage(owners: readonly { readonly name: string;
 }
 
 describe("API - generator batching", { concurrency: areTestsFiltered() }, () => {
+    test("Program statistics are fetched for every sync and generator call", () => {
+        using api = spawnAPI({ "/src/main.ts": "export const value = 1;" }, { collectTiming: true });
+        for (const generatorFirst of [false, true]) {
+            using program = api.createProgram(["/src/main.ts"], { noLib: true });
+            api.resetTimingInfo();
+            const statistics = generatorFirst ? api.batch(program.getStatistics.gen())[0] : program.getStatistics();
+            assert.ok(statistics.nodeCount > 0);
+            const [next, repeated] = api.batch(
+                program.getStatistics.gen(),
+                program.getStatistics.gen(),
+            );
+            assert.deepEqual(next, statistics);
+            assert.deepEqual(repeated, statistics);
+            assert.deepEqual(program.getStatistics(), statistics);
+            assert.equal(api.getTimingInfo().totals.requestCount, 3);
+        }
+    });
+
     test("looks up binder symbols through standalone and API generators", () => {
         using api = spawnAPI();
         using lease = api.createSourceFile("/symbols.ts", "function present() {}");
@@ -579,7 +600,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
         assert.equal(started, false);
     });
 
-    test("retains deferred branding after completion", () => {
+    test("rejects deferred generator reuse after completion", () => {
         let completed = false;
         function* child(): Generator<APIRequest, string, string> {
             const result = yield { method: "request", params: null } as unknown as APIRequest;
@@ -591,8 +612,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
         assert.deepEqual(results, []);
         assert.equal(completed, true);
         const noRequests = () => assert.fail("Unexpected request round");
-        assert.deepEqual(executeRequestGenerators([deferred], noRequests), []);
-        assert.throws(() => executeRequestGenerators([deferred, deferred], noRequests), /same generator instance more than once/);
+        assert.throws(() => executeRequestGenerators([deferred], noRequests), /same generator instance more than once/);
     });
 
     test("joins nested, empty, and synchronously completed groups in result order", () => {
@@ -897,23 +917,15 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
         }
     });
 
-    test("tracks all identity independently across executors", () => {
+    test("rejects generator reuse across executors", () => {
         const joined = all();
         const noRequests = () => assert.fail("Unexpected request round");
         function* parent() {
             assert.deepEqual(yield* all(joined), [[]]);
-            assert.deepEqual(executeRequestGenerators([joined], noRequests), [undefined]);
-            try {
-                yield* all(joined);
-                assert.fail("Expected duplicate generator rejection");
-            }
-            catch (error) {
-                assert.match((error as Error).message, /same generator instance more than once/);
-            }
+            assert.throws(() => executeRequestGenerators([joined], noRequests), /same generator instance more than once/);
         }
         executeRequestGenerators([parent()], noRequests);
-        assert.deepEqual(executeRequestGenerators([joined], noRequests), [undefined]);
-        assert.throws(() => executeRequestGenerators([joined, joined], noRequests), /same generator instance more than once/);
+        assert.throws(() => executeRequestGenerators([joined], noRequests), /same generator instance more than once/);
     });
 
     test("deduplicates initialization across nested joins", () => {
@@ -1585,6 +1597,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
                 parityCase("API", "parseConfigFile", api.parseConfigFile, assertDeepEquivalent, "/tsconfig.json"),
                 parityCase("API", "parseCommandLine", api.parseCommandLine, assertDeepEquivalent, ["--strict", "--noEmit"]),
                 parityCase("API", "readConfigFile", api.readConfigFile, assertDeepEquivalent, "/tsconfig.json"),
+                parityCase("API", "parseConfigFileTextToJson", api.parseConfigFileTextToJson, assertDeepEquivalent, "/tsconfig.json", `{ "compilerOptions": { "strict": true } }`),
                 parityCase("API", "parseJsonConfigFileContent", api.parseJsonConfigFileContent, assertDeepEquivalent, { compilerOptions: { strict: true } }, { configDirectory: "/" }),
                 parityCase("API", "parseJsonConfigFileContent", api.parseJsonConfigFileContent, assertDeepEquivalent, { extends: "./base.json" }, { configFileName: "/tsconfig.json" }),
                 parityCase("API", "createSourceFile", api.createSourceFile, assertRetainedSourceFilesEquivalent, "/generated.ts", "export const generated = true;"),
@@ -1734,6 +1747,17 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
                 parityCase("Checker", "getTypeArguments", checker.getTypeArguments, assertTypeArraysEquivalent, boxedType),
                 parityCase("Checker", "getNonMissingTypeOfSymbol", checker.getNonMissingTypeOfSymbol, assertTypesEquivalent, boxedOptSymbol),
                 parityCase("Checker", "isReadonlySymbol", checker.isReadonlySymbol, assertDeepEquivalent, boxedOptSymbol),
+                parityCase("Checker", "getNullableType", checker.getNullableType, assertTypesEquivalent, interfaceType, TypeFlags.Null),
+                parityCase("Checker", "getStringLiteralType", checker.getStringLiteralType, assertTypesEquivalent, "hello"),
+                parityCase("Checker", "getNumberLiteralType", checker.getNumberLiteralType, assertTypesEquivalent, 42),
+                parityCase("Checker", "getBigIntLiteralType", checker.getBigIntLiteralType, assertTypesEquivalent, 123n),
+                parityCase("Checker", "getFalseType", checker.getFalseType, assertTypesEquivalent),
+                parityCase("Checker", "getTrueType", checker.getTrueType, assertTypesEquivalent),
+                parityCase("Checker", "getJsxIntrinsicTagNamesAt", checker.getJsxIntrinsicTagNamesAt, assertSymbolArraysEquivalent, combineDeclaration),
+                parityCase("Checker", "getPrivateIdentifierPropertyOfType", checker.getPrivateIdentifierPropertyOfType, assertOptionalSymbolsEquivalent, interfaceType, "#missing", combineDeclaration),
+                parityCase("Checker", "isImplementationOfOverload", checker.isImplementationOfOverload, assertDeepEquivalent, combineDeclaration),
+                parityCase("Checker", "getPropertySymbolOfDestructuringAssignment", checker.getPropertySymbolOfDestructuringAssignment, assertOptionalSymbolsEquivalent, importedDerived),
+                parityCase("Checker", "getAmbientModules", checker.getAmbientModules, assertSymbolArraysEquivalent),
                 parityCase("Checker", "getTargetSymbol", checker.getTargetSymbol, assertOptionalSymbolsEquivalent, boxedOptSymbol),
                 parityCase("Checker", "getExportSymbolOfSymbol", checker.getExportSymbolOfSymbol, assertSymbolsEquivalent, localCombineSymbol),
 
@@ -1795,10 +1819,17 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
             ];
 
             runParityBatch(api, cases);
+            runParityBatch(api, [
+                parityCase("Program", "getStatistics", program.getStatistics, assertDeepEquivalent),
+            ]);
             assert.deepEqual(temporaryProjects, ["/tsconfig.json", "/tsconfig.json"]);
 
-            const snapshotGeneratorAPI = spawnAPI(parityFiles);
-            const snapshotSyncAPI = spawnAPI(parityFiles);
+            const snapshotFiles = {
+                ...parityFiles,
+                "/tsconfig.json": JSON.stringify({ compilerOptions: { noLib: true }, files: ["src/syntax.ts"] }),
+            };
+            const snapshotGeneratorAPI = spawnAPI(snapshotFiles);
+            const snapshotSyncAPI = spawnAPI(snapshotFiles);
             try {
                 const generatorBase = snapshotGeneratorAPI.batch(snapshotGeneratorAPI.createSnapshot.gen({ openProjects: ["/tsconfig.json"] }))[0];
                 const syncBase = snapshotSyncAPI.createSnapshot({ openProjects: ["/tsconfig.json"] });
@@ -1806,6 +1837,16 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
                 const syncUpdated = syncBase.update({});
                 assertSnapshotsEquivalent(generatorUpdated, syncUpdated, "Snapshot.update");
                 exercisedMethods.add("Snapshot.update");
+                const changes = {
+                    fileSystem: { kind: "layer", files: { "/src/syntax.ts": "export const fixed = true;" } },
+                } as const;
+                const generatorExtras = snapshotGeneratorAPI.batch(generatorUpdated.update.gen(changes))[0];
+                const syncExtras = syncUpdated.update(changes);
+                const snapshotChanges = { prepareAutoImports: "/src/syntax.ts", openFiles: ["/src/syntax.ts"] } as const;
+                const generatorOverlay = snapshotGeneratorAPI.batch(generatorBase.update.gen({ ...snapshotChanges, fileSystem: createFileSystemFromSnapshot(generatorExtras) }))[0];
+                const syncOverlay = syncBase.update({ ...snapshotChanges, fileSystem: createFileSystemFromSnapshot(syncExtras) });
+                assertSnapshotsEquivalent(generatorOverlay, syncOverlay, "Snapshot.update with a snapshot filesystem");
+                assert.equal(generatorOverlay.getConfiguredProject("/tsconfig.json")!.program.getSourceFile("/src/syntax.ts")!.text, "export const fixed = true;");
             }
             finally {
                 snapshotGeneratorAPI.close();

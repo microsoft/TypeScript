@@ -1,0 +1,42 @@
+//// [tests/cases/compiler/partialDeepIntersectionCommonSupertype.ts] ////
+
+=== partialDeepIntersectionCommonSupertype.ts ===
+type PartialDeep<T> = T extends object ? { [K in keyof T]?: PartialDeep<T[K]> } : T;
+>PartialDeep : PartialDeep<T>
+
+type Theme<T extends object> = T & { style: { message: (text: string) => string } };
+>Theme : Theme<T>
+>style : { message: (text: string) => string; }
+>message : (text: string) => string
+>text : string
+
+declare function makeTheme<T extends object>(...themes: PartialDeep<Theme<T>>[]): Theme<T>;
+>makeTheme : <T extends object>(...themes: PartialDeep<Theme<T>>[]) => Theme<T>
+>themes : PartialDeep<Theme<T>>[]
+
+declare const theme: { style: { description: (text: string) => string } };
+>theme : { style: { description: (text: string) => string; }; }
+>style : { description: (text: string) => string; }
+>description : (text: string) => string
+>text : string
+
+declare const customization: PartialDeep<Theme<typeof theme>>;
+>customization : { style?: { message?: {} | undefined; description?: {} | undefined; } | undefined; }
+>theme : { style: { description: (text: string) => string; }; }
+
+const merged = makeTheme(theme, customization);
+>merged : Theme<{ style: { description: (text: string) => string; }; }>
+>makeTheme(theme, customization) : Theme<{ style: { description: (text: string) => string; }; }>
+>makeTheme : <T extends object>(...themes: PartialDeep<Theme<T>>[]) => Theme<T>
+>theme : { style: { description: (text: string) => string; }; }
+>customization : { style?: { message?: {} | undefined; description?: {} | undefined; } | undefined; }
+
+merged.style.description("");
+>merged.style.description("") : string
+>merged.style.description : (text: string) => string
+>merged.style : { description: (text: string) => string; } & { message: (text: string) => string; }
+>merged : Theme<{ style: { description: (text: string) => string; }; }>
+>style : { description: (text: string) => string; } & { message: (text: string) => string; }
+>description : (text: string) => string
+>"" : ""
+

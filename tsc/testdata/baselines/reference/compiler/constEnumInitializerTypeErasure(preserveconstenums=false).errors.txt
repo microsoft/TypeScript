@@ -1,0 +1,25 @@
+constEnumInitializerTypeErasure.ts(3,12): error TS2474: const enum member initializers must be constant expressions.
+constEnumInitializerTypeErasure.ts(4,14): error TS2474: const enum member initializers must be constant expressions.
+constEnumInitializerTypeErasure.ts(5,12): error TS2474: const enum member initializers must be constant expressions.
+constEnumInitializerTypeErasure.ts(6,15): error TS2474: const enum member initializers must be constant expressions.
+
+
+==== constEnumInitializerTypeErasure.ts (4 errors) ====
+    const enum Token {
+        End = 0,
+        Word = "word" as string,
+               ~~~~~~~~~~~~~~~~
+!!! error TS2474: const enum member initializers must be constant expressions.
+        Marker = <number>2,
+                 ~~~~~~~~~
+!!! error TS2474: const enum member initializers must be constant expressions.
+        Flag = 3!,
+               ~~
+!!! error TS2474: const enum member initializers must be constant expressions.
+        Count = 4 satisfies number,
+                  ~~~~~~~~~
+!!! error TS2474: const enum member initializers must be constant expressions.
+    }
+    
+    export const end = Token.End;
+    

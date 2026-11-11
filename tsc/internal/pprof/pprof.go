@@ -10,7 +10,30 @@ import (
 	"runtime/pprof"
 	"sync"
 	"time"
+
+	"github.com/microsoft/TypeScript/tsc/internal/nativepath"
 )
+
+// makeProfileDir creates profileDir, refusing network paths so that
+// profiling requests cannot trigger connections to remote hosts.
+func makeProfileDir(profileDir string) error {
+	if nativepath.IsNetworkPath(profileDir) {
+		return errors.New("network paths are not supported: " + profileDir)
+	}
+	if err := os.MkdirAll(profileDir, 0o755); err != nil {
+		return fmt.Errorf("failed to create profile directory: %w", err)
+	}
+	return nil
+}
+
+var defaultMemProfileRate = runtime.MemProfileRate
+
+// DisableMemProfiling turns off heap profile sampling, which otherwise
+// costs a stack walk every few hundred kilobytes allocated. It should be
+// called as early as possible; BeginProfiling turns sampling back on.
+func DisableMemProfiling() {
+	runtime.MemProfileRate = 0
+}
 
 type ProfileSession struct {
 	cpuFilePath string
@@ -21,9 +44,11 @@ type ProfileSession struct {
 
 // BeginProfiling starts CPU and memory profiling, writing the profiles to the specified directory.
 func BeginProfiling(profileDir string, logWriter io.Writer) *ProfileSession {
-	if err := os.MkdirAll(profileDir, 0o755); err != nil {
+	if err := makeProfileDir(profileDir); err != nil {
 		panic(err)
 	}
+
+	runtime.MemProfileRate = defaultMemProfileRate
 
 	pid := os.Getpid()
 
@@ -55,6 +80,9 @@ func (p *ProfileSession) Stop() {
 		if err != nil {
 			panic(err)
 		}
+		// The profile reflects the heap as of the last completed collection,
+		// which can be long before the end of the run.
+		runtime.GC()
 		if err := pprof.Lookup("allocs").WriteTo(memFile, 0); err != nil {
 			panic(err)
 		}
@@ -80,8 +108,8 @@ func (c *CPUProfiler) StartCPUProfile(profileDir string) error {
 		return errors.New("CPU profiling already in progress")
 	}
 
-	if err := os.MkdirAll(profileDir, 0o755); err != nil {
-		return fmt.Errorf("failed to create profile directory: %w", err)
+	if err := makeProfileDir(profileDir); err != nil {
+		return err
 	}
 
 	cpuProfilePath := filepath.Join(profileDir, fmt.Sprintf("%d-%d-cpuprofile.pb.gz", os.Getpid(), time.Now().UnixMilli()))
@@ -122,8 +150,8 @@ func (c *CPUProfiler) StopCPUProfile() (string, error) {
 
 // SaveHeapProfile saves a heap profile to the specified directory.
 func SaveHeapProfile(profileDir string) (string, error) {
-	if err := os.MkdirAll(profileDir, 0o755); err != nil {
-		return "", fmt.Errorf("failed to create profile directory: %w", err)
+	if err := makeProfileDir(profileDir); err != nil {
+		return "", err
 	}
 
 	heapProfilePath := filepath.Join(profileDir, fmt.Sprintf("%d-%d-heapprofile.pb.gz", os.Getpid(), time.Now().UnixMilli()))
@@ -144,8 +172,8 @@ func SaveHeapProfile(profileDir string) (string, error) {
 
 // SaveAllocProfile saves an allocation profile to the specified directory.
 func SaveAllocProfile(profileDir string) (string, error) {
-	if err := os.MkdirAll(profileDir, 0o755); err != nil {
-		return "", fmt.Errorf("failed to create profile directory: %w", err)
+	if err := makeProfileDir(profileDir); err != nil {
+		return "", err
 	}
 
 	allocProfilePath := filepath.Join(profileDir, fmt.Sprintf("%d-%d-allocprofile.pb.gz", os.Getpid(), time.Now().UnixMilli()))
@@ -155,6 +183,7 @@ func SaveAllocProfile(profileDir string) (string, error) {
 	}
 	defer allocFile.Close()
 
+	runtime.GC()
 	if err := pprof.Lookup("allocs").WriteTo(allocFile, 0); err != nil {
 		os.Remove(allocProfilePath)
 		return "", fmt.Errorf("failed to write alloc profile: %w", err)

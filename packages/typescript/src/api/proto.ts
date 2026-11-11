@@ -1,4 +1,4 @@
-import { SymbolOwnerKind } from "#enums/symbolOwnerKind";
+import { SymbolOwnerKind } from "../../enums/symbolOwnerKind.js";
 import {
     documentURIToFileName,
     fileNameToDocumentURI,
@@ -7,7 +7,6 @@ import type {
     APIMethodInfo,
     CreateSnapshotParams as CoreCreateSnapshotParams,
     DocumentIdentifier,
-    ProjectId,
     SignatureResponse,
     SourceFileDescriptor,
     SourceFileResponse,
@@ -32,7 +31,7 @@ export interface SnapshotSymbolOwner {
     readonly kind: typeof SymbolOwnerKind.Snapshot;
     readonly file?: never;
     readonly snapshot: number;
-    readonly project: ProjectId;
+    readonly project: number;
 }
 
 export type SymbolOwner = FileSymbolOwner | SnapshotSymbolOwner;
@@ -70,7 +69,7 @@ export type SymbolsPropertyMethod = APIMethodsReturning<ProtocolSymbolResponse[]
 export type SignaturePropertyMethod = APIMethodsReturning<SignatureResponse>;
 export type TypePropertyMethod = Exclude<APIMethodsReturning<TypeResponse>, IntrinsicTypeMethod>;
 export type TypesPropertyMethod = APIMethodsReturning<TypeResponse[]>;
-export type IntrinsicTypeMethod = "getAnyType" | "getBigIntType" | "getBooleanType" | "getESSymbolType" | "getNeverType" | "getNonPrimitiveType" | "getNullType" | "getNumberType" | "getStringType" | "getUndefinedType" | "getUnknownType" | "getVoidType";
+export type IntrinsicTypeMethod = "getAnyType" | "getBigIntType" | "getBooleanType" | "getESSymbolType" | "getFalseType" | "getNeverType" | "getNonPrimitiveType" | "getNullType" | "getNumberType" | "getStringType" | "getTrueType" | "getUndefinedType" | "getUnknownType" | "getVoidType";
 
 type BatchableAPIMethod = Exclude<keyof APIMethodInfo, "batchRequests">;
 export type APIRequest = { [K in BatchableAPIMethod]: { method: K; params: APIMethodInfo[K]["params"]; }; }[BatchableAPIMethod];

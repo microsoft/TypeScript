@@ -1,4 +1,4 @@
-import { EmitFlags } from "#enums/emitFlags";
+import { EmitFlags } from "../../enums/emitFlags.js";
 import type {
     Node,
     SyntaxKind,

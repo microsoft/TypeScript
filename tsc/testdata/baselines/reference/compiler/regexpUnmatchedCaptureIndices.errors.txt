@@ -1,0 +1,21 @@
+regexpUnmatchedCaptureIndices.ts(3,5): error TS2532: Object is possibly 'undefined'.
+regexpUnmatchedCaptureIndices.ts(4,5): error TS2532: Object is possibly 'undefined'.
+
+
+==== regexpUnmatchedCaptureIndices.ts (2 errors) ====
+    const match = /(section)?/d.exec("");
+    if (match) {
+        match.indices![1][0];
+        ~~~~~~~~~~~~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+        match.indices![1][1];
+        ~~~~~~~~~~~~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+    
+        const indices = match.indices![1];
+        if (indices) {
+            indices[0];
+            indices[1];
+        }
+    }
+    

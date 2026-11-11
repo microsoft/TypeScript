@@ -1,0 +1,11 @@
+moduleKeywordInstantiatedNamespace.ts(1,8): error TS1540: A 'namespace' declaration should not be declared using the 'module' keyword. Please use the 'namespace' keyword instead.
+
+
+==== moduleKeywordInstantiatedNamespace.ts (1 errors) ====
+    module Runtime {
+           ~~~~~~~
+!!! error TS1540: A 'namespace' declaration should not be declared using the 'module' keyword. Please use the 'namespace' keyword instead.
+        export const value = 0;
+    }
+    Runtime.value;
+    

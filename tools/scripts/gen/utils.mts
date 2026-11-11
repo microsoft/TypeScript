@@ -42,6 +42,16 @@ function beginFileFingerprintWrite(): () => void {
     };
 }
 
+export async function withFileFingerprintWrites<T>(action: () => T | PromiseLike<T>): Promise<T> {
+    const finishWrite = beginFileFingerprintWrite();
+    try {
+        return await action();
+    }
+    finally {
+        finishWrite();
+    }
+}
+
 export function getFileFingerprint(file: string, fresh = false): string {
     file = path.resolve(file);
     fresh ||= activeFingerprintWriters > 0;
@@ -76,9 +86,8 @@ export function formatCommandArg(arg: string) {
 
 export async function run(command: string, args: readonly string[] = [], options: RunOptions = {}) {
     console.log("$ " + [command, ...args].map(formatCommandArg).join(" "));
-    const finishWrite = beginFileFingerprintWrite();
-    try {
-        return await x(command, args, {
+    return withFileFingerprintWrites(() =>
+        x(command, args, {
             throwOnError: true,
             ...(options.signal ? { signal: options.signal } : {}),
             nodeOptions: {
@@ -86,11 +95,8 @@ export async function run(command: string, args: readonly string[] = [], options
                 env: options.env ? { ...process.env, ...options.env } : undefined,
                 stdio: options.captureOutput ? "pipe" : "inherit",
             },
-        });
-    }
-    finally {
-        finishWrite();
-    }
+        })
+    );
 }
 
 export function globInputs(patterns: string[], exclude: string[] = []): string[] {
@@ -101,7 +107,7 @@ export function goInputs(): string[] {
     return [import.meta.filename, ...globInputs(["go.work", "go.work.sum", "{tsc,tools}/go.{mod,sum}"])];
 }
 
-export function resolveForce(force?: boolean, environment = process.env.TSGO_HEREBY_FORCE): boolean {
+export function resolveForce(force?: boolean, environment = process.env.TS_HEREBY_FORCE): boolean {
     return force ?? /^(1|true|yes|on)$/i.test(environment ?? "");
 }
 
@@ -115,13 +121,7 @@ export function parseGeneratorArgs<const Options extends ParseArgsOptionsConfig>
 }
 
 export async function formatFiles(files: string[]): Promise<void> {
-    const finishWrite = beginFileFingerprintWrite();
-    try {
-        await x("dprint", ["fmt", ...files], { throwOnError: true, nodeOptions: { cwd: repoRoot, stdio: "inherit" } });
-    }
-    finally {
-        finishWrite();
-    }
+    await withFileFingerprintWrites(() => x("dprint", ["fmt", ...files], { throwOnError: true, nodeOptions: { cwd: repoRoot, stdio: "inherit" } }));
 }
 
 export function formatFilesSync(files: string[]): void {
