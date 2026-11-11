@@ -32,10 +32,10 @@ function victim<T extends Box>(
 
 ): string {
     return x.b + y.b;
->x.b + y.b : any
->x.b : any
+>x.b + y.b : string
+>x.b : string
 >x : T
->b : any
+>b : string
 >y.b : any
 >y : T["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]
 >b : any
@@ -46,8 +46,8 @@ function lone<U extends Box>(y: U["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]["
 >y : U["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]
 
     return y.b;
->y.b : string
+>y.b : any
 >y : U["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]
->b : string
+>b : any
 }
 

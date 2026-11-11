@@ -43,9 +43,7 @@ function victim<T extends Box>(
 >x.b : Symbol(Box.b, Decl(deepIndexedAccessChainConstraintCheckOrder.ts, 5, 23))
 >x : Symbol(x, Decl(deepIndexedAccessChainConstraintCheckOrder.ts, 9, 31))
 >b : Symbol(Box.b, Decl(deepIndexedAccessChainConstraintCheckOrder.ts, 5, 23))
->y.b : Symbol(Box.b, Decl(deepIndexedAccessChainConstraintCheckOrder.ts, 5, 23))
 >y : Symbol(y, Decl(deepIndexedAccessChainConstraintCheckOrder.ts, 10, 9))
->b : Symbol(Box.b, Decl(deepIndexedAccessChainConstraintCheckOrder.ts, 5, 23))
 }
 
 function lone<U extends Box>(y: U["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]): string {
@@ -56,8 +54,6 @@ function lone<U extends Box>(y: U["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]["
 >U : Symbol(U, Decl(deepIndexedAccessChainConstraintCheckOrder.ts, 16, 14))
 
     return y.b;
->y.b : Symbol(Box.b, Decl(deepIndexedAccessChainConstraintCheckOrder.ts, 5, 23))
 >y : Symbol(y, Decl(deepIndexedAccessChainConstraintCheckOrder.ts, 16, 29))
->b : Symbol(Box.b, Decl(deepIndexedAccessChainConstraintCheckOrder.ts, 5, 23))
 }
 
