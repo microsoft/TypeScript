@@ -7,6 +7,7 @@
 //                 ^
 // | ----------------------------------------------------------------------
 // | c2(): c2
+// | This is class c2 without constructor
 // | ----------------------------------------------------------------------
 // var i2_c = c2;
 // class c3 {
@@ -42,6 +43,7 @@
 //                 ^
 // | ----------------------------------------------------------------------
 // | c5(): c5
+// | Class with statics
 // | ----------------------------------------------------------------------
 // var i5_c = c5;
 // /** class with statics and constructor*/
@@ -101,6 +103,10 @@
       "signatures": [
         {
           "label": "c2(): c2",
+          "documentation": {
+            "kind": "markdown",
+            "value": "This is class c2 without constructor"
+          },
           "parameters": [],
           "_vs_colorizedLabel": {
             "Runs": [
@@ -259,6 +265,10 @@
       "signatures": [
         {
           "label": "c5(): c5",
+          "documentation": {
+            "kind": "markdown",
+            "value": "Class with statics"
+          },
           "parameters": [],
           "_vs_colorizedLabel": {
             "Runs": [
