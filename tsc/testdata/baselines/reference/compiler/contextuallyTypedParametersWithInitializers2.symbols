@@ -56,3 +56,19 @@ const test3: (arg: number) => void = (arg = 1) => {};
 >arg : Symbol(arg, Decl(contextuallyTypedParametersWithInitializers2.ts, 18, 14))
 >arg : Symbol(arg, Decl(contextuallyTypedParametersWithInitializers2.ts, 18, 38))
 
+const test4: (reader: () => number, value: 1) => void =
+>test4 : Symbol(test4, Decl(contextuallyTypedParametersWithInitializers2.ts, 20, 5))
+>reader : Symbol(reader, Decl(contextuallyTypedParametersWithInitializers2.ts, 20, 14))
+>value : Symbol(value, Decl(contextuallyTypedParametersWithInitializers2.ts, 20, 35))
+
+  (get = () => x, x = 0) => {
+>get : Symbol(get, Decl(contextuallyTypedParametersWithInitializers2.ts, 21, 3))
+>x : Symbol(x, Decl(contextuallyTypedParametersWithInitializers2.ts, 21, 17))
+>x : Symbol(x, Decl(contextuallyTypedParametersWithInitializers2.ts, 21, 17))
+
+    x.toFixed();
+>x.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(contextuallyTypedParametersWithInitializers2.ts, 21, 17))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+
+  };
