@@ -44,6 +44,8 @@ type FlowState struct {
 	flowContainer   *ast.Node
 	refKey          CacheHashKey
 	depth           int
+	depthBase       int // depth of the loop analyses depth is measured from
+	limitHits       int
 	sharedFlowStart int
 	reduceLabels    []*ast.FlowReduceLabelData
 	next            *FlowState
@@ -111,14 +113,25 @@ func (c *Checker) getFlowTypeOfReferenceEx(reference *ast.Node, declaredType *Ty
 	return resultType
 }
 
+// A walk gives up after maxFlowDepth nested steps. Each loop is analyzed
+// once per reference key and its result is cached, so the analysis of a
+// loop measures depth from the loop rather than from the reference that
+// reached it first. maxFlowTotalDepth only guards the call stack against
+// loop analyses nested so deeply that the walk is certain to be runaway.
+const (
+	maxFlowDepth      = 2000
+	maxFlowTotalDepth = 20 * maxFlowDepth
+)
+
 func (c *Checker) getTypeAtFlowNode(f *FlowState, flow *ast.FlowNode) FlowType {
-	if f.depth == 2000 {
+	if f.depth == maxFlowDepth || f.depthBase+f.depth == maxFlowTotalDepth {
 		// We have made 2000 recursive invocations. To avoid overflowing the call stack we report an error
 		// and give up on this reference. Each reference hits the limit on its own, so its type does not depend
 		// on which other references were analyzed first.
 		if tr := c.tracer; tr != nil {
 			tr.Instant(tracing.PhaseCheckTypes, "getTypeAtFlowNode_DepthLimit", map[string]any{"depth": f.depth})
 		}
+		f.limitHits++
 		c.reportFlowControlError(f.reference)
 		return FlowType{t: c.errorType}
 	}
@@ -1330,9 +1343,37 @@ func (c *Checker) getTypeAtFlowLoopLabel(f *FlowState, flow *ast.FlowNode) FlowT
 	key := FlowLoopKey{flowNode: flow, refKey: f.refKey}
 	// If we have previously computed the control flow type for the reference at
 	// this flow loop junction, return the cached type.
-	if cached := c.flowLoopCache[key]; cached != nil {
-		return FlowType{t: cached}
+	if cached := c.flowLoopCache[key]; cached.t != nil {
+		if cached.tooDeep {
+			// Analyzing the loop again would give up again.
+			c.reportFlowControlError(f.reference)
+		}
+		return FlowType{t: cached.t}
 	}
+	// The result is cached for every reference with this key, so the analysis
+	// neither uses the depth left to this reference nor the nodes this
+	// reference already visited, and the nodes it visits are not reused
+	// after it.
+	depth, depthBase, sharedFlowStart, hits := f.depth, f.depthBase, f.sharedFlowStart, f.limitHits
+	f.depthBase += f.depth
+	f.depth = 0
+	f.sharedFlowStart = len(c.sharedFlows)
+	result := c.getTypeAtFlowLoopLabelUncached(f, flow, key)
+	c.sharedFlows = c.sharedFlows[:f.sharedFlowStart]
+	f.depth, f.depthBase, f.sharedFlowStart = depth, depthBase, sharedFlowStart
+	if cached := c.flowLoopCache[key]; cached.t != nil {
+		if f.limitHits != hits {
+			cached.tooDeep = true
+			c.flowLoopCache[key] = cached
+		} else if cached.tooDeep {
+			// Another reference completed the analysis meanwhile.
+			c.reportFlowControlError(f.reference)
+		}
+	}
+	return result
+}
+
+func (c *Checker) getTypeAtFlowLoopLabelUncached(f *FlowState, flow *ast.FlowNode, key FlowLoopKey) FlowType {
 	// If this flow loop junction and reference are already being processed, return
 	// the union of the types computed for each branch so far, marked as incomplete.
 	// It is possible to see an empty array in cases where loops are nested and the
@@ -1377,8 +1418,8 @@ func (c *Checker) getTypeAtFlowLoopLabel(f *FlowState, flow *ast.FlowNode) FlowT
 			// If we see a value appear in the cache it is a sign that control flow analysis
 			// was restarted and completed by checkExpressionCached. We can simply pick up
 			// the resulting type and bail out.
-			if cached := c.flowLoopCache[key]; cached != nil {
-				return FlowType{t: cached}
+			if cached := c.flowLoopCache[key]; cached.t != nil {
+				return FlowType{t: cached.t}
 			}
 		}
 		antecedentTypes = core.AppendIfUnique(antecedentTypes, flowType.t)
@@ -1401,7 +1442,7 @@ func (c *Checker) getTypeAtFlowLoopLabel(f *FlowState, flow *ast.FlowNode) FlowT
 	if firstAntecedentType.incomplete {
 		return c.newFlowType(result, true /*incomplete*/)
 	}
-	c.flowLoopCache[key] = result
+	c.flowLoopCache[key] = flowLoopCacheEntry{t: result}
 	return FlowType{t: result}
 }
 
