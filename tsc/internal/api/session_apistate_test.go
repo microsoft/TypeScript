@@ -488,9 +488,7 @@ func TestOpenFileNotIncludedByConfigOpensInInferredProject(t *testing.T) {
 			defer session.Close()
 
 			created, err := session.handleCreateSnapshot(context.Background(), &CreateSnapshotParams{
-				SnapshotRequestChangesParams: SnapshotRequestChangesParams{
-					OpenFiles: []DocumentIdentifier{{FileName: fileName}},
-				},
+				OpenFiles: []DocumentIdentifier{{FileName: fileName}},
 			})
 			assert.NilError(t, err)
 			assert.Equal(t, (*created.Operation.OpenedFiles)[0].Project, inferredProjectID())
@@ -498,9 +496,7 @@ func TestOpenFileNotIncludedByConfigOpensInInferredProject(t *testing.T) {
 			updated, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
 				Snapshot: created.Snapshot,
 				Changes: &CreateSnapshotParams{
-					SnapshotRequestChangesParams: SnapshotRequestChangesParams{
-						OpenFiles: []DocumentIdentifier{{FileName: otherFileName}},
-					},
+					OpenFiles: []DocumentIdentifier{{FileName: otherFileName}},
 				},
 			})
 			assert.NilError(t, err)
