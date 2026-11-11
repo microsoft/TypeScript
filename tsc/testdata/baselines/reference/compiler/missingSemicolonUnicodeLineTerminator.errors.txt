@@ -1,0 +1,33 @@
+missingSemicolonUnicodeLineTerminator.ts(2,26): error TS2349: This expression is not callable.
+  Type 'Number' has no call signatures.
+missingSemicolonUnicodeLineTerminator.ts(6,26): error TS2349: This expression is not callable.
+  Type 'Number' has no call signatures.
+missingSemicolonUnicodeLineTerminator.ts(10,26): error TS2349: This expression is not callable.
+  Type 'Number' has no call signatures.
+
+
+==== missingSemicolonUnicodeLineTerminator.ts (3 errors) ====
+    // U+2028 LINE SEPARATOR
+    const a = (x: number) => x
+                             ~
+!!! error TS2349: This expression is not callable.
+!!! error TS2349:   Type 'Number' has no call signatures.
+!!! related TS2734 missingSemicolonUnicodeLineTerminator.ts:2:26: Are you missing a semicolon?
+    (1);
+    
+    // U+2029 PARAGRAPH SEPARATOR
+    const b = (x: number) => x
+                             ~
+!!! error TS2349: This expression is not callable.
+!!! error TS2349:   Type 'Number' has no call signatures.
+!!! related TS2734 missingSemicolonUnicodeLineTerminator.ts:6:26: Are you missing a semicolon?
+    (1);
+    
+    // Standard newline for comparison
+    const c = (x: number) => x
+                             ~
+!!! error TS2349: This expression is not callable.
+!!! error TS2349:   Type 'Number' has no call signatures.
+!!! related TS2734 missingSemicolonUnicodeLineTerminator.ts:10:26: Are you missing a semicolon?
+    (1);
+    

@@ -8,7 +8,7 @@ import (
 )
 
 var (
-	lineDelimiter      = regexp.MustCompile("\r?\n")
+	lineDelimiter      = regexp.MustCompile("[\r\u2028\u2029]|\r?\n")
 	nonWhitespace      = regexp.MustCompile(`\S`)
 	tsExtension        = regexp.MustCompile(`\.tsx?$`)
 	testPathCharacters = regexp.MustCompile(`[\^<>:"|?*%]`)

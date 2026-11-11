@@ -1,0 +1,36 @@
+//// [tests/cases/compiler/missingSemicolonUnicodeLineTerminator.ts] ////
+
+=== missingSemicolonUnicodeLineTerminator.ts ===
+// U+2028 LINE SEPARATOR
+const a = (x: number) => x
+>a : (x: number) => any
+>(x: number) => x(1) : (x: number) => any
+>x : number
+>x(1) : any
+>x : number
+
+(1);
+>1 : 1
+
+// U+2029 PARAGRAPH SEPARATOR
+const b = (x: number) => x
+>b : (x: number) => any
+>(x: number) => x(1) : (x: number) => any
+>x : number
+>x(1) : any
+>x : number
+
+(1);
+>1 : 1
+
+// Standard newline for comparison
+const c = (x: number) => x
+>c : (x: number) => any
+>(x: number) => x(1) : (x: number) => any
+>x : number
+>x(1) : any
+>x : number
+
+(1);
+>1 : 1
+
