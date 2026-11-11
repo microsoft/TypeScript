@@ -56,7 +56,6 @@ type fileLoader struct {
 	caseSensitivity                                tspath.CaseSensitivity
 	supportedExtensions                            [][]string
 	supportedExtensionsWithJsonIfResolveJsonModule [][]string
-	contentMapperExtensions                        []string
 
 	filesParser *filesParser
 	rootTasks   []*parseTask
@@ -189,7 +188,6 @@ func processAllProgramFiles(
 		rootTasks:           make([]*parseTask, 0, len(rootFiles)+len(compilerOptions.Lib)),
 		supportedExtensions: supportedExtensions,
 		supportedExtensionsWithJsonIfResolveJsonModule: supportedExtensionsWithJsonIfResolveJsonModule,
-		contentMapperExtensions:                        opts.Config.ContentMapperExtensions(),
 	}
 	loader.addProjectReferenceTasks(singleThreaded)
 	resolverOptions := module.ResolverOptions{
@@ -421,7 +419,7 @@ func (p *fileLoader) parseSourceFile(t *parseTask) *ast.SourceFile {
 		PathKey:                        t.path,
 		ExternalModuleIndicatorOptions: ast.GetExternalModuleIndicatorOptions(t.normalizedFilePath, options, t.metadata),
 	}
-	if t.normalizedFilePath.ExtensionIsOneOf(p.contentMapperExtensions) {
+	if p.opts.Config.GetContentMapperForFileName(t.normalizedFilePath) != nil {
 		return p.parseContentMappedFile(parseOptions)
 	}
 	return p.host.GetSourceFile(parseOptions)
