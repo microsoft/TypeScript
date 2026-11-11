@@ -153,9 +153,9 @@ func TestProcessChanges(t *testing.T) {
 				URI:  testURI1,
 			},
 		})
-		// We don't observe saves for snapshot changes,
-		// so they're not included in the summary
-		assert.Assert(t, result.IsEmpty())
+		assert.Equal(t, result.Changed.Len(), 0)
+		assert.Assert(t, result.DiskChanged.Has(testURI1))
+		assert.Assert(t, !result.IsEmpty())
 
 		// Check that the overlay is marked as matching disk text
 		fh := fs.GetFile(testURI1.FileName())
@@ -240,12 +240,14 @@ func TestProcessChanges(t *testing.T) {
 
 		// Now process a watch change
 		assert.NilError(t, fs.host.WriteFile(testURI1.FileName(), "const x = 2;"))
-		fs.processChanges([]FileChange{
+		result, _ := fs.processChanges([]FileChange{
 			{
 				Kind: FileChangeKindWatchChange,
 				URI:  testURI1,
 			},
 		})
+		assert.Equal(t, result.Changed.Len(), 0)
+		assert.Assert(t, result.DiskChanged.Has(testURI1))
 		assert.Assert(t, !fs.GetFile(testURI1.FileName()).MatchesDiskText())
 	})
 

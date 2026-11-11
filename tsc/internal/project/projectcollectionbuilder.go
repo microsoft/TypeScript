@@ -415,7 +415,7 @@ func (b *ProjectCollectionBuilder) DidChangeFiles(summary FileChangeSummary, log
 	deletedFiles := toPaths(summary.Deleted)
 	createdFiles := toPaths(summary.Created)
 	if b.contentMapperHost != nil {
-		allWatchChanges := slices.Concat(changedFiles, deletedFiles, createdFiles)
+		allWatchChanges := slices.Concat(changedFiles, deletedFiles, createdFiles, toPaths(summary.DiskChanged))
 		b.forEachProject(func(entry dirty.Value[*Project]) bool {
 			b.refreshContentMapperProjectForChanges(entry, allWatchChanges, summary.HasExcessiveNonCreateWatchEvents(), logger)
 			return true

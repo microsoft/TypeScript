@@ -565,6 +565,7 @@ func (fs *overlayFS) processChanges(changes []FileChange) (FileChangeSummary, ma
 		}
 
 		if o != nil && (events.watchObserved || events.saved) {
+			result.DiskChanged.Add(uri)
 			if matchesDiskText, _ := o.computeMatchesDiskText(fs.host); matchesDiskText != o.MatchesDiskText() {
 				o = newOverlay(o.FileName(), o.Content(), o.Version(), o.kind)
 				o.matchesDiskText = matchesDiskText

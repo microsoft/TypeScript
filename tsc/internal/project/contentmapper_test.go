@@ -909,6 +909,83 @@ func TestDynamicContentMapperInProject(t *testing.T) {
 	assert.Assert(t, !mappedFile.IsContentMapperFailureStub())
 }
 
+func TestDynamicContentMapperRefreshesForSavedOverlay(t *testing.T) {
+	t.Parallel()
+	for _, test := range []struct {
+		name  string
+		save  bool
+		watch bool
+	}{
+		{name: "save", save: true},
+		{name: "watch", watch: true},
+		{name: "save and watch", save: true, watch: true},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+			files := map[string]any{
+				"/home/project/tsconfig.json":                    `{ "contentMappers": [{ "package": "mapper", "extensions": [".box"] }] }`,
+				"/home/project/node_modules/mapper/package.json": contentmappertest.PackageJSON(contentmappertest.DynamicVerbatimMapper),
+				"/home/project/mapper.config.json":               `{ "version": 1 }`,
+				"/home/project/app.box":                          "export const value = 1;\n",
+				"/home/project/main.ts":                          `import { value } from "./app.box"; value;`,
+			}
+			init, utils := projecttestutil.GetSessionInitOptions(files, &project.SessionOptions{
+				CurrentDirectory:   "/home/project",
+				DefaultLibraryPath: bundled.LibPath(),
+				TypingsLocation:    projecttestutil.TestTypingsLocation,
+				PositionEncoding:   lsproto.PositionEncodingKindUTF8,
+				RunExternalCode:    true,
+			}, nil)
+			lifecycle := &contentmappertest.ProjectLifecycle{}
+			init.Spawner = contentmappertest.NewSpawnerWithProjectLifecycle(lifecycle)
+			session := project.NewSession(init)
+			defer session.Close()
+
+			ctx := context.Background()
+			mainURI := lsproto.DocumentUri("file:///home/project/main.ts")
+			configURI := lsproto.DocumentUri("file:///home/project/mapper.config.json")
+			session.DidOpenFile(ctx, mainURI, 1, files["/home/project/main.ts"].(string), lsproto.LanguageKindTypeScript)
+			session.DidOpenFile(ctx, configURI, 1, files["/home/project/mapper.config.json"].(string), lsproto.LanguageKindJSON)
+			_, err := session.GetLanguageService(ctx, mainURI)
+			assert.NilError(t, err)
+			opens := lifecycle.Opens.Load()
+			closes := lifecycle.Closes.Load()
+			assert.Assert(t, opens > 0)
+
+			const savedContent = `{ "version": 2 }`
+			session.DidChangeFile(ctx, configURI, 2, []lsproto.TextDocumentContentChangePartialOrWholeDocument{{
+				WholeDocument: &lsproto.TextDocumentContentChangeWholeDocument{Text: savedContent},
+			}})
+			// Flush the edit before saving, while the mapper still sees the old disk content.
+			languageService, err := session.GetLanguageService(ctx, mainURI)
+			assert.NilError(t, err)
+			assert.Equal(t, lifecycle.Opens.Load(), opens+1)
+			program := languageService.GetProgram()
+
+			assert.NilError(t, utils.FS().WriteFile(configURI.FileName(), savedContent))
+			if test.save {
+				session.DidSaveFile(ctx, configURI)
+			}
+			if test.watch {
+				session.DidChangeWatchedFiles(ctx, []*lsproto.FileEvent{{Uri: configURI, Type: lsproto.FileChangeTypeChanged}})
+			}
+			session.WaitForBackgroundTasks()
+			languageService, err = session.GetLanguageService(ctx, mainURI)
+			assert.NilError(t, err)
+			assert.Equal(t, lifecycle.Closes.Load(), closes+2)
+			assert.Equal(t, lifecycle.Opens.Load(), opens+2)
+			assert.Assert(t, languageService.GetProgram() != program)
+
+			session.DidSaveFile(ctx, mainURI)
+			session.DidChangeWatchedFiles(ctx, []*lsproto.FileEvent{{Uri: mainURI, Type: lsproto.FileChangeTypeChanged}})
+			session.WaitForBackgroundTasks()
+			_, err = session.GetLanguageService(ctx, mainURI)
+			assert.NilError(t, err)
+			assert.Equal(t, lifecycle.Opens.Load(), opens+2)
+		})
+	}
+}
+
 func TestDynamicContentMapperRefreshesForMixedWatchBatches(t *testing.T) {
 	t.Parallel()
 	for _, test := range []struct {
