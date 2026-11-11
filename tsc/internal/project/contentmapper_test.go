@@ -956,10 +956,11 @@ func TestDynamicContentMapperRefreshesForSavedOverlay(t *testing.T) {
 			session.DidChangeFile(ctx, configURI, 2, []lsproto.TextDocumentContentChangePartialOrWholeDocument{{
 				WholeDocument: &lsproto.TextDocumentContentChangeWholeDocument{Text: savedContent},
 			}})
-			// Flush the edit before saving, while the mapper still sees the old disk content.
+			// Flush the edit before saving; the mapper cannot observe unsaved overlay content.
 			languageService, err := session.GetLanguageService(ctx, mainURI)
 			assert.NilError(t, err)
-			assert.Equal(t, lifecycle.Opens.Load(), opens+1)
+			assert.Equal(t, lifecycle.Opens.Load(), opens)
+			assert.Equal(t, lifecycle.Closes.Load(), closes)
 			program := languageService.GetProgram()
 
 			assert.NilError(t, utils.FS().WriteFile(configURI.FileName(), savedContent))
@@ -972,8 +973,8 @@ func TestDynamicContentMapperRefreshesForSavedOverlay(t *testing.T) {
 			session.WaitForBackgroundTasks()
 			languageService, err = session.GetLanguageService(ctx, mainURI)
 			assert.NilError(t, err)
-			assert.Equal(t, lifecycle.Closes.Load(), closes+2)
-			assert.Equal(t, lifecycle.Opens.Load(), opens+2)
+			assert.Equal(t, lifecycle.Closes.Load(), closes+1)
+			assert.Equal(t, lifecycle.Opens.Load(), opens+1)
 			assert.Assert(t, languageService.GetProgram() != program)
 
 			session.DidSaveFile(ctx, mainURI)
@@ -981,7 +982,7 @@ func TestDynamicContentMapperRefreshesForSavedOverlay(t *testing.T) {
 			session.WaitForBackgroundTasks()
 			_, err = session.GetLanguageService(ctx, mainURI)
 			assert.NilError(t, err)
-			assert.Equal(t, lifecycle.Opens.Load(), opens+2)
+			assert.Equal(t, lifecycle.Opens.Load(), opens+1)
 		})
 	}
 }

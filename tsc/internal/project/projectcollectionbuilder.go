@@ -415,9 +415,18 @@ func (b *ProjectCollectionBuilder) DidChangeFiles(summary FileChangeSummary, log
 	deletedFiles := toPaths(summary.Deleted)
 	createdFiles := toPaths(summary.Created)
 	if b.contentMapperHost != nil {
-		allWatchChanges := slices.Concat(changedFiles, deletedFiles, createdFiles, toPaths(summary.DiskChanged))
+		// Mapper processes read from disk, so overlay-only changes cannot affect their configuration.
+		allWatchChanges := toPaths(summary.DiskChanged)
+		for _, path := range changedFiles {
+			if _, hasOverlay := b.overlays[path]; !hasOverlay {
+				allWatchChanges = append(allWatchChanges, path)
+			}
+		}
+		allWatchChanges = append(allWatchChanges, deletedFiles...)
+		refreshAll := summary.InvalidateAll || len(allWatchChanges) > excessiveChangeThreshold
+		allWatchChanges = append(allWatchChanges, createdFiles...)
 		b.forEachProject(func(entry dirty.Value[*Project]) bool {
-			b.refreshContentMapperProjectForChanges(entry, allWatchChanges, summary.HasExcessiveNonCreateWatchEvents(), logger)
+			b.refreshContentMapperProjectForChanges(entry, allWatchChanges, refreshAll, logger)
 			return true
 		})
 	}
