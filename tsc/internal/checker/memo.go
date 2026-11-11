@@ -466,14 +466,6 @@ func (m *memoMap[K, V]) setKeyBits(keyBits func(K) uint64) {
 	m.sideTable().keyBits = keyBits
 }
 
-// states returns the memo states of the entries, or nil.
-func (m *memoMap[K, V]) states() map[K]*memoState {
-	if m.side == nil {
-		return nil
-	}
-	return m.side.memoStates
-}
-
 // stateOf returns the memo state of the entry for k, or nil.
 func (m *memoMap[K, V]) stateOf(k K) *memoState {
 	s := m.side
