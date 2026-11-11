@@ -417,8 +417,9 @@ func (b *ProjectCollectionBuilder) DidChangeFiles(summary FileChangeSummary, log
 	if b.contentMapperHost != nil {
 		// Mapper processes read from disk, so overlay-only changes cannot affect their configuration.
 		allWatchChanges := toPaths(summary.DiskChanged)
-		for _, path := range changedFiles {
-			if _, hasOverlay := b.overlays[path]; !hasOverlay {
+		for uri := range summary.Changed.Keys() {
+			path := uri.PathKey(b.base.caseSensitivity)
+			if _, hasOverlay := b.overlays[path]; !hasOverlay && !summary.DiskChanged.Has(uri) {
 				allWatchChanges = append(allWatchChanges, path)
 			}
 		}

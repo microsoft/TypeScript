@@ -129,6 +129,7 @@ func TestProcessChanges(t *testing.T) {
 
 		assert.Assert(t, result.Changed.Has(testURI1))
 		assert.Equal(t, result.Changed.Len(), 1)
+		assert.Assert(t, result.DiskChanged.Has(testURI1))
 	})
 
 	t.Run("save marks overlay as matching disk", func(t *testing.T) {

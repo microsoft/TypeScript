@@ -48,7 +48,7 @@ type FileChangeSummary struct {
 	// Only set when file watching is enabled
 	Deleted collections.Set[lsproto.DocumentUri]
 
-	// DiskChanged records disk changes hidden by overlays, for consumers that read directly from disk.
+	// DiskChanged records disk changes, including those hidden by overlays, for consumers that read directly from disk.
 	DiskChanged collections.Set[lsproto.DocumentUri]
 
 	// IncludesWatchChangeOutsideNodeModules is true if the summary includes a create, change, or delete watch

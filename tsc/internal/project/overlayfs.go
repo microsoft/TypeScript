@@ -506,7 +506,7 @@ func (fs *overlayFS) processChanges(changes []FileChange) (FileChangeSummary, ma
 		path := uri.PathKey(fs.caseSensitivity)
 		o := newOverlays[path]
 
-		if (o != nil || events.openChange != nil) && (events.watchObserved || events.saveObserved) {
+		if events.saveObserved || events.watchChanged || (o != nil || events.openChange != nil) && events.watchObserved {
 			result.DiskChanged.Add(uri)
 		}
 
