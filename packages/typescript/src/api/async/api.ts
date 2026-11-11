@@ -3152,6 +3152,20 @@ export interface EmitContext {
     getSyntheticTrailingComments(node: Node): readonly SynthesizedComment[] | undefined;
 }
 
+function encodePrintNode(node: Node, emitContext: EmitContext | undefined): { data: string; emitNodes: Record<number, EmitNode> | undefined; } {
+    let emitNodes: Record<number, EmitNode> | undefined;
+    const encoded = encodeNode(node, (node, index) => {
+        const emitNode = emitContext?.getEmitNode(node);
+        if (emitNode === undefined) return;
+        (emitNodes ??= {})[index] = {
+            emitFlags: emitNode.emitFlags,
+            leadingComments: emitNode.leadingComments?.map(c => ({ ...c })),
+            trailingComments: emitNode.trailingComments?.map(c => ({ ...c })),
+        };
+    });
+    return { data: uint8ArrayToBase64(encoded), emitNodes };
+}
+
 export class Printer {
     private client: Client;
 
@@ -3160,23 +3174,11 @@ export class Printer {
     }
 
     async printNode(node: Node, options: PrintNodeOptions = {}): Promise<string> {
-        const emitNodes: Record<number, EmitNode> = {};
-        const encoded = encodeNode(node, (node, index) => {
-            const emitNode = options.emitContext?.getEmitNode(node);
-            if (emitNode === undefined) return;
-            emitNodes[index] = {
-                emitFlags: emitNode.emitFlags,
-                leadingComments: emitNode.leadingComments?.map(c => ({ ...c })),
-                trailingComments: emitNode.trailingComments?.map(c => ({ ...c })),
-            };
-        });
-        const base64 = uint8ArrayToBase64(encoded);
         return this.client.apiRequest("printNode", {
-            data: base64,
+            ...encodePrintNode(node, options.emitContext),
             preserveSourceNewlines: options.preserveSourceNewlines,
             neverAsciiEscape: options.neverAsciiEscape,
             terminateUnterminatedLiterals: options.terminateUnterminatedLiterals,
-            emitNodes,
         });
     }
 

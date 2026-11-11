@@ -3058,12 +3058,12 @@ func (p *Printer) commentWillEmitNewLine(comment ast.CommentRange) bool {
 }
 
 func (p *Printer) syntheticCommentWillEmitNewLine(comment SynthesizedComment) bool {
-	return comment.Kind == ast.KindSingleLineCommentTrivia || comment.HasLeadingNewLine || comment.HasTrailingNewLine
+	return comment.Kind == ast.KindSingleLineCommentTrivia ||
+		comment.HasLeadingNewLine || comment.HasTrailingNewLine ||
+		strings.ContainsFunc(comment.Text, stringutil.IsLineBreak)
 }
 
-// willEmitLeadingSyntheticNewLine reports whether the synthetic leading comments of node will
-// introduce a line separator. Unlike source comments, these do not depend on a source file.
-func (p *Printer) willEmitLeadingSyntheticNewLine(node *ast.Expression) bool {
+func (p *Printer) hasSyntheticLeadingCommentIntroducingNewLine(node *ast.Expression) bool {
 	return p.emitContext.EmitFlags(node)&EFNoLeadingComments == 0 &&
 		slices.ContainsFunc(p.emitContext.GetSyntheticLeadingComments(node), p.syntheticCommentWillEmitNewLine)
 }
@@ -3088,7 +3088,7 @@ func (p *Printer) willEmitLeadingNewLine(node *ast.Expression) bool {
 			return true
 		}
 	}
-	if p.willEmitLeadingSyntheticNewLine(node) {
+	if p.hasSyntheticLeadingCommentIntroducingNewLine(node) {
 		return true
 	}
 	if ast.IsPartiallyEmittedExpression(node) {
@@ -3109,7 +3109,7 @@ func (p *Printer) willEmitLeadingNewLine(node *ast.Expression) bool {
 // that would introduce a line separator between the node and its parent.
 func (p *Printer) parenthesizeExpressionForNoAsi(node *ast.Expression) *ast.Expression {
 	if !p.commentsDisabled {
-		if node.Kind != ast.KindPartiallyEmittedExpression && p.willEmitLeadingSyntheticNewLine(node) {
+		if node.Kind != ast.KindPartiallyEmittedExpression && p.hasSyntheticLeadingCommentIntroducingNewLine(node) {
 			return p.emitContext.Factory.NewParenthesizedExpression(node)
 		}
 		switch node.Kind {

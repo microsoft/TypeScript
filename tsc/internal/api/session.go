@@ -3974,6 +3974,18 @@ func decodePrintNode(encoded string, emitNodes map[int]*PrintEmitNode) (*ast.Nod
 	if err != nil {
 		return nil, nil, fmt.Errorf("%w: invalid base64 data: %w", ErrClientError, err)
 	}
+	for index, emitNode := range emitNodes {
+		if emitNode == nil {
+			continue
+		}
+		for _, comments := range [][]PrintSynthesizedComment{emitNode.LeadingComments, emitNode.TrailingComments} {
+			for _, comment := range comments {
+				if comment.Kind != int32(ast.KindSingleLineCommentTrivia) && comment.Kind != int32(ast.KindMultiLineCommentTrivia) {
+					return nil, nil, fmt.Errorf("%w: invalid synthetic comment kind %d for node %d", ErrClientError, comment.Kind, index)
+				}
+			}
+		}
+	}
 	usedEmitNodes := 0
 	node, err := encoder.DecodeNodesWithCallback(data, func(node *ast.Node, index int) {
 		emitNode, ok := emitNodes[index]

@@ -1049,10 +1049,7 @@ export interface DiagnosticResponse {
     relatedInformation?: DiagnosticResponse[] | undefined;
 }
 
-/**
- * PrintEmitNode carries the EmitFlags and synthetic comments a client attaches to a
- * specific node (by index) via EmitContext before printing.
- */
+/** PrintNodeParams are the parameters for the printNode method. */
 export interface PrintNodeParams {
     /** base64-encoded binary AST data */
     data: string;
@@ -1700,7 +1697,10 @@ export interface DiagnosticSourceLineResponse {
     text: string;
 }
 
-/** Extra information for a node used during node printing */
+/**
+ * PrintEmitNode carries the EmitFlags and synthetic comments a client attaches to a
+ * specific node (by index) via EmitContext before printing.
+ */
 export interface PrintEmitNode {
     emitFlags?: number | undefined;
     leadingComments?: PrintSynthesizedComment[] | undefined;

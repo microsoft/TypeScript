@@ -1772,7 +1772,8 @@ type SignatureToSignatureDeclarationParams struct {
 	Flags     int32       `json:"flags,omitempty"`
 }
 
-// Extra information for a node used during node printing
+// PrintEmitNode carries the EmitFlags and synthetic comments a client attaches to a
+// specific node (by index) via EmitContext before printing.
 type PrintEmitNode struct {
 	EmitFlags        uint32                    `json:"emitFlags,omitempty"`
 	LeadingComments  []PrintSynthesizedComment `json:"leadingComments,omitempty"`
@@ -1787,8 +1788,7 @@ type PrintSynthesizedComment struct {
 	HasLeadingNewLine  bool   `json:"hasLeadingNewLine,omitempty"`
 }
 
-// PrintEmitNode carries the EmitFlags and synthetic comments a client attaches to a
-// specific node (by index) via EmitContext before printing.
+// PrintNodeParams are the parameters for the printNode method.
 type PrintNodeParams struct {
 	Data                          string                 `json:"data"` // base64-encoded binary AST data
 	PreserveSourceNewlines        bool                   `json:"preserveSourceNewlines,omitempty"`

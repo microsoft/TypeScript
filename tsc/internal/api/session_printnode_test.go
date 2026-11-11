@@ -33,12 +33,18 @@ func TestDecodePrintNodeAppliesEmitNodes(t *testing.T) {
 	t.Parallel()
 
 	// The encoded root node is at index 1.
+	comments := []PrintSynthesizedComment{
+		{Kind: int32(ast.KindSingleLineCommentTrivia), Text: " single line"},
+		{Kind: int32(ast.KindMultiLineCommentTrivia), Text: " block "},
+	}
 	node, emitContext, err := decodePrintNode(encodePrintNodeForTest(t), map[int]*PrintEmitNode{
-		1: {EmitFlags: uint32(printer.EFSingleLine)},
+		1: {EmitFlags: uint32(printer.EFSingleLine), LeadingComments: comments, TrailingComments: comments},
 	})
 	assert.NilError(t, err)
 	assert.Equal(t, node.Kind, ast.KindTypeAliasDeclaration)
 	assert.Equal(t, emitContext.EmitFlags(node), printer.EFSingleLine)
+	assert.Equal(t, len(emitContext.GetSyntheticLeadingComments(node)), len(comments))
+	assert.Equal(t, len(emitContext.GetSyntheticTrailingComments(node)), len(comments))
 }
 
 func TestDecodePrintNodeRejectsNullEmitNode(t *testing.T) {
@@ -53,6 +59,35 @@ func TestDecodePrintNodeRejectsUnknownEmitNodeIndex(t *testing.T) {
 
 	_, _, err := decodePrintNode(encodePrintNodeForTest(t), map[int]*PrintEmitNode{1 << 20: {}})
 	assert.ErrorIs(t, err, ErrClientError)
+}
+
+func TestDecodePrintNodeRejectsInvalidCommentKind(t *testing.T) {
+	t.Parallel()
+
+	for _, test := range []struct {
+		name string
+		kind int32
+	}{
+		{name: "unknown", kind: 0},
+		{name: "identifier", kind: int32(ast.KindIdentifier)},
+		{name: "negative", kind: -1},
+		{name: "out of range", kind: 1<<16 | int32(ast.KindSingleLineCommentTrivia)},
+	} {
+		for _, position := range []string{"leading", "trailing"} {
+			t.Run(test.name+"/"+position, func(t *testing.T) {
+				t.Parallel()
+				emitNode := &PrintEmitNode{}
+				comments := []PrintSynthesizedComment{{Kind: test.kind, Text: " comment"}}
+				if position == "leading" {
+					emitNode.LeadingComments = comments
+				} else {
+					emitNode.TrailingComments = comments
+				}
+				_, _, err := decodePrintNode(encodePrintNodeForTest(t), map[int]*PrintEmitNode{1: emitNode})
+				assert.ErrorIs(t, err, ErrClientError)
+			})
+		}
+	}
 }
 
 // printStatementWithComments decodes a statement the way handlePrintNode does, lets the caller
