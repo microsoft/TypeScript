@@ -259,6 +259,12 @@ type FlowLoopKey struct {
 	refKey   CacheHashKey
 }
 
+type flowLoopCacheEntry struct {
+	t *Type
+	// The analysis of the loop gave up because it was too deep.
+	tooDeep bool
+}
+
 type FlowLoopInfo struct {
 	key   FlowLoopKey
 	types []*Type
@@ -851,7 +857,7 @@ type Checker struct {
 	lastGetCombinedModifierFlagsResult          ast.ModifierFlags
 	freeinferenceState                          *InferenceState
 	freeFlowState                               *FlowState
-	flowLoopCache                               map[FlowLoopKey]*Type
+	flowLoopCache                               map[FlowLoopKey]flowLoopCacheEntry
 	flowLoopStack                               []FlowLoopInfo
 	sharedFlows                                 []SharedFlow
 	antecedentTypes                             []*Type
@@ -1114,7 +1120,7 @@ func NewChecker(program Program, tracer *Tracer) (*Checker, *sync.Mutex) {
 	c.zeroType = c.getNumberLiteralType(0)
 	c.zeroBigIntType = c.getBigIntLiteralType(jsnum.PseudoBigInt{})
 	c.typeofType = c.getUnionType(core.Map(slices.Sorted(maps.Keys(typeofNEFacts)), c.getStringLiteralType))
-	c.flowLoopCache = make(map[FlowLoopKey]*Type)
+	c.flowLoopCache = make(map[FlowLoopKey]flowLoopCacheEntry)
 	c.flowNodeReachable = make(map[*ast.FlowNode]bool)
 	c.flowNodePostSuper = make(map[*ast.FlowNode]bool)
 	c.subtypeRelation = &Relation{}

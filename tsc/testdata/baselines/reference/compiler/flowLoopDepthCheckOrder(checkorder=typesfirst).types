@@ -24,7 +24,7 @@ while (cond()) {
     if (typeof x === "string") { x = 1; } else { x = "a"; }
 >typeof x === "string" : boolean
 >typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
->x : any
+>x : string | number
 >"string" : "string"
 >x = 1 : 1
 >x : string | number
@@ -3064,6 +3064,6 @@ if (b) {}
 >b : boolean
 
 const deep = x;
->deep : any
->x : any
+>deep : string | number
+>x : string | number
 
