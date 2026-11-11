@@ -361,3 +361,41 @@ function f22(a: "" | undefined) {
 >b : Symbol(b, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 156, 7))
 }
 
+function f23(u: { tag: ""; empty: 1 } | { tag: "ok" }) {
+>f23 : Symbol(f23, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 159, 1))
+>u : Symbol(u, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 161, 13))
+>tag : Symbol(tag, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 161, 17))
+>empty : Symbol(empty, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 161, 26))
+>tag : Symbol(tag, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 161, 41))
+
+    if ((u.tag) ?? (false || true)) {} else {
+>u.tag : Symbol(tag, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 161, 17), Decl(controlFlowNullishCoalescingFalsyLeft.ts, 161, 41))
+>u : Symbol(u, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 161, 13))
+>tag : Symbol(tag, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 161, 17), Decl(controlFlowNullishCoalescingFalsyLeft.ts, 161, 41))
+
+        u.empty;
+>u.empty : Symbol(empty, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 161, 26))
+>u : Symbol(u, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 161, 13))
+>empty : Symbol(empty, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 161, 26))
+    }
+}
+
+function f24(u: { tag: ""; empty: 1 } | { tag: "ok" }) {
+>f24 : Symbol(f24, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 165, 1))
+>u : Symbol(u, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 167, 13))
+>tag : Symbol(tag, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 167, 17))
+>empty : Symbol(empty, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 167, 26))
+>tag : Symbol(tag, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 167, 41))
+
+    if (u.tag! ?? (false || true)) {} else {
+>u.tag : Symbol(tag, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 167, 17), Decl(controlFlowNullishCoalescingFalsyLeft.ts, 167, 41))
+>u : Symbol(u, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 167, 13))
+>tag : Symbol(tag, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 167, 17), Decl(controlFlowNullishCoalescingFalsyLeft.ts, 167, 41))
+
+        u.empty;
+>u.empty : Symbol(empty, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 167, 26))
+>u : Symbol(u, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 167, 13))
+>empty : Symbol(empty, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 167, 26))
+    }
+}
+

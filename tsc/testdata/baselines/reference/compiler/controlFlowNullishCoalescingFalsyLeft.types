@@ -504,3 +504,53 @@ function f22(a: "" | undefined) {
 >b : 1
 }
 
+function f23(u: { tag: ""; empty: 1 } | { tag: "ok" }) {
+>f23 : (u: { tag: ""; empty: 1; } | { tag: "ok"; }) => void
+>u : { tag: ""; empty: 1; } | { tag: "ok"; }
+>tag : ""
+>empty : 1
+>tag : "ok"
+
+    if ((u.tag) ?? (false || true)) {} else {
+>(u.tag) ?? (false || true) : "" | "ok"
+>(u.tag) : "" | "ok"
+>u.tag : "" | "ok"
+>u : { tag: ""; empty: 1; } | { tag: "ok"; }
+>tag : "" | "ok"
+>(false || true) : true
+>false || true : true
+>false : false
+>true : true
+
+        u.empty;
+>u.empty : 1
+>u : { tag: ""; empty: 1; }
+>empty : 1
+    }
+}
+
+function f24(u: { tag: ""; empty: 1 } | { tag: "ok" }) {
+>f24 : (u: { tag: ""; empty: 1; } | { tag: "ok"; }) => void
+>u : { tag: ""; empty: 1; } | { tag: "ok"; }
+>tag : ""
+>empty : 1
+>tag : "ok"
+
+    if (u.tag! ?? (false || true)) {} else {
+>u.tag! ?? (false || true) : "" | "ok"
+>u.tag! : "" | "ok"
+>u.tag : "" | "ok"
+>u : { tag: ""; empty: 1; } | { tag: "ok"; }
+>tag : "" | "ok"
+>(false || true) : true
+>false || true : true
+>false : false
+>true : true
+
+        u.empty;
+>u.empty : 1
+>u : { tag: ""; empty: 1; }
+>empty : 1
+    }
+}
+

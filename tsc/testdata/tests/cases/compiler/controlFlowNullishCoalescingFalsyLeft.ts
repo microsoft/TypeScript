@@ -162,3 +162,15 @@ function f22(a: "" | undefined) {
     (a ?? (b = 1, ""))?.charAt(b = 1) ?? false;
     const one: 1 = b;
 }
+
+function f23(u: { tag: ""; empty: 1 } | { tag: "ok" }) {
+    if ((u.tag) ?? (false || true)) {} else {
+        u.empty;
+    }
+}
+
+function f24(u: { tag: ""; empty: 1 } | { tag: "ok" }) {
+    if (u.tag! ?? (false || true)) {} else {
+        u.empty;
+    }
+}
