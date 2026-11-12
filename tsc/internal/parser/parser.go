@@ -5147,16 +5147,27 @@ func (p *Parser) parseJsxTagName() *ast.Expression {
 	pos := p.nodePos()
 	p.scanJsxIdentifier()
 	isThis := p.token == ast.KindThisKeyword
-	tagName := p.parseIdentifierNameErrorOnUnicodeEscapeSequence()
+	tagName := p.parseJsxIdentifierName()
 	if p.parseOptional(ast.KindColonToken) {
 		p.scanJsxIdentifier()
-		return p.finishNode(p.factory.NewJsxNamespacedName(tagName, p.parseIdentifierNameErrorOnUnicodeEscapeSequence()), pos)
+		return p.finishNode(p.factory.NewJsxNamespacedName(tagName, p.parseJsxIdentifierName()), pos)
 	}
 	if isThis {
 		result := p.factory.NewKeywordExpression(ast.KindThisKeyword)
 		return p.finishNode(result, pos)
 	}
 	return tagName
+}
+
+func (p *Parser) parseJsxIdentifierName() *ast.Node {
+	if p.token == ast.KindPrivateIdentifier {
+		// '#' is not a valid JSX identifier character. Consume the private identifier and produce a missing
+		// identifier, as parseRightSideOfDot does for `<a.#b />`.
+		p.parseErrorAtCurrentToken(diagnostics.Identifier_expected)
+		p.nextToken()
+		return p.createMissingIdentifier()
+	}
+	return p.parseIdentifierNameErrorOnUnicodeEscapeSequence()
 }
 
 func (p *Parser) parseJsxAttributes() *ast.Node {
@@ -5184,10 +5195,10 @@ func (p *Parser) parseJsxSpreadAttribute() *ast.Node {
 func (p *Parser) parseJsxAttributeName() *ast.Node {
 	pos := p.nodePos()
 	p.scanJsxIdentifier()
-	attrName := p.parseIdentifierNameErrorOnUnicodeEscapeSequence()
+	attrName := p.parseJsxIdentifierName()
 	if p.parseOptional(ast.KindColonToken) {
 		p.scanJsxIdentifier()
-		return p.finishNode(p.factory.NewJsxNamespacedName(attrName, p.parseIdentifierNameErrorOnUnicodeEscapeSequence()), pos)
+		return p.finishNode(p.factory.NewJsxNamespacedName(attrName, p.parseJsxIdentifierName()), pos)
 	}
 	return attrName
 }

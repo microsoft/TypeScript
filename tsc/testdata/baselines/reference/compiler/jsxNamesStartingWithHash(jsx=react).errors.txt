@@ -1,0 +1,57 @@
+jsxNamesStartingWithHash.tsx(8,12): error TS1003: Identifier expected.
+jsxNamesStartingWithHash.tsx(8,17): error TS1003: Identifier expected.
+jsxNamesStartingWithHash.tsx(9,16): error TS1003: Identifier expected.
+jsxNamesStartingWithHash.tsx(10,16): error TS1003: Identifier expected.
+jsxNamesStartingWithHash.tsx(11,16): error TS1003: Identifier expected.
+jsxNamesStartingWithHash.tsx(12,14): error TS1003: Identifier expected.
+jsxNamesStartingWithHash.tsx(13,16): error TS1003: Identifier expected.
+jsxNamesStartingWithHash.tsx(14,12): error TS1003: Identifier expected.
+jsxNamesStartingWithHash.tsx(15,18): error TS1003: Identifier expected.
+jsxNamesStartingWithHash.tsx(16,16): error TS1003: Identifier expected.
+jsxNamesStartingWithHash.tsx(16,19): error TS1003: Identifier expected.
+jsxNamesStartingWithHash.tsx(17,12): error TS1127: Invalid character.
+
+
+==== jsxNamesStartingWithHash.tsx (12 errors) ====
+    declare const React: any;
+    declare namespace JSX {
+        interface IntrinsicElements {
+            [name: string]: any;
+        }
+    }
+    
+    const a = <#a></#a>;
+               ~~
+!!! error TS1003: Identifier expected.
+                    ~~
+!!! error TS1003: Identifier expected.
+    const b = <div #b />;
+                   ~~
+!!! error TS1003: Identifier expected.
+    const c = <div #c="" />;
+                   ~~
+!!! error TS1003: Identifier expected.
+    const d = <div #d:e />;
+                   ~~
+!!! error TS1003: Identifier expected.
+    const e = <a:#f />;
+                 ~~
+!!! error TS1003: Identifier expected.
+    const f = <a.#g />;
+                   
+!!! error TS1003: Identifier expected.
+    const g = <#h:i />;
+               ~~
+!!! error TS1003: Identifier expected.
+    const h = <div j:#k />;
+                     ~~
+!!! error TS1003: Identifier expected.
+    const i = <div #l #m="" n="" />;
+                   ~~
+!!! error TS1003: Identifier expected.
+                      ~~
+!!! error TS1003: Identifier expected.
+    const j = <# />;
+               ~
+!!! error TS1127: Invalid character.
+    
