@@ -6662,8 +6662,6 @@ func (c *Checker) getAsyncFromSyncIterationTypes(iterationTypes IterationTypes, 
 	if errorNode != nil {
 		c.getGlobalAwaitedSymbol()
 	}
-	// A nil message crashes the invalid-thenable path. yield* names the delegated
-	// element; for-await names the value it awaits.
 	diagnostic := diagnostics.Type_of_await_operand_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member
 	if use&IterationUseYieldStarFlag != 0 {
 		diagnostic = diagnostics.Type_of_iterated_elements_of_a_yield_Asterisk_operand_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member
