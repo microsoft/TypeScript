@@ -17354,7 +17354,9 @@ func (c *Checker) resolveQualifiedName(name *ast.Node, left *ast.Node, right *as
 func (c *Checker) tryGetQualifiedNameAsValue(node *ast.Node) *ast.Symbol {
 	id := ast.GetFirstIdentifier(node)
 	symbol := c.resolveName(id, id.Text(), ast.SymbolFlagsValue, nil /*nameNotFoundMessage*/, true /*isUse*/, false /*excludeGlobals*/)
-	if symbol == nil {
+	if symbol == nil || isSameScopeDescendentOf(node, symbol.ValueDeclaration(), nil) {
+		// The type of a value used in its own declaration, which the
+		// suggestion would need, can need the name being resolved.
 		return nil
 	}
 	n := id
