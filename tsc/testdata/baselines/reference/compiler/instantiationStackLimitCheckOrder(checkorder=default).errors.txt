@@ -1,6 +1,6 @@
-instantiationStackLimitCheckOrder.ts(6,48): error TS5114: Instantiations of type 'F' appear infinitely circular.
-instantiationStackLimitCheckOrder.ts(7,10): error TS5114: Instantiations of type 'F' appear infinitely circular.
-instantiationStackLimitCheckOrder.ts(14,11): error TS5114: Instantiations of type 'FlatArray' appear infinitely circular.
+instantiationStackLimitCheckOrder.ts(6,48): error TS2589: Type instantiation is excessively deep and possibly infinite.
+instantiationStackLimitCheckOrder.ts(7,10): error TS2589: Type instantiation is excessively deep and possibly infinite.
+instantiationStackLimitCheckOrder.ts(14,11): error TS2589: Type instantiation is excessively deep and possibly infinite.
 
 
 ==== instantiationStackLimitCheckOrder.ts (3 errors) ====
@@ -11,10 +11,10 @@ instantiationStackLimitCheckOrder.ts(14,11): error TS5114: Instantiations of typ
     
     type F<T> = T extends [unknown?, ...infer R] ? [0, ...F<R>] : [];
                                                    ~~~~~~~~~~~~
-!!! error TS5114: Instantiations of type 'F' appear infinitely circular.
+!!! error TS2589: Type instantiation is excessively deep and possibly infinite.
     type X = F<[]>;
              ~~~~~
-!!! error TS5114: Instantiations of type 'F' appear infinitely circular.
+!!! error TS2589: Type instantiation is excessively deep and possibly infinite.
     
     // The element type of A[] is resolved whenever first needed, inside the
     // instantiation of the return type of flat or not. Reaching the limit while
@@ -23,5 +23,5 @@ instantiationStackLimitCheckOrder.ts(14,11): error TS5114: Instantiations of typ
     type A = A[];
     const r = ([] as A).flat(Infinity);
               ~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS5114: Instantiations of type 'FlatArray' appear infinitely circular.
+!!! error TS2589: Type instantiation is excessively deep and possibly infinite.
     
