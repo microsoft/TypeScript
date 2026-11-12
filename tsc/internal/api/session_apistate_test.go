@@ -466,6 +466,45 @@ func TestFailedLanguageServerSnapshotOpenIsNotAdopted(t *testing.T) {
 	assert.Equal(t, session.openFiles.Len(), 0)
 }
 
+func TestOpenFileNotIncludedByConfigOpensInInferredProject(t *testing.T) {
+	t.Parallel()
+	if !bundled.Embedded {
+		t.Skip("bundled files are not embedded")
+	}
+
+	for _, fileName := range []string{
+		"/home/projects/p/w.mjs",
+		"/home/projects/p/src/nested/w.js",
+	} {
+		t.Run(fileName, func(t *testing.T) {
+			t.Parallel()
+			const otherFileName = "/home/projects/p/x.cjs"
+			init, _ := projecttestutil.GetSessionInitOptions(map[string]any{
+				"/home/projects/p/tsconfig.json": `{}`,
+				fileName:                         `export const a = 1`,
+				otherFileName:                    `exports.b = 1`,
+			}, nil, &projecttestutil.TypingsInstallerOptions{})
+			session := NewStandaloneSession(init, nil)
+			defer session.Close()
+
+			created, err := session.handleCreateSnapshot(context.Background(), &CreateSnapshotParams{
+				OpenFiles: []DocumentIdentifier{{FileName: fileName}},
+			})
+			assert.NilError(t, err)
+			assert.Equal(t, (*created.Operation.OpenedFiles)[0].Project, inferredProjectID())
+
+			updated, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
+				Snapshot: created.Snapshot,
+				Changes: &CreateSnapshotParams{
+					OpenFiles: []DocumentIdentifier{{FileName: otherFileName}},
+				},
+			})
+			assert.NilError(t, err)
+			assert.Equal(t, (*updated.Operation.OpenedFiles)[0].Project, inferredProjectID())
+		})
+	}
+}
+
 func TestGetCurrentLanguageServerSnapshotOpeningLSPFileEnsuresConfiguredProgram(t *testing.T) {
 	t.Parallel()
 

@@ -176,7 +176,7 @@ func (c *configFileRegistryBuilder) updateExtendingConfigs(extendingConfigPath t
 		for _, extendedConfig := range newCommandLine.ExtendedSourceFiles() {
 			extendedConfigPath := caseSensitivity.PathKey(tspath.RootedPath(extendedConfig))
 			newExtendedConfigPaths.Add(extendedConfigPath)
-			entry, loaded := c.configs.LoadOrStore(extendedConfigPath, newExtendedConfigFileEntry(extendedConfig, extendingConfigPath))
+			entry, loaded := c.configs.LoadOrStoreReplacingDeleted(extendedConfigPath, newExtendedConfigFileEntry(extendedConfig, extendingConfigPath))
 			if loaded {
 				entry.ChangeIf(
 					func(config *configFileEntry) bool {
@@ -286,7 +286,8 @@ func (c *configFileRegistryBuilder) updateRootFilesWatch(fileName tspath.RootedF
 // in the cache. Each `acquireConfigForProject` call that passes a `project` should be accompanied
 // by an eventual `releaseConfigForProject` call with the same project.
 func (c *configFileRegistryBuilder) acquireConfigForProject(fileName tspath.RootedFilePath, path tspath.PathKey, project *Project, logger *logging.LogTree) *tsoptions.ParsedCommandLine {
-	entry, _ := c.configs.LoadOrStore(path, newConfigFileEntry(c.hasRelativePatternCapability, fileName))
+	// Cleanup may have deleted the entry earlier in this builder; if so, recreate it.
+	entry, _ := c.configs.LoadOrStoreReplacingDeleted(path, newConfigFileEntry(c.hasRelativePatternCapability, fileName))
 	var needsRetainProject bool
 	var contentMappersChanged bool
 	entry.ChangeIf(
@@ -316,7 +317,8 @@ func (c *configFileRegistryBuilder) acquireConfigForProject(fileName tspath.Root
 // Each `acquireConfigForFile` call that passes an `openFilePath`
 // should be accompanied by an eventual `releaseConfigForOpenFile` call with the same open file.
 func (c *configFileRegistryBuilder) acquireConfigForFile(configFileName tspath.RootedFilePath, configFilePath tspath.PathKey, filePath tspath.PathKey, logger *logging.LogTree) *tsoptions.ParsedCommandLine {
-	entry, _ := c.configs.LoadOrStore(configFilePath, newConfigFileEntry(c.hasRelativePatternCapability, configFileName))
+	// Cleanup may have deleted the entry earlier in this builder; if so, recreate it.
+	entry, _ := c.configs.LoadOrStoreReplacingDeleted(configFilePath, newConfigFileEntry(c.hasRelativePatternCapability, configFileName))
 	var needsRetainOpenFile bool
 	var contentMappersChanged bool
 	entry.ChangeIf(
