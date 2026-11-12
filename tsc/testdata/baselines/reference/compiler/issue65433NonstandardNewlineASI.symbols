@@ -1,0 +1,10 @@
+//// [tests/cases/compiler/issue65433NonstandardNewlineASI.ts] ////
+
+=== issue65433NonstandardNewlineASI.ts ===
+const a = (x: number) => x
+>a : Symbol(a, Decl(issue65433NonstandardNewlineASI.ts, 0, 5))
+>x : Symbol(x, Decl(issue65433NonstandardNewlineASI.ts, 0, 11))
+>x : Symbol(x, Decl(issue65433NonstandardNewlineASI.ts, 0, 11))
+
+(1)
+

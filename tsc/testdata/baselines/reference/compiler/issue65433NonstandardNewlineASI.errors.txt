@@ -1,0 +1,11 @@
+issue65433NonstandardNewlineASI.ts(1,26): error TS2349: This expression is not callable.
+  Type 'Number' has no call signatures.
+
+
+==== issue65433NonstandardNewlineASI.ts (1 errors) ====
+    const a = (x: number) => x (1)
+                             ~
+!!! error TS2349: This expression is not callable.
+!!! error TS2349:   Type 'Number' has no call signatures.
+!!! related TS2734 issue65433NonstandardNewlineASI.ts:1:26: Are you missing a semicolon?
+    
