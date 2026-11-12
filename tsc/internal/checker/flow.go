@@ -1917,13 +1917,21 @@ func (c *Checker) isOrContainsMatchingReference(source *ast.Node, target *ast.No
 // true intersection because it is more costly and, when applied to union types, generates a large number of
 // types we don't actually care about.
 func (c *Checker) replacePrimitivesWithLiterals(typeWithPrimitives *Type, typeWithLiterals *Type) *Type {
-	if c.maybeTypeOfKind(typeWithPrimitives, TypeFlagsString|TypeFlagsTemplateLiteral|TypeFlagsNumber|TypeFlagsBigInt) &&
+	if c.maybeTypeOfKind(typeWithPrimitives, TypeFlagsString|TypeFlagsTemplateLiteral|TypeFlagsStringMapping|TypeFlagsNumber|TypeFlagsBigInt) &&
 		c.maybeTypeOfKind(typeWithLiterals, TypeFlagsStringLiteral|TypeFlagsTemplateLiteral|TypeFlagsStringMapping|TypeFlagsNumberLiteral|TypeFlagsBigIntLiteral) {
 		return c.mapType(typeWithPrimitives, func(t *Type) *Type {
 			switch {
 			case t.flags&TypeFlagsString != 0:
 				return c.extractTypesOfKind(typeWithLiterals, TypeFlagsString|TypeFlagsStringLiteral|TypeFlagsTemplateLiteral|TypeFlagsStringMapping)
 			case c.isPatternLiteralType(t) && !c.maybeTypeOfKind(typeWithLiterals, TypeFlagsString|TypeFlagsTemplateLiteral|TypeFlagsStringMapping):
+				if t.flags&TypeFlagsStringMapping != 0 {
+					// A string mapping type such as Uppercase<string> is narrowed only to the literals it
+					// contains: "BE", but not "be". Generic mappings such as Uppercase<T> are not pattern
+					// literal types and are left as is, like generic template literal types.
+					return c.filterType(c.extractTypesOfKind(typeWithLiterals, TypeFlagsStringLiteral), func(lit *Type) bool {
+						return c.isTypeAssignableTo(lit, t)
+					})
+				}
 				return c.extractTypesOfKind(typeWithLiterals, TypeFlagsStringLiteral)
 			case t.flags&TypeFlagsNumber != 0:
 				return c.extractTypesOfKind(typeWithLiterals, TypeFlagsNumber|TypeFlagsNumberLiteral)

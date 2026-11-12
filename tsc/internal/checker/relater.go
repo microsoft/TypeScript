@@ -3844,6 +3844,16 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 				return result
 			}
 		} else {
+			// A string literal can only be comparable to a string mapping type if applying the mapping
+			// leaves it unchanged: "BA" may be an Uppercase<string>, but "ba" never is. Comparing only
+			// against the base constraint (string) would make every literal comparable. Whether the
+			// unmapped type can produce the literal (e.g. "A" for Uppercase<T> where T extends "a" | "b")
+			// is still decided by the base constraint below.
+			if r.relation == r.c.comparableRelation && target.flags&TypeFlagsStringLiteral != 0 {
+				if mapped, _ := r.c.applyTargetStringMappingToSource(target, source); mapped != target {
+					return TernaryFalse
+				}
+			}
 			constraint := r.c.getBaseConstraintOfType(source)
 			if constraint != nil {
 				result = r.isRelatedTo(constraint, target, RecursionFlagsSource, reportErrors)
