@@ -2522,10 +2522,22 @@ func (r *resolutionState) loadEntrypointsFromExportMap(
 	packageName string,
 	exports packagejson.ExportsOrImports,
 ) []*ResolvedEntrypoint {
-	var loadEntrypointsFromTargetExports func(subpath string, includeConditions *collections.Set[string], excludeConditions *collections.Set[string], exports packagejson.ExportsOrImports)
+	var loadEntrypointsFromTargetExports func(subpath string, sets []conditionSet, exports packagejson.ExportsOrImports)
 	var entrypoints []*ResolvedEntrypoint
 
-	loadEntrypointsFromTargetExports = func(subpath string, includeConditions *collections.Set[string], excludeConditions *collections.Set[string], exports packagejson.ExportsOrImports) {
+	// addEntrypoint records that every resolver described by one of `sets` reaches fileName through moduleSpecifier.
+	addEntrypoint := func(fileName tspath.RootedFilePath, moduleSpecifier tspath.ModuleSpecifier, sets []conditionSet, ending Ending) {
+		entrypoint := r.resolver.createResolvedEntrypointHandlingSymlink(fileName, moduleSpecifier, sets[0].include, sets[0].exclude, ending)
+		entrypoints = append(entrypoints, entrypoint)
+		for _, set := range sets[1:] {
+			alternative := *entrypoint
+			alternative.IncludeConditions = set.include
+			alternative.ExcludeConditions = set.exclude
+			entrypoints = append(entrypoints, &alternative)
+		}
+	}
+
+	loadEntrypointsFromTargetExports = func(subpath string, sets []conditionSet, exports packagejson.ExportsOrImports) {
 		if exports.Type == packagejson.JSONValueTypeString && strings.HasPrefix(exports.AsString(), "./") {
 			if strings.ContainsRune(exports.AsString(), '*') {
 				if strings.IndexByte(exports.AsString(), '*') != strings.LastIndexByte(exports.AsString(), '*') {
@@ -2571,13 +2583,12 @@ func (r *resolutionState) loadEntrypointsFromExportMap(
 						continue
 					}
 					moduleSpecifier := tspath.ToModuleSpecifier(packageName + "/" + resolvedSubpath)
-					entrypoints = append(entrypoints, r.resolver.createResolvedEntrypointHandlingSymlink(
+					addEntrypoint(
 						file,
 						moduleSpecifier,
-						includeConditions,
-						excludeConditions,
+						sets,
 						core.IfElse(strings.HasSuffix(exports.AsString(), "*"), EndingExtensionChangeable, EndingFixed),
-					))
+					)
 				}
 			} else {
 				partsAfterFirst := tspath.GetPathComponents(exports.AsString())[2:]
@@ -2586,70 +2597,163 @@ func (r *resolutionState) loadEntrypointsFromExportMap(
 				}
 				resolvedTarget := resolutionCandidateFromDirectoryPath(packageJson.PackageDirectory.AsDirectoryPath(), exports.AsString())
 				if result := r.loadFileNameFromPackageJSONField(r.extensions, resolvedTarget, exports.AsString()); result.isResolved() {
-					entrypoints = append(entrypoints, r.resolver.createResolvedEntrypointHandlingSymlink(
+					addEntrypoint(
 						result.path,
 						tspath.ToModuleSpecifier(tspath.ResolvePath(packageName, subpath)),
-						includeConditions,
-						excludeConditions,
+						sets,
 						core.IfElse(strings.HasSuffix(exports.AsString(), "*"), EndingExtensionChangeable, EndingFixed),
-					))
+					)
 				}
 			}
 		} else if exports.Type == packagejson.JSONValueTypeArray {
 			for _, element := range exports.AsArray() {
-				loadEntrypointsFromTargetExports(subpath, includeConditions, excludeConditions, element)
+				loadEntrypointsFromTargetExports(subpath, sets, element)
 			}
 		} else if exports.Type == packagejson.JSONValueTypeObject {
-			var prevConditions []string
+			// A runtime resolver commits to the first condition it has, unless that condition's target yields
+			// nothing for it (as a nested conditions object with no matching branch does), in which case it
+			// moves on to the next condition. So a target is only reachable by resolvers that get past every
+			// preceding condition, by either lacking it or falling through its target. That applies to
+			// "default" as much as to any named condition.
+			reachable := sets
 			for condition, export := range exports.AsObject().Entries() {
-				if excludeConditions != nil && excludeConditions.Has(condition) {
+				isTypesCondition := condition == "types" || IsApplicableVersionedTypesKey(condition)
+				conditionAlwaysMatches := condition == "default" || isTypesCondition
+				// The "types" conditions don't exist at runtime, so a resolver that has an earlier condition
+				// still falls through to a "types" target when the earlier one yields no declaration file.
+				candidates := core.IfElse(isTypesCondition, sets, reachable)
+				var matching []conditionSet
+				for _, set := range candidates {
+					if set.exclude.Has(condition) {
+						continue
+					}
+					if !conditionAlwaysMatches {
+						set.include = set.include.UnionedWith(collections.NewSetFromItems(condition))
+					}
+					matching = append(matching, set)
+				}
+				if len(matching) > 0 {
+					loadEntrypointsFromTargetExports(subpath, matching, export)
+				}
+				if conditionAlwaysMatches {
+					break
+				}
+				next := intersectConditionSets(reachable, passConditionSets(condition, export))
+				if len(next) > maxConditionSets {
+					// Too many alternatives to track: ignore this condition's shadowing rather than risk
+					// hiding a reachable target.
 					continue
 				}
-
-				conditionAlwaysMatches := condition == "default" || condition == "types" || IsApplicableVersionedTypesKey(condition)
-				newIncludeConditions := includeConditions
-				if !conditionAlwaysMatches {
-					newIncludeConditions = includeConditions.Clone()
-					excludeConditions = excludeConditions.Clone()
-					if newIncludeConditions == nil {
-						newIncludeConditions = &collections.Set[string]{}
-					}
-					newIncludeConditions.Add(condition)
-					for _, prevCondition := range prevConditions {
-						if excludeConditions == nil {
-							excludeConditions = &collections.Set[string]{}
-						}
-						excludeConditions.Add(prevCondition)
-					}
-				}
-
-				prevConditions = append(prevConditions, condition)
-				loadEntrypointsFromTargetExports(subpath, newIncludeConditions, excludeConditions, export)
-				if conditionAlwaysMatches {
+				reachable = next
+				if len(reachable) == 0 {
 					break
 				}
 			}
 		}
 	}
 
+	allResolvers := []conditionSet{{}}
 	switch exports.Type {
 	case packagejson.JSONValueTypeArray:
 		for _, element := range exports.AsArray() {
-			loadEntrypointsFromTargetExports(".", nil, nil, element)
+			loadEntrypointsFromTargetExports(".", allResolvers, element)
 		}
 	case packagejson.JSONValueTypeObject:
 		if exports.IsSubpaths() {
 			for subpath, export := range exports.AsObject().Entries() {
-				loadEntrypointsFromTargetExports(subpath, nil, nil, export)
+				loadEntrypointsFromTargetExports(subpath, allResolvers, export)
 			}
 		} else {
-			loadEntrypointsFromTargetExports(".", nil, nil, exports)
+			loadEntrypointsFromTargetExports(".", allResolvers, exports)
 		}
 	default:
-		loadEntrypointsFromTargetExports(".", nil, nil, exports)
+		loadEntrypointsFromTargetExports(".", allResolvers, exports)
 	}
 
 	return entrypoints
+}
+
+// conditionSet describes the resolvers that have every condition in include and none in exclude.
+// A nil set places no constraint.
+type conditionSet struct {
+	include *collections.Set[string]
+	exclude *collections.Set[string]
+}
+
+func (s conditionSet) isUnconstrained() bool {
+	return s.include.Len() == 0 && s.exclude.Len() == 0
+}
+
+// maxConditionSets bounds how many alternative condition sets are tracked for one target. Past it,
+// shadowing is ignored, which may treat a shadowed target as reachable but never hides a reachable one.
+const maxConditionSets = 32
+
+// intersectConditionSets returns the resolvers described both by one of a and by one of b.
+func intersectConditionSets(a []conditionSet, b []conditionSet) []conditionSet {
+	var result []conditionSet
+	for _, x := range a {
+		for _, y := range b {
+			set := conditionSet{include: x.include.UnionedWith(y.include), exclude: x.exclude.UnionedWith(y.exclude)}
+			// No resolver both has and lacks a condition.
+			if !set.include.Intersects(set.exclude) {
+				result = append(result, set)
+			}
+		}
+	}
+	return result
+}
+
+// passConditionSets returns the resolvers that get past `condition` in a conditions object at runtime:
+// those that don't have it, and those for which its target falls through.
+func passConditionSets(condition string, target packagejson.ExportsOrImports) []conditionSet {
+	fallThrough := fallThroughConditionSets(target)
+	if condition == "default" {
+		return fallThrough
+	}
+	if slices.ContainsFunc(fallThrough, conditionSet.isUnconstrained) {
+		return []conditionSet{{}}
+	}
+	return append(
+		[]conditionSet{{exclude: collections.NewSetFromItems(condition)}},
+		intersectConditionSets([]conditionSet{{include: collections.NewSetFromItems(condition)}}, fallThrough)...,
+	)
+}
+
+// fallThroughConditionSets returns the resolvers for which runtime resolution of target yields nothing,
+// so that resolution moves on to the next condition. A string target never falls through: it either
+// resolves, whether or not the file it names exists, or is invalid and fails resolution. Neither does
+// null, which blocks the subpath.
+func fallThroughConditionSets(target packagejson.ExportsOrImports) []conditionSet {
+	result := []conditionSet{{}}
+	switch target.Type {
+	case packagejson.JSONValueTypeArray:
+		// An array falls through only if each of its elements does.
+		for _, element := range target.AsArray() {
+			result = intersectConditionSets(result, fallThroughConditionSets(element))
+			if len(result) == 0 || len(result) > maxConditionSets {
+				break
+			}
+		}
+	case packagejson.JSONValueTypeObject:
+		// An object falls through only if each of its conditions is passed. The "types" conditions don't
+		// exist at runtime, so they are always passed.
+		for condition, value := range target.AsObject().Entries() {
+			if condition == "types" || IsApplicableVersionedTypesKey(condition) {
+				continue
+			}
+			result = intersectConditionSets(result, passConditionSets(condition, value))
+			if condition == "default" || len(result) == 0 || len(result) > maxConditionSets {
+				break
+			}
+		}
+	default:
+		return nil
+	}
+	if len(result) > maxConditionSets {
+		// Too many alternatives to track: assume the target can fall through for anyone.
+		return []conditionSet{{}}
+	}
+	return result
 }
 
 func (r *resolutionState) getMatchedStarForPatternEntrypoint(file string, leadingSlice string, trailingSlice string, forceCaseSensitive bool) (string, bool) {
