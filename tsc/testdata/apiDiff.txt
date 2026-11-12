@@ -302,13 +302,9 @@ updatePropertyAccessChain
 
 
 # ts (old) methods compared to ts, API (new).
-## (391) ts methods matched in async ts, API  ##
+## (390) ts methods matched in async ts, API  ##
 
-## ts methods missing from async ts, API (97) ##
-addEmitHelper
-addEmitHelpers
-addSyntheticLeadingComment
-addSyntheticTrailingComment
+## ts methods missing from async ts, API (98) ##
 canHaveDecorators
 canHaveModifiers
 convertCompilerOptionsFromJson
@@ -319,7 +315,7 @@ findConfigFile
 flattenDiagnosticMessageText
 getAutomaticTypeDirectiveNames
 getCombinedNodeFlags
-getConstantValue
+getCommentRange
 getDecorators
 getDefaultCompilerOptions
 getDefaultFormatCodeSettings
@@ -349,7 +345,9 @@ getJSDocTypeTag
 getModeForResolutionAtIndex
 getModeForUsageLocation
 getModifiers
+getOriginalNode
 getOutputFileNames
+getParseTreeNode
 getPreEmitDiagnostics
 getTsBuildInfoEmitOutputFilePath
 hasOnlyExpressionInitializer
@@ -394,11 +392,14 @@ isTypeElement
 isTypeOnlyExportDeclaration
 isTypeOnlyImportDeclaration
 isTypeOnlyImportOrExportDeclaration
+moveSyntheticComments
 parseIsolatedEntityName
 parseJsonText
 readJsonConfigFile
 resolveTripleslashReference
 resolveTypeReferenceDirective
+setCommentRange
+setOriginalNode
 sortAndDeduplicateDiagnostics
 symbolName
 walkUpBindingElementsAndPatterns

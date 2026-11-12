@@ -164,7 +164,7 @@ ts.createSolutionBuilder||SolutionBuilder is deferred for redesign
 ts.createSolutionBuilderHost||SolutionBuilder is deferred for redesign
 ts.createSolutionBuilderWithWatch||SolutionBuilder is deferred for redesign
 ts.createSolutionBuilderWithWatchHost||SolutionBuilder is deferred for redesign
-ts.createSourceMapSource||Trivial plain JavaScript object
+ts.createSourceMapSource||Constructs a plain JavaScript object for custom source-map ranges. Custom emit transforms and source-map-producing client printing are not supported; revisit with those capabilities.
 ts.createTextChangeRange||Internal helper, trivial plain JavaScript object
 ts.createTextSpan||Internal helper, trivial plain JavaScript object
 ts.createTextSpanFromBounds||Internal helper, trivial plain JavaScript object
@@ -173,26 +173,24 @@ ts.createWatchCompilerHost||Watch APIs are deferred for redesign
 ts.createWatchProgram||Watch APIs are deferred for redesign
 ts.decodedTextSpanIntersectsWith||Internal helper
 ts.displayPartsToString||Display parts are not used in TypeScript 7
-ts.disposeEmitNodes||EmitNodes are not used in TypeScript 7
+ts.disposeEmitNodes||Emit metadata belongs to an explicit context rather than client parse-tree nodes. Use a fresh context for independent printing; source-file-wide cleanup of node-attached emit metadata is unnecessary.
 ts.forEachChild||Node.forEachChild is sufficient
 ts.formatDiagnostic||formatDiagnostics is sufficient
-ts.getCommentRange||EmitNodes are not used in TypeScript 7
 ts.getConfigFileParsingDiagnostics|Program.getConfigFileParsingDiagnostics|
-ts.getEmitHelpers||EmitNodes are not used in TypeScript 7
+ts.getConstantValue||Reads the legacy emitter's const-enum substitution cache, not semantic constant evaluation. Native emit rewrites accesses to literal nodes before printing; use Checker.getConstantValue for semantic queries.
+ts.getEmitHelpers||Inspects support code attached by transformation/downleveling. Custom emit transforms and helper-bearing client printing are not supported; revisit with those capabilities.
 ts.getJSDocClassTag||The bespoke JSDocClassTag kind and @class/@constructor semantics were intentionally removed. Such tags are available as JSDocUnknownTag through getJSDocTags, filtered by tagName.text. Same decision as the removed NodeFactory class-tag factories; https://github.com/microsoft/typescript-go/pull/34
 ts.getJSDocEnumTag||The bespoke JSDocEnumTag kind and @enum semantics were intentionally removed. Such tags are available as JSDocUnknownTag through getJSDocTags, filtered by tagName.text, without a structured enum typeExpression. Same decision as the removed NodeFactory enum-tag factories; https://github.com/microsoft/typescript-go/pull/34
 ts.getLineAndCharacterOfPosition||SourceFile.getLineAndCharacterOfPosition is sufficient
 ts.getModeForFileReference||Internal helper, trivially reimplementable in user code
 ts.getNameOfJSDocTypedef||Function not used in TypeScript 7
-ts.getOriginalNode||EmitNodes are not used in TypeScript 7
-ts.getParseTreeNode||Original nodes are not stored on clones in TypeScript 7
 ts.getParsedCommandLineOfConfigFile||Internal helper
 ts.getPositionOfLineAndCharacter||SourceFile.getPositionOfLineAndCharacter is sufficient
-ts.getSourceMapRange||EmitNodes are not used in TypeScript 7
+ts.getSourceMapRange||Custom emit transforms and source-map-producing client printing are not supported. Revisit with mapped printing; editor-only range metadata can be held in an application-owned side table.
 ts.getSupportedCodeFixes||Only public for TS Server plugins; no longer needed
-ts.getSyntheticLeadingComments||EmitNodes are not used in TypeScript 7
-ts.getSyntheticTrailingComments||EmitNodes are not used in TypeScript 7
-ts.getTokenSourceMapRange||EmitNodes are not used in TypeScript 7
+ts.getSyntheticLeadingComments|EmitContext.getSyntheticLeadingComments|Pending microsoft/TypeScript#65447: use api.printer.createEmitContext() and pass the same context to printNode/printFile as { emitContext }; metadata belongs to the context, not the AST.
+ts.getSyntheticTrailingComments|EmitContext.getSyntheticTrailingComments|Pending microsoft/TypeScript#65447: use api.printer.createEmitContext() and pass the same context to printNode/printFile as { emitContext }; metadata belongs to the context, not the AST.
+ts.getTokenSourceMapRange||Token-specific mapping overrides depend on unsupported custom source-map emission. No product workload was verified in the inspected public sample; revisit on concrete demand.
 ts.getTypeParameterOwner||Function not used in TypeScript 7, trivially implementable in user code
 ts.hasJSDocParameterTags||Function not used in TypeScript 7, trivially reimplementable in user code
 ts.isAccessor|ts.isAccessorDeclaration|
@@ -215,25 +213,22 @@ ts.isParameter|ts.isParameterDeclaration|
 ts.isPropertySignature|ts.isPropertySignatureDeclaration|
 ts.isSetAccessor|ts.isSetAccessorDeclaration|
 ts.isTypeAssertionExpression|ts.isTypeAssertion|
-ts.moveEmitHelpers||EmitNodes are not used in TypeScript 7
-ts.moveSyntheticComments||EmitNodes are not used in TypeScript 7
+ts.moveEmitHelpers||Transfers support code between emission containers. Custom emit transforms and helper-bearing client printing are not supported; revisit with those capabilities.
 ts.nodeModuleNameResolver||Node module resolution is removed in TypeScript 7; use `api.createModuleResolver` with supported options
 ts.parseBuildCommand||Build APIs are deferred for redesign
 ts.preProcessFile||File preprocessing is not used in TypeScript 7
 ts.readBuilderProgram||Build APIs are deferred for redesign
-ts.removeEmitHelper||EmitNodes are not used in TypeScript 7
+ts.removeEmitHelper||Removes support code from an emission container. Custom emit transforms and helper-bearing client printing are not supported; revisit with those capabilities.
 ts.resolveModuleName|ModuleResolver.resolveModuleName|Through `api.createModuleResolver`
 ts.resolveModuleNameFromCache||Module resolution results are not cached beyond a single program build in TypeScript 7
 ts.resolveProjectReferencePath||Internal helper; trivially reimplementable in user code
-ts.setCommentRange||EmitNodes are not used in TypeScript 7
-ts.setConstantValue||EmitNodes are not used in TypeScript 7
-ts.setEmitFlags||EmitNodes are not used in TypeScript 7
-ts.setOriginalNode||EmitNodes are not used in TypeScript 7
-ts.setSourceMapRange||EmitNodes are not used in TypeScript 7
-ts.setSyntheticLeadingComments||EmitNodes are not used in TypeScript 7
-ts.setSyntheticTrailingComments||EmitNodes are not used in TypeScript 7
+ts.setConstantValue||Writes the legacy emitter's const-enum substitution cache. Native emit rewrites accesses to literal nodes before printing, so this cache setter has no equivalent purpose.
+ts.setEmitFlags|EmitContext.setEmitFlags|Pending microsoft/TypeScript#65447: use api.printer.createEmitContext() and pass the same context to printNode/printFile as { emitContext }; metadata belongs to the context, not the AST.
+ts.setSourceMapRange||Associates generated syntax with original source locations in emitted maps. Custom emit transforms and source-map-producing client printing are not supported; revisit with those capabilities.
+ts.setSyntheticLeadingComments|EmitContext.setSyntheticLeadingComments|Pending microsoft/TypeScript#65447: use api.printer.createEmitContext() and pass the same context to printNode/printFile as { emitContext }; metadata belongs to the context, not the AST. SynthesizedComment now requires both hasLeadingNewLine and hasTrailingNewLine.
+ts.setSyntheticTrailingComments|EmitContext.setSyntheticTrailingComments|Pending microsoft/TypeScript#65447: use api.printer.createEmitContext() and pass the same context to printNode/printFile as { emitContext }; metadata belongs to the context, not the AST. SynthesizedComment now requires both hasLeadingNewLine and hasTrailingNewLine.
 ts.setTextRange||Internal helper; Nodes should be considered immutable by user code
-ts.setTokenSourceMapRange||EmitNodes are not used in TypeScript 7
+ts.setTokenSourceMapRange||Token-specific mapping overrides depend on unsupported custom source-map emission. No product workload was verified in the inspected public sample; revisit on concrete demand.
 ts.textChangeRangeIsUnchanged||Internal helper
 ts.textChangeRangeNewSpan||Internal helper
 ts.textSpanContainsPosition||Internal helper, trivially reimplementable in user code
@@ -253,6 +248,10 @@ ts.updateLanguageServiceSourceFile||Incremental parsing is not used in TypeScrip
 ts.validateLocaleAndSetLanguage||The locale cannot be set from the API in TypeScript 7
 ts.visitCommaListElements||CommaListExpression is removed in TypeScript 7
 ts.visitFunctionBody||Only needed for internal transforms
+ts.addSyntheticLeadingComment|EmitContext.addSyntheticLeadingComment|Pending microsoft/TypeScript#65447: use api.printer.createEmitContext() and pass the same context to printNode/printFile as { emitContext }; metadata belongs to the context, not the AST. Both hasTrailingNewLine and the additional hasLeadingNewLine argument are required.
+ts.addSyntheticTrailingComment|EmitContext.addSyntheticTrailingComment|Pending microsoft/TypeScript#65447: use api.printer.createEmitContext() and pass the same context to printNode/printFile as { emitContext }; metadata belongs to the context, not the AST. Both hasTrailingNewLine and the additional hasLeadingNewLine argument are required.
+ts.addEmitHelper||Attaches runtime support code for transformed output. Custom emit transforms and helper-bearing client printing are not supported; revisit with those capabilities.
+ts.addEmitHelpers||Propagates runtime support code requested during transformation. Custom emit transforms and helper-bearing client printing are not supported; revisit with those capabilities.
 ts.visitIterationBody||Only needed for internal transforms
 ts.visitLexicalEnvironment||Only needed for internal transforms
 ts.visitParameterList||Only needed for internal transforms
