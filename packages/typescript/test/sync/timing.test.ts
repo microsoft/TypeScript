@@ -12,8 +12,7 @@ describe("sync IPC timing", () => {
         const fs = createVirtualFileSystem({ "/tsconfig.json": "{}", "/a.ts": "" });
         const nestedArgument = "x".repeat(10_000);
         let nested = false;
-        let api: API | undefined;
-        using instance = new API({
+        using api = new API({
             cwd: fileURLToPath(new URL("../../../../", import.meta.url).toString()),
             collectTiming: true,
             fs: {
@@ -21,19 +20,16 @@ describe("sync IPC timing", () => {
                 readFile: path => {
                     if (!nested) {
                         nested = true;
-                        if (!api) throw new Error("API is not initialized");
                         api.parseCommandLine([nestedArgument]);
                     }
                     return fs.readFile!(path);
                 },
             },
         });
-        api = instance;
-
-        instance.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        api.createSnapshot({ openProjects: ["/tsconfig.json"] });
 
         assert.ok(nested);
-        const { recentRequests } = instance.getTimingInfo();
+        const { recentRequests } = api.getTimingInfo();
         const nestedIndex = recentRequests.findIndex(request => request.method === "parseCommandLine");
         assert.ok(nestedIndex >= 0);
         assert.ok(recentRequests[nestedIndex].bytesSent > nestedArgument.length);
