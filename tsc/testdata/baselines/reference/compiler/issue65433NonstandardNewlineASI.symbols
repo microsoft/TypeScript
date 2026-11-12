@@ -7,4 +7,16 @@ const a = (x: number) => x
 >x : Symbol(x, Decl(issue65433NonstandardNewlineASI.ts, 0, 11))
 
 (1)
+const b = (x: number) => x
+>b : Symbol(b, Decl(issue65433NonstandardNewlineASI.ts, 2, 5))
+>x : Symbol(x, Decl(issue65433NonstandardNewlineASI.ts, 2, 11))
+>x : Symbol(x, Decl(issue65433NonstandardNewlineASI.ts, 2, 11))
+
+    (1)
+const c = (x: number) => x
+>c : Symbol(c, Decl(issue65433NonstandardNewlineASI.ts, 4, 5))
+>x : Symbol(x, Decl(issue65433NonstandardNewlineASI.ts, 4, 11))
+>x : Symbol(x, Decl(issue65433NonstandardNewlineASI.ts, 4, 11))
+
+    (1)
 

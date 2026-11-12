@@ -48,6 +48,20 @@ func TestNormalizeJSDocTypeSourceText(t *testing.T) {
 	}
 }
 
+func TestSkipTriviaStopsAfterUnicodeLineBreak(t *testing.T) {
+	t.Parallel()
+
+	for _, lineBreak := range []string{"\u2028", "\u2029"} {
+		t.Run(lineBreak, func(t *testing.T) {
+			t.Parallel()
+			text := "x" + lineBreak + "  (1)"
+			options := SkipTriviaOptions{StopAfterLineBreak: true}
+
+			assert.Equal(t, SkipTriviaEx(text, 1, &options), 1+len(lineBreak))
+		})
+	}
+}
+
 func TestIsJSDocTypeExpressionOrChild(t *testing.T) {
 	t.Parallel()
 
