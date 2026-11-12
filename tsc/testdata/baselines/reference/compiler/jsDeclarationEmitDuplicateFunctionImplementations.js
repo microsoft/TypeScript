@@ -1,0 +1,91 @@
+//// [tests/cases/compiler/jsDeclarationEmitDuplicateFunctionImplementations.ts] ////
+
+//// [a.js]
+/** @param {number} x */
+function func(x) {
+    return x + 1;
+}
+
+//// [b.js]
+/** @param {number} x */
+function func(x) {
+    return x + 2;
+}
+
+function sameFile() {}
+var separator = 0;
+function sameFile() {
+    return 1;
+}
+
+//// [c.js]
+// The implementation of a JSDoc overload set is still left out.
+
+/**
+ * @overload
+ * @param {string} x
+ * @returns {string}
+ */
+/**
+ * @overload
+ * @param {number} x
+ * @returns {number}
+ */
+/**
+ * @param {string | number} x
+ */
+function overloaded(x) {
+    return x;
+}
+
+
+//// [a.js]
+"use strict";
+/** @param {number} x */
+function func(x) {
+    return x + 1;
+}
+//// [b.js]
+"use strict";
+/** @param {number} x */
+function func(x) {
+    return x + 2;
+}
+function sameFile() { }
+var separator = 0;
+function sameFile() {
+    return 1;
+}
+//// [c.js]
+"use strict";
+// The implementation of a JSDoc overload set is still left out.
+/**
+ * @overload
+ * @param {string} x
+ * @returns {string}
+ */
+/**
+ * @overload
+ * @param {number} x
+ * @returns {number}
+ */
+/**
+ * @param {string | number} x
+ */
+function overloaded(x) {
+    return x;
+}
+
+
+//// [a.d.ts]
+/** @param {number} x */
+declare function func(x: number): number;
+//// [b.d.ts]
+/** @param {number} x */
+declare function func(x: number): number;
+declare function sameFile(): void;
+declare var separator: number;
+declare function sameFile(): number;
+//// [c.d.ts]
+declare function overloaded(x: string): string;
+declare function overloaded(x: number): number;

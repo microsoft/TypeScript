@@ -1,0 +1,58 @@
+//// [tests/cases/compiler/jsDeclarationEmitDuplicateFunctionImplementations.ts] ////
+
+=== a.js ===
+/** @param {number} x */
+function func(x) {
+>func : Symbol(func, Decl(a.js, 0, 0), Decl(b.js, 0, 0))
+>x : Symbol(x, Decl(a.js, 1, 14))
+
+    return x + 1;
+>x : Symbol(x, Decl(a.js, 1, 14))
+}
+
+=== b.js ===
+/** @param {number} x */
+function func(x) {
+>func : Symbol(func, Decl(a.js, 0, 0), Decl(b.js, 0, 0))
+>x : Symbol(x, Decl(b.js, 1, 14))
+
+    return x + 2;
+>x : Symbol(x, Decl(b.js, 1, 14))
+}
+
+function sameFile() {}
+>sameFile : Symbol(sameFile, Decl(b.js, 3, 1), Decl(b.js, 6, 18))
+
+var separator = 0;
+>separator : Symbol(separator, Decl(b.js, 6, 3))
+
+function sameFile() {
+>sameFile : Symbol(sameFile, Decl(b.js, 3, 1), Decl(b.js, 6, 18))
+
+    return 1;
+}
+
+=== c.js ===
+// The implementation of a JSDoc overload set is still left out.
+
+/**
+ * @overload
+ * @param {string} x
+ * @returns {string}
+ */
+/**
+ * @overload
+ * @param {number} x
+ * @returns {number}
+ */
+/**
+ * @param {string | number} x
+ */
+function overloaded(x) {
+>overloaded : Symbol(overloaded, Decl(c.js, 3, 4), Decl(c.js, 8, 4), Decl(c.js, 0, 0))
+>x : Symbol(x, Decl(c.js, 15, 20))
+
+    return x;
+>x : Symbol(x, Decl(c.js, 15, 20))
+}
+
