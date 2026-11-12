@@ -4,6 +4,7 @@ package lsutil
 
 import (
 	"maps"
+	"strconv"
 	"strings"
 
 	"github.com/microsoft/TypeScript/tsc/internal/core"
@@ -171,6 +172,23 @@ func setNestedValue(config map[string]any, path string, value any) {
 		current = next
 	}
 	current[parts[len(parts)-1]] = value
+}
+
+// parsePreferenceNonnegativeInteger preserves the distinction between an absent
+// limit and zero, without truncating fractional or overflowing JSON numbers.
+func parsePreferenceNonnegativeInteger(value any) (*int, bool) {
+	switch value := value.(type) {
+	case int:
+		if value >= 0 {
+			return &value, true
+		}
+	case float64:
+		if value >= 0 && value < float64(uint(1)<<(strconv.IntSize-1)) && value == float64(int(value)) {
+			parsed := int(value)
+			return &parsed, true
+		}
+	}
+	return nil, false
 }
 
 func normalizeCustomConfigFileName(name string) string {

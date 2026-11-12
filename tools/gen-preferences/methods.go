@@ -113,6 +113,8 @@ func (s schema) writePreferenceMethods(out *bytes.Buffer, imports map[string]str
 		goType, _ := field.goType()
 		serialized := value
 		switch {
+		case goType == "*int":
+			serialized = "*" + value
 		case goType == "core.Tristate":
 			serialized += ".IsTrue()"
 		case field.serializeEnum():
@@ -140,6 +142,8 @@ func (s schema) writePreferenceMethods(out *bytes.Buffer, imports map[string]str
 func writeAssignment(out *bytes.Buffer, target string, prop property) {
 	goType, _ := prop.goType()
 	switch {
+	case goType == "*int":
+		fmt.Fprintf(out, "if parsed, ok := parsePreferenceNonnegativeInteger(value); ok { %s = parsed }\n", target)
 	case len(prop.Enum) != 0:
 		fmt.Fprintf(out, "%s = %s(value)\n", target, parserName(prop.GoType))
 	case goType == "core.Tristate":
@@ -155,6 +159,9 @@ func writeAssignment(out *bytes.Buffer, target string, prop property) {
 
 func presentCondition(value string, prop property) string {
 	goType, _ := prop.goType()
+	if goType == "*int" {
+		return value + " != nil"
+	}
 	if prop.serializeEnum() {
 		return "true"
 	}
