@@ -11,6 +11,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 
 	"github.com/microsoft/TypeScript/tsc/internal/debug"
+	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
 )
 
 // Checker side effects and memoization
@@ -1146,6 +1147,12 @@ func (s *memoState) setErrors(c *Checker, reports []*currentNodeError) {
 //go:noinline
 func (c *Checker) replayCurrentNodeErrors(reports []*currentNodeError) {
 	for _, r := range reports {
+		if r == instantiationTooDeep && len(c.instantiationStack) != 0 {
+			// Computing the result here would fail the instantiation in
+			// progress; see "Instantiation limits".
+			c.abortInstantiation()
+			continue
+		}
 		c.reportNode(r)
 	}
 }
@@ -1726,13 +1733,13 @@ func (c *Checker) logMemoDiscard(memo *memoHeader, key memoKey, restore func()) 
 // logResults reports whether caching a result must be logged in the discard
 // log.
 func (c *Checker) logResults() bool {
-	return c.circularityStart != 0 || c.varianceCycleRoot != 0
+	return c.circularityStart != 0 || c.varianceCycleRoot != 0 || c.instantiationAborted
 }
 
 // logEffects reports whether changing the effects of a result must be logged
 // in the discard log.
 func (c *Checker) logEffects() bool {
-	return c.circularityStart != 0 || c.effectsMarkDepth != 0 || c.varianceCycleRoot != 0
+	return c.circularityStart != 0 || c.effectsMarkDepth != 0 || c.varianceCycleRoot != 0 || c.instantiationAborted
 }
 
 // discardLogSince restores everything logged in the discard log since
@@ -2109,13 +2116,25 @@ func (c *Checker) logPendingDiscard(state *memoState) {
 // For the result not to depend on what was cached before, each memoized
 // computation (including each cached comparison of two types) measures
 // depth from where it started, whether or not it reports errors, and a
-// reused result adds no depth. Chains that start a new memoized computation
-// at every level are only stopped by a much larger limit on the whole
-// outermost instantiation, which is only reached by runaway instantiations,
-// and which does depend on what was cached before.
+// reused result adds no depth.
 //
-// The limit on the number of instantiations is likewise only reached by
-// runaway instantiations, and depends on what was cached before: it counts
+// Chains that start a new memoized computation at every level are only
+// stopped by a limit on the depth of the whole instantiation stack, which
+// is there to stop infinite instantiations rather than to judge finite
+// ones: caching only ever shortens the stack, so an instantiation that
+// would stay below it if computed from scratch stays below it in any order.
+// An instantiation reaching it fails as a whole, with all instantiations in
+// progress, and the results cached since are discarded, so no part of an
+// infinite instantiation is cached as though it were complete. The error
+// reported for it is carried by the results computed with it, and replaying
+// it in an instantiation in progress fails that instantiation the same way,
+// as computing those results again would. Each cached instantiation in
+// progress when one fails would fail too if computed from scratch, so it is
+// recorded as failing, rather than computed again to the limit wherever it
+// is reached.
+//
+// The limit on the number of instantiations is only reached by runaway
+// instantiations, and depends on what was cached before: it counts
 // the instantiations performed since the start of the current statement or
 // expression, or of the outermost computation in progress, and reused
 // results add none. Making it independent would mean
@@ -2123,14 +2142,85 @@ func (c *Checker) logPendingDiscard(state *memoState) {
 // scratch, which costs far more than the limit is worth.
 
 const (
-	instantiationDepthLimit      = 100
-	instantiationTotalDepthLimit = 200
-	instantiationCountLimit      = 5_000_000
+	instantiationDepthLimit = 100
+	instantiationStackLimit = 1000
+	instantiationCountLimit = 5_000_000
 )
 
 func (c *Checker) instantiationDepthLimitReached() bool {
-	depth := len(c.instantiationStack)
-	return depth-int(c.currentResolution().depthStart) == instantiationDepthLimit || depth == instantiationTotalDepthLimit
+	return len(c.instantiationStack)-int(c.currentResolution().depthStart) == instantiationDepthLimit
+}
+
+// instantiationTooDeep is the error reported for an instantiation that
+// reached instantiationStackLimit.
+var instantiationTooDeep = &currentNodeError{func(c *Checker, node *ast.Node) {
+	c.error(node, diagnostics.Type_instantiation_is_excessively_deep_and_possibly_infinite)
+}}
+
+// abortInstantiation fails every instantiation in progress; see
+// "Instantiation limits".
+func (c *Checker) abortInstantiation() {
+	if c.instantiationAborted {
+		return
+	}
+	c.instantiationAborted = true
+	c.instantiationAbortLog = len(c.discardLog)
+	// Each cached instantiation in progress reached the limit, and would
+	// again if computed from scratch, so it is known to fail without
+	// computing it again.
+	for i := range c.resolutions {
+		if f := &c.resolutions[i]; f.instantiation {
+			if c.tooDeepInstantiations == nil {
+				c.tooDeepInstantiations = make(map[memoKey]struct{})
+			}
+			c.tooDeepInstantiations[f.key] = struct{}{}
+		}
+	}
+}
+
+// beginInstantiation is called after beginning the computation of a cached
+// instantiation, and reports whether it is known to fail, in which case it
+// fails as computing it would.
+func (c *Checker) beginInstantiation() bool {
+	f := c.currentResolution()
+	f.instantiation = true
+	if len(c.tooDeepInstantiations) == 0 {
+		return false
+	}
+	if _, ok := c.tooDeepInstantiations[f.key]; !ok {
+		return false
+	}
+	if len(c.instantiationStack) != 0 {
+		c.abortInstantiation()
+	} else {
+		c.reportNode(instantiationTooDeep)
+	}
+	return true
+}
+
+// endInstantiation is called when the computation of a cached instantiation
+// finishes, and reports whether to cache its result. An instantiation
+// finishing while instantiations in progress are failing is part of the
+// failure, and is not cached, since the instantiation caches keep the
+// identity of what they cache and so are not discarded with the results
+// cached since the failure. It then ends the computation itself.
+func (c *Checker) endInstantiation(reports currentNodeErrorsMark) bool {
+	if !c.instantiationAborted {
+		return true
+	}
+	c.endCurrentNodeErrors(reports)
+	c.endMemoUncached()
+	return false
+}
+
+// endInstantiationAbort finishes failing the outermost instantiation, once
+// it has unwound.
+func (c *Checker) endInstantiationAbort() {
+	c.instantiationAborted = false
+	c.discardLogSince(c.instantiationAbortLog)
+	c.instantiationAbortLog = 0
+	c.trimDiscardLog()
+	c.reportNode(instantiationTooDeep)
 }
 
 // A Relation caches the results of comparisons.

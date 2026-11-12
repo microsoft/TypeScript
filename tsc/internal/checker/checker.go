@@ -646,6 +646,8 @@ type Checker struct {
 	resolutionSerials          uint32
 	resolutions                []resolution
 	instantiationStack         []*Type
+	instantiationAborted       bool  // See "Instantiation limits"
+	instantiationAbortLog      int   // Length of discardLog when instantiationAborted was set
 	readIncompleteFloor        int32 // See markReadIncomplete
 	conditionalConstraintDepth depthLimit
 	baseConstraintWalk         baseConstraintWalk
@@ -839,6 +841,7 @@ type memoStore struct {
 	SymbolCount                            uint32
 	SignatureCount                         uint32
 	TotalInstantiationCount                uint32
+	tooDeepInstantiations                  map[memoKey]struct{} // See "Instantiation limits"
 	languageVersion                        core.ScriptTarget
 	moduleKind                             core.ModuleKind
 	moduleResolutionKind                   core.ModuleResolutionKind
@@ -25120,6 +25123,10 @@ func (c *Checker) instantiateTypeWithAlias(t *Type, m *TypeMapper, alias *TypeAl
 		return t
 	}
 	// See "Instantiation limits" in memo.go.
+	if len(c.instantiationStack) == instantiationStackLimit || c.instantiationAborted {
+		c.abortInstantiation()
+		return c.errorType
+	}
 	depthLimitReached := c.instantiationDepthLimitReached()
 	if depthLimitReached || c.instantiationCount >= instantiationCountLimit {
 		// We have reached 100 recursive type instantiations in one computation, or 5M type instantiations caused by
@@ -25174,6 +25181,10 @@ func (c *Checker) instantiateTypeWithAlias(t *Type, m *TypeMapper, alias *TypeAl
 	}
 	c.instantiationStack[len(c.instantiationStack)-1] = nil
 	c.instantiationStack = c.instantiationStack[:len(c.instantiationStack)-1]
+	if len(c.instantiationStack) == 0 && c.instantiationAborted {
+		c.endInstantiationAbort()
+		return c.errorType
+	}
 	return result
 }
 
@@ -25200,12 +25211,7 @@ func (c *Checker) getCircularTypeNames() []string {
 	// A computation reaching the depth limit names only its own
 	// instantiations, which do not depend on where it was first computed;
 	// see "Instantiation limits".
-	stack := c.instantiationStack
-	total := len(stack) == instantiationTotalDepthLimit
-	if !total {
-		stack = stack[c.currentResolution().depthStart:]
-	}
-	for _, t := range stack {
+	for _, t := range c.instantiationStack[c.currentResolution().depthStart:] {
 		typeCounts[t] = typeCounts[t] + 1
 		if typeCounts[t] == 3 {
 			symbol := t.symbol
@@ -25216,18 +25222,6 @@ func (c *Checker) getCircularTypeNames() []string {
 				circularSymbols = append(circularSymbols, symbol)
 			}
 		}
-	}
-	if total && len(circularSymbols) > 1 {
-		// The whole instantiation is named, and which of the types in the
-		// cycle it entered first depends on what was cached before, so the
-		// cycle is named starting from the type declared first.
-		first := 0
-		for i, s := range circularSymbols {
-			if c.compareSymbols(s, circularSymbols[first]) < 0 {
-				first = i
-			}
-		}
-		circularSymbols = append(circularSymbols[first:], circularSymbols[:first]...)
 	}
 	var circularTypeNames []string
 	for _, s := range circularSymbols {
@@ -25484,7 +25478,14 @@ func (c *Checker) getObjectTypeInstantiation(t *Type, m *TypeMapper, alias *Type
 	if result == nil {
 		reports := c.startCurrentNodeErrors()
 		data.instantiations.begin(c, key)
-		result = instantiate(newTypeMapper(typeParameters, typeArguments))
+		if c.beginInstantiation() {
+			result = c.errorType
+		} else {
+			result = instantiate(newTypeMapper(typeParameters, typeArguments))
+		}
+		if !c.endInstantiation(reports) {
+			return c.errorType
+		}
 		data.instantiations.setReported(c, key, result, c.endCurrentNodeErrors(reports))
 		c.endMemo()
 		if result.flags&TypeFlagsObjectFlagsType != 0 && result.objectFlags&ObjectFlagsCouldContainTypeVariablesComputed == 0 {
@@ -25605,6 +25606,11 @@ func (c *Checker) getConditionalTypeInstantiation(t *Type, mapper *TypeMapper, f
 		if result == nil {
 			reports := c.startCurrentNodeErrors()
 			root.instantiations.begin(c, key)
+			if c.beginInstantiation() {
+				root.instantiations.setReported(c, key, c.errorType, c.endCurrentNodeErrors(reports))
+				c.endMemo()
+				return c.errorType
+			}
 			newMapper := newTypeMapper(root.outerTypeParameters, typeArguments)
 			checkType := root.checkType
 			var distributionType *Type
@@ -25620,6 +25626,9 @@ func (c *Checker) getConditionalTypeInstantiation(t *Type, mapper *TypeMapper, f
 				}, alias)
 			} else {
 				result = c.getConditionalType(root, newMapper, forConstraint, alias)
+			}
+			if !c.endInstantiation(reports) {
+				return c.errorType
 			}
 			root.instantiations.setReported(c, key, result, c.endCurrentNodeErrors(reports))
 			c.endMemo()
@@ -26872,10 +26881,21 @@ func (c *Checker) getTypeAliasInstantiation(symbol *ast.Symbol, typeArguments []
 	if instantiation, _ := links.instantiations.cached(c, key); instantiation != nil {
 		return instantiation
 	}
-	return links.instantiations.compute(c, key, func() *Type {
+	// The instantiation may fail with an error that reusing it must replay;
+	// see "Instantiation limits".
+	reports := c.startCurrentNodeErrors()
+	links.instantiations.begin(c, key)
+	result := c.errorType
+	if !c.beginInstantiation() {
 		mapper := newTypeMapper(typeParameters, c.fillMissingTypeArguments(typeArguments, typeParameters, c.getMinTypeArgumentCount(typeParameters), ast.IsInJSFile(symbol.ValueDeclaration())))
-		return c.instantiateTypeWithAlias(t, mapper, alias)
-	})
+		result = c.instantiateTypeWithAlias(t, mapper, alias)
+	}
+	if !c.endInstantiation(reports) {
+		return c.errorType
+	}
+	links.instantiations.setReported(c, key, result, c.endCurrentNodeErrors(reports))
+	c.endMemo()
+	return result
 }
 
 func isLocalTypeAlias(symbol *ast.Symbol) bool {

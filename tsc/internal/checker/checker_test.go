@@ -491,6 +491,7 @@ var unmemoizedCacheFields = map[string]string{
 	"Type.id":                                unmemoizedCounter,
 	"Type.kind":                              unmemoizedCreated,
 	"Type.generation":                        unmemoizedDerived,
+	"memoStore.tooDeepInstantiations":        "Instantiations known to reach the limit on the instantiation stack, whichever order computes them; see \"Instantiation limits\"",
 	"Type.baseConstraintHeight":              "Set with the resolved base constraint whose walk it describes; see \"Base constraint walks\"",
 	"Type.symbol":                            unmemoizedCreated,
 	"Type.alias":                             unmemoizedCreated,

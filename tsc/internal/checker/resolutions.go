@@ -43,7 +43,10 @@ type resolution struct {
 	// The structured members the outermost resolution of key computes are
 	// available before it completes; see resolveStructuredTypeMembersUncached.
 	membersPublished bool
-	prevMemo         int32 // Checker.memoTop on entry
+	// The computation is of an instantiation cached in an instantiation
+	// cache; see "Instantiation limits".
+	instantiation bool
+	prevMemo      int32 // Checker.memoTop on entry
 	// Index in Checker.deferredAttach of the first result cached by the
 	// computation before it had effects; see attachState.
 	attachStart int32
