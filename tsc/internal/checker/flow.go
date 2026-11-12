@@ -366,6 +366,10 @@ func (c *Checker) getTypeAtFlowCondition(f *FlowState, flow *ast.FlowNode) FlowT
 	assumeTrue := flow.Flags&ast.FlowFlagsTrueCondition != 0
 	nonEvolvingType := c.finalizeEvolvingArrayType(flowType.t)
 	narrowedType := c.narrowType(f, nonEvolvingType, flow.Node, assumeTrue)
+	if flow.Flags&ast.FlowFlagsCondition == ast.FlowFlagsCondition {
+		node := ast.SkipOuterExpressions(flow.Node, ast.OEKAll)
+		narrowedType = c.narrowTypeByTruthiness(f, c.narrowTypeByOptionality(f, nonEvolvingType, node, true), node, false)
+	}
 	if narrowedType == nonEvolvingType {
 		return flowType
 	}
