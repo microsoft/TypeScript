@@ -609,6 +609,8 @@ type Checker struct {
 	memberLayoutCount                           uint32
 	instantiationStack                          []*Type
 	conditionalConstraintDepth                  uint32
+	templateExpansionBudget                     int
+	templateExpansionBudgetActive               bool
 	inlineLevel                                 int
 	serializationLevel                          int
 	currentNode                                 *ast.Node
@@ -28277,6 +28279,17 @@ func (c *Checker) getResolvedBaseConstraint(t *Type, stack []RecursionId) *Type 
 	if constrained.resolvedBaseConstraint != nil {
 		return constrained.resolvedBaseConstraint
 	}
+	if !c.templateExpansionBudgetActive {
+		// Computing one base constraint can distribute template literal cross products over
+		// the members of a recursive conditional type; each distribution creates literal types
+		// that are retained for the checker's lifetime. Bound the total expansion performed by
+		// a single query (see getTemplateLiteralType).
+		c.templateExpansionBudgetActive = true
+		c.templateExpansionBudget = maxTemplateExpansionPerBaseConstraint
+		defer func() {
+			c.templateExpansionBudgetActive = false
+		}()
+	}
 	if !c.pushTypeResolution(t, TypeSystemPropertyNameResolvedBaseConstraint) {
 		return c.circularConstraintType
 	}
@@ -29992,9 +30005,24 @@ func (c *Checker) getConstraintDeclaration(t *Type) *ast.Node {
 const (
 	maxTemplateLiteralTypeLength = 50_000_000
 	maxTemplateLiteralTypeSpans  = 100_000
+	// Bound the number of template literal expansions performed while computing a single base
+	// constraint; beyond this, getTemplateLiteralType falls back to `string` (see its
+	// templateExpansionBudget handling). Keeps recursive conditional types from materializing
+	// unbounded numbers of retained literal types during contextual typing.
+	maxTemplateExpansionPerBaseConstraint = 1_000_000
 )
 
 func (c *Checker) getTemplateLiteralType(texts []string, types []*Type) *Type {
+	if c.templateExpansionBudgetActive {
+		// While a base constraint is being computed, every template literal expansion counts
+		// against a shared budget. Once exhausted, fall back to `string`, which is a sound base
+		// constraint for any template literal type, instead of materializing unbounded numbers
+		// of literal types.
+		if c.templateExpansionBudget <= 0 {
+			return c.stringType
+		}
+		c.templateExpansionBudget--
+	}
 	unionIndex := core.FindIndex(types, func(t *Type) bool {
 		return t.flags&(TypeFlagsNever|TypeFlagsUnion) != 0
 	})
