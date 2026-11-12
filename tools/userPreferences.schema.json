@@ -183,6 +183,12 @@
                     "type": "boolean",
                     "x-config": "format.insertSpaceBeforeTypeAnnotation"
                 },
+                "maxConsecutiveBlankLines": {
+                    "description": "Maximum number of consecutive blank lines between tokens or comments. Omit to preserve existing blank lines. Must be a nonnegative integer; zero removes all blank lines.",
+                    "type": "integer",
+                    "x-go-type": "*int",
+                    "x-config": "format.maxConsecutiveBlankLines"
+                },
                 "placeOpenBraceOnNewLineForControlBlocks": {
                     "type": "boolean",
                     "x-config": "format.placeOpenBraceOnNewLineForControlBlocks"
@@ -190,6 +196,11 @@
                 "placeOpenBraceOnNewLineForFunctions": {
                     "type": "boolean",
                     "x-config": "format.placeOpenBraceOnNewLineForFunctions"
+                },
+                "removeBlankLinesBeforeClosingBrace": {
+                    "description": "Remove blank lines immediately before structural closing braces. Disabled by default.",
+                    "type": "boolean",
+                    "x-config": "format.removeBlankLinesBeforeClosingBrace"
                 },
                 "semicolons": {
                     "enum": [

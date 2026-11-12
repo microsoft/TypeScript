@@ -1,5 +1,32 @@
 # How does TypeScript formatting work?
 
+## Blank lines
+
+The language server accepts two optional formatting preferences through its
+existing configuration mechanism, under `format` in the language settings:
+
+```json
+{
+    "format": {
+        "removeBlankLinesBeforeClosingBrace": true,
+        "maxConsecutiveBlankLines": 1
+    }
+}
+```
+
+Both are opt-in. `maxConsecutiveBlankLines` accepts nonnegative integers; zero
+removes all blank lines between tokens or comments while retaining the line break
+that separates them. An omitted limit preserves existing blank lines. Invalid
+values leave the current setting unchanged. Removing blank lines before structural
+closing braces takes precedence over the general limit.
+
+These preferences apply to document and selection formatting, including formatting
+on save. They do not apply to on-type formatting, file-leading or file-trailing
+blank lines, or the contents of comments, strings, templates, and JSX text.
+The closing-brace preference excludes template interpolations and JSX expressions.
+
+## Overview
+
 To format code you need to have a formatting context and a `SourceFile`.  The formatting context contains 
 all user settings like tab size, newline character, etc.
 

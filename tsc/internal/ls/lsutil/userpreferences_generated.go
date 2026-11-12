@@ -3,12 +3,11 @@
 package lsutil
 
 import (
-	"slices"
-	"strings"
-
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/json"
 	"github.com/microsoft/TypeScript/tsc/internal/modulespecifiers"
+	"slices"
+	"strings"
 )
 
 type CodeLensUserPreferences struct {
@@ -52,26 +51,30 @@ type EditorSettings struct {
 
 type FormatCodeSettings struct {
 	EditorSettings
-	IndentMultiLineObjectLiteralBeginningOnBlankLine            core.Tristate       `json:"indentMultiLineObjectLiteralBeginningOnBlankLine,omitempty"`
-	IndentSwitchCase                                            core.Tristate       `json:"indentSwitchCase,omitempty"`
-	InsertSpaceAfterCommaDelimiter                              core.Tristate       `json:"insertSpaceAfterCommaDelimiter,omitempty"`
-	InsertSpaceAfterConstructor                                 core.Tristate       `json:"insertSpaceAfterConstructor,omitempty"`
-	InsertSpaceAfterFunctionKeywordForAnonymousFunctions        core.Tristate       `json:"insertSpaceAfterFunctionKeywordForAnonymousFunctions,omitempty"`
-	InsertSpaceAfterKeywordsInControlFlowStatements             core.Tristate       `json:"insertSpaceAfterKeywordsInControlFlowStatements,omitempty"`
-	InsertSpaceAfterOpeningAndBeforeClosingEmptyBraces          core.Tristate       `json:"insertSpaceAfterOpeningAndBeforeClosingEmptyBraces,omitempty"`
-	InsertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces  core.Tristate       `json:"insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces,omitempty"`
-	InsertSpaceAfterOpeningAndBeforeClosingNonemptyBraces       core.Tristate       `json:"insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces,omitempty"`
-	InsertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets     core.Tristate       `json:"insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets,omitempty"`
-	InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis  core.Tristate       `json:"insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis,omitempty"`
-	InsertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces core.Tristate       `json:"insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces,omitempty"`
-	InsertSpaceAfterSemicolonInForStatements                    core.Tristate       `json:"insertSpaceAfterSemicolonInForStatements,omitempty"`
-	InsertSpaceAfterTypeAssertion                               core.Tristate       `json:"insertSpaceAfterTypeAssertion,omitempty"`
-	InsertSpaceBeforeAndAfterBinaryOperators                    core.Tristate       `json:"insertSpaceBeforeAndAfterBinaryOperators,omitempty"`
-	InsertSpaceBeforeFunctionParenthesis                        core.Tristate       `json:"insertSpaceBeforeFunctionParenthesis,omitempty"`
-	InsertSpaceBeforeTypeAnnotation                             core.Tristate       `json:"insertSpaceBeforeTypeAnnotation,omitempty"`
-	PlaceOpenBraceOnNewLineForControlBlocks                     core.Tristate       `json:"placeOpenBraceOnNewLineForControlBlocks,omitempty"`
-	PlaceOpenBraceOnNewLineForFunctions                         core.Tristate       `json:"placeOpenBraceOnNewLineForFunctions,omitempty"`
-	Semicolons                                                  SemicolonPreference `json:"semicolons,omitempty"`
+	IndentMultiLineObjectLiteralBeginningOnBlankLine            core.Tristate `json:"indentMultiLineObjectLiteralBeginningOnBlankLine,omitempty"`
+	IndentSwitchCase                                            core.Tristate `json:"indentSwitchCase,omitempty"`
+	InsertSpaceAfterCommaDelimiter                              core.Tristate `json:"insertSpaceAfterCommaDelimiter,omitempty"`
+	InsertSpaceAfterConstructor                                 core.Tristate `json:"insertSpaceAfterConstructor,omitempty"`
+	InsertSpaceAfterFunctionKeywordForAnonymousFunctions        core.Tristate `json:"insertSpaceAfterFunctionKeywordForAnonymousFunctions,omitempty"`
+	InsertSpaceAfterKeywordsInControlFlowStatements             core.Tristate `json:"insertSpaceAfterKeywordsInControlFlowStatements,omitempty"`
+	InsertSpaceAfterOpeningAndBeforeClosingEmptyBraces          core.Tristate `json:"insertSpaceAfterOpeningAndBeforeClosingEmptyBraces,omitempty"`
+	InsertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces  core.Tristate `json:"insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces,omitempty"`
+	InsertSpaceAfterOpeningAndBeforeClosingNonemptyBraces       core.Tristate `json:"insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces,omitempty"`
+	InsertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets     core.Tristate `json:"insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets,omitempty"`
+	InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis  core.Tristate `json:"insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis,omitempty"`
+	InsertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces core.Tristate `json:"insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces,omitempty"`
+	InsertSpaceAfterSemicolonInForStatements                    core.Tristate `json:"insertSpaceAfterSemicolonInForStatements,omitempty"`
+	InsertSpaceAfterTypeAssertion                               core.Tristate `json:"insertSpaceAfterTypeAssertion,omitempty"`
+	InsertSpaceBeforeAndAfterBinaryOperators                    core.Tristate `json:"insertSpaceBeforeAndAfterBinaryOperators,omitempty"`
+	InsertSpaceBeforeFunctionParenthesis                        core.Tristate `json:"insertSpaceBeforeFunctionParenthesis,omitempty"`
+	InsertSpaceBeforeTypeAnnotation                             core.Tristate `json:"insertSpaceBeforeTypeAnnotation,omitempty"`
+	// Maximum number of consecutive blank lines between tokens or comments. Omit to preserve existing blank lines. Must be a nonnegative integer; zero removes all blank lines.
+	MaxConsecutiveBlankLines                *int          `json:"maxConsecutiveBlankLines,omitempty"`
+	PlaceOpenBraceOnNewLineForControlBlocks core.Tristate `json:"placeOpenBraceOnNewLineForControlBlocks,omitempty"`
+	PlaceOpenBraceOnNewLineForFunctions     core.Tristate `json:"placeOpenBraceOnNewLineForFunctions,omitempty"`
+	// Remove blank lines immediately before structural closing braces. Disabled by default.
+	RemoveBlankLinesBeforeClosingBrace core.Tristate       `json:"removeBlankLinesBeforeClosingBrace,omitempty"`
+	Semicolons                         SemicolonPreference `json:"semicolons,omitempty"`
 }
 
 type InlayHintsPreferences struct {
@@ -483,10 +486,16 @@ func (p *UserPreferences) applyRawPreferences(settings map[string]any) {
 			p.FormatCodeSettings.InsertSpaceBeforeFunctionParenthesis = parsePreferenceTristate(value)
 		case "insertSpaceBeforeTypeAnnotation":
 			p.FormatCodeSettings.InsertSpaceBeforeTypeAnnotation = parsePreferenceTristate(value)
+		case "maxConsecutiveBlankLines":
+			if parsed, ok := parsePreferenceNonnegativeInteger(value); ok {
+				p.FormatCodeSettings.MaxConsecutiveBlankLines = parsed
+			}
 		case "placeOpenBraceOnNewLineForControlBlocks":
 			p.FormatCodeSettings.PlaceOpenBraceOnNewLineForControlBlocks = parsePreferenceTristate(value)
 		case "placeOpenBraceOnNewLineForFunctions":
 			p.FormatCodeSettings.PlaceOpenBraceOnNewLineForFunctions = parsePreferenceTristate(value)
+		case "removeBlankLinesBeforeClosingBrace":
+			p.FormatCodeSettings.RemoveBlankLinesBeforeClosingBrace = parsePreferenceTristate(value)
 		case "semicolons":
 			p.FormatCodeSettings.Semicolons = parsePreferenceSemicolonPreference(value)
 		case "includeAutomaticOptionalChainCompletions":
@@ -776,6 +785,13 @@ func (p UserPreferences) withConfig(config map[string]any) UserPreferences {
 			p.FormatCodeSettings.InsertSpaceBeforeTypeAnnotation = parsePreferenceTristate(value)
 		}
 	}
+	if value, ok := getPreferenceConfigValue(config, "format.maxConsecutiveBlankLines"); ok {
+		if value != nil {
+			if parsed, ok := parsePreferenceNonnegativeInteger(value); ok {
+				p.FormatCodeSettings.MaxConsecutiveBlankLines = parsed
+			}
+		}
+	}
 	if value, ok := getPreferenceConfigValue(config, "format.placeOpenBraceOnNewLineForControlBlocks"); ok {
 		if value != nil {
 			p.FormatCodeSettings.PlaceOpenBraceOnNewLineForControlBlocks = parsePreferenceTristate(value)
@@ -784,6 +800,11 @@ func (p UserPreferences) withConfig(config map[string]any) UserPreferences {
 	if value, ok := getPreferenceConfigValue(config, "format.placeOpenBraceOnNewLineForFunctions"); ok {
 		if value != nil {
 			p.FormatCodeSettings.PlaceOpenBraceOnNewLineForFunctions = parsePreferenceTristate(value)
+		}
+	}
+	if value, ok := getPreferenceConfigValue(config, "format.removeBlankLinesBeforeClosingBrace"); ok {
+		if value != nil {
+			p.FormatCodeSettings.RemoveBlankLinesBeforeClosingBrace = parsePreferenceTristate(value)
 		}
 	}
 	if value, ok := getPreferenceConfigValue(config, "format.semicolons"); ok {
@@ -1124,11 +1145,17 @@ func (p *UserPreferences) MarshalJSONTo(enc *json.Encoder) error {
 	if p.FormatCodeSettings.InsertSpaceBeforeTypeAnnotation.IsTrue() || p.FormatCodeSettings.InsertSpaceBeforeTypeAnnotation.IsFalse() {
 		setNestedValue(config, "format.insertSpaceBeforeTypeAnnotation", p.FormatCodeSettings.InsertSpaceBeforeTypeAnnotation.IsTrue())
 	}
+	if p.FormatCodeSettings.MaxConsecutiveBlankLines != nil {
+		setNestedValue(config, "format.maxConsecutiveBlankLines", *p.FormatCodeSettings.MaxConsecutiveBlankLines)
+	}
 	if p.FormatCodeSettings.PlaceOpenBraceOnNewLineForControlBlocks.IsTrue() || p.FormatCodeSettings.PlaceOpenBraceOnNewLineForControlBlocks.IsFalse() {
 		setNestedValue(config, "format.placeOpenBraceOnNewLineForControlBlocks", p.FormatCodeSettings.PlaceOpenBraceOnNewLineForControlBlocks.IsTrue())
 	}
 	if p.FormatCodeSettings.PlaceOpenBraceOnNewLineForFunctions.IsTrue() || p.FormatCodeSettings.PlaceOpenBraceOnNewLineForFunctions.IsFalse() {
 		setNestedValue(config, "format.placeOpenBraceOnNewLineForFunctions", p.FormatCodeSettings.PlaceOpenBraceOnNewLineForFunctions.IsTrue())
+	}
+	if p.FormatCodeSettings.RemoveBlankLinesBeforeClosingBrace.IsTrue() || p.FormatCodeSettings.RemoveBlankLinesBeforeClosingBrace.IsFalse() {
+		setNestedValue(config, "format.removeBlankLinesBeforeClosingBrace", p.FormatCodeSettings.RemoveBlankLinesBeforeClosingBrace.IsTrue())
 	}
 	if p.FormatCodeSettings.Semicolons != "" {
 		setNestedValue(config, "format.semicolons", string(p.FormatCodeSettings.Semicolons))
@@ -1164,7 +1191,7 @@ func (p *UserPreferences) MarshalJSONTo(enc *json.Encoder) error {
 		setNestedValue(config, "inlayHints.parameterNames.enabled", string(p.InlayHintsPreferences.IncludeInlayParameterNameHints))
 	}
 	if p.InlayHintsPreferences.IncludeInlayParameterNameHintsWhenArgumentMatchesName.IsTrue() || p.InlayHintsPreferences.IncludeInlayParameterNameHintsWhenArgumentMatchesName.IsFalse() {
-		setNestedValue(config, "inlayHints.parameterNames.suppressWhenArgumentMatchesName", !p.InlayHintsPreferences.IncludeInlayParameterNameHintsWhenArgumentMatchesName.IsTrue())
+		setNestedValue(config, "inlayHints.parameterNames.suppressWhenArgumentMatchesName", !(p.InlayHintsPreferences.IncludeInlayParameterNameHintsWhenArgumentMatchesName.IsTrue()))
 	}
 	if p.InlayHintsPreferences.IncludeInlayPropertyDeclarationTypeHints.IsTrue() || p.InlayHintsPreferences.IncludeInlayPropertyDeclarationTypeHints.IsFalse() {
 		setNestedValue(config, "inlayHints.propertyDeclarationTypes.enabled", p.InlayHintsPreferences.IncludeInlayPropertyDeclarationTypeHints.IsTrue())
@@ -1173,7 +1200,7 @@ func (p *UserPreferences) MarshalJSONTo(enc *json.Encoder) error {
 		setNestedValue(config, "inlayHints.variableTypes.enabled", p.InlayHintsPreferences.IncludeInlayVariableTypeHints.IsTrue())
 	}
 	if p.InlayHintsPreferences.IncludeInlayVariableTypeHintsWhenTypeMatchesName.IsTrue() || p.InlayHintsPreferences.IncludeInlayVariableTypeHintsWhenTypeMatchesName.IsFalse() {
-		setNestedValue(config, "inlayHints.variableTypes.suppressWhenTypeMatchesName", !p.InlayHintsPreferences.IncludeInlayVariableTypeHintsWhenTypeMatchesName.IsTrue())
+		setNestedValue(config, "inlayHints.variableTypes.suppressWhenTypeMatchesName", !(p.InlayHintsPreferences.IncludeInlayVariableTypeHintsWhenTypeMatchesName.IsTrue()))
 	}
 	if p.CodeLensUserPreferences.ImplementationsCodeLensEnabled.IsTrue() || p.CodeLensUserPreferences.ImplementationsCodeLensEnabled.IsFalse() {
 		setNestedValue(config, "implementationsCodeLens.enabled", p.CodeLensUserPreferences.ImplementationsCodeLensEnabled.IsTrue())

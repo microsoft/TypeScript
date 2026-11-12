@@ -69,8 +69,16 @@ export interface FormatCodeSettings extends EditorSettings {
     insertSpaceBeforeAndAfterBinaryOperators?: boolean | undefined;
     insertSpaceBeforeFunctionParenthesis?: boolean | undefined;
     insertSpaceBeforeTypeAnnotation?: boolean | undefined;
+    /**
+     * Maximum number of consecutive blank lines between tokens or comments. Omit to preserve existing blank lines. Must be a nonnegative integer; zero removes all blank lines.
+     */
+    maxConsecutiveBlankLines?: number | undefined;
     placeOpenBraceOnNewLineForControlBlocks?: boolean | undefined;
     placeOpenBraceOnNewLineForFunctions?: boolean | undefined;
+    /**
+     * Remove blank lines immediately before structural closing braces. Disabled by default.
+     */
+    removeBlankLinesBeforeClosingBrace?: boolean | undefined;
     semicolons?: "ignore" | "insert" | "remove" | undefined;
 }
 

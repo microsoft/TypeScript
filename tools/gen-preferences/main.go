@@ -247,6 +247,10 @@ func goName(name string) string {
 }
 
 func (p property) goType() (string, error) {
+	// Optional nonnegative integer limits must distinguish absence from zero.
+	if p.GoType == "*int" && p.Type == "integer" {
+		return p.GoType, nil
+	}
 	if p.GoType != "" {
 		parts := strings.Split(p.GoType, ".")
 		if len(parts) > 2 || len(parts) == 2 && parts[0] != "core" && parts[0] != "modulespecifiers" {
