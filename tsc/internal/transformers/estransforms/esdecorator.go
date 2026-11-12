@@ -1619,6 +1619,9 @@ func (tx *esDecoratorTransformer) visitPropertyDeclaration(node *ast.Node) *ast.
 		// When the field has no trailing semicolon, those are the leading comments of the
 		// next class member, which then get emitted twice.
 		call.Loc = initializer.Loc
+		// The initializer still emits the comments that precede it, so the call must not
+		// emit them as well.
+		ec.AddEmitFlags(call, printer.EFNoLeadingComments)
 		initializer = call
 	}
 

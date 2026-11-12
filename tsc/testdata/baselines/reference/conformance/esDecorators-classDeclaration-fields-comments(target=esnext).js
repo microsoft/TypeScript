@@ -26,6 +26,12 @@ class C {
     @dec static j = 10
     /** doc k */
     static k = 11
+    @dec #l = /* leading comment of l */ 12;
+    @dec #m = 13
+    /** doc n */
+    @dec #n = 14
+    /** doc o */
+    #o = 15
 }
 
 
@@ -60,4 +66,13 @@ class C {
     static j = 10;
     /** doc k */
     static k = 11;
+    @dec
+    #l = /* leading comment of l */ 12;
+    @dec
+    #m = 13;
+    /** doc n */
+    @dec
+    #n = 14;
+    /** doc o */
+    #o = 15;
 }
