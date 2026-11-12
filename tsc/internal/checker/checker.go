@@ -18005,7 +18005,7 @@ func (c *Checker) getInferredTypeParameterConstraint(t *Type, omitTypeReferences
 				}
 				switch {
 				case ast.IsTypeReferenceNode(parent) && !omitTypeReferences:
-					typeParameters := c.getTypeParametersForTypeReferenceOrImport(parent)
+					typeParameters := c.getDeclaredTypeParametersOfTypeReference(parent)
 					if typeParameters != nil {
 						index := slices.Index(parent.TypeArguments(), child)
 						if index >= 0 && index < len(typeParameters) {
@@ -18070,6 +18070,32 @@ func (c *Checker) getTypeParametersForTypeReferenceOrImport(node *ast.Node) []*T
 		}
 	}
 	return nil
+}
+
+// getDeclaredTypeParametersOfTypeReference returns the type parameters of the
+// type a type reference refers to, if it has an acceptable number of type
+// arguments. Unlike getTypeParametersForTypeReferenceOrImport, it does not
+// instantiate the type, which can need the constraints of the infer type
+// parameters among its type arguments, inferred from these type parameters.
+func (c *Checker) getDeclaredTypeParametersOfTypeReference(node *ast.Node) []*Type {
+	symbol := c.getSymbolFromTypeReference(node)
+	if symbol == c.unknownSymbol {
+		return nil
+	}
+	declared := c.getDeclaredTypeOfSymbol(symbol)
+	if c.isErrorType(declared) {
+		return nil
+	}
+	var typeParameters []*Type
+	if symbol.Flags()&ast.SymbolFlagsTypeAlias != 0 {
+		typeParameters = c.typeAliasLinks.Get(symbol).typeParameters
+	} else if declared.objectFlags&ObjectFlagsClassOrInterface != 0 {
+		typeParameters = declared.AsInterfaceType().LocalTypeParameters()
+	}
+	if n := len(node.TypeArguments()); n < c.getMinTypeArgumentCount(typeParameters) || n > len(typeParameters) {
+		return nil
+	}
+	return typeParameters
 }
 
 func (c *Checker) getTypeParametersForTypeAndSymbol(t *Type, symbol *ast.Symbol) []*Type {
