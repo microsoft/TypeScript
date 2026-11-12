@@ -21,6 +21,9 @@ type resolution struct {
 	// for a node.
 	depthStart int32
 	serial     uint32 // Identifies the resolution among all entered
+	// One more than the index of the resolution below with a key in the same
+	// slot of the resolving table, or 0; see resolvingTable.
+	belowInSlot int32
 
 	// A query records the effects of a memoized computation, for replay by
 	// reuse of its result; see memo.go.
@@ -31,7 +34,8 @@ type resolution struct {
 	shadowed  bool
 	fromCheck bool // The query began in a check; see recordFromCheck
 	// The computation read the incomplete result of a computation in
-	// progress, or was started by one that did; see effectsToDrop.
+	// progress, or was started by one that did; see effectsToDrop and
+	// readIncompleteAt.
 	readIncomplete bool
 	// The computation reported an error located at the current node; see
 	// effectsToDrop.
@@ -92,8 +96,14 @@ func (c *Checker) pushResolution() *resolution {
 	f := &c.resolutions[n]
 	// What a computation started by one that read an incomplete result
 	// computes may be derived from it too.
-	f.readIncomplete = n != 0 && c.resolutions[n-1].readIncomplete
+	f.readIncomplete = n != 0 && c.readIncompleteAt(n-1)
 	return f
+}
+
+// readIncompleteAt reports whether the resolution at index i read an
+// incomplete result; see markReadIncomplete.
+func (c *Checker) readIncompleteAt(i int) bool {
+	return c.resolutions[i].readIncomplete || c.readIncompleteFloor != 0 && i >= int(c.readIncompleteFloor)
 }
 
 func (c *Checker) currentResolution() *resolution {
@@ -110,6 +120,11 @@ func (c *Checker) appendResolution(key memoKey, source memoStateSource, index in
 	c.resolutionSerials++
 	f := c.pushResolution()
 	f.key = key
+	if key != 0 {
+		h := resolvingHome(key)
+		f.belowInSlot = c.resolving.innermost[h]
+		c.resolving.innermost[h] = int32(len(c.resolutions))
+	}
 	f.source = source
 	f.index = int32(index)
 	f.depthStart = depthBase
@@ -144,7 +159,16 @@ func (c *Checker) forgetResult() {
 		f.source.popState(int(f.index))
 	}
 	c.endResolving(f)
+	c.unlinkResolution(f)
 	f.key, f.source = 0, nil
+}
+
+// unlinkResolution removes f, the innermost resolution with its key in its
+// slot of the resolving table, from the resolutions linked from the slot.
+func (c *Checker) unlinkResolution(f *resolution) {
+	if f.key != 0 {
+		c.resolving.innermost[resolvingHome(f.key)] = f.belowInSlot
+	}
 }
 
 // resolvingIndex returns 1 + the index in resolutions of the outermost
@@ -159,12 +183,14 @@ func (c *Checker) resolvingIndex(key memoKey) int {
 // resolvingTable counts the computations of memo cells in progress whose
 // keys hash to each of its slots, so that finding none, which is nearly
 // always the case, is one load. A computation in progress is a resolution
-// with resolving set, which is found by searching the resolution stack only
-// when its slot is not empty. The keys of the computations in progress are
-// few, so the slots are rarely shared.
+// with resolving set, which is found by searching the resolutions with a key
+// in its slot only when its slot is not empty. Those are linked from the
+// innermost, so that a search stays short however deep the computations in
+// progress nest.
 type resolvingTable struct {
-	counts [1 << resolvingTableBits]uint16
-	count  int
+	counts    [1 << resolvingTableBits]uint16
+	innermost [1 << resolvingTableBits]int32 // One more than the index of the innermost resolution with a key in each slot, or 0
+	count     int
 }
 
 const resolvingTableBits = 12
@@ -185,12 +211,13 @@ func (c *Checker) resolvingGet(key memoKey) (int32, bool) {
 
 //go:noinline
 func (c *Checker) resolvingFind(key memoKey) (int32, bool) {
-	for i := range c.resolutions {
+	found := int32(-1)
+	for i := c.resolving.innermost[resolvingHome(key)] - 1; i >= 0; i = c.resolutions[i].belowInSlot - 1 {
 		if f := &c.resolutions[i]; f.resolving && f.key == key && f.source == nil && !f.shadowed {
-			return int32(i), true
+			found = i
 		}
 	}
-	return 0, false
+	return max(found, 0), found >= 0
 }
 
 // beginResolving records that the resolution about to be pushed computes key,

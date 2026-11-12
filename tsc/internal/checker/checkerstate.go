@@ -47,6 +47,7 @@ var checkerProgressFields = []string{
 	"parametersAssigning",
 	"queryRoot",
 	"querySave",
+	"readIncompleteFloor",
 	"recordingFromCheck",
 	"reliabilityFlags",
 	"request",
