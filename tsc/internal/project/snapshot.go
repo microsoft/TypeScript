@@ -157,6 +157,7 @@ func (s *Snapshot) processFileChanges(
 			// All watch changes/deletes are files we haven't seen; should be irrelevant to us (probably an external tool's build or something)
 			fileChanges.Changed = collections.Set[lsproto.DocumentUri]{}
 			fileChanges.Deleted = collections.Set[lsproto.DocumentUri]{}
+			fileChanges.DroppedWatchChanges = true
 		} else if fileChanges.IncludesWatchChangeOutsideNodeModules {
 			fs.invalidateCache()
 			if logger != nil {
@@ -678,6 +679,7 @@ func (s *Snapshot) Clone(
 		Deleted:           change.fileChanges.Deleted,
 		RebuiltPrograms:   projectsWithNewProgramStructure,
 		UserPreferences:   change.newConfig,
+		InvalidateAll:     change.fileChanges.InvalidateAll || change.fileChanges.DroppedWatchChanges,
 	}, autoImportHost, store.options.CurrentDirectory, logger.Fork("UpdateAutoImports"))
 	if err == nil {
 		autoImportsWatch = s.autoImportsWatch.Clone(autoImports.NodeModulesDirectories())

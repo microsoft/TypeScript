@@ -56,6 +56,8 @@ type FileChangeSummary struct {
 	IncludesWatchChangeOutsideNodeModules bool
 	// InvalidateAll indicates that all cached file state should be discarded.
 	InvalidateAll bool
+
+	DroppedWatchChanges bool
 }
 
 func (f FileChangeSummary) Clone() FileChangeSummary {

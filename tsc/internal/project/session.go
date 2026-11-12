@@ -23,6 +23,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/json"
 	"github.com/microsoft/TypeScript/tsc/internal/locale"
 	"github.com/microsoft/TypeScript/tsc/internal/ls"
+	"github.com/microsoft/TypeScript/tsc/internal/ls/autoimport"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
@@ -2107,7 +2108,7 @@ func (s *Session) warmAutoImportCache(ctx context.Context, change SnapshotChange
 		if s.warmAutoImportCancel != nil {
 			s.warmAutoImportCancel()
 		}
-		warmCtx, cancel := context.WithCancel(ctx)
+		warmCtx, cancel := context.WithCancel(autoimport.WithExtractionLifetime(ctx))
 		if warmCtx.Err() == nil {
 			s.warmAutoImportCancel = func() {
 				if warmCtx.Err() != nil {

@@ -3,6 +3,7 @@ package autoimport_test
 import (
 	"context"
 	"fmt"
+	"sync/atomic"
 	"testing"
 
 	"github.com/microsoft/TypeScript/tsc/internal/bundled"
@@ -19,6 +20,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/projecttestutil"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs/wrapvfs"
 	"gotest.tools/v3/assert"
 )
 
@@ -1304,4 +1306,181 @@ func TestUnsavedExportAfterAutoImportsComputed(t *testing.T) {
 	stats := autoImportStats(t, session)
 	bucket := singleBucket(t, stats.ProjectBuckets)
 	assert.Assert(t, bucket.ExportCount > 0, "exporter.ts exports should be indexed: %+v", bucket)
+}
+
+func TestCancelledBuildKeepsExtractedPackages(t *testing.T) {
+	t.Parallel()
+	const root = "/home/src/partial"
+	pkgADeclaration := root + "/node_modules/pkg-a/index.d.ts"
+	files := map[string]any{
+		root + "/tsconfig.json":                   `{"compilerOptions":{"module":"esnext","target":"esnext","strict":true}}`,
+		root + "/package.json":                    `{"dependencies":{"pkg-a":"*","pkg-b":"*"}}`,
+		root + "/index.ts":                        "export {};\n",
+		root + "/node_modules/pkg-a/package.json": `{"name":"pkg-a","version":"1.0.0","types":"index.d.ts"}`,
+		pkgADeclaration:                           "export declare const fromA: number;\n",
+		root + "/node_modules/pkg-b/package.json": `{"name":"pkg-b","version":"1.0.0","types":"index.d.ts"}`,
+		root + "/node_modules/pkg-b/index.d.ts":   "export declare const fromB: number;\n",
+	}
+
+	setup := func(t *testing.T) (*project.Session, *projecttestutil.SessionUtils, *atomic.Int32, *atomic.Pointer[context.CancelFunc]) {
+		init, utils := projecttestutil.GetSessionInitOptions(files, nil, &projecttestutil.TypingsInstallerOptions{})
+		var reads atomic.Int32
+		var cancelOnRead atomic.Pointer[context.CancelFunc]
+		inner := init.FS
+		init.FS = wrapvfs.Wrap(inner, wrapvfs.Replacements{
+			ReadFile: func(fileName tspath.RootedFilePath) (string, bool) {
+				if fileName.AsString() == pkgADeclaration {
+					reads.Add(1)
+					if cancel := cancelOnRead.Swap(nil); cancel != nil {
+						(*cancel)()
+					}
+				}
+				return inner.ReadFile(fileName)
+			},
+		})
+		session := project.NewSession(init)
+		t.Cleanup(session.Close)
+		return session, utils, &reads, &cancelOnRead
+	}
+
+	indexURI := lsproto.DocumentUri("file://" + root + "/index.ts")
+
+	t.Run("reuses packages extracted before cancellation", func(t *testing.T) {
+		t.Parallel()
+		session, _, reads, cancelOnRead := setup(t)
+		session.DidOpenFile(context.Background(), indexURI, 1, "export {};\n", lsproto.LanguageKindTypeScript)
+
+		ctx, cancel := context.WithCancel(context.Background())
+		defer cancel()
+		cancelOnRead.Store(&cancel)
+		_, _ = session.GetCurrentLanguageServiceWithAutoImports(ctx, indexURI)
+		assert.Equal(t, reads.Load(), int32(1))
+
+		_, err := session.GetCurrentLanguageServiceWithAutoImports(context.Background(), indexURI)
+		assert.NilError(t, err)
+		assert.Equal(t, reads.Load(), int32(1), "pkg-a should not be extracted again")
+		assert.Equal(t, singleBucket(t, autoImportStats(t, session).NodeModulesBuckets).ExportCount, 2)
+	})
+
+	t.Run("node_modules changes discard extracted packages", func(t *testing.T) {
+		t.Parallel()
+		session, utils, reads, cancelOnRead := setup(t)
+		session.DidOpenFile(context.Background(), indexURI, 1, "export {};\n", lsproto.LanguageKindTypeScript)
+
+		ctx, cancel := context.WithCancel(context.Background())
+		defer cancel()
+		cancelOnRead.Store(&cancel)
+		_, _ = session.GetCurrentLanguageServiceWithAutoImports(ctx, indexURI)
+		assert.Equal(t, reads.Load(), int32(1))
+
+		assert.NilError(t, utils.FS().WriteFile(tspath.RootedFilePathFromNormalized(pkgADeclaration), "export declare const fromA: number;\nexport declare const alsoFromA: number;\n"))
+		session.DidChangeWatchedFiles(context.Background(), []*lsproto.FileEvent{
+			{Uri: lsproto.DocumentUri("file://" + pkgADeclaration), Type: lsproto.FileChangeTypeChanged},
+		})
+
+		_, err := session.GetCurrentLanguageServiceWithAutoImports(context.Background(), indexURI)
+		assert.NilError(t, err)
+		assert.Assert(t, reads.Load() > 1, "pkg-a should be extracted again after it changed")
+		assert.Equal(t, singleBucket(t, autoImportStats(t, session).NodeModulesBuckets).ExportCount, 3)
+	})
+
+	t.Run("bulk node_modules changes discard extracted packages", func(t *testing.T) {
+		t.Parallel()
+		session, utils, reads, cancelOnRead := setup(t)
+		session.DidOpenFile(context.Background(), indexURI, 1, "export {};\n", lsproto.LanguageKindTypeScript)
+
+		ctx, cancel := context.WithCancel(context.Background())
+		defer cancel()
+		cancelOnRead.Store(&cancel)
+		_, _ = session.GetCurrentLanguageServiceWithAutoImports(ctx, indexURI)
+		assert.Equal(t, reads.Load(), int32(1))
+
+		assert.NilError(t, utils.FS().WriteFile(tspath.RootedFilePathFromNormalized(pkgADeclaration), "export declare const fromA: number;\nexport declare const alsoFromA: number;\n"))
+		events := []*lsproto.FileEvent{{Uri: lsproto.DocumentUri("file://" + pkgADeclaration), Type: lsproto.FileChangeTypeChanged}}
+		for i := range 1000 {
+			events = append(events, &lsproto.FileEvent{Uri: lsproto.DocumentUri(fmt.Sprintf("file://%s/node_modules/pkg-a/generated/file%d.d.ts", root, i)), Type: lsproto.FileChangeTypeChanged})
+		}
+		session.DidChangeWatchedFiles(context.Background(), events)
+
+		_, err := session.GetCurrentLanguageServiceWithAutoImports(context.Background(), indexURI)
+		assert.NilError(t, err)
+		assert.Assert(t, reads.Load() > 1, "pkg-a should be extracted again after a bulk change")
+		assert.Equal(t, singleBucket(t, autoImportStats(t, session).NodeModulesBuckets).ExportCount, 3)
+	})
+}
+
+func TestCancelledBuildTracksExtractionDependencies(t *testing.T) {
+	t.Parallel()
+	const root = "/home/src/ws"
+	appDir := root + "/packages/app"
+	pkgADeclaration := root + "/packages/a/index.d.ts"
+	sharedDeclaration := root + "/packages/shared/index.d.ts"
+	files := map[string]any{
+		appDir + "/tsconfig.json":              `{"compilerOptions":{"module":"esnext","target":"esnext","strict":true}}`,
+		appDir + "/package.json":               `{"dependencies":{"a":"*"}}`,
+		appDir + "/index.ts":                   "export {};\n",
+		appDir + "/node_modules/a":             vfstest.Symlink(root + "/packages/a"),
+		root + "/packages/a/package.json":      `{"name":"a","version":"1.0.0","types":"index.d.ts"}`,
+		pkgADeclaration:                        "export * from \"../shared/index\";\n",
+		root + "/packages/shared/package.json": `{"name":"shared","version":"1.0.0","types":"index.d.ts"}`,
+		sharedDeclaration:                      "export declare const one: number;\n",
+	}
+
+	indexURI := lsproto.DocumentUri("file://" + appDir + "/index.ts")
+	setup := func(t *testing.T) (*project.Session, *projecttestutil.SessionUtils, *atomic.Int32) {
+		init, utils := projecttestutil.GetSessionInitOptions(files, nil, &projecttestutil.TypingsInstallerOptions{})
+		var reads atomic.Int32
+		var cancelOnRead atomic.Pointer[context.CancelFunc]
+		inner := init.FS
+		init.FS = wrapvfs.Wrap(inner, wrapvfs.Replacements{
+			ReadFile: func(fileName tspath.RootedFilePath) (string, bool) {
+				if fileName.AsString() == pkgADeclaration {
+					reads.Add(1)
+					if cancel := cancelOnRead.Swap(nil); cancel != nil {
+						(*cancel)()
+					}
+				}
+				return inner.ReadFile(fileName)
+			},
+		})
+		session := project.NewSession(init)
+		t.Cleanup(session.Close)
+		session.DidOpenFile(context.Background(), indexURI, 1, "export {};\n", lsproto.LanguageKindTypeScript)
+
+		ctx, cancel := context.WithCancel(context.Background())
+		t.Cleanup(cancel)
+		cancelOnRead.Store(&cancel)
+		_, _ = session.GetCurrentLanguageServiceWithAutoImports(ctx, indexURI)
+		assert.Equal(t, reads.Load(), int32(1))
+		return session, utils, &reads
+	}
+
+	t.Run("changed dependency", func(t *testing.T) {
+		t.Parallel()
+		session, utils, _ := setup(t)
+		assert.NilError(t, utils.FS().WriteFile(tspath.RootedFilePathFromNormalized(sharedDeclaration), "export declare const one: number;\nexport declare const two: number;\n"))
+		session.DidChangeWatchedFiles(context.Background(), []*lsproto.FileEvent{
+			{Uri: lsproto.DocumentUri("file://" + sharedDeclaration), Type: lsproto.FileChangeTypeChanged},
+		})
+
+		_, err := session.GetCurrentLanguageServiceWithAutoImports(context.Background(), indexURI)
+		assert.NilError(t, err)
+		assert.Equal(t, singleBucket(t, autoImportStats(t, session).NodeModulesBuckets).ExportCount, 2)
+	})
+
+	t.Run("deleted dependency directory", func(t *testing.T) {
+		t.Parallel()
+		session, utils, reads := setup(t)
+		sharedDir := root + "/packages/shared"
+		for _, fileName := range []string{sharedDeclaration, sharedDir + "/package.json", sharedDir} {
+			assert.NilError(t, utils.FS().Remove(tspath.RootedPathFromNormalized(fileName)))
+		}
+		session.DidChangeWatchedFiles(context.Background(), []*lsproto.FileEvent{
+			{Uri: lsproto.DocumentUri("file://" + sharedDir), Type: lsproto.FileChangeTypeDeleted},
+		})
+
+		_, err := session.GetCurrentLanguageServiceWithAutoImports(context.Background(), indexURI)
+		assert.NilError(t, err)
+		assert.Assert(t, reads.Load() > 1, "a should be extracted again after its dependency was deleted")
+	})
 }

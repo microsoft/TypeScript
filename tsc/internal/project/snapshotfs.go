@@ -717,6 +717,8 @@ func (s *snapshotFSBuilder) expandAndFilterWatchEvents(change FileChangeSummary,
 				// They won't be in cacheDirectories since the registry doesn't use the snapshotFSBuilder for
 				// its file system, since we don't want to retain files read there.
 				filteredDeleted.Add(uri)
+			} else {
+				change.DroppedWatchChanges = true
 			}
 		}
 		change.Deleted = filteredDeleted
