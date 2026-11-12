@@ -598,13 +598,12 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
             "createBuildOrchestrator",
             function (rootNames: readonly string[], buildOrchestratorOptions: BuildOrchestratorOptions): BuildOrchestrator {
                 owner.ensureInitialized();
+                const { cwd, dry, force, verbose, stopBuildOnErrors, overrideCompilerOptions } = buildOrchestratorOptions;
                 const orchestratorResponse = owner.client.apiRequest("createBuildOrchestrator", {
-                    ...buildOrchestratorOptions,
-                    ...buildOrchestratorOptions.overrideCompilerOptions,
-                    cwd: buildOrchestratorOptions.cwd === undefined
-                        ? undefined
-                        : toRootedDirectoryPath(buildOrchestratorOptions.cwd, owner.getCurrentDirectory()),
                     rootNames,
+                    cwd: cwd === undefined ? undefined : toRootedDirectoryPath(cwd, owner.getCurrentDirectory()),
+                    buildOptions: { dry, force, verbose, stopBuildOnErrors },
+                    compilerOptions: overrideCompilerOptions,
                 });
 
                 const orchestrator = new BuildOrchestrator(owner.client, orchestratorResponse, () => {
@@ -615,13 +614,12 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
             },
             function* (rootNames: readonly string[], buildOrchestratorOptions: BuildOrchestratorOptions): Generator<ProtocolRequest, BuildOrchestrator, ProtocolResponse["result"]> {
                 yield* owner.ensureInitialized.gen();
+                const { cwd, dry, force, verbose, stopBuildOnErrors, overrideCompilerOptions } = buildOrchestratorOptions;
                 const orchestratorResponse = yield* apiRequest("createBuildOrchestrator", {
-                    ...buildOrchestratorOptions,
-                    ...buildOrchestratorOptions.overrideCompilerOptions,
-                    cwd: buildOrchestratorOptions.cwd === undefined
-                        ? undefined
-                        : toRootedDirectoryPath(buildOrchestratorOptions.cwd, owner.getCurrentDirectory()),
                     rootNames,
+                    cwd: cwd === undefined ? undefined : toRootedDirectoryPath(cwd, owner.getCurrentDirectory()),
+                    buildOptions: { dry, force, verbose, stopBuildOnErrors },
+                    compilerOptions: overrideCompilerOptions,
                 });
 
                 const orchestrator = new BuildOrchestrator(owner.client, orchestratorResponse, () => {
@@ -4002,6 +4000,7 @@ export interface OverrideCompilerOptions {
     sourceMap?: boolean;
     inlineSourceMap?: boolean;
     traceResolution?: boolean;
+    noEmit?: boolean;
 }
 
 export class BuildOrchestrator {
