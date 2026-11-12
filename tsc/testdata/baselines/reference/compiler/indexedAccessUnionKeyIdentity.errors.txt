@@ -1,0 +1,79 @@
+indexedAccessUnionKeyIdentity.ts(6,11): error TS2322: Type 'T[K1] | T[K2]' is not assignable to type 'T[K1] & T[K2]'.
+  Type 'T[K1]' is not assignable to type 'T[K1] & T[K2]'.
+    Type 'T[keyof T]' is not assignable to type 'T[K1] & T[K2]'.
+      Type 'T[string] | T[number] | T[symbol]' is not assignable to type 'T[K1] & T[K2]'.
+        Type 'T[string]' is not assignable to type 'T[K1] & T[K2]'.
+          Type 'T[string]' is not assignable to type 'T[K1]'.
+            Type 'string' is not assignable to type 'K1'.
+              'string' is assignable to the constraint of type 'K1', but 'K1' could be instantiated with a different subtype of constraint 'string | number | symbol'.
+                Type 'T[keyof T]' is not assignable to type 'T[K1]'.
+                  Type 'keyof T' is not assignable to type 'K1'.
+                    'keyof T' is assignable to the constraint of type 'K1', but 'K1' could be instantiated with a different subtype of constraint 'string | number | symbol'.
+                      Type 'string | number | symbol' is not assignable to type 'K1'.
+                        'string | number | symbol' is assignable to the constraint of type 'K1', but 'K1' could be instantiated with a different subtype of constraint 'string | number | symbol'.
+                          Type 'string' is not assignable to type 'K1'.
+                            'string' is assignable to the constraint of type 'K1', but 'K1' could be instantiated with a different subtype of constraint 'string | number | symbol'.
+                              Type 'T[K1]' is not assignable to type 'T[K2]'.
+                                Type 'K1' is not assignable to type 'K2'.
+                                  'K1' is assignable to the constraint of type 'K2', but 'K2' could be instantiated with a different subtype of constraint 'string | number | symbol'.
+indexedAccessUnionKeyIdentity.ts(12,26): error TS2345: Argument of type '(A & B)[keyof A] | (A & B)[keyof B]' is not assignable to parameter of type '(A & B)[keyof A] & (A & B)[keyof B]'.
+  Type '(A & B)[keyof A]' is not assignable to type '(A & B)[keyof A] & (A & B)[keyof B]'.
+    Type '(A[string] & B[string]) | (A[number] & B[number]) | (A[symbol] & B[symbol])' is not assignable to type '(A & B)[keyof A] & (A & B)[keyof B]'.
+      Type 'A[string] & B[string]' is not assignable to type '(A & B)[keyof A] & (A & B)[keyof B]'.
+        Type 'A[string] & B[string]' is not assignable to type '(A & B)[keyof A]'.
+          Type '(A & B)[keyof A]' is not assignable to type '(A & B)[keyof B]'.
+            Type 'keyof A' is not assignable to type 'keyof B'.
+              Type 'string | number | symbol' is not assignable to type 'keyof B'.
+                Type 'string' is not assignable to type 'keyof B'.
+
+
+==== indexedAccessUnionKeyIdentity.ts (2 errors) ====
+    // An indexed access type with a union index must be the same type wherever
+    // it is written, whatever flags the access was made with, as reading and
+    // writing the same type are related by identity.
+    
+    function f<T, K1 extends keyof T, K2 extends keyof T>(obj: T, key: K1 | K2) {
+        const value: T[K1 | K2] = obj[key];
+              ~~~~~
+!!! error TS2322: Type 'T[K1] | T[K2]' is not assignable to type 'T[K1] & T[K2]'.
+!!! error TS2322:   Type 'T[K1]' is not assignable to type 'T[K1] & T[K2]'.
+!!! error TS2322:     Type 'T[keyof T]' is not assignable to type 'T[K1] & T[K2]'.
+!!! error TS2322:       Type 'T[string] | T[number] | T[symbol]' is not assignable to type 'T[K1] & T[K2]'.
+!!! error TS2322:         Type 'T[string]' is not assignable to type 'T[K1] & T[K2]'.
+!!! error TS2322:           Type 'T[string]' is not assignable to type 'T[K1]'.
+!!! error TS2322:             Type 'string' is not assignable to type 'K1'.
+!!! error TS2322:               'string' is assignable to the constraint of type 'K1', but 'K1' could be instantiated with a different subtype of constraint 'string | number | symbol'.
+!!! error TS2322:                 Type 'T[keyof T]' is not assignable to type 'T[K1]'.
+!!! error TS2322:                   Type 'keyof T' is not assignable to type 'K1'.
+!!! error TS2322:                     'keyof T' is assignable to the constraint of type 'K1', but 'K1' could be instantiated with a different subtype of constraint 'string | number | symbol'.
+!!! error TS2322:                       Type 'string | number | symbol' is not assignable to type 'K1'.
+!!! error TS2322:                         'string | number | symbol' is assignable to the constraint of type 'K1', but 'K1' could be instantiated with a different subtype of constraint 'string | number | symbol'.
+!!! error TS2322:                           Type 'string' is not assignable to type 'K1'.
+!!! error TS2322:                             'string' is assignable to the constraint of type 'K1', but 'K1' could be instantiated with a different subtype of constraint 'string | number | symbol'.
+!!! error TS2322:                               Type 'T[K1]' is not assignable to type 'T[K2]'.
+!!! error TS2322:                                 Type 'K1' is not assignable to type 'K2'.
+!!! error TS2322:                                   'K1' is assignable to the constraint of type 'K2', but 'K2' could be instantiated with a different subtype of constraint 'string | number | symbol'.
+        return value;
+    }
+    
+    declare function set<T>(obj: T, key: keyof T, value: T[keyof T]): void;
+    function g<A, B>(obj: A & B, key: keyof (A & B)) {
+        set<A & B>(obj, key, obj[key]);
+                             ~~~~~~~~
+!!! error TS2345: Argument of type '(A & B)[keyof A] | (A & B)[keyof B]' is not assignable to parameter of type '(A & B)[keyof A] & (A & B)[keyof B]'.
+!!! error TS2345:   Type '(A & B)[keyof A]' is not assignable to type '(A & B)[keyof A] & (A & B)[keyof B]'.
+!!! error TS2345:     Type '(A[string] & B[string]) | (A[number] & B[number]) | (A[symbol] & B[symbol])' is not assignable to type '(A & B)[keyof A] & (A & B)[keyof B]'.
+!!! error TS2345:       Type 'A[string] & B[string]' is not assignable to type '(A & B)[keyof A] & (A & B)[keyof B]'.
+!!! error TS2345:         Type 'A[string] & B[string]' is not assignable to type '(A & B)[keyof A]'.
+!!! error TS2345:           Type '(A & B)[keyof A]' is not assignable to type '(A & B)[keyof B]'.
+!!! error TS2345:             Type 'keyof A' is not assignable to type 'keyof B'.
+!!! error TS2345:               Type 'string | number | symbol' is not assignable to type 'keyof B'.
+!!! error TS2345:                 Type 'string' is not assignable to type 'keyof B'.
+    }
+    
+    function h<T, K1 extends keyof T, K2 extends keyof T>(obj: T, key: K1 | K2) {
+        const a = obj[key];
+        const value: typeof a = obj[key];
+        return value;
+    }
+    

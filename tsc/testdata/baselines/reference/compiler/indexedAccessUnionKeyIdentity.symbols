@@ -1,0 +1,92 @@
+//// [tests/cases/compiler/indexedAccessUnionKeyIdentity.ts] ////
+
+=== indexedAccessUnionKeyIdentity.ts ===
+// An indexed access type with a union index must be the same type wherever
+// it is written, whatever flags the access was made with, as reading and
+// writing the same type are related by identity.
+
+function f<T, K1 extends keyof T, K2 extends keyof T>(obj: T, key: K1 | K2) {
+>f : Symbol(f, Decl(indexedAccessUnionKeyIdentity.ts, 0, 0))
+>T : Symbol(T, Decl(indexedAccessUnionKeyIdentity.ts, 4, 11))
+>K1 : Symbol(K1, Decl(indexedAccessUnionKeyIdentity.ts, 4, 13))
+>T : Symbol(T, Decl(indexedAccessUnionKeyIdentity.ts, 4, 11))
+>K2 : Symbol(K2, Decl(indexedAccessUnionKeyIdentity.ts, 4, 33))
+>T : Symbol(T, Decl(indexedAccessUnionKeyIdentity.ts, 4, 11))
+>obj : Symbol(obj, Decl(indexedAccessUnionKeyIdentity.ts, 4, 54))
+>T : Symbol(T, Decl(indexedAccessUnionKeyIdentity.ts, 4, 11))
+>key : Symbol(key, Decl(indexedAccessUnionKeyIdentity.ts, 4, 61))
+>K1 : Symbol(K1, Decl(indexedAccessUnionKeyIdentity.ts, 4, 13))
+>K2 : Symbol(K2, Decl(indexedAccessUnionKeyIdentity.ts, 4, 33))
+
+    const value: T[K1 | K2] = obj[key];
+>value : Symbol(value, Decl(indexedAccessUnionKeyIdentity.ts, 5, 9))
+>T : Symbol(T, Decl(indexedAccessUnionKeyIdentity.ts, 4, 11))
+>K1 : Symbol(K1, Decl(indexedAccessUnionKeyIdentity.ts, 4, 13))
+>K2 : Symbol(K2, Decl(indexedAccessUnionKeyIdentity.ts, 4, 33))
+>obj : Symbol(obj, Decl(indexedAccessUnionKeyIdentity.ts, 4, 54))
+>key : Symbol(key, Decl(indexedAccessUnionKeyIdentity.ts, 4, 61))
+
+    return value;
+>value : Symbol(value, Decl(indexedAccessUnionKeyIdentity.ts, 5, 9))
+}
+
+declare function set<T>(obj: T, key: keyof T, value: T[keyof T]): void;
+>set : Symbol(set, Decl(indexedAccessUnionKeyIdentity.ts, 7, 1))
+>T : Symbol(T, Decl(indexedAccessUnionKeyIdentity.ts, 9, 21))
+>obj : Symbol(obj, Decl(indexedAccessUnionKeyIdentity.ts, 9, 24))
+>T : Symbol(T, Decl(indexedAccessUnionKeyIdentity.ts, 9, 21))
+>key : Symbol(key, Decl(indexedAccessUnionKeyIdentity.ts, 9, 31))
+>T : Symbol(T, Decl(indexedAccessUnionKeyIdentity.ts, 9, 21))
+>value : Symbol(value, Decl(indexedAccessUnionKeyIdentity.ts, 9, 45))
+>T : Symbol(T, Decl(indexedAccessUnionKeyIdentity.ts, 9, 21))
+>T : Symbol(T, Decl(indexedAccessUnionKeyIdentity.ts, 9, 21))
+
+function g<A, B>(obj: A & B, key: keyof (A & B)) {
+>g : Symbol(g, Decl(indexedAccessUnionKeyIdentity.ts, 9, 71))
+>A : Symbol(A, Decl(indexedAccessUnionKeyIdentity.ts, 10, 11))
+>B : Symbol(B, Decl(indexedAccessUnionKeyIdentity.ts, 10, 13))
+>obj : Symbol(obj, Decl(indexedAccessUnionKeyIdentity.ts, 10, 17))
+>A : Symbol(A, Decl(indexedAccessUnionKeyIdentity.ts, 10, 11))
+>B : Symbol(B, Decl(indexedAccessUnionKeyIdentity.ts, 10, 13))
+>key : Symbol(key, Decl(indexedAccessUnionKeyIdentity.ts, 10, 28))
+>A : Symbol(A, Decl(indexedAccessUnionKeyIdentity.ts, 10, 11))
+>B : Symbol(B, Decl(indexedAccessUnionKeyIdentity.ts, 10, 13))
+
+    set<A & B>(obj, key, obj[key]);
+>set : Symbol(set, Decl(indexedAccessUnionKeyIdentity.ts, 7, 1))
+>A : Symbol(A, Decl(indexedAccessUnionKeyIdentity.ts, 10, 11))
+>B : Symbol(B, Decl(indexedAccessUnionKeyIdentity.ts, 10, 13))
+>obj : Symbol(obj, Decl(indexedAccessUnionKeyIdentity.ts, 10, 17))
+>key : Symbol(key, Decl(indexedAccessUnionKeyIdentity.ts, 10, 28))
+>obj : Symbol(obj, Decl(indexedAccessUnionKeyIdentity.ts, 10, 17))
+>key : Symbol(key, Decl(indexedAccessUnionKeyIdentity.ts, 10, 28))
+}
+
+function h<T, K1 extends keyof T, K2 extends keyof T>(obj: T, key: K1 | K2) {
+>h : Symbol(h, Decl(indexedAccessUnionKeyIdentity.ts, 12, 1))
+>T : Symbol(T, Decl(indexedAccessUnionKeyIdentity.ts, 14, 11))
+>K1 : Symbol(K1, Decl(indexedAccessUnionKeyIdentity.ts, 14, 13))
+>T : Symbol(T, Decl(indexedAccessUnionKeyIdentity.ts, 14, 11))
+>K2 : Symbol(K2, Decl(indexedAccessUnionKeyIdentity.ts, 14, 33))
+>T : Symbol(T, Decl(indexedAccessUnionKeyIdentity.ts, 14, 11))
+>obj : Symbol(obj, Decl(indexedAccessUnionKeyIdentity.ts, 14, 54))
+>T : Symbol(T, Decl(indexedAccessUnionKeyIdentity.ts, 14, 11))
+>key : Symbol(key, Decl(indexedAccessUnionKeyIdentity.ts, 14, 61))
+>K1 : Symbol(K1, Decl(indexedAccessUnionKeyIdentity.ts, 14, 13))
+>K2 : Symbol(K2, Decl(indexedAccessUnionKeyIdentity.ts, 14, 33))
+
+    const a = obj[key];
+>a : Symbol(a, Decl(indexedAccessUnionKeyIdentity.ts, 15, 9))
+>obj : Symbol(obj, Decl(indexedAccessUnionKeyIdentity.ts, 14, 54))
+>key : Symbol(key, Decl(indexedAccessUnionKeyIdentity.ts, 14, 61))
+
+    const value: typeof a = obj[key];
+>value : Symbol(value, Decl(indexedAccessUnionKeyIdentity.ts, 16, 9))
+>a : Symbol(a, Decl(indexedAccessUnionKeyIdentity.ts, 15, 9))
+>obj : Symbol(obj, Decl(indexedAccessUnionKeyIdentity.ts, 14, 54))
+>key : Symbol(key, Decl(indexedAccessUnionKeyIdentity.ts, 14, 61))
+
+    return value;
+>value : Symbol(value, Decl(indexedAccessUnionKeyIdentity.ts, 16, 9))
+}
+
