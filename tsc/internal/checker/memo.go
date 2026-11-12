@@ -776,6 +776,9 @@ func (c *Checker) beginMemo(key memoKey) {
 	n := len(c.resolutions) - 1
 	f := &c.resolutions[n]
 	f.resolving = resolving
+	if resolving {
+		c.linkResolution()
+	}
 	if c.checking && c.memoPendingCount == 0 && c.memoTop|c.currentNodeResolution != 0 && !c.checkingRecords() {
 		// beginCheckedMemo for the common case, without the calls. The memo
 		// state of the result is looked up only if needed; see
@@ -1192,8 +1195,10 @@ func (c *Checker) endMemo() {
 // result published so far. What they compute from here on may be derived
 // from it; see logResultDiscard.
 func (c *Checker) markReadIncomplete(i int) {
-	for j := i + 1; j < len(c.resolutions); j++ {
-		c.resolutions[j].readIncomplete = true
+	// Every resolution from i+1 up is marked by the floor, until the stack
+	// shrinks below it, so that marking does not walk the stack.
+	if i+1 < len(c.resolutions) && (c.readIncompleteFloor == 0 || int32(i+1) < c.readIncompleteFloor) {
+		c.readIncompleteFloor = int32(i + 1)
 	}
 }
 
@@ -1704,7 +1709,7 @@ type discardEntry struct {
 func (c *Checker) logResultDiscard(own bool, memo *memoHeader, restore func()) {
 	var drop *memoEffects
 	if own {
-		if f := &c.resolutions[c.memoTop-1]; f.readIncomplete && !f.reportsAtCurrentNode {
+		if f := &c.resolutions[c.memoTop-1]; c.readIncompleteAt(c.memoTop-1) && !f.reportsAtCurrentNode {
 			drop = f.effects
 		}
 	}
@@ -1944,8 +1949,13 @@ func (c *Checker) addInnerCycle(head int, mark int) {
 // dropResolution removes the resolution at index n, the top of the stack, and
 // ends the cycles it was the head of.
 func (c *Checker) dropResolution(n int) {
+	debug.Assert(n == len(c.resolutions)-1, "resolution dropped below the top")
+	c.unlinkResolution(&c.resolutions[n])
 	c.resolutions[n] = resolution{}
 	c.resolutions = c.resolutions[:n]
+	if int(c.readIncompleteFloor) >= n {
+		c.readIncompleteFloor = 0
+	}
 	c.endCyclesAt(n)
 }
 

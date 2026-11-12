@@ -651,6 +651,7 @@ type Checker struct {
 	resolutionSerials          uint32
 	resolutions                []resolution
 	instantiationStack         []*Type
+	readIncompleteFloor        int32 // See markReadIncomplete
 	conditionalConstraintDepth depthLimit
 	baseConstraintWalk         baseConstraintWalk
 	baseConstraintRepeatBuffer []baseConstraintRepeat // Repeats of the walks in progress; see "Base constraint walks"
