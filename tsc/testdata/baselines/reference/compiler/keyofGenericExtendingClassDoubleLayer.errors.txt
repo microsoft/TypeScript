@@ -1,10 +1,12 @@
 keyofGenericExtendingClassDoubleLayer.ts(2,12): error TS2564: Property 'createdAt' has no initializer and is not definitely assigned in the constructor.
-keyofGenericExtendingClassDoubleLayer.ts(9,7): error TS5115: Instantiations of the following types appear infinitely circular: 'Exclude', 'Model', 'ModelAttributes'.
+keyofGenericExtendingClassDoubleLayer.ts(9,7): error TS2589: Type instantiation is excessively deep and possibly infinite.
 keyofGenericExtendingClassDoubleLayer.ts(10,12): error TS2564: Property 'age' has no initializer and is not definitely assigned in the constructor.
-keyofGenericExtendingClassDoubleLayer.ts(13,13): error TS5115: Instantiations of the following types appear infinitely circular: 'Exclude', 'Model', 'ModelAttributes'.
+keyofGenericExtendingClassDoubleLayer.ts(13,13): error TS2322: Type 'string' is not assignable to type 'keyof this'.
+  Type '"createdAt"' is not assignable to type '"age" | "toJson"'.
+keyofGenericExtendingClassDoubleLayer.ts(13,13): error TS2589: Type instantiation is excessively deep and possibly infinite.
 
 
-==== keyofGenericExtendingClassDoubleLayer.ts (4 errors) ====
+==== keyofGenericExtendingClassDoubleLayer.ts (5 errors) ====
     class Model<Attributes = any> {
         public createdAt: Date;
                ~~~~~~~~~
@@ -17,7 +19,7 @@ keyofGenericExtendingClassDoubleLayer.ts(13,13): error TS5115: Instantiations of
     
     class PersonModel extends AutoModel<PersonModel> {
           ~~~~~~~~~~~
-!!! error TS5115: Instantiations of the following types appear infinitely circular: 'Exclude', 'Model', 'ModelAttributes'.
+!!! error TS2589: Type instantiation is excessively deep and possibly infinite.
         public age: number;
                ~~~
 !!! error TS2564: Property 'age' has no initializer and is not definitely assigned in the constructor.
@@ -25,7 +27,10 @@ keyofGenericExtendingClassDoubleLayer.ts(13,13): error TS5115: Instantiations of
         toJson() {
             let x: keyof this = 'createdAt';
                 ~
-!!! error TS5115: Instantiations of the following types appear infinitely circular: 'Exclude', 'Model', 'ModelAttributes'.
+!!! error TS2322: Type 'string' is not assignable to type 'keyof this'.
+!!! error TS2322:   Type '"createdAt"' is not assignable to type '"age" | "toJson"'.
+                ~
+!!! error TS2589: Type instantiation is excessively deep and possibly infinite.
         }
     }
     
