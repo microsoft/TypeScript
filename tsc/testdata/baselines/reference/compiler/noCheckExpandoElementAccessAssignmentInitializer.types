@@ -1,0 +1,18 @@
+//// [tests/cases/compiler/noCheckExpandoElementAccessAssignmentInitializer.ts] ////
+
+=== noCheckExpandoElementAccessAssignmentInitializer.ts ===
+const k = "bar";
+>k : "bar"
+>"bar" : "bar"
+
+const foo = () => {};
+>foo : { (): void; bar: number; }
+>() => {} : { (): void; bar: number; }
+
+foo[k] = 1;
+>foo[k] = 1 : 1
+>foo[k] : number
+>foo : { (): void; bar: number; }
+>k : "bar"
+>1 : 1
+
