@@ -6,7 +6,7 @@
 // resolved first.
 
 declare const n: n.T;
->n : any
+>n : n.T
 >n : any
 
 declare namespace n {}

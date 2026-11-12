@@ -1,4 +1,4 @@
-qualifiedNameCycleErrorCheckOrder.ts(5,15): error TS2502: 'n' is referenced directly or indirectly in its own type annotation.
+qualifiedNameCycleErrorCheckOrder.ts(5,20): error TS2694: Namespace 'n' has no exported member 'T'.
 
 
 ==== qualifiedNameCycleErrorCheckOrder.ts (1 errors) ====
@@ -7,7 +7,7 @@ qualifiedNameCycleErrorCheckOrder.ts(5,15): error TS2502: 'n' is referenced dire
     // resolved first.
     
     declare const n: n.T;
-                  ~
-!!! error TS2502: 'n' is referenced directly or indirectly in its own type annotation.
+                       ~
+!!! error TS2694: Namespace 'n' has no exported member 'T'.
     declare namespace n {}
     
