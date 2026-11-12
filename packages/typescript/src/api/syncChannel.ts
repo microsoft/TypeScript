@@ -327,6 +327,10 @@ export class SyncRpcChannel {
                         );
                     }
                     if (this.collectTiming) {
+                        // A callback may have issued a nested request while waiting for this response.
+                        this.lastBytesSent = typeof payload === "string"
+                            ? Buffer.byteLength(payload, "utf-8")
+                            : payload.length;
                         this.lastBytesReceived = this._msgPayload.length;
                     }
                     return this._msgPayload;
