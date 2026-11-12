@@ -84,7 +84,7 @@ type Frame = RequestFrame | CallFrame;
 
 const encoder = new TextEncoder();
 const decoder = new TextDecoder();
-const fileContentDecoder = new Wtf8Decoder("utf-8", { ignoreBOM: true });
+const fileContentDecoder = new Wtf8Decoder("utf-8");
 
 /**
  * API transport backed by an in-process TypeScript WebAssembly reactor.
