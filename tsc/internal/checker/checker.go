@@ -21611,14 +21611,15 @@ func (c *Checker) resolveStructuredTypeMembersSlow(t *Type) *StructuredType {
 		} else {
 			c.isResolutionInProgress(t, TypeSystemPropertyNameStructuredMembers)
 		}
-		if j, ok := c.resolvingGet(key); ok && int(j) < c.visibleStart {
+		published = c.resolutions[enclosing].membersPublished
+		if j, ok := c.resolvingGet(key); published && ok && int(j) < c.visibleStart {
 			// The members are being resolved below the cycle yield in
 			// progress, which then sees whatever part of them that
 			// resolution has published, rather than compute them from
-			// scratch, so the yield fails.
+			// scratch, so the yield fails. If none are published, the
+			// nested resolution below computes them from scratch instead.
 			c.markResolutionCycle(c.visibleStart)
 		}
-		published = c.resolutions[enclosing].membersPublished
 	}
 	c.beginMemo(key)
 	if !published {
