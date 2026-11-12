@@ -5566,9 +5566,10 @@ func (c *Checker) checkExternalImportOrExportDeclaration(node *ast.Node) bool {
 	if !ast.IsImportEqualsDeclaration(node) {
 		attributes := ast.GetImportAttributes(node)
 		if attributes != nil {
-			if c.checkGrammarImportAttributeValues(attributes.AsImportAttributes()) {
-				return false
-			}
+			// As for an import type, invalid attribute values leave the
+			// imported names to be checked, as resolving them for any query
+			// would check them.
+			c.checkGrammarImportAttributeValues(attributes.AsImportAttributes())
 		}
 	}
 	return true
