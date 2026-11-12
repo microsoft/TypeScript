@@ -173,3 +173,73 @@ func TestRegExpLiteralReplacementCharacterInClassRange(t *testing.T) {
 		})
 	}
 }
+
+func TestSkipTriviaExHandlesUnicodeLineSeparators(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name               string
+		text               string
+		stopAfterLineBreak bool
+		expected           int
+	}{
+		{
+			name:               "U+2028 stops after line separator",
+			text:               " \u2028  next",
+			stopAfterLineBreak: true,
+			expected:           len(" \u2028"),
+		},
+		{
+			name:               "U+2029 stops after paragraph separator",
+			text:               " \u2029  next",
+			stopAfterLineBreak: true,
+			expected:           len(" \u2029"),
+		},
+		{
+			name:     "U+2028 continues when not stopping",
+			text:     " \u2028  next",
+			expected: len(" \u2028  "),
+		},
+		{
+			name:     "U+2029 continues when not stopping",
+			text:     " \u2029  next",
+			expected: len(" \u2029  "),
+		},
+		{
+			name:               "LF preserves existing behavior",
+			text:               " \n  next",
+			stopAfterLineBreak: true,
+			expected:           len(" \n"),
+		},
+		{
+			name:               "CRLF preserves existing behavior",
+			text:               " \r\n  next",
+			stopAfterLineBreak: true,
+			expected:           len(" \r\n"),
+		},
+		{
+			name:               "line comment stops at U+2028",
+			text:               "// comment\u2028  next",
+			stopAfterLineBreak: true,
+			expected:           len("// comment\u2028"),
+		},
+		{
+			name:     "line comment continues after U+2029",
+			text:     "// comment\u2029  next",
+			expected: len("// comment\u2029  "),
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+
+			options := &SkipTriviaOptions{
+				StopAfterLineBreak: test.stopAfterLineBreak,
+			}
+
+			actual := SkipTriviaEx(test.text, 0, options)
+			assert.Equal(t, actual, test.expected)
+		})
+	}
+}
