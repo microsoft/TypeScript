@@ -7,7 +7,7 @@
 
 declare const B: (new (x: C["p"]) => {}) & (new () => {});
 >B : (new (x: C["p"]) => {}) & (new () => {})
->x : any
+>x : number
 
 declare class C extends B { p: number; }
 >C : C

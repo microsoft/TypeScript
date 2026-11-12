@@ -1,16 +1,13 @@
-intersectionBaseConstructorCycleCheckOrder.ts(5,24): error TS2502: 'x' is referenced directly or indirectly in its own type annotation.
 intersectionBaseConstructorCycleCheckOrder.ts(6,15): error TS2310: Type 'C' recursively references itself as a base type.
 intersectionBaseConstructorCycleCheckOrder.ts(6,15): error TS2506: 'C' is referenced directly or indirectly in its own base expression.
 
 
-==== intersectionBaseConstructorCycleCheckOrder.ts (3 errors) ====
+==== intersectionBaseConstructorCycleCheckOrder.ts (2 errors) ====
     // The type of x depends on the members of C, which depend on its base B,
     // whose members depend on the type of x. Whichever is resolved first, the
     // cycle must be resolved the same way.
     
     declare const B: (new (x: C["p"]) => {}) & (new () => {});
-                           ~~~~~~~~~
-!!! error TS2502: 'x' is referenced directly or indirectly in its own type annotation.
     declare class C extends B { p: number; }
                   ~
 !!! error TS2310: Type 'C' recursively references itself as a base type.

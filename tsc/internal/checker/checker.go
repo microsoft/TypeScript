@@ -20813,7 +20813,13 @@ func (c *Checker) yieldCycleToMembers(start int) bool {
 			c.markResolutionCycle(m)
 			return false
 		}
-		c.beginCycleYield(r.target, r.propertyName, len(c.resolutions), m)
+		floor := m
+		if t := &c.resolutions[m].typeResolution; t.propertyName == TypeSystemPropertyNameStructuredMembers && m > start+1 && c.resolutions[m-1].key == memoKeyOf(t.target.(*Type), memoStructuredMembers) {
+			// The table's own computation, below its type resolution, must be
+			// visible too, so that reading the table finds it in progress.
+			floor = m - 1
+		}
+		c.beginCycleYield(r.target, r.propertyName, len(c.resolutions), floor)
 		return true
 	}
 	if !c.yieldCycle(start) {
