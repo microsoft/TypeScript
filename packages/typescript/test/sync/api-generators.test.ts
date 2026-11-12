@@ -59,6 +59,7 @@ import {
     type TimingInfo,
     type Type,
     TypeFlags,
+    type TypeMember,
     type TypeParameter,
     type TypePredicate,
     type TypeReference,
@@ -271,6 +272,19 @@ function assertOptionalTypesEquivalent(actual: Type | undefined, expected: Type 
 
 function assertTypeArraysEquivalent(actual: readonly Type[], expected: readonly Type[], message?: string): void {
     assertArrayElementsEquivalent(actual, expected, assertTypesEquivalent, message);
+}
+
+function assertTypeMembersEquivalent(actual: readonly TypeMember[], expected: readonly TypeMember[], message?: string): void {
+    assertArrayElementsEquivalent(actual, expected, (actualMember, expectedMember, elementMessage) => {
+        assertSymbolsEquivalent(actualMember.symbol, expectedMember.symbol, elementMessage);
+        assertOptionalSymbolsEquivalent(actualMember.owner, expectedMember.owner, elementMessage);
+        assertOptionalTypesEquivalent(actualMember.declaredType, expectedMember.declaredType, elementMessage);
+        assert.deepEqual(
+            { isMethod: actualMember.isMethod, isParameterProperty: actualMember.isParameterProperty, tags: actualMember.tags, comment: actualMember.comment },
+            { isMethod: expectedMember.isMethod, isParameterProperty: expectedMember.isParameterProperty, tags: expectedMember.tags, comment: expectedMember.comment },
+            elementMessage,
+        );
+    }, message);
 }
 
 function assertOptionalTypeArraysEquivalent(actual: readonly (Type | undefined)[], expected: readonly (Type | undefined)[], message?: string): void {
@@ -1744,6 +1758,8 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
                 parityCase("Checker", "getMemberInModuleExports", checker.getMemberInModuleExports, assertOptionalSymbolsEquivalent, moduleSymbol, "Derived"),
                 parityCase("Checker", "getJsDocTagsOfSymbol", checker.getJsDocTagsOfSymbol, assertDeepEquivalent, combineSymbol),
                 parityCase("Checker", "getDocumentationCommentOfSymbol", checker.getDocumentationCommentOfSymbol, assertDeepEquivalent, combineSymbol),
+                parityCase("Checker", "getSymbolDocumentations", checker.getSymbolDocumentations, assertDeepEquivalent, [combineSymbol, derivedMemberSymbol]),
+                parityCase("Checker", "getMembersOfType", checker.getMembersOfType, assertTypeMembersEquivalent, derivedType, { includeDeclaredType: true }),
                 parityCase("Checker", "getTypeArguments", checker.getTypeArguments, assertTypeArraysEquivalent, boxedType),
                 parityCase("Checker", "getNonMissingTypeOfSymbol", checker.getNonMissingTypeOfSymbol, assertTypesEquivalent, boxedOptSymbol),
                 parityCase("Checker", "isReadonlySymbol", checker.isReadonlySymbol, assertDeepEquivalent, boxedOptSymbol),
