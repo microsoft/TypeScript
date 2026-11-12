@@ -87,6 +87,25 @@ describe("Wtf8Decoder", { concurrency }, () => {
             [0xD83E, 0xDD80, 0xD7FF, 0xD800, 0xD801, 0xDC00, 0xD83E, 0xDD80],
         );
     });
+
+    test("preserves U+FEFF at the start of a decoded segment", () => {
+        const decoder = new Wtf8Decoder();
+        const cases: readonly [string, string, readonly number[]][] = [
+            ["leading", "\uFEFFx", [0xFEFF, 0x78]],
+            ["only", "\uFEFF", [0xFEFF]],
+            ["after a lone surrogate", "\uD800\uFEFF", [0xD800, 0xFEFF]],
+            ["middle", "a\uFEFFb", [0x61, 0xFEFF, 0x62]],
+            ["template text", "\uFEFFtail", [0xFEFF, 0x74, 0x61, 0x69, 0x6C]],
+        ];
+
+        for (const [name, text, expected] of cases) {
+            assert.deepStrictEqual(
+                Array.from(decoder.decode(encodeWtf8(text)), c => c.codePointAt(0)),
+                expected,
+                name,
+            );
+        }
+    });
 });
 
 describe("Msgpack strings", { concurrency }, () => {
