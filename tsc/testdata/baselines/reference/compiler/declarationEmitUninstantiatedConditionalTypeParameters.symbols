@@ -1,0 +1,44 @@
+//// [tests/cases/compiler/declarationEmitUninstantiatedConditionalTypeParameters.ts] ////
+
+=== router.ts ===
+import { State } from "./contracts";
+>State : Symbol(State, Decl(router.ts, 0, 8))
+
+interface Builder<TOutputOut> {
+>Builder : Symbol(Builder, Decl(router.ts, 0, 36))
+>TOutputOut : Symbol(TOutputOut, Decl(router.ts, 1, 18))
+
+    query<T>(resolver: () => T): { output: TOutputOut extends "unset" ? T : TOutputOut };
+>query : Symbol(Builder.query, Decl(router.ts, 1, 31))
+>T : Symbol(T, Decl(router.ts, 2, 10))
+>resolver : Symbol(resolver, Decl(router.ts, 2, 13))
+>T : Symbol(T, Decl(router.ts, 2, 10))
+>output : Symbol(output, Decl(router.ts, 2, 34))
+>TOutputOut : Symbol(TOutputOut, Decl(router.ts, 1, 18))
+>T : Symbol(T, Decl(router.ts, 2, 10))
+>TOutputOut : Symbol(TOutputOut, Decl(router.ts, 1, 18))
+}
+
+declare const builder: Builder<"unset">;
+>builder : Symbol(builder, Decl(router.ts, 5, 13))
+>Builder : Symbol(Builder, Decl(router.ts, 0, 36))
+
+export const query = builder.query((): State | null => null);
+>query : Symbol(query, Decl(router.ts, 7, 12))
+>builder.query : Symbol(Builder.query, Decl(router.ts, 1, 31))
+>builder : Symbol(builder, Decl(router.ts, 5, 13))
+>query : Symbol(Builder.query, Decl(router.ts, 1, 31))
+>State : Symbol(State, Decl(router.ts, 0, 8))
+
+export const anyQuery = builder.query((): any => null);
+>anyQuery : Symbol(anyQuery, Decl(router.ts, 8, 12))
+>builder.query : Symbol(Builder.query, Decl(router.ts, 1, 31))
+>builder : Symbol(builder, Decl(router.ts, 5, 13))
+>query : Symbol(Builder.query, Decl(router.ts, 1, 31))
+
+export const typedQuery = builder.query((): string | null => null);
+>typedQuery : Symbol(typedQuery, Decl(router.ts, 9, 12))
+>builder.query : Symbol(Builder.query, Decl(router.ts, 1, 31))
+>builder : Symbol(builder, Decl(router.ts, 5, 13))
+>query : Symbol(Builder.query, Decl(router.ts, 1, 31))
+
