@@ -1,0 +1,80 @@
+//// [tests/cases/compiler/asyncGeneratorInvalidThenable.ts] ////
+
+=== asyncGeneratorInvalidThenable.ts ===
+// https://github.com/microsoft/TypeScript/issues/65378
+async function* invalidThenableBeforeValue() {
+>invalidThenableBeforeValue : Symbol(invalidThenableBeforeValue, Decl(asyncGeneratorInvalidThenable.ts, 0, 0))
+
+    yield { then() {} };
+>then : Symbol(then, Decl(asyncGeneratorInvalidThenable.ts, 2, 11))
+
+    yield 1;
+}
+
+async function* invalidThenableAfterValue() {
+>invalidThenableAfterValue : Symbol(invalidThenableAfterValue, Decl(asyncGeneratorInvalidThenable.ts, 4, 1))
+
+    yield 1;
+    yield { then() {} };
+>then : Symbol(then, Decl(asyncGeneratorInvalidThenable.ts, 8, 11))
+}
+
+async function* invalidThenableWithMultipleValues() {
+>invalidThenableWithMultipleValues : Symbol(invalidThenableWithMultipleValues, Decl(asyncGeneratorInvalidThenable.ts, 9, 1))
+
+    yield { then() {} };
+>then : Symbol(then, Decl(asyncGeneratorInvalidThenable.ts, 12, 11))
+
+    yield 1;
+    yield "text";
+}
+
+async function* onlyInvalidThenables() {
+>onlyInvalidThenables : Symbol(onlyInvalidThenables, Decl(asyncGeneratorInvalidThenable.ts, 15, 1))
+
+    yield { then() {} };
+>then : Symbol(then, Decl(asyncGeneratorInvalidThenable.ts, 18, 11))
+
+    yield { then() {} };
+>then : Symbol(then, Decl(asyncGeneratorInvalidThenable.ts, 19, 11))
+}
+
+async function* singleInvalidThenable() {
+>singleInvalidThenable : Symbol(singleInvalidThenable, Decl(asyncGeneratorInvalidThenable.ts, 20, 1))
+
+    yield { then() {} };
+>then : Symbol(then, Decl(asyncGeneratorInvalidThenable.ts, 23, 11))
+}
+
+async function* invalidThenableWithNext() {
+>invalidThenableWithNext : Symbol(invalidThenableWithNext, Decl(asyncGeneratorInvalidThenable.ts, 24, 1))
+
+    const next: boolean = yield { then() {} };
+>next : Symbol(next, Decl(asyncGeneratorInvalidThenable.ts, 27, 9))
+>then : Symbol(then, Decl(asyncGeneratorInvalidThenable.ts, 27, 33))
+
+    yield 1;
+    return next;
+>next : Symbol(next, Decl(asyncGeneratorInvalidThenable.ts, 27, 9))
+}
+
+async function* validYields() {
+>validYields : Symbol(validYields, Decl(asyncGeneratorInvalidThenable.ts, 30, 1))
+
+    yield Promise.resolve(1);
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+
+    yield "text";
+}
+
+function* synchronousThenable() {
+>synchronousThenable : Symbol(synchronousThenable, Decl(asyncGeneratorInvalidThenable.ts, 35, 1))
+
+    yield { then() {} };
+>then : Symbol(then, Decl(asyncGeneratorInvalidThenable.ts, 38, 11))
+
+    yield 1;
+}
+

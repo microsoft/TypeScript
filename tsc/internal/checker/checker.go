@@ -21007,7 +21007,9 @@ func (c *Checker) checkAndAggregateYieldOperandTypes(fn *ast.Node, checkMode Che
 		if yieldExpr.Expression() != nil && c.isConstContext(yieldExpr.Expression()) {
 			yieldExprType = c.getRegularTypeOfLiteralType(yieldExprType)
 		}
-		yieldTypes = core.AppendIfUnique(yieldTypes, c.getYieldedTypeOfYieldExpression(yieldExpr, yieldExprType, c.anyType, isAsync))
+		if yieldedType := c.getYieldedTypeOfYieldExpression(yieldExpr, yieldExprType, c.anyType, isAsync); yieldedType != nil {
+			yieldTypes = core.AppendIfUnique(yieldTypes, yieldedType)
+		}
 		var nextType *Type
 		if yieldExpr.AsYieldExpression().AsteriskToken != nil {
 			iterationTypes := c.getIterationTypesOfIterable(yieldExprType, core.IfElse(isAsync, IterationUseAsyncYieldStar, IterationUseYieldStar), yieldExpr.Expression())
