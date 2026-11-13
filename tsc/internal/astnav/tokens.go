@@ -164,7 +164,7 @@ func getTokenAtPosition(
 		// We can't abort visiting children, so once a match is found, we set `next`
 		// and do nothing on subsequent visits.
 		if node == nil || node.Flags&ast.NodeFlagsReparsed != 0 {
-			return nil
+			return node
 		}
 		if nodeAfterLeft == nil {
 			nodeAfterLeft = node
