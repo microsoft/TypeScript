@@ -2,6 +2,7 @@ package change
 
 import (
 	"slices"
+	"unicode/utf8"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/astnav"
@@ -234,12 +235,14 @@ func (t *Tracker) endPositionToDeleteNodeInList(sourceFile *ast.SourceFile, node
 		if isSeparator(prevNode, prevToken) {
 			pos := scanner.SkipTriviaEx(sourceFile.Text(), token.End(), &scanner.SkipTriviaOptions{StopAfterLineBreak: true, StopAtComments: true})
 			if positionsAreOnSameLine(astnav.GetStartOfNode(prevToken, sourceFile, false), astnav.GetStartOfNode(token, sourceFile, false), sourceFile) {
-				if pos > 0 && stringutil.IsLineBreak(rune(sourceFile.Text()[pos-1])) {
-					return pos - 1
+				lastRune, size := utf8.DecodeLastRuneInString(sourceFile.Text()[:pos])
+				if pos > 0 && stringutil.IsLineBreak(lastRune) {
+					return pos - size
 				}
 				return pos
 			}
-			if stringutil.IsLineBreak(rune(sourceFile.Text()[pos])) {
+			lineBreak, _ := utf8.DecodeRuneInString(sourceFile.Text()[pos:])
+			if stringutil.IsLineBreak(lineBreak) {
 				return pos
 			}
 		}

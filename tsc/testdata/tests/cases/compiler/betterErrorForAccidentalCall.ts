@@ -13,3 +13,7 @@ foo()
 
 foo()
     (<number>1).toString();
+
+foo() (1 as number).toString();
+
+foo() (1 as number).toString();
