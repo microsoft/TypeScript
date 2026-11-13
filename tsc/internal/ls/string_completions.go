@@ -799,9 +799,13 @@ func (l *LanguageService) getCompletionEntriesForNonRelativeModules(
 				}
 			}
 
+			// A fragment directory like "https://esm.sh/pkg?alias=react:preact/" is a URL with a query
+			// or fragment; it cannot be resolved to a rooted path, so there is nothing to list.
+			fragmentDirectoryIsURLWithQueryOrFragment := isURLWithQueryOrFragment(fragmentDirectory)
+
 			ancestorLookup := func(ancestor tspath.RootedDirectoryPath) (any, bool) {
 				nodeModules := ancestor.ResolveDirectory("node_modules")
-				if l.host.DirectoryExists(nodeModules) {
+				if !fragmentDirectoryIsURLWithQueryOrFragment && l.host.DirectoryExists(nodeModules) {
 					l.getCompletionEntriesForDirectoryFragment(
 						fragment,
 						nodeModules,
@@ -884,6 +888,17 @@ func getFragmentDirectory(fragment string) string {
 		return fragment
 	}
 	return tspath.GetDirectoryPath(fragment)
+}
+
+// isURLWithQueryOrFragment reports whether path is a URL whose query or fragment
+// would be part of the path, e.g. "https://esm.sh/pkg?alias=react:preact/".
+// Such a path can never name a file system entry.
+func isURLWithQueryOrFragment(path string) bool {
+	if !tspath.IsUrl(path) {
+		return false
+	}
+	_, ok := tspath.TryRootedPathFromAbsolute(path)
+	return !ok
 }
 
 func getPatternFromFirstMatchingCondition(target *packagejson.ExportsOrImports, conditions []string) string {
@@ -1675,6 +1690,9 @@ func (l *LanguageService) getModulesForPathsPattern(
 		expandedPrefixDirectory = tspath.CombinePaths(normalizedPrefixDirectory, normalizedPrefixBase+fragmentDirectory)
 	} else {
 		expandedPrefixDirectory = normalizedPrefixDirectory
+	}
+	if isURLWithQueryOrFragment(expandedPrefixDirectory) {
+		return nil
 	}
 	// Need to normalize after combining: If we combinePaths("a", "../b"), we want "b" and not "a/../b".
 	baseDirectory := packageDirectory.ResolveDirectory(expandedPrefixDirectory)
