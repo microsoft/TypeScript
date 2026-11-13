@@ -340,7 +340,8 @@ func isLiteralURLPath(path string) bool {
 	if path == "" ||
 		path[0] == '/' ||
 		path[0] == '\\' ||
-		len(path) > 1 && path[1] == ':' ||
+		len(path) > 1 && isLiteralVolumeCharacter(path[0]) && path[1] == ':' &&
+			(len(path) == 2 || path[2] == '/' || path[2] == '\\') ||
 		strings.HasPrefix(path, "^/") {
 		return false
 	}
@@ -474,11 +475,7 @@ func isLiteralCanonicalPath(path string) bool {
 }
 
 func literalURLPathPart(path string) string {
-	if path == "" ||
-		path[0] == '/' ||
-		path[0] == '\\' ||
-		len(path) > 1 && path[1] == ':' ||
-		strings.HasPrefix(path, "^/") {
+	if !isLiteralURLPath(path) {
 		return path
 	}
 	schemeEnd := strings.Index(path, "://")
