@@ -36,11 +36,21 @@ func ApplyDebugStackLimit() {
 func Filter[T any](slice []T, f func(T) bool) []T {
 	for i, value := range slice {
 		if !f(value) {
-			result := slices.Clone(slice[:i])
-			for i++; i < len(slice); i++ {
-				value = slice[i]
-				if f(value) {
-					result = append(result, value)
+			// Find the next kept element so the result can be sized to an upper bound
+			// up front, and nothing is allocated if no elements are kept.
+			j := i + 1
+			for j < len(slice) && !f(slice[j]) {
+				j++
+			}
+			result := make([]T, i, i+len(slice)-j)
+			copy(result, slice[:i])
+			if j < len(slice) {
+				result = append(result, slice[j])
+				for j++; j < len(slice); j++ {
+					value = slice[j]
+					if f(value) {
+						result = append(result, value)
+					}
 				}
 			}
 			return result
@@ -64,11 +74,19 @@ func FilterSeq[T any](slice []T, f func(T) bool) iter.Seq[T] {
 func FilterIndex[T any](slice []T, f func(T, int, []T) bool) []T {
 	for i, value := range slice {
 		if !f(value, i, slice) {
-			result := slices.Clone(slice[:i])
-			for i++; i < len(slice); i++ {
-				value = slice[i]
-				if f(value, i, slice) {
-					result = append(result, value)
+			j := i + 1
+			for j < len(slice) && !f(slice[j], j, slice) {
+				j++
+			}
+			result := make([]T, i, i+len(slice)-j)
+			copy(result, slice[:i])
+			if j < len(slice) {
+				result = append(result, slice[j])
+				for j++; j < len(slice); j++ {
+					value = slice[j]
+					if f(value, j, slice) {
+						result = append(result, value)
+					}
 				}
 			}
 			return result
@@ -825,7 +843,8 @@ func Deduplicate[T comparable](slice []T) []T {
 	if len(slice) > 1 {
 		for i, value := range slice {
 			if slices.Contains(slice[:i], value) {
-				result := slices.Clone(slice[:i])
+				result := make([]T, i, len(slice)-1)
+				copy(result, slice[:i])
 				for i++; i < len(slice); i++ {
 					value = slice[i]
 					if !slices.Contains(result, value) {
