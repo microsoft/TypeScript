@@ -650,7 +650,12 @@ func (c *Checker) GetTypeArgumentConstraint(node *ast.Node) *Type {
 func (c *Checker) getUninstantiatedSignatures(node *ast.Node) []*Signature {
 	switch node.Kind {
 	case ast.KindCallExpression, ast.KindDecorator:
-		return c.getSignaturesOfType(c.getTypeOfExpression(node.Expression()), SignatureKindCall)
+		expression := node.Expression()
+		if ast.IsDecorator(node) && ast.IsExpressionWithTypeArguments(expression) {
+			// The type arguments of a decorator are part of its expression.
+			expression = expression.Expression()
+		}
+		return c.getSignaturesOfType(c.getTypeOfExpression(expression), SignatureKindCall)
 	case ast.KindNewExpression:
 		return c.getSignaturesOfType(c.getTypeOfExpression(node.Expression()), SignatureKindConstruct)
 	case ast.KindJsxSelfClosingElement, ast.KindJsxOpeningElement:
