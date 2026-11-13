@@ -65,12 +65,14 @@ func newContentMapperProgramWithOutputExtensions(t *testing.T, contentMapperProj
 
 	config := tsoptions.NewParsedCommandLine(options, testFileNames(rootFiles...), nil, "/", fs.CaseSensitivity())
 	config.ParsedConfig.ContentMappers = []*contentmapper.Mapper{{Package: "vue", Extensions: []string{".vue"}, OutputExtensions: outputExtensions, Name: "vue-mapper", Version: "1.0.0"}}
-	return compiler.NewProgram(compiler.ProgramOptions{
+	program, err := compiler.NewProgram(t.Context(), compiler.ProgramOptions{
 		Config: config,
 		Host:   compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, contentMapperProject),
 		// Load files on the calling goroutine for deterministic diagnostics ordering.
 		SingleThreaded: core.TSTrue,
 	})
+	assert.NilError(t, err)
+	return program
 }
 
 func TestContentMapperSymlinkedPackage(t *testing.T) {
@@ -118,7 +120,7 @@ func TestContentMapperSymlinkedPackage(t *testing.T) {
 					expectedMapper = filtered
 				}
 			}
-			program := compiler.NewProgram(compiler.ProgramOptions{
+			program, err := compiler.NewProgram(t.Context(), compiler.ProgramOptions{
 				Config: config,
 				Host: compiler.NewCompilerHost(fs, "/", nil, nil, fakeContentMapperHost{
 					transform: func(fileName, content string) (contentmapper.Result, error) {
@@ -127,6 +129,7 @@ func TestContentMapperSymlinkedPackage(t *testing.T) {
 				}),
 				SingleThreaded: core.TSTrue,
 			})
+			assert.NilError(t, err)
 			assert.Equal(t, len(program.SourceFiles()), 2)
 			assert.Equal(t, len(program.DuplicateSourceFiles()), 0)
 			file := program.GetSourceFile(dataPath)
@@ -164,7 +167,7 @@ func TestContentMapperRelativeSymlinkedDirectory(t *testing.T) {
 			assert.Equal(t, len(errors), 0)
 			assert.Equal(t, len(config.Errors), 0)
 			assert.Assert(t, slices.Contains(config.FileNames(), "/project/src/linked/data.vue"))
-			program := compiler.NewProgram(compiler.ProgramOptions{
+			program, err := compiler.NewProgram(t.Context(), compiler.ProgramOptions{
 				Config: config,
 				Host: compiler.NewCompilerHost(fs, "/", nil, nil, fakeContentMapperHost{
 					transform: func(fileName, content string) (contentmapper.Result, error) {
@@ -173,6 +176,7 @@ func TestContentMapperRelativeSymlinkedDirectory(t *testing.T) {
 				}),
 				SingleThreaded: core.TSTrue,
 			})
+			assert.NilError(t, err)
 			assert.Equal(t, len(program.SourceFiles()), 2)
 			assert.Equal(t, len(program.DuplicateSourceFiles()), 0)
 			assert.Assert(t, program.GetSourceFile("/project/shared/data.vue") == nil)
@@ -223,11 +227,12 @@ func TestContentMapperDynamicRewriteValidation(t *testing.T) {
 				mapper.OutputExtensions = map[string]string{".toml": test.output}
 			}
 			config.ParsedConfig.ContentMappers = []*contentmapper.Mapper{mapper}
-			program := compiler.NewProgram(compiler.ProgramOptions{
+			program, err := compiler.NewProgram(t.Context(), compiler.ProgramOptions{
 				Config:         config,
 				Host:           compiler.NewCompilerHost(fs, "/", nil, nil, nil),
 				SingleThreaded: core.TSTrue,
 			})
+			assert.NilError(t, err)
 			var diags []*ast.Diagnostic
 			for _, name := range []tspath.RootedFilePath{"/project/main.ts", "/project/require.js"} {
 				diags = append(diags, program.GetSemanticDiagnostics(t.Context(), program.GetSourceFile(name))...)
@@ -272,7 +277,7 @@ func TestContentMapperRuntimeRewrites(t *testing.T) {
 						OutputExtensions: map[string]string{".toml": ".js"},
 					})
 				}
-				program := compiler.NewProgram(compiler.ProgramOptions{
+				program, err := compiler.NewProgram(t.Context(), compiler.ProgramOptions{
 					Config: config,
 					Host: compiler.NewCompilerHost(fs, "/", nil, nil, fakeContentMapperHost{
 						transform: func(fileName, content string) (contentmapper.Result, error) {
@@ -281,6 +286,7 @@ func TestContentMapperRuntimeRewrites(t *testing.T) {
 					}),
 					SingleThreaded: core.TSTrue,
 				})
+				assert.NilError(t, err)
 				program.Emit(context.Background(), compiler.EmitOptions{})
 				js, ok := fs.ReadFile("/dist/main.js")
 				assert.Assert(t, ok)
@@ -318,7 +324,8 @@ func TestContentMapperOverlappingExtensionDeclarationRoundTrip(t *testing.T) {
 			return contentmapper.Result{Text: content, VirtualExtension: ".ts", Mappings: spanmap.New(nil)}, nil
 		},
 	})
-	program := compiler.NewProgram(compiler.ProgramOptions{Config: config, Host: host, SingleThreaded: core.TSTrue})
+	program, err := compiler.NewProgram(t.Context(), compiler.ProgramOptions{Config: config, Host: host, SingleThreaded: core.TSTrue})
+	assert.NilError(t, err)
 	program.Emit(t.Context(), compiler.EmitOptions{})
 	assert.Assert(t, fs.FileExists("/dist/special/widget.d.part.toml.ts"))
 	assert.Assert(t, fs.FileExists("/dist/other/widget.part.d.toml.ts"))
@@ -333,7 +340,8 @@ func TestContentMapperOverlappingExtensionDeclarationRoundTrip(t *testing.T) {
 		Module: core.ModuleKindPreserve, ModuleResolution: core.ModuleResolutionKindBundler,
 	}, []tspath.RootedFilePath{"/dist/main.ts"}, nil, "/dist", fs.CaseSensitivity())
 	consumerConfig.ParsedConfig.ContentMappers = mappers
-	consumer := compiler.NewProgram(compiler.ProgramOptions{Config: consumerConfig, Host: host, SingleThreaded: core.TSTrue})
+	consumer, err := compiler.NewProgram(t.Context(), compiler.ProgramOptions{Config: consumerConfig, Host: host, SingleThreaded: core.TSTrue})
+	assert.NilError(t, err)
 	main := consumer.GetSourceFile("/dist/main.ts")
 	for i, path := range []tspath.RootedFilePath{"/dist/special/widget.d.part.toml.ts", "/dist/other/widget.part.d.toml.ts"} {
 		resolved := consumer.GetResolvedModuleFromModuleSpecifier(main, main.Imports()[i])
@@ -376,7 +384,7 @@ func TestContentMapperExcludedResolution(t *testing.T) {
 			config.ParsedConfig.ContentMappers = []*contentmapper.Mapper{{
 				Package: "mapper", Extensions: []string{".vue"}, Include: test.include,
 			}}
-			program := compiler.NewProgram(compiler.ProgramOptions{
+			program, err := compiler.NewProgram(t.Context(), compiler.ProgramOptions{
 				Config: config,
 				Host: compiler.NewCompilerHost(fs, "/", nil, nil, fakeContentMapperHost{
 					transform: func(fileName, content string) (contentmapper.Result, error) {
@@ -386,6 +394,7 @@ func TestContentMapperExcludedResolution(t *testing.T) {
 				}),
 				SingleThreaded: core.TSTrue,
 			})
+			assert.NilError(t, err)
 			main := program.GetSourceFile("/project/src/main.ts")
 			resolved := program.GetResolvedModuleFromModuleSpecifier(main, main.Imports()[0])
 			assert.Assert(t, resolved != nil)
@@ -448,7 +457,7 @@ func TestContentMapperLiteralRewriteValidation(t *testing.T) {
 						Package: "mapper", Name: "mapper", Extensions: []string{".toml"}, Include: test.include,
 						OutputExtensions: map[string]string{".toml": test.output},
 					}}
-					program := compiler.NewProgram(compiler.ProgramOptions{
+					program, err := compiler.NewProgram(t.Context(), compiler.ProgramOptions{
 						Config: config,
 						Host: compiler.NewCompilerHost(fs, "/", nil, nil, fakeContentMapperHost{
 							transform: func(fileName, content string) (contentmapper.Result, error) {
@@ -457,6 +466,7 @@ func TestContentMapperLiteralRewriteValidation(t *testing.T) {
 						}),
 						SingleThreaded: core.TSTrue,
 					})
+					assert.NilError(t, err)
 					diags := program.GetSemanticDiagnostics(t.Context(), program.GetSourceFile("/project/src/main.ts"))
 					if test.conflict {
 						expected := 4
@@ -752,10 +762,11 @@ func TestContentMapperMissingSourceFile(t *testing.T) {
 	fs := vfstest.FromMap(map[string]any{"/src/Component.vue": "export {};"}, tspath.CaseSensitive)
 	config := tsoptions.NewParsedCommandLine(&core.CompilerOptions{NoLib: core.TSTrue}, testFileNames("/src/Component.vue"), nil, "/", fs.CaseSensitivity())
 	config.ParsedConfig.ContentMappers = []*contentmapper.Mapper{{Package: "vue", Extensions: []string{".vue"}, Name: "vue-mapper", Version: "1.0.0"}}
-	program := compiler.NewProgram(compiler.ProgramOptions{
+	program, err := compiler.NewProgram(t.Context(), compiler.ProgramOptions{
 		Config: config,
 		Host:   missingContentMappedCompilerHost{CompilerHost: compiler.NewCompilerHost(fs, "/", nil, nil, nil)},
 	})
+	assert.NilError(t, err)
 	assert.Assert(t, program.GetSourceFile("/src/Component.vue") == nil)
 }
 

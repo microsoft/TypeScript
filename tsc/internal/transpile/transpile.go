@@ -150,11 +150,14 @@ func transpileWorker(ctx context.Context, input string, options Options, declara
 	programFS := &transpileFS{files: files}
 	host := compiler.NewCompilerHost(programFS, libDirectory, nil, nil, nil)
 
-	program := compiler.NewProgram(compiler.ProgramOptions{
+	program, err := compiler.NewProgram(ctx, compiler.ProgramOptions{
 		Config:               tsoptions.NewParsedCommandLine(opts, []tspath.RootedFilePath{inputFileName}, nil, inputDirectory, programFS.CaseSensitivity()),
 		Host:                 host,
 		SkipModuleResolution: true,
 	})
+	if err != nil {
+		return nil
+	}
 
 	var allDiagnostics []*ast.Diagnostic
 	if options.ReportDiagnostics {

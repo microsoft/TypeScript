@@ -1,13 +1,67 @@
 package compiler
 
 import (
+	"context"
 	"slices"
 	"testing"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
+	"github.com/microsoft/TypeScript/tsc/internal/checker"
+	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/module"
+	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
+	"gotest.tools/v3/assert"
 )
+
+func TestCheckerGroupStopsOnCancellation(t *testing.T) {
+	t.Parallel()
+	fs := vfstest.FromMap(map[string]any{
+		"/src/a.ts": "export const a = 1;",
+		"/src/b.ts": "export const b = 2;",
+	}, tspath.CaseSensitive)
+	config := tsoptions.NewParsedCommandLine(&core.CompilerOptions{NoLib: core.TSTrue}, []tspath.RootedFilePath{"/src/a.ts", "/src/b.ts"}, nil, "/src", tspath.CaseSensitive)
+	program, err := NewProgram(t.Context(), ProgramOptions{
+		Config:         config,
+		SingleThreaded: core.TSTrue,
+		Host:           NewCompilerHost(fs, "/", nil, nil, nil),
+	})
+	assert.NilError(t, err)
+	ctx, cancel := context.WithCancel(t.Context())
+	defer cancel()
+	visited := 0
+	program.compilerCheckerPool.forEachCheckerGroupDo(ctx, program.files, true, func(c *checker.Checker, _ int, file *ast.SourceFile) {
+		visited++
+		cancel()
+		c.GetDiagnostics(ctx, file)
+	})
+	assert.Equal(t, visited, 1)
+}
+
+func TestSemanticDiagnosticsWithCancelledContext(t *testing.T) {
+	t.Parallel()
+	for _, singleThreaded := range []core.Tristate{core.TSTrue, core.TSFalse} {
+		t.Run(singleThreaded.String(), func(t *testing.T) {
+			t.Parallel()
+			fs := vfstest.FromMap(map[string]any{
+				"/src/a.ts": "export const a: string = 1;",
+				"/src/b.ts": "export const b: string = 2;",
+			}, tspath.CaseSensitive)
+			config := tsoptions.NewParsedCommandLine(&core.CompilerOptions{NoLib: core.TSTrue}, []tspath.RootedFilePath{"/src/a.ts", "/src/b.ts"}, nil, "/src", tspath.CaseSensitive)
+			program, err := NewProgram(t.Context(), ProgramOptions{
+				Config:         config,
+				SingleThreaded: singleThreaded,
+				Host:           NewCompilerHost(fs, "/", nil, nil, nil),
+			})
+			assert.NilError(t, err)
+			ctx, cancel := context.WithCancel(t.Context())
+			cancel()
+			assert.Equal(t, len(program.GetSemanticDiagnostics(ctx, nil)), 0)
+			assert.Equal(t, len(program.GetSemanticDiagnostics(t.Context(), nil)), 2)
+		})
+	}
+}
 
 func TestGetSourceFileForResolvedModuleUsesResolvedPath(t *testing.T) {
 	t.Parallel()

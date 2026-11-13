@@ -314,7 +314,12 @@ func (p *Program) GetSourceFileFromReference(origin *ast.SourceFile, ref *ast.Fi
 	return nil
 }
 
-func NewProgram(opts ProgramOptions) *Program {
+// NewProgram stops loading new source files when ctx is cancelled.
+// An in-progress file read, parse, or module resolution must finish first.
+func NewProgram(ctx context.Context, opts ProgramOptions) (*Program, error) {
+	if err := ctx.Err(); err != nil {
+		return nil, err
+	}
 	p := &Program{
 		opts:            opts.ProgramConfig,
 		hosts:           opts.ProgramHosts,
@@ -323,34 +328,46 @@ func NewProgram(opts ProgramOptions) *Program {
 	if opts.Tracing != nil {
 		defer opts.Tracing.Push(tracing.PhaseProgram, "createProgram", map[string]any{"configFilePath": opts.Config.CompilerOptions().ConfigFilePath}, true)()
 	}
-	p.processedFiles, p.resolutionData, p.moduleResolutionError = processAllProgramFiles(opts, p.SingleThreaded())
+	p.processedFiles, p.resolutionData, p.moduleResolutionError = processAllProgramFiles(ctx, opts, p.SingleThreaded())
+	if err := ctx.Err(); err != nil {
+		return nil, err
+	}
 	p.initCheckerPool(opts.CreateCheckerPool)
 	p.verifyCompilerOptions()
 	p.collectContentMapperOptionDiagnostics()
-	return p
+	if err := ctx.Err(); err != nil {
+		return nil, err
+	}
+	return p, nil
 }
 
 // Return an updated program for which it is known that only the file with the given path has changed.
 // In addition to a new program, return a boolean indicating whether the data of the old program was reused.
 // The returned *ast.SourceFile is the changed file as acquired through newHost; it is nil
-// only if the host cannot locate the file (e.g. it was deleted). Callers that manage
-// host-side parse caches must release this exact pointer when the old program could not be
-// reused, since it was acquired speculatively before that decision was made.
+// if cancellation precedes acquisition or the host cannot locate the file (e.g. it was deleted).
+// Callers that manage host-side parse caches must release this exact pointer when the old program could not be
+// reused, even if a fallback rebuild was cancelled, since it was acquired speculatively
+// before that decision was made.
 func (p *Program) UpdateProgram(
+	ctx context.Context,
 	changedFilePath tspath.PathKey,
 	newHost CompilerHost,
 	createCheckerPool func(*Program) CheckerPool,
 	createModuleResolver func(module.ResolverOptions) module.Resolver,
-) (*Program, *ast.SourceFile, bool) {
+) (*Program, *ast.SourceFile, bool, error) {
+	if err := ctx.Err(); err != nil {
+		return nil, nil, false, err
+	}
 	if result, newFile, reused := p.ReuseProgram(changedFilePath, newHost, createCheckerPool, createModuleResolver); reused {
-		return result, newFile, true
+		return result, newFile, true, nil
 	} else {
-		return NewProgram(ProgramOptions{
+		program, err := NewProgram(ctx, ProgramOptions{
 			ProgramConfig:        p.opts,
 			Host:                 newHost,
 			CreateCheckerPool:    createCheckerPool,
 			CreateModuleResolver: createModuleResolver,
-		}), newFile, false
+		})
+		return program, newFile, false, err
 	}
 }
 
@@ -639,10 +656,20 @@ func (p *Program) SingleThreaded() bool {
 }
 
 func (p *Program) BindSourceFiles() {
+	p.bindSourceFiles(context.Background())
+}
+
+func (p *Program) bindSourceFiles(ctx context.Context) {
 	wg := core.NewWorkGroup(core.WorkGroupConcurrency(p.SingleThreaded()))
 	for _, file := range p.files {
+		if ctx.Err() != nil {
+			break
+		}
 		if !file.IsBound() {
 			wg.Queue(func() {
+				if ctx.Err() != nil {
+					return
+				}
 				if p.hosts.Tracing != nil {
 					defer p.hosts.Tracing.Push(tracing.PhaseBind, "bindSourceFile", map[string]any{"path": string(file.PathKey())}, true)()
 				}
@@ -749,7 +776,13 @@ func (p *Program) collectDiagnosticsFromFiles(ctx context.Context, sourceFiles [
 	diagnostics := make([][]*ast.Diagnostic, len(sourceFiles))
 	wg := core.NewWorkGroup(core.WorkGroupConcurrency(!concurrent || p.SingleThreaded()))
 	for i, file := range sourceFiles {
+		if ctx.Err() != nil {
+			break
+		}
 		wg.Queue(func() {
+			if ctx.Err() != nil {
+				return
+			}
 			diagnostics[i] = collect(ctx, file)
 		})
 	}
@@ -763,13 +796,19 @@ func (p *Program) collectDiagnosticsFromFiles(ctx context.Context, sourceFiles [
 // processed in parallel with one task per checker, reducing contention and improving
 // cache locality. Otherwise, falls back to per-file concurrent collection.
 func (p *Program) collectCheckerDiagnostics(ctx context.Context, sourceFile *ast.SourceFile, collect func(context.Context, *checker.Checker, *ast.SourceFile) []*ast.Diagnostic) []*ast.Diagnostic {
+	if ctx.Err() != nil {
+		return nil
+	}
 	if sourceFile != nil {
 		if p.SkipTypeChecking(sourceFile, false) {
 			return nil
 		}
 		c, done := p.GetTypeCheckerForFileExclusive(ctx, sourceFile)
+		defer done()
+		if ctx.Err() != nil {
+			return nil
+		}
 		result := collect(ctx, c, sourceFile)
-		done()
 		return filterAndSortDiagnostics(result)
 	}
 	return filterAndSortDiagnostics(slices.Concat(p.collectCheckerDiagnosticsFromFiles(ctx, p.files, collect)...))
@@ -796,13 +835,22 @@ func (p *Program) collectCheckerDiagnosticsFromFiles(ctx context.Context, source
 	} else {
 		wg := core.NewWorkGroup(core.WorkGroupConcurrency(p.SingleThreaded()))
 		for i, file := range sourceFiles {
+			if ctx.Err() != nil {
+				break
+			}
 			if p.SkipTypeChecking(file, false) {
 				continue
 			}
 			wg.Queue(func() {
+				if ctx.Err() != nil {
+					return
+				}
 				c, done := p.checkerPool.GetChecker(ctx, file)
+				defer done()
+				if ctx.Err() != nil {
+					return
+				}
 				diagnostics[i] = collect(ctx, c, file)
-				done()
 			})
 		}
 		wg.RunAndWait()
@@ -894,10 +942,13 @@ func getAdditionalJSSyntacticDiagnostics(file *ast.SourceFile, options *core.Com
 }
 
 func (p *Program) GetBindDiagnostics(ctx context.Context, sourceFile *ast.SourceFile) []*ast.Diagnostic {
+	if ctx.Err() != nil {
+		return nil
+	}
 	if sourceFile != nil {
 		binder.BindSourceFile(sourceFile)
 	} else {
-		p.BindSourceFiles()
+		p.bindSourceFiles(ctx)
 	}
 	return p.collectDiagnostics(ctx, sourceFile, false /*concurrent*/, func(_ context.Context, file *ast.SourceFile) []*ast.Diagnostic {
 		return file.BindDiagnostics()
@@ -1591,10 +1642,14 @@ func emitModuleKindIsNonNodeESM(moduleKind core.ModuleKind) bool {
 }
 
 func (p *Program) GetGlobalDiagnostics(ctx context.Context) []*ast.Diagnostic {
-	if len(p.files) == 0 {
+	if len(p.files) == 0 || ctx.Err() != nil {
 		return nil
 	}
 	if p.compilerCheckerPool != nil {
+		p.bindSourceFiles(ctx)
+		if ctx.Err() != nil {
+			return nil
+		}
 		return p.compilerCheckerPool.GetGlobalDiagnostics()
 	}
 	// For external pools (project system), global diagnostics are collected
@@ -2002,6 +2057,9 @@ type SourceMapEmitResult struct {
 }
 
 func (p *Program) Emit(ctx context.Context, options EmitOptions) *EmitResult {
+	if ctx.Err() != nil {
+		return nil
+	}
 	if tr := p.hosts.Tracing; tr != nil {
 		defer tr.Push(tracing.PhaseEmit, "emit", nil, true)()
 	}
@@ -2031,19 +2089,36 @@ func (p *Program) Emit(ctx context.Context, options EmitOptions) *EmitResult {
 	sourceFiles := p.getSourceFilesToEmit(options.TargetSourceFiles, forceDtsEmit, forceJsEmit)
 
 	for _, sourceFile := range sourceFiles {
+		if ctx.Err() != nil {
+			return nil
+		}
 		emitters = append(emitters, &emitter{
 			writer:     nil,
 			sourceFile: sourceFile,
 			emitOnly:   options.EmitOnly,
 			forceEmit:  options.ForceEmit,
-			writeFile:  options.WriteFile,
-			tr:         p.hosts.Tracing,
+			writeFile: func(fileName tspath.RootedFilePath, text string, data *WriteFileData) error {
+				if err := ctx.Err(); err != nil {
+					return err
+				}
+				if options.WriteFile != nil {
+					return options.WriteFile(fileName, text, data)
+				}
+				return p.Host().FS().WriteFile(fileName, text)
+			},
+			tr: p.hosts.Tracing,
 		})
 	}
 	transformFile := func(emitter *emitter) {
+		if ctx.Err() != nil {
+			return
+		}
 		sourceFile := emitter.sourceFile
 		host, done := newEmitHost(ctx, p, sourceFile)
 		defer done()
+		if ctx.Err() != nil {
+			return
+		}
 		emitter.host = host
 		emitter.paths = outputpaths.GetOutputPathsFor(sourceFile, host.Options(), host, outputpaths.ForceEmitPaths{
 			Dts:            forceDtsEmit,
@@ -2053,6 +2128,9 @@ func (p *Program) Emit(ctx context.Context, options EmitOptions) *EmitResult {
 		emitter.transform()
 	}
 	printFile := func(emitter *emitter) {
+		if ctx.Err() != nil {
+			return
+		}
 		// take an unused writer
 		writer := writerPool.Get().(printer.EmitTextWriter)
 		writer.Clear()
@@ -2073,13 +2151,22 @@ func (p *Program) Emit(ctx context.Context, options EmitOptions) *EmitResult {
 		// does not use the checker, so it runs in tasks of its own. Single-threaded programs emit file by file instead,
 		// since queued prints would only run after every file is transformed.
 		for _, group := range p.compilerCheckerPool.groupFilesByChecker(sourceFiles) {
+			if ctx.Err() != nil {
+				break
+			}
 			if len(group) == 0 {
 				continue
 			}
 			wg.Queue(func() {
 				for _, i := range slices.Backward(group) {
+					if ctx.Err() != nil {
+						return
+					}
 					emitter := emitters[i]
 					transformFile(emitter)
+					if ctx.Err() != nil {
+						return
+					}
 					wg.Queue(func() {
 						printFile(emitter)
 					})
@@ -2088,6 +2175,9 @@ func (p *Program) Emit(ctx context.Context, options EmitOptions) *EmitResult {
 		}
 	} else {
 		for _, emitter := range emitters {
+			if ctx.Err() != nil {
+				break
+			}
 			wg.Queue(func() {
 				transformFile(emitter)
 				printFile(emitter)
@@ -2097,6 +2187,9 @@ func (p *Program) Emit(ctx context.Context, options EmitOptions) *EmitResult {
 
 	// wait for emit to complete
 	wg.RunAndWait()
+	if ctx.Err() != nil {
+		return nil
+	}
 
 	// collect results from emit, preserving input order
 	return CombineEmitResults(core.Map(emitters, func(e *emitter) *EmitResult {
@@ -2183,14 +2276,23 @@ func GetDiagnosticsOfAnyProgram(
 	getBindDiagnostics func(context.Context, *ast.SourceFile) []*ast.Diagnostic,
 	getSemanticDiagnostics func(context.Context, *ast.SourceFile) []*ast.Diagnostic,
 ) []*ast.Diagnostic {
+	if ctx.Err() != nil {
+		return nil
+	}
 	allDiagnostics := slices.Clip(program.GetConfigFileParsingDiagnostics())
 	configFileParsingDiagnosticsLength := len(allDiagnostics)
 
 	appendDiagnosticsForAllFiles := func(diagnostics []*ast.Diagnostic, getDiagnostics func(context.Context, *ast.SourceFile) []*ast.Diagnostic) []*ast.Diagnostic {
+		if ctx.Err() != nil {
+			return diagnostics
+		}
 		if files == nil {
 			return append(diagnostics, getDiagnostics(ctx, nil)...)
 		}
 		for _, file := range files {
+			if ctx.Err() != nil {
+				break
+			}
 			diagnostics = append(diagnostics, getDiagnostics(ctx, file)...)
 		}
 		return diagnostics
@@ -2296,7 +2398,10 @@ func (p *Program) IsMissingPath(path tspath.PathKey) bool {
 	return p.missingFiles.Has(path)
 }
 
-func (p *Program) ExplainFiles(w io.Writer, locale locale.Locale, currentDirectory tspath.RootedDirectoryPath) {
+func (p *Program) ExplainFiles(ctx context.Context, w io.Writer, locale locale.Locale, currentDirectory tspath.RootedDirectoryPath) {
+	if ctx.Err() != nil {
+		return
+	}
 	toRelativeFileName := func(fileName tspath.RootedFilePath) string {
 		if relativePath, ok := p.caseSensitivity.RelativePathFromDirectory(currentDirectory, fileName); ok {
 			return relativePath.AsString()
@@ -2304,35 +2409,58 @@ func (p *Program) ExplainFiles(w io.Writer, locale locale.Locale, currentDirecto
 		return fileName.AsString()
 	}
 	filesExplained := 0
-	explainFile := func(file ast.HasFileName) {
+	explainFile := func(file ast.HasFileName) bool {
+		if ctx.Err() != nil {
+			return false
+		}
 		fmt.Fprintln(w, toRelativeFileName(file.FileName()))
 		for _, reason := range p.fileIncludeReasons[file.PathKey()] {
+			if ctx.Err() != nil {
+				return false
+			}
 			fmt.Fprintln(w, "  ", reason.toDiagnostic(p, true, currentDirectory).Localize(locale))
 		}
+		if ctx.Err() != nil {
+			return false
+		}
 		for _, diag := range p.includeProcessor.explainRedirectAndImpliedFormat(p, file.PathKey(), toRelativeFileName) {
+			if ctx.Err() != nil {
+				return false
+			}
 			fmt.Fprintln(w, "  ", diag.Localize(locale))
 		}
 		filesExplained++
+		return true
 	}
 
-	redirectFiles := slices.Collect(maps.Values(p.redirectFilesByPath))
+	redirectFiles := make([]*redirectsFile, 0, len(p.redirectFilesByPath))
+	for _, file := range p.redirectFilesByPath {
+		if ctx.Err() != nil {
+			return
+		}
+		redirectFiles = append(redirectFiles, file)
+	}
 	slices.SortFunc(redirectFiles, func(a, b *redirectsFile) int {
 		return a.index - b.index
 	})
 
 	files := p.GetSourceFiles()
 	sourceFileIndex := 0
-	explainSourceFiles := func(endIndex int) {
+	explainSourceFiles := func(endIndex int) bool {
 		for filesExplained < endIndex {
-			explainFile(files[sourceFileIndex])
+			if !explainFile(files[sourceFileIndex]) {
+				return false
+			}
 			sourceFileIndex++
 		}
+		return true
 	}
 
 	for _, redirectFile := range redirectFiles {
 		// Explain all sourceFiles till we reach this redirectFile index
-		explainSourceFiles(redirectFile.index)
-		explainFile(redirectFile)
+		if !explainSourceFiles(redirectFile.index) || !explainFile(redirectFile) {
+			return
+		}
 	}
 
 	// Explain any remaining sourceFiles

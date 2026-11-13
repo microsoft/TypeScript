@@ -21,7 +21,9 @@ func buildTestProgram(t *testing.T, fs vfs.FS) *Program {
 	config, diagnostics := tsoptions.GetParsedCommandLineOfConfigFile("/tsconfig.json", &core.CompilerOptions{}, nil, tsoptions.NewDefaultParseConfigHost(fs), nil)
 	assert.Equal(t, len(diagnostics), 0)
 	old := ReadBuildInfoProgram(config, NewBuildInfoReader(host), host)
-	return NewProgram(compiler.NewProgram(compiler.ProgramOptions{Config: config, Host: host}), old, CreateHost(host), nil, false)
+	program, err := compiler.NewProgram(t.Context(), compiler.ProgramOptions{Config: config, Host: host})
+	assert.NilError(t, err)
+	return NewProgram(program, old, CreateHost(host), nil, false)
 }
 
 func buildAndEmitTestProgram(t *testing.T, fs vfs.FS) {

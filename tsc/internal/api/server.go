@@ -68,8 +68,10 @@ func NewStdioServer(options *StdioServerOptions) *StdioServer {
 	}
 }
 
-// Run starts the server and blocks until the connection closes.
+// Run starts the server and blocks until the connection closes or ctx is cancelled.
 func (s *StdioServer) Run(ctx context.Context) error {
+	ctx, cancel := context.WithCancel(ctx)
+	defer cancel()
 	var transport ipc.Transport
 	if s.options.Tuples != nil {
 		if s.options.Async {
@@ -86,6 +88,10 @@ func (s *StdioServer) Run(ctx context.Context) error {
 		t := ipc.NewStdioTransport(s.options.In, s.options.Out)
 		defer t.Close()
 		transport = t
+	}
+	if transport != nil {
+		stopAccept := context.AfterFunc(ctx, func() { _ = transport.Close() })
+		defer stopAccept()
 	}
 
 	baseFS := s.options.FS
@@ -122,21 +128,29 @@ func (s *StdioServer) Run(ctx context.Context) error {
 
 	var conn ipc.Conn
 	if s.options.Tuples != nil {
-		syncConn := ipc.NewSyncConn(nil, NewTupleProtocol(s.options.Tuples), session)
+		protocol := newCancellableProtocol(ctx, NewTupleProtocol(s.options.Tuples))
+		syncConn := ipc.NewSyncConn(nil, protocol, session)
 		syncConn.SetCollectTiming(s.options.CollectTiming)
 		conn = syncConn
-	} else if rwc, err := transport.Accept(); err != nil {
-		return fmt.Errorf("failed to accept connection: %w", err)
-	} else if s.options.Async {
-		protocol := ipc.NewJSONRPCProtocol(rwc)
-		asyncConn := ipc.NewAsyncConnWithProtocol(rwc, protocol, session)
-		asyncConn.SetCollectTiming(s.options.CollectTiming)
-		conn = asyncConn
 	} else {
-		protocol := NewMessagePackProtocol(rwc)
-		syncConn := ipc.NewSyncConn(rwc, protocol, session)
-		syncConn.SetCollectTiming(s.options.CollectTiming)
-		conn = syncConn
+		rwc, err := transport.Accept()
+		if err != nil {
+			return serverRunError(ctx, fmt.Errorf("failed to accept connection: %w", err))
+		}
+		defer rwc.Close()
+		stopConnection := context.AfterFunc(ctx, func() { _ = rwc.Close() })
+		defer stopConnection()
+		if s.options.Async {
+			protocol := newCancellableProtocol(ctx, ipc.NewJSONRPCProtocol(rwc))
+			asyncConn := ipc.NewAsyncConnWithProtocol(rwc, protocol, session)
+			asyncConn.SetCollectTiming(s.options.CollectTiming)
+			conn = asyncConn
+		} else {
+			protocol := newCancellableProtocol(ctx, NewMessagePackProtocol(rwc))
+			syncConn := ipc.NewSyncConn(rwc, protocol, session)
+			syncConn.SetCollectTiming(s.options.CollectTiming)
+			conn = syncConn
+		}
 	}
 
 	// If callbacks are enabled, set the connection on the FS
@@ -146,6 +160,61 @@ func (s *StdioServer) Run(ctx context.Context) error {
 	session.SetConnection(conn)
 
 	return serverRunError(ctx, conn.Run(ctx))
+}
+
+type protocolReadResult struct {
+	message *ipc.Message
+	err     error
+}
+
+type cancellableProtocol struct {
+	ipc.Protocol
+	ctx      context.Context
+	requests chan struct{}
+	results  chan protocolReadResult
+}
+
+func newCancellableProtocol(ctx context.Context, protocol ipc.Protocol) *cancellableProtocol {
+	p := &cancellableProtocol{
+		Protocol: protocol,
+		ctx:      ctx,
+		requests: make(chan struct{}),
+		results:  make(chan protocolReadResult),
+	}
+	go func() {
+		for {
+			select {
+			case <-ctx.Done():
+				return
+			case <-p.requests:
+				message, err := protocol.ReadMessage()
+				select {
+				case <-ctx.Done():
+					return
+				case p.results <- protocolReadResult{message: message, err: err}:
+					continue
+				}
+			}
+		}
+	}()
+	return p
+}
+
+// Stdin reads may remain blocked even after Close. Keep that read separate from
+// request handling so cancellation can finish handlers and close the session.
+// Reads are demand-driven because synchronous callbacks also read responses.
+func (p *cancellableProtocol) ReadMessage() (*ipc.Message, error) {
+	select {
+	case <-p.ctx.Done():
+		return nil, p.ctx.Err()
+	case p.requests <- struct{}{}:
+		select {
+		case <-p.ctx.Done():
+			return nil, p.ctx.Err()
+		case result := <-p.results:
+			return result.message, result.err
+		}
+	}
 }
 
 func serverRunError(ctx context.Context, err error) error {
