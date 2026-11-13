@@ -100,3 +100,112 @@ interface E extends D {}
 >E : Symbol(E, Decl(circularDeclaredPropertyAccess.ts, 20, 36))
 >D : Symbol(D, Decl(circularDeclaredPropertyAccess.ts, 18, 16))
 
+// Declared members are available while the base types are instantiated, which
+// can need one of them through a type argument referring back to the type.
+
+namespace BaseTypeArguments {
+>BaseTypeArguments : Symbol(BaseTypeArguments, Decl(circularDeclaredPropertyAccess.ts, 22, 24))
+
+    interface Internals<I = unknown> { input: I; optin?: "optional" | "defaulted" | undefined }
+>Internals : Symbol(Internals, Decl(circularDeclaredPropertyAccess.ts, 27, 29))
+>I : Symbol(I, Decl(circularDeclaredPropertyAccess.ts, 28, 24))
+>input : Symbol(Internals.input, Decl(circularDeclaredPropertyAccess.ts, 28, 38))
+>I : Symbol(I, Decl(circularDeclaredPropertyAccess.ts, 28, 24))
+>optin : Symbol(Internals.optin, Decl(circularDeclaredPropertyAccess.ts, 28, 48))
+
+    interface Schema { _zod: Internals }
+>Schema : Symbol(Schema, Decl(circularDeclaredPropertyAccess.ts, 28, 95))
+>_zod : Symbol(Schema._zod, Decl(circularDeclaredPropertyAccess.ts, 29, 22))
+>Internals : Symbol(Internals, Decl(circularDeclaredPropertyAccess.ts, 27, 29))
+
+    type OptionalIn = { _zod: { optin: "optional" | "defaulted" } };
+>OptionalIn : Symbol(OptionalIn, Decl(circularDeclaredPropertyAccess.ts, 29, 40))
+>_zod : Symbol(_zod, Decl(circularDeclaredPropertyAccess.ts, 30, 23))
+>optin : Symbol(optin, Decl(circularDeclaredPropertyAccess.ts, 30, 31))
+
+    type IsOptionalIn<T extends Schema> = T extends OptionalIn ? true : false;
+>IsOptionalIn : Symbol(IsOptionalIn, Decl(circularDeclaredPropertyAccess.ts, 30, 68))
+>T : Symbol(T, Decl(circularDeclaredPropertyAccess.ts, 31, 22))
+>Schema : Symbol(Schema, Decl(circularDeclaredPropertyAccess.ts, 28, 95))
+>T : Symbol(T, Decl(circularDeclaredPropertyAccess.ts, 31, 22))
+>OptionalIn : Symbol(OptionalIn, Decl(circularDeclaredPropertyAccess.ts, 29, 40))
+
+    type RecordInput<V extends Schema> = [V] extends [OptionalIn] ? Partial<Record<string, V["_zod"]["input"]>> : Record<string, V["_zod"]["input"]>;
+>RecordInput : Symbol(RecordInput, Decl(circularDeclaredPropertyAccess.ts, 31, 78))
+>V : Symbol(V, Decl(circularDeclaredPropertyAccess.ts, 32, 21))
+>Schema : Symbol(Schema, Decl(circularDeclaredPropertyAccess.ts, 28, 95))
+>V : Symbol(V, Decl(circularDeclaredPropertyAccess.ts, 32, 21))
+>OptionalIn : Symbol(OptionalIn, Decl(circularDeclaredPropertyAccess.ts, 29, 40))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>V : Symbol(V, Decl(circularDeclaredPropertyAccess.ts, 32, 21))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>V : Symbol(V, Decl(circularDeclaredPropertyAccess.ts, 32, 21))
+
+    interface RecordInternals<V extends Schema> extends Internals<RecordInput<V>> { optin?: "optional" | undefined }
+>RecordInternals : Symbol(RecordInternals, Decl(circularDeclaredPropertyAccess.ts, 32, 149))
+>V : Symbol(V, Decl(circularDeclaredPropertyAccess.ts, 33, 30))
+>Schema : Symbol(Schema, Decl(circularDeclaredPropertyAccess.ts, 28, 95))
+>Internals : Symbol(Internals, Decl(circularDeclaredPropertyAccess.ts, 27, 29))
+>RecordInput : Symbol(RecordInput, Decl(circularDeclaredPropertyAccess.ts, 31, 78))
+>V : Symbol(V, Decl(circularDeclaredPropertyAccess.ts, 33, 30))
+>optin : Symbol(RecordInternals.optin, Decl(circularDeclaredPropertyAccess.ts, 33, 83))
+
+    interface RecordSchema<V extends Schema> extends Schema { _zod: RecordInternals<V> }
+>RecordSchema : Symbol(RecordSchema, Decl(circularDeclaredPropertyAccess.ts, 33, 116))
+>V : Symbol(V, Decl(circularDeclaredPropertyAccess.ts, 34, 27))
+>Schema : Symbol(Schema, Decl(circularDeclaredPropertyAccess.ts, 28, 95))
+>Schema : Symbol(Schema, Decl(circularDeclaredPropertyAccess.ts, 28, 95))
+>_zod : Symbol(RecordSchema._zod, Decl(circularDeclaredPropertyAccess.ts, 34, 61))
+>RecordInternals : Symbol(RecordInternals, Decl(circularDeclaredPropertyAccess.ts, 32, 149))
+>V : Symbol(V, Decl(circularDeclaredPropertyAccess.ts, 34, 27))
+
+    interface UnionInternals<T extends readonly Schema[]> extends Internals<T[number]["_zod"]["input"]> {
+>UnionInternals : Symbol(UnionInternals, Decl(circularDeclaredPropertyAccess.ts, 34, 88))
+>T : Symbol(T, Decl(circularDeclaredPropertyAccess.ts, 35, 29))
+>Schema : Symbol(Schema, Decl(circularDeclaredPropertyAccess.ts, 28, 95))
+>Internals : Symbol(Internals, Decl(circularDeclaredPropertyAccess.ts, 27, 29))
+>T : Symbol(T, Decl(circularDeclaredPropertyAccess.ts, 35, 29))
+
+        optin: IsOptionalIn<T[number]> extends false ? "optional" | "defaulted" | undefined : "optional" | "defaulted";
+>optin : Symbol(UnionInternals.optin, Decl(circularDeclaredPropertyAccess.ts, 35, 105))
+>IsOptionalIn : Symbol(IsOptionalIn, Decl(circularDeclaredPropertyAccess.ts, 30, 68))
+>T : Symbol(T, Decl(circularDeclaredPropertyAccess.ts, 35, 29))
+    }
+    interface UnionSchema<T extends readonly Schema[]> extends Schema { _zod: UnionInternals<T> }
+>UnionSchema : Symbol(UnionSchema, Decl(circularDeclaredPropertyAccess.ts, 37, 5))
+>T : Symbol(T, Decl(circularDeclaredPropertyAccess.ts, 38, 26))
+>Schema : Symbol(Schema, Decl(circularDeclaredPropertyAccess.ts, 28, 95))
+>Schema : Symbol(Schema, Decl(circularDeclaredPropertyAccess.ts, 28, 95))
+>_zod : Symbol(UnionSchema._zod, Decl(circularDeclaredPropertyAccess.ts, 38, 71))
+>UnionInternals : Symbol(UnionInternals, Decl(circularDeclaredPropertyAccess.ts, 34, 88))
+>T : Symbol(T, Decl(circularDeclaredPropertyAccess.ts, 38, 26))
+
+    type JsonValue = { [k: string]: JsonValue };
+>JsonValue : Symbol(JsonValue, Decl(circularDeclaredPropertyAccess.ts, 38, 97))
+>k : Symbol(k, Decl(circularDeclaredPropertyAccess.ts, 39, 24))
+>JsonValue : Symbol(JsonValue, Decl(circularDeclaredPropertyAccess.ts, 38, 97))
+
+    type _Json = UnionSchema<[RecordSchema<Json>]>;
+>_Json : Symbol(_Json, Decl(circularDeclaredPropertyAccess.ts, 39, 48))
+>UnionSchema : Symbol(UnionSchema, Decl(circularDeclaredPropertyAccess.ts, 37, 5))
+>RecordSchema : Symbol(RecordSchema, Decl(circularDeclaredPropertyAccess.ts, 33, 116))
+>Json : Symbol(Json, Decl(circularDeclaredPropertyAccess.ts, 42, 71))
+
+    type _JsonInternals = _Json["_zod"];
+>_JsonInternals : Symbol(_JsonInternals, Decl(circularDeclaredPropertyAccess.ts, 40, 51))
+>_Json : Symbol(_Json, Decl(circularDeclaredPropertyAccess.ts, 39, 48))
+
+    interface JsonInternals extends _JsonInternals { input: JsonValue }
+>JsonInternals : Symbol(JsonInternals, Decl(circularDeclaredPropertyAccess.ts, 41, 40))
+>_JsonInternals : Symbol(_JsonInternals, Decl(circularDeclaredPropertyAccess.ts, 40, 51))
+>input : Symbol(JsonInternals.input, Decl(circularDeclaredPropertyAccess.ts, 42, 52))
+>JsonValue : Symbol(JsonValue, Decl(circularDeclaredPropertyAccess.ts, 38, 97))
+
+    interface Json extends _Json { _zod: JsonInternals }
+>Json : Symbol(Json, Decl(circularDeclaredPropertyAccess.ts, 42, 71))
+>_Json : Symbol(_Json, Decl(circularDeclaredPropertyAccess.ts, 39, 48))
+>_zod : Symbol(Json._zod, Decl(circularDeclaredPropertyAccess.ts, 43, 34))
+>JsonInternals : Symbol(JsonInternals, Decl(circularDeclaredPropertyAccess.ts, 41, 40))
+}
+

@@ -19701,6 +19701,9 @@ func (c *Checker) resolveObjectTypeMembers(t *Type) {
 		indexInfos = c.instantiateIndexInfos(resolved.declaredIndexInfos, mapper)
 	}
 	baseTypes := c.getBaseTypes(source)
+	// Declared members are available while the base types are instantiated,
+	// as their type arguments can refer back to this type.
+	c.resolvingObjectTypeStack = append(c.resolvingObjectTypeStack, ResolvingObjectType{t: t, mapper: mapper})
 	instantiatedBaseTypes := baseTypes
 	thisArgument := core.LastOrNil(typeArguments)
 	if len(baseTypes) != 0 && thisArgument != nil {
@@ -19709,7 +19712,7 @@ func (c *Checker) resolveObjectTypeMembers(t *Type) {
 			instantiatedBaseTypes[i] = c.getTypeWithThisArgument(c.instantiateType(baseType, mapper), thisArgument, false /*needsApparentType*/)
 		}
 	}
-	c.resolvingObjectTypeStack = append(c.resolvingObjectTypeStack, ResolvingObjectType{t: t, mapper: mapper, baseTypes: instantiatedBaseTypes})
+	c.resolvingObjectTypeStack[len(c.resolvingObjectTypeStack)-1].baseTypes = instantiatedBaseTypes
 	// Member layout must be computed before inherited signatures, which may circularly depend on it
 	layout := c.getMemberLayout(t, instantiatedBaseTypes)
 	for _, instantiatedBaseType := range instantiatedBaseTypes {
