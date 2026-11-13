@@ -31492,15 +31492,15 @@ func (c *Checker) addBaseConstraintRepeat(identity RecursionId, generation int, 
 }
 
 // addInnerBaseConstraintWalk records in the walk being computed a walk
-// entered with stack that reached height levels below it, with repeats,
+// entered with stack that reached walkHeight levels below it, with repeats,
 // counting the frames of the walk on the stack that its frames repeat. The
 // walk's own repeats end at end in the buffer; when repeats are those of an
 // inner walk just computed, which follow, each is read before the walk's own
 // are written over it.
-func (c *Checker) addInnerBaseConstraintWalk(height int32, repeats []baseConstraintRepeat, gaveUp bool, stack []baseConstraintFrame, end int) {
+func (c *Checker) addInnerBaseConstraintWalk(walkHeight int32, repeats []baseConstraintRepeat, gaveUp bool, stack []baseConstraintFrame, end int) {
 	w := &c.baseConstraintWalk
 	offset := int32(len(stack) - w.start)
-	w.depth = max(w.depth, int32(len(stack))+height)
+	w.depth = max(w.depth, int32(len(stack))+walkHeight)
 	w.gaveUp = w.gaveUp || gaveUp
 	frames := stack[w.start:]
 	buffer := c.baseConstraintRepeatBuffer[:end]
@@ -31534,11 +31534,10 @@ func (c *Checker) addInnerBaseConstraintWalk(height int32, repeats []baseConstra
 // canReuseBaseConstraint reports whether computing the kept base constraint of
 // t inside the walk with stack would give up nowhere.
 func (c *Checker) canReuseBaseConstraint(t *Type, stack []baseConstraintFrame) bool {
-	depth := len(stack) + int(t.baseConstraintHeight)
-	if depth < baseConstraintFreeDepth {
+	if !t.baseConstraintHeight.reaches(len(stack), baseConstraintFreeDepth) {
 		return true
 	}
-	if depth >= baseConstraintMaxDepth {
+	if t.baseConstraintHeight.reaches(len(stack), baseConstraintMaxDepth) {
 		return false
 	}
 	for _, r := range c.baseConstraintRepeats[t] {
@@ -31587,7 +31586,7 @@ func (c *Checker) resolveBaseConstraint(t *Type, stack []baseConstraintFrame, pr
 	if !c.pushTypeResolution(t, propertyName, memo) {
 		return c.circularConstraintType, 0, nil, false
 	}
-	constraint, height, repeats, gaveUp := c.walkBaseConstraint(t, stack, propertyName == TypeSystemPropertyNameResolvedBaseConstraint)
+	constraint, walkHeight, repeats, gaveUp := c.walkBaseConstraint(t, stack, propertyName == TypeSystemPropertyNameResolvedBaseConstraint)
 	if !c.popTypeResolution() {
 		if t.flags&TypeFlagsTypeParameter != 0 {
 			errorNode := c.getConstraintDeclaration(t)
@@ -31621,7 +31620,7 @@ func (c *Checker) resolveBaseConstraint(t *Type, stack []baseConstraintFrame, pr
 	if constraint == nil {
 		constraint = c.noConstraintType
 	}
-	return constraint, height, repeats, gaveUp
+	return constraint, walkHeight, repeats, gaveUp
 }
 
 func (c *Checker) isBaseConstraintInProgress(t *Type) bool {
@@ -31652,15 +31651,15 @@ func (c *Checker) walkBaseConstraint(t *Type, stack []baseConstraintFrame, keep 
 		c.baseConstraintWalk.gaveUp = true
 	}
 	walk := c.baseConstraintWalk
-	height := walk.depth - int32(len(stack))
+	walkHeight := walk.depth - int32(len(stack))
 	repeats := c.baseConstraintRepeatBuffer[repeatsStart:]
 	var kept []baseConstraintRepeat
 	if keep && !walk.gaveUp {
 		kept = slices.Clone(repeats)
 	}
 	c.baseConstraintWalk = saveWalk
-	c.addInnerBaseConstraintWalk(height, repeats, walk.gaveUp, stack, repeatsStart)
-	return constraint, height, kept, walk.gaveUp
+	c.addInnerBaseConstraintWalk(walkHeight, repeats, walk.gaveUp, stack, repeatsStart)
+	return constraint, walkHeight, kept, walk.gaveUp
 }
 
 func (c *Checker) getResolvedBaseConstraintUncached(t *Type, stack []baseConstraintFrame) *Type {
@@ -31671,7 +31670,7 @@ func (c *Checker) getResolvedBaseConstraintUncached(t *Type, stack []baseConstra
 	if constrained.resolvedBaseConstraint.cached(c) != nil {
 		return constrained.resolvedBaseConstraint.cached(c)
 	}
-	constraint, height, repeats, gaveUp := c.resolveBaseConstraint(t, stack, TypeSystemPropertyNameResolvedBaseConstraint, &constrained.resolvedBaseConstraint.memoHeader)
+	constraint, walkHeight, repeats, gaveUp := c.resolveBaseConstraint(t, stack, TypeSystemPropertyNameResolvedBaseConstraint, &constrained.resolvedBaseConstraint.memoHeader)
 	if gaveUp && len(stack) != 0 {
 		// Depends on the walk it was computed in.
 		return constraint
@@ -31682,7 +31681,7 @@ func (c *Checker) getResolvedBaseConstraintUncached(t *Type, stack []baseConstra
 			t.baseConstraintHeight = math.MaxUint8
 			repeats = nil
 		} else {
-			t.baseConstraintHeight = uint8(min(height, math.MaxUint8))
+			t.baseConstraintHeight = heightOf(walkHeight)
 		}
 		if len(repeats) != 0 {
 			if c.baseConstraintRepeats == nil {
