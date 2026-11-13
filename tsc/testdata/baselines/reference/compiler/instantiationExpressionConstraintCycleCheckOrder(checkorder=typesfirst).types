@@ -17,7 +17,7 @@ namespace InterfaceCycle {
 >value : T
 
         child: typeof b<A<T>>;
->child : () => A<T>
+>child : typeof b<A<T>>
 >b : <U extends A = A<number>>() => U
     }
 }

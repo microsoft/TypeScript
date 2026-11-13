@@ -11117,11 +11117,15 @@ func (c *Checker) getInstantiationExpressionType(exprType *Type, node *ast.Node)
 			return len(sig.TypeParameters()) != 0 && c.hasCorrectTypeArgumentArity(sig, typeArguments.Nodes)
 		})
 		return core.SameMap(applicableSignatures, func(sig *Signature) *Signature {
-			typeArgumentTypes := c.checkTypeArguments(sig, typeArguments.Nodes, true /*reportErrors*/, nil)
-			if typeArgumentTypes != nil {
-				return c.getSignatureInstantiation(sig, typeArgumentTypes, ast.IsInJSFile(sig.declaration), nil)
-			}
-			return sig
+			// As for a type reference, the type arguments are those given
+			// whether or not they satisfy their constraints, which are
+			// checked once the types they need are resolved: checking them
+			// can need the variances of a type whose members include this
+			// expression.
+			c.addDeferredDiagnostic(func() {
+				c.checkTypeArguments(sig, typeArguments.Nodes, true /*reportErrors*/, nil)
+			})
+			return c.getSignatureInstantiation(sig, core.Map(typeArguments.Nodes, c.getTypeFromTypeNode), ast.IsInJSFile(sig.declaration), nil)
 		})
 	}
 	var getInstantiatedType func(*Type) *Type
