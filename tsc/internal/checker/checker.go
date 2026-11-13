@@ -648,6 +648,7 @@ type Checker struct {
 	instantiationStack         []*Type
 	instantiationAborted       bool  // See "Instantiation limits"
 	instantiationAbortLog      int   // Length of discardLog when instantiationAborted was set
+	instantiationAbortRoot     int   // Length of instantiationStack to which a failing instantiation unwinds
 	readIncompleteFloor        int32 // See markReadIncomplete
 	conditionalConstraintDepth depthLimit
 	baseConstraintWalk         baseConstraintWalk
@@ -25190,7 +25191,7 @@ func (c *Checker) instantiateTypeWithAlias(t *Type, m *TypeMapper, alias *TypeAl
 	}
 	c.instantiationStack[len(c.instantiationStack)-1] = nil
 	c.instantiationStack = c.instantiationStack[:len(c.instantiationStack)-1]
-	if len(c.instantiationStack) == 0 && c.instantiationAborted {
+	if c.instantiationAborted && len(c.instantiationStack) == c.instantiationAbortRoot {
 		c.endInstantiationAbort()
 		return c.errorType
 	}

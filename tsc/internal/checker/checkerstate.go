@@ -40,6 +40,7 @@ var checkerProgressFields = []string{
 	"inlineLevel",
 	"innerCycles",
 	"instantiationAbortLog",
+	"instantiationAbortRoot",
 	"instantiationAborted",
 	"instantiationStack",
 	"markingForEmit",
