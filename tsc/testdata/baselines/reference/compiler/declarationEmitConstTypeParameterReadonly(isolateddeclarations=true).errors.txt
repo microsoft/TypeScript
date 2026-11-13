@@ -1,0 +1,159 @@
+declarationEmitConstTypeParameterReadonly.ts(2,14): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+declarationEmitConstTypeParameterReadonly.ts(2,31): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
+declarationEmitConstTypeParameterReadonly.ts(2,31): error TS9013: Expression type can't be inferred with --isolatedDeclarations.
+declarationEmitConstTypeParameterReadonly.ts(3,14): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+declarationEmitConstTypeParameterReadonly.ts(3,47): error TS9013: Expression type can't be inferred with --isolatedDeclarations.
+declarationEmitConstTypeParameterReadonly.ts(6,14): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+declarationEmitConstTypeParameterReadonly.ts(6,48): error TS9013: Expression type can't be inferred with --isolatedDeclarations.
+declarationEmitConstTypeParameterReadonly.ts(6,59): error TS9013: Expression type can't be inferred with --isolatedDeclarations.
+declarationEmitConstTypeParameterReadonly.ts(8,14): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+declarationEmitConstTypeParameterReadonly.ts(8,31): error TS9017: Only const arrays can be inferred with --isolatedDeclarations.
+declarationEmitConstTypeParameterReadonly.ts(8,37): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
+declarationEmitConstTypeParameterReadonly.ts(11,14): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+declarationEmitConstTypeParameterReadonly.ts(11,53): error TS9013: Expression type can't be inferred with --isolatedDeclarations.
+declarationEmitConstTypeParameterReadonly.ts(11,69): error TS9013: Expression type can't be inferred with --isolatedDeclarations.
+declarationEmitConstTypeParameterReadonly.ts(29,14): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+declarationEmitConstTypeParameterReadonly.ts(30,14): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+declarationEmitConstTypeParameterReadonly.ts(30,62): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
+declarationEmitConstTypeParameterReadonly.ts(30,62): error TS9013: Expression type can't be inferred with --isolatedDeclarations.
+declarationEmitConstTypeParameterReadonly.ts(31,14): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+declarationEmitConstTypeParameterReadonly.ts(31,60): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
+declarationEmitConstTypeParameterReadonly.ts(31,60): error TS9013: Expression type can't be inferred with --isolatedDeclarations.
+declarationEmitConstTypeParameterReadonly.ts(40,14): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+declarationEmitConstTypeParameterReadonly.ts(40,57): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
+declarationEmitConstTypeParameterReadonly.ts(41,14): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+declarationEmitConstTypeParameterReadonly.ts(41,59): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
+
+
+==== declarationEmitConstTypeParameterReadonly.ts (25 errors) ====
+    declare function id<const C>(c: C): C;
+    export const b = id({ A: { f: () => 1 } });
+                 ~
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+!!! related TS9027 declarationEmitConstTypeParameterReadonly.ts:2:14: Add a type annotation to the variable b.
+                                  ~~~~~~~
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
+!!! related TS9027 declarationEmitConstTypeParameterReadonly.ts:2:14: Add a type annotation to the variable b.
+!!! related TS9030 declarationEmitConstTypeParameterReadonly.ts:2:31: Add a return type to the function expression.
+                                  ~~~~~~~
+!!! error TS9013: Expression type can't be inferred with --isolatedDeclarations.
+!!! related TS9027 declarationEmitConstTypeParameterReadonly.ts:2:14: Add a type annotation to the variable b.
+!!! related TS9035 declarationEmitConstTypeParameterReadonly.ts:2:31: Add satisfies and a type assertion to this expression (satisfies T as T) to make the type explicit.
+    export const annotatedFunction = id({ A: { f: (): number => 1 } });
+                 ~~~~~~~~~~~~~~~~~
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+!!! related TS9027 declarationEmitConstTypeParameterReadonly.ts:3:14: Add a type annotation to the variable annotatedFunction.
+                                                  ~~~~~~~~~~~~~~~
+!!! error TS9013: Expression type can't be inferred with --isolatedDeclarations.
+!!! related TS9027 declarationEmitConstTypeParameterReadonly.ts:3:14: Add a type annotation to the variable annotatedFunction.
+!!! related TS9035 declarationEmitConstTypeParameterReadonly.ts:3:47: Add satisfies and a type assertion to this expression (satisfies T as T) to make the type explicit.
+    
+    const leaf = { a: 1 } as const;
+    export const twoRefs = id({ properties: { one: leaf, two: leaf } });
+                 ~~~~~~~
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+!!! related TS9027 declarationEmitConstTypeParameterReadonly.ts:6:14: Add a type annotation to the variable twoRefs.
+                                                   ~~~~
+!!! error TS9013: Expression type can't be inferred with --isolatedDeclarations.
+!!! related TS9027 declarationEmitConstTypeParameterReadonly.ts:6:14: Add a type annotation to the variable twoRefs.
+!!! related TS9035 declarationEmitConstTypeParameterReadonly.ts:6:48: Add satisfies and a type assertion to this expression (satisfies T as T) to make the type explicit.
+                                                              ~~~~
+!!! error TS9013: Expression type can't be inferred with --isolatedDeclarations.
+!!! related TS9027 declarationEmitConstTypeParameterReadonly.ts:6:14: Add a type annotation to the variable twoRefs.
+!!! related TS9035 declarationEmitConstTypeParameterReadonly.ts:6:59: Add satisfies and a type assertion to this expression (satisfies T as T) to make the type explicit.
+    
+    export const nested = id({ A: [{ f: () => 1 }] });
+                 ~~~~~~
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+!!! related TS9027 declarationEmitConstTypeParameterReadonly.ts:8:14: Add a type annotation to the variable nested.
+                                  ~~~~~~~~~~~~~~~~
+!!! error TS9017: Only const arrays can be inferred with --isolatedDeclarations.
+!!! related TS9027 declarationEmitConstTypeParameterReadonly.ts:8:14: Add a type annotation to the variable nested.
+                                        ~~~~~~~
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
+!!! related TS9027 declarationEmitConstTypeParameterReadonly.ts:8:14: Add a type annotation to the variable nested.
+!!! related TS9030 declarationEmitConstTypeParameterReadonly.ts:8:37: Add a return type to the function expression.
+    
+    const tupleLeaf = [1, "a"] as const;
+    export const twoTupleRefs = id({ properties: { one: tupleLeaf, two: tupleLeaf } });
+                 ~~~~~~~~~~~~
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+!!! related TS9027 declarationEmitConstTypeParameterReadonly.ts:11:14: Add a type annotation to the variable twoTupleRefs.
+                                                        ~~~~~~~~~
+!!! error TS9013: Expression type can't be inferred with --isolatedDeclarations.
+!!! related TS9027 declarationEmitConstTypeParameterReadonly.ts:11:14: Add a type annotation to the variable twoTupleRefs.
+!!! related TS9035 declarationEmitConstTypeParameterReadonly.ts:11:53: Add satisfies and a type assertion to this expression (satisfies T as T) to make the type explicit.
+                                                                        ~~~~~~~~~
+!!! error TS9013: Expression type can't be inferred with --isolatedDeclarations.
+!!! related TS9027 declarationEmitConstTypeParameterReadonly.ts:11:14: Add a type annotation to the variable twoTupleRefs.
+!!! related TS9035 declarationEmitConstTypeParameterReadonly.ts:11:69: Add satisfies and a type assertion to this expression (satisfies T as T) to make the type explicit.
+    
+    export const getterOnly = {
+        get value(): number {
+            return 1;
+        },
+    };
+    
+    export const getterAndSetter = {
+        get value(): number {
+            return 1;
+        },
+        set value(value: number) {},
+    };
+    
+    declare function readonlyInput<const T>(arg: { readonly [K in keyof T]: T[K] }): T;
+    declare function mutableInput<const T>(arg: { -readonly [K in keyof T]: T[K] }): T;
+    
+    export const mappedScalars = readonlyInput({ foo: "str", bar: 42 });
+                 ~~~~~~~~~~~~~
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+!!! related TS9027 declarationEmitConstTypeParameterReadonly.ts:29:14: Add a type annotation to the variable mappedScalars.
+    export const readonlyParameter = readonlyInput({ value: { f: () => 1 } });
+                 ~~~~~~~~~~~~~~~~~
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+!!! related TS9027 declarationEmitConstTypeParameterReadonly.ts:30:14: Add a type annotation to the variable readonlyParameter.
+                                                                 ~~~~~~~
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
+!!! related TS9027 declarationEmitConstTypeParameterReadonly.ts:30:14: Add a type annotation to the variable readonlyParameter.
+!!! related TS9030 declarationEmitConstTypeParameterReadonly.ts:30:62: Add a return type to the function expression.
+                                                                 ~~~~~~~
+!!! error TS9013: Expression type can't be inferred with --isolatedDeclarations.
+!!! related TS9027 declarationEmitConstTypeParameterReadonly.ts:30:14: Add a type annotation to the variable readonlyParameter.
+!!! related TS9035 declarationEmitConstTypeParameterReadonly.ts:30:62: Add satisfies and a type assertion to this expression (satisfies T as T) to make the type explicit.
+    export const mutableParameter = mutableInput({ value: { f: () => 1 } });
+                 ~~~~~~~~~~~~~~~~
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+!!! related TS9027 declarationEmitConstTypeParameterReadonly.ts:31:14: Add a type annotation to the variable mutableParameter.
+                                                               ~~~~~~~
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
+!!! related TS9027 declarationEmitConstTypeParameterReadonly.ts:31:14: Add a type annotation to the variable mutableParameter.
+!!! related TS9030 declarationEmitConstTypeParameterReadonly.ts:31:60: Add a return type to the function expression.
+                                                               ~~~~~~~
+!!! error TS9013: Expression type can't be inferred with --isolatedDeclarations.
+!!! related TS9027 declarationEmitConstTypeParameterReadonly.ts:31:14: Add a type annotation to the variable mutableParameter.
+!!! related TS9035 declarationEmitConstTypeParameterReadonly.ts:31:60: Add satisfies and a type assertion to this expression (satisfies T as T) to make the type explicit.
+    
+    declare function addReadonly<const T>(arg: { value: T }): {
+        value: { readonly [K in keyof T]: T[K] };
+    };
+    declare function removeReadonly<const T>(arg: { value: T }): {
+        value: { -readonly [K in keyof T]: T[K] };
+    };
+    
+    export const readonlyResult = addReadonly({ value: { f: () => 1 } });
+                 ~~~~~~~~~~~~~~
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+!!! related TS9027 declarationEmitConstTypeParameterReadonly.ts:40:14: Add a type annotation to the variable readonlyResult.
+                                                            ~~~~~~~
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
+!!! related TS9027 declarationEmitConstTypeParameterReadonly.ts:40:14: Add a type annotation to the variable readonlyResult.
+!!! related TS9030 declarationEmitConstTypeParameterReadonly.ts:40:57: Add a return type to the function expression.
+    export const mutableResult = removeReadonly({ value: { f: () => 1 } } as const);
+                 ~~~~~~~~~~~~~
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+!!! related TS9027 declarationEmitConstTypeParameterReadonly.ts:41:14: Add a type annotation to the variable mutableResult.
+                                                              ~~~~~~~
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
+!!! related TS9027 declarationEmitConstTypeParameterReadonly.ts:41:14: Add a type annotation to the variable mutableResult.
+!!! related TS9030 declarationEmitConstTypeParameterReadonly.ts:41:59: Add a return type to the function expression.
+    

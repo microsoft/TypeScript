@@ -1,0 +1,191 @@
+//// [tests/cases/compiler/declarationEmitConstTypeParameterReadonly.ts] ////
+
+=== declarationEmitConstTypeParameterReadonly.ts ===
+declare function id<const C>(c: C): C;
+>id : <const C>(c: C) => C
+>c : C
+
+export const b = id({ A: { f: () => 1 } });
+>b : { readonly A: { readonly f: () => 1; }; }
+>id({ A: { f: () => 1 } }) : { readonly A: { readonly f: () => 1; }; }
+>id : <const C>(c: C) => C
+>{ A: { f: () => 1 } } : { A: { f: () => 1; }; }
+>A : { f: () => 1; }
+>{ f: () => 1 } : { f: () => 1; }
+>f : () => 1
+>() => 1 : () => 1
+>1 : 1
+
+export const annotatedFunction = id({ A: { f: (): number => 1 } });
+>annotatedFunction : { readonly A: { readonly f: () => number; }; }
+>id({ A: { f: (): number => 1 } }) : { readonly A: { readonly f: () => number; }; }
+>id : <const C>(c: C) => C
+>{ A: { f: (): number => 1 } } : { A: { f: () => number; }; }
+>A : { f: () => number; }
+>{ f: (): number => 1 } : { f: () => number; }
+>f : () => number
+>(): number => 1 : () => number
+>1 : 1
+
+const leaf = { a: 1 } as const;
+>leaf : { readonly a: 1; }
+>{ a: 1 } as const : { readonly a: 1; }
+>{ a: 1 } : { readonly a: 1; }
+>a : 1
+>1 : 1
+
+export const twoRefs = id({ properties: { one: leaf, two: leaf } });
+>twoRefs : { readonly properties: { readonly one: { readonly a: 1; }; readonly two: { readonly a: 1; }; }; }
+>id({ properties: { one: leaf, two: leaf } }) : { readonly properties: { readonly one: { readonly a: 1; }; readonly two: { readonly a: 1; }; }; }
+>id : <const C>(c: C) => C
+>{ properties: { one: leaf, two: leaf } } : { properties: { one: { readonly a: 1; }; two: { readonly a: 1; }; }; }
+>properties : { one: { readonly a: 1; }; two: { readonly a: 1; }; }
+>{ one: leaf, two: leaf } : { one: { readonly a: 1; }; two: { readonly a: 1; }; }
+>one : { readonly a: 1; }
+>leaf : { readonly a: 1; }
+>two : { readonly a: 1; }
+>leaf : { readonly a: 1; }
+
+export const nested = id({ A: [{ f: () => 1 }] });
+>nested : { readonly A: readonly [{ readonly f: () => 1; }]; }
+>id({ A: [{ f: () => 1 }] }) : { readonly A: readonly [{ readonly f: () => 1; }]; }
+>id : <const C>(c: C) => C
+>{ A: [{ f: () => 1 }] } : { A: [{ f: () => 1; }]; }
+>A : [{ f: () => 1; }]
+>[{ f: () => 1 }] : [{ f: () => 1; }]
+>{ f: () => 1 } : { f: () => 1; }
+>f : () => 1
+>() => 1 : () => 1
+>1 : 1
+
+const tupleLeaf = [1, "a"] as const;
+>tupleLeaf : readonly [1, "a"]
+>[1, "a"] as const : readonly [1, "a"]
+>[1, "a"] : readonly [1, "a"]
+>1 : 1
+>"a" : "a"
+
+export const twoTupleRefs = id({ properties: { one: tupleLeaf, two: tupleLeaf } });
+>twoTupleRefs : { readonly properties: { readonly one: readonly [1, "a"]; readonly two: readonly [1, "a"]; }; }
+>id({ properties: { one: tupleLeaf, two: tupleLeaf } }) : { readonly properties: { readonly one: readonly [1, "a"]; readonly two: readonly [1, "a"]; }; }
+>id : <const C>(c: C) => C
+>{ properties: { one: tupleLeaf, two: tupleLeaf } } : { properties: { one: readonly [1, "a"]; two: readonly [1, "a"]; }; }
+>properties : { one: readonly [1, "a"]; two: readonly [1, "a"]; }
+>{ one: tupleLeaf, two: tupleLeaf } : { one: readonly [1, "a"]; two: readonly [1, "a"]; }
+>one : readonly [1, "a"]
+>tupleLeaf : readonly [1, "a"]
+>two : readonly [1, "a"]
+>tupleLeaf : readonly [1, "a"]
+
+export const getterOnly = {
+>getterOnly : { readonly value: number; }
+>{    get value(): number {        return 1;    },} : { readonly value: number; }
+
+    get value(): number {
+>value : number
+
+        return 1;
+>1 : 1
+
+    },
+};
+
+export const getterAndSetter = {
+>getterAndSetter : { value: number; }
+>{    get value(): number {        return 1;    },    set value(value: number) {},} : { value: number; }
+
+    get value(): number {
+>value : number
+
+        return 1;
+>1 : 1
+
+    },
+    set value(value: number) {},
+>value : number
+>value : number
+
+};
+
+declare function readonlyInput<const T>(arg: { readonly [K in keyof T]: T[K] }): T;
+>readonlyInput : <const T>(arg: { readonly [K in keyof T]: T[K]; }) => T
+>arg : { readonly [K in keyof T]: T[K]; }
+
+declare function mutableInput<const T>(arg: { -readonly [K in keyof T]: T[K] }): T;
+>mutableInput : <const T>(arg: { -readonly [K in keyof T]: T[K]; }) => T
+>arg : { -readonly [K in keyof T]: T[K]; }
+
+export const mappedScalars = readonlyInput({ foo: "str", bar: 42 });
+>mappedScalars : { foo: "str"; bar: 42; }
+>readonlyInput({ foo: "str", bar: 42 }) : { foo: "str"; bar: 42; }
+>readonlyInput : <const T>(arg: { readonly [K in keyof T]: T[K]; }) => T
+>{ foo: "str", bar: 42 } : { foo: "str"; bar: 42; }
+>foo : "str"
+>"str" : "str"
+>bar : 42
+>42 : 42
+
+export const readonlyParameter = readonlyInput({ value: { f: () => 1 } });
+>readonlyParameter : { value: { readonly f: () => 1; }; }
+>readonlyInput({ value: { f: () => 1 } }) : { value: { readonly f: () => 1; }; }
+>readonlyInput : <const T>(arg: { readonly [K in keyof T]: T[K]; }) => T
+>{ value: { f: () => 1 } } : { value: { f: () => 1; }; }
+>value : { f: () => 1; }
+>{ f: () => 1 } : { f: () => 1; }
+>f : () => 1
+>() => 1 : () => 1
+>1 : 1
+
+export const mutableParameter = mutableInput({ value: { f: () => 1 } });
+>mutableParameter : { readonly value: { readonly f: () => 1; }; }
+>mutableInput({ value: { f: () => 1 } }) : { readonly value: { readonly f: () => 1; }; }
+>mutableInput : <const T>(arg: { -readonly [K in keyof T]: T[K]; }) => T
+>{ value: { f: () => 1 } } : { value: { f: () => 1; }; }
+>value : { f: () => 1; }
+>{ f: () => 1 } : { f: () => 1; }
+>f : () => 1
+>() => 1 : () => 1
+>1 : 1
+
+declare function addReadonly<const T>(arg: { value: T }): {
+>addReadonly : <const T>(arg: { value: T; }) => { value: { readonly [K in keyof T]: T[K]; }; }
+>arg : { value: T; }
+>value : T
+
+    value: { readonly [K in keyof T]: T[K] };
+>value : { readonly [K in keyof T]: T[K]; }
+
+};
+declare function removeReadonly<const T>(arg: { value: T }): {
+>removeReadonly : <const T>(arg: { value: T; }) => { value: { -readonly [K in keyof T]: T[K]; }; }
+>arg : { value: T; }
+>value : T
+
+    value: { -readonly [K in keyof T]: T[K] };
+>value : { -readonly [K in keyof T]: T[K]; }
+
+};
+
+export const readonlyResult = addReadonly({ value: { f: () => 1 } });
+>readonlyResult : { value: { readonly f: () => 1; }; }
+>addReadonly({ value: { f: () => 1 } }) : { value: { readonly f: () => 1; }; }
+>addReadonly : <const T>(arg: { value: T; }) => { value: { readonly [K in keyof T]: T[K]; }; }
+>{ value: { f: () => 1 } } : { value: { f: () => 1; }; }
+>value : { f: () => 1; }
+>{ f: () => 1 } : { f: () => 1; }
+>f : () => 1
+>() => 1 : () => 1
+>1 : 1
+
+export const mutableResult = removeReadonly({ value: { f: () => 1 } } as const);
+>mutableResult : { value: { f: () => 1; }; }
+>removeReadonly({ value: { f: () => 1 } } as const) : { value: { f: () => 1; }; }
+>removeReadonly : <const T>(arg: { value: T; }) => { value: { -readonly [K in keyof T]: T[K]; }; }
+>{ value: { f: () => 1 } } as const : { readonly value: { readonly f: () => 1; }; }
+>{ value: { f: () => 1 } } : { readonly value: { readonly f: () => 1; }; }
+>value : { readonly f: () => 1; }
+>{ f: () => 1 } : { readonly f: () => 1; }
+>f : () => 1
+>() => 1 : () => 1
+>1 : 1
+
