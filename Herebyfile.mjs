@@ -743,6 +743,18 @@ export const generateAPI = task({
     run: runGenerateAPI,
 });
 
+async function runGenerateAPIDiff() {
+    await run("node", ["tools/scripts/gen/apiDiff.mts"]);
+}
+
+export const generateAPIDiff = task({
+    name: "generate:api-diff",
+    description: "Generates the API compatibility report.",
+    dependencies: [generateAST, generateAPI],
+    outputs: ["tsc/testdata/apiDiff.txt"],
+    run: runGenerateAPIDiff,
+});
+
 const vendorJsonrpcDir = "packages/typescript/vendor/vscode-jsonrpc";
 const vendorJsonrpcSrc = "node_modules/vscode-jsonrpc";
 // Files copied verbatim from the installed vscode-jsonrpc package into the
@@ -790,11 +802,12 @@ async function runGenerate() {
         },
         runGenerateVendor,
     ], 4);
+    await runGenerateAPIDiff();
 }
 
 export const generate = task({
     name: "generate",
-    description: "Runs all code generation, including AST, LSP, APIs, extension localization, and vendored dependencies.",
+    description: "Runs all code generation, including AST, LSP, APIs, the API compatibility report, extension localization, and vendored dependencies.",
     run: runGenerate,
 });
 

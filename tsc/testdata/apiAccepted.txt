@@ -1,0 +1,257 @@
+originalType.MethodName|newType.MethodName|reason (will be discarded in parsing)
+
+TypeChecker.tryGetMemberInModuleExports|Checker.getMemberInModuleExports|rename
+TypeChecker.getAugmentedPropertiesOfType|| use `Type.getApparentProperties()` instead
+Program.getTypeChecker|| removed
+Program.getOptionsDiagnostics|| removed
+Project.containsFile|| same as `Program` method
+Project.getFileNames|| same as `Program` method
+Project.getRootFiles||same as `Program` method
+Project.hasRoots|| same as `Program` method
+Project.isRoot|| same as `Program` method
+Project.hasConfigFile|| same as `Program` method
+Project.getSourceFile|| same as `Program` method
+ts.parseCommandLine|API.parseCommandLine|
+ts.parseJsonConfigFileContent|API.parseJsonConfigFileContent|
+ts.readConfigFile|API.readConfigFile|
+ts.parseJsonSourceFileConfigFileContent|API.parseConfigFile|
+TypeChecker.runWithCancellationToken||Cancellation will be investigated at the client level, no longer tied to Checker
+BuilderProgram.getAllDependencies||BuilderProgram deferred for redesign
+BuilderProgram.getOptionsDiagnostics||BuilderProgram deferred for redesign
+BuilderProgram.getProgram||BuilderProgram deferred for redesign
+BuilderProgram.getSourceFiles||BuilderProgram deferred for redesign
+SolutionBuilder.getNextInvalidatedProject||SolutionBuilder deferred for redesign
+Project.addMissingFileRoot||Project is immutable; use file change and snapshot update APIs
+Project.addRoot||Project is immutable; use file change and snapshot update APIs
+Project.close|Snapshot.update|Use `closeProjects` as part of snapshot update
+Project.containsScriptInfo||ScriptInfo does not exist
+Project.directoryExists||Project no longer proxies methods from its host
+Project.disableLanguageService||LanguageService is no longer a stateful object owned by a Project
+Project.emitFile||Project no longer proxies methods from objects it owns
+Project.enableLanguageService||LanguageService is no longer a stateful object owned by Project
+Project.error||Utility method intended for internal use
+Project.fileExists||Project no longer proxies methods from its host
+Project.filesToString||Utility method intended for internal use
+Project.getAllProjectErrors||Use Program APIs
+Project.getCancellationToken||Cancellation will be investigated as a client-level feature
+Project.getCompilationSettings||Project no longer proxies methods from objects it owns; use the Program API instead
+Project.getCompileOnSaveAffectedFileList||Compile on save is no longer a built-in feature
+Project.getCompilerOptions||Project no longer proxies methods from objects it owns; use the Program API instead
+Project.getCurrentDirectory||Project no longer proxies methods from its host
+Project.getDefaultLibFileName||Project no longer proxies methods from its host
+Project.getDirectories||Project no longer proxies methods from its host
+Project.getExcludedFiles||Utility method intended for internal use
+Project.getExternalFiles||External files is no longer a concept
+Project.getGlobalProjectErrors||Use Program APIs
+Project.getLanguageService||LanguageService is no longer a stateful object owned by a Project; access Project.languageService instead
+Project.getNewLine||Project no longer proxies methods from its host
+Project.getProjectName|Project.id|
+Project.getProjectReferences||Project no longer proxies methods from objects it owns; use the Program API instead
+Project.getProjectVersion||Projects are immutable use `snapshot.id` and snapshot update results to track changes
+Project.getRootScriptInfos||ScriptInfo does not exist
+Project.getScriptFileNames||Project no longer proxies methods from objects it owns; use the Program API instead
+Project.getScriptInfo||ScriptInfo does not exist
+Project.getScriptInfoForNormalizedPath||ScriptInfo does not exist
+Project.getScriptInfos||ScriptInfo does not exist
+Project.getScriptKind||Project no longer proxies methods from its host
+Project.getScriptSnapshot||Project no longer proxies methods from its host
+Project.getScriptVersion||Project no longer proxies methods from its host
+Project.installPackage||Project is immutable; ATA controlling is intended internal
+Project.isClosed||Project is immutable
+Project.isKnownTypesPackageName||Internal utility method
+Project.isNonTsProject||Internal utility method
+Project.log||Project no longer proxies methods from its host
+Project.readDirectory||Project no longer proxies methods from its host
+Project.readFile||Project no longer proxies methods from its host
+Project.refreshDiagnostics||Project is immutable; use file change and snapshot update APIs
+Project.registerFileUpdate||Project is immutable; use file change and snapshot update APIs
+Project.removeFile||Project is immutable; use file change and snapshot update APIs
+Project.resolveModule||Project no longer proxies methods from its owned objects
+Project.setCompilerOptions||Project is immutable; use file change and snapshot update APIs
+Project.setProjectErrors||Project is immutable; use file change and snapshot update APIs
+Project.setTypeAcquisition||Project is immutable; use file change and snapshot update APIs
+Project.updateGraph||Project is immutable; use file change and snapshot update APIs
+Project.useCaseSensitiveFileNames||Project no longer proxies methods from its host
+Project.writeFile||Project no longer proxies methods from its host
+Scanner.getStartPos||Removal of deprecated alias; use `Scanner.getTokenFullStart()`
+Scanner.getTextPos||Removal of deprecated alias; use `Scanner.getTokenEnd()`
+Scanner.getTokenPos||Removal of deprecated alias; use `Scanner.getTokenStart()`
+Scanner.setJSDocParsingMode||JSDoc parsing is no longer configurable to improve AST reuse between programs with different requirements
+Scanner.setOnError||Scanner no longer reports errors; use `isUnterminated()` and flags to inspect state
+Scanner.setScriptKind||Scanner behavior is no longer dependent on ScriptKind
+Scanner.setScriptTarget||Scanner behavior is no longer dependent on ScriptTarget
+Scanner.setTextPos||Removal of deprecated alias; use `Scanner.resetTokenState(pos)`
+Printer.printBundle||outFile is not supported in TypeScript 7
+Signature.getDeclaration|Signature.declaration|
+Signature.getDocumentationComment|Symbol.getDocumentationComment|Go through the signature’s declaration’s symbol
+Signature.getJsDocTags||Go through the signature’s declaration’s symbol
+SourceFile.update||Incremental parsing is not implemented in TypeScript 7
+Symbol.getDeclarations|Symbol.declarations|
+Symbol.getEscapedName|Symbol.escapedName|
+Symbol.getFlags|Symbol.flags|
+Symbol.getName|Symbol.name|
+Type.getConstraint|TypeParameter.getConstraint|Available as an async method on TypeParameter, not as a public Type property. Narrow with type.isTypeParameter() before calling; the old method returned undefined for non-type-parameters. See packages/typescript/src/api/async/types.ts.
+Type.getDefault|TypeParameter.getDefault|Available as an async method on TypeParameter, not as a public Type property. Narrow with type.isTypeParameter() before calling; the old method returned undefined for non-type-parameters. See packages/typescript/src/api/async/types.ts.
+Type.getFlags|Type.flags|
+Type.isIntersection|Type.isIntersectionType|
+Type.isLiteral|Type.isLiteralType|
+Type.isNumberLiteral|Type.isNumberLiteralType|
+Type.isUnion|Type.isUnionType|
+NodeFactory.createAssertClause||AssertClause is removed in TypeScript 7
+NodeFactory.createAssertEntry||AssertEntry is removed in TypeScript 7
+NodeFactory.createBundle||outFile is removed in TypeScript 7
+NodeFactory.createCallSignature|ts.createCallSignatureDeclaration|
+NodeFactory.createCommaListExpression||CommaListExpression is removed in TypeScript 7
+NodeFactory.createConstructSignature|ts.createConstructSignatureDeclaration|
+NodeFactory.createImportTypeAssertionContainer||ImportTypeAssertionContainer is removed in TypeScript 7
+NodeFactory.createIndexSignature|ts.createIndexSignatureDeclaration|
+NodeFactory.createJSDocAuthorTag||@author no longer has a bespoke kind; it is a JSDocUnknownTag with tagName author. Use ts.createJSDocUnknownTag for the generic representation. Removed intentionally in microsoft/typescript-go#34: https://github.com/microsoft/typescript-go/pull/34
+NodeFactory.createJSDocClassTag||@class/@constructor no longer have a bespoke kind; they are JSDocUnknownTag nodes, not class-declaration factories. Use ts.createJSDocUnknownTag for the generic representation. Removed intentionally in microsoft/typescript-go#34: https://github.com/microsoft/typescript-go/pull/34
+NodeFactory.createJSDocComment|ts.createJSDoc|Renamed to createJSDoc. Comment is now a readonly JSDocComment[] (required); use [] for no comment and [ts.createJSDocText(text)] for a plain string. See packages/typescript/src/ast/factory.generated.ts and ast.generated.ts.
+NodeFactory.createJSDocEnumTag||@enum no longer has a bespoke kind or enum semantics; it is a JSDocUnknownTag, with any type text left in the comment. Use ts.createJSDocUnknownTag for the generic representation. Removed intentionally in microsoft/typescript-go#34: https://github.com/microsoft/typescript-go/pull/34
+NodeFactory.createJSDocFunctionType||JSDocFunctionType and Closure-style function(...) type syntax are not supported; this is not a rename to FunctionTypeNode. TypeScript-style function types use the ordinary function-type factories. Intentional removal: https://github.com/microsoft/typescript-go/pull/408
+NodeFactory.createJSDocMemberName|ts.createQualifiedName|The separate JSDocMemberName kind was removed. Class#member link names are represented by QualifiedName, just like dotted names; parseJSDocLinkName constructs QualifiedName for both. The AST no longer distinguishes the # separator. See tsc/internal/parser/jsdoc.go:742-760.
+NodeFactory.createJSDocNamepathType||JSDocNamepathType and its Closure namepath syntax were intentionally dropped, not renamed. No dedicated AST kind remains. See usage analysis in https://github.com/microsoft/typescript-go/pull/34
+NodeFactory.createJSDocUnknownType||The standalone JSDoc ? type and JSDocUnknownType kind were intentionally dropped; this is not the TypeScript unknown keyword or a rename to createKeywordTypeNode. See usage analysis in https://github.com/microsoft/typescript-go/pull/34
+NodeFactory.createJsxJsxClosingFragment|ts.createJsxClosingFragment|
+NodeFactory.createLoopVariable||The factory is stateless; generated-name and source/emit metadata behavior is not supported.
+NodeFactory.createMethodSignature|ts.createMethodSignatureDeclaration|Renamed to createMethodSignatureDeclaration. Export verified in packages/typescript/src/ast/factory.generated.ts; use the current signature (including postfix-token/type parameters as applicable).
+NodeFactory.createParenthesizedType|ts.createParenthesizedTypeNode|Renamed to createParenthesizedTypeNode. Export and corresponding type-node shape verified in packages/typescript/src/ast/factory.generated.ts.
+NodeFactory.createPropertySignature|ts.createPropertySignatureDeclaration|Renamed to createPropertySignatureDeclaration. Export verified in packages/typescript/src/ast/factory.generated.ts; use the current signature (including postfix-token/type parameters as applicable).
+NodeFactory.createStringLiteralFromNode||The factory is stateless; generated-name and source/emit metadata behavior is not supported.
+NodeFactory.createTempVariable||The factory is stateless; generated-name and source/emit metadata behavior is not supported.
+NodeFactory.createTemplateLiteralType|ts.createTemplateLiteralTypeNode|Renamed to createTemplateLiteralTypeNode. Export and corresponding type-node shape verified in packages/typescript/src/ast/factory.generated.ts.
+NodeFactory.createUniqueName||The factory is stateless; generated-name and source/emit metadata behavior is not supported.
+NodeFactory.createUniquePrivateName||The factory is stateless; generated-name and source/emit metadata behavior is not supported.
+NodeFactory.getGeneratedNameForNode||The factory is stateless; generated-name and source/emit metadata behavior is not supported.
+NodeFactory.getGeneratedPrivateNameForNode||The factory is stateless; generated-name and source/emit metadata behavior is not supported.
+NodeFactory.updateAssertClause||AssertClause is removed in TypeScript 7; same classification as the corresponding create method.
+NodeFactory.updateAssertEntry||AssertEntry is removed in TypeScript 7; same classification as the corresponding create method.
+NodeFactory.updateBundle||outFile is removed in TypeScript 7; same classification as the corresponding create method.
+NodeFactory.updateCallSignature|ts.updateCallSignatureDeclaration|Renamed to updateCallSignatureDeclaration. Export verified in packages/typescript/src/ast/factory.generated.ts; use the current signature (including postfix-token/type parameters as applicable).
+NodeFactory.updateCommaListExpression||CommaListExpression is removed in TypeScript 7; same classification as the corresponding create method.
+NodeFactory.updateConstructSignature|ts.updateConstructSignatureDeclaration|Renamed to updateConstructSignatureDeclaration. Export verified in packages/typescript/src/ast/factory.generated.ts; use the current signature (including postfix-token/type parameters as applicable).
+NodeFactory.updateImportTypeAssertionContainer||ImportTypeAssertionContainer is removed in TypeScript 7; same classification as the corresponding create method.
+NodeFactory.updateIndexSignature|ts.updateIndexSignatureDeclaration|Renamed to updateIndexSignatureDeclaration. Export verified in packages/typescript/src/ast/factory.generated.ts; use the current signature (including postfix-token/type parameters as applicable).
+NodeFactory.updateJSDocAuthorTag||@author no longer has a bespoke kind; it is a JSDocUnknownTag with tagName author. Use ts.updateJSDocUnknownTag for the generic representation. Removed intentionally in microsoft/typescript-go#34: https://github.com/microsoft/typescript-go/pull/34
+NodeFactory.updateJSDocClassTag||@class/@constructor no longer have a bespoke kind; they are JSDocUnknownTag nodes, not class-declaration factories. Use ts.updateJSDocUnknownTag for the generic representation. Removed intentionally in microsoft/typescript-go#34: https://github.com/microsoft/typescript-go/pull/34
+NodeFactory.updateJSDocComment|ts.updateJSDoc|Renamed to updateJSDoc. Comment is now a readonly JSDocComment[] (required); use [] for no comment and [ts.createJSDocText(text)] for a plain string. See packages/typescript/src/ast/factory.generated.ts and ast.generated.ts.
+NodeFactory.updateJSDocEnumTag||@enum no longer has a bespoke kind or enum semantics; it is a JSDocUnknownTag, with any type text left in the comment. Use ts.updateJSDocUnknownTag for the generic representation. Removed intentionally in microsoft/typescript-go#34: https://github.com/microsoft/typescript-go/pull/34
+NodeFactory.updateJSDocFunctionType||JSDocFunctionType and Closure-style function(...) type syntax are not supported; this is not a rename to FunctionTypeNode. TypeScript-style function types use the ordinary function-type factories. Intentional removal: https://github.com/microsoft/typescript-go/pull/408
+NodeFactory.updateJSDocMemberName|ts.updateQualifiedName|The separate JSDocMemberName kind was removed. Class#member link names are represented by QualifiedName, just like dotted names; parseJSDocLinkName constructs QualifiedName for both. The AST no longer distinguishes the # separator. See tsc/internal/parser/jsdoc.go:742-760.
+NodeFactory.updateJSDocNamepathType||JSDocNamepathType and its Closure namepath syntax were intentionally dropped, not renamed. No dedicated AST kind remains. See usage analysis in https://github.com/microsoft/typescript-go/pull/34
+NodeFactory.updateMethodSignature|ts.updateMethodSignatureDeclaration|Renamed to updateMethodSignatureDeclaration. Export verified in packages/typescript/src/ast/factory.generated.ts; use the current signature (including postfix-token/type parameters as applicable).
+NodeFactory.updateParenthesizedType|ts.updateParenthesizedTypeNode|Renamed to updateParenthesizedTypeNode. Export and corresponding type-node shape verified in packages/typescript/src/ast/factory.generated.ts.
+NodeFactory.updatePropertySignature|ts.updatePropertySignatureDeclaration|Renamed to updatePropertySignatureDeclaration. Export verified in packages/typescript/src/ast/factory.generated.ts; use the current signature (including postfix-token/type parameters as applicable).
+NodeFactory.updateTemplateLiteralType|ts.updateTemplateLiteralTypeNode|Renamed to updateTemplateLiteralTypeNode. Export and corresponding type-node shape verified in packages/typescript/src/ast/factory.generated.ts.
+ts.bundlerModuleNameResolver||Use `api.createModuleResolver`
+ts.classicNameResolver||Classic module resolution is removed from TypeScript 7
+ts.collapseTextChangeRangesAcrossMultipleVersions||Internal helper
+ts.createAbstractBuilder||SolutionBuilder is deferred for redesign
+ts.createBuilderStatusReporter||SolutionBuilder is deferred for redesign
+ts.createClassifier||No equivalent in TypeScript 7
+ts.createCompilerHost||No longer needed to create a program or customize its behavior
+ts.createDocumentRegistry||SourceFiles are automatically cached
+ts.createEmitAndSemanticDiagnosticsBuilderProgram||SolutionBuilder is deferred for redesign
+ts.createIncrementalCompilerHost||IncrementalProgram is deferred for redesign
+ts.createIncrementalProgram||IncrementalProgram is deferred for redesign
+ts.createLanguageService||Access a LanguageService from a Project
+ts.createLanguageServiceSourceFile||No equivalent concept in TypeScript 7
+ts.createModuleResolutionCache||Module resolution is cached only in the scope of a single program build in TypeScript 7
+ts.createPrinter|API.printer|
+ts.createSemanticDiagnosticsBuilderProgram||SolutionBuilder is deferred for redesign
+ts.createSolutionBuilder||SolutionBuilder is deferred for redesign
+ts.createSolutionBuilderHost||SolutionBuilder is deferred for redesign
+ts.createSolutionBuilderWithWatch||SolutionBuilder is deferred for redesign
+ts.createSolutionBuilderWithWatchHost||SolutionBuilder is deferred for redesign
+ts.createSourceMapSource||Constructs a plain JavaScript object for custom source-map ranges. Custom emit transforms and source-map-producing client printing are not supported; revisit with those capabilities.
+ts.createTextChangeRange||Internal helper, trivial plain JavaScript object
+ts.createTextSpan||Internal helper, trivial plain JavaScript object
+ts.createTextSpanFromBounds||Internal helper, trivial plain JavaScript object
+ts.createTypeReferenceDirectiveResolutionCache||Module resolution is only cached within a single Program build in TypeScript 7
+ts.createWatchCompilerHost||Watch APIs are deferred for redesign
+ts.createWatchProgram||Watch APIs are deferred for redesign
+ts.decodedTextSpanIntersectsWith||Internal helper
+ts.displayPartsToString||Display parts are not used in TypeScript 7
+ts.disposeEmitNodes||Emit metadata belongs to an explicit context rather than client parse-tree nodes. Use a fresh context for independent printing; source-file-wide cleanup of node-attached emit metadata is unnecessary.
+ts.forEachChild||Node.forEachChild is sufficient
+ts.formatDiagnostic||formatDiagnostics is sufficient
+ts.getConfigFileParsingDiagnostics|Program.getConfigFileParsingDiagnostics|
+ts.getConstantValue||Reads the legacy emitter's const-enum substitution cache, not semantic constant evaluation. Native emit rewrites accesses to literal nodes before printing; use Checker.getConstantValue for semantic queries.
+ts.getEmitHelpers||Inspects support code attached by transformation/downleveling. Custom emit transforms and helper-bearing client printing are not supported; revisit with those capabilities.
+ts.getJSDocClassTag||The bespoke JSDocClassTag kind and @class/@constructor semantics were intentionally removed. Such tags are available as JSDocUnknownTag through getJSDocTags, filtered by tagName.text. Same decision as the removed NodeFactory class-tag factories; https://github.com/microsoft/typescript-go/pull/34
+ts.getJSDocEnumTag||The bespoke JSDocEnumTag kind and @enum semantics were intentionally removed. Such tags are available as JSDocUnknownTag through getJSDocTags, filtered by tagName.text, without a structured enum typeExpression. Same decision as the removed NodeFactory enum-tag factories; https://github.com/microsoft/typescript-go/pull/34
+ts.getLineAndCharacterOfPosition||SourceFile.getLineAndCharacterOfPosition is sufficient
+ts.getModeForFileReference||Internal helper, trivially reimplementable in user code
+ts.getNameOfJSDocTypedef||Function not used in TypeScript 7
+ts.getParsedCommandLineOfConfigFile||Internal helper
+ts.getPositionOfLineAndCharacter||SourceFile.getPositionOfLineAndCharacter is sufficient
+ts.getSourceMapRange||Custom emit transforms and source-map-producing client printing are not supported. Revisit with mapped printing; editor-only range metadata can be held in an application-owned side table.
+ts.getSupportedCodeFixes||Only public for TS Server plugins; no longer needed
+ts.getSyntheticLeadingComments|EmitContext.getSyntheticLeadingComments|Pending microsoft/TypeScript#65447: use api.printer.createEmitContext() and pass the same context to printNode/printFile as { emitContext }; metadata belongs to the context, not the AST.
+ts.getSyntheticTrailingComments|EmitContext.getSyntheticTrailingComments|Pending microsoft/TypeScript#65447: use api.printer.createEmitContext() and pass the same context to printNode/printFile as { emitContext }; metadata belongs to the context, not the AST.
+ts.getTokenSourceMapRange||Token-specific mapping overrides depend on unsupported custom source-map emission. No product workload was verified in the inspected public sample; revisit on concrete demand.
+ts.getTypeParameterOwner||Function not used in TypeScript 7, trivially implementable in user code
+ts.hasJSDocParameterTags||Function not used in TypeScript 7, trivially reimplementable in user code
+ts.isAccessor|ts.isAccessorDeclaration|
+ts.isAssertClause||AssertClause is removed in TypeScript 7
+ts.isAssertEntry||AssertEntry is removed in TypeScript 7
+ts.isBuildCommand||Build APIs are deferred for redesign
+ts.isBundle||outFile is removed in TypeScript 7
+ts.isCommaListExpression||CommaListExpression is removed in TypeScript 7
+ts.isGetAccessor|ts.isGetAccessorDeclaration|
+ts.isImportTypeAssertionContainer||ImportTypeAssertionContainer is removed in TypeScript 7
+ts.isJSDocAuthorTag||The bespoke JSDoc author tag kind was intentionally removed. Such tags are represented by JSDocUnknownTag and can be identified by tagName.text; no dedicated kind predicate remains. Same decision as the removed tag factories/getters. https://github.com/microsoft/typescript-go/pull/34
+ts.isJSDocClassTag||The bespoke JSDoc class/constructor tag kind was intentionally removed. Such tags are represented by JSDocUnknownTag and can be identified by tagName.text; no dedicated kind predicate remains. Same decision as the removed tag factories/getters. https://github.com/microsoft/typescript-go/pull/34
+ts.isJSDocEnumTag||The bespoke JSDoc enum tag kind was intentionally removed. Such tags are represented by JSDocUnknownTag and can be identified by tagName.text; no dedicated kind predicate remains. Same decision as the removed tag factories/getters. https://github.com/microsoft/typescript-go/pull/34
+ts.isJSDocFunctionType||JSDocFunctionType and Closure-style function(...) type syntax are not supported. isFunctionTypeNode identifies TypeScript-style function types, not an equivalent of the removed syntax. https://github.com/microsoft/typescript-go/pull/408
+ts.isJSDocMemberName||The distinct JSDocMemberName kind was removed; JSDoc Class#member and dotted names are both QualifiedName nodes. Unlike the factory replacement, isQualifiedName is not an equivalent predicate: it also matches dotted names and the AST no longer retains the distinction. See tsc/internal/parser/jsdoc.go:742-760.
+ts.isJSDocNamepathType||JSDocNamepathType and its Closure namepath syntax were intentionally dropped; there is no corresponding node kind to test. https://github.com/microsoft/typescript-go/pull/34
+ts.isJSDocUnknownType||The standalone JSDoc ? type and JSDocUnknownType kind were intentionally dropped. The TypeScript unknown keyword is a different type, not a predicate rename. https://github.com/microsoft/typescript-go/pull/34
+ts.isMethodSignature|ts.isMethodSignatureDeclaration|
+ts.isParameter|ts.isParameterDeclaration|
+ts.isPropertySignature|ts.isPropertySignatureDeclaration|
+ts.isSetAccessor|ts.isSetAccessorDeclaration|
+ts.isTypeAssertionExpression|ts.isTypeAssertion|
+ts.moveEmitHelpers||Transfers support code between emission containers. Custom emit transforms and helper-bearing client printing are not supported; revisit with those capabilities.
+ts.nodeModuleNameResolver||Node module resolution is removed in TypeScript 7; use `api.createModuleResolver` with supported options
+ts.parseBuildCommand||Build APIs are deferred for redesign
+ts.preProcessFile||File preprocessing is not used in TypeScript 7
+ts.readBuilderProgram||Build APIs are deferred for redesign
+ts.removeEmitHelper||Removes support code from an emission container. Custom emit transforms and helper-bearing client printing are not supported; revisit with those capabilities.
+ts.resolveModuleName|ModuleResolver.resolveModuleName|Through `api.createModuleResolver`
+ts.resolveModuleNameFromCache||Module resolution results are not cached beyond a single program build in TypeScript 7
+ts.resolveProjectReferencePath||Internal helper; trivially reimplementable in user code
+ts.setConstantValue||Writes the legacy emitter's const-enum substitution cache. Native emit rewrites accesses to literal nodes before printing, so this cache setter has no equivalent purpose.
+ts.setEmitFlags|EmitContext.setEmitFlags|Pending microsoft/TypeScript#65447: use api.printer.createEmitContext() and pass the same context to printNode/printFile as { emitContext }; metadata belongs to the context, not the AST.
+ts.setSourceMapRange||Associates generated syntax with original source locations in emitted maps. Custom emit transforms and source-map-producing client printing are not supported; revisit with those capabilities.
+ts.setSyntheticLeadingComments|EmitContext.setSyntheticLeadingComments|Pending microsoft/TypeScript#65447: use api.printer.createEmitContext() and pass the same context to printNode/printFile as { emitContext }; metadata belongs to the context, not the AST. SynthesizedComment now requires both hasLeadingNewLine and hasTrailingNewLine.
+ts.setSyntheticTrailingComments|EmitContext.setSyntheticTrailingComments|Pending microsoft/TypeScript#65447: use api.printer.createEmitContext() and pass the same context to printNode/printFile as { emitContext }; metadata belongs to the context, not the AST. SynthesizedComment now requires both hasLeadingNewLine and hasTrailingNewLine.
+ts.setTextRange||Internal helper; Nodes should be considered immutable by user code
+ts.setTokenSourceMapRange||Token-specific mapping overrides depend on unsupported custom source-map emission. No product workload was verified in the inspected public sample; revisit on concrete demand.
+ts.textChangeRangeIsUnchanged||Internal helper
+ts.textChangeRangeNewSpan||Internal helper
+ts.textSpanContainsPosition||Internal helper, trivially reimplementable in user code
+ts.textSpanContainsTextSpan||Internal helper, trivially reimplementable in user code
+ts.textSpanEnd||Internal helper, trivially reimplementable in user code
+ts.textSpanIntersection||Internal helper, trivially reimplementable in user code
+ts.textSpanIntersectsWith||Internal helper, trivially reimplementable in user code
+ts.textSpanIntersectsWithPosition||Internal helper, trivially reimplementable in user code
+ts.textSpanIntersectsWithTextSpan||Internal helper, trivially reimplementable in user code
+ts.textSpanIsEmpty||Internal helper, trivially reimplementable in user code
+ts.textSpanOverlap||Internal helper, trivially reimplementable in user code
+ts.textSpanOverlapsWith||Internal helper, trivially reimplementable in user code
+ts.toEditorSettings||Internal helper, no longer needed
+ts.transform||Transform APIs are deferred
+ts.transpile||`api.transpileModule` is sufficient
+ts.updateLanguageServiceSourceFile||Incremental parsing is not used in TypeScript 7
+ts.validateLocaleAndSetLanguage||The locale cannot be set from the API in TypeScript 7
+ts.visitCommaListElements||CommaListExpression is removed in TypeScript 7
+ts.visitFunctionBody||Only needed for internal transforms
+ts.addSyntheticLeadingComment|EmitContext.addSyntheticLeadingComment|Pending microsoft/TypeScript#65447: use api.printer.createEmitContext() and pass the same context to printNode/printFile as { emitContext }; metadata belongs to the context, not the AST. Both hasTrailingNewLine and the additional hasLeadingNewLine argument are required.
+ts.addSyntheticTrailingComment|EmitContext.addSyntheticTrailingComment|Pending microsoft/TypeScript#65447: use api.printer.createEmitContext() and pass the same context to printNode/printFile as { emitContext }; metadata belongs to the context, not the AST. Both hasTrailingNewLine and the additional hasLeadingNewLine argument are required.
+ts.addEmitHelper||Attaches runtime support code for transformed output. Custom emit transforms and helper-bearing client printing are not supported; revisit with those capabilities.
+ts.addEmitHelpers||Propagates runtime support code requested during transformation. Custom emit transforms and helper-bearing client printing are not supported; revisit with those capabilities.
+ts.visitIterationBody||Only needed for internal transforms
+ts.visitLexicalEnvironment||Only needed for internal transforms
+ts.visitParameterList||Only needed for internal transforms
