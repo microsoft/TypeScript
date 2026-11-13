@@ -194,7 +194,8 @@ func TestCommandLineTermination(t *testing.T) {
 				args := strings.Fields(test.args)
 				pipePath := filepath.Join(projectDir, "api.sock")
 				if test.pipeAPI {
-					args = append(args, pipePath)
+					// Keep the socket address below the Unix path limit even with a long TMPDIR.
+					args = append(args, "api.sock")
 				}
 				if test.profiled {
 					args = append(args, "--pprofDir", filepath.Join(projectDir, "profiles"))
@@ -228,7 +229,7 @@ func TestCommandLineTermination(t *testing.T) {
 				} else if test.pipeAPI {
 					deadline := time.Now().Add(10 * time.Second)
 					for {
-						_, err := os.Stat(pipePath)
+						_, err := os.Stat(filepath.Join(pipePath, "socket"))
 						if err == nil {
 							break
 						}
