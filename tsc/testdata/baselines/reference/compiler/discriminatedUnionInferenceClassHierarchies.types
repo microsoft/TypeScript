@@ -1,0 +1,170 @@
+//// [tests/cases/compiler/discriminatedUnionInferenceClassHierarchies.ts] ////
+
+=== discriminatedUnionInferenceClassHierarchies.ts ===
+// The discriminant lives on the instance type behind a construct signature.
+declare class GlobalController<P, S> {
+>GlobalController : GlobalController<P, S>
+
+    isLocal: false;
+>isLocal : false
+>false : false
+
+    getProps(state: S, props: P): void;
+>getProps : (state: S, props: P) => void
+>state : S
+>props : P
+}
+declare class LocalController<P, S> {
+>LocalController : LocalController<P, S>
+
+    isLocal: true;
+>isLocal : true
+>true : true
+
+    getProps(props: P, state: S): void;
+>getProps : (props: P, state: S) => void
+>props : P
+>state : S
+}
+interface GlobalControllerClass<P, S> {
+    new (): GlobalController<P, S>;
+}
+interface LocalControllerClass<P, S> {
+    new (): LocalController<P, S>;
+}
+declare function createEnhancer<P, S>(Wrapper: GlobalControllerClass<P, S> | LocalControllerClass<P, S>): [P, S];
+>createEnhancer : <P, S>(Wrapper: GlobalControllerClass<P, S> | LocalControllerClass<P, S>) => [P, S]
+>Wrapper : GlobalControllerClass<P, S> | LocalControllerClass<P, S>
+
+class Fail extends LocalController<{ baz: any }, { bar: any }> {}
+>Fail : Fail
+>LocalController : LocalController<{ baz: any; }, { bar: any; }>
+>baz : any
+>bar : any
+
+const enhanced = createEnhancer(Fail);
+>enhanced : [{ bar: any; }, { baz: any; }]
+>createEnhancer(Fail) : [{ bar: any; }, { baz: any; }]
+>createEnhancer : <P, S>(Wrapper: GlobalControllerClass<P, S> | LocalControllerClass<P, S>) => [P, S]
+>Fail : typeof Fail
+
+class WorkaroundUnusedMethod extends LocalController<{ baz: any }, { bar: any }> {
+>WorkaroundUnusedMethod : WorkaroundUnusedMethod
+>LocalController : LocalController<{ baz: any; }, { bar: any; }>
+>baz : any
+>bar : any
+
+    _unused() {}
+>_unused : () => void
+}
+const enhancedUnusedMethod = createEnhancer(WorkaroundUnusedMethod);
+>enhancedUnusedMethod : [{ baz: any; }, { bar: any; }]
+>createEnhancer(WorkaroundUnusedMethod) : [{ baz: any; }, { bar: any; }]
+>createEnhancer : <P, S>(Wrapper: GlobalControllerClass<P, S> | LocalControllerClass<P, S>) => [P, S]
+>WorkaroundUnusedMethod : typeof WorkaroundUnusedMethod
+
+class WorkaroundChangeSignature extends LocalController<{ baz: any }, { bar: any }> {
+>WorkaroundChangeSignature : WorkaroundChangeSignature
+>LocalController : LocalController<{ baz: any; }, { bar: any; }>
+>baz : any
+>bar : any
+
+    getProps(props: { baz: any }) {}
+>getProps : (props: { baz: any; }) => void
+>props : { baz: any; }
+>baz : any
+}
+const enhancedChangedSignature = createEnhancer(WorkaroundChangeSignature);
+>enhancedChangedSignature : [{ baz: any; }, { baz: any; }]
+>createEnhancer(WorkaroundChangeSignature) : [{ baz: any; }, { baz: any; }]
+>createEnhancer : <P, S>(Wrapper: GlobalControllerClass<P, S> | LocalControllerClass<P, S>) => [P, S]
+>WorkaroundChangeSignature : typeof WorkaroundChangeSignature
+
+// Three type parameters with a default, as in the original report.
+declare abstract class GlobalStoreController<P, S, SS> {
+>GlobalStoreController : GlobalStoreController<P, S, SS>
+
+    isLocal: false;
+>isLocal : false
+>false : false
+
+    abstract getProps(storeState: SS, props: P, state: S): void;
+>getProps : (storeState: SS, props: P, state: S) => void
+>storeState : SS
+>props : P
+>state : S
+}
+interface GlobalStoreControllerClass<P, S, SS> {
+    new (): GlobalStoreController<P, S, SS>;
+}
+type ControllerClass<P, S, SS = {}> = GlobalStoreControllerClass<P, S, SS> | LocalControllerClass<P, S>;
+>ControllerClass : ControllerClass<P, S, SS>
+
+declare function createStoreEnhancer<P, S, SS = void>(Wrapper: ControllerClass<P, S, SS>): [P, S, SS];
+>createStoreEnhancer : <P, S, SS = void>(Wrapper: ControllerClass<P, S, SS>) => [P, S, SS]
+>Wrapper : ControllerClass<P, S, SS>
+
+const storeEnhanced = createStoreEnhancer(Fail);
+>storeEnhanced : [{ bar: any; }, { bar: any; }, { baz: any; }]
+>createStoreEnhancer(Fail) : [{ bar: any; }, { bar: any; }, { baz: any; }]
+>createStoreEnhancer : <P, S, SS = void>(Wrapper: ControllerClass<P, S, SS>) => [P, S, SS]
+>Fail : typeof Fail
+
+// Instances declared directly, through an alias, and through an extending interface.
+interface Local<T, U> {
+    isLocal: true;
+>isLocal : true
+>true : true
+
+    a: T;
+>a : T
+
+    b: U;
+>b : U
+}
+interface NotLocal<T, U> {
+    isLocal: false;
+>isLocal : false
+>false : false
+
+    a: U;
+>a : U
+
+    b: T;
+>b : T
+}
+declare function callme<T, U>(Wrapper: NotLocal<T, U> | Local<T, U>): [T, U];
+>callme : <T, U>(Wrapper: NotLocal<T, U> | Local<T, U>) => [T, U]
+>Wrapper : Local<T, U> | NotLocal<T, U>
+
+declare const directDecl: Local<string, number>;
+>directDecl : Local<string, number>
+
+const direct = callme(directDecl);
+>direct : [string, number]
+>callme(directDecl) : [string, number]
+>callme : <T, U>(Wrapper: NotLocal<T, U> | Local<T, U>) => [T, U]
+>directDecl : Local<string, number>
+
+type LocalStringNumberAlias = Local<string, number>;
+>LocalStringNumberAlias : LocalStringNumberAlias
+
+declare const typeAlias: LocalStringNumberAlias;
+>typeAlias : LocalStringNumberAlias
+
+const alias = callme(typeAlias);
+>alias : [string, number]
+>callme(typeAlias) : [string, number]
+>callme : <T, U>(Wrapper: NotLocal<T, U> | Local<T, U>) => [T, U]
+>typeAlias : LocalStringNumberAlias
+
+interface LocalStringNumberInterface extends Local<string, number> {}
+declare const interfaceDecl: LocalStringNumberInterface;
+>interfaceDecl : LocalStringNumberInterface
+
+const extended = callme(interfaceDecl);
+>extended : [string, number]
+>callme(interfaceDecl) : [string, number]
+>callme : <T, U>(Wrapper: NotLocal<T, U> | Local<T, U>) => [T, U]
+>interfaceDecl : LocalStringNumberInterface
+

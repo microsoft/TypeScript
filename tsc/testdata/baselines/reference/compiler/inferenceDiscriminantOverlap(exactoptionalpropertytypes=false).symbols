@@ -1,0 +1,334 @@
+//// [tests/cases/compiler/inferenceDiscriminantOverlap.ts] ////
+
+=== inferenceDiscriminantOverlap.ts ===
+declare const validOptionalSource: { tag: "a"; value: 1 } | { tag?: "a"; value: 2 };
+>validOptionalSource : Symbol(validOptionalSource, Decl(inferenceDiscriminantOverlap.ts, 0, 13))
+>tag : Symbol(tag, Decl(inferenceDiscriminantOverlap.ts, 0, 36))
+>value : Symbol(value, Decl(inferenceDiscriminantOverlap.ts, 0, 46))
+>tag : Symbol(tag, Decl(inferenceDiscriminantOverlap.ts, 0, 61))
+>value : Symbol(value, Decl(inferenceDiscriminantOverlap.ts, 0, 72))
+
+declare const mixedOptionalSource: { tag: "a"; value: 1 } | { tag?: "b"; value: 2 };
+>mixedOptionalSource : Symbol(mixedOptionalSource, Decl(inferenceDiscriminantOverlap.ts, 1, 13))
+>tag : Symbol(tag, Decl(inferenceDiscriminantOverlap.ts, 1, 36))
+>value : Symbol(value, Decl(inferenceDiscriminantOverlap.ts, 1, 46))
+>tag : Symbol(tag, Decl(inferenceDiscriminantOverlap.ts, 1, 61))
+>value : Symbol(value, Decl(inferenceDiscriminantOverlap.ts, 1, 72))
+
+declare const matchingOptionalSource: { tag: "a"; value: 1 } | { tag?: "a"; value: 2 } | { tag: "b"; value: 3 };
+>matchingOptionalSource : Symbol(matchingOptionalSource, Decl(inferenceDiscriminantOverlap.ts, 2, 13))
+>tag : Symbol(tag, Decl(inferenceDiscriminantOverlap.ts, 2, 39))
+>value : Symbol(value, Decl(inferenceDiscriminantOverlap.ts, 2, 49))
+>tag : Symbol(tag, Decl(inferenceDiscriminantOverlap.ts, 2, 64))
+>value : Symbol(value, Decl(inferenceDiscriminantOverlap.ts, 2, 75))
+>tag : Symbol(tag, Decl(inferenceDiscriminantOverlap.ts, 2, 90))
+>value : Symbol(value, Decl(inferenceDiscriminantOverlap.ts, 2, 100))
+
+declare const requiredMismatchSource: { tag: "a"; value: 1 } | { tag: "b"; value: 2 };
+>requiredMismatchSource : Symbol(requiredMismatchSource, Decl(inferenceDiscriminantOverlap.ts, 3, 13))
+>tag : Symbol(tag, Decl(inferenceDiscriminantOverlap.ts, 3, 39))
+>value : Symbol(value, Decl(inferenceDiscriminantOverlap.ts, 3, 49))
+>tag : Symbol(tag, Decl(inferenceDiscriminantOverlap.ts, 3, 64))
+>value : Symbol(value, Decl(inferenceDiscriminantOverlap.ts, 3, 74))
+
+declare const partiallyMatchingSource: { tag: "a" | "b"; value: 1 } | { tag: "b"; value: 2 };
+>partiallyMatchingSource : Symbol(partiallyMatchingSource, Decl(inferenceDiscriminantOverlap.ts, 4, 13))
+>tag : Symbol(tag, Decl(inferenceDiscriminantOverlap.ts, 4, 40))
+>value : Symbol(value, Decl(inferenceDiscriminantOverlap.ts, 4, 56))
+>tag : Symbol(tag, Decl(inferenceDiscriminantOverlap.ts, 4, 71))
+>value : Symbol(value, Decl(inferenceDiscriminantOverlap.ts, 4, 81))
+
+declare const undefinedRequiredSource: { tag: "a"; value: 1 } | { tag: undefined; value: 2 };
+>undefinedRequiredSource : Symbol(undefinedRequiredSource, Decl(inferenceDiscriminantOverlap.ts, 5, 13))
+>tag : Symbol(tag, Decl(inferenceDiscriminantOverlap.ts, 5, 40))
+>value : Symbol(value, Decl(inferenceDiscriminantOverlap.ts, 5, 50))
+>tag : Symbol(tag, Decl(inferenceDiscriminantOverlap.ts, 5, 65))
+>value : Symbol(value, Decl(inferenceDiscriminantOverlap.ts, 5, 81))
+
+declare const explicitUndefinedSource: { tag: "a"; value: 1 } | { tag: "b" | undefined; value: 2 };
+>explicitUndefinedSource : Symbol(explicitUndefinedSource, Decl(inferenceDiscriminantOverlap.ts, 6, 13))
+>tag : Symbol(tag, Decl(inferenceDiscriminantOverlap.ts, 6, 40))
+>value : Symbol(value, Decl(inferenceDiscriminantOverlap.ts, 6, 50))
+>tag : Symbol(tag, Decl(inferenceDiscriminantOverlap.ts, 6, 65))
+>value : Symbol(value, Decl(inferenceDiscriminantOverlap.ts, 6, 87))
+
+declare const optionalNeverSource: { tag: "a"; value: 1 } | { tag?: never; value: 2 };
+>optionalNeverSource : Symbol(optionalNeverSource, Decl(inferenceDiscriminantOverlap.ts, 7, 13))
+>tag : Symbol(tag, Decl(inferenceDiscriminantOverlap.ts, 7, 36))
+>value : Symbol(value, Decl(inferenceDiscriminantOverlap.ts, 7, 46))
+>tag : Symbol(tag, Decl(inferenceDiscriminantOverlap.ts, 7, 61))
+>value : Symbol(value, Decl(inferenceDiscriminantOverlap.ts, 7, 74))
+
+declare const indexedSource:
+>indexedSource : Symbol(indexedSource, Decl(inferenceDiscriminantOverlap.ts, 9, 13))
+
+    | { tag: "a"; value: "a" }
+>tag : Symbol(tag, Decl(inferenceDiscriminantOverlap.ts, 10, 7))
+>value : Symbol(value, Decl(inferenceDiscriminantOverlap.ts, 10, 17))
+
+    | { tag?: "a"; value: "a" }
+>tag : Symbol(tag, Decl(inferenceDiscriminantOverlap.ts, 11, 7))
+>value : Symbol(value, Decl(inferenceDiscriminantOverlap.ts, 11, 18))
+
+    | { [key: string]: "b"; value: "b" };
+>key : Symbol(key, Decl(inferenceDiscriminantOverlap.ts, 12, 9))
+>value : Symbol(value, Decl(inferenceDiscriminantOverlap.ts, 12, 27))
+
+declare const requiredPropertySource:
+>requiredPropertySource : Symbol(requiredPropertySource, Decl(inferenceDiscriminantOverlap.ts, 13, 13))
+
+    | { tag: "a"; value: "a" }
+>tag : Symbol(tag, Decl(inferenceDiscriminantOverlap.ts, 14, 7))
+>value : Symbol(value, Decl(inferenceDiscriminantOverlap.ts, 14, 17))
+
+    | { [key: string]: "b"; tag: "b"; value: "b" };
+>key : Symbol(key, Decl(inferenceDiscriminantOverlap.ts, 15, 9))
+>tag : Symbol(tag, Decl(inferenceDiscriminantOverlap.ts, 15, 27))
+>value : Symbol(value, Decl(inferenceDiscriminantOverlap.ts, 15, 37))
+
+declare const optionalPropertySource:
+>optionalPropertySource : Symbol(optionalPropertySource, Decl(inferenceDiscriminantOverlap.ts, 16, 13))
+
+    | { tag: "a"; value: "a" }
+>tag : Symbol(tag, Decl(inferenceDiscriminantOverlap.ts, 17, 7))
+>value : Symbol(value, Decl(inferenceDiscriminantOverlap.ts, 17, 17))
+
+    | { [key: string]: "a" | "b" | undefined; tag?: "a"; value: "b" };
+>key : Symbol(key, Decl(inferenceDiscriminantOverlap.ts, 18, 9))
+>tag : Symbol(tag, Decl(inferenceDiscriminantOverlap.ts, 18, 45))
+>value : Symbol(value, Decl(inferenceDiscriminantOverlap.ts, 18, 56))
+
+declare function inferOptionalSource<T>(value: { tag?: "a"; value: T }): T;
+>inferOptionalSource : Symbol(inferOptionalSource, Decl(inferenceDiscriminantOverlap.ts, 18, 70))
+>T : Symbol(T, Decl(inferenceDiscriminantOverlap.ts, 20, 37))
+>value : Symbol(value, Decl(inferenceDiscriminantOverlap.ts, 20, 40))
+>tag : Symbol(tag, Decl(inferenceDiscriminantOverlap.ts, 20, 48))
+>value : Symbol(value, Decl(inferenceDiscriminantOverlap.ts, 20, 59))
+>T : Symbol(T, Decl(inferenceDiscriminantOverlap.ts, 20, 37))
+>T : Symbol(T, Decl(inferenceDiscriminantOverlap.ts, 20, 37))
+
+const validOptional = inferOptionalSource(validOptionalSource);
+>validOptional : Symbol(validOptional, Decl(inferenceDiscriminantOverlap.ts, 21, 5))
+>inferOptionalSource : Symbol(inferOptionalSource, Decl(inferenceDiscriminantOverlap.ts, 18, 70))
+>validOptionalSource : Symbol(validOptionalSource, Decl(inferenceDiscriminantOverlap.ts, 0, 13))
+
+const mixedOptional = inferOptionalSource(mixedOptionalSource);
+>mixedOptional : Symbol(mixedOptional, Decl(inferenceDiscriminantOverlap.ts, 22, 5))
+>inferOptionalSource : Symbol(inferOptionalSource, Decl(inferenceDiscriminantOverlap.ts, 18, 70))
+>mixedOptionalSource : Symbol(mixedOptionalSource, Decl(inferenceDiscriminantOverlap.ts, 1, 13))
+
+const matchingOptional = inferOptionalSource(matchingOptionalSource);
+>matchingOptional : Symbol(matchingOptional, Decl(inferenceDiscriminantOverlap.ts, 23, 5))
+>inferOptionalSource : Symbol(inferOptionalSource, Decl(inferenceDiscriminantOverlap.ts, 18, 70))
+>matchingOptionalSource : Symbol(matchingOptionalSource, Decl(inferenceDiscriminantOverlap.ts, 2, 13))
+
+const requiredMismatch = inferOptionalSource(requiredMismatchSource);
+>requiredMismatch : Symbol(requiredMismatch, Decl(inferenceDiscriminantOverlap.ts, 24, 5))
+>inferOptionalSource : Symbol(inferOptionalSource, Decl(inferenceDiscriminantOverlap.ts, 18, 70))
+>requiredMismatchSource : Symbol(requiredMismatchSource, Decl(inferenceDiscriminantOverlap.ts, 3, 13))
+
+const requiredUndefined = inferOptionalSource(undefinedRequiredSource);
+>requiredUndefined : Symbol(requiredUndefined, Decl(inferenceDiscriminantOverlap.ts, 25, 5))
+>inferOptionalSource : Symbol(inferOptionalSource, Decl(inferenceDiscriminantOverlap.ts, 18, 70))
+>undefinedRequiredSource : Symbol(undefinedRequiredSource, Decl(inferenceDiscriminantOverlap.ts, 5, 13))
+
+const explicitUndefined = inferOptionalSource(explicitUndefinedSource);
+>explicitUndefined : Symbol(explicitUndefined, Decl(inferenceDiscriminantOverlap.ts, 26, 5))
+>inferOptionalSource : Symbol(inferOptionalSource, Decl(inferenceDiscriminantOverlap.ts, 18, 70))
+>explicitUndefinedSource : Symbol(explicitUndefinedSource, Decl(inferenceDiscriminantOverlap.ts, 6, 13))
+
+const optionalNever = inferOptionalSource(optionalNeverSource);
+>optionalNever : Symbol(optionalNever, Decl(inferenceDiscriminantOverlap.ts, 27, 5))
+>inferOptionalSource : Symbol(inferOptionalSource, Decl(inferenceDiscriminantOverlap.ts, 18, 70))
+>optionalNeverSource : Symbol(optionalNeverSource, Decl(inferenceDiscriminantOverlap.ts, 7, 13))
+
+const indexedOptional = inferOptionalSource(indexedSource); // error
+>indexedOptional : Symbol(indexedOptional, Decl(inferenceDiscriminantOverlap.ts, 28, 5))
+>inferOptionalSource : Symbol(inferOptionalSource, Decl(inferenceDiscriminantOverlap.ts, 18, 70))
+>indexedSource : Symbol(indexedSource, Decl(inferenceDiscriminantOverlap.ts, 9, 13))
+
+const declaredOptional = inferOptionalSource(optionalPropertySource); // error
+>declaredOptional : Symbol(declaredOptional, Decl(inferenceDiscriminantOverlap.ts, 29, 5))
+>inferOptionalSource : Symbol(inferOptionalSource, Decl(inferenceDiscriminantOverlap.ts, 18, 70))
+>optionalPropertySource : Symbol(optionalPropertySource, Decl(inferenceDiscriminantOverlap.ts, 16, 13))
+
+const declaredRequired = inferOptionalSource(requiredPropertySource); // error
+>declaredRequired : Symbol(declaredRequired, Decl(inferenceDiscriminantOverlap.ts, 30, 5))
+>inferOptionalSource : Symbol(inferOptionalSource, Decl(inferenceDiscriminantOverlap.ts, 18, 70))
+>requiredPropertySource : Symbol(requiredPropertySource, Decl(inferenceDiscriminantOverlap.ts, 13, 13))
+
+declare function inferRequiredSource<T>(value: { tag: "a"; value: T }): T;
+>inferRequiredSource : Symbol(inferRequiredSource, Decl(inferenceDiscriminantOverlap.ts, 30, 69))
+>T : Symbol(T, Decl(inferenceDiscriminantOverlap.ts, 32, 37))
+>value : Symbol(value, Decl(inferenceDiscriminantOverlap.ts, 32, 40))
+>tag : Symbol(tag, Decl(inferenceDiscriminantOverlap.ts, 32, 48))
+>value : Symbol(value, Decl(inferenceDiscriminantOverlap.ts, 32, 58))
+>T : Symbol(T, Decl(inferenceDiscriminantOverlap.ts, 32, 37))
+>T : Symbol(T, Decl(inferenceDiscriminantOverlap.ts, 32, 37))
+
+const partiallyMatching = inferRequiredSource(partiallyMatchingSource);
+>partiallyMatching : Symbol(partiallyMatching, Decl(inferenceDiscriminantOverlap.ts, 33, 5))
+>inferRequiredSource : Symbol(inferRequiredSource, Decl(inferenceDiscriminantOverlap.ts, 30, 69))
+>partiallyMatchingSource : Symbol(partiallyMatchingSource, Decl(inferenceDiscriminantOverlap.ts, 4, 13))
+
+const indexedRequired = inferRequiredSource(indexedSource); // error
+>indexedRequired : Symbol(indexedRequired, Decl(inferenceDiscriminantOverlap.ts, 34, 5))
+>inferRequiredSource : Symbol(inferRequiredSource, Decl(inferenceDiscriminantOverlap.ts, 30, 69))
+>indexedSource : Symbol(indexedSource, Decl(inferenceDiscriminantOverlap.ts, 9, 13))
+
+declare function makeOptional<const T>(): { tag?: "a"; value: T };
+>makeOptional : Symbol(makeOptional, Decl(inferenceDiscriminantOverlap.ts, 34, 59))
+>T : Symbol(T, Decl(inferenceDiscriminantOverlap.ts, 36, 30))
+>tag : Symbol(tag, Decl(inferenceDiscriminantOverlap.ts, 36, 43))
+>value : Symbol(value, Decl(inferenceDiscriminantOverlap.ts, 36, 54))
+>T : Symbol(T, Decl(inferenceDiscriminantOverlap.ts, 36, 30))
+
+export function optionalContext(): { tag: "a"; value: 1 } | { tag?: "b"; value: 2 } {
+>optionalContext : Symbol(optionalContext, Decl(inferenceDiscriminantOverlap.ts, 36, 66))
+>tag : Symbol(tag, Decl(inferenceDiscriminantOverlap.ts, 37, 36))
+>value : Symbol(value, Decl(inferenceDiscriminantOverlap.ts, 37, 46))
+>tag : Symbol(tag, Decl(inferenceDiscriminantOverlap.ts, 37, 61))
+>value : Symbol(value, Decl(inferenceDiscriminantOverlap.ts, 37, 72))
+
+    return makeOptional();
+>makeOptional : Symbol(makeOptional, Decl(inferenceDiscriminantOverlap.ts, 34, 59))
+}
+
+declare function inferOptionalTargets<A, B>(value: { tag: "a"; value: A } | { tag?: "b"; value: B }): [A, B];
+>inferOptionalTargets : Symbol(inferOptionalTargets, Decl(inferenceDiscriminantOverlap.ts, 39, 1))
+>A : Symbol(A, Decl(inferenceDiscriminantOverlap.ts, 41, 38))
+>B : Symbol(B, Decl(inferenceDiscriminantOverlap.ts, 41, 40))
+>value : Symbol(value, Decl(inferenceDiscriminantOverlap.ts, 41, 44))
+>tag : Symbol(tag, Decl(inferenceDiscriminantOverlap.ts, 41, 52))
+>value : Symbol(value, Decl(inferenceDiscriminantOverlap.ts, 41, 62))
+>A : Symbol(A, Decl(inferenceDiscriminantOverlap.ts, 41, 38))
+>tag : Symbol(tag, Decl(inferenceDiscriminantOverlap.ts, 41, 77))
+>value : Symbol(value, Decl(inferenceDiscriminantOverlap.ts, 41, 88))
+>B : Symbol(B, Decl(inferenceDiscriminantOverlap.ts, 41, 40))
+>A : Symbol(A, Decl(inferenceDiscriminantOverlap.ts, 41, 38))
+>B : Symbol(B, Decl(inferenceDiscriminantOverlap.ts, 41, 40))
+
+declare const optionalInput: { tag?: "a"; value: 42 };
+>optionalInput : Symbol(optionalInput, Decl(inferenceDiscriminantOverlap.ts, 42, 13))
+>tag : Symbol(tag, Decl(inferenceDiscriminantOverlap.ts, 42, 30))
+>value : Symbol(value, Decl(inferenceDiscriminantOverlap.ts, 42, 41))
+
+declare const optionalNeverInput: { tag?: never; value: 42 };
+>optionalNeverInput : Symbol(optionalNeverInput, Decl(inferenceDiscriminantOverlap.ts, 43, 13))
+>tag : Symbol(tag, Decl(inferenceDiscriminantOverlap.ts, 43, 35))
+>value : Symbol(value, Decl(inferenceDiscriminantOverlap.ts, 43, 48))
+
+const optionalTargetInference = inferOptionalTargets(optionalInput);
+>optionalTargetInference : Symbol(optionalTargetInference, Decl(inferenceDiscriminantOverlap.ts, 44, 5))
+>inferOptionalTargets : Symbol(inferOptionalTargets, Decl(inferenceDiscriminantOverlap.ts, 39, 1))
+>optionalInput : Symbol(optionalInput, Decl(inferenceDiscriminantOverlap.ts, 42, 13))
+
+const optionalNeverTargetInference = inferOptionalTargets(optionalNeverInput);
+>optionalNeverTargetInference : Symbol(optionalNeverTargetInference, Decl(inferenceDiscriminantOverlap.ts, 45, 5))
+>inferOptionalTargets : Symbol(inferOptionalTargets, Decl(inferenceDiscriminantOverlap.ts, 39, 1))
+>optionalNeverInput : Symbol(optionalNeverInput, Decl(inferenceDiscriminantOverlap.ts, 43, 13))
+
+// Return type inference runs with the contextual type as the source and the declared
+// return type as the target, so assignability has to hold the other way around.
+declare function makeTagged<const T>(value: T): { kind: "a"; value: T };
+>makeTagged : Symbol(makeTagged, Decl(inferenceDiscriminantOverlap.ts, 45, 78))
+>T : Symbol(T, Decl(inferenceDiscriminantOverlap.ts, 49, 28))
+>value : Symbol(value, Decl(inferenceDiscriminantOverlap.ts, 49, 37))
+>T : Symbol(T, Decl(inferenceDiscriminantOverlap.ts, 49, 28))
+>kind : Symbol(kind, Decl(inferenceDiscriminantOverlap.ts, 49, 49))
+>value : Symbol(value, Decl(inferenceDiscriminantOverlap.ts, 49, 60))
+>T : Symbol(T, Decl(inferenceDiscriminantOverlap.ts, 49, 28))
+
+declare function makeOptionalTagged<const T>(value: T): { kind?: "a"; value: T };
+>makeOptionalTagged : Symbol(makeOptionalTagged, Decl(inferenceDiscriminantOverlap.ts, 49, 72))
+>T : Symbol(T, Decl(inferenceDiscriminantOverlap.ts, 50, 36))
+>value : Symbol(value, Decl(inferenceDiscriminantOverlap.ts, 50, 45))
+>T : Symbol(T, Decl(inferenceDiscriminantOverlap.ts, 50, 36))
+>kind : Symbol(kind, Decl(inferenceDiscriminantOverlap.ts, 50, 57))
+>value : Symbol(value, Decl(inferenceDiscriminantOverlap.ts, 50, 69))
+>T : Symbol(T, Decl(inferenceDiscriminantOverlap.ts, 50, 36))
+
+declare function makeUnionTagged<const T>(value: T): { kind: "a" | undefined; value: T };
+>makeUnionTagged : Symbol(makeUnionTagged, Decl(inferenceDiscriminantOverlap.ts, 50, 81))
+>T : Symbol(T, Decl(inferenceDiscriminantOverlap.ts, 51, 33))
+>value : Symbol(value, Decl(inferenceDiscriminantOverlap.ts, 51, 42))
+>T : Symbol(T, Decl(inferenceDiscriminantOverlap.ts, 51, 33))
+>kind : Symbol(kind, Decl(inferenceDiscriminantOverlap.ts, 51, 54))
+>value : Symbol(value, Decl(inferenceDiscriminantOverlap.ts, 51, 77))
+>T : Symbol(T, Decl(inferenceDiscriminantOverlap.ts, 51, 33))
+
+export function broadContext(): { kind: string; value: string[] } | { kind: "a"; value: number } {
+>broadContext : Symbol(broadContext, Decl(inferenceDiscriminantOverlap.ts, 51, 89))
+>kind : Symbol(kind, Decl(inferenceDiscriminantOverlap.ts, 53, 33))
+>value : Symbol(value, Decl(inferenceDiscriminantOverlap.ts, 53, 47))
+>kind : Symbol(kind, Decl(inferenceDiscriminantOverlap.ts, 53, 69))
+>value : Symbol(value, Decl(inferenceDiscriminantOverlap.ts, 53, 80))
+
+    return makeTagged([]);
+>makeTagged : Symbol(makeTagged, Decl(inferenceDiscriminantOverlap.ts, 45, 78))
+}
+export function partialTagContext(): { kind: "a" | "b"; value: string[] } | { kind: "a"; value: number } {
+>partialTagContext : Symbol(partialTagContext, Decl(inferenceDiscriminantOverlap.ts, 55, 1))
+>kind : Symbol(kind, Decl(inferenceDiscriminantOverlap.ts, 56, 38))
+>value : Symbol(value, Decl(inferenceDiscriminantOverlap.ts, 56, 55))
+>kind : Symbol(kind, Decl(inferenceDiscriminantOverlap.ts, 56, 77))
+>value : Symbol(value, Decl(inferenceDiscriminantOverlap.ts, 56, 88))
+
+    return makeTagged([]);
+>makeTagged : Symbol(makeTagged, Decl(inferenceDiscriminantOverlap.ts, 45, 78))
+}
+export function unionTagContext(): { kind?: "a"; value: string[] } | { kind: "a"; value: number } {
+>unionTagContext : Symbol(unionTagContext, Decl(inferenceDiscriminantOverlap.ts, 58, 1))
+>kind : Symbol(kind, Decl(inferenceDiscriminantOverlap.ts, 59, 36))
+>value : Symbol(value, Decl(inferenceDiscriminantOverlap.ts, 59, 48))
+>kind : Symbol(kind, Decl(inferenceDiscriminantOverlap.ts, 59, 70))
+>value : Symbol(value, Decl(inferenceDiscriminantOverlap.ts, 59, 81))
+
+    return makeUnionTagged([]);
+>makeUnionTagged : Symbol(makeUnionTagged, Decl(inferenceDiscriminantOverlap.ts, 50, 81))
+}
+export function indexedContext():
+>indexedContext : Symbol(indexedContext, Decl(inferenceDiscriminantOverlap.ts, 61, 1))
+
+    | { [key: string]: string | string[]; value: string[] }
+>key : Symbol(key, Decl(inferenceDiscriminantOverlap.ts, 63, 9))
+>value : Symbol(value, Decl(inferenceDiscriminantOverlap.ts, 63, 41))
+
+    | { kind: "a"; value: number }
+>kind : Symbol(kind, Decl(inferenceDiscriminantOverlap.ts, 64, 7))
+>value : Symbol(value, Decl(inferenceDiscriminantOverlap.ts, 64, 18))
+
+    | { kind: "b"; value: boolean } {
+>kind : Symbol(kind, Decl(inferenceDiscriminantOverlap.ts, 65, 7))
+>value : Symbol(value, Decl(inferenceDiscriminantOverlap.ts, 65, 18))
+
+    return makeOptionalTagged([]);
+>makeOptionalTagged : Symbol(makeOptionalTagged, Decl(inferenceDiscriminantOverlap.ts, 49, 72))
+}
+
+declare function makeEither<const A, const B>(a: A, b: B): { kind: "a"; value: A } | { kind: "b"; value: B };
+>makeEither : Symbol(makeEither, Decl(inferenceDiscriminantOverlap.ts, 67, 1))
+>A : Symbol(A, Decl(inferenceDiscriminantOverlap.ts, 69, 28))
+>B : Symbol(B, Decl(inferenceDiscriminantOverlap.ts, 69, 36))
+>a : Symbol(a, Decl(inferenceDiscriminantOverlap.ts, 69, 46))
+>A : Symbol(A, Decl(inferenceDiscriminantOverlap.ts, 69, 28))
+>b : Symbol(b, Decl(inferenceDiscriminantOverlap.ts, 69, 51))
+>B : Symbol(B, Decl(inferenceDiscriminantOverlap.ts, 69, 36))
+>kind : Symbol(kind, Decl(inferenceDiscriminantOverlap.ts, 69, 60))
+>value : Symbol(value, Decl(inferenceDiscriminantOverlap.ts, 69, 71))
+>A : Symbol(A, Decl(inferenceDiscriminantOverlap.ts, 69, 28))
+>kind : Symbol(kind, Decl(inferenceDiscriminantOverlap.ts, 69, 86))
+>value : Symbol(value, Decl(inferenceDiscriminantOverlap.ts, 69, 97))
+>B : Symbol(B, Decl(inferenceDiscriminantOverlap.ts, 69, 36))
+
+export function eitherContext(): { kind: "a"; value: string[] } | { kind: "b"; value: number[] } {
+>eitherContext : Symbol(eitherContext, Decl(inferenceDiscriminantOverlap.ts, 69, 109))
+>kind : Symbol(kind, Decl(inferenceDiscriminantOverlap.ts, 70, 34))
+>value : Symbol(value, Decl(inferenceDiscriminantOverlap.ts, 70, 45))
+>kind : Symbol(kind, Decl(inferenceDiscriminantOverlap.ts, 70, 67))
+>value : Symbol(value, Decl(inferenceDiscriminantOverlap.ts, 70, 78))
+
+    return makeEither([], []);
+>makeEither : Symbol(makeEither, Decl(inferenceDiscriminantOverlap.ts, 67, 1))
+}
+
