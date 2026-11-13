@@ -100,15 +100,210 @@ func GetSymbolTable(data *SymbolTable) SymbolTable {
 }
 
 func GetMembers(symbol *Symbol, arena *SymbolExtraArena) SymbolTable {
-	return GetSymbolTable(&symbol.ensureExtra(arena).members)
+	extra := symbol.ensureExtra(arena)
+	if extra.members == nil {
+		extra.members = NewSymbolTableWithCapacity(membersCapacityHint(symbol))
+	}
+	return extra.members
 }
 
 func GetExports(symbol *Symbol, arena *SymbolExtraArena) SymbolTable {
-	return GetSymbolTable(&symbol.ensureExtra(arena).exports)
+	extra := symbol.ensureExtra(arena)
+	if extra.exports == nil {
+		extra.exports = NewSymbolTableWithCapacity(exportsCapacityHint(symbol))
+	}
+	return extra.exports
 }
 
 func GetLocals(container *Node) SymbolTable {
-	return GetSymbolTable(&container.LocalsContainerData().Locals)
+	data := container.LocalsContainerData()
+	if data.Locals == nil {
+		data.Locals = NewSymbolTableWithCapacity(localsCapacityHint(container))
+	}
+	return data.Locals
+}
+
+// The capacity hints below estimate from the declaration syntax how many entries a symbol table will
+// hold, so that the binder can fill a table without repeatedly growing it.
+
+func membersCapacityHint(symbol *Symbol) int {
+	decls := symbol.Declarations()
+	if len(decls) == 0 || decls[0] == nil {
+		return 0
+	}
+	decl := decls[0]
+	switch decl.Kind {
+	case KindClassDeclaration, KindClassExpression:
+		members, _ := classCapacityHints(decl)
+		return members
+	case KindInterfaceDeclaration, KindTypeLiteral:
+		return len(decl.Members())
+	case KindObjectLiteralExpression, KindJsxAttributes:
+		return len(decl.Properties())
+	}
+	return 0
+}
+
+func exportsCapacityHint(symbol *Symbol) int {
+	decls := symbol.Declarations()
+	if len(decls) == 0 || decls[0] == nil {
+		return 0
+	}
+	decl := decls[0]
+	switch decl.Kind {
+	case KindEnumDeclaration:
+		return len(decl.Members())
+	case KindClassDeclaration, KindClassExpression:
+		_, exports := classCapacityHints(decl)
+		return exports
+	case KindSourceFile, KindModuleDeclaration:
+		_, exports := moduleCapacityHints(decl)
+		return exports
+	}
+	return 0
+}
+
+func localsCapacityHint(container *Node) int {
+	switch container.Kind {
+	case KindSourceFile, KindModuleDeclaration:
+		locals, _ := moduleCapacityHints(container)
+		return locals
+	case KindFunctionDeclaration, KindMethodDeclaration, KindMethodSignature, KindConstructor,
+		KindGetAccessor, KindSetAccessor, KindFunctionExpression, KindArrowFunction,
+		KindCallSignature, KindConstructSignature, KindFunctionType, KindConstructorType:
+		n := len(container.TypeParameters())
+		if params := container.ParameterList(); params != nil {
+			n += len(params.Nodes)
+		}
+		return n
+	case KindTypeAliasDeclaration, KindJSTypeAliasDeclaration:
+		return len(container.TypeParameters())
+	}
+	return 0
+}
+
+// classCapacityHints estimates the number of instance members and static exports a class declares, mirroring
+// where the binder puts them (see declareClassMember).
+func classCapacityHints(class *Node) (members int, exports int) {
+	// Every class has a static 'prototype' property.
+	exports = 1
+	hasConstructor := false
+	for _, member := range class.Members() {
+		switch {
+		case member.Kind == KindSemicolonClassElement || member.Kind == KindClassStaticBlockDeclaration:
+			// Declares no symbol in either table.
+		case IsStatic(member):
+			exports++
+		case member.Kind == KindConstructor:
+			// All constructor overloads share a single symbol.
+			if !hasConstructor {
+				hasConstructor = true
+				members++
+			}
+			if params := member.ParameterList(); params != nil {
+				for _, param := range params.Nodes {
+					if param.ModifierFlags()&ModifierFlagsParameterPropertyModifier != 0 {
+						members++
+					}
+				}
+			}
+		default:
+			members++
+		}
+	}
+	return members, exports
+}
+
+// moduleCapacityHints estimates the number of locals and exports a source file or namespace declares by counting
+// the declarations among its top-level statements, mirroring where the binder puts them (see declareModuleMember).
+// Statements that declare nothing, such as expression statements, are not counted.
+func moduleCapacityHints(container *Node) (locals int, exports int) {
+	var statements []*Node
+	switch container.Kind {
+	case KindSourceFile:
+		statements = container.Statements()
+	case KindModuleDeclaration:
+		if body := container.Body(); body != nil && body.Kind == KindModuleBlock {
+			statements = body.Statements()
+		}
+	}
+	// Declarations in an ambient export context are implicitly exported.
+	exportContext := container.Flags&NodeFlagsExportContext != 0
+	hasExportStar := false
+	for _, statement := range statements {
+		count := 0
+		switch statement.Kind {
+		case KindVariableStatement:
+			count = len(statement.AsVariableStatement().DeclarationList.AsVariableDeclarationList().Declarations.Nodes)
+		case KindFunctionDeclaration, KindClassDeclaration, KindInterfaceDeclaration, KindTypeAliasDeclaration,
+			KindEnumDeclaration:
+			count = 1
+		case KindJSTypeAliasDeclaration:
+			// JSDoc typedefs are implicitly exported from modules.
+			locals++
+			exports++
+			continue
+		case KindModuleDeclaration:
+			if IsAmbientModule(statement) {
+				// Ambient modules and global augmentations are never exported.
+				locals++
+				continue
+			}
+			count = 1
+		case KindImportEqualsDeclaration:
+			// An exported import alias is only declared as an export.
+			if statement.ModifierFlags()&ModifierFlagsExport != 0 {
+				exports++
+			} else {
+				locals++
+			}
+			continue
+		case KindImportDeclaration, KindJSImportDeclaration:
+			if clause := statement.ImportClause(); clause != nil {
+				if clause.Name() != nil {
+					locals++
+				}
+				if bindings := clause.AsImportClause().NamedBindings; bindings != nil {
+					if bindings.Kind == KindNamedImports {
+						locals += len(bindings.Elements())
+					} else {
+						locals++
+					}
+				}
+			}
+			continue
+		case KindExportDeclaration:
+			switch clause := statement.AsExportDeclaration().ExportClause; {
+			case clause == nil:
+				// All `export *` declarations share a single entry.
+				hasExportStar = true
+			case clause.Kind == KindNamedExports:
+				exports += len(clause.Elements())
+			default:
+				exports++
+			}
+			continue
+		case KindExportAssignment:
+			exports++
+			continue
+		default:
+			continue
+		}
+		flags := statement.ModifierFlags()
+		if flags&ModifierFlagsExport == 0 && !exportContext {
+			locals += count
+			continue
+		}
+		exports += count
+		// An unnamed default export has no local symbol.
+		if flags&ModifierFlagsDefault == 0 || statement.Name() != nil {
+			locals += count
+		}
+	}
+	if hasExportStar {
+		exports++
+	}
+	return locals, exports
 }
 
 // Determines if a node is missing (either `nil` or empty)
