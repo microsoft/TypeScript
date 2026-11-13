@@ -776,11 +776,11 @@ func (c *Checker) isDeeplyNestedType(t *Type, stack []*Type, maxDepth int) bool 
 				}
 			}
 		} else {
-			identity := getRecursionIdentityFromTarget(target)
+			identity := c.getRecursionIdentityFromTarget(target)
 			count := 0
 			lastGeneration := 0
 			for _, t := range stack {
-				if hasMatchingRecursionIdentity(t, identity) {
+				if c.hasMatchingRecursionIdentity(t, identity) {
 					// We only count occurrences of a generation at least that of the previous occurrence, since
 					// newer instantiations caused by recursion are built from the previous ones, whereas nested
 					// type arguments are older than the types they are arguments of.
@@ -897,21 +897,21 @@ func (c *Checker) deeplyNestedStart(t *Type, stack []*Type, maxDepth int) int {
 	return 0
 }
 
-func hasMatchingRecursionIdentity(t *Type, identity RecursionId) bool {
+func (c *Checker) hasMatchingRecursionIdentity(t *Type, identity RecursionId) bool {
 	target := getRecursionIdentityTarget(t)
 	if target.flags&TypeFlagsIntersection != 0 {
 		for _, t := range target.Types() {
-			if hasMatchingRecursionIdentity(t, identity) {
+			if c.hasMatchingRecursionIdentity(t, identity) {
 				return true
 			}
 		}
 		return false
 	}
-	return getRecursionIdentityFromTarget(target) == identity
+	return c.getRecursionIdentityFromTarget(target) == identity
 }
 
-func getRecursionIdentity(t *Type) RecursionId {
-	return getRecursionIdentityFromTarget(getRecursionIdentityTarget(t))
+func (c *Checker) getRecursionIdentity(t *Type) RecursionId {
+	return c.getRecursionIdentityFromTarget(getRecursionIdentityTarget(t))
 }
 
 // Get the recursion identity target type from a type. Recursively (a) obtain the target object type of an
@@ -940,7 +940,7 @@ func getRecursionIdentityTarget(t *Type) *Type {
 // instantiations of that type have the same recursion identity. The default recursion identity is the object
 // identity of the type, meaning that every type is unique. Generally, types with constituents that could circularly
 // reference the type have a recursion identity that differs from the object identity.
-func getRecursionIdentityFromTarget(t *Type) RecursionId {
+func (c *Checker) getRecursionIdentityFromTarget(t *Type) RecursionId {
 	// Object and array literals are known not to contain recursive references and don't need a recursion identity.
 	if t.flags&TypeFlagsObject != 0 && !isObjectOrArrayLiteralType(t) {
 		if t.objectFlags&ObjectFlagsReference != 0 && t.AsTypeReference().node != nil {
@@ -949,14 +949,18 @@ func getRecursionIdentityFromTarget(t *Type) RecursionId {
 			// unique AST node.
 			return asRecursionId(t.AsTypeReference().node)
 		}
-		if t.symbol != nil && !(t.objectFlags&ObjectFlagsAnonymous != 0 && t.symbol.Flags()&ast.SymbolFlagsClass != 0) && t.objectFlags&ObjectFlagsFromTypeNode == 0 {
+		// A type reference whose type arguments were not themselves
+		// instantiated, such as one written out in a type node, cannot be the
+		// source of generative recursion, so it is tracked by itself. Type
+		// references are interned, so this depends on the type arguments
+		// rather than on how the reference was first created.
+		generative := t.objectFlags&ObjectFlagsReference == 0 || c.typeGeneration(t) > 1
+		if t.symbol != nil && !(t.objectFlags&ObjectFlagsAnonymous != 0 && t.symbol.Flags()&ast.SymbolFlagsClass != 0) && generative {
 			// We track object types that have a symbol by that symbol (representing the origin of the type), but
-			// exclude the static sides of classes (since they share their symbols with the instance sides) and type
-			// references that originate in resolution of AST type nodes (since such type nodes cannot be the source
-			// of generative recursion without first being instantiated).
+			// exclude the static sides of classes (since they share their symbols with the instance sides).
 			return asRecursionId(t.symbol)
 		}
-		if isTupleType(t) && t.objectFlags&ObjectFlagsFromTypeNode == 0 {
+		if isTupleType(t) && generative {
 			return asRecursionId(t.Target())
 		}
 	}
