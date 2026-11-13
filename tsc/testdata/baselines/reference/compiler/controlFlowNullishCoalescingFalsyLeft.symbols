@@ -1,0 +1,401 @@
+//// [tests/cases/compiler/controlFlowNullishCoalescingFalsyLeft.ts] ////
+
+=== controlFlowNullishCoalescingFalsyLeft.ts ===
+declare function c(): boolean;
+>c : Symbol(c, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 0, 0))
+
+declare function d(): boolean | undefined;
+>d : Symbol(d, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 0, 30))
+
+declare function u(x: undefined): boolean;
+>u : Symbol(u, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 1, 42))
+>x : Symbol(x, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 2, 19))
+
+// https://github.com/microsoft/TypeScript/issues/65402
+
+function f1() {
+>f1 : Symbol(f1, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 2, 42))
+
+    while (c() ?? (c() || true)) {}
+>c : Symbol(c, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 0, 0))
+>c : Symbol(c, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 0, 0))
+
+    c(); // Reachable
+>c : Symbol(c, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 0, 0))
+}
+
+function f2(a: "" | undefined, b: boolean) {
+>f2 : Symbol(f2, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 9, 1))
+>a : Symbol(a, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 11, 12))
+>b : Symbol(b, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 11, 30))
+
+    if (a ?? b) {} else {
+>a : Symbol(a, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 11, 12))
+>b : Symbol(b, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 11, 30))
+
+        const x: undefined = a; // Error
+>x : Symbol(x, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 13, 13))
+>a : Symbol(a, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 11, 12))
+    }
+}
+
+// Narrowing of a falsy, non-nullish left operand
+
+function f3(a: boolean | undefined, b: boolean) {
+>f3 : Symbol(f3, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 15, 1))
+>a : Symbol(a, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 19, 12))
+>b : Symbol(b, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 19, 35))
+
+    if (a ?? b) {
+>a : Symbol(a, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 19, 12))
+>b : Symbol(b, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 19, 35))
+
+        a; // boolean | undefined
+>a : Symbol(a, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 19, 12))
+    }
+    else {
+        a; // false | undefined
+>a : Symbol(a, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 19, 12))
+    }
+}
+
+function f4(a: string | number | undefined) {
+>f4 : Symbol(f4, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 26, 1))
+>a : Symbol(a, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 28, 12))
+
+    if (a ?? (c() || true)) {
+>a : Symbol(a, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 28, 12))
+>c : Symbol(c, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 0, 0))
+
+        a; // string | number | undefined
+>a : Symbol(a, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 28, 12))
+    }
+    else {
+        a; // string | number
+>a : Symbol(a, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 28, 12))
+    }
+}
+
+function f5(a: object | undefined, b: boolean) {
+>f5 : Symbol(f5, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 35, 1))
+>a : Symbol(a, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 37, 12))
+>b : Symbol(b, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 37, 34))
+
+    if (a ?? b) {}
+>a : Symbol(a, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 37, 12))
+>b : Symbol(b, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 37, 34))
+
+    else {
+        a; // undefined
+>a : Symbol(a, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 37, 12))
+
+        const r: false = b; // Error, as with `if (a && b)` when `a: object`
+>r : Symbol(r, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 41, 13))
+>b : Symbol(b, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 37, 34))
+    }
+}
+
+function f6(o: { p?: number }, b: boolean) {
+>f6 : Symbol(f6, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 43, 1))
+>o : Symbol(o, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 45, 12))
+>p : Symbol(p, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 45, 16))
+>b : Symbol(b, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 45, 30))
+
+    if (o.p ?? b) {}
+>o.p : Symbol(p, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 45, 16))
+>o : Symbol(o, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 45, 12))
+>p : Symbol(p, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 45, 16))
+>b : Symbol(b, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 45, 30))
+
+    else {
+        o.p; // number | undefined
+>o.p : Symbol(p, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 45, 16))
+>o : Symbol(o, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 45, 12))
+>p : Symbol(p, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 45, 16))
+    }
+}
+
+function f7(a: "" | boolean | undefined, b: boolean) {
+>f7 : Symbol(f7, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 50, 1))
+>a : Symbol(a, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 52, 12))
+>b : Symbol(b, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 52, 40))
+
+    if (a ??= b) {
+>a : Symbol(a, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 52, 12))
+>b : Symbol(b, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 52, 40))
+
+        a; // "" | boolean
+>a : Symbol(a, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 52, 12))
+    }
+    else {
+        a; // "" | false
+>a : Symbol(a, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 52, 12))
+    }
+}
+
+// Literal left operands
+
+function f8() {
+>f8 : Symbol(f8, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 59, 1))
+
+    while (true ?? (c() || true)) {}
+>c : Symbol(c, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 0, 0))
+
+    c(); // Unreachable
+>c : Symbol(c, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 0, 0))
+}
+
+function f9() {
+>f9 : Symbol(f9, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 66, 1))
+
+    while (false ?? (c() || true)) {}
+>c : Symbol(c, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 0, 0))
+
+    c(); // Reachable
+>c : Symbol(c, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 0, 0))
+}
+
+function f10() {
+>f10 : Symbol(f10, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 71, 1))
+
+    while (null ?? (c() || true)) {}
+>c : Symbol(c, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 0, 0))
+
+    c(); // Unreachable
+>c : Symbol(c, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 0, 0))
+}
+
+// Logical left operands
+
+function f11() {
+>f11 : Symbol(f11, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 76, 1))
+
+    while ((c() || 0) ?? (c() || true)) {}
+>c : Symbol(c, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 0, 0))
+>c : Symbol(c, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 0, 0))
+
+    c(); // Reachable
+>c : Symbol(c, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 0, 0))
+}
+
+function f12() {
+>f12 : Symbol(f12, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 83, 1))
+
+    while (d() ?? d() ?? (c() || true)) {}
+>d : Symbol(d, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 0, 30))
+>d : Symbol(d, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 0, 30))
+>c : Symbol(c, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 0, 0))
+
+    c(); // Reachable
+>c : Symbol(c, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 0, 0))
+}
+
+function f13(a: "" | undefined, b: "" | undefined) {
+>f13 : Symbol(f13, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 88, 1))
+>a : Symbol(a, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 90, 13))
+>b : Symbol(b, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 90, 31))
+
+    if (a ?? b ?? u(a)) {
+>a : Symbol(a, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 90, 13))
+>b : Symbol(b, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 90, 31))
+>u : Symbol(u, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 1, 42))
+>a : Symbol(a, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 90, 13))
+
+        a; // "" | undefined
+>a : Symbol(a, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 90, 13))
+    }
+    else {
+        a; // "" | undefined
+>a : Symbol(a, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 90, 13))
+
+        b; // "" | undefined
+>b : Symbol(b, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 90, 31))
+    }
+    const r = a ?? b ?? u(a);
+>r : Symbol(r, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 98, 9))
+>a : Symbol(a, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 90, 13))
+>b : Symbol(b, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 90, 31))
+>u : Symbol(u, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 1, 42))
+>a : Symbol(a, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 90, 13))
+}
+
+function f14(x: boolean, z: 0 | undefined) {
+>f14 : Symbol(f14, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 99, 1))
+>x : Symbol(x, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 101, 13))
+>z : Symbol(z, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 101, 24))
+
+    let y: 0 | 1 | undefined;
+>y : Symbol(y, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 102, 7))
+
+    (x || (y = z)) ?? (y = 1);
+>x : Symbol(x, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 101, 13))
+>y : Symbol(y, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 102, 7))
+>z : Symbol(z, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 101, 24))
+>y : Symbol(y, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 102, 7))
+
+    y; // 0 | 1 | undefined
+>y : Symbol(y, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 102, 7))
+}
+
+// Nested in logical expressions
+
+function f15(a: "" | undefined, b: true, d: boolean) {
+>f15 : Symbol(f15, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 105, 1))
+>a : Symbol(a, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 109, 13))
+>b : Symbol(b, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 109, 31))
+>d : Symbol(d, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 109, 40))
+
+    if ((a ?? b) || d) {}
+>a : Symbol(a, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 109, 13))
+>b : Symbol(b, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 109, 31))
+>d : Symbol(d, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 109, 40))
+
+    else {
+        a; // "" | undefined
+>a : Symbol(a, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 109, 13))
+    }
+}
+
+// Expressions of optional chains only test for nullishness
+
+function f16(a: "" | undefined) {
+>f16 : Symbol(f16, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 114, 1))
+>a : Symbol(a, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 118, 13))
+
+    let b: 0 | 1 = 0;
+>b : Symbol(b, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 119, 7))
+
+    if ((a ?? (b = 1, ""))?.[b = 1]) {}
+>a : Symbol(a, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 118, 13))
+>b : Symbol(b, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 119, 7))
+>b : Symbol(b, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 119, 7))
+
+    else {
+        const one: 1 = b;
+>one : Symbol(one, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 122, 13))
+>b : Symbol(b, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 119, 7))
+    }
+}
+
+function f17(a: "" | undefined, b: "" | undefined) {
+>f17 : Symbol(f17, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 124, 1))
+>a : Symbol(a, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 126, 13))
+>b : Symbol(b, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 126, 31))
+
+    (a ?? b ?? u(a))?.valueOf();
+>(a ?? b ?? u(a))?.valueOf : Symbol(valueOf, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 126, 13))
+>b : Symbol(b, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 126, 31))
+>u : Symbol(u, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 1, 42))
+>a : Symbol(a, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 126, 13))
+>valueOf : Symbol(valueOf, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+
+// Parenthesized literal left operands
+
+function f18() {
+>f18 : Symbol(f18, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 128, 1))
+
+    while (((true)) ?? (c() || true)) {}
+>c : Symbol(c, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 0, 0))
+
+    c(); // Unreachable
+>c : Symbol(c, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 0, 0))
+}
+
+function f19() {
+>f19 : Symbol(f19, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 135, 1))
+
+    while (((null)) ?? (c() || true)) {}
+>c : Symbol(c, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 0, 0))
+
+    c(); // Unreachable
+>c : Symbol(c, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 0, 0))
+}
+
+function f20() {
+>f20 : Symbol(f20, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 140, 1))
+
+    while (((false)) ?? (c() || true)) {}
+>c : Symbol(c, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 0, 0))
+
+    c(); // Reachable
+>c : Symbol(c, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 0, 0))
+}
+
+// Optional-chain side effects still occur when nested in another ??
+
+function f21(a: "" | undefined) {
+>f21 : Symbol(f21, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 145, 1))
+>a : Symbol(a, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 149, 13))
+
+    let b: 0 | 1 = 0;
+>b : Symbol(b, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 150, 7))
+
+    (a ?? (b = 1, ""))?.[b = 1] ?? false;
+>a : Symbol(a, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 149, 13))
+>b : Symbol(b, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 150, 7))
+>b : Symbol(b, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 150, 7))
+
+    const one: 1 = b;
+>one : Symbol(one, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 152, 9))
+>b : Symbol(b, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 150, 7))
+}
+
+function f22(a: "" | undefined) {
+>f22 : Symbol(f22, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 153, 1))
+>a : Symbol(a, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 155, 13))
+
+    let b: 0 | 1 = 0;
+>b : Symbol(b, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 156, 7))
+
+    (a ?? (b = 1, ""))?.charAt(b = 1) ?? false;
+>(a ?? (b = 1, ""))?.charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 155, 13))
+>b : Symbol(b, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 156, 7))
+>charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
+>b : Symbol(b, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 156, 7))
+
+    const one: 1 = b;
+>one : Symbol(one, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 158, 9))
+>b : Symbol(b, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 156, 7))
+}
+
+function f23(u: { tag: ""; empty: 1 } | { tag: "ok" }) {
+>f23 : Symbol(f23, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 159, 1))
+>u : Symbol(u, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 161, 13))
+>tag : Symbol(tag, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 161, 17))
+>empty : Symbol(empty, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 161, 26))
+>tag : Symbol(tag, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 161, 41))
+
+    if ((u.tag) ?? (false || true)) {} else {
+>u.tag : Symbol(tag, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 161, 17), Decl(controlFlowNullishCoalescingFalsyLeft.ts, 161, 41))
+>u : Symbol(u, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 161, 13))
+>tag : Symbol(tag, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 161, 17), Decl(controlFlowNullishCoalescingFalsyLeft.ts, 161, 41))
+
+        u.empty;
+>u.empty : Symbol(empty, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 161, 26))
+>u : Symbol(u, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 161, 13))
+>empty : Symbol(empty, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 161, 26))
+    }
+}
+
+function f24(u: { tag: ""; empty: 1 } | { tag: "ok" }) {
+>f24 : Symbol(f24, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 165, 1))
+>u : Symbol(u, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 167, 13))
+>tag : Symbol(tag, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 167, 17))
+>empty : Symbol(empty, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 167, 26))
+>tag : Symbol(tag, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 167, 41))
+
+    if (u.tag! ?? (false || true)) {} else {
+>u.tag : Symbol(tag, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 167, 17), Decl(controlFlowNullishCoalescingFalsyLeft.ts, 167, 41))
+>u : Symbol(u, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 167, 13))
+>tag : Symbol(tag, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 167, 17), Decl(controlFlowNullishCoalescingFalsyLeft.ts, 167, 41))
+
+        u.empty;
+>u.empty : Symbol(empty, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 167, 26))
+>u : Symbol(u, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 167, 13))
+>empty : Symbol(empty, Decl(controlFlowNullishCoalescingFalsyLeft.ts, 167, 26))
+    }
+}
+

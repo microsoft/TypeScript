@@ -20,6 +20,7 @@ const (
 	FlowFlagsReduceLabel    FlowFlags = 1 << 10 // Temporarily reduce antecedents of label
 	FlowFlagsReferenced     FlowFlags = 1 << 11 // Referenced as antecedent once
 	FlowFlagsShared         FlowFlags = 1 << 12 // Referenced as antecedent more than once
+	FlowFlagsNonNullish     FlowFlags = 1 << 13 // With FalseCondition, falsy but not nullish left operand of ?? or ??=
 	FlowFlagsLabel                    = FlowFlagsBranchLabel | FlowFlagsLoopLabel
 	FlowFlagsCondition                = FlowFlagsTrueCondition | FlowFlagsFalseCondition
 )
