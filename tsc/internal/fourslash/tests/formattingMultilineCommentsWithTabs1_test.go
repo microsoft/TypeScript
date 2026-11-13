@@ -7,6 +7,16 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/testutil"
 )
 
+func TestFormattingMultilineCommentWithMixedIndentation(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = "function f() {\n \t/* comment\n     * continuation\n     */\n}"
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.FormatDocument(t, "")
+	f.VerifyCurrentFileContent(t, "function f() {\n    /* comment\n     * continuation\n     */\n}")
+}
+
 func TestFormattingMultilineCommentsWithTabs1(t *testing.T) {
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
