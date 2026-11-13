@@ -13,7 +13,7 @@ export class D { }
     },
 }
 
-tsgo -i
+tsc -i
 ExitStatus:: DiagnosticsPresent_OutputsSkipped
 Output::
 [96mfile1.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType '"hello"' is not assignable to type '30'.
@@ -143,7 +143,7 @@ Signatures::
 Edit [0]:: delete file without error
 //// [/home/src/workspaces/project/file2.ts] *deleted*
 
-tsgo -i
+tsc -i
 ExitStatus:: DiagnosticsPresent_OutputsSkipped
 Output::
 [96mfile1.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType '"hello"' is not assignable to type '30'.

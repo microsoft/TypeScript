@@ -613,7 +613,7 @@ func (s *snapshotFSBuilder) reloadEntryIfContentChanged(entry *dirty.SyncMapEntr
 	return changed
 }
 
-// expandRealpathAliases adds synthetic URIs to the Changed, Created, and Deleted sets for
+// expandRealpathAliases adds synthetic URIs to the Changed, Created, Deleted, and DiskChanged sets for
 // files that were accessed through node_modules symlinks. When a watch event arrives
 // using a realpath, this expands it to include the symlink-based path so that
 // downstream consumers (markDirtyFiles, markFilesChanged) can find cached entries.
@@ -643,6 +643,7 @@ func (s *SnapshotFS) expandRealpathAliases(change FileChangeSummary) FileChangeS
 	expandSet(&change.Changed)
 	expandSet(&change.Created)
 	expandSet(&change.Deleted)
+	expandSet(&change.DiskChanged)
 
 	if change.Created.Len() > 0 {
 		createdDirectories := collections.NewSetWithSizeHint[tspath.PathKey](change.Created.Len())

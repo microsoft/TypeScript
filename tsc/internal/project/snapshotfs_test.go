@@ -1183,12 +1183,15 @@ func TestRealpathAliasLifecycle(t *testing.T) {
 		// Simulate a watch event on the REALPATH.
 		change := FileChangeSummary{}
 		change.Changed.Add("file:///packages/mylib/package.json")
+		change.DiskChanged.Add("file:///packages/mylib/package.json")
 
 		expanded := snapshot.expandRealpathAliases(change)
 
 		// Should now also contain the symlink path.
 		assert.Assert(t, expanded.Changed.Has("file:///packages/mylib/package.json"), "original event should remain")
 		assert.Assert(t, expanded.Changed.Has("file:///project/node_modules/mylib/package.json"), "symlink event should be added")
+		assert.Assert(t, expanded.DiskChanged.Has("file:///packages/mylib/package.json"), "original disk event should remain")
+		assert.Assert(t, expanded.DiskChanged.Has("file:///project/node_modules/mylib/package.json"), "symlink disk event should be added")
 	})
 
 	t.Run("expandRealpathAliases expands delete events", func(t *testing.T) {

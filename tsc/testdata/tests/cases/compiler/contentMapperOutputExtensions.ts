@@ -34,6 +34,7 @@ export interface CardProps { title: string }
 export declare const Card: (props: CardProps) => string;
 
 // @Filename: /Widget.y.z
+// @box-extension: .mts
 export declare const Widget: () => string;
 
 // @Filename: /typed.ts

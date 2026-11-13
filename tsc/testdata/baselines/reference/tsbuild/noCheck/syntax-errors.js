@@ -13,7 +13,7 @@ export const b = 10;
     }
 }
 
-tsgo -b -v --noCheck
+tsc -b -v --noCheck
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -100,7 +100,7 @@ Signatures::
 
 Edit [0]:: no change
 
-tsgo -b -v --noCheck
+tsc -b -v --noCheck
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -137,7 +137,7 @@ Edit [1]:: Fix `a` error with noCheck
 //// [/home/src/workspaces/project/a.ts] *modified* 
 export const a = "hello";
 
-tsgo -b -v --noCheck
+tsc -b -v --noCheck
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -186,7 +186,7 @@ Signatures::
 
 Edit [2]:: no change
 
-tsgo -b -v --noCheck
+tsc -b -v --noCheck
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -199,7 +199,7 @@ Output::
 
 Edit [3]:: No Change run with checking
 
-tsgo -b -v
+tsc -b -v
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -245,7 +245,7 @@ Signatures::
 
 Edit [4]:: No Change run with checking
 
-tsgo -b -v
+tsc -b -v
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -258,7 +258,7 @@ Output::
 
 Edit [5]:: no change
 
-tsgo -b -v --noCheck
+tsc -b -v --noCheck
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -273,7 +273,7 @@ Edit [6]:: Introduce error with noCheck
 //// [/home/src/workspaces/project/a.ts] *modified* 
 export const a = "hello
 
-tsgo -b -v --noCheck
+tsc -b -v --noCheck
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -331,7 +331,7 @@ Signatures::
 
 Edit [7]:: no change
 
-tsgo -b -v --noCheck
+tsc -b -v --noCheck
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -366,7 +366,7 @@ Signatures::
 
 Edit [8]:: No Change run with checking
 
-tsgo -b -v
+tsc -b -v
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -423,7 +423,7 @@ Edit [9]:: Fix `a` error with noCheck
 //// [/home/src/workspaces/project/a.ts] *modified* 
 export const a = "hello";
 
-tsgo -b -v --noCheck
+tsc -b -v --noCheck
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -472,7 +472,7 @@ Signatures::
 
 Edit [10]:: No Change run with checking
 
-tsgo -b -v
+tsc -b -v
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -520,7 +520,7 @@ Edit [11]:: Add file with error
 //// [/home/src/workspaces/project/c.ts] *new* 
 export const c: number = "hello";
 
-tsgo -b -v
+tsc -b -v
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -590,7 +590,7 @@ Edit [12]:: Introduce error with noCheck
 //// [/home/src/workspaces/project/a.ts] *modified* 
 export const a = "hello
 
-tsgo -b -v --noCheck
+tsc -b -v --noCheck
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -659,7 +659,7 @@ Edit [13]:: Fix `a` error with noCheck
 //// [/home/src/workspaces/project/a.ts] *modified* 
 export const a = "hello";
 
-tsgo -b -v --noCheck
+tsc -b -v --noCheck
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -717,7 +717,7 @@ Signatures::
 
 Edit [14]:: No Change run with checking
 
-tsgo -b -v
+tsc -b -v
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -781,7 +781,7 @@ Signatures::
 
 Edit [15]:: no change
 
-tsgo -b -v --noCheck
+tsc -b -v --noCheck
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -794,7 +794,7 @@ Output::
 
 Edit [16]:: No Change run with checking
 
-tsgo -b -v
+tsc -b -v
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 

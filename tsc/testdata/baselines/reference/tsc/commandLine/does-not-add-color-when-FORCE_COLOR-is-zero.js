@@ -4,7 +4,7 @@ Input::
 //// [/home/src/workspaces/project/index.ts] *new* 
 const x: string = 1;
 
-tsgo index.ts --noEmit
+tsc index.ts --noEmit
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 index.ts(1,7): error TS2322: Type 'number' is not assignable to type 'string'.

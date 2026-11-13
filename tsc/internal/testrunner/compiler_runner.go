@@ -316,11 +316,16 @@ func newCompilerTest(
 	// Content-mapped files are transformed during program construction; the transformed text is what the
 	// compiler actually parses and reports positions against. Baseline that text (rather than the original
 	// foreign source) so the type, symbol, and error baselines line up with the compiler's positions.
-	for _, file := range core.Concatenate(toBeCompiled, otherFiles) {
+	withContentMappedText := func(file *harnessutil.TestFile) *harnessutil.TestFile {
 		if sf := result.Program.GetSourceFile(tspath.ToRootedFilePath(file.UnitName, currentDirectory)); sf != nil && sf.ContentMapper() != "" {
-			file.Content = sf.Text()
+			baselineFile := *file
+			baselineFile.Content = sf.Text()
+			return &baselineFile
 		}
+		return file
 	}
+	toBeCompiled = core.Map(toBeCompiled, withContentMappedText)
+	otherFiles = core.Map(otherFiles, withContentMappedText)
 
 	return &compilerTest{
 		testName:         testName,

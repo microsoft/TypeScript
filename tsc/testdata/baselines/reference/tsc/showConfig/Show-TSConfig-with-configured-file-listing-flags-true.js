@@ -13,7 +13,7 @@ export const a = 1;
     "files": ["src/index.ts"]
 }
 
-tsgo --showConfig
+tsc --showConfig
 ExitStatus:: Success
 Output::
 {

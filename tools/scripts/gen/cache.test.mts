@@ -9,7 +9,7 @@ import { GeneratedFile } from "./generatedFile.mts";
 import { enableFileFingerprintCache } from "./utils.mts";
 
 test("cached commands produce no output", async context => {
-    const directory = fs.mkdtempSync(path.join(os.tmpdir(), "tsgo-cache-quiet-"));
+    const directory = fs.mkdtempSync(path.join(os.tmpdir(), "typescript-cache-quiet-"));
     context.after(() => fs.rmSync(directory, { recursive: true, force: true }));
     const options = {
         cwd: directory,
@@ -29,7 +29,7 @@ test("cached commands produce no output", async context => {
 });
 
 test("command cache snapshots and generated files share invocation fingerprints", async context => {
-    const directory = fs.mkdtempSync(path.join(os.tmpdir(), "tsgo-fingerprint-"));
+    const directory = fs.mkdtempSync(path.join(os.tmpdir(), "typescript-fingerprint-"));
     context.after(() => fs.rmSync(directory, { recursive: true, force: true }));
     const input = path.join(directory, "input.txt");
     fs.writeFileSync(input, "input");
@@ -59,7 +59,7 @@ test("command cache snapshots and generated files share invocation fingerprints"
 });
 
 test("cache commands use and track an explicit environment without changing the parent", async context => {
-    const directory = fs.mkdtempSync(path.join(os.tmpdir(), "tsgo-cache-env-"));
+    const directory = fs.mkdtempSync(path.join(os.tmpdir(), "typescript-cache-env-"));
     context.after(() => fs.rmSync(directory, { recursive: true, force: true }));
     const parentValue = process.env.GOFILE;
     let calls = 0;
@@ -93,7 +93,7 @@ test("cache commands use and track an explicit environment without changing the 
 });
 
 test("cache commands preserve the working directory and arguments", async context => {
-    const directory = fs.mkdtempSync(path.join(os.tmpdir(), "tsgo-cache probe-"));
+    const directory = fs.mkdtempSync(path.join(os.tmpdir(), "typescript-cache probe-"));
     context.after(() => fs.rmSync(directory, { recursive: true, force: true, maxRetries: 10 }));
     fs.writeFileSync(path.join(directory, "input.txt"), "input");
     const calls: string[] = [];
@@ -141,7 +141,7 @@ test("cache commands preserve the working directory and arguments", async contex
 });
 
 test("cache commands track inputs, outputs, arguments, and failures", async context => {
-    const directory = fs.mkdtempSync(path.join(os.tmpdir(), "tsgo-cache-"));
+    const directory = fs.mkdtempSync(path.join(os.tmpdir(), "typescript-cache-"));
     context.after(() => fs.rmSync(directory, { recursive: true, force: true, maxRetries: 10 }));
     const input = path.join(directory, "input.txt");
     const output = path.join(directory, "output.txt");
@@ -162,7 +162,7 @@ test("cache commands track inputs, outputs, arguments, and failures", async cont
             inputs: ["input*.txt"],
             exclude: ["input-ignored.txt"],
             outputs: ["output.txt", "extra*.txt"],
-            envInputs: ["TSGO_CACHE_PROBE"],
+            envInputs: ["TS_CACHE_PROBE"],
             env,
             commands: [
                 ["generate"],
@@ -199,7 +199,7 @@ test("cache commands track inputs, outputs, arguments, and failures", async cont
     await assert.rejects(generate(" changed", true, true));
     assert.equal(await generate(" changed"), false);
     assert.equal(await generate(" changed"), true);
-    const environment = { TSGO_CACHE_PROBE: "changed" };
+    const environment = { TS_CACHE_PROBE: "changed" };
     assert.equal(await generate(" changed", false, false, environment), false);
     assert.equal(await generate(" changed", false, false, environment), true);
     assert.equal(await generate("--force"), false);
@@ -208,7 +208,7 @@ test("cache commands track inputs, outputs, arguments, and failures", async cont
 });
 
 test("failed commands invalidate metadata even when outputs are unchanged", async context => {
-    const directory = fs.mkdtempSync(path.join(os.tmpdir(), "tsgo-cache-"));
+    const directory = fs.mkdtempSync(path.join(os.tmpdir(), "typescript-cache-"));
     context.after(() => fs.rmSync(directory, { recursive: true, force: true }));
     let fail = false;
     let calls = 0;
@@ -230,7 +230,7 @@ test("failed commands invalidate metadata even when outputs are unchanged", asyn
 });
 
 test("cache commands reject missing inputs, outputs, and empty commands", async context => {
-    const directory = fs.mkdtempSync(path.join(os.tmpdir(), "tsgo-cache-"));
+    const directory = fs.mkdtempSync(path.join(os.tmpdir(), "typescript-cache-"));
     context.after(() => fs.rmSync(directory, { recursive: true, force: true }));
     let calls = 0;
     const host: CacheHost = {
@@ -260,7 +260,7 @@ test("cache commands reject missing inputs, outputs, and empty commands", async 
 });
 
 test("cache commands do not cache inputs changed during execution", async context => {
-    const directory = fs.mkdtempSync(path.join(os.tmpdir(), "tsgo-cache-"));
+    const directory = fs.mkdtempSync(path.join(os.tmpdir(), "typescript-cache-"));
     context.after(() => fs.rmSync(directory, { recursive: true, force: true }));
     for (const changedFile of ["input.txt", "input-added.txt"]) {
         fs.writeFileSync(path.join(directory, "input.txt"), "initial");

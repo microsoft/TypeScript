@@ -1,0 +1,73 @@
+/src/main.ts(1,22): error TS18139: This relative import path is unsafe to rewrite because it appears not to match the content mapper's 'include', but does after resolution with 'rootDirs' and 'moduleSuffixes'.
+/src/main.ts(2,31): error TS18139: This relative import path is unsafe to rewrite because it appears not to match the content mapper's 'include', but does after resolution with 'rootDirs' and 'moduleSuffixes'.
+/src/main.ts(3,26): error TS18139: This relative import path is unsafe to rewrite because it appears not to match the content mapper's 'include', but does after resolution with 'rootDirs' and 'moduleSuffixes'.
+/src/main.ts(7,29): error TS2876: This relative import path is unsafe to rewrite because it looks like a file name, but actually resolves to "../generated/declaration.d.toml.ts".
+/src/main.ts(8,47): error TS18139: This relative import path is unsafe to rewrite because it appears not to match the content mapper's 'include', but does after resolution with 'rootDirs' and 'moduleSuffixes'.
+/src/main.ts(10,34): error TS18139: This relative import path is unsafe to rewrite because it appears not to match the content mapper's 'include', but does after resolution with 'rootDirs' and 'moduleSuffixes'.
+/src/main.ts(11,31): error TS18139: This relative import path is unsafe to rewrite because it appears not to match the content mapper's 'include', but does after resolution with 'rootDirs' and 'moduleSuffixes'.
+
+
+==== /tsconfig.json (0 errors) ====
+    {
+        "compilerOptions": {
+            "target": "esnext",
+            "module": "preserve",
+            "moduleResolution": "bundler",
+            "rewriteRelativeImportExtensions": true,
+            "allowArbitraryExtensions": true,
+            "declaration": true,
+            "rootDirs": ["src", "generated"],
+            "moduleSuffixes": [".native", ""],
+            "outDir": "/dist"
+        },
+        "contentMappers": [{
+            "package": "mapper",
+            "extensions": [".toml", ".identity", ".part.toml"],
+            "include": ["generated", "**/*.native.toml", "src/allowed", "src/declaration.toml"],
+            "outputExtensions": { ".toml": ".js", ".part.toml": ".part.js" }
+        }, {
+            "package": "mapper",
+            "extensions": [".toml"],
+            "include": ["src/second"],
+            "outputExtensions": { ".toml": ".js" }
+        }]
+    }
+    
+==== /generated/declaration.d.toml.ts (0 errors) ====
+    export const declaration: number;
+    
+==== /src/main.ts (7 errors) ====
+    import { make } from "./root.toml";
+                         ~~~~~~~~~~~~~
+!!! error TS18139: This relative import path is unsafe to rewrite because it appears not to match the content mapper's 'include', but does after resolution with 'rootDirs' and 'moduleSuffixes'.
+    import type { TypeOnly } from "./root.toml";
+                                  ~~~~~~~~~~~~~
+!!! error TS18139: This relative import path is unsafe to rewrite because it appears not to match the content mapper's 'include', but does after resolution with 'rootDirs' and 'moduleSuffixes'.
+    export { suffixed } from "./suffixed.toml";
+                             ~~~~~~~~~~~~~~~~~
+!!! error TS18139: This relative import path is unsafe to rewrite because it appears not to match the content mapper's 'include', but does after resolution with 'rootDirs' and 'moduleSuffixes'.
+    export { allowed } from "./allowed/blob.toml";
+    export { second } from "./second/blob.part.toml";
+    export { identity } from "./blob.identity";
+    export { declaration } from "./declaration.toml";
+                                ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2876: This relative import path is unsafe to rewrite because it looks like a file name, but actually resolves to "../generated/declaration.d.toml.ts".
+    export type { TypeOnly as ExportedType } from "./root.toml";
+                                                  ~~~~~~~~~~~~~
+!!! error TS18139: This relative import path is unsafe to rewrite because it appears not to match the content mapper's 'include', but does after resolution with 'rootDirs' and 'moduleSuffixes'.
+    export const root = make();
+    export const load = () => import("./root.toml");
+                                     ~~~~~~~~~~~~~
+!!! error TS18139: This relative import path is unsafe to rewrite because it appears not to match the content mapper's 'include', but does after resolution with 'rootDirs' and 'moduleSuffixes'.
+    export type RootType = import("./root.toml").Root;
+                                  ~~~~~~~~~~~~~
+!!! error TS18139: This relative import path is unsafe to rewrite because it appears not to match the content mapper's 'include', but does after resolution with 'rootDirs' and 'moduleSuffixes'.
+    export type DirectType = TypeOnly;
+    
+==== /node_modules/mapper/package.json (0 errors) ====
+    {
+        "name": "mapper",
+        "version": "1.0.0",
+        "typescript": { "contentMapper": { "exec": ["compiler-test-mapper"] } }
+    }
+    

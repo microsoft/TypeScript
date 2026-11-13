@@ -16,7 +16,7 @@ export const d = class { private p = 10; };
     }
 }
 
-tsgo --noEmit
+tsc --noEmit
 ExitStatus:: Success
 Output::
 //// [/home/src/projects/project/tsconfig.tsbuildinfo] *new* 
@@ -143,7 +143,7 @@ Signatures::
 
 Edit [0]:: no change
 
-tsgo --noEmit
+tsc --noEmit
 ExitStatus:: Success
 Output::
 
@@ -154,7 +154,7 @@ Signatures::
 
 Edit [1]:: With declaration enabled noEmit - Should report errors
 
-tsgo --noEmit --declaration
+tsc --noEmit --declaration
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96ma.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
@@ -386,7 +386,7 @@ Signatures::
 
 Edit [2]:: With declaration and declarationMap noEmit - Should report errors
 
-tsgo --noEmit --declaration --declarationMap
+tsc --noEmit --declaration --declarationMap
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96ma.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
@@ -619,7 +619,7 @@ Signatures::
 
 Edit [3]:: no change
 
-tsgo --noEmit
+tsc --noEmit
 ExitStatus:: Success
 Output::
 
@@ -630,7 +630,7 @@ Signatures::
 
 Edit [4]:: Dts Emit with error
 
-tsgo --declaration
+tsc --declaration
 ExitStatus:: DiagnosticsPresent_OutputsSkipped
 Output::
 [96ma.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
@@ -857,7 +857,7 @@ Edit [5]:: Fix the error
 //// [/home/src/projects/project/a.ts] *modified* 
 export const a = class { public p = 10; };
 
-tsgo --noEmit
+tsc --noEmit
 ExitStatus:: Success
 Output::
 //// [/home/src/projects/project/tsconfig.tsbuildinfo] *modified* 
@@ -1009,7 +1009,7 @@ Signatures::
 
 Edit [6]:: With declaration enabled noEmit
 
-tsgo --noEmit --declaration
+tsc --noEmit --declaration
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96mc.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
@@ -1214,7 +1214,7 @@ Signatures::
 
 Edit [7]:: With declaration and declarationMap noEmit
 
-tsgo --noEmit --declaration --declarationMap
+tsc --noEmit --declaration --declarationMap
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96mc.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
@@ -1422,7 +1422,7 @@ Edit [8]:: Fix the another
 //// [/home/src/projects/project/c.ts] *modified* 
 export const c = class { public p = 10; };
 
-tsgo --noEmit --declaration --declarationMap
+tsc --noEmit --declaration --declarationMap
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96md.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.

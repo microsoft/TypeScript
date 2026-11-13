@@ -17,7 +17,7 @@ export const FOO: string = 'THEFOOEXPORT';
     "references": [ { "path": "./lib" } ]
 }
 
-tsgo --b
+tsc --b
 ExitStatus:: Success
 Output::
 //// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
@@ -142,7 +142,7 @@ Edit [0]:: dts doesnt change
 //// [/home/src/workspaces/project/lib/foo.ts] *modified* 
 export const FOO: string = 'THEFOOEXPORT';const Bar = 10;
 
-tsgo --b
+tsc --b
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/index.js] *rewrite with same content*
