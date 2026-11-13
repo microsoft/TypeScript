@@ -653,6 +653,7 @@ type Checker struct {
 	instantiationStack         []*Type
 	instantiationAborted       bool  // See "Instantiation limits"
 	instantiationAbortLog      int   // Length of discardLog when instantiationAborted was set
+	instantiationAbortRoot     int   // Length of instantiationStack to which a failing instantiation unwinds
 	readIncompleteFloor        int32 // See markReadIncomplete
 	conditionalConstraintDepth depthLimit
 	baseConstraintWalk         baseConstraintWalk
@@ -25550,7 +25551,7 @@ func (c *Checker) instantiateTypeWithAlias(t *Type, m *TypeMapper, alias *TypeAl
 	}
 	c.instantiationStack[len(c.instantiationStack)-1] = nil
 	c.instantiationStack = c.instantiationStack[:len(c.instantiationStack)-1]
-	if len(c.instantiationStack) == 0 && c.instantiationAborted {
+	if c.instantiationAborted && len(c.instantiationStack) == c.instantiationAbortRoot {
 		c.endInstantiationAbort()
 		return c.errorType
 	}
@@ -25981,25 +25982,24 @@ func (c *Checker) getConditionalTypeInstantiation(t *Type, mapper *TypeMapper, f
 			reports := c.startCurrentNodeErrors()
 			root.instantiations.begin(c, key)
 			if c.beginInstantiation() {
-				root.instantiations.setReported(c, key, c.errorType, c.endCurrentNodeErrors(reports))
-				c.endMemo()
-				return c.errorType
-			}
-			newMapper := newTypeMapper(root.outerTypeParameters, typeArguments)
-			checkType := root.checkType
-			var distributionType *Type
-			if root.isDistributive {
-				distributionType = c.getReducedType(getMappedType(checkType, newMapper))
-			}
-			// Distributive conditional types are distributed over union types. For example, when the
-			// distributive conditional type T extends U ? X : Y is instantiated with A | B for T, the
-			// result is (A extends U ? X : Y) | (B extends U ? X : Y).
-			if distributionType != nil && checkType != distributionType && distributionType.flags&(TypeFlagsUnion|TypeFlagsNever) != 0 {
-				result = c.mapTypeWithAlias(distributionType, func(t *Type) *Type {
-					return c.getConditionalType(root, prependTypeMapping(checkType, t, newMapper), forConstraint, nil)
-				}, alias)
+				result = c.errorType
 			} else {
-				result = c.getConditionalType(root, newMapper, forConstraint, alias)
+				newMapper := newTypeMapper(root.outerTypeParameters, typeArguments)
+				checkType := root.checkType
+				var distributionType *Type
+				if root.isDistributive {
+					distributionType = c.getReducedType(getMappedType(checkType, newMapper))
+				}
+				// Distributive conditional types are distributed over union types. For example, when the
+				// distributive conditional type T extends U ? X : Y is instantiated with A | B for T, the
+				// result is (A extends U ? X : Y) | (B extends U ? X : Y).
+				if distributionType != nil && checkType != distributionType && distributionType.flags&(TypeFlagsUnion|TypeFlagsNever) != 0 {
+					result = c.mapTypeWithAlias(distributionType, func(t *Type) *Type {
+						return c.getConditionalType(root, prependTypeMapping(checkType, t, newMapper), forConstraint, nil)
+					}, alias)
+				} else {
+					result = c.getConditionalType(root, newMapper, forConstraint, alias)
+				}
 			}
 			if !c.endInstantiation(reports) {
 				return c.errorType
