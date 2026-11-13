@@ -1,0 +1,69 @@
+//// [tests/cases/compiler/relationMaybeCheckOrder.ts] ////
+
+=== relationMaybeCheckOrder.ts ===
+// Relating to 'keyof M<T>' rejects keys that relate only by assuming a
+// comparison still in progress. Relating 'A' to 'B' assumes only itself
+// along 'next', so it completes on its own and must be accepted whether
+// or not the call to 'h' related 'A' to 'B' first.
+
+interface A { next: A; v: "a" }
+>A : Symbol(A, Decl(relationMaybeCheckOrder.ts, 0, 0))
+>next : Symbol(A.next, Decl(relationMaybeCheckOrder.ts, 5, 13))
+>A : Symbol(A, Decl(relationMaybeCheckOrder.ts, 0, 0))
+>v : Symbol(A.v, Decl(relationMaybeCheckOrder.ts, 5, 22))
+
+interface B { next: B; v: string }
+>B : Symbol(B, Decl(relationMaybeCheckOrder.ts, 5, 31))
+>next : Symbol(B.next, Decl(relationMaybeCheckOrder.ts, 6, 13))
+>B : Symbol(B, Decl(relationMaybeCheckOrder.ts, 5, 31))
+>v : Symbol(B.v, Decl(relationMaybeCheckOrder.ts, 6, 22))
+
+type M<T> = { [K in keyof T as B]: 1 };
+>M : Symbol(M, Decl(relationMaybeCheckOrder.ts, 6, 34))
+>T : Symbol(T, Decl(relationMaybeCheckOrder.ts, 7, 7))
+>K : Symbol(K, Decl(relationMaybeCheckOrder.ts, 7, 15))
+>T : Symbol(T, Decl(relationMaybeCheckOrder.ts, 7, 7))
+>B : Symbol(B, Decl(relationMaybeCheckOrder.ts, 5, 31))
+
+declare const a: A;
+>a : Symbol(a, Decl(relationMaybeCheckOrder.ts, 9, 13))
+>A : Symbol(A, Decl(relationMaybeCheckOrder.ts, 0, 0))
+
+declare function h(x: B): 1;
+>h : Symbol(h, Decl(relationMaybeCheckOrder.ts, 9, 19), Decl(relationMaybeCheckOrder.ts, 10, 28))
+>x : Symbol(x, Decl(relationMaybeCheckOrder.ts, 10, 19))
+>B : Symbol(B, Decl(relationMaybeCheckOrder.ts, 5, 31))
+
+declare function h(x: unknown): 2;
+>h : Symbol(h, Decl(relationMaybeCheckOrder.ts, 9, 19), Decl(relationMaybeCheckOrder.ts, 10, 28))
+>x : Symbol(x, Decl(relationMaybeCheckOrder.ts, 11, 19))
+
+function f<T>() {
+>f : Symbol(f, Decl(relationMaybeCheckOrder.ts, 11, 34))
+>T : Symbol(T, Decl(relationMaybeCheckOrder.ts, 13, 11))
+
+    function g(x: keyof M<T>): 1;
+>g : Symbol(g, Decl(relationMaybeCheckOrder.ts, 13, 17), Decl(relationMaybeCheckOrder.ts, 14, 33), Decl(relationMaybeCheckOrder.ts, 15, 30))
+>x : Symbol(x, Decl(relationMaybeCheckOrder.ts, 14, 15))
+>M : Symbol(M, Decl(relationMaybeCheckOrder.ts, 6, 34))
+>T : Symbol(T, Decl(relationMaybeCheckOrder.ts, 13, 11))
+
+    function g(x: unknown): 2;
+>g : Symbol(g, Decl(relationMaybeCheckOrder.ts, 13, 17), Decl(relationMaybeCheckOrder.ts, 14, 33), Decl(relationMaybeCheckOrder.ts, 15, 30))
+>x : Symbol(x, Decl(relationMaybeCheckOrder.ts, 15, 15))
+
+    function g(x: unknown) { return 1 as any; }
+>g : Symbol(g, Decl(relationMaybeCheckOrder.ts, 13, 17), Decl(relationMaybeCheckOrder.ts, 14, 33), Decl(relationMaybeCheckOrder.ts, 15, 30))
+>x : Symbol(x, Decl(relationMaybeCheckOrder.ts, 16, 15))
+
+    const r: 1 = g(a);
+>r : Symbol(r, Decl(relationMaybeCheckOrder.ts, 17, 9))
+>g : Symbol(g, Decl(relationMaybeCheckOrder.ts, 13, 17), Decl(relationMaybeCheckOrder.ts, 14, 33), Decl(relationMaybeCheckOrder.ts, 15, 30))
+>a : Symbol(a, Decl(relationMaybeCheckOrder.ts, 9, 13))
+}
+
+const w: 1 = h(a);
+>w : Symbol(w, Decl(relationMaybeCheckOrder.ts, 20, 5))
+>h : Symbol(h, Decl(relationMaybeCheckOrder.ts, 9, 19), Decl(relationMaybeCheckOrder.ts, 10, 28))
+>a : Symbol(a, Decl(relationMaybeCheckOrder.ts, 9, 13))
+
