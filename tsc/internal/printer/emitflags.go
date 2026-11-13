@@ -28,11 +28,8 @@ const (
 	EFNoLexicalArguments                                   // Do not capture `arguments` for this arrow function. Set on arrows lowered from class static blocks, where `arguments` is an error; preserves Strada's emit behavior.
 	EFTransformPrivateStaticElements                       // Indicates static private elements in a file or class should be transformed regardless of --target (used by esDecorators transform).
 	EFNoLexicalThis                                        // Do not capture `this` for this node's subtree. Set on relocated static initializers, where `this` is handled by the class fields transform.
-)
-
-const (
-	EFNone              EmitFlags = 0
-	EFNoSourceMap                 = EFNoLeadingSourceMap | EFNoTrailingSourceMap             // Do not emit a source map location for this node.
-	EFNoTokenSourceMaps           = EFNoTokenLeadingSourceMaps | EFNoTokenTrailingSourceMaps // Do not emit source map locations for tokens of this node.
-	EFNoComments                  = EFNoLeadingComments | EFNoTrailingComments               // Do not emit comments for this node.
+	EFNone                           EmitFlags = 0
+	EFNoSourceMap                              = EFNoLeadingSourceMap | EFNoTrailingSourceMap             // Do not emit a source map location for this node.
+	EFNoTokenSourceMaps                        = EFNoTokenLeadingSourceMaps | EFNoTokenTrailingSourceMaps // Do not emit source map locations for tokens of this node.
+	EFNoComments                               = EFNoLeadingComments | EFNoTrailingComments               // Do not emit comments for this node.
 )
