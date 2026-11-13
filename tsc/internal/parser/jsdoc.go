@@ -54,7 +54,7 @@ const (
 )
 
 func (p *Parser) withJSDoc(node *ast.Node, info jsdocScannerInfo) []*ast.Node {
-	if info&jsdocScannerInfoHasJSDoc == 0 {
+	if info&jsdocScannerInfoHasJSDoc == 0 || p.parsingFlags&ParsingFlagsTentative != 0 {
 		return nil
 	}
 
