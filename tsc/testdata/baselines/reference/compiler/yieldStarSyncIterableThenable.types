@@ -1,0 +1,58 @@
+//// [tests/cases/compiler/yieldStarSyncIterableThenable.ts] ////
+
+=== yieldStarSyncIterableThenable.ts ===
+// https://github.com/microsoft/TypeScript/issues/65452
+
+declare const thenable: { then(onfulfilled: number): void };
+>thenable : { then(onfulfilled: number): void; }
+>then : (onfulfilled: number) => void
+>onfulfilled : number
+
+async function* delegated() {
+>delegated : () => AsyncGenerator<any, void, unknown>
+
+    yield* [thenable];
+>yield* [thenable] : undefined
+>[thenable] : { then(onfulfilled: number): void; }[]
+>thenable : { then(onfulfilled: number): void; }
+}
+
+async function* direct() {
+>direct : () => AsyncGenerator<never, void, unknown>
+
+    yield thenable;
+>yield thenable : any
+>thenable : { then(onfulfilled: number): void; }
+}
+
+async function iterated() {
+>iterated : () => Promise<void>
+
+    for await (const value of [thenable]) {
+>value : any
+>[thenable] : { then(onfulfilled: number): void; }[]
+>thenable : { then(onfulfilled: number): void; }
+
+        value;
+>value : any
+    }
+}
+
+async function* valid() {
+>valid : () => AsyncGenerator<number, void, unknown>
+
+    yield* [1];
+>yield* [1] : undefined
+>[1] : number[]
+>1 : 1
+
+    yield* [Promise.resolve(1)];
+>yield* [Promise.resolve(1)] : undefined
+>[Promise.resolve(1)] : Promise<number>[]
+>Promise.resolve(1) : Promise<number>
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Promise : PromiseConstructor
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>1 : 1
+}
+

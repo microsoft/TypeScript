@@ -6526,7 +6526,7 @@ func (c *Checker) getIterationTypesOfIterableWorker(t *Type, use IterationUse, e
 		iterationTypes := c.getIterationTypesOfIterableFast(t, c.asyncIterationTypesResolver)
 		if iterationTypes.hasTypes() {
 			if use&IterationUseForOfFlag != 0 {
-				return c.getAsyncFromSyncIterationTypes(iterationTypes, errorNode)
+				return c.getAsyncFromSyncIterationTypes(iterationTypes, use, errorNode)
 			}
 			return iterationTypes
 		}
@@ -6544,7 +6544,7 @@ func (c *Checker) getIterationTypesOfIterableWorker(t *Type, use IterationUse, e
 		iterationTypes := c.getIterationTypesOfIterableFast(t, c.syncIterationTypesResolver)
 		if iterationTypes.hasTypes() {
 			if use&IterationUseAllowsAsyncIterablesFlag != 0 {
-				return c.getAsyncFromSyncIterationTypes(iterationTypes, errorNode)
+				return c.getAsyncFromSyncIterationTypes(iterationTypes, use, errorNode)
 			}
 			return iterationTypes
 		}
@@ -6556,7 +6556,7 @@ func (c *Checker) getIterationTypesOfIterableWorker(t *Type, use IterationUse, e
 				}
 			}
 			if use&IterationUseAllowsAsyncIterablesFlag != 0 {
-				return c.getAsyncFromSyncIterationTypes(iterationTypes, errorNode)
+				return c.getAsyncFromSyncIterationTypes(iterationTypes, use, errorNode)
 			}
 			return iterationTypes
 		}
@@ -6653,7 +6653,7 @@ func (c *Checker) getIterationTypeUnion(iterationTypes []IterationTypes, f func(
 	return c.getUnionType(types)
 }
 
-func (c *Checker) getAsyncFromSyncIterationTypes(iterationTypes IterationTypes, errorNode *ast.Node) IterationTypes {
+func (c *Checker) getAsyncFromSyncIterationTypes(iterationTypes IterationTypes, use IterationUse, errorNode *ast.Node) IterationTypes {
 	if !iterationTypes.hasTypes() ||
 		iterationTypes.yieldType == c.anyType && iterationTypes.returnType == c.anyType && iterationTypes.nextType == c.anyType {
 		return iterationTypes
@@ -6662,9 +6662,13 @@ func (c *Checker) getAsyncFromSyncIterationTypes(iterationTypes IterationTypes, 
 	if errorNode != nil {
 		c.getGlobalAwaitedSymbol()
 	}
+	diagnostic := diagnostics.Type_of_await_operand_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member
+	if use&IterationUseYieldStarFlag != 0 {
+		diagnostic = diagnostics.Type_of_iterated_elements_of_a_yield_Asterisk_operand_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member
+	}
 	return IterationTypes{
-		yieldType:  core.OrElse(c.getAwaitedTypeEx(iterationTypes.yieldType, errorNode, nil), c.anyType),
-		returnType: core.OrElse(c.getAwaitedTypeEx(iterationTypes.returnType, errorNode, nil), c.anyType),
+		yieldType:  core.OrElse(c.getAwaitedTypeEx(iterationTypes.yieldType, errorNode, diagnostic), c.anyType),
+		returnType: core.OrElse(c.getAwaitedTypeEx(iterationTypes.returnType, errorNode, diagnostic), c.anyType),
 		nextType:   iterationTypes.nextType,
 	}
 }
