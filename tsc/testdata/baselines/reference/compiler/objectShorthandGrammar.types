@@ -1,0 +1,36 @@
+//// [tests/cases/compiler/objectShorthandGrammar.ts] ////
+
+=== objectShorthandGrammar.ts ===
+const value = 1;
+>value : 1
+>1 : 1
+
+const valid = { value, other: value };
+>valid : { value: number; other: number; }
+>{ value, other: value } : { value: number; other: number; }
+>value : number
+>other : number
+>value : 1
+
+const optional = { value? };
+>optional : { value: number; }
+>{ value? } : { value: number; }
+>value : number
+
+const definite = { value! };
+>definite : { value: number; }
+>{ value! } : { value: number; }
+>value : number
+
+const initializer = { value = 2 };
+>initializer : { value: number; }
+>{ value = 2 } : { value: number; }
+>value : number
+>2 : 2
+
+const duplicate = { value, value };
+>duplicate : { value: number; }
+>{ value, value } : { value: number; }
+>value : number
+>value : number
+
