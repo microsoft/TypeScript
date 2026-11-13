@@ -1,0 +1,29 @@
+//// [tests/cases/compiler/objectShorthandGrammar.ts] ////
+
+=== objectShorthandGrammar.ts ===
+const value = 1;
+>value : Symbol(value, Decl(objectShorthandGrammar.ts, 0, 5))
+
+const valid = { value, other: value };
+>valid : Symbol(valid, Decl(objectShorthandGrammar.ts, 1, 5))
+>value : Symbol(value, Decl(objectShorthandGrammar.ts, 1, 15))
+>other : Symbol(other, Decl(objectShorthandGrammar.ts, 1, 22))
+>value : Symbol(value, Decl(objectShorthandGrammar.ts, 0, 5))
+
+const optional = { value? };
+>optional : Symbol(optional, Decl(objectShorthandGrammar.ts, 2, 5))
+>value : Symbol(value, Decl(objectShorthandGrammar.ts, 2, 18))
+
+const definite = { value! };
+>definite : Symbol(definite, Decl(objectShorthandGrammar.ts, 3, 5))
+>value : Symbol(value, Decl(objectShorthandGrammar.ts, 3, 18))
+
+const initializer = { value = 2 };
+>initializer : Symbol(initializer, Decl(objectShorthandGrammar.ts, 4, 5))
+>value : Symbol(value, Decl(objectShorthandGrammar.ts, 4, 21))
+
+const duplicate = { value, value };
+>duplicate : Symbol(duplicate, Decl(objectShorthandGrammar.ts, 5, 5))
+>value : Symbol(value, Decl(objectShorthandGrammar.ts, 5, 19), Decl(objectShorthandGrammar.ts, 5, 26))
+>value : Symbol(value, Decl(objectShorthandGrammar.ts, 5, 19), Decl(objectShorthandGrammar.ts, 5, 26))
+

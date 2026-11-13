@@ -6,7 +6,7 @@ import (
 	"slices"
 	"strings"
 	"testing"
-	"time"
+	"testing/synctest"
 
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/execute/build"
@@ -50,50 +50,47 @@ func TestBuildScheduling(t *testing.T) {
 	} {
 		t.Run(operation.name, func(t *testing.T) {
 			t.Parallel()
-			sys := newSchedulingTestSystem()
-			independentStarted := make(chan struct{})
-			sys.fs.onRead = func(path tspath.RootedFilePath) {
-				if path.BaseName() != "index.ts" {
-					return
-				}
-				switch path.Directory().BaseName() {
-				case "Leaf":
-					// Independent must start while Leaf is still occupying a builder.
-					select {
-					case <-independentStarted:
+			synctest.Test(t, func(t *testing.T) {
+				sys := newSchedulingTestSystem()
+				independentStarted := make(chan struct{})
+				sys.fs.onRead = func(path tspath.RootedFilePath) {
+					if path.BaseName() != "index.ts" {
 						return
-					case <-time.After(30 * time.Second):
-						t.Error("Independent was queued behind a builder waiting on Leaf")
 					}
-				case "Independent":
-					close(independentStarted)
+					switch path.Directory().BaseName() {
+					case "Leaf":
+						// Independent must start while Leaf is still occupying a builder.
+						<-independentStarted
+					case "Independent":
+						close(independentStarted)
+					}
 				}
-			}
-			command := tsoptions.ParseBuildCommandLine([]string{"--build", "--verbose", "--builders", "2", "Root", "Other"}, sys.FS(), sys.GetCurrentDirectory())
-			orchestrator := build.NewOrchestrator(build.Options{Sys: sys, Command: command})
-			var result *build.OrchestratorResult
-			if operation.refsOnly {
-				result = orchestrator.BuildReferences(t.Context(), operation.project)
-			} else {
-				result = orchestrator.Build(t.Context(), operation.project)
-			}
-			assert.Equal(t, result.Result.Status, tsc.ExitStatusSuccess)
-			assert.Equal(t, result.Statistics.Projects, len(operation.order))
-			assert.Equal(t, result.Statistics.ProjectsBuilt, len(operation.order))
-			reported := []string{}
-			for line := range strings.SplitSeq(sys.output.String(), "\n") {
-				if strings.Contains(line, "Building project") {
-					for _, project := range operation.order {
-						if strings.Contains(line, "'"+project+"/tsconfig.json'") {
-							reported = append(reported, project)
+				command := tsoptions.ParseBuildCommandLine([]string{"--build", "--verbose", "--builders", "2", "Root", "Other"}, sys.FS(), sys.GetCurrentDirectory())
+				orchestrator := build.NewOrchestrator(build.Options{Sys: sys, Command: command})
+				var result *build.OrchestratorResult
+				if operation.refsOnly {
+					result = orchestrator.BuildReferences(t.Context(), operation.project)
+				} else {
+					result = orchestrator.Build(t.Context(), operation.project)
+				}
+				assert.Equal(t, result.Result.Status, tsc.ExitStatusSuccess)
+				assert.Equal(t, result.Statistics.Projects, len(operation.order))
+				assert.Equal(t, result.Statistics.ProjectsBuilt, len(operation.order))
+				reported := []string{}
+				for line := range strings.SplitSeq(sys.output.String(), "\n") {
+					if strings.Contains(line, "Building project") {
+						for _, project := range operation.order {
+							if strings.Contains(line, "'"+project+"/tsconfig.json'") {
+								reported = append(reported, project)
+							}
 						}
 					}
 				}
-			}
-			assert.DeepEqual(t, reported, operation.order)
-			for _, project := range []string{"Leaf", "Middle", "Independent", "Root", "Other"} {
-				assert.Equal(t, sys.FS().FileExists(sys.GetCurrentDirectory().ResolveFile(project+"/dist/index.js")), slices.Contains(operation.order, project))
-			}
+				assert.DeepEqual(t, reported, operation.order)
+				for _, project := range []string{"Leaf", "Middle", "Independent", "Root", "Other"} {
+					assert.Equal(t, sys.FS().FileExists(sys.GetCurrentDirectory().ResolveFile(project+"/dist/index.js")), slices.Contains(operation.order, project))
+				}
+			})
 		})
 	}
 }

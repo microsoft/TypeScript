@@ -30,23 +30,26 @@ type parseTask struct {
 	isContentMapperSupplemental bool
 	failedLookup                bool
 	includeReason               *FileIncludeReason
-	packageId                   module.PackageId
+	packageId                   *module.PackageId
+	increaseDepth               bool
+	elideOnDepth                bool
+	loadedTask                  *parseTask
 
+	// Most tasks are duplicate references to an already-loaded file, so
+	// state produced by loading lives in a separately allocated record that
+	// is only created when the task is loaded.
+	*parseTaskResult
+}
+
+type parseTaskResult struct {
 	metadata                     ast.SourceFileMetaData
 	resolutionsInFile            module.ModeAwareCache[*module.ResolvedModule]
 	resolutionsTrace             []module.DiagAndArgs
 	typeResolutionsInFile        module.ModeAwareCache[*module.ResolvedTypeReferenceDirective]
 	typeResolutionsTrace         []module.DiagAndArgs
-	resolutionDiagnostics        []*ast.Diagnostic
 	processingDiagnostics        []*processingDiagnostic
 	importHelpersImportSpecifier *ast.StringLiteralNode
 	jsxRuntimeImportSpecifier    *jsxRuntimeImportSpecifier
-
-	increaseDepth bool
-	elideOnDepth  bool
-
-	loadedTask        *parseTask
-	allIncludeReasons []*FileIncludeReason
 }
 
 func (t *parseTask) FileName() tspath.RootedFilePath {
@@ -59,6 +62,9 @@ func (t *parseTask) PathKey() tspath.PathKey {
 
 func (t *parseTask) load(ctx context.Context, loader *fileLoader) {
 	t.loaded = true
+	if t.parseTaskResult == nil {
+		t.parseTaskResult = &parseTaskResult{}
+	}
 	if t.isForAutomaticTypeDirective {
 		t.loadAutomaticTypeDirectives(ctx, loader)
 		return
@@ -78,6 +84,17 @@ func (t *parseTask) load(ctx context.Context, loader *fileLoader) {
 	}
 
 	if !t.isContentMapperSupplemental && t.normalizedFilePath.HasExtension() {
+		if loader.opts.Config.ContentMapperFileMatcher().IsUnclaimed(t.normalizedFilePath) {
+			t.processingDiagnostics = append(t.processingDiagnostics, &processingDiagnostic{
+				kind: processingDiagnosticKindExplainingFileInclude,
+				explanation: &includeExplainingDiagnostic{
+					diagnosticReason: t.includeReason,
+					message:          diagnostics.File_0_has_a_registered_content_mapper_extension_but_does_not_match_any_content_mapper_s_include,
+					args:             []string{t.normalizedFilePath.AsString()},
+				},
+			})
+			return
+		}
 		compilerOptions := loader.opts.Config.CompilerOptions()
 		allowNonTsExtensions := compilerOptions.AllowNonTsExtensions.IsTrue()
 		if !allowNonTsExtensions {
@@ -156,13 +173,7 @@ func (t *parseTask) load(ctx context.Context, loader *fileLoader) {
 			if ctx.Err() != nil {
 				return
 			}
-			includeReason := &FileIncludeReason{
-				kind: fileIncludeKindLibReferenceDirective,
-				referencedFile: &referencedFileData{
-					file:  t.path,
-					index: index,
-				},
-			}
+			includeReason := newReferencedFileIncludeReason(fileIncludeKindLibReferenceDirective, t.path, index, syntheticImportNone)
 			if name, ok := tsoptions.GetLibFileName(lib.FileName); ok {
 				libFile := loader.pathForLibFile(name)
 				t.addSubTask(resolvedRef{
@@ -224,7 +235,16 @@ type resolvedRef struct {
 	increaseDepth bool
 	elideOnDepth  bool
 	includeReason *FileIncludeReason
-	packageId     module.PackageId
+	packageId     *module.PackageId
+}
+
+// packageIdRef returns id, or nil if id is empty. Pointing into an existing
+// resolution keeps the commonly empty ID out of every parse task.
+func packageIdRef(id *module.PackageId) *module.PackageId {
+	if id.Name == "" {
+		return nil
+	}
+	return id
 }
 
 func (t *parseTask) addSubTask(ref resolvedRef, libFile *LibFile) {
@@ -313,8 +333,8 @@ func (w *filesParser) start(ctx context.Context, loader *fileLoader, tasks []*pa
 			}
 
 			// Propagate packageId to data if we have one and data doesn't yet
-			if data.packageId.Name == "" && task.packageId.Name != "" {
-				data.packageId = task.packageId
+			if data.packageId.Name == "" && task.packageId != nil {
+				data.packageId = *task.packageId
 			}
 
 			currentDepth := core.IfElse(task.increaseDepth, depth+1, depth)

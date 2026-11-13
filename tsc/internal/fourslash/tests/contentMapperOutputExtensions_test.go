@@ -108,3 +108,67 @@ export const value = component;
 		})
 	}
 }
+
+func TestContentMapperOutputExtensionsModuleFormatRedirects(t *testing.T) {
+	t.Parallel()
+	for _, mode := range []string{"cjs", "esm"} {
+		for _, disableRedirect := range []bool{false, true} {
+			name := mode + core.IfElse(disableRedirect, "/declaration", "/source")
+			t.Run(name, func(t *testing.T) {
+				t.Parallel()
+				defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+				// The format mapper returns the source unchanged with identity mappings,
+				// using .cts for "cjs" and .mts otherwise. The differing literal types
+				// distinguish source redirects from loading the built declaration.
+				content := `// @Filename: /node_modules/mapper/package.json
+` + contentmappertest.PackageJSON(contentmappertest.FormatVerbatimMapper) + `
+// @Filename: /lib/package.json
+{"type": "$packageType"}
+// @Filename: /lib/tsconfig.json
+{
+	"compilerOptions": {
+		"composite": true, "module": "nodenext", "rootDir": ".", "outDir": "/dist/lib",
+		"rewriteRelativeImportExtensions": true
+	},
+	"contentMappers": [{
+		"package": "mapper", "extensions": [".vue"], "outputExtensions": {".vue": ".$output"}
+	}]
+}
+// @Filename: /lib/Component.vue
+// $mode
+export const component = "source";
+$declarationFile
+// @Filename: /app/tsconfig.json
+{
+	"compilerOptions": {
+		"module": "nodenext", "disableSourceOfProjectReferenceRedirect": $disableRedirect,
+		"rootDir": ".", "outDir": "/dist/app",
+		"rewriteRelativeImportExtensions": true
+	},
+	"references": [{"path": "../lib"}],
+	"contentMappers": [{
+		"package": "mapper", "extensions": [".vue"], "outputExtensions": {".vue": ".$output"}
+	}]
+}
+// @Filename: /app/main.ts
+import { component } from "../dist/lib/Component.$output";
+const expected: "$expected" = component;
+`
+				content = strings.NewReplacer(
+					"$declarationFile", core.IfElse(disableRedirect,
+						"// @Filename: /dist/lib/Component.d."+core.IfElse(mode == "cjs", "cts", "mts")+"\nexport declare const component: \"declaration\";", ""),
+					"$packageType", core.IfElse(mode == "cjs", "module", "commonjs"),
+					"$mode", mode,
+					"$output", core.IfElse(mode == "cjs", "cjs", "mjs"),
+					"$disableRedirect", core.IfElse(disableRedirect, "true", "false"),
+					"$expected", core.IfElse(disableRedirect, "declaration", "source"),
+				).Replace(content)
+				f, done := fourslash.NewFourslashWithOptions(t, content, &fourslash.FourslashOptions{
+					ContentMapperSpawner: contentmappertest.NewSpawner(), RunExternalCode: true,
+				})
+				defer done()
+				f.VerifyNoErrors(t)
+			})
+		}
+	}
+}

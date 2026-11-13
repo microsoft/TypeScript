@@ -3924,6 +3924,36 @@ var Content_mapper_extension_0_must_not_contain_path_separators = &Message{code:
 
 var The_content_mapper_package_0_is_outside_the_open_workspace_and_will_not_be_loaded = &Message{code: 18124, category: CategoryError, key: "The_content_mapper_package_0_is_outside_the_open_workspace_and_will_not_be_loaded_18124", text: "The content mapper package '{0}' is outside the open workspace and will not be loaded."}
 
+var The_content_mapper_0_returned_virtual_extension_1_whose_module_format_does_not_match_declaration_output_2 = &Message{code: 18125, category: CategoryError, key: "The_content_mapper_0_returned_virtual_extension_1_whose_module_format_does_not_match_declaration_out_18125", text: "The content mapper '{0}' returned virtual extension '{1}', whose module format does not match declaration output '{2}'."}
+
+var Content_mapper_0_is_also_registered_for_the_extension_1_but_has_a_conflicting_outputExtensions_mapping_Each_registration_for_this_extension_must_produce_the_same_output_file_name = &Message{code: 18127, category: CategoryError, key: "Content_mapper_0_is_also_registered_for_the_extension_1_but_has_a_conflicting_outputExtensions_mappi_18127", text: "Content mapper '{0}' is also registered for the extension '{1}', but has a conflicting 'outputExtensions' mapping. Each registration for this extension must produce the same output file name."}
+
+var Content_mapper_0_is_also_registered_for_the_extension_1_but_has_no_outputExtensions_mapping_Each_registration_for_this_extension_must_produce_the_same_output_file_name = &Message{code: 18128, category: CategoryError, key: "Content_mapper_0_is_also_registered_for_the_extension_1_but_has_no_outputExtensions_mapping_Each_reg_18128", text: "Content mapper '{0}' is also registered for the extension '{1}', but has no 'outputExtensions' mapping. Each registration for this extension must produce the same output file name."}
+
+var The_conflicting_mapper_registration_is_declared_here = &Message{code: 18130, category: CategoryMessage, key: "The_conflicting_mapper_registration_is_declared_here_18130", text: "The conflicting mapper registration is declared here."}
+
+var The_conflicting_mapper_registration_is_declared_here_Its_outputExtensions_setting_is_inherited_from_the_mapper_s_package_json = &Message{code: 18131, category: CategoryMessage, key: "The_conflicting_mapper_registration_is_declared_here_Its_outputExtensions_setting_is_inherited_from__18131", text: "The conflicting mapper registration is declared here. Its 'outputExtensions' setting is inherited from the mapper's package.json."}
+
+var This_relative_import_path_is_unsafe_to_rewrite_because_the_content_mapper_s_outputExtensions_mapping_depends_on_module_resolution = &Message{code: 18132, category: CategoryError, key: "This_relative_import_path_is_unsafe_to_rewrite_because_the_content_mapper_s_outputExtensions_mapping_18132", text: "This relative import path is unsafe to rewrite because the content mapper's 'outputExtensions' mapping depends on module resolution."}
+
+var Non_literal_import_paths_cannot_be_rewritten_when_a_content_mapper_uses_both_include_and_an_outputExtensions_mapping_Set_disableDynamicImportExtensionRewriting_to_disable_rewriting_of_non_literal_import_paths = &Message{code: 18133, category: CategoryError, key: "Non_literal_import_paths_cannot_be_rewritten_when_a_content_mapper_uses_both_include_and_an_outputEx_18133", text: "Non-literal import paths cannot be rewritten when a content mapper uses both 'include' and an 'outputExtensions' mapping. Set 'disableDynamicImportExtensionRewriting' to disable rewriting of non-literal import paths."}
+
+var This_relative_import_path_is_unsafe_to_rewrite_because_it_appears_to_match_the_content_mapper_s_include_but_does_not_after_resolution_with_rootDirs = &Message{code: 18134, category: CategoryError, key: "This_relative_import_path_is_unsafe_to_rewrite_because_it_appears_to_match_the_content_mapper_s_incl_18134", text: "This relative import path is unsafe to rewrite because it appears to match the content mapper's 'include', but does not after resolution with 'rootDirs'."}
+
+var This_relative_import_path_is_unsafe_to_rewrite_because_it_appears_not_to_match_the_content_mapper_s_include_but_does_after_resolution_with_rootDirs = &Message{code: 18135, category: CategoryError, key: "This_relative_import_path_is_unsafe_to_rewrite_because_it_appears_not_to_match_the_content_mapper_s__18135", text: "This relative import path is unsafe to rewrite because it appears not to match the content mapper's 'include', but does after resolution with 'rootDirs'."}
+
+var This_relative_import_path_is_unsafe_to_rewrite_because_it_appears_to_match_the_content_mapper_s_include_but_does_not_after_resolution_with_moduleSuffixes = &Message{code: 18136, category: CategoryError, key: "This_relative_import_path_is_unsafe_to_rewrite_because_it_appears_to_match_the_content_mapper_s_incl_18136", text: "This relative import path is unsafe to rewrite because it appears to match the content mapper's 'include', but does not after resolution with 'moduleSuffixes'."}
+
+var This_relative_import_path_is_unsafe_to_rewrite_because_it_appears_not_to_match_the_content_mapper_s_include_but_does_after_resolution_with_moduleSuffixes = &Message{code: 18137, category: CategoryError, key: "This_relative_import_path_is_unsafe_to_rewrite_because_it_appears_not_to_match_the_content_mapper_s__18137", text: "This relative import path is unsafe to rewrite because it appears not to match the content mapper's 'include', but does after resolution with 'moduleSuffixes'."}
+
+var This_relative_import_path_is_unsafe_to_rewrite_because_it_appears_to_match_the_content_mapper_s_include_but_does_not_after_resolution_with_rootDirs_and_moduleSuffixes = &Message{code: 18138, category: CategoryError, key: "This_relative_import_path_is_unsafe_to_rewrite_because_it_appears_to_match_the_content_mapper_s_incl_18138", text: "This relative import path is unsafe to rewrite because it appears to match the content mapper's 'include', but does not after resolution with 'rootDirs' and 'moduleSuffixes'."}
+
+var This_relative_import_path_is_unsafe_to_rewrite_because_it_appears_not_to_match_the_content_mapper_s_include_but_does_after_resolution_with_rootDirs_and_moduleSuffixes = &Message{code: 18139, category: CategoryError, key: "This_relative_import_path_is_unsafe_to_rewrite_because_it_appears_not_to_match_the_content_mapper_s__18139", text: "This relative import path is unsafe to rewrite because it appears not to match the content mapper's 'include', but does after resolution with 'rootDirs' and 'moduleSuffixes'."}
+
+var File_0_has_a_registered_content_mapper_extension_but_does_not_match_any_content_mapper_s_include = &Message{code: 18140, category: CategoryError, key: "File_0_has_a_registered_content_mapper_extension_but_does_not_match_any_content_mapper_s_include_18140", text: "File '{0}' has a registered content mapper extension but does not match any content mapper's 'include'."}
+
+var Content_mapper_0_must_specify_extensions_in_tsconfig_or_its_package_manifest = &Message{code: 18141, category: CategoryError, key: "Content_mapper_0_must_specify_extensions_in_tsconfig_or_its_package_manifest_18141", text: "Content mapper '{0}' must specify 'extensions' in tsconfig or its package manifest."}
+
 var X_nodenext_if_module_is_nodenext_node16_if_module_is_node16_or_node18_otherwise_bundler = &Message{code: 69010, category: CategoryMessage, key: "nodenext_if_module_is_nodenext_node16_if_module_is_node16_or_node18_otherwise_bundler_69010", text: "`nodenext` if `module` is `nodenext`; `node16` if `module` is `node16` or `node18`; otherwise, `bundler`."}
 
 var File_is_a_CommonJS_module_it_may_be_converted_to_an_ES_module = &Message{code: 80001, category: CategorySuggestion, key: "File_is_a_CommonJS_module_it_may_be_converted_to_an_ES_module_80001", text: "File is a CommonJS module; it may be converted to an ES module."}
@@ -6426,6 +6456,21 @@ var allMessages = [...]**Message{
 	&The_typescript_contentMapper_outputExtensions_of_the_content_mapper_package_0_must_be_an_object_with_string_values,
 	&Content_mapper_extension_0_must_not_contain_path_separators,
 	&The_content_mapper_package_0_is_outside_the_open_workspace_and_will_not_be_loaded,
+	&The_content_mapper_0_returned_virtual_extension_1_whose_module_format_does_not_match_declaration_output_2,
+	&Content_mapper_0_is_also_registered_for_the_extension_1_but_has_a_conflicting_outputExtensions_mapping_Each_registration_for_this_extension_must_produce_the_same_output_file_name,
+	&Content_mapper_0_is_also_registered_for_the_extension_1_but_has_no_outputExtensions_mapping_Each_registration_for_this_extension_must_produce_the_same_output_file_name,
+	&The_conflicting_mapper_registration_is_declared_here,
+	&The_conflicting_mapper_registration_is_declared_here_Its_outputExtensions_setting_is_inherited_from_the_mapper_s_package_json,
+	&This_relative_import_path_is_unsafe_to_rewrite_because_the_content_mapper_s_outputExtensions_mapping_depends_on_module_resolution,
+	&Non_literal_import_paths_cannot_be_rewritten_when_a_content_mapper_uses_both_include_and_an_outputExtensions_mapping_Set_disableDynamicImportExtensionRewriting_to_disable_rewriting_of_non_literal_import_paths,
+	&This_relative_import_path_is_unsafe_to_rewrite_because_it_appears_to_match_the_content_mapper_s_include_but_does_not_after_resolution_with_rootDirs,
+	&This_relative_import_path_is_unsafe_to_rewrite_because_it_appears_not_to_match_the_content_mapper_s_include_but_does_after_resolution_with_rootDirs,
+	&This_relative_import_path_is_unsafe_to_rewrite_because_it_appears_to_match_the_content_mapper_s_include_but_does_not_after_resolution_with_moduleSuffixes,
+	&This_relative_import_path_is_unsafe_to_rewrite_because_it_appears_not_to_match_the_content_mapper_s_include_but_does_after_resolution_with_moduleSuffixes,
+	&This_relative_import_path_is_unsafe_to_rewrite_because_it_appears_to_match_the_content_mapper_s_include_but_does_not_after_resolution_with_rootDirs_and_moduleSuffixes,
+	&This_relative_import_path_is_unsafe_to_rewrite_because_it_appears_not_to_match_the_content_mapper_s_include_but_does_after_resolution_with_rootDirs_and_moduleSuffixes,
+	&File_0_has_a_registered_content_mapper_extension_but_does_not_match_any_content_mapper_s_include,
+	&Content_mapper_0_must_specify_extensions_in_tsconfig_or_its_package_manifest,
 	&X_nodenext_if_module_is_nodenext_node16_if_module_is_node16_or_node18_otherwise_bundler,
 	&File_is_a_CommonJS_module_it_may_be_converted_to_an_ES_module,
 	&This_constructor_function_may_be_converted_to_a_class_declaration,

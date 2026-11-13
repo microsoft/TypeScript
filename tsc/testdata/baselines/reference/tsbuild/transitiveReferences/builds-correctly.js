@@ -43,7 +43,7 @@ export class A {}
     "references": [{ "path": "tsconfig.b.json" }],
 }
 
-tsgo --b tsconfig.c.json --listFiles
+tsc --b tsconfig.c.json --listFiles
 ExitStatus:: Success
 Output::
 /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts

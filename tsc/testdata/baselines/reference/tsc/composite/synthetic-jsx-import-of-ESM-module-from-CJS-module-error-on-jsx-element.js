@@ -22,7 +22,7 @@ export default <div/>;
     },
 }
 
-tsgo 
+tsc 
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96msrc/main.tsx[0m:[93m1[0m:[93m16[0m - [91merror[0m[90m TS1479: [0mThe current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("solid-js/jsx-runtime")' call instead.

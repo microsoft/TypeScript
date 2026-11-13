@@ -6,7 +6,7 @@ export const a = 1
 //// [/home/src/workspaces/project/tsconfig.json] *new* 
 
 
-tsgo -p .
+tsc -p .
 ExitStatus:: Success
 Output::
 //// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*

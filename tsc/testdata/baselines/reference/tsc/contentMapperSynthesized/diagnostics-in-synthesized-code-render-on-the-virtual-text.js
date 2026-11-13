@@ -20,7 +20,7 @@ import "./app.vue";
     ]
 }
 
-tsgo --runExternalCode
+tsc --runExternalCode
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96mapp.vue[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS2304: [0mCannot find name 'jsxRuntime'.

@@ -6,8 +6,11 @@ import (
 	"maps"
 	"path/filepath"
 	"slices"
+	"strconv"
 	"strings"
+	"sync/atomic"
 	"testing"
+	"time"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
@@ -25,6 +28,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/osvfs"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs/wrapvfs"
 	"gotest.tools/v3/assert"
 )
 
@@ -962,7 +966,7 @@ func TestParseJsonConfigFileContentHandlesNullArrayElements(t *testing.T) {
 	fs := tsoptionstest.NewVFS(map[string]string{
 		"/project/index.ts": "export {};",
 	}, tspath.CaseSensitive /*caseSensitivity*/)
-	for _, property := range []string{"files", "include", "exclude"} {
+	for _, property := range []string{"files", "include", "exclude", "extends"} {
 		t.Run(property, func(t *testing.T) {
 			t.Parallel()
 			parsed := tsoptions.ParseJsonConfigFileContent(
@@ -997,6 +1001,41 @@ func TestParseJsonConfigFileContentDefaultsCompileOnSaveToFalse(t *testing.T) {
 	)
 	assert.Assert(t, parsed.CompileOnSave != nil)
 	assert.Equal(t, *parsed.CompileOnSave, false)
+}
+
+func TestParseConfigExtendsInvalidArrayElements(t *testing.T) {
+	t.Parallel()
+	const text = `{"extends":["./base.json",42,false,{},["./base.json"]],"files":["index.ts"]}`
+	fs := tsoptionstest.NewVFS(map[string]string{
+		"/project/base.json": `{"compilerOptions":{"strict":true}}`,
+		"/project/index.ts":  "export {};",
+	}, tspath.CaseSensitive)
+	for _, fromSource := range []bool{false, true} {
+		t.Run(strconv.FormatBool(fromSource), func(t *testing.T) {
+			t.Parallel()
+			config := testConfig{
+				jsonText:       text,
+				configFileName: "/project/tsconfig.json",
+			}
+			var parsed *tsoptions.ParsedCommandLine
+			if fromSource {
+				parsed = getParsedWithJsonSourceFileApi(config, fs, "/project")
+			} else {
+				parsed = getParsedWithJsonApi(config, fs, "/project")
+			}
+			assert.Equal(t, len(parsed.Errors), 4)
+			for i, diagnostic := range parsed.Errors {
+				assert.Equal(t, diagnostic.Code(), diagnostics.Compiler_option_0_requires_a_value_of_type_1.Code())
+				assert.DeepEqual(t, diagnostic.MessageArgs(), []string{"extends", "string"})
+				if fromSource {
+					element := []string{"42", "false", "{}", `["./base.json"]`}[i]
+					assert.Equal(t, diagnostic.Pos(), strings.Index(text, element))
+					assert.Equal(t, diagnostic.Len(), len(element))
+				}
+			}
+			assert.Assert(t, parsed.CompilerOptions().Strict.IsTrue())
+		})
+	}
 }
 
 func getParsedWithJsonApi(config testConfig, fs vfs.FS, basePath tspath.RootedDirectoryPath) *tsoptions.ParsedCommandLine {
@@ -1549,7 +1588,7 @@ func TestContentMappersValidation(t *testing.T) {
 		{
 			name:           "missing extensions",
 			contentMappers: `[{ "package": "x" }]`,
-			expectedCode:   diagnostics.Compiler_option_0_requires_a_value_of_type_1.Code(),
+			expectedCode:   diagnostics.Content_mapper_0_must_specify_extensions_in_tsconfig_or_its_package_manifest.Code(),
 		},
 		{
 			name:           "duplicate extension across mappers",
@@ -1581,6 +1620,29 @@ func TestContentMappersValidation(t *testing.T) {
 			contentMappers: `[{ "package": "x", "extensions": [".vue"], "options": ["strict"] }]`,
 			expectedCode:   diagnostics.Compiler_option_0_requires_a_value_of_type_1.Code(),
 		},
+		{
+			name:           "include is not an array",
+			contentMappers: `[{ "package": "x", "extensions": [".vue"], "include": "src" }]`,
+			expectedCode:   diagnostics.Compiler_option_0_requires_a_value_of_type_1.Code(),
+		},
+		{
+			name:           "include contains a non-string",
+			contentMappers: `[{ "package": "x", "extensions": [".vue"], "include": [1] }]`,
+			expectedCode:   diagnostics.Compiler_option_0_requires_a_value_of_type_1.Code(),
+		},
+		{
+			name:           "include ends in recursion",
+			contentMappers: `[{ "package": "x", "extensions": [".vue"], "include": ["src/**"] }]`,
+			expectedCode:   diagnostics.File_specification_cannot_end_in_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0.Code(),
+		},
+		{
+			name: "incompatible output extensions",
+			contentMappers: `[
+				{ "package": "a", "extensions": [".vue"], "outputExtensions": {".vue": ".js"}, "include": ["src"] },
+				{ "package": "b", "extensions": [".vue"] }
+			]`,
+			expectedCode: diagnostics.Content_mapper_0_is_also_registered_for_the_extension_1_but_has_a_conflicting_outputExtensions_mapping_Each_registration_for_this_extension_must_produce_the_same_output_file_name.Code(),
+		},
 	}
 
 	for _, test := range tests {
@@ -1593,9 +1655,12 @@ func TestContentMappersValidation(t *testing.T) {
 				allFileList:     map[string]string{"/app.ts": "export {}"},
 				existingOptions: &core.CompilerOptions{RunExternalCode: core.TSTrue},
 			}
-			if test.name == "duplicate extension across mappers" {
+			if test.name == "duplicate extension across mappers" || test.name == "incompatible output extensions" {
 				config.allFileList["/node_modules/a/package.json"] = `{ "name": "a", "version": "1.0.0", "typescript": { "contentMapper": { "exec": ["a"] } } }`
 				config.allFileList["/node_modules/b/package.json"] = `{ "name": "b", "version": "1.0.0", "typescript": { "contentMapper": { "exec": ["b"] } } }`
+			}
+			if test.name == "missing extensions" {
+				config.allFileList["/node_modules/x/package.json"] = `{ "name": "x", "typescript": { "contentMapper": { "exec": ["x"] } } }`
 			}
 			for apiName, getParsed := range map[string]func(testConfig, vfs.FS, tspath.RootedDirectoryPath) *tsoptions.ParsedCommandLine{
 				"json api":           getParsedWithJsonApi,
@@ -2138,4 +2203,43 @@ func TestExtendedConfigConfigDirPathsAreNotCached(t *testing.T) {
 	parseConfig("/packages/a/tsconfig.json")
 	paths := parseConfig("/packages/b/tsconfig.json").CompilerOptions().Paths
 	assert.DeepEqual(t, paths.GetOrZero("@pkg/*"), []string{"/packages/b/src/*"})
+}
+
+func TestParseJsonConfigFileContentSingleThreadedReadsDirectoriesSerially(t *testing.T) {
+	t.Parallel()
+
+	files := map[string]string{}
+	for i := range 16 {
+		files[fmt.Sprintf("/project/dir%d/index.ts", i)] = ""
+	}
+	base := tsoptionstest.NewVFS(files, tspath.CaseSensitive)
+	var inFlight, maxInFlight atomic.Int32
+	fs := wrapvfs.Wrap(base, wrapvfs.Replacements{
+		GetAccessibleEntries: func(path tspath.RootedDirectoryPath) vfs.Entries {
+			n := inFlight.Add(1)
+			for {
+				current := maxInFlight.Load()
+				if n <= current || maxInFlight.CompareAndSwap(current, n) {
+					break
+				}
+			}
+			// Give concurrent readers time to overlap.
+			time.Sleep(time.Millisecond)
+			defer inFlight.Add(-1)
+			return base.GetAccessibleEntries(path)
+		},
+	})
+
+	parsed := tsoptions.ParseJsonConfigFileContent(
+		map[string]any{},
+		tsoptions.NewDefaultParseConfigHost(fs),
+		"/project",
+		&core.CompilerOptions{SingleThreaded: core.TSTrue},
+		"/project/tsconfig.json",
+		nil, /*resolutionStack*/
+		nil, /*extendedConfigCache*/
+	)
+
+	assert.Equal(t, len(parsed.FileNames()), 16)
+	assert.Equal(t, maxInFlight.Load(), int32(1))
 }

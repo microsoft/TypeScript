@@ -603,7 +603,9 @@ func (p *Program) GetContentMapper(file *ast.SourceFile) *contentmapper.Mapper {
 	return nil
 }
 
-func (p *Program) ContentMapperExtensions() []string { return p.opts.Config.ContentMapperExtensions() }
+func (p *Program) ContentMapperExtensionForFileName(fileName tspath.RootedFilePath) string {
+	return p.opts.Config.ContentMapperExtensionForFileName(fileName)
+}
 
 func (p *Program) ContentMapperExtensionRewrites() []tspath.ExtensionRewrite {
 	return p.opts.Config.ContentMapperExtensionRewrites()
@@ -859,6 +861,9 @@ func (p *Program) collectCheckerDiagnosticsFromFiles(ctx context.Context, source
 func (p *Program) GetSyntacticDiagnostics(ctx context.Context, sourceFile *ast.SourceFile) []*ast.Diagnostic {
 	return p.collectDiagnostics(ctx, sourceFile, false /*concurrent*/, func(_ context.Context, file *ast.SourceFile) []*ast.Diagnostic {
 		diags := core.Concatenate(file.Diagnostics(), file.JSDiagnostics())
+		if diagnostic := p.getContentMapperModuleFormatDiagnostic(file); diagnostic != nil {
+			diags = append(diags, diagnostic)
+		}
 		// For JS files that won't be checked by the checker (no checkJs/ts-check), we need
 		// program-level syntactic checks that require compiler options. This mirrors Strada's
 		// getJSSyntacticDiagnosticsForFile in program.ts.
@@ -867,6 +872,42 @@ func (p *Program) GetSyntacticDiagnostics(ctx context.Context, sourceFile *ast.S
 		}
 		return diags
 	})
+}
+
+func (p *Program) getContentMapperModuleFormatDiagnostic(file *ast.SourceFile) *ast.Diagnostic {
+	if file.IsContentMapperFailureStub() || file.IsContentMapperSupplemental() || ast.IsJsonSourceFile(file) {
+		return nil
+	}
+	mapper := p.GetContentMapper(file)
+	if mapper == nil {
+		return nil
+	}
+	options := p.Options()
+	var host outputpaths.OutputPathsHost = p
+	if config := p.GetRedirectForResolution(file); config != nil {
+		options = config.CompilerOptions()
+		host = config
+	}
+	// Declaration paths depend on the complete source graph, so validate here rather than during loading.
+	declarationPath := outputpaths.GetOutputDeclarationFileNameWorker(file.FileName(), options, host)
+	virtualFileName := file.VirtualFileName()
+	if p.getContentMappedFileModuleFormat(virtualFileName) == p.getContentMappedFileModuleFormat(declarationPath) {
+		return nil
+	}
+	return ast.NewDiagnostic(file, core.NewTextRange(0, 0),
+		diagnostics.The_content_mapper_0_returned_virtual_extension_1_whose_module_format_does_not_match_declaration_output_2,
+		mapper.DiagnosticName(), virtualFileName.Extension(), declarationPath.BaseName())
+}
+
+func (p *Program) getContentMappedFileModuleFormat(fileName tspath.RootedFilePath) core.ModuleKind {
+	var packageJsonType string
+	if !p.opts.SkipModuleResolution {
+		scope := p.newResolver().GetPackageScopeForPath(fileName.Directory())
+		if scope.Exists() {
+			packageJsonType, _ = scope.Contents.Type.GetValue()
+		}
+	}
+	return ast.GetImpliedNodeFormatForFile(fileName, packageJsonType)
 }
 
 // getAdditionalJSSyntacticDiagnostics produces option-dependent syntactic diagnostics for JS files
@@ -942,6 +983,27 @@ func (p *Program) GetProgramDiagnostics() []*ast.Diagnostic {
 		p.contentMapperOptionDiagnostics,
 		p.includeProcessor.getDiagnostics(p).GetGlobalDiagnostics(),
 	))
+}
+
+func (p *Program) GetOptionsDiagnostics() []*ast.Diagnostic {
+	configFiles := map[tspath.PathKey]*ast.SourceFile{}
+	addConfig := func(config *tsoptions.ParsedCommandLine) {
+		if config != nil && config.ConfigFile != nil {
+			configFiles[config.ConfigFile.SourceFile.PathKey()] = config.ConfigFile.SourceFile
+		}
+	}
+	addConfig(p.CommandLine())
+	p.RangeResolvedProjectReference(func(_ tspath.PathKey, config *tsoptions.ParsedCommandLine, _ *tsoptions.ParsedCommandLine, _ int) bool {
+		addConfig(config)
+		return true
+	})
+	result := core.Filter(p.GetProgramDiagnostics(), func(d *ast.Diagnostic) bool {
+		return d.File() == nil || configFiles[d.File().PathKey()] != nil
+	})
+	for _, file := range configFiles {
+		result = append(result, p.includeProcessor.getDiagnostics(p).GetDiagnosticsForFile(file)...)
+	}
+	return SortAndDeduplicateDiagnostics(result)
 }
 
 func (p *Program) collectContentMapperOptionDiagnostics() {
@@ -1872,19 +1934,19 @@ func (p *Program) GetSourceFileMetaData(path tspath.PathKey) ast.SourceFileMetaD
 }
 
 func (p *Program) GetEmitModuleFormatOfFile(sourceFile ast.HasFileName) core.ModuleKind {
-	return ast.GetEmitModuleFormatOfFileWorker(sourceFile.FileName(), p.projectReferenceFileMapper.getCompilerOptionsForFile(sourceFile), p.GetSourceFileMetaData(sourceFile.PathKey()))
+	return ast.GetEmitModuleFormatOfFileWorker(getModuleFormatFileName(sourceFile), p.projectReferenceFileMapper.getCompilerOptionsForFile(sourceFile), p.GetSourceFileMetaData(sourceFile.PathKey()))
 }
 
 func (p *Program) GetEmitSyntaxForUsageLocation(sourceFile ast.HasFileName, location *ast.StringLiteralLike) core.ResolutionMode {
-	return getEmitSyntaxForUsageLocationWorker(sourceFile.FileName(), p.sourceFileMetaDatas[sourceFile.PathKey()], location, p.projectReferenceFileMapper.getCompilerOptionsForFile(sourceFile))
+	return getEmitSyntaxForUsageLocationWorker(getModuleFormatFileName(sourceFile), p.sourceFileMetaDatas[sourceFile.PathKey()], location, p.projectReferenceFileMapper.getCompilerOptionsForFile(sourceFile))
 }
 
 func (p *Program) GetImpliedNodeFormatForEmit(sourceFile ast.HasFileName) core.ResolutionMode {
-	return ast.GetImpliedNodeFormatForEmitWorker(sourceFile.FileName(), p.projectReferenceFileMapper.getCompilerOptionsForFile(sourceFile).GetEmitModuleKind(), p.GetSourceFileMetaData(sourceFile.PathKey()))
+	return ast.GetImpliedNodeFormatForEmitWorker(getModuleFormatFileName(sourceFile), p.projectReferenceFileMapper.getCompilerOptionsForFile(sourceFile).GetEmitModuleKind(), p.GetSourceFileMetaData(sourceFile.PathKey()))
 }
 
 func (p *Program) GetModeForUsageLocation(sourceFile ast.HasFileName, location *ast.StringLiteralLike) core.ResolutionMode {
-	return getModeForUsageLocation(sourceFile.FileName(), p.sourceFileMetaDatas[sourceFile.PathKey()], location, p.projectReferenceFileMapper.getCompilerOptionsForFile(sourceFile))
+	return getModeForUsageLocation(getModuleFormatFileName(sourceFile), p.sourceFileMetaDatas[sourceFile.PathKey()], location, p.projectReferenceFileMapper.getCompilerOptionsForFile(sourceFile))
 }
 
 func (p *Program) GetModeForResolutionAtIndex(sourceFile *ast.SourceFile, index int) core.ResolutionMode {
@@ -1905,7 +1967,7 @@ func (p *Program) GetModeForResolutionAtIndex(sourceFile *ast.SourceFile, index 
 }
 
 func (p *Program) GetDefaultResolutionModeForFile(sourceFile ast.HasFileName) core.ResolutionMode {
-	return getDefaultResolutionModeForFile(sourceFile.FileName(), p.sourceFileMetaDatas[sourceFile.PathKey()], p.projectReferenceFileMapper.getCompilerOptionsForFile(sourceFile))
+	return getDefaultResolutionModeForFile(getModuleFormatFileName(sourceFile), p.sourceFileMetaDatas[sourceFile.PathKey()], p.projectReferenceFileMapper.getCompilerOptionsForFile(sourceFile))
 }
 
 func (p *Program) IsSourceFileDefaultLibrary(path tspath.PathKey) bool {

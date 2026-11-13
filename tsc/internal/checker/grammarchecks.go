@@ -443,6 +443,8 @@ func (c *Checker) checkGrammarModifiers(node *ast.Node /*Union[HasModifiers, Has
 			case ast.KindDeclareKeyword:
 				if flags&ast.ModifierFlagsAmbient != 0 {
 					return c.grammarErrorOnNode(modifier, diagnostics.X_0_modifier_already_seen, "declare")
+				} else if flags&ast.ModifierFlagsAbstract != 0 && modifier.Flags&ast.NodeFlagsReparsed == 0 {
+					return c.grammarErrorOnNode(modifier, diagnostics.X_0_modifier_must_precede_1_modifier, "declare", "abstract")
 				} else if flags&ast.ModifierFlagsAsync != 0 {
 					return c.grammarErrorOnNode(modifier, diagnostics.X_0_modifier_cannot_be_used_in_an_ambient_context, "async")
 				} else if flags&ast.ModifierFlagsOverride != 0 {
@@ -1073,7 +1075,6 @@ func (c *Checker) checkGrammarObjectLiteralExpression(node *ast.ObjectLiteralExp
 			ast.KindPropertyAssignment:
 			var commonProp *ast.NamedMemberBase
 			if prop.Kind == ast.KindShorthandPropertyAssignment {
-				prop.ClassLikeData()
 				commonProp = &prop.AsShorthandPropertyAssignment().NamedMemberBase
 			} else {
 				commonProp = &prop.AsPropertyAssignment().NamedMemberBase

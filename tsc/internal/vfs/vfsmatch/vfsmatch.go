@@ -2,6 +2,7 @@ package vfsmatch
 
 import (
 	"math"
+	"runtime"
 	"slices"
 	"strings"
 	"unicode/utf8"
@@ -22,6 +23,8 @@ const (
 	UsageFiles Usage = iota
 	UsageDirectories
 	UsageExclude
+	// UsageContentMapperInclude matches include specs without discovery's hidden/package-folder exclusions.
+	UsageContentMapperInclude
 )
 
 // UnlimitedDepth can be passed as the depth argument to indicate there is no depth limit.
@@ -31,8 +34,16 @@ type PathPatternInput interface {
 	string | tspath.PathPattern
 }
 
+// ReadDirectory returns the files below path matching the include and exclude
+// patterns. Directories may be read concurrently.
 func ReadDirectory[T PathPatternInput](host vfs.FS, path tspath.RootedDirectoryPath, extensions []string, excludes []T, includes []T, depth int) []tspath.RootedFilePath {
 	return matchFileNames(path, extensions, excludes, includes, depth, host)
+}
+
+// ReadDirectorySingleThreaded is ReadDirectory with all directory reads on the
+// calling goroutine.
+func ReadDirectorySingleThreaded[T PathPatternInput](host vfs.FS, path tspath.RootedDirectoryPath, extensions []string, excludes []T, includes []T, depth int) []tspath.RootedFilePath {
+	return matchFileNamesWithPrefetch(path, extensions, excludes, includes, depth, host, 0)
 }
 
 // IsImplicitGlob checks if a path component is implicitly a glob.
@@ -103,6 +114,7 @@ type globPattern struct {
 	isExclude       bool        // exclude patterns have different matching rules
 	caseSensitivity tspath.CaseSensitivity
 	excludeMinJs    bool // for "files" patterns, exclude .min.js by default
+	matchAllNames   bool
 }
 
 // component is a single path segment in a glob pattern.
@@ -167,12 +179,13 @@ func compileGlobPattern(spec string, basePath tspath.RootedDirectoryPath, usage 
 		isExclude:       usage == UsageExclude,
 		caseSensitivity: caseSensitivity,
 		excludeMinJs:    usage == UsageFiles,
+		matchAllNames:   usage == UsageContentMapperInclude,
 		// Avoid slice growth during compilation.
 		components: make([]component, 0, len(parts)),
 	}
 
 	for _, part := range parts {
-		p.components = append(p.components, parseComponent(part, usage != UsageExclude))
+		p.components = append(p.components, parseComponent(part, usage != UsageExclude && usage != UsageContentMapperInclude))
 	}
 	return p, true
 }
@@ -262,7 +275,7 @@ func (p *globPattern) matchPathParts(prefix, suffix string, pathOffset, compIdx 
 			if p.matchPathParts(prefix, suffix, pathOffset, compIdx+1, prefixOnly) {
 				return true
 			}
-			if !p.isExclude && (isHiddenPath(pathPart) || isPackageFolder(pathPart)) {
+			if !p.isExclude && !p.matchAllNames && (isHiddenPath(pathPart) || isPackageFolder(pathPart)) {
 				return false
 			}
 			pathOffset = nextOffset
@@ -369,7 +382,7 @@ func nextPathPartParts(prefix, suffix string, offset int) (part string, nextOffs
 // matchWildcard matches a path component against wildcard segments.
 func (p *globPattern) matchWildcard(segs []segment, s string) bool {
 	// Include patterns: wildcards at start cannot match hidden files
-	if !p.isExclude && len(segs) > 0 && isHiddenPath(s) && (segs[0].kind == segStar || segs[0].kind == segQuestion) {
+	if !p.isExclude && !p.matchAllNames && len(segs) > 0 && isHiddenPath(s) && (segs[0].kind == segStar || segs[0].kind == segQuestion) {
 		return false
 	}
 
@@ -587,6 +600,7 @@ type globVisitor struct {
 	caseSensitivity  tspath.CaseSensitivity
 	visited          collections.Set[tspath.PathKey]
 	results          [][]tspath.RootedFilePath
+	prefetched       map[tspath.RootedDirectoryPath]prefetchedDirectory
 }
 
 // visit walks a directory tree, collecting files that match the glob patterns.
@@ -595,9 +609,12 @@ type globVisitor struct {
 // called to resolve symlinks.
 func (v *globVisitor) visit(absolutePath tspath.RootedDirectoryPath, depth int, resolvedRealPath tspath.RootedDirectoryPath) {
 	// Detect symlink cycles
+	prefetched, hasPrefetched := v.prefetched[absolutePath]
 	var realPath tspath.RootedDirectoryPath
 	if resolvedRealPath != "" {
 		realPath = resolvedRealPath
+	} else if hasPrefetched {
+		realPath = prefetched.realPath
 	} else {
 		realPath = tspath.RootedDirectoryPathFromPath(v.host.Realpath(absolutePath.AsPath()))
 	}
@@ -607,7 +624,12 @@ func (v *globVisitor) visit(absolutePath tspath.RootedDirectoryPath, depth int, 
 	}
 	v.visited.Add(canonicalPath)
 
-	entries := v.host.GetAccessibleEntries(absolutePath)
+	var entries vfs.Entries
+	if hasPrefetched {
+		entries = prefetched.entries
+	} else {
+		entries = v.host.GetAccessibleEntries(absolutePath)
+	}
 
 	absPrefix := tspath.EnsureTrailingDirectorySeparator(absolutePath.AsString())
 
@@ -647,6 +669,12 @@ func (v *globVisitor) visit(absolutePath tspath.RootedDirectoryPath, depth int, 
 }
 
 func matchFileNames[T PathPatternInput](path tspath.RootedDirectoryPath, extensions []string, excludes, includes []T, depth int, host vfs.FS) []tspath.RootedFilePath {
+	return matchFileNamesWithPrefetch(path, extensions, excludes, includes, depth, host, runtime.GOMAXPROCS(0))
+}
+
+// matchFileNamesWithPrefetch is matchFileNames with prefetchWorkers concurrent
+// directory readers; zero disables the prefetch.
+func matchFileNamesWithPrefetch[T PathPatternInput](path tspath.RootedDirectoryPath, extensions []string, excludes, includes []T, depth int, host vfs.FS, prefetchWorkers int) []tspath.RootedFilePath {
 	caseSensitivity := host.CaseSensitivity()
 
 	fileMatcher := newGlobMatcher(includes, excludes, path, caseSensitivity, UsageFiles)
@@ -661,7 +689,11 @@ func matchFileNames[T PathPatternInput](path tspath.RootedDirectoryPath, extensi
 		results:          make([][]tspath.RootedFilePath, max(len(fileMatcher.includes), 1)),
 	}
 
-	for _, basePath := range getBasePaths(path, includes, caseSensitivity) {
+	basePaths := getBasePaths(path, includes, caseSensitivity)
+	if prefetchWorkers > 0 {
+		v.prefetched = prefetchDirectories(host, directoryMatcher, caseSensitivity, basePaths, depth, prefetchWorkers)
+	}
+	for _, basePath := range basePaths {
 		v.visit(basePath, depth, "")
 	}
 

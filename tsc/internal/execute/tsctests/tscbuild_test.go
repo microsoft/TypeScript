@@ -2372,7 +2372,7 @@ func TestBuildInferredTypeFromMonorepoReference(t *testing.T) {
 				// Root package.json and tsconfig.json
 				"/home/src/workspaces/solution/package.json": stringtestutil.Dedent(`
 					{
-						"name": "tsgo-monorepo-issue",
+						"name": "monorepo-issue",
 						"private": true,
 						"workspaces": ["packages/*"]
 					}`),

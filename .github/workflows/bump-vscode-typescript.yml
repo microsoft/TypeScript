@@ -58,7 +58,7 @@ jobs:
           fi
 
           npm version "$BUMP" \
-            --workspace native-preview \
+            --workspace packages/vscode-typescript \
             --no-git-tag-version \
             --package-lock-only
 
@@ -69,7 +69,7 @@ jobs:
             exit 1
           fi
 
-      - run: npm test -w native-preview
+      - run: npm test -w packages/vscode-typescript
 
       - name: Package extension
         run: npx hereby vscode-typescript:pack --forRelease --vscodeTypescriptRelease

@@ -11,11 +11,12 @@ func _() {
 	_ = x[UsageFiles-0]
 	_ = x[UsageDirectories-1]
 	_ = x[UsageExclude-2]
+	_ = x[UsageContentMapperInclude-3]
 }
 
-const _Usage_name = "FilesDirectoriesExclude"
+const _Usage_name = "FilesDirectoriesExcludeContentMapperInclude"
 
-var _Usage_index = [...]uint8{0, 5, 16, 23}
+var _Usage_index = [...]uint8{0, 5, 16, 23, 43}
 
 func (i Usage) String() string {
 	idx := int(i) - 0

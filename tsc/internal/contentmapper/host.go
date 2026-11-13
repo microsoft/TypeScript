@@ -167,7 +167,8 @@ func (e *InitializeError) Error() string {
 type Result struct {
 	// Text is the virtual TypeScript source text that is parsed into the program.
 	Text string
-	// VirtualExtension determines how Text is parsed.
+	// VirtualExtension determines how Text is parsed. Its module format must match the declaration
+	// output determined by OutputExtensions and the declaration's package.json scope.
 	VirtualExtension string
 	// Diagnostics are syntax errors in the original content.
 	Diagnostics []*ast.Diagnostic

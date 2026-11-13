@@ -112,6 +112,7 @@ const (
 	MethodGetNonMissingTypeOfSymbol                      Method = "getNonMissingTypeOfSymbol"
 	MethodGetSourceFile                                  Method = "getSourceFile"
 	MethodGetSourceFileNames                             Method = "getSourceFileNames"
+	MethodGetProgramStatistics                           Method = "getProgramStatistics"
 	MethodGetSourceFileMetadata                          Method = "getSourceFileMetadata"
 	MethodGetModeForUsageLocation                        Method = "getModeForUsageLocation"
 	MethodGetModeForResolutionAtIndex                    Method = "getModeForResolutionAtIndex"
@@ -796,6 +797,7 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodGetSuggestionDiagnostics:                   unmarshallerFor[GetDiagnosticsParams],
 	MethodGetDeclarationDiagnostics:                  unmarshallerFor[GetDiagnosticsParams],
 	MethodGetProgramDiagnostics:                      unmarshallerFor[GetProjectDiagnosticsParams],
+	MethodGetProgramStatistics:                       unmarshallerFor[GetProjectDiagnosticsParams],
 	MethodGetGlobalDiagnostics:                       unmarshallerFor[GetProjectDiagnosticsParams],
 	MethodGetConfigFileParsingDiagnostics:            unmarshallerFor[GetProjectDiagnosticsParams],
 	MethodStartCPUProfile:                            unmarshallerFor[ProfileParams],
@@ -1045,11 +1047,20 @@ type ConfigFileResponse struct {
 	FileNames         []tspath.RootedFilePath  `json:"fileNames" nonnil:"true"`
 	Options           *core.CompilerOptions    `json:"options" nonnil:"true"`
 	BuildOptions      *core.BuildOptions       `json:"buildOptions,omitempty"`
-	ProjectReferences []*core.ProjectReference `json:"projectReferences,omitempty"`
+	ProjectReferences []*core.ProjectReference `json:"projectReferences,omitzero"`
 	TypeAcquisition   *core.TypeAcquisition    `json:"typeAcquisition,omitempty"`
 	CompileOnSave     *bool                    `json:"compileOnSave,omitempty"`
 	Raw               any                      `json:"raw,omitempty"`
 	Errors            []*DiagnosticResponse    `json:"errors" nonnil:"true"`
+}
+
+type ProgramStatisticsResponse struct {
+	NodeCount          int                        `json:"nodeCount"`
+	IdentifierCount    int                        `json:"identifierCount"`
+	SymbolCount        int                        `json:"symbolCount"`
+	TypeCount          uint32                     `json:"typeCount"`
+	InstantiationCount uint32                     `json:"instantiationCount"`
+	RelationCacheSizes checker.RelationCacheSizes `json:"relationCacheSizes"`
 }
 
 type ReadConfigFileResponse struct {

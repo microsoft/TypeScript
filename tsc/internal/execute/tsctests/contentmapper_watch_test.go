@@ -7,7 +7,7 @@ import (
 	"sync"
 	"sync/atomic"
 	"testing"
-	"time"
+	"testing/synctest"
 
 	"github.com/microsoft/TypeScript/tsc/internal/contentmapper"
 	"github.com/microsoft/TypeScript/tsc/internal/execute"
@@ -148,6 +148,68 @@ func TestContentMapperOutputExtensionsIncrementalEmit(t *testing.T) {
 	}
 }
 
+func TestContentMapperIncludeIncrementalEmit(t *testing.T) {
+	t.Parallel()
+	for _, build := range []bool{false, true} {
+		for _, include := range []string{`["**/*.vue"]`, `[]`} {
+			name := "incremental/" + include
+			if build {
+				name = "build/" + include
+			}
+			t.Run(name, func(t *testing.T) {
+				t.Parallel()
+				const root = "/home/src/workspaces/project/"
+				const config = `{
+					"compilerOptions": {
+						"composite": true, "module": "preserve",
+						"rewriteRelativeImportExtensions": true, "outDir": "dist"
+					},
+					"files": ["main.ts", "globals.d.ts"],
+					"contentMappers": [{
+						"package": "mapper", "extensions": [".vue"],
+						"outputExtensions": {".vue": ".js"}
+					}]
+				}`
+				input := &tscInput{files: FileMap{
+					root + "tsconfig.json":                    config,
+					root + "main.ts":                          `export function dynamic(path: string) { return import(path); }`,
+					root + "globals.d.ts":                     `interface Promise<T> {} declare const Promise: any;`,
+					root + "node_modules/mapper/package.json": contentmappertest.PackageJSON(contentmappertest.VerbatimMapper),
+				}}
+				testSys := newTestSys(input, false)
+				sys := &recordingContentMapperSystem{
+					TestSys: testSys,
+					spawner: &recordingContentMapperSpawner{inner: contentmappertest.NewSpawner()},
+				}
+				args := []string{"--pretty", "false", "--runExternalCode"}
+				if build {
+					args = append([]string{"--build"}, args...)
+				}
+				run := func(runtimeMapping bool) {
+					t.Helper()
+					result := execute.CommandLine(t.Context(), sys, args, testSys)
+					expected := tsc.ExitStatusSuccess
+					if !runtimeMapping {
+						expected = tsc.ExitStatusDiagnosticsPresent_OutputsGenerated
+						assert.Assert(t, strings.Contains(testSys.currentWrite.String(), "TS18133"), testSys.currentWrite.String())
+					}
+					assert.Equal(t, result.Status, expected, testSys.currentWrite.String())
+					text, ok := testSys.FS().ReadFile(tspath.RootedFilePathFromNormalized(root + "dist/main.js"))
+					assert.Assert(t, ok)
+					assert.Equal(t, strings.Contains(text, `".vue": ".js"`), runtimeMapping, text)
+				}
+				run(true)
+				testSys.clearOutput()
+				testSys.writeFileNoError(root+"tsconfig.json", strings.Replace(config, `"extensions":`, `"include": `+include+`, "extensions":`, 1))
+				run(false)
+				testSys.clearOutput()
+				testSys.writeFileNoError(root+"tsconfig.json", config)
+				run(true)
+			})
+		}
+	}
+}
+
 func TestContentMapperSupplementalDiagnosticUsesOriginalFileName(t *testing.T) {
 	t.Parallel()
 	input := &tscInput{files: FileMap{
@@ -241,65 +303,60 @@ func TestContentMapperWatchLifecycle(t *testing.T) {
 	} {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
-			const configFileName = "/home/src/workspaces/project/tsconfig.json"
-			input := &tscInput{files: FileMap{
-				configFileName: `{
+			synctest.Test(t, func(t *testing.T) {
+				const configFileName = "/home/src/workspaces/project/tsconfig.json"
+				input := &tscInput{files: FileMap{
+					configFileName: `{
 					"compilerOptions": { "composite": true },
 					"contentMappers": [{ "package": "mapper-a", "extensions": [".vue"] }]
 				}`,
-				"/home/src/workspaces/project/app.vue":                            `export const app = 1;`,
-				"/home/src/workspaces/project/node_modules/mapper-a/package.json": contentmappertest.PackageJSON(contentmappertest.VerbatimMapper),
-				"/home/src/workspaces/project/node_modules/mapper-b/package.json": strings.Replace(contentmappertest.PackageJSON(contentmappertest.VerbatimMapper), `"version": "1.0.0"`, `"version": "2.0.0"`, 1),
-			}}
-			testSys := newTestSys(input, false)
-			closed := make(chan struct{}, 3)
-			spawner := &recordingContentMapperSpawner{inner: contentmappertest.NewSpawner(), closed: closed}
-			sys := &recordingContentMapperSystem{TestSys: testSys, spawner: spawner}
-			ctx, cancel := context.WithCancel(t.Context())
-			defer cancel()
+					"/home/src/workspaces/project/app.vue":                            `export const app = 1;`,
+					"/home/src/workspaces/project/node_modules/mapper-a/package.json": contentmappertest.PackageJSON(contentmappertest.VerbatimMapper),
+					"/home/src/workspaces/project/node_modules/mapper-b/package.json": strings.Replace(contentmappertest.PackageJSON(contentmappertest.VerbatimMapper), `"version": "1.0.0"`, `"version": "2.0.0"`, 1),
+				}}
+				testSys := newTestSys(input, false)
+				closed := make(chan struct{}, 3)
+				spawner := &recordingContentMapperSpawner{inner: contentmappertest.NewSpawner(), closed: closed}
+				sys := &recordingContentMapperSystem{TestSys: testSys, spawner: spawner}
+				ctx, cancel := context.WithCancel(t.Context())
+				defer cancel()
 
-			result := execute.CommandLine(ctx, sys, test.args, testSys)
-			assert.Assert(t, result.Watcher != nil)
-			assert.Equal(t, spawner.spawns.Load(), int32(1))
-			assert.Equal(t, spawner.closes.Load(), int32(0))
+				result := execute.CommandLine(ctx, sys, test.args, testSys)
+				assert.Assert(t, result.Watcher != nil)
+				assert.Equal(t, spawner.spawns.Load(), int32(1))
+				assert.Equal(t, spawner.closes.Load(), int32(0))
 
-			testSys.writeFileNoError(configFileName, `{
+				testSys.writeFileNoError(configFileName, `{
 				"compilerOptions": { "composite": true },
 				"contentMappers": [{ "package": "mapper-b", "extensions": [".vue"] }]
 			}`)
-			testSys.mockWatchBackend.SendEvents([]fswatch.Event{{Kind: fswatch.EventUpdate, Path: configFileName}})
-			result.Watcher.DoCycle(ctx)
+				testSys.mockWatchBackend.SendEvents([]fswatch.Event{{Kind: fswatch.EventUpdate, Path: configFileName}})
+				result.Watcher.DoCycle(ctx)
 
-			assert.Equal(t, spawner.spawns.Load(), int32(2))
-			assert.Equal(t, spawner.closes.Load(), int32(1))
-			<-closed
+				assert.Equal(t, spawner.spawns.Load(), int32(2))
+				assert.Equal(t, spawner.closes.Load(), int32(1))
+				<-closed
 
-			testSys.writeFileNoError(configFileName, `{ "compilerOptions": { "composite": true } }`)
-			testSys.mockWatchBackend.SendEvents([]fswatch.Event{{Kind: fswatch.EventUpdate, Path: configFileName}})
-			result.Watcher.DoCycle(ctx)
+				testSys.writeFileNoError(configFileName, `{ "compilerOptions": { "composite": true } }`)
+				testSys.mockWatchBackend.SendEvents([]fswatch.Event{{Kind: fswatch.EventUpdate, Path: configFileName}})
+				result.Watcher.DoCycle(ctx)
 
-			assert.Equal(t, spawner.closes.Load(), int32(2))
-			<-closed
+				assert.Equal(t, spawner.closes.Load(), int32(2))
+				<-closed
 
-			testSys.writeFileNoError(configFileName, `{
+				testSys.writeFileNoError(configFileName, `{
 				"compilerOptions": { "composite": true },
 				"contentMappers": [{ "package": "mapper-a", "extensions": [".vue"] }]
 			}`)
-			testSys.mockWatchBackend.SendEvents([]fswatch.Event{{Kind: fswatch.EventUpdate, Path: configFileName}})
-			result.Watcher.DoCycle(ctx)
+				testSys.mockWatchBackend.SendEvents([]fswatch.Event{{Kind: fswatch.EventUpdate, Path: configFileName}})
+				result.Watcher.DoCycle(ctx)
 
-			assert.Equal(t, spawner.spawns.Load(), int32(3))
-			assert.Equal(t, spawner.closes.Load(), int32(2))
-			cancel()
-			closedAfterCancellation := false
-			select {
-			case <-closed:
-				closedAfterCancellation = true
-			case <-time.After(time.Second):
-				closedAfterCancellation = false
-			}
-			assert.Assert(t, closedAfterCancellation, "content mapper process was not closed after cancellation")
-			assert.Equal(t, spawner.closes.Load(), int32(3))
+				assert.Equal(t, spawner.spawns.Load(), int32(3))
+				assert.Equal(t, spawner.closes.Load(), int32(2))
+				cancel()
+				<-closed
+				assert.Equal(t, spawner.closes.Load(), int32(3))
+			})
 		})
 	}
 }

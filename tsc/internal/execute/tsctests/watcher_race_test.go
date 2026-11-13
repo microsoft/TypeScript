@@ -6,7 +6,7 @@ import (
 	"strings"
 	"sync"
 	"testing"
-	"time"
+	"testing/synctest"
 
 	"github.com/microsoft/TypeScript/tsc/internal/execute"
 	"github.com/microsoft/TypeScript/tsc/internal/execute/build"
@@ -356,28 +356,20 @@ func TestWatcherAlternatingModifyAndDoCycle(t *testing.T) {
 
 func TestBuildWatchStopsWhenContextIsCancelled(t *testing.T) {
 	t.Parallel()
+	synctest.Test(t, func(t *testing.T) {
+		sys := newTestSys(&tscInput{
+			files: FileMap{
+				"/home/src/workspaces/project/tsconfig.json": `{"compilerOptions":{"composite":true},"files":["index.ts"]}`,
+				"/home/src/workspaces/project/index.ts":      `export const x = 1;`,
+			},
+		}, false)
+		ctx, cancel := context.WithCancel(context.Background())
+		cancel()
 
-	sys := newTestSys(&tscInput{
-		files: FileMap{
-			"/home/src/workspaces/project/tsconfig.json": `{"compilerOptions":{"composite":true},"files":["index.ts"]}`,
-			"/home/src/workspaces/project/index.ts":      `export const x = 1;`,
-		},
-	}, false)
-	ctx, cancel := context.WithCancel(context.Background())
-	cancel()
-
-	resultCh := make(chan tsc.CommandLineResult, 1)
-	go func() {
-		resultCh <- execute.CommandLine(ctx, sys, []string{"--build", "--watch"}, sys)
-	}()
-
-	select {
-	case result := <-resultCh:
+		result := execute.CommandLine(ctx, sys, []string{"--build", "--watch"}, sys)
 		assert.Equal(t, result.Status, tsc.ExitStatusCancelled)
 		assert.Assert(t, result.Watcher == nil)
-	case <-time.After(2 * time.Second):
-		t.Fatal("build watch did not stop after context cancellation")
-	}
+	})
 }
 
 func TestWatcherStartsFromExistingBuildInfo(t *testing.T) {

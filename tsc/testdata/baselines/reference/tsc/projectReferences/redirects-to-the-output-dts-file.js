@@ -23,7 +23,7 @@ import { m } from '../alpha/a'
     "references": [ { "path": "../alpha" } ]
 }
 
-tsgo --p beta/tsconfig.json --explainFiles
+tsc --p beta/tsconfig.json --explainFiles
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96mbeta/b.ts[0m:[93m1[0m:[93m10[0m - [91merror[0m[90m TS2305: [0mModule '"../alpha/a"' has no exported member 'm'.

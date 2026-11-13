@@ -321,6 +321,9 @@ func (s *snapshotFSBuilder) deleteCacheEntry(entry *dirty.SyncMapEntry[tspath.Pa
 }
 
 func (s *snapshotFSBuilder) FileExists(fileName tspath.RootedFilePath, path tspath.PathKey) bool {
+	if file, ok := s.cacheFiles.LoadClean(path); ok && file != nil && file.MatchesDiskText() {
+		return true
+	}
 	if entry, ok := s.cacheFiles.Load(path); ok {
 		val := entry.Value()
 		if val == nil {
@@ -334,6 +337,9 @@ func (s *snapshotFSBuilder) FileExists(fileName tspath.RootedFilePath, path tspa
 }
 
 func (s *snapshotFSBuilder) GetFileByPath(fileName tspath.RootedFilePath, path tspath.PathKey) FileHandle {
+	if file, ok := s.cacheFiles.LoadClean(path); ok && file != nil && file.MatchesDiskText() {
+		return file
+	}
 	if entry, ok := s.cacheFiles.Load(path); ok {
 		return s.reloadEntryIfNeeded(entry)
 	}
@@ -351,6 +357,9 @@ func (s *snapshotFSBuilder) GetAccessibleEntries(path tspath.RootedDirectoryPath
 		return lowerEntries
 	}
 	return mergeCachedDirectoryEntries(lowerEntries, directory.Value(), func(key tspath.PathKey, childName string) bool {
+		if file, clean := s.cacheFiles.LoadClean(key); clean {
+			return file != nil || s.fs.FileExists(path.ResolveFile(childName))
+		}
 		entry, cached := s.cacheFiles.Load(key)
 		return cached && entry.Value() != nil || s.fs.FileExists(path.ResolveFile(childName))
 	}, s.fs.CaseSensitivity())
@@ -604,7 +613,7 @@ func (s *snapshotFSBuilder) reloadEntryIfContentChanged(entry *dirty.SyncMapEntr
 	return changed
 }
 
-// expandRealpathAliases adds synthetic URIs to the Changed, Created, and Deleted sets for
+// expandRealpathAliases adds synthetic URIs to the Changed, Created, Deleted, and DiskChanged sets for
 // files that were accessed through node_modules symlinks. When a watch event arrives
 // using a realpath, this expands it to include the symlink-based path so that
 // downstream consumers (markDirtyFiles, markFilesChanged) can find cached entries.
@@ -634,6 +643,7 @@ func (s *SnapshotFS) expandRealpathAliases(change FileChangeSummary) FileChangeS
 	expandSet(&change.Changed)
 	expandSet(&change.Created)
 	expandSet(&change.Deleted)
+	expandSet(&change.DiskChanged)
 
 	if change.Created.Len() > 0 {
 		createdDirectories := collections.NewSetWithSizeHint[tspath.PathKey](change.Created.Len())
@@ -844,7 +854,16 @@ func (fs *sourceFS) Track(fileName tspath.RootedFilePath) {
 	if !fs.tracking {
 		return
 	}
-	fs.seenFiles.Store(fs.caseSensitivity.PathKey(fileName.AsPath()), fileName)
+	fs.track(fileName, fs.caseSensitivity.PathKey(fileName.AsPath()))
+}
+
+func (fs *sourceFS) track(fileName tspath.RootedFilePath, path tspath.PathKey) {
+	if !fs.tracking {
+		return
+	}
+	if _, ok := fs.seenFiles.Load(path); !ok {
+		fs.seenFiles.Store(path, fileName)
+	}
 }
 
 func (fs *sourceFS) SeenFile(path tspath.PathKey) bool {
@@ -883,7 +902,7 @@ func (fs *sourceFS) GetFile(fileName tspath.RootedFilePath) FileHandle {
 }
 
 func (fs *sourceFS) GetFileByPath(fileName tspath.RootedFilePath, path tspath.PathKey) FileHandle {
-	fs.Track(fileName)
+	fs.track(fileName, path)
 	return fs.source.GetFileByPath(fileName, path)
 }
 
@@ -898,8 +917,9 @@ func (fs *sourceFS) DirectoryExists(path tspath.RootedDirectoryPath) bool {
 
 // FileExists implements vfs.FS.
 func (fs *sourceFS) FileExists(path tspath.RootedFilePath) bool {
-	fs.Track(path)
-	return fs.source.FileExists(path, fs.caseSensitivity.PathKey(path.AsPath()))
+	pathKey := fs.caseSensitivity.PathKey(path.AsPath())
+	fs.track(path, pathKey)
+	return fs.source.FileExists(path, pathKey)
 }
 
 // GetAccessibleEntries implements vfs.FS.

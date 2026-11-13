@@ -33,7 +33,7 @@ export const Other = 0;
     ],
 }
 
-tsgo --b src/main --verbose
+tsc --b src/main --verbose
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 

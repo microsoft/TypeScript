@@ -29,11 +29,13 @@ import (
 var ErrProjectUnavailable = errors.New("content mapper project is unavailable")
 
 // Definition is a content mapper as declared in a tsconfig's "contentMappers": the npm package that
-// implements the mapper and the otherwise unsupported file extensions it registers.
+// implements the mapper, its effective file extensions, and an optional project-relative include filter.
 type Definition struct {
 	Package    string   `json:"package"`
 	Extensions []string `json:"extensions"`
+	Include    []string `json:"include,omitzero"`
 	// OutputExtensions contains the resolved mapping after applying manifest defaults and project overrides.
+	// It determines declaration filenames and their module format; canonical virtual outputs must agree.
 	OutputExtensions map[string]string `json:"outputExtensions,omitzero"`
 	Options          json.Value        `json:"options,omitempty"`
 }
@@ -48,6 +50,7 @@ type Manifest struct {
 	CompilerOptions         []string
 	DynamicConfig           bool
 	DefaultOutputExtensions map[string]string
+	DefaultExtensions       []string
 }
 
 // Mapper is a resolved content mapper: its tsconfig Definition combined with the Manifest resolved from
@@ -128,6 +131,8 @@ func (m *Mapper) Equals(other *Mapper) bool {
 	return m.Package == other.Package &&
 		(m.Extensions == nil) == (other.Extensions == nil) &&
 		slices.Equal(m.Extensions, other.Extensions) &&
+		(m.Include == nil) == (other.Include == nil) &&
+		slices.Equal(m.Include, other.Include) &&
 		(m.Definition.OutputExtensions == nil) == (other.Definition.OutputExtensions == nil) &&
 		maps.Equal(m.Definition.OutputExtensions, other.Definition.OutputExtensions) &&
 		(m.Options == nil) == (other.Options == nil) &&
@@ -139,14 +144,16 @@ func (m *Mapper) Equals(other *Mapper) bool {
 		(m.CompilerOptions == nil) == (other.CompilerOptions == nil) &&
 		slices.Equal(m.CompilerOptions, other.CompilerOptions) &&
 		m.DynamicConfig == other.DynamicConfig &&
+		(m.DefaultExtensions == nil) == (other.DefaultExtensions == nil) &&
+		slices.Equal(m.DefaultExtensions, other.DefaultExtensions) &&
 		(m.Manifest.DefaultOutputExtensions == nil) == (other.Manifest.DefaultOutputExtensions == nil) &&
 		maps.Equal(m.Manifest.DefaultOutputExtensions, other.Manifest.DefaultOutputExtensions) &&
 		m.PackageDirectory == other.PackageDirectory &&
 		m.ContributionID == other.ContributionID
 }
 
-// TransformIdentity fingerprints the mapper's identity, declared compiler options, and runtime output
-// contract so both transformed-file caches and incremental emit are invalidated when these change.
+// TransformIdentity fingerprints the mapper's identity, declared compiler options, include filter, and
+// runtime output contract so both transformed-file caches and incremental emit are invalidated when these change.
 // It is a pure function of the mapper and options and never starts the mapper process.
 func (m *Mapper) TransformIdentity(options *core.CompilerOptions) xxh3.Uint128 {
 	declared, _ := m.MarshalDeclaredOptions(options)
@@ -155,7 +162,11 @@ func (m *Mapper) TransformIdentity(options *core.CompilerOptions) xxh3.Uint128 {
 	if len(m.Definition.OutputExtensions) > 0 {
 		outputExtensionsJSON, _ = json.Marshal(m.Definition.OutputExtensions, json.Deterministic(true))
 	}
-	buf := make([]byte, 0, len(m.Identity())+3+len(m.Options)+len(optionsJSON)+len(outputExtensionsJSON))
+	var includeJSON []byte
+	if m.Include != nil {
+		includeJSON, _ = json.Marshal(m.Include)
+	}
+	buf := make([]byte, 0, len(m.Identity())+4+len(m.Options)+len(optionsJSON)+len(outputExtensionsJSON)+len(includeJSON))
 	buf = append(buf, m.Identity()...)
 	buf = append(buf, 0)
 	buf = append(buf, m.Options...)
@@ -164,6 +175,10 @@ func (m *Mapper) TransformIdentity(options *core.CompilerOptions) xxh3.Uint128 {
 	if len(outputExtensionsJSON) > 0 {
 		buf = append(buf, 0)
 		buf = append(buf, outputExtensionsJSON...)
+	}
+	if len(includeJSON) > 0 {
+		buf = append(buf, 0)
+		buf = append(buf, includeJSON...)
 	}
 	return xxh3.Hash128(buf)
 }

@@ -8,6 +8,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/execute"
 	"github.com/microsoft/TypeScript/tsc/internal/osutil"
+	"github.com/microsoft/TypeScript/tsc/internal/pprof"
 )
 
 func main() {
@@ -70,6 +71,9 @@ func run(ctx context.Context) int {
 			return runAPI(ctx, args[1:])
 		}
 	}
+	// The language server and API take heap profiles on demand, so only the
+	// command line can skip sampling.
+	pprof.DisableMemProfiling()
 	result := execute.CommandLine(ctx, newSystem(), args, nil)
 	return int(result.Status)
 }

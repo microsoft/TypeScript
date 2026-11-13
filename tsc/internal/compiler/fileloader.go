@@ -57,7 +57,6 @@ type fileLoader struct {
 	caseSensitivity                                tspath.CaseSensitivity
 	supportedExtensions                            [][]string
 	supportedExtensionsWithJsonIfResolveJsonModule [][]string
-	contentMapperExtensions                        []string
 
 	filesParser *filesParser
 	rootTasks   []*parseTask
@@ -191,7 +190,6 @@ func processAllProgramFiles(
 		rootTasks:           make([]*parseTask, 0, len(rootFiles)+len(compilerOptions.Lib)),
 		supportedExtensions: supportedExtensions,
 		supportedExtensionsWithJsonIfResolveJsonModule: supportedExtensionsWithJsonIfResolveJsonModule,
-		contentMapperExtensions:                        opts.Config.ContentMapperExtensions(),
 	}
 	loader.addProjectReferenceTasks(ctx, singleThreaded)
 	if err := ctx.Err(); err != nil {
@@ -274,6 +272,7 @@ func (p *fileLoader) addRootFileTask(fileName tspath.RootedFilePath, referenceTe
 		rootTask.normalizedFilePath = fileName
 		rootTask.path = p.caseSensitivity.PathKey(tspath.RootedPath(fileName))
 		rootTask.failedLookup = true
+		rootTask.parseTaskResult = &parseTaskResult{}
 		rootTask.processingDiagnostics = []*processingDiagnostic{{
 			kind: processingDiagnosticKindExplainingFileInclude,
 			explanation: &includeExplainingDiagnostic{
@@ -329,7 +328,7 @@ func (p *fileLoader) resolveAutomaticTypeDirectives(ctx context.Context, contain
 						kind:                   fileIncludeKindAutomaticTypeDirectiveFile,
 						automaticTypeDirective: &automaticTypeDirectiveFileData{name, resolved.PackageId},
 					},
-					packageId: resolved.PackageId,
+					packageId: packageIdRef(&resolved.PackageId),
 				})
 			} else {
 				pDiagnostics = append(pDiagnostics, &processingDiagnostic{
@@ -437,7 +436,7 @@ func (p *fileLoader) parseSourceFile(ctx context.Context, t *parseTask) *ast.Sou
 		PathKey:                        t.path,
 		ExternalModuleIndicatorOptions: ast.GetExternalModuleIndicatorOptions(t.normalizedFilePath, options, t.metadata),
 	}
-	if t.normalizedFilePath.ExtensionIsOneOf(p.contentMapperExtensions) {
+	if p.opts.Config.GetContentMapperForFileName(t.normalizedFilePath) != nil {
 		return p.parseContentMappedFile(parseOptions)
 	}
 	return p.host.GetSourceFile(parseOptions)
@@ -745,13 +744,7 @@ func (p *fileLoader) getSourceFileFromReference(
 func (p *fileLoader) resolveTripleslashPathReference(moduleName string, containingFile tspath.RootedFilePath, index int) (*resolvedRef, *processingDiagnostic) {
 	normalizedFileName := containingFile.Directory().ResolveFile(moduleName)
 	containingPath := p.caseSensitivity.PathKey(tspath.RootedPath(containingFile))
-	includeReason := &FileIncludeReason{
-		kind: fileIncludeKindReferenceFile,
-		referencedFile: &referencedFileData{
-			file:  containingPath,
-			index: index,
-		},
-	}
+	includeReason := newReferencedFileIncludeReason(fileIncludeKindReferenceFile, containingPath, index, syntheticImportNone)
 
 	resolvedFileName, resolvedPath, diagnostic := p.getSourceFileFromReference(
 		normalizedFileName,
@@ -808,13 +801,7 @@ func (p *fileLoader) resolveTypeReferenceDirectives(ctx context.Context, t *pars
 			traceDone = p.tracing.Push(tracing.PhaseProgram, "processTypeReferenceDirective", map[string]any{"directive": ref.FileName, "hasResolved": resolved.IsResolved(), "refKind": int(fileIncludeKindTypeReferenceDirective), "refPath": string(t.path)}, false)
 		}
 		typeResolutionsInFile[module.ModeAwareCacheKey{Name: ref.FileName, Mode: resolutionMode}] = resolved
-		includeReason := &FileIncludeReason{
-			kind: fileIncludeKindTypeReferenceDirective,
-			referencedFile: &referencedFileData{
-				file:  t.path,
-				index: index,
-			},
-		}
+		includeReason := newReferencedFileIncludeReason(fileIncludeKindTypeReferenceDirective, t.path, index, syntheticImportNone)
 		typeResolutionsTrace = append(typeResolutionsTrace, trace...)
 
 		if resolved.IsResolved() {
@@ -824,7 +811,7 @@ func (p *fileLoader) resolveTypeReferenceDirectives(ctx context.Context, t *pars
 				increaseDepth: resolved.IsExternalLibraryImport,
 				elideOnDepth:  false,
 				includeReason: includeReason,
-				packageId:     resolved.PackageId,
+				packageId:     packageIdRef(&resolved.PackageId),
 			}, nil)
 		} else {
 			t.processingDiagnostics = append(t.processingDiagnostics, &processingDiagnostic{
@@ -904,7 +891,7 @@ func (p *fileLoader) resolveImportsAndModuleAugmentations(ctx context.Context, t
 				continue
 			}
 
-			mode := getModeForUsageLocation(file.FileName(), meta, entry, optionsForFile)
+			mode := getModeForUsageLocation(getModuleFormatFileName(file), meta, entry, optionsForFile)
 			// We know moduleName resolves to an ambient module provided that moduleName:
 			// - is in the list of ambient modules locally declared in the current source file.
 			if slices.Contains(file.AmbientModuleNames, moduleName) {
@@ -966,15 +953,8 @@ func (p *fileLoader) resolveImportsAndModuleAugmentations(ctx context.Context, t
 					path:          resolvedModule.ResolvedPath,
 					increaseDepth: resolvedModule.IsExternalLibraryImport,
 					elideOnDepth:  isJsFileFromNodeModules,
-					includeReason: &FileIncludeReason{
-						kind: fileIncludeKindImport,
-						referencedFile: &referencedFileData{
-							file:      t.path,
-							index:     importIndex,
-							synthetic: synthetic,
-						},
-					},
-					packageId: resolvedModule.PackageId,
+					includeReason: newReferencedFileIncludeReason(fileIncludeKindImport, t.path, importIndex, synthetic),
+					packageId:     packageIdRef(&resolvedModule.PackageId),
 				}, nil)
 			}
 		}
@@ -1070,8 +1050,17 @@ func getModeForTypeReferenceDirectiveInFile(ref *ast.FileReference, file *ast.So
 	if ref.ResolutionMode != core.ResolutionModeNone {
 		return ref.ResolutionMode
 	} else {
-		return getDefaultResolutionModeForFile(file.FileName(), meta, options)
+		return getDefaultResolutionModeForFile(getModuleFormatFileName(file), meta, options)
 	}
+}
+
+func getModuleFormatFileName(file ast.HasFileName) tspath.RootedFilePath {
+	if sourceFile, ok := file.(*ast.SourceFile); ok {
+		if virtualFileName := sourceFile.VirtualFileName(); virtualFileName != "" {
+			return virtualFileName
+		}
+	}
+	return file.FileName()
 }
 
 func getDefaultResolutionModeForFile(fileName tspath.RootedFilePath, meta ast.SourceFileMetaData, options *core.CompilerOptions) core.ResolutionMode {

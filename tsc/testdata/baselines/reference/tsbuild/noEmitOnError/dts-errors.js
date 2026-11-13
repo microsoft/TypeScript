@@ -21,7 +21,7 @@ export { }
     },
 }
 
-tsgo -b -v
+tsc -b -v
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -105,7 +105,7 @@ Signatures::
 
 Edit [0]:: no change
 
-tsgo -b -v
+tsc -b -v
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -121,7 +121,7 @@ Edit [1]:: Fix error
 import { A } from "../shared/types/db";
 export const a = class { p = 10; };
 
-tsgo -b -v
+tsc -b -v
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -148,7 +148,7 @@ Signatures::
 
 Edit [2]:: no change
 
-tsgo -b -v
+tsc -b -v
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 

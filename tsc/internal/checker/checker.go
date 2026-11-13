@@ -16,6 +16,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/binder"
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
+	"github.com/microsoft/TypeScript/tsc/internal/contentmapper"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/debug"
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
@@ -8489,7 +8490,7 @@ func (c *Checker) checkImportCallExpression(node *ast.Node) *Type {
 	if c.compilerOptions.RewriteRelativeImportExtensions.IsTrue() &&
 		!c.compilerOptions.DisableDynamicImportExtensionRewriting.IsTrue() &&
 		!ast.IsStringLiteralLike(specifier) {
-		c.checkExternalEmitHelpers(node, ExternalEmitHelpersRewriteRelativeImportExtension)
+		c.checkDynamicImportExtensionRewriting(node)
 	}
 	specifierType := c.checkExpressionCached(specifier)
 	var optionsType *Type
@@ -8537,6 +8538,16 @@ func (c *Checker) checkImportCallExpression(node *ast.Node) *Type {
 	return c.createPromiseReturnType(node, c.anyType)
 }
 
+func (c *Checker) checkDynamicImportExtensionRewriting(node *ast.Node) {
+	for _, rewrite := range c.program.ContentMapperExtensionRewrites() {
+		if !rewrite.Runtime && rewrite.Source != rewrite.Target {
+			c.error(node, diagnostics.Non_literal_import_paths_cannot_be_rewritten_when_a_content_mapper_uses_both_include_and_an_outputExtensions_mapping_Set_disableDynamicImportExtensionRewriting_to_disable_rewriting_of_non_literal_import_paths)
+			return
+		}
+	}
+	c.checkExternalEmitHelpers(node, ExternalEmitHelpersRewriteRelativeImportExtension)
+}
+
 /**
  * Syntactically and semantically checks a call or new expression.
  * @param node The call/new expression to be checked.
@@ -8547,7 +8558,7 @@ func (c *Checker) checkCallExpression(node *ast.Node, checkMode CheckMode) *Type
 		!c.compilerOptions.DisableDynamicImportExtensionRewriting.IsTrue() &&
 		ast.IsInJSFile(node) && ast.IsRequireCall(node, false /*requireStringLiteralLikeArgument*/) &&
 		!ast.IsStringLiteralLike(node.Arguments()[0]) {
-		c.checkExternalEmitHelpers(node, ExternalEmitHelpersRewriteRelativeImportExtension)
+		c.checkDynamicImportExtensionRewriting(node)
 	}
 	c.checkGrammarTypeArguments(node, node.TypeArgumentList())
 	signature := c.getResolvedSignature(node, nil /*candidatesOutArray*/, checkMode)
@@ -14226,7 +14237,7 @@ func (c *Checker) getCannotFindNameDiagnosticForName(node *ast.Node) *diagnostic
 		return core.IfElse(c.compilerOptions.UsesWildcardTypes(),
 			diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_Bun_Try_npm_i_save_dev_types_Slashbun,
 			diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_Bun_Try_npm_i_save_dev_types_Slashbun_and_then_add_bun_to_the_types_field_in_your_tsconfig)
-	case "Map", "Set", "Promise", "ast.Symbol", "WeakMap", "WeakSet", "Iterator", "AsyncIterator", "SharedArrayBuffer", "Atomics", "AsyncIterable",
+	case "Map", "Set", "Promise", "Symbol", "WeakMap", "WeakSet", "Iterator", "AsyncIterator", "SharedArrayBuffer", "Atomics", "AsyncIterable",
 		"AsyncIterableIterator", "AsyncGenerator", "AsyncGeneratorFunction", "BigInt", "Reflect", "BigInt64Array", "BigUint64Array":
 		return diagnostics.Cannot_find_name_0_Do_you_need_to_change_your_target_library_Try_changing_the_lib_compiler_option_to_1_or_later
 	case "await":
@@ -15572,11 +15583,17 @@ func (c *Checker) resolveExternalModule(
 		}
 
 		if errorNode != nil && !resolvedModule.IsCustomResolution {
-			rewrites := c.program.ContentMapperExtensionRewrites()
+			allRewrites := c.program.ContentMapperExtensionRewrites()
 			caseSensitivity := c.program.CaseSensitivity()
 			specifier := tspath.ToModuleSpecifier(moduleReference)
+			rewrites := contentmapper.RewritesForImport(allRewrites, importingSourceFile.FileName(), specifier, c.program.ContentMapperExtensionForFileName, caseSensitivity)
 			_, mappedSpecifier := specifier.RewriteExtension(rewrites, caseSensitivity)
-			checkDeclarationRewrite := c.compilerOptions.GetEmitDeclarations() && mappedSpecifier &&
+			resolvedRewrites := contentmapper.FilterExtensionRewrites(allRewrites, c.program.ContentMapperExtensionForFileName(sourceFile.FileName()), caseSensitivity)
+			mappedSource := false
+			if sourceFile.ContentMapper() != "" {
+				_, mappedSource = sourceFile.FileName().RewriteExtension(resolvedRewrites, caseSensitivity)
+			}
+			checkDeclarationRewrite := c.compilerOptions.GetEmitDeclarations() && (mappedSpecifier || mappedSource) &&
 				tspath.PathIsRelative(moduleReference) && !importingSourceFile.IsDeclarationFile
 			if resolvedModule.ResolvedUsingTsExtension && tspath.IsDeclarationFileName(moduleReference) {
 				if ast.FindAncestor(location, ast.IsEmittableImport) != nil {
@@ -15619,13 +15636,41 @@ func (c *Checker) resolveExternalModule(
 				(!ast.IsLiteralImportTypeNode(location) && !ast.IsPartOfTypeOnlyImportOrExportDeclaration(location) ||
 					checkDeclarationRewrite) {
 				shouldRewrite := specifier.ShouldRewriteExtension(rewrites, caseSensitivity)
-				mappedSource := false
-				if sourceFile.ContentMapper() != "" {
-					_, mappedSource = sourceFile.FileName().RewriteExtension(rewrites, caseSensitivity)
-				}
+				predictedSpecifier, _ := specifier.RewriteExtension(rewrites, caseSensitivity)
+				resolvedSpecifier, resolvedSpecifierRewritten := specifier.RewriteExtension(resolvedRewrites, caseSensitivity)
 				resolvedUsingRewritableExtension := resolvedModule.ResolvedUsingTsExtension ||
 					resolvedModule.ResolvedUsingExtraExtensions && sourceFile.ContentMapper() != "" && mappedSource
-				if !resolvedUsingRewritableExtension && shouldRewrite {
+				if specifier.IsRelative() && sourceFile.ContentMapper() != "" &&
+					(caseSensitivity.Canonicalize(predictedSpecifier.AsString()) != caseSensitivity.Canonicalize(resolvedSpecifier.AsString()) ||
+						mappedSource && !resolvedSpecifierRewritten && resolvedModule.ResolvedUsingExtraExtensions) {
+					hasRootDirs := len(c.compilerOptions.RootDirs) > 0
+					hasModuleSuffixes := len(c.compilerOptions.ModuleSuffixes) > 0
+					if (hasRootDirs || hasModuleSuffixes) && mappedSpecifier != mappedSource {
+						var message *diagnostics.Message
+						if hasRootDirs && hasModuleSuffixes {
+							message = diagnostics.This_relative_import_path_is_unsafe_to_rewrite_because_it_appears_not_to_match_the_content_mapper_s_include_but_does_after_resolution_with_rootDirs_and_moduleSuffixes
+							if mappedSpecifier {
+								message = diagnostics.This_relative_import_path_is_unsafe_to_rewrite_because_it_appears_to_match_the_content_mapper_s_include_but_does_not_after_resolution_with_rootDirs_and_moduleSuffixes
+							}
+						} else if hasRootDirs {
+							message = diagnostics.This_relative_import_path_is_unsafe_to_rewrite_because_it_appears_not_to_match_the_content_mapper_s_include_but_does_after_resolution_with_rootDirs
+							if mappedSpecifier {
+								message = diagnostics.This_relative_import_path_is_unsafe_to_rewrite_because_it_appears_to_match_the_content_mapper_s_include_but_does_not_after_resolution_with_rootDirs
+							}
+						} else {
+							message = diagnostics.This_relative_import_path_is_unsafe_to_rewrite_because_it_appears_not_to_match_the_content_mapper_s_include_but_does_after_resolution_with_moduleSuffixes
+							if mappedSpecifier {
+								message = diagnostics.This_relative_import_path_is_unsafe_to_rewrite_because_it_appears_to_match_the_content_mapper_s_include_but_does_not_after_resolution_with_moduleSuffixes
+							}
+						}
+						c.error(errorNode, message)
+					} else {
+						c.error(
+							errorNode,
+							diagnostics.This_relative_import_path_is_unsafe_to_rewrite_because_the_content_mapper_s_outputExtensions_mapping_depends_on_module_resolution,
+						)
+					}
+				} else if !resolvedUsingRewritableExtension && shouldRewrite {
 					relativeToSourceFile := resolvedModule.ResolvedFileName.AsString()
 					if relativePath, ok := c.program.CaseSensitivity().RelativePathFromFile(
 						importingSourceFile.FileName(),
@@ -15642,7 +15687,7 @@ func (c *Checker) resolveExternalModule(
 				} else if resolvedUsingRewritableExtension && !shouldRewrite && (mappedSource || c.program.SourceFileMayBeEmitted(sourceFile, false)) {
 					extension := tspath.GetAnyExtensionFromPath(moduleReference, nil, tspath.CaseSensitive)
 					if mappedSource {
-						rewrite, _ := sourceFile.FileName().GetExtensionRewrite(rewrites, caseSensitivity)
+						rewrite, _ := sourceFile.FileName().GetExtensionRewrite(resolvedRewrites, caseSensitivity)
 						extension = rewrite.Source
 					}
 					c.error(
@@ -27739,7 +27784,7 @@ func (c *Checker) getIndexedAccessTypeOrUndefined(objectType *Type, indexType *T
 		}
 		// Defer the operation by creating an indexed access type.
 		persistentAccessFlags := accessFlags & AccessFlagsPersistent
-		key := getIndexedAccessKey(objectType, indexType, accessFlags, alias)
+		key := getIndexedAccessKey(objectType, indexType, persistentAccessFlags, alias)
 		t := c.indexedAccessTypes[key]
 		if t == nil {
 			t = c.newIndexedAccessType(objectType, indexType, persistentAccessFlags)
@@ -29399,7 +29444,7 @@ func (c *Checker) checkExternalEmitHelpers(location *ast.Node, helpers ExternalE
 					if !c.hasSignatureWithArityGreaterThan(symbol, 4) {
 						c.error(location, diagnostics.This_syntax_requires_an_imported_helper_named_1_with_2_parameters_which_is_not_compatible_with_the_one_in_0_Consider_upgrading_your_version_of_0, externalHelpersModuleNameText, name, 5)
 					}
-				} else if helper&ExternalEmitHelpersRewriteRelativeImportExtension != 0 && len(c.program.ContentMapperExtensionRewrites()) > 0 {
+				} else if helper&ExternalEmitHelpersRewriteRelativeImportExtension != 0 && tspath.HasRuntimeExtensionRewrites(c.program.ContentMapperExtensionRewrites()) {
 					if !c.hasSignatureWithArityGreaterThan(symbol, 3) {
 						c.error(location, diagnostics.This_syntax_requires_an_imported_helper_named_1_with_2_parameters_which_is_not_compatible_with_the_one_in_0_Consider_upgrading_your_version_of_0, externalHelpersModuleNameText, name, 4)
 					}

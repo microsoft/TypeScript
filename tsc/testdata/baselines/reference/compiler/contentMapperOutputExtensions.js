@@ -19,6 +19,7 @@ export declare const Card: (props: CardProps) => string;
 
 //// [Widget.y.z]
 const __VERSION = "1.0.0";
+// @box-extension: .mts
 export declare const Widget: () => string;
 
 //// [typed.ts]
