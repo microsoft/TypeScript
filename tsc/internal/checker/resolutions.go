@@ -199,7 +199,7 @@ type resolvingTable struct {
 const resolvingTableBits = 12
 
 func resolvingHome(key memoKey) uint64 {
-	return uint64(key) * 0x9E3779B97F4A7C15 >> (64 - resolvingTableBits)
+	return spreadBits(uint64(key)) >> (64 - resolvingTableBits)
 }
 
 // resolvingGet returns the index in resolutions of the computation of key
