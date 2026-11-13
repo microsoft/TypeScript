@@ -1,0 +1,93 @@
+//// [tests/cases/compiler/contentMapperFilteredDynamicImport.ts] ////
+
+=== /data.toml ===
+const __VERSION = "1.0.0";
+>__VERSION : "1.0.0"
+>"1.0.0" : "1.0.0"
+
+export const data = 1;
+>data : 1
+>1 : 1
+
+=== /main.ts ===
+declare const path: string;
+>path : string
+
+export const dynamic = import(path);
+>dynamic : Promise<any>
+>import(path) : Promise<any>
+>path : string
+
+export const template = import(`./${path}.toml`);
+>template : Promise<any>
+>import(`./${path}.toml`) : Promise<any>
+>`./${path}.toml` : string
+>path : string
+
+export const parenthesized = import(("./data.toml"));
+>parenthesized : Promise<any>
+>import(("./data.toml")) : Promise<any>
+>("./data.toml") : "./data.toml"
+>"./data.toml" : "./data.toml"
+
+export const literal = import("./data.toml");
+>literal : Promise<typeof import("./data.toml")>
+>import("./data.toml") : Promise<typeof import("./data.toml")>
+>"./data.toml" : "./data.toml"
+
+export const literalTemplate = import(`./data.toml`);
+>literalTemplate : Promise<typeof import("./data.toml")>
+>import(`./data.toml`) : Promise<typeof import("./data.toml")>
+>`./data.toml` : "./data.toml"
+
+declare function require(path: string): unknown;
+>require : (path: string) => unknown
+>path : string
+
+export const tsRequire = require(path);
+>tsRequire : unknown
+>require(path) : unknown
+>require : (path: string) => unknown
+>path : string
+
+=== /require.js ===
+/** @type {string} */
+const path = "./data.toml";
+>path : string
+>"./data.toml" : "./data.toml"
+
+export const dynamic = import(path);
+>dynamic : Promise<any>
+>import(path) : Promise<any>
+>path : string
+
+export const required = require(path);
+>required : unknown
+>require(path) : unknown
+>require : (path: string) => unknown
+>path : string
+
+export const template = require(`./${path}.toml`);
+>template : unknown
+>require(`./${path}.toml`) : unknown
+>require : (path: string) => unknown
+>`./${path}.toml` : string
+>path : string
+
+export const literal = require("./data.toml");
+>literal : typeof import("./data.toml")
+>require("./data.toml") : typeof import("./data.toml")
+>require : (path: string) => unknown
+>"./data.toml" : "./data.toml"
+
+export const literalTemplate = require(`./data.toml`);
+>literalTemplate : typeof import("./data.toml")
+>require(`./data.toml`) : typeof import("./data.toml")
+>require : (path: string) => unknown
+>`./data.toml` : "./data.toml"
+
+=== /globals.d.ts ===
+declare function require(path: string): unknown;
+>require : (path: string) => unknown
+>path : string
+

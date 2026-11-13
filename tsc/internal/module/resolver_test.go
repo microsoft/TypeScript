@@ -35,6 +35,133 @@ type caseInsensitiveViewFS struct {
 	vfs.FS
 }
 
+func TestExtraExtensionResolution(t *testing.T) {
+	t.Parallel()
+	for _, sensitivity := range []tspath.CaseSensitivity{tspath.CaseSensitive, tspath.CaseInsensitive} {
+		t.Run(sensitivity.String(), func(t *testing.T) {
+			t.Parallel()
+			fs := vfstest.FromMap(map[string]string{
+				"/project/blob.toml":            "",
+				"/project/other.toml":           "",
+				"/project/other.d.toml.ts":      "",
+				"/project/not-mapped.toml":      "",
+				"/project/other.part.d.toml.ts": "",
+				"/project/other.d.part.toml.ts": "",
+			}, sensitivity)
+			host := &resolutionTestInputs{fs: fs, cwd: "/project"}
+			resolver := NewResolver(ResolverOptions{
+				Host:            host,
+				CompilerOptions: &core.CompilerOptions{ModuleResolution: core.ModuleResolutionKindBundler},
+				ExtraExtensions: []string{".toml", ".part.toml"},
+			})
+			for _, rebound := range []*DefaultResolver{resolver, resolver.GetResolutionData().Clone().NewResolver(host)} {
+				mapped, _, err := rebound.ResolveModuleName("./blob.toml", "/project/main.ts", core.ModuleKindESNext, nil)
+				assert.NilError(t, err)
+				assert.Equal(t, mapped.ResolvedFileName, tspath.RootedFilePath("/project/blob.toml"))
+				assert.Assert(t, mapped.ResolvedUsingExtraExtensions)
+				other, _, err := rebound.ResolveModuleName("./other.toml", "/project/main.ts", core.ModuleKindESNext, nil)
+				assert.NilError(t, err)
+				assert.Equal(t, other.ResolvedFileName, tspath.RootedFilePath("/project/other.toml"))
+				assert.Assert(t, other.ResolvedUsingExtraExtensions)
+				composite, _, err := rebound.ResolveModuleName("./other.part.toml", "/project/main.ts", core.ModuleKindESNext, nil)
+				assert.NilError(t, err)
+				assert.Equal(t, composite.ResolvedFileName, tspath.RootedFilePath("/project/other.d.part.toml.ts"))
+				assert.Assert(t, !composite.ResolvedUsingExtraExtensions)
+				unfiltered, _, err := rebound.ResolveModuleName("./not-mapped.toml", "/project/main.ts", core.ModuleKindESNext, nil)
+				assert.NilError(t, err)
+				assert.Equal(t, unfiltered.ResolvedFileName, tspath.RootedFilePath("/project/not-mapped.toml"))
+				assert.Assert(t, unfiltered.ResolvedUsingExtraExtensions)
+			}
+		})
+	}
+}
+
+func TestExtraExtensionModuleSuffixes(t *testing.T) {
+	t.Parallel()
+	for _, test := range []struct {
+		name, target string
+		hasSource    bool
+	}{
+		{"suffixed source", "/project/blob.native.toml", true},
+		{"declaration fallback", "/project/blob.d.toml.native.ts", false},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+			files := map[string]string{
+				"/project/blob.d.toml.native.ts": "",
+			}
+			if test.hasSource {
+				files["/project/blob.native.toml"] = ""
+				files["/project/blob.toml"] = ""
+			}
+			fs := vfstest.FromMap(files, tspath.CaseSensitive)
+			resolver := NewResolver(ResolverOptions{
+				Host: &resolutionTestInputs{fs: fs, cwd: "/project"},
+				CompilerOptions: &core.CompilerOptions{
+					ModuleResolution: core.ModuleResolutionKindBundler,
+					ModuleSuffixes:   []string{".native", ""},
+				},
+				ExtraExtensions: []string{".toml"},
+			})
+			result, _, err := resolver.ResolveModuleName("./blob.toml", "/project/main.ts", core.ModuleKindESNext, nil)
+			assert.NilError(t, err)
+			assert.Equal(t, result.ResolvedFileName, tspath.RootedFilePathFromAbsolute(test.target))
+			assert.Equal(t, result.ResolvedUsingExtraExtensions, test.hasSource)
+		})
+	}
+}
+
+func TestCompoundExtraExtensionModuleSuffixes(t *testing.T) {
+	t.Parallel()
+	for _, test := range []struct {
+		name, target string
+		suffixes     []string
+		hasSource    bool
+		onlyShorter  bool
+	}{
+		{"no suffix fallback", "/project/blob.d.part.toml.ts", nil, false, false},
+		{"empty suffix fallback", "/project/blob.d.part.toml.ts", []string{""}, false, false},
+		{"native suffix fallback", "/project/blob.d.part.toml.native.ts", []string{".native", ""}, false, false},
+		{"native-only suffix fallback", "/project/blob.d.part.toml.native.ts", []string{".native"}, false, false},
+		{"suffixed source", "/project/blob.native.part.toml", []string{".native", ""}, true, false},
+		{"shorter extension fallback", "/project/blob.part.d.toml.ts", nil, false, true},
+		{"shorter empty suffix fallback", "/project/blob.part.d.toml.ts", []string{""}, false, true},
+		{"shorter native suffix fallback", "/project/blob.part.d.toml.native.ts", []string{".native", ""}, false, true},
+		{"shorter native-only suffix fallback", "/project/blob.part.d.toml.native.ts", []string{".native"}, false, true},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+			files := map[string]string{
+				"/project/blob.part.d.toml.ts":        "",
+				"/project/blob.d.part.toml.ts":        "",
+				"/project/blob.part.d.toml.native.ts": "",
+				"/project/blob.d.part.toml.native.ts": "",
+			}
+			if test.onlyShorter {
+				delete(files, "/project/blob.d.part.toml.ts")
+				delete(files, "/project/blob.d.part.toml.native.ts")
+			}
+			if test.hasSource {
+				files["/project/blob.native.part.toml"] = ""
+				files["/project/blob.part.toml"] = ""
+			}
+			fs := vfstest.FromMap(files, tspath.CaseSensitive)
+			resolver := NewResolver(ResolverOptions{
+				Host: &resolutionTestInputs{fs: fs, cwd: "/project"},
+				CompilerOptions: &core.CompilerOptions{
+					ModuleResolution: core.ModuleResolutionKindBundler,
+					ModuleSuffixes:   test.suffixes,
+				},
+				ExtraExtensions: []string{".toml", ".part.toml"},
+			})
+			result, _, err := resolver.ResolveModuleName("./blob.part.toml", "/project/main.ts", core.ModuleKindESNext, nil)
+			assert.NilError(t, err)
+			assert.Equal(t, result.ResolvedFileName, tspath.RootedFilePathFromAbsolute(test.target))
+			assert.Equal(t, result.ResolvedUsingExtraExtensions, test.hasSource)
+		})
+	}
+}
+
 func (caseInsensitiveViewFS) CaseSensitivity() tspath.CaseSensitivity {
 	return tspath.CaseInsensitive
 }

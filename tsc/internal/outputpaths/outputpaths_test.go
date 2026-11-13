@@ -19,8 +19,8 @@ func (h outputPathsHost) CommonSourceDirectory() tspath.RootedDirectoryPath {
 	return h.commonSourceDirectory
 }
 
-func (h outputPathsHost) ContentMapperExtensions() []string {
-	return h.contentMapperExtensions
+func (h outputPathsHost) ContentMapperExtensionForFileName(fileName tspath.RootedFilePath) string {
+	return fileName.LongestExtension(h.contentMapperExtensions, h.CaseSensitivity())
 }
 
 func (h outputPathsHost) ContentMapperExtensionRewrites() []tspath.ExtensionRewrite {

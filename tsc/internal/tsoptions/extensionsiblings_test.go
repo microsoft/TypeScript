@@ -145,7 +145,7 @@ func runGetFileNames(
 		specs.validatedIncludeSpecs = append(specs.validatedIncludeSpecs, pattern(i))
 	}
 	options := &core.CompilerOptions{AllowJs: core.BoolToTristate(allowJs)}
-	result, _ := getFileNamesFromConfigSpecs(specs, basePath, options, host, extra)
+	result, _ := getFileNamesFromConfigSpecs(specs, basePath, options, host, extra, nil)
 	for _, f := range result {
 		got = append(got, f.AsString())
 	}

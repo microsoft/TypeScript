@@ -1041,9 +1041,9 @@ func (l *LanguageService) getExtensionOptions(
 	checker *checker.Checker,
 ) *extensionOptions {
 	extensionsToSearch := getSupportedExtensionsForModuleResolution(options, l.GetProgram().CommandLine().ContentMapperExtensions(), checker)
-
 	return &extensionOptions{
 		extensionsToSearch:  extensionsToSearch,
+		ambientExtensions:   getAmbientModuleExtensions(checker),
 		referenceKind:       referenceKind,
 		importingSourceFile: file,
 		endingPreference:    l.UserPreferences().ImportModuleSpecifierEnding,
@@ -1051,8 +1051,7 @@ func (l *LanguageService) getExtensionOptions(
 	}
 }
 
-func getSupportedExtensionsForModuleResolution(options *core.CompilerOptions, extraExtensions []string, checker *checker.Checker) []string {
-	/** file extensions from ambient modules declarations e.g. *.css */
+func getAmbientModuleExtensions(checker *checker.Checker) []string {
 	var extensions []string
 	if checker != nil {
 		ambientModules := checker.GetAmbientModules()
@@ -1064,6 +1063,11 @@ func getSupportedExtensionsForModuleResolution(options *core.CompilerOptions, ex
 			extensions = append(extensions, name[1:])
 		}
 	}
+	return extensions
+}
+
+func getSupportedExtensionsForModuleResolution(options *core.CompilerOptions, extraExtensions []string, checker *checker.Checker) []string {
+	extensions := getAmbientModuleExtensions(checker)
 	supportedExtensions := tsoptions.GetSupportedExtensions(options, extraExtensions)
 	for _, ext := range supportedExtensions {
 		extensions = append(extensions, ext...)
@@ -1238,10 +1242,16 @@ func (s *moduleCompletionNameAndKindSet) add(entry moduleCompletionNameAndKind) 
 
 type extensionOptions struct {
 	extensionsToSearch  []string
+	ambientExtensions   []string
 	referenceKind       referenceKind
 	importingSourceFile *ast.SourceFile
 	endingPreference    modulespecifiers.ImportModuleSpecifierEndingPreference
 	resolutionMode      core.ResolutionMode
+}
+
+func (o *extensionOptions) shouldIncludeFile(fileName tspath.RootedFilePath, program *compiler.Program) bool {
+	return !program.CommandLine().ContentMapperFileMatcher().IsUnclaimed(fileName) ||
+		fileName.LongestExtension(o.ambientExtensions, program.CaseSensitivity()) != ""
 }
 
 type referenceKind int
@@ -1317,6 +1327,9 @@ func (l *LanguageService) getCompletionEntriesForDirectoryFragment(
 	)
 
 	for _, filePath := range files {
+		if !extensionOptions.shouldIncludeFile(filePath, program) {
+			continue
+		}
 		if exclude == program.PathKeyForFileName(filePath) {
 			continue // Avoid self-imports
 		}
@@ -1751,6 +1764,9 @@ func (l *LanguageService) getModulesForPathsPattern(
 
 		var result []moduleCompletionNameAndKind
 		for _, match := range matches {
+			if !extensionOptions.shouldIncludeFile(match, program) {
+				continue
+			}
 			trimmedWithPattern := trimPrefixAndSuffix(match.AsString(), completePrefix)
 			if trimmedWithPattern != "" {
 				if containsSlash(trimmedWithPattern) {

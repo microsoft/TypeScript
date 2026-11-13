@@ -110,10 +110,23 @@ function valueSchema(declaration: Declaration): JSONSchema {
                     type: "object",
                     properties: {
                         package: { type: "string", minLength: 1 },
-                        extensions: { type: "array", items: { type: "string" } },
+                        extensions: {
+                            type: "array",
+                            items: { type: "string" },
+                            description: "File extensions handled by this mapper. Defaults to the value of 'typescript.contentMapper.extensions' in the package manifest.",
+                        },
+                        include: {
+                            type: "array",
+                            items: { type: "string" },
+                            description: "Patterns relative to this config file that narrow which files the mapper handles.",
+                        },
+                        outputExtensions: {
+                            ...nullable({ type: "object", additionalProperties: { type: "string" } }),
+                            description: "Maps source file extensions to output extensions for declaration filenames and rewritten imports.",
+                        },
                         options: { type: "object" },
                     },
-                    required: ["package", "extensions"],
+                    required: ["package"],
                     additionalProperties: false,
                 };
             }

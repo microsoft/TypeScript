@@ -8,6 +8,7 @@ import (
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
+	"github.com/microsoft/TypeScript/tsc/internal/contentmapper"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/debug"
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
@@ -1609,6 +1610,7 @@ func (tx *DeclarationTransformer) rewriteModuleSpecifier(parent *ast.Node, input
 		specifier := tspath.ToModuleSpecifier(input.Text())
 		rewrites := tx.host.ContentMapperExtensionRewrites()
 		caseSensitivity := tx.host.CaseSensitivity()
+		rewrites = contentmapper.RewritesForImport(rewrites, tx.state.currentSourceFile.FileName(), specifier, tx.host.ContentMapperExtensionForFileName, caseSensitivity)
 		if !specifier.ShouldRewriteExtension(rewrites, caseSensitivity) {
 			return input
 		}

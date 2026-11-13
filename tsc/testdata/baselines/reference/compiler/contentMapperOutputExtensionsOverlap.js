@@ -13,6 +13,7 @@ export const short = 1;
 
 //// [Widget.y.z]
 const __VERSION = "1.0.0";
+// @box-extension: .mts
 export const long = 1;
 
 //// [Widget.identity.y.z]
