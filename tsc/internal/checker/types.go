@@ -823,8 +823,8 @@ type Type struct {
 	objectFlags ObjectFlags
 	id          TypeId
 	kind        typeKind `customlint:"protected"`
-	// Depth of the walk for the cached base constraint; see "Base constraint walks"
-	baseConstraintHeight uint8
+	// Height of the walk for the cached base constraint; see "Base constraint walks"
+	baseConstraintHeight height
 	generation           uint16 // see Checker.typeGeneration; zero until computed
 	symbol               *ast.Symbol
 	alias                *TypeAlias

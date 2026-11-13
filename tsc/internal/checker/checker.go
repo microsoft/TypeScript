@@ -30863,12 +30863,11 @@ func (c *Checker) getResolvedBaseConstraint(t *Type, stack []RecursionId) *Type 
 	if constrained := t.AsConstrainedType(); constrained != nil && constrained.resolvedBaseConstraint.peek() != nil {
 		// A resolved base constraint is only read.
 		if len(stack) != 0 {
-			depth := int32(len(stack)) + int32(t.baseConstraintHeight)
-			if depth >= baseConstraintFreeDepth {
+			if t.baseConstraintHeight.reaches(len(stack), baseConstraintFreeDepth) {
 				constraint, _, _ := c.resolveBaseConstraint(t, stack, TypeSystemPropertyNameBaseConstraintInWalk, nil)
 				return constraint
 			}
-			c.baseConstraintWalk.depth = max(c.baseConstraintWalk.depth, depth)
+			c.baseConstraintWalk.depth = max(c.baseConstraintWalk.depth, int32(len(stack))+int32(t.baseConstraintHeight))
 		}
 		return constrained.resolvedBaseConstraint.cached(c)
 	}
@@ -30921,13 +30920,13 @@ func (c *Checker) getResolvedBaseConstraintUncached(t *Type, stack []RecursionId
 	if constrained.resolvedBaseConstraint.cached(c) != nil {
 		return constrained.resolvedBaseConstraint.cached(c)
 	}
-	constraint, height, gaveUp := c.resolveBaseConstraint(t, stack, TypeSystemPropertyNameResolvedBaseConstraint, &constrained.resolvedBaseConstraint.memoHeader)
+	constraint, walkHeight, gaveUp := c.resolveBaseConstraint(t, stack, TypeSystemPropertyNameResolvedBaseConstraint, &constrained.resolvedBaseConstraint.memoHeader)
 	if gaveUp && len(stack) != 0 {
 		// Depends on the walk it was computed in.
 		return constraint
 	}
 	if constrained.resolvedBaseConstraint.cached(c) == nil {
-		t.baseConstraintHeight = uint8(min(height, math.MaxUint8))
+		t.baseConstraintHeight = heightOf(walkHeight)
 		constrained.resolvedBaseConstraint.set(c, constraint)
 	}
 	return constraint
