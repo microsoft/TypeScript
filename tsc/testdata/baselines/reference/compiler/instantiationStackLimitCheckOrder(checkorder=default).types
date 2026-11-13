@@ -20,8 +20,8 @@ type A = A[];
 >A : A
 
 const r = ([] as A).flat(Infinity);
->r : any
->([] as A).flat(Infinity) : any
+>r : any[]
+>([] as A).flat(Infinity) : any[]
 >([] as A).flat : <A, D extends number = 1>(this: A, depth?: D | undefined) => FlatArray<A, D>[]
 >([] as A) : A
 >[] as A : A

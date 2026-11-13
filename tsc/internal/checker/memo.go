@@ -1147,12 +1147,6 @@ func (s *memoState) setErrors(c *Checker, reports []*currentNodeError) {
 //go:noinline
 func (c *Checker) replayCurrentNodeErrors(reports []*currentNodeError) {
 	for _, r := range reports {
-		if r == instantiationTooDeep && len(c.instantiationStack) != 0 {
-			// Computing the result here would fail the instantiation in
-			// progress; see "Instantiation limits".
-			c.abortInstantiation()
-			continue
-		}
 		c.reportNode(r)
 	}
 }
@@ -2123,15 +2117,19 @@ func (c *Checker) logPendingDiscard(state *memoState) {
 // is there to stop infinite instantiations rather than to judge finite
 // ones: caching only ever shortens the stack, so an instantiation that
 // would stay below it if computed from scratch stays below it in any order.
-// An instantiation reaching it fails as a whole, with all instantiations in
-// progress, and the results cached since are discarded, so no part of an
-// infinite instantiation is cached as though it were complete. The error
-// reported for it is carried by the results computed with it, and replaying
-// it in an instantiation in progress fails that instantiation the same way,
-// as computing those results again would. Each cached instantiation in
-// progress when one fails would fail too if computed from scratch, so it is
-// recorded as failing, rather than computed again to the limit wherever it
-// is reached.
+// An instantiation reaching it fails as a whole, with the instantiations in
+// progress in the innermost computation other than of a cached
+// instantiation, and the results cached since are discarded, so no part of
+// an infinite instantiation is cached as though it were complete. Such a
+// computation, like resolving the type arguments of a deferred type
+// reference, is computed whenever first needed, inside an instantiation or
+// not, so failing only its own instantiations makes the failure the same
+// wherever it is reached. The error reported for it is carried by the
+// results computed with it, and replaying it fails nothing, as computing
+// those results again would fail only within them. Each cached
+// instantiation in progress when one fails would fail too if computed from
+// scratch, so it is recorded as failing, rather than computed again to the
+// limit wherever it is reached.
 //
 // The limit on the number of instantiations is only reached by runaway
 // instantiations, and depends on what was cached before: it counts
@@ -2157,18 +2155,26 @@ var instantiationTooDeep = &currentNodeError{func(c *Checker, node *ast.Node) {
 	c.error(node, diagnostics.Type_instantiation_is_excessively_deep_and_possibly_infinite)
 }}
 
-// abortInstantiation fails every instantiation in progress; see
-// "Instantiation limits".
+// abortInstantiation fails the instantiations in progress in the innermost
+// computation other than of a cached instantiation; see "Instantiation
+// limits".
 func (c *Checker) abortInstantiation() {
 	if c.instantiationAborted {
 		return
 	}
+	root := c.instantiationRoot()
+	if int(c.resolutions[root].depthStart) == len(c.instantiationStack) {
+		// No instantiation of the root is in progress.
+		c.reportNode(instantiationTooDeep)
+		return
+	}
 	c.instantiationAborted = true
+	c.instantiationAbortRoot = int(c.resolutions[root].depthStart)
 	c.instantiationAbortLog = len(c.discardLog)
 	// Each cached instantiation in progress reached the limit, and would
 	// again if computed from scratch, so it is known to fail without
 	// computing it again.
-	for i := range c.resolutions {
+	for i := root + 1; i < len(c.resolutions); i++ {
 		if f := &c.resolutions[i]; f.instantiation {
 			if c.tooDeepInstantiations == nil {
 				c.tooDeepInstantiations = make(map[memoKey]struct{})
@@ -2190,12 +2196,22 @@ func (c *Checker) beginInstantiation() bool {
 	if _, ok := c.tooDeepInstantiations[f.key]; !ok {
 		return false
 	}
-	if len(c.instantiationStack) != 0 {
-		c.abortInstantiation()
-	} else {
-		c.reportNode(instantiationTooDeep)
-	}
+	c.abortInstantiation()
 	return true
+}
+
+// instantiationRoot returns the index in resolutions of the innermost
+// computation in progress other than of a cached instantiation, whose
+// instantiations fail together when one reaches instantiationStackLimit; see
+// "Instantiation limits". A type or node resolution is part of the
+// computation below it, with the same serial.
+func (c *Checker) instantiationRoot() int {
+	for i := len(c.resolutions) - 1; i > 0; i-- {
+		if f := &c.resolutions[i]; !f.instantiation && f.serial != c.resolutions[i-1].serial {
+			return i
+		}
+	}
+	return 0
 }
 
 // endInstantiation is called when the computation of a cached instantiation
@@ -2213,10 +2229,11 @@ func (c *Checker) endInstantiation(reports currentNodeErrorsMark) bool {
 	return false
 }
 
-// endInstantiationAbort finishes failing the outermost instantiation, once
-// it has unwound.
+// endInstantiationAbort finishes failing the instantiations of the innermost
+// computation, once they have unwound.
 func (c *Checker) endInstantiationAbort() {
 	c.instantiationAborted = false
+	c.instantiationAbortRoot = 0
 	c.discardLogSince(c.instantiationAbortLog)
 	c.instantiationAbortLog = 0
 	c.trimDiscardLog()
