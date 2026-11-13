@@ -5784,7 +5784,12 @@ func (p *Parser) parseArrayLiteralExpression() *ast.Expression {
 	openBracketPosition := p.scanner.TokenStart()
 	openBracketParsed := p.parseExpected(ast.KindOpenBracketToken)
 	multiLine := p.hasPrecedingLineBreak()
-	elements := p.parseDelimitedList(PCArrayLiteralMembers, (*Parser).parseArgumentOrArrayLiteralElement)
+	// The [~In] of a `for` statement head does not reach into array literals:
+	// ElementList elements are AssignmentExpression[+In]. Parse them with `in` allowed,
+	// as is already done for object literal property values and call arguments.
+	elements := p.doInContext(ast.NodeFlagsDisallowInContext, false, func(p *Parser) *ast.NodeList {
+		return p.parseDelimitedList(PCArrayLiteralMembers, (*Parser).parseArgumentOrArrayLiteralElement)
+	})
 	p.parseExpectedMatchingBrackets(ast.KindOpenBracketToken, ast.KindCloseBracketToken, openBracketParsed, openBracketPosition)
 	return p.finishNode(p.factory.NewArrayLiteralExpression(elements, multiLine), pos)
 }
