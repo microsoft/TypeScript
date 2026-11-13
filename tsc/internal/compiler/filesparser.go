@@ -83,6 +83,17 @@ func (t *parseTask) load(loader *fileLoader) {
 	}
 
 	if !t.isContentMapperSupplemental && t.normalizedFilePath.HasExtension() {
+		if loader.opts.Config.ContentMapperFileMatcher().IsUnclaimed(t.normalizedFilePath) {
+			t.processingDiagnostics = append(t.processingDiagnostics, &processingDiagnostic{
+				kind: processingDiagnosticKindExplainingFileInclude,
+				explanation: &includeExplainingDiagnostic{
+					diagnosticReason: t.includeReason,
+					message:          diagnostics.File_0_has_a_registered_content_mapper_extension_but_does_not_match_any_content_mapper_s_include,
+					args:             []string{t.normalizedFilePath.AsString()},
+				},
+			})
+			return
+		}
 		compilerOptions := loader.opts.Config.CompilerOptions()
 		allowNonTsExtensions := compilerOptions.AllowNonTsExtensions.IsTrue()
 		if !allowNonTsExtensions {

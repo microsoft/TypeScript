@@ -48,6 +48,9 @@ type FileChangeSummary struct {
 	// Only set when file watching is enabled
 	Deleted collections.Set[lsproto.DocumentUri]
 
+	// DiskChanged records disk changes, including those hidden by overlays, for consumers that read directly from disk.
+	DiskChanged collections.Set[lsproto.DocumentUri]
+
 	// IncludesWatchChangeOutsideNodeModules is true if the summary includes a create, change, or delete watch
 	// event of a file outside a node_modules directory.
 	IncludesWatchChangeOutsideNodeModules bool
@@ -60,11 +63,12 @@ func (f FileChangeSummary) Clone() FileChangeSummary {
 	f.Changed = *f.Changed.Clone()
 	f.Created = *f.Created.Clone()
 	f.Deleted = *f.Deleted.Clone()
+	f.DiskChanged = *f.DiskChanged.Clone()
 	return f
 }
 
 func (f FileChangeSummary) IsEmpty() bool {
-	return !f.InvalidateAll && f.Opened == "" && f.Reopened == "" && f.Closed.Len() == 0 && f.Changed.Len() == 0 && f.Created.Len() == 0 && f.Deleted.Len() == 0
+	return !f.InvalidateAll && f.Opened == "" && f.Reopened == "" && f.Closed.Len() == 0 && f.Changed.Len() == 0 && f.Created.Len() == 0 && f.Deleted.Len() == 0 && f.DiskChanged.Len() == 0
 }
 
 func (f FileChangeSummary) HasExcessiveWatchEvents() bool {
@@ -91,6 +95,9 @@ func mergeFileChangeSummary(dst *FileChangeSummary, src FileChangeSummary) {
 	}
 	for uri := range src.Deleted.Keys() {
 		dst.Deleted.Add(uri)
+	}
+	for uri := range src.DiskChanged.Keys() {
+		dst.DiskChanged.Add(uri)
 	}
 	if src.IncludesWatchChangeOutsideNodeModules {
 		dst.IncludesWatchChangeOutsideNodeModules = true

@@ -129,6 +129,7 @@ func TestProcessChanges(t *testing.T) {
 
 		assert.Assert(t, result.Changed.Has(testURI1))
 		assert.Equal(t, result.Changed.Len(), 1)
+		assert.Assert(t, result.DiskChanged.Has(testURI1))
 	})
 
 	t.Run("save marks overlay as matching disk", func(t *testing.T) {
@@ -153,15 +154,86 @@ func TestProcessChanges(t *testing.T) {
 				URI:  testURI1,
 			},
 		})
-		// We don't observe saves for snapshot changes,
-		// so they're not included in the summary
-		assert.Assert(t, result.IsEmpty())
+		assert.Equal(t, result.Changed.Len(), 0)
+		assert.Assert(t, result.DiskChanged.Has(testURI1))
+		assert.Assert(t, !result.IsEmpty())
 
 		// Check that the overlay is marked as matching disk text
 		fh := fs.GetFile(testURI1.FileName())
 		assert.Assert(t, fh != nil)
 		assert.Assert(t, fh.MatchesDiskText())
 	})
+
+	t.Run("save followed by edit records disk change", func(t *testing.T) {
+		t.Parallel()
+		fs := createOverlayFS()
+		const savedContent = "const x = 1;"
+		fs.processChanges([]FileChange{
+			{
+				Kind:         FileChangeKindOpen,
+				URI:          testURI1,
+				Version:      1,
+				Content:      savedContent,
+				LanguageKind: lsproto.LanguageKindTypeScript,
+			},
+		})
+		assert.NilError(t, fs.host.WriteFile(testURI1.FileName(), savedContent))
+
+		result, _ := fs.processChanges([]FileChange{
+			{Kind: FileChangeKindSave, URI: testURI1},
+			{
+				Kind:    FileChangeKindChange,
+				URI:     testURI1,
+				Version: 2,
+				Changes: []lsproto.TextDocumentContentChangePartialOrWholeDocument{{
+					WholeDocument: &lsproto.TextDocumentContentChangeWholeDocument{Text: "const x = 2;"},
+				}},
+			},
+		})
+
+		assert.Assert(t, result.DiskChanged.Has(testURI1))
+		assert.Assert(t, !fs.GetFile(testURI1.FileName()).MatchesDiskText())
+	})
+
+	for _, test := range []struct {
+		name       string
+		diskChange FileChangeKind
+		transition FileChangeKind
+	}{
+		{name: "watch then open", diskChange: FileChangeKindWatchChange, transition: FileChangeKindOpen},
+		{name: "save then reopen", diskChange: FileChangeKindSave, transition: FileChangeKindOpen},
+		{name: "save then close", diskChange: FileChangeKindSave, transition: FileChangeKindClose},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+			fs := createOverlayFS()
+			const savedContent = "const x = 1;"
+			if test.diskChange == FileChangeKindSave {
+				fs.processChanges([]FileChange{{
+					Kind:         FileChangeKindOpen,
+					URI:          testURI1,
+					Version:      1,
+					Content:      savedContent,
+					LanguageKind: lsproto.LanguageKindTypeScript,
+				}})
+			}
+			assert.NilError(t, fs.host.WriteFile(testURI1.FileName(), savedContent))
+
+			result, _ := fs.processChanges([]FileChange{
+				{Kind: test.diskChange, URI: testURI1},
+				{
+					Kind:         test.transition,
+					URI:          testURI1,
+					Version:      2,
+					Content:      savedContent,
+					LanguageKind: lsproto.LanguageKindTypeScript,
+				},
+			})
+
+			assert.Assert(t, result.DiskChanged.Has(testURI1))
+			assert.Equal(t, result.Changed.Len(), 0)
+		})
+	}
 
 	t.Run("open falls back to file extension for unknown language kind", func(t *testing.T) {
 		t.Parallel()
@@ -240,12 +312,14 @@ func TestProcessChanges(t *testing.T) {
 
 		// Now process a watch change
 		assert.NilError(t, fs.host.WriteFile(testURI1.FileName(), "const x = 2;"))
-		fs.processChanges([]FileChange{
+		result, _ := fs.processChanges([]FileChange{
 			{
 				Kind: FileChangeKindWatchChange,
 				URI:  testURI1,
 			},
 		})
+		assert.Equal(t, result.Changed.Len(), 0)
+		assert.Assert(t, result.DiskChanged.Has(testURI1))
 		assert.Assert(t, !fs.GetFile(testURI1.FileName()).MatchesDiskText())
 	})
 
