@@ -73,7 +73,7 @@ func (c *Checker) typeToStringEx(t *Type, enclosingDeclaration *ast.Node, flags 
 	if noTruncation {
 		combinedFlags = combinedFlags | nodebuilder.FlagsNoTruncation
 	}
-	nodeBuilder, release := c.getNodeBuilder()
+	nodeBuilder, release := c.getNodeBuilderForTypeFormat(flags)
 	defer release()
 	oldVerbosity := nodeBuilder.verbosity
 	nodeBuilder.verbosity = vc
@@ -201,7 +201,7 @@ func (c *Checker) signatureToStringEx(signature *Signature, enclosingDeclaration
 		}
 	}
 
-	nodeBuilder, release := c.getNodeBuilder()
+	nodeBuilder, release := c.getNodeBuilderForTypeFormat(flags)
 	defer release()
 	oldVerbosity := nodeBuilder.verbosity
 	nodeBuilder.verbosity = vc
@@ -233,7 +233,7 @@ func (c *Checker) typePredicateToString(typePredicate *TypePredicate) string {
 func (c *Checker) typePredicateToStringEx(typePredicate *TypePredicate, enclosingDeclaration *ast.Node, flags TypeFormatFlags) string {
 	writer, putWriter := printer.GetSingleLineStringWriter()
 	defer putWriter()
-	nodeBuilder, release := c.getNodeBuilder()
+	nodeBuilder, release := c.getNodeBuilderForTypeFormat(flags)
 	defer release()
 	combinedFlags := toNodeBuilderFlags(flags) | nodebuilder.FlagsIgnoreErrors | nodebuilder.FlagsWriteTypeParametersInQualifiedName
 	predicate := nodeBuilder.TypePredicateToTypePredicateNode(typePredicate, enclosingDeclaration, combinedFlags, nodebuilder.InternalFlagsNone, nil) // TODO: GH#18217
@@ -291,6 +291,8 @@ func (c *Checker) TypeToTypeNode(t *Type, enclosingDeclaration *ast.Node, flags 
 }
 
 func (c *Checker) SignatureToSignatureDeclaration(signature *Signature, kind ast.Kind, enclosingDeclaration *ast.Node, flags nodebuilder.Flags) *ast.Node {
+	// Declaration ASTs do not carry hover-only instantiation metadata.
+	flags &^= nodebuilder.FlagsWriteTypeArgumentsOfSignature
 	nodeBuilder, release := c.getNodeBuilder()
 	defer release()
 	return nodeBuilder.SignatureToSignatureDeclaration(signature, kind, enclosingDeclaration, flags, nodebuilder.InternalFlagsNone, nil)

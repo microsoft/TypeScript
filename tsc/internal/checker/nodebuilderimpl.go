@@ -1911,6 +1911,7 @@ type SignatureToSignatureDeclarationOptions struct {
 
 func (b *NodeBuilderImpl) signatureToSignatureDeclarationHelper(signature *Signature, kind ast.Kind, options *SignatureToSignatureDeclarationOptions) *ast.Node {
 	var typeParameters []*ast.Node
+	var typeArguments []*ast.Node
 
 	expandedParams, cleanup := b.enterSignatureScope(signature)
 	b.ctx.approximateLength += 3
@@ -1918,12 +1919,18 @@ func (b *NodeBuilderImpl) signatureToSignatureDeclarationHelper(signature *Signa
 
 	if b.ctx.flags&nodebuilder.FlagsWriteTypeArgumentsOfSignature != 0 && signature.target != nil && signature.mapper != nil && len(signature.target.TypeParameters()) != 0 {
 		for _, parameter := range signature.target.TypeParameters() {
-			typeParameters = append(typeParameters, b.typeToTypeNode(b.ch.instantiateType(parameter, signature.mapper)))
+			typeArguments = append(typeArguments, b.typeToTypeNode(b.ch.instantiateType(parameter, signature.mapper)))
 		}
-	} else {
-		for _, parameter := range signature.TypeParameters() {
-			typeParameters = append(typeParameters, b.typeParameterToDeclaration(parameter))
-		}
+	}
+	displayLength, displayTruncating := b.ctx.approximateLength, b.ctx.truncating
+	canIncreaseExpansionDepth, expansionTruncated := b.ctx.canIncreaseExpansionDepth, b.ctx.expansionTruncated
+	for _, parameter := range signature.TypeParameters() {
+		typeParameters = append(typeParameters, b.typeParameterToDeclaration(parameter))
+	}
+	if len(typeArguments) != 0 {
+		// These declarations remain in the AST but are hidden behind display arguments.
+		b.ctx.approximateLength, b.ctx.truncating = displayLength, displayTruncating
+		b.ctx.canIncreaseExpansionDepth, b.ctx.expansionTruncated = canIncreaseExpansionDepth, expansionTruncated
 	}
 
 	restoreFlags := b.saveRestoreFlags()
@@ -2020,10 +2027,10 @@ func (b *NodeBuilderImpl) signatureToSignatureDeclarationHelper(signature *Signa
 		panic("Unhandled kind in signatureToSignatureDeclarationHelper")
 	}
 
-	// !!! TODO: Smuggle type arguments of signatures out for quickinfo
-	// if typeArguments != nil {
-	// 	node.TypeArguments = b.f.NewNodeList(typeArguments)
-	// }
+	// Instantiated arguments are display metadata, not type parameter declarations.
+	if len(typeArguments) != 0 {
+		b.e.SetSignatureTypeArguments(node, b.f.NewNodeList(typeArguments))
+	}
 
 	cleanup()
 	return node

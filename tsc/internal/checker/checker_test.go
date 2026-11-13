@@ -11,6 +11,8 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/checker"
 	"github.com/microsoft/TypeScript/tsc/internal/compiler"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/nodebuilder"
+	"github.com/microsoft/TypeScript/tsc/internal/printer"
 	"github.com/microsoft/TypeScript/tsc/internal/repo"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
@@ -18,6 +20,141 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
 	"gotest.tools/v3/assert"
 )
+
+func TestInstantiatedSignatureDeclarationTypeParameters(t *testing.T) {
+	t.Parallel()
+	newSignature := func(t *testing.T) (*checker.Checker, *checker.Signature) {
+		t.Helper()
+		fs := bundled.WrapFS(vfstest.FromMap(map[string]string{
+			"/main.ts": `function identity<T>(value: T): T { return value; }
+identity<string>("hello");`,
+		}, tspath.CaseSensitive))
+		program, err := compiler.NewProgram(t.Context(), compiler.ProgramOptions{
+			Config: tsoptions.NewParsedCommandLine(&core.CompilerOptions{NoLib: core.TSTrue}, []tspath.RootedFilePath{"/main.ts"}, nil, "/", fs.CaseSensitivity()),
+			Host:   compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil),
+		})
+		assert.NilError(t, err)
+		program.BindSourceFiles()
+		c, done := program.GetTypeChecker(t.Context())
+		t.Cleanup(done)
+		call := program.GetSourceFile("/main.ts").Statements.Nodes[1].Expression()
+		return c, c.GetResolvedSignature(call)
+	}
+	for _, kind := range []ast.Kind{
+		ast.KindCallSignature, ast.KindConstructSignature, ast.KindMethodSignature,
+		ast.KindMethodDeclaration, ast.KindFunctionType, ast.KindConstructorType,
+		ast.KindFunctionDeclaration, ast.KindFunctionExpression, ast.KindArrowFunction,
+	} {
+		t.Run(kind.String(), func(t *testing.T) {
+			t.Parallel()
+			c, signature := newSignature(t)
+			declaration := c.SignatureToSignatureDeclaration(signature, kind, nil, nodebuilder.FlagsWriteTypeArgumentsOfSignature)
+			assert.Assert(t, declaration.TypeParameters() == nil, "type parameters must contain declarations, not instantiated argument types")
+			assert.Equal(t, declaration.Parameters()[0].Type().Kind, ast.KindStringKeyword)
+			assert.Equal(t, declaration.Type().Kind, ast.KindStringKeyword)
+		})
+	}
+	t.Run("rendering", func(t *testing.T) {
+		t.Parallel()
+		c, signature := newSignature(t)
+		assert.Equal(t, c.SignatureToStringEx(signature, nil, checker.TypeFormatFlagsWriteTypeArgumentsOfSignature, nil), "<string>(value: string): string")
+		assert.Equal(t, c.SignatureToStringEx(signature, nil, checker.TypeFormatFlagsWriteTypeArgumentsOfSignature|checker.TypeFormatFlagsWriteArrowStyleSignature, nil), "<string>(value: string) => string")
+
+		emitContext := printer.NewEmitContext()
+		defer emitContext.Factory.ReleaseArenas()
+		builder := checker.NewNodeBuilderEx(c, emitContext, nil)
+		declaration := builder.SignatureToSignatureDeclaration(signature, ast.KindFunctionType, nil, nodebuilder.FlagsWriteTypeArgumentsOfSignature, nodebuilder.InternalFlagsNone, nil)
+		printNode := func(node *ast.Node) string {
+			writer := printer.NewTextWriter("\n", 4)
+			p := printer.NewPrinter(printer.PrinterOptions{}, printer.PrintHandlers{}, emitContext)
+			p.Write(node, nil, writer, nil)
+			return writer.String()
+		}
+		assert.Equal(t, printNode(declaration), "<string>(value: string) => string")
+		clone := declaration.Clone(emitContext.Factory.AsNodeFactory())
+		assert.Equal(t, printNode(clone), "<string>(value: string) => string")
+		updated := emitContext.Factory.UpdateFunctionTypeNode(
+			clone.AsFunctionTypeNode(),
+			clone.TypeParameterList(),
+			clone.ParameterList(),
+			emitContext.Factory.NewKeywordTypeNode(ast.KindNumberKeyword),
+		)
+		assert.Equal(t, printNode(updated), "<string>(value: string) => number")
+	})
+}
+
+func TestInstantiatedGenericSignatureDeclarationTypeParameters(t *testing.T) {
+	t.Parallel()
+	fs := bundled.WrapFS(vfstest.FromMap(map[string]string{
+		"/main.ts": `class C<T> {
+    method<U extends T>(value: U): U { return value; }
+}
+new C<string>().method;`,
+	}, tspath.CaseSensitive))
+	program, err := compiler.NewProgram(t.Context(), compiler.ProgramOptions{
+		Config: tsoptions.NewParsedCommandLine(&core.CompilerOptions{NoLib: core.TSTrue}, []tspath.RootedFilePath{"/main.ts"}, nil, "/", fs.CaseSensitivity()),
+		Host:   compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil),
+	})
+	assert.NilError(t, err)
+	program.BindSourceFiles()
+	c, done := program.GetTypeChecker(t.Context())
+	defer done()
+	expression := program.GetSourceFile("/main.ts").Statements.Nodes[1].Expression()
+	signatures := c.GetSignaturesOfType(c.GetTypeAtLocation(expression), checker.SignatureKindCall)
+	assert.Equal(t, len(signatures), 1)
+	emitContext := printer.NewEmitContext()
+	defer emitContext.Factory.ReleaseArenas()
+	builder := checker.NewNodeBuilderEx(c, emitContext, nil)
+	for _, declaration := range []*ast.Node{
+		c.SignatureToSignatureDeclaration(signatures[0], ast.KindFunctionType, nil, nodebuilder.FlagsWriteTypeArgumentsOfSignature),
+		builder.SignatureToSignatureDeclaration(signatures[0], ast.KindFunctionType, nil, nodebuilder.FlagsWriteTypeArgumentsOfSignature, nodebuilder.InternalFlagsNone, nil),
+	} {
+		parameters := declaration.TypeParameters()
+		assert.Equal(t, len(parameters), 1)
+		assert.Equal(t, parameters[0].Kind, ast.KindTypeParameter)
+		assert.Equal(t, parameters[0].Name().Text(), "U")
+		assert.Equal(t, parameters[0].AsTypeParameterDeclaration().Constraint.Kind, ast.KindStringKeyword)
+	}
+}
+
+func TestInstantiatedSignatureHiddenTypeParameterTruncation(t *testing.T) {
+	t.Parallel()
+	longLiteral := `"` + strings.Repeat("x", 200) + `"`
+	for _, test := range []struct {
+		name        string
+		declaration string
+	}{
+		{"default", "= " + longLiteral},
+		{"constraint", "extends { hidden: " + longLiteral + "; nested: { value: number } }"},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+			fs := bundled.WrapFS(vfstest.FromMap(map[string]string{
+				"/main.ts": "class C<T> {\nmethod<U " + test.declaration + ">() { return { value: null as T }; }\n}\nnew C<string>().method;",
+			}, tspath.CaseSensitive))
+			program, err := compiler.NewProgram(t.Context(), compiler.ProgramOptions{
+				Config: tsoptions.NewParsedCommandLine(&core.CompilerOptions{NoLib: core.TSTrue}, []tspath.RootedFilePath{"/main.ts"}, nil, "/", fs.CaseSensitivity()),
+				Host:   compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil),
+			})
+			assert.NilError(t, err)
+			program.BindSourceFiles()
+			c, done := program.GetTypeChecker(t.Context())
+			defer done()
+			expression := program.GetSourceFile("/main.ts").Statements.Nodes[1].Expression()
+			signatures := c.GetSignaturesOfType(c.GetTypeAtLocation(expression), checker.SignatureKindCall)
+			assert.Equal(t, len(signatures), 1)
+			for _, verbosity := range []*checker.VerbosityContext{nil, {}} {
+				text := c.SignatureToStringEx(signatures[0], nil, checker.TypeFormatFlagsWriteTypeArgumentsOfSignature, verbosity)
+				assert.Equal(t, text, "<U>(): { value: string; }")
+				if verbosity != nil {
+					assert.Assert(t, !verbosity.Truncated)
+				}
+			}
+			visible := c.SignatureToStringEx(signatures[0], nil, checker.TypeFormatFlagsNone, nil)
+			assert.Assert(t, strings.HasSuffix(visible, "(): ..."), visible)
+		})
+	}
+}
 
 func TestGetSymbolAtLocation(t *testing.T) {
 	t.Parallel()

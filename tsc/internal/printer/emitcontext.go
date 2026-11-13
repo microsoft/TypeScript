@@ -14,16 +14,17 @@ import (
 //
 // NOTE: EmitContext is not guaranteed to be thread-safe.
 type EmitContext struct {
-	Factory       *NodeFactory // Required. The NodeFactory to use to create new nodes
-	autoGenerate  map[*ast.MemberName]*AutoGenerateInfo
-	textSource    map[*ast.StringLiteralNode]*ast.Node
-	original      map[*ast.Node]*ast.Node
-	emitNodes     core.LinkStore[*ast.Node, emitNode]
-	assignedName  map[*ast.Node]*ast.Expression
-	classThis     map[*ast.Node]*ast.IdentifierNode
-	varScopeStack core.Stack[*varScope]
-	letScopeStack core.Stack[*varScope]
-	emitHelpers   collections.OrderedSet[*EmitHelper]
+	Factory                *NodeFactory // Required. The NodeFactory to use to create new nodes
+	autoGenerate           map[*ast.MemberName]*AutoGenerateInfo
+	textSource             map[*ast.StringLiteralNode]*ast.Node
+	original               map[*ast.Node]*ast.Node
+	emitNodes              core.LinkStore[*ast.Node, emitNode]
+	signatureTypeArguments map[*ast.Node]*ast.TypeArgumentList
+	assignedName           map[*ast.Node]*ast.Expression
+	classThis              map[*ast.Node]*ast.IdentifierNode
+	varScopeStack          core.Stack[*varScope]
+	letScopeStack          core.Stack[*varScope]
+	emitHelpers            collections.OrderedSet[*EmitHelper]
 }
 
 type environmentFlags int
@@ -445,11 +446,29 @@ func (c *EmitContext) SetOriginalEx(node *ast.Node, original *ast.Node, allowOve
 		if emitNode := c.emitNodes.TryGet(original); emitNode != nil {
 			c.emitNodes.Get(node).copyFrom(emitNode)
 		}
+		if arguments := c.signatureTypeArguments[original]; arguments != nil {
+			c.signatureTypeArguments[node] = arguments
+		}
 	} else if !allowOverwrite && existing != original {
 		panic("Original node already set.")
 	} else if allowOverwrite {
 		c.original[node] = original
 	}
+}
+
+func (c *EmitContext) SignatureTypeArguments(node *ast.Node) *ast.TypeArgumentList {
+	return c.signatureTypeArguments[node]
+}
+
+func (c *EmitContext) SetSignatureTypeArguments(node *ast.Node, arguments *ast.TypeArgumentList) {
+	if arguments == nil {
+		delete(c.signatureTypeArguments, node)
+		return
+	}
+	if c.signatureTypeArguments == nil {
+		c.signatureTypeArguments = make(map[*ast.Node]*ast.TypeArgumentList)
+	}
+	c.signatureTypeArguments[node] = arguments
 }
 
 // Gets the original node for a given node.

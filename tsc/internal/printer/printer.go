@@ -1461,8 +1461,7 @@ func (p *Printer) emitTypeParameter(node *ast.TypeParameterDeclaration) {
 }
 
 func (p *Printer) emitTypeParameterDeclarationNode(node *ast.TypeParameterDeclarationNode) {
-	// NOTE: QuickInfo uses TypeFormatFlagsWriteTypeArgumentsOfSignature to instruct the NodeBuilder to store type arguments
-	// (i.e. type nodes) instead of type parameter declarations in the type parameter list.
+	// Synthesized display argument lists may also contain type parameter declarations.
 	if ast.IsTypeParameterDeclaration(node) {
 		p.emitTypeParameter(node.AsTypeParameterDeclaration())
 	} else {
@@ -1519,6 +1518,14 @@ func (p *Printer) emitTypeParameters(parentNode *ast.Node, nodes *ast.TypeParame
 		return
 	}
 	p.emitList((*Printer).emitTypeParameterDeclarationNode, parentNode, nodes, LFTypeParameters|core.IfElse(ast.IsArrowFunction(parentNode) /*p.shouldAllowTrailingComma(parentNode, nodes)*/, LFAllowTrailingComma, LFNone)) // TODO: preserve trailing comma after Strada migration
+}
+
+func (p *Printer) emitSignatureTypeArgumentsOrParameters(node *ast.Node) {
+	if arguments := p.emitContext.SignatureTypeArguments(node); arguments != nil {
+		p.emitTypeArguments(node, arguments)
+	} else {
+		p.emitTypeParameters(node, node.FunctionLikeData().TypeParameters)
+	}
 }
 
 func (p *Printer) emitTypeAnnotation(node *ast.TypeNode) {
@@ -1586,12 +1593,7 @@ func (p *Printer) emitParametersForIndexSignature(parentNode *ast.Node, paramete
 func (p *Printer) emitSignature(node *ast.Node) {
 	n := node.FunctionLikeData()
 
-	// !!! In old emitter, quickinfo used type arguments in place of type parameters on instantiated signatures
-	////if n.TypeArguments != nil {
-	////	p.emitTypeArguments(node, n.TypeArguments)
-	////} else {
-	p.emitTypeParameters(node, n.TypeParameters)
-	////}
+	p.emitSignatureTypeArgumentsOrParameters(node)
 
 	p.emitParameters(node, n.Parameters)
 	p.emitTypeAnnotation(n.Type)
@@ -1939,8 +1941,7 @@ func (p *Printer) emitFunctionType(node *ast.FunctionTypeNode) {
 	indented := p.shouldEmitIndented(node.AsNode())
 	p.increaseIndentIf(indented)
 	p.pushNameGenerationScope(node.AsNode())
-	// !!! in the old emitter, quickinfo uses type arguments in place of type parameters for instantiated signatures
-	p.emitTypeParameters(node.AsNode(), node.TypeParameters)
+	p.emitSignatureTypeArgumentsOrParameters(node.AsNode())
 	p.emitParameters(node.AsNode(), node.Parameters)
 	p.writeSpace()
 	p.emitReturnType(node.Type)
@@ -1957,8 +1958,7 @@ func (p *Printer) emitConstructorType(node *ast.ConstructorTypeNode) {
 	indented := p.shouldEmitIndented(node.AsNode())
 	p.increaseIndentIf(indented)
 	p.pushNameGenerationScope(node.AsNode())
-	// !!! in the old emitter, quickinfo uses type arguments in place of type parameters for instantiated signatures
-	p.emitTypeParameters(node.AsNode(), node.TypeParameters)
+	p.emitSignatureTypeArgumentsOrParameters(node.AsNode())
 	p.emitParameters(node.AsNode(), node.Parameters)
 	p.writeSpace()
 	p.emitReturnType(node.Type)
@@ -2691,7 +2691,7 @@ func (p *Printer) emitArrowFunction(node *ast.ArrowFunction) {
 	indented := p.shouldEmitIndented(node.AsNode())
 	p.increaseIndentIf(indented)
 	p.pushNameGenerationScope(node.AsNode())
-	p.emitTypeParameters(node.AsNode(), node.TypeParameters)
+	p.emitSignatureTypeArgumentsOrParameters(node.AsNode())
 	p.emitParametersForArrow(node.AsNode(), node.Parameters)
 	p.emitTypeAnnotation(node.Type)
 	p.writeSpace()

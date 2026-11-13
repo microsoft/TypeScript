@@ -296,6 +296,15 @@ func (c *Checker) getNodeBuilder() (*NodeBuilder, func()) {
 	return c.typeToStringNodebuilder, releaseNodes
 }
 
+func (c *Checker) getNodeBuilderForTypeFormat(flags TypeFormatFlags) (*NodeBuilder, func()) {
+	if flags&TypeFormatFlagsWriteTypeArgumentsOfSignature == 0 {
+		return c.getNodeBuilder()
+	}
+	// Instantiated signature display metadata must not retain nodes in the cached builder.
+	builder := c.getNodeBuilderEx(nil)
+	return builder, builder.EmitContext().Factory.ReleaseArenas
+}
+
 func (c *Checker) getNodeBuilderEx(idToSymbol map[*ast.IdentifierNode]*ast.Symbol) *NodeBuilder {
 	b := NewNodeBuilderEx(c, printer.NewEmitContext(), idToSymbol)
 	return b

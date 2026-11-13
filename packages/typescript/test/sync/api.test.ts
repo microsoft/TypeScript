@@ -115,6 +115,7 @@ import {
     ModuleKind,
     ModuleResolutionKind,
     type ModuleResolver,
+    NodeBuilderFlags,
     type NumberLiteralType,
     ObjectFlags,
     type Program,
@@ -3999,6 +4000,69 @@ export class Cache {
         const target = sig.getTarget();
         assert.ok(target, "getTarget() should return the generic signature");
         assert.ok(target.typeParameters && target.typeParameters.length > 0, "target should have type parameters");
+    });
+
+    test("instantiated signature declarations do not expose type arguments as type parameters", () => {
+        using api = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/src/main.ts": `function identity<T>(value: T): T { return value; }
+identity<string>("hello");`,
+        });
+        const snapshot = api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const source = project.program.getSourceFile("/src/main.ts");
+        assert.ok(source);
+        const statement = source.statements[1];
+        assert.ok(isExpressionStatement(statement));
+        const call = statement.expression;
+        assert.ok(isCallExpression(call));
+        const signature = project.checker.getResolvedSignature(call);
+        const declaration = project.checker.signatureToSignatureDeclaration(
+            signature,
+            SyntaxKind.FunctionDeclaration,
+            undefined,
+            NodeBuilderFlags.WriteTypeArgumentsOfSignature,
+        );
+        assert.ok(declaration && isFunctionDeclaration(declaration));
+        assert.strictEqual(declaration.typeParameters, undefined);
+        assert.strictEqual(declaration.parameters[0].type?.kind, SyntaxKind.StringKeyword);
+        assert.strictEqual(declaration.type?.kind, SyntaxKind.StringKeyword);
+        const target = signature.getTarget();
+        assert.ok(target);
+        const generic = project.checker.signatureToSignatureDeclaration(target, SyntaxKind.FunctionDeclaration);
+        assert.ok(generic && isFunctionDeclaration(generic));
+        assert.strictEqual(generic.typeParameters?.[0].kind, SyntaxKind.TypeParameter);
+    });
+
+    test("instantiated generic signature declarations retain their type parameter constraints", () => {
+        using api = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/src/main.ts": `class C<T> {
+    method<U extends T>(value: U): U { return value; }
+}
+new C<string>().method;`,
+        });
+        const snapshot = api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const source = project.program.getSourceFile("/src/main.ts");
+        assert.ok(source);
+        const statement = source.statements[1];
+        assert.ok(isExpressionStatement(statement));
+        const type = project.checker.getTypeAtLocation(statement.expression);
+        const signatures = type.getCallSignatures();
+        assert.strictEqual(signatures.length, 1);
+        const declaration = project.checker.signatureToSignatureDeclaration(
+            signatures[0],
+            SyntaxKind.FunctionDeclaration,
+            undefined,
+            NodeBuilderFlags.WriteTypeArgumentsOfSignature,
+        );
+        assert.ok(declaration && isFunctionDeclaration(declaration));
+        assert.ok(declaration.typeParameters);
+        assert.strictEqual(declaration.typeParameters.length, 1);
+        const parameter = declaration.typeParameters[0];
+        assert.strictEqual(parameter.name.text, "U");
+        assert.strictEqual(parameter.constraint?.kind, SyntaxKind.StringKeyword);
     });
 });
 
