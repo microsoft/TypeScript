@@ -3,6 +3,24 @@
 /main.ts(5,5): error TS7031: Binding element 'required' implicitly has an 'any' type.
 /main.ts(10,5): error TS7031: Binding element 'required' implicitly has an 'any' type.
 /main.ts(15,5): error TS7031: Binding element 'required' implicitly has an 'any' type.
+/main.ts(31,11): error TS2322: Type 'boolean | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+/main.ts(36,11): error TS2322: Type 'boolean | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+/main.ts(44,34): error TS2322: Type 'boolean | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+/main.ts(44,45): error TS2322: Type 'boolean | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+/main.ts(49,11): error TS2322: Type 'boolean | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+/main.ts(53,84): error TS2339: Property 'unknown' does not exist on type '{ known?: number | undefined; }'.
+/main.ts(53,84): error TS7031: Binding element 'unknown' implicitly has an 'any' type.
+/main.ts(54,11): error TS2322: Type 'number | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+/main.ts(62,11): error TS2322: Type 'number | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+/main.ts(65,11): error TS2322: Type 'number | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
 
 
 ==== /unchecked.js (0 errors) ====
@@ -32,7 +50,7 @@
         optional = false,
     ] = []) => {};
     
-==== /main.ts (3 errors) ====
+==== /main.ts (13 errors) ====
     import { checkedArray, checkedObject } from "./checked";
     import { uncheckedArray, uncheckedObject } from "./unchecked";
     
@@ -65,4 +83,72 @@
     checkedArray(["value"]);
     typedObject({ required: "value" });
     typedArray(["value"]);
+    
+    // Contextually typed parameters: the contextual signature types the missing elements.
+    type Options = (options?: { recursive?: boolean }) => void;
+    export const contextualFunction: Options = ({ recursive } = {}) => {
+        const flag: string = recursive; // error: boolean | undefined
+              ~~~~
+!!! error TS2322: Type 'boolean | undefined' is not assignable to type 'string'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'string'.
+    };
+    
+    declare function takesCallback(cb: (options?: { deep?: boolean }) => void): void;
+    takesCallback(({ deep } = {}) => {
+        const flag: string = deep; // error: boolean | undefined
+              ~~~~
+!!! error TS2322: Type 'boolean | undefined' is not assignable to type 'string'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'string'.
+    });
+    
+    interface Driver {
+        rm(path: string, options?: { recursive?: boolean; force?: boolean }): void;
+    }
+    export const driver: Driver = {
+        rm: (path, { recursive, force } = {}) => {
+            const flags: string[] = [recursive, force]; // error: boolean | undefined
+                                     ~~~~~~~~~
+!!! error TS2322: Type 'boolean | undefined' is not assignable to type 'string'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'string'.
+                                                ~~~~~
+!!! error TS2322: Type 'boolean | undefined' is not assignable to type 'string'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'string'.
+        },
+    };
+    
+    export const contextualNested: (options?: { inner?: { deep?: boolean } }) => void = ({ inner: { deep } = {} } = {}) => {
+        const flag: string = deep; // error: boolean | undefined
+              ~~~~
+!!! error TS2322: Type 'boolean | undefined' is not assignable to type 'string'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'string'.
+    };
+    
+    // Only the elements the contextual type has are typed by it; the rest stay implicitly any.
+    export const contextualPartial: (options?: { known?: number }) => void = ({ known, unknown } = {}) => {
+                                                                                       ~~~~~~~
+!!! error TS2339: Property 'unknown' does not exist on type '{ known?: number | undefined; }'.
+                                                                                       ~~~~~~~
+!!! error TS7031: Binding element 'unknown' implicitly has an 'any' type.
+        const value: string = known; // error: number | undefined
+              ~~~~~
+!!! error TS2322: Type 'number | undefined' is not assignable to type 'string'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'string'.
+    };
+    
+    // Annotated parameters: the annotation types the missing elements of a nested pattern.
+    interface Outer {
+        inner?: { b?: number };
+    }
+    export function annotatedNested({ inner: { b } = {} }: Outer) {
+        const value: string = b; // error: number | undefined
+              ~~~~~
+!!! error TS2322: Type 'number | undefined' is not assignable to type 'string'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'string'.
+    }
+    export function annotatedNestedWithDefault({ inner: { b } = {} }: Outer = {}) {
+        const value: string = b; // error: number | undefined
+              ~~~~~
+!!! error TS2322: Type 'number | undefined' is not assignable to type 'string'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'string'.
+    }
     
