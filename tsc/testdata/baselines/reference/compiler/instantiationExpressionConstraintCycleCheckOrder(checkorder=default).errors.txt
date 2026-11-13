@@ -1,8 +1,10 @@
+instantiationExpressionConstraintCycleCheckOrder.ts(10,25): error TS2344: Type 'A<T>' does not satisfy the constraint 'A<number>'.
+  Type 'T' is not assignable to type 'number'.
 instantiationExpressionConstraintCycleCheckOrder.ts(17,41): error TS2344: Type 'A<T>' does not satisfy the constraint 'A<number>'.
   Type 'T' is not assignable to type 'number'.
 
 
-==== instantiationExpressionConstraintCycleCheckOrder.ts (1 errors) ====
+==== instantiationExpressionConstraintCycleCheckOrder.ts (2 errors) ====
     // Checking the type arguments of the instantiation expressions against their
     // constraints needs the variances of A, which need the type of child. The
     // constraint errors and the types of child must not depend on whether child
@@ -13,6 +15,10 @@ instantiationExpressionConstraintCycleCheckOrder.ts(17,41): error TS2344: Type '
         interface A<T = number> {
             value: T;
             child: typeof b<A<T>>;
+                            ~~~~
+!!! error TS2344: Type 'A<T>' does not satisfy the constraint 'A<number>'.
+!!! error TS2344:   Type 'T' is not assignable to type 'number'.
+!!! related TS2208 instantiationExpressionConstraintCycleCheckOrder.ts:8:17: This type parameter might need an `extends number` constraint.
         }
     }
     
