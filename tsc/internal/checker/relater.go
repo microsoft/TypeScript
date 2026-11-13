@@ -1156,13 +1156,48 @@ func (c *Checker) getKeyPropertyCandidateName(types []*Type) string {
 	for _, t := range types {
 		if t.flags&(TypeFlagsObject|TypeFlagsInstantiableNonPrimitive) != 0 {
 			for _, p := range c.getPropertiesOfType(t) {
-				if isUnitType(c.getTypeOfSymbol(p)) {
+				if c.isPropertyOfUnitType(p) {
 					return p.Name()
 				}
 			}
 		}
 	}
 	return ""
+}
+
+// Reports whether a property has a unit type. It skips resolving the type of a method, which is a function type.
+// For an instantiated or mapped property whose type is not resolved yet, it first checks the type
+// the property is instantiated from, and skips the instantiation when that type already rules out a unit type.
+func (c *Checker) isPropertyOfUnitType(prop *ast.Symbol) bool {
+	// A method, including an object literal method, is typed as a function type
+	if prop.Flags()&ast.SymbolFlagsMethod != 0 {
+		return false
+	}
+
+	checkFlags := prop.CheckFlags()
+	if checkFlags&(ast.CheckFlagsInstantiated|ast.CheckFlagsMapped) != 0 {
+		if links := c.valueSymbolLinks.Get(prop); links.resolvedType == nil {
+			var uninstantiated *Type
+			if checkFlags&ast.CheckFlagsInstantiated != 0 {
+				uninstantiated = c.getTypeOfSymbol(links.target)
+			} else {
+				mappedType := links.getContainingType()
+				uninstantiated = c.getTemplateTypeFromMappedType(core.OrElse(mappedType.AsMappedType().target, mappedType))
+			}
+			// An object type other than a mapped type or a generic tuple type never instantiates to a unit type or to never,
+			// so neither does a union containing one. A homomorphic mapped type instantiated for a primitive is that
+			// primitive. A generic tuple type has a variadic element, like [string, ...T, number], and it normalizes to never
+			// when that element is instantiated to never. The tuple then drops out of a union, so with T = never the union
+			// [string, ...T, number] | K is just K, which can be a unit type.
+			if someType(uninstantiated, func(t *Type) bool {
+				return t.flags&TypeFlagsObject != 0 && t.objectFlags&ObjectFlagsMapped == 0 && !isGenericTupleType(t)
+			}) {
+				return false
+			}
+		}
+	}
+
+	return isUnitType(c.getTypeOfSymbol(prop))
 }
 
 // Given a set of constituent types and a property name, create and return a map keyed by the literal
