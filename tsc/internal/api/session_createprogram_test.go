@@ -280,6 +280,48 @@ func TestUpdateSnapshotEnsuresSyntheticProgram(t *testing.T) {
 	assert.Equal(t, ensured.Projects[0].Dirty, false)
 }
 
+func TestUpdateSnapshotRemovesAndCreatesPrograms(t *testing.T) {
+	t.Parallel()
+
+	const (
+		fileA = "/home/projects/p/a.ts"
+		fileB = "/home/projects/p/b.ts"
+	)
+	projectSession, _ := projecttestutil.Setup(map[string]any{
+		fileA: "export const a = 1;",
+		fileB: "export const b = 1;",
+	})
+	defer projectSession.Close()
+	session := NewLSPSession(projectSession, nil)
+	defer session.Close()
+
+	created, err := session.handleCreateSnapshot(context.Background(), &CreateSnapshotParams{
+		CreatePrograms: []*CreateSnapshotProgramParams{{
+			RootFiles:       []DocumentIdentifier{{FileName: fileA}},
+			CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue},
+		}},
+	})
+	assert.NilError(t, err)
+	assert.DeepEqual(t, *created.Operation.CreatedPrograms, []project.SyntheticProjectID{syntheticProjectID(1)})
+
+	updated, err := session.handleUpdateSnapshot(context.Background(), &UpdateSnapshotParams{
+		Snapshot: created.Snapshot,
+		Changes: &CreateSnapshotParams{
+			RemovePrograms: []project.SyntheticProjectID{syntheticProjectID(1)},
+			CreatePrograms: []*CreateSnapshotProgramParams{{
+				RootFiles:       []DocumentIdentifier{{FileName: fileB}},
+				CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue},
+			}},
+		},
+	})
+	assert.NilError(t, err)
+	assert.DeepEqual(t, *updated.Operation.CreatedPrograms, []project.SyntheticProjectID{syntheticProjectID(2)})
+	assert.DeepEqual(t, updated.Changes.RemovedProjects, []project.ID{syntheticProjectID(1).AsID()})
+	assert.Equal(t, len(updated.Projects), 1)
+	assert.Equal(t, updated.Projects[0].Id, syntheticProjectID(2).AsID())
+	assert.DeepEqual(t, updated.Projects[0].ParsedCommandLine.FileNames, []tspath.RootedFilePath{fileB})
+}
+
 func TestCreateProgramReportsNonCompositeProjectReference(t *testing.T) {
 	t.Parallel()
 
