@@ -12,7 +12,7 @@ export const x = 1;
     "extends": "./base.json",
 }
 
-tsgo -p tsconfig.json --pretty false
+tsc -p tsconfig.json --pretty false
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 base.json(2,15): error TS5024: Compiler option 'files' requires a value of type string.

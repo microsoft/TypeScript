@@ -36,8 +36,6 @@ var An_index_signature_parameter_cannot_have_a_question_mark = &Message{code: 10
 
 var An_index_signature_parameter_cannot_have_an_initializer = &Message{code: 1020, category: CategoryError, key: "An_index_signature_parameter_cannot_have_an_initializer_1020", text: "An index signature parameter cannot have an initializer."}
 
-var An_index_signature_must_have_a_type_annotation = &Message{code: 1021, category: CategoryError, key: "An_index_signature_must_have_a_type_annotation_1021", text: "An index signature must have a type annotation."}
-
 var An_index_signature_parameter_must_have_a_type_annotation = &Message{code: 1022, category: CategoryError, key: "An_index_signature_parameter_must_have_a_type_annotation_1022", text: "An index signature parameter must have a type annotation."}
 
 var X_readonly_modifier_can_only_appear_on_a_property_declaration_or_index_signature = &Message{code: 1024, category: CategoryError, key: "readonly_modifier_can_only_appear_on_a_property_declaration_or_index_signature_1024", text: "'readonly' modifier can only appear on a property declaration or index signature."}
@@ -746,7 +744,7 @@ var X_0_resolves_to_a_type_only_declaration_and_must_be_re_exported_using_a_type
 
 var Preserve_unused_imported_values_in_the_JavaScript_output_that_would_otherwise_be_removed = &Message{code: 1449, category: CategoryMessage, key: "Preserve_unused_imported_values_in_the_JavaScript_output_that_would_otherwise_be_removed_1449", text: "Preserve unused imported values in the JavaScript output that would otherwise be removed."}
 
-var Dynamic_imports_can_only_accept_a_module_specifier_and_an_optional_set_of_attributes_as_arguments = &Message{code: 1450, category: CategoryMessage, key: "Dynamic_imports_can_only_accept_a_module_specifier_and_an_optional_set_of_attributes_as_arguments_1450", text: "Dynamic imports can only accept a module specifier and an optional set of attributes as arguments"}
+var Dynamic_imports_can_only_accept_a_module_specifier_and_an_optional_set_of_attributes_as_arguments = &Message{code: 1450, category: CategoryError, key: "Dynamic_imports_can_only_accept_a_module_specifier_and_an_optional_set_of_attributes_as_arguments_1450", text: "Dynamic imports can only accept a module specifier and an optional set of attributes as arguments"}
 
 var Private_identifiers_are_only_allowed_in_class_bodies_and_may_only_be_used_as_part_of_a_class_member_declaration_property_access_or_on_the_left_hand_side_of_an_in_expression = &Message{code: 1451, category: CategoryError, key: "Private_identifiers_are_only_allowed_in_class_bodies_and_may_only_be_used_as_part_of_a_class_member__1451", text: "Private identifiers are only allowed in class bodies and may only be used as part of a class member declaration, property access, or on the left-hand-side of an 'in' expression"}
 
@@ -3318,6 +3316,8 @@ var Enable_lib_replacement = &Message{code: 6808, category: CategoryMessage, key
 
 var Ensure_types_are_ordered_stably_and_deterministically_across_compilations = &Message{code: 6809, category: CategoryMessage, key: "Ensure_types_are_ordered_stably_and_deterministically_across_compilations_6809", text: "Ensure types are ordered stably and deterministically across compilations."}
 
+var Disable_runtime_rewriting_of_file_extensions_in_non_literal_import_and_require_calls_when_rewriteRelativeImportExtensions_is_enabled = &Message{code: 6810, category: CategoryMessage, key: "Disable_runtime_rewriting_of_file_extensions_in_non_literal_import_and_require_calls_when_rewriteRel_6810", text: "Disable runtime rewriting of file extensions in non-literal 'import()' and 'require()' calls when 'rewriteRelativeImportExtensions' is enabled."}
+
 var X_one_of_Colon = &Message{code: 6900, category: CategoryMessage, key: "one_of_Colon_6900", text: "one of:"}
 
 var X_one_or_more_Colon = &Message{code: 6901, category: CategoryMessage, key: "one_or_more_Colon_6901", text: "one or more:"}
@@ -3505,6 +3505,8 @@ var This_syntax_is_reserved_in_files_with_the_mts_or_cts_extension_Use_an_as_exp
 var This_syntax_is_reserved_in_files_with_the_mts_or_cts_extension_Add_a_trailing_comma_or_explicit_constraint = &Message{code: 7060, category: CategoryError, key: "This_syntax_is_reserved_in_files_with_the_mts_or_cts_extension_Add_a_trailing_comma_or_explicit_cons_7060", text: "This syntax is reserved in files with the .mts or .cts extension. Add a trailing comma or explicit constraint."}
 
 var A_mapped_type_may_not_declare_properties_or_methods = &Message{code: 7061, category: CategoryError, key: "A_mapped_type_may_not_declare_properties_or_methods_7061", text: "A mapped type may not declare properties or methods."}
+
+var Index_signature_which_lacks_type_annotation_implicitly_has_an_any_type = &Message{code: 7062, category: CategoryError, key: "Index_signature_which_lacks_type_annotation_implicitly_has_an_any_type_7062", text: "Index signature, which lacks type annotation, implicitly has an 'any' type."}
 
 var Declaration_emit_elides_private_members_but_0_refers_to_a_private_member_Write_an_explicit_type_here = &Message{code: 7080, category: CategoryError, key: "Declaration_emit_elides_private_members_but_0_refers_to_a_private_member_Write_an_explicit_type_here_7080", text: "Declaration emit elides private members, but '{0}' refers to a private member. Write an explicit type here."}
 
@@ -3804,7 +3806,7 @@ var Private_identifiers_cannot_be_used_in_destructuring_patterns = &Message{code
 
 var Content_mapper_file_extension_0_must_begin_with_a = &Message{code: 18065, category: CategoryError, key: "Content_mapper_file_extension_0_must_begin_with_a_18065", text: "Content mapper file extension '{0}' must begin with a '.'."}
 
-var Content_mapper_file_extension_0_is_a_built_in_extension_and_cannot_be_registered_by_a_content_mapper = &Message{code: 18066, category: CategoryError, key: "Content_mapper_file_extension_0_is_a_built_in_extension_and_cannot_be_registered_by_a_content_mapper_18066", text: "Content mapper file extension '{0}' is a built-in extension and cannot be registered by a content mapper."}
+var Content_mapper_file_extension_0_cannot_be_registered_because_it_ends_in_a_built_in_extension = &Message{code: 18066, category: CategoryError, key: "Content_mapper_file_extension_0_cannot_be_registered_because_it_ends_in_a_built_in_extension_18066", text: "Content mapper file extension '{0}' cannot be registered because it ends in a built-in extension."}
 
 var Content_mapper_file_extension_0_is_registered_by_more_than_one_content_mapper = &Message{code: 18067, category: CategoryError, key: "Content_mapper_file_extension_0_is_registered_by_more_than_one_content_mapper_18067", text: "Content mapper file extension '{0}' is registered by more than one content mapper."}
 
@@ -3921,6 +3923,36 @@ var The_typescript_contentMapper_outputExtensions_of_the_content_mapper_package_
 var Content_mapper_extension_0_must_not_contain_path_separators = &Message{code: 18123, category: CategoryError, key: "Content_mapper_extension_0_must_not_contain_path_separators_18123", text: "Content mapper extension '{0}' must not contain path separators."}
 
 var The_content_mapper_package_0_is_outside_the_open_workspace_and_will_not_be_loaded = &Message{code: 18124, category: CategoryError, key: "The_content_mapper_package_0_is_outside_the_open_workspace_and_will_not_be_loaded_18124", text: "The content mapper package '{0}' is outside the open workspace and will not be loaded."}
+
+var The_content_mapper_0_returned_virtual_extension_1_whose_module_format_does_not_match_declaration_output_2 = &Message{code: 18125, category: CategoryError, key: "The_content_mapper_0_returned_virtual_extension_1_whose_module_format_does_not_match_declaration_out_18125", text: "The content mapper '{0}' returned virtual extension '{1}', whose module format does not match declaration output '{2}'."}
+
+var Content_mapper_0_is_also_registered_for_the_extension_1_but_has_a_conflicting_outputExtensions_mapping_Each_registration_for_this_extension_must_produce_the_same_output_file_name = &Message{code: 18127, category: CategoryError, key: "Content_mapper_0_is_also_registered_for_the_extension_1_but_has_a_conflicting_outputExtensions_mappi_18127", text: "Content mapper '{0}' is also registered for the extension '{1}', but has a conflicting 'outputExtensions' mapping. Each registration for this extension must produce the same output file name."}
+
+var Content_mapper_0_is_also_registered_for_the_extension_1_but_has_no_outputExtensions_mapping_Each_registration_for_this_extension_must_produce_the_same_output_file_name = &Message{code: 18128, category: CategoryError, key: "Content_mapper_0_is_also_registered_for_the_extension_1_but_has_no_outputExtensions_mapping_Each_reg_18128", text: "Content mapper '{0}' is also registered for the extension '{1}', but has no 'outputExtensions' mapping. Each registration for this extension must produce the same output file name."}
+
+var The_conflicting_mapper_registration_is_declared_here = &Message{code: 18130, category: CategoryMessage, key: "The_conflicting_mapper_registration_is_declared_here_18130", text: "The conflicting mapper registration is declared here."}
+
+var The_conflicting_mapper_registration_is_declared_here_Its_outputExtensions_setting_is_inherited_from_the_mapper_s_package_json = &Message{code: 18131, category: CategoryMessage, key: "The_conflicting_mapper_registration_is_declared_here_Its_outputExtensions_setting_is_inherited_from__18131", text: "The conflicting mapper registration is declared here. Its 'outputExtensions' setting is inherited from the mapper's package.json."}
+
+var This_relative_import_path_is_unsafe_to_rewrite_because_the_content_mapper_s_outputExtensions_mapping_depends_on_module_resolution = &Message{code: 18132, category: CategoryError, key: "This_relative_import_path_is_unsafe_to_rewrite_because_the_content_mapper_s_outputExtensions_mapping_18132", text: "This relative import path is unsafe to rewrite because the content mapper's 'outputExtensions' mapping depends on module resolution."}
+
+var Non_literal_import_paths_cannot_be_rewritten_when_a_content_mapper_uses_both_include_and_an_outputExtensions_mapping_Set_disableDynamicImportExtensionRewriting_to_disable_rewriting_of_non_literal_import_paths = &Message{code: 18133, category: CategoryError, key: "Non_literal_import_paths_cannot_be_rewritten_when_a_content_mapper_uses_both_include_and_an_outputEx_18133", text: "Non-literal import paths cannot be rewritten when a content mapper uses both 'include' and an 'outputExtensions' mapping. Set 'disableDynamicImportExtensionRewriting' to disable rewriting of non-literal import paths."}
+
+var This_relative_import_path_is_unsafe_to_rewrite_because_it_appears_to_match_the_content_mapper_s_include_but_does_not_after_resolution_with_rootDirs = &Message{code: 18134, category: CategoryError, key: "This_relative_import_path_is_unsafe_to_rewrite_because_it_appears_to_match_the_content_mapper_s_incl_18134", text: "This relative import path is unsafe to rewrite because it appears to match the content mapper's 'include', but does not after resolution with 'rootDirs'."}
+
+var This_relative_import_path_is_unsafe_to_rewrite_because_it_appears_not_to_match_the_content_mapper_s_include_but_does_after_resolution_with_rootDirs = &Message{code: 18135, category: CategoryError, key: "This_relative_import_path_is_unsafe_to_rewrite_because_it_appears_not_to_match_the_content_mapper_s__18135", text: "This relative import path is unsafe to rewrite because it appears not to match the content mapper's 'include', but does after resolution with 'rootDirs'."}
+
+var This_relative_import_path_is_unsafe_to_rewrite_because_it_appears_to_match_the_content_mapper_s_include_but_does_not_after_resolution_with_moduleSuffixes = &Message{code: 18136, category: CategoryError, key: "This_relative_import_path_is_unsafe_to_rewrite_because_it_appears_to_match_the_content_mapper_s_incl_18136", text: "This relative import path is unsafe to rewrite because it appears to match the content mapper's 'include', but does not after resolution with 'moduleSuffixes'."}
+
+var This_relative_import_path_is_unsafe_to_rewrite_because_it_appears_not_to_match_the_content_mapper_s_include_but_does_after_resolution_with_moduleSuffixes = &Message{code: 18137, category: CategoryError, key: "This_relative_import_path_is_unsafe_to_rewrite_because_it_appears_not_to_match_the_content_mapper_s__18137", text: "This relative import path is unsafe to rewrite because it appears not to match the content mapper's 'include', but does after resolution with 'moduleSuffixes'."}
+
+var This_relative_import_path_is_unsafe_to_rewrite_because_it_appears_to_match_the_content_mapper_s_include_but_does_not_after_resolution_with_rootDirs_and_moduleSuffixes = &Message{code: 18138, category: CategoryError, key: "This_relative_import_path_is_unsafe_to_rewrite_because_it_appears_to_match_the_content_mapper_s_incl_18138", text: "This relative import path is unsafe to rewrite because it appears to match the content mapper's 'include', but does not after resolution with 'rootDirs' and 'moduleSuffixes'."}
+
+var This_relative_import_path_is_unsafe_to_rewrite_because_it_appears_not_to_match_the_content_mapper_s_include_but_does_after_resolution_with_rootDirs_and_moduleSuffixes = &Message{code: 18139, category: CategoryError, key: "This_relative_import_path_is_unsafe_to_rewrite_because_it_appears_not_to_match_the_content_mapper_s__18139", text: "This relative import path is unsafe to rewrite because it appears not to match the content mapper's 'include', but does after resolution with 'rootDirs' and 'moduleSuffixes'."}
+
+var File_0_has_a_registered_content_mapper_extension_but_does_not_match_any_content_mapper_s_include = &Message{code: 18140, category: CategoryError, key: "File_0_has_a_registered_content_mapper_extension_but_does_not_match_any_content_mapper_s_include_18140", text: "File '{0}' has a registered content mapper extension but does not match any content mapper's 'include'."}
+
+var Content_mapper_0_must_specify_extensions_in_tsconfig_or_its_package_manifest = &Message{code: 18141, category: CategoryError, key: "Content_mapper_0_must_specify_extensions_in_tsconfig_or_its_package_manifest_18141", text: "Content mapper '{0}' must specify 'extensions' in tsconfig or its package manifest."}
 
 var X_nodenext_if_module_is_nodenext_node16_if_module_is_node16_or_node18_otherwise_bundler = &Message{code: 69010, category: CategoryMessage, key: "nodenext_if_module_is_nodenext_node16_if_module_is_node16_or_node18_otherwise_bundler_69010", text: "`nodenext` if `module` is `nodenext`; `node16` if `module` is `node16` or `node18`; otherwise, `bundler`."}
 
@@ -4480,7 +4512,6 @@ var allMessages = [...]**Message{
 	&An_index_signature_parameter_cannot_have_an_accessibility_modifier,
 	&An_index_signature_parameter_cannot_have_a_question_mark,
 	&An_index_signature_parameter_cannot_have_an_initializer,
-	&An_index_signature_must_have_a_type_annotation,
 	&An_index_signature_parameter_must_have_a_type_annotation,
 	&X_readonly_modifier_can_only_appear_on_a_property_declaration_or_index_signature,
 	&An_index_signature_cannot_have_a_trailing_comma,
@@ -6121,6 +6152,7 @@ var allMessages = [...]**Message{
 	&This_operation_can_be_simplified_This_shift_is_identical_to_0_1_2,
 	&Enable_lib_replacement,
 	&Ensure_types_are_ordered_stably_and_deterministically_across_compilations,
+	&Disable_runtime_rewriting_of_file_extensions_in_non_literal_import_and_require_calls_when_rewriteRelativeImportExtensions_is_enabled,
 	&X_one_of_Colon,
 	&X_one_or_more_Colon,
 	&X_type_Colon,
@@ -6215,6 +6247,7 @@ var allMessages = [...]**Message{
 	&This_syntax_is_reserved_in_files_with_the_mts_or_cts_extension_Use_an_as_expression_instead,
 	&This_syntax_is_reserved_in_files_with_the_mts_or_cts_extension_Add_a_trailing_comma_or_explicit_constraint,
 	&A_mapped_type_may_not_declare_properties_or_methods,
+	&Index_signature_which_lacks_type_annotation_implicitly_has_an_any_type,
 	&Declaration_emit_elides_private_members_but_0_refers_to_a_private_member_Write_an_explicit_type_here,
 	&You_cannot_rename_this_element,
 	&You_cannot_rename_elements_that_are_defined_in_the_standard_TypeScript_library,
@@ -6364,7 +6397,7 @@ var allMessages = [...]**Message{
 	&Duplicate_named_capturing_groups_are_only_available_when_targeting_0_or_later,
 	&Private_identifiers_cannot_be_used_in_destructuring_patterns,
 	&Content_mapper_file_extension_0_must_begin_with_a,
-	&Content_mapper_file_extension_0_is_a_built_in_extension_and_cannot_be_registered_by_a_content_mapper,
+	&Content_mapper_file_extension_0_cannot_be_registered_because_it_ends_in_a_built_in_extension,
 	&Content_mapper_file_extension_0_is_registered_by_more_than_one_content_mapper,
 	&Content_mappers_require_the_runExternalCode_command_line_flag_to_be_enabled,
 	&The_content_mapper_0_failed_to_transform_this_file,
@@ -6423,6 +6456,21 @@ var allMessages = [...]**Message{
 	&The_typescript_contentMapper_outputExtensions_of_the_content_mapper_package_0_must_be_an_object_with_string_values,
 	&Content_mapper_extension_0_must_not_contain_path_separators,
 	&The_content_mapper_package_0_is_outside_the_open_workspace_and_will_not_be_loaded,
+	&The_content_mapper_0_returned_virtual_extension_1_whose_module_format_does_not_match_declaration_output_2,
+	&Content_mapper_0_is_also_registered_for_the_extension_1_but_has_a_conflicting_outputExtensions_mapping_Each_registration_for_this_extension_must_produce_the_same_output_file_name,
+	&Content_mapper_0_is_also_registered_for_the_extension_1_but_has_no_outputExtensions_mapping_Each_registration_for_this_extension_must_produce_the_same_output_file_name,
+	&The_conflicting_mapper_registration_is_declared_here,
+	&The_conflicting_mapper_registration_is_declared_here_Its_outputExtensions_setting_is_inherited_from_the_mapper_s_package_json,
+	&This_relative_import_path_is_unsafe_to_rewrite_because_the_content_mapper_s_outputExtensions_mapping_depends_on_module_resolution,
+	&Non_literal_import_paths_cannot_be_rewritten_when_a_content_mapper_uses_both_include_and_an_outputExtensions_mapping_Set_disableDynamicImportExtensionRewriting_to_disable_rewriting_of_non_literal_import_paths,
+	&This_relative_import_path_is_unsafe_to_rewrite_because_it_appears_to_match_the_content_mapper_s_include_but_does_not_after_resolution_with_rootDirs,
+	&This_relative_import_path_is_unsafe_to_rewrite_because_it_appears_not_to_match_the_content_mapper_s_include_but_does_after_resolution_with_rootDirs,
+	&This_relative_import_path_is_unsafe_to_rewrite_because_it_appears_to_match_the_content_mapper_s_include_but_does_not_after_resolution_with_moduleSuffixes,
+	&This_relative_import_path_is_unsafe_to_rewrite_because_it_appears_not_to_match_the_content_mapper_s_include_but_does_after_resolution_with_moduleSuffixes,
+	&This_relative_import_path_is_unsafe_to_rewrite_because_it_appears_to_match_the_content_mapper_s_include_but_does_not_after_resolution_with_rootDirs_and_moduleSuffixes,
+	&This_relative_import_path_is_unsafe_to_rewrite_because_it_appears_not_to_match_the_content_mapper_s_include_but_does_after_resolution_with_rootDirs_and_moduleSuffixes,
+	&File_0_has_a_registered_content_mapper_extension_but_does_not_match_any_content_mapper_s_include,
+	&Content_mapper_0_must_specify_extensions_in_tsconfig_or_its_package_manifest,
 	&X_nodenext_if_module_is_nodenext_node16_if_module_is_node16_or_node18_otherwise_bundler,
 	&File_is_a_CommonJS_module_it_may_be_converted_to_an_ES_module,
 	&This_constructor_function_may_be_converted_to_a_class_declaration,

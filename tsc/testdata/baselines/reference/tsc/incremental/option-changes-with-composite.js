@@ -16,7 +16,7 @@ import { b } from "./b";export const d = b;
     }
 }
 
-tsgo 
+tsc 
 ExitStatus:: Success
 Output::
 //// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
@@ -193,7 +193,7 @@ Signatures::
 
 Edit [0]:: with sourceMap
 
-tsgo --sourceMap
+tsc --sourceMap
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/a.js] *modified* 
@@ -335,7 +335,7 @@ Signatures::
 
 Edit [1]:: should re-emit only js so they dont contain sourcemap
 
-tsgo 
+tsc 
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/a.js] *modified* 
@@ -468,7 +468,7 @@ Signatures::
 
 Edit [2]:: with declaration should not emit anything
 
-tsgo --declaration
+tsc --declaration
 ExitStatus:: Success
 Output::
 
@@ -479,7 +479,7 @@ Signatures::
 
 Edit [3]:: no change
 
-tsgo 
+tsc 
 ExitStatus:: Success
 Output::
 
@@ -490,7 +490,7 @@ Signatures::
 
 Edit [4]:: with declaration and declarationMap
 
-tsgo --declaration --declarationMap
+tsc --declaration --declarationMap
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/a.d.ts] *modified* 
@@ -629,7 +629,7 @@ Signatures::
 
 Edit [5]:: should re-emit only dts so they dont contain sourcemap
 
-tsgo 
+tsc 
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/a.d.ts] *modified* 
@@ -758,7 +758,7 @@ Signatures::
 
 Edit [6]:: with emitDeclarationOnly should not emit anything
 
-tsgo --emitDeclarationOnly
+tsc --emitDeclarationOnly
 ExitStatus:: Success
 Output::
 
@@ -769,7 +769,7 @@ Signatures::
 
 Edit [7]:: no change
 
-tsgo 
+tsc 
 ExitStatus:: Success
 Output::
 
@@ -782,7 +782,7 @@ Edit [8]:: local change
 //// [/home/src/workspaces/project/a.ts] *modified* 
 export const a = 10;const aLocal = 100;
 
-tsgo 
+tsc 
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/a.js] *modified* 
@@ -905,7 +905,7 @@ Signatures::
 
 Edit [9]:: with declaration should not emit anything
 
-tsgo --declaration
+tsc --declaration
 ExitStatus:: Success
 Output::
 
@@ -916,7 +916,7 @@ Signatures::
 
 Edit [10]:: with inlineSourceMap
 
-tsgo --inlineSourceMap
+tsc --inlineSourceMap
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/a.js] *modified* 
@@ -1050,7 +1050,7 @@ Signatures::
 
 Edit [11]:: with sourceMap
 
-tsgo --sourceMap
+tsc --sourceMap
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/a.js] *modified* 
@@ -1195,7 +1195,7 @@ Edit [12]:: declarationMap enabling
     }
 }
 
-tsgo 
+tsc 
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/a.d.ts] *modified* 
@@ -1345,7 +1345,7 @@ Signatures::
 
 Edit [13]:: with sourceMap should not emit d.ts
 
-tsgo --sourceMap
+tsc --sourceMap
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/a.js] *modified* 

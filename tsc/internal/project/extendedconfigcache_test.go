@@ -24,7 +24,7 @@ func (noopClient) WatchFiles(ctx context.Context, id WatcherID, watchers []*lspr
 
 func (noopClient) UnwatchFiles(ctx context.Context, id WatcherID) error { return nil }
 
-func (noopClient) RegisterContentMapperExtensions(ctx context.Context, extensions []string) error {
+func (noopClient) RegisterContentMapperSelectors(ctx context.Context, selectors []ContentMapperSelector) error {
 	return nil
 }
 

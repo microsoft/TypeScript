@@ -32,6 +32,7 @@
 export const short = 1;
 
 // @Filename: /Widget.y.z
+// @box-extension: .mts
 export const long = 1;
 
 // @Filename: /Widget.identity.y.z

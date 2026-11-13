@@ -103,7 +103,7 @@ import { Nominal } from '../common/nominal';
     "include": [],
 }
 
-tsgo --b
+tsc --b
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96mcommon/nominal.js[0m:[93m3[0m:[93m27[0m - [91merror[0m[90m TS2339: [0mProperty 'species' does not exist on type 'SymbolConstructor'.

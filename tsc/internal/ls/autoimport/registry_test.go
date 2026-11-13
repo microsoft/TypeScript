@@ -1276,3 +1276,32 @@ func singleBucket(t *testing.T, buckets []autoimport.BucketStats) autoimport.Buc
 	}
 	return buckets[0]
 }
+
+func TestUnsavedExportAfterAutoImportsComputed(t *testing.T) {
+	t.Parallel()
+	root := "/home/src/proj"
+	files := map[string]any{
+		root + "/exporter.ts":   "",
+		root + "/tsconfig.json": `{"compilerOptions":{"module":"esnext","moduleResolution":"bundler","strict":true,"noEmit":true},"include":["*.ts"]}`,
+	}
+	session, _ := projecttestutil.Setup(files)
+	t.Cleanup(session.Close)
+	ctx := context.Background()
+	importer := lsproto.DocumentUri("file://" + root + "/importer.ts")
+	exporter := lsproto.DocumentUri("file://" + root + "/exporter.ts")
+
+	session.DidOpenFile(ctx, importer, 1, "export {};", lsproto.LanguageKindTypeScript)
+	_, err := session.GetCurrentLanguageServiceWithAutoImports(ctx, importer)
+	assert.NilError(t, err)
+	session.DidCloseFile(ctx, importer)
+
+	session.DidOpenFile(ctx, exporter, 1, "export function unsavedFn() {}", lsproto.LanguageKindTypeScript)
+	_, err = session.GetLanguageService(ctx, exporter)
+	assert.NilError(t, err)
+	session.DidOpenFile(ctx, importer, 1, "unsavedFn;", lsproto.LanguageKindTypeScript)
+	_, err = session.GetCurrentLanguageServiceWithAutoImports(ctx, importer)
+	assert.NilError(t, err)
+	stats := autoImportStats(t, session)
+	bucket := singleBucket(t, stats.ProjectBuckets)
+	assert.Assert(t, bucket.ExportCount > 0, "exporter.ts exports should be indexed: %+v", bucket)
+}

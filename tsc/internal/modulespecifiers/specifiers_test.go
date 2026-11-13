@@ -128,8 +128,8 @@ func (h *mockModuleSpecifierGenerationHost) CommonSourceDirectory() tspath.Roote
 	return h.currentDir
 }
 
-func (h *mockModuleSpecifierGenerationHost) ContentMapperExtensions() []string {
-	return h.contentMapperExtensions
+func (h *mockModuleSpecifierGenerationHost) ContentMapperExtensionForFileName(fileName tspath.RootedFilePath) string {
+	return fileName.LongestExtension(h.contentMapperExtensions, h.CaseSensitivity())
 }
 
 func (h *mockModuleSpecifierGenerationHost) ContentMapperExtensionRewrites() []tspath.ExtensionRewrite {

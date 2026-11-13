@@ -21,7 +21,7 @@ export const value = 1;
     ]
 }
 
-tsgo --build --verbose --runExternalCode --pretty false
+tsc --build --verbose --runExternalCode --pretty false
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 HH:MM:SS AM - Projects in this build: 
@@ -110,7 +110,7 @@ Signatures::
 
 Edit [0]:: no change
 
-tsgo --build --verbose --runExternalCode --pretty false
+tsc --build --verbose --runExternalCode --pretty false
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 HH:MM:SS AM - Projects in this build: 

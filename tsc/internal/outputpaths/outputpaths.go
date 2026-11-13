@@ -2,13 +2,14 @@ package outputpaths
 
 import (
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
+	"github.com/microsoft/TypeScript/tsc/internal/contentmapper"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
 type OutputPathsHost interface {
 	CommonSourceDirectory() tspath.RootedDirectoryPath
-	ContentMapperExtensions() []string
+	ContentMapperExtensionForFileName(fileName tspath.RootedFilePath) string
 	ContentMapperExtensionRewrites() []tspath.ExtensionRewrite
 	CaseSensitivity() tspath.CaseSensitivity
 }
@@ -116,7 +117,7 @@ func GetOutputJSFileName(inputFileName tspath.RootedFilePath, options *core.Comp
 }
 
 func isContentMappedFileName(fileName tspath.RootedFilePath, host OutputPathsHost) bool {
-	return fileName.LongestExtension(host.ContentMapperExtensions(), host.CaseSensitivity()) != ""
+	return host.ContentMapperExtensionForFileName(fileName) != ""
 }
 
 func GetOutputJSFileNameWorker(inputFileName tspath.RootedFilePath, options *core.CompilerOptions, host OutputPathsHost) tspath.RootedFilePath {
@@ -130,12 +131,16 @@ func GetOutputDeclarationFileNameWorker(inputFileName tspath.RootedFilePath, opt
 		dir = options.OutDir
 	}
 	path := getOutputFileNameWithoutChangingExtension(inputFileName, dir, host)
-	return ChangeToDeclarationExtension(path, host)
+	return changeToDeclarationExtensionForSource(path, inputFileName, host)
 }
 
 func GetExternalOutputFileName(inputFileName tspath.RootedFilePath, options *core.CompilerOptions, host OutputPathsHost) tspath.RootedFilePath {
+	extension := host.ContentMapperExtensionForFileName(inputFileName)
+	if extension == "" {
+		return ""
+	}
 	outputPath := getOutputFileNameWithoutChangingExtension(inputFileName, options.OutDir, host)
-	rewritten, ok := outputPath.RewriteExtension(host.ContentMapperExtensionRewrites(), host.CaseSensitivity())
+	rewritten, ok := rewriteContentMapperExtension(outputPath, extension, host)
 	if !ok {
 		return ""
 	}
@@ -170,13 +175,14 @@ func getDeclarationEmitOutputFilePathForFileName(file tspath.RootedFilePath, opt
 	}
 
 	if outputDir != "" {
-		return ChangeToDeclarationExtension(
+		return changeToDeclarationExtensionForSource(
 			GetSourceFileNameInNewDir(
 				file,
 				outputDir,
 				host.CommonSourceDirectory(),
 				host.CaseSensitivity(),
 			),
+			file,
 			host,
 		)
 	}
@@ -184,13 +190,23 @@ func getDeclarationEmitOutputFilePathForFileName(file tspath.RootedFilePath, opt
 }
 
 func ChangeToDeclarationExtension(path tspath.RootedFilePath, host OutputPathsHost) tspath.RootedFilePath {
-	if rewritten, ok := path.RewriteExtension(host.ContentMapperExtensionRewrites(), host.CaseSensitivity()); ok {
+	return changeToDeclarationExtensionForSource(path, path, host)
+}
+
+func rewriteContentMapperExtension(path tspath.RootedFilePath, extension string, host OutputPathsHost) (tspath.RootedFilePath, bool) {
+	rewrites := contentmapper.FilterExtensionRewrites(host.ContentMapperExtensionRewrites(), extension, host.CaseSensitivity())
+	return path.RewriteExtension(rewrites, host.CaseSensitivity())
+}
+
+func changeToDeclarationExtensionForSource(path, source tspath.RootedFilePath, host OutputPathsHost) tspath.RootedFilePath {
+	extension := host.ContentMapperExtensionForFileName(source)
+	if extension == "" {
+		return changeToDeclarationExtension(path)
+	}
+	if rewritten, ok := rewriteContentMapperExtension(path, extension, host); ok {
 		return changeToDeclarationExtension(rewritten)
 	}
-	if extension := path.LongestExtension(host.ContentMapperExtensions(), tspath.CaseSensitive); extension != "" {
-		return path.RemoveExtension(extension).AppendSuffix(".d" + extension + ".ts")
-	}
-	return changeToDeclarationExtension(path)
+	return path.RemoveExtension(extension).AppendSuffix(".d" + extension + ".ts")
 }
 
 func changeToDeclarationExtension(path tspath.RootedFilePath) tspath.RootedFilePath {

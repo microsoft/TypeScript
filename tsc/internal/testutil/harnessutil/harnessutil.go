@@ -489,6 +489,12 @@ func (h *cachedCompilerHost) GetSourceFile(opts ast.SourceFileParseOptions) *ast
 		panic("Unknown script kind for file  " + opts.FileName.AsString())
 	}
 
+	// Only library files are shared across tests; caching test files would retain every test's ASTs.
+	fileName := opts.FileName.AsString()
+	if !tspath.ContainsPath(h.DefaultLibraryPath().AsString(), fileName, h.FS().CaseSensitivity()) && !tspath.ContainsPath(testLibFolder, fileName, h.FS().CaseSensitivity()) {
+		return parser.ParseSourceFile(opts, text, scriptKind)
+	}
+
 	key := GetSourceFileCacheKey(opts, text, scriptKind)
 
 	if cached, ok := sourceFileCache.Load(key); ok {
@@ -845,7 +851,8 @@ func (c *CompilationResult) getOutputPath(filePath tspath.RootedFilePath, ext st
 		}
 	}
 	if ext == outputPath.DeclarationEmitExtension() {
-		return outputpaths.ChangeToDeclarationExtension(outputPath, c.Program.Program())
+		declarationPath := outputpaths.ChangeToDeclarationExtension(filePath, c.Program.Program())
+		return outputPath.Directory().ResolveFile(declarationPath.BaseName())
 	}
 	return outputPath.ChangeExtension(ext)
 }

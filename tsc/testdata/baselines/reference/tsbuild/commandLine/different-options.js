@@ -16,7 +16,7 @@ import { b } from "./b";export const d = b;
     }
 }
 
-tsgo --build --verbose
+tsc --build --verbose
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -200,7 +200,7 @@ Signatures::
 
 Edit [0]:: with sourceMap
 
-tsgo --build --verbose --sourceMap
+tsc --build --verbose --sourceMap
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -349,7 +349,7 @@ Signatures::
 
 Edit [1]:: should re-emit only js so they dont contain sourcemap
 
-tsgo --build --verbose
+tsc --build --verbose
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -489,7 +489,7 @@ Signatures::
 
 Edit [2]:: with declaration should not emit anything
 
-tsgo --build --verbose --declaration
+tsc --build --verbose --declaration
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -502,7 +502,7 @@ Output::
 
 Edit [3]:: no change
 
-tsgo --build --verbose
+tsc --build --verbose
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -515,7 +515,7 @@ Output::
 
 Edit [4]:: with declaration and declarationMap
 
-tsgo --build --verbose --declaration --declarationMap
+tsc --build --verbose --declaration --declarationMap
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -661,7 +661,7 @@ Signatures::
 
 Edit [5]:: should re-emit only dts so they dont contain sourcemap
 
-tsgo --build --verbose
+tsc --build --verbose
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -797,7 +797,7 @@ Signatures::
 
 Edit [6]:: with emitDeclarationOnly should not emit anything
 
-tsgo --build --verbose --emitDeclarationOnly
+tsc --build --verbose --emitDeclarationOnly
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -810,7 +810,7 @@ Output::
 
 Edit [7]:: no change
 
-tsgo --build --verbose
+tsc --build --verbose
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -825,7 +825,7 @@ Edit [8]:: local change
 //// [/home/src/workspaces/project/a.ts] *modified* 
 export const a = 10;const aLocal = 100;
 
-tsgo --build --verbose
+tsc --build --verbose
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -955,7 +955,7 @@ Signatures::
 
 Edit [9]:: with declaration should not emit anything
 
-tsgo --build --verbose --declaration
+tsc --build --verbose --declaration
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -968,7 +968,7 @@ Output::
 
 Edit [10]:: with inlineSourceMap
 
-tsgo --build --verbose --inlineSourceMap
+tsc --build --verbose --inlineSourceMap
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -1109,7 +1109,7 @@ Signatures::
 
 Edit [11]:: with sourceMap
 
-tsgo --build --verbose --sourceMap
+tsc --build --verbose --sourceMap
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 

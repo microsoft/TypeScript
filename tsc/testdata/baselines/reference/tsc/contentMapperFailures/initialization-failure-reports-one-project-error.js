@@ -33,7 +33,7 @@ import "./f.vue";
     ]
 }
 
-tsgo --runExternalCode --singleThreaded
+tsc --runExternalCode --singleThreaded
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [91merror[0m[90m TS18099: [0mThe content mapper 'missing' could not be initialized.

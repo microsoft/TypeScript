@@ -23,7 +23,7 @@ let a = A.ONE
     }
 }
 
-tsgo 
+tsc 
 ExitStatus:: Success
 Output::
 //// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
@@ -211,7 +211,7 @@ Edit [0]:: change aworker
 //// [/home/src/workspaces/project/aworker.ts] *modified* 
 export const AWorker  = 20
 
-tsgo 
+tsc 
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/aworker.d.ts] *modified* 
@@ -359,7 +359,7 @@ export const enum A {
     ONE = 2
 }
 
-tsgo 
+tsc 
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/aworker.d.ts] *modified* 

@@ -66,6 +66,56 @@ func TestModuleResolverUsesSnapshotFileSystem(t *testing.T) {
 	assert.Assert(t, len(result.Trace) > 0)
 }
 
+func TestContentMapperModuleResolverProjectContext(t *testing.T) {
+	t.Parallel()
+	init, _ := projecttestutil.GetSessionInitOptions(map[string]any{
+		"/a/tsconfig.json": `{
+			"files": ["a.ts"], "compilerOptions": {"noLib": true},
+			"contentMappers": [{"package": "mapper", "extensions": [".blob.toml"], "include": ["../b"]}]
+		}`,
+		"/b/tsconfig.json": `{
+			"files": ["b.ts"], "compilerOptions": {"noLib": true},
+			"contentMappers": [{"package": "mapper", "extensions": [".toml"]}]
+		}`,
+		"/a/a.ts":        "export {};",
+		"/b/b.ts":        "export {};",
+		"/b/x.blob.toml": "",
+		"/c/x.blob.toml": "",
+		"/node_modules/mapper/package.json": `{
+			"name": "mapper", "typescript": {"contentMapper": {"exec": ["run"]}}
+		}`,
+	}, nil, nil)
+	init.Options.RunExternalCode = true
+	session := NewStandaloneSession(init, nil)
+	defer session.Close()
+	snapshot, err := session.handleCreateSnapshot(t.Context(), &CreateSnapshotParams{
+		OpenProjects: []DocumentIdentifier{{FileName: "/a/tsconfig.json"}, {FileName: "/b/tsconfig.json"}},
+	})
+	assert.NilError(t, err)
+	for _, test := range []struct {
+		configPath tspath.RootedFilePath
+		extension  string
+		directory  string
+	}{
+		{configPath: "/b/tsconfig.json", directory: "/b", extension: ".toml"},
+		{directory: "/c", extension: ".blob.toml"},
+	} {
+		resolver, err := session.handleCreateModuleResolver(&CreateModuleResolverParams{
+			CompilerOptions: core.CompilerOptions{
+				ConfigFilePath: test.configPath, Module: core.ModuleKindPreserve, ModuleResolution: core.ModuleResolutionKindBundler,
+			},
+		})
+		assert.NilError(t, err)
+		result, err := session.handleResolveModuleName(t.Context(), &ResolveModuleNameParams{
+			Snapshot: snapshot.Snapshot, Resolver: resolver, ModuleName: "./x.blob.toml",
+			ContainingDirectory: DocumentIdentifier{FileName: test.directory},
+		})
+		assert.NilError(t, err)
+		assert.Assert(t, result.ResolvedModule != nil)
+		assert.Equal(t, result.ResolvedModule.Extension, test.extension)
+	}
+}
+
 func TestStaticModuleResolutionSpecificityAndLifetime(t *testing.T) {
 	t.Parallel()
 

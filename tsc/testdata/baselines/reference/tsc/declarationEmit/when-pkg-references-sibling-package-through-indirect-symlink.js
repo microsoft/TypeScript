@@ -55,7 +55,7 @@ export const ADMIN = MetadataAccessor.create<boolean>('1');
     },
 }
 
-tsgo -p pkg3 --explainFiles
+tsc -p pkg3 --explainFiles
 ExitStatus:: DiagnosticsPresent_OutputsSkipped
 Output::
 [96mpkg3/src/keys.ts[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS2883: [0mThe inferred type of 'ADMIN' cannot be named without a reference to 'IdType' from '../../pkg2/node_modules/@raymondfeng/pkg1/dist'. This is likely not portable. A type annotation is necessary.

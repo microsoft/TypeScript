@@ -15,8 +15,8 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 )
 
-// resolveContentMapperManifest locates packageName in node_modules (walking up from the directory of
-// containingFile via node module resolution) and reads its package.json to produce the mapper's manifest
+// resolveContentMapperManifest locates packageName as a directory path relative to containingFile or in
+// node_modules (walking up via node module resolution) and reads its package.json to produce the mapper's manifest
 // and package directory. It never executes the package. On failure it returns a diagnostic describing why
 // the mapper could not be resolved; on success the diagnostic is nil.
 type contentMapperResolutionHost struct {
@@ -78,6 +78,12 @@ func resolveContentMapperManifest(host ParseConfigHost, containingFile tspath.Ro
 		return contentmapper.Manifest{}, packageDirectory, ast.NewCompilerDiagnostic(diagnostics.The_typescript_contentMapper_exec_of_the_content_mapper_package_0_must_be_a_non_empty_array_of_strings, packageName)
 	}
 	compilerOptions, _ := cm.CompilerOptions.GetValue()
+	extensions, valid := cm.Extensions.GetValue()
+	if cm.Extensions.IsPresent() && !valid {
+		return contentmapper.Manifest{}, packageDirectory, ast.NewCompilerDiagnostic(
+			diagnostics.Compiler_option_0_requires_a_value_of_type_1, "typescript.contentMapper.extensions", "string[]",
+		)
+	}
 	dynamicConfig, _ := cm.DynamicConfig.GetValue()
 	outputExtensions, valid := cm.OutputExtensions.GetValue()
 	if cm.OutputExtensions.IsPresent() && !valid {
@@ -105,5 +111,5 @@ func resolveContentMapperManifest(host ParseConfigHost, containingFile tspath.Ro
 			)
 		}
 	}
-	return contentmapper.Manifest{Name: name, Version: version, Exec: exec, CompilerOptions: compilerOptions, DynamicConfig: dynamicConfig, DefaultOutputExtensions: outputExtensions}, packageDirectory, nil
+	return contentmapper.Manifest{Name: name, Version: version, Exec: exec, CompilerOptions: compilerOptions, DynamicConfig: dynamicConfig, DefaultOutputExtensions: outputExtensions, DefaultExtensions: extensions}, packageDirectory, nil
 }

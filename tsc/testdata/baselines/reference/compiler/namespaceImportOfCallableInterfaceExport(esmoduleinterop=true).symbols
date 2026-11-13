@@ -1,0 +1,45 @@
+//// [tests/cases/compiler/namespaceImportOfCallableInterfaceExport.ts] ////
+
+=== mod.d.ts ===
+interface Base<T> {
+>Base : Symbol(Base, Decl(mod.d.ts, 0, 0))
+>T : Symbol(T, Decl(mod.d.ts, 0, 15))
+
+    value: T;
+>value : Symbol(Base.value, Decl(mod.d.ts, 0, 19))
+>T : Symbol(T, Decl(mod.d.ts, 0, 15))
+}
+interface Callable extends Base<string> {
+>Callable : Symbol(Callable, Decl(mod.d.ts, 2, 1))
+>Base : Symbol(Base, Decl(mod.d.ts, 0, 0))
+
+    (): void;
+    __esModule: true;
+>__esModule : Symbol(Callable.__esModule, Decl(mod.d.ts, 4, 13))
+
+    other: number;
+>other : Symbol(Callable.other, Decl(mod.d.ts, 5, 21))
+}
+declare const callable: Callable;
+>callable : Symbol(callable, Decl(mod.d.ts, 8, 13))
+>Callable : Symbol(Callable, Decl(mod.d.ts, 2, 1))
+
+export = callable;
+>callable : Symbol(callable, Decl(mod.d.ts, 8, 13))
+
+=== main.ts ===
+import * as ns from "./mod";
+>ns : Symbol(ns, Decl(main.ts, 0, 6))
+
+const value: string = ns.value;
+>value : Symbol(value, Decl(main.ts, 1, 5))
+>ns.value : Symbol(Base.value, Decl(mod.d.ts, 0, 19))
+>ns : Symbol(ns, Decl(main.ts, 0, 6))
+>value : Symbol(Base.value, Decl(mod.d.ts, 0, 19))
+
+const other: number = ns.other;
+>other : Symbol(other, Decl(main.ts, 2, 5))
+>ns.other : Symbol(Callable.other, Decl(mod.d.ts, 5, 21))
+>ns : Symbol(ns, Decl(main.ts, 0, 6))
+>other : Symbol(Callable.other, Decl(mod.d.ts, 5, 21))
+
