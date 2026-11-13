@@ -203,9 +203,27 @@ func (c *Checker) isTypeRelatedTo(source *Type, target *Type, relation *Relation
 	return false
 }
 
+// isSimpleTypeRelatedTo is small enough to be inlined into callers, so relating two structured or instantiable
+// types when the target isn't a union, by far the most common case, fails without a function call.
 func (c *Checker) isSimpleTypeRelatedTo(source *Type, target *Type, relation *Relation, errorReporter ErrorReporter) bool {
+	if source.flags&^TypeFlagsStructuredOrInstantiable|target.flags&^(TypeFlagsStructuredOrInstantiable&^TypeFlagsUnion) == 0 {
+		return false
+	}
+	return c.isSimpleTypeRelatedToWorker(source, target, relation, errorReporter)
+}
+
+func (c *Checker) isSimpleTypeRelatedToWorker(source *Type, target *Type, relation *Relation, errorReporter ErrorReporter) bool {
 	s := source.flags
 	t := target.flags
+	// The following two shortcuts produce the same results as the full set of checks below.
+	// Two enum members of the same kind: only the matching value and enum check can apply.
+	if s == t && (s == TypeFlagsNumberLiteral|TypeFlagsEnumLiteral || s == TypeFlagsStringLiteral|TypeFlagsEnumLiteral) {
+		return source.AsLiteralType().value == target.AsLiteralType().value && c.isEnumTypeRelatedTo(source.symbol, target.symbol, errorReporter)
+	}
+	// Two structured or instantiable types: only the unknown-like union check can apply.
+	if (s|t)&^TypeFlagsStructuredOrInstantiable == 0 {
+		return t&TypeFlagsUnion != 0 && (relation == c.assignableRelation || relation == c.comparableRelation) && c.isUnknownLikeUnionType(target)
+	}
 	if t&TypeFlagsAny != 0 || s&TypeFlagsNever != 0 || source == c.wildcardType {
 		return true
 	}
