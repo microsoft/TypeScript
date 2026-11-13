@@ -61,11 +61,12 @@ func (c *Checker) inferTypes(inferences []*InferenceInfo, originalSource *Type, 
 	n.priority = priority
 	n.inferencePriority = InferencePriorityMaxValue
 	n.contravariant = contravariant
-	c.inferFromTypes(n, originalSource, originalTarget)
+	c.inferFromTypesMemo(n, originalSource, originalTarget)
 	c.putInferenceState(n)
 }
 
 func (c *Checker) inferFromTypes(n *InferenceState, source *Type, target *Type) {
+	c.inferMemo.steps++
 	if !c.couldContainTypeVariables(target) || c.isNoInferType(target) {
 		return
 	}
