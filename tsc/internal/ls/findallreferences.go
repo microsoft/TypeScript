@@ -5,9 +5,7 @@ import (
 	"context"
 	"fmt"
 	"slices"
-	"strings"
 	"sync"
-	"unicode/utf8"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/astnav"
@@ -1364,7 +1362,7 @@ func (l *LanguageService) getReferencesForStringLiteral(
 			return nil
 		}
 		var entries []*ReferenceEntry
-		possibleReferences := getPossibleSymbolReferenceNodes(sourceFile, node.Text(), nil /*container*/)
+		possibleReferences := astnav.GetPossibleSymbolReferenceNodes(sourceFile, node.Text(), nil /*container*/)
 		for _, ref := range possibleReferences {
 			if ast.IsStringLiteralLike(ref) && ref.Text() == node.Text() {
 				if t != nil {
@@ -1478,7 +1476,7 @@ func getReferencedSymbolsSpecial(node *ast.Node, sourceFiles []*ast.SourceFile) 
 func getLabelReferencesInNode(container *ast.Node, targetLabel *ast.Node) []*SymbolAndEntries {
 	sourceFile := ast.GetSourceFileOfNode(container)
 	labelName := targetLabel.Text()
-	references := core.MapNonNil(getPossibleSymbolReferenceNodes(sourceFile, labelName, container), func(node *ast.Node) *ReferenceEntry {
+	references := core.MapNonNil(astnav.GetPossibleSymbolReferenceNodes(sourceFile, labelName, container), func(node *ast.Node) *ReferenceEntry {
 		// Only pick labels that are either the target label, or have a target that is the target label
 		if node == targetLabel.AsNode() || (isJumpStatementTarget(node) && getTargetLabel(node, labelName) == targetLabel) {
 			return newNodeEntry(node)
@@ -1526,7 +1524,7 @@ func getReferencesForThisKeyword(thisOrSuperKeyword *ast.Node, sourceFiles []*as
 		core.FlatMap(filesToSearch, func(sourceFile *ast.SourceFile) []*ast.Node {
 			// cancellationToken.throwIfCancellationRequested();
 			return core.Filter(
-				getPossibleSymbolReferenceNodes(sourceFile, "this", core.IfElse(searchSpaceNode.Kind == ast.KindSourceFile, sourceFile.AsNode(), searchSpaceNode)),
+				astnav.GetPossibleSymbolReferenceNodes(sourceFile, "this", core.IfElse(searchSpaceNode.Kind == ast.KindSourceFile, sourceFile.AsNode(), searchSpaceNode)),
 				func(node *ast.Node) bool {
 					if !isThis(node) {
 						return false
@@ -1583,7 +1581,7 @@ func getReferencesForSuperKeyword(superKeyword *ast.Node) []*SymbolAndEntries {
 	}
 
 	sourceFile := ast.GetSourceFileOfNode(searchSpaceNode)
-	references := core.MapNonNil(getPossibleSymbolReferenceNodes(sourceFile, "super", searchSpaceNode), func(node *ast.Node) *ReferenceEntry {
+	references := core.MapNonNil(astnav.GetPossibleSymbolReferenceNodes(sourceFile, "super", searchSpaceNode), func(node *ast.Node) *ReferenceEntry {
 		if node.Kind != ast.KindSuperKeyword {
 			return nil
 		}
@@ -1604,7 +1602,7 @@ func getReferencesForSuperKeyword(superKeyword *ast.Node) []*SymbolAndEntries {
 
 func getAllReferencesForImportMeta(sourceFiles []*ast.SourceFile) []*SymbolAndEntries {
 	references := core.FlatMap(sourceFiles, func(sourceFile *ast.SourceFile) []*ReferenceEntry {
-		return core.MapNonNil(getPossibleSymbolReferenceNodes(sourceFile, "meta", sourceFile.AsNode()), func(node *ast.Node) *ReferenceEntry {
+		return core.MapNonNil(astnav.GetPossibleSymbolReferenceNodes(sourceFile, "meta", sourceFile.AsNode()), func(node *ast.Node) *ReferenceEntry {
 			parent := node.Parent
 			if ast.IsImportMeta(parent) {
 				return newNodeEntry(parent)
@@ -1622,7 +1620,7 @@ func getAllReferencesForKeyword(sourceFiles []*ast.SourceFile, keywordKind ast.K
 	// references is a list of NodeEntry
 	references := core.FlatMap(sourceFiles, func(sourceFile *ast.SourceFile) []*ReferenceEntry {
 		// cancellationToken.throwIfCancellationRequested();
-		return core.MapNonNil(getPossibleSymbolReferenceNodes(sourceFile, scanner.TokenToString(keywordKind), sourceFile.AsNode()), func(referenceLocation *ast.Node) *ReferenceEntry {
+		return core.MapNonNil(astnav.GetPossibleSymbolReferenceNodes(sourceFile, scanner.TokenToString(keywordKind), sourceFile.AsNode()), func(referenceLocation *ast.Node) *ReferenceEntry {
 			if referenceLocation.Kind == keywordKind && (!filterReadOnlyTypeOperator || isReadonlyTypeOperator(referenceLocation)) {
 				return newNodeEntry(referenceLocation)
 			}
@@ -1633,65 +1631,6 @@ func getAllReferencesForKeyword(sourceFiles []*ast.SourceFile, keywordKind ast.K
 		return nil
 	}
 	return []*SymbolAndEntries{NewSymbolAndEntries(definitionKindKeyword, references[0].node, nil, references)}
-}
-
-func getPossibleSymbolReferenceNodes(sourceFile *ast.SourceFile, symbolName string, container *ast.Node) []*ast.Node {
-	return core.MapNonNil(getPossibleSymbolReferencePositions(sourceFile, symbolName, container), func(pos int) *ast.Node {
-		if referenceLocation := astnav.GetTouchingPropertyName(sourceFile, pos); referenceLocation != sourceFile.AsNode() {
-			return referenceLocation
-		}
-		return nil
-	})
-}
-
-func getPossibleSymbolReferencePositions(sourceFile *ast.SourceFile, symbolName string, container *ast.Node) []int {
-	positions := []int{}
-
-	/// TODO: Cache symbol existence for files to save text search
-	// Also, need to make this work for unicode escapes.
-
-	// Be resilient in the face of a symbol with no name or zero length name
-	if symbolName == "" {
-		return positions
-	}
-
-	text := sourceFile.Text()
-	sourceLength := len(text)
-	symbolNameLength := len(symbolName)
-
-	if container == nil {
-		container = sourceFile.AsNode()
-	}
-
-	foundIndex := strings.Index(text[container.Pos():], symbolName)
-	if foundIndex == -1 {
-		return positions
-	}
-	position := container.Pos() + foundIndex
-	endPos := container.End()
-	for position >= 0 && position < endPos {
-		// We found a match. Make sure the runes before and after it are not identifier parts.
-		endPosition := position + symbolNameLength
-		before, _ := utf8.DecodeLastRuneInString(text[:position])
-		after, _ := utf8.DecodeRuneInString(text[endPosition:])
-
-		if (position == 0 || !scanner.IsIdentifierPart(before)) &&
-			(endPosition == sourceLength || !scanner.IsIdentifierPart(after)) {
-			// Found a real match.  Keep searching.
-			positions = append(positions, position)
-		}
-		startIndex := position + symbolNameLength + 1
-		if startIndex > len(text) {
-			break
-		}
-		if foundIndex := strings.Index(text[startIndex:], symbolName); foundIndex != -1 {
-			position = startIndex + foundIndex
-		} else {
-			break
-		}
-	}
-
-	return positions
 }
 
 // findFirstJsxNode recursively searches for the first JSX element, self-closing element, or fragment
@@ -2201,7 +2140,7 @@ func (state *refState) getReferencesInContainer(container *ast.Node, sourceFile 
 		return
 	}
 
-	for _, position := range getPossibleSymbolReferencePositions(sourceFile, search.text, container) {
+	for _, position := range astnav.GetPossibleSymbolReferencePositions(sourceFile, search.text, container) {
 		state.getReferencesAtLocation(sourceFile, position, search, addReferencesHere)
 	}
 }

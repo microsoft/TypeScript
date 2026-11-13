@@ -2,15 +2,12 @@ package checker
 
 import (
 	"slices"
-	"strings"
-	"unicode/utf8"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/astnav"
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/debug"
-	"github.com/microsoft/TypeScript/tsc/internal/scanner"
 )
 
 func (c *Checker) GetSymbolsInScope(location *ast.Node, meaning ast.SymbolFlags) []*ast.Symbol {
@@ -554,7 +551,7 @@ func (c *Checker) IsSymbolReferencedInFile(
 	symbol *ast.Symbol,
 ) bool {
 	identifierText := definition.Text
-	for _, token := range getPossibleSymbolReferenceNodes(sourceFile, identifierText, sourceFile.AsNode()) {
+	for _, token := range astnav.GetPossibleSymbolReferenceNodes(sourceFile, identifierText, sourceFile.AsNode()) {
 		if !ast.IsIdentifier(token) {
 			continue
 		}
@@ -589,7 +586,7 @@ func (c *Checker) GetReferencesToSymbolInFile(
 ) []*ast.Node {
 	identifierText := symbol.Name()
 	var result []*ast.Node
-	for _, token := range getPossibleSymbolReferenceNodes(sourceFile, identifierText, sourceFile.AsNode()) {
+	for _, token := range astnav.GetPossibleSymbolReferenceNodes(sourceFile, identifierText, sourceFile.AsNode()) {
 		if !ast.IsIdentifier(token) {
 			continue
 		}
@@ -640,65 +637,6 @@ func isExportSpecifierAlias(referenceLocation *ast.Identifier, exportSpecifier *
 		// `export { foo };` is not a re-export, it creates an alias for the local variable `foo`.
 		return exportSpecifier.Parent.Parent.ModuleSpecifier() == nil
 	}
-}
-
-func getPossibleSymbolReferenceNodes(sourceFile *ast.SourceFile, symbolName string, container *ast.Node) []*ast.Node {
-	return core.MapNonNil(getPossibleSymbolReferencePositions(sourceFile, symbolName, container), func(pos int) *ast.Node {
-		if referenceLocation := astnav.GetTouchingPropertyName(sourceFile, pos); referenceLocation != sourceFile.AsNode() {
-			return referenceLocation
-		}
-		return nil
-	})
-}
-
-func getPossibleSymbolReferencePositions(sourceFile *ast.SourceFile, symbolName string, container *ast.Node) []int {
-	positions := []int{}
-
-	// TODO: Cache symbol existence for files to save text search
-	// Also, need to make this work for unicode escapes.
-
-	// Be resilient in the face of a symbol with no name or zero length name
-	if symbolName == "" {
-		return positions
-	}
-
-	text := sourceFile.Text()
-	sourceLength := len(text)
-	symbolNameLength := len(symbolName)
-
-	if container == nil {
-		container = sourceFile.AsNode()
-	}
-
-	foundIndex := strings.Index(text[container.Pos():], symbolName)
-	if foundIndex == -1 {
-		return positions
-	}
-	position := container.Pos() + foundIndex
-	endPos := container.End()
-	for position >= 0 && position < endPos {
-		// We found a match. Make sure the runes before and after it are not identifier parts.
-		endPosition := position + symbolNameLength
-		before, _ := utf8.DecodeLastRuneInString(text[:position])
-		after, _ := utf8.DecodeRuneInString(text[endPosition:])
-
-		if (position == 0 || !scanner.IsIdentifierPart(before)) &&
-			(endPosition == sourceLength || !scanner.IsIdentifierPart(after)) {
-			// Found a real match.  Keep searching.
-			positions = append(positions, position)
-		}
-		startIndex := position + symbolNameLength + 1
-		if startIndex > len(text) {
-			break
-		}
-		if foundIndex := strings.Index(text[startIndex:], symbolName); foundIndex != -1 {
-			position = startIndex + foundIndex
-		} else {
-			break
-		}
-	}
-
-	return positions
 }
 
 func (c *Checker) GetTypeArgumentConstraint(node *ast.Node) *Type {
