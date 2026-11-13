@@ -1,0 +1,52 @@
+//// [tests/cases/compiler/jsxIntrinsicTagErrorReporting.tsx] ////
+
+=== jsxIntrinsicTagErrorReporting.tsx ===
+declare namespace JSX {
+>JSX : Symbol(JSX, Decl(jsxIntrinsicTagErrorReporting.tsx, 0, 0))
+
+  interface Element {}
+>Element : Symbol(Element, Decl(jsxIntrinsicTagErrorReporting.tsx, 0, 23))
+
+  interface IntrinsicElements {
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(jsxIntrinsicTagErrorReporting.tsx, 1, 22))
+
+    div: any;
+>div : Symbol(IntrinsicElements.div, Decl(jsxIntrinsicTagErrorReporting.tsx, 2, 31))
+  }
+}
+
+function Component() {
+>Component : Symbol(Component, Decl(jsxIntrinsicTagErrorReporting.tsx, 5, 1))
+
+  return (
+    <div>
+>div : Symbol(JSX.IntrinsicElements.div, Decl(jsxIntrinsicTagErrorReporting.tsx, 2, 31))
+
+      <dov></dov>
+      <dav></dav>
+    </div>
+>div : Symbol(JSX.IntrinsicElements.div, Decl(jsxIntrinsicTagErrorReporting.tsx, 2, 31))
+
+  );
+}
+const components = {
+>components : Symbol(components, Decl(jsxIntrinsicTagErrorReporting.tsx, 15, 5))
+
+    div: 'div',
+>div : Symbol(div, Decl(jsxIntrinsicTagErrorReporting.tsx, 15, 20))
+
+} as const;
+>const : Symbol(const)
+
+function ComponentWithPropertyAccess() {
+>ComponentWithPropertyAccess : Symbol(ComponentWithPropertyAccess, Decl(jsxIntrinsicTagErrorReporting.tsx, 17, 11))
+
+    return <components.dov />;
+>components : Symbol(components, Decl(jsxIntrinsicTagErrorReporting.tsx, 15, 5))
+}
+function ComponentWithValidOpeningTag() {
+>ComponentWithValidOpeningTag : Symbol(ComponentWithValidOpeningTag, Decl(jsxIntrinsicTagErrorReporting.tsx, 21, 1))
+
+    return <div></dov>;
+>div : Symbol(JSX.IntrinsicElements.div, Decl(jsxIntrinsicTagErrorReporting.tsx, 2, 31))
+}

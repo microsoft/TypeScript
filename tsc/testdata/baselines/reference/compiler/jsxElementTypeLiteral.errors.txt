@@ -1,6 +1,6 @@
 jsxElementTypeLiteral.tsx(16,10): error TS2786: 'span' cannot be used as a JSX component.
   Its type '"span"' is not a valid JSX element type.
-jsxElementTypeLiteral.tsx(20,9): error TS2339: Property 'ruhroh' does not exist on type 'JSX.IntrinsicElements'.
+jsxElementTypeLiteral.tsx(20,10): error TS2339: Property 'ruhroh' does not exist on type 'JSX.IntrinsicElements'.
 jsxElementTypeLiteral.tsx(20,10): error TS2786: 'ruhroh' cannot be used as a JSX component.
   Its type '"ruhroh"' is not a valid JSX element type.
 
@@ -29,7 +29,7 @@ jsxElementTypeLiteral.tsx(20,10): error TS2786: 'ruhroh' cannot be used as a JSX
     // Should be an error.
     // `ruhroh` is in neither `IntrinsicElements` nor `ElementType`
     let c = <ruhroh />;
-            ~~~~~~~~~~
+             ~~~~~~
 !!! error TS2339: Property 'ruhroh' does not exist on type 'JSX.IntrinsicElements'.
              ~~~~~~
 !!! error TS2786: 'ruhroh' cannot be used as a JSX component.
