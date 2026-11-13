@@ -1,0 +1,111 @@
+//// [tests/cases/compiler/postSuperSharedFlow.ts] ////
+
+=== postSuperSharedFlow.ts ===
+class Base {
+>Base : Base
+
+    value = 0;
+>value : number
+>0 : 0
+}
+
+class AllPaths extends Base {
+>AllPaths : AllPaths
+>Base : Base
+
+    constructor(condition: boolean) {
+>condition : boolean
+
+        if (condition) {
+>condition : boolean
+
+            super();
+>super() : void
+>super : typeof Base
+
+        } else {
+            super();
+>super() : void
+>super : typeof Base
+        }
+        this.value++;
+>this.value++ : number
+>this.value : number
+>this : this
+>value : number
+
+        this.value++;
+>this.value++ : number
+>this.value : number
+>this : this
+>value : number
+
+        while (condition) {
+>condition : boolean
+
+            this.value++;
+>this.value++ : number
+>this.value : number
+>this : this
+>value : number
+
+            condition = false;
+>condition = false : false
+>condition : boolean
+>false : false
+        }
+        try {
+            this.value++;
+>this.value++ : number
+>this.value : number
+>this : this
+>value : number
+
+        } finally {
+            this.value++;
+>this.value++ : number
+>this.value : number
+>this : this
+>value : number
+        }
+    }
+}
+
+class MissingPath extends Base {
+>MissingPath : MissingPath
+>Base : Base
+
+    constructor(condition: boolean) {
+>condition : boolean
+
+        if (condition) {
+>condition : boolean
+
+            super();
+>super() : void
+>super : typeof Base
+        }
+        this.value++;
+>this.value++ : number
+>this.value : number
+>this : this
+>value : number
+
+        this.value++;
+>this.value++ : number
+>this.value : number
+>this : this
+>value : number
+
+        super();
+>super() : void
+>super : typeof Base
+
+        this.value++;
+>this.value++ : number
+>this.value : number
+>this : this
+>value : number
+    }
+}
+
