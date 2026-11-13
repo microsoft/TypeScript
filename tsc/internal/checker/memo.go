@@ -4,6 +4,7 @@ import (
 	"hash/maphash"
 	"iter"
 	"maps"
+	"math"
 	"math/bits"
 	"slices"
 	"unsafe"
@@ -647,7 +648,7 @@ func (m *memoMap[K, V]) begin(c *Checker, k K) {
 func (m *memoMap[K, V]) entryKey(k K) memoKey {
 	// SAFETY: Only the address of the map is kept, as an identity; it is
 	// never turned back into a pointer.
-	h := maphash.Comparable(memoMapSeed, k) ^ uint64(uintptr(unsafe.Pointer(m)))*0x9E3779B97F4A7C15
+	h := maphash.Comparable(memoMapSeed, k) ^ spreadBits(uint64(uintptr(unsafe.Pointer(m))))
 	return memoKey(h&^0xff | uint64(memoMapEntry))
 }
 
@@ -881,8 +882,14 @@ type stateKeyFilter struct {
 // to a few percent.
 const stateFilterBitsPerState = 16
 
+// spreadBits spreads the bits of x over the high bits of the result, from
+// which hash tables and filters take their indexes.
+func spreadBits(x uint64) uint64 {
+	return x * 0x9E3779B97F4A7C15
+}
+
 func memoKeyBits(key memoKey) uint64 {
-	return uint64(key) * 0x9E3779B97F4A7C15
+	return spreadBits(uint64(key))
 }
 
 func (f *stateKeyFilter) mayContain(h uint64) bool {
@@ -918,7 +925,7 @@ const errorFilterBits = 12
 type errorKeyFilter [1 << errorFilterBits / 64]uint64
 
 func errorFilterIndex(key memoKey) uint64 {
-	return uint64(key) * 0x9E3779B97F4A7C15 >> (64 - errorFilterBits)
+	return spreadBits(uint64(key)) >> (64 - errorFilterBits)
 }
 
 // peekMemoState returns the memo state of the result identified by key, or
@@ -2138,6 +2145,39 @@ func (c *Checker) logPendingDiscard(state *memoState) {
 // results add none. Making it independent would mean
 // keeping, for every cached result, the work needed to compute it from
 // scratch, which costs far more than the limit is worth.
+
+// Heights
+//
+// Some computations give up beyond a limit on how deeply they nest, counted
+// from the outermost one in progress, so a result computed inside another
+// computation can differ from the same result computed on its own. A height
+// is the number of levels a computation went below its own, kept with a
+// cached result so that a computation reusing the result can tell whether
+// computing it again there would reach the limit; see "Base constraint
+// walks" and "Reusing failures".
+
+// height saturates at its maximum, which is above every limit it is
+// compared with.
+type height uint8
+
+func heightOf[T ~int | ~int32](levels T) height {
+	return height(min(levels, math.MaxUint8))
+}
+
+// below returns the height of a computation with a computation of height h
+// one level below it.
+func (h height) below() height {
+	if h == math.MaxUint8 {
+		return h
+	}
+	return h + 1
+}
+
+// reaches reports whether a computation of height h, started at depth,
+// reaches limit.
+func (h height) reaches(depth int, limit int) bool {
+	return depth+int(h) >= limit
+}
 
 const (
 	instantiationDepthLimit = 100
