@@ -7,6 +7,20 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/testutil"
 )
 
+func TestFormattingDecoratedEnum(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	// Preserve alignment while editing an enum with an invalid decorator.
+	const content = `@decorator
+enum E {
+    A
+}`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.FormatDocument(t, "")
+	f.VerifyCurrentFileContent(t, content)
+}
+
 func TestFormattingDecorators(t *testing.T) {
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
