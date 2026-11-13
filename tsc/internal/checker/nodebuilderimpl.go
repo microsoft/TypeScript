@@ -733,45 +733,12 @@ func (b *NodeBuilderImpl) symbolToTypeNode(symbol *ast.Symbol, mask ast.SymbolFl
 		if typeParameterNodes == nil {
 			typeParameterNodes = b.lookupTypeParameterNodes(chain, 0)
 		}
-		contextFile := ast.GetSourceFileOfNode(b.e.MostOriginal(b.ctx.enclosingDeclaration)) // TODO: Just use b.ctx.enclosingFile ? Or is the delayed lookup important for context moves?
-		targetFile := ast.GetSourceFileOfModule(chain[0])
-		var specifierResult moduleSpecifierResult
-		var importModeOverride core.ResolutionMode
-		if b.ch.compilerOptions.GetModuleResolutionKind() == core.ModuleResolutionKindNode16 || b.ch.compilerOptions.GetModuleResolutionKind() == core.ModuleResolutionKindNodeNext {
-			// An `import` type directed at an esm format file is only going to resolve in esm mode - set the esm mode assertion
-			if targetFile != nil && contextFile != nil && b.ch.program.GetEmitModuleFormatOfFile(targetFile) == core.ModuleKindESNext && b.ch.program.GetEmitModuleFormatOfFile(targetFile) != b.ch.program.GetEmitModuleFormatOfFile(contextFile) {
-				specifierResult = b.getSpecifierForModuleSymbol(chain[0], core.ModuleKindESNext)
-				importModeOverride = core.ModuleKindESNext
-			}
-		}
-		if len(specifierResult.specifier) == 0 {
-			specifierResult = b.getSpecifierForModuleSymbol(chain[0], core.ResolutionModeNone)
-		}
-		if (b.ctx.flags&nodebuilder.FlagsAllowNodeModulesRelativePaths == 0) /* && b.ch.compilerOptions.GetModuleResolutionKind() != core.ModuleResolutionKindClassic */ && strings.Contains(specifierResult.specifier.AsString(), "/node_modules/") {
-			oldSpecifierResult := specifierResult
-
-			if b.ch.compilerOptions.GetModuleResolutionKind() == core.ModuleResolutionKindNode16 || b.ch.compilerOptions.GetModuleResolutionKind() == core.ModuleResolutionKindNodeNext {
-				// We might be able to write a portable import type using a mode override; try specifier generation again, but with a different mode set
-				swappedMode := core.ModuleKindESNext
-				if b.ch.program.GetEmitModuleFormatOfFile(contextFile) == core.ModuleKindESNext {
-					swappedMode = core.ModuleKindCommonJS
-				}
-				specifierResult = b.getSpecifierForModuleSymbol(chain[0], swappedMode)
-
-				if strings.Contains(specifierResult.specifier.AsString(), "/node_modules/") {
-					// Still unreachable :(
-					specifierResult = oldSpecifierResult
-				} else {
-					importModeOverride = swappedMode
-				}
-			}
-
-			if importModeOverride == core.ResolutionModeNone {
-				// If ultimately we can only name the symbol with a reference that dives into a `node_modules` folder, we should error
-				// since declaration files with these kinds of references are liable to fail when published :(
-				b.ctx.encounteredError = true
-				b.ctx.tracker.ReportLikelyUnsafeImportRequiredError(oldSpecifierResult.specifier.AsString(), symbol.Name())
-			}
+		specifierResult, importModeOverride, portable := b.getImportTypeSpecifier(chain[0])
+		if !portable {
+			// If ultimately we can only name the symbol with a reference that dives into a `node_modules` folder, we should error
+			// since declaration files with these kinds of references are liable to fail when published :(
+			b.ctx.encounteredError = true
+			b.ctx.tracker.ReportLikelyUnsafeImportRequiredError(specifierResult.specifier.AsString(), symbol.Name())
 		}
 
 		attributes := b.createImportAttributesForModuleSpecifier(specifierResult, importModeOverride)
@@ -810,6 +777,58 @@ func (b *NodeBuilderImpl) symbolToTypeNode(symbol *ast.Symbol, mask ast.SymbolFl
 		return b.f.NewTypeQueryNode(b.f.DeepCloneNode(expr.Expression), expr.TypeArguments)
 	}
 	return entityName
+}
+
+func (b *NodeBuilderImpl) getImportTypeSpecifier(symbol *ast.Symbol) (moduleSpecifierResult, core.ResolutionMode, bool) {
+	contextFile := ast.GetSourceFileOfNode(b.e.MostOriginal(b.ctx.enclosingDeclaration)) // TODO: Just use b.ctx.enclosingFile ? Or is the delayed lookup important for context moves?
+	targetFile := ast.GetSourceFileOfModule(symbol)
+	var specifierResult moduleSpecifierResult
+	var importModeOverride core.ResolutionMode
+	resolutionKind := b.ch.compilerOptions.GetModuleResolutionKind()
+	if resolutionKind == core.ModuleResolutionKindNode16 || resolutionKind == core.ModuleResolutionKindNodeNext {
+		// An `import` type directed at an esm format file is only going to resolve in esm mode - set the esm mode assertion
+		if targetFile != nil && contextFile != nil && b.ch.program.GetEmitModuleFormatOfFile(targetFile) == core.ModuleKindESNext && b.ch.program.GetEmitModuleFormatOfFile(targetFile) != b.ch.program.GetEmitModuleFormatOfFile(contextFile) {
+			specifierResult = b.getSpecifierForModuleSymbol(symbol, core.ModuleKindESNext)
+			importModeOverride = core.ModuleKindESNext
+		}
+	}
+	if len(specifierResult.specifier) == 0 {
+		specifierResult = b.getSpecifierForModuleSymbol(symbol, core.ResolutionModeNone)
+	}
+	if (b.ctx.flags&nodebuilder.FlagsAllowNodeModulesRelativePaths == 0) /* && b.ch.compilerOptions.GetModuleResolutionKind() != core.ModuleResolutionKindClassic */ && strings.Contains(specifierResult.specifier.AsString(), "/node_modules/") {
+		oldSpecifierResult := specifierResult
+
+		if resolutionKind == core.ModuleResolutionKindNode16 || resolutionKind == core.ModuleResolutionKindNodeNext {
+			// We might be able to write a portable import type using a mode override; try specifier generation again, but with a different mode set
+			swappedMode := core.ModuleKindESNext
+			if b.ch.program.GetEmitModuleFormatOfFile(contextFile) == core.ModuleKindESNext {
+				swappedMode = core.ModuleKindCommonJS
+			}
+			specifierResult = b.getSpecifierForModuleSymbol(symbol, swappedMode)
+
+			if strings.Contains(specifierResult.specifier.AsString(), "/node_modules/") {
+				// Still unreachable :(
+				specifierResult = oldSpecifierResult
+			} else {
+				importModeOverride = swappedMode
+			}
+		}
+		return specifierResult, importModeOverride, importModeOverride != core.ResolutionModeNone
+	}
+	return specifierResult, importModeOverride, true
+}
+
+func (b *NodeBuilderImpl) shouldExpandUnreachableMappedType(t *Type) bool {
+	if b.ctx.flags&nodebuilder.FlagsUseStructuralFallback == 0 ||
+		t.objectFlags&ObjectFlagsMapped == 0 || b.ch.isGenericMappedType(t) {
+		return false
+	}
+	chain := b.lookupSymbolChainWorker(t.alias.Symbol(), ast.SymbolFlagsType, b.ctx.flags&nodebuilder.FlagsUseAliasDefinedOutsideCurrentScope == 0)
+	if !core.Some(chain[0].Declarations(), hasNonGlobalAugmentationExternalModuleSymbol) {
+		return false
+	}
+	_, _, portable := b.getImportTypeSpecifier(chain[0])
+	return !portable
 }
 
 func getTopmostIndexedAccessType(node *ast.IndexedAccessTypeNode) *ast.IndexedAccessTypeNode {
@@ -3599,7 +3618,8 @@ func (b *NodeBuilderImpl) typeToTypeNode(t *Type) *ast.TypeNode {
 		return b.f.NewThisTypeNode()
 	}
 
-	if inTypeAlias == 0 && t.alias != nil && (b.ctx.flags&nodebuilder.FlagsUseAliasDefinedOutsideCurrentScope != 0 || b.ch.IsTypeSymbolAccessible(t.alias.Symbol(), b.ctx.enclosingDeclaration)) {
+	if inTypeAlias == 0 && t.alias != nil && (b.ctx.flags&nodebuilder.FlagsUseAliasDefinedOutsideCurrentScope != 0 || b.ch.IsTypeSymbolAccessible(t.alias.Symbol(), b.ctx.enclosingDeclaration)) &&
+		!b.shouldExpandUnreachableMappedType(t) {
 		// If we should expand this type alias, skip the alias and fall through to expand the underlying type
 		if !b.shouldExpandType(t, true /*isAlias*/) {
 			return b.serializationTypeNameToNode(serializationTypeName{
