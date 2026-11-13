@@ -1,0 +1,9 @@
+commonjsExportNestedRestBinding.ts(2,18): error TS1003: Identifier expected.
+
+
+==== commonjsExportNestedRestBinding.ts (1 errors) ====
+    declare const source: any;
+    export const {...{object}} = source;
+                     ~
+!!! error TS1003: Identifier expected.
+    

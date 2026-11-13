@@ -1,0 +1,10 @@
+//// [tests/cases/compiler/commonjsExportNestedRestBinding.ts] ////
+
+=== commonjsExportNestedRestBinding.ts ===
+declare const source: any;
+>source : Symbol(source, Decl(commonjsExportNestedRestBinding.ts, 0, 13))
+
+export const {...{object}} = source;
+>object : Symbol(object, Decl(commonjsExportNestedRestBinding.ts, 1, 18))
+>source : Symbol(source, Decl(commonjsExportNestedRestBinding.ts, 0, 13))
+
