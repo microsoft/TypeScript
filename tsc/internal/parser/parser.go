@@ -6828,6 +6828,13 @@ func (p *Parser) parseResolutionMode(mode string, pos int, end int) (resolutionK
 	return resolutionKind
 }
 
+func (p *Parser) jsErrorAtNode(node *ast.Node, message *diagnostics.Message, args ...any) {
+	// getErrorSpanForNode does not skip trivia for missing nodes, so a diagnostic
+	// anchored at an empty location reports the position where the node would have
+	// been instead of the following token (see https://github.com/microsoft/TypeScript/issues/65078).
+	p.jsDiagnostics = append(p.jsDiagnostics, ast.NewDiagnostic(nil, getErrorSpanForNode(p.sourceText, node), message, args...))
+}
+
 func (p *Parser) jsErrorAtRange(loc core.TextRange, message *diagnostics.Message, args ...any) {
 	p.jsDiagnostics = append(p.jsDiagnostics, ast.NewDiagnostic(nil, core.NewTextRange(scanner.SkipTrivia(p.sourceText, loc.Pos()), loc.End()), message, args...))
 }
@@ -6841,7 +6848,7 @@ func (p *Parser) checkJSDecoratorSyntax(node *ast.Node) {
 	if ast.CanHaveIllegalDecorators(node) {
 		for _, modifier := range modifiers {
 			if ast.IsDecorator(modifier) {
-				p.jsErrorAtRange(modifier.Loc, diagnostics.Decorators_are_not_valid_here)
+				p.jsErrorAtNode(modifier, diagnostics.Decorators_are_not_valid_here)
 				break
 			}
 		}
@@ -6856,7 +6863,7 @@ func (p *Parser) checkJSDecoratorSyntax(node *ast.Node) {
 					})
 					if decoratorIndex > exportIndex && defaultIndex >= 0 && decoratorIndex < defaultIndex {
 						// Decorator between `export` and `default`
-						p.jsErrorAtRange(modifiers[decoratorIndex].Loc, diagnostics.Decorators_are_not_valid_here)
+						p.jsErrorAtNode(modifiers[decoratorIndex], diagnostics.Decorators_are_not_valid_here)
 					} else if decoratorIndex < exportIndex {
 						// Find a trailing decorator after the export keyword
 						trailingDecoratorIndex := -1
@@ -6893,56 +6900,56 @@ func (p *Parser) checkJSSyntax(node *ast.Node) *ast.Node {
 	switch node.Kind {
 	case ast.KindParameter, ast.KindPropertyDeclaration, ast.KindMethodDeclaration:
 		if token := node.QuestionToken(); token != nil && token.Flags&ast.NodeFlagsReparsed == 0 && ast.IsQuestionToken(token) {
-			p.jsErrorAtRange(token.Loc, diagnostics.The_0_modifier_can_only_be_used_in_TypeScript_files, "?")
+			p.jsErrorAtNode(token, diagnostics.The_0_modifier_can_only_be_used_in_TypeScript_files, "?")
 		}
 		fallthrough
 	case ast.KindMethodSignature, ast.KindConstructor, ast.KindGetAccessor, ast.KindSetAccessor, ast.KindFunctionExpression,
 		ast.KindFunctionDeclaration, ast.KindArrowFunction, ast.KindVariableDeclaration, ast.KindIndexSignature:
 		if ast.IsFunctionLike(node) && node.Body() == nil {
-			p.jsErrorAtRange(node.Loc, diagnostics.Signature_declarations_can_only_be_used_in_TypeScript_files)
+			p.jsErrorAtNode(node, diagnostics.Signature_declarations_can_only_be_used_in_TypeScript_files)
 		} else if t := node.Type(); t != nil && t.Flags&ast.NodeFlagsReparsed == 0 {
-			p.jsErrorAtRange(t.Loc, diagnostics.Type_annotations_can_only_be_used_in_TypeScript_files)
+			p.jsErrorAtNode(t, diagnostics.Type_annotations_can_only_be_used_in_TypeScript_files)
 		}
 	case ast.KindImportDeclaration:
 		if clause := node.ImportClause(); clause != nil && clause.IsTypeOnly() {
-			p.jsErrorAtRange(node.Loc, diagnostics.X_0_declarations_can_only_be_used_in_TypeScript_files, "import type")
+			p.jsErrorAtNode(node, diagnostics.X_0_declarations_can_only_be_used_in_TypeScript_files, "import type")
 		}
 	case ast.KindExportDeclaration:
 		if node.IsTypeOnly() {
-			p.jsErrorAtRange(node.Loc, diagnostics.X_0_declarations_can_only_be_used_in_TypeScript_files, "export type")
+			p.jsErrorAtNode(node, diagnostics.X_0_declarations_can_only_be_used_in_TypeScript_files, "export type")
 		}
 	case ast.KindImportSpecifier:
 		if node.IsTypeOnly() {
-			p.jsErrorAtRange(node.Loc, diagnostics.X_0_declarations_can_only_be_used_in_TypeScript_files, "import...type")
+			p.jsErrorAtNode(node, diagnostics.X_0_declarations_can_only_be_used_in_TypeScript_files, "import...type")
 		}
 	case ast.KindExportSpecifier:
 		if node.IsTypeOnly() {
-			p.jsErrorAtRange(node.Loc, diagnostics.X_0_declarations_can_only_be_used_in_TypeScript_files, "export...type")
+			p.jsErrorAtNode(node, diagnostics.X_0_declarations_can_only_be_used_in_TypeScript_files, "export...type")
 		}
 	case ast.KindImportEqualsDeclaration:
-		p.jsErrorAtRange(node.Loc, diagnostics.X_import_can_only_be_used_in_TypeScript_files)
+		p.jsErrorAtNode(node, diagnostics.X_import_can_only_be_used_in_TypeScript_files)
 	case ast.KindExportAssignment:
 		if node.AsExportAssignment().IsExportEquals {
-			p.jsErrorAtRange(node.Loc, diagnostics.X_export_can_only_be_used_in_TypeScript_files)
+			p.jsErrorAtNode(node, diagnostics.X_export_can_only_be_used_in_TypeScript_files)
 		}
 	case ast.KindHeritageClause:
 		if node.AsHeritageClause().Token == ast.KindImplementsKeyword {
-			p.jsErrorAtRange(node.Loc, diagnostics.X_implements_clauses_can_only_be_used_in_TypeScript_files)
+			p.jsErrorAtNode(node, diagnostics.X_implements_clauses_can_only_be_used_in_TypeScript_files)
 		}
 	case ast.KindInterfaceDeclaration:
-		p.jsErrorAtRange(node.Name().Loc, diagnostics.X_0_declarations_can_only_be_used_in_TypeScript_files, "interface")
+		p.jsErrorAtNode(node.Name(), diagnostics.X_0_declarations_can_only_be_used_in_TypeScript_files, "interface")
 	case ast.KindModuleDeclaration:
-		p.jsErrorAtRange(node.Name().Loc, diagnostics.X_0_declarations_can_only_be_used_in_TypeScript_files, scanner.TokenToString(node.AsModuleDeclaration().Keyword))
+		p.jsErrorAtNode(node.Name(), diagnostics.X_0_declarations_can_only_be_used_in_TypeScript_files, scanner.TokenToString(node.AsModuleDeclaration().Keyword))
 	case ast.KindTypeAliasDeclaration:
-		p.jsErrorAtRange(node.Name().Loc, diagnostics.Type_aliases_can_only_be_used_in_TypeScript_files)
+		p.jsErrorAtNode(node.Name(), diagnostics.Type_aliases_can_only_be_used_in_TypeScript_files)
 	case ast.KindEnumDeclaration:
-		p.jsErrorAtRange(node.Name().Loc, diagnostics.X_0_declarations_can_only_be_used_in_TypeScript_files, "enum")
+		p.jsErrorAtNode(node.Name(), diagnostics.X_0_declarations_can_only_be_used_in_TypeScript_files, "enum")
 	case ast.KindNonNullExpression:
-		p.jsErrorAtRange(node.Loc, diagnostics.Non_null_assertions_can_only_be_used_in_TypeScript_files)
+		p.jsErrorAtNode(node, diagnostics.Non_null_assertions_can_only_be_used_in_TypeScript_files)
 	case ast.KindAsExpression:
-		p.jsErrorAtRange(node.Type().Loc, diagnostics.Type_assertion_expressions_can_only_be_used_in_TypeScript_files)
+		p.jsErrorAtNode(node.Type(), diagnostics.Type_assertion_expressions_can_only_be_used_in_TypeScript_files)
 	case ast.KindSatisfiesExpression:
-		p.jsErrorAtRange(node.Type().Loc, diagnostics.Type_satisfaction_expressions_can_only_be_used_in_TypeScript_files)
+		p.jsErrorAtNode(node.Type(), diagnostics.Type_satisfaction_expressions_can_only_be_used_in_TypeScript_files)
 	}
 	// Check decorator placement in JS files
 	p.checkJSDecoratorSyntax(node)
@@ -6957,7 +6964,7 @@ func (p *Parser) checkJSSyntax(node *ast.Node) *ast.Node {
 	case ast.KindVariableStatement, ast.KindPropertyDeclaration:
 		for _, modifier := range node.ModifierNodes() {
 			if modifier.Flags&ast.NodeFlagsReparsed == 0 && modifier.Kind != ast.KindDecorator && ast.ModifierToFlag(modifier.Kind)&ast.ModifierFlagsJavaScript == 0 {
-				p.jsErrorAtRange(modifier.Loc, diagnostics.The_0_modifier_can_only_be_used_in_TypeScript_files, scanner.TokenToString(modifier.Kind))
+				p.jsErrorAtNode(modifier, diagnostics.The_0_modifier_can_only_be_used_in_TypeScript_files, scanner.TokenToString(modifier.Kind))
 			}
 		}
 	case ast.KindParameter:
