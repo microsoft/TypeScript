@@ -10,7 +10,7 @@ function write<T extends Record<string, unknown>>(values: Partial<T>, key: strin
 >(values[key] as unknown) = 0 : 0
 >(values[key] as unknown) : unknown
 >values[key] as unknown : unknown
->values[key] : T[string] | undefined
+>values[key] : any
 >values : Partial<T>
 >key : string
 >0 : 0

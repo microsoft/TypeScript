@@ -1,0 +1,222 @@
+//// [tests/cases/compiler/usedBeforeAssignedTypeAssertion.ts] ////
+
+=== usedBeforeAssignedTypeAssertion.ts ===
+function directAssignment() {
+>directAssignment : () => void
+
+    let value: number;
+>value : number
+
+    value = 1;
+>value = 1 : 1
+>value : number
+>1 : 1
+}
+
+function parenthesizedAssignment() {
+>parenthesizedAssignment : () => void
+
+    let value: number;
+>value : number
+
+    (value) = 1;
+>(value) = 1 : 1
+>(value) : number
+>value : number
+>1 : 1
+}
+
+function asAssignment() {
+>asAssignment : () => void
+
+    let value: number;
+>value : number
+
+    (value as number) = 1;
+>(value as number) = 1 : 1
+>(value as number) : number
+>value as number : number
+>value : number
+>1 : 1
+}
+
+function typeAssertionAssignment() {
+>typeAssertionAssignment : () => void
+
+    let value: number;
+>value : number
+
+    (<number>value) = 1;
+>(<number>value) = 1 : 1
+>(<number>value) : number
+><number>value : number
+>value : number
+>1 : 1
+}
+
+function nestedAssertionAssignment() {
+>nestedAssertionAssignment : () => void
+
+    let value: number;
+>value : number
+
+    ((<number>value) as number) = 1;
+>((<number>value) as number) = 1 : 1
+>((<number>value) as number) : number
+>(<number>value) as number : number
+>(<number>value) : number
+><number>value : number
+>value : number
+>1 : 1
+}
+
+function readBeforeAssignment() {
+>readBeforeAssignment : () => number
+
+    let value: number;
+>value : number
+
+    return value as number;
+>value as number : number
+>value : number
+}
+
+function compoundAssignmentBeforeInitialization() {
+>compoundAssignmentBeforeInitialization : () => void
+
+    let value: number;
+>value : number
+
+    (value as number) += 1;
+>(value as number) += 1 : number
+>(value as number) : number
+>value as number : number
+>value : number
+>1 : 1
+}
+
+function incrementBeforeInitialization() {
+>incrementBeforeInitialization : () => void
+
+    let value: number;
+>value : number
+
+    ++(<number>value);
+>++(<number>value) : number
+>(<number>value) : number
+><number>value : number
+>value : number
+}
+
+function decrementBeforeInitialization() {
+>decrementBeforeInitialization : () => void
+
+    let value: number;
+>value : number
+
+    (value as number)--;
+>(value as number)-- : number
+>(value as number) : number
+>value as number : number
+>value : number
+}
+
+function initializedCompoundAssignments() {
+>initializedCompoundAssignments : () => void
+
+    let value = 1;
+>value : number
+>1 : 1
+
+    (value as number) += 1;
+>(value as number) += 1 : number
+>(value as number) : number
+>value as number : number
+>value : number
+>1 : 1
+
+    ++(<number>value);
+>++(<number>value) : number
+>(<number>value) : number
+><number>value : number
+>value : number
+
+    (value as number)--;
+>(value as number)-- : number
+>(value as number) : number
+>value as number : number
+>value : number
+}
+
+function constAssignment() {
+>constAssignment : () => void
+
+    const value = 1;
+>value : 1
+>1 : 1
+
+    (value as any) = 2;
+>(value as any) = 2 : 2
+>(value as any) : any
+>value as any : any
+>value : any
+>2 : 2
+
+    (<any>value) = 3;
+>(<any>value) = 3 : 3
+>(<any>value) : any
+><any>value : any
+>value : any
+>3 : 3
+}
+
+function readonlyPropertyAssignment() {
+>readonlyPropertyAssignment : () => void
+
+    const object: { readonly value: number } = { value: 1 };
+>object : { readonly value: number; }
+>value : number
+>{ value: 1 } : { value: number; }
+>value : number
+>1 : 1
+
+    (object.value as number) = 2;
+>(object.value as number) = 2 : 2
+>(object.value as number) : number
+>object.value as number : number
+>object.value : any
+>object : { readonly value: number; }
+>value : any
+>2 : 2
+
+    (<number>object["value"]) = 3;
+>(<number>object["value"]) = 3 : 3
+>(<number>object["value"]) : number
+><number>object["value"] : number
+>object["value"] : any
+>object : { readonly value: number; }
+>"value" : "value"
+>3 : 3
+}
+
+function mutableObjectAssertion() {
+>mutableObjectAssertion : () => void
+
+    const object: { readonly value: number } = { value: 1 };
+>object : { readonly value: number; }
+>value : number
+>{ value: 1 } : { value: number; }
+>value : number
+>1 : 1
+
+    (object as { value: number }).value = 2;
+>(object as { value: number }).value = 2 : 2
+>(object as { value: number }).value : number
+>(object as { value: number }) : { value: number; }
+>object as { value: number } : { value: number; }
+>object : { readonly value: number; }
+>value : number
+>value : number
+>2 : 2
+}
+
