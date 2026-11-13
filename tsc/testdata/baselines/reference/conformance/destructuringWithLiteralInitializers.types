@@ -20,7 +20,7 @@ f1({ x: 1, y: 1 });
 function f2({ x, y = 0 }) { }
 >f2 : ({ x, y }: { x: any; y?: number; }) => void
 >x : any
->y : number
+>y : number (origin: number | 0)
 >0 : 0
 
 f2({ x: 1 });
@@ -42,9 +42,9 @@ f2({ x: 1, y: 1 });
 // (arg: { x?: number, y?: number }) => void
 function f3({ x = 0, y = 0 }) { }
 >f3 : ({ x, y }: { x?: number; y?: number; }) => void
->x : number
+>x : number (origin: number | 0)
 >0 : 0
->y : number
+>y : number (origin: number | 0)
 >0 : 0
 
 f3({});
@@ -103,7 +103,7 @@ f4({ x: 1, y: 1 });
 function f5({ x, y = 0 } = { x: 0 }) { }
 >f5 : ({ x, y }?: { x: number; y?: number; }) => void
 >x : number
->y : number
+>y : number (origin: number | 0)
 >0 : 0
 >{ x: 0 } : { x: number; }
 >x : number
@@ -132,9 +132,9 @@ f5({ x: 1, y: 1 });
 // (arg?: { x?: number, y?: number }) => void
 function f6({ x = 0, y = 0 } = {}) { }
 >f6 : ({ x, y }?: { x?: number; y?: number; }) => void
->x : number
+>x : number (origin: number | 0)
 >0 : 0
->y : number
+>y : number (origin: number | 0)
 >0 : 0
 >{} : {}
 
@@ -238,9 +238,9 @@ g1([1, 1]);
 // (arg: [number, number]) => void
 function g2([x = 0, y = 0]) { }
 >g2 : ([x, y]: [number?, number?]) => void
->x : number
+>x : number (origin: number | 0)
 >0 : 0
->y : number
+>y : number (origin: number | 0)
 >0 : 0
 
 g2([1, 1]);
@@ -274,7 +274,7 @@ g3([1, 1]);
 function g4([x, y = 0] = [0]) { }
 >g4 : ([x, y]?: [number, number?]) => void
 >x : number
->y : number
+>y : number (origin: number | 0)
 >0 : 0
 >[0] : [number]
 >0 : 0
@@ -293,9 +293,9 @@ g4([1, 1]);
 // (arg?: [number, number]) => void
 function g5([x = 0, y = 0] = []) { }
 >g5 : ([x, y]?: [number?, number?]) => void
->x : number
+>x : number (origin: number | 0)
 >0 : 0
->y : number
+>y : number (origin: number | 0)
 >0 : 0
 >[] : []
 

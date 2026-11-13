@@ -36,8 +36,8 @@ function sq(n?: number): number {
 >n : number | undefined
 
   const r = n !== undefined && n*n || 0;
->r : number
->n !== undefined && n*n || 0 : number
+>r : number (origin: number | 0)
+>n !== undefined && n*n || 0 : number (origin: number | 0)
 >n !== undefined && n*n : number | false
 >n !== undefined : boolean
 >n : number | undefined
@@ -48,7 +48,7 @@ function sq(n?: number): number {
 >0 : 0
 
   return r;
->r : number
+>r : number (origin: number | 0)
 }
 
 sq(3);

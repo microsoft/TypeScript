@@ -54,7 +54,7 @@ class Test4 {
 >n : number
 
         return (n === 0) ? 1 : (n * Test4.m1(n - 1));
->(n === 0) ? 1 : (n * Test4.m1(n - 1)) : number
+>(n === 0) ? 1 : (n * Test4.m1(n - 1)) : number (origin: number | 1)
 >(n === 0) : boolean
 >n === 0 : boolean
 >n : number
@@ -77,7 +77,7 @@ class Test4 {
 >n : number
 
         return (n === 0) ? 1 : (n * Test4["m2"](n - 1));
->(n === 0) ? 1 : (n * Test4["m2"](n - 1)) : number
+>(n === 0) ? 1 : (n * Test4["m2"](n - 1)) : number (origin: number | 1)
 >(n === 0) : boolean
 >n === 0 : boolean
 >n : number

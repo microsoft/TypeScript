@@ -428,7 +428,7 @@
 
 function foo({a = 4, b = { x: 5 }}) {
 >foo : ({ a, b }: { a?: number | undefined; b?: { x: number; } | undefined; }) => void
->a : number
+>a : number (origin: number | 4)
 >4 : 4
 >b : { x: number; }
 >{ x: 5 } : { x: number; }

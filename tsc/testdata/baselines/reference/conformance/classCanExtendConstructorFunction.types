@@ -26,7 +26,7 @@ Wagon.circle = function (wagons) {
 >wagons : Wagon[] | undefined
 
     return wagons ? wagons.length : 3.14;
->wagons ? wagons.length : 3.14 : number
+>wagons ? wagons.length : 3.14 : number (origin: number | 3.14)
 >wagons : Wagon[] | undefined
 >wagons.length : number
 >wagons : Wagon[]
@@ -54,7 +54,7 @@ Wagon.prototype.weight = supplies => supplies ? supplies.length : -1
 >weight : any
 >supplies => supplies ? supplies.length : -1 : (supplies?: any[] | undefined) => number
 >supplies : any[] | undefined
->supplies ? supplies.length : -1 : number
+>supplies ? supplies.length : -1 : number (origin: number | -1)
 >supplies : any[] | undefined
 >supplies.length : number
 >supplies : any[]

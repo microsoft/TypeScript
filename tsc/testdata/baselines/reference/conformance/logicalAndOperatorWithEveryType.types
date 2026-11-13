@@ -153,26 +153,26 @@ var rb10 = undefined && a2;
 >a2 : boolean
 
 var rc1 = a1 && a3;
->rc1 : number
->a1 && a3 : number
+>rc1 : number (origin: number | 0)
+>a1 && a3 : number (origin: number | 0)
 >a1 : any
 >a3 : number
 
 var rc2 = a2 && a3;
->rc2 : number
->a2 && a3 : number
+>rc2 : number (origin: number | 0)
+>a2 && a3 : number (origin: number | 0)
 >a2 : boolean
 >a3 : number
 
 var rc3 = a3 && a3;
->rc3 : number
->a3 && a3 : number
+>rc3 : number (origin: number | 0)
+>a3 && a3 : number (origin: number | 0)
 >a3 : number
 >a3 : number
 
 var rc4 = a4 && a3;
->rc4 : number
->a4 && a3 : number
+>rc4 : number (origin: number | 0)
+>a4 && a3 : number (origin: number | 0)
 >a4 : string
 >a3 : number
 
@@ -183,20 +183,20 @@ var rc5 = a5 && a3;
 >a3 : number
 
 var rc6 = a6 && a3;
->rc6 : number
->a6 && a3 : number
+>rc6 : number (origin: number | 0)
+>a6 && a3 : number (origin: number | 0)
 >a6 : E
 >a3 : number
 
 var rc7 = a7 && a3;
->rc7 : number
->a7 && a3 : number
+>rc7 : number (origin: number | 0)
+>a7 && a3 : number (origin: number | 0)
 >a7 : {}
 >a3 : number
 
 var rc8 = a8 && a3;
->rc8 : number
->a8 && a3 : number
+>rc8 : number (origin: number | 0)
+>a8 && a3 : number (origin: number | 0)
 >a8 : string[]
 >a3 : number
 
@@ -212,26 +212,26 @@ var rc10 = undefined && a3;
 >a3 : number
 
 var rd1 = a1 && a4;
->rd1 : string
->a1 && a4 : string
+>rd1 : string (origin: string | "")
+>a1 && a4 : string (origin: string | "")
 >a1 : any
 >a4 : string
 
 var rd2 = a2 && a4;
->rd2 : string
->a2 && a4 : string
+>rd2 : string (origin: string | "")
+>a2 && a4 : string (origin: string | "")
 >a2 : boolean
 >a4 : string
 
 var rd3 = a3 && a4;
->rd3 : string
->a3 && a4 : string
+>rd3 : string (origin: string | "")
+>a3 && a4 : string (origin: string | "")
 >a3 : number
 >a4 : string
 
 var rd4 = a4 && a4;
->rd4 : string
->a4 && a4 : string
+>rd4 : string (origin: string | "")
+>a4 && a4 : string (origin: string | "")
 >a4 : string
 >a4 : string
 
@@ -242,20 +242,20 @@ var rd5 = a5 && a4;
 >a4 : string
 
 var rd6 = a6 && a4;
->rd6 : string
->a6 && a4 : string
+>rd6 : string (origin: string | "")
+>a6 && a4 : string (origin: string | "")
 >a6 : E
 >a4 : string
 
 var rd7 = a7 && a4;
->rd7 : string
->a7 && a4 : string
+>rd7 : string (origin: string | "")
+>a7 && a4 : string (origin: string | "")
 >a7 : {}
 >a4 : string
 
 var rd8 = a8 && a4;
->rd8 : string
->a8 && a4 : string
+>rd8 : string (origin: string | "")
+>a8 && a4 : string (origin: string | "")
 >a8 : string[]
 >a4 : string
 

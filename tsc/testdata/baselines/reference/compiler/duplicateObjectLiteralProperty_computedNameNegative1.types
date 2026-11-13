@@ -10,9 +10,9 @@ function bar(props: { x?: string; y?: string }) {
 >y : string | undefined
 
   const { x = "", y = "" } = props;
->x : string
+>x : string (origin: string | "")
 >"" : ""
->y : string
+>y : string (origin: string | "")
 >"" : ""
 >props : { x?: string; y?: string; }
 
@@ -21,12 +21,12 @@ function bar(props: { x?: string; y?: string }) {
 
     [x]: 1,
 >[x] : number
->x : string
+>x : string (origin: string | "")
 >1 : 1
 
     [y]: 2,
 >[y] : number
->y : string
+>y : string (origin: string | "")
 >2 : 2
 
   };

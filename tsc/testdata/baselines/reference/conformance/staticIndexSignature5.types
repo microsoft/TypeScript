@@ -36,7 +36,7 @@ type TD = (typeof B)[number]
 >B : typeof B
 
 type TE = keyof typeof B;
->TE : string | number
+>TE : string | number (origin: string | number | "prototype")
 >B : typeof B
 
 type TF = Pick<typeof B, number>

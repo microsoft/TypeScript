@@ -1,0 +1,18 @@
+mappedTypeRecursiveKeyLowerBound.ts(5,51): error TS2344: Type 'Options<T>' does not satisfy the constraint 'Options<Options<T>>'.
+  Type 'Exclude<Exclude<"a", Exclude<keyof T, "unused"> | Exclude<Exclude<"a", keyof T>, "unused">>, "unused"> | Exclude<Exclude<keyof T, "unused">, "unused"> | Exclude<Exclude<Exclude<"a", keyof T>, "unused">, "unused">' is not assignable to type 'Exclude<keyof T, "unused"> | Exclude<Exclude<"a", keyof T>, "unused">'.
+    Type 'Exclude<Exclude<"a", Exclude<keyof T, "unused"> | Exclude<Exclude<"a", keyof T>, "unused">>, "unused">' is not assignable to type 'Exclude<keyof T, "unused"> | Exclude<Exclude<"a", keyof T>, "unused">'.
+      Type '"a"' is not assignable to type 'Exclude<keyof T, "unused"> | Exclude<Exclude<"a", keyof T>, "unused">'.
+
+
+==== mappedTypeRecursiveKeyLowerBound.ts (1 errors) ====
+    type Merge<A, B> = Omit<A, keyof B> & B;
+    type Options<T> = Omit<Merge<{ a: number }, T>, "unused">;
+    
+    type Constrained<T extends Options<T>> = T;
+    type Resolved<T extends Options<T>> = Constrained<Options<T>>;
+                                                      ~~~~~~~~~~
+!!! error TS2344: Type 'Options<T>' does not satisfy the constraint 'Options<Options<T>>'.
+!!! error TS2344:   Type 'Exclude<Exclude<"a", Exclude<keyof T, "unused"> | Exclude<Exclude<"a", keyof T>, "unused">>, "unused"> | Exclude<Exclude<keyof T, "unused">, "unused"> | Exclude<Exclude<Exclude<"a", keyof T>, "unused">, "unused">' is not assignable to type 'Exclude<keyof T, "unused"> | Exclude<Exclude<"a", keyof T>, "unused">'.
+!!! error TS2344:     Type 'Exclude<Exclude<"a", Exclude<keyof T, "unused"> | Exclude<Exclude<"a", keyof T>, "unused">>, "unused">' is not assignable to type 'Exclude<keyof T, "unused"> | Exclude<Exclude<"a", keyof T>, "unused">'.
+!!! error TS2344:       Type '"a"' is not assignable to type 'Exclude<keyof T, "unused"> | Exclude<Exclude<"a", keyof T>, "unused">'.
+    

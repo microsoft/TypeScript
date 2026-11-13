@@ -58,7 +58,7 @@ function f() {
 >i : I
 
     n&&n;
->n&&n : number
+>n&&n : number (origin: number | 0)
 >n : number
 >n : number
 
@@ -88,7 +88,7 @@ function f() {
 >i : I
 
     s&&s;
->s&&s : string
+>s&&s : string (origin: string | "")
 >s : string
 >s : string
 
@@ -158,7 +158,7 @@ function f() {
 >e : E
 
     e&&n;
->e&&n : number
+>e&&n : number (origin: number | E.Red)
 >e : E
 >n : number
 
@@ -213,7 +213,7 @@ function f() {
 >n : number
 
     n||e;
->n||e : number
+>n||e : number (origin: number | E)
 >n : number
 >e : E
 
@@ -308,7 +308,7 @@ function f() {
 >e : E
 
     e||n;
->e||n : number
+>e||n : number (origin: number | E.Green | E.Blue)
 >e : E
 >n : number
 

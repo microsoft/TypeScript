@@ -317,7 +317,7 @@ namespace Harness {
 >throwAssertError : (error: Error) => never
 >new Error(msg || "Expected true, got false.") : Error
 >Error : ErrorConstructor
->msg || "Expected true, got false." : string
+>msg || "Expected true, got false." : string (origin: string | "Expected true, got false.")
 >msg : string | undefined
 >"Expected true, got false." : "Expected true, got false."
             }
@@ -2427,8 +2427,8 @@ namespace Harness {
 >b.description : string
 >b : Benchmark
 >description : string
->(prop ? ": " + prop : '') : string
->prop ? ": " + prop : '' : string
+>(prop ? ": " + prop : '') : string (origin: string | "")
+>prop ? ": " + prop : '' : string (origin: string | "")
 >prop : string
 >": " + prop : string
 >": " : ": "
@@ -4719,8 +4719,8 @@ namespace Harness {
                 }
 
                 var uName = unitName || '0.ts';
->uName : string
->unitName || '0.ts' : string
+>uName : string (origin: string | "0.ts")
+>unitName || '0.ts' : string (origin: string | "0.ts")
 >unitName : string | undefined
 >'0.ts' : "0.ts"
 
@@ -4728,7 +4728,7 @@ namespace Harness {
 >updateUnit('', uName) : void
 >updateUnit : (code: string, unitName: string, setRecovery?: boolean) => void
 >'' : ""
->uName : string
+>uName : string (origin: string | "0.ts")
             }
 
             return '';
@@ -5564,8 +5564,8 @@ namespace Harness {
 
             // for single file tests just add them as using the old '0.ts' naming scheme
             var uName = context ? unitName : ((isDeclareFile) ? '0.d.ts' : '0.ts');
->uName : string
->context ? unitName : ((isDeclareFile) ? '0.d.ts' : '0.ts') : string
+>uName : string (origin: string | "0.d.ts" | "0.ts")
+>context ? unitName : ((isDeclareFile) ? '0.d.ts' : '0.ts') : string (origin: string | "0.d.ts" | "0.ts")
 >context : CompilationContext | undefined
 >unitName : string
 >((isDeclareFile) ? '0.d.ts' : '0.ts') : "0.d.ts" | "0.ts"
@@ -5583,7 +5583,7 @@ namespace Harness {
 >addUnit(code, uName, false, isDeclareFile, references) : TypeScript.Script
 >addUnit : (code: string, unitName?: string, isResident?: boolean, isDeclareFile?: boolean, references?: TypeScript.IFileReference[]) => TypeScript.Script
 >code : string
->uName : string
+>uName : string (origin: string | "0.d.ts" | "0.ts")
 >false : false
 >isDeclareFile : boolean
 >references : TypeScript.IFileReference[] | undefined
@@ -5592,7 +5592,7 @@ namespace Harness {
 >compile(code, uName) : void
 >compile : (code?: string, filename?: string) => void
 >code : string
->uName : string
+>uName : string (origin: string | "0.d.ts" | "0.ts")
 
             var errors;
 >errors : any
@@ -5608,7 +5608,7 @@ namespace Harness {
 >compiler.pullGetErrorsForFile : any
 >compiler : TypeScript.TypeScriptCompiler
 >pullGetErrorsForFile : any
->uName : string
+>uName : string (origin: string | "0.d.ts" | "0.ts")
 
                 emit(stdout, true);
 >emit(stdout, true) : void
@@ -6177,8 +6177,8 @@ namespace Harness {
 >{                content: currentFileContent || '',                name: currentFileName,                fileOptions: currentFileOptions,                originalFilePath: filename,                references: refs            } : { content: string; name: any; fileOptions: {}; originalFilePath: string; references: TypeScript.IFileReference[]; }
 
                 content: currentFileContent || '',
->content : string
->currentFileContent || '' : string
+>content : string (origin: string | "")
+>currentFileContent || '' : string (origin: string | "")
 >currentFileContent : string
 >'' : ""
 

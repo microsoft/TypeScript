@@ -34,7 +34,7 @@ var p1 = import(getSpecifier());
 const p2 = import(whatToLoad ? getSpecifier() : "defaulPath")
 >p2 : Promise<any>
 >import(whatToLoad ? getSpecifier() : "defaulPath") : Promise<any>
->whatToLoad ? getSpecifier() : "defaulPath" : string
+>whatToLoad ? getSpecifier() : "defaulPath" : string (origin: string | "defaulPath")
 >whatToLoad : boolean
 >getSpecifier() : string
 >getSpecifier : () => string

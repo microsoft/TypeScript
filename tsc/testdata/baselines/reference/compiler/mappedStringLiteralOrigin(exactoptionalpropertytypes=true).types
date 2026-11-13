@@ -1,0 +1,238 @@
+//// [tests/cases/compiler/mappedStringLiteralOrigin.ts] ////
+
+=== mappedStringLiteralOrigin.ts ===
+// Literal origins are editor metadata, not additional mapped keys.
+type Keys = "a" | string;
+>Keys : string (origin: string | "a")
+
+type LegacyKeys = "a" | (string & {});
+>LegacyKeys : string (origin: string | "a")
+
+type Values = Record<Keys, number>;
+>Values : Values
+
+type LegacyValues = Record<LegacyKeys, number>;
+>LegacyValues : LegacyValues
+
+declare const values: Values;
+>values : Values
+
+declare const legacy: LegacyValues;
+>legacy : LegacyValues
+
+export const known = values.a;
+>known : number | undefined
+>values.a : number | undefined
+>values : Values
+>a : number | undefined
+
+export const other = values.other;
+>other : number | undefined
+>values.other : number | undefined
+>values : Values
+>other : number | undefined
+
+export const legacyKnown = legacy.a;
+>legacyKnown : number | undefined
+>legacy.a : number | undefined
+>legacy : LegacyValues
+>a : number | undefined
+
+export const legacyOther = legacy.other;
+>legacyOther : number | undefined
+>legacy.other : number | undefined
+>legacy : LegacyValues
+>other : number | undefined
+
+const missing: Values = {};
+>missing : Values
+>{} : {}
+
+const legacyMissing: LegacyValues = {};
+>legacyMissing : LegacyValues
+>{} : {}
+
+const present: Values = { a: 1, other: 2 };
+>present : Values
+>{ a: 1, other: 2 } : { a: number; other: number; }
+>a : number
+>1 : 1
+>other : number
+>2 : 2
+
+const plain: Record<string, number> = {};
+>plain : Record<string, number>
+>{} : {}
+
+type KeyValues = { [Key in Keys]: Key };
+>KeyValues : KeyValues
+
+declare const keyValues: KeyValues;
+>keyValues : KeyValues
+
+export const literalValue = keyValues.a;
+>literalValue : string | undefined (origin: string | "a" | undefined)
+>keyValues.a : string | undefined (origin: string | "a" | undefined)
+>keyValues : KeyValues
+>a : string | undefined (origin: string | "a" | undefined)
+
+export const indexValue = keyValues.other;
+>indexValue : string | undefined (origin: string | "a" | undefined)
+>keyValues.other : string | undefined (origin: string | "a" | undefined)
+>keyValues : KeyValues
+>other : string | undefined (origin: string | "a" | undefined)
+
+type Remapped = { [Key in Keys as `get_${Key}`]: Key };
+>Remapped : Remapped
+
+declare const remapped: Remapped;
+>remapped : Remapped
+
+export const remappedKnown = remapped.get_a;
+>remappedKnown : string | undefined (origin: string | "a" | undefined)
+>remapped.get_a : string | undefined (origin: string | "a" | undefined)
+>remapped : Remapped
+>get_a : string | undefined (origin: string | "a" | undefined)
+
+export const remappedOther = remapped.get_other;
+>remappedOther : string | undefined (origin: string | "a" | undefined)
+>remapped.get_other : string | undefined (origin: string | "a" | undefined)
+>remapped : Remapped
+>get_other : string | undefined (origin: string | "a" | undefined)
+
+type OptionalValues = { readonly [Key in Keys]?: number };
+>OptionalValues : OptionalValues
+
+declare let optional: OptionalValues;
+>optional : OptionalValues
+
+export const optionalKnown = optional.a;
+>optionalKnown : number | undefined
+>optional.a : number | undefined
+>optional : OptionalValues
+>a : number | undefined
+
+optional.a = 1;
+>optional.a = 1 : 1
+>optional.a : number | undefined
+>optional : OptionalValues
+>a : number | undefined
+>1 : 1
+
+type RequiredValues = { -readonly [Key in keyof OptionalValues]-?: OptionalValues[Key] };
+>RequiredValues : RequiredValues
+
+declare let required: RequiredValues;
+>required : RequiredValues
+
+required.a = 1;
+>required.a = 1 : 1
+>required.a : number | undefined
+>required : RequiredValues
+>a : number | undefined
+>1 : 1
+
+export const requiredKnown = required.a;
+>requiredKnown : number
+>required.a : number
+>required : RequiredValues
+>a : number
+
+export const requiredOther = required.other;
+>requiredOther : number | undefined
+>required.other : number | undefined
+>required : RequiredValues
+>other : number | undefined
+
+type ExtendedKeys = Keys | "b" | number;
+>ExtendedKeys : ExtendedKeys (origin: string | number | "a" | "b")
+
+declare const extended: Record<ExtendedKeys, number>;
+>extended : Record<ExtendedKeys, number>
+
+export const extendedKnown = extended.a;
+>extendedKnown : number | undefined
+>extended.a : number | undefined
+>extended : Record<ExtendedKeys, number>
+>a : number | undefined
+
+export const extendedAdded = extended.b;
+>extendedAdded : number | undefined
+>extended.b : number | undefined
+>extended : Record<ExtendedKeys, number>
+>b : number | undefined
+
+export const extendedIndex = extended[0];
+>extendedIndex : number | undefined
+>extended[0] : number | undefined
+>extended : Record<ExtendedKeys, number>
+>0 : 0
+
+type GenericValues<Key extends string> = Record<Key | string, number>;
+>GenericValues : GenericValues<Key>
+
+declare const generic: GenericValues<"a" | "b">;
+>generic : GenericValues<"a" | "b">
+
+export const genericKnown = generic.a;
+>genericKnown : number | undefined
+>generic.a : number | undefined
+>generic : GenericValues<"a" | "b">
+>a : number | undefined
+
+export const genericAdded = generic.b;
+>genericAdded : number | undefined
+>generic.b : number | undefined
+>generic : GenericValues<"a" | "b">
+>b : number | undefined
+
+export const genericOther = generic.other;
+>genericOther : number | undefined
+>generic.other : number | undefined
+>generic : GenericValues<"a" | "b">
+>other : number | undefined
+
+type OnlyKnown<Value> = { [Key in Keys as Key extends "a" ? Key : never]: Value };
+>OnlyKnown : OnlyKnown<Value>
+
+export function knownKey<Value>(): keyof OnlyKnown<Value> {
+>knownKey : <Value>() => keyof OnlyKnown<Value>
+
+	return "a";
+>"a" : "a"
+}
+export function knownValue<Value>(value: OnlyKnown<Value>): Value {
+>knownValue : <Value>(value: OnlyKnown<Value>) => Value
+>value : OnlyKnown<Value>
+
+	return value.a;
+>value.a : any
+>value : OnlyKnown<Value>
+>a : any
+}
+const filteredMissing: OnlyKnown<number> = {};
+>filteredMissing : OnlyKnown<number>
+>{} : {}
+
+const filteredPresent: OnlyKnown<number> = { a: 1 };
+>filteredPresent : OnlyKnown<number>
+>{ a: 1 } : { a: number; }
+>a : number
+>1 : 1
+
+type WithoutKnown<Value> = { [Key in Keys as Key extends "a" ? never : Key]: Value };
+>WithoutKnown : WithoutKnown<Value>
+
+const filteredPlain: WithoutKnown<number> = {};
+>filteredPlain : WithoutKnown<number>
+>{} : {}
+
+declare const filtered: WithoutKnown<number>;
+>filtered : WithoutKnown<number>
+
+export const filteredAccess = filtered.a;
+>filteredAccess : number | undefined
+>filtered.a : number | undefined
+>filtered : WithoutKnown<number>
+>a : number | undefined
+
