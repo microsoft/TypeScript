@@ -1,0 +1,81 @@
+//// [tests/cases/compiler/temporalZonedDateTimeToLocaleStringTimeZone.ts] ////
+
+=== temporalZonedDateTimeToLocaleStringTimeZone.ts ===
+// https://github.com/microsoft/TypeScript/issues/64227
+
+declare const zdt: Temporal.ZonedDateTime;
+>zdt : Symbol(zdt, Decl(temporalZonedDateTimeToLocaleStringTimeZone.ts, 2, 13))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>ZonedDateTime : Symbol(Temporal.ZonedDateTime, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+
+// Error: ZonedDateTime always formats in its own time zone
+zdt.toLocaleString(undefined, { timeZone: "Europe/Berlin" });
+>zdt.toLocaleString : Symbol(Temporal.ZonedDateTime.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
+>zdt : Symbol(zdt, Decl(temporalZonedDateTimeToLocaleStringTimeZone.ts, 2, 13))
+>toLocaleString : Symbol(Temporal.ZonedDateTime.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
+>undefined : Symbol(undefined)
+>timeZone : Symbol(timeZone, Decl(temporalZonedDateTimeToLocaleStringTimeZone.ts, 5, 31))
+
+zdt.toLocaleString("de-DE", { timeZone: "Pacific/Auckland", weekday: "long" });
+>zdt.toLocaleString : Symbol(Temporal.ZonedDateTime.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
+>zdt : Symbol(zdt, Decl(temporalZonedDateTimeToLocaleStringTimeZone.ts, 2, 13))
+>toLocaleString : Symbol(Temporal.ZonedDateTime.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
+>timeZone : Symbol(timeZone, Decl(temporalZonedDateTimeToLocaleStringTimeZone.ts, 6, 29))
+>weekday : Symbol(weekday, Decl(temporalZonedDateTimeToLocaleStringTimeZone.ts, 6, 59))
+
+// OK
+zdt.toLocaleString();
+>zdt.toLocaleString : Symbol(Temporal.ZonedDateTime.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
+>zdt : Symbol(zdt, Decl(temporalZonedDateTimeToLocaleStringTimeZone.ts, 2, 13))
+>toLocaleString : Symbol(Temporal.ZonedDateTime.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
+
+zdt.toLocaleString("en-US", { month: "long", timeZoneName: "short" });
+>zdt.toLocaleString : Symbol(Temporal.ZonedDateTime.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
+>zdt : Symbol(zdt, Decl(temporalZonedDateTimeToLocaleStringTimeZone.ts, 2, 13))
+>toLocaleString : Symbol(Temporal.ZonedDateTime.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
+>month : Symbol(month, Decl(temporalZonedDateTimeToLocaleStringTimeZone.ts, 10, 29))
+>timeZoneName : Symbol(timeZoneName, Decl(temporalZonedDateTimeToLocaleStringTimeZone.ts, 10, 44))
+
+zdt.withTimeZone("Europe/Berlin").toLocaleString("de-DE", { dateStyle: "full", timeStyle: "long" });
+>zdt.withTimeZone("Europe/Berlin").toLocaleString : Symbol(Temporal.ZonedDateTime.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
+>zdt.withTimeZone : Symbol(Temporal.ZonedDateTime.withTimeZone, Decl(lib.esnext.temporal.d.ts, --, --))
+>zdt : Symbol(zdt, Decl(temporalZonedDateTimeToLocaleStringTimeZone.ts, 2, 13))
+>withTimeZone : Symbol(Temporal.ZonedDateTime.withTimeZone, Decl(lib.esnext.temporal.d.ts, --, --))
+>toLocaleString : Symbol(Temporal.ZonedDateTime.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
+>dateStyle : Symbol(dateStyle, Decl(temporalZonedDateTimeToLocaleStringTimeZone.ts, 11, 59))
+>timeStyle : Symbol(timeStyle, Decl(temporalZonedDateTimeToLocaleStringTimeZone.ts, 11, 78))
+
+declare const options: Intl.DateTimeFormatOptions;
+>options : Symbol(options, Decl(temporalZonedDateTimeToLocaleStringTimeZone.ts, 13, 13))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 7 more)
+>DateTimeFormatOptions : Symbol(Intl.DateTimeFormatOptions, Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --))
+
+zdt.toLocaleString("en-US", options);
+>zdt.toLocaleString : Symbol(Temporal.ZonedDateTime.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
+>zdt : Symbol(zdt, Decl(temporalZonedDateTimeToLocaleStringTimeZone.ts, 2, 13))
+>toLocaleString : Symbol(Temporal.ZonedDateTime.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
+>options : Symbol(options, Decl(temporalZonedDateTimeToLocaleStringTimeZone.ts, 13, 13))
+
+// OK: other Temporal types still accept a timeZone option
+declare const instant: Temporal.Instant;
+>instant : Symbol(instant, Decl(temporalZonedDateTimeToLocaleStringTimeZone.ts, 17, 13))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>Instant : Symbol(Temporal.Instant, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+
+instant.toLocaleString("en-US", { timeZone: "Europe/Berlin" });
+>instant.toLocaleString : Symbol(Temporal.Instant.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
+>instant : Symbol(instant, Decl(temporalZonedDateTimeToLocaleStringTimeZone.ts, 17, 13))
+>toLocaleString : Symbol(Temporal.Instant.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
+>timeZone : Symbol(timeZone, Decl(temporalZonedDateTimeToLocaleStringTimeZone.ts, 18, 33))
+
+declare const plainDateTime: Temporal.PlainDateTime;
+>plainDateTime : Symbol(plainDateTime, Decl(temporalZonedDateTimeToLocaleStringTimeZone.ts, 19, 13))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>PlainDateTime : Symbol(Temporal.PlainDateTime, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+
+plainDateTime.toLocaleString("en-US", { timeZone: "Europe/Berlin" });
+>plainDateTime.toLocaleString : Symbol(Temporal.PlainDateTime.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
+>plainDateTime : Symbol(plainDateTime, Decl(temporalZonedDateTimeToLocaleStringTimeZone.ts, 19, 13))
+>toLocaleString : Symbol(Temporal.PlainDateTime.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
+>timeZone : Symbol(timeZone, Decl(temporalZonedDateTimeToLocaleStringTimeZone.ts, 20, 39))
+

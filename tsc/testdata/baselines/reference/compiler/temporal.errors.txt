@@ -1,10 +1,11 @@
 temporal.ts(25,13): error TS2339: Property 'year' does not exist on type 'Instant'.
+temporal.ts(594,47): error TS2353: Object literal may only specify known properties, and 'timeZone' does not exist in type 'Omit<DateTimeFormatOptions, "timeZone">'.
 temporal.ts(1504,8): error TS2339: Property 'month' does not exist on type 'PlainMonthDay'.
 temporal.ts(1514,8): error TS2339: Property 'month' does not exist on type 'PlainMonthDay'.
 temporal.ts(1520,8): error TS2339: Property 'month' does not exist on type 'PlainMonthDay'.
 
 
-==== temporal.ts (4 errors) ====
+==== temporal.ts (5 errors) ====
     /**
      * Test cases derived from documentation at tc39/proposal-temporal,
      * under the following license:
@@ -601,6 +602,8 @@ temporal.ts(1520,8): error TS2339: Property 'month' does not exist on type 'Plai
         const options = { weekday: "long", year: "numeric", month: "long", day: "numeric" } as const;
         zdt.toLocaleString("de-DE", options); // => 'Sonntag, 1. Dezember 2019'
         /* WRONG */ zdt.toLocaleString("de-DE", { timeZone: "Pacific/Auckland" });
+                                                  ~~~~~~~~
+!!! error TS2353: Object literal may only specify known properties, and 'timeZone' does not exist in type 'Omit<DateTimeFormatOptions, "timeZone">'.
         // => RangeError: Time zone option Pacific/Auckland does not match actual time zone Europe/Berlin
         zdt.withTimeZone("Pacific/Auckland").toLocaleString("de-DE"); // => '2.12.2019, 0:00:00 GMT+13'
         zdt.toLocaleString("en-US-u-nu-fullwide-hc-h12"); // => '１２/１/２０１９, １２:００:００ PM GMT+１'

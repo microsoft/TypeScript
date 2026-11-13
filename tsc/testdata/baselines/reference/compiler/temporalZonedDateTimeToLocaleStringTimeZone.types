@@ -1,0 +1,108 @@
+//// [tests/cases/compiler/temporalZonedDateTimeToLocaleStringTimeZone.ts] ////
+
+=== temporalZonedDateTimeToLocaleStringTimeZone.ts ===
+// https://github.com/microsoft/TypeScript/issues/64227
+
+declare const zdt: Temporal.ZonedDateTime;
+>zdt : Temporal.ZonedDateTime
+>Temporal : any
+
+// Error: ZonedDateTime always formats in its own time zone
+zdt.toLocaleString(undefined, { timeZone: "Europe/Berlin" });
+>zdt.toLocaleString(undefined, { timeZone: "Europe/Berlin" }) : string
+>zdt.toLocaleString : (locales?: Intl.LocalesArgument, options?: Temporal.ZonedDateTimeToLocaleStringOptions) => string
+>zdt : Temporal.ZonedDateTime
+>toLocaleString : (locales?: Intl.LocalesArgument, options?: Temporal.ZonedDateTimeToLocaleStringOptions) => string
+>undefined : undefined
+>{ timeZone: "Europe/Berlin" } : { timeZone: string; }
+>timeZone : string
+>"Europe/Berlin" : "Europe/Berlin"
+
+zdt.toLocaleString("de-DE", { timeZone: "Pacific/Auckland", weekday: "long" });
+>zdt.toLocaleString("de-DE", { timeZone: "Pacific/Auckland", weekday: "long" }) : string
+>zdt.toLocaleString : (locales?: Intl.LocalesArgument, options?: Temporal.ZonedDateTimeToLocaleStringOptions) => string
+>zdt : Temporal.ZonedDateTime
+>toLocaleString : (locales?: Intl.LocalesArgument, options?: Temporal.ZonedDateTimeToLocaleStringOptions) => string
+>"de-DE" : "de-DE"
+>{ timeZone: "Pacific/Auckland", weekday: "long" } : { timeZone: string; weekday: "long"; }
+>timeZone : string
+>"Pacific/Auckland" : "Pacific/Auckland"
+>weekday : "long"
+>"long" : "long"
+
+// OK
+zdt.toLocaleString();
+>zdt.toLocaleString() : string
+>zdt.toLocaleString : (locales?: Intl.LocalesArgument, options?: Temporal.ZonedDateTimeToLocaleStringOptions) => string
+>zdt : Temporal.ZonedDateTime
+>toLocaleString : (locales?: Intl.LocalesArgument, options?: Temporal.ZonedDateTimeToLocaleStringOptions) => string
+
+zdt.toLocaleString("en-US", { month: "long", timeZoneName: "short" });
+>zdt.toLocaleString("en-US", { month: "long", timeZoneName: "short" }) : string
+>zdt.toLocaleString : (locales?: Intl.LocalesArgument, options?: Temporal.ZonedDateTimeToLocaleStringOptions) => string
+>zdt : Temporal.ZonedDateTime
+>toLocaleString : (locales?: Intl.LocalesArgument, options?: Temporal.ZonedDateTimeToLocaleStringOptions) => string
+>"en-US" : "en-US"
+>{ month: "long", timeZoneName: "short" } : { month: "long"; timeZoneName: "short"; }
+>month : "long"
+>"long" : "long"
+>timeZoneName : "short"
+>"short" : "short"
+
+zdt.withTimeZone("Europe/Berlin").toLocaleString("de-DE", { dateStyle: "full", timeStyle: "long" });
+>zdt.withTimeZone("Europe/Berlin").toLocaleString("de-DE", { dateStyle: "full", timeStyle: "long" }) : string
+>zdt.withTimeZone("Europe/Berlin").toLocaleString : (locales?: Intl.LocalesArgument, options?: Temporal.ZonedDateTimeToLocaleStringOptions) => string
+>zdt.withTimeZone("Europe/Berlin") : Temporal.ZonedDateTime
+>zdt.withTimeZone : (timeZone: Temporal.TimeZoneLike) => Temporal.ZonedDateTime
+>zdt : Temporal.ZonedDateTime
+>withTimeZone : (timeZone: Temporal.TimeZoneLike) => Temporal.ZonedDateTime
+>"Europe/Berlin" : "Europe/Berlin"
+>toLocaleString : (locales?: Intl.LocalesArgument, options?: Temporal.ZonedDateTimeToLocaleStringOptions) => string
+>"de-DE" : "de-DE"
+>{ dateStyle: "full", timeStyle: "long" } : { dateStyle: "full"; timeStyle: "long"; }
+>dateStyle : "full"
+>"full" : "full"
+>timeStyle : "long"
+>"long" : "long"
+
+declare const options: Intl.DateTimeFormatOptions;
+>options : Intl.DateTimeFormatOptions
+>Intl : any
+
+zdt.toLocaleString("en-US", options);
+>zdt.toLocaleString("en-US", options) : string
+>zdt.toLocaleString : (locales?: Intl.LocalesArgument, options?: Temporal.ZonedDateTimeToLocaleStringOptions) => string
+>zdt : Temporal.ZonedDateTime
+>toLocaleString : (locales?: Intl.LocalesArgument, options?: Temporal.ZonedDateTimeToLocaleStringOptions) => string
+>"en-US" : "en-US"
+>options : Intl.DateTimeFormatOptions
+
+// OK: other Temporal types still accept a timeZone option
+declare const instant: Temporal.Instant;
+>instant : Temporal.Instant
+>Temporal : any
+
+instant.toLocaleString("en-US", { timeZone: "Europe/Berlin" });
+>instant.toLocaleString("en-US", { timeZone: "Europe/Berlin" }) : string
+>instant.toLocaleString : (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions) => string
+>instant : Temporal.Instant
+>toLocaleString : (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions) => string
+>"en-US" : "en-US"
+>{ timeZone: "Europe/Berlin" } : { timeZone: string; }
+>timeZone : string
+>"Europe/Berlin" : "Europe/Berlin"
+
+declare const plainDateTime: Temporal.PlainDateTime;
+>plainDateTime : Temporal.PlainDateTime
+>Temporal : any
+
+plainDateTime.toLocaleString("en-US", { timeZone: "Europe/Berlin" });
+>plainDateTime.toLocaleString("en-US", { timeZone: "Europe/Berlin" }) : string
+>plainDateTime.toLocaleString : (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions) => string
+>plainDateTime : Temporal.PlainDateTime
+>toLocaleString : (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions) => string
+>"en-US" : "en-US"
+>{ timeZone: "Europe/Berlin" } : { timeZone: string; }
+>timeZone : string
+>"Europe/Berlin" : "Europe/Berlin"
+
