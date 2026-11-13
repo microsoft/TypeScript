@@ -778,22 +778,19 @@ func (c *Checker) isDeeplyNestedType(t *Type, stack []*Type, maxDepth int) bool 
 				}
 			}
 		} else {
-			identity := getRecursionIdentityFromTarget(target)
+			identity := c.getRecursionIdentityFromTarget(target)
 			count := 0
-			lastGeneration := 0
+			var previous *Type
 			for _, t := range stack {
-				if hasMatchingRecursionIdentity(t, identity) {
-					// We only count occurrences of a generation at least that of the previous occurrence, since
-					// newer instantiations caused by recursion are built from the previous ones, whereas nested
-					// type arguments are older than the types they are arguments of.
-					generation := c.typeGeneration(t)
-					if generation >= lastGeneration {
+				if c.hasMatchingRecursionIdentity(t, identity) {
+					// We only count occurrences that may continue an expansion from the previous occurrence.
+					if previous == nil || c.continuesExpansion(t, previous) {
 						count++
 						if count >= maxDepth {
 							return true
 						}
 					}
-					lastGeneration = generation
+					previous = t
 				}
 			}
 		}
@@ -884,6 +881,140 @@ func (c *Checker) mapperGeneration(m *TypeMapper) int {
 	return 0
 }
 
+// continuesExpansion reports whether t, an occurrence of a recursion identity
+// nested within the occurrence previous, may be the next step of an infinitely
+// expanding instantiation. Newer instantiations caused by recursion are built
+// from the previous ones, so such a step is no older than the one before it,
+// whereas nested type arguments are older than the types they are arguments
+// of. A step from a type reference is moreover built from one of its type
+// arguments, whereas the same generic type may otherwise occur nested with
+// unrelated type arguments, as Promise<IteratorResult<T>> does within
+// Promise<AsyncIterable<T>>. Other types may be built from parts of the types
+// they were instantiated from, extracted by inference, so any step from them
+// that is no older counts, as does one built from types not known.
+func (c *Checker) continuesExpansion(t *Type, previous *Type) bool {
+	if c.typeGeneration(t) < c.typeGeneration(previous) {
+		return false
+	}
+	if t == previous || previous.objectFlags&ObjectFlagsReference == 0 || previous.AsTypeReference().node != nil {
+		return true
+	}
+	typeArguments := previous.AsTypeReference().resolvedTypeArguments
+	known := true
+	for _, s := range typeArguments {
+		found, k := c.isBuiltFrom(t, s)
+		if found {
+			return true
+		}
+		known = known && k
+	}
+	return len(typeArguments) == 0 || !known
+}
+
+// isBuiltFrom reports whether t is s, or was instantiated, transitively, from
+// s, as typeGeneration counts the types a type was instantiated from, and
+// whether the types t was built from were all known.
+func (c *Checker) isBuiltFrom(t *Type, s *Type) (found bool, known bool) {
+	if t == s {
+		return true, true
+	}
+	target := c.typeGeneration(s)
+	known = true
+	var visited collections.Set[*Type]
+	var visit func(t *Type) bool
+	visit = func(t *Type) bool {
+		if t == s {
+			return true
+		}
+		if t == nil || c.typeGeneration(t) <= target || visited.Has(t) {
+			return false
+		}
+		visited.Add(t)
+		builtFrom := false
+		if !c.visitTypeSources(t, func(u *Type) {
+			if !builtFrom && visit(u) {
+				builtFrom = true
+			}
+		}) {
+			known = false
+		}
+		return builtFrom
+	}
+	found = visit(t)
+	return found, known
+}
+
+// visitTypeSources calls f with each type t was instantiated from, as
+// typeGeneration counts them, and reports whether those are all known.
+func (c *Checker) visitTypeSources(t *Type, f func(*Type)) bool {
+	switch {
+	case t.flags&TypeFlagsObject != 0:
+		if t.objectFlags&ObjectFlagsReference != 0 {
+			if t.AsTypeReference().node != nil {
+				return false
+			}
+			for _, a := range t.AsTypeReference().resolvedTypeArguments {
+				f(a)
+			}
+		} else if m := t.AsObjectType().mapper; m != nil {
+			return c.visitMapperTargets(m, f)
+		} else if t.symbol != nil && t.symbol.Flags()&ast.SymbolFlagsObjectLiteral != 0 {
+			for prop := range t.AsStructuredType().members.Values() {
+				if prop.Flags()&ast.SymbolFlagsTransient == 0 || prop.CheckFlags()&(ast.CheckFlagsInstantiated|ast.CheckFlagsMapped|ast.CheckFlagsReverseMapped|ast.CheckFlagsDeferredType) != 0 {
+					continue
+				}
+				if propType := c.peekTypeOfObjectLiteralMember(prop); propType != nil {
+					f(propType)
+				}
+			}
+		}
+	case t.flags&TypeFlagsConditional != 0:
+		if m := t.AsConditionalType().mapper; m != nil {
+			return c.visitMapperTargets(m, f)
+		}
+	case t.flags&TypeFlagsIndexedAccess != 0:
+		d := t.AsIndexedAccessType()
+		f(d.objectType)
+		f(d.indexType)
+	case t.flags&TypeFlagsUnionOrIntersection != 0, t.flags&TypeFlagsTemplateLiteral != 0:
+		for _, u := range t.Types() {
+			f(u)
+		}
+	case t.flags&TypeFlagsIndex != 0, t.flags&TypeFlagsStringMapping != 0:
+		f(t.Target())
+	case t.flags&TypeFlagsSubstitution != 0:
+		d := t.AsSubstitutionType()
+		f(d.baseType)
+		f(d.constraint)
+	}
+	return true
+}
+
+// visitMapperTargets calls f with each type m maps to, as mapperGeneration
+// counts them, and reports whether those are all known.
+func (c *Checker) visitMapperTargets(m *TypeMapper, f func(*Type)) bool {
+	switch m.kind {
+	case TypeMapperKindSimple:
+		f(castTypeMapper[SimpleTypeMapper](m, TypeMapperKindSimple).target)
+		return true
+	case TypeMapperKindArray:
+		for _, t := range castTypeMapper[ArrayTypeMapper](m, TypeMapperKindArray).targets {
+			f(t)
+		}
+		return true
+	case TypeMapperKindArrayToSingle:
+		f(castTypeMapper[ArrayToSingleTypeMapper](m, TypeMapperKindArrayToSingle).target)
+		return true
+	case TypeMapperKindMerged:
+		d := castTypeMapper[MergedTypeMapper](m, TypeMapperKindMerged)
+		return c.visitMapperTargets(d.m1, f) && c.visitMapperTargets(d.m2, f)
+	case TypeMapperKindComposite:
+		d := castTypeMapper[CompositeTypeMapper](m, TypeMapperKindComposite)
+		return c.visitMapperTargets(d.m1, f) && c.visitMapperTargets(d.m2, f)
+	}
+	return false
+}
+
 // deeplyNestedStart returns the highest index in stack from which t is still
 // deeply nested, or -1 if it is not deeply nested. Comparisons starting at or
 // below that index would be truncated the same way.
@@ -899,21 +1030,21 @@ func (c *Checker) deeplyNestedStart(t *Type, stack []*Type, maxDepth int) int {
 	return 0
 }
 
-func hasMatchingRecursionIdentity(t *Type, identity RecursionId) bool {
+func (c *Checker) hasMatchingRecursionIdentity(t *Type, identity RecursionId) bool {
 	target := getRecursionIdentityTarget(t)
 	if target.flags&TypeFlagsIntersection != 0 {
 		for _, t := range target.Types() {
-			if hasMatchingRecursionIdentity(t, identity) {
+			if c.hasMatchingRecursionIdentity(t, identity) {
 				return true
 			}
 		}
 		return false
 	}
-	return getRecursionIdentityFromTarget(target) == identity
+	return c.getRecursionIdentityFromTarget(target) == identity
 }
 
-func getRecursionIdentity(t *Type) RecursionId {
-	return getRecursionIdentityFromTarget(getRecursionIdentityTarget(t))
+func (c *Checker) getRecursionIdentity(t *Type) RecursionId {
+	return c.getRecursionIdentityFromTarget(getRecursionIdentityTarget(t))
 }
 
 // Get the recursion identity target type from a type. Recursively (a) obtain the target object type of an
@@ -942,7 +1073,7 @@ func getRecursionIdentityTarget(t *Type) *Type {
 // instantiations of that type have the same recursion identity. The default recursion identity is the object
 // identity of the type, meaning that every type is unique. Generally, types with constituents that could circularly
 // reference the type have a recursion identity that differs from the object identity.
-func getRecursionIdentityFromTarget(t *Type) RecursionId {
+func (c *Checker) getRecursionIdentityFromTarget(t *Type) RecursionId {
 	// Object and array literals are known not to contain recursive references and don't need a recursion identity.
 	if t.flags&TypeFlagsObject != 0 && !isObjectOrArrayLiteralType(t) {
 		if t.objectFlags&ObjectFlagsReference != 0 && t.AsTypeReference().node != nil {
@@ -951,14 +1082,12 @@ func getRecursionIdentityFromTarget(t *Type) RecursionId {
 			// unique AST node.
 			return asRecursionId(t.AsTypeReference().node)
 		}
-		if t.symbol != nil && !(t.objectFlags&ObjectFlagsAnonymous != 0 && t.symbol.Flags()&ast.SymbolFlagsClass != 0) && t.objectFlags&ObjectFlagsFromTypeNode == 0 {
+		if t.symbol != nil && !(t.objectFlags&ObjectFlagsAnonymous != 0 && t.symbol.Flags()&ast.SymbolFlagsClass != 0) {
 			// We track object types that have a symbol by that symbol (representing the origin of the type), but
-			// exclude the static sides of classes (since they share their symbols with the instance sides) and type
-			// references that originate in resolution of AST type nodes (since such type nodes cannot be the source
-			// of generative recursion without first being instantiated).
+			// exclude the static sides of classes (since they share their symbols with the instance sides).
 			return asRecursionId(t.symbol)
 		}
-		if isTupleType(t) && t.objectFlags&ObjectFlagsFromTypeNode == 0 {
+		if isTupleType(t) {
 			return asRecursionId(t.Target())
 		}
 	}
