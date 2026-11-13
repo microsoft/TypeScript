@@ -806,6 +806,15 @@ func (d RootedDirectoryPath) ResolveDirectory(path string) RootedDirectoryPath {
 	return ToRootedDirectoryPath(path, d)
 }
 
+// TryResolveDirectory is like ResolveDirectory, but returns false instead of
+// panicking when path would resolve to a URL with a query or fragment.
+func (d RootedDirectoryPath) TryResolveDirectory(path string) (RootedDirectoryPath, bool) {
+	if hasRootedURLSuffix(path) || GetEncodedRootLength(path) == 0 && hasURLRoot(d.AsString()) && strings.ContainsAny(path, "?#") {
+		return "", false
+	}
+	return d.ResolveDirectory(path), true
+}
+
 func rootedFilePathFromResolved(path string) RootedFilePath {
 	if hasRootedURLSuffix(path) {
 		panic("path must not contain a URL query or fragment")

@@ -1285,7 +1285,11 @@ func (l *LanguageService) getCompletionEntriesForDirectoryFragment(
 
 	fragment = tspath.EnsureTrailingDirectorySeparator(fragment)
 
-	baseDirectory := scriptDirectory.ResolveDirectory(fragment)
+	baseDirectory, ok := scriptDirectory.TryResolveDirectory(fragment)
+	if !ok {
+		// A URL with a query or fragment (e.g. "https://example.com/a?b/") can't name a directory.
+		return result
+	}
 	if !moduleSpecifierIsRelative {
 		// Check for a version redirect.
 		packageJsonDirectory := program.GetNearestAncestorDirectoryWithPackageJson(baseDirectory)
