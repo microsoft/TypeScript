@@ -81,7 +81,7 @@ func (c *Checker) inferFromTypes(n *InferenceState, source *Type, target *Type) 
 	}
 	if source.alias != nil && target.alias != nil && source.alias.symbol == target.alias.symbol {
 		if len(source.alias.typeArguments) != 0 || len(target.alias.typeArguments) != 0 {
-			c.invokeOnce(n, source, target, (*Checker).inferFromAliasTypeArguments)
+			c.invokeOnceWithoutRecursionCheck(n, source, target, (*Checker).inferFromAliasTypeArguments)
 		}
 		// And if there weren't any type arguments, there's no reason to run inference as the types must be the same.
 		return
@@ -227,7 +227,7 @@ func (c *Checker) inferFromTypes(n *InferenceState, source *Type, target *Type) 
 	switch {
 	case source.objectFlags&ObjectFlagsReference != 0 && target.objectFlags&ObjectFlagsReference != 0 && (source.AsTypeReference().target == target.AsTypeReference().target || c.isArrayType(source) && c.isArrayType(target)) && !(source.AsTypeReference().node != nil && target.AsTypeReference().node != nil):
 		// If source and target are references to the same generic type, infer from type arguments
-		c.invokeOnce(n, source, target, (*Checker).inferFromReferenceTypeArguments)
+		c.invokeOnceWithoutRecursionCheck(n, source, target, (*Checker).inferFromReferenceTypeArguments)
 	case source.flags&TypeFlagsIndex != 0 && target.flags&TypeFlagsIndex != 0:
 		c.inferFromContravariantTypes(n, source.AsIndexType().target, target.AsIndexType().target)
 	case (isLiteralType(source) || source.flags&TypeFlagsString != 0) && target.flags&TypeFlagsIndex != 0:
@@ -344,6 +344,19 @@ func (c *Checker) inferFromContravariantTypesIfStrictFunctionTypes(n *InferenceS
 // such that we would go on inferring forever, even though we would never infer
 // between the same pair of types.
 func (c *Checker) invokeOnce(n *InferenceState, source *Type, target *Type, action func(c *Checker, n *InferenceState, source *Type, target *Type)) {
+	c.invokeOnceWorker(n, source, target, action, true /*checkRecursion*/)
+}
+
+// invokeOnceWithoutRecursionCheck caches like invokeOnce but leaves the recursion stacks alone and
+// never reports a circularity. It serves inference between the type arguments of two references to
+// the same generic type (or alias), which is bounded by the arguments themselves and needs no cycle
+// guard. Pushing those references onto the stacks would make an outer `Box<() => Box<T>>` look like
+// a cycle at depth 2 and drop the inferences for the inner `T` (#64757).
+func (c *Checker) invokeOnceWithoutRecursionCheck(n *InferenceState, source *Type, target *Type, action func(c *Checker, n *InferenceState, source *Type, target *Type)) {
+	c.invokeOnceWorker(n, source, target, action, false /*checkRecursion*/)
+}
+
+func (c *Checker) invokeOnceWorker(n *InferenceState, source *Type, target *Type, action func(c *Checker, n *InferenceState, source *Type, target *Type), checkRecursion bool) {
 	key := CacheHashKey{
 		Lo: uint64(source.id)<<32 | uint64(target.id),
 		Hi: uint64(uint32(n.priority))<<2 | uint64(core.IfElse(n.contravariant, 2, 0)) | uint64(core.IfElse(n.bivariant, 1, 0)),
@@ -355,25 +368,29 @@ func (c *Checker) invokeOnce(n *InferenceState, source *Type, target *Type, acti
 	n.visited.set(key, InferencePriorityCircularity)
 	saveInferencePriority := n.inferencePriority
 	n.inferencePriority = InferencePriorityMaxValue
-	// We stop inferring and report a circularity if we encounter duplicate recursion identities on both
-	// the source side and the target side.
-	saveExpandingFlags := n.expandingFlags
-	n.sourceStack = append(n.sourceStack, source)
-	n.targetStack = append(n.targetStack, target)
-	if c.isDeeplyNestedType(source, n.sourceStack, 2) {
-		n.expandingFlags |= ExpandingFlagsSource
-	}
-	if c.isDeeplyNestedType(target, n.targetStack, 2) {
-		n.expandingFlags |= ExpandingFlagsTarget
-	}
-	if n.expandingFlags != ExpandingFlagsBoth {
-		action(c, n, source, target)
+	if checkRecursion {
+		// We stop inferring and report a circularity if we encounter duplicate recursion identities on both
+		// the source side and the target side.
+		saveExpandingFlags := n.expandingFlags
+		n.sourceStack = append(n.sourceStack, source)
+		n.targetStack = append(n.targetStack, target)
+		if c.isDeeplyNestedType(source, n.sourceStack, 2) {
+			n.expandingFlags |= ExpandingFlagsSource
+		}
+		if c.isDeeplyNestedType(target, n.targetStack, 2) {
+			n.expandingFlags |= ExpandingFlagsTarget
+		}
+		if n.expandingFlags != ExpandingFlagsBoth {
+			action(c, n, source, target)
+		} else {
+			n.inferencePriority = InferencePriorityCircularity
+		}
+		n.targetStack = n.targetStack[:len(n.targetStack)-1]
+		n.sourceStack = n.sourceStack[:len(n.sourceStack)-1]
+		n.expandingFlags = saveExpandingFlags
 	} else {
-		n.inferencePriority = InferencePriorityCircularity
+		action(c, n, source, target)
 	}
-	n.targetStack = n.targetStack[:len(n.targetStack)-1]
-	n.sourceStack = n.sourceStack[:len(n.sourceStack)-1]
-	n.expandingFlags = saveExpandingFlags
 	n.visited.set(key, n.inferencePriority)
 	n.inferencePriority = min(n.inferencePriority, saveInferencePriority)
 }
