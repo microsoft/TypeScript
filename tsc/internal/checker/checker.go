@@ -606,6 +606,7 @@ type Checker struct {
 	SignatureCount                              uint32
 	TotalInstantiationCount                     uint32
 	instantiationCount                          uint32
+	instantiationLimitReportedNode              *ast.Node // node for which the instantiation count limit error was already reported
 	memberLayoutCount                           uint32
 	instantiationStack                          []*Type
 	conditionalConstraintDepth                  uint32
@@ -22806,6 +22807,9 @@ func (c *Checker) symbolIsValueEx(symbol *ast.Symbol, includeTypeOnlyMembers boo
 		c.getSymbolFlagsEx(symbol, !includeTypeOnlyMembers, false /*excludeLocalMeanings*/)&ast.SymbolFlagsValue != 0
 }
 
+// The maximum number of type instantiations performed for a single statement or expression.
+const maxInstantiationCount = 5_000_000
+
 func (c *Checker) instantiateType(t *Type, m *TypeMapper) *Type {
 	return c.instantiateTypeWithAlias(t, m, nil /*alias*/)
 }
@@ -22817,12 +22821,20 @@ func (c *Checker) instantiateTypeWithAlias(t *Type, m *TypeMapper, alias *TypeAl
 	if t == nil || m == nil || !(c.couldContainTypeVariables(t) || (t.alias != nil && len(t.alias.typeArguments) > 0 && core.Some(t.alias.typeArguments, c.couldContainTypeVariables))) {
 		return t
 	}
-	if len(c.instantiationStack) == 100 || c.instantiationCount >= 5_000_000 {
+	if len(c.instantiationStack) == 100 || c.instantiationCount >= maxInstantiationCount {
 		// We have reached 100 recursive type instantiations, or 5M type instantiations caused by the same statement
 		// or expression. There is a very high likelihood we're dealing with a combination of infinite generic types
 		// that perpetually generate new type identities, so we stop the recursion here by yielding the error type.
 		if tr := c.tracer; tr != nil {
 			tr.Instant(tracing.PhaseCheckTypes, "instantiateType_DepthLimit", map[string]any{"typeId": t.id, "instantiationDepth": len(c.instantiationStack), "instantiationCount": c.instantiationCount})
+		}
+		if c.instantiationCount >= maxInstantiationCount {
+			// Once the count limit is exceeded every further instantiation for this node hits the limit again.
+			// Report the error only once per node instead of allocating millions of identical diagnostics.
+			if c.instantiationLimitReportedNode == c.currentNode && c.currentNode != nil {
+				return c.errorType
+			}
+			c.instantiationLimitReportedNode = c.currentNode
 		}
 		circularTypeNames := c.getCircularTypeNames()
 		switch {
@@ -28354,6 +28366,14 @@ func (c *Checker) computeBaseConstraint(t *Type, stack []RecursionId) *Type {
 		}
 		return c.stringNumberSymbolType
 	case t.flags&TypeFlagsTemplateLiteral != 0:
+		if c.instantiationLimitReportedNode != nil && c.instantiationLimitReportedNode == c.currentNode && c.instantiationCount >= maxInstantiationCount {
+			// The instantiation limit has already been reported (TS2589) for the current node, and all further
+			// instantiations yield the error type. Expanding the constraint of this generic template literal type
+			// into a cross product of string literals would only allocate huge unions that can never be used.
+			// This is scoped to base constraint computation, which is only ever performed for generic types, so
+			// the error type is not cached for independently declared (non-generic) aliases.
+			return c.errorType
+		}
 		types := t.Types()
 		constraints := make([]*Type, 0, len(types))
 		for _, s := range types {
@@ -30002,9 +30022,24 @@ func (c *Checker) getTemplateLiteralType(texts []string, types []*Type) *Type {
 		if !c.checkCrossProductUnion(types) {
 			return c.errorType
 		}
-		return c.mapType(types[unionIndex], func(t *Type) *Type {
-			return c.getTemplateLiteralType(texts, core.ReplaceElement(types, unionIndex, t))
+		// Once a constituent produces an error (e.g. the cross product is too complex, or the template is too
+		// large), the whole result is the error type. Stop expanding the remaining constituents so we don't
+		// repeatedly redo the same work and report the same diagnostic for every combination.
+		failed := false
+		result := c.mapType(types[unionIndex], func(t *Type) *Type {
+			if failed {
+				return c.errorType
+			}
+			r := c.getTemplateLiteralType(texts, core.ReplaceElement(types, unionIndex, t))
+			if r == c.errorType {
+				failed = true
+			}
+			return r
 		})
+		if failed {
+			return c.errorType
+		}
+		return result
 	}
 	if slices.Contains(types, c.wildcardType) {
 		return c.wildcardType
