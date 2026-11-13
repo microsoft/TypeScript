@@ -1,0 +1,23 @@
+//// [tests/cases/compiler/aliasToDeclarationFreeUndefinedUnused.ts] ////
+
+=== src/host.ts ===
+import { report } from "mid"; export function run(): string { return report() }
+>report : () => string
+>run : () => string
+>report() : string
+>report : () => string
+
+=== node_modules/target/index.cjs ===
+module.exports=undefined
+>module.exports=undefined : undefined
+>module.exports : undefined
+>module : { exports: undefined; }
+>exports : undefined
+>undefined : undefined
+
+=== node_modules/mid/index.mjs ===
+import * as ns from 'target'; export function report(){return 'ok'}
+>ns : { default: undefined; }
+>report : () => string
+>'ok' : "ok"
+

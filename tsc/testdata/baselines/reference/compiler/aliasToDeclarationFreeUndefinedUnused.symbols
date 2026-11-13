@@ -1,0 +1,20 @@
+//// [tests/cases/compiler/aliasToDeclarationFreeUndefinedUnused.ts] ////
+
+=== src/host.ts ===
+import { report } from "mid"; export function run(): string { return report() }
+>report : Symbol(report, Decl(host.ts, 0, 8))
+>run : Symbol(run, Decl(host.ts, 0, 29))
+>report : Symbol(report, Decl(host.ts, 0, 8))
+
+=== node_modules/target/index.cjs ===
+module.exports=undefined
+>module.exports : Symbol(exports, Decl(index.cjs, 0, 0))
+>module : Symbol(module, Decl(index.cjs, 0, 0))
+>exports : Symbol(exports, Decl(index.cjs, 0, 0))
+>undefined : Symbol(undefined)
+
+=== node_modules/mid/index.mjs ===
+import * as ns from 'target'; export function report(){return 'ok'}
+>ns : Symbol(ns, Decl(index.mjs, 0, 6))
+>report : Symbol(report, Decl(index.mjs, 0, 29))
+
