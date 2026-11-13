@@ -1,0 +1,44 @@
+varianceAnnotationDiagnosticState.ts(1,20): error TS2636: Type 'Consumer<sub-T>' is not assignable to type 'Consumer<super-T>' as implied by variance annotation.
+  Types of property 'consume' are incompatible.
+    Type '(value: sub-T) => void' is not assignable to type '(value: super-T) => void'.
+      Types of parameters 'value' and 'value' are incompatible.
+        Type 'super-T' is not assignable to type 'sub-T'.
+varianceAnnotationDiagnosticState.ts(5,20): error TS2636: Type 'Producer<super-U>' is not assignable to type 'Producer<sub-U>' as implied by variance annotation.
+  Types of property 'value' are incompatible.
+    Type 'super-U' is not assignable to type 'sub-U'.
+varianceAnnotationDiagnosticState.ts(16,5): error TS2322: Type 'Container<number>' is not assignable to type 'Container<string>'.
+  Type 'number' is not assignable to type 'string'.
+
+
+==== varianceAnnotationDiagnosticState.ts (3 errors) ====
+    interface Consumer<out T> {
+                       ~~~~~
+!!! error TS2636: Type 'Consumer<sub-T>' is not assignable to type 'Consumer<super-T>' as implied by variance annotation.
+!!! error TS2636:   Types of property 'consume' are incompatible.
+!!! error TS2636:     Type '(value: sub-T) => void' is not assignable to type '(value: super-T) => void'.
+!!! error TS2636:       Types of parameters 'value' and 'value' are incompatible.
+!!! error TS2636:         Type 'super-T' is not assignable to type 'sub-T'.
+        consume: (value: T) => void;
+    }
+    
+    interface Producer<in U> {
+                       ~~~~
+!!! error TS2636: Type 'Producer<super-U>' is not assignable to type 'Producer<sub-U>' as implied by variance annotation.
+!!! error TS2636:   Types of property 'value' are incompatible.
+!!! error TS2636:     Type 'super-U' is not assignable to type 'sub-U'.
+        value: U;
+    }
+    
+    interface Container<out V> {
+        value: V;
+    }
+    
+    declare let strings: Container<string>;
+    declare let numbers: Container<number>;
+    const assign = () => {
+        strings = numbers;
+        ~~~~~~~
+!!! error TS2322: Type 'Container<number>' is not assignable to type 'Container<string>'.
+!!! error TS2322:   Type 'number' is not assignable to type 'string'.
+    };
+    

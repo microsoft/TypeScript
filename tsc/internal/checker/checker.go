@@ -2721,7 +2721,7 @@ func (c *Checker) checkTypeParameterDeferred(node *ast.Node) {
 				}
 				source := c.createMarkerType(symbol, typeParameter, core.IfElse(modifiers == ast.ModifierFlagsOut, c.markerSubTypeForCheck, c.markerSuperTypeForCheck))
 				target := c.createMarkerType(symbol, typeParameter, core.IfElse(modifiers == ast.ModifierFlagsOut, c.markerSuperTypeForCheck, c.markerSubTypeForCheck))
-				saveVarianceTypeParameter := typeParameter
+				saveVarianceTypeParameter := c.varianceTypeParameter
 				c.varianceTypeParameter = typeParameter
 				c.checkTypeAssignableTo(source, target, node, diagnostics.Type_0_is_not_assignable_to_type_1_as_implied_by_variance_annotation)
 				c.varianceTypeParameter = saveVarianceTypeParameter

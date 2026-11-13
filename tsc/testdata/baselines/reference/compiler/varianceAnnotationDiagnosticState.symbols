@@ -1,0 +1,48 @@
+//// [tests/cases/compiler/varianceAnnotationDiagnosticState.ts] ////
+
+=== varianceAnnotationDiagnosticState.ts ===
+interface Consumer<out T> {
+>Consumer : Symbol(Consumer, Decl(varianceAnnotationDiagnosticState.ts, 0, 0))
+>T : Symbol(T, Decl(varianceAnnotationDiagnosticState.ts, 0, 19))
+
+    consume: (value: T) => void;
+>consume : Symbol(Consumer.consume, Decl(varianceAnnotationDiagnosticState.ts, 0, 27))
+>value : Symbol(value, Decl(varianceAnnotationDiagnosticState.ts, 1, 14))
+>T : Symbol(T, Decl(varianceAnnotationDiagnosticState.ts, 0, 19))
+}
+
+interface Producer<in U> {
+>Producer : Symbol(Producer, Decl(varianceAnnotationDiagnosticState.ts, 2, 1))
+>U : Symbol(U, Decl(varianceAnnotationDiagnosticState.ts, 4, 19))
+
+    value: U;
+>value : Symbol(Producer.value, Decl(varianceAnnotationDiagnosticState.ts, 4, 26))
+>U : Symbol(U, Decl(varianceAnnotationDiagnosticState.ts, 4, 19))
+}
+
+interface Container<out V> {
+>Container : Symbol(Container, Decl(varianceAnnotationDiagnosticState.ts, 6, 1))
+>V : Symbol(V, Decl(varianceAnnotationDiagnosticState.ts, 8, 20))
+
+    value: V;
+>value : Symbol(Container.value, Decl(varianceAnnotationDiagnosticState.ts, 8, 28))
+>V : Symbol(V, Decl(varianceAnnotationDiagnosticState.ts, 8, 20))
+}
+
+declare let strings: Container<string>;
+>strings : Symbol(strings, Decl(varianceAnnotationDiagnosticState.ts, 12, 11))
+>Container : Symbol(Container, Decl(varianceAnnotationDiagnosticState.ts, 6, 1))
+
+declare let numbers: Container<number>;
+>numbers : Symbol(numbers, Decl(varianceAnnotationDiagnosticState.ts, 13, 11))
+>Container : Symbol(Container, Decl(varianceAnnotationDiagnosticState.ts, 6, 1))
+
+const assign = () => {
+>assign : Symbol(assign, Decl(varianceAnnotationDiagnosticState.ts, 14, 5))
+
+    strings = numbers;
+>strings : Symbol(strings, Decl(varianceAnnotationDiagnosticState.ts, 12, 11))
+>numbers : Symbol(numbers, Decl(varianceAnnotationDiagnosticState.ts, 13, 11))
+
+};
+
