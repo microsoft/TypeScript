@@ -29,7 +29,7 @@ namespace inferenceConstraint {
 >x : A
 
     declare let r1: S extends G ? true : false;
->r1 : false
+>r1 : true
 >true : true
 >false : false
 
@@ -66,7 +66,7 @@ namespace inferenceConstraintMethod {
 >x : A
 
     declare let r1: S extends G ? true : false;
->r1 : false
+>r1 : true
 >true : true
 >false : false
 
@@ -134,7 +134,7 @@ namespace inferenceConstraintMutual {
 >s2 : S2
 
     declare let r1: S1 extends G1 ? true : false;
->r1 : false
+>r1 : true
 >true : true
 >false : false
 
@@ -175,7 +175,7 @@ namespace discriminated {
 >y : number
 
     declare let r1: Src extends Tgt ? true : false;
->r1 : false
+>r1 : true
 >true : true
 >false : false
 

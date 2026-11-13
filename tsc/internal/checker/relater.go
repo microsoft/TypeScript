@@ -5,6 +5,7 @@ import (
 	"slices"
 	"strconv"
 	"strings"
+	"unsafe"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/binder"
@@ -63,12 +64,15 @@ const (
 	ExpandingFlagsBoth                  = ExpandingFlagsSource | ExpandingFlagsTarget
 )
 
-type RelationComparisonResult uint32
+type RelationComparisonResult uint64
 
 const (
-	RelationComparisonResultNone                RelationComparisonResult = 0
-	RelationComparisonResultSucceeded           RelationComparisonResult = 1 << 0
-	RelationComparisonResultFailed              RelationComparisonResult = 1 << 1
+	RelationComparisonResultNone      RelationComparisonResult = 0
+	RelationComparisonResultSucceeded RelationComparisonResult = 1 << 0
+	RelationComparisonResultFailed    RelationComparisonResult = 1 << 1
+	// The result depends on a failure through a check that more truncation
+	// could change; see "Reusing failures".
+	RelationComparisonResultDependsOnFailure    RelationComparisonResult = 1 << 2
 	RelationComparisonResultReportsUnmeasurable RelationComparisonResult = 1 << 3
 	RelationComparisonResultReportsUnreliable   RelationComparisonResult = 1 << 4
 	RelationComparisonResultComplexityOverflow  RelationComparisonResult = 1 << 5
@@ -76,8 +80,371 @@ const (
 	// Only reported, never cached.
 	RelationComparisonResultReportsIncomplete RelationComparisonResult = 1 << 6
 	RelationComparisonResultReportsMask                                = RelationComparisonResultReportsUnmeasurable | RelationComparisonResultReportsUnreliable
-	RelationComparisonResultOverflow                                   = RelationComparisonResultComplexityOverflow
+	// The bits of a result that keeps a failureReach.
+	relationReachMask                = RelationComparisonResultFailed | RelationComparisonResultReportsMask | RelationComparisonResultDependsOnFailure
+	RelationComparisonResultOverflow = RelationComparisonResultComplexityOverflow
+	// A success that relied on truncating a comparison below it.
+	RelationComparisonResultTruncated RelationComparisonResult = 1 << 63
 )
+
+// relationModeShift is the position of the RecursionFlags with which a result
+// was computed, kept for failures, results reporting reliability flags, and
+// successes that relied on truncation; see "Reusing failures".
+const relationModeShift = 61
+
+func relationMode(recursionFlags RecursionFlags) RelationComparisonResult {
+	return RelationComparisonResult(recursionFlags&RecursionFlagsBoth) << relationModeShift
+}
+
+func entryMode(entry RelationComparisonResult) RecursionFlags {
+	return RecursionFlags(entry>>relationModeShift) & RecursionFlagsBoth
+}
+
+// Reusing failures
+//
+// A comparison nested too deeply is truncated: it stops comparing deeper and
+// assumes the deeper comparisons hold. That happens 100 levels deep, where
+// both the source and the target are deeply nested (see isDeeplyNestedType),
+// or where a conditional type is deeply nested on one side. All of these
+// depend on the comparisons in progress around it, as the types they push
+// count toward the depth and toward the recursion identities. So inside
+// another comparison, a comparison may be truncated sooner than as the
+// outermost one, and give a different result. Results that depend on a
+// truncation made around them are not cached, but a cached result is reused
+// inside any comparison that comes to the same pair of types, so it must equal
+// the result of comparing them from scratch there.
+//
+// Most checks combine the results of the comparisons below them so that
+// truncating more only finds fewer failures, and turns no failure into a
+// success or a success into a failure that the check does not find. A cached
+// success that depends on no failure through other checks thus equals the
+// result of comparing the same types inside any other comparison pushing as
+// much onto the stacks, except for the reliability flags it reports, as
+// truncation can skip the comparisons that report them. A few checks instead
+// reject types that relate, or pick among types by which relate, as inference
+// does by constraints, so a truncation changes what they decide whichever way
+// it is taken (see relateNonMonotone). A result depends on the failures such a
+// check reads. A result for which such a check read a truncated comparison, or
+// one assumed related, depends on how much the comparison pushes onto the
+// stacks, and a failure that such a check made of a comparison truncated or
+// assumed related outside it is not cached. A check that requires a comparison
+// to be related rather than assumed related takes a truncated comparison as
+// related, and a result for which it read a comparison assumed related is not
+// cached, as it depends on the comparisons in progress.
+//
+// So each cached failure, and each cached result reporting reliability flags
+// or depending on a failure, keeps a failureReach of the comparisons below it
+// that it depends on: the failures it is found from or depends on, and the
+// comparisons reporting its flags. A failureReach records how deep those
+// comparisons went on each side, which recursion identities they pushed, which
+// were pushed twice and whether any was pushed three times along one path, and
+// whether conditional types are among them, whose identities it counts as
+// pushed. The result is reused only where the comparisons in progress, and the
+// comparison of the result itself, which pushes onto the stacks as the
+// comparison reusing it does, could truncate none of them; otherwise it is
+// compared again in place, and the cached result is kept. A success that
+// relied on truncation is reused only where the comparison pushes onto at
+// least the stacks it pushed onto. Either way the result equals the result of
+// comparing from scratch in place.
+
+// identityBloom is a set of recursion identities, with false positives.
+type identityBloom uint16
+
+const identityBloomBits = 9
+
+func identityBloomOf(id RecursionId) identityBloom {
+	var p uintptr
+	switch v := id.value.(type) {
+	case *ast.Node:
+		// SAFETY: Only the address is hashed; it is never turned back into a pointer.
+		p = uintptr(unsafe.Pointer(v))
+	case *ast.Symbol:
+		// SAFETY: Only the address is hashed; it is never turned back into a pointer.
+		p = uintptr(unsafe.Pointer(v))
+	case *Type:
+		// SAFETY: Only the address is hashed; it is never turned back into a pointer.
+		p = uintptr(unsafe.Pointer(v))
+	}
+	return 1 << (spreadBits(uint64(p)) >> 32 % identityBloomBits)
+}
+
+// recursionIdentityBloom returns the recursion identities of t, including
+// those of each member of an intersection, as isDeeplyNestedType matches them.
+func (c *Checker) recursionIdentityBloom(t *Type) identityBloom {
+	target := c.getRecursionIdentityTarget(t)
+	if target.flags&TypeFlagsIntersection != 0 {
+		var ids identityBloom
+		for _, t := range target.Types() {
+			ids |= c.recursionIdentityBloom(t)
+		}
+		return ids
+	}
+	return identityBloomOf(c.getRecursionIdentityFromTarget(target))
+}
+
+// appendRecursionIdentities appends the recursion identities of t to ids, as
+// isDeeplyNestedType matches them.
+func (c *Checker) appendRecursionIdentities(ids []RecursionId, t *Type) []RecursionId {
+	target := c.getRecursionIdentityTarget(t)
+	if target.flags&TypeFlagsIntersection != 0 {
+		for _, t := range target.Types() {
+			ids = c.appendRecursionIdentities(ids, t)
+		}
+		return ids
+	}
+	return append(ids, c.getRecursionIdentityFromTarget(target))
+}
+
+// stackIdentities are the recursion identities on a stack of a comparison up
+// to an entry: those that occur at least once, and those counted at least
+// twice and at least conditionalNestingLimit-2 times, as isDeeplyNestedType
+// counts them.
+type stackIdentities struct {
+	once, twice, many identityBloom
+	ids               identityBloom // The identities of the entry
+	first             int32         // The index of the first occurrence of the entry
+	generation        int           // The generation of the type of the entry
+}
+
+// identityOccurrence is a recursion identity of an entry of a stack of a
+// comparison.
+type identityOccurrence struct {
+	id    RecursionId
+	count int32 // The count of id up to the entry, as isDeeplyNestedType counts it
+	prev  int32 // The index of the previous occurrence of id, or -1
+	entry int32 // The index of the entry on the stack
+}
+
+// identityStack keeps the recursion identities of the types on a stack of a
+// comparison, which tell where they are deeply nested, and whether the
+// comparisons on it could truncate the comparisons of a failureReach. They
+// are found only once needed.
+type identityStack struct {
+	entries     []stackIdentities
+	occurrences []identityOccurrence
+	scratch     []RecursionId
+}
+
+func (s *identityStack) top() stackIdentities {
+	if len(s.entries) == 0 {
+		return stackIdentities{}
+	}
+	return s.entries[len(s.entries)-1]
+}
+
+// sync adds the entries of the types on stack not yet on s.
+func (s *identityStack) sync(c *Checker, stack []*Type) {
+	for _, t := range stack[len(s.entries):] {
+		s.push(c, t)
+	}
+}
+
+// truncate removes the entries above the first n.
+func (s *identityStack) truncate(n int) {
+	if n < len(s.entries) {
+		s.occurrences = s.occurrences[:s.entries[n].first]
+		s.entries = s.entries[:n]
+	}
+}
+
+func (s *identityStack) push(c *Checker, t *Type) {
+	top := s.top()
+	e := stackIdentities{once: top.once, twice: top.twice, many: top.many, first: int32(len(s.occurrences)), generation: c.typeGeneration(t)}
+	s.scratch = c.appendRecursionIdentities(s.scratch[:0], t)
+	for _, id := range s.scratch {
+		if slices.ContainsFunc(s.occurrences[e.first:], func(o identityOccurrence) bool { return o.id == id }) {
+			// An entry matches an identity once, however many of its members
+			// have it.
+			continue
+		}
+		bit := identityBloomOf(id)
+		o := identityOccurrence{id: id, count: 1, prev: -1, entry: int32(len(s.entries))}
+		if top.once&bit != 0 {
+			for i := int(e.first) - 1; i >= 0; i-- {
+				if p := &s.occurrences[i]; p.id == id {
+					o.prev, o.count = int32(i), p.count
+					if e.generation >= s.entries[p.entry].generation {
+						o.count++
+					}
+					break
+				}
+			}
+		}
+		e.ids |= bit
+		if o.count >= 2 {
+			e.twice |= bit
+		}
+		if o.count >= conditionalNestingLimit-2 {
+			e.many |= bit
+		}
+		s.occurrences = append(s.occurrences, o)
+	}
+	e.once |= e.ids
+	s.entries = append(s.entries, e)
+}
+
+func (s *identityStack) reset() {
+	s.entries, s.occurrences = s.entries[:0], s.occurrences[:0]
+}
+
+// nestedStart returns the highest index in the stack from which t is still
+// deeply nested, as isDeeplyNestedType tells with maxDepth, or -1 if it is
+// not deeply nested. Comparisons starting at or below that index would be
+// truncated the same way. onTop tells whether t is the type of the top
+// entry, whose identities are then known.
+func (s *identityStack) nestedStart(c *Checker, t *Type, onTop bool, maxDepth int) int {
+	start := -1
+	// The count of an identity in the part of the stack from an occurrence
+	// of it is one more than the increase of its count from there.
+	check := func(o *identityOccurrence) {
+		if int(o.count) < maxDepth {
+			return
+		}
+		p := o
+		for int(p.count) > int(o.count)-maxDepth+1 {
+			p = &s.occurrences[p.prev]
+		}
+		start = max(start, int(p.entry))
+	}
+	if onTop {
+		for i := int(s.top().first); i < len(s.occurrences); i++ {
+			check(&s.occurrences[i])
+		}
+		return start
+	}
+	s.scratch = c.appendRecursionIdentities(s.scratch[:0], t)
+	for _, id := range s.scratch {
+		if s.top().once&identityBloomOf(id) == 0 {
+			continue
+		}
+		for i := len(s.occurrences) - 1; i >= 0; i-- {
+			if o := &s.occurrences[i]; o.id == id {
+				check(o)
+				break
+			}
+		}
+	}
+	return start
+}
+
+// reachSide is the part of a failureReach for one of the stacks.
+type reachSide struct {
+	height height
+	// The recursion identities pushed, those pushed at least twice along one
+	// path, and whether one was pushed at least three times along one path.
+	once, twice identityBloom
+	thrice      bool
+	// Whether a conditional type was compared, which is truncated where
+	// nested on one side alone; see structuredTypeRelatedToWorker.
+	conditional bool
+}
+
+func (a *reachSide) merge(b reachSide) {
+	a.height = max(a.height, b.height)
+	a.once |= b.once
+	a.twice |= b.twice
+	a.thrice = a.thrice || b.thrice
+	a.conditional = a.conditional || b.conditional
+}
+
+// below returns the reach of a comparison that pushed the recursion
+// identities ids onto the stack, if pushed, given the reach of the
+// comparisons below it.
+func (a reachSide) below(pushed bool, ids identityBloom, conditional bool) reachSide {
+	if pushed {
+		a.thrice = a.thrice || a.twice&ids != 0
+		a.twice |= a.once & ids
+		a.once |= ids
+		a.height = a.height.below()
+	}
+	if conditional {
+		a.once |= ids
+		a.conditional = true
+	}
+	return a
+}
+
+// conditionalNestingLimit is the number of times a conditional type is on a
+// stack where comparing it is truncated.
+const conditionalNestingLimit = 10
+
+// canReuse reports whether the comparisons in progress, with stack
+// identities ids on a stack depth deep, could not make the comparisons of
+// reach a deeply nested source or target, and whether they could not
+// truncate them on this side alone.
+func (a reachSide) canReuse(depth int, ids stackIdentities, expanding bool) (notNested bool, notTruncated bool) {
+	notNested = !expanding && a.once&ids.twice == 0 && a.twice&ids.once == 0
+	notTruncated = !a.height.reaches(depth, relationStackLimit)
+	if notTruncated && a.conditional {
+		// A conditional type below is on the stack at most twice below unless
+		// one is pushed three times, and otherwise at most height times, so
+		// the comparisons in progress must count it at least
+		// conditionalNestingLimit less those.
+		switch {
+		case !a.thrice:
+			notTruncated = a.once&ids.many == 0
+		case a.height.reaches(1, conditionalNestingLimit):
+			notTruncated = a.once&ids.once == 0
+		default:
+			notTruncated = a.once&ids.twice == 0
+		}
+	}
+	return notNested, notTruncated
+}
+
+// failureReach summarizes the comparisons that found a failure, or the
+// reliability flags of a result; see "Reusing failures".
+type failureReach struct {
+	source, target reachSide
+}
+
+func (a *failureReach) merge(b failureReach) {
+	a.source.merge(b.source)
+	a.target.merge(b.target)
+}
+
+const failureReachShift = 7
+
+func (a reachSide) pack(shift uint) uint64 {
+	v := uint64(min(a.height, 127)) | uint64(a.once)<<7 | uint64(a.twice)<<16
+	if a.thrice {
+		v |= 1 << 25
+	}
+	if a.conditional {
+		v |= 1 << 26
+	}
+	return v << shift
+}
+
+func unpackReachSide(v uint64) reachSide {
+	const m = 1<<identityBloomBits - 1
+	return reachSide{
+		height:      height(v & 127),
+		once:        identityBloom(v >> 7 & m),
+		twice:       identityBloom(v >> 16 & m),
+		thrice:      v>>25&1 != 0,
+		conditional: v>>26&1 != 0,
+	}
+}
+
+// pack returns the bits of a cached result that keep a failureReach. Heights
+// are kept up to 127, which is above relationStackLimit.
+func (f failureReach) pack() RelationComparisonResult {
+	return RelationComparisonResult((f.source.pack(0) | f.target.pack(27)) << failureReachShift)
+}
+
+func unpackFailureReach(entry RelationComparisonResult) failureReach {
+	v := uint64(entry) >> failureReachShift
+	return failureReach{source: unpackReachSide(v & (1<<27 - 1)), target: unpackReachSide(v >> 27)}
+}
+
+// symmetric returns the reach of a comparison under a relation whose keys
+// do not tell the source from the target.
+func (f failureReach) symmetric() failureReach {
+	f.source.merge(f.target)
+	f.target = f.source
+	return f
+}
 
 type DiagnosticAndArguments struct {
 	message   *diagnostics.Message
@@ -99,6 +466,10 @@ type RecursionId struct {
 func asRecursionId[T *ast.Node | *ast.Symbol | *Type](value T) RecursionId {
 	return RecursionId{value: value}
 }
+
+// relationStackLimit is the depth of the source or target stack of a
+// comparison at which it is truncated.
+const relationStackLimit = 100
 
 // relationCountLimit is the number of results a single comparison may add to
 // a relation before it is considered too complex.
@@ -176,6 +547,11 @@ func (c *Checker) reuseRelation(entry RelationComparisonResult) (related bool, o
 // it is related, if it can be reused; see reuseRelation.
 func (c *Checker) cachedRelation(relation *Relation, id CacheHashKey) (entry RelationComparisonResult, related bool, ok bool) {
 	entry = relation.cached(c, id)
+	if entry&(relationReachMask|RelationComparisonResultTruncated) != 0 && entryMode(entry) != RecursionFlagsBoth {
+		// Computed pushing less onto the stacks than an outermost comparison
+		// does; see canReuseResult.
+		return entry, false, false
+	}
 	related, ok = c.reuseRelation(entry)
 	return entry, related, ok
 }
@@ -944,21 +1320,6 @@ func (c *Checker) mapperGeneration(m *TypeMapper) int {
 	case TypeMapperKindComposite:
 		d := castTypeMapper[CompositeTypeMapper](m, TypeMapperKindComposite)
 		return max(c.mapperGeneration(d.m1), c.mapperGeneration(d.m2))
-	}
-	return 0
-}
-
-// deeplyNestedStart returns the highest index in stack from which t is still
-// deeply nested, or -1 if it is not deeply nested. Comparisons starting at or
-// below that index would be truncated the same way.
-func (c *Checker) deeplyNestedStart(t *Type, stack []*Type, maxDepth int) int {
-	if !c.isDeeplyNestedType(t, stack, maxDepth) {
-		return -1
-	}
-	for k := len(stack) - maxDepth; k > 0; k-- {
-		if c.isDeeplyNestedType(t, stack[k:], maxDepth) {
-			return k
-		}
 	}
 	return 0
 }
@@ -1836,10 +2197,10 @@ func (c *Checker) hasCovariantVoidArgument(typeArguments []*Type, variances []Va
 }
 
 func (c *Checker) isSignatureAssignableTo(source *Signature, target *Signature, ignoreReturnTypes bool) bool {
-	return c.compareSignaturesRelated(source, target, core.IfElse(ignoreReturnTypes, SignatureCheckModeIgnoreReturnTypes, SignatureCheckModeNone), false /*reportErrors*/, nil /*errorReporter*/, c.compareTypesAssignable, nil /*reportUnreliableMarkers*/) != TernaryFalse
+	return c.compareSignaturesRelated(source, target, core.IfElse(ignoreReturnTypes, SignatureCheckModeIgnoreReturnTypes, SignatureCheckModeNone), false /*reportErrors*/, nil /*errorReporter*/, c.compareTypesAssignable, nil /*reportUnreliableMarkers*/, nil /*r*/) != TernaryFalse
 }
 
-func (c *Checker) compareSignaturesRelated(source *Signature, target *Signature, checkMode SignatureCheckMode, reportErrors bool, errorReporter ErrorReporter, compareTypes TypeComparer, reportUnreliableMarkers *TypeMapper) Ternary {
+func (c *Checker) compareSignaturesRelated(source *Signature, target *Signature, checkMode SignatureCheckMode, reportErrors bool, errorReporter ErrorReporter, compareTypes TypeComparer, reportUnreliableMarkers *TypeMapper, r *Relater) Ternary {
 	if source == target {
 		return TernaryTrue
 	}
@@ -1868,7 +2229,11 @@ func (c *Checker) compareSignaturesRelated(source *Signature, target *Signature,
 	}
 	if len(source.TypeParameters()) != 0 && !core.Same(source.TypeParameters(), target.TypeParameters()) {
 		target = c.getCanonicalSignature(target)
-		source = c.instantiateSignatureInContextOf(source, target /*inferenceContext*/, nil, compareTypes)
+		inferenceCompareTypes := compareTypes
+		if r != nil {
+			inferenceCompareTypes = r.nonMonotoneComparer(compareTypes)
+		}
+		source = c.instantiateSignatureInContextOf(source, target /*inferenceContext*/, nil, inferenceCompareTypes)
 	}
 	sourceCount := c.getParameterCount(source)
 	sourceRestType := c.getNonArrayRestType(source)
@@ -1949,7 +2314,7 @@ func (c *Checker) compareSignaturesRelated(source *Signature, target *Signature,
 				c.getTypeFacts(sourceType, TypeFactsIsUndefinedOrNull) == c.getTypeFacts(targetType, TypeFactsIsUndefinedOrNull)
 			var related Ternary
 			if callbacks {
-				related = c.compareSignaturesRelated(targetSig, sourceSig, checkMode&SignatureCheckModeStrictArity|core.IfElse(strictVariance, SignatureCheckModeStrictCallback, SignatureCheckModeBivariantCallback), reportErrors, errorReporter, compareTypes, reportUnreliableMarkers)
+				related = c.compareSignaturesRelated(targetSig, sourceSig, checkMode&SignatureCheckModeStrictArity|core.IfElse(strictVariance, SignatureCheckModeStrictCallback, SignatureCheckModeBivariantCallback), reportErrors, errorReporter, compareTypes, reportUnreliableMarkers, r)
 			} else {
 				if checkMode&SignatureCheckModeCallback == 0 && !strictVariance {
 					related = compareTypes(sourceType, targetType, false /*reportErrors*/)
@@ -1959,7 +2324,7 @@ func (c *Checker) compareSignaturesRelated(source *Signature, target *Signature,
 				}
 			}
 			// With strict arity, (x: number | undefined) => void is a subtype of (x?: number | undefined) => void
-			if related != TernaryFalse && checkMode&SignatureCheckModeStrictArity != 0 && i >= c.getMinArgumentCount(source) && i < c.getMinArgumentCount(target) && compareTypes(sourceType, targetType, false /*reportErrors*/) != TernaryFalse {
+			if related != TernaryFalse && checkMode&SignatureCheckModeStrictArity != 0 && i >= c.getMinArgumentCount(source) && i < c.getMinArgumentCount(target) && strictArityRelated(r, compareTypes, sourceType, targetType) {
 				related = TernaryFalse
 			}
 			if related == TernaryFalse {
@@ -2989,6 +3354,21 @@ type Relater struct {
 	// pushed each entry of sourceStack and targetStack.
 	sourceDepths []int
 	targetDepths []int
+	// sourceIdentities and targetIdentities are the recursion identities on
+	// sourceStack and targetStack up to each entry.
+	sourceIdentities identityStack
+	targetIdentities identityStack
+	// reach summarizes the failures found so far by the innermost comparison
+	// in progress; see "Reusing failures".
+	reach failureReach
+	// dependsOnFailure and readMaybe are set if the innermost comparison in
+	// progress depends on a failure, or read a Maybe, through a check that
+	// truncating more could change; see relateNonMonotone.
+	dependsOnFailure bool
+	readMaybe        bool
+	// readAssumed is set if the innermost comparison in progress read a
+	// comparison assumed related; see relateNonMonotone.
+	readAssumed bool
 	// depth is the number of comparisons in progress.
 	depth int
 	// low is the lowest depth that the result of the innermost comparison in
@@ -3012,9 +3392,11 @@ type maybeKey struct {
 	key CacheHashKey
 	// low is the lowest depth that the comparison depends on, which is its
 	// own while it is in progress.
-	low       int
-	result    Ternary
-	truncated bool
+	low         int
+	result      Ternary
+	truncated   bool
+	cached      bool // Whether a result is cached for key, which is compared again
+	readAssumed bool // Whether the comparison read one assumed related; see relateNonMonotone
 }
 
 // beginTop makes the outermost comparison a computation of its own, so that
@@ -3069,6 +3451,10 @@ func (c *Checker) putRelater(r *Relater) {
 	r.maybeKeys = r.maybeKeys[:0]
 	r.sourceStack, r.targetStack = r.sourceStack[:0], r.targetStack[:0]
 	r.sourceDepths, r.targetDepths = r.sourceDepths[:0], r.targetDepths[:0]
+	r.sourceIdentities.reset()
+	r.targetIdentities.reset()
+	r.reach = failureReach{}
+	r.dependsOnFailure, r.readMaybe, r.readAssumed = false, false, false
 	r.depth, r.low, r.truncated = 0, 0, false
 	r.topSource, r.topTarget = nil, nil
 	r.topKey, r.topConstrained = CacheHashKey{}, false
@@ -3218,7 +3604,10 @@ func (r *Relater) hasExcessProperties(source *Type, target *Type, reportErrors b
 	reducedTarget := target
 	var checkTypes []*Type
 	if target.flags&TypeFlagsUnion != 0 {
-		reducedTarget = r.c.findMatchingDiscriminantType(source, target, r.isRelatedToSimple)
+		reducedTarget = r.c.findMatchingDiscriminantType(source, target, func(source *Type, target *Type) Ternary {
+			result, _ := r.relateNonMonotone(func() Ternary { return r.isRelatedToSimple(source, target) })
+			return result
+		})
 		if reducedTarget == nil {
 			reducedTarget = r.c.filterPrimitivesIfContainsNonPrimitive(target)
 		}
@@ -3617,12 +4006,19 @@ func (r *Relater) recursiveTypeRelatedTo(source *Type, target *Type, reportError
 		if reportErrors && entry&RelationComparisonResultFailed != 0 {
 			// We are elaborating errors and the cached result is a failure not due to a comparison overflow,
 			// so we will do the comparison again to generate an error message.
-		} else if related, _ := r.c.reuseRelation(entry); related {
-			return TernaryTrue
-		} else {
-			return TernaryFalse
+		} else if r.canReuseResult(entry, source, target, recursionFlags) {
+			if entry&relationReachMask != 0 && r.depth != 0 {
+				r.reach.merge(r.comparisonReach(unpackFailureReach(entry), source, target, recursionFlags))
+				r.dependsOnFailure = r.dependsOnFailure || entry&RelationComparisonResultDependsOnFailure != 0
+			}
+			related, _ := r.c.reuseRelation(entry)
+			return core.IfElse(related, TernaryTrue, TernaryFalse)
 		}
+		// Otherwise the comparisons in progress may truncate the comparisons
+		// that the result depends on, which are compared again here; see
+		// "Reusing failures".
 	}
+	recomputing := entry != RelationComparisonResultNone
 	if r.relationCount <= 0 {
 		r.overflow = true
 		return TernaryFalse
@@ -3641,20 +4037,19 @@ func (r *Relater) recursiveTypeRelatedTo(source *Type, target *Type, reportError
 		}
 		// What relates with unconstrained type parameters also relates with
 		// constrained ones.
-		if entry := r.relation.cached(r.c, broadestEquivalentId); entry&RelationComparisonResultSucceeded != 0 {
-			r.c.reliabilityFlags |= entry & (RelationComparisonResultReportsUnmeasurable | RelationComparisonResultReportsUnreliable)
+		if entry := r.relation.cached(r.c, broadestEquivalentId); entry&RelationComparisonResultSucceeded != 0 && entry&relationReachMask == 0 && r.canReuseResult(entry, source, target, recursionFlags) {
 			return TernaryTrue
 		}
 	}
-	if len(r.sourceStack) == 100 || len(r.targetStack) == 100 {
+	if len(r.sourceStack) == relationStackLimit || len(r.targetStack) == relationStackLimit {
 		// We stop relating if we reach 100 levels of nesting. This is a backstop to catch infinite recursion
 		// that wasn't caught by isDeeplyNestedType. It will also stop relating types that truly are over 100
 		// levels deep, but those are exceedingly rare.
 		depth := r.depth
-		if len(r.sourceStack) == 100 {
+		if len(r.sourceStack) == relationStackLimit {
 			depth = min(depth, r.sourceDepths[0])
 		}
-		if len(r.targetStack) == 100 {
+		if len(r.targetStack) == relationStackLimit {
 			depth = min(depth, r.targetDepths[0])
 		}
 		r.truncate(depth)
@@ -3663,7 +4058,7 @@ func (r *Relater) recursiveTypeRelatedTo(source *Type, target *Type, reportError
 	depth := r.depth
 	r.depth++
 	maybeStart := len(r.maybeKeys)
-	r.maybeKeys = append(r.maybeKeys, maybeKey{key: id, low: depth, result: TernaryMaybe})
+	r.maybeKeys = append(r.maybeKeys, maybeKey{key: id, low: depth, result: TernaryMaybe, cached: recomputing})
 	if r.maybeKeysSet == nil {
 		r.maybeKeysSet = make(map[CacheHashKey]int)
 	}
@@ -3675,7 +4070,7 @@ func (r *Relater) recursiveTypeRelatedTo(source *Type, target *Type, reportError
 		r.sourceStack = append(r.sourceStack, source)
 		r.sourceDepths = append(r.sourceDepths, depth)
 		if r.expandingFlags&ExpandingFlagsSource == 0 {
-			if k := r.c.deeplyNestedStart(source, r.sourceStack, 3); k >= 0 {
+			if k := r.nestedStart(&r.sourceIdentities, r.sourceStack, source, 3); k >= 0 {
 				r.expandingFlags |= ExpandingFlagsSource
 				r.expandingSourceDepth = r.sourceDepths[k]
 			}
@@ -3685,7 +4080,7 @@ func (r *Relater) recursiveTypeRelatedTo(source *Type, target *Type, reportError
 		r.targetStack = append(r.targetStack, target)
 		r.targetDepths = append(r.targetDepths, depth)
 		if r.expandingFlags&ExpandingFlagsTarget == 0 {
-			if k := r.c.deeplyNestedStart(target, r.targetStack, 3); k >= 0 {
+			if k := r.nestedStart(&r.targetIdentities, r.targetStack, target, 3); k >= 0 {
 				r.expandingFlags |= ExpandingFlagsTarget
 				r.expandingTargetDepth = r.targetDepths[k]
 			}
@@ -3693,6 +4088,8 @@ func (r *Relater) recursiveTypeRelatedTo(source *Type, target *Type, reportError
 	}
 	saveReliabilityFlags := r.c.reliabilityFlags
 	r.c.reliabilityFlags = 0
+	saveReach, saveDependsOnFailure, saveReadMaybe, saveReadAssumed := r.reach, r.dependsOnFailure, r.readMaybe, r.readAssumed
+	r.reach, r.dependsOnFailure, r.readMaybe, r.readAssumed = failureReach{}, false, false, false
 	var result Ternary
 	if r.expandingFlags == ExpandingFlagsBoth {
 		if tr := r.c.tracer; tr != nil {
@@ -3714,13 +4111,39 @@ func (r *Relater) recursiveTypeRelatedTo(source *Type, target *Type, reportError
 	propagatingVarianceFlags := r.c.reliabilityFlags & RelationComparisonResultReportsMask
 	incomplete := r.c.reliabilityFlags&RelationComparisonResultReportsIncomplete != 0
 	r.c.reliabilityFlags |= saveReliabilityFlags
+	reachBelow, dependsOnFailure, readMaybe, readAssumed := r.reach, r.dependsOnFailure, r.readMaybe, r.readAssumed
+	r.reach, r.dependsOnFailure, r.readMaybe, r.readAssumed = saveReach, saveDependsOnFailure || dependsOnFailure, saveReadMaybe || readMaybe, saveReadAssumed || readAssumed
+	if readAssumed {
+		// A result that read a comparison assumed related is not cached, nor
+		// those of the comparisons assuming it or completed assuming it.
+		for i := maybeStart; i < len(r.maybeKeys); i++ {
+			r.maybeKeys[i].readAssumed = true
+		}
+	}
+	// The bits of the result that make it keep reachBelow.
+	reachFlags := propagatingVarianceFlags
+	if dependsOnFailure {
+		reachFlags |= RelationComparisonResultDependsOnFailure
+	}
+	// A check that read a truncated comparison, or one assumed related, in a
+	// way that truncating less could change, makes the result depend on how
+	// much the comparison pushes onto the stacks.
+	var modeFlags RelationComparisonResult
+	if readMaybe {
+		modeFlags = RelationComparisonResultTruncated | relationMode(recursionFlags)
+	}
+	if r.relation == r.c.identityRelation {
+		reachBelow = reachBelow.symmetric()
+	}
 	if recursionFlags&RecursionFlagsSource != 0 {
 		r.sourceStack = r.sourceStack[:len(r.sourceStack)-1]
 		r.sourceDepths = r.sourceDepths[:len(r.sourceDepths)-1]
+		r.sourceIdentities.truncate(len(r.sourceStack))
 	}
 	if recursionFlags&RecursionFlagsTarget != 0 {
 		r.targetStack = r.targetStack[:len(r.targetStack)-1]
 		r.targetDepths = r.targetDepths[:len(r.targetDepths)-1]
+		r.targetIdentities.truncate(len(r.targetStack))
 	}
 	r.expandingFlags, r.expandingSourceDepth, r.expandingTargetDepth = saveExpandingFlags, saveExpandingSourceDepth, saveExpandingTargetDepth
 	r.depth--
@@ -3731,25 +4154,39 @@ func (r *Relater) recursiveTypeRelatedTo(source *Type, target *Type, reportError
 		// The comparison was cut short, so its result and those of the
 		// comparisons that completed assuming it are not what computing them
 		// from scratch would give. Only the overflow is cached.
-		r.resetMaybeStack(maybeStart, propagatingVarianceFlags, false)
+		r.resetMaybeStack(maybeStart, reachFlags, false, reachBelow, recursionFlags, modeFlags)
 		result = TernaryFalse
-	case incomplete && low >= depth:
+	case readAssumed && result == TernaryFalse:
+		// The failure depends on the comparisons it assumed related.
+		r.resetMaybeStack(maybeStart, reachFlags, false, reachBelow, recursionFlags, modeFlags)
+		r.low = min(r.low, low)
+		r.truncated = r.truncated || truncated
+	case (incomplete || readAssumed) && low >= depth:
 		// The result observed incomplete variances, so it is not what
 		// comparing from scratch would give (see getRecursiveVariances).
-		r.resetMaybeStack(maybeStart, propagatingVarianceFlags, false)
+		r.resetMaybeStack(maybeStart, reachFlags, false, reachBelow, recursionFlags, modeFlags)
 		if result == TernaryMaybe {
 			result = TernaryTrue
 		}
-	case incomplete:
+	case incomplete || readAssumed:
 		// As above, once the outermost comparison this one assumed completes.
 		r.low = min(r.low, low)
 		r.truncated = r.truncated || truncated
 	case result == TernaryFalse:
 		// A false result goes straight into global cache (when something is false under
-		// assumptions it will also be false without assumptions)
-		r.relation.set(r.c, id, RelationComparisonResultFailed|propagatingVarianceFlags)
-		r.relationCount--
-		r.resetMaybeStack(maybeStart, propagatingVarianceFlags, false)
+		// assumptions it will also be false without assumptions), unless a check
+		// read a Maybe from outside this comparison in a way that truncating
+		// more could change (see relateNonMonotone).
+		if readMaybe && low < depth {
+			// The failure depends on the comparisons it read Maybe from, as
+			// the comparisons in progress do.
+			r.low = min(r.low, low)
+			r.truncated = r.truncated || truncated
+		} else if !recomputing {
+			r.relation.set(r.c, id, RelationComparisonResultFailed|reachFlags|reachBelow.pack()|relationMode(recursionFlags)|modeFlags)
+			r.relationCount--
+		}
+		r.resetMaybeStack(maybeStart, reachFlags, false, reachBelow, recursionFlags, modeFlags)
 	case low >= depth:
 		// The result depends on no comparison outside of this one, so it is the
 		// same from scratch. Comparisons that completed assuming this one hold
@@ -3757,13 +4194,15 @@ func (r *Relater) recursiveTypeRelatedTo(source *Type, target *Type, reportError
 		// scratch. Ternary.Unknown results are never recorded.
 		switch {
 		case result == TernaryUnknown:
-			r.resetMaybeStack(maybeStart, propagatingVarianceFlags, false)
+			r.resetMaybeStack(maybeStart, reachFlags, false, reachBelow, recursionFlags, modeFlags)
 		case truncated:
-			r.resetMaybeStack(maybeStart, propagatingVarianceFlags, false)
-			r.relation.set(r.c, id, RelationComparisonResultSucceeded|propagatingVarianceFlags)
-			r.relationCount--
+			r.resetMaybeStack(maybeStart, reachFlags, false, reachBelow, recursionFlags, modeFlags)
+			if !recomputing {
+				r.relation.set(r.c, id, RelationComparisonResultSucceeded|RelationComparisonResultTruncated|reachFlags|flaggedReach(reachFlags, reachBelow)|relationMode(recursionFlags))
+				r.relationCount--
+			}
 		default:
-			r.resetMaybeStack(maybeStart, propagatingVarianceFlags, true)
+			r.resetMaybeStack(maybeStart, reachFlags, true, reachBelow, recursionFlags, modeFlags)
 		}
 		// The result no longer depends on any comparison in progress, so it
 		// is reported as related, the same as when it is read from the cache.
@@ -3785,7 +4224,171 @@ func (r *Relater) recursiveTypeRelatedTo(source *Type, target *Type, reportError
 		r.low = min(r.low, low)
 		r.truncated = r.truncated || truncated
 	}
+	if result == TernaryFalse && !r.overflow || reachFlags != 0 {
+		r.reach.merge(r.comparisonReach(reachBelow, source, target, recursionFlags))
+	}
 	return result
+}
+
+// comparisonReach returns the reach of the comparison of source to target,
+// given the reach of the comparisons below it.
+func (r *Relater) comparisonReach(below failureReach, source *Type, target *Type, recursionFlags RecursionFlags) failureReach {
+	pushedSource, pushedTarget := recursionFlags&RecursionFlagsSource != 0, recursionFlags&RecursionFlagsTarget != 0
+	conditionalSource, conditionalTarget := source.flags&TypeFlagsConditional != 0, target.flags&TypeFlagsConditional != 0
+	var sourceIds, targetIds identityBloom
+	if pushedSource || conditionalSource {
+		sourceIds = r.c.recursionIdentityBloom(source)
+	}
+	if pushedTarget || conditionalTarget {
+		targetIds = r.c.recursionIdentityBloom(target)
+	}
+	return failureReach{
+		source: below.source.below(pushedSource, sourceIds, conditionalSource),
+		target: below.target.below(pushedTarget, targetIds, conditionalTarget),
+	}
+}
+
+// canReuseResult reports whether a cached result for the comparison of
+// source to target equals the result of comparing them in place; see
+// "Reusing failures".
+func (r *Relater) canReuseResult(entry RelationComparisonResult, source *Type, target *Type, recursionFlags RecursionFlags) bool {
+	mode := entryMode(entry)
+	if entry&RelationComparisonResultTruncated != 0 && mode&^recursionFlags != 0 {
+		// Pushing less onto the stacks truncates less.
+		return false
+	}
+	if entry&relationReachMask == 0 {
+		return true
+	}
+	if r.depth == 0 && mode == recursionFlags {
+		// The same comparison as the one that cached the result.
+		return true
+	}
+	return r.canReuse(unpackFailureReach(entry), source, target, recursionFlags)
+}
+
+// canReuse reports whether comparing source to target in place, pushing onto
+// the stacks per recursionFlags, could truncate none of the comparisons
+// summarized by below, the reach of the comparisons below it.
+func (r *Relater) canReuse(below failureReach, source *Type, target *Type, recursionFlags RecursionFlags) bool {
+	sourceDepth, targetDepth := len(r.sourceStack), len(r.targetStack)
+	if sourceDepth >= relationStackLimit || targetDepth >= relationStackLimit {
+		return false
+	}
+	sourceIds, targetIds := &r.sourceIdentities, &r.targetIdentities
+	sourceIds.sync(r.c, r.sourceStack)
+	targetIds.sync(r.c, r.targetStack)
+	sourceExpanding := r.expandingFlags&ExpandingFlagsSource != 0
+	targetExpanding := r.expandingFlags&ExpandingFlagsTarget != 0
+	sourcePushed, targetPushed := recursionFlags&RecursionFlagsSource != 0, recursionFlags&RecursionFlagsTarget != 0
+	if sourcePushed {
+		sourceIds.push(r.c, source)
+		sourceDepth++
+		sourceExpanding = sourceExpanding || sourceIds.nestedStart(r.c, source, true /*onTop*/, 3) >= 0
+	}
+	if targetPushed {
+		targetIds.push(r.c, target)
+		targetDepth++
+		targetExpanding = targetExpanding || targetIds.nestedStart(r.c, target, true /*onTop*/, 3) >= 0
+	}
+	// The comparison itself is truncated where both its source and its
+	// target are deeply nested, or where a conditional type is.
+	ok := !(sourceExpanding && targetExpanding) &&
+		!(source.flags&TypeFlagsConditional != 0 && sourceIds.nestedStart(r.c, source, sourcePushed, conditionalNestingLimit) >= 0) &&
+		!(target.flags&TypeFlagsConditional != 0 && targetIds.nestedStart(r.c, target, targetPushed, conditionalNestingLimit) >= 0)
+	if ok {
+		sourceNotNested, sourceNotTruncated := below.source.canReuse(sourceDepth, sourceIds.top(), sourceExpanding)
+		targetNotNested, targetNotTruncated := below.target.canReuse(targetDepth, targetIds.top(), targetExpanding)
+		// A comparison below is truncated where both its source and its
+		// target are deeply nested: one of their recursion identities is on
+		// the stack three times.
+		ok = sourceNotTruncated && targetNotTruncated &&
+			(sourceNotNested && targetNotNested ||
+				sourceNotNested && !below.source.thrice ||
+				targetNotNested && !below.target.thrice)
+	}
+	sourceIds.truncate(len(r.sourceStack))
+	targetIds.truncate(len(r.targetStack))
+	return ok
+}
+
+// relateNonMonotone runs a comparison whose result a check uses in a way that
+// truncating more could make fail: it rejects types that relate, or picks
+// among types by which relate. A failure it reads makes the result of the
+// comparison in progress depend on the failure, and a Maybe makes it depend
+// on the comparisons it is Maybe from or truncated. It reports whether the
+// result is not a failure and a comparison was truncated in computing it. See
+// "Reusing failures".
+func (r *Relater) relateNonMonotone(compare func() Ternary) (Ternary, bool) {
+	saveTruncated := r.truncated
+	r.truncated = false
+	result := compare()
+	truncated := r.truncated
+	r.truncated = saveTruncated || truncated
+	if result == TernaryFalse {
+		r.dependsOnFailure = true
+	}
+	if result == TernaryMaybe || truncated {
+		r.readMaybe = true
+	}
+	if result == TernaryMaybe && !truncated {
+		// Whether a comparison assumed related is related depends on the
+		// comparisons in progress, so the results depending on it are not
+		// cached.
+		r.readAssumed = true
+	}
+	return result, result != TernaryFalse && truncated
+}
+
+// relateRequiringTrue runs a comparison for a check that requires it to be
+// related rather than assumed related, as relateNonMonotone does. A
+// comparison that is not a failure and truncated another is taken as
+// related.
+func (r *Relater) relateRequiringTrue(compare func() Ternary) Ternary {
+	result, truncated := r.relateNonMonotone(compare)
+	if truncated {
+		return TernaryTrue
+	}
+	return result
+}
+
+// nonMonotoneComparer returns compareTypes for a check that uses its results
+// as relateNonMonotone describes.
+func (r *Relater) nonMonotoneComparer(compareTypes TypeComparer) TypeComparer {
+	return func(source *Type, target *Type, reportErrors bool) Ternary {
+		result, _ := r.relateNonMonotone(func() Ternary { return compareTypes(source, target, reportErrors) })
+		return result
+	}
+}
+
+// strictArityRelated reports whether compareTypes relates source to target,
+// for a check that rejects types that relate.
+func strictArityRelated(r *Relater, compareTypes TypeComparer, source *Type, target *Type) bool {
+	if r != nil {
+		result, _ := r.relateNonMonotone(func() Ternary { return compareTypes(source, target, false /*reportErrors*/) })
+		return result != TernaryFalse
+	}
+	return compareTypes(source, target, false /*reportErrors*/) != TernaryFalse
+}
+
+// nestedStart returns the highest index in stack, whose recursion identities
+// ids keeps, from which t is still deeply nested, as isDeeplyNestedType tells
+// with maxDepth, or -1 if it is not deeply nested.
+func (r *Relater) nestedStart(ids *identityStack, stack []*Type, t *Type, maxDepth int) int {
+	if len(stack) < maxDepth {
+		return -1
+	}
+	ids.sync(r.c, stack)
+	return ids.nestedStart(r.c, t, stack[len(stack)-1] == t, maxDepth)
+}
+
+// flaggedReach returns the bits keeping reach in a cached success, which
+// needs them only if it reports reliability flags or depends on a failure.
+func flaggedReach(reachFlags RelationComparisonResult, reach failureReach) RelationComparisonResult {
+	if reachFlags == 0 {
+		return 0
+	}
+	return reach.pack()
 }
 
 // assume relates a comparison in progress, or one that completed assuming one
@@ -3794,6 +4397,7 @@ func (r *Relater) assume(i int) Ternary {
 	m := &r.maybeKeys[i]
 	r.low = min(r.low, m.low)
 	r.truncated = r.truncated || m.truncated
+	r.readAssumed = r.readAssumed || m.readAssumed
 	return m.result
 }
 
@@ -3804,12 +4408,20 @@ func (r *Relater) truncate(depth int) {
 	r.truncated = true
 }
 
-func (r *Relater) resetMaybeStack(maybeStart int, propagatingVarianceFlags RelationComparisonResult, markAllAsSucceeded bool) {
+func (r *Relater) resetMaybeStack(maybeStart int, reachFlags RelationComparisonResult, markAllAsSucceeded bool, reach failureReach, recursionFlags RecursionFlags, modeFlags RelationComparisonResult) {
 	for i := maybeStart; i < len(r.maybeKeys); i++ {
 		key := r.maybeKeys[i].key
 		delete(r.maybeKeysSet, key)
-		if markAllAsSucceeded {
-			r.relation.set(r.c, key, RelationComparisonResultSucceeded|propagatingVarianceFlags)
+		// The comparisons that completed assuming the first share its
+		// reliability flags and the failures it depends on, but their reach
+		// from their own entry is not known, so only the first is cached
+		// then.
+		if markAllAsSucceeded && !r.maybeKeys[i].cached && (i == maybeStart || reachFlags|modeFlags == 0) {
+			entry := RelationComparisonResultSucceeded | reachFlags | modeFlags
+			if reachFlags != 0 {
+				entry |= reach.pack() | relationMode(recursionFlags)
+			}
+			r.relation.set(r.c, key, entry)
 			r.relationCount--
 		}
 	}
@@ -4164,7 +4776,9 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 				// false positives. For example, given 'T extends { [K in keyof T]: string }',
 				// 'keyof T' has itself as its constraint and produces a Ternary.Maybe when
 				// related to other types.
-				if r.isRelatedTo(source, r.c.getIndexTypeEx(constraint, target.AsIndexType().indexFlags|IndexFlagsNoReducibleCheck), RecursionFlagsTarget, reportErrors) == TernaryTrue {
+				if r.relateRequiringTrue(func() Ternary {
+					return r.isRelatedTo(source, r.c.getIndexTypeEx(constraint, target.AsIndexType().indexFlags|IndexFlagsNoReducibleCheck), RecursionFlagsTarget, reportErrors)
+				}) == TernaryTrue {
 					return TernaryTrue
 				}
 			} else if r.c.isGenericMappedType(targetType) {
@@ -4185,7 +4799,9 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 				} else {
 					targetKeys = constraintType
 				}
-				if r.isRelatedTo(source, targetKeys, RecursionFlagsTarget, reportErrors) == TernaryTrue {
+				if r.relateRequiringTrue(func() Ternary {
+					return r.isRelatedTo(source, targetKeys, RecursionFlagsTarget, reportErrors)
+				}) == TernaryTrue {
 					return TernaryTrue
 				}
 			}
@@ -4193,7 +4809,7 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 	case target.flags&TypeFlagsConditional != 0:
 		// If we reach 10 levels of nesting for the same conditional type, assume it is an infinitely expanding recursive
 		// conditional type and bail out with a Ternary.Maybe result.
-		if k := r.c.deeplyNestedStart(target, r.targetStack, 10); k >= 0 {
+		if k := r.nestedStart(&r.targetIdentities, r.targetStack, target, conditionalNestingLimit); k >= 0 {
 			r.truncate(r.targetDepths[k])
 			return TernaryMaybe
 		}
@@ -4235,7 +4851,7 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 			// For example, `foo-${number}` is related to `foo-${string}` even though number isn't related to string.
 			r.c.instantiateType(source, r.c.reportUnreliableMapper)
 		}
-		if r.c.isTypeMatchedByTemplateLiteralType(source, target.AsTemplateLiteralType(), r.isRelatedToWorker) {
+		if r.c.isTypeMatchedByTemplateLiteralType(source, target.AsTemplateLiteralType(), r.nonMonotoneComparer(r.isRelatedToWorker)) {
 			return TernaryTrue
 		}
 	case target.flags&TypeFlagsStringMapping != 0:
@@ -4375,7 +4991,7 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 	case source.flags&TypeFlagsConditional != 0:
 		// If we reach 10 levels of nesting for the same conditional type, assume it is an infinitely expanding recursive
 		// conditional type and bail out with a Ternary.Maybe result.
-		if k := r.c.deeplyNestedStart(source, r.sourceStack, 10); k >= 0 {
+		if k := r.nestedStart(&r.sourceIdentities, r.sourceStack, source, conditionalNestingLimit); k >= 0 {
 			r.truncate(r.sourceDepths[k])
 			return TernaryMaybe
 		}
@@ -4388,7 +5004,7 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 			var mapper *TypeMapper
 			if len(sourceParams) != 0 {
 				// If the source has infer type parameters, we instantiate them in the context of the target
-				ctx := r.c.newInferenceContext(sourceParams, nil /*signature*/, InferenceFlagsNone, r.isRelatedToWorker)
+				ctx := r.c.newInferenceContext(sourceParams, nil /*signature*/, InferenceFlagsNone, r.nonMonotoneComparer(r.isRelatedToWorker))
 				r.c.inferTypes(ctx.inferences, target.AsConditionalType().extendsType, sourceExtends, InferencePriorityNoConstraints|InferencePriorityAlwaysStrict, false)
 				sourceExtends = r.c.instantiateType(sourceExtends, ctx.mapper)
 				mapper = ctx.mapper
@@ -4709,8 +5325,10 @@ func (r *Relater) typeRelatedToDiscriminatedType(source *Type, target *Type) Ter
 					continue
 				}
 				// We compare the source property to the target in the context of a single discriminant type.
-				related := r.propertyRelatedTo(source, target, sourceProperty, targetProperty, func(*ast.Symbol) *Type { return combination[i] },
-					false /*reportErrors*/, IntersectionStateNone, r.c.strictNullChecks || r.relation == r.c.comparableRelation /*skipOptional*/)
+				related, _ := r.relateNonMonotone(func() Ternary {
+					return r.propertyRelatedTo(source, target, sourceProperty, targetProperty, func(*ast.Symbol) *Type { return combination[i] },
+						false /*reportErrors*/, IntersectionStateNone, r.c.strictNullChecks || r.relation == r.c.comparableRelation /*skipOptional*/)
+				})
 				// If the target property could not be found, or if the properties were not related,
 				// then this constituent is not a match.
 				if related == TernaryFalse {
@@ -5207,7 +5825,7 @@ func (r *Relater) signatureRelatedTo(source *Signature, target *Signature, erase
 	isRelatedToWorker := func(source *Type, target *Type, reportErrors bool) Ternary {
 		return r.isRelatedToEx(source, target, RecursionFlagsBoth, reportErrors, nil /*headMessage*/, intersectionState)
 	}
-	return r.c.compareSignaturesRelated(source, target, checkMode, reportErrors, r.reportError, isRelatedToWorker, r.c.reportUnreliableMapper)
+	return r.c.compareSignaturesRelated(source, target, checkMode, reportErrors, r.reportError, isRelatedToWorker, r.c.reportUnreliableMapper, r)
 }
 
 func (r *Relater) signaturesIdenticalTo(source *Type, target *Type, kind SignatureKind) Ternary {

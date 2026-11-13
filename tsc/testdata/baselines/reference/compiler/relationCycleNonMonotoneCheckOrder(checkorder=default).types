@@ -139,7 +139,7 @@ namespace inferenceConstraintMutual {
 >false : false
 
     declare let r2: S2 extends G2 ? true : false;
->r2 : false
+>r2 : true
 >true : true
 >false : false
 }
