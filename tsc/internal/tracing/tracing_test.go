@@ -66,6 +66,63 @@ func TestThreadIDsAreStableAcrossFirstSeenOrder(t *testing.T) {
 	assert.DeepEqual(t, first, second)
 }
 
+func TestTypedEmitPathsUseFileThreads(t *testing.T) {
+	t.Parallel()
+
+	for _, test := range []struct {
+		name string
+		key  string
+		ext  string
+	}{
+		{name: "emitJsFileOrBundle", key: "jsFilePath", ext: ".js"},
+		{name: "emitDeclarationFileOrBundle", key: "declarationFilePath", ext: ".d.ts"},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+
+			fsys := vfstest.FromMap(fstest.MapFS{
+				"/trace": &fstest.MapFile{Mode: fs.ModeDir},
+			}, tspath.CaseSensitive)
+			tr, err := StartTracing(fsys, "/trace", "", true /*deterministic*/)
+			assert.NilError(t, err)
+
+			a := "/a" + test.ext
+			b := "/b" + test.ext
+			aPath := tspath.RootedFilePathFromAbsolute(a)
+			bPath := tspath.RootedFilePathFromAbsolute(b)
+			endA := tr.Push(PhaseEmit, test.name, map[string]any{test.key: aPath}, true)
+			endB := tr.Push(PhaseEmit, test.name, map[string]any{test.key: bPath}, true)
+			endA()
+			endB()
+			tr.Instant(PhaseEmit, "stringPath", map[string]any{"path": a})
+			tr.Instant(PhaseEmit, "emptyPath", map[string]any{"path": tspath.RootedFilePath(""), test.key: aPath})
+			tr.Instant(PhaseEmit, "noPath", nil)
+			assert.NilError(t, tr.StopTracing())
+
+			traceText, ok := fsys.ReadFile("/trace/trace.json")
+			assert.Assert(t, ok)
+			var events []traceEvent
+			assert.NilError(t, json.Unmarshal([]byte(traceText), &events))
+
+			aBegin := findEvent(t, events, "B", test.name, test.key, a)
+			aEnd := findEvent(t, events, "E", test.name, test.key, a)
+			bBegin := findEvent(t, events, "B", test.name, test.key, b)
+			bEnd := findEvent(t, events, "E", test.name, test.key, b)
+			assert.Equal(t, aBegin.TID, aEnd.TID)
+			assert.Equal(t, bBegin.TID, bEnd.TID)
+			assert.Assert(t, aBegin.TID != bBegin.TID)
+			assertThreadName(t, events, aBegin.TID, "file:"+a)
+			assertThreadName(t, events, bBegin.TID, "file:"+b)
+			assert.Equal(t, aBegin.TID, findEvent(t, events, "I", "stringPath", "path", a).TID)
+			assert.Equal(t, aBegin.TID, findEvent(t, events, "I", "emptyPath", "path", "").TID)
+			noPath := findEvent(t, events, "I", "noPath", "", nil)
+			assert.Assert(t, aBegin.TID != noPath.TID)
+			assertThreadName(t, events, noPath.TID, "Main")
+			assertDurationEventsAreWellNestedByThread(t, events)
+		})
+	}
+}
+
 func traceThreadIDsForPaths(t *testing.T, paths []string) map[string]int {
 	t.Helper()
 
