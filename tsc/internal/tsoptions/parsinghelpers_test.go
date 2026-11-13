@@ -1,13 +1,66 @@
 package tsoptions
 
 import (
+	"fmt"
+	"math"
 	"reflect"
 	"strings"
 	"testing"
 
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
+	"gotest.tools/v3/assert"
 )
+
+func TestConvertJsonOptionNumericList(t *testing.T) { //nolint:paralleltest // Modifies the element declaration map.
+	const name = "testNumericList"
+	commandLineOptionElements[name] = &CommandLineOption{Name: name, Kind: CommandLineOptionTypeNumber}
+	t.Cleanup(func() { delete(commandLineOptionElements, name) })
+
+	for _, preserve := range []bool{false, true} {
+		option := &CommandLineOption{Name: name, Kind: CommandLineOptionTypeList, listPreserveFalsyValues: preserve}
+		values := []any{float64(0), float64(1), float64(-1), math.Copysign(0, -1), nil}
+		got, errors := convertJsonOptionOfListType(option, values, "/project", nil, nil, nil)
+		assert.Equal(t, len(errors), 0)
+		expected := []any{float64(1), float64(-1)}
+		if preserve {
+			expected = values
+		}
+		assert.DeepEqual(t, got, expected)
+	}
+}
+
+func TestParseConfigCircularityPreservesRaw(t *testing.T) {
+	t.Parallel()
+	const fileName tspath.RootedFilePath = "/project/tsconfig.json"
+	const path tspath.PathKey = "/project/tsconfig.json"
+	fs := vfstest.FromMap(map[string]string{}, tspath.CaseSensitive)
+	for _, text := range []string{`{}`, `{"customSetting":true,"files":["index.ts"]}`} {
+		for _, fromSource := range []bool{false, true} {
+			t.Run(fmt.Sprintf("%s/source=%v", text, fromSource), func(t *testing.T) {
+				t.Parallel()
+				value, errors := ParseConfigFileTextToJson(fileName, path, text)
+				assert.Equal(t, len(errors), 0)
+				raw := value.(*collections.OrderedMap[string, any])
+				var source *TsConfigSourceFile
+				input := raw
+				if fromSource {
+					input = nil
+					source = NewTsconfigSourceFileFromFilePath(fileName, path, text)
+				}
+				got, errors := parseConfig(input, source, fs, "/project", fileName, []tspath.PathKey{path}, nil)
+				assert.Equal(t, len(errors), 1)
+				assert.Equal(t, errors[0].Code(), diagnostics.Circularity_detected_while_resolving_configuration_Colon_0.Code())
+				assert.DeepEqual(t, errors[0].MessageArgs(), []string{"/project/tsconfig.json -> /project/tsconfig.json"})
+				assert.Assert(t, got.raw != nil)
+				assert.Assert(t, reflect.DeepEqual(got.raw, raw))
+			})
+		}
+	}
+}
 
 func TestMergeCompilerOptions(t *testing.T) {
 	t.Parallel()
