@@ -1,0 +1,69 @@
+doYouNeedToChangeYourTargetLibraryReadonly.ts(46,7): error TS2339: Property 'fill' does not exist on type 'readonly number[]'.
+doYouNeedToChangeYourTargetLibraryReadonly.ts(47,7): error TS2339: Property 'copyWithin' does not exist on type 'readonly number[]'.
+doYouNeedToChangeYourTargetLibraryReadonly.ts(48,7): error TS2339: Property 'notAnArrayMethod' does not exist on type 'readonly number[]'.
+doYouNeedToChangeYourTargetLibraryReadonly.ts(49,5): error TS2339: Property 'getOrInsert' does not exist on type 'ReadonlyMap<string, number>'.
+doYouNeedToChangeYourTargetLibraryReadonly.ts(50,5): error TS2339: Property 'getOrInsertComputed' does not exist on type 'ReadonlyMap<string, number>'.
+
+
+==== doYouNeedToChangeYourTargetLibraryReadonly.ts (5 errors) ====
+    declare const array: ReadonlyArray<number>;
+    array.find;
+    array.findIndex;
+    array.entries;
+    array.keys;
+    array.values;
+    array.includes;
+    array.flat;
+    array.flatMap;
+    array.at;
+    array.findLastIndex;
+    array.findLast;
+    array.toReversed;
+    array.toSorted;
+    array.toSpliced;
+    array.with;
+    
+    declare const readonlyArray: readonly number[];
+    readonlyArray.toReversed;
+    ([1, 2, 3] as const).toReversed();
+    
+    declare const tuple: [number, string];
+    tuple.toReversed;
+    
+    function f<T extends readonly number[]>(value: T) {
+        value.toReversed;
+    }
+    
+    declare const map: ReadonlyMap<string, number>;
+    map.entries;
+    map.keys;
+    map.values;
+    
+    declare const set: ReadonlySet<number>;
+    set.entries;
+    set.keys;
+    set.values;
+    set.union;
+    set.intersection;
+    set.difference;
+    set.symmetricDifference;
+    set.isSubsetOf;
+    set.isSupersetOf;
+    set.isDisjointFrom;
+    
+    array.fill;
+          ~~~~
+!!! error TS2339: Property 'fill' does not exist on type 'readonly number[]'.
+    array.copyWithin;
+          ~~~~~~~~~~
+!!! error TS2339: Property 'copyWithin' does not exist on type 'readonly number[]'.
+    array.notAnArrayMethod;
+          ~~~~~~~~~~~~~~~~
+!!! error TS2339: Property 'notAnArrayMethod' does not exist on type 'readonly number[]'.
+    map.getOrInsert;
+        ~~~~~~~~~~~
+!!! error TS2339: Property 'getOrInsert' does not exist on type 'ReadonlyMap<string, number>'.
+    map.getOrInsertComputed;
+        ~~~~~~~~~~~~~~~~~~~
+!!! error TS2339: Property 'getOrInsertComputed' does not exist on type 'ReadonlyMap<string, number>'.
+    
