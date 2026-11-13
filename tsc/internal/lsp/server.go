@@ -113,6 +113,8 @@ type Writer interface {
 	Write(msg *lsproto.Message) error
 }
 
+var errExitBeforeShutdown = errors.New("exit notification received before shutdown")
+
 type lspReader struct {
 	r *lsproto.BaseReader
 }
@@ -178,6 +180,7 @@ type Server struct {
 
 	logger                  *logger
 	initStarted             atomic.Bool
+	shutdownRequested       atomic.Bool
 	clientSeq               atomic.Int32
 	requestQueue            *dynamicQueue[*lsproto.RequestMessage]
 	outgoingQueue           *dynamicQueue[*lsproto.Message]
@@ -953,6 +956,13 @@ func (s *Server) readLoop(ctx context.Context) error {
 				}
 				continue
 			}
+			if errors.Is(err, io.EOF) {
+				// Queue EOF after pending requests so transport closure cannot preempt dispatch.
+				if err := s.requestQueue.Put(ctx, nil); err != nil {
+					return err
+				}
+				return nil
+			}
 			return err
 		}
 
@@ -1025,7 +1035,13 @@ func (s *Server) dispatchLoop(ctx context.Context) error {
 	for {
 		req, err := s.requestQueue.Get(ctx)
 		if err != nil {
+			if cause := context.Cause(ctx); errors.Is(cause, io.EOF) || errors.Is(cause, errExitBeforeShutdown) {
+				return cause
+			}
 			return err
+		}
+		if req == nil {
+			return io.EOF
 		}
 
 		s.lastRequestTimeMs.Store(time.Now().UnixMilli())
@@ -1046,8 +1062,8 @@ func (s *Server) dispatchLoop(ctx context.Context) error {
 				if err := s.sendError(req.ID, lsproto.ErrorCodeRequestCancelled); err != nil {
 					lspExit(err)
 				}
-			} else if errors.Is(err, io.EOF) {
-				lspExit(nil)
+			} else if errors.Is(err, io.EOF) || errors.Is(err, errExitBeforeShutdown) {
+				lspExit(err)
 			} else {
 				if err := s.sendError(req.ID, err); err != nil {
 					lspExit(err)
@@ -1353,7 +1369,7 @@ var handlers = sync.OnceValue(func() handlerMap {
 
 func (handlers handlerMap) registerNotificationHandler[Req any](info lsproto.NotificationInfo[Req], fn func(*Server, context.Context, Req) error) {
 	handlers[info.Method] = func(s *Server, ctx context.Context, req *lsproto.RequestMessage) (func() error, error) {
-		if s.session == nil && req.Method != lsproto.MethodInitialized {
+		if s.session == nil && req.Method != lsproto.MethodInitialized && req.Method != lsproto.MethodExit {
 			return nil, lsproto.ErrorCodeServerNotInitialized
 		}
 
@@ -1868,10 +1884,14 @@ func (s *Server) handleShutdown(ctx context.Context, _ lsproto.NoParams, _ *lspr
 	}
 	s.closeAPISessions()
 	s.session.Close()
+	s.shutdownRequested.Store(true)
 	return lsproto.ShutdownResponse{}, nil
 }
 
 func (s *Server) handleExit(ctx context.Context, _ lsproto.NoParams) error {
+	if !s.shutdownRequested.Load() {
+		return errExitBeforeShutdown
+	}
 	return io.EOF
 }
 
