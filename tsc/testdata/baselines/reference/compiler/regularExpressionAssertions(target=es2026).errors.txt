@@ -1,0 +1,228 @@
+regularExpressionAssertions.ts(2,6): error TS18142: Regular expression buffer boundary assertions are only available when targeting 'esnext'.
+regularExpressionAssertions.ts(3,6): error TS18142: Regular expression buffer boundary assertions are only available when targeting 'esnext'.
+regularExpressionAssertions.ts(4,6): error TS18142: Regular expression buffer boundary assertions are only available when targeting 'esnext'.
+regularExpressionAssertions.ts(5,6): error TS18142: Regular expression buffer boundary assertions are only available when targeting 'esnext'.
+regularExpressionAssertions.ts(6,6): error TS18142: Regular expression buffer boundary assertions are only available when targeting 'esnext'.
+regularExpressionAssertions.ts(7,6): error TS18142: Regular expression buffer boundary assertions are only available when targeting 'esnext'.
+regularExpressionAssertions.ts(8,6): error TS18142: Regular expression buffer boundary assertions are only available when targeting 'esnext'.
+regularExpressionAssertions.ts(8,11): error TS18142: Regular expression buffer boundary assertions are only available when targeting 'esnext'.
+regularExpressionAssertions.ts(9,6): error TS18142: Regular expression buffer boundary assertions are only available when targeting 'esnext'.
+regularExpressionAssertions.ts(9,11): error TS18142: Regular expression buffer boundary assertions are only available when targeting 'esnext'.
+regularExpressionAssertions.ts(10,6): error TS18142: Regular expression buffer boundary assertions are only available when targeting 'esnext'.
+regularExpressionAssertions.ts(10,11): error TS18142: Regular expression buffer boundary assertions are only available when targeting 'esnext'.
+regularExpressionAssertions.ts(11,10): error TS18142: Regular expression buffer boundary assertions are only available when targeting 'esnext'.
+regularExpressionAssertions.ts(11,15): error TS18142: Regular expression buffer boundary assertions are only available when targeting 'esnext'.
+regularExpressionAssertions.ts(12,6): error TS18142: Regular expression buffer boundary assertions are only available when targeting 'esnext'.
+regularExpressionAssertions.ts(12,15): error TS18142: Regular expression buffer boundary assertions are only available when targeting 'esnext'.
+regularExpressionAssertions.ts(13,10): error TS18142: Regular expression buffer boundary assertions are only available when targeting 'esnext'.
+regularExpressionAssertions.ts(13,19): error TS18142: Regular expression buffer boundary assertions are only available when targeting 'esnext'.
+regularExpressionAssertions.ts(14,9): error TS18142: Regular expression buffer boundary assertions are only available when targeting 'esnext'.
+regularExpressionAssertions.ts(14,14): error TS18142: Regular expression buffer boundary assertions are only available when targeting 'esnext'.
+regularExpressionAssertions.ts(15,6): error TS18142: Regular expression buffer boundary assertions are only available when targeting 'esnext'.
+regularExpressionAssertions.ts(15,10): error TS18142: Regular expression buffer boundary assertions are only available when targeting 'esnext'.
+regularExpressionAssertions.ts(26,6): error TS18142: Regular expression buffer boundary assertions are only available when targeting 'esnext'.
+regularExpressionAssertions.ts(26,8): error TS1507: There is nothing available for repetition.
+regularExpressionAssertions.ts(27,6): error TS18142: Regular expression buffer boundary assertions are only available when targeting 'esnext'.
+regularExpressionAssertions.ts(27,8): error TS1507: There is nothing available for repetition.
+regularExpressionAssertions.ts(28,6): error TS18142: Regular expression buffer boundary assertions are only available when targeting 'esnext'.
+regularExpressionAssertions.ts(28,8): error TS1507: There is nothing available for repetition.
+regularExpressionAssertions.ts(29,7): error TS18142: Regular expression buffer boundary assertions are only available when targeting 'esnext'.
+regularExpressionAssertions.ts(29,9): error TS1507: There is nothing available for repetition.
+regularExpressionAssertions.ts(30,7): error TS18142: Regular expression buffer boundary assertions are only available when targeting 'esnext'.
+regularExpressionAssertions.ts(30,9): error TS1507: There is nothing available for repetition.
+regularExpressionAssertions.ts(31,7): error TS18142: Regular expression buffer boundary assertions are only available when targeting 'esnext'.
+regularExpressionAssertions.ts(31,9): error TS1507: There is nothing available for repetition.
+regularExpressionAssertions.ts(32,6): error TS18142: Regular expression buffer boundary assertions are only available when targeting 'esnext'.
+regularExpressionAssertions.ts(32,8): error TS1507: There is nothing available for repetition.
+regularExpressionAssertions.ts(33,6): error TS18142: Regular expression buffer boundary assertions are only available when targeting 'esnext'.
+regularExpressionAssertions.ts(33,8): error TS1507: There is nothing available for repetition.
+regularExpressionAssertions.ts(34,6): error TS18142: Regular expression buffer boundary assertions are only available when targeting 'esnext'.
+regularExpressionAssertions.ts(34,8): error TS1507: There is nothing available for repetition.
+regularExpressionAssertions.ts(35,7): error TS18142: Regular expression buffer boundary assertions are only available when targeting 'esnext'.
+regularExpressionAssertions.ts(35,9): error TS1507: There is nothing available for repetition.
+regularExpressionAssertions.ts(36,7): error TS18142: Regular expression buffer boundary assertions are only available when targeting 'esnext'.
+regularExpressionAssertions.ts(36,9): error TS1507: There is nothing available for repetition.
+regularExpressionAssertions.ts(37,7): error TS18142: Regular expression buffer boundary assertions are only available when targeting 'esnext'.
+regularExpressionAssertions.ts(37,9): error TS1507: There is nothing available for repetition.
+regularExpressionAssertions.ts(39,7): error TS1535: This character cannot be escaped in a regular expression.
+regularExpressionAssertions.ts(40,7): error TS1535: This character cannot be escaped in a regular expression.
+regularExpressionAssertions.ts(41,7): error TS1535: This character cannot be escaped in a regular expression.
+regularExpressionAssertions.ts(42,7): error TS1535: This character cannot be escaped in a regular expression.
+regularExpressionAssertions.ts(43,7): error TS1535: This character cannot be escaped in a regular expression.
+regularExpressionAssertions.ts(44,7): error TS1535: This character cannot be escaped in a regular expression.
+regularExpressionAssertions.ts(45,8): error TS1535: This character cannot be escaped in a regular expression.
+regularExpressionAssertions.ts(46,10): error TS1535: This character cannot be escaped in a regular expression.
+regularExpressionAssertions.ts(46,13): error TS1535: This character cannot be escaped in a regular expression.
+regularExpressionAssertions.ts(46,16): error TS1535: This character cannot be escaped in a regular expression.
+regularExpressionAssertions.ts(48,6): error TS1535: This character cannot be escaped in a regular expression.
+regularExpressionAssertions.ts(49,6): error TS1535: This character cannot be escaped in a regular expression.
+
+
+==== regularExpressionAssertions.ts (58 errors) ====
+    const regexes: RegExp[] = [
+        /\A/u,
+         ~~
+!!! error TS18142: Regular expression buffer boundary assertions are only available when targeting 'esnext'.
+        /\z/u,
+         ~~
+!!! error TS18142: Regular expression buffer boundary assertions are only available when targeting 'esnext'.
+        /\Z/u,
+         ~~
+!!! error TS18142: Regular expression buffer boundary assertions are only available when targeting 'esnext'.
+        /\A/v,
+         ~~
+!!! error TS18142: Regular expression buffer boundary assertions are only available when targeting 'esnext'.
+        /\z/v,
+         ~~
+!!! error TS18142: Regular expression buffer boundary assertions are only available when targeting 'esnext'.
+        /\Z/v,
+         ~~
+!!! error TS18142: Regular expression buffer boundary assertions are only available when targeting 'esnext'.
+        /\Afoo\z/u,
+         ~~
+!!! error TS18142: Regular expression buffer boundary assertions are only available when targeting 'esnext'.
+              ~~
+!!! error TS18142: Regular expression buffer boundary assertions are only available when targeting 'esnext'.
+        /\Afoo\Z/v,
+         ~~
+!!! error TS18142: Regular expression buffer boundary assertions are only available when targeting 'esnext'.
+              ~~
+!!! error TS18142: Regular expression buffer boundary assertions are only available when targeting 'esnext'.
+        /\Afoo\Z/gimsuy,
+         ~~
+!!! error TS18142: Regular expression buffer boundary assertions are only available when targeting 'esnext'.
+              ~~
+!!! error TS18142: Regular expression buffer boundary assertions are only available when targeting 'esnext'.
+        /(?m:\Afoo\z)/v,
+             ~~
+!!! error TS18142: Regular expression buffer boundary assertions are only available when targeting 'esnext'.
+                  ~~
+!!! error TS18142: Regular expression buffer boundary assertions are only available when targeting 'esnext'.
+        /\Afoo|bar\z/u,
+         ~~
+!!! error TS18142: Regular expression buffer boundary assertions are only available when targeting 'esnext'.
+                  ~~
+!!! error TS18142: Regular expression buffer boundary assertions are only available when targeting 'esnext'.
+        /(?<=\A)foo(?=\z)/v,
+             ~~
+!!! error TS18142: Regular expression buffer boundary assertions are only available when targeting 'esnext'.
+                      ~~
+!!! error TS18142: Regular expression buffer boundary assertions are only available when targeting 'esnext'.
+        /(?:\Afoo\Z)+/u,
+            ~~
+!!! error TS18142: Regular expression buffer boundary assertions are only available when targeting 'esnext'.
+                 ~~
+!!! error TS18142: Regular expression buffer boundary assertions are only available when targeting 'esnext'.
+        /\Aa+\z/u,
+         ~~
+!!! error TS18142: Regular expression buffer boundary assertions are only available when targeting 'esnext'.
+             ~~
+!!! error TS18142: Regular expression buffer boundary assertions are only available when targeting 'esnext'.
+    
+        /\A\z\Z/,
+        /\A*\z+\Z{1,2}?/,
+        /[\A\z\Z]/,
+        /[\A-\Z]/,
+    
+        /\\A+\\z+\\Z+/u,
+        /[\\A\\z\\Z]/v,
+        /\u0041+\u007a+\u005a+/u,
+    
+        /\A*/u,
+         ~~
+!!! error TS18142: Regular expression buffer boundary assertions are only available when targeting 'esnext'.
+           ~
+!!! error TS1507: There is nothing available for repetition.
+        /\z+/u,
+         ~~
+!!! error TS18142: Regular expression buffer boundary assertions are only available when targeting 'esnext'.
+           ~
+!!! error TS1507: There is nothing available for repetition.
+        /\Z?/u,
+         ~~
+!!! error TS18142: Regular expression buffer boundary assertions are only available when targeting 'esnext'.
+           ~
+!!! error TS1507: There is nothing available for repetition.
+        /a\A{1}/u,
+          ~~
+!!! error TS18142: Regular expression buffer boundary assertions are only available when targeting 'esnext'.
+            ~~~
+!!! error TS1507: There is nothing available for repetition.
+        /a\z{1,}/u,
+          ~~
+!!! error TS18142: Regular expression buffer boundary assertions are only available when targeting 'esnext'.
+            ~~~~
+!!! error TS1507: There is nothing available for repetition.
+        /a\Z{1,2}?/u,
+          ~~
+!!! error TS18142: Regular expression buffer boundary assertions are only available when targeting 'esnext'.
+            ~~~~~~
+!!! error TS1507: There is nothing available for repetition.
+        /\A*?/v,
+         ~~
+!!! error TS18142: Regular expression buffer boundary assertions are only available when targeting 'esnext'.
+           ~~
+!!! error TS1507: There is nothing available for repetition.
+        /\z+?/v,
+         ~~
+!!! error TS18142: Regular expression buffer boundary assertions are only available when targeting 'esnext'.
+           ~~
+!!! error TS1507: There is nothing available for repetition.
+        /\Z??/v,
+         ~~
+!!! error TS18142: Regular expression buffer boundary assertions are only available when targeting 'esnext'.
+           ~~
+!!! error TS1507: There is nothing available for repetition.
+        /a\A{1}/v,
+          ~~
+!!! error TS18142: Regular expression buffer boundary assertions are only available when targeting 'esnext'.
+            ~~~
+!!! error TS1507: There is nothing available for repetition.
+        /a\z{1,}/v,
+          ~~
+!!! error TS18142: Regular expression buffer boundary assertions are only available when targeting 'esnext'.
+            ~~~~
+!!! error TS1507: There is nothing available for repetition.
+        /a\Z{1,2}/v,
+          ~~
+!!! error TS18142: Regular expression buffer boundary assertions are only available when targeting 'esnext'.
+            ~~~~~
+!!! error TS1507: There is nothing available for repetition.
+    
+        /[\A]/u,
+          ~~
+!!! error TS1535: This character cannot be escaped in a regular expression.
+        /[\z]/u,
+          ~~
+!!! error TS1535: This character cannot be escaped in a regular expression.
+        /[\Z]/u,
+          ~~
+!!! error TS1535: This character cannot be escaped in a regular expression.
+        /[\A]/v,
+          ~~
+!!! error TS1535: This character cannot be escaped in a regular expression.
+        /[\z]/v,
+          ~~
+!!! error TS1535: This character cannot be escaped in a regular expression.
+        /[\Z]/v,
+          ~~
+!!! error TS1535: This character cannot be escaped in a regular expression.
+        /[[\A]&&[a]]/v,
+           ~~
+!!! error TS1535: This character cannot be escaped in a regular expression.
+        /[\q{\A|\z|\Z}]/v,
+             ~~
+!!! error TS1535: This character cannot be escaped in a regular expression.
+                ~~
+!!! error TS1535: This character cannot be escaped in a regular expression.
+                   ~~
+!!! error TS1535: This character cannot be escaped in a regular expression.
+    
+        /\a/u,
+         ~~
+!!! error TS1535: This character cannot be escaped in a regular expression.
+        /\a/v,
+         ~~
+!!! error TS1535: This character cannot be escaped in a regular expression.
+    ];
+    

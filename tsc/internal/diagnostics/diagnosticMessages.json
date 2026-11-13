@@ -9019,5 +9019,9 @@
     "File '{0}' has a registered content mapper extension but does not match any content mapper's 'include'.": {
         "category": "Error",
         "code": 18140
+    },
+    "Regular expression buffer boundary assertions are only available when targeting 'esnext'.": {
+        "category": "Error",
+        "code": 18142
     }
 }
