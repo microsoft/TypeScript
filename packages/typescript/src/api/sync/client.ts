@@ -1,6 +1,8 @@
+import type { FileSystemCallbacks } from "../fs.ts";
 import {
     configureFileSystemCallbacks,
     encodeFileSystemCallbackResult,
+    type FileSystemCallbackConfiguration,
 } from "../fsCallbacks.ts";
 import {
     type ClientSocketOptions,
@@ -33,30 +35,42 @@ export class Client extends TransportClient {
             super(options.transport, options.collectTiming ?? false, options.maxResponseBytesPerPage);
             return;
         }
-        if (!isSpawnOptions(options)) {
-            throw new Error("Socket connections are not yet supported in the sync client");
-        }
 
-        const timingDump = TimingDump.fromEnvironment("sync", "spawn");
-        if (timingDump) {
-            options = { ...options, collectTiming: true };
-        }
-        const args = getAPIProcessArgs(options, false);
-        const fsConfiguration = configureFileSystemCallbacks(options.fs);
-        if (fsConfiguration.arguments.length > 0) {
-            args.push(`--callbacks=${fsConfiguration.arguments.join(",")}`);
-        }
+        const timingDump = TimingDump.fromEnvironment("sync", isSpawnOptions(options) ? "spawn" : "socket");
+        let fsConfiguration: FileSystemCallbackConfiguration | undefined;
+        let channel: SyncRpcChannel;
+        let fs: FileSystemCallbacks | undefined;
+        let collectTiming = false;
+        if (isSpawnOptions(options)) {
+            if (timingDump) {
+                options = { ...options, collectTiming: true };
+            }
+            const args = getAPIProcessArgs(options, false);
 
-        const collectTiming = options.collectTiming ?? false;
-        const channel = new SyncRpcChannel(resolveExePath(options), args, collectTiming);
+            fsConfiguration = configureFileSystemCallbacks(options.fs);
+            if (fsConfiguration.arguments.length > 0) {
+                args.push(`--callbacks=${fsConfiguration.arguments.join(",")}`);
+            }
+
+            collectTiming = options.collectTiming ?? false;
+            fs = options.fs;
+            channel = new SyncRpcChannel({
+                exe: resolveExePath(options),
+                args,
+            }, collectTiming);
+        }
+        else {
+            collectTiming = timingDump !== undefined;
+            channel = new SyncRpcChannel({ pipe: options.pipe }, collectTiming);
+        }
         super(channel, collectTiming, options.maxResponseBytesPerPage);
         this.channel = channel;
         this.timingDump = timingDump;
 
-        if (options.fs) {
+        if (fs && fsConfiguration) {
             for (const name of fsConfiguration.callbackNames) {
                 if (name === "writeFile") {
-                    const callback = options.fs.writeFile;
+                    const callback = fs.writeFile;
                     if (typeof callback !== "function") throw new Error("Invalid writeFile callback configuration");
                     channel.registerCallback(name, (_, arg) => {
                         const { path, data } = JSON.parse(arg);
@@ -65,7 +79,7 @@ export class Client extends TransportClient {
                     continue;
                 }
 
-                const callback = options.fs[name];
+                const callback = fs[name];
                 if (typeof callback !== "function") throw new Error(`Invalid ${name} callback configuration`);
                 channel.registerCallback(name, (_, arg) => {
                     return JSON.stringify(encodeFileSystemCallbackResult(name, callback(JSON.parse(arg))));

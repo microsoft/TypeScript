@@ -44,6 +44,54 @@ func TestPipeTransportClosePreservesReplacement(t *testing.T) {
 	defer conn.Close()
 }
 
+func TestPipeTransportAcceptPreservesReplacement(t *testing.T) {
+	t.Parallel()
+
+	transport, err := NewPrivatePipeTransport("tsgo-api-test")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer transport.Close()
+	socketPath := transport.Path()
+	accepted := make(chan error, 1)
+	done := make(chan struct{})
+	defer close(done)
+	go func() {
+		conn, acceptErr := transport.Accept(t.Context())
+		accepted <- acceptErr
+		if acceptErr == nil {
+			defer conn.Close()
+			<-done
+		}
+	}()
+
+	client, err := net.DialTimeout("unix", socketPath, time.Second)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer client.Close()
+	if acceptErr := <-accepted; acceptErr != nil {
+		t.Fatal(acceptErr)
+	}
+	if _, statErr := os.Stat(filepath.Dir(socketPath)); !os.IsNotExist(statErr) {
+		t.Fatalf("socket directory still exists after accept: %v", statErr)
+	}
+
+	replacement, err := NewPipeTransport(filepath.Dir(socketPath))
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer replacement.Close()
+	if closeErr := transport.Close(); !errors.Is(closeErr, net.ErrClosed) {
+		t.Fatalf("Close after Accept returned %v, want net.ErrClosed", closeErr)
+	}
+	conn, err := net.DialTimeout("unix", replacement.Path(), time.Second)
+	if err != nil {
+		t.Fatalf("replacement socket is unreachable: %v", err)
+	}
+	defer conn.Close()
+}
+
 func TestPipeTransportPermissions(t *testing.T) {
 	t.Parallel()
 
