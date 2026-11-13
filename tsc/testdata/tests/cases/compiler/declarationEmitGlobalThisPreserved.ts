@@ -31,6 +31,14 @@ export const b2 = (isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN
 export const b3 = (isNaN: number, bar: typeof globalThis.isNaN) => bar;
 export const b4 = (isNaN: number) => globalThis.isNaN;
 
+export const laterArrayElement = ([first, isNaN]: [number, number]) => globalThis.isNaN;
+export const omittedArrayElement = ([, isNaN]: [number, number]) => globalThis.isNaN;
+export const laterObjectElement = ({ first, isNaN }: { first: number; isNaN: number }) => globalThis.isNaN;
+export const nestedElements = ([[first, isNaN], parseInt]: [[number, number], number]) => ({
+    isNaN: globalThis.isNaN,
+    parseInt: globalThis.parseInt,
+});
+
 export const bObj = {
     b1: (isNaN: typeof globalThis.isNaN) => isNaN,
     b2: (isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN) => bar ?? isNaN,
