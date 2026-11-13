@@ -173,6 +173,57 @@ export const b4 = (isNaN: number) => globalThis.isNaN;
 >globalThis : typeof globalThis
 >isNaN : (number: number) => boolean
 
+export const laterArrayElement = ([first, isNaN]: [number, number]) => globalThis.isNaN;
+>laterArrayElement : ([first, isNaN]: [number, number]) => (number: number) => boolean
+>([first, isNaN]: [number, number]) => globalThis.isNaN : ([first, isNaN]: [number, number]) => (number: number) => boolean
+>first : number
+>isNaN : number
+>globalThis.isNaN : (number: number) => boolean
+>globalThis : typeof globalThis
+>isNaN : (number: number) => boolean
+
+export const omittedArrayElement = ([, isNaN]: [number, number]) => globalThis.isNaN;
+>omittedArrayElement : ([, isNaN]: [number, number]) => (number: number) => boolean
+>([, isNaN]: [number, number]) => globalThis.isNaN : ([, isNaN]: [number, number]) => (number: number) => boolean
+>isNaN : number
+>globalThis.isNaN : (number: number) => boolean
+>globalThis : typeof globalThis
+>isNaN : (number: number) => boolean
+
+export const laterObjectElement = ({ first, isNaN }: { first: number; isNaN: number }) => globalThis.isNaN;
+>laterObjectElement : ({ first, isNaN }: { first: number; isNaN: number; }) => (number: number) => boolean
+>({ first, isNaN }: { first: number; isNaN: number }) => globalThis.isNaN : ({ first, isNaN }: { first: number; isNaN: number; }) => (number: number) => boolean
+>first : number
+>isNaN : number
+>first : number
+>isNaN : number
+>globalThis.isNaN : (number: number) => boolean
+>globalThis : typeof globalThis
+>isNaN : (number: number) => boolean
+
+export const nestedElements = ([[first, isNaN], parseInt]: [[number, number], number]) => ({
+>nestedElements : ([[first, isNaN], parseInt]: [[number, number], number]) => { isNaN: (number: number) => boolean; parseInt: (string: string, radix?: number) => number; }
+>([[first, isNaN], parseInt]: [[number, number], number]) => ({    isNaN: globalThis.isNaN,    parseInt: globalThis.parseInt,}) : ([[first, isNaN], parseInt]: [[number, number], number]) => { isNaN: (number: number) => boolean; parseInt: (string: string, radix?: number) => number; }
+>first : number
+>isNaN : number
+>parseInt : number
+>({    isNaN: globalThis.isNaN,    parseInt: globalThis.parseInt,}) : { isNaN: (number: number) => boolean; parseInt: (string: string, radix?: number) => number; }
+>{    isNaN: globalThis.isNaN,    parseInt: globalThis.parseInt,} : { isNaN: (number: number) => boolean; parseInt: (string: string, radix?: number) => number; }
+
+    isNaN: globalThis.isNaN,
+>isNaN : (number: number) => boolean
+>globalThis.isNaN : (number: number) => boolean
+>globalThis : typeof globalThis
+>isNaN : (number: number) => boolean
+
+    parseInt: globalThis.parseInt,
+>parseInt : (string: string, radix?: number) => number
+>globalThis.parseInt : (string: string, radix?: number) => number
+>globalThis : typeof globalThis
+>parseInt : (string: string, radix?: number) => number
+
+});
+
 export const bObj = {
 >bObj : { b1: (isNaN: typeof globalThis.isNaN) => (number: number) => boolean; b2: (isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN) => (number: number) => boolean; b3: (isNaN: number, bar: typeof globalThis.isNaN) => (number: number) => boolean; b4: (isNaN: number) => (number: number) => boolean; }
 >{    b1: (isNaN: typeof globalThis.isNaN) => isNaN,    b2: (isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN) => bar ?? isNaN,    b3: (isNaN: number, bar: typeof globalThis.isNaN) => bar,    b4: (isNaN: number) => globalThis.isNaN,} : { b1: (isNaN: typeof globalThis.isNaN) => (number: number) => boolean; b2: (isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN) => (number: number) => boolean; b3: (isNaN: number, bar: typeof globalThis.isNaN) => (number: number) => boolean; b4: (isNaN: number) => (number: number) => boolean; }
