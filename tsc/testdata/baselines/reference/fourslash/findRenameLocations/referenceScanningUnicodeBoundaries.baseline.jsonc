@@ -1,0 +1,12 @@
+// === findRenameLocations ===
+// === /referenceScanningUnicodeBoundaries.ts ===
+// const padding = 0;
+// function example() {
+//     const /*RENAME*/[|objRENAME|] = {};
+//     [|objRENAME|]¬;
+//     ☺[|objRENAME|];
+//     　[|objRENAME|]　;
+//     const éobj = {}, objé = {}, 𐐀obj = {}, obj𐐀 = {}, obj́ = {};
+//     éobj; objé; 𐐀obj; obj𐐀; obj́;
+//     [|objRENAME|];
+// }
