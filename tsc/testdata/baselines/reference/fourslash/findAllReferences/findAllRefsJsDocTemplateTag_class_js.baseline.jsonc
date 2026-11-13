@@ -1,0 +1,19 @@
+// === findAllReferences ===
+// === /a.js ===
+// /** @template /*FIND ALL REFS*/T */
+// class C {
+//     constructor() {
+//         /** @type {T} */
+// --- (line: 5) skipped ---
+
+
+
+// === findAllReferences ===
+// === /a.js ===
+// /** @template T */
+// class C {
+//     constructor() {
+//         /** @type {/*FIND ALL REFS*/[|T|]} */
+//         this.x = null;
+//     }
+// }

@@ -1,0 +1,17 @@
+// === findAllReferences ===
+// === /a.js ===
+// /**
+//  * @template /*FIND ALL REFS*/T
+//  * @return {T}
+//  */
+// function f() {}
+
+
+
+// === findAllReferences ===
+// === /a.js ===
+// /**
+//  * @template T
+//  * @return {/*FIND ALL REFS*/[|T|]}
+//  */
+// function f() {}
