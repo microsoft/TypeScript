@@ -153,3 +153,121 @@ typedArray(["value"]);
 >["value"] : [string]
 >"value" : "value"
 
+// Contextual typing must win over padding for parameter defaults (#64974 / #65069).
+type Obj = (input?: { a?: string; b?: number }) => number;
+>Obj : Obj
+>input : { a?: string; b?: number; } | undefined
+>a : string | undefined
+>b : number | undefined
+
+export const obj1: Obj = ({ a, b } = {}) => (a ? 1 : 0) + (b ?? 0);
+>obj1 : Obj
+>({ a, b } = {}) => (a ? 1 : 0) + (b ?? 0) : ({ a, b }?: { a?: string; b?: number; } | undefined) => number
+>a : string | undefined
+>b : number | undefined
+>{} : {}
+>(a ? 1 : 0) + (b ?? 0) : number
+>(a ? 1 : 0) : 0 | 1
+>a ? 1 : 0 : 0 | 1
+>a : string | undefined
+>1 : 1
+>0 : 0
+>(b ?? 0) : number
+>b ?? 0 : number
+>b : number | undefined
+>0 : 0
+
+type Arr = (input?: [string?, number?]) => number;
+>Arr : Arr
+>input : [(string | undefined)?, (number | undefined)?] | undefined
+
+export const arr1: Arr = ([a, b] = []) => (a ? 1 : 0) + (b ?? 0);
+>arr1 : Arr
+>([a, b] = []) => (a ? 1 : 0) + (b ?? 0) : ([a, b]?: [(string | undefined)?, (number | undefined)?] | undefined) => number
+>a : string | undefined
+>b : number | undefined
+>[] : []
+>(a ? 1 : 0) + (b ?? 0) : number
+>(a ? 1 : 0) : 0 | 1
+>a ? 1 : 0 : 0 | 1
+>a : string | undefined
+>1 : 1
+>0 : 0
+>(b ?? 0) : number
+>b ?? 0 : number
+>b : number | undefined
+>0 : 0
+
+export const arr2: (input: [string?, number?]) => number = ([a, b] = []) => (a ? 1 : 0) + (b ?? 0);
+>arr2 : (input: [string?, number?]) => number
+>input : [(string | undefined)?, (number | undefined)?]
+>([a, b] = []) => (a ? 1 : 0) + (b ?? 0) : ([a, b]?: [(string | undefined)?, (number | undefined)?]) => number
+>a : string | undefined
+>b : number | undefined
+>[] : []
+>(a ? 1 : 0) + (b ?? 0) : number
+>(a ? 1 : 0) : 0 | 1
+>a ? 1 : 0 : 0 | 1
+>a : string | undefined
+>1 : 1
+>0 : 0
+>(b ?? 0) : number
+>b ?? 0 : number
+>b : number | undefined
+>0 : 0
+
+declare function takeArr(callback: Arr): void;
+>takeArr : (callback: Arr) => void
+>callback : Arr
+
+takeArr(([a, b] = []) => {
+>takeArr(([a, b] = []) => {    const c: number = a;    const d: string = b;    return 0;}) : void
+>takeArr : (callback: Arr) => void
+>([a, b] = []) => {    const c: number = a;    const d: string = b;    return 0;} : ([a, b]?: [(string | undefined)?, (number | undefined)?] | undefined) => number
+>a : string | undefined
+>b : number | undefined
+>[] : []
+
+    const c: number = a;
+>c : number
+>a : string | undefined
+
+    const d: string = b;
+>d : string
+>b : number | undefined
+
+    return 0;
+>0 : 0
+
+});
+
+export const arr3: (input?: [{ a?: number }?]) => void = ([{ a } = {}] = []) => {
+>arr3 : (input?: [{ a?: number; }?]) => void
+>input : [({ a?: number; } | undefined)?] | undefined
+>a : number | undefined
+>([{ a } = {}] = []) => {    const b: string = a;} : ([{ a }]?: [({ a?: number; } | undefined)?] | undefined) => void
+>a : number | undefined
+>{} : {}
+>[] : []
+
+    const b: string = a;
+>b : string
+>a : number | undefined
+
+};
+
+export const arr4: (input?: { a?: number }[]) => void = ([...[{ a } = {}]] = []) => {
+>arr4 : (input?: { a?: number; }[]) => void
+>input : { a?: number; }[] | undefined
+>a : number | undefined
+>([...[{ a } = {}]] = []) => {    const b: string = a;} : ([...[{ a }]]?: { a?: number; }[] | undefined) => void
+>a : number | undefined
+>{} : {}
+>[] : never[]
+
+    const b: string = a;
+>b : string
+>a : number | undefined
+
+};
+

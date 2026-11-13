@@ -114,3 +114,83 @@ typedObject({ required: "value" });
 typedArray(["value"]);
 >typedArray : Symbol(typedArray, Decl(main.ts, 8, 12))
 
+// Contextual typing must win over padding for parameter defaults (#64974 / #65069).
+type Obj = (input?: { a?: string; b?: number }) => number;
+>Obj : Symbol(Obj, Decl(main.ts, 25, 22))
+>input : Symbol(input, Decl(main.ts, 28, 12))
+>a : Symbol(a, Decl(main.ts, 28, 21))
+>b : Symbol(b, Decl(main.ts, 28, 33))
+
+export const obj1: Obj = ({ a, b } = {}) => (a ? 1 : 0) + (b ?? 0);
+>obj1 : Symbol(obj1, Decl(main.ts, 29, 12))
+>Obj : Symbol(Obj, Decl(main.ts, 25, 22))
+>a : Symbol(a, Decl(main.ts, 29, 27))
+>b : Symbol(b, Decl(main.ts, 29, 30))
+>a : Symbol(a, Decl(main.ts, 29, 27))
+>b : Symbol(b, Decl(main.ts, 29, 30))
+
+type Arr = (input?: [string?, number?]) => number;
+>Arr : Symbol(Arr, Decl(main.ts, 29, 67))
+>input : Symbol(input, Decl(main.ts, 31, 12))
+
+export const arr1: Arr = ([a, b] = []) => (a ? 1 : 0) + (b ?? 0);
+>arr1 : Symbol(arr1, Decl(main.ts, 32, 12))
+>Arr : Symbol(Arr, Decl(main.ts, 29, 67))
+>a : Symbol(a, Decl(main.ts, 32, 27))
+>b : Symbol(b, Decl(main.ts, 32, 29))
+>a : Symbol(a, Decl(main.ts, 32, 27))
+>b : Symbol(b, Decl(main.ts, 32, 29))
+
+export const arr2: (input: [string?, number?]) => number = ([a, b] = []) => (a ? 1 : 0) + (b ?? 0);
+>arr2 : Symbol(arr2, Decl(main.ts, 34, 12))
+>input : Symbol(input, Decl(main.ts, 34, 20))
+>a : Symbol(a, Decl(main.ts, 34, 61))
+>b : Symbol(b, Decl(main.ts, 34, 63))
+>a : Symbol(a, Decl(main.ts, 34, 61))
+>b : Symbol(b, Decl(main.ts, 34, 63))
+
+declare function takeArr(callback: Arr): void;
+>takeArr : Symbol(takeArr, Decl(main.ts, 34, 99))
+>callback : Symbol(callback, Decl(main.ts, 36, 25))
+>Arr : Symbol(Arr, Decl(main.ts, 29, 67))
+
+takeArr(([a, b] = []) => {
+>takeArr : Symbol(takeArr, Decl(main.ts, 34, 99))
+>a : Symbol(a, Decl(main.ts, 37, 10))
+>b : Symbol(b, Decl(main.ts, 37, 12))
+
+    const c: number = a;
+>c : Symbol(c, Decl(main.ts, 38, 9))
+>a : Symbol(a, Decl(main.ts, 37, 10))
+
+    const d: string = b;
+>d : Symbol(d, Decl(main.ts, 39, 9))
+>b : Symbol(b, Decl(main.ts, 37, 12))
+
+    return 0;
+});
+
+export const arr3: (input?: [{ a?: number }?]) => void = ([{ a } = {}] = []) => {
+>arr3 : Symbol(arr3, Decl(main.ts, 43, 12))
+>input : Symbol(input, Decl(main.ts, 43, 20))
+>a : Symbol(a, Decl(main.ts, 43, 30))
+>a : Symbol(a, Decl(main.ts, 43, 60))
+
+    const b: string = a;
+>b : Symbol(b, Decl(main.ts, 44, 9))
+>a : Symbol(a, Decl(main.ts, 43, 60))
+
+};
+
+export const arr4: (input?: { a?: number }[]) => void = ([...[{ a } = {}]] = []) => {
+>arr4 : Symbol(arr4, Decl(main.ts, 47, 12))
+>input : Symbol(input, Decl(main.ts, 47, 20))
+>a : Symbol(a, Decl(main.ts, 47, 29))
+>a : Symbol(a, Decl(main.ts, 47, 63))
+
+    const b: string = a;
+>b : Symbol(b, Decl(main.ts, 48, 9))
+>a : Symbol(a, Decl(main.ts, 47, 63))
+
+};
+
