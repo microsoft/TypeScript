@@ -49,3 +49,57 @@ export class Bar2 {
     f = 2;
 >f : Symbol(Bar2.f, Decl(file2.ts, 5, 19))
 }
+
+=== file3.ts ===
+type T = number;
+>T : Symbol(T, Decl(file3.ts, 0, 0))
+
+export const intersection = (p = 1 as number & (T | undefined), required: number): void => {};
+>intersection : Symbol(intersection, Decl(file3.ts, 1, 12))
+>p : Symbol(p, Decl(file3.ts, 1, 29))
+>T : Symbol(T, Decl(file3.ts, 0, 0))
+>required : Symbol(required, Decl(file3.ts, 1, 63))
+
+export const reversedIntersection = (p = 1 as (T | undefined) & number, required: number): void => {};
+>reversedIntersection : Symbol(reversedIntersection, Decl(file3.ts, 2, 12))
+>p : Symbol(p, Decl(file3.ts, 2, 37))
+>T : Symbol(T, Decl(file3.ts, 0, 0))
+>required : Symbol(required, Decl(file3.ts, 2, 71))
+
+export const possiblyUndefinedIntersection = (p = undefined as (T | undefined) & (number | undefined), required: number): void => {};
+>possiblyUndefinedIntersection : Symbol(possiblyUndefinedIntersection, Decl(file3.ts, 3, 12))
+>p : Symbol(p, Decl(file3.ts, 3, 46))
+>undefined : Symbol(undefined)
+>T : Symbol(T, Decl(file3.ts, 0, 0))
+>required : Symbol(required, Decl(file3.ts, 3, 102))
+
+export const anyIntersection = (p = "" as any & (T | undefined), required: number): void => {};
+>anyIntersection : Symbol(anyIntersection, Decl(file3.ts, 4, 12))
+>p : Symbol(p, Decl(file3.ts, 4, 32))
+>T : Symbol(T, Decl(file3.ts, 0, 0))
+>required : Symbol(required, Decl(file3.ts, 4, 64))
+
+export const unknownIntersection = (p = undefined as unknown & (T | undefined), required: number): void => {};
+>unknownIntersection : Symbol(unknownIntersection, Decl(file3.ts, 5, 12))
+>p : Symbol(p, Decl(file3.ts, 5, 36))
+>undefined : Symbol(undefined)
+>T : Symbol(T, Decl(file3.ts, 0, 0))
+>required : Symbol(required, Decl(file3.ts, 5, 79))
+
+export const neverIntersection = (p = undefined as never & (T | undefined), required: number): void => {};
+>neverIntersection : Symbol(neverIntersection, Decl(file3.ts, 6, 12))
+>p : Symbol(p, Decl(file3.ts, 6, 34))
+>undefined : Symbol(undefined)
+>T : Symbol(T, Decl(file3.ts, 0, 0))
+>required : Symbol(required, Decl(file3.ts, 6, 75))
+
+type MaybeNumber = number | undefined;
+>MaybeNumber : Symbol(MaybeNumber, Decl(file3.ts, 6, 106))
+
+export const aliasIntersection = (p = 1 as MaybeNumber & (T | undefined), required: number): void => {};
+>aliasIntersection : Symbol(aliasIntersection, Decl(file3.ts, 8, 12))
+>p : Symbol(p, Decl(file3.ts, 8, 34))
+>MaybeNumber : Symbol(MaybeNumber, Decl(file3.ts, 6, 106))
+>T : Symbol(T, Decl(file3.ts, 0, 0))
+>required : Symbol(required, Decl(file3.ts, 8, 73))
+
