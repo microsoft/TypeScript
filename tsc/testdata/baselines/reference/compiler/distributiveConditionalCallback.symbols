@@ -1,0 +1,104 @@
+//// [tests/cases/compiler/distributiveConditionalCallback.ts] ////
+
+=== distributiveConditionalCallback.ts ===
+// https://github.com/microsoft/TypeScript/issues/64892
+
+export class C {
+>C : Symbol(C, Decl(distributiveConditionalCallback.ts, 0, 0))
+
+    m1<T>(
+>m1 : Symbol(C.m1, Decl(distributiveConditionalCallback.ts, 2, 16))
+>T : Symbol(T, Decl(distributiveConditionalCallback.ts, 3, 7))
+
+        item: T,
+>item : Symbol(item, Decl(distributiveConditionalCallback.ts, 3, 10))
+>T : Symbol(T, Decl(distributiveConditionalCallback.ts, 3, 7))
+
+        callback: T extends string
+>callback : Symbol(callback, Decl(distributiveConditionalCallback.ts, 4, 16))
+>T : Symbol(T, Decl(distributiveConditionalCallback.ts, 3, 7))
+
+            ? (item: T) => void
+>item : Symbol(item, Decl(distributiveConditionalCallback.ts, 6, 15))
+>T : Symbol(T, Decl(distributiveConditionalCallback.ts, 3, 7))
+
+            : (item: T) => void
+>item : Symbol(item, Decl(distributiveConditionalCallback.ts, 7, 15))
+>T : Symbol(T, Decl(distributiveConditionalCallback.ts, 3, 7))
+
+    ): void {
+        callback(item);
+>callback : Symbol(callback, Decl(distributiveConditionalCallback.ts, 4, 16))
+>item : Symbol(item, Decl(distributiveConditionalCallback.ts, 3, 10))
+
+        callback(item as T extends string ? T : T);
+>callback : Symbol(callback, Decl(distributiveConditionalCallback.ts, 4, 16))
+>item : Symbol(item, Decl(distributiveConditionalCallback.ts, 3, 10))
+>T : Symbol(T, Decl(distributiveConditionalCallback.ts, 3, 7))
+>T : Symbol(T, Decl(distributiveConditionalCallback.ts, 3, 7))
+>T : Symbol(T, Decl(distributiveConditionalCallback.ts, 3, 7))
+    }
+
+    m2(
+>m2 : Symbol(C.m2, Decl(distributiveConditionalCallback.ts, 11, 5), Decl(distributiveConditionalCallback.ts, 16, 12), Decl(distributiveConditionalCallback.ts, 20, 12))
+
+        item: string,
+>item : Symbol(item, Decl(distributiveConditionalCallback.ts, 13, 7))
+
+        callback?: (item: string) => void
+>callback : Symbol(callback, Decl(distributiveConditionalCallback.ts, 14, 21))
+>item : Symbol(item, Decl(distributiveConditionalCallback.ts, 15, 20))
+
+    ): void;
+    m2<T>(
+>m2 : Symbol(C.m2, Decl(distributiveConditionalCallback.ts, 11, 5), Decl(distributiveConditionalCallback.ts, 16, 12), Decl(distributiveConditionalCallback.ts, 20, 12))
+>T : Symbol(T, Decl(distributiveConditionalCallback.ts, 17, 7))
+
+        item: T,
+>item : Symbol(item, Decl(distributiveConditionalCallback.ts, 17, 10))
+>T : Symbol(T, Decl(distributiveConditionalCallback.ts, 17, 7))
+
+        callback: (item: T) => void
+>callback : Symbol(callback, Decl(distributiveConditionalCallback.ts, 18, 16))
+>item : Symbol(item, Decl(distributiveConditionalCallback.ts, 19, 19))
+>T : Symbol(T, Decl(distributiveConditionalCallback.ts, 17, 7))
+
+    ): void;
+    m2<T>(
+>m2 : Symbol(C.m2, Decl(distributiveConditionalCallback.ts, 11, 5), Decl(distributiveConditionalCallback.ts, 16, 12), Decl(distributiveConditionalCallback.ts, 20, 12))
+>T : Symbol(T, Decl(distributiveConditionalCallback.ts, 21, 7))
+
+        item: T,
+>item : Symbol(item, Decl(distributiveConditionalCallback.ts, 21, 10))
+>T : Symbol(T, Decl(distributiveConditionalCallback.ts, 21, 7))
+
+        callback: T extends string
+>callback : Symbol(callback, Decl(distributiveConditionalCallback.ts, 22, 16))
+>T : Symbol(T, Decl(distributiveConditionalCallback.ts, 21, 7))
+
+            ? ((item: T) => void) | undefined
+>item : Symbol(item, Decl(distributiveConditionalCallback.ts, 24, 16))
+>T : Symbol(T, Decl(distributiveConditionalCallback.ts, 21, 7))
+
+            : (item: T) => void
+>item : Symbol(item, Decl(distributiveConditionalCallback.ts, 25, 15))
+>T : Symbol(T, Decl(distributiveConditionalCallback.ts, 21, 7))
+
+    ): void {
+        if (callback) {
+>callback : Symbol(callback, Decl(distributiveConditionalCallback.ts, 22, 16))
+
+            callback(item);
+>callback : Symbol(callback, Decl(distributiveConditionalCallback.ts, 22, 16))
+>item : Symbol(item, Decl(distributiveConditionalCallback.ts, 21, 10))
+
+            callback(item as T extends string ? T : T);
+>callback : Symbol(callback, Decl(distributiveConditionalCallback.ts, 22, 16))
+>item : Symbol(item, Decl(distributiveConditionalCallback.ts, 21, 10))
+>T : Symbol(T, Decl(distributiveConditionalCallback.ts, 21, 7))
+>T : Symbol(T, Decl(distributiveConditionalCallback.ts, 21, 7))
+>T : Symbol(T, Decl(distributiveConditionalCallback.ts, 21, 7))
+        }
+    }
+}
+
