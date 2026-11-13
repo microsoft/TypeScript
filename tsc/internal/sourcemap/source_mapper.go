@@ -385,7 +385,7 @@ func tryParseBase64Url(url string) (parseableUrl string, isBase64Url bool) {
 		return "", true
 	}
 	if url, found = strings.CutPrefix(url, `charset=`); found {
-		if !strings.EqualFold(url[:len(`utf-8;`)], `utf-8;`) {
+		if len(url) < len(`utf-8;`) || !strings.EqualFold(url[:len(`utf-8;`)], `utf-8;`) {
 			return "", true
 		}
 		url = url[len(`utf-8;`):]
