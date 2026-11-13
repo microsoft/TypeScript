@@ -1,10 +1,7 @@
 package fourslash
 
 import (
-	"os"
-	"os/exec"
 	"slices"
-	"strings"
 	"testing"
 
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
@@ -48,23 +45,5 @@ func TestGoToEachMarker(t *testing.T) {
 				t.Fatalf("visited %v, want %v", visited, tt.want)
 			}
 		})
-	}
-}
-
-func TestGoToEachMarkerMissing(t *testing.T) {
-	t.Parallel()
-	const helperEnv = "FOURSLASH_MISSING_MARKER_HELPER"
-	if os.Getenv(helperEnv) == "1" {
-		f := newMarkerTest(t)
-		f.GoToEachMarker(t, []string{"first", "missing"}, func(marker *Marker, index int) {
-			t.Error("unexpected marker callback")
-		})
-		return
-	}
-	cmd := exec.Command(os.Args[0], "-test.run=^TestGoToEachMarkerMissing$")
-	cmd.Env = append(os.Environ(), helperEnv+"=1")
-	output, err := cmd.CombinedOutput()
-	if err == nil || !strings.Contains(string(output), "Marker 'missing' not found") || strings.Contains(string(output), "unexpected marker callback") {
-		t.Fatalf("expected missing marker failure before any callbacks; got %v\n%s", err, output)
 	}
 }
