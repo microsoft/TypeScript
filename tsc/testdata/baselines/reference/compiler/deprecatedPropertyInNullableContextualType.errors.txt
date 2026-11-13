@@ -1,0 +1,39 @@
+jsxAttributes.tsx(10,35): suggestion TS6385: 'value' is deprecated.
+jsxAttributes.tsx(11,29): suggestion TS6385: 'value' is deprecated.
+objectLiteral.ts(5,41): suggestion TS6385: 'value' is deprecated.
+objectLiteral.ts(6,26): suggestion TS6385: 'value' is deprecated.
+
+
+==== objectLiteral.ts (2 errors) ====
+    interface Options {
+        /** @deprecated use other */
+        value: number;
+    }
+    const nullable: Options | undefined = { value: 1 };
+                                            ~~~~~
+!!! suggestion TS6385: 'value' is deprecated.
+!!! related TS2798 objectLiteral.ts:2:9: The declaration was marked as deprecated here.
+    const plain: Options = { value: 1 };
+                             ~~~~~
+!!! suggestion TS6385: 'value' is deprecated.
+!!! related TS2798 objectLiteral.ts:2:9: The declaration was marked as deprecated here.
+    
+==== jsxAttributes.tsx (2 errors) ====
+    declare namespace JSX {
+        interface Element {}
+    }
+    interface Props {
+        /** @deprecated use other */
+        value: number;
+    }
+    declare function Nullable(props: Props | undefined): JSX.Element;
+    declare function Plain(props: Props): JSX.Element;
+    const nullableElement = <Nullable value={1} />;
+                                      ~~~~~
+!!! suggestion TS6385: 'value' is deprecated.
+!!! related TS2798 jsxAttributes.tsx:5:9: The declaration was marked as deprecated here.
+    const plainElement = <Plain value={1} />;
+                                ~~~~~
+!!! suggestion TS6385: 'value' is deprecated.
+!!! related TS2798 jsxAttributes.tsx:5:9: The declaration was marked as deprecated here.
+    
