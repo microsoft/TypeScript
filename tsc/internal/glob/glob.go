@@ -208,7 +208,11 @@ func (g group) String() string {
 }
 
 func (r charRange) String() string {
-	return "[" + string(r.low) + "-" + string(r.high) + "]"
+	prefix := "["
+	if r.negate {
+		prefix += "!"
+	}
+	return prefix + string(r.low) + "-" + string(r.high) + "]"
 }
 
 // Match reports whether the input string matches the glob pattern.
@@ -225,7 +229,7 @@ func match(elems []element, input string) (ok bool) {
 			if len(input) == 0 || input[0] != '/' {
 				return false
 			}
-			for input[0] == '/' {
+			for len(input) > 0 && input[0] == '/' {
 				input = input[1:]
 			}
 
@@ -262,8 +266,8 @@ func match(elems []element, input string) (ok bool) {
 			input = input[len(elem):]
 
 		case star:
-			var segInput string
-			segInput, input = split(input)
+			segInput, _, _ := strings.Cut(input, "/")
+			input = input[len(segInput):]
 
 			elemEnd := len(elems)
 			for i, e := range elems {
@@ -318,7 +322,7 @@ func match(elems []element, input string) (ok bool) {
 				return false
 			}
 			c, sz := utf8.DecodeRuneInString(input)
-			if c < elem.low || c > elem.high {
+			if (c >= elem.low && c <= elem.high) == elem.negate {
 				return false
 			}
 			input = input[sz:]
