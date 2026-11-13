@@ -3,6 +3,7 @@ package checker
 import (
 	"slices"
 	"strings"
+	"unicode/utf8"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/astnav"
@@ -669,15 +670,20 @@ func getPossibleSymbolReferencePositions(sourceFile *ast.SourceFile, symbolName 
 		container = sourceFile.AsNode()
 	}
 
-	position := strings.Index(text[container.Pos():], symbolName)
+	foundIndex := strings.Index(text[container.Pos():], symbolName)
+	if foundIndex == -1 {
+		return positions
+	}
+	position := container.Pos() + foundIndex
 	endPos := container.End()
 	for position >= 0 && position < endPos {
-		// We found a match.  Make sure it's not part of a larger word (i.e. the char
-		// before and after it have to be a non-identifier char).
+		// We found a match. Make sure the runes before and after it are not identifier parts.
 		endPosition := position + symbolNameLength
+		before, _ := utf8.DecodeLastRuneInString(text[:position])
+		after, _ := utf8.DecodeRuneInString(text[endPosition:])
 
-		if (position == 0 || !scanner.IsIdentifierPart(rune(text[position-1]))) &&
-			(endPosition == sourceLength || !scanner.IsIdentifierPart(rune(text[endPosition]))) {
+		if (position == 0 || !scanner.IsIdentifierPart(before)) &&
+			(endPosition == sourceLength || !scanner.IsIdentifierPart(after)) {
 			// Found a real match.  Keep searching.
 			positions = append(positions, position)
 		}
