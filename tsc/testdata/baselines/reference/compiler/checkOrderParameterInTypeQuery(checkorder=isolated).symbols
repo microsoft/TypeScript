@@ -1,0 +1,37 @@
+//// [tests/cases/compiler/checkOrderParameterInTypeQuery.ts] ////
+
+=== checkOrderParameterInTypeQuery.ts ===
+// Whether a parameter named in a reused return type annotation is the same
+// symbol in the printed signature must not depend on whether the type of
+// the parameter was resolved before the signature was instantiated.
+
+export class C2 {
+>C2 : Symbol(C2, Decl(checkOrderParameterInTypeQuery.ts, 0, 0))
+
+    #a = 1;
+>#a : Symbol(C2.#a, Decl(checkOrderParameterInTypeQuery.ts, 4, 17))
+
+    test1() {
+>test1 : Symbol(C2.test1, Decl(checkOrderParameterInTypeQuery.ts, 5, 11))
+
+        class C {
+>C : Symbol(C, Decl(checkOrderParameterInTypeQuery.ts, 6, 13))
+
+            test1(a: C2): typeof a.#a {
+>test1 : Symbol(C.test1, Decl(checkOrderParameterInTypeQuery.ts, 7, 17))
+>a : Symbol(a, Decl(checkOrderParameterInTypeQuery.ts, 8, 18))
+>C2 : Symbol(C2, Decl(checkOrderParameterInTypeQuery.ts, 0, 0))
+>a.#a : Symbol(C2.#a, Decl(checkOrderParameterInTypeQuery.ts, 4, 17))
+>a : Symbol(a, Decl(checkOrderParameterInTypeQuery.ts, 8, 18))
+
+                return 1;
+            }
+        }
+        return new C().test1(this);
+>new C().test1 : Symbol(C.test1, Decl(checkOrderParameterInTypeQuery.ts, 7, 17))
+>C : Symbol(C, Decl(checkOrderParameterInTypeQuery.ts, 6, 13))
+>test1 : Symbol(C.test1, Decl(checkOrderParameterInTypeQuery.ts, 7, 17))
+>this : Symbol(C2, Decl(checkOrderParameterInTypeQuery.ts, 0, 0))
+    }
+}
+

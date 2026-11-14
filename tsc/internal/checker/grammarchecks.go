@@ -2026,30 +2026,44 @@ func (c *Checker) checkGrammarSourceFile(node *ast.SourceFile) bool {
 
 func (c *Checker) checkGrammarStatementInAmbientContext(node *ast.Node) bool {
 	if node.Flags&ast.NodeFlagsAmbient != 0 {
-		// Find containing block which is either Block, ModuleBlock, SourceFile
-		links := c.nodeLinks.Get(node)
-		if !links.hasReportedStatementInAmbientContext && (ast.IsFunctionLike(node.Parent) || ast.IsAccessor(node.Parent)) {
-			links.hasReportedStatementInAmbientContext = c.grammarErrorOnFirstToken(node, diagnostics.An_implementation_cannot_be_declared_in_ambient_contexts)
-			return links.hasReportedStatementInAmbientContext
+		if ast.IsFunctionLike(node.Parent) || ast.IsAccessor(node.Parent) {
+			return c.grammarErrorOnFirstToken(node, diagnostics.An_implementation_cannot_be_declared_in_ambient_contexts)
 		}
 
 		// We are either parented by another statement, or some sort of block.
-		// If we're in a block, we only want to really report an error once
-		// to prevent noisiness.  So use a bit on the block to indicate if
-		// this has already been reported, and don't report if it has.
-		//
+		// If we're in a block, only its first statement not allowed in an
+		// ambient context reports an error, to prevent noisiness, unless the
+		// block is the body of a function, which reports itself.
 		if node.Parent.Kind == ast.KindBlock || node.Parent.Kind == ast.KindModuleBlock || node.Parent.Kind == ast.KindSourceFile {
-			links := c.nodeLinks.Get(node.Parent)
-			// Check if the containing block ever report this error
-			if !links.hasReportedStatementInAmbientContext {
-				links.hasReportedStatementInAmbientContext = c.grammarErrorOnFirstToken(node, diagnostics.Statements_are_not_allowed_in_ambient_contexts)
-				return links.hasReportedStatementInAmbientContext
+			block := node.Parent
+			if block.Kind == ast.KindBlock && (ast.IsFunctionLike(block.Parent) || ast.IsAccessor(block.Parent)) {
+				return false
+			}
+			if core.Find(block.Statements(), isStatementNotAllowedInAmbientContext) == node {
+				return c.grammarErrorOnFirstToken(node, diagnostics.Statements_are_not_allowed_in_ambient_contexts)
 			}
 		} else {
 			// We must be parented by a statement.  If so, there's no need
 			// to report the error as our parent will have already done it.
 			// debug.Assert(ast.IsStatement(node.Parent)) // !!! commented out in strada - fails if uncommented
 		}
+	}
+	return false
+}
+
+// isStatementNotAllowedInAmbientContext reports whether the check of node
+// reports it with checkGrammarStatementInAmbientContext.
+func isStatementNotAllowedInAmbientContext(node *ast.Node) bool {
+	if node.Flags&ast.NodeFlagsAmbient == 0 {
+		return false
+	}
+	switch node.Kind {
+	case ast.KindBlock, ast.KindEmptyStatement, ast.KindDebuggerStatement, ast.KindExpressionStatement,
+		ast.KindIfStatement, ast.KindDoStatement, ast.KindWhileStatement, ast.KindForStatement,
+		ast.KindForInStatement, ast.KindForOfStatement, ast.KindBreakStatement, ast.KindContinueStatement,
+		ast.KindReturnStatement, ast.KindWithStatement, ast.KindSwitchStatement, ast.KindLabeledStatement,
+		ast.KindThrowStatement, ast.KindTryStatement:
+		return true
 	}
 	return false
 }

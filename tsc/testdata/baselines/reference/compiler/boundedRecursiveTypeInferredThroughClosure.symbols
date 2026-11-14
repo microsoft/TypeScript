@@ -1,0 +1,424 @@
+//// [tests/cases/compiler/boundedRecursiveTypeInferredThroughClosure.ts] ////
+
+=== boundedRecursiveTypeInferredThroughClosure.ts ===
+// The recursion of InferData and UnpackKeyValue is bounded by Next, so
+// inferring it through a closure must not report it as infinite.
+
+type Prettify<T> = { [K in keyof T]: T[K] } & {};
+>Prettify : Symbol(Prettify, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 0, 0))
+>T : Symbol(T, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 3, 14))
+>K : Symbol(K, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 3, 22))
+>T : Symbol(T, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 3, 14))
+>T : Symbol(T, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 3, 14))
+>K : Symbol(K, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 3, 22))
+
+type ExtractUndefined<T> = { [K in keyof T]: undefined extends T[K] ? K : never }[keyof T];
+>ExtractUndefined : Symbol(ExtractUndefined, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 3, 49))
+>T : Symbol(T, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 4, 22))
+>K : Symbol(K, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 4, 30))
+>T : Symbol(T, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 4, 22))
+>T : Symbol(T, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 4, 22))
+>K : Symbol(K, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 4, 30))
+>K : Symbol(K, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 4, 30))
+>T : Symbol(T, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 4, 22))
+
+type ExtractDefined<T> = { [K in keyof T]: undefined extends T[K] ? never : K }[keyof T];
+>ExtractDefined : Symbol(ExtractDefined, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 4, 91))
+>T : Symbol(T, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 5, 20))
+>K : Symbol(K, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 5, 28))
+>T : Symbol(T, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 5, 20))
+>T : Symbol(T, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 5, 20))
+>K : Symbol(K, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 5, 28))
+>K : Symbol(K, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 5, 28))
+>T : Symbol(T, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 5, 20))
+
+type Next = [1, 2, 3, 4, 5, 6];
+>Next : Symbol(Next, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 5, 89))
+
+type JSONPrimitives = string | number | bigint | boolean | null | undefined;
+>JSONPrimitives : Symbol(JSONPrimitives, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 6, 31))
+
+type JSONValues = JSONPrimitives | CanBeSerialized<any>;
+>JSONValues : Symbol(JSONValues, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 7, 76))
+>JSONPrimitives : Symbol(JSONPrimitives, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 6, 31))
+>CanBeSerialized : Symbol(CanBeSerialized, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 8, 56))
+
+type CanBeSerialized<T extends JSONDataTypes> = {
+>CanBeSerialized : Symbol(CanBeSerialized, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 8, 56))
+>T : Symbol(T, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 9, 21))
+>JSONDataTypes : Symbol(JSONDataTypes, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 11, 2))
+
+    toJSON(): T;
+>toJSON : Symbol(toJSON, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 9, 49))
+>T : Symbol(T, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 9, 21))
+
+};
+type JSONDataTypes = JSONValues | JSONDataTypes[] | {
+>JSONDataTypes : Symbol(JSONDataTypes, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 11, 2))
+>JSONValues : Symbol(JSONValues, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 7, 76))
+>JSONDataTypes : Symbol(JSONDataTypes, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 11, 2))
+
+    [key: string]: JSONDataTypes;
+>key : Symbol(key, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 13, 5))
+>JSONDataTypes : Symbol(JSONDataTypes, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 11, 2))
+
+};
+type SerializeJSONObject<T> = {
+>SerializeJSONObject : Symbol(SerializeJSONObject, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 14, 2))
+>T : Symbol(T, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 15, 25))
+
+    [K in ExtractDefined<T>]: SerializeJSONTypes<T[K]>;
+>K : Symbol(K, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 16, 5))
+>ExtractDefined : Symbol(ExtractDefined, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 4, 91))
+>T : Symbol(T, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 15, 25))
+>SerializeJSONTypes : Symbol(SerializeJSONTypes, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 26, 264))
+>T : Symbol(T, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 15, 25))
+>K : Symbol(K, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 16, 5))
+
+} & {
+    [K in ExtractUndefined<T>]?: SerializeJSONTypes<T[K]>;
+>K : Symbol(K, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 18, 5))
+>ExtractUndefined : Symbol(ExtractUndefined, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 3, 49))
+>T : Symbol(T, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 15, 25))
+>SerializeJSONTypes : Symbol(SerializeJSONTypes, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 26, 264))
+>T : Symbol(T, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 15, 25))
+>K : Symbol(K, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 18, 5))
+
+};
+interface ExtendedJSONTypes {
+>ExtendedJSONTypes : Symbol(ExtendedJSONTypes, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 19, 2))
+}
+type NonAllowedJSTypes = Map<any, any> | Set<any>;
+>NonAllowedJSTypes : Symbol(NonAllowedJSTypes, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 21, 1))
+>Map : Symbol(Map, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2026.collection.d.ts, --, --))
+>Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2025.collection.d.ts, --, --))
+
+type ForcefullyAllowedTypes = {
+>ForcefullyAllowedTypes : Symbol(ForcefullyAllowedTypes, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 22, 50))
+
+    [K in keyof ExtendedJSONTypes]: ExtendedJSONTypes[K];
+>K : Symbol(K, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 24, 5))
+>ExtendedJSONTypes : Symbol(ExtendedJSONTypes, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 19, 2))
+>ExtendedJSONTypes : Symbol(ExtendedJSONTypes, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 19, 2))
+>K : Symbol(K, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 24, 5))
+
+}[keyof ExtendedJSONTypes];
+>ExtendedJSONTypes : Symbol(ExtendedJSONTypes, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 19, 2))
+
+type SerializeJSONOwnTypes<T> = T extends JSONPrimitives ? T : T extends ForcefullyAllowedTypes ? T : T extends NonAllowedJSTypes ? never : T extends Array<infer item> ? Array<SerializeJSONTypes<item>> : T extends object ? Prettify<SerializeJSONObject<T>> : never;
+>SerializeJSONOwnTypes : Symbol(SerializeJSONOwnTypes, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 25, 27))
+>T : Symbol(T, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 26, 27))
+>T : Symbol(T, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 26, 27))
+>JSONPrimitives : Symbol(JSONPrimitives, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 6, 31))
+>T : Symbol(T, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 26, 27))
+>T : Symbol(T, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 26, 27))
+>ForcefullyAllowedTypes : Symbol(ForcefullyAllowedTypes, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 22, 50))
+>T : Symbol(T, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 26, 27))
+>T : Symbol(T, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 26, 27))
+>NonAllowedJSTypes : Symbol(NonAllowedJSTypes, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 21, 1))
+>T : Symbol(T, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 26, 27))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>item : Symbol(item, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 26, 161))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>SerializeJSONTypes : Symbol(SerializeJSONTypes, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 26, 264))
+>item : Symbol(item, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 26, 161))
+>T : Symbol(T, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 26, 27))
+>Prettify : Symbol(Prettify, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 0, 0))
+>SerializeJSONObject : Symbol(SerializeJSONObject, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 14, 2))
+>T : Symbol(T, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 26, 27))
+
+type SerializeJSONTypes<T> = T extends ForcefullyAllowedTypes ? T : T extends CanBeSerialized<infer A> ? SerializeJSONOwnTypes<A> : SerializeJSONOwnTypes<T>;
+>SerializeJSONTypes : Symbol(SerializeJSONTypes, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 26, 264))
+>T : Symbol(T, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 27, 24))
+>T : Symbol(T, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 27, 24))
+>ForcefullyAllowedTypes : Symbol(ForcefullyAllowedTypes, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 22, 50))
+>T : Symbol(T, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 27, 24))
+>T : Symbol(T, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 27, 24))
+>CanBeSerialized : Symbol(CanBeSerialized, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 8, 56))
+>A : Symbol(A, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 27, 99))
+>SerializeJSONOwnTypes : Symbol(SerializeJSONOwnTypes, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 25, 27))
+>A : Symbol(A, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 27, 99))
+>SerializeJSONOwnTypes : Symbol(SerializeJSONOwnTypes, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 25, 27))
+>T : Symbol(T, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 27, 24))
+
+interface ItemContract<Transformer extends Record<string, any>, MaxDepth extends Next[number], Variant extends string> {
+>ItemContract : Symbol(ItemContract, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 27, 157))
+>Transformer : Symbol(Transformer, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 28, 23))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>MaxDepth : Symbol(MaxDepth, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 28, 63))
+>Next : Symbol(Next, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 5, 89))
+>Variant : Symbol(Variant, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 28, 94))
+
+    $type: 'item';
+>$type : Symbol(ItemContract.$type, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 28, 120))
+
+    transformer: {
+>transformer : Symbol(ItemContract.transformer, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 29, 18))
+
+        new (...args: any[]): Transformer;
+>args : Symbol(args, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 31, 13))
+>Transformer : Symbol(Transformer, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 28, 23))
+
+    };
+    maxDepth: MaxDepth;
+>maxDepth : Symbol(ItemContract.maxDepth, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 32, 6))
+>MaxDepth : Symbol(MaxDepth, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 28, 63))
+
+    variant: Variant;
+>variant : Symbol(ItemContract.variant, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 33, 23))
+>Variant : Symbol(Variant, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 28, 94))
+}
+type UnpackKeyValue<Value extends [any, any], MaxDepth extends number, Depth extends number> = [Value[0]] extends [never] ? SerializeJSONTypes<Value[1]> : Value[0] extends ItemContract<infer Transformer, infer LocalMaxDepth, infer Variant> ? InferData<Transformer, Variant, MaxDepth extends -1 ? LocalMaxDepth : MaxDepth, Next[Depth]> | SerializeJSONTypes<Value[1]> : SerializeJSONTypes<Value[1]>;
+>UnpackKeyValue : Symbol(UnpackKeyValue, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 35, 1))
+>Value : Symbol(Value, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 36, 20))
+>MaxDepth : Symbol(MaxDepth, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 36, 45))
+>Depth : Symbol(Depth, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 36, 70))
+>Value : Symbol(Value, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 36, 20))
+>SerializeJSONTypes : Symbol(SerializeJSONTypes, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 26, 264))
+>Value : Symbol(Value, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 36, 20))
+>Value : Symbol(Value, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 36, 20))
+>ItemContract : Symbol(ItemContract, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 27, 157))
+>Transformer : Symbol(Transformer, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 36, 190))
+>LocalMaxDepth : Symbol(LocalMaxDepth, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 36, 209))
+>Variant : Symbol(Variant, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 36, 230))
+>InferData : Symbol(InferData, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 55, 173))
+>Transformer : Symbol(Transformer, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 36, 190))
+>Variant : Symbol(Variant, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 36, 230))
+>MaxDepth : Symbol(MaxDepth, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 36, 45))
+>LocalMaxDepth : Symbol(LocalMaxDepth, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 36, 209))
+>MaxDepth : Symbol(MaxDepth, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 36, 45))
+>Next : Symbol(Next, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 5, 89))
+>Depth : Symbol(Depth, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 36, 70))
+>SerializeJSONTypes : Symbol(SerializeJSONTypes, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 26, 264))
+>Value : Symbol(Value, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 36, 20))
+>SerializeJSONTypes : Symbol(SerializeJSONTypes, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 26, 264))
+>Value : Symbol(Value, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 36, 20))
+
+type LimitDepth<Key, Value, MaxDepth extends number, Depth extends number> = [
+>LimitDepth : Symbol(LimitDepth, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 36, 397))
+>Key : Symbol(Key, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 37, 16))
+>Value : Symbol(Value, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 37, 20))
+>MaxDepth : Symbol(MaxDepth, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 37, 27))
+>Depth : Symbol(Depth, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 37, 52))
+
+    Value
+>Value : Symbol(Value, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 37, 20))
+
+] extends [never] ? Key : Value extends ItemContract<any, any, any> ? MaxDepth extends Depth ? never : Key : Key;
+>Key : Symbol(Key, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 37, 16))
+>Value : Symbol(Value, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 37, 20))
+>ItemContract : Symbol(ItemContract, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 27, 157))
+>MaxDepth : Symbol(MaxDepth, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 37, 27))
+>Depth : Symbol(Depth, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 37, 52))
+>Key : Symbol(Key, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 37, 16))
+>Key : Symbol(Key, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 37, 16))
+
+type UnpackOptionalValues<Data, MaxDepth extends number, Depth extends number> = {
+>UnpackOptionalValues : Symbol(UnpackOptionalValues, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 39, 113))
+>Data : Symbol(Data, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 40, 26))
+>MaxDepth : Symbol(MaxDepth, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 40, 31))
+>Depth : Symbol(Depth, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 40, 56))
+
+    [O in {
+>O : Symbol(O, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 41, 5))
+
+        [K in keyof Data]: [undefined] extends [Data[K]] ? LimitDepth<K, SplitItm<Data[K]>[0], MaxDepth, Depth> : never;
+>K : Symbol(K, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 42, 9))
+>Data : Symbol(Data, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 40, 26))
+>Data : Symbol(Data, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 40, 26))
+>K : Symbol(K, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 42, 9))
+>LimitDepth : Symbol(LimitDepth, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 36, 397))
+>K : Symbol(K, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 42, 9))
+>SplitItm : Symbol(SplitItm, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 49, 2))
+>Data : Symbol(Data, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 40, 26))
+>K : Symbol(K, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 42, 9))
+>MaxDepth : Symbol(MaxDepth, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 40, 31))
+>Depth : Symbol(Depth, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 40, 56))
+
+    }[keyof Data]]?: UnpackKeyValue<SplitItm<Data[O]>, MaxDepth, Depth>;
+>Data : Symbol(Data, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 40, 26))
+>UnpackKeyValue : Symbol(UnpackKeyValue, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 35, 1))
+>SplitItm : Symbol(SplitItm, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 49, 2))
+>Data : Symbol(Data, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 40, 26))
+>O : Symbol(O, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 41, 5))
+>MaxDepth : Symbol(MaxDepth, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 40, 31))
+>Depth : Symbol(Depth, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 40, 56))
+
+};
+type UnpackRequiredValues<Data, MaxDepth extends number, Depth extends number> = {
+>UnpackRequiredValues : Symbol(UnpackRequiredValues, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 44, 2))
+>Data : Symbol(Data, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 45, 26))
+>MaxDepth : Symbol(MaxDepth, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 45, 31))
+>Depth : Symbol(Depth, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 45, 56))
+
+    [O in {
+>O : Symbol(O, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 46, 5))
+
+        [K in keyof Data]: [undefined] extends [Data[K]] ? never : LimitDepth<K, SplitItm<Data[K]>[0], MaxDepth, Depth>;
+>K : Symbol(K, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 47, 9))
+>Data : Symbol(Data, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 45, 26))
+>Data : Symbol(Data, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 45, 26))
+>K : Symbol(K, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 47, 9))
+>LimitDepth : Symbol(LimitDepth, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 36, 397))
+>K : Symbol(K, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 47, 9))
+>SplitItm : Symbol(SplitItm, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 49, 2))
+>Data : Symbol(Data, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 45, 26))
+>K : Symbol(K, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 47, 9))
+>MaxDepth : Symbol(MaxDepth, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 45, 31))
+>Depth : Symbol(Depth, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 45, 56))
+
+    }[keyof Data]]: UnpackKeyValue<SplitItm<Data[O]>, MaxDepth, Depth>;
+>Data : Symbol(Data, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 45, 26))
+>UnpackKeyValue : Symbol(UnpackKeyValue, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 35, 1))
+>SplitItm : Symbol(SplitItm, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 49, 2))
+>Data : Symbol(Data, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 45, 26))
+>O : Symbol(O, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 46, 5))
+>MaxDepth : Symbol(MaxDepth, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 45, 31))
+>Depth : Symbol(Depth, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 45, 56))
+
+};
+type SplitItm<T> = [
+>SplitItm : Symbol(SplitItm, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 49, 2))
+>T : Symbol(T, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 50, 14))
+
+    Extract<T, ItemContract<any, any, any>>,
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 50, 14))
+>ItemContract : Symbol(ItemContract, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 27, 157))
+
+    Exclude<T, ItemContract<any, any, any>>
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 50, 14))
+>ItemContract : Symbol(ItemContract, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 27, 157))
+
+];
+type UnpackAsTopLevelItem<T, Wrapper extends string | undefined> = T extends ItemContract<infer Transformer, any, infer Variant> ? InferData<Transformer, Variant, -1, 0> : never;
+>UnpackAsTopLevelItem : Symbol(UnpackAsTopLevelItem, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 53, 2))
+>T : Symbol(T, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 54, 26))
+>Wrapper : Symbol(Wrapper, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 54, 28))
+>T : Symbol(T, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 54, 26))
+>ItemContract : Symbol(ItemContract, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 27, 157))
+>Transformer : Symbol(Transformer, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 54, 95))
+>Variant : Symbol(Variant, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 54, 119))
+>InferData : Symbol(InferData, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 55, 173))
+>Transformer : Symbol(Transformer, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 54, 95))
+>Variant : Symbol(Variant, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 54, 119))
+
+type UnpackValues<Data, MaxDepth extends number, Depth extends number> = Prettify<UnpackRequiredValues<Data, MaxDepth, Depth> & UnpackOptionalValues<Data, MaxDepth, Depth>>;
+>UnpackValues : Symbol(UnpackValues, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 54, 178))
+>Data : Symbol(Data, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 55, 18))
+>MaxDepth : Symbol(MaxDepth, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 55, 23))
+>Depth : Symbol(Depth, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 55, 48))
+>Prettify : Symbol(Prettify, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 0, 0))
+>UnpackRequiredValues : Symbol(UnpackRequiredValues, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 44, 2))
+>Data : Symbol(Data, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 55, 18))
+>MaxDepth : Symbol(MaxDepth, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 55, 23))
+>Depth : Symbol(Depth, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 55, 48))
+>UnpackOptionalValues : Symbol(UnpackOptionalValues, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 39, 113))
+>Data : Symbol(Data, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 55, 18))
+>MaxDepth : Symbol(MaxDepth, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 55, 23))
+>Depth : Symbol(Depth, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 55, 48))
+
+type InferData<Transformer, Variant extends string = 'toObject', MaxDepth extends number = -1, Depth extends number = 0> = Transformer extends {
+>InferData : Symbol(InferData, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 55, 173))
+>Transformer : Symbol(Transformer, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 56, 15))
+>Variant : Symbol(Variant, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 56, 27))
+>MaxDepth : Symbol(MaxDepth, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 56, 64))
+>Depth : Symbol(Depth, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 56, 94))
+>Transformer : Symbol(Transformer, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 56, 15))
+
+    [K in Variant]: (...args: any[]) => unknown;
+>K : Symbol(K, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 57, 5))
+>Variant : Symbol(Variant, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 56, 27))
+>args : Symbol(args, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 57, 21))
+
+} ? UnpackValues<Awaited<ReturnType<Transformer[Variant]>>, MaxDepth, Depth> : never;
+>UnpackValues : Symbol(UnpackValues, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 54, 178))
+>Awaited : Symbol(Awaited, Decl(lib.es5.d.ts, --, --))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>Transformer : Symbol(Transformer, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 56, 15))
+>Variant : Symbol(Variant, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 56, 27))
+>MaxDepth : Symbol(MaxDepth, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 56, 64))
+>Depth : Symbol(Depth, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 56, 94))
+
+declare class Item<Transformer extends Record<string, any>, MaxDepth extends Next[number], Variant extends string> {
+>Item : Symbol(Item, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 58, 85))
+>Transformer : Symbol(Transformer, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 59, 19))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>MaxDepth : Symbol(MaxDepth, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 59, 59))
+>Next : Symbol(Next, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 5, 89))
+>Variant : Symbol(Variant, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 59, 90))
+
+	transformer: { new (...args: any[]): Transformer };
+>transformer : Symbol(Item.transformer, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 59, 116))
+>args : Symbol(args, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 60, 21))
+>Transformer : Symbol(Transformer, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 59, 19))
+
+	maxDepth: MaxDepth;
+>maxDepth : Symbol(Item.maxDepth, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 60, 52))
+>MaxDepth : Symbol(MaxDepth, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 59, 59))
+
+	variant: Variant;
+>variant : Symbol(Item.variant, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 61, 20))
+>Variant : Symbol(Variant, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 59, 90))
+
+	$type: 'item';
+>$type : Symbol(Item.$type, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 62, 18))
+
+	resolve(): Promise<UnpackAsTopLevelItem<this, undefined>>;
+>resolve : Symbol(Item.resolve, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 63, 15))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>UnpackAsTopLevelItem : Symbol(UnpackAsTopLevelItem, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 53, 2))
+}
+type Ctor = { new (resource: any, ...rest: any[]): any };
+>Ctor : Symbol(Ctor, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 65, 1))
+>resource : Symbol(resource, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 66, 19))
+>rest : Symbol(rest, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 66, 33))
+
+declare abstract class BaseTransformer<T> {
+>BaseTransformer : Symbol(BaseTransformer, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 66, 57))
+>T : Symbol(T, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 67, 39))
+
+	static transform<Self extends Ctor>(this: Self, data: ConstructorParameters<Self>[0]): Item<InstanceType<Self>, 1, 'toObject'>;
+>transform : Symbol(BaseTransformer.transform, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 67, 43))
+>Self : Symbol(Self, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 68, 18))
+>Ctor : Symbol(Ctor, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 65, 1))
+>this : Symbol(this, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 68, 37))
+>Self : Symbol(Self, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 68, 18))
+>data : Symbol(data, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 68, 48))
+>ConstructorParameters : Symbol(ConstructorParameters, Decl(lib.es5.d.ts, --, --))
+>Self : Symbol(Self, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 68, 18))
+>Item : Symbol(Item, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 58, 85))
+>InstanceType : Symbol(InstanceType, Decl(lib.es5.d.ts, --, --))
+>Self : Symbol(Self, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 68, 18))
+
+	constructor(resource: T);
+>resource : Symbol(resource, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 69, 13))
+>T : Symbol(T, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 67, 39))
+}
+class Size {
+>Size : Symbol(Size, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 70, 1))
+}
+class SizeTransformer extends BaseTransformer<Size> {
+>SizeTransformer : Symbol(SizeTransformer, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 72, 1))
+>BaseTransformer : Symbol(BaseTransformer, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 66, 57))
+>Size : Symbol(Size, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 70, 1))
+
+	toObject() {
+>toObject : Symbol(SizeTransformer.toObject, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 73, 53))
+	}
+}
+declare function once<T>(value: T): T;
+>once : Symbol(once, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 76, 1))
+>T : Symbol(T, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 77, 22))
+>value : Symbol(value, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 77, 25))
+>T : Symbol(T, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 77, 22))
+>T : Symbol(T, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 77, 22))
+
+once(() => SizeTransformer.transform(new Size()));
+>once : Symbol(once, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 76, 1))
+>SizeTransformer.transform : Symbol(BaseTransformer.transform, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 67, 43))
+>SizeTransformer : Symbol(SizeTransformer, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 72, 1))
+>transform : Symbol(BaseTransformer.transform, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 67, 43))
+>Size : Symbol(Size, Decl(boundedRecursiveTypeInferredThroughClosure.ts, 70, 1))
+

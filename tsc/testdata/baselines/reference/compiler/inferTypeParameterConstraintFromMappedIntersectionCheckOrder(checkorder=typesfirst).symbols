@@ -1,0 +1,29 @@
+//// [tests/cases/compiler/inferTypeParameterConstraintFromMappedIntersectionCheckOrder.ts] ////
+
+=== inferTypeParameterConstraintFromMappedIntersectionCheckOrder.ts ===
+// The constraint of U is inferred from the constraint of the type parameter
+// of S. Instantiating S with U needs the constraint of U, so whether U
+// satisfies object must not depend on whether I is queried before its type
+// arguments are checked.
+
+type Copy<T> = { [K in keyof T]: T[K] };
+>Copy : Symbol(Copy, Decl(inferTypeParameterConstraintFromMappedIntersectionCheckOrder.ts, 0, 0))
+>T : Symbol(T, Decl(inferTypeParameterConstraintFromMappedIntersectionCheckOrder.ts, 5, 10))
+>K : Symbol(K, Decl(inferTypeParameterConstraintFromMappedIntersectionCheckOrder.ts, 5, 18))
+>T : Symbol(T, Decl(inferTypeParameterConstraintFromMappedIntersectionCheckOrder.ts, 5, 10))
+>T : Symbol(T, Decl(inferTypeParameterConstraintFromMappedIntersectionCheckOrder.ts, 5, 10))
+>K : Symbol(K, Decl(inferTypeParameterConstraintFromMappedIntersectionCheckOrder.ts, 5, 18))
+
+type S<T extends object> = Copy<{ x: 0 } & T>;
+>S : Symbol(S, Decl(inferTypeParameterConstraintFromMappedIntersectionCheckOrder.ts, 5, 40))
+>T : Symbol(T, Decl(inferTypeParameterConstraintFromMappedIntersectionCheckOrder.ts, 6, 7))
+>Copy : Symbol(Copy, Decl(inferTypeParameterConstraintFromMappedIntersectionCheckOrder.ts, 0, 0))
+>x : Symbol(x, Decl(inferTypeParameterConstraintFromMappedIntersectionCheckOrder.ts, 6, 33))
+>T : Symbol(T, Decl(inferTypeParameterConstraintFromMappedIntersectionCheckOrder.ts, 6, 7))
+
+type I = {} extends S<infer U> ? U : never;
+>I : Symbol(I, Decl(inferTypeParameterConstraintFromMappedIntersectionCheckOrder.ts, 6, 46))
+>S : Symbol(S, Decl(inferTypeParameterConstraintFromMappedIntersectionCheckOrder.ts, 5, 40))
+>U : Symbol(U, Decl(inferTypeParameterConstraintFromMappedIntersectionCheckOrder.ts, 7, 27))
+>U : Symbol(U, Decl(inferTypeParameterConstraintFromMappedIntersectionCheckOrder.ts, 7, 27))
+

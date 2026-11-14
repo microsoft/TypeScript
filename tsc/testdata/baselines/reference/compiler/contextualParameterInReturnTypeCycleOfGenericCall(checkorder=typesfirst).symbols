@@ -1,0 +1,45 @@
+//// [tests/cases/compiler/contextualParameterInReturnTypeCycleOfGenericCall.ts] ////
+
+=== contextualParameterInReturnTypeCycleOfGenericCall.ts ===
+// Inferring `T` for `g` needs the return type of the arrow, whose body is a
+// call to `f` that is contextually typed by that same return type, a cycle.
+// `state` must still get the contextual type `number` (S inferred from
+// `initialState`), as in main and TS 6.0 (redux-toolkit `createSlice` inside
+// vitest `expect(() => ...)` pattern).
+
+declare function f<S, CR extends Record<string, (state: S) => S>>(options: {
+>f : Symbol(f, Decl(contextualParameterInReturnTypeCycleOfGenericCall.ts, 0, 0))
+>S : Symbol(S, Decl(contextualParameterInReturnTypeCycleOfGenericCall.ts, 6, 19))
+>CR : Symbol(CR, Decl(contextualParameterInReturnTypeCycleOfGenericCall.ts, 6, 21))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>state : Symbol(state, Decl(contextualParameterInReturnTypeCycleOfGenericCall.ts, 6, 49))
+>S : Symbol(S, Decl(contextualParameterInReturnTypeCycleOfGenericCall.ts, 6, 19))
+>S : Symbol(S, Decl(contextualParameterInReturnTypeCycleOfGenericCall.ts, 6, 19))
+>options : Symbol(options, Decl(contextualParameterInReturnTypeCycleOfGenericCall.ts, 6, 66))
+
+    initialState: S;
+>initialState : Symbol(initialState, Decl(contextualParameterInReturnTypeCycleOfGenericCall.ts, 6, 76))
+>S : Symbol(S, Decl(contextualParameterInReturnTypeCycleOfGenericCall.ts, 6, 19))
+
+    reducers: CR;
+>reducers : Symbol(reducers, Decl(contextualParameterInReturnTypeCycleOfGenericCall.ts, 7, 20))
+>CR : Symbol(CR, Decl(contextualParameterInReturnTypeCycleOfGenericCall.ts, 6, 21))
+
+}): CR;
+>CR : Symbol(CR, Decl(contextualParameterInReturnTypeCycleOfGenericCall.ts, 6, 21))
+
+declare function g<T>(a: T): void;
+>g : Symbol(g, Decl(contextualParameterInReturnTypeCycleOfGenericCall.ts, 9, 7))
+>T : Symbol(T, Decl(contextualParameterInReturnTypeCycleOfGenericCall.ts, 10, 19))
+>a : Symbol(a, Decl(contextualParameterInReturnTypeCycleOfGenericCall.ts, 10, 22))
+>T : Symbol(T, Decl(contextualParameterInReturnTypeCycleOfGenericCall.ts, 10, 19))
+
+g(() => f({ reducers: { a: (state) => state + 1 }, initialState: 0 }));
+>g : Symbol(g, Decl(contextualParameterInReturnTypeCycleOfGenericCall.ts, 9, 7))
+>f : Symbol(f, Decl(contextualParameterInReturnTypeCycleOfGenericCall.ts, 0, 0))
+>reducers : Symbol(reducers, Decl(contextualParameterInReturnTypeCycleOfGenericCall.ts, 12, 11))
+>a : Symbol(a, Decl(contextualParameterInReturnTypeCycleOfGenericCall.ts, 12, 23))
+>state : Symbol(state, Decl(contextualParameterInReturnTypeCycleOfGenericCall.ts, 12, 28))
+>state : Symbol(state, Decl(contextualParameterInReturnTypeCycleOfGenericCall.ts, 12, 28))
+>initialState : Symbol(initialState, Decl(contextualParameterInReturnTypeCycleOfGenericCall.ts, 12, 50))
+

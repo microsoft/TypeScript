@@ -1,0 +1,30 @@
+//// [tests/cases/compiler/typeReferenceRecursionIdentityCheckOrder.ts] ////
+
+=== typeReferenceRecursionIdentityCheckOrder.ts ===
+// Comparing never[] to B<0> nests comparisons of the members of A and B.
+// Whether they are cut short as deeply nested must not depend on whether the
+// annotation of b is resolved before checking a instantiates slice.
+
+interface A<T> {
+    slice(): B<T>;
+>slice : () => B<T>
+
+    every<S extends T>(predicate: (value: T) => value is S): this is A<S>;
+>every : <S extends T>(predicate: (value: T) => value is S) => this is A<S>
+>predicate : (value: T) => value is S
+>value : T
+
+    flatMap<U>(callback: (value: T) => U | readonly U[] | A<U>): U[];
+>flatMap : <U>(callback: (value: T) => U | readonly U[] | A<U>) => U[]
+>callback : (value: T) => U | readonly U[] | A<U>
+>value : T
+}
+interface B<T> extends A<T> {}
+const a: A<0> = [];
+>a : A<0>
+>[] : never[]
+
+const b: B<0> = [];
+>b : B<0>
+>[] : never[]
+

@@ -1,0 +1,91 @@
+//// [tests/cases/compiler/relationComplexityError.ts] ////
+
+=== relationComplexityError.ts ===
+// Repro from #55630
+// Every comparison that needs a comparison that is too complex is too complex
+// itself, whether or not that comparison happened before.
+
+type Digits = '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7';
+>Digits : Symbol(Digits, Decl(relationComplexityError.ts, 0, 0))
+
+type T1 = `${Digits}${Digits}${Digits}${Digits}` | undefined;
+>T1 : Symbol(T1, Decl(relationComplexityError.ts, 4, 60))
+>Digits : Symbol(Digits, Decl(relationComplexityError.ts, 0, 0))
+>Digits : Symbol(Digits, Decl(relationComplexityError.ts, 0, 0))
+>Digits : Symbol(Digits, Decl(relationComplexityError.ts, 0, 0))
+>Digits : Symbol(Digits, Decl(relationComplexityError.ts, 0, 0))
+
+type T2 = { a: string } | { b: number };
+>T2 : Symbol(T2, Decl(relationComplexityError.ts, 5, 61))
+>a : Symbol(a, Decl(relationComplexityError.ts, 6, 11))
+>b : Symbol(b, Decl(relationComplexityError.ts, 6, 27))
+
+function f0(x: { p: T1 | null }, y: { p: T1 & T2 }) {
+>f0 : Symbol(f0, Decl(relationComplexityError.ts, 6, 40))
+>x : Symbol(x, Decl(relationComplexityError.ts, 8, 12))
+>p : Symbol(p, Decl(relationComplexityError.ts, 8, 16))
+>T1 : Symbol(T1, Decl(relationComplexityError.ts, 4, 60))
+>y : Symbol(y, Decl(relationComplexityError.ts, 8, 32))
+>p : Symbol(p, Decl(relationComplexityError.ts, 8, 37))
+>T1 : Symbol(T1, Decl(relationComplexityError.ts, 4, 60))
+>T2 : Symbol(T2, Decl(relationComplexityError.ts, 5, 61))
+
+    x = y;  // Complexity error
+>x : Symbol(x, Decl(relationComplexityError.ts, 8, 12))
+>y : Symbol(y, Decl(relationComplexityError.ts, 8, 32))
+}
+
+function f1(x: T1, y: T1 & T2) {
+>f1 : Symbol(f1, Decl(relationComplexityError.ts, 10, 1))
+>x : Symbol(x, Decl(relationComplexityError.ts, 12, 12))
+>T1 : Symbol(T1, Decl(relationComplexityError.ts, 4, 60))
+>y : Symbol(y, Decl(relationComplexityError.ts, 12, 18))
+>T1 : Symbol(T1, Decl(relationComplexityError.ts, 4, 60))
+>T2 : Symbol(T2, Decl(relationComplexityError.ts, 5, 61))
+
+    x = y;
+>x : Symbol(x, Decl(relationComplexityError.ts, 12, 12))
+>y : Symbol(y, Decl(relationComplexityError.ts, 12, 18))
+}
+
+function f2(x: T1 | null, y: T1 & T2) {
+>f2 : Symbol(f2, Decl(relationComplexityError.ts, 14, 1))
+>x : Symbol(x, Decl(relationComplexityError.ts, 16, 12))
+>T1 : Symbol(T1, Decl(relationComplexityError.ts, 4, 60))
+>y : Symbol(y, Decl(relationComplexityError.ts, 16, 25))
+>T1 : Symbol(T1, Decl(relationComplexityError.ts, 4, 60))
+>T2 : Symbol(T2, Decl(relationComplexityError.ts, 5, 61))
+
+    x = y;  // Complexity error
+>x : Symbol(x, Decl(relationComplexityError.ts, 16, 12))
+>y : Symbol(y, Decl(relationComplexityError.ts, 16, 25))
+}
+
+function f3(x: T1 | null, y: T1 & T2) {
+>f3 : Symbol(f3, Decl(relationComplexityError.ts, 18, 1))
+>x : Symbol(x, Decl(relationComplexityError.ts, 20, 12))
+>T1 : Symbol(T1, Decl(relationComplexityError.ts, 4, 60))
+>y : Symbol(y, Decl(relationComplexityError.ts, 20, 25))
+>T1 : Symbol(T1, Decl(relationComplexityError.ts, 4, 60))
+>T2 : Symbol(T2, Decl(relationComplexityError.ts, 5, 61))
+
+    x = y;  // Complexity error
+>x : Symbol(x, Decl(relationComplexityError.ts, 20, 12))
+>y : Symbol(y, Decl(relationComplexityError.ts, 20, 25))
+}
+
+function f4(x: { p: T1 | null }, y: { p: T1 & T2 }) {
+>f4 : Symbol(f4, Decl(relationComplexityError.ts, 22, 1))
+>x : Symbol(x, Decl(relationComplexityError.ts, 24, 12))
+>p : Symbol(p, Decl(relationComplexityError.ts, 24, 16))
+>T1 : Symbol(T1, Decl(relationComplexityError.ts, 4, 60))
+>y : Symbol(y, Decl(relationComplexityError.ts, 24, 32))
+>p : Symbol(p, Decl(relationComplexityError.ts, 24, 37))
+>T1 : Symbol(T1, Decl(relationComplexityError.ts, 4, 60))
+>T2 : Symbol(T2, Decl(relationComplexityError.ts, 5, 61))
+
+    x = y;  // Complexity error
+>x : Symbol(x, Decl(relationComplexityError.ts, 24, 12))
+>y : Symbol(y, Decl(relationComplexityError.ts, 24, 32))
+}
+

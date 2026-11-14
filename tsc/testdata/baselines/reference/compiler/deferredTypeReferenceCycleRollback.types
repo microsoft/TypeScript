@@ -1,0 +1,34 @@
+//// [tests/cases/compiler/deferredTypeReferenceCycleRollback.ts] ////
+
+=== deferredTypeReferenceCycleRollback.ts ===
+// A cycle rollback used to reset the type of the Array<NodePath<unknown>>
+// node while the deferred reference identified by that node survived,
+// which crashed a later instantiation of it.
+
+declare function declare<T extends PluginObj = PluginObj>(): void;
+>declare : <T extends PluginObj = PluginObj<unknown>>() => void
+
+interface PluginObj<S = unknown> {
+    visitor: Visit<S, never>;
+>visitor : Visit<S, never>
+}
+type Visit<S, P> = VisitFn<S, P> | VisitObj<S, P>;
+>Visit : Visit<S, P>
+
+type VisitFn<S, P> = (path: NodePath<P>) => void;
+>VisitFn : VisitFn<S, P>
+>path : NodePath<P>
+
+interface VisitObj<S, P> {}
+declare class NodePath<T> {
+>NodePath : NodePath<T>
+
+    parentPath: NodePath<Exclude<T, null>>;
+>parentPath : NodePath<Exclude<T, null>>
+
+    get: Get<T>;
+>get : Get<T>
+}
+type Get<T> = T extends Array<Missing> ? Array<NodePath<unknown>> : never;
+>Get : Get<T>
+

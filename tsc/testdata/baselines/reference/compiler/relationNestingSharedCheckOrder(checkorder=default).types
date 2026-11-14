@@ -1,0 +1,29 @@
+//// [tests/cases/compiler/relationNestingSharedCheckOrder.ts] ////
+
+=== relationNestingSharedCheckOrder.ts ===
+// Relating S<string> to R<string> fresh is cut short at deeply nested
+// types before reaching next.leaf, and so succeeds. In program order Inner
+// has already found that S<[string]> is not related to R<[string]>. Whether
+// Outer succeeds must not depend on which comes first. Conditional types
+// relate without reporting errors, which would compute the comparison again.
+
+type S<T> = { next: S<[T]>; leaf: T extends [[unknown]] ? number : T };
+>S : S<T>
+>next : S<[T]>
+>leaf : T extends [[unknown]] ? number : T
+
+type R<T> = { next: R<[T]>; leaf: T };
+>R : R<T>
+>next : R<[T]>
+>leaf : T
+
+type Inner = S<[string]> extends R<[string]> ? true : false;
+>Inner : false
+>true : true
+>false : false
+
+type Outer = S<string> extends R<string> ? true : false;
+>Outer : true
+>true : true
+>false : false
+

@@ -1,0 +1,3352 @@
+//// [tests/cases/compiler/flowLoopTooDeepCheckOrder.ts] ////
+
+=== flowLoopTooDeepCheckOrder.ts ===
+// The loop is too deep to analyze from any reference, so 'narrowed' gives
+// up whether or not the reference in the loop analyzed the loop first.
+
+declare function cond(): boolean;
+>cond : Symbol(cond, Decl(flowLoopTooDeepCheckOrder.ts, 0, 0))
+
+declare function isString(value: unknown): value is string;
+>isString : Symbol(isString, Decl(flowLoopTooDeepCheckOrder.ts, 3, 33))
+>value : Symbol(value, Decl(flowLoopTooDeepCheckOrder.ts, 4, 26))
+>value : Symbol(value, Decl(flowLoopTooDeepCheckOrder.ts, 4, 26))
+
+declare let b: boolean;
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+let w: string | number = 0;
+>w : Symbol(w, Decl(flowLoopTooDeepCheckOrder.ts, 7, 3))
+
+while (cond()) {
+>cond : Symbol(cond, Decl(flowLoopTooDeepCheckOrder.ts, 0, 0))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (typeof w === "string") { w = 1; } else { w = "a"; }
+>w : Symbol(w, Decl(flowLoopTooDeepCheckOrder.ts, 7, 3))
+>w : Symbol(w, Decl(flowLoopTooDeepCheckOrder.ts, 7, 3))
+>w : Symbol(w, Decl(flowLoopTooDeepCheckOrder.ts, 7, 3))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopTooDeepCheckOrder.ts, 5, 11))
+}
+if (isString(w)) {
+>isString : Symbol(isString, Decl(flowLoopTooDeepCheckOrder.ts, 3, 33))
+>w : Symbol(w, Decl(flowLoopTooDeepCheckOrder.ts, 7, 3))
+
+    const narrowed = w;
+>narrowed : Symbol(narrowed, Decl(flowLoopTooDeepCheckOrder.ts, 1117, 9))
+>w : Symbol(w, Decl(flowLoopTooDeepCheckOrder.ts, 7, 3))
+}
+

@@ -1,0 +1,89 @@
+//// [tests/cases/compiler/contextualReturnArrayPatternCallback.ts] ////
+
+=== contextualReturnArrayPatternCallback.ts ===
+interface Matcher<Input, Value = unknown> {
+>Matcher : Symbol(Matcher, Decl(contextualReturnArrayPatternCallback.ts, 0, 0))
+>Input : Symbol(Input, Decl(contextualReturnArrayPatternCallback.ts, 0, 18))
+>Value : Symbol(Value, Decl(contextualReturnArrayPatternCallback.ts, 0, 24))
+
+    matcher(): { match(value: Input): boolean; value?: Value };
+>matcher : Symbol(Matcher.matcher, Decl(contextualReturnArrayPatternCallback.ts, 0, 43))
+>match : Symbol(match, Decl(contextualReturnArrayPatternCallback.ts, 1, 16))
+>value : Symbol(value, Decl(contextualReturnArrayPatternCallback.ts, 1, 23))
+>Input : Symbol(Input, Decl(contextualReturnArrayPatternCallback.ts, 0, 18))
+>value : Symbol(value, Decl(contextualReturnArrayPatternCallback.ts, 1, 46))
+>Value : Symbol(Value, Decl(contextualReturnArrayPatternCallback.ts, 0, 24))
+}
+type Pattern<Input> = Input | Matcher<Input> | { [Key in keyof Input]?: Pattern<Input[Key]> };
+>Pattern : Symbol(Pattern, Decl(contextualReturnArrayPatternCallback.ts, 2, 1))
+>Input : Symbol(Input, Decl(contextualReturnArrayPatternCallback.ts, 3, 13))
+>Input : Symbol(Input, Decl(contextualReturnArrayPatternCallback.ts, 3, 13))
+>Matcher : Symbol(Matcher, Decl(contextualReturnArrayPatternCallback.ts, 0, 0))
+>Input : Symbol(Input, Decl(contextualReturnArrayPatternCallback.ts, 3, 13))
+>Key : Symbol(Key, Decl(contextualReturnArrayPatternCallback.ts, 3, 50))
+>Input : Symbol(Input, Decl(contextualReturnArrayPatternCallback.ts, 3, 13))
+>Pattern : Symbol(Pattern, Decl(contextualReturnArrayPatternCallback.ts, 2, 1))
+>Input : Symbol(Input, Decl(contextualReturnArrayPatternCallback.ts, 3, 13))
+>Key : Symbol(Key, Decl(contextualReturnArrayPatternCallback.ts, 3, 50))
+
+type ArrayElement<Input> = Input extends readonly (infer Value)[] ? Value : unknown;
+>ArrayElement : Symbol(ArrayElement, Decl(contextualReturnArrayPatternCallback.ts, 3, 94))
+>Input : Symbol(Input, Decl(contextualReturnArrayPatternCallback.ts, 4, 18))
+>Input : Symbol(Input, Decl(contextualReturnArrayPatternCallback.ts, 4, 18))
+>Value : Symbol(Value, Decl(contextualReturnArrayPatternCallback.ts, 4, 56))
+>Value : Symbol(Value, Decl(contextualReturnArrayPatternCallback.ts, 4, 56))
+
+declare function array<Input, Value extends Pattern<ArrayElement<Input>>>(value: Value): Matcher<Input, Value>;
+>array : Symbol(array, Decl(contextualReturnArrayPatternCallback.ts, 4, 84))
+>Input : Symbol(Input, Decl(contextualReturnArrayPatternCallback.ts, 5, 23))
+>Value : Symbol(Value, Decl(contextualReturnArrayPatternCallback.ts, 5, 29))
+>Pattern : Symbol(Pattern, Decl(contextualReturnArrayPatternCallback.ts, 2, 1))
+>ArrayElement : Symbol(ArrayElement, Decl(contextualReturnArrayPatternCallback.ts, 3, 94))
+>Input : Symbol(Input, Decl(contextualReturnArrayPatternCallback.ts, 5, 23))
+>value : Symbol(value, Decl(contextualReturnArrayPatternCallback.ts, 5, 74))
+>Value : Symbol(Value, Decl(contextualReturnArrayPatternCallback.ts, 5, 29))
+>Matcher : Symbol(Matcher, Decl(contextualReturnArrayPatternCallback.ts, 0, 0))
+>Input : Symbol(Input, Decl(contextualReturnArrayPatternCallback.ts, 5, 23))
+>Value : Symbol(Value, Decl(contextualReturnArrayPatternCallback.ts, 5, 29))
+
+declare function when<Input, Callback extends (value: Input) => unknown>(callback: Callback): Matcher<Input>;
+>when : Symbol(when, Decl(contextualReturnArrayPatternCallback.ts, 5, 111))
+>Input : Symbol(Input, Decl(contextualReturnArrayPatternCallback.ts, 6, 22))
+>Callback : Symbol(Callback, Decl(contextualReturnArrayPatternCallback.ts, 6, 28))
+>value : Symbol(value, Decl(contextualReturnArrayPatternCallback.ts, 6, 47))
+>Input : Symbol(Input, Decl(contextualReturnArrayPatternCallback.ts, 6, 22))
+>callback : Symbol(callback, Decl(contextualReturnArrayPatternCallback.ts, 6, 73))
+>Callback : Symbol(Callback, Decl(contextualReturnArrayPatternCallback.ts, 6, 28))
+>Matcher : Symbol(Matcher, Decl(contextualReturnArrayPatternCallback.ts, 0, 0))
+>Input : Symbol(Input, Decl(contextualReturnArrayPatternCallback.ts, 6, 22))
+
+declare function accept<Value extends Pattern<{ list: { prop: string }[] }>>(value: Value): void;
+>accept : Symbol(accept, Decl(contextualReturnArrayPatternCallback.ts, 6, 109))
+>Value : Symbol(Value, Decl(contextualReturnArrayPatternCallback.ts, 7, 24))
+>Pattern : Symbol(Pattern, Decl(contextualReturnArrayPatternCallback.ts, 2, 1))
+>list : Symbol(list, Decl(contextualReturnArrayPatternCallback.ts, 7, 47))
+>prop : Symbol(prop, Decl(contextualReturnArrayPatternCallback.ts, 7, 55))
+>value : Symbol(value, Decl(contextualReturnArrayPatternCallback.ts, 7, 77))
+>Value : Symbol(Value, Decl(contextualReturnArrayPatternCallback.ts, 7, 24))
+
+accept({
+>accept : Symbol(accept, Decl(contextualReturnArrayPatternCallback.ts, 6, 109))
+
+    list: array({
+>list : Symbol(list, Decl(contextualReturnArrayPatternCallback.ts, 9, 8))
+>array : Symbol(array, Decl(contextualReturnArrayPatternCallback.ts, 4, 84))
+
+        prop: when(value => {
+>prop : Symbol(prop, Decl(contextualReturnArrayPatternCallback.ts, 10, 17))
+>when : Symbol(when, Decl(contextualReturnArrayPatternCallback.ts, 5, 111))
+>value : Symbol(value, Decl(contextualReturnArrayPatternCallback.ts, 11, 19))
+
+            const text: string = value;
+>text : Symbol(text, Decl(contextualReturnArrayPatternCallback.ts, 12, 17))
+>value : Symbol(value, Decl(contextualReturnArrayPatternCallback.ts, 11, 19))
+
+            return true;
+        }),
+    }),
+});
+

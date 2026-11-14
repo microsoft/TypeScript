@@ -1,0 +1,190 @@
+//// [tests/cases/compiler/contextualCheckReentryAfterParameters.ts] ////
+
+=== contextualCheckReentryAfterParameters.ts ===
+// Instantiating the type predicate inside the nested callback re-enters the
+// contextual check of the enclosing functions through their outer type
+// parameters. That must not discard the parameter types assigned to them.
+
+type Surface = { id: string; kind: "file"; path: string } | { id: string; kind: "terminal" };
+>Surface : Surface
+>id : string
+>kind : "file"
+>path : string
+>id : string
+>kind : "terminal"
+
+interface Panel {
+    surfaces: Surface[];
+>surfaces : Surface[]
+}
+interface Store {
+    panel: Panel;
+>panel : Panel
+
+    openFile: (path: string) => void;
+>openFile : (path: string) => void
+>path : string
+
+    close: (id: string) => void;
+>close : (id: string) => void
+>id : string
+}
+type Creator<T> = (set: (update: (state: T) => Partial<T>) => void) => T;
+>Creator : Creator<T>
+>set : (update: (state: T) => Partial<T>) => void
+>update : (state: T) => Partial<T>
+>state : T
+
+declare function create<T>(init: Creator<T>): T;
+>create : <T>(init: Creator<T>) => T
+>init : Creator<T>
+
+declare function wrap<T>(init: Creator<T>): Creator<T>;
+>wrap : <T>(init: Creator<T>) => Creator<T>
+>init : Creator<T>
+
+const update = (state: Store, updater: (current: Panel) => Panel): Partial<Store> => ({ panel: updater(state.panel) });
+>update : (state: Store, updater: (current: Panel) => Panel) => Partial<Store>
+>(state: Store, updater: (current: Panel) => Panel): Partial<Store> => ({ panel: updater(state.panel) }) : (state: Store, updater: (current: Panel) => Panel) => Partial<Store>
+>state : Store
+>updater : (current: Panel) => Panel
+>current : Panel
+>({ panel: updater(state.panel) }) : { panel: Panel; }
+>{ panel: updater(state.panel) } : { panel: Panel; }
+>panel : Panel
+>updater(state.panel) : Panel
+>updater : (current: Panel) => Panel
+>state.panel : Panel
+>state : Store
+>panel : Panel
+
+export const store = create<Store>(wrap((set) => ({
+>store : Store
+>create<Store>(wrap((set) => ({    panel: { surfaces: [] },    openFile: (path) =>        set((state) =>            update(state, (current) => {                const existing = current.surfaces.find(                    (surface): surface is Extract<Surface, { kind: "file" }> => surface.kind === "file" && surface.path === path,                );                return existing ? current : { surfaces: [...current.surfaces, { id: path, kind: "file", path }] };            })        ),    close: (id) =>        set((state) =>            update(state, (current) => {                const index = current.surfaces.findIndex((entry) => entry.id === id);                return { surfaces: current.surfaces.slice(index) };            })        ),}))) : Store
+>create : <T>(init: Creator<T>) => T
+>wrap((set) => ({    panel: { surfaces: [] },    openFile: (path) =>        set((state) =>            update(state, (current) => {                const existing = current.surfaces.find(                    (surface): surface is Extract<Surface, { kind: "file" }> => surface.kind === "file" && surface.path === path,                );                return existing ? current : { surfaces: [...current.surfaces, { id: path, kind: "file", path }] };            })        ),    close: (id) =>        set((state) =>            update(state, (current) => {                const index = current.surfaces.findIndex((entry) => entry.id === id);                return { surfaces: current.surfaces.slice(index) };            })        ),})) : Creator<Store>
+>wrap : <T>(init: Creator<T>) => Creator<T>
+>(set) => ({    panel: { surfaces: [] },    openFile: (path) =>        set((state) =>            update(state, (current) => {                const existing = current.surfaces.find(                    (surface): surface is Extract<Surface, { kind: "file" }> => surface.kind === "file" && surface.path === path,                );                return existing ? current : { surfaces: [...current.surfaces, { id: path, kind: "file", path }] };            })        ),    close: (id) =>        set((state) =>            update(state, (current) => {                const index = current.surfaces.findIndex((entry) => entry.id === id);                return { surfaces: current.surfaces.slice(index) };            })        ),}) : (set: (update: (state: Store) => Partial<Store>) => void) => { panel: { surfaces: never[]; }; openFile: (path: string) => void; close: (id: string) => void; }
+>set : (update: (state: Store) => Partial<Store>) => void
+>({    panel: { surfaces: [] },    openFile: (path) =>        set((state) =>            update(state, (current) => {                const existing = current.surfaces.find(                    (surface): surface is Extract<Surface, { kind: "file" }> => surface.kind === "file" && surface.path === path,                );                return existing ? current : { surfaces: [...current.surfaces, { id: path, kind: "file", path }] };            })        ),    close: (id) =>        set((state) =>            update(state, (current) => {                const index = current.surfaces.findIndex((entry) => entry.id === id);                return { surfaces: current.surfaces.slice(index) };            })        ),}) : { panel: { surfaces: never[]; }; openFile: (path: string) => void; close: (id: string) => void; }
+>{    panel: { surfaces: [] },    openFile: (path) =>        set((state) =>            update(state, (current) => {                const existing = current.surfaces.find(                    (surface): surface is Extract<Surface, { kind: "file" }> => surface.kind === "file" && surface.path === path,                );                return existing ? current : { surfaces: [...current.surfaces, { id: path, kind: "file", path }] };            })        ),    close: (id) =>        set((state) =>            update(state, (current) => {                const index = current.surfaces.findIndex((entry) => entry.id === id);                return { surfaces: current.surfaces.slice(index) };            })        ),} : { panel: { surfaces: never[]; }; openFile: (path: string) => void; close: (id: string) => void; }
+
+    panel: { surfaces: [] },
+>panel : { surfaces: never[]; }
+>{ surfaces: [] } : { surfaces: never[]; }
+>surfaces : never[]
+>[] : never[]
+
+    openFile: (path) =>
+>openFile : (path: string) => void
+>(path) =>        set((state) =>            update(state, (current) => {                const existing = current.surfaces.find(                    (surface): surface is Extract<Surface, { kind: "file" }> => surface.kind === "file" && surface.path === path,                );                return existing ? current : { surfaces: [...current.surfaces, { id: path, kind: "file", path }] };            })        ) : (path: string) => void
+>path : string
+
+        set((state) =>
+>set((state) =>            update(state, (current) => {                const existing = current.surfaces.find(                    (surface): surface is Extract<Surface, { kind: "file" }> => surface.kind === "file" && surface.path === path,                );                return existing ? current : { surfaces: [...current.surfaces, { id: path, kind: "file", path }] };            })        ) : void
+>set : (update: (state: Store) => Partial<Store>) => void
+>(state) =>            update(state, (current) => {                const existing = current.surfaces.find(                    (surface): surface is Extract<Surface, { kind: "file" }> => surface.kind === "file" && surface.path === path,                );                return existing ? current : { surfaces: [...current.surfaces, { id: path, kind: "file", path }] };            }) : (state: Store) => Partial<Store>
+>state : Store
+
+            update(state, (current) => {
+>update(state, (current) => {                const existing = current.surfaces.find(                    (surface): surface is Extract<Surface, { kind: "file" }> => surface.kind === "file" && surface.path === path,                );                return existing ? current : { surfaces: [...current.surfaces, { id: path, kind: "file", path }] };            }) : Partial<Store>
+>update : (state: Store, updater: (current: Panel) => Panel) => Partial<Store>
+>state : Store
+>(current) => {                const existing = current.surfaces.find(                    (surface): surface is Extract<Surface, { kind: "file" }> => surface.kind === "file" && surface.path === path,                );                return existing ? current : { surfaces: [...current.surfaces, { id: path, kind: "file", path }] };            } : (current: Panel) => Panel
+>current : Panel
+
+                const existing = current.surfaces.find(
+>existing : { id: string; kind: "file"; path: string; } | undefined
+>current.surfaces.find(                    (surface): surface is Extract<Surface, { kind: "file" }> => surface.kind === "file" && surface.path === path,                ) : { id: string; kind: "file"; path: string; } | undefined
+>current.surfaces.find : { <S extends Surface>(predicate: (value: Surface, index: number, obj: Surface[]) => value is S, thisArg?: any): S | undefined; (predicate: (value: Surface, index: number, obj: Surface[]) => unknown, thisArg?: any): Surface | undefined; }
+>current.surfaces : Surface[]
+>current : Panel
+>surfaces : Surface[]
+>find : { <S extends Surface>(predicate: (value: Surface, index: number, obj: Surface[]) => value is S, thisArg?: any): S | undefined; (predicate: (value: Surface, index: number, obj: Surface[]) => unknown, thisArg?: any): Surface | undefined; }
+
+                    (surface): surface is Extract<Surface, { kind: "file" }> => surface.kind === "file" && surface.path === path,
+>(surface): surface is Extract<Surface, { kind: "file" }> => surface.kind === "file" && surface.path === path : (surface: Surface) => surface is Extract<Surface, { kind: "file"; }>
+>surface : Surface
+>kind : "file"
+>surface.kind === "file" && surface.path === path : boolean
+>surface.kind === "file" : boolean
+>surface.kind : "file" | "terminal"
+>surface : Surface
+>kind : "file" | "terminal"
+>"file" : "file"
+>surface.path === path : boolean
+>surface.path : string
+>surface : { id: string; kind: "file"; path: string; }
+>path : string
+>path : string
+
+                );
+                return existing ? current : { surfaces: [...current.surfaces, { id: path, kind: "file", path }] };
+>existing ? current : { surfaces: [...current.surfaces, { id: path, kind: "file", path }] } : Panel
+>existing : { id: string; kind: "file"; path: string; } | undefined
+>current : Panel
+>{ surfaces: [...current.surfaces, { id: path, kind: "file", path }] } : { surfaces: Surface[]; }
+>surfaces : Surface[]
+>[...current.surfaces, { id: path, kind: "file", path }] : Surface[]
+>...current.surfaces : Surface
+>current.surfaces : Surface[]
+>current : Panel
+>surfaces : Surface[]
+>{ id: path, kind: "file", path } : { id: string; kind: "file"; path: string; }
+>id : string
+>path : string
+>kind : "file"
+>"file" : "file"
+>path : string
+
+            })
+        ),
+    close: (id) =>
+>close : (id: string) => void
+>(id) =>        set((state) =>            update(state, (current) => {                const index = current.surfaces.findIndex((entry) => entry.id === id);                return { surfaces: current.surfaces.slice(index) };            })        ) : (id: string) => void
+>id : string
+
+        set((state) =>
+>set((state) =>            update(state, (current) => {                const index = current.surfaces.findIndex((entry) => entry.id === id);                return { surfaces: current.surfaces.slice(index) };            })        ) : void
+>set : (update: (state: Store) => Partial<Store>) => void
+>(state) =>            update(state, (current) => {                const index = current.surfaces.findIndex((entry) => entry.id === id);                return { surfaces: current.surfaces.slice(index) };            }) : (state: Store) => Partial<Store>
+>state : Store
+
+            update(state, (current) => {
+>update(state, (current) => {                const index = current.surfaces.findIndex((entry) => entry.id === id);                return { surfaces: current.surfaces.slice(index) };            }) : Partial<Store>
+>update : (state: Store, updater: (current: Panel) => Panel) => Partial<Store>
+>state : Store
+>(current) => {                const index = current.surfaces.findIndex((entry) => entry.id === id);                return { surfaces: current.surfaces.slice(index) };            } : (current: Panel) => { surfaces: Surface[]; }
+>current : Panel
+
+                const index = current.surfaces.findIndex((entry) => entry.id === id);
+>index : number
+>current.surfaces.findIndex((entry) => entry.id === id) : number
+>current.surfaces.findIndex : (predicate: (value: Surface, index: number, obj: Surface[]) => unknown, thisArg?: any) => number
+>current.surfaces : Surface[]
+>current : Panel
+>surfaces : Surface[]
+>findIndex : (predicate: (value: Surface, index: number, obj: Surface[]) => unknown, thisArg?: any) => number
+>(entry) => entry.id === id : (entry: Surface) => boolean
+>entry : Surface
+>entry.id === id : boolean
+>entry.id : string
+>entry : Surface
+>id : string
+>id : string
+
+                return { surfaces: current.surfaces.slice(index) };
+>{ surfaces: current.surfaces.slice(index) } : { surfaces: Surface[]; }
+>surfaces : Surface[]
+>current.surfaces.slice(index) : Surface[]
+>current.surfaces.slice : (start?: number, end?: number) => Surface[]
+>current.surfaces : Surface[]
+>current : Panel
+>surfaces : Surface[]
+>slice : (start?: number, end?: number) => Surface[]
+>index : number
+
+            })
+        ),
+})));
+

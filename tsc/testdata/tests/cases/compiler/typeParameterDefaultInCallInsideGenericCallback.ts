@@ -1,0 +1,25 @@
+// @strict: true
+// @noEmit: true
+// @target: esnext
+
+// The default of T applies to the call inside the callback passed to another
+// generic function as it does elsewhere, so data is accepted.
+
+declare function fetcher<D>(cfg: unknown): Promise<D>;
+
+type Routes<R> = R extends 'x' ? { IN: { v: number }, OUT: string } : never;
+
+function executeFetch<R extends string, T = Routes<R>>(
+  route: R,
+  body?: T extends Record<'IN', any> ? T['IN'] : never
+) {
+  return fetcher<T extends Record<'OUT', any> ? T['OUT'] : T>({ route, body });
+}
+
+declare function useCallback<T extends Function>(cb: T, deps: unknown[]): T;
+
+export const cb = useCallback((data: { v: number }) => {
+  return executeFetch('x', data);
+}, []);
+
+export const check: Promise<string> = cb({ v: 1 });

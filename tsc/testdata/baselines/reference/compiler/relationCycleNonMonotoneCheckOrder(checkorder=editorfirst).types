@@ -1,0 +1,292 @@
+//// [tests/cases/compiler/relationCycleNonMonotoneCheckOrder.ts] ////
+
+=== relationCycleNonMonotoneCheckOrder.ts ===
+// 'S' relates to 'G' only if inferring 'T' from 'A' fails the constraint
+// 'C', so that 'T' falls back to 'C'. Relating 'A' to 'C' compares 'S' to
+// 'G' again, but 'A' fails 'C' on 'z' regardless. 'S' must relate to 'G'
+// whether or not 'A' was compared to 'C' first.
+namespace inferenceConstraint {
+>inferenceConstraint : typeof inferenceConstraint
+
+    type A = { k?: "c"; f: S | G; z: number };
+>A : A
+>k : "c" | undefined
+>f : G | S
+>z : number
+
+    type C = { [s: string]: "c" | G | number; f: G; z: 1 };
+>C : C
+>s : string
+>f : G
+>z : 1
+
+    type S = <T extends C>(x: T) => T["k"];
+>S : S
+>x : T
+
+    type G = (x: A) => "c" | G | number;
+>G : G
+>x : A
+
+    declare let r1: S extends G ? true : false;
+>r1 : true
+>true : true
+>false : false
+
+    declare let r2: A extends C ? true : false;
+>r2 : false
+>true : true
+>false : false
+}
+
+// As above, with method signatures, which are compared bivariantly.
+namespace inferenceConstraintMethod {
+>inferenceConstraintMethod : typeof inferenceConstraintMethod
+
+    type A = { k?: "c"; f: S | G; z: number };
+>A : A
+>k : "c" | undefined
+>f : G | S
+>z : number
+
+    type C = { [s: string]: "c" | G | number; f: G; z: 1 };
+>C : C
+>s : string
+>f : G
+>z : 1
+
+    type S = { m<T extends C>(x: T): T["k"] };
+>S : S
+>m : <T extends C>(x: T) => T["k"]
+>x : T
+
+    type G = { m(x: A): "c" | G | number };
+>G : G
+>m : (x: A) => "c" | G | number
+>x : A
+
+    declare let r1: S extends G ? true : false;
+>r1 : true
+>true : true
+>false : false
+
+    declare let r2: A extends C ? true : false;
+>r2 : false
+>true : true
+>false : false
+}
+
+// 'S1' relates to 'G1' only if 'S2' does not relate to 'G2', and the
+// reverse, so no answer is consistent for both. Each is answered as if
+// compared first, assuming itself while relating the other, regardless
+// of which assignment is checked first.
+namespace inferenceConstraintMutual {
+>inferenceConstraintMutual : typeof inferenceConstraintMutual
+
+    type A1 = { k?: "c"; f: S2 | G2 };
+>A1 : A1
+>k : "c" | undefined
+>f : G2 | S2
+
+    type C1 = { [s: string]: "c" | G2; f: G2 };
+>C1 : C1
+>s : string
+>f : G2
+
+    type S1 = <T extends C1>(x: T) => T["k"];
+>S1 : S1
+>x : T
+
+    type G1 = (x: A1) => "c" | G2;
+>G1 : G1
+>x : A1
+
+    type A2 = { k?: "d"; f: S1 | G1 };
+>A2 : A2
+>k : "d" | undefined
+>f : G1 | S1
+
+    type C2 = { [s: string]: "d" | G1; f: G1 };
+>C2 : C2
+>s : string
+>f : G1
+
+    type S2 = <T extends C2>(x: T) => T["k"];
+>S2 : S2
+>x : T
+
+    type G2 = (x: A2) => "d" | G1;
+>G2 : G2
+>x : A2
+
+    declare let s1: S1;
+>s1 : S1
+
+    declare let s2: S2;
+>s2 : S2
+
+    let g1: G1 = s1;
+>g1 : G1
+>s1 : S1
+
+    let g2: G2 = s2;
+>g2 : G2
+>s2 : S2
+
+    declare let r1: S1 extends G1 ? true : false;
+>r1 : true
+>true : true
+>false : false
+
+    declare let r2: S2 extends G2 ? true : false;
+>r2 : true
+>true : true
+>false : false
+}
+
+// 'Src' relates to the union 'Tgt' by discriminating on 'd'. The member
+// '{ d: Y; y: number }' matches 'd: X' only if 'X' relates to 'Y', and
+// relating 'X' to 'Y' compares 'Src' to 'Tgt' again before failing on
+// 'q'. 'Src' must relate to 'Tgt' whether or not 'X' was compared to 'Y'
+// first.
+namespace discriminated {
+>discriminated : typeof discriminated
+
+    interface X { p: Src; q: number }
+>p : Src
+>q : number
+
+    interface Y { p: Tgt; q: 1 }
+>p : Tgt
+>q : 1
+
+    type Src = { d: "a" | X; y: string };
+>Src : Src
+>d : "a" | X
+>y : string
+
+    type Tgt = { d: "a"; y: string } | { d: X; y: string } | { d: Y; y: number };
+>Tgt : Tgt
+>d : "a"
+>y : string
+>d : X
+>y : string
+>d : Y
+>y : number
+
+    declare let r1: Src extends Tgt ? true : false;
+>r1 : true
+>true : true
+>false : false
+
+    declare let r2: X extends Y ? true : false;
+>r2 : false
+>true : true
+>false : false
+}
+
+// The excess property check of the object literal keeps the members of
+// 'Outer' whose 'e' the literal's 'e' relates to, so 'w' is known only
+// if 'Src' relates to 'Tgt' as above.
+namespace excessPropertyDiscriminant {
+>excessPropertyDiscriminant : typeof excessPropertyDiscriminant
+
+    interface X { p: Src; q: number }
+>p : Src
+>q : number
+
+    interface Y { p: Tgt; q: 1 }
+>p : Tgt
+>q : 1
+
+    type Src = { d: "a" | X; y: string };
+>Src : Src
+>d : "a" | X
+>y : string
+
+    type Tgt = { d: "a"; y: string } | { d: X; y: string } | { d: Y; y: number };
+>Tgt : Tgt
+>d : "a"
+>y : string
+>d : X
+>y : string
+>d : Y
+>y : number
+
+    type Outer = { e: "z" } | { e: Tgt; w: number } | { e: Src };
+>Outer : Outer
+>e : "z"
+>e : Tgt
+>w : number
+>e : Src
+
+    declare let src: Src;
+>src : Src
+
+    let o: Outer = { e: src, w: 1 };
+>o : Outer
+>{ e: src, w: 1 } : { e: Src; w: number; }
+>e : Src
+>src : Src
+>w : number
+>1 : 1
+
+    declare let r2: X extends Y ? true : false;
+>r2 : false
+>true : true
+>false : false
+}
+
+// Subtype reduction drops 'F' if it is a strict subtype of 'G'. Its
+// optional parameter relates only if 'P' is not a strict subtype of 'Q',
+// and relating 'P' to 'Q' compares 'F' to 'G' again before failing on
+// 'z'. 'F' must be dropped whether or not 'P' was compared to 'Q' first.
+namespace strictArity {
+>strictArity : typeof strictArity
+
+    type P = { f: F | G; z: number };
+>P : P
+>f : F | G
+>z : number
+
+    type Q = { f: G; z: 1 };
+>Q : Q
+>f : G
+>z : 1
+
+    type F = (x?: P) => 1;
+>F : F
+>x : P | undefined
+
+    type G = (x: Q | undefined) => number;
+>G : G
+>x : Q | undefined
+
+    type WP = { a: P; b: string };
+>WP : WP
+>a : P
+>b : string
+
+    type WQ = { a: Q };
+>WQ : WQ
+>a : Q
+
+    declare let f: F, g: G, wp: WP, wq: WQ;
+>f : F
+>g : G
+>wp : WP
+>wq : WQ
+
+    let a1 = [f, g];
+>a1 : G[]
+>[f, g] : G[]
+>f : F
+>g : G
+
+    let a2 = [wp, wq];
+>a2 : (WP | WQ)[]
+>[wp, wq] : (WP | WQ)[]
+>wp : WP
+>wq : WQ
+}
+

@@ -476,7 +476,7 @@ func (b *NodeBuilderImpl) serializeTypeName(node *ast.Node, isTypeOf bool, typeA
 	if isTypeOf {
 		meaning = ast.SymbolFlagsValue
 	}
-	symbol := b.ch.resolveEntityName(node, meaning, true, false, node)
+	symbol := b.ch.resolveEntityNameEx(node, meaning, true, false, node, false /*use*/)
 	if symbol == nil {
 		return nil
 	}
@@ -544,13 +544,7 @@ func (b *NodeBuilderImpl) tryGetResolvedSymbolFromTypeNode(node *ast.Node) *ast.
 	if node == nil || node.Parent == nil {
 		return nil
 	}
-	b.ch.getTypeFromTypeNode(node)
-	// call to ensure symbol is resolved
-	links := b.ch.symbolNodeLinks.TryGet(node)
-	if links == nil {
-		return nil
-	}
-	return links.resolvedSymbol
+	return b.ch.getSymbolOfTypeNode(node)
 }
 
 func (b *NodeBuilderImpl) existingTypeNodeIsNotReferenceOrIsReferenceWithCompatibleTypeArgumentCount(existing *ast.TypeNode, t *Type) bool {
@@ -607,7 +601,7 @@ func (b *NodeBuilderImpl) getResolvedTypeWithoutAbstractConstructSignatures(t *S
 		t.extra.objectTypeWithoutAbstractConstructSignatures = t.AsType()
 		return t.AsType()
 	}
-	typeCopy := b.ch.newAnonymousType(t.symbol, t.getMembers(), t.CallSignatures(), core.IfElse(len(constructSignatures) > 0, constructSignatures, []*Signature{}), t.getIndexInfos())
+	typeCopy := b.ch.newAnonymousType(t.symbol, t.getMembers(b.ch), t.CallSignatures(), core.IfElse(len(constructSignatures) > 0, constructSignatures, []*Signature{}), t.getIndexInfos())
 	t.extra.objectTypeWithoutAbstractConstructSignatures = typeCopy
 	typeCopy.AsStructuredType().ensureExtra().objectTypeWithoutAbstractConstructSignatures = typeCopy
 	return typeCopy
@@ -2097,9 +2091,9 @@ func (c *Checker) getExpandedParameters(sig *Signature, skipUnionExpanding bool)
 				symbol := c.newSymbolEx(ast.SymbolFlagsFunctionScopedVariable, name, checkFlags)
 				links := c.valueSymbolLinks.Get(symbol)
 				if flags&ElementFlagsRest != 0 {
-					links.resolvedType = c.createArrayType(t)
+					links.resolvedType.setIdentity(c, c.createArrayType(t))
 				} else {
-					links.resolvedType = t
+					links.resolvedType.setIdentity(c, t)
 				}
 				return symbol
 			})
@@ -2483,12 +2477,12 @@ func (b *NodeBuilderImpl) shouldUsePlaceholderForProperty(propertySymbol *ast.Sy
 func (b *NodeBuilderImpl) trackComputedName(accessExpression *ast.Node, enclosingDeclaration *ast.Node) {
 	// get symbol of the first identifier of the entityName
 	firstIdentifier := ast.GetFirstIdentifier(accessExpression)
-	name := b.ch.resolveName(enclosingDeclaration, firstIdentifier.Text(), ast.SymbolFlagsValue|ast.SymbolFlagsExportValue, nil /*nameNotFoundMessage*/, true /*isUse*/, false)
+	name := b.ch.resolveName(enclosingDeclaration, firstIdentifier.Text(), ast.SymbolFlagsValue|ast.SymbolFlagsExportValue, nil /*nameNotFoundMessage*/, false /*isUse*/, false)
 	if name != nil {
 		b.ctx.tracker.TrackSymbol(name, enclosingDeclaration, ast.SymbolFlagsValue)
 	} else {
 		// Name does not resolve at target location, track symbol at dest location (should be inaccessible)
-		fallback := b.ch.resolveName(firstIdentifier, firstIdentifier.Text(), ast.SymbolFlagsValue|ast.SymbolFlagsExportValue, nil /*nameNotFoundMessage*/, true /*isUse*/, false)
+		fallback := b.ch.resolveName(firstIdentifier, firstIdentifier.Text(), ast.SymbolFlagsValue|ast.SymbolFlagsExportValue, nil /*nameNotFoundMessage*/, false /*isUse*/, false)
 		if fallback != nil {
 			b.ctx.tracker.TrackSymbol(fallback, enclosingDeclaration, ast.SymbolFlagsValue)
 		}
@@ -2625,6 +2619,16 @@ func (b *NodeBuilderImpl) getPropertyNameNodeForSymbolFromNameType(symbol *ast.S
 	return nil
 }
 
+// approximateNameLength returns the length of a property name, without the
+// symbol ID a late-bound name ends with, which depends on when the symbol was
+// created and so would make truncation depend on the order of checking.
+func approximateNameLength(name string) int {
+	if isLateBoundName(name) {
+		return strings.LastIndexByte(name, '@')
+	}
+	return len(name)
+}
+
 func (b *NodeBuilderImpl) addPropertyToElementList(propertySymbol *ast.Symbol, typeElements []*ast.TypeElement) []*ast.TypeElement {
 	propertyIsReverseMapped := propertySymbol.CheckFlags()&ast.CheckFlagsReverseMapped != 0
 	var propertyType *Type
@@ -2661,7 +2665,7 @@ func (b *NodeBuilderImpl) addPropertyToElementList(propertySymbol *ast.Symbol, t
 	}
 	propertyName := b.getPropertyNameNodeForSymbol(propertySymbol, saveEnclosingDeclaration)
 	b.ctx.enclosingDeclaration = saveEnclosingDeclaration
-	b.ctx.approximateLength += len(ast.SymbolName(propertySymbol)) + 1
+	b.ctx.approximateLength += approximateNameLength(ast.SymbolName(propertySymbol)) + 1
 
 	if propertySymbol.Flags()&ast.SymbolFlagsAccessor != 0 {
 		writeType := b.ch.getWriteTypeOfSymbol(propertySymbol)
@@ -2703,7 +2707,7 @@ func (b *NodeBuilderImpl) addPropertyToElementList(propertySymbol *ast.Symbol, t
 				typeElements = append(typeElements, fakeGetterDeclaration)
 
 				setterParam := b.ch.newSymbol(ast.SymbolFlagsFunctionScopedVariable, "arg")
-				b.ch.valueSymbolLinks.Get(setterParam).resolvedType = writeType
+				b.ch.valueSymbolLinks.Get(setterParam).resolvedType.set(b.ch, writeType)
 				fakeSetterSignature := b.ch.newSignature(SignatureFlagsNone, nil, nil, nil, []*ast.Symbol{setterParam}, b.ch.voidType, nil, 0)
 				fakeSetterDeclaration := b.signatureToSignatureDeclarationHelper(fakeSetterSignature, ast.KindSetAccessor, &SignatureToSignatureDeclarationOptions{
 					name: propertyName,
@@ -2792,7 +2796,7 @@ func (b *NodeBuilderImpl) createTypeNodesFromResolvedType(resolvedType *Structur
 		typeElements = slices.Concat(typeElements, b.indexInfoToObjectComputedNamesOrSignatureDeclaration(info, typeNode))
 	}
 
-	properties := resolvedType.getProperties()
+	properties := resolvedType.getProperties(b.ch)
 	if len(properties) == 0 {
 		return b.f.NewNodeList(typeElements)
 	}
@@ -2834,14 +2838,14 @@ func (b *NodeBuilderImpl) createTypeNodesFromResolvedType(resolvedType *Structur
 }
 
 func (b *NodeBuilderImpl) createTypeNodeFromObjectType(t *Type) *ast.TypeNode {
-	if b.ch.isGenericMappedType(t) || (t.objectFlags&ObjectFlagsMapped != 0 && t.AsMappedType().containsError) {
+	if b.ch.isGenericMappedType(t) || (t.objectFlags&ObjectFlagsMapped != 0 && b.ch.mappedTypeContainsError(t)) {
 		return b.createMappedTypeNodeFromType(t)
 	}
 
 	resolved := b.ch.resolveStructuredTypeMembers(t)
 	callSigs := resolved.CallSignatures()
 	ctorSigs := resolved.ConstructSignatures()
-	if len(resolved.getProperties()) == 0 && len(resolved.getIndexInfos()) == 0 {
+	if len(resolved.getProperties(b.ch)) == 0 && len(resolved.getIndexInfos()) == 0 {
 		if len(callSigs) == 0 && len(ctorSigs) == 0 {
 			b.ctx.approximateLength += 2
 			result := b.f.NewTypeLiteralNode(b.f.NewNodeList([]*ast.Node{}))
@@ -2870,9 +2874,9 @@ func (b *NodeBuilderImpl) createTypeNodeFromObjectType(t *Type) *ast.TypeNode {
 			return b.ch.getOrCreateTypeFromSignature(s)
 		})
 		// count the number of type elements excluding abstract constructors
-		typeElementCount := len(callSigs) + (len(ctorSigs) - len(abstractSignatures)) + len(resolved.getIndexInfos()) + core.IfElse(b.ctx.flags&nodebuilder.FlagsWriteClassExpressionAsTypeLiteral != 0, core.CountWhere(resolved.getProperties(), func(p *ast.Symbol) bool {
+		typeElementCount := len(callSigs) + (len(ctorSigs) - len(abstractSignatures)) + len(resolved.getIndexInfos()) + core.IfElse(b.ctx.flags&nodebuilder.FlagsWriteClassExpressionAsTypeLiteral != 0, core.CountWhere(resolved.getProperties(b.ch), func(p *ast.Symbol) bool {
 			return p.Flags()&ast.SymbolFlagsPrototype == 0
-		}), len(resolved.getProperties()))
+		}), len(resolved.getProperties(b.ch)))
 		// don't include an empty object literal if there were no other static-side
 		// properties to write, i.e. `abstract class C { }` becomes `abstract new () => {}`
 		// and not `(abstract new () => {}) & {}`

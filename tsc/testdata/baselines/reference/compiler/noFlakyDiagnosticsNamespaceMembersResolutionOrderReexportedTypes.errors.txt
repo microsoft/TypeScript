@@ -1,4 +1,4 @@
-/main.ts(8,32): error TS2339: Property 'ma' does not exist on type '{}'.
+/main.ts(7,32): error TS2339: Property 'mb' does not exist on type '{}'.
 
 
 ==== /main.ts (1 errors) ====
@@ -9,9 +9,9 @@
     export const fromA = MA.pa;
     export const fromB = MB.pb;
     export const checkA: 1 = MA.pa.mb;
-    export const checkB: 1 = MB.pb.ma;
                                    ~~
-!!! error TS2339: Property 'ma' does not exist on type '{}'.
+!!! error TS2339: Property 'mb' does not exist on type '{}'.
+    export const checkB: 1 = MB.pb.ma;
     
 ==== /ma.js (0 errors) ====
     export { v as pa } from "./xa";

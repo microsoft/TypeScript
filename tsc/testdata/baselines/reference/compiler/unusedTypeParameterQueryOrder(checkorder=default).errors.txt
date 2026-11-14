@@ -1,0 +1,12 @@
+unusedTypeParameterQueryOrder.ts(3,17): error TS6196: 'T' is declared but never used.
+
+
+==== unusedTypeParameterQueryOrder.ts (1 errors) ====
+    class A {
+        f() {
+            return <T>() => {};
+                    ~
+!!! error TS6196: 'T' is declared but never used.
+        }
+    }
+    

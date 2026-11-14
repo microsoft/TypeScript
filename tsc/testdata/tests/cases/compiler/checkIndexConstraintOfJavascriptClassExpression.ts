@@ -1,3 +1,4 @@
+// @checkOrder: default, typesfirst
 // @target: es2015
 // @Filename: weird.js
 // @allowJs: true

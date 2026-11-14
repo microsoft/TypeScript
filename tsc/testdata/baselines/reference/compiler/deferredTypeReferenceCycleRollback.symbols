@@ -1,0 +1,70 @@
+//// [tests/cases/compiler/deferredTypeReferenceCycleRollback.ts] ////
+
+=== deferredTypeReferenceCycleRollback.ts ===
+// A cycle rollback used to reset the type of the Array<NodePath<unknown>>
+// node while the deferred reference identified by that node survived,
+// which crashed a later instantiation of it.
+
+declare function declare<T extends PluginObj = PluginObj>(): void;
+>declare : Symbol(declare, Decl(deferredTypeReferenceCycleRollback.ts, 0, 0))
+>T : Symbol(T, Decl(deferredTypeReferenceCycleRollback.ts, 4, 25))
+>PluginObj : Symbol(PluginObj, Decl(deferredTypeReferenceCycleRollback.ts, 4, 66))
+>PluginObj : Symbol(PluginObj, Decl(deferredTypeReferenceCycleRollback.ts, 4, 66))
+
+interface PluginObj<S = unknown> {
+>PluginObj : Symbol(PluginObj, Decl(deferredTypeReferenceCycleRollback.ts, 4, 66))
+>S : Symbol(S, Decl(deferredTypeReferenceCycleRollback.ts, 6, 20))
+
+    visitor: Visit<S, never>;
+>visitor : Symbol(PluginObj.visitor, Decl(deferredTypeReferenceCycleRollback.ts, 6, 34))
+>Visit : Symbol(Visit, Decl(deferredTypeReferenceCycleRollback.ts, 8, 1))
+>S : Symbol(S, Decl(deferredTypeReferenceCycleRollback.ts, 6, 20))
+}
+type Visit<S, P> = VisitFn<S, P> | VisitObj<S, P>;
+>Visit : Symbol(Visit, Decl(deferredTypeReferenceCycleRollback.ts, 8, 1))
+>S : Symbol(S, Decl(deferredTypeReferenceCycleRollback.ts, 9, 11))
+>P : Symbol(P, Decl(deferredTypeReferenceCycleRollback.ts, 9, 13))
+>VisitFn : Symbol(VisitFn, Decl(deferredTypeReferenceCycleRollback.ts, 9, 50))
+>S : Symbol(S, Decl(deferredTypeReferenceCycleRollback.ts, 9, 11))
+>P : Symbol(P, Decl(deferredTypeReferenceCycleRollback.ts, 9, 13))
+>VisitObj : Symbol(VisitObj, Decl(deferredTypeReferenceCycleRollback.ts, 10, 49))
+>S : Symbol(S, Decl(deferredTypeReferenceCycleRollback.ts, 9, 11))
+>P : Symbol(P, Decl(deferredTypeReferenceCycleRollback.ts, 9, 13))
+
+type VisitFn<S, P> = (path: NodePath<P>) => void;
+>VisitFn : Symbol(VisitFn, Decl(deferredTypeReferenceCycleRollback.ts, 9, 50))
+>S : Symbol(S, Decl(deferredTypeReferenceCycleRollback.ts, 10, 13))
+>P : Symbol(P, Decl(deferredTypeReferenceCycleRollback.ts, 10, 15))
+>path : Symbol(path, Decl(deferredTypeReferenceCycleRollback.ts, 10, 22))
+>NodePath : Symbol(NodePath, Decl(deferredTypeReferenceCycleRollback.ts, 11, 27))
+>P : Symbol(P, Decl(deferredTypeReferenceCycleRollback.ts, 10, 15))
+
+interface VisitObj<S, P> {}
+>VisitObj : Symbol(VisitObj, Decl(deferredTypeReferenceCycleRollback.ts, 10, 49))
+>S : Symbol(S, Decl(deferredTypeReferenceCycleRollback.ts, 11, 19))
+>P : Symbol(P, Decl(deferredTypeReferenceCycleRollback.ts, 11, 21))
+
+declare class NodePath<T> {
+>NodePath : Symbol(NodePath, Decl(deferredTypeReferenceCycleRollback.ts, 11, 27))
+>T : Symbol(T, Decl(deferredTypeReferenceCycleRollback.ts, 12, 23))
+
+    parentPath: NodePath<Exclude<T, null>>;
+>parentPath : Symbol(NodePath.parentPath, Decl(deferredTypeReferenceCycleRollback.ts, 12, 27))
+>NodePath : Symbol(NodePath, Decl(deferredTypeReferenceCycleRollback.ts, 11, 27))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(deferredTypeReferenceCycleRollback.ts, 12, 23))
+
+    get: Get<T>;
+>get : Symbol(NodePath.get, Decl(deferredTypeReferenceCycleRollback.ts, 13, 43))
+>Get : Symbol(Get, Decl(deferredTypeReferenceCycleRollback.ts, 15, 1))
+>T : Symbol(T, Decl(deferredTypeReferenceCycleRollback.ts, 12, 23))
+}
+type Get<T> = T extends Array<Missing> ? Array<NodePath<unknown>> : never;
+>Get : Symbol(Get, Decl(deferredTypeReferenceCycleRollback.ts, 15, 1))
+>T : Symbol(T, Decl(deferredTypeReferenceCycleRollback.ts, 16, 9))
+>T : Symbol(T, Decl(deferredTypeReferenceCycleRollback.ts, 16, 9))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>Missing : Symbol(Missing)
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>NodePath : Symbol(NodePath, Decl(deferredTypeReferenceCycleRollback.ts, 11, 27))
+

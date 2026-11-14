@@ -1,0 +1,35 @@
+//// [tests/cases/compiler/instantiationStackLimitCheckOrder.ts] ////
+
+=== instantiationStackLimitCheckOrder.ts ===
+// F<[]> recurses forever, so instantiating it reaches the limit on the
+// instantiation stack, wherever it is first instantiated. The instantiations
+// in progress then fail as a whole, and none of them may be cached partly
+// built for the other declaration to reuse.
+
+type F<T> = T extends [unknown?, ...infer R] ? [0, ...F<R>] : [];
+>F : Symbol(F, Decl(instantiationStackLimitCheckOrder.ts, 0, 0))
+>T : Symbol(T, Decl(instantiationStackLimitCheckOrder.ts, 5, 7))
+>T : Symbol(T, Decl(instantiationStackLimitCheckOrder.ts, 5, 7))
+>R : Symbol(R, Decl(instantiationStackLimitCheckOrder.ts, 5, 41))
+>F : Symbol(F, Decl(instantiationStackLimitCheckOrder.ts, 0, 0))
+>R : Symbol(R, Decl(instantiationStackLimitCheckOrder.ts, 5, 41))
+
+type X = F<[]>;
+>X : Symbol(X, Decl(instantiationStackLimitCheckOrder.ts, 5, 65))
+>F : Symbol(F, Decl(instantiationStackLimitCheckOrder.ts, 0, 0))
+
+// The element type of A[] is resolved whenever first needed, inside the
+// instantiation of the return type of flat or not. Reaching the limit while
+// flattening it must fail the same instantiations either way.
+
+type A = A[];
+>A : Symbol(A, Decl(instantiationStackLimitCheckOrder.ts, 6, 15))
+>A : Symbol(A, Decl(instantiationStackLimitCheckOrder.ts, 6, 15))
+
+const r = ([] as A).flat(Infinity);
+>r : Symbol(r, Decl(instantiationStackLimitCheckOrder.ts, 13, 5))
+>([] as A).flat : Symbol(Array.flat, Decl(lib.es2019.array.d.ts, --, --))
+>A : Symbol(A, Decl(instantiationStackLimitCheckOrder.ts, 6, 15))
+>flat : Symbol(Array.flat, Decl(lib.es2019.array.d.ts, --, --))
+>Infinity : Symbol(Infinity, Decl(lib.es5.d.ts, --, --))
+

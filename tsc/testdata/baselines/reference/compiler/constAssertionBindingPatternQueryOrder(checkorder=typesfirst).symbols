@@ -1,0 +1,31 @@
+//// [tests/cases/compiler/constAssertionBindingPatternQueryOrder.ts] ////
+
+=== constAssertionBindingPatternQueryOrder.ts ===
+declare function settle<T extends readonly unknown[]>(fn: () => T): Promise<{ [K in keyof T]: [Awaited<T[K]>] }>;
+>settle : Symbol(settle, Decl(constAssertionBindingPatternQueryOrder.ts, 0, 0))
+>T : Symbol(T, Decl(constAssertionBindingPatternQueryOrder.ts, 0, 24))
+>fn : Symbol(fn, Decl(constAssertionBindingPatternQueryOrder.ts, 0, 54))
+>T : Symbol(T, Decl(constAssertionBindingPatternQueryOrder.ts, 0, 24))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>K : Symbol(K, Decl(constAssertionBindingPatternQueryOrder.ts, 0, 79))
+>T : Symbol(T, Decl(constAssertionBindingPatternQueryOrder.ts, 0, 24))
+>Awaited : Symbol(Awaited, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(constAssertionBindingPatternQueryOrder.ts, 0, 24))
+>K : Symbol(K, Decl(constAssertionBindingPatternQueryOrder.ts, 0, 79))
+
+async function f() {
+>f : Symbol(f, Decl(constAssertionBindingPatternQueryOrder.ts, 0, 113))
+
+  const [[a], b] = await settle(() => [Promise.resolve(0), Promise.reject(1)] as const);
+>a : Symbol(a, Decl(constAssertionBindingPatternQueryOrder.ts, 3, 10))
+>b : Symbol(b, Decl(constAssertionBindingPatternQueryOrder.ts, 3, 13))
+>settle : Symbol(settle, Decl(constAssertionBindingPatternQueryOrder.ts, 0, 0))
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise.reject : Symbol(PromiseConstructor.reject, Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>reject : Symbol(PromiseConstructor.reject, Decl(lib.es2015.promise.d.ts, --, --))
+>const : Symbol(const)
+}
+

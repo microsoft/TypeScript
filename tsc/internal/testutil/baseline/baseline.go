@@ -65,7 +65,9 @@ func writeComparison(t *testing.T, actualContent string, local, reference string
 	if actualContent == NoContent {
 		if err := os.WriteFile(local+".delete", []byte{}, 0o644); err != nil {
 			t.Error(fmt.Errorf("failed to write the local baseline file %s: %w", local+".delete", err))
+			return
 		}
+		t.Errorf("the baseline file %s should be deleted. (Run `hereby baseline-accept` if the deletion is correct.)", reference)
 		return
 	}
 	if err := os.WriteFile(local, []byte(actualContent), 0o644); err != nil {
