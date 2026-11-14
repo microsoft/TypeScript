@@ -283,6 +283,13 @@
                         "type": "string"
                     }
                 },
+                "tsExtends": {
+                    "type": "array",
+                    "description": "Public TypeScript bases when they differ from the native bases.",
+                    "items": {
+                        "type": "string"
+                    }
+                },
                 "members": {
                     "type": "array",
                     "description": "Ordered list of members. Array position defines factory parameter order, visitor traversal order, and binary encoding order.",

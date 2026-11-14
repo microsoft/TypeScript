@@ -4764,18 +4764,32 @@
                     "DeclarationBase",
                     "FunctionLikeBase"
                 ],
+                "tsExtends": [
+                    "JSDocTypeBase",
+                    "DeclarationBase"
+                ],
                 "members": [
                     {
                         "name": "TypeParameters",
-                        "inherited": true
+                        "inherited": true,
+                        "type": "JSDocTemplateTag",
+                        "list": "NodeList",
+                        "optional": true
                     },
                     {
                         "name": "Parameters",
-                        "inherited": true
+                        "inherited": true,
+                        "type": [
+                            "JSDocParameterTag",
+                            "JSDocThisTag"
+                        ],
+                        "list": "NodeList"
                     },
                     {
                         "name": "Type",
-                        "inherited": true
+                        "inherited": true,
+                        "type": "JSDocReturnTag",
+                        "optional": true
                     }
                 ]
             },
@@ -5228,7 +5242,8 @@
             ],
             "ModuleBody": [
                 "ModuleBlock",
-                "ModuleDeclaration"
+                "ModuleDeclaration",
+                "Identifier"
             ],
             "JSDocFullName": [
                 "Identifier",

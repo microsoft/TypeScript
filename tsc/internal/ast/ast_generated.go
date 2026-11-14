@@ -532,7 +532,7 @@ type (
 	ModuleName                     = Node // Identifier | StringLiteral
 	ModuleExportName               = Node // Identifier | StringLiteral
 	PropertyName                   = Node // Identifier | StringLiteral | NoSubstitutionTemplateLiteral | NumericLiteral | ComputedPropertyName | PrivateIdentifier | BigIntLiteral
-	ModuleBody                     = Node // ModuleBlock | ModuleDeclaration
+	ModuleBody                     = Node // ModuleBlock | ModuleDeclaration | Identifier
 	JSDocFullName                  = Node // Identifier | ModuleDeclaration
 	ForInitializer                 = Node // Expression | MissingDeclaration | VariableDeclarationList
 	ModuleReference                = Node // Identifier | QualifiedName | ExternalModuleReference
@@ -8061,7 +8061,7 @@ type JSDocSignature struct {
 	FunctionLikeBase
 }
 
-func (f *NodeFactory) NewJSDocSignature(typeParameters *TypeParameterList, parameters *ParameterList, typeNode *TypeNode) *Node {
+func (f *NodeFactory) NewJSDocSignature(typeParameters *NodeList, parameters *NodeList, typeNode *JSDocReturnTagNode) *Node {
 	data := &JSDocSignature{}
 	data.TypeParameters = typeParameters
 	data.Parameters = parameters
@@ -8069,7 +8069,7 @@ func (f *NodeFactory) NewJSDocSignature(typeParameters *TypeParameterList, param
 	return f.newNode(KindJSDocSignature, data.AsNode())
 }
 
-func (f *NodeFactory) UpdateJSDocSignature(node *JSDocSignature, typeParameters *TypeParameterList, parameters *ParameterList, typeNode *TypeNode) *Node {
+func (f *NodeFactory) UpdateJSDocSignature(node *JSDocSignature, typeParameters *NodeList, parameters *NodeList, typeNode *JSDocReturnTagNode) *Node {
 	if typeParameters != node.TypeParameters || parameters != node.Parameters || typeNode != node.Type {
 		return updateNode(f.NewJSDocSignature(typeParameters, parameters, typeNode), node.AsNode(), f.hooks)
 	}

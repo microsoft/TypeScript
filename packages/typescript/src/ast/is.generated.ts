@@ -2171,7 +2171,7 @@ export declare namespace isPropertyName {
 isPropertyName.Handle = isPropertyName as any;
 
 export function isModuleBody(node: Node): node is ModuleBody {
-    return node.kind === SyntaxKind.ModuleBlock || node.kind === SyntaxKind.ModuleDeclaration;
+    return node.kind === SyntaxKind.ModuleBlock || node.kind === SyntaxKind.ModuleDeclaration || node.kind === SyntaxKind.Identifier;
 }
 
 export declare namespace isModuleBody {
