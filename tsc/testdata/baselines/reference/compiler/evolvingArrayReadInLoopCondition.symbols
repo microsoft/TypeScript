@@ -1,0 +1,36 @@
+//// [tests/cases/compiler/evolvingArrayReadInLoopCondition.ts] ////
+
+=== evolvingArrayReadInLoopCondition.ts ===
+// Narrowing by the condition needs the type of `seen` at the call, which
+// depends on the analysis of the loop in progress for that same read. Once
+// the loop is analyzed, `seen` is number[] there, so no error should say that
+// its type cannot be determined.
+
+declare const x: number;
+>x : Symbol(x, Decl(evolvingArrayReadInLoopCondition.ts, 5, 13))
+
+const seen = [];
+>seen : Symbol(seen, Decl(evolvingArrayReadInLoopCondition.ts, 6, 5))
+
+for (let i = 0; i < 3; i++) {
+>i : Symbol(i, Decl(evolvingArrayReadInLoopCondition.ts, 7, 8))
+>i : Symbol(i, Decl(evolvingArrayReadInLoopCondition.ts, 7, 8))
+>i : Symbol(i, Decl(evolvingArrayReadInLoopCondition.ts, 7, 8))
+
+    if (!seen.some(s => true)) {
+>seen.some : Symbol(Array.some, Decl(lib.es5.d.ts, --, --))
+>seen : Symbol(seen, Decl(evolvingArrayReadInLoopCondition.ts, 6, 5))
+>some : Symbol(Array.some, Decl(lib.es5.d.ts, --, --))
+>s : Symbol(s, Decl(evolvingArrayReadInLoopCondition.ts, 8, 19))
+
+        seen.push(x);
+>seen.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>seen : Symbol(seen, Decl(evolvingArrayReadInLoopCondition.ts, 6, 5))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(evolvingArrayReadInLoopCondition.ts, 5, 13))
+    }
+}
+const result = seen;
+>result : Symbol(result, Decl(evolvingArrayReadInLoopCondition.ts, 12, 5))
+>seen : Symbol(seen, Decl(evolvingArrayReadInLoopCondition.ts, 6, 5))
+

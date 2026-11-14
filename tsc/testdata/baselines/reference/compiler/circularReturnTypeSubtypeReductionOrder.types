@@ -1,0 +1,88 @@
+//// [tests/cases/compiler/circularReturnTypeSubtypeReductionOrder.ts] ////
+
+=== expression.ts ===
+// Subtype reduction of rebuild's return type relates the class to A,
+// which needs b's return type, which needs rebuild's: a cycle. Both
+// members report it, whichever return type is requested first, as if
+// rebuild's, declared first, were requested first.
+interface A {
+    b(): A;
+>b : () => A
+
+    c: A;
+>c : A
+}
+declare const flag: boolean;
+>flag : boolean
+
+const A: new () => A = class {
+>A : new () => A
+>class {    rebuild() {        return flag ? this : new A();    }    b() {        return this.rebuild();    }    c() {        return this.rebuild;    }} : typeof A
+
+    rebuild() {
+>rebuild : () => any
+
+        return flag ? this : new A();
+>flag ? this : new A() : this | A
+>flag : boolean
+>this : this
+>new A() : A
+>A : new () => A
+    }
+    b() {
+>b : () => any
+
+        return this.rebuild();
+>this.rebuild() : any
+>this.rebuild : () => any
+>this : this
+>rebuild : () => any
+    }
+    c() {
+>c : () => () => any
+
+        return this.rebuild;
+>this.rebuild : () => any
+>this : this
+>rebuild : () => any
+    }
+};
+export {};
+
+=== declaration.ts ===
+interface B {
+    b(): B;
+>b : () => B
+}
+declare const flag: boolean;
+>flag : boolean
+
+class K {
+>K : K
+
+    rebuild() {
+>rebuild : () => any
+
+        return flag ? this : new B();
+>flag ? this : new B() : this | B
+>flag : boolean
+>this : this
+>new B() : B
+>B : new () => B
+    }
+    b() {
+>b : () => any
+
+        return this.rebuild();
+>this.rebuild() : any
+>this.rebuild : () => any
+>this : this
+>rebuild : () => any
+    }
+}
+const B: new () => B = K;
+>B : new () => B
+>K : typeof K
+
+export {};
+

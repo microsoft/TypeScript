@@ -1,0 +1,54 @@
+//// [tests/cases/compiler/typeReferenceRecursionIdentityCheckOrder.ts] ////
+
+=== typeReferenceRecursionIdentityCheckOrder.ts ===
+// Comparing never[] to B<0> nests comparisons of the members of A and B.
+// Whether they are cut short as deeply nested must not depend on whether the
+// annotation of b is resolved before checking a instantiates slice.
+
+interface A<T> {
+>A : Symbol(A, Decl(typeReferenceRecursionIdentityCheckOrder.ts, 0, 0))
+>T : Symbol(T, Decl(typeReferenceRecursionIdentityCheckOrder.ts, 4, 12))
+
+    slice(): B<T>;
+>slice : Symbol(A.slice, Decl(typeReferenceRecursionIdentityCheckOrder.ts, 4, 16))
+>B : Symbol(B, Decl(typeReferenceRecursionIdentityCheckOrder.ts, 8, 1))
+>T : Symbol(T, Decl(typeReferenceRecursionIdentityCheckOrder.ts, 4, 12))
+
+    every<S extends T>(predicate: (value: T) => value is S): this is A<S>;
+>every : Symbol(A.every, Decl(typeReferenceRecursionIdentityCheckOrder.ts, 5, 18))
+>S : Symbol(S, Decl(typeReferenceRecursionIdentityCheckOrder.ts, 6, 10))
+>T : Symbol(T, Decl(typeReferenceRecursionIdentityCheckOrder.ts, 4, 12))
+>predicate : Symbol(predicate, Decl(typeReferenceRecursionIdentityCheckOrder.ts, 6, 23))
+>value : Symbol(value, Decl(typeReferenceRecursionIdentityCheckOrder.ts, 6, 35))
+>T : Symbol(T, Decl(typeReferenceRecursionIdentityCheckOrder.ts, 4, 12))
+>value : Symbol(value, Decl(typeReferenceRecursionIdentityCheckOrder.ts, 6, 35))
+>S : Symbol(S, Decl(typeReferenceRecursionIdentityCheckOrder.ts, 6, 10))
+>A : Symbol(A, Decl(typeReferenceRecursionIdentityCheckOrder.ts, 0, 0))
+>S : Symbol(S, Decl(typeReferenceRecursionIdentityCheckOrder.ts, 6, 10))
+
+    flatMap<U>(callback: (value: T) => U | readonly U[] | A<U>): U[];
+>flatMap : Symbol(A.flatMap, Decl(typeReferenceRecursionIdentityCheckOrder.ts, 6, 74))
+>U : Symbol(U, Decl(typeReferenceRecursionIdentityCheckOrder.ts, 7, 12))
+>callback : Symbol(callback, Decl(typeReferenceRecursionIdentityCheckOrder.ts, 7, 15))
+>value : Symbol(value, Decl(typeReferenceRecursionIdentityCheckOrder.ts, 7, 26))
+>T : Symbol(T, Decl(typeReferenceRecursionIdentityCheckOrder.ts, 4, 12))
+>U : Symbol(U, Decl(typeReferenceRecursionIdentityCheckOrder.ts, 7, 12))
+>U : Symbol(U, Decl(typeReferenceRecursionIdentityCheckOrder.ts, 7, 12))
+>A : Symbol(A, Decl(typeReferenceRecursionIdentityCheckOrder.ts, 0, 0))
+>U : Symbol(U, Decl(typeReferenceRecursionIdentityCheckOrder.ts, 7, 12))
+>U : Symbol(U, Decl(typeReferenceRecursionIdentityCheckOrder.ts, 7, 12))
+}
+interface B<T> extends A<T> {}
+>B : Symbol(B, Decl(typeReferenceRecursionIdentityCheckOrder.ts, 8, 1))
+>T : Symbol(T, Decl(typeReferenceRecursionIdentityCheckOrder.ts, 9, 12))
+>A : Symbol(A, Decl(typeReferenceRecursionIdentityCheckOrder.ts, 0, 0))
+>T : Symbol(T, Decl(typeReferenceRecursionIdentityCheckOrder.ts, 9, 12))
+
+const a: A<0> = [];
+>a : Symbol(a, Decl(typeReferenceRecursionIdentityCheckOrder.ts, 10, 5))
+>A : Symbol(A, Decl(typeReferenceRecursionIdentityCheckOrder.ts, 0, 0))
+
+const b: B<0> = [];
+>b : Symbol(b, Decl(typeReferenceRecursionIdentityCheckOrder.ts, 11, 5))
+>B : Symbol(B, Decl(typeReferenceRecursionIdentityCheckOrder.ts, 8, 1))
+

@@ -1,0 +1,24 @@
+//// [tests/cases/compiler/exportAssignmentNestedVisibilityQueryOrder.ts] ////
+
+=== exportAssignmentNestedVisibilityQueryOrder.ts ===
+namespace m {
+    export interface Inner {
+        x: number;
+>x : number
+    }
+    export interface Outer {
+        use: (inner: Inner) => Outer;
+>use : (inner: Inner) => Outer
+>inner : Inner
+    }
+}
+declare var m: {
+>m : () => m.Outer
+
+    (): m.Outer;
+>m : any
+
+};
+export = m;
+>m : () => m.Outer
+

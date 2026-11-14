@@ -1,9 +1,11 @@
 malformedObjectDestructuringAssignmentESDecorators.ts(6,12): error TS1136: Property assignment expected.
 malformedObjectDestructuringAssignmentESDecorators.ts(6,24): error TS1136: Property assignment expected.
 malformedObjectDestructuringAssignmentESDecorators.ts(6,47): error TS1136: Property assignment expected.
+malformedObjectDestructuringAssignmentESDecorators.ts(6,47): error TS7032: Property 's' implicitly has type 'any', because its set accessor lacks a parameter type annotation.
+malformedObjectDestructuringAssignmentESDecorators.ts(6,49): error TS7006: Parameter 'v' implicitly has an 'any' type.
 
 
-==== malformedObjectDestructuringAssignmentESDecorators.ts (3 errors) ====
+==== malformedObjectDestructuringAssignmentESDecorators.ts (5 errors) ====
     declare function dec(...args: any[]): any;
     
     @dec
@@ -16,6 +18,10 @@ malformedObjectDestructuringAssignmentESDecorators.ts(6,47): error TS1136: Prope
 !!! error TS1136: Property assignment expected.
                                                   ~
 !!! error TS1136: Property assignment expected.
+                                                  ~
+!!! error TS7032: Property 's' implicitly has type 'any', because its set accessor lacks a parameter type annotation.
+                                                    ~
+!!! error TS7006: Parameter 'v' implicitly has an 'any' type.
         }
     }
     

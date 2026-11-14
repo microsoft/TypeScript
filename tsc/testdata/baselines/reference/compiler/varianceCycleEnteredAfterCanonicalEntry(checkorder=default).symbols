@@ -1,0 +1,132 @@
+//// [tests/cases/compiler/varianceCycleEnteredAfterCanonicalEntry.ts] ////
+
+=== varianceCycleEnteredAfterCanonicalEntry.ts ===
+// Reduced from capnweb's RpcStub types (cloudflare-os). Measuring the variance
+// of Stubify enters a circularity (Stubify -> Stub -> Provider ->
+// MethodOrProperty -> Result -> RpcPromise -> Stubify) whose canonical entry is
+// Stub, so the measurement from Stubify is discarded and the circularity
+// measured again from Stub. The discarded measurement once ran to completion,
+// which on the full types took long enough to exceed the instantiation limit.
+
+interface StubBase<T = unknown> {
+>StubBase : Symbol(StubBase, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 0, 0))
+>T : Symbol(T, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 7, 19))
+
+  brand: T;
+>brand : Symbol(StubBase.brand, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 7, 33))
+>T : Symbol(T, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 7, 19))
+}
+type Stub<T> = T extends object ? Provider<T> & StubBase<T> : StubBase<T>;
+>Stub : Symbol(Stub, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 9, 1))
+>T : Symbol(T, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 10, 10))
+>T : Symbol(T, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 10, 10))
+>Provider : Symbol(Provider, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 14, 125))
+>T : Symbol(T, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 10, 10))
+>StubBase : Symbol(StubBase, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 0, 0))
+>T : Symbol(T, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 10, 10))
+>StubBase : Symbol(StubBase, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 0, 0))
+>T : Symbol(T, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 10, 10))
+
+type Stubify<T> = T extends StubBase<any> ? T : T extends Function ? Stub<T> : T;
+>Stubify : Symbol(Stubify, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 10, 74))
+>T : Symbol(T, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 11, 13))
+>T : Symbol(T, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 11, 13))
+>StubBase : Symbol(StubBase, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 0, 0))
+>T : Symbol(T, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 11, 13))
+>T : Symbol(T, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 11, 13))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.decorators.d.ts, --, --))
+>Stub : Symbol(Stub, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 9, 1))
+>T : Symbol(T, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 11, 13))
+>T : Symbol(T, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 11, 13))
+
+type RpcPromise<T> = Promise<Stubify<T>> & Provider<T> & StubBase<T>;
+>RpcPromise : Symbol(RpcPromise, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 11, 81))
+>T : Symbol(T, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 12, 16))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Stubify : Symbol(Stubify, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 10, 74))
+>T : Symbol(T, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 12, 16))
+>Provider : Symbol(Provider, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 14, 125))
+>T : Symbol(T, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 12, 16))
+>StubBase : Symbol(StubBase, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 0, 0))
+>T : Symbol(T, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 12, 16))
+
+type Result<R> = R extends StubBase<infer U> ? Result<U> : RpcPromise<R>;
+>Result : Symbol(Result, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 12, 69))
+>R : Symbol(R, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 13, 12))
+>R : Symbol(R, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 13, 12))
+>StubBase : Symbol(StubBase, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 0, 0))
+>U : Symbol(U, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 13, 41))
+>Result : Symbol(Result, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 12, 69))
+>U : Symbol(U, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 13, 41))
+>RpcPromise : Symbol(RpcPromise, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 11, 81))
+>R : Symbol(R, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 13, 12))
+
+type MethodOrProperty<V> = V extends (...args: infer P) => infer R ? (...args: P) => Result<Awaited<R>> : Result<Awaited<V>>;
+>MethodOrProperty : Symbol(MethodOrProperty, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 13, 73))
+>V : Symbol(V, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 14, 22))
+>V : Symbol(V, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 14, 22))
+>args : Symbol(args, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 14, 38))
+>P : Symbol(P, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 14, 52))
+>R : Symbol(R, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 14, 64))
+>args : Symbol(args, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 14, 70))
+>P : Symbol(P, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 14, 52))
+>Result : Symbol(Result, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 12, 69))
+>Awaited : Symbol(Awaited, Decl(lib.es5.d.ts, --, --))
+>R : Symbol(R, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 14, 64))
+>Result : Symbol(Result, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 12, 69))
+>Awaited : Symbol(Awaited, Decl(lib.es5.d.ts, --, --))
+>V : Symbol(V, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 14, 22))
+
+type Provider<T> = { [K in keyof T]: MethodOrProperty<T[K]> };
+>Provider : Symbol(Provider, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 14, 125))
+>T : Symbol(T, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 15, 14))
+>K : Symbol(K, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 15, 22))
+>T : Symbol(T, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 15, 14))
+>MethodOrProperty : Symbol(MethodOrProperty, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 13, 73))
+>T : Symbol(T, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 15, 14))
+>K : Symbol(K, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 15, 22))
+
+function f<T>(x: Stubify<T>, y: Stubify<T | undefined>) {
+>f : Symbol(f, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 15, 62))
+>T : Symbol(T, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 17, 11))
+>x : Symbol(x, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 17, 14))
+>Stubify : Symbol(Stubify, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 10, 74))
+>T : Symbol(T, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 17, 11))
+>y : Symbol(y, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 17, 28))
+>Stubify : Symbol(Stubify, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 10, 74))
+>T : Symbol(T, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 17, 11))
+
+  y = x;
+>y : Symbol(y, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 17, 28))
+>x : Symbol(x, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 17, 14))
+
+  x = y;
+>x : Symbol(x, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 17, 14))
+>y : Symbol(y, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 17, 28))
+}
+
+declare const api: Stub<{ sub(): Promise<Stub<{}>> }>;
+>api : Symbol(api, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 22, 13))
+>Stub : Symbol(Stub, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 9, 1))
+>sub : Symbol(sub, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 22, 25))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Stub : Symbol(Stub, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 9, 1))
+
+export async function g() {
+>g : Symbol(g, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 22, 54))
+
+  await api.sub();
+>api.sub : Symbol(sub, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 22, 25))
+>api : Symbol(api, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 22, 13))
+>sub : Symbol(sub, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 22, 25))
+
+  api.sub().then(s => s);
+>api.sub().then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>api.sub : Symbol(sub, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 22, 25))
+>api : Symbol(api, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 22, 13))
+>sub : Symbol(sub, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 22, 25))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>s : Symbol(s, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 25, 17))
+>s : Symbol(s, Decl(varianceCycleEnteredAfterCanonicalEntry.ts, 25, 17))
+}
+

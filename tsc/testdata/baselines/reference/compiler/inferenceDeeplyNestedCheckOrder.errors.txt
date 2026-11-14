@@ -1,0 +1,24 @@
+first.ts(3,7): error TS2322: Type 'string[]' is not assignable to type 'null'.
+second.ts(6,7): error TS2322: Type 'number[]' is not assignable to type 'null'.
+
+
+==== first.ts (1 errors) ====
+    declare function flatten1<T>(iterable: Iterable<Iterable<T>>): T[];
+    declare const lists1: string[][];
+    const flat1: null = flatten1(lists1);
+          ~~~~~
+!!! error TS2322: Type 'string[]' is not assignable to type 'null'.
+    
+    declare const items1: string[];
+    for (const item of items1) {}
+    
+==== second.ts (1 errors) ====
+    declare const items2: number[];
+    for (const item of items2) {}
+    
+    declare function flatten2<T>(iterable: Iterable<Iterable<T>>): T[];
+    declare const lists2: number[][];
+    const flat2: null = flatten2(lists2);
+          ~~~~~
+!!! error TS2322: Type 'number[]' is not assignable to type 'null'.
+    

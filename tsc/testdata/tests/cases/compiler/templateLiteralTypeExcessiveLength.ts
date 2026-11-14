@@ -1,3 +1,4 @@
+// @checkOrder: default, typesfirst
 // @strict: true
 
 // Regression test for #63271: `Dec<2>` is `any`, so `Recur` produces both conditional branches and

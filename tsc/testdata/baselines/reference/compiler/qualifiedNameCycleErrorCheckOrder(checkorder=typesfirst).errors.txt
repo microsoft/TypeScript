@@ -1,0 +1,13 @@
+qualifiedNameCycleErrorCheckOrder.ts(5,20): error TS2694: Namespace 'n' has no exported member 'T'.
+
+
+==== qualifiedNameCycleErrorCheckOrder.ts (1 errors) ====
+    // Resolving n.T looks for a value n to suggest typeof, which needs the type of
+    // n, which is n.T. The missing member must be reported whichever is
+    // resolved first.
+    
+    declare const n: n.T;
+                       ~
+!!! error TS2694: Namespace 'n' has no exported member 'T'.
+    declare namespace n {}
+    

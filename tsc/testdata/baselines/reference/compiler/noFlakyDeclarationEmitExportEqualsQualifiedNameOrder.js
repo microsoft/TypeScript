@@ -78,5 +78,7 @@ export declare const obsA: {
     v: 0;
 };
 export declare const obsB: {
+    pa: 0;
+    readonly ma: 1;
     v: 0;
 };

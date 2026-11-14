@@ -1,3 +1,4 @@
+// @checkOrder: default, typesfirst
 // @target: esnext
 // @module: esnext
 

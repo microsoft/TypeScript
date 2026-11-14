@@ -1,0 +1,61 @@
+//// [tests/cases/compiler/inferenceThroughSortOfFlattenedIterable.ts] ////
+
+=== inferenceThroughSortOfFlattenedIterable.ts ===
+// Sorting the array made from a flattened iterable must keep its element type.
+
+function getAllValuesUnsorted(m: ReadonlyArray<ReadonlyArray<string>>): ReadonlyArray<string> {
+>getAllValuesUnsorted : (m: ReadonlyArray<ReadonlyArray<string>>) => ReadonlyArray<string>
+>m : readonly (readonly string[])[]
+
+	// OK
+	return Array.from(flatten(m.values()))
+>Array.from(flatten(m.values())) : string[]
+>Array.from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
+>Array : ArrayConstructor
+>from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
+>flatten(m.values()) : Iterable<string>
+>flatten : <T>(a: Iterable<Iterable<T>>) => Iterable<T>
+>m.values() : ArrayIterator<readonly string[]>
+>m.values : () => ArrayIterator<readonly string[]>
+>m : readonly (readonly string[])[]
+>values : () => ArrayIterator<readonly string[]>
+}
+
+function getAllValuesSorted(m: ReadonlyArray<ReadonlyArray<string>>): ReadonlyArray<string> {
+>getAllValuesSorted : (m: ReadonlyArray<ReadonlyArray<string>>) => ReadonlyArray<string>
+>m : readonly (readonly string[])[]
+
+	// Type 'unknown[]' is not assignable to type 'readonly string[]'.
+	return Array.from(flatten(m.values())).sort()
+>Array.from(flatten(m.values())).sort() : string[]
+>Array.from(flatten(m.values())).sort : (compareFn?: ((a: string, b: string) => number) | undefined) => string[]
+>Array.from(flatten(m.values())) : string[]
+>Array.from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
+>Array : ArrayConstructor
+>from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
+>flatten(m.values()) : Iterable<string>
+>flatten : <T>(a: Iterable<Iterable<T>>) => Iterable<T>
+>m.values() : ArrayIterator<readonly string[]>
+>m.values : () => ArrayIterator<readonly string[]>
+>m : readonly (readonly string[])[]
+>values : () => ArrayIterator<readonly string[]>
+>sort : (compareFn?: ((a: string, b: string) => number) | undefined) => string[]
+}
+
+function* flatten<T>(a: Iterable<Iterable<T>>): Iterable<T> {
+>flatten : <T>(a: Iterable<Iterable<T>>) => Iterable<T>
+>a : Iterable<Iterable<T>>
+
+	for (const xs of a)
+>xs : Iterable<T>
+>a : Iterable<Iterable<T>>
+
+		for (const x of xs)
+>x : T
+>xs : Iterable<T>
+
+			yield x
+>yield x : any
+>x : T
+}
+

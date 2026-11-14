@@ -1,0 +1,150 @@
+//// [tests/cases/compiler/contextualCheckInDiscardedCycle.ts] ////
+
+=== returnTypeCycle.ts ===
+// Callbacks contextually checked while a cycle is in progress are checked
+// again once it is discarded, with their contextual parameter types.
+
+declare function useCallback<T extends Function>(callback: T): T;
+>useCallback : Symbol(useCallback, Decl(returnTypeCycle.ts, 0, 0))
+>T : Symbol(T, Decl(returnTypeCycle.ts, 3, 29))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.decorators.d.ts, --, --))
+>callback : Symbol(callback, Decl(returnTypeCycle.ts, 3, 49))
+>T : Symbol(T, Decl(returnTypeCycle.ts, 3, 29))
+>T : Symbol(T, Decl(returnTypeCycle.ts, 3, 29))
+
+declare function refreshAll<T>(options: { ids: string[]; extra: T }): Promise<T>;
+>refreshAll : Symbol(refreshAll, Decl(returnTypeCycle.ts, 3, 65))
+>T : Symbol(T, Decl(returnTypeCycle.ts, 4, 28))
+>options : Symbol(options, Decl(returnTypeCycle.ts, 4, 31))
+>ids : Symbol(ids, Decl(returnTypeCycle.ts, 4, 41))
+>extra : Symbol(extra, Decl(returnTypeCycle.ts, 4, 56))
+>T : Symbol(T, Decl(returnTypeCycle.ts, 4, 28))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>T : Symbol(T, Decl(returnTypeCycle.ts, 4, 28))
+
+interface View {
+>View : Symbol(View, Decl(returnTypeCycle.ts, 4, 81))
+
+    refresh: (force?: boolean) => Promise<number>;
+>refresh : Symbol(View.refresh, Decl(returnTypeCycle.ts, 6, 16))
+>force : Symbol(force, Decl(returnTypeCycle.ts, 7, 14))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+}
+
+declare const items: { id: string }[];
+>items : Symbol(items, Decl(returnTypeCycle.ts, 10, 13))
+>id : Symbol(id, Decl(returnTypeCycle.ts, 10, 22))
+
+function useView(): View {
+>useView : Symbol(useView, Decl(returnTypeCycle.ts, 10, 38))
+>View : Symbol(View, Decl(returnTypeCycle.ts, 4, 81))
+
+    const refresh = useCallback((force?: boolean) =>
+>refresh : Symbol(refresh, Decl(returnTypeCycle.ts, 13, 9))
+>useCallback : Symbol(useCallback, Decl(returnTypeCycle.ts, 0, 0))
+>force : Symbol(force, Decl(returnTypeCycle.ts, 13, 33))
+
+        refreshAll({
+>refreshAll : Symbol(refreshAll, Decl(returnTypeCycle.ts, 3, 65))
+
+            ids: items.map(({ id }) => id),
+>ids : Symbol(ids, Decl(returnTypeCycle.ts, 14, 20))
+>items.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>items : Symbol(items, Decl(returnTypeCycle.ts, 10, 13))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>id : Symbol(id, Decl(returnTypeCycle.ts, 15, 29))
+>id : Symbol(id, Decl(returnTypeCycle.ts, 15, 29))
+
+            extra: 1,
+>extra : Symbol(extra, Decl(returnTypeCycle.ts, 15, 43))
+
+        }));
+    return { refresh };
+>refresh : Symbol(refresh, Decl(returnTypeCycle.ts, 18, 12))
+}
+
+=== yieldOperandCycle.ts ===
+interface Eff<A, E> {
+>Eff : Symbol(Eff, Decl(yieldOperandCycle.ts, 0, 0))
+>A : Symbol(A, Decl(yieldOperandCycle.ts, 0, 14))
+>E : Symbol(E, Decl(yieldOperandCycle.ts, 0, 16))
+
+    [Symbol.iterator](): Generator<Eff<A, E>, A, any>;
+>[Symbol.iterator] : Symbol(Eff[Symbol.iterator], Decl(yieldOperandCycle.ts, 0, 21))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
+>Eff : Symbol(Eff, Decl(yieldOperandCycle.ts, 0, 0))
+>A : Symbol(A, Decl(yieldOperandCycle.ts, 0, 14))
+>E : Symbol(E, Decl(yieldOperandCycle.ts, 0, 16))
+>A : Symbol(A, Decl(yieldOperandCycle.ts, 0, 14))
+
+    pipe<B>(f: (self: Eff<A, E>) => B): B;
+>pipe : Symbol(Eff.pipe, Decl(yieldOperandCycle.ts, 1, 54))
+>B : Symbol(B, Decl(yieldOperandCycle.ts, 2, 9))
+>f : Symbol(f, Decl(yieldOperandCycle.ts, 2, 12))
+>self : Symbol(self, Decl(yieldOperandCycle.ts, 2, 16))
+>Eff : Symbol(Eff, Decl(yieldOperandCycle.ts, 0, 0))
+>A : Symbol(A, Decl(yieldOperandCycle.ts, 0, 14))
+>E : Symbol(E, Decl(yieldOperandCycle.ts, 0, 16))
+>B : Symbol(B, Decl(yieldOperandCycle.ts, 2, 9))
+>B : Symbol(B, Decl(yieldOperandCycle.ts, 2, 9))
+}
+declare function mapError<E, E2>(f: (e: E) => E2): <A>(self: Eff<A, E>) => Eff<A, E2>;
+>mapError : Symbol(mapError, Decl(yieldOperandCycle.ts, 3, 1))
+>E : Symbol(E, Decl(yieldOperandCycle.ts, 4, 26))
+>E2 : Symbol(E2, Decl(yieldOperandCycle.ts, 4, 28))
+>f : Symbol(f, Decl(yieldOperandCycle.ts, 4, 33))
+>e : Symbol(e, Decl(yieldOperandCycle.ts, 4, 37))
+>E : Symbol(E, Decl(yieldOperandCycle.ts, 4, 26))
+>E2 : Symbol(E2, Decl(yieldOperandCycle.ts, 4, 28))
+>A : Symbol(A, Decl(yieldOperandCycle.ts, 4, 52))
+>self : Symbol(self, Decl(yieldOperandCycle.ts, 4, 55))
+>Eff : Symbol(Eff, Decl(yieldOperandCycle.ts, 0, 0))
+>A : Symbol(A, Decl(yieldOperandCycle.ts, 4, 52))
+>E : Symbol(E, Decl(yieldOperandCycle.ts, 4, 26))
+>Eff : Symbol(Eff, Decl(yieldOperandCycle.ts, 0, 0))
+>A : Symbol(A, Decl(yieldOperandCycle.ts, 4, 52))
+>E2 : Symbol(E2, Decl(yieldOperandCycle.ts, 4, 28))
+
+declare function fn<Y, R>(body: (input: number) => Generator<Y, R, any>): (input: number) => Eff<R, never>;
+>fn : Symbol(fn, Decl(yieldOperandCycle.ts, 4, 86))
+>Y : Symbol(Y, Decl(yieldOperandCycle.ts, 5, 20))
+>R : Symbol(R, Decl(yieldOperandCycle.ts, 5, 22))
+>body : Symbol(body, Decl(yieldOperandCycle.ts, 5, 26))
+>input : Symbol(input, Decl(yieldOperandCycle.ts, 5, 33))
+>Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
+>Y : Symbol(Y, Decl(yieldOperandCycle.ts, 5, 20))
+>R : Symbol(R, Decl(yieldOperandCycle.ts, 5, 22))
+>input : Symbol(input, Decl(yieldOperandCycle.ts, 5, 75))
+>Eff : Symbol(Eff, Decl(yieldOperandCycle.ts, 0, 0))
+>R : Symbol(R, Decl(yieldOperandCycle.ts, 5, 22))
+
+declare function make<T extends string>(s: T): T;
+>make : Symbol(make, Decl(yieldOperandCycle.ts, 5, 107))
+>T : Symbol(T, Decl(yieldOperandCycle.ts, 6, 22))
+>s : Symbol(s, Decl(yieldOperandCycle.ts, 6, 40))
+>T : Symbol(T, Decl(yieldOperandCycle.ts, 6, 22))
+>T : Symbol(T, Decl(yieldOperandCycle.ts, 6, 22))
+
+declare const uuid: Eff<string, Error>;
+>uuid : Symbol(uuid, Decl(yieldOperandCycle.ts, 7, 13))
+>Eff : Symbol(Eff, Decl(yieldOperandCycle.ts, 0, 0))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+
+fn(function* (input) {
+>fn : Symbol(fn, Decl(yieldOperandCycle.ts, 4, 86))
+>input : Symbol(input, Decl(yieldOperandCycle.ts, 9, 14))
+
+    make(yield* uuid.pipe(mapError((cause) => ({ cause }))));
+>make : Symbol(make, Decl(yieldOperandCycle.ts, 5, 107))
+>uuid.pipe : Symbol(Eff.pipe, Decl(yieldOperandCycle.ts, 1, 54))
+>uuid : Symbol(uuid, Decl(yieldOperandCycle.ts, 7, 13))
+>pipe : Symbol(Eff.pipe, Decl(yieldOperandCycle.ts, 1, 54))
+>mapError : Symbol(mapError, Decl(yieldOperandCycle.ts, 3, 1))
+>cause : Symbol(cause, Decl(yieldOperandCycle.ts, 10, 36))
+>cause : Symbol(cause, Decl(yieldOperandCycle.ts, 10, 48))
+
+});
+

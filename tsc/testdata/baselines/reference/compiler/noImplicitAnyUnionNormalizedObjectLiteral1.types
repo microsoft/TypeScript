@@ -36,8 +36,8 @@ function doSthWithParams(params: unknown) {
 }
 
 const bar = {
->bar : { c?: undefined; p: any; s: any; } | { c: string; p: string; s: string; }
->{  p: null,  s: null,  ...doSthWithParams({    p: "hello",    s: "world",  }),} : { c?: undefined; p: null; s: null; } | { c: string; p: string; s: string; }
+>bar : { c: string; p: string; s: string; } | { c?: undefined; p: any; s: any; }
+>{  p: null,  s: null,  ...doSthWithParams({    p: "hello",    s: "world",  }),} : { c: string; p: string; s: string; } | { c?: undefined; p: null; s: null; }
 
   p: null,
 >p : null

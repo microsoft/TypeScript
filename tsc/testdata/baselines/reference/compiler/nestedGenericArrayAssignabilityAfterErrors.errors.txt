@@ -1,0 +1,48 @@
+nestedGenericArrayAssignabilityAfterErrors.ts(14,27): error TS2322: Type 'boolean' is not assignable to type 'number'.
+nestedGenericArrayAssignabilityAfterErrors.ts(17,17): error TS2322: Type 'boolean' is not assignable to type 'number'.
+nestedGenericArrayAssignabilityAfterErrors.ts(23,5): error TS2322: Type 'DataTypeThree<number>' is not assignable to type 'DataTypeThree<boolean>'.
+  Type 'number' is not assignable to type 'boolean'.
+nestedGenericArrayAssignabilityAfterErrors.ts(28,5): error TS2322: Type 'DataTypeTwo<number>' is not assignable to type 'DataTypeTwo<boolean>'.
+  Type 'number' is not assignable to type 'boolean'.
+
+
+==== nestedGenericArrayAssignabilityAfterErrors.ts (4 errors) ====
+    // Assigning DataTypeThree<number> to DataTypeThree<boolean>, and likewise for
+    // DataTypeTwo, must be reported whether or not earlier assignments errored.
+    
+    type TypeA = number;
+    type TypeB = boolean;
+    type DataTypeTwo<T extends TypeA | TypeB> = {
+      one: Array<{ two: Array<T> }>;
+    };
+    type DataTypeThree<T extends TypeA | TypeB> = {
+      one: Array<{ two: Array<{ three: Array<T> }> }>;
+    };
+    
+    let testingThreeErr: DataTypeThree<TypeA> = {
+      one: [{ two: [{ three: [true] }] }]
+                              ~~~~
+!!! error TS2322: Type 'boolean' is not assignable to type 'number'.
+    };
+    let testingTwoErr: DataTypeTwo<TypeA> = {
+      one: [{ two: [false] }]
+                    ~~~~~
+!!! error TS2322: Type 'boolean' is not assignable to type 'number'.
+    };
+    
+    let testingThree: DataTypeThree<TypeA> = {
+      one: [{ two: [{ three: [5] }] }]
+    };
+    let t3a: DataTypeThree<TypeB> = testingThree;
+        ~~~
+!!! error TS2322: Type 'DataTypeThree<number>' is not assignable to type 'DataTypeThree<boolean>'.
+!!! error TS2322:   Type 'number' is not assignable to type 'boolean'.
+    
+    let testingTwo: DataTypeTwo<TypeA> = {
+      one: [{ two: [5] }]
+    };
+    let t2a: DataTypeTwo<TypeB> = testingTwo;
+        ~~~
+!!! error TS2322: Type 'DataTypeTwo<number>' is not assignable to type 'DataTypeTwo<boolean>'.
+!!! error TS2322:   Type 'number' is not assignable to type 'boolean'.
+    

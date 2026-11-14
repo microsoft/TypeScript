@@ -1696,6 +1696,7 @@
     "Set_the_number_of_projects_to_build_concurrently_6938": "Set the number of projects to build concurrently.",
     "Deduplicate_packages_with_the_same_name_and_version_6939": "Deduplicate packages with the same name and version.",
     "Allow_loading_external_content_mapper_plugins_that_execute_code_during_compilation_6940": "Allow loading external content mapper plugins that execute code during compilation.",
+    "Based_on_the_available_CPUs_and_the_size_of_the_project_unless_singleThreaded_is_passed_6941": "Based on the available CPUs and the size of the project, unless --singleThreaded is passed.",
     "Variable_0_implicitly_has_an_1_type_7005": "Variable '{0}' implicitly has an '{1}' type.",
     "Parameter_0_implicitly_has_an_1_type_7006": "Parameter '{0}' implicitly has an '{1}' type.",
     "Member_0_implicitly_has_an_1_type_7008": "Member '{0}' implicitly has an '{1}' type.",

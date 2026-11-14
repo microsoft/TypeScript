@@ -1,0 +1,14 @@
+//// [tests/cases/compiler/unusedTypeParameterQueryOrder.ts] ////
+
+=== unusedTypeParameterQueryOrder.ts ===
+class A {
+>A : A
+
+    f() {
+>f : () => <T>() => void
+
+        return <T>() => {};
+><T>() => {} : <T>() => void
+    }
+}
+
