@@ -1,5 +1,5 @@
 decoratorOnArrowFunction.ts(3,16): error TS1109: Expression expected.
-decoratorOnArrowFunction.ts(3,17): error TS1005: ';' expected.
+decoratorOnArrowFunction.ts(3,16): error TS7006: Parameter '(Missing)' implicitly has an 'any' type.
 
 
 ==== decoratorOnArrowFunction.ts (2 errors) ====
@@ -8,6 +8,6 @@ decoratorOnArrowFunction.ts(3,17): error TS1005: ';' expected.
     var F = @dec () => {
                    
 !!! error TS1109: Expression expected.
-                    ~~
-!!! error TS1005: ';' expected.
+                   
+!!! error TS7006: Parameter '(Missing)' implicitly has an 'any' type.
     }

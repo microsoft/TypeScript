@@ -7,6 +7,6 @@ declare function dec<T>(target: T): T;
 
 var F = @dec function () {
 >F : any
->dec : <T>(target: T) => T
+> : any
 > : () => void
 }
