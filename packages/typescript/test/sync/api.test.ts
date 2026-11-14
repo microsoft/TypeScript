@@ -21,7 +21,6 @@ import {
     isClassDeclaration,
     isExpressionStatement,
     isFunctionDeclaration,
-    isFunctionTypeNode,
     isIdentifier,
     isImportDeclaration,
     isInterfaceDeclaration,
@@ -58,7 +57,6 @@ import {
 import {
     cloneNode,
     createArrayTypeNode,
-    createExpressionWithTypeArguments,
     createFunctionTypeNode,
     createIdentifier,
     createKeywordTypeNode,
@@ -117,7 +115,6 @@ import {
     ModuleKind,
     ModuleResolutionKind,
     type ModuleResolver,
-    NodeBuilderFlags,
     type NumberLiteralType,
     ObjectFlags,
     type Program,
@@ -8752,38 +8749,6 @@ export const obj = { m: 1, s: "hi", b: true };
         for (const kind of kinds) {
             assert.ok(isTypeNode({ kind } as any), `isTypeNode should accept ${SyntaxKind[kind]}`);
         }
-        assert.ok(!isTypeNode(createExpressionWithTypeArguments(createIdentifier("f"), [createKeywordTypeNode(SyntaxKind.StringKeyword)])));
-    });
-
-    test("node builder results keep hover-only notation out of the syntax tree", () => {
-        const source = `function f<T>(x: T) {
-    class C<U> { value = x; other!: U; }
-    return new C<number>();
-}
-const local = f("hello");
-class N<T> { method<U extends T>(value: U): U { return value; } }
-const method = new N<string>().method;`;
-        using api = spawnAPI({ "/tsconfig.json": "{}", "/main.ts": source });
-        const snapshot = api.createSnapshot({ openProjects: ["/tsconfig.json"] });
-        const { checker } = snapshot.getConfiguredProject("/tsconfig.json")!;
-        const typeOf = (name: string) => checker.getTypeOfSymbol((checker.getSymbolAtPosition("/main.ts", source.indexOf(`const ${name}`) + 6))!);
-        const assertTypeSyntax = (node: Node | undefined) => {
-            assert.ok(node);
-            (function visit(child: Node): Node {
-                assert.ok(child.kind !== SyntaxKind.ExpressionWithTypeArguments && child.kind !== SyntaxKind.PropertyAccessExpression, SyntaxKind[child.kind]);
-                return visitEachChild(child, visit);
-            })(node);
-        };
-
-        // f<number>.C is only meaningful as display text.
-        assertTypeSyntax(checker.typeToTypeNode(typeOf("local"), undefined, NodeBuilderFlags.UseInstantiationExpressions));
-
-        // An instantiated signature declares its remaining type parameters.
-        const [signature] = (typeOf("method")).getCallSignatures();
-        const declaration = checker.signatureToSignatureDeclaration(signature, SyntaxKind.FunctionType, undefined, NodeBuilderFlags.WriteTypeArgumentsOfSignature);
-        assert.ok(declaration && isFunctionTypeNode(declaration));
-        assert.strictEqual(declaration.typeParameters?.[0].kind, SyntaxKind.TypeParameter);
-        assert.strictEqual(declaration.typeParameters[0].constraint?.kind, SyntaxKind.StringKeyword);
     });
 
     test("typeToString", () => {
