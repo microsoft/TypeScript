@@ -82,6 +82,7 @@ type NodeBuilderContext struct {
 	inferTypeParameters             []*Type
 	visitedTypes                    collections.Set[TypeId]
 	symbolDepth                     map[CompositeSymbolIdentity]int
+	containerDepth                  int
 	trackedSymbols                  []*TrackedSymbolArgs
 	mapper                          *TypeMapper
 	reverseMappedStack              []*ast.Symbol
@@ -3291,6 +3292,14 @@ func (b *NodeBuilderImpl) visitAndTransformType(t *Type, transform func(b *NodeB
 	}
 	if b.ctx.visitedTypes.Has(typeId) {
 		return b.createCyclicStructurePlaceholder()
+	}
+	if isArrayOrTuple {
+		if b.ctx.containerDepth >= 20 {
+			b.ctx.truncating = true
+			return b.createElidedInformationPlaceholder()
+		}
+		b.ctx.containerDepth++
+		defer func() { b.ctx.containerDepth-- }()
 	}
 
 	isConstructorObject := t.objectFlags&ObjectFlagsAnonymous != 0 && t.symbol != nil && t.symbol.Flags()&ast.SymbolFlagsClass != 0

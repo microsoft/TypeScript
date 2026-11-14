@@ -1,0 +1,13 @@
+//// [tests/cases/compiler/recursiveArrayTupleDeclarationEmit.ts] ////
+
+=== recursiveArrayTupleDeclarationEmit.ts ===
+type G<T> = T extends unknown ? (T | G<[T]>)[] : never;
+>G : G<T>
+
+declare const g: G<"x">;
+>g : ("x" | (((((((((((((((((((any | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[])[]
+
+export const h = g;
+>h : ("x" | (((((((((((((((((((any | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[])[]
+>g : ("x" | (((((((((((((((((((any | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[])[]
+
