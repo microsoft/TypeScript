@@ -37,6 +37,38 @@ func TestEncodeSourceFile(t *testing.T) {
 	})
 }
 
+func TestEncodeSourceFileWithNormalizedNumericLiterals(t *testing.T) {
+	t.Parallel()
+	for _, tt := range []struct {
+		source string
+		text   string
+	}{
+		{".1", "0.1"},
+		{"1e3", "1000"},
+		{"1e9", "1000000000"},
+		{"1e2", "100"},
+		{"1", "1"},
+		{"0", "0"},
+		{" /* leading trivia */ .1", "0.1"},
+		{" /* leading trivia */ 1e9", "1000000000"},
+		{"1_000", "1000"},
+		{"0x10", "16"},
+	} {
+		t.Run(tt.source, func(t *testing.T) {
+			t.Parallel()
+			sourceFile := parseSourceFile(tt.source)
+			buf, _, err := encoder.EncodeSourceFile(sourceFile)
+			assert.NilError(t, err)
+
+			decoded, err := encoder.DecodeSourceFile(buf)
+			assert.NilError(t, err)
+			assert.Equal(t, decoded.Text(), tt.source)
+			literal := decoded.Statements.Nodes[0].AsExpressionStatement().Expression.AsNumericLiteral()
+			assert.Equal(t, literal.Text, tt.text)
+		})
+	}
+}
+
 func TestEncodeContentMapperSourceFileMetadata(t *testing.T) {
 	t.Parallel()
 	if encoder.ProtocolVersion != 9 {
