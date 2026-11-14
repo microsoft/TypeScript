@@ -935,7 +935,7 @@ func (f *isolatedDeclarationsFixer) getExtraFlags(node *ast.Node, t *checker.Typ
 // createTypeOfFromEntityNameExpression creates a `typeof X` type query node.
 func (f *isolatedDeclarationsFixer) createTypeOfFromEntityNameExpression(node *ast.Node) *ast.TypeNode {
 	return f.changeTracker.NodeFactory.NewTypeQueryNode(
-		f.changeTracker.NodeFactory.DeepCloneNode(node), nil,
+		printer.CreateEntityNameFromExpression(f.changeTracker.NodeFactory, node), nil,
 	)
 }
 

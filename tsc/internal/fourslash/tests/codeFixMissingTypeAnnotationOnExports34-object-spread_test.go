@@ -74,3 +74,30 @@ export const All: typeof All_Part1_1 & typeof Start & typeof All_Part3 & typeof 
 		Index: 1,
 	})
 }
+
+func TestCodeFixMissingTypeAnnotationOnQualifiedObjectSpread(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @isolatedDeclarations: true
+// @declaration: true
+// @Filename: /code.ts
+declare namespace N {
+    namespace Nested {
+        const values: { x: number };
+    }
+}
+export const all = { ...N.Nested.values };`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyCodeFix(t, fourslash.VerifyCodeFixOptions{
+		Description: "Add annotation of type 'typeof N.Nested.values'",
+		NewFileContent: `declare namespace N {
+    namespace Nested {
+        const values: { x: number };
+    }
+}
+export const all: typeof N.Nested.values = {
+    ...N.Nested.values
+};`,
+	})
+}
