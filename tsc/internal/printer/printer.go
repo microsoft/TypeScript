@@ -1223,16 +1223,30 @@ func (p *Printer) emitComputedPropertyName(node *ast.ComputedPropertyName) {
 	p.exitNode(node.AsNode(), state)
 }
 
+// emitDisplayNode prints the display-only substitute for a synthesized node,
+// if one exists, and reports whether it did.
+func (p *Printer) emitDisplayNode(node *ast.Node) bool {
+	display := p.emitContext.DisplayNode(node)
+	switch {
+	case display == nil:
+		return false
+	case ast.IsTypeParameterDeclaration(display):
+		p.emitTypeParameter(display.AsTypeParameterDeclaration())
+	default:
+		p.emitExpression(display, ast.OperatorPrecedenceDisallowComma)
+	}
+	return true
+}
+
 func (p *Printer) emitEntityName(node *ast.EntityName) {
+	if p.emitDisplayNode(node) {
+		return
+	}
 	switch node.Kind {
 	case ast.KindIdentifier:
 		p.emitIdentifierReference(node.AsIdentifier())
 	case ast.KindQualifiedName:
 		p.emitQualifiedName(node.AsQualifiedName())
-	case ast.KindPropertyAccessExpression:
-		// TypeQuery nodes may have PropertyAccessExpression as exprName (e.g. typeof foo.x).
-		// TS's emitter handles this via generic emit(); we dispatch to expression emitter here.
-		p.emitExpression(node, ast.OperatorPrecedenceDisallowComma)
 	default:
 		panic(fmt.Sprintf("unexpected EntityName: %v", node.Kind))
 	}
@@ -1461,13 +1475,7 @@ func (p *Printer) emitTypeParameter(node *ast.TypeParameterDeclaration) {
 }
 
 func (p *Printer) emitTypeParameterDeclarationNode(node *ast.TypeParameterDeclarationNode) {
-	// NOTE: QuickInfo uses TypeFormatFlagsWriteTypeArgumentsOfSignature to instruct the NodeBuilder to store type arguments
-	// (i.e. type nodes) instead of type parameter declarations in the type parameter list.
-	if ast.IsTypeParameterDeclaration(node) {
-		p.emitTypeParameter(node.AsTypeParameterDeclaration())
-	} else {
-		p.emitTypeArgument(node)
-	}
+	p.emitTypeParameter(node.AsTypeParameterDeclaration())
 }
 
 func (p *Printer) emitParameterName(node *ast.BindingName) {
@@ -1519,6 +1527,14 @@ func (p *Printer) emitTypeParameters(parentNode *ast.Node, nodes *ast.TypeParame
 		return
 	}
 	p.emitList((*Printer).emitTypeParameterDeclarationNode, parentNode, nodes, LFTypeParameters|core.IfElse(ast.IsArrowFunction(parentNode) /*p.shouldAllowTrailingComma(parentNode, nodes)*/, LFAllowTrailingComma, LFNone)) // TODO: preserve trailing comma after Strada migration
+}
+
+func (p *Printer) emitSignatureTypeArgumentsOrParameters(node *ast.Node) {
+	if arguments := p.emitContext.DisplayTypeArguments(node); arguments != nil {
+		p.emitTypeArguments(node, arguments)
+	} else {
+		p.emitTypeParameters(node, node.FunctionLikeData().TypeParameters)
+	}
 }
 
 func (p *Printer) emitTypeAnnotation(node *ast.TypeNode) {
@@ -1586,12 +1602,7 @@ func (p *Printer) emitParametersForIndexSignature(parentNode *ast.Node, paramete
 func (p *Printer) emitSignature(node *ast.Node) {
 	n := node.FunctionLikeData()
 
-	// !!! In old emitter, quickinfo used type arguments in place of type parameters on instantiated signatures
-	////if n.TypeArguments != nil {
-	////	p.emitTypeArguments(node, n.TypeArguments)
-	////} else {
-	p.emitTypeParameters(node, n.TypeParameters)
-	////}
+	p.emitSignatureTypeArgumentsOrParameters(node)
 
 	p.emitParameters(node, n.Parameters)
 	p.emitTypeAnnotation(n.Type)
@@ -1905,13 +1916,15 @@ func (p *Printer) emitTypeArguments(parentNode *ast.Node, nodes *ast.TypeArgumen
 	if nodes == nil {
 		return
 	}
-	p.emitList((*Printer).emitTypeParameterDeclarationNode, parentNode, nodes, LFTypeArguments /*|core.IfElse(p.shouldAllowTrailingComma(parentNode, nodes), LFAllowTrailingComma, LFNone)*/) // TODO: preserve trailing comma after Strada migration
+	p.emitList((*Printer).emitTypeArgument, parentNode, nodes, LFTypeArguments /*|core.IfElse(p.shouldAllowTrailingComma(parentNode, nodes), LFAllowTrailingComma, LFNone)*/) // TODO: preserve trailing comma after Strada migration
 }
 
 func (p *Printer) emitTypeReference(node *ast.TypeReferenceNode) {
 	state := p.enterNode(node.AsNode())
-	p.emitEntityName(node.TypeName)
-	p.emitTypeArguments(node.AsNode(), node.TypeArguments)
+	if !p.emitDisplayNode(node.AsNode()) {
+		p.emitEntityName(node.TypeName)
+		p.emitTypeArguments(node.AsNode(), node.TypeArguments)
+	}
 	p.exitNode(node.AsNode(), state)
 }
 
@@ -1939,8 +1952,7 @@ func (p *Printer) emitFunctionType(node *ast.FunctionTypeNode) {
 	indented := p.shouldEmitIndented(node.AsNode())
 	p.increaseIndentIf(indented)
 	p.pushNameGenerationScope(node.AsNode())
-	// !!! in the old emitter, quickinfo uses type arguments in place of type parameters for instantiated signatures
-	p.emitTypeParameters(node.AsNode(), node.TypeParameters)
+	p.emitSignatureTypeArgumentsOrParameters(node.AsNode())
 	p.emitParameters(node.AsNode(), node.Parameters)
 	p.writeSpace()
 	p.emitReturnType(node.Type)
@@ -1957,8 +1969,7 @@ func (p *Printer) emitConstructorType(node *ast.ConstructorTypeNode) {
 	indented := p.shouldEmitIndented(node.AsNode())
 	p.increaseIndentIf(indented)
 	p.pushNameGenerationScope(node.AsNode())
-	// !!! in the old emitter, quickinfo uses type arguments in place of type parameters for instantiated signatures
-	p.emitTypeParameters(node.AsNode(), node.TypeParameters)
+	p.emitSignatureTypeArgumentsOrParameters(node.AsNode())
 	p.emitParameters(node.AsNode(), node.Parameters)
 	p.writeSpace()
 	p.emitReturnType(node.Type)
@@ -2366,13 +2377,6 @@ func (p *Printer) emitTypeNode(node *ast.TypeNode, precedence ast.TypePrecedence
 		p.emitTemplateTypeSpan(node.AsTemplateLiteralTypeSpan())
 	case ast.KindImportType:
 		p.emitImportTypeNode(node.AsImportTypeNode())
-
-	case ast.KindPropertyAccessExpression:
-		// Occurs in pseudo-types such as `f<T>.C`, where `f` is a generic function and `C` is a local type
-		p.emitPropertyAccessExpression(node.AsPropertyAccessExpression())
-	case ast.KindExpressionWithTypeArguments:
-		// !!! Should this actually be considered a type?
-		p.emitExpressionWithTypeArguments(node.AsExpressionWithTypeArguments())
 
 	case ast.KindJSDocAllType:
 		p.emitJSDocAllType(node)

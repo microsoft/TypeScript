@@ -73,7 +73,7 @@ func (c *Checker) typeToStringEx(t *Type, enclosingDeclaration *ast.Node, flags 
 	if noTruncation {
 		combinedFlags = combinedFlags | nodebuilder.FlagsNoTruncation
 	}
-	nodeBuilder, release := c.getNodeBuilder()
+	nodeBuilder, release := c.getNodeBuilderForTypeFormat(flags)
 	defer release()
 	oldVerbosity := nodeBuilder.verbosity
 	nodeBuilder.verbosity = vc
@@ -201,7 +201,7 @@ func (c *Checker) signatureToStringEx(signature *Signature, enclosingDeclaration
 		}
 	}
 
-	nodeBuilder, release := c.getNodeBuilder()
+	nodeBuilder, release := c.getNodeBuilderForTypeFormat(flags)
 	defer release()
 	oldVerbosity := nodeBuilder.verbosity
 	nodeBuilder.verbosity = vc
@@ -285,12 +285,18 @@ func (c *Checker) formatUnionTypes(types []*Type, expandingEnum bool) []*Type {
 	return result
 }
 
+// hoverOnlyNodeBuilderFlags only affect printed hover text, which API callers
+// do not receive.
+const hoverOnlyNodeBuilderFlags = nodebuilder.FlagsWriteTypeArgumentsOfSignature | nodebuilder.FlagsUseInstantiationExpressions
+
 func (c *Checker) TypeToTypeNode(t *Type, enclosingDeclaration *ast.Node, flags nodebuilder.Flags, idToSymbol map[*ast.IdentifierNode]*ast.Symbol) *ast.TypeNode {
+	flags &^= hoverOnlyNodeBuilderFlags
 	nodeBuilder := c.getNodeBuilderEx(idToSymbol)
 	return nodeBuilder.TypeToTypeNode(t, enclosingDeclaration, flags, nodebuilder.InternalFlagsNone, nil)
 }
 
 func (c *Checker) SignatureToSignatureDeclaration(signature *Signature, kind ast.Kind, enclosingDeclaration *ast.Node, flags nodebuilder.Flags) *ast.Node {
+	flags &^= hoverOnlyNodeBuilderFlags
 	nodeBuilder, release := c.getNodeBuilder()
 	defer release()
 	return nodeBuilder.SignatureToSignatureDeclaration(signature, kind, enclosingDeclaration, flags, nodebuilder.InternalFlagsNone, nil)

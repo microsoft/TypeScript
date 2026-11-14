@@ -296,6 +296,17 @@ func (c *Checker) getNodeBuilder() (*NodeBuilder, func()) {
 	return c.typeToStringNodebuilder, releaseNodes
 }
 
+// getNodeBuilderForTypeFormat gives hover-only display formatting a builder
+// local to the operation, so the cached builder does not retain its display
+// metadata.
+func (c *Checker) getNodeBuilderForTypeFormat(flags TypeFormatFlags) (*NodeBuilder, func()) {
+	if flags&(TypeFormatFlagsWriteTypeArgumentsOfSignature|TypeFormatFlagsUseInstantiationExpressions) == 0 {
+		return c.getNodeBuilder()
+	}
+	builder := c.getNodeBuilderEx(nil)
+	return builder, builder.EmitContext().Factory.ReleaseArenas
+}
+
 func (c *Checker) getNodeBuilderEx(idToSymbol map[*ast.IdentifierNode]*ast.Symbol) *NodeBuilder {
 	b := NewNodeBuilderEx(c, printer.NewEmitContext(), idToSymbol)
 	return b

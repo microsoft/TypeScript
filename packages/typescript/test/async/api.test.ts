@@ -8979,7 +8979,6 @@ export const obj = { m: 1, s: "hi", b: true };
             SyntaxKind.ObjectKeyword,
             SyntaxKind.SymbolKeyword,
             SyntaxKind.IntrinsicKeyword,
-            SyntaxKind.ExpressionWithTypeArguments,
             SyntaxKind.JSDocAllType,
             SyntaxKind.JSDocNullableType,
             SyntaxKind.JSDocNonNullableType,
