@@ -1,0 +1,117 @@
+//// [tests/cases/compiler/declarationEmitCommonjsRequireNumericKey.ts] ////
+
+=== b.js ===
+const {0: numeric, "a b": text, named} = require("./a");
+>numeric : any
+>text : "text"
+>named : true
+>require("./a") : typeof import("./a")
+>require : any
+>"./a" : "./a"
+
+const {[1]: computedNumeric, [`a b`]: computedTemplate} = require("./a");
+>1 : 1
+>computedNumeric : any
+>`a b` : "a b"
+>computedTemplate : any
+>require("./a") : typeof import("./a")
+>require : any
+>"./a" : "./a"
+
+exports.numeric = numeric;
+>exports.numeric = numeric : error
+>exports.numeric : error
+>exports : typeof import("./b")
+>numeric : any
+>numeric : error
+
+exports.text = text;
+>exports.text = text : "text"
+>exports.text : "text"
+>exports : typeof import("./b")
+>text : "text"
+>text : "text"
+
+exports.named = named;
+>exports.named = named : true
+>exports.named : true
+>exports : typeof import("./b")
+>named : true
+>named : true
+
+exports.computedNumeric = computedNumeric;
+>exports.computedNumeric = computedNumeric : error
+>exports.computedNumeric : error
+>exports : typeof import("./b")
+>computedNumeric : any
+>computedNumeric : error
+
+exports.computedTemplate = computedTemplate;
+>exports.computedTemplate = computedTemplate : error
+>exports.computedTemplate : error
+>exports : typeof import("./b")
+>computedTemplate : any
+>computedTemplate : error
+
+const {[-0]: signedZero, ["-0"]: negativeZeroString} = require("./a");
+>-0 : 0
+>0 : 0
+>signedZero : any
+>"-0" : "-0"
+>negativeZeroString : any
+>require("./a") : typeof import("./a")
+>require : any
+>"./a" : "./a"
+
+exports.signedZero = signedZero;
+>exports.signedZero = signedZero : error
+>exports.signedZero : error
+>exports : typeof import("./b")
+>signedZero : any
+>signedZero : error
+
+exports.negativeZeroString = negativeZeroString;
+>exports.negativeZeroString = negativeZeroString : error
+>exports.negativeZeroString : error
+>exports : typeof import("./b")
+>negativeZeroString : any
+>negativeZeroString : error
+
+=== a.js ===
+exports[0] = 123;
+>exports[0] = 123 : 123
+>exports[0] : 123
+>exports : typeof import("./a")
+>0 : 0
+>123 : 123
+
+exports["a b"] = "text";
+>exports["a b"] = "text" : "text"
+>exports["a b"] : "text"
+>exports : typeof import("./a")
+>"a b" : "a b"
+>"text" : "text"
+
+exports.named = true;
+>exports.named = true : true
+>exports.named : true
+>exports : typeof import("./a")
+>named : true
+>true : true
+
+exports[1] = { value: 1 };
+>exports[1] = { value: 1 } : { value: number; }
+>exports[1] : { value: number; }
+>exports : typeof import("./a")
+>1 : 1
+>{ value: 1 } : { value: number; }
+>value : number
+>1 : 1
+
+exports["-0"] = "negative zero";
+>exports["-0"] = "negative zero" : "negative zero"
+>exports["-0"] : "negative zero"
+>exports : typeof import("./a")
+>"-0" : "-0"
+>"negative zero" : "negative zero"
+

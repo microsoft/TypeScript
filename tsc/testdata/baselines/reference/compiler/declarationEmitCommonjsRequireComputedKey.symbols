@@ -1,0 +1,138 @@
+//// [tests/cases/compiler/declarationEmitCommonjsRequireComputedKey.ts] ////
+
+=== b.js ===
+const key = "value";
+>key : Symbol(key, Decl(b.js, 0, 5))
+
+const {[key]: dynamic, ["text"]: text, other, nested: {value}, ...rest} = require("./a"),
+>key : Symbol(key, Decl(b.js, 0, 5))
+>dynamic : Symbol(dynamic, Decl(b.js, 1, 7))
+>"text" : Symbol(text, Decl(b.js, 1, 22))
+>text : Symbol(text, Decl(b.js, 1, 22))
+>other : Symbol(other, Decl(b.js, 1, 38))
+>nested : Symbol(sibling.nested, Decl(a.js, 2, 21))
+>value : Symbol(value, Decl(b.js, 1, 55))
+>rest : Symbol(rest, Decl(b.js, 1, 62))
+>require : Symbol(require)
+>"./a" : Symbol(sibling, Decl(a.js, 0, 0))
+
+    sibling = require("./a");
+>sibling : Symbol(sibling, Decl(b.js, 1, 89))
+>require : Symbol(require)
+>"./a" : Symbol(sibling, Decl(a.js, 0, 0))
+
+exports.dynamic = dynamic;
+>exports.dynamic : Symbol(dynamic, Decl(b.js, 2, 29))
+>exports : Symbol(exports, Decl(b.js, 0, 0))
+>dynamic : Symbol(dynamic, Decl(b.js, 2, 29))
+>dynamic : Symbol(dynamic, Decl(b.js, 1, 7))
+
+exports.text = text;
+>exports.text : Symbol(text, Decl(b.js, 3, 26))
+>exports : Symbol(exports, Decl(b.js, 0, 0))
+>text : Symbol(text, Decl(b.js, 3, 26))
+>text : Symbol(text, Decl(b.js, 1, 22))
+
+exports.other = other;
+>exports.other : Symbol(other, Decl(b.js, 4, 20))
+>exports : Symbol(exports, Decl(b.js, 0, 0))
+>other : Symbol(other, Decl(b.js, 4, 20))
+>other : Symbol(other, Decl(b.js, 1, 38))
+
+exports.value = value;
+>exports.value : Symbol(value, Decl(b.js, 5, 22))
+>exports : Symbol(exports, Decl(b.js, 0, 0))
+>value : Symbol(value, Decl(b.js, 5, 22))
+>value : Symbol(value, Decl(b.js, 1, 55))
+
+exports.rest = rest;
+>exports.rest : Symbol(rest, Decl(b.js, 6, 22))
+>exports : Symbol(exports, Decl(b.js, 0, 0))
+>rest : Symbol(rest, Decl(b.js, 6, 22))
+>rest : Symbol(rest, Decl(b.js, 1, 62))
+
+exports.sibling = sibling;
+>exports.sibling : Symbol(sibling, Decl(b.js, 7, 20))
+>exports : Symbol(exports, Decl(b.js, 0, 0))
+>sibling : Symbol(sibling, Decl(b.js, 7, 20))
+>sibling : Symbol(sibling, Decl(b.js, 1, 89))
+
+const {[key]: extra, Obj} = require("./a");
+>key : Symbol(key, Decl(b.js, 0, 5))
+>extra : Symbol(extra, Decl(b.js, 10, 7))
+>Obj : Symbol(Obj, Decl(b.js, 10, 20))
+>require : Symbol(require)
+>"./a" : Symbol(sibling, Decl(a.js, 0, 0))
+
+/** @param {Obj} o */
+function useObj(o) {}
+>useObj : Symbol(useObj, Decl(b.js, 10, 43))
+>o : Symbol(o, Decl(b.js, 12, 16))
+
+exports.Obj = Obj;
+>exports.Obj : Symbol(Obj, Decl(b.js, 12, 21))
+>exports : Symbol(exports, Decl(b.js, 0, 0))
+>Obj : Symbol(Obj, Decl(b.js, 12, 21))
+>Obj : Symbol(Obj, Decl(b.js, 10, 20))
+
+exports.extra = extra;
+>exports.extra : Symbol(extra, Decl(b.js, 13, 18))
+>exports : Symbol(exports, Decl(b.js, 0, 0))
+>extra : Symbol(extra, Decl(b.js, 13, 18))
+>extra : Symbol(extra, Decl(b.js, 10, 7))
+
+exports.useObj = useObj;
+>exports.useObj : Symbol(useObj, Decl(b.js, 14, 22))
+>exports : Symbol(exports, Decl(b.js, 0, 0))
+>useObj : Symbol(useObj, Decl(b.js, 14, 22))
+>useObj : Symbol(useObj, Decl(b.js, 10, 43))
+
+const {[key]: unusedDynamic, text: unusedText} = require("./a"), keep = 1;
+>key : Symbol(key, Decl(b.js, 0, 5))
+>unusedDynamic : Symbol(unusedDynamic, Decl(b.js, 17, 7))
+>text : Symbol(unusedText, Decl(a.js, 0, 20))
+>unusedText : Symbol(unusedText, Decl(b.js, 17, 28))
+>require : Symbol(require)
+>"./a" : Symbol(sibling, Decl(a.js, 0, 0))
+>keep : Symbol(keep, Decl(b.js, 17, 64))
+
+exports.keep = keep;
+>exports.keep : Symbol(keep, Decl(b.js, 17, 74))
+>exports : Symbol(exports, Decl(b.js, 0, 0))
+>keep : Symbol(keep, Decl(b.js, 17, 74))
+>keep : Symbol(keep, Decl(b.js, 17, 64))
+
+=== a.js ===
+exports.value = 123;
+>exports.value : Symbol(value, Decl(a.js, 0, 0))
+>exports : Symbol(exports, Decl(a.js, 0, 0))
+>value : Symbol(value, Decl(a.js, 0, 0))
+
+exports.text = "text";
+>exports.text : Symbol(text, Decl(a.js, 0, 20))
+>exports : Symbol(exports, Decl(a.js, 0, 0))
+>text : Symbol(text, Decl(a.js, 0, 20))
+
+exports.other = true;
+>exports.other : Symbol(other, Decl(a.js, 1, 22))
+>exports : Symbol(exports, Decl(a.js, 0, 0))
+>other : Symbol(other, Decl(a.js, 1, 22))
+
+exports.nested = { value: 1 };
+>exports.nested : Symbol(nested, Decl(a.js, 2, 21))
+>exports : Symbol(exports, Decl(a.js, 0, 0))
+>nested : Symbol(nested, Decl(a.js, 2, 21))
+>value : Symbol(value, Decl(a.js, 3, 18))
+
+class Obj {
+>Obj : Symbol(Obj, Decl(a.js, 3, 30))
+
+    x = 1;
+>x : Symbol(Obj.x, Decl(a.js, 4, 11))
+}
+exports.Obj = Obj;
+>exports.Obj : Symbol(Obj, Decl(a.js, 6, 1))
+>exports : Symbol(exports, Decl(a.js, 0, 0))
+>Obj : Symbol(Obj, Decl(a.js, 6, 1))
+>Obj : Symbol(Obj, Decl(a.js, 3, 30))
+
