@@ -229,7 +229,8 @@ func leadingIndentation(text string) string {
 }
 
 func (t *Tracker) getFormattedTextOfNode(nodeIn *ast.Node, targetSourceFile *ast.SourceFile, sourceFile *ast.SourceFile, pos int, options NodeOptions) string {
-	text, sourceFileLike := t.getNonformattedText(nodeIn, targetSourceFile)
+	text, nodeOut := t.getNonformattedText(nodeIn, targetSourceFile)
+	formatFile := printer.CreateSyntheticSourceFile(t.NodeFactory, text, targetSourceFile.ParseOptions())
 	// !!! if (validate) validate(node, text);
 	formatOptions := GetFormatCodeSettingsForWriting(t.formatSettings, targetSourceFile)
 
@@ -246,7 +247,7 @@ func (t *Tracker) getFormattedTextOfNode(nodeIn *ast.Node, targetSourceFile *ast
 		delta = formatOptions.IndentSize
 	}
 
-	changes := format.FormatNodeGivenIndentation(t.ctx, sourceFileLike, sourceFileLike.AsSourceFile(), targetSourceFile.LanguageVariant, initialIndentation, delta)
+	changes := format.FormatNodeGivenIndentation(t.ctx, nodeOut, formatFile, targetSourceFile.LanguageVariant, initialIndentation, delta)
 	return core.ApplyBulkEdits(text, changes)
 }
 
@@ -261,14 +262,7 @@ func GetFormatCodeSettingsForWriting(options lsutil.FormatCodeSettings, sourceFi
 }
 
 func (t *Tracker) getNonformattedText(node *ast.Node, sourceFile *ast.SourceFile) (string, *ast.Node) {
-	text, nodeOut := printer.PrintAndPositionNode(t.NodeFactory, node, sourceFile, t.newLine, t.formatSettings.IndentSize, t.EmitContext)
-	sourceFileLike := printer.CreateSyntheticSourceFile(
-		t.NodeFactory,
-		nodeOut,
-		text,
-		ast.SourceFileParseOptions{FileName: sourceFile.FileName(), PathKey: sourceFile.PathKey()},
-	)
-	return text, sourceFileLike.AsNode()
+	return printer.PrintAndPositionNode(t.NodeFactory, node, sourceFile, t.newLine, t.formatSettings.IndentSize, t.EmitContext)
 }
 
 // method on the changeTracker because use of converters

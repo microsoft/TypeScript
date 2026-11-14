@@ -6826,7 +6826,7 @@ func (p *snippetPrinter) printAndFormatNode(ctx context.Context, node *ast.Node,
 func (p *snippetPrinter) printAndFormatNodeWithSettings(ctx context.Context, node *ast.Node, sourceFile *ast.SourceFile, formatOptions lsutil.FormatCodeSettings) string {
 	text := p.printUnescapedNode(node)
 	nodeWithPos := p.baseWriter.AssignPositionsToNode(node, p.factory)
-	syntheticFile := printer.CreateSyntheticSourceFile(p.factory, nodeWithPos, text, sourceFile.ParseOptions())
+	syntheticFile := printer.CreateSyntheticSourceFile(p.factory, text, sourceFile.ParseOptions())
 	ctx = format.WithFormatCodeSettings(ctx, formatOptions, formatOptions.NewLineCharacter)
 	changes := format.FormatNodeGivenIndentation(
 		ctx,
