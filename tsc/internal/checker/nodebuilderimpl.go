@@ -313,14 +313,14 @@ func (b *NodeBuilderImpl) appendReferenceToType(root *ast.TypeNode, ref *ast.Typ
 		refDisplay := b.e.DisplayNode(ref)
 		if rootDisplay != nil && ast.IsExpressionWithTypeArguments(rootDisplay) ||
 			refDisplay != nil && ast.IsExpressionWithTypeArguments(refDisplay) {
-			display := b.appendReferenceToExpression(b.referenceToExpression(root), b.referenceToExpression(ref))
+			display := b.appendReferenceToExpression(b.referenceToExpression(typeRef), b.referenceToExpression(ref.AsTypeReferenceNode()))
 			b.e.SetDisplayNode(result, display)
 		} else if rootDisplay != nil ||
 			b.ctx.flags&nodebuilder.FlagsUseInstantiationExpressions != 0 && typeRef.TypeArguments != nil && len(typeRef.TypeArguments.Nodes) != 0 {
 			// The display omits the inner reference's type arguments; the
 			// type reference keeps them.
 			displayRef := b.createAccessExpression(ref.AsTypeReferenceNode().TypeName)
-			display := b.appendReferenceToExpression(b.referenceToExpression(root), displayRef)
+			display := b.appendReferenceToExpression(b.referenceToExpression(typeRef), displayRef)
 			b.e.SetDisplayNode(result, display)
 		}
 		return result
@@ -329,16 +329,12 @@ func (b *NodeBuilderImpl) appendReferenceToType(root *ast.TypeNode, ref *ast.Typ
 	return nil
 }
 
-// referenceToExpression returns a type reference, or a reference that is
-// already an expression, as an expression.
-func (b *NodeBuilderImpl) referenceToExpression(ref *ast.Node) *ast.Expression {
-	if display := b.e.DisplayNode(ref); display != nil {
-		return b.cloneWithSymbols(display)
+// referenceToExpression returns a type reference as an expression.
+func (b *NodeBuilderImpl) referenceToExpression(ref *ast.TypeReferenceNode) *ast.Expression {
+	if display := b.e.DisplayNode(ref.AsNode()); display != nil {
+		return display
 	}
-	if ast.IsTypeReferenceNode(ref) {
-		return b.createExpressionWithTypeArguments(b.createAccessExpression(ref.AsTypeReferenceNode().TypeName), ref.TypeArgumentList())
-	}
-	return b.createAccessExpression(ref)
+	return b.createExpressionWithTypeArguments(b.createAccessExpression(ref.TypeName), ref.TypeArguments)
 }
 
 // appendReferenceToExpression returns ref, a reference expression, as a
@@ -1935,17 +1931,10 @@ func (b *NodeBuilderImpl) signatureToSignatureDeclarationHelper(signature *Signa
 		for _, parameter := range signature.target.TypeParameters() {
 			typeArguments = append(typeArguments, b.typeToTypeNode(b.ch.instantiateType(parameter, signature.mapper)))
 		}
-	}
-	displayLength, displayTruncating := b.ctx.approximateLength, b.ctx.truncating
-	canIncreaseExpansionDepth, expansionTruncated := b.ctx.canIncreaseExpansionDepth, b.ctx.expansionTruncated
-	for _, parameter := range signature.TypeParameters() {
-		typeParameters = append(typeParameters, b.typeParameterToDeclaration(parameter))
-	}
-	if len(typeArguments) != 0 {
-		// The display arguments are printed instead of these declarations,
-		// so the declarations do not count toward the truncation length.
-		b.ctx.approximateLength, b.ctx.truncating = displayLength, displayTruncating
-		b.ctx.canIncreaseExpansionDepth, b.ctx.expansionTruncated = canIncreaseExpansionDepth, expansionTruncated
+	} else {
+		for _, parameter := range signature.TypeParameters() {
+			typeParameters = append(typeParameters, b.typeParameterToDeclaration(parameter))
+		}
 	}
 
 	restoreFlags := b.saveRestoreFlags()
@@ -3774,43 +3763,15 @@ func (b *NodeBuilderImpl) newIdentifier(text string, symbol *ast.Symbol) *ast.No
 	return id
 }
 
-// cloneWithSymbols deep-clones node and copies each identifier's symbol to its
-// clone. Classified output colors names by symbol.
-func (b *NodeBuilderImpl) cloneWithSymbols(node *ast.Node) *ast.Node {
-	clone := b.f.DeepCloneNode(node)
-	b.copyIdentifierSymbols(node, clone)
-	return clone
-}
-
-func (b *NodeBuilderImpl) copyIdentifierSymbols(original *ast.Node, clone *ast.Node) {
-	if symbol, ok := b.idToSymbol[original]; ok {
-		b.idToSymbol[clone] = symbol
-	}
-	var originals []*ast.Node
-	original.ForEachChild(func(child *ast.Node) bool {
-		originals = append(originals, child)
-		return false
-	})
-	i := 0
-	clone.ForEachChild(func(child *ast.Node) bool {
-		b.copyIdentifierSymbols(originals[i], child)
-		i++
-		return false
-	})
-}
-
-func (b *NodeBuilderImpl) createAccessExpression(node *ast.Node) *ast.Expression {
+func (b *NodeBuilderImpl) createAccessExpression(node *ast.EntityName) *ast.Expression {
 	if display := b.e.DisplayNode(node); display != nil {
-		return b.cloneWithSymbols(display)
+		return display
 	}
-	switch {
-	case ast.IsQualifiedName(node):
-		return b.f.NewPropertyAccessExpression(b.createAccessExpression(node.AsQualifiedName().Left), nil /*questionDotToken*/, b.cloneWithSymbols(node.AsQualifiedName().Right), ast.NodeFlagsNone)
-	case ast.IsIdentifier(node), ast.IsPropertyAccessExpression(node), ast.IsExpressionWithTypeArguments(node):
-		return b.cloneWithSymbols(node)
-	default:
-		panic("unexpected access node kind: " + node.Kind.String())
+	if ast.IsQualifiedName(node) {
+		return b.f.NewPropertyAccessExpression(b.createAccessExpression(node.AsQualifiedName().Left), nil /*questionDotToken*/, node.AsQualifiedName().Right, ast.NodeFlagsNone)
 	}
+	debug.Assert(ast.IsIdentifier(node))
+	return node
 }
 
 func (b *NodeBuilderImpl) createExpressionWithTypeArguments(expr *ast.Expression, typeArguments *ast.NodeList) *ast.Expression {

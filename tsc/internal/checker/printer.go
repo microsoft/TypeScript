@@ -233,7 +233,7 @@ func (c *Checker) typePredicateToString(typePredicate *TypePredicate) string {
 func (c *Checker) typePredicateToStringEx(typePredicate *TypePredicate, enclosingDeclaration *ast.Node, flags TypeFormatFlags) string {
 	writer, putWriter := printer.GetSingleLineStringWriter()
 	defer putWriter()
-	nodeBuilder, release := c.getNodeBuilderForTypeFormat(flags)
+	nodeBuilder, release := c.getNodeBuilder()
 	defer release()
 	combinedFlags := toNodeBuilderFlags(flags) | nodebuilder.FlagsIgnoreErrors | nodebuilder.FlagsWriteTypeParametersInQualifiedName
 	predicate := nodeBuilder.TypePredicateToTypePredicateNode(typePredicate, enclosingDeclaration, combinedFlags, nodebuilder.InternalFlagsNone, nil) // TODO: GH#18217
@@ -285,14 +285,18 @@ func (c *Checker) formatUnionTypes(types []*Type, expandingEnum bool) []*Type {
 	return result
 }
 
+// hoverOnlyNodeBuilderFlags only affect printed hover text, which API callers
+// do not receive.
+const hoverOnlyNodeBuilderFlags = nodebuilder.FlagsWriteTypeArgumentsOfSignature | nodebuilder.FlagsUseInstantiationExpressions
+
 func (c *Checker) TypeToTypeNode(t *Type, enclosingDeclaration *ast.Node, flags nodebuilder.Flags, idToSymbol map[*ast.IdentifierNode]*ast.Symbol) *ast.TypeNode {
+	flags &^= hoverOnlyNodeBuilderFlags
 	nodeBuilder := c.getNodeBuilderEx(idToSymbol)
 	return nodeBuilder.TypeToTypeNode(t, enclosingDeclaration, flags, nodebuilder.InternalFlagsNone, nil)
 }
 
 func (c *Checker) SignatureToSignatureDeclaration(signature *Signature, kind ast.Kind, enclosingDeclaration *ast.Node, flags nodebuilder.Flags) *ast.Node {
-	// Only hover prints display arguments, so API callers do not need them.
-	flags &^= nodebuilder.FlagsWriteTypeArgumentsOfSignature
+	flags &^= hoverOnlyNodeBuilderFlags
 	nodeBuilder, release := c.getNodeBuilder()
 	defer release()
 	return nodeBuilder.SignatureToSignatureDeclaration(signature, kind, enclosingDeclaration, flags, nodebuilder.InternalFlagsNone, nil)
