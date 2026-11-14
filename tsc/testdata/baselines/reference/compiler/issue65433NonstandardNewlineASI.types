@@ -1,0 +1,33 @@
+//// [tests/cases/compiler/issue65433NonstandardNewlineASI.ts] ////
+
+=== issue65433NonstandardNewlineASI.ts ===
+const a = (x: number) => x
+>a : (x: number) => any
+>(x: number) => x(1) : (x: number) => any
+>x : number
+>x(1) : any
+>x : number
+
+(1)
+>1 : 1
+
+const b = (x: number) => x
+>b : (x: number) => any
+>(x: number) => x    (1) : (x: number) => any
+>x : number
+>x    (1) : any
+>x : number
+
+    (1)
+>1 : 1
+
+const c = (x: number) => x
+>c : (x: number) => any
+>(x: number) => x    (1) : (x: number) => any
+>x : number
+>x    (1) : any
+>x : number
+
+    (1)
+>1 : 1
+

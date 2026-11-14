@@ -2376,6 +2376,13 @@ func SkipTriviaEx(text string, pos int, options *SkipTriviaOptions) int {
 		}
 		ch, size := utf8.DecodeRuneInString(text[pos:])
 		switch ch {
+		case '\u2028', '\u2029':
+			pos += size
+			if options.StopAfterLineBreak {
+				return pos
+			}
+			canConsumeStar = options.InJSDoc
+			continue
 		case '\r':
 			if pos+1 < textLen && text[pos+1] == '\n' {
 				pos++
