@@ -44,7 +44,7 @@ var result: number = foo(x => new G(x)); // x has type D, new G(x) fails, so fir
 >x : D
 >new G(x) : G<A>
 >G : typeof G
->x : any
+>x : D
 
 var result2: number = foo(x => new G<typeof x>(x)); // x has type D, new G(x) fails, so first overload is picked.
 >result2 : number
@@ -55,7 +55,7 @@ var result2: number = foo(x => new G<typeof x>(x)); // x has type D, new G(x) fa
 >new G<typeof x>(x) : G<D>
 >G : typeof G
 >x : D
->x : any
+>x : D
 
 var result3: string = foo(x => { // x has type D
 >result3 : string
@@ -72,7 +72,7 @@ var result3: string = foo(x => { // x has type D
 >x : D
 
     return y;
->y : G<any>
+>y : G<D>
 
 });
 

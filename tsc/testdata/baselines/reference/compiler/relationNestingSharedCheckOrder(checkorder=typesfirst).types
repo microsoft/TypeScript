@@ -18,7 +18,7 @@ type R<T> = { next: R<[T]>; leaf: T };
 >leaf : T
 
 type Inner = S<[string]> extends R<[string]> ? true : false;
->Inner : true
+>Inner : false
 >true : true
 >false : false
 

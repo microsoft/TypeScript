@@ -340,7 +340,7 @@ func getExistingNodeTreeVisitor(b *NodeBuilderImpl, bound *recoveryBoundary) *as
 			}
 			return introducesError, attachSymbolToLeftmostIdentifier(leftmost, node, sym), nil
 		}
-		sym = b.ch.resolveEntityName(leftmost, meaning, true, true, nil)
+		sym = b.ch.resolveEntityNameEx(leftmost, meaning, true, true, nil, false /*use*/)
 		if b.ctx.enclosingDeclaration != nil && !(sym != nil && sym.Flags()&ast.SymbolFlagsTypeParameter != 0) {
 			sym = b.ch.getExportSymbolOfValueSymbolIfExported(sym)
 			// Some declarations may be transplanted to a new location.
@@ -348,14 +348,16 @@ func getExistingNodeTreeVisitor(b *NodeBuilderImpl, bound *recoveryBoundary) *as
 			// We also check for the unknownSymbol because when we create a fake scope some parameters may actually not be usable
 			// either because they are the expanded rest parameter,
 			// or because they are the newly added parameters from the tuple, which might have different meanings in the original context
-			symAtLocation := b.ch.resolveEntityName(leftmost, meaning, true, true, b.ctx.enclosingDeclaration)
+			symAtLocation := b.ch.resolveEntityNameEx(leftmost, meaning, true, true, b.ctx.enclosingDeclaration, false /*use*/)
 			if
 			// Check for unusable parameters symbols
 			symAtLocation == b.ch.unknownSymbol ||
 				// If the symbol is not found, but was not found in the original scope either we probably have an error, don't reuse the node
 				(symAtLocation == nil && sym != nil) ||
-				// If the symbol is found both in declaration scope and in current scope then it should point to the same reference
-				(symAtLocation != nil && sym != nil && b.ch.getSymbolIfSameReference(b.ch.getExportSymbolOfValueSymbolIfExported(symAtLocation), sym) == nil) {
+				// If the symbol is found both in declaration scope and in current scope then it should point to the same reference.
+				// A parameter in scope may be an instantiation of the one in the declaration, depending on whether
+				// its type was resolved before its signature was instantiated, so compare what they instantiate.
+				(symAtLocation != nil && sym != nil && b.ch.getSymbolIfSameReference(b.ch.getTargetSymbol(b.ch.getExportSymbolOfValueSymbolIfExported(symAtLocation)), b.ch.getTargetSymbol(sym)) == nil) {
 				// In isolated declaration we will not do rest parameter expansion so there is no need to report on these.
 				if symAtLocation != b.ch.unknownSymbol {
 					b.ctx.tracker.ReportInferenceFallback(node)

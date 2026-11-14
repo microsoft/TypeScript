@@ -1,8 +1,7 @@
 baseConstraintDepthCheckOrder.ts(7,7): error TS2339: Property 'length' does not exist on type 'T0'.
-baseConstraintDepthCheckOrder.ts(8,7): error TS2339: Property 'length' does not exist on type 'T20'.
 
 
-==== baseConstraintDepthCheckOrder.ts (2 errors) ====
+==== baseConstraintDepthCheckOrder.ts (1 errors) ====
     // The base constraint of 'T0' is 60 type parameters deep and gives up after
     // 50, while that of 'T20' is found 40 deep. Neither may depend on which was
     // computed first: computing 'T0' first must not leave 'T20' without its
@@ -13,7 +12,5 @@ baseConstraintDepthCheckOrder.ts(8,7): error TS2339: Property 'length' does not 
           ~~~~~~
 !!! error TS2339: Property 'length' does not exist on type 'T0'.
         y.length;
-          ~~~~~~
-!!! error TS2339: Property 'length' does not exist on type 'T20'.
     }
     

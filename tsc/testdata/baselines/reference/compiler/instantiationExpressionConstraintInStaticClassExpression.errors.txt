@@ -1,0 +1,21 @@
+instantiationExpressionConstraintInStaticClassExpression.ts(6,35): error TS2344: Type 'A<T>' does not satisfy the constraint 'A<number>'.
+  Type 'T' is not assignable to type 'number'.
+
+
+==== instantiationExpressionConstraintInStaticClassExpression.ts (1 errors) ====
+    // A<T> does not satisfy the constraint A of B, as T is not assignable to
+    // number, which must be reported.
+    
+    class A<T = number> {
+      value!: T;
+      child!: InstanceType<typeof A.B<A<T>>>; // this should error
+                                      ~~~~
+!!! error TS2344: Type 'A<T>' does not satisfy the constraint 'A<number>'.
+!!! error TS2344:   Type 'T' is not assignable to type 'number'.
+!!! related TS2208 instantiationExpressionConstraintInStaticClassExpression.ts:4:9: This type parameter might need an `extends number` constraint.
+    
+      static B = class B<T extends A = A> {
+        parent!: T;
+      };
+    }
+    

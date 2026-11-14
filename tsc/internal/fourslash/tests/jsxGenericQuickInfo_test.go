@@ -39,8 +39,8 @@ var c = <Component items={[0, 1, 2]} render/*3*/Item={it/*4*/em => item.toFixed(
 	defer done()
 	f.VerifyQuickInfoAt(t, "0", "(property) PropsA<number>.renderItem: (item: number) => string", "")
 	f.VerifyQuickInfoAt(t, "1", "(parameter) item: number", "")
-	f.VerifyQuickInfoAt(t, "2", "(property) PropsA<T>.name: \"A\"", "comments for A")
+	f.VerifyQuickInfoAt(t, "2", "(property) PropsA<number>.name: \"A\"", "comments for A")
 	f.VerifyQuickInfoAt(t, "3", "(property) PropsA<number>.renderItem: (item: number) => string", "")
 	f.VerifyQuickInfoAt(t, "4", "(parameter) item: number", "")
-	f.VerifyQuickInfoAt(t, "5", "(property) PropsA<T>.name: \"A\"", "comments for A")
+	f.VerifyQuickInfoAt(t, "5", "(property) PropsA<number>.name: \"A\"", "comments for A")
 }

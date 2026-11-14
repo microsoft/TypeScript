@@ -1,0 +1,25 @@
+//// [tests/cases/compiler/reinstantiatedParameterKeepsResolvedType.ts] ////
+
+=== reinstantiatedParameterKeepsResolvedType.ts ===
+// Instantiating E := {} turns the type of v into unknown. Inferring
+// K := never must not then turn it into {}['V'][never], which is never.
+interface I<E extends { V?: object }> {
+>V : object | undefined
+
+    f<K extends keyof E['V']>(k: K, v: E['V'][K]): void;
+>f : <K extends keyof E['V']>(k: K, v: E['V'][K]) => void
+>k : K
+>v : E["V"][K]
+}
+declare const i: I<{}>;
+>i : I<{}>
+
+i.f("x" as never, 1);
+>i.f("x" as never, 1) : void
+>i.f : <K extends never>(k: K, v: unknown) => void
+>i : I<{}>
+>f : <K extends never>(k: K, v: unknown) => void
+>"x" as never : never
+>"x" : "x"
+>1 : 1
+

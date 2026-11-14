@@ -17,8 +17,8 @@ function f<T0 extends T1, T1 extends T2, T2 extends T3, T3 extends T4, T4 extend
 >length : any
 
     y.length;
->y.length : any
+>y.length : number
 >y : T20
->length : any
+>length : number
 }
 

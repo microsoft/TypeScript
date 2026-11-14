@@ -476,7 +476,7 @@ func (b *NodeBuilderImpl) serializeTypeName(node *ast.Node, isTypeOf bool, typeA
 	if isTypeOf {
 		meaning = ast.SymbolFlagsValue
 	}
-	symbol := b.ch.resolveEntityName(node, meaning, true, false, node)
+	symbol := b.ch.resolveEntityNameEx(node, meaning, true, false, node, false /*use*/)
 	if symbol == nil {
 		return nil
 	}
@@ -2483,12 +2483,12 @@ func (b *NodeBuilderImpl) shouldUsePlaceholderForProperty(propertySymbol *ast.Sy
 func (b *NodeBuilderImpl) trackComputedName(accessExpression *ast.Node, enclosingDeclaration *ast.Node) {
 	// get symbol of the first identifier of the entityName
 	firstIdentifier := ast.GetFirstIdentifier(accessExpression)
-	name := b.ch.resolveName(enclosingDeclaration, firstIdentifier.Text(), ast.SymbolFlagsValue|ast.SymbolFlagsExportValue, nil /*nameNotFoundMessage*/, true /*isUse*/, false)
+	name := b.ch.resolveName(enclosingDeclaration, firstIdentifier.Text(), ast.SymbolFlagsValue|ast.SymbolFlagsExportValue, nil /*nameNotFoundMessage*/, false /*isUse*/, false)
 	if name != nil {
 		b.ctx.tracker.TrackSymbol(name, enclosingDeclaration, ast.SymbolFlagsValue)
 	} else {
 		// Name does not resolve at target location, track symbol at dest location (should be inaccessible)
-		fallback := b.ch.resolveName(firstIdentifier, firstIdentifier.Text(), ast.SymbolFlagsValue|ast.SymbolFlagsExportValue, nil /*nameNotFoundMessage*/, true /*isUse*/, false)
+		fallback := b.ch.resolveName(firstIdentifier, firstIdentifier.Text(), ast.SymbolFlagsValue|ast.SymbolFlagsExportValue, nil /*nameNotFoundMessage*/, false /*isUse*/, false)
 		if fallback != nil {
 			b.ctx.tracker.TrackSymbol(fallback, enclosingDeclaration, ast.SymbolFlagsValue)
 		}
