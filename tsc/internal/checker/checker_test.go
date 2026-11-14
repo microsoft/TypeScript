@@ -84,7 +84,7 @@ func TestQualifiedNameTypeParametersAreDisplayOnly(t *testing.T) {
 	builder := checker.NewNodeBuilderEx(c, emitContext, nil)
 	expression := builder.SymbolToExpression(c.GetSymbolAtLocation(access), ast.SymbolFlagsValue, access, nodebuilder.FlagsWriteTypeParametersInQualifiedName, nodebuilder.InternalFlagsNone, nil)
 
-	// The declaration's modifiers, constraint and default are display text, not a type argument.
+	// The type argument references T; its modifiers, constraint and default appear only in the printed text.
 	argument := expression.Expression().AsExpressionWithTypeArguments().TypeArguments.Nodes[0]
 	assert.Assert(t, ast.IsTypeNode(argument), argument.Kind)
 	text := printer.NewPrinter(printer.PrinterOptions{}, printer.PrintHandlers{}, emitContext).Emit(expression, file)

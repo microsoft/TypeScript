@@ -291,7 +291,7 @@ func (c *Checker) TypeToTypeNode(t *Type, enclosingDeclaration *ast.Node, flags 
 }
 
 func (c *Checker) SignatureToSignatureDeclaration(signature *Signature, kind ast.Kind, enclosingDeclaration *ast.Node, flags nodebuilder.Flags) *ast.Node {
-	// API callers receive only valid syntax, so skip recording display arguments.
+	// Only hover prints display arguments, so API callers do not need them.
 	flags &^= nodebuilder.FlagsWriteTypeArgumentsOfSignature
 	nodeBuilder, release := c.getNodeBuilder()
 	defer release()

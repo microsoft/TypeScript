@@ -317,8 +317,8 @@ func (b *NodeBuilderImpl) appendReferenceToType(root *ast.TypeNode, ref *ast.Typ
 			b.e.SetDisplayNode(result, display)
 		} else if rootDisplay != nil ||
 			b.ctx.flags&nodebuilder.FlagsUseInstantiationExpressions != 0 && typeRef.TypeArguments != nil && len(typeRef.TypeArguments.Nodes) != 0 {
-			// The display omits the inner reference's type arguments, which
-			// the type reference itself still has.
+			// The display omits the inner reference's type arguments; the
+			// type reference keeps them.
 			displayRef := b.createAccessExpression(ref.AsTypeReferenceNode().TypeName)
 			display := b.appendReferenceToExpression(b.referenceToExpression(root), displayRef)
 			b.e.SetDisplayNode(result, display)
@@ -2042,7 +2042,7 @@ func (b *NodeBuilderImpl) signatureToSignatureDeclarationHelper(signature *Signa
 		panic("Unhandled kind in signatureToSignatureDeclarationHelper")
 	}
 
-	// Instantiated arguments are display metadata, not type parameter declarations.
+	// The printer shows the instantiated arguments in place of the type parameters.
 	if len(typeArguments) != 0 {
 		b.e.SetDisplayTypeArguments(node, b.f.NewNodeList(typeArguments))
 	}
