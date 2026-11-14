@@ -1,0 +1,55 @@
+//// [tests/cases/compiler/declarationEmitCommonjsTemplateExportName.ts] ////
+
+=== a.js ===
+const value = 123;
+>value : 123
+>123 : 123
+
+exports[`class`] = value;
+>exports[`class`] = value : 123
+>exports[`class`] : 123
+>exports : typeof import("./a")
+>`class` : "class"
+>value : 123
+
+exports[`ordinary`] = value;
+>exports[`ordinary`] = value : 123
+>exports[`ordinary`] : 123
+>exports : typeof import("./a")
+>`ordinary` : "ordinary"
+>value : 123
+
+exports[`default`] = value;
+>exports[`default`] = value : 123
+>exports[`default`] : 123
+>exports : typeof import("./a")
+>`default` : "default"
+>value : 123
+
+exports[`a b`] = value;
+>exports[`a b`] = value : 123
+>exports[`a b`] : number
+>exports : typeof import("./a")
+>`a b` : "a b"
+>value : 123
+
+Object.defineProperty(exports, `a b`, { value });
+>Object.defineProperty(exports, `a b`, { value }) : typeof import("./a")
+>Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>Object : ObjectConstructor
+>defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>exports : typeof import("./a")
+>`a b` : "a b"
+>{ value } : { value: number; }
+>value : number
+
+Object.defineProperty(exports, `other name`, { value });
+>Object.defineProperty(exports, `other name`, { value }) : typeof import("./a")
+>Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>Object : ObjectConstructor
+>defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>exports : typeof import("./a")
+>`other name` : "other name"
+>{ value } : { value: number; }
+>value : number
+

@@ -836,7 +836,14 @@ func (tx *DeclarationTransformer) transformTypeParameterDeclaration(input *ast.T
 
 func (tx *DeclarationTransformer) transformVariableDeclaration(input *ast.VariableDeclaration) *ast.Node {
 	if tx.state.currentSourceFile.CommonJSModuleIndicator != nil && ast.IsVariableDeclarationInitializedToRequire(input.AsNode()) {
-		return tx.transformCjsRequireVariableDeclaration(input)
+		if canTransformCjsRequireToImport(input.AsNode()) {
+			return tx.transformCjsRequireVariableDeclaration(input)
+		}
+		// bindings with dynamic property names can't be named imports, so declare those and any nested or rest
+		// bindings with their types; the remaining bindings are imported by transformVariableStatement
+		return tx.recreateBindingElements(core.Filter(input.Name().AsBindingPattern().Elements.Nodes, func(elem *ast.Node) bool {
+			return !isCjsRequireImportableBinding(elem)
+		}))
 	}
 	if ast.IsBindingPattern(input.Name()) && hasAnyBindingInitializers(input.Name().AsBindingPattern()) {
 		return tx.recreateBindingPattern(input.Name().AsBindingPattern())
@@ -868,6 +875,24 @@ func hasAnyBindingInitializers(bindingPattern *ast.BindingPattern) bool {
 	return false
 }
 
+func canTransformCjsRequireToImport(decl *ast.Node) bool {
+	name := decl.Name()
+	if !ast.IsObjectBindingPattern(name) {
+		return true
+	}
+	for _, elem := range name.AsBindingPattern().Elements.Nodes {
+		if propertyName := elem.PropertyName(); propertyName != nil && ast.IsDynamicName(propertyName) {
+			return false
+		}
+	}
+	return true
+}
+
+func isCjsRequireImportableBinding(elem *ast.Node) bool {
+	propertyName := elem.PropertyName()
+	return ast.IsIdentifier(elem.Name()) && elem.AsBindingElement().DotDotDotToken == nil && (propertyName == nil || !ast.IsDynamicName(propertyName))
+}
+
 func (tx *DeclarationTransformer) transformCjsRequireVariableDeclaration(input *ast.VariableDeclaration) *ast.Node {
 	specifier := tx.rewriteModuleSpecifier(input.AsNode(), input.Initializer.AsCallExpression().Arguments.Nodes[0])
 	if ast.IsIdentifier(input.Name()) {
@@ -880,12 +905,33 @@ func (tx *DeclarationTransformer) transformCjsRequireVariableDeclaration(input *
 
 		// `const {x, y: z} = require("something")` -> `import {x, y as z} from "something"`
 		b := input.Name().AsBindingPattern()
+		importsAllBindings := canTransformCjsRequireToImport(input.AsNode())
 		var importSpecifiers []*ast.Node
 		for _, elem := range b.Elements.Nodes {
 			if !ast.IsIdentifier(elem.Name()) {
 				continue // nested destructuring, bail
 			}
-			importSpecifiers = append(importSpecifiers, tx.Factory().NewImportSpecifier(false, elem.PropertyName(), elem.Name()))
+			if !importsAllBindings && !isCjsRequireImportableBinding(elem) {
+				continue // declared as a variable by transformVariableDeclaration
+			}
+			propertyName := elem.PropertyName()
+			if propertyName != nil && !ast.IsIdentifier(propertyName) && !ast.IsStringLiteral(propertyName) {
+				// numeric and literal computed keys aren't valid import names, so normalize them to an identifier or string
+				text := ast.GetPropertyNameForPropertyNameNode(propertyName)
+				if ast.IsComputedPropertyName(propertyName) && ast.IsSignedNumericLiteral(propertyName.Expression()) {
+					// the property key is the string form of the number, so `[-0]` names property "0"
+					text = jsnum.FromString(text).String()
+				}
+				if scanner.IsIdentifierText(text, core.LanguageVariantStandard) {
+					propertyName = tx.Factory().NewIdentifier(text)
+				} else {
+					propertyName = tx.Factory().NewStringLiteral(text, ast.TokenFlagsNone)
+				}
+			}
+			importSpecifiers = append(importSpecifiers, tx.Factory().NewImportSpecifier(false, propertyName, elem.Name()))
+		}
+		if !importsAllBindings && len(importSpecifiers) == 0 {
+			return nil
 		}
 		return tx.Factory().NewImportDeclaration(
 			nil,
@@ -901,8 +947,12 @@ func (tx *DeclarationTransformer) transformCjsRequireVariableDeclaration(input *
 }
 
 func (tx *DeclarationTransformer) recreateBindingPattern(input *ast.BindingPattern) *ast.Node {
+	return tx.recreateBindingElements(input.Elements.Nodes)
+}
+
+func (tx *DeclarationTransformer) recreateBindingElements(elements []*ast.Node) *ast.Node {
 	var results []*ast.Node
-	for _, elem := range input.Elements.Nodes {
+	for _, elem := range elements {
 		result := tx.recreateBindingElement(elem.AsBindingElement())
 		if result == nil {
 			continue
@@ -2258,15 +2308,29 @@ func (tx *DeclarationTransformer) transformVariableStatement(input *ast.Variable
 	if tx.state.currentSourceFile.CommonJSModuleIndicator != nil {
 		var normalDeclarations []*ast.Node
 		var imports []*ast.Node
+		var partialImports []*ast.Node
 		for _, n := range inputNodes {
-			if ast.IsVariableDeclarationInitializedToRequire(n) {
+			if !ast.IsVariableDeclarationInitializedToRequire(n) {
+				normalDeclarations = append(normalDeclarations, n)
+			} else if canTransformCjsRequireToImport(n) {
 				imports = append(imports, n)
 			} else {
+				// bindings with dynamic property names stay variables, but their statically named siblings are still imported
 				normalDeclarations = append(normalDeclarations, n)
+				partialImports = append(partialImports, n)
 			}
 		}
 		inputNodes = normalDeclarations
 		extraImports, _ = tx.Visitor().VisitSlice(imports)
+		for _, n := range partialImports {
+			// apply the same filtering the visitor applies to fully imported declarations
+			if tx.shouldStripInternal(n) || isDeclarationAndNotVisible(tx.EmitContext(), tx.resolver, n) {
+				continue
+			}
+			if imp := tx.transformCjsRequireVariableDeclaration(n.AsVariableDeclaration()); imp != nil {
+				extraImports = append(extraImports, imp)
+			}
+		}
 	}
 
 	nodes, _ := tx.Visitor().VisitSlice(inputNodes)
@@ -2683,6 +2747,10 @@ func (tx *DeclarationTransformer) getNameExpressionPreferringIdentifier(nameExpr
 			// intentionally leave Loc unset so the string isn't used as the text source of the identifier
 			return result
 		}
+	}
+	if ast.IsNoSubstitutionTemplateLiteral(nameExpr) {
+		// template literals aren't valid module export names
+		return tx.Factory().NewStringLiteral(nameExpr.Text(), ast.TokenFlagsNone)
 	}
 	return nameExpr
 }
