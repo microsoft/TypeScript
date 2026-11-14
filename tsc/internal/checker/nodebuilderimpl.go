@@ -333,7 +333,7 @@ func (b *NodeBuilderImpl) appendReferenceToType(root *ast.TypeNode, ref *ast.Typ
 // already an expression, as an expression.
 func (b *NodeBuilderImpl) referenceToExpression(ref *ast.Node) *ast.Expression {
 	if display := b.e.DisplayNode(ref); display != nil {
-		return b.f.DeepCloneNode(display)
+		return b.cloneWithSymbols(display)
 	}
 	if ast.IsTypeReferenceNode(ref) {
 		return b.createExpressionWithTypeArguments(b.createAccessExpression(ref.AsTypeReferenceNode().TypeName), ref.TypeArgumentList())
@@ -3774,27 +3774,40 @@ func (b *NodeBuilderImpl) newIdentifier(text string, symbol *ast.Symbol) *ast.No
 	return id
 }
 
-// cloneIdentifier copies an identifier along with its symbol, which
-// classified output uses to color the name.
-func (b *NodeBuilderImpl) cloneIdentifier(node *ast.IdentifierNode) *ast.IdentifierNode {
+// cloneWithSymbols deep-clones node and gives each cloned identifier the
+// symbol of its original, which classified output uses to color names.
+func (b *NodeBuilderImpl) cloneWithSymbols(node *ast.Node) *ast.Node {
 	clone := b.f.DeepCloneNode(node)
-	if symbol, ok := b.idToSymbol[node]; ok {
+	b.copyIdentifierSymbols(node, clone)
+	return clone
+}
+
+func (b *NodeBuilderImpl) copyIdentifierSymbols(original *ast.Node, clone *ast.Node) {
+	if symbol, ok := b.idToSymbol[original]; ok {
 		b.idToSymbol[clone] = symbol
 	}
-	return clone
+	var originals []*ast.Node
+	original.ForEachChild(func(child *ast.Node) bool {
+		originals = append(originals, child)
+		return false
+	})
+	i := 0
+	clone.ForEachChild(func(child *ast.Node) bool {
+		b.copyIdentifierSymbols(originals[i], child)
+		i++
+		return false
+	})
 }
 
 func (b *NodeBuilderImpl) createAccessExpression(node *ast.Node) *ast.Expression {
 	if display := b.e.DisplayNode(node); display != nil {
-		return b.f.DeepCloneNode(display)
+		return b.cloneWithSymbols(display)
 	}
 	switch {
 	case ast.IsQualifiedName(node):
-		return b.f.NewPropertyAccessExpression(b.createAccessExpression(node.AsQualifiedName().Left), nil /*questionDotToken*/, b.cloneIdentifier(node.AsQualifiedName().Right), ast.NodeFlagsNone)
-	case ast.IsIdentifier(node):
-		return b.cloneIdentifier(node)
-	case ast.IsPropertyAccessExpression(node), ast.IsExpressionWithTypeArguments(node):
-		return b.f.DeepCloneNode(node)
+		return b.f.NewPropertyAccessExpression(b.createAccessExpression(node.AsQualifiedName().Left), nil /*questionDotToken*/, b.cloneWithSymbols(node.AsQualifiedName().Right), ast.NodeFlagsNone)
+	case ast.IsIdentifier(node), ast.IsPropertyAccessExpression(node), ast.IsExpressionWithTypeArguments(node):
+		return b.cloneWithSymbols(node)
 	default:
 		panic("unexpected access node kind: " + node.Kind.String())
 	}
