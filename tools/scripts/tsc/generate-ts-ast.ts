@@ -152,7 +152,7 @@ function resolveBaseExtends(base: NodeType): string {
 }
 
 function deriveNodeTsExtends(node: NodeType): string {
-    const tsExts = expandTsExtends(node.extendsKeys)
+    const tsExts = expandTsExtends(node.def?.tsExtends ?? node.extendsKeys)
         .map(e => baseTsName(e));
     return tsExts.length > 0 ? tsExts.join(", ") : "Node";
 }
@@ -610,7 +610,7 @@ function generateFactory(): string {
     // ── Collect all types referenced in factory ──
     function addType(t: string) {
         // Extract base type names from complex types
-        const stripped = t.replace(/readonly\s+/g, "").replace(/\[\]/g, "")
+        const stripped = t.replace(/readonly\s+/g, "").replace(/\[\]/g, "").replace(/[()]/g, "")
             .replace(/NodeArray<(.+)>/g, "$1").replace(/\s*\|\s*/g, "|");
         for (const part of stripped.split("|")) {
             const clean = part.trim();

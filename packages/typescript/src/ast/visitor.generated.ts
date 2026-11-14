@@ -374,6 +374,7 @@ import {
     isImportAttributes,
     isImportClause,
     isJSDocFullName,
+    isJSDocReturnTag,
     isJsxAttributeName,
     isJsxAttributes,
     isJsxAttributeValue,
@@ -1337,7 +1338,7 @@ const visitEachChildTable: Record<number, VisitEachChildFunction> = {
     [SyntaxKind.JSDocSignature]: (node: JSDocSignature, visitor: Visitor): JSDocSignature => {
         const _typeParameters = visitNodes(node.typeParameters, visitor);
         const _parameters = visitNodes(node.parameters, visitor);
-        const _type = visitNode(node.type, visitor, isTypeNode);
+        const _type = visitNode(node.type, visitor, isJSDocReturnTag);
         return updateJSDocSignature(node, _typeParameters, _parameters, _type);
     },
     [SyntaxKind.JSDocNameReference]: (node: JSDocNameReference, visitor: Visitor): JSDocNameReference => {

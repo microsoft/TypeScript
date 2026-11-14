@@ -27,6 +27,8 @@ export interface Member {
 export interface NodeDef {
     kind?: string | string[];
     extends: string[];
+    /** Public bases can differ from native bases used only for shared storage. */
+    tsExtends?: string[];
     members?: Member[];
     generateSubtreeFacts?: boolean;
     arena?: boolean;
@@ -548,7 +550,7 @@ export class ListType extends TypeBase {
     formatTypeScript(): string {
         const elementType = this.elementType.formatTypeScript();
         if (this.listKind === "raw") {
-            return `readonly ${elementType}[]`;
+            return `readonly ${this.elementType.kind === "union" ? `(${elementType})` : elementType}[]`;
         }
         return `NodeArray<${elementType}>`;
     }

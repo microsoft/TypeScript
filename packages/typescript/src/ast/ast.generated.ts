@@ -1270,8 +1270,11 @@ export interface JSDocTypedefTag extends JSDocTagBase {
     readonly typeExpression?: Node;
     readonly name?: JSDocFullName;
 }
-export interface JSDocSignature extends JSDocTypeBase, DeclarationBase, FunctionLikeBase {
+export interface JSDocSignature extends JSDocTypeBase, DeclarationBase {
     readonly kind: SyntaxKind.JSDocSignature;
+    readonly typeParameters?: NodeArray<JSDocTemplateTag>;
+    readonly parameters: NodeArray<JSDocParameterTag | JSDocThisTag>;
+    readonly type?: JSDocReturnTag;
 }
 export interface JSDocNameReference extends TypeNodeBase {
     readonly kind: SyntaxKind.JSDocNameReference;
@@ -1360,7 +1363,7 @@ export type DeclarationName = Identifier | PrivateIdentifier | StringLiteral | N
 export type ModuleName = Identifier | StringLiteral;
 export type ModuleExportName = Identifier | StringLiteral;
 export type PropertyName = Identifier | StringLiteral | NoSubstitutionTemplateLiteral | NumericLiteral | ComputedPropertyName | PrivateIdentifier | BigIntLiteral;
-export type ModuleBody = ModuleBlock | ModuleDeclaration;
+export type ModuleBody = ModuleBlock | ModuleDeclaration | Identifier;
 export type JSDocFullName = Identifier | ModuleDeclaration;
 export type ForInitializer = Expression | MissingDeclaration | VariableDeclarationList;
 export type ModuleReference = Identifier | QualifiedName | ExternalModuleReference;
