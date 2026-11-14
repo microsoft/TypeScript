@@ -1,0 +1,94 @@
+//// [tests/cases/compiler/aliasToDeclarationFreeUndefinedCycle.ts] ////
+
+=== src/host.ts ===
+import { report } from "mid"; export function run(): string { return report() }
+>report : () => string
+>run : () => string
+>report() : string
+>report : () => string
+
+=== node_modules/target/index.cjs ===
+module.exports=undefined
+>module.exports=undefined : undefined
+>module.exports : undefined
+>module : { exports: undefined; }
+>exports : undefined
+>undefined : undefined
+
+=== node_modules/mid/index.mjs ===
+import {initial,early} from './reader.mjs';import * as ns from 'target';export function read(){return ns};export function report(){return early+':'+(initial===ns)+':'+String(ns.default)+':'+Object.keys(ns).join(',')}
+>initial : any
+>early : any
+>ns : { default: undefined; }
+>read : () => { default: undefined; }
+>ns : { default: undefined; }
+>report : () => string
+>early+':'+(initial===ns)+':'+String(ns.default)+':'+Object.keys(ns).join(',') : string
+>early+':'+(initial===ns)+':'+String(ns.default)+':' : string
+>early+':'+(initial===ns)+':'+String(ns.default) : string
+>early+':'+(initial===ns)+':' : string
+>early+':'+(initial===ns) : string
+>early+':' : string
+>early : any
+>':' : ":"
+>(initial===ns) : boolean
+>initial===ns : boolean
+>initial : any
+>ns : { default: undefined; }
+>':' : ":"
+>String(ns.default) : string
+>String : StringConstructor
+>ns.default : undefined
+>ns : { default: undefined; }
+>default : undefined
+>':' : ":"
+>Object.keys(ns).join(',') : string
+>Object.keys(ns).join : (separator?: string) => string
+>Object.keys(ns) : string[]
+>Object.keys : { (o: object): string[]; (o: {}): string[]; }
+>Object : ObjectConstructor
+>keys : { (o: object): string[]; (o: {}): string[]; }
+>ns : { default: undefined; }
+>join : (separator?: string) => string
+>',' : ","
+
+=== node_modules/mid/reader.mjs ===
+import{read}from './index.mjs';export var initial;export var early;try{initial=read();early=typeof initial+':'+String(initial.default)+':'+Object.keys(initial).join(',')}catch(e){early=e.name}
+>read : () => { default: undefined; }
+>initial : any
+>early : any
+>initial=read() : { default: undefined; }
+>initial : any
+>read() : { default: undefined; }
+>read : () => { default: undefined; }
+>early=typeof initial+':'+String(initial.default)+':'+Object.keys(initial).join(',') : string
+>early : any
+>typeof initial+':'+String(initial.default)+':'+Object.keys(initial).join(',') : string
+>typeof initial+':'+String(initial.default)+':' : string
+>typeof initial+':'+String(initial.default) : string
+>typeof initial+':' : string
+>typeof initial : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>initial : any
+>':' : ":"
+>String(initial.default) : string
+>String : StringConstructor
+>initial.default : any
+>initial : any
+>default : any
+>':' : ":"
+>Object.keys(initial).join(',') : string
+>Object.keys(initial).join : (separator?: string) => string
+>Object.keys(initial) : string[]
+>Object.keys : { (o: object): string[]; (o: {}): string[]; }
+>Object : ObjectConstructor
+>keys : { (o: object): string[]; (o: {}): string[]; }
+>initial : any
+>join : (separator?: string) => string
+>',' : ","
+>e : unknown
+>early=e.name : error
+>early : any
+>e.name : error
+>e : unknown
+>name : any
+

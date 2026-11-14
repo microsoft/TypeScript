@@ -1,0 +1,20 @@
+//// [tests/cases/compiler/aliasToDeclarationFreeUndefined.ts] ////
+
+=== main.ts ===
+import { read } from './bridge.mjs'; read();
+>read : Symbol(read, Decl(main.ts, 0, 8))
+>read : Symbol(read, Decl(main.ts, 0, 8))
+
+=== target.cjs ===
+module.exports=undefined
+>module.exports : Symbol(exports, Decl(target.cjs, 0, 0))
+>module : Symbol(module, Decl(target.cjs, 0, 0))
+>exports : Symbol(exports, Decl(target.cjs, 0, 0))
+>undefined : Symbol(undefined)
+
+=== bridge.mjs ===
+import * as ns from './target.cjs'; export function read() { return ns }
+>ns : Symbol(ns, Decl(bridge.mjs, 0, 6))
+>read : Symbol(read, Decl(bridge.mjs, 0, 35))
+>ns : Symbol(ns, Decl(bridge.mjs, 0, 6))
+

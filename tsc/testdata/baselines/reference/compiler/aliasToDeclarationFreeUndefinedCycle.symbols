@@ -1,0 +1,58 @@
+//// [tests/cases/compiler/aliasToDeclarationFreeUndefinedCycle.ts] ////
+
+=== src/host.ts ===
+import { report } from "mid"; export function run(): string { return report() }
+>report : Symbol(report, Decl(host.ts, 0, 8))
+>run : Symbol(run, Decl(host.ts, 0, 29))
+>report : Symbol(report, Decl(host.ts, 0, 8))
+
+=== node_modules/target/index.cjs ===
+module.exports=undefined
+>module.exports : Symbol(exports, Decl(index.cjs, 0, 0))
+>module : Symbol(module, Decl(index.cjs, 0, 0))
+>exports : Symbol(exports, Decl(index.cjs, 0, 0))
+>undefined : Symbol(undefined)
+
+=== node_modules/mid/index.mjs ===
+import {initial,early} from './reader.mjs';import * as ns from 'target';export function read(){return ns};export function report(){return early+':'+(initial===ns)+':'+String(ns.default)+':'+Object.keys(ns).join(',')}
+>initial : Symbol(initial, Decl(index.mjs, 0, 8))
+>early : Symbol(early, Decl(index.mjs, 0, 16))
+>ns : Symbol(ns, Decl(index.mjs, 0, 49))
+>read : Symbol(read, Decl(index.mjs, 0, 72))
+>ns : Symbol(ns, Decl(index.mjs, 0, 49))
+>report : Symbol(report, Decl(index.mjs, 0, 106))
+>early : Symbol(early, Decl(index.mjs, 0, 16))
+>initial : Symbol(initial, Decl(index.mjs, 0, 8))
+>ns : Symbol(ns, Decl(index.mjs, 0, 49))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 6 more)
+>ns.default : Symbol(default)
+>ns : Symbol(ns, Decl(index.mjs, 0, 49))
+>default : Symbol(default)
+>Object.keys(ns).join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
+>Object.keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>ns : Symbol(ns, Decl(index.mjs, 0, 49))
+>join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
+
+=== node_modules/mid/reader.mjs ===
+import{read}from './index.mjs';export var initial;export var early;try{initial=read();early=typeof initial+':'+String(initial.default)+':'+Object.keys(initial).join(',')}catch(e){early=e.name}
+>read : Symbol(read, Decl(reader.mjs, 0, 7))
+>initial : Symbol(initial, Decl(reader.mjs, 0, 41))
+>early : Symbol(early, Decl(reader.mjs, 0, 60))
+>initial : Symbol(initial, Decl(reader.mjs, 0, 41))
+>read : Symbol(read, Decl(reader.mjs, 0, 7))
+>early : Symbol(early, Decl(reader.mjs, 0, 60))
+>initial : Symbol(initial, Decl(reader.mjs, 0, 41))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 6 more)
+>initial : Symbol(initial, Decl(reader.mjs, 0, 41))
+>Object.keys(initial).join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
+>Object.keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>initial : Symbol(initial, Decl(reader.mjs, 0, 41))
+>join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
+>e : Symbol(e, Decl(reader.mjs, 0, 176))
+>early : Symbol(early, Decl(reader.mjs, 0, 60))
+>e : Symbol(e, Decl(reader.mjs, 0, 176))
+

@@ -16814,20 +16814,18 @@ func (c *Checker) resolveAliasWithDeprecationCheck(symbol *ast.Symbol, location 
 	}
 	for symbol.Flags()&ast.SymbolFlagsAlias != 0 {
 		target := c.getImmediateAliasedSymbol(symbol)
-		if target != nil {
+		if target != nil && len(target.Declarations()) != 0 {
 			if target == targetSymbol {
 				break
 			}
-			if len(target.Declarations()) != 0 {
-				if c.isDeprecatedSymbol(target) {
-					c.addDeprecatedSuggestion(location, target.Declarations(), target.Name())
+			if c.isDeprecatedSymbol(target) {
+				c.addDeprecatedSuggestion(location, target.Declarations(), target.Name())
+				break
+			} else {
+				if symbol == targetSymbol {
 					break
-				} else {
-					if symbol == targetSymbol {
-						break
-					}
-					symbol = target
 				}
+				symbol = target
 			}
 		} else {
 			break
