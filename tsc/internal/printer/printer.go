@@ -1229,10 +1229,6 @@ func (p *Printer) emitEntityName(node *ast.EntityName) {
 		p.emitIdentifierReference(node.AsIdentifier())
 	case ast.KindQualifiedName:
 		p.emitQualifiedName(node.AsQualifiedName())
-	case ast.KindPropertyAccessExpression:
-		// TypeQuery nodes may have PropertyAccessExpression as exprName (e.g. typeof foo.x).
-		// TS's emitter handles this via generic emit(); we dispatch to expression emitter here.
-		p.emitExpression(node, ast.OperatorPrecedenceDisallowComma)
 	default:
 		panic(fmt.Sprintf("unexpected EntityName: %v", node.Kind))
 	}

@@ -757,19 +757,25 @@ func (b *NodeBuilderImpl) symbolToTypeNode(symbol *ast.Symbol, mask ast.SymbolFl
 
 	}
 
+	restoreFlags := b.saveRestoreFlags()
+	if isTypeOf {
+		// Type queries permit arguments only after the complete entity name.
+		b.ctx.flags &^= nodebuilder.FlagsWriteTypeParametersInQualifiedName
+	}
 	entityName := b.createAccessFromSymbolChain(chain, len(chain)-1, 0, typeArguments)
+	restoreFlags()
 	if ast.IsIndexedAccessTypeNode(entityName) {
 		return entityName // Indexed accesses can never be `typeof`
 	}
 	if ast.IsEntityName(entityName) {
 		if isTypeOf {
-			return b.f.NewTypeQueryNode(entityName, nil)
+			return b.f.NewTypeQueryNode(entityName, typeArguments)
 		}
 		return b.f.NewTypeReferenceNode(entityName, typeArguments)
 	}
 	if isTypeOf && ast.IsExpressionWithTypeArguments(entityName) {
 		expr := entityName.AsExpressionWithTypeArguments()
-		return b.f.NewTypeQueryNode(b.f.DeepCloneNode(expr.Expression), expr.TypeArguments)
+		return b.f.NewTypeQueryNode(printer.CreateEntityNameFromExpression(b.f, expr.Expression), expr.TypeArguments)
 	}
 	return entityName
 }
