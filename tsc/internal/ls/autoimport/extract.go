@@ -194,7 +194,7 @@ func (e *symbolExtractor) extractFromSymbol(name string, symbol *ast.Symbol, mod
 		for name, namedExport := range symbol.Parent().Exports().All() {
 			if name != ast.InternalSymbolNameExportStar {
 				idx := slices.Index(allExports, namedExport)
-				if idx >= 0 || shouldIgnoreSymbol(namedExport) {
+				if idx >= 0 {
 					allExports = slices.Delete(allExports, idx, idx+1)
 				}
 			}

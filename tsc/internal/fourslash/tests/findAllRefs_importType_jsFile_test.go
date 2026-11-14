@@ -13,12 +13,13 @@ func TestFindAllRefs_importType_js(t *testing.T) {
 	const content = `// @allowJs: true
 // @checkJs: true
 // @Filename: /a.js
-/**/module.exports = class C {};
-module.exports.D = class D {};
+class C {}
+C.D = class D {};
+/**/module.exports = C;
 // @Filename: /b.js
 /** @type {import("./a")} */
 const x = 0;
-/** @type {import("./a").D} */
+/** @type {InstanceType<typeof import("./a").D>} */
 const y = 0;`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()

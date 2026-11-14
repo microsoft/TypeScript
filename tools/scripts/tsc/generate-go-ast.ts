@@ -996,7 +996,7 @@ function generateVisitEachChild(w: CodeWriter, node: NodeType) {
         if (m.isChild() && type.kind === "list" && type.listKind === "raw") {
             const localName = m.goParamName();
             rawListLocals.set(m.name, localName);
-            w.write(`${localName} := core.SameMap(node.${m.name}, func(n *Node) *Node { return v.visitNode(n) })`);
+            w.write(`${localName} := core.SameMap(node.${m.name}, func(n *Node) *Node { return requiredChild(n, v.visitNode(n)) })`);
         }
     }
 
@@ -1014,17 +1014,13 @@ function generateVisitEachChild(w: CodeWriter, node: NodeType) {
         const type = m.type;
         const listKind = m.listKind;
 
-        if (m.visit) {
-            return `v.visit${api.capitalize(m.visit)}(${access})`;
-        }
-        if (listKind === "ModifierList") {
-            return `v.visitModifiers(${access})`;
-        }
-        if (listKind === "NodeList") {
-            return `v.visitNodes(${access})`;
-        }
-        if (type.kind === "primitive" && type.name === "Token") return `v.visitToken(${access})`;
-        return `v.visitNode(${access})`;
+        const visit = m.visit ? `visit${api.capitalize(m.visit)}`
+            : listKind === "ModifierList" ? "visitModifiers"
+            : listKind === "NodeList" ? "visitNodes"
+            : type.kind === "primitive" && type.name === "Token" ? "visitToken"
+            : "visitNode";
+        const result = `v.${visit}(${access})`;
+        return m.optional ? result : `requiredChild(${access}, ${result})`;
     }).join(", ");
 
     w.write(`return v.Factory.Update${node.name}(node, ${args})`);

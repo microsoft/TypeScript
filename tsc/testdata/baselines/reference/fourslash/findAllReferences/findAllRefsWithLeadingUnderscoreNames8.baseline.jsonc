@@ -1,6 +1,6 @@
 // === findAllReferences ===
 // === /findAllRefsWithLeadingUnderscoreNames8.ts ===
-// (/*FIND ALL REFS*/function __foo() {
+// (/*FIND ALL REFS*/function [|__foo|]() {
 //     [|__foo|]();
 // })
 
@@ -8,7 +8,7 @@
 
 // === findAllReferences ===
 // === /findAllRefsWithLeadingUnderscoreNames8.ts ===
-// (function /*FIND ALL REFS*/__foo() {
+// (function /*FIND ALL REFS*/[|__foo|]() {
 //     [|__foo|]();
 // })
 
@@ -16,6 +16,6 @@
 
 // === findAllReferences ===
 // === /findAllRefsWithLeadingUnderscoreNames8.ts ===
-// (function __foo() {
+// (function [|__foo|]() {
 //     /*FIND ALL REFS*/[|__foo|]();
 // })

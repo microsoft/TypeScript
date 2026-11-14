@@ -286,3 +286,58 @@ func TestSourceMapperIgnoresExternalMapURLSuffix(t *testing.T) {
 	}}
 	assert.Assert(t, GetDocumentPositionMapper(host, generatedFile) == nil)
 }
+
+func TestTryParseBase64Url(t *testing.T) {
+	t.Parallel()
+
+	for _, test := range []struct {
+		url     string
+		payload string
+		matched bool
+	}{
+		{"out.d.ts.map", "", false},
+		{"data:", "", true},
+		{"data:text/plain;base64,e30=", "", true},
+		{"data:application/json;charset=", "", true},
+		{"data:application/json;charset=x", "", true},
+		{"data:application/json;charset=ut", "", true},
+		{"data:application/json;charset=utf", "", true},
+		{"data:application/json;charset=utf-", "", true},
+		{"data:application/json;charset=utf-8", "", true},
+		{"data:application/json;charset=utf-8;", "", true},
+		{"data:application/json;charset=ascii;base64,e30=", "", true},
+		{"data:application/json;charset=utf-8;base64,e30=!", "", true},
+		{"data:application/json;base64,e30=", "e30=", true},
+		{"data:application/json;charset=utf-8;base64,e30=", "e30=", true},
+		{"data:application/json;charset=UtF-8;base64,e30=", "e30=", true},
+	} {
+		t.Run(test.url, func(t *testing.T) {
+			t.Parallel()
+			payload, matched := tryParseBase64Url(test.url)
+			assert.Equal(t, payload, test.payload)
+			assert.Equal(t, matched, test.matched)
+		})
+	}
+}
+
+func TestSourceMapperSkipsMalformedDataURL(t *testing.T) {
+	t.Parallel()
+
+	const generatedFile = "/project/out/out.d.ts"
+	host := &sourceMapperTestHost{files: map[tspath.RootedFilePath]string{
+		generatedFile:         "declare const value: number;\n//# sourceMappingURL=data:application/json;charset=x",
+		"/project/out/src.ts": "export const value = 0;",
+	}}
+	assert.Assert(t, GetDocumentPositionMapper(host, generatedFile) == nil)
+
+	host.files[generatedFile+".map"] = `{"version":3,"file":"out.d.ts","sources":["src.ts"],"names":[],"mappings":"AAAA"}`
+	mapper := GetDocumentPositionMapper(host, generatedFile)
+	assert.Assert(t, mapper != nil)
+	assert.DeepEqual(t, mapper.GetSourcePosition(&DocumentPosition{
+		FileName: generatedFile,
+		Pos:      0,
+	}), &DocumentPosition{
+		FileName: "/project/out/src.ts",
+		Pos:      0,
+	})
+}

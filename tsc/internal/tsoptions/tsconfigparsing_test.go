@@ -6,6 +6,7 @@ import (
 	"maps"
 	"path/filepath"
 	"slices"
+	"strconv"
 	"strings"
 	"sync/atomic"
 	"testing"
@@ -965,7 +966,7 @@ func TestParseJsonConfigFileContentHandlesNullArrayElements(t *testing.T) {
 	fs := tsoptionstest.NewVFS(map[string]string{
 		"/project/index.ts": "export {};",
 	}, tspath.CaseSensitive /*caseSensitivity*/)
-	for _, property := range []string{"files", "include", "exclude"} {
+	for _, property := range []string{"files", "include", "exclude", "extends"} {
 		t.Run(property, func(t *testing.T) {
 			t.Parallel()
 			parsed := tsoptions.ParseJsonConfigFileContent(
@@ -1000,6 +1001,41 @@ func TestParseJsonConfigFileContentDefaultsCompileOnSaveToFalse(t *testing.T) {
 	)
 	assert.Assert(t, parsed.CompileOnSave != nil)
 	assert.Equal(t, *parsed.CompileOnSave, false)
+}
+
+func TestParseConfigExtendsInvalidArrayElements(t *testing.T) {
+	t.Parallel()
+	const text = `{"extends":["./base.json",42,false,{},["./base.json"]],"files":["index.ts"]}`
+	fs := tsoptionstest.NewVFS(map[string]string{
+		"/project/base.json": `{"compilerOptions":{"strict":true}}`,
+		"/project/index.ts":  "export {};",
+	}, tspath.CaseSensitive)
+	for _, fromSource := range []bool{false, true} {
+		t.Run(strconv.FormatBool(fromSource), func(t *testing.T) {
+			t.Parallel()
+			config := testConfig{
+				jsonText:       text,
+				configFileName: "/project/tsconfig.json",
+			}
+			var parsed *tsoptions.ParsedCommandLine
+			if fromSource {
+				parsed = getParsedWithJsonSourceFileApi(config, fs, "/project")
+			} else {
+				parsed = getParsedWithJsonApi(config, fs, "/project")
+			}
+			assert.Equal(t, len(parsed.Errors), 4)
+			for i, diagnostic := range parsed.Errors {
+				assert.Equal(t, diagnostic.Code(), diagnostics.Compiler_option_0_requires_a_value_of_type_1.Code())
+				assert.DeepEqual(t, diagnostic.MessageArgs(), []string{"extends", "string"})
+				if fromSource {
+					element := []string{"42", "false", "{}", `["./base.json"]`}[i]
+					assert.Equal(t, diagnostic.Pos(), strings.Index(text, element))
+					assert.Equal(t, diagnostic.Len(), len(element))
+				}
+			}
+			assert.Assert(t, parsed.CompilerOptions().Strict.IsTrue())
+		})
+	}
 }
 
 func getParsedWithJsonApi(config testConfig, fs vfs.FS, basePath tspath.RootedDirectoryPath) *tsoptions.ParsedCommandLine {

@@ -2112,13 +2112,13 @@ func (tx *DeclarationTransformer) visitThisPropertyAssignments(node *ast.Node) *
 	thisContainer := ast.GetThisContainer(node, false, false)
 	thisTarget = thisContainer.Parent
 	if thisTarget == nil {
-		return nil // thisContainer was source file, can't have expando-this
+		return node // thisContainer was source file, can't have expando-this
 	}
 	if ast.HasStaticModifier(thisContainer) || ast.IsClassStaticBlockDeclaration(thisContainer) {
 		isStatic = true
 	}
 	if thisTarget != tx.enclosingDeclaration {
-		return nil // stop searching within new `this` contexts
+		return node // stop searching within new `this` contexts
 	}
 caseBlock:
 	switch ast.GetAssignmentDeclarationKind(node) {

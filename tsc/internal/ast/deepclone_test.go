@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/parsetestutil"
 	"gotest.tools/v3/assert"
 )
@@ -20,6 +21,58 @@ func getChildren(node *ast.Node) []*ast.Node {
 		return node
 	}, nil, ast.NodeVisitorHooks{}))
 	return children
+}
+
+func TestVisitEachChildRequiredChild(t *testing.T) {
+	t.Parallel()
+	factory := ast.NewNodeFactory(ast.NodeFactoryHooks{})
+	for _, test := range []struct {
+		name  string
+		node  *ast.Node
+		kind  ast.Kind
+		hooks ast.NodeVisitorHooks
+	}{
+		{name: "node", node: factory.NewExpressionStatement(factory.NewIdentifier("x")), kind: ast.KindIdentifier},
+		{name: "embedded statement", node: factory.NewIfStatement(factory.NewIdentifier("x"), factory.NewEmptyStatement(), nil), kind: ast.KindEmptyStatement},
+		{name: "raw list", node: factory.NewSyntaxList([]*ast.Node{factory.NewIdentifier("x")}), kind: ast.KindIdentifier},
+		{
+			name: "hook",
+			node: factory.NewExpressionStatement(factory.NewIdentifier("x")),
+			hooks: ast.NodeVisitorHooks{
+				VisitNode: func(node *ast.Node, v *ast.NodeVisitor) *ast.Node { return nil },
+			},
+		},
+		{
+			name: "list hook",
+			node: factory.NewBlock(factory.NewNodeList(nil), false),
+			hooks: ast.NodeVisitorHooks{
+				VisitNodes: func(nodes *ast.NodeList, v *ast.NodeVisitor) *ast.NodeList { return nil },
+			},
+		},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+			visitor := ast.NewNodeVisitor(func(node *ast.Node) *ast.Node {
+				if node.Kind == test.kind {
+					return nil
+				}
+				return node
+			}, factory, test.hooks)
+			testutil.AssertPanics(t, func() {
+				visitor.VisitEachChild(test.node)
+			}, "Visitor returned nil for a required child")
+		})
+	}
+}
+
+func TestVisitEachChildElision(t *testing.T) {
+	t.Parallel()
+	factory := ast.NewNodeFactory(ast.NodeFactoryHooks{})
+	node := factory.NewReturnStatement(factory.NewIdentifier("x"))
+	visitor := ast.NewNodeVisitor(func(node *ast.Node) *ast.Node { return nil }, factory, ast.NodeVisitorHooks{})
+	assert.Assert(t, visitor.VisitEachChild(node).AsReturnStatement().Expression == nil)
+	block := factory.NewBlock(factory.NewNodeList([]*ast.Node{node}), false)
+	assert.Equal(t, len(visitor.VisitEachChild(block).AsBlock().Statements.Nodes), 0)
 }
 
 func TestDeepCloneNodeSanityCheck(t *testing.T) {

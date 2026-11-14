@@ -704,7 +704,7 @@ func getAdjustedLocationForDeclaration(node *ast.Node, forRename bool, sourceFil
 	case ast.KindClassDeclaration, ast.KindFunctionDeclaration:
 		// for class and function declarations, use the `default` modifier
 		// when the declaration is unnamed.
-		return core.Find(node.ModifierNodes(), func(*ast.Node) bool { return node.Kind == ast.KindDefaultKeyword })
+		return core.Find(node.ModifierNodes(), func(modifier *ast.Node) bool { return modifier.Kind == ast.KindDefaultKeyword })
 	case ast.KindClassExpression:
 		// for class expressions, use the `class` keyword when the class is unnamed
 		return astnav.FindChildOfKind(node, ast.KindClassKeyword, sourceFile)
