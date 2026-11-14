@@ -1,0 +1,33 @@
+assignment.ts(2,9): error TS1109: Expression expected.
+assignment.ts(2,10): error TS1005: ';' expected.
+assignment.ts(3,8): error TS1109: Expression expected.
+assignment.ts(3,9): error TS1005: ';' expected.
+destructuring.ts(1,8): error TS1109: Expression expected.
+forAwait.ts(2,18): error TS1109: Expression expected.
+
+
+==== assignment.ts (4 errors) ====
+    let x;
+    x = @dec 1;
+            
+!!! error TS1109: Expression expected.
+             ~
+!!! error TS1005: ';' expected.
+    x = @@a 1;
+           
+!!! error TS1109: Expression expected.
+            ~
+!!! error TS1005: ';' expected.
+    
+==== forAwait.ts (1 errors) ====
+    async function f(y: any) {
+        for await (@d of y) {}
+                     
+!!! error TS1109: Expression expected.
+    }
+    
+==== destructuring.ts (1 errors) ====
+    ({...@d} = {});
+           
+!!! error TS1109: Expression expected.
+    

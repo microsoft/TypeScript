@@ -5905,7 +5905,7 @@ func (p *Parser) parseDecoratedExpression() *ast.Expression {
 		return p.parseClassDeclarationOrExpression(pos, jsdoc, modifiers, ast.KindClassExpression)
 	}
 	p.parseErrorAt(p.nodePos(), p.nodePos(), diagnostics.Expression_expected)
-	return p.finishNode(p.factory.NewMissingDeclaration(modifiers), pos)
+	return p.createMissingIdentifier()
 }
 
 func (p *Parser) unparseExpressionWithTypeArguments(expression *ast.Node, typeArguments *ast.NodeList, result *ast.Node) {
