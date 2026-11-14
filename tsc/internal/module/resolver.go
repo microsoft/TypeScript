@@ -2527,6 +2527,10 @@ func (r *resolutionState) loadEntrypointsFromExportMap(
 
 	loadEntrypointsFromTargetExports = func(subpath string, includeConditions *collections.Set[string], excludeConditions *collections.Set[string], exports packagejson.ExportsOrImports) {
 		if exports.Type == packagejson.JSONValueTypeString && strings.HasPrefix(exports.AsString(), "./") {
+			partsAfterFirst := tspath.GetPathComponents(exports.AsString())[2:]
+			if slices.Contains(partsAfterFirst, "..") || slices.Contains(partsAfterFirst, ".") || slices.Contains(partsAfterFirst, "node_modules") {
+				return
+			}
 			if strings.ContainsRune(exports.AsString(), '*') {
 				if strings.IndexByte(exports.AsString(), '*') != strings.LastIndexByte(exports.AsString(), '*') {
 					return
@@ -2580,10 +2584,6 @@ func (r *resolutionState) loadEntrypointsFromExportMap(
 					))
 				}
 			} else {
-				partsAfterFirst := tspath.GetPathComponents(exports.AsString())[2:]
-				if slices.Contains(partsAfterFirst, "..") || slices.Contains(partsAfterFirst, ".") || slices.Contains(partsAfterFirst, "node_modules") {
-					return
-				}
 				resolvedTarget := resolutionCandidateFromDirectoryPath(packageJson.PackageDirectory.AsDirectoryPath(), exports.AsString())
 				if result := r.loadFileNameFromPackageJSONField(r.extensions, resolvedTarget, exports.AsString()); result.isResolved() {
 					entrypoints = append(entrypoints, r.resolver.createResolvedEntrypointHandlingSymlink(
