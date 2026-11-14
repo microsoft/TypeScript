@@ -1,0 +1,19 @@
+importAttributeValueCheckOrder.ts(5,19): error TS2322: Type '{ a: 0; }' is not assignable to type 'ImportAttributes'.
+  Property 'a' is incompatible with index signature.
+    Type 'number' is not assignable to type 'string'.
+importAttributeValueCheckOrder.ts(5,29): error TS2858: Import attribute values must be string literal expressions.
+
+
+==== importAttributeValueCheckOrder.ts (2 errors) ====
+    // The attribute value is invalid, which does not affect the module. Its
+    // missing module must be reported whether or not the type of x is queried
+    // before the import is checked.
+    
+    import x from "x" with { a: 0 };
+                      ~~~~~~~~~~~~~
+!!! error TS2322: Type '{ a: 0; }' is not assignable to type 'ImportAttributes'.
+!!! error TS2322:   Property 'a' is incompatible with index signature.
+!!! error TS2322:     Type 'number' is not assignable to type 'string'.
+                                ~
+!!! error TS2858: Import attribute values must be string literal expressions.
+    

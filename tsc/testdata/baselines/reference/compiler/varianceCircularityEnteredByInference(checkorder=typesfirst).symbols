@@ -1,0 +1,129 @@
+//// [tests/cases/compiler/varianceCircularityEnteredByInference.ts] ////
+
+=== varianceCircularityEnteredByInference.ts ===
+// AstObject and AstValue form a variance circularity. AstValue is covariant
+// in T through typeBrand, and AstObject reaches it through getValue, so
+// AstObject<Empty> is not assignable to AstObject<WithDecorators> and the
+// call below must be an error. Checking getValue first infers the type
+// arguments of `new AstValue` from its return type, which measures AstValue
+// first; AstObject, measured inside it, then sees T only in references to
+// the types in progress, and main recorded it as independent of T and
+// accepted the call. Main reports the error when AstObject's variance is
+// measured first.
+
+export {};
+
+type ObjectType<T> = T extends object ? T : never;
+>ObjectType : Symbol(ObjectType, Decl(varianceCircularityEnteredByInference.ts, 10, 10))
+>T : Symbol(T, Decl(varianceCircularityEnteredByInference.ts, 12, 16))
+>T : Symbol(T, Decl(varianceCircularityEnteredByInference.ts, 12, 16))
+>T : Symbol(T, Decl(varianceCircularityEnteredByInference.ts, 12, 16))
+
+class AstObject<T extends object, E> {
+>AstObject : Symbol(AstObject, Decl(varianceCircularityEnteredByInference.ts, 12, 50))
+>T : Symbol(T, Decl(varianceCircularityEnteredByInference.ts, 14, 16))
+>E : Symbol(E, Decl(varianceCircularityEnteredByInference.ts, 14, 33))
+
+    constructor(private host: E) {}
+>host : Symbol(AstObject.host, Decl(varianceCircularityEnteredByInference.ts, 15, 16))
+>E : Symbol(E, Decl(varianceCircularityEnteredByInference.ts, 14, 33))
+
+    getObject<K extends keyof T & string>(key: K): AstObject<ObjectType<T>, E> {
+>getObject : Symbol(AstObject.getObject, Decl(varianceCircularityEnteredByInference.ts, 15, 35))
+>K : Symbol(K, Decl(varianceCircularityEnteredByInference.ts, 17, 14))
+>T : Symbol(T, Decl(varianceCircularityEnteredByInference.ts, 14, 16))
+>key : Symbol(key, Decl(varianceCircularityEnteredByInference.ts, 17, 42))
+>K : Symbol(K, Decl(varianceCircularityEnteredByInference.ts, 17, 14))
+>AstObject : Symbol(AstObject, Decl(varianceCircularityEnteredByInference.ts, 12, 50))
+>ObjectType : Symbol(ObjectType, Decl(varianceCircularityEnteredByInference.ts, 10, 10))
+>T : Symbol(T, Decl(varianceCircularityEnteredByInference.ts, 14, 16))
+>E : Symbol(E, Decl(varianceCircularityEnteredByInference.ts, 14, 33))
+
+        return new AstObject<ObjectType<T>, E>(this.host);
+>AstObject : Symbol(AstObject, Decl(varianceCircularityEnteredByInference.ts, 12, 50))
+>ObjectType : Symbol(ObjectType, Decl(varianceCircularityEnteredByInference.ts, 10, 10))
+>T : Symbol(T, Decl(varianceCircularityEnteredByInference.ts, 14, 16))
+>E : Symbol(E, Decl(varianceCircularityEnteredByInference.ts, 14, 33))
+>this.host : Symbol(AstObject.host, Decl(varianceCircularityEnteredByInference.ts, 15, 16))
+>this : Symbol(AstObject, Decl(varianceCircularityEnteredByInference.ts, 12, 50))
+>host : Symbol(AstObject.host, Decl(varianceCircularityEnteredByInference.ts, 15, 16))
+    }
+
+    getValue<K extends keyof T & string>(key: K): AstValue<T[K], E> {
+>getValue : Symbol(AstObject.getValue, Decl(varianceCircularityEnteredByInference.ts, 19, 5))
+>K : Symbol(K, Decl(varianceCircularityEnteredByInference.ts, 21, 13))
+>T : Symbol(T, Decl(varianceCircularityEnteredByInference.ts, 14, 16))
+>key : Symbol(key, Decl(varianceCircularityEnteredByInference.ts, 21, 41))
+>K : Symbol(K, Decl(varianceCircularityEnteredByInference.ts, 21, 13))
+>AstValue : Symbol(AstValue, Decl(varianceCircularityEnteredByInference.ts, 24, 1))
+>T : Symbol(T, Decl(varianceCircularityEnteredByInference.ts, 14, 16))
+>K : Symbol(K, Decl(varianceCircularityEnteredByInference.ts, 21, 13))
+>E : Symbol(E, Decl(varianceCircularityEnteredByInference.ts, 14, 33))
+
+        return new AstValue(this.host);
+>AstValue : Symbol(AstValue, Decl(varianceCircularityEnteredByInference.ts, 24, 1))
+>this.host : Symbol(AstObject.host, Decl(varianceCircularityEnteredByInference.ts, 15, 16))
+>this : Symbol(AstObject, Decl(varianceCircularityEnteredByInference.ts, 12, 50))
+>host : Symbol(AstObject.host, Decl(varianceCircularityEnteredByInference.ts, 15, 16))
+    }
+}
+
+class AstValue<T, E> {
+>AstValue : Symbol(AstValue, Decl(varianceCircularityEnteredByInference.ts, 24, 1))
+>T : Symbol(T, Decl(varianceCircularityEnteredByInference.ts, 26, 15))
+>E : Symbol(E, Decl(varianceCircularityEnteredByInference.ts, 26, 17))
+
+    declare typeBrand: T;
+>typeBrand : Symbol(AstValue.typeBrand, Decl(varianceCircularityEnteredByInference.ts, 26, 22))
+>T : Symbol(T, Decl(varianceCircularityEnteredByInference.ts, 26, 15))
+
+    constructor(private host: E) {}
+>host : Symbol(AstValue.host, Decl(varianceCircularityEnteredByInference.ts, 29, 16))
+>E : Symbol(E, Decl(varianceCircularityEnteredByInference.ts, 26, 17))
+
+    getObject(): AstObject<ObjectType<T>, E> {
+>getObject : Symbol(AstValue.getObject, Decl(varianceCircularityEnteredByInference.ts, 29, 35))
+>AstObject : Symbol(AstObject, Decl(varianceCircularityEnteredByInference.ts, 12, 50))
+>ObjectType : Symbol(ObjectType, Decl(varianceCircularityEnteredByInference.ts, 10, 10))
+>T : Symbol(T, Decl(varianceCircularityEnteredByInference.ts, 26, 15))
+>E : Symbol(E, Decl(varianceCircularityEnteredByInference.ts, 26, 17))
+
+        return new AstObject(this.host);
+>AstObject : Symbol(AstObject, Decl(varianceCircularityEnteredByInference.ts, 12, 50))
+>this.host : Symbol(AstValue.host, Decl(varianceCircularityEnteredByInference.ts, 29, 16))
+>this : Symbol(AstValue, Decl(varianceCircularityEnteredByInference.ts, 24, 1))
+>host : Symbol(AstValue.host, Decl(varianceCircularityEnteredByInference.ts, 29, 16))
+    }
+}
+
+interface Empty {}
+>Empty : Symbol(Empty, Decl(varianceCircularityEnteredByInference.ts, 34, 1))
+
+interface WithDecorators {
+>WithDecorators : Symbol(WithDecorators, Decl(varianceCircularityEnteredByInference.ts, 36, 18))
+
+    decorators: string;
+>decorators : Symbol(WithDecorators.decorators, Decl(varianceCircularityEnteredByInference.ts, 37, 26))
+}
+
+declare function useDerived<E>(obj: AstObject<WithDecorators, E>): void;
+>useDerived : Symbol(useDerived, Decl(varianceCircularityEnteredByInference.ts, 39, 1))
+>E : Symbol(E, Decl(varianceCircularityEnteredByInference.ts, 41, 28))
+>obj : Symbol(obj, Decl(varianceCircularityEnteredByInference.ts, 41, 31))
+>AstObject : Symbol(AstObject, Decl(varianceCircularityEnteredByInference.ts, 12, 50))
+>WithDecorators : Symbol(WithDecorators, Decl(varianceCircularityEnteredByInference.ts, 36, 18))
+>E : Symbol(E, Decl(varianceCircularityEnteredByInference.ts, 41, 28))
+
+function useBase<E>(obj: AstObject<Empty, E>) {
+>useBase : Symbol(useBase, Decl(varianceCircularityEnteredByInference.ts, 41, 72))
+>E : Symbol(E, Decl(varianceCircularityEnteredByInference.ts, 43, 17))
+>obj : Symbol(obj, Decl(varianceCircularityEnteredByInference.ts, 43, 20))
+>AstObject : Symbol(AstObject, Decl(varianceCircularityEnteredByInference.ts, 12, 50))
+>Empty : Symbol(Empty, Decl(varianceCircularityEnteredByInference.ts, 34, 1))
+>E : Symbol(E, Decl(varianceCircularityEnteredByInference.ts, 43, 17))
+
+    useDerived(obj);
+>useDerived : Symbol(useDerived, Decl(varianceCircularityEnteredByInference.ts, 39, 1))
+>obj : Symbol(obj, Decl(varianceCircularityEnteredByInference.ts, 43, 20))
+}
+

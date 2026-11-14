@@ -1,0 +1,31 @@
+//// [tests/cases/compiler/checkOrderAwaitedCycle.ts] ////
+
+=== a.ts ===
+type S = string | Promise<S>;
+>S : S
+
+declare const s: S;
+>s : S
+
+declare const p: Promise<S>;
+>p : Promise<S>
+
+async function f1() {
+>f1 : () => Promise<void>
+
+    const a: number = await p;
+>a : number
+>await p : string
+>p : Promise<S>
+}
+
+=== b.ts ===
+async function f2() {
+>f2 : () => Promise<void>
+
+    const b: number = await s;
+>b : number
+>await s : string
+>s : S
+}
+

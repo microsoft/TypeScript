@@ -1,0 +1,14 @@
+//// [tests/cases/compiler/unusedTypeParameterQueryOrder.ts] ////
+
+=== unusedTypeParameterQueryOrder.ts ===
+class A {
+>A : Symbol(A, Decl(unusedTypeParameterQueryOrder.ts, 0, 0))
+
+    f() {
+>f : Symbol(A.f, Decl(unusedTypeParameterQueryOrder.ts, 0, 9))
+
+        return <T>() => {};
+>T : Symbol(T, Decl(unusedTypeParameterQueryOrder.ts, 2, 16))
+    }
+}
+

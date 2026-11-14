@@ -1,0 +1,26 @@
+inferenceThroughSortOfFlattenedIterable.ts(10,2): error TS2322: Type 'unknown[]' is not assignable to type 'readonly string[]'.
+  Type 'unknown' is not assignable to type 'string'.
+
+
+==== inferenceThroughSortOfFlattenedIterable.ts (1 errors) ====
+    // Sorting the array made from a flattened iterable must keep its element type.
+    
+    function getAllValuesUnsorted(m: ReadonlyArray<ReadonlyArray<string>>): ReadonlyArray<string> {
+    	// OK
+    	return Array.from(flatten(m.values()))
+    }
+    
+    function getAllValuesSorted(m: ReadonlyArray<ReadonlyArray<string>>): ReadonlyArray<string> {
+    	// Type 'unknown[]' is not assignable to type 'readonly string[]'.
+    	return Array.from(flatten(m.values())).sort()
+    	~~~~~~
+!!! error TS2322: Type 'unknown[]' is not assignable to type 'readonly string[]'.
+!!! error TS2322:   Type 'unknown' is not assignable to type 'string'.
+    }
+    
+    function* flatten<T>(a: Iterable<Iterable<T>>): Iterable<T> {
+    	for (const xs of a)
+    		for (const x of xs)
+    			yield x
+    }
+    

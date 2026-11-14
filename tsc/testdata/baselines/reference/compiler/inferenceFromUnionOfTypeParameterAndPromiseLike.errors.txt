@@ -1,0 +1,17 @@
+inferenceFromUnionOfTypeParameterAndPromiseLike.ts(6,7): error TS2322: Type 'Promise<Map<number, Promise<string>>>' is not assignable to type 'Promise<Map<number, string>>'.
+  Type 'Map<number, Promise<string>>' is not assignable to type 'Map<number, string>'.
+    Type 'Promise<string>' is not assignable to type 'string'.
+
+
+==== inferenceFromUnionOfTypeParameterAndPromiseLike.ts (1 errors) ====
+    // Inferring from Promise<string> to PromiseLike<V> | V must infer V as string,
+    // whichever order the union's members are in.
+    
+    declare function props<K, V>(x: PromiseLike<Map<K, PromiseLike<V> | V>>): Promise<Map<K, V>>;
+    declare const input: Promise<Map<number, Promise<string>>>;
+    const out: Promise<Map<number, string>> = props(input);
+          ~~~
+!!! error TS2322: Type 'Promise<Map<number, Promise<string>>>' is not assignable to type 'Promise<Map<number, string>>'.
+!!! error TS2322:   Type 'Map<number, Promise<string>>' is not assignable to type 'Map<number, string>'.
+!!! error TS2322:     Type 'Promise<string>' is not assignable to type 'string'.
+    

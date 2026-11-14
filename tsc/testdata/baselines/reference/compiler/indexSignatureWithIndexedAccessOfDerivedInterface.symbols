@@ -1,0 +1,45 @@
+//// [tests/cases/compiler/indexSignatureWithIndexedAccessOfDerivedInterface.ts] ////
+
+=== indexSignatureWithIndexedAccessOfDerivedInterface.ts ===
+// The type of data in TokenNode is assignable to its inherited index
+// signature, which mentions it through an indexed access.
+
+interface BaseNode {
+>BaseNode : Symbol(BaseNode, Decl(indexSignatureWithIndexedAccessOfDerivedInterface.ts, 0, 0))
+
+  kind: string;
+>kind : Symbol(BaseNode.kind, Decl(indexSignatureWithIndexedAccessOfDerivedInterface.ts, 3, 20))
+
+  [key: string]: string | TokenNode["data"];
+>key : Symbol(key, Decl(indexSignatureWithIndexedAccessOfDerivedInterface.ts, 5, 3))
+>TokenNode : Symbol(TokenNode, Decl(indexSignatureWithIndexedAccessOfDerivedInterface.ts, 6, 1))
+}
+
+interface TokenNode extends BaseNode {
+>TokenNode : Symbol(TokenNode, Decl(indexSignatureWithIndexedAccessOfDerivedInterface.ts, 6, 1))
+>BaseNode : Symbol(BaseNode, Decl(indexSignatureWithIndexedAccessOfDerivedInterface.ts, 0, 0))
+
+  kind: 'token';
+>kind : Symbol(TokenNode.kind, Decl(indexSignatureWithIndexedAccessOfDerivedInterface.ts, 8, 38))
+
+  data: TokenData;
+>data : Symbol(TokenNode.data, Decl(indexSignatureWithIndexedAccessOfDerivedInterface.ts, 9, 16))
+>TokenData : Symbol(TokenData, Decl(indexSignatureWithIndexedAccessOfDerivedInterface.ts, 11, 1))
+}
+
+interface TokenData {
+>TokenData : Symbol(TokenData, Decl(indexSignatureWithIndexedAccessOfDerivedInterface.ts, 11, 1))
+
+  offset: number;
+>offset : Symbol(TokenData.offset, Decl(indexSignatureWithIndexedAccessOfDerivedInterface.ts, 13, 21))
+
+  width: number;
+>width : Symbol(TokenData.width, Decl(indexSignatureWithIndexedAccessOfDerivedInterface.ts, 14, 17))
+
+  leading_width: number;
+>leading_width : Symbol(TokenData.leading_width, Decl(indexSignatureWithIndexedAccessOfDerivedInterface.ts, 15, 16))
+
+  trailing_width: number;
+>trailing_width : Symbol(TokenData.trailing_width, Decl(indexSignatureWithIndexedAccessOfDerivedInterface.ts, 16, 24))
+}
+

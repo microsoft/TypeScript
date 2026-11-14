@@ -1,0 +1,37 @@
+//// [tests/cases/compiler/instantiationExpressionConstraintInStaticClassExpression.ts] ////
+
+=== instantiationExpressionConstraintInStaticClassExpression.ts ===
+// A<T> does not satisfy the constraint A of B, as T is not assignable to
+// number, which must be reported.
+
+class A<T = number> {
+>A : Symbol(A, Decl(instantiationExpressionConstraintInStaticClassExpression.ts, 0, 0))
+>T : Symbol(T, Decl(instantiationExpressionConstraintInStaticClassExpression.ts, 3, 8))
+
+  value!: T;
+>value : Symbol(A.value, Decl(instantiationExpressionConstraintInStaticClassExpression.ts, 3, 21))
+>T : Symbol(T, Decl(instantiationExpressionConstraintInStaticClassExpression.ts, 3, 8))
+
+  child!: InstanceType<typeof A.B<A<T>>>; // this should error
+>child : Symbol(A.child, Decl(instantiationExpressionConstraintInStaticClassExpression.ts, 4, 12))
+>InstanceType : Symbol(InstanceType, Decl(lib.es5.d.ts, --, --))
+>A.B : Symbol(A.B, Decl(instantiationExpressionConstraintInStaticClassExpression.ts, 5, 41))
+>A : Symbol(A, Decl(instantiationExpressionConstraintInStaticClassExpression.ts, 0, 0))
+>B : Symbol(A.B, Decl(instantiationExpressionConstraintInStaticClassExpression.ts, 5, 41))
+>A : Symbol(A, Decl(instantiationExpressionConstraintInStaticClassExpression.ts, 0, 0))
+>T : Symbol(T, Decl(instantiationExpressionConstraintInStaticClassExpression.ts, 3, 8))
+
+  static B = class B<T extends A = A> {
+>B : Symbol(A.B, Decl(instantiationExpressionConstraintInStaticClassExpression.ts, 5, 41))
+>B : Symbol(B, Decl(instantiationExpressionConstraintInStaticClassExpression.ts, 7, 12))
+>T : Symbol(T, Decl(instantiationExpressionConstraintInStaticClassExpression.ts, 7, 21))
+>A : Symbol(A, Decl(instantiationExpressionConstraintInStaticClassExpression.ts, 0, 0))
+>A : Symbol(A, Decl(instantiationExpressionConstraintInStaticClassExpression.ts, 0, 0))
+
+    parent!: T;
+>parent : Symbol(B.parent, Decl(instantiationExpressionConstraintInStaticClassExpression.ts, 7, 39))
+>T : Symbol(T, Decl(instantiationExpressionConstraintInStaticClassExpression.ts, 7, 21))
+
+  };
+}
+

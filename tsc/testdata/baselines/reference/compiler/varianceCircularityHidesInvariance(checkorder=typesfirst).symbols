@@ -1,0 +1,279 @@
+//// [tests/cases/compiler/varianceCircularityHidesInvariance.ts] ////
+
+=== varianceCircularityHidesInvariance.ts ===
+// Reduced from chart.js typings (PeerTube, Unleash). Chart, TooltipModel and
+// ScriptableContext form a variance circularity. ScriptableContext<T> is in
+// fact invariant: ScriptableContext<"bar" | "line"> is not assignable to
+// ScriptableContext<"bar"> ('dataset.data' differs), so Chart<"bar"> is not
+// assignable to Chart<ChartType> and the assignment below must be an error.
+// Measuring variances from the circularity's entry, main recorded
+// ScriptableContext/TooltipModel as bivariant (measured mid-cycle) and
+// accepted it; main reports this error too when ScriptableContext's variance
+// is measured first (e.g. after checking a ScriptableContext assignment).
+
+declare class Element<T, O> { options: O }
+>Element : Symbol(Element, Decl(varianceCircularityHidesInvariance.ts, 0, 0))
+>T : Symbol(T, Decl(varianceCircularityHidesInvariance.ts, 10, 22))
+>O : Symbol(O, Decl(varianceCircularityHidesInvariance.ts, 10, 24))
+>options : Symbol(Element.options, Decl(varianceCircularityHidesInvariance.ts, 10, 29))
+>O : Symbol(O, Decl(varianceCircularityHidesInvariance.ts, 10, 24))
+
+type DeepPartial<T> = T extends Function ? T : T extends object ? _DeepPartialObject<T> : undefined
+>DeepPartial : Symbol(DeepPartial, Decl(varianceCircularityHidesInvariance.ts, 10, 42))
+>T : Symbol(T, Decl(varianceCircularityHidesInvariance.ts, 11, 17))
+>T : Symbol(T, Decl(varianceCircularityHidesInvariance.ts, 11, 17))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.decorators.d.ts, --, --))
+>T : Symbol(T, Decl(varianceCircularityHidesInvariance.ts, 11, 17))
+>T : Symbol(T, Decl(varianceCircularityHidesInvariance.ts, 11, 17))
+>_DeepPartialObject : Symbol(_DeepPartialObject, Decl(varianceCircularityHidesInvariance.ts, 11, 99))
+>T : Symbol(T, Decl(varianceCircularityHidesInvariance.ts, 11, 17))
+
+type _DeepPartialObject<T> = { [P in keyof T]?: DeepPartial<T[P]> }
+>_DeepPartialObject : Symbol(_DeepPartialObject, Decl(varianceCircularityHidesInvariance.ts, 11, 99))
+>T : Symbol(T, Decl(varianceCircularityHidesInvariance.ts, 12, 24))
+>P : Symbol(P, Decl(varianceCircularityHidesInvariance.ts, 12, 32))
+>T : Symbol(T, Decl(varianceCircularityHidesInvariance.ts, 12, 24))
+>DeepPartial : Symbol(DeepPartial, Decl(varianceCircularityHidesInvariance.ts, 10, 42))
+>T : Symbol(T, Decl(varianceCircularityHidesInvariance.ts, 12, 24))
+>P : Symbol(P, Decl(varianceCircularityHidesInvariance.ts, 12, 32))
+
+type UnionToIntersection<U> = (U extends unknown ? (k: U) => void : never) extends (k: infer I) => void ? I : never
+>UnionToIntersection : Symbol(UnionToIntersection, Decl(varianceCircularityHidesInvariance.ts, 12, 67))
+>U : Symbol(U, Decl(varianceCircularityHidesInvariance.ts, 13, 25))
+>U : Symbol(U, Decl(varianceCircularityHidesInvariance.ts, 13, 25))
+>k : Symbol(k, Decl(varianceCircularityHidesInvariance.ts, 13, 52))
+>U : Symbol(U, Decl(varianceCircularityHidesInvariance.ts, 13, 25))
+>k : Symbol(k, Decl(varianceCircularityHidesInvariance.ts, 13, 84))
+>I : Symbol(I, Decl(varianceCircularityHidesInvariance.ts, 13, 92))
+>I : Symbol(I, Decl(varianceCircularityHidesInvariance.ts, 13, 92))
+
+type AnyObject = Record<string, any>
+>AnyObject : Symbol(AnyObject, Decl(varianceCircularityHidesInvariance.ts, 13, 115))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+interface ScriptableContext<TType extends ChartType> {
+>ScriptableContext : Symbol(ScriptableContext, Decl(varianceCircularityHidesInvariance.ts, 14, 36))
+>TType : Symbol(TType, Decl(varianceCircularityHidesInvariance.ts, 15, 28))
+>ChartType : Symbol(ChartType, Decl(varianceCircularityHidesInvariance.ts, 50, 1))
+
+    dataset: UnionToIntersection<ChartDataset<TType>>
+>dataset : Symbol(ScriptableContext.dataset, Decl(varianceCircularityHidesInvariance.ts, 15, 54))
+>UnionToIntersection : Symbol(UnionToIntersection, Decl(varianceCircularityHidesInvariance.ts, 12, 67))
+>ChartDataset : Symbol(ChartDataset, Decl(varianceCircularityHidesInvariance.ts, 56, 1))
+>TType : Symbol(TType, Decl(varianceCircularityHidesInvariance.ts, 15, 28))
+}
+type Scriptable<T, TContext> = (ctx: TContext) => T
+>Scriptable : Symbol(Scriptable, Decl(varianceCircularityHidesInvariance.ts, 17, 1))
+>T : Symbol(T, Decl(varianceCircularityHidesInvariance.ts, 18, 16))
+>TContext : Symbol(TContext, Decl(varianceCircularityHidesInvariance.ts, 18, 18))
+>ctx : Symbol(ctx, Decl(varianceCircularityHidesInvariance.ts, 18, 32))
+>TContext : Symbol(TContext, Decl(varianceCircularityHidesInvariance.ts, 18, 18))
+>T : Symbol(T, Decl(varianceCircularityHidesInvariance.ts, 18, 16))
+
+declare class Chart<TType extends ChartType = ChartType, TData = TType> {
+>Chart : Symbol(Chart, Decl(varianceCircularityHidesInvariance.ts, 18, 51))
+>TType : Symbol(TType, Decl(varianceCircularityHidesInvariance.ts, 19, 20))
+>ChartType : Symbol(ChartType, Decl(varianceCircularityHidesInvariance.ts, 50, 1))
+>ChartType : Symbol(ChartType, Decl(varianceCircularityHidesInvariance.ts, 50, 1))
+>TData : Symbol(TData, Decl(varianceCircularityHidesInvariance.ts, 19, 56))
+>TType : Symbol(TType, Decl(varianceCircularityHidesInvariance.ts, 19, 20))
+
+    config: ChartConfigurationCustomTypesPerDataset<TType>
+>config : Symbol(Chart.config, Decl(varianceCircularityHidesInvariance.ts, 19, 73))
+>ChartConfigurationCustomTypesPerDataset : Symbol(ChartConfigurationCustomTypesPerDataset, Decl(varianceCircularityHidesInvariance.ts, 62, 1))
+>TType : Symbol(TType, Decl(varianceCircularityHidesInvariance.ts, 19, 20))
+}
+interface Plugin<TType extends ChartType> {
+>Plugin : Symbol(Plugin, Decl(varianceCircularityHidesInvariance.ts, 21, 1))
+>TType : Symbol(TType, Decl(varianceCircularityHidesInvariance.ts, 22, 17))
+>ChartType : Symbol(ChartType, Decl(varianceCircularityHidesInvariance.ts, 50, 1))
+
+    id: string;
+>id : Symbol(Plugin.id, Decl(varianceCircularityHidesInvariance.ts, 22, 43))
+
+    beforeDraw(chart: Chart<TType>): void
+>beforeDraw : Symbol(Plugin.beforeDraw, Decl(varianceCircularityHidesInvariance.ts, 23, 15))
+>chart : Symbol(chart, Decl(varianceCircularityHidesInvariance.ts, 24, 15))
+>Chart : Symbol(Chart, Decl(varianceCircularityHidesInvariance.ts, 18, 51))
+>TType : Symbol(TType, Decl(varianceCircularityHidesInvariance.ts, 22, 17))
+}
+interface CoreChartOptions<TType extends ChartType> {
+>CoreChartOptions : Symbol(CoreChartOptions, Decl(varianceCircularityHidesInvariance.ts, 25, 1))
+>TType : Symbol(TType, Decl(varianceCircularityHidesInvariance.ts, 26, 27))
+>ChartType : Symbol(ChartType, Decl(varianceCircularityHidesInvariance.ts, 50, 1))
+
+    backgroundColor: Scriptable<number, ScriptableContext<TType>>
+>backgroundColor : Symbol(CoreChartOptions.backgroundColor, Decl(varianceCircularityHidesInvariance.ts, 26, 53))
+>Scriptable : Symbol(Scriptable, Decl(varianceCircularityHidesInvariance.ts, 17, 1))
+>ScriptableContext : Symbol(ScriptableContext, Decl(varianceCircularityHidesInvariance.ts, 14, 36))
+>TType : Symbol(TType, Decl(varianceCircularityHidesInvariance.ts, 26, 27))
+}
+interface AnimationSpec<TType extends ChartType> {
+>AnimationSpec : Symbol(AnimationSpec, Decl(varianceCircularityHidesInvariance.ts, 28, 1))
+>TType : Symbol(TType, Decl(varianceCircularityHidesInvariance.ts, 29, 24))
+>ChartType : Symbol(ChartType, Decl(varianceCircularityHidesInvariance.ts, 50, 1))
+
+    delay: Scriptable<number, ScriptableContext<TType>>
+>delay : Symbol(AnimationSpec.delay, Decl(varianceCircularityHidesInvariance.ts, 29, 50))
+>Scriptable : Symbol(Scriptable, Decl(varianceCircularityHidesInvariance.ts, 17, 1))
+>ScriptableContext : Symbol(ScriptableContext, Decl(varianceCircularityHidesInvariance.ts, 14, 36))
+>TType : Symbol(TType, Decl(varianceCircularityHidesInvariance.ts, 29, 24))
+}
+interface TooltipModel<TType extends ChartType> extends Element<AnyObject, TooltipOptions<TType>> {
+>TooltipModel : Symbol(TooltipModel, Decl(varianceCircularityHidesInvariance.ts, 31, 1))
+>TType : Symbol(TType, Decl(varianceCircularityHidesInvariance.ts, 32, 23))
+>ChartType : Symbol(ChartType, Decl(varianceCircularityHidesInvariance.ts, 50, 1))
+>Element : Symbol(Element, Decl(varianceCircularityHidesInvariance.ts, 0, 0))
+>AnyObject : Symbol(AnyObject, Decl(varianceCircularityHidesInvariance.ts, 13, 115))
+>TooltipOptions : Symbol(TooltipOptions, Decl(varianceCircularityHidesInvariance.ts, 37, 1))
+>TType : Symbol(TType, Decl(varianceCircularityHidesInvariance.ts, 32, 23))
+
+    chart: Chart<TType>
+>chart : Symbol(TooltipModel.chart, Decl(varianceCircularityHidesInvariance.ts, 32, 99))
+>Chart : Symbol(Chart, Decl(varianceCircularityHidesInvariance.ts, 18, 51))
+>TType : Symbol(TType, Decl(varianceCircularityHidesInvariance.ts, 32, 23))
+}
+interface TooltipDatasetCallbacks<TType extends ChartType, Model = TooltipModel<TType>> {
+>TooltipDatasetCallbacks : Symbol(TooltipDatasetCallbacks, Decl(varianceCircularityHidesInvariance.ts, 34, 1))
+>TType : Symbol(TType, Decl(varianceCircularityHidesInvariance.ts, 35, 34))
+>ChartType : Symbol(ChartType, Decl(varianceCircularityHidesInvariance.ts, 50, 1))
+>Model : Symbol(Model, Decl(varianceCircularityHidesInvariance.ts, 35, 58))
+>TooltipModel : Symbol(TooltipModel, Decl(varianceCircularityHidesInvariance.ts, 31, 1))
+>TType : Symbol(TType, Decl(varianceCircularityHidesInvariance.ts, 35, 34))
+
+    (this: Model): void
+>this : Symbol(this, Decl(varianceCircularityHidesInvariance.ts, 36, 5))
+>Model : Symbol(Model, Decl(varianceCircularityHidesInvariance.ts, 35, 58))
+}
+interface TooltipOptions<TType extends ChartType> {
+>TooltipOptions : Symbol(TooltipOptions, Decl(varianceCircularityHidesInvariance.ts, 37, 1))
+>TType : Symbol(TType, Decl(varianceCircularityHidesInvariance.ts, 38, 25))
+>ChartType : Symbol(ChartType, Decl(varianceCircularityHidesInvariance.ts, 50, 1))
+
+    animation: AnimationSpec<TType>
+>animation : Symbol(TooltipOptions.animation, Decl(varianceCircularityHidesInvariance.ts, 38, 51))
+>AnimationSpec : Symbol(AnimationSpec, Decl(varianceCircularityHidesInvariance.ts, 28, 1))
+>TType : Symbol(TType, Decl(varianceCircularityHidesInvariance.ts, 38, 25))
+}
+interface TooltipDatasetOptions<TType extends ChartType> {
+>TooltipDatasetOptions : Symbol(TooltipDatasetOptions, Decl(varianceCircularityHidesInvariance.ts, 40, 1))
+>TType : Symbol(TType, Decl(varianceCircularityHidesInvariance.ts, 41, 32))
+>ChartType : Symbol(ChartType, Decl(varianceCircularityHidesInvariance.ts, 50, 1))
+
+    callbacks: TooltipDatasetCallbacks<TType>
+>callbacks : Symbol(TooltipDatasetOptions.callbacks, Decl(varianceCircularityHidesInvariance.ts, 41, 58))
+>TooltipDatasetCallbacks : Symbol(TooltipDatasetCallbacks, Decl(varianceCircularityHidesInvariance.ts, 34, 1))
+>TType : Symbol(TType, Decl(varianceCircularityHidesInvariance.ts, 41, 32))
+}
+interface PluginDatasetOptionsByType<TType extends ChartType> {
+>PluginDatasetOptionsByType : Symbol(PluginDatasetOptionsByType, Decl(varianceCircularityHidesInvariance.ts, 43, 1))
+>TType : Symbol(TType, Decl(varianceCircularityHidesInvariance.ts, 44, 37))
+>ChartType : Symbol(ChartType, Decl(varianceCircularityHidesInvariance.ts, 50, 1))
+
+    tooltip: TooltipDatasetOptions<TType>
+>tooltip : Symbol(PluginDatasetOptionsByType.tooltip, Decl(varianceCircularityHidesInvariance.ts, 44, 63))
+>TooltipDatasetOptions : Symbol(TooltipDatasetOptions, Decl(varianceCircularityHidesInvariance.ts, 40, 1))
+>TType : Symbol(TType, Decl(varianceCircularityHidesInvariance.ts, 44, 37))
+}
+interface ChartTypeRegistry {
+>ChartTypeRegistry : Symbol(ChartTypeRegistry, Decl(varianceCircularityHidesInvariance.ts, 46, 1))
+
+    bar: { defaultDataPoint: [] }
+>bar : Symbol(ChartTypeRegistry.bar, Decl(varianceCircularityHidesInvariance.ts, 47, 29))
+>defaultDataPoint : Symbol(defaultDataPoint, Decl(varianceCircularityHidesInvariance.ts, 48, 10))
+
+    line: { defaultDataPoint: null }
+>line : Symbol(ChartTypeRegistry.line, Decl(varianceCircularityHidesInvariance.ts, 48, 33))
+>defaultDataPoint : Symbol(defaultDataPoint, Decl(varianceCircularityHidesInvariance.ts, 49, 11))
+}
+type ChartType = keyof ChartTypeRegistry
+>ChartType : Symbol(ChartType, Decl(varianceCircularityHidesInvariance.ts, 50, 1))
+>ChartTypeRegistry : Symbol(ChartTypeRegistry, Decl(varianceCircularityHidesInvariance.ts, 46, 1))
+
+type DatasetChartOptions<TType extends ChartType> = { [key in TType]: {} }
+>DatasetChartOptions : Symbol(DatasetChartOptions, Decl(varianceCircularityHidesInvariance.ts, 51, 40))
+>TType : Symbol(TType, Decl(varianceCircularityHidesInvariance.ts, 52, 25))
+>ChartType : Symbol(ChartType, Decl(varianceCircularityHidesInvariance.ts, 50, 1))
+>key : Symbol(key, Decl(varianceCircularityHidesInvariance.ts, 52, 55))
+>TType : Symbol(TType, Decl(varianceCircularityHidesInvariance.ts, 52, 25))
+
+type ChartOptions<TType extends ChartType> = Exclude<DeepPartial<CoreChartOptions<TType> & DatasetChartOptions<TType> & TType>, undefined>
+>ChartOptions : Symbol(ChartOptions, Decl(varianceCircularityHidesInvariance.ts, 52, 74))
+>TType : Symbol(TType, Decl(varianceCircularityHidesInvariance.ts, 53, 18))
+>ChartType : Symbol(ChartType, Decl(varianceCircularityHidesInvariance.ts, 50, 1))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>DeepPartial : Symbol(DeepPartial, Decl(varianceCircularityHidesInvariance.ts, 10, 42))
+>CoreChartOptions : Symbol(CoreChartOptions, Decl(varianceCircularityHidesInvariance.ts, 25, 1))
+>TType : Symbol(TType, Decl(varianceCircularityHidesInvariance.ts, 53, 18))
+>DatasetChartOptions : Symbol(DatasetChartOptions, Decl(varianceCircularityHidesInvariance.ts, 51, 40))
+>TType : Symbol(TType, Decl(varianceCircularityHidesInvariance.ts, 53, 18))
+>TType : Symbol(TType, Decl(varianceCircularityHidesInvariance.ts, 53, 18))
+
+interface ChartDatasetProperties<TType, TData> {
+>ChartDatasetProperties : Symbol(ChartDatasetProperties, Decl(varianceCircularityHidesInvariance.ts, 53, 138))
+>TType : Symbol(TType, Decl(varianceCircularityHidesInvariance.ts, 54, 33))
+>TData : Symbol(TData, Decl(varianceCircularityHidesInvariance.ts, 54, 39))
+
+    data: TData
+>data : Symbol(ChartDatasetProperties.data, Decl(varianceCircularityHidesInvariance.ts, 54, 48))
+>TData : Symbol(TData, Decl(varianceCircularityHidesInvariance.ts, 54, 39))
+}
+type ChartDataset<TType extends ChartType, TData = TType> =
+>ChartDataset : Symbol(ChartDataset, Decl(varianceCircularityHidesInvariance.ts, 56, 1))
+>TType : Symbol(TType, Decl(varianceCircularityHidesInvariance.ts, 57, 18))
+>ChartType : Symbol(ChartType, Decl(varianceCircularityHidesInvariance.ts, 50, 1))
+>TData : Symbol(TData, Decl(varianceCircularityHidesInvariance.ts, 57, 42))
+>TType : Symbol(TType, Decl(varianceCircularityHidesInvariance.ts, 57, 18))
+
+    DeepPartial<ChartTypeRegistry[TType] & PluginDatasetOptionsByType<TType>> & ChartDatasetProperties<TType, TData>
+>DeepPartial : Symbol(DeepPartial, Decl(varianceCircularityHidesInvariance.ts, 10, 42))
+>ChartTypeRegistry : Symbol(ChartTypeRegistry, Decl(varianceCircularityHidesInvariance.ts, 46, 1))
+>TType : Symbol(TType, Decl(varianceCircularityHidesInvariance.ts, 57, 18))
+>PluginDatasetOptionsByType : Symbol(PluginDatasetOptionsByType, Decl(varianceCircularityHidesInvariance.ts, 43, 1))
+>TType : Symbol(TType, Decl(varianceCircularityHidesInvariance.ts, 57, 18))
+>ChartDatasetProperties : Symbol(ChartDatasetProperties, Decl(varianceCircularityHidesInvariance.ts, 53, 138))
+>TType : Symbol(TType, Decl(varianceCircularityHidesInvariance.ts, 57, 18))
+>TData : Symbol(TData, Decl(varianceCircularityHidesInvariance.ts, 57, 42))
+
+type ChartDatasetCustomTypesPerDataset<TType extends ChartType> = DeepPartial<PluginDatasetOptionsByType<TType>>
+>ChartDatasetCustomTypesPerDataset : Symbol(ChartDatasetCustomTypesPerDataset, Decl(varianceCircularityHidesInvariance.ts, 58, 116))
+>TType : Symbol(TType, Decl(varianceCircularityHidesInvariance.ts, 59, 39))
+>ChartType : Symbol(ChartType, Decl(varianceCircularityHidesInvariance.ts, 50, 1))
+>DeepPartial : Symbol(DeepPartial, Decl(varianceCircularityHidesInvariance.ts, 10, 42))
+>PluginDatasetOptionsByType : Symbol(PluginDatasetOptionsByType, Decl(varianceCircularityHidesInvariance.ts, 43, 1))
+>TType : Symbol(TType, Decl(varianceCircularityHidesInvariance.ts, 59, 39))
+
+interface ChartDataCustomTypesPerDataset<TType extends ChartType> {
+>ChartDataCustomTypesPerDataset : Symbol(ChartDataCustomTypesPerDataset, Decl(varianceCircularityHidesInvariance.ts, 59, 112))
+>TType : Symbol(TType, Decl(varianceCircularityHidesInvariance.ts, 60, 41))
+>ChartType : Symbol(ChartType, Decl(varianceCircularityHidesInvariance.ts, 50, 1))
+
+    datasets: ChartDatasetCustomTypesPerDataset<TType>
+>datasets : Symbol(ChartDataCustomTypesPerDataset.datasets, Decl(varianceCircularityHidesInvariance.ts, 60, 67))
+>ChartDatasetCustomTypesPerDataset : Symbol(ChartDatasetCustomTypesPerDataset, Decl(varianceCircularityHidesInvariance.ts, 58, 116))
+>TType : Symbol(TType, Decl(varianceCircularityHidesInvariance.ts, 60, 41))
+}
+export interface ChartConfigurationCustomTypesPerDataset<TType extends ChartType> {
+>ChartConfigurationCustomTypesPerDataset : Symbol(ChartConfigurationCustomTypesPerDataset, Decl(varianceCircularityHidesInvariance.ts, 62, 1))
+>TType : Symbol(TType, Decl(varianceCircularityHidesInvariance.ts, 63, 57))
+>ChartType : Symbol(ChartType, Decl(varianceCircularityHidesInvariance.ts, 50, 1))
+
+    data: ChartDataCustomTypesPerDataset<TType>
+>data : Symbol(ChartConfigurationCustomTypesPerDataset.data, Decl(varianceCircularityHidesInvariance.ts, 63, 83))
+>ChartDataCustomTypesPerDataset : Symbol(ChartDataCustomTypesPerDataset, Decl(varianceCircularityHidesInvariance.ts, 59, 112))
+>TType : Symbol(TType, Decl(varianceCircularityHidesInvariance.ts, 63, 57))
+
+    options: ChartOptions<TType>
+>options : Symbol(ChartConfigurationCustomTypesPerDataset.options, Decl(varianceCircularityHidesInvariance.ts, 64, 47))
+>ChartOptions : Symbol(ChartOptions, Decl(varianceCircularityHidesInvariance.ts, 52, 74))
+>TType : Symbol(TType, Decl(varianceCircularityHidesInvariance.ts, 63, 57))
+}
+
+const p: Plugin<"bar"> = { id: "x", beforeDraw: (chart: Chart) => {} };
+>p : Symbol(p, Decl(varianceCircularityHidesInvariance.ts, 68, 5))
+>Plugin : Symbol(Plugin, Decl(varianceCircularityHidesInvariance.ts, 21, 1))
+>id : Symbol(id, Decl(varianceCircularityHidesInvariance.ts, 68, 26))
+>beforeDraw : Symbol(beforeDraw, Decl(varianceCircularityHidesInvariance.ts, 68, 35))
+>chart : Symbol(chart, Decl(varianceCircularityHidesInvariance.ts, 68, 49))
+>Chart : Symbol(Chart, Decl(varianceCircularityHidesInvariance.ts, 18, 51))
+

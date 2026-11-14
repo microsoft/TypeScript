@@ -1,0 +1,90 @@
+//// [tests/cases/compiler/circularReturnTypeSubtypeReductionOrder.ts] ////
+
+=== expression.ts ===
+// Subtype reduction of rebuild's return type relates the class to A,
+// which needs b's return type, which needs rebuild's: a cycle. Both
+// members report it, whichever return type is requested first, as if
+// rebuild's, declared first, were requested first.
+interface A {
+>A : Symbol(A, Decl(expression.ts, 0, 0), Decl(expression.ts, 9, 5))
+
+    b(): A;
+>b : Symbol(A.b, Decl(expression.ts, 4, 13))
+>A : Symbol(A, Decl(expression.ts, 0, 0), Decl(expression.ts, 9, 5))
+
+    c: A;
+>c : Symbol(A.c, Decl(expression.ts, 5, 11))
+>A : Symbol(A, Decl(expression.ts, 0, 0), Decl(expression.ts, 9, 5))
+}
+declare const flag: boolean;
+>flag : Symbol(flag, Decl(expression.ts, 8, 13))
+
+const A: new () => A = class {
+>A : Symbol(A, Decl(expression.ts, 0, 0), Decl(expression.ts, 9, 5))
+>A : Symbol(A, Decl(expression.ts, 0, 0), Decl(expression.ts, 9, 5))
+
+    rebuild() {
+>rebuild : Symbol(A.rebuild, Decl(expression.ts, 9, 30))
+
+        return flag ? this : new A();
+>flag : Symbol(flag, Decl(expression.ts, 8, 13))
+>this : Symbol(A, Decl(expression.ts, 9, 22))
+>A : Symbol(A, Decl(expression.ts, 0, 0), Decl(expression.ts, 9, 5))
+    }
+    b() {
+>b : Symbol(A.b, Decl(expression.ts, 12, 5))
+
+        return this.rebuild();
+>this.rebuild : Symbol(A.rebuild, Decl(expression.ts, 9, 30))
+>this : Symbol(A, Decl(expression.ts, 9, 22))
+>rebuild : Symbol(A.rebuild, Decl(expression.ts, 9, 30))
+    }
+    c() {
+>c : Symbol(A.c, Decl(expression.ts, 15, 5))
+
+        return this.rebuild;
+>this.rebuild : Symbol(A.rebuild, Decl(expression.ts, 9, 30))
+>this : Symbol(A, Decl(expression.ts, 9, 22))
+>rebuild : Symbol(A.rebuild, Decl(expression.ts, 9, 30))
+    }
+};
+export {};
+
+=== declaration.ts ===
+interface B {
+>B : Symbol(B, Decl(declaration.ts, 0, 0), Decl(declaration.ts, 12, 5))
+
+    b(): B;
+>b : Symbol(B.b, Decl(declaration.ts, 0, 13))
+>B : Symbol(B, Decl(declaration.ts, 0, 0), Decl(declaration.ts, 12, 5))
+}
+declare const flag: boolean;
+>flag : Symbol(flag, Decl(declaration.ts, 3, 13))
+
+class K {
+>K : Symbol(K, Decl(declaration.ts, 3, 28))
+
+    rebuild() {
+>rebuild : Symbol(K.rebuild, Decl(declaration.ts, 4, 9))
+
+        return flag ? this : new B();
+>flag : Symbol(flag, Decl(declaration.ts, 3, 13))
+>this : Symbol(K, Decl(declaration.ts, 3, 28))
+>B : Symbol(B, Decl(declaration.ts, 0, 0), Decl(declaration.ts, 12, 5))
+    }
+    b() {
+>b : Symbol(K.b, Decl(declaration.ts, 7, 5))
+
+        return this.rebuild();
+>this.rebuild : Symbol(K.rebuild, Decl(declaration.ts, 4, 9))
+>this : Symbol(K, Decl(declaration.ts, 3, 28))
+>rebuild : Symbol(K.rebuild, Decl(declaration.ts, 4, 9))
+    }
+}
+const B: new () => B = K;
+>B : Symbol(B, Decl(declaration.ts, 0, 0), Decl(declaration.ts, 12, 5))
+>B : Symbol(B, Decl(declaration.ts, 0, 0), Decl(declaration.ts, 12, 5))
+>K : Symbol(K, Decl(declaration.ts, 3, 28))
+
+export {};
+

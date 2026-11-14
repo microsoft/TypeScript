@@ -1,0 +1,26 @@
+// @strict: true
+// @noEmit: true
+// @checkOrder: default, typesfirst
+
+// Relating y to x fresh caches too many comparisons. In program order the
+// comparisons before it have cached all but a seventh of them. Whether
+// relating y is too complex must not depend on which comes first.
+
+type D = '0' | '1' | '2' | '3' | '4' | '5' | '6';
+type T1 = `${D}${D}${D}${D}` | undefined;
+type T2 = { a: string } | { b: number };
+declare let x: T1 | null;
+declare const y1: (`${'0'}${D}${D}${D}` | undefined) & T2;
+x = y1;
+declare const y2: (`${'0' | '1'}${D}${D}${D}` | undefined) & T2;
+x = y2;
+declare const y3: (`${'0' | '1' | '2'}${D}${D}${D}` | undefined) & T2;
+x = y3;
+declare const y4: (`${'0' | '1' | '2' | '3'}${D}${D}${D}` | undefined) & T2;
+x = y4;
+declare const y5: (`${'0' | '1' | '2' | '3' | '4'}${D}${D}${D}` | undefined) & T2;
+x = y5;
+declare const y6: (`${'0' | '1' | '2' | '3' | '4' | '5'}${D}${D}${D}` | undefined) & T2;
+x = y6;
+declare const y: T1 & T2;
+x = y;

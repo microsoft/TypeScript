@@ -1,0 +1,46 @@
+//// [tests/cases/compiler/evolvingArrayReadInLoopCondition.ts] ////
+
+=== evolvingArrayReadInLoopCondition.ts ===
+// Narrowing by the condition needs the type of `seen` at the call, which
+// depends on the analysis of the loop in progress for that same read. Once
+// the loop is analyzed, `seen` is number[] there, so no error should say that
+// its type cannot be determined.
+
+declare const x: number;
+>x : number
+
+const seen = [];
+>seen : any[]
+>[] : never[]
+
+for (let i = 0; i < 3; i++) {
+>i : number
+>0 : 0
+>i < 3 : boolean
+>i : number
+>3 : 3
+>i++ : number
+>i : number
+
+    if (!seen.some(s => true)) {
+>!seen.some(s => true) : boolean
+>seen.some(s => true) : boolean
+>seen.some : (predicate: (value: number, index: number, array: number[]) => unknown, thisArg?: any) => boolean
+>seen : number[]
+>some : (predicate: (value: number, index: number, array: number[]) => unknown, thisArg?: any) => boolean
+>s => true : (s: number) => boolean
+>s : number
+>true : true
+
+        seen.push(x);
+>seen.push(x) : number
+>seen.push : (...items: any[]) => number
+>seen : any[]
+>push : (...items: any[]) => number
+>x : number
+    }
+}
+const result = seen;
+>result : number[]
+>seen : number[]
+

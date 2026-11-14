@@ -33,6 +33,7 @@ type checkerPool struct {
 	checkers           []*checker.Checker
 	locks              []*sync.Mutex
 	fileAssociations   map[*ast.SourceFile]*checker.Checker
+	associations       []int // from ProgramFactories.AssignCheckers, if set
 }
 
 var _ CheckerPool = (*checkerPool)(nil)
@@ -307,20 +308,35 @@ func newCheckerPool(program *Program) *checkerPool {
 }
 
 func newCheckerPoolWithTracing(program *Program, tr *tracing.Tracing) *checkerPool {
+	return newCheckerPoolWithAssignment(program, tr, nil)
+}
+
+// newCheckerPoolWithAssignment is newCheckerPoolWithTracing with the checker
+// of each file given by assign, if set; see ProgramFactories.AssignCheckers.
+func newCheckerPoolWithAssignment(program *Program, tr *tracing.Tracing, assign func([]*ast.SourceFile) []int) *checkerPool {
+	var associations []int
 	checkerCount := 4
-	if program.SingleThreaded() {
+	if assign != nil {
+		associations = assign(program.files)
 		checkerCount = 1
-	} else if c := program.Options().Checkers; c != nil {
-		checkerCount = *c
+		if len(associations) > 0 {
+			checkerCount = slices.Max(associations) + 1
+		}
+	} else {
+		if program.SingleThreaded() {
+			checkerCount = 1
+		} else if c := program.Options().Checkers; c != nil {
+			checkerCount = *c
+		}
+		checkerCount = max(min(checkerCount, len(program.files), 256), 1)
 	}
 
-	checkerCount = max(min(checkerCount, len(program.files), 256), 1)
-
 	pool := &checkerPool{
-		program:  program,
-		checkers: make([]*checker.Checker, checkerCount),
-		locks:    make([]*sync.Mutex, checkerCount),
-		tracing:  tr,
+		program:      program,
+		checkers:     make([]*checker.Checker, checkerCount),
+		locks:        make([]*sync.Mutex, checkerCount),
+		tracing:      tr,
+		associations: associations,
 	}
 
 	return pool
@@ -380,8 +396,11 @@ func (p *checkerPool) createCheckers() {
 
 		wg.RunAndWait()
 
-		associations := make([]int, len(p.program.files))
-		if checkerCount > 1 {
+		associations := p.associations
+		if associations == nil {
+			associations = make([]int, len(p.program.files))
+		}
+		if checkerCount > 1 && p.associations == nil {
 			baseWeights := make([]int, len(p.program.files))
 			importCounts := make([]int, len(p.program.files))
 			isDeclarationFile := make([]bool, len(p.program.files))

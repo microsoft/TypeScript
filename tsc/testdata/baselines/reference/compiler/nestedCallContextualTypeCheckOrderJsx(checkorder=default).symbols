@@ -1,0 +1,52 @@
+//// [tests/cases/compiler/nestedCallContextualTypeCheckOrderJsx.tsx] ////
+
+=== nestedCallContextualTypeCheckOrderJsx.tsx ===
+// A generic call in a JSX attribute is resolved after the element, whichever
+// is queried first.
+
+declare namespace JSX {
+>JSX : Symbol(JSX, Decl(nestedCallContextualTypeCheckOrderJsx.tsx, 0, 0))
+
+    interface Element {}
+>Element : Symbol(Element, Decl(nestedCallContextualTypeCheckOrderJsx.tsx, 3, 23))
+
+    interface IntrinsicElements {}
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(nestedCallContextualTypeCheckOrderJsx.tsx, 4, 24))
+}
+declare function Outer<T>(props: { cb: (x: T) => void; v: T }): JSX.Element;
+>Outer : Symbol(Outer, Decl(nestedCallContextualTypeCheckOrderJsx.tsx, 6, 1))
+>T : Symbol(T, Decl(nestedCallContextualTypeCheckOrderJsx.tsx, 7, 23))
+>props : Symbol(props, Decl(nestedCallContextualTypeCheckOrderJsx.tsx, 7, 26))
+>cb : Symbol(cb, Decl(nestedCallContextualTypeCheckOrderJsx.tsx, 7, 34))
+>x : Symbol(x, Decl(nestedCallContextualTypeCheckOrderJsx.tsx, 7, 40))
+>T : Symbol(T, Decl(nestedCallContextualTypeCheckOrderJsx.tsx, 7, 23))
+>v : Symbol(v, Decl(nestedCallContextualTypeCheckOrderJsx.tsx, 7, 54))
+>T : Symbol(T, Decl(nestedCallContextualTypeCheckOrderJsx.tsx, 7, 23))
+>JSX : Symbol(JSX, Decl(nestedCallContextualTypeCheckOrderJsx.tsx, 0, 0))
+>Element : Symbol(JSX.Element, Decl(nestedCallContextualTypeCheckOrderJsx.tsx, 3, 23))
+
+declare function wrap<U>(f: U): U;
+>wrap : Symbol(wrap, Decl(nestedCallContextualTypeCheckOrderJsx.tsx, 7, 76))
+>U : Symbol(U, Decl(nestedCallContextualTypeCheckOrderJsx.tsx, 8, 22))
+>f : Symbol(f, Decl(nestedCallContextualTypeCheckOrderJsx.tsx, 8, 25))
+>U : Symbol(U, Decl(nestedCallContextualTypeCheckOrderJsx.tsx, 8, 22))
+>U : Symbol(U, Decl(nestedCallContextualTypeCheckOrderJsx.tsx, 8, 22))
+
+const a = <Outer cb={wrap((x) => x.toFixed())} v={1} />;
+>a : Symbol(a, Decl(nestedCallContextualTypeCheckOrderJsx.tsx, 10, 5))
+>Outer : Symbol(Outer, Decl(nestedCallContextualTypeCheckOrderJsx.tsx, 6, 1))
+>cb : Symbol(cb, Decl(nestedCallContextualTypeCheckOrderJsx.tsx, 10, 16))
+>wrap : Symbol(wrap, Decl(nestedCallContextualTypeCheckOrderJsx.tsx, 7, 76))
+>x : Symbol(x, Decl(nestedCallContextualTypeCheckOrderJsx.tsx, 10, 27))
+>x : Symbol(x, Decl(nestedCallContextualTypeCheckOrderJsx.tsx, 10, 27))
+>v : Symbol(v, Decl(nestedCallContextualTypeCheckOrderJsx.tsx, 10, 46))
+
+const b = <Outer {...{ cb: wrap((x) => x.toFixed()) }} v={1} />;
+>b : Symbol(b, Decl(nestedCallContextualTypeCheckOrderJsx.tsx, 11, 5))
+>Outer : Symbol(Outer, Decl(nestedCallContextualTypeCheckOrderJsx.tsx, 6, 1))
+>cb : Symbol(cb, Decl(nestedCallContextualTypeCheckOrderJsx.tsx, 11, 22))
+>wrap : Symbol(wrap, Decl(nestedCallContextualTypeCheckOrderJsx.tsx, 7, 76))
+>x : Symbol(x, Decl(nestedCallContextualTypeCheckOrderJsx.tsx, 11, 33))
+>x : Symbol(x, Decl(nestedCallContextualTypeCheckOrderJsx.tsx, 11, 33))
+>v : Symbol(v, Decl(nestedCallContextualTypeCheckOrderJsx.tsx, 11, 54))
+

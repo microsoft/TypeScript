@@ -1,0 +1,35 @@
+//// [tests/cases/compiler/substitutionInDeferredConditionalOfConditional.ts] ////
+
+=== substitutionInDeferredConditionalOfConditional.ts ===
+// Children<S> always produces a Record, so it satisfies NeedsRecord. Its
+// true branch narrows S["states"] to Record<string, Schema> even when S is
+// a conditional type that is itself deferred.
+
+interface Schema {
+    states?: Record<string, Schema>;
+>states : Record<string, Schema> | undefined
+}
+type Resolve<S extends Record<string, Schema>, Segments extends readonly string[]> =
+>Resolve : Resolve<S, Segments>
+
+    Segments extends [infer Head extends string, ...infer Rest extends string[]]
+        ? Head extends keyof S
+            ? Rest extends []
+                ? S[Head]
+                : S[Head]["states"] extends Record<string, Schema>
+                    ? Resolve<S[Head]["states"], Rest>
+                    : never
+            : never
+        : never;
+type Split<P extends string> = P extends `${infer Head}.${infer Tail}` ? [Head, Tail] : [P];
+>Split : Split<P>
+
+type Children<S extends Schema> = S["states"] extends Record<string, Schema> ? S["states"] : Record<string, Schema>;
+>Children : Children<S>
+
+type NeedsRecord<T extends Record<string, Schema>> = T;
+>NeedsRecord : T
+
+type ChildrenAt<S extends Record<string, Schema>, P extends string> = NeedsRecord<Children<Resolve<S, Split<P>>>>;
+>ChildrenAt : Children<Resolve<S, Split<P>>>
+

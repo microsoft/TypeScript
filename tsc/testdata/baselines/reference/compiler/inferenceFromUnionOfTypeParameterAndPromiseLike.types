@@ -1,0 +1,19 @@
+//// [tests/cases/compiler/inferenceFromUnionOfTypeParameterAndPromiseLike.ts] ////
+
+=== inferenceFromUnionOfTypeParameterAndPromiseLike.ts ===
+// Inferring from Promise<string> to PromiseLike<V> | V must infer V as string,
+// whichever order the union's members are in.
+
+declare function props<K, V>(x: PromiseLike<Map<K, PromiseLike<V> | V>>): Promise<Map<K, V>>;
+>props : <K, V>(x: PromiseLike<Map<K, PromiseLike<V> | V>>) => Promise<Map<K, V>>
+>x : PromiseLike<Map<K, V | PromiseLike<V>>>
+
+declare const input: Promise<Map<number, Promise<string>>>;
+>input : Promise<Map<number, Promise<string>>>
+
+const out: Promise<Map<number, string>> = props(input);
+>out : Promise<Map<number, string>>
+>props(input) : Promise<Map<number, Promise<string>>>
+>props : <K, V>(x: PromiseLike<Map<K, PromiseLike<V> | V>>) => Promise<Map<K, V>>
+>input : Promise<Map<number, Promise<string>>>
+

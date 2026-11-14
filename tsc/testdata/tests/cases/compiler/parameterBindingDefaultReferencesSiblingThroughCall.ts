@@ -1,0 +1,25 @@
+// @strict: true
+// @noEmit: true
+// @checkOrder: default,typesfirst
+
+// A default in a destructured parameter that references a sibling element
+// makes the sibling's type depend on itself: the type of 'a' comes from the
+// parameter initializer '{}', which is padded with the types of the defaults,
+// including 'b'. Main reports this cycle (TS7022 on 'a') for 'b = a', but not
+// for 'b = id(a)', where the padding reuses the signature resolved while 'a'
+// was treated as non-inferrable any during contextual typing of '{}', which
+// gives 'b' the type 'unknown' (see tldraw TldrawApp.test.ts).
+
+declare function id<T>(v: T): T;
+
+function direct({ a = 1 as number | undefined, b = a } = {}) {
+    const n: string = b;
+}
+
+function viaCall({ a = 1 as number | undefined, b = id(a) } = {}) {
+    const n: string = b;
+}
+
+function viaCallArray({ a = 1 as number | undefined, b = id([a]) } = {}) {
+    const n: string = b;
+}

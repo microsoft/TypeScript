@@ -1,0 +1,52 @@
+//// [tests/cases/compiler/varianceCycleCachedResults.ts] ////
+
+=== first.ts ===
+declare let b1: Box<string>;
+>b1 : Symbol(b1, Decl(first.ts, 0, 11))
+>Box : Symbol(Box, Decl(box.ts, 2, 28))
+
+declare let b2: Box<number>;
+>b2 : Symbol(b2, Decl(first.ts, 1, 11))
+>Box : Symbol(Box, Decl(box.ts, 2, 28))
+
+b1 = b2;
+>b1 : Symbol(b1, Decl(first.ts, 0, 11))
+>b2 : Symbol(b2, Decl(first.ts, 1, 11))
+
+=== box.ts ===
+declare let a1: Box<string>;
+>a1 : Symbol(a1, Decl(box.ts, 0, 11))
+>Box : Symbol(Box, Decl(box.ts, 2, 28))
+
+declare let a2: Box<number>;
+>a2 : Symbol(a2, Decl(box.ts, 1, 11))
+>Box : Symbol(Box, Decl(box.ts, 2, 28))
+
+declare const cond: boolean;
+>cond : Symbol(cond, Decl(box.ts, 2, 13))
+
+class Box<T> {
+>Box : Symbol(Box, Decl(box.ts, 2, 28))
+>T : Symbol(T, Decl(box.ts, 3, 10))
+
+    value!: T;
+>value : Symbol(Box.value, Decl(box.ts, 3, 14))
+>T : Symbol(T, Decl(box.ts, 3, 10))
+
+    m() {
+>m : Symbol(Box.m, Decl(box.ts, 4, 14))
+
+        if (cond) return a1;
+>cond : Symbol(cond, Decl(box.ts, 2, 13))
+>a1 : Symbol(a1, Decl(box.ts, 0, 11))
+
+        return a2;
+>a2 : Symbol(a2, Decl(box.ts, 1, 11))
+    }
+}
+const r = new Box<boolean>().m();
+>r : Symbol(r, Decl(box.ts, 10, 5))
+>new Box<boolean>().m : Symbol(Box.m, Decl(box.ts, 4, 14))
+>Box : Symbol(Box, Decl(box.ts, 2, 28))
+>m : Symbol(Box.m, Decl(box.ts, 4, 14))
+

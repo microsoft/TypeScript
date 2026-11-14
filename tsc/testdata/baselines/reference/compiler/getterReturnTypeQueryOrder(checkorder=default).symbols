@@ -1,0 +1,29 @@
+//// [tests/cases/compiler/getterReturnTypeQueryOrder.ts] ////
+
+=== getterReturnTypeQueryOrder.ts ===
+declare const props: Options;
+>props : Symbol(props, Decl(getterReturnTypeQueryOrder.ts, 0, 13))
+>Options : Symbol(Options, Decl(getterReturnTypeQueryOrder.ts, 6, 1))
+
+class Container {
+>Container : Symbol(Container, Decl(getterReturnTypeQueryOrder.ts, 0, 29))
+
+    get options() {
+>options : Symbol(Container.options, Decl(getterReturnTypeQueryOrder.ts, 2, 17))
+
+        return { container: this, ...props } as Options;
+>container : Symbol(container, Decl(getterReturnTypeQueryOrder.ts, 4, 16))
+>this : Symbol(Container, Decl(getterReturnTypeQueryOrder.ts, 0, 29))
+>props : Symbol(props, Decl(getterReturnTypeQueryOrder.ts, 0, 13))
+>Options : Symbol(Options, Decl(getterReturnTypeQueryOrder.ts, 6, 1))
+    }
+}
+
+interface Options {
+>Options : Symbol(Options, Decl(getterReturnTypeQueryOrder.ts, 6, 1))
+
+    container?: Container;
+>container : Symbol(Options.container, Decl(getterReturnTypeQueryOrder.ts, 8, 19))
+>Container : Symbol(Container, Decl(getterReturnTypeQueryOrder.ts, 0, 29))
+}
+

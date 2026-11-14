@@ -1,0 +1,51 @@
+//// [tests/cases/compiler/instantiationExpressionConstraintCycleCheckOrder.ts] ////
+
+=== instantiationExpressionConstraintCycleCheckOrder.ts ===
+// Checking the type arguments of the instantiation expressions against their
+// constraints needs the variances of A, which need the type of child. The
+// constraint errors and the types of child must not depend on whether child
+// is queried before A is checked.
+
+namespace InterfaceCycle {
+>InterfaceCycle : typeof InterfaceCycle
+
+    declare function b<U extends A = A>(): U;
+>b : <U extends A = A<number>>() => U
+
+    interface A<T = number> {
+        value: T;
+>value : T
+
+        child: typeof b<A<T>>;
+>child : () => A<T>
+>b : <U extends A = A<number>>() => U
+    }
+}
+
+namespace ClassCycle {
+>ClassCycle : typeof ClassCycle
+
+    class A<T = number> {
+>A : A<T>
+
+        value!: T;
+>value : T
+
+        child!: InstanceType<typeof A.B<A<T>>>;
+>child : B<A<T>>
+>A.B : typeof B
+>A : typeof A
+>B : typeof B
+
+        static B = class B<T extends A> {
+>B : typeof B
+>class B<T extends A> {            parent!: T;        } : typeof B
+>B : typeof B
+
+            parent!: T;
+>parent : T
+
+        };
+    }
+}
+

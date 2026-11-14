@@ -1,0 +1,12 @@
+index.tsx(5,2): error TS2304: Cannot find name 'a'.
+
+
+==== index.tsx (1 errors) ====
+    declare namespace JSX {
+      interface IntrinsicElements extends Record<string, any> {}
+    }
+    
+    <a />;
+     ~
+!!! error TS2304: Cannot find name 'a'.
+    

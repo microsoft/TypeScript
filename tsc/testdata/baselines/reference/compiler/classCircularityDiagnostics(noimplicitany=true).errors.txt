@@ -1,0 +1,80 @@
+classCircularityDiagnostics.ts(1,7): error TS2506: 'Direct' is referenced directly or indirectly in its own base expression.
+classCircularityDiagnostics.ts(9,7): error TS2506: 'First' is referenced directly or indirectly in its own base expression.
+classCircularityDiagnostics.ts(9,21): error TS2449: Class 'Second' used before its declaration.
+classCircularityDiagnostics.ts(10,7): error TS2506: 'Second' is referenced directly or indirectly in its own base expression.
+classCircularityDiagnostics.ts(12,26): error TS2506: 'Named' is referenced directly or indirectly in its own base expression.
+classCircularityDiagnostics.ts(23,16): error TS2448: Block-scoped variable 'SelfReferencingBase' used before its declaration.
+classCircularityDiagnostics.ts(41,44): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+classCircularityDiagnostics.ts(42,58): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+classCircularityDiagnostics.ts(45,34): error TS2507: Type 'number' is not a constructor function type.
+classCircularityDiagnostics.ts(45,50): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+
+
+==== classCircularityDiagnostics.ts (10 errors) ====
+    class Direct extends Direct {
+          ~~~~~~
+!!! error TS2506: 'Direct' is referenced directly or indirectly in its own base expression.
+    	static value = 1;
+    	value = 2;
+    }
+    
+    const staticValue = Direct.value;
+    const instanceValue = new Direct().value;
+    
+    class First extends Second {}
+          ~~~~~
+!!! error TS2506: 'First' is referenced directly or indirectly in its own base expression.
+                        ~~~~~~
+!!! error TS2449: Class 'Second' used before its declaration.
+!!! related TS2728 classCircularityDiagnostics.ts:10:7: 'Second' is declared here.
+    class Second extends First {}
+          ~~~~~~
+!!! error TS2506: 'Second' is referenced directly or indirectly in its own base expression.
+    
+    const Expression = class Named extends Named {};
+                             ~~~~~
+!!! error TS2506: 'Named' is referenced directly or indirectly in its own base expression.
+    
+    class NestedBase extends (class {
+    	static value = 1;
+    	value = 2;
+    }) {}
+    
+    const nestedStaticValue: number = NestedBase.value;
+    const nestedInstanceValue: number = new NestedBase().value;
+    
+    const SelfReferencingBase = class extends (class {
+    	static self = SelfReferencingBase;
+    	              ~~~~~~~~~~~~~~~~~~~
+!!! error TS2448: Block-scoped variable 'SelfReferencingBase' used before its declaration.
+!!! related TS2728 classCircularityDiagnostics.ts:22:7: 'SelfReferencingBase' is declared here.
+    }) {};
+    
+    const selfConstructor = SelfReferencingBase.self;
+    
+    function mixin<Base extends new (...args: any[]) => {}>(base: Base) {
+    	return class extends base {
+    		static value = 1;
+    		value = 2;
+    	};
+    }
+    
+    class Mixed extends mixin(NestedBase) {}
+    
+    const mixedStaticValue: number = Mixed.value;
+    const mixedInstanceValue: number = new Mixed().value;
+    
+    declare function makeBase(value: number): typeof NestedBase;
+    class InvalidBaseArgument extends makeBase("invalid") {}
+                                               ~~~~~~~~~
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+    const InvalidExpressionArgument = class extends makeBase("invalid") {};
+                                                             ~~~~~~~~~
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+    
+    declare function makeInvalidBase(value: number): number;
+    class InvalidConstructor extends makeInvalidBase("invalid") {}
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2507: Type 'number' is not a constructor function type.
+                                                     ~~~~~~~~~
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.

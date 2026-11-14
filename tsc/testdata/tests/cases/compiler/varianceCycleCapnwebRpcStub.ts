@@ -1,0 +1,170 @@
+// @strict: true
+// @target: esnext
+// @lib: esnext,dom
+// @skipLibCheck: true
+// @noEmit: true
+
+// The RpcStub types of capnweb 0.12.0 (MIT license, Copyright (c) 2025
+// Cloudflare, Inc.), as used by cloudflare-os. Stub, Result, MethodOrProperty,
+// MaybeCallableProvider and others form a variance circularity in which the
+// types measured before it completes are measured unreliable. Comparisons
+// of them while it completes must not fall back to comparing structurally,
+// or measuring it reaches the instantiation limit (TS2589), and the `.then`
+// callback parameter is implicitly any (TS7006).
+
+// @filename: capnweb.d.ts
+// Copyright (c) 2025 Cloudflare, Inc.
+// Licensed under the MIT license found in the LICENSE.txt file or at:
+//     https://opensource.org/license/mit
+// This file borrows heavily from `types/defines/rpc.d.ts` in workerd.
+// Branded types for identifying `WorkerEntrypoint`/`DurableObject`/`Target`s.
+// TypeScript uses *structural* typing meaning anything with the same shape as type `T` is a `T`.
+// For the classes exported by `cloudflare:workers` we want *nominal* typing (i.e. we only want to
+// accept `WorkerEntrypoint` from `cloudflare:workers`, not any other class with the same shape)
+declare const __RPC_STUB_BRAND: '__RPC_STUB_BRAND';
+declare const __RPC_TARGET_BRAND: '__RPC_TARGET_BRAND';
+// Distinguishes mapper placeholders from regular values so param unwrapping can accept them.
+declare const __RPC_MAP_VALUE_BRAND: unique symbol;
+interface RpcTargetBranded {
+  [__RPC_TARGET_BRAND]: never;
+}
+// Types that can be used through `Stub`s
+// `never[]` preserves compatibility with strongly-typed function signatures without introducing
+// `any` into inference.
+type Stubable = RpcTargetBranded | ((...args: never[]) => unknown);
+// Note: also true for `any` (call sites that care check `IsAny` first).
+type IsUnknown<T> = unknown extends T ? true : false; // Types that can be passed over RPC
+// The reason for using a generic type here is to build the serializable subset of RPC-compatible
+//   composite types. This allows types defined with the "interface" keyword to pass the
+//   serializable check as well. Otherwise, only types defined with the "type" keyword would pass.
+type RpcCompatible<T> = // Allow `unknown` as a leaf so records/interfaces with `unknown` fields remain compatible.
+(IsUnknown<T> extends true ? unknown : never) // RPC-compatible base values
+| BaseType // RPC-compatible composites
+| Map<T extends Map<infer U, unknown> ? RpcCompatible<U> : never, T extends Map<unknown, infer U> ? RpcCompatible<U> : never> | Set<T extends Set<infer U> ? RpcCompatible<U> : never> | Array<T extends Array<infer U> ? RpcCompatible<U> : never> | ReadonlyArray<T extends ReadonlyArray<infer U> ? RpcCompatible<U> : never> | { [K in keyof T as K extends string | number ? K : never]: RpcCompatible<T[K]> } | Promise<T extends Promise<infer U> ? RpcCompatible<U> : never> // Special types
+| Stub<Stubable> // Serialized as stubs, see `Stubify`
+| Stubable;
+// Base type for all RPC stubs, including common memory management methods.
+// `T` is used as a marker type for unwrapping `Stub`s later.
+interface StubBase<T = unknown> extends Disposable {
+  [__RPC_STUB_BRAND]: T;
+  dup(): this;
+  onRpcBroken(callback: (error: any) => void): void;
+}
+type Stub<T extends RpcCompatible<T>> = T extends object ? Provider<T> & StubBase<T> : StubBase<T>;
+type TypedArray = Uint8Array | Uint8ClampedArray | Uint16Array | Uint32Array | Int8Array | Int16Array | Int32Array | BigUint64Array | BigInt64Array | Float32Array | Float64Array; // This represents all the types that can be sent as-is over an RPC boundary
+type BaseType = void | undefined | null | boolean | number | bigint | string | TypedArray | ArrayBuffer | DataView | Date | Error | RegExp | Blob | ReadableStream<any> // Chunk type can be any RPC-compatible type
+| WritableStream<any> // Chunk type can be any RPC-compatible type
+| URL | Request | Response | Headers; // Recursively rewrite all `Stubable` types with `Stub`s, and resolve promises.
+// Arm ordering matters here:
+// - `Promise` must come before `StubBase`: `RpcPromise<T>` matches both, and must resolve
+//   through the Promise arm rather than pass through as-is.
+// - `StubBase` must come before `Stubable`: `Stub<T>` of a callable `T` is itself callable, so
+//   it matches `Stubable`. Checking `StubBase` first keeps existing stubs as-is instead of
+//   double-wrapping them as `Stub<Stub<T>>`.
+// prettier-ignore
+type Stubify<T> = T extends Promise<infer U> ? Stubify<U> : T extends StubBase<any> ? T : T extends Stubable ? Stub<T> : T extends Map<infer K, infer V> ? Map<Stubify<K>, Stubify<V>> : T extends Set<infer V> ? Set<Stubify<V>> : T extends [] ? [] : T extends [infer Head, ...infer Tail] ? [Stubify<Head>, ...Stubify<Tail>] : T extends readonly [] ? readonly [] : T extends readonly [infer Head, ...infer Tail] ? readonly [Stubify<Head>, ...Stubify<Tail>] : T extends Array<infer V> ? Array<Stubify<V>> : T extends ReadonlyArray<infer V> ? ReadonlyArray<Stubify<V>> : T extends BaseType ? T // When using "unknown" instead of "any", interfaces are not stubified.
+: T extends {
+  [key: string | number]: any;
+} ? { [K in keyof T as K extends string | number ? K : never]: Stubify<T[K]> } : T;
+// Recursively rewrite all `Stub<T>`s with the corresponding `T`s.
+// Note we use `StubBase` instead of `Stub` here to avoid circular dependencies:
+// `Stub` depends on `Provider`, which depends on `Unstubify`, which would depend on `Stub`.
+// prettier-ignore
+type UnstubifyInner<T> = // Preserve local RpcTarget acceptance, but avoid needless `Stub | Value` unions when the stub
+// is already assignable to the value type (important for callback contextual typing).
+T extends StubBase<infer V> ? (T extends V ? UnstubifyInner<V> : (T | UnstubifyInner<V>)) : T extends Promise<infer U> ? UnstubifyInner<U> : T extends Map<infer K, infer V> ? Map<Unstubify<K>, Unstubify<V>> : T extends Set<infer V> ? Set<Unstubify<V>> : T extends [] ? [] : T extends [infer Head, ...infer Tail] ? [Unstubify<Head>, ...Unstubify<Tail>] : T extends readonly [] ? readonly [] : T extends readonly [infer Head, ...infer Tail] ? readonly [Unstubify<Head>, ...Unstubify<Tail>] : T extends Array<infer V> ? Array<Unstubify<V>> : T extends ReadonlyArray<infer V> ? ReadonlyArray<Unstubify<V>> : T extends BaseType ? T : T extends {
+  [key: string | number]: unknown;
+} ? { [K in keyof T as K extends string | number ? K : never]: Unstubify<T[K]> } : T; // You can put promises anywhere in the params and they'll be resolved before delivery.
+// (This also covers RpcPromise, because it's defined as being a Promise.)
+// Map placeholders are also allowed so primitive map callback inputs can be forwarded directly
+// into RPC params.
+//
+// Keep raw non-stub members so generic assignability still works when UnstubifyInner<T> is deferred.
+// Remove stub members from mixed unions so callback params don’t get both stub and unstubbed signatures.
+// Marker carried by map() callback inputs. This lets primitive placeholders flow through params.
+type Unstubify<T> = NonStubMembers<T> | UnstubifyInner<T> | Promise<UnstubifyInner<T>> | MapValuePlaceholder<UnstubifyInner<T>>;
+type UnstubifyAll<A extends readonly unknown[]> = { [I in keyof A]: Unstubify<A[I]> };
+interface MapValuePlaceholder<T> {
+  [__RPC_MAP_VALUE_BRAND]: T;
+}
+type NonStubMembers<T> = Exclude<T, StubBase<any>>; // Utility type for adding `Disposable`s to `object` types only.
+// Note `unknown & T` is equivalent to `T`.
+type MaybeDisposable<T> = T extends object ? Disposable : unknown; // The type behind the public `RpcPromise` (re-exported with its `RpcCompatible` constraint from
+// index.ts). Defined here so that `Result`'s arms below resolve to the exact same alias
+// instantiation: when both sides of an assignability check are the same alias applied to the
+// same type arguments, the checker short-circuits on identity instead of recursing through the
+// full structural comparison of these mutually-recursive types.
+type RpcPromise$1<T> = T extends Stubable ? Promise<Stub<T>> & Provider<T> & StubBase<T> : Promise<Stubify<T> & MaybeDisposable<T>> & Provider<T> & StubBase<T>;
+// The elision `Result` applies to a bare stub type: unwrap `Stub<T>` back to `T` when the
+// payload is `Stubable`. Such stubs await back to a stub either way, so eliding keeps a
+// declared `Promise<RpcStub<T>>` return interchangeable with a `Promise<T>` return.
+// Plain-interface stubs are NOT elided: `RpcPromise<U>` only awaits to `Stub<U>` when
+// `U extends Stubable`, so eliding those would change the awaited type from a stub to a
+// stubified record. The payload check is deliberately non-distributive (`[U] extends [...]`).
+// `Stub<any>` is not elided either: `[any] extends [Stubable]` is true, so without the `IsAny`
+// guard an `any`-payload stub would lose its stub surface.
+// Also used by the `RpcPromise` constructor signature (index.ts), which applies exactly this
+// transformation so constructing from a promised stub matches the method-return type.
+type ElideStub<T> = T extends StubBase<infer U> ? (IsAny<U> extends true ? T : [U] extends [Stubable] ? U : T) : T;
+// What the promise given to `new RpcPromise<T>(...)` may resolve to: the payload itself, or —
+// for stubable payloads — a stub of it. `NoInfer` keeps the stub arm out of inference, so an
+// inferred `T` is always the promise's own resolution type; the arm only matters when `T` is
+// explicitly annotated (`new RpcPromise<Counter>(promiseOfStub)`). Stubs of non-stubable
+// payloads are deliberately rejected: `ElideStub` wouldn't elide those, so accepting one would
+// claim the promise awaits to a stubified record while the runtime resolves to a stub.
+type PayloadOrStub<T> = T | NoInfer<Stub<Extract<T, Stubable>>>;
+// Type for method return or property on an RPC interface.
+// - Stubable types are replaced by stubs.
+// - RpcCompatible types are passed by value, with stubable types replaced by stubs
+//   and a top-level `Disposer`.
+// Everything else can't be passed over RPC.
+// Technically, we use custom thenables here, but they quack like `Promise`s.
+// Intersecting with `(Maybe)Provider` allows pipelining.
+// prettier-ignore
+type Result<R> = IsAny<R> extends true ? RpcPromise$1<unknown> // `RpcPromise<U>`: always safe to normalize — `Result` is idempotent — so a declared
+// `RpcPromise<U>` return produces the same type as a `Promise<U>` return.
+: R extends PromiseLike<unknown> & StubBase<infer U> ? Result<U> // Bare stubs: elide per `ElideStub` above. Note there is no `RpcCompatible<R>` re-check
+// here: anything matching our `StubBase` was produced by machinery that already enforced
+// the constraint, and re-evaluating `RpcCompatible<R>` in this arm recurses through its
+// `Stub<Stubable>` member back into `Result`, tripping TS2615 circularity errors in mapped
+// types.
+: R extends StubBase<any> ? RpcPromise$1<ElideStub<R>> : R extends RpcCompatible<R> ? RpcPromise$1<R> : never;
+type IsAny<T> = 0 extends (1 & T) ? true : false; // Type for method or property on an RPC interface.
+// For methods, unwrap `Stub`s in parameters, and rewrite returns to be `Result`s.
+// Unwrapping `Stub`s allows calling with `Stubable` arguments.
+// For properties, rewrite types to be `Result`s.
+// In each case, unwrap `Promise`s.
+type MethodOrProperty<V> = V extends ((...args: infer P) => infer R) ? (...args: UnstubifyAll<P>) => Result<Awaited<R>> : Result<Awaited<V>>; // Type for the callable part of an `Provider` if `T` is callable.
+// This is intersected with methods/properties.
+type MaybeCallableProvider<T> = T extends ((...args: any[]) => any) ? MethodOrProperty<T> : unknown;
+type TupleIndexKeys<T extends ReadonlyArray<unknown>> = Extract<keyof T, `${number}`>;
+type MapCallbackValue<T> = // `Omit` removes call signatures, so re-intersect callable provider behavior.
+T extends unknown ? Omit<Result<T>, keyof Promise<unknown>> & MaybeCallableProvider<T> & MapValuePlaceholder<T> : never;
+type InvalidNativePromiseInMapResult<T, Seen = never> = T extends unknown ? InvalidNativePromiseInMapResultImpl<T, Seen> : never;
+type InvalidNativePromiseInMapResultImpl<T, Seen> = [T] extends [Seen] ? never // RpcPromise is modeled as Promise & StubBase, so allow promise-like stub values.
+: T extends StubBase<any> ? never // Native thenables cannot be represented in map recordings, even when typed as PromiseLike.
+: T extends PromiseLike<unknown> ? T : T extends Map<infer K, infer V> ? InvalidNativePromiseInMapResult<K, Seen | T> | InvalidNativePromiseInMapResult<V, Seen | T> : T extends Set<infer V> ? InvalidNativePromiseInMapResult<V, Seen | T> : T extends readonly [] ? never : T extends readonly [infer Head, ...infer Tail] ? InvalidNativePromiseInMapResult<Head, Seen | T> | InvalidNativePromiseInMapResult<Tail[number], Seen | T> : T extends ReadonlyArray<infer V> ? InvalidNativePromiseInMapResult<V, Seen | T> : T extends {
+  [key: string | number]: unknown;
+} ? InvalidNativePromiseInMapResult<T[Extract<keyof T, string | number>], Seen | T> : never;
+type MapCallbackReturn<T> = InvalidNativePromiseInMapResult<T> extends never ? T : never;
+type ArrayProvider<E> = { [K in number]: MethodOrProperty<E> } & {
+  map<V>(callback: (elem: MapCallbackValue<E>) => MapCallbackReturn<V>): Result<Array<V>>;
+};
+type TupleProvider<T extends ReadonlyArray<unknown>> = { [K in TupleIndexKeys<T>]: MethodOrProperty<T[K]> } & ArrayProvider<T[number]>; // Base type for all other types providing RPC-like interfaces.
+// Rewrites all methods/properties to be `MethodOrProperty`s, while preserving callable types.
+// `__RPC_TARGET_BRAND` deliberately flows through the key mapping (as a `never` property) so
+// stubs of branded targets stay assignable to workers-types' `Stubable`. Such stubs match our
+// `Stubable` too — harmless, since all machinery checks `StubBase` before `Stubable`.
+type Provider<T> = MaybeCallableProvider<T> & (T extends ReadonlyArray<unknown> ? number extends T["length"] ? ArrayProvider<T[number]> : TupleProvider<T> : { [K in Exclude<keyof T, symbol | keyof StubBase<never>>]: MethodOrProperty<T[K]> } & {
+  map<V>(callback: (value: MapCallbackValue<NonNullable<T>>) => MapCallbackReturn<V>): Result<Array<V>>;
+});
+export type RpcStub<T extends RpcCompatible<T>> = Stub<T>;
+
+// @filename: main.ts
+import type { RpcStub } from "./capnweb";
+
+declare const api: RpcStub<{ sub(): Promise<RpcStub<{}>> }>;
+export async function f() {
+  await api.sub();
+  api.sub().then(s => s);
+}

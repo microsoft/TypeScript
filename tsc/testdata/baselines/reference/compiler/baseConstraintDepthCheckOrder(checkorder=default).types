@@ -1,0 +1,24 @@
+//// [tests/cases/compiler/baseConstraintDepthCheckOrder.ts] ////
+
+=== baseConstraintDepthCheckOrder.ts ===
+// The base constraint of 'T0' is 60 type parameters deep and gives up after
+// 50, while that of 'T20' is found 40 deep. Neither may depend on which was
+// computed first: computing 'T0' first must not leave 'T20' without its
+// constraint, and computing 'T20' first must not let 'T0' reuse it.
+
+function f<T0 extends T1, T1 extends T2, T2 extends T3, T3 extends T4, T4 extends T5, T5 extends T6, T6 extends T7, T7 extends T8, T8 extends T9, T9 extends T10, T10 extends T11, T11 extends T12, T12 extends T13, T13 extends T14, T14 extends T15, T15 extends T16, T16 extends T17, T17 extends T18, T18 extends T19, T19 extends T20, T20 extends T21, T21 extends T22, T22 extends T23, T23 extends T24, T24 extends T25, T25 extends T26, T26 extends T27, T27 extends T28, T28 extends T29, T29 extends T30, T30 extends T31, T31 extends T32, T32 extends T33, T33 extends T34, T34 extends T35, T35 extends T36, T36 extends T37, T37 extends T38, T38 extends T39, T39 extends T40, T40 extends T41, T41 extends T42, T42 extends T43, T43 extends T44, T44 extends T45, T45 extends T46, T46 extends T47, T47 extends T48, T48 extends T49, T49 extends T50, T50 extends T51, T51 extends T52, T52 extends T53, T53 extends T54, T54 extends T55, T55 extends T56, T56 extends T57, T57 extends T58, T58 extends T59, T59 extends string>(x: T0, y: T20) {
+>f : <T0 extends T1, T1 extends T2, T2 extends T3, T3 extends T4, T4 extends T5, T5 extends T6, T6 extends T7, T7 extends T8, T8 extends T9, T9 extends T10, T10 extends T11, T11 extends T12, T12 extends T13, T13 extends T14, T14 extends T15, T15 extends T16, T16 extends T17, T17 extends T18, T18 extends T19, T19 extends T20, T20 extends T21, T21 extends T22, T22 extends T23, T23 extends T24, T24 extends T25, T25 extends T26, T26 extends T27, T27 extends T28, T28 extends T29, T29 extends T30, T30 extends T31, T31 extends T32, T32 extends T33, T33 extends T34, T34 extends T35, T35 extends T36, T36 extends T37, T37 extends T38, T38 extends T39, T39 extends T40, T40 extends T41, T41 extends T42, T42 extends T43, T43 extends T44, T44 extends T45, T45 extends T46, T46 extends T47, T47 extends T48, T48 extends T49, T49 extends T50, T50 extends T51, T51 extends T52, T52 extends T53, T53 extends T54, T54 extends T55, T55 extends T56, T56 extends T57, T57 extends T58, T58 extends T59, T59 extends string>(x: T0, y: T20) => void
+>x : T0
+>y : T20
+
+    x.length;
+>x.length : any
+>x : T0
+>length : any
+
+    y.length;
+>y.length : any
+>y : T20
+>length : any
+}
+

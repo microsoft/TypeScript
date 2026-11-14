@@ -1,0 +1,94 @@
+//// [tests/cases/compiler/substitutionInDeferredConditionalOfConditional.ts] ////
+
+=== substitutionInDeferredConditionalOfConditional.ts ===
+// Children<S> always produces a Record, so it satisfies NeedsRecord. Its
+// true branch narrows S["states"] to Record<string, Schema> even when S is
+// a conditional type that is itself deferred.
+
+interface Schema {
+>Schema : Symbol(Schema, Decl(substitutionInDeferredConditionalOfConditional.ts, 0, 0))
+
+    states?: Record<string, Schema>;
+>states : Symbol(Schema.states, Decl(substitutionInDeferredConditionalOfConditional.ts, 4, 18))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Schema : Symbol(Schema, Decl(substitutionInDeferredConditionalOfConditional.ts, 0, 0))
+}
+type Resolve<S extends Record<string, Schema>, Segments extends readonly string[]> =
+>Resolve : Symbol(Resolve, Decl(substitutionInDeferredConditionalOfConditional.ts, 6, 1))
+>S : Symbol(S, Decl(substitutionInDeferredConditionalOfConditional.ts, 7, 13))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Schema : Symbol(Schema, Decl(substitutionInDeferredConditionalOfConditional.ts, 0, 0))
+>Segments : Symbol(Segments, Decl(substitutionInDeferredConditionalOfConditional.ts, 7, 46))
+
+    Segments extends [infer Head extends string, ...infer Rest extends string[]]
+>Segments : Symbol(Segments, Decl(substitutionInDeferredConditionalOfConditional.ts, 7, 46))
+>Head : Symbol(Head, Decl(substitutionInDeferredConditionalOfConditional.ts, 8, 27))
+>Rest : Symbol(Rest, Decl(substitutionInDeferredConditionalOfConditional.ts, 8, 57))
+
+        ? Head extends keyof S
+>Head : Symbol(Head, Decl(substitutionInDeferredConditionalOfConditional.ts, 8, 27))
+>S : Symbol(S, Decl(substitutionInDeferredConditionalOfConditional.ts, 7, 13))
+
+            ? Rest extends []
+>Rest : Symbol(Rest, Decl(substitutionInDeferredConditionalOfConditional.ts, 8, 57))
+
+                ? S[Head]
+>S : Symbol(S, Decl(substitutionInDeferredConditionalOfConditional.ts, 7, 13))
+>Head : Symbol(Head, Decl(substitutionInDeferredConditionalOfConditional.ts, 8, 27))
+
+                : S[Head]["states"] extends Record<string, Schema>
+>S : Symbol(S, Decl(substitutionInDeferredConditionalOfConditional.ts, 7, 13))
+>Head : Symbol(Head, Decl(substitutionInDeferredConditionalOfConditional.ts, 8, 27))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Schema : Symbol(Schema, Decl(substitutionInDeferredConditionalOfConditional.ts, 0, 0))
+
+                    ? Resolve<S[Head]["states"], Rest>
+>Resolve : Symbol(Resolve, Decl(substitutionInDeferredConditionalOfConditional.ts, 6, 1))
+>S : Symbol(S, Decl(substitutionInDeferredConditionalOfConditional.ts, 7, 13))
+>Head : Symbol(Head, Decl(substitutionInDeferredConditionalOfConditional.ts, 8, 27))
+>Rest : Symbol(Rest, Decl(substitutionInDeferredConditionalOfConditional.ts, 8, 57))
+
+                    : never
+            : never
+        : never;
+type Split<P extends string> = P extends `${infer Head}.${infer Tail}` ? [Head, Tail] : [P];
+>Split : Symbol(Split, Decl(substitutionInDeferredConditionalOfConditional.ts, 16, 16))
+>P : Symbol(P, Decl(substitutionInDeferredConditionalOfConditional.ts, 17, 11))
+>P : Symbol(P, Decl(substitutionInDeferredConditionalOfConditional.ts, 17, 11))
+>Head : Symbol(Head, Decl(substitutionInDeferredConditionalOfConditional.ts, 17, 49))
+>Tail : Symbol(Tail, Decl(substitutionInDeferredConditionalOfConditional.ts, 17, 63))
+>Head : Symbol(Head, Decl(substitutionInDeferredConditionalOfConditional.ts, 17, 49))
+>Tail : Symbol(Tail, Decl(substitutionInDeferredConditionalOfConditional.ts, 17, 63))
+>P : Symbol(P, Decl(substitutionInDeferredConditionalOfConditional.ts, 17, 11))
+
+type Children<S extends Schema> = S["states"] extends Record<string, Schema> ? S["states"] : Record<string, Schema>;
+>Children : Symbol(Children, Decl(substitutionInDeferredConditionalOfConditional.ts, 17, 92))
+>S : Symbol(S, Decl(substitutionInDeferredConditionalOfConditional.ts, 18, 14))
+>Schema : Symbol(Schema, Decl(substitutionInDeferredConditionalOfConditional.ts, 0, 0))
+>S : Symbol(S, Decl(substitutionInDeferredConditionalOfConditional.ts, 18, 14))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Schema : Symbol(Schema, Decl(substitutionInDeferredConditionalOfConditional.ts, 0, 0))
+>S : Symbol(S, Decl(substitutionInDeferredConditionalOfConditional.ts, 18, 14))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Schema : Symbol(Schema, Decl(substitutionInDeferredConditionalOfConditional.ts, 0, 0))
+
+type NeedsRecord<T extends Record<string, Schema>> = T;
+>NeedsRecord : Symbol(NeedsRecord, Decl(substitutionInDeferredConditionalOfConditional.ts, 18, 116))
+>T : Symbol(T, Decl(substitutionInDeferredConditionalOfConditional.ts, 19, 17))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Schema : Symbol(Schema, Decl(substitutionInDeferredConditionalOfConditional.ts, 0, 0))
+>T : Symbol(T, Decl(substitutionInDeferredConditionalOfConditional.ts, 19, 17))
+
+type ChildrenAt<S extends Record<string, Schema>, P extends string> = NeedsRecord<Children<Resolve<S, Split<P>>>>;
+>ChildrenAt : Symbol(ChildrenAt, Decl(substitutionInDeferredConditionalOfConditional.ts, 19, 55))
+>S : Symbol(S, Decl(substitutionInDeferredConditionalOfConditional.ts, 20, 16))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Schema : Symbol(Schema, Decl(substitutionInDeferredConditionalOfConditional.ts, 0, 0))
+>P : Symbol(P, Decl(substitutionInDeferredConditionalOfConditional.ts, 20, 49))
+>NeedsRecord : Symbol(NeedsRecord, Decl(substitutionInDeferredConditionalOfConditional.ts, 18, 116))
+>Children : Symbol(Children, Decl(substitutionInDeferredConditionalOfConditional.ts, 17, 92))
+>Resolve : Symbol(Resolve, Decl(substitutionInDeferredConditionalOfConditional.ts, 6, 1))
+>S : Symbol(S, Decl(substitutionInDeferredConditionalOfConditional.ts, 20, 16))
+>Split : Symbol(Split, Decl(substitutionInDeferredConditionalOfConditional.ts, 16, 16))
+>P : Symbol(P, Decl(substitutionInDeferredConditionalOfConditional.ts, 20, 49))
+
