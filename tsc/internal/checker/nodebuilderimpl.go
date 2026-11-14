@@ -1741,10 +1741,6 @@ func (b *NodeBuilderImpl) typeParameterToDeclaration(parameter *Type) *ast.Node 
 }
 
 func (b *NodeBuilderImpl) symbolToTypeParameterDeclarations(symbol *ast.Symbol) []*ast.Node {
-	return b.typeParametersToTypeParameterDeclarations(symbol)
-}
-
-func (b *NodeBuilderImpl) typeParametersToTypeParameterDeclarations(symbol *ast.Symbol) []*ast.Node {
 	if parameters := b.getTypeParametersOfSymbol(symbol); len(parameters) > 0 {
 		return core.Map(parameters, b.typeParameterToDeclaration)
 	}
