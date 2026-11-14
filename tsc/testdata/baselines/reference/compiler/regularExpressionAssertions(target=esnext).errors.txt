@@ -1,0 +1,126 @@
+regularExpressionAssertions.ts(26,8): error TS1507: There is nothing available for repetition.
+regularExpressionAssertions.ts(27,8): error TS1507: There is nothing available for repetition.
+regularExpressionAssertions.ts(28,8): error TS1507: There is nothing available for repetition.
+regularExpressionAssertions.ts(29,9): error TS1507: There is nothing available for repetition.
+regularExpressionAssertions.ts(30,9): error TS1507: There is nothing available for repetition.
+regularExpressionAssertions.ts(31,9): error TS1507: There is nothing available for repetition.
+regularExpressionAssertions.ts(32,8): error TS1507: There is nothing available for repetition.
+regularExpressionAssertions.ts(33,8): error TS1507: There is nothing available for repetition.
+regularExpressionAssertions.ts(34,8): error TS1507: There is nothing available for repetition.
+regularExpressionAssertions.ts(35,9): error TS1507: There is nothing available for repetition.
+regularExpressionAssertions.ts(36,9): error TS1507: There is nothing available for repetition.
+regularExpressionAssertions.ts(37,9): error TS1507: There is nothing available for repetition.
+regularExpressionAssertions.ts(39,7): error TS1535: This character cannot be escaped in a regular expression.
+regularExpressionAssertions.ts(40,7): error TS1535: This character cannot be escaped in a regular expression.
+regularExpressionAssertions.ts(41,7): error TS1535: This character cannot be escaped in a regular expression.
+regularExpressionAssertions.ts(42,7): error TS1535: This character cannot be escaped in a regular expression.
+regularExpressionAssertions.ts(43,7): error TS1535: This character cannot be escaped in a regular expression.
+regularExpressionAssertions.ts(44,7): error TS1535: This character cannot be escaped in a regular expression.
+regularExpressionAssertions.ts(45,8): error TS1535: This character cannot be escaped in a regular expression.
+regularExpressionAssertions.ts(46,10): error TS1535: This character cannot be escaped in a regular expression.
+regularExpressionAssertions.ts(46,13): error TS1535: This character cannot be escaped in a regular expression.
+regularExpressionAssertions.ts(46,16): error TS1535: This character cannot be escaped in a regular expression.
+regularExpressionAssertions.ts(48,6): error TS1535: This character cannot be escaped in a regular expression.
+regularExpressionAssertions.ts(49,6): error TS1535: This character cannot be escaped in a regular expression.
+
+
+==== regularExpressionAssertions.ts (24 errors) ====
+    const regexes: RegExp[] = [
+        /\A/u,
+        /\z/u,
+        /\Z/u,
+        /\A/v,
+        /\z/v,
+        /\Z/v,
+        /\Afoo\z/u,
+        /\Afoo\Z/v,
+        /\Afoo\Z/gimsuy,
+        /(?m:\Afoo\z)/v,
+        /\Afoo|bar\z/u,
+        /(?<=\A)foo(?=\z)/v,
+        /(?:\Afoo\Z)+/u,
+        /\Aa+\z/u,
+    
+        /\A\z\Z/,
+        /\A*\z+\Z{1,2}?/,
+        /[\A\z\Z]/,
+        /[\A-\Z]/,
+    
+        /\\A+\\z+\\Z+/u,
+        /[\\A\\z\\Z]/v,
+        /\u0041+\u007a+\u005a+/u,
+    
+        /\A*/u,
+           ~
+!!! error TS1507: There is nothing available for repetition.
+        /\z+/u,
+           ~
+!!! error TS1507: There is nothing available for repetition.
+        /\Z?/u,
+           ~
+!!! error TS1507: There is nothing available for repetition.
+        /a\A{1}/u,
+            ~~~
+!!! error TS1507: There is nothing available for repetition.
+        /a\z{1,}/u,
+            ~~~~
+!!! error TS1507: There is nothing available for repetition.
+        /a\Z{1,2}?/u,
+            ~~~~~~
+!!! error TS1507: There is nothing available for repetition.
+        /\A*?/v,
+           ~~
+!!! error TS1507: There is nothing available for repetition.
+        /\z+?/v,
+           ~~
+!!! error TS1507: There is nothing available for repetition.
+        /\Z??/v,
+           ~~
+!!! error TS1507: There is nothing available for repetition.
+        /a\A{1}/v,
+            ~~~
+!!! error TS1507: There is nothing available for repetition.
+        /a\z{1,}/v,
+            ~~~~
+!!! error TS1507: There is nothing available for repetition.
+        /a\Z{1,2}/v,
+            ~~~~~
+!!! error TS1507: There is nothing available for repetition.
+    
+        /[\A]/u,
+          ~~
+!!! error TS1535: This character cannot be escaped in a regular expression.
+        /[\z]/u,
+          ~~
+!!! error TS1535: This character cannot be escaped in a regular expression.
+        /[\Z]/u,
+          ~~
+!!! error TS1535: This character cannot be escaped in a regular expression.
+        /[\A]/v,
+          ~~
+!!! error TS1535: This character cannot be escaped in a regular expression.
+        /[\z]/v,
+          ~~
+!!! error TS1535: This character cannot be escaped in a regular expression.
+        /[\Z]/v,
+          ~~
+!!! error TS1535: This character cannot be escaped in a regular expression.
+        /[[\A]&&[a]]/v,
+           ~~
+!!! error TS1535: This character cannot be escaped in a regular expression.
+        /[\q{\A|\z|\Z}]/v,
+             ~~
+!!! error TS1535: This character cannot be escaped in a regular expression.
+                ~~
+!!! error TS1535: This character cannot be escaped in a regular expression.
+                   ~~
+!!! error TS1535: This character cannot be escaped in a regular expression.
+    
+        /\a/u,
+         ~~
+!!! error TS1535: This character cannot be escaped in a regular expression.
+        /\a/v,
+         ~~
+!!! error TS1535: This character cannot be escaped in a regular expression.
+    ];
+    

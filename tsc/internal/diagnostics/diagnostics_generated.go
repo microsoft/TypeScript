@@ -3954,6 +3954,8 @@ var File_0_has_a_registered_content_mapper_extension_but_does_not_match_any_cont
 
 var Content_mapper_0_must_specify_extensions_in_tsconfig_or_its_package_manifest = &Message{code: 18141, category: CategoryError, key: "Content_mapper_0_must_specify_extensions_in_tsconfig_or_its_package_manifest_18141", text: "Content mapper '{0}' must specify 'extensions' in tsconfig or its package manifest."}
 
+var Regular_expression_buffer_boundary_assertions_are_only_available_when_targeting_esnext = &Message{code: 18142, category: CategoryError, key: "Regular_expression_buffer_boundary_assertions_are_only_available_when_targeting_esnext_18142", text: "Regular expression buffer boundary assertions are only available when targeting 'esnext'."}
+
 var X_nodenext_if_module_is_nodenext_node16_if_module_is_node16_or_node18_otherwise_bundler = &Message{code: 69010, category: CategoryMessage, key: "nodenext_if_module_is_nodenext_node16_if_module_is_node16_or_node18_otherwise_bundler_69010", text: "`nodenext` if `module` is `nodenext`; `node16` if `module` is `node16` or `node18`; otherwise, `bundler`."}
 
 var File_is_a_CommonJS_module_it_may_be_converted_to_an_ES_module = &Message{code: 80001, category: CategorySuggestion, key: "File_is_a_CommonJS_module_it_may_be_converted_to_an_ES_module_80001", text: "File is a CommonJS module; it may be converted to an ES module."}
@@ -6471,6 +6473,7 @@ var allMessages = [...]**Message{
 	&This_relative_import_path_is_unsafe_to_rewrite_because_it_appears_not_to_match_the_content_mapper_s_include_but_does_after_resolution_with_rootDirs_and_moduleSuffixes,
 	&File_0_has_a_registered_content_mapper_extension_but_does_not_match_any_content_mapper_s_include,
 	&Content_mapper_0_must_specify_extensions_in_tsconfig_or_its_package_manifest,
+	&Regular_expression_buffer_boundary_assertions_are_only_available_when_targeting_esnext,
 	&X_nodenext_if_module_is_nodenext_node16_if_module_is_node16_or_node18_otherwise_bundler,
 	&File_is_a_CommonJS_module_it_may_be_converted_to_an_ES_module,
 	&This_constructor_function_may_be_converted_to_a_class_declaration,
