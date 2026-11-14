@@ -164,7 +164,7 @@ func (l *LanguageService) ResolveCodeLens(ctx context.Context, codeLens *lsproto
 
 func (l *LanguageService) newCodeLensForNode(fileUri lsproto.DocumentUri, file *ast.SourceFile, node *ast.Node, kind lsproto.CodeLensKind) *lsproto.CodeLens {
 	nodeForRange := node
-	nodeName := node.Name()
+	nodeName := ast.GetNonAssignedNameOfDeclaration(node)
 	if nodeName != nil {
 		nodeForRange = nodeName
 	}
@@ -225,6 +225,9 @@ func isValidReferenceLensNode(node *ast.Node, userPrefs lsutil.CodeLensUserPrefe
 
 	case ast.KindClassDeclaration, ast.KindInterfaceDeclaration, ast.KindTypeAliasDeclaration, ast.KindEnumDeclaration, ast.KindEnumMember:
 		return true
+
+	case ast.KindExportAssignment:
+		return ast.IsIdentifier(node.Expression())
 
 	case ast.KindMethodDeclaration, ast.KindMethodSignature, ast.KindConstructor,
 		ast.KindGetAccessor, ast.KindSetAccessor,
