@@ -802,14 +802,15 @@ func TestWildcardExportTargetContainment(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 
-			fs := vfstest.FromMap(map[string]string{
-				"/repo/src/main.ts":                          "",
-				"/repo/node_modules/pkg/package.json":       `{"name":"pkg","exports":{".":"./index.d.ts","./*":"` + test.target + `"}}`,
-				"/repo/node_modules/pkg/index.d.ts":         "export const index: number;",
-				"/repo/node_modules/pkg/lib/allowed.d.ts":   "export const allowed: number;",
-				"/repo/node_modules/pkg/node_modules/inner.d.ts": "export const inner: number;",
-				"/repo/private/secret.d.ts":                  "export const secret: number;",
-			}, tspath.CaseSensitive)
+			files := map[string]string{
+				"/repo/src/main.ts": "",
+			}
+			files["/repo/node_modules/pkg/package.json"] = `{"name":"pkg","exports":{".":"./index.d.ts","./*":"` + test.target + `"}}`
+			files["/repo/node_modules/pkg/index.d.ts"] = "export const index: number;"
+			files["/repo/node_modules/pkg/lib/allowed.d.ts"] = "export const allowed: number;"
+			files["/repo/node_modules/pkg/node_modules/inner.d.ts"] = "export const inner: number;"
+			files["/repo/private/secret.d.ts"] = "export const secret: number;"
+			fs := vfstest.FromMap(files, tspath.CaseSensitive)
 			host := &resolutionTestInputs{fs: fs, cwd: "/repo"}
 			options := &core.CompilerOptions{
 				ModuleResolution: core.ModuleResolutionKindBundler,
