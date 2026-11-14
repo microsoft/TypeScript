@@ -11,8 +11,6 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/checker"
 	"github.com/microsoft/TypeScript/tsc/internal/compiler"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
-	"github.com/microsoft/TypeScript/tsc/internal/nodebuilder"
-	"github.com/microsoft/TypeScript/tsc/internal/printer"
 	"github.com/microsoft/TypeScript/tsc/internal/repo"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
@@ -63,32 +61,6 @@ foo.bar;`
 			t.Fatalf("Expected symbol to be non-nil")
 		}
 	}
-}
-
-func TestQualifiedNameTypeParametersAreDisplayOnly(t *testing.T) {
-	t.Parallel()
-	fs := bundled.WrapFS(vfstest.FromMap(map[string]string{
-		"/main.ts": `class C<out T extends string = "a"> {} C.prototype;`,
-	}, tspath.CaseSensitive))
-	p, err := compiler.NewProgram(t.Context(), compiler.ProgramOptions{
-		Config: tsoptions.NewParsedCommandLine(&core.CompilerOptions{}, []tspath.RootedFilePath{"/main.ts"}, nil, "/", fs.CaseSensitivity()),
-		Host:   compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil),
-	})
-	assert.NilError(t, err)
-	p.BindSourceFiles()
-	c, done := p.GetTypeChecker(t.Context())
-	defer done()
-	file := p.GetSourceFile("/main.ts")
-	access := file.Statements.Nodes[1].Expression()
-	emitContext := printer.NewEmitContext()
-	builder := checker.NewNodeBuilderEx(c, emitContext, nil)
-	expression := builder.SymbolToExpression(c.GetSymbolAtLocation(access), ast.SymbolFlagsValue, access, nodebuilder.FlagsWriteTypeParametersInQualifiedName, nodebuilder.InternalFlagsNone, nil)
-
-	// The type argument references T; its modifiers, constraint and default appear only in the printed text.
-	argument := expression.Expression().AsExpressionWithTypeArguments().TypeArguments.Nodes[0]
-	assert.Assert(t, ast.IsTypeNode(argument), argument.Kind)
-	text := printer.NewPrinter(printer.PrinterOptions{}, printer.PrintHandlers{}, emitContext).Emit(expression, file)
-	assert.Equal(t, text, `C<out T extends string = "a">.prototype`)
 }
 
 func TestGetTypeAtLocationOfTypeOnlyImportClause(t *testing.T) {

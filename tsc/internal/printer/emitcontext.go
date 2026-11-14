@@ -554,10 +554,10 @@ func (e *emitNode) copyFrom(source *emitNode) {
 	}
 }
 
-// display holds notation that the printer substitutes when showing a
-// synthesized node to a user. The syntax tree itself keeps canonical children,
-// so declarations and API consumers never observe display-only syntax.
-// Entries are replaced rather than mutated because clones share them.
+// display records how the printer shows a synthesized node to a user. The
+// syntax tree keeps canonical children, so declarations and API consumers
+// never see display-only syntax. Clones share entries, so each setter stores
+// a new entry.
 type display struct {
 	node          *ast.Node
 	typeArguments *ast.TypeArgumentList

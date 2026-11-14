@@ -296,9 +296,9 @@ func (c *Checker) getNodeBuilder() (*NodeBuilder, func()) {
 	return c.typeToStringNodebuilder, releaseNodes
 }
 
-// getNodeBuilderForTypeFormat uses a builder local to the operation for
-// hover-only display formatting, so the display metadata it records is not
-// retained by the cached builder.
+// getNodeBuilderForTypeFormat gives hover-only display formatting a builder
+// local to the operation, so the cached builder does not retain its display
+// metadata.
 func (c *Checker) getNodeBuilderForTypeFormat(flags TypeFormatFlags) (*NodeBuilder, func()) {
 	if flags&(TypeFormatFlagsWriteTypeArgumentsOfSignature|TypeFormatFlagsUseInstantiationExpressions) == 0 {
 		return c.getNodeBuilder()

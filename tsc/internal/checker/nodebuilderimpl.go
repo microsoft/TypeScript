@@ -3774,8 +3774,8 @@ func (b *NodeBuilderImpl) newIdentifier(text string, symbol *ast.Symbol) *ast.No
 	return id
 }
 
-// cloneWithSymbols deep-clones node and gives each cloned identifier the
-// symbol of its original, which classified output uses to color names.
+// cloneWithSymbols deep-clones node and copies each identifier's symbol to its
+// clone. Classified output colors names by symbol.
 func (b *NodeBuilderImpl) cloneWithSymbols(node *ast.Node) *ast.Node {
 	clone := b.f.DeepCloneNode(node)
 	b.copyIdentifierSymbols(node, clone)
