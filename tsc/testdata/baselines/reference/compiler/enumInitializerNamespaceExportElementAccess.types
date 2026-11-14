@@ -1,0 +1,51 @@
+//// [tests/cases/compiler/enumInitializerNamespaceExportElementAccess.ts] ////
+
+=== enumInitializerNamespaceExportElementAccess.ts ===
+// Namespace export merged with enum must not be treated as an enum member via E["C"].
+// Previously panicked: Unhandled case in Node.MemberList: KindModuleBlock
+
+namespace E {
+>E : typeof E
+
+    export class C {}
+>C : C
+}
+enum E {
+>E : E
+
+    D = E["C"],
+>D : E.D
+>E["C"] : typeof E.C
+>E : typeof E
+>"C" : "C"
+}
+
+// Alias exports that resolve to enum members must still constant-evaluate (like E.C).
+enum F {
+>F : F
+
+    A = 1,
+>A : F.A
+>1 : 1
+}
+namespace E2 {
+>E2 : typeof E2
+
+    export import C = F.A;
+>C : F.A
+>F : F
+>A : F.A
+}
+enum E2 {
+>E2 : E2
+
+    D = E2["C"],
+>D : E2.D
+>E2["C"] : F
+>E2 : typeof E2
+>"C" : "C"
+
+    Next,
+>Next : E2.Next
+}
+
