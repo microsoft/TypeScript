@@ -272,12 +272,6 @@ func (b *NodeBuilderImpl) checkTypeExpandability(t *Type) {
 }
 
 func (b *NodeBuilderImpl) appendReferenceToType(root *ast.TypeNode, ref *ast.TypeNode) *ast.TypeNode {
-	if !ast.IsImportTypeNode(root) && (ast.IsExpressionWithTypeArguments(root) || ast.IsExpressionWithTypeArguments(ref)) {
-		// Type arguments precede the last name of root or ref, so the
-		// reference is an expression with type arguments rather than a
-		// qualified name.
-		return b.appendReferenceToExpression(b.referenceToExpression(root), b.referenceToExpression(ref))
-	}
 	if ast.IsImportTypeNode(root) {
 		// first shift type arguments
 
@@ -310,29 +304,37 @@ func (b *NodeBuilderImpl) appendReferenceToType(root *ast.TypeNode, ref *ast.Typ
 		return b.f.UpdateImportTypeNode(imprt, imprt.IsTypeOf, imprt.Argument, imprt.Attributes, qualifier, ref.TypeArgumentList())
 	} else if ast.IsTypeReferenceNode(root) {
 		typeRef := root.AsTypeReferenceNode()
-		if b.ctx.flags&nodebuilder.FlagsUseInstantiationExpressions != 0 && typeRef.TypeArguments != nil && len(typeRef.TypeArguments.Nodes) != 0 {
-			expr := b.createExpressionWithTypeArguments(b.createAccessExpression(typeRef.TypeName), typeRef.TypeArguments)
-			for _, id := range getAccessStack(ref) {
-				expr = b.f.NewPropertyAccessExpression(expr, nil, id, ast.NodeFlagsNone)
-			}
-			return expr
-		}
 		var typeName *ast.Node = typeRef.TypeName
 		for _, id := range getAccessStack(ref) {
 			typeName = b.f.NewQualifiedName(typeName, id)
 		}
-		return b.f.UpdateTypeReferenceNode(root.AsTypeReferenceNode(), typeName, ref.TypeArgumentList())
+		result := b.f.UpdateTypeReferenceNode(root.AsTypeReferenceNode(), typeName, ref.TypeArgumentList())
+		rootDisplay := b.e.DisplayNode(root)
+		refDisplay := b.e.DisplayNode(ref)
+		if rootDisplay != nil && ast.IsExpressionWithTypeArguments(rootDisplay) ||
+			refDisplay != nil && ast.IsExpressionWithTypeArguments(refDisplay) {
+			display := b.appendReferenceToExpression(b.referenceToExpression(root), b.referenceToExpression(ref))
+			b.e.SetDisplayNode(result, display)
+		} else if rootDisplay != nil ||
+			b.ctx.flags&nodebuilder.FlagsUseInstantiationExpressions != 0 && typeRef.TypeArguments != nil && len(typeRef.TypeArguments.Nodes) != 0 {
+			// The display omits the inner reference's type arguments, which
+			// the type reference itself still has.
+			displayRef := b.createAccessExpression(ref.AsTypeReferenceNode().TypeName)
+			display := b.appendReferenceToExpression(b.referenceToExpression(root), displayRef)
+			b.e.SetDisplayNode(result, display)
+		}
+		return result
 	}
-	expr := b.createAccessExpression(root)
-	for _, id := range getAccessStack(ref) {
-		expr = b.f.NewPropertyAccessExpression(expr, nil, id, ast.NodeFlagsNone)
-	}
-	return expr
+	debug.FailBadSyntaxKind(root)
+	return nil
 }
 
 // referenceToExpression returns a type reference, or a reference that is
 // already an expression, as an expression.
 func (b *NodeBuilderImpl) referenceToExpression(ref *ast.Node) *ast.Expression {
+	if display := b.e.DisplayNode(ref); display != nil {
+		return b.f.DeepCloneNode(display)
+	}
 	if ast.IsTypeReferenceNode(ref) {
 		return b.createExpressionWithTypeArguments(b.createAccessExpression(ref.AsTypeReferenceNode().TypeName), ref.TypeArgumentList())
 	}
@@ -761,17 +763,16 @@ func (b *NodeBuilderImpl) symbolToTypeNode(symbol *ast.Symbol, mask ast.SymbolFl
 	if ast.IsIndexedAccessTypeNode(entityName) {
 		return entityName // Indexed accesses can never be `typeof`
 	}
-	if ast.IsEntityName(entityName) {
-		if isTypeOf {
-			return b.f.NewTypeQueryNode(entityName, nil)
-		}
-		return b.f.NewTypeReferenceNode(entityName, typeArguments)
+	debug.Assert(ast.IsEntityName(entityName))
+	if isTypeOf {
+		return b.f.NewTypeQueryNode(entityName, typeArguments)
 	}
-	if isTypeOf && ast.IsExpressionWithTypeArguments(entityName) {
-		expr := entityName.AsExpressionWithTypeArguments()
-		return b.f.NewTypeQueryNode(b.f.DeepCloneNode(expr.Expression), expr.TypeArguments)
+	result := b.f.NewTypeReferenceNode(entityName, typeArguments)
+	if b.ctx.flags&nodebuilder.FlagsUseInstantiationExpressions != 0 && ast.IsQualifiedName(entityName) &&
+		(b.e.DisplayNode(entityName) != nil || typeArguments != nil && len(typeArguments.Nodes) != 0) {
+		b.e.SetDisplayNode(result, b.createExpressionWithTypeArguments(b.createAccessExpression(entityName), typeArguments))
 	}
-	return entityName
+	return result
 }
 
 func getTopmostIndexedAccessType(node *ast.IndexedAccessTypeNode) *ast.IndexedAccessTypeNode {
@@ -869,10 +870,16 @@ func (b *NodeBuilderImpl) createAccessFromSymbolChain(chain []*ast.Symbol, index
 
 	if index > stopper {
 		lhs := b.createAccessFromSymbolChain(chain, index-1, stopper, overrideTypeArguments)
-		if b.ctx.flags&nodebuilder.FlagsUseInstantiationExpressions == 0 || ast.IsEntityName(lhs) && (typeParameterNodes == nil || len(typeParameterNodes.Nodes) == 0) {
-			return b.f.NewQualifiedName(lhs, identifier)
+		name := b.f.NewQualifiedName(lhs, identifier)
+		if b.ctx.flags&nodebuilder.FlagsUseInstantiationExpressions != 0 &&
+			(b.e.DisplayNode(lhs) != nil || index < len(chain)-1 && typeParameterNodes != nil && len(typeParameterNodes.Nodes) != 0) {
+			expr := b.f.NewPropertyAccessExpression(b.createAccessExpression(lhs), nil, identifier, ast.NodeFlagsNone)
+			if index < len(chain)-1 {
+				expr = b.createExpressionWithTypeArguments(expr, typeParameterNodes)
+			}
+			b.e.SetDisplayNode(name, expr)
 		}
-		return b.createExpressionWithTypeArguments(b.f.NewPropertyAccessExpression(b.createAccessExpression(lhs), nil, identifier, ast.NodeFlagsNone), typeParameterNodes)
+		return name
 	}
 	return identifier
 }
@@ -1065,7 +1072,7 @@ func (b *NodeBuilderImpl) getTypeParametersOfClassOrInterface(symbol *ast.Symbol
 	return result
 }
 
-func (b *NodeBuilderImpl) lookupTypeParameterNodes(chain []*ast.Symbol, index int) *ast.TypeParameterList {
+func (b *NodeBuilderImpl) lookupTypeParameterNodes(chain []*ast.Symbol, index int) *ast.TypeList {
 	debug.Assert(chain != nil && 0 <= index && index < len(chain))
 	symbol := chain[index]
 	symbolId := ast.GetSymbolId(symbol)
@@ -1078,7 +1085,7 @@ func (b *NodeBuilderImpl) lookupTypeParameterNodes(chain []*ast.Symbol, index in
 		if typeArgumentNodes := b.lookupInstantiatedTypeArgumentNodes(chain, index); typeArgumentNodes != nil {
 			return typeArgumentNodes
 		} else {
-			typeParameterNodes := b.typeParametersToTypeParameterDeclarations(symbol)
+			typeParameterNodes := b.typeParametersToTypeArgumentNodes(symbol)
 			if len(typeParameterNodes) > 0 {
 				return b.f.NewNodeList(typeParameterNodes)
 			}
@@ -1742,20 +1749,27 @@ func (b *NodeBuilderImpl) symbolToTypeParameterDeclarations(symbol *ast.Symbol) 
 }
 
 func (b *NodeBuilderImpl) typeParametersToTypeParameterDeclarations(symbol *ast.Symbol) []*ast.Node {
+	if parameters := b.getTypeParametersOfSymbol(symbol); len(parameters) > 0 {
+		return core.Map(parameters, b.typeParameterToDeclaration)
+	}
+	return nil
+}
+
+func (b *NodeBuilderImpl) typeParametersToTypeArgumentNodes(symbol *ast.Symbol) []*ast.TypeNode {
+	return core.Map(b.getTypeParametersOfSymbol(symbol), func(parameter *Type) *ast.TypeNode {
+		declaration := b.typeParameterToDeclaration(parameter)
+		reference := b.f.NewTypeReferenceNode(declaration.Name(), nil)
+		b.e.SetDisplayNode(reference, declaration)
+		return reference
+	})
+}
+
+func (b *NodeBuilderImpl) getTypeParametersOfSymbol(symbol *ast.Symbol) []*Type {
 	targetSymbol := b.ch.getTargetSymbol(symbol)
 	if targetSymbol.Flags()&(ast.SymbolFlagsClass|ast.SymbolFlagsInterface|ast.SymbolFlagsAlias) != 0 {
-		var results []*ast.Node
-		params := b.ch.getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol)
-		for _, param := range params {
-			results = append(results, b.typeParameterToDeclaration(param))
-		}
-		return results
+		return b.ch.getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol)
 	} else if targetSymbol.Flags()&ast.SymbolFlagsFunction != 0 {
-		var results []*ast.Node
-		for _, param := range b.ch.getTypeParametersFromDeclaration(symbol.ValueDeclaration()) {
-			results = append(results, b.typeParameterToDeclaration(param))
-		}
-		return results
+		return b.ch.getTypeParametersFromDeclaration(symbol.ValueDeclaration())
 	}
 	return nil
 }
@@ -1911,6 +1925,7 @@ type SignatureToSignatureDeclarationOptions struct {
 
 func (b *NodeBuilderImpl) signatureToSignatureDeclarationHelper(signature *Signature, kind ast.Kind, options *SignatureToSignatureDeclarationOptions) *ast.Node {
 	var typeParameters []*ast.Node
+	var typeArguments []*ast.Node
 
 	expandedParams, cleanup := b.enterSignatureScope(signature)
 	b.ctx.approximateLength += 3
@@ -1918,12 +1933,19 @@ func (b *NodeBuilderImpl) signatureToSignatureDeclarationHelper(signature *Signa
 
 	if b.ctx.flags&nodebuilder.FlagsWriteTypeArgumentsOfSignature != 0 && signature.target != nil && signature.mapper != nil && len(signature.target.TypeParameters()) != 0 {
 		for _, parameter := range signature.target.TypeParameters() {
-			typeParameters = append(typeParameters, b.typeToTypeNode(b.ch.instantiateType(parameter, signature.mapper)))
+			typeArguments = append(typeArguments, b.typeToTypeNode(b.ch.instantiateType(parameter, signature.mapper)))
 		}
-	} else {
-		for _, parameter := range signature.TypeParameters() {
-			typeParameters = append(typeParameters, b.typeParameterToDeclaration(parameter))
-		}
+	}
+	displayLength, displayTruncating := b.ctx.approximateLength, b.ctx.truncating
+	canIncreaseExpansionDepth, expansionTruncated := b.ctx.canIncreaseExpansionDepth, b.ctx.expansionTruncated
+	for _, parameter := range signature.TypeParameters() {
+		typeParameters = append(typeParameters, b.typeParameterToDeclaration(parameter))
+	}
+	if len(typeArguments) != 0 {
+		// The display arguments are printed instead of these declarations,
+		// so the declarations do not count toward the truncation length.
+		b.ctx.approximateLength, b.ctx.truncating = displayLength, displayTruncating
+		b.ctx.canIncreaseExpansionDepth, b.ctx.expansionTruncated = canIncreaseExpansionDepth, expansionTruncated
 	}
 
 	restoreFlags := b.saveRestoreFlags()
@@ -2020,10 +2042,10 @@ func (b *NodeBuilderImpl) signatureToSignatureDeclarationHelper(signature *Signa
 		panic("Unhandled kind in signatureToSignatureDeclarationHelper")
 	}
 
-	// !!! TODO: Smuggle type arguments of signatures out for quickinfo
-	// if typeArguments != nil {
-	// 	node.TypeArguments = b.f.NewNodeList(typeArguments)
-	// }
+	// Instantiated arguments are display metadata, not type parameter declarations.
+	if len(typeArguments) != 0 {
+		b.e.SetDisplayTypeArguments(node, b.f.NewNodeList(typeArguments))
+	}
 
 	cleanup()
 	return node
@@ -3752,11 +3774,26 @@ func (b *NodeBuilderImpl) newIdentifier(text string, symbol *ast.Symbol) *ast.No
 	return id
 }
 
+// cloneIdentifier copies an identifier along with its symbol, which
+// classified output uses to color the name.
+func (b *NodeBuilderImpl) cloneIdentifier(node *ast.IdentifierNode) *ast.IdentifierNode {
+	clone := b.f.DeepCloneNode(node)
+	if symbol, ok := b.idToSymbol[node]; ok {
+		b.idToSymbol[clone] = symbol
+	}
+	return clone
+}
+
 func (b *NodeBuilderImpl) createAccessExpression(node *ast.Node) *ast.Expression {
+	if display := b.e.DisplayNode(node); display != nil {
+		return b.f.DeepCloneNode(display)
+	}
 	switch {
 	case ast.IsQualifiedName(node):
-		return b.f.NewPropertyAccessExpression(b.createAccessExpression(node.AsQualifiedName().Left), nil /*questionDotToken*/, b.f.DeepCloneNode(node.AsQualifiedName().Right), ast.NodeFlagsNone)
-	case ast.IsIdentifier(node), ast.IsPropertyAccessExpression(node), ast.IsExpressionWithTypeArguments(node):
+		return b.f.NewPropertyAccessExpression(b.createAccessExpression(node.AsQualifiedName().Left), nil /*questionDotToken*/, b.cloneIdentifier(node.AsQualifiedName().Right), ast.NodeFlagsNone)
+	case ast.IsIdentifier(node):
+		return b.cloneIdentifier(node)
+	case ast.IsPropertyAccessExpression(node), ast.IsExpressionWithTypeArguments(node):
 		return b.f.DeepCloneNode(node)
 	default:
 		panic("unexpected access node kind: " + node.Kind.String())
@@ -3770,7 +3807,7 @@ func (b *NodeBuilderImpl) createExpressionWithTypeArguments(expr *ast.Expression
 	return b.f.NewExpressionWithTypeArguments(expr, typeArguments)
 }
 
-func (b *NodeBuilderImpl) lookupInstantiatedTypeArgumentNodes(chain []*ast.Symbol, index int) *ast.TypeParameterList {
+func (b *NodeBuilderImpl) lookupInstantiatedTypeArgumentNodes(chain []*ast.Symbol, index int) *ast.TypeList {
 	if b.shouldWriteTypeParametersInQualifiedName(chain, index) {
 		symbol := chain[index]
 		nextSymbol := chain[index+1]
@@ -3797,7 +3834,7 @@ func (b *NodeBuilderImpl) lookupInstantiatedTypeArgumentNodes(chain []*ast.Symbo
 	return nil
 }
 
-func (b *NodeBuilderImpl) lookupExpressionChainTypeArgumentNodes(chain []*ast.Symbol, index int) *ast.TypeParameterList {
+func (b *NodeBuilderImpl) lookupExpressionChainTypeArgumentNodes(chain []*ast.Symbol, index int) *ast.TypeList {
 	if b.shouldWriteTypeParametersInQualifiedName(chain, index) {
 		symbol := chain[index]
 		symbolId := ast.GetSymbolId(symbol)
@@ -3809,7 +3846,7 @@ func (b *NodeBuilderImpl) lookupExpressionChainTypeArgumentNodes(chain []*ast.Sy
 		if typeArgumentNodes := b.lookupInstantiatedTypeArgumentNodes(chain, index); typeArgumentNodes != nil {
 			return typeArgumentNodes
 		}
-		typeParameterNodes := b.typeParametersToTypeParameterDeclarations(symbol)
+		typeParameterNodes := b.typeParametersToTypeArgumentNodes(symbol)
 		if len(typeParameterNodes) > 0 {
 			return b.f.NewNodeList(typeParameterNodes)
 		}

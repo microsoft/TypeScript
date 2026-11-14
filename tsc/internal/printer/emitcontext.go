@@ -534,6 +534,7 @@ type emitNode struct {
 	leadingComments           []SynthesizedComment
 	trailingComments          []SynthesizedComment
 	typeNode                  *ast.TypeNode
+	display                   *display
 	snippetElement            *SnippetElement
 }
 
@@ -546,10 +547,47 @@ func (e *emitNode) copyFrom(source *emitNode) {
 	e.tokenSourceMapRanges = maps.Clone(source.tokenSourceMapRanges)
 	e.helpers = slices.Clone(source.helpers)
 	e.externalHelpersModuleName = source.externalHelpersModuleName
+	e.display = source.display
 	if source.snippetElement != nil {
 		snippetElement := *source.snippetElement
 		e.snippetElement = &snippetElement
 	}
+}
+
+// display holds notation that the printer substitutes when showing a
+// synthesized node to a user. The syntax tree itself keeps canonical children,
+// so declarations and API consumers never observe display-only syntax.
+// Entries are replaced rather than mutated because clones share them.
+type display struct {
+	node          *ast.Node
+	typeArguments *ast.TypeArgumentList
+}
+
+// DisplayNode returns the node printed in place of node, such as the
+// instantiation expression f<string>.C for a type reference or a constrained
+// type parameter for a type argument.
+func (c *EmitContext) DisplayNode(node *ast.Node) *ast.Node {
+	if emitNode := c.emitNodes.TryGet(node); emitNode != nil && emitNode.display != nil {
+		return emitNode.display.node
+	}
+	return nil
+}
+
+func (c *EmitContext) SetDisplayNode(node *ast.Node, displayNode *ast.Node) {
+	c.emitNodes.Get(node).display = &display{node: displayNode}
+}
+
+// DisplayTypeArguments returns the instantiated type arguments printed in
+// place of a signature's type parameters.
+func (c *EmitContext) DisplayTypeArguments(node *ast.Node) *ast.TypeArgumentList {
+	if emitNode := c.emitNodes.TryGet(node); emitNode != nil && emitNode.display != nil {
+		return emitNode.display.typeArguments
+	}
+	return nil
+}
+
+func (c *EmitContext) SetDisplayTypeArguments(node *ast.Node, typeArguments *ast.TypeArgumentList) {
+	c.emitNodes.Get(node).display = &display{typeArguments: typeArguments}
 }
 
 func (c *EmitContext) EmitFlags(node *ast.Node) EmitFlags {
