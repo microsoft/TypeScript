@@ -48,7 +48,7 @@ import (
 //     dispatch (compareDir, handleFileEvent) executes on this goroutine.
 //     compareDir and handleFileEvent acquire b.mu for watch/fd lookups.
 //   - subscribe/closeWatch run on the caller's goroutine under
-//     watcherBase.mu. watchPath acquires b.mu to register fd mappings.
+//     watcherBase.mu. subscribe acquires b.mu to register fd mappings.
 //
 // Callback delivery:
 //   dirWatch.notify() posts to the shared process-wide debouncer. After a
@@ -98,7 +98,18 @@ type dirEntry struct {
 	path      string
 	watchPath string
 	isDir     bool
-	state     any // stores the open fd
+	state     any // owns the current open fd, or nil after it is closed
+	identity  kqueueIdentity
+}
+
+type kqueueIdentity struct {
+	device uint64
+	inode  uint64
+}
+
+// The native device number type differs across kqueue platforms.
+func newKqueueIdentity[D ~int32 | ~uint32 | ~int64 | ~uint64](device D, inode uint64) kqueueIdentity {
+	return kqueueIdentity{device: uint64(device), inode: inode}
 }
 
 // kqueueSubscription.
@@ -106,7 +117,6 @@ type kqueueSubscription struct {
 	dirWatch *dirWatch
 	path     string
 	entries  map[string]*dirEntry
-	fd       int
 }
 
 // kqueueBackend. It embeds treeReaderBackend (via Go
@@ -119,11 +129,12 @@ type kqueueBackend struct {
 	// pipeFDs[0] is read in the Start goroutine only. pipeFDs[1] is written
 	// by Shutdown (any goroutine) to wake the loop, so it lives in
 	// pipeWriteFD as an atomic with a sentinel of -1 once closed.
-	pipeFDs     [2]int
-	pipeWriteFD atomic.Int32
-	subsByPath  map[string][]*kqueueSubscription // multimap<path, sub>
-	fdToEntry   map[int]*dirEntry
-	endedSignal chan struct{}
+	pipeFDs        [2]int
+	pipeWriteFD    atomic.Int32
+	subsByPath     map[string][]*kqueueSubscription // multimap<path, sub>
+	fdToEntry      map[int]*dirEntry
+	entriesByWatch map[*dirWatch]map[string]*dirEntry
+	endedSignal    chan struct{}
 
 	// Persistent buffer reused across event batches. Only accessed
 	// from the start goroutine, so no synchronization needed.
@@ -140,6 +151,7 @@ func newKqueueBackend() *kqueueBackend {
 		pipeFDs:         [2]int{-1, -1},
 		subsByPath:      map[string][]*kqueueSubscription{},
 		fdToEntry:       map[int]*dirEntry{},
+		entriesByWatch:  map[*dirWatch]map[string]*dirEntry{},
 		endedSignal:     make(chan struct{}),
 		watchersTouched: make(map[*dirWatch]struct{}),
 	}
@@ -257,21 +269,12 @@ func (b *kqueueBackend) closeFDs() {
 
 func (b *kqueueBackend) closeSubscriptions() {
 	b.mu.Lock()
-	seenFDs := map[int]struct{}{}
-	for _, list := range b.subsByPath {
-		for _, sub := range list {
-			if sub.fd < 0 {
-				continue
-			}
-			if _, ok := seenFDs[sub.fd]; ok {
-				continue
-			}
-			seenFDs[sub.fd] = struct{}{}
-			_ = unix.Close(sub.fd)
-		}
+	for _, entries := range b.entriesByWatch {
+		b.cleanupEntriesLocked(entries)
 	}
 	b.subsByPath = map[string][]*kqueueSubscription{}
 	b.fdToEntry = map[int]*dirEntry{}
+	b.entriesByWatch = map[*dirWatch]map[string]*dirEntry{}
 	b.mu.Unlock()
 }
 
@@ -287,53 +290,26 @@ func (b *kqueueBackend) shutdown() {
 func (b *kqueueBackend) handleFileEvent(fflags uint32, entry *dirEntry, touched map[*dirWatch]struct{}) {
 	b.mu.Lock()
 	defer b.mu.Unlock()
+	if entry.state == nil {
+		return
+	}
 	subs := b.findSubscriptionsLocked(entry.path)
 
 	if fflags&(unix.NOTE_DELETE|unix.NOTE_RENAME|unix.NOTE_REVOKE) != 0 {
 		// Close the stale fd; the watched inode is gone.
-		if oldFD, ok := entry.state.(int); ok {
-			unix.Close(oldFD)
-			delete(b.fdToEntry, oldFD)
-			entry.state = nil
-		}
+		b.closeEntryLocked(entry)
 
 		recreated := false
 		if fflags&unix.NOTE_DELETE != 0 && fflags&(unix.NOTE_RENAME|unix.NOTE_REVOKE) == 0 && !entry.isDir {
 			recreated = b.tryRewatchLocked(entry)
 		}
-
+		if !recreated {
+			b.removePathLocked(entry, touched)
+			return
+		}
 		for _, sub := range subs {
 			touched[sub.dirWatch] = struct{}{}
-			if recreated {
-				sub.dirWatch.events.update(sub.path)
-			} else {
-				sub.dirWatch.events.remove(sub.path)
-				// If we lost a directory, walk the entries map and
-				// close every fd we had open for descendants. Some
-				// kernels (OpenBSD in particular) deliver only the
-				// parent's NOTE_DELETE/NOTE_RENAME and never fire
-				// NOTE_DELETE on the children; without this cleanup,
-				// modifying a file inside the moved tree later
-				// surfaces an event against the descendant's stale
-				// (pre-rename) path. We also emit a delete for each
-				// descendant we close, so callers don't miss those
-				// removals if the kernel didn't fire per-child events.
-				// (When the kernel does fire them, our follow-up
-				// handleFileEvent finds the fd already gone and is a
-				// no-op, so events.create's coalescing handles dups.)
-				if entry.isDir {
-					b.closeDescendantFDsLocked(sub.dirWatch, sub.entries, sub.path)
-				}
-				removeEntryAndDescendants(sub.entries, sub.path)
-				// Root-of-watch deletion: no more events can fire
-				// for this dirWatch. Tell the caller.
-				if sub.path == sub.dirWatch.dir {
-					sub.dirWatch.events.setError(fmt.Errorf("%w: watched directory removed", ErrWatchTerminated))
-				}
-			}
-		}
-		if !recreated {
-			delete(b.subsByPath, entry.path)
+			sub.dirWatch.events.update(sub.path)
 		}
 		return
 	}
@@ -346,26 +322,42 @@ func (b *kqueueBackend) handleFileEvent(fflags uint32, entry *dirEntry, touched 
 	}
 }
 
-// closeDescendantFDsLocked closes every fd attached to an entry whose
-// path lives strictly under root, removing the kevent registration and
-// the corresponding b.subsByPath / b.fdToEntry bookkeeping, and emits a
-// delete event for each. Used when a directory's parent is lost
-// (deleted, renamed away) and the kernel didn't propagate the loss to
-// children. eventList coalesces against any per-child NOTE_DELETE that
-// arrives later.
-func (b *kqueueBackend) closeDescendantFDsLocked(w *dirWatch, entries map[string]*dirEntry, root string) {
+// An ancestor's removal may be the only event the kernel reports. Clean
+// the affected trees, including entries without descriptors, but preserve
+// watches already attached to a replacement inode at the same path.
+func (b *kqueueBackend) removePathLocked(removed *dirEntry, touched map[*dirWatch]struct{}) {
+	root := removed.path
 	prefix := root + string(filepath.Separator)
-	for path, e := range entries {
-		if !strings.HasPrefix(path, prefix) {
+	for w, entries := range b.entriesByWatch {
+		affected := false
+		if entry := entries[root]; entry != nil {
+			affected = entry == removed || entry.state == nil || entry.identity == removed.identity
+		} else if strings.HasPrefix(w.dir, prefix) {
+			// A nested watch has no entry for the removed ancestor.
+			// Its root fd still identifies whether it follows the
+			// current path or belongs to the tree that moved away.
+			entry := entries[w.dir]
+			var st unix.Stat_t
+			affected = unix.Stat(entry.watchPath, &st) != nil ||
+				entry.identity != newKqueueIdentity(st.Dev, st.Ino)
+		}
+		if !affected {
 			continue
 		}
-		if fd, ok := e.state.(int); ok {
-			unix.Close(fd)
-			delete(b.fdToEntry, fd)
-			e.state = nil
+		for path, entry := range entries {
+			if path != root && !strings.HasPrefix(path, prefix) {
+				continue
+			}
+			b.closeEntryLocked(entry)
+			b.removeSubsForEntryLocked(path, entry)
+			delete(entries, path)
+			w.events.remove(path)
+			touched[w] = struct{}{}
+			if path == w.dir {
+				w.events.setError(fmt.Errorf("%w: watched directory removed", ErrWatchTerminated))
+				delete(b.entriesByWatch, w)
+			}
 		}
-		delete(b.subsByPath, path)
-		w.events.remove(path)
 	}
 }
 
@@ -385,24 +377,31 @@ func (b *kqueueBackend) tryRewatchLocked(entry *dirEntry) bool {
 		return false
 	}
 
+	return b.openEntryLocked(entry) == nil
+}
+
+func (b *kqueueBackend) openEntryLocked(entry *dirEntry) error {
 	fd, err := openForEvents(entry.watchPath)
 	if err != nil {
-		return false
+		return err
 	}
-
+	var st unix.Stat_t
+	if err := unix.Fstat(fd, &st); err != nil {
+		unix.Close(fd)
+		return err
+	}
 	var ev unix.Kevent_t
 	unix.SetKevent(&ev, fd, unix.EVFILT_VNODE, unix.EV_ADD|unix.EV_CLEAR|unix.EV_ENABLE)
 	ev.Fflags = unix.NOTE_DELETE | unix.NOTE_WRITE | unix.NOTE_EXTEND |
 		unix.NOTE_ATTRIB | unix.NOTE_RENAME | unix.NOTE_REVOKE
 	if _, err := unix.Kevent(b.kq, []unix.Kevent_t{ev}, nil, nil); err != nil {
 		unix.Close(fd)
-		return false
+		return err
 	}
-
 	entry.state = fd
-
+	entry.identity = newKqueueIdentity(st.Dev, st.Ino)
 	b.fdToEntry[fd] = entry
-	return true
+	return nil
 }
 
 func (b *kqueueBackend) closeEntryLocked(entry *dirEntry) {
@@ -413,11 +412,11 @@ func (b *kqueueBackend) closeEntryLocked(entry *dirEntry) {
 	}
 }
 
-func (b *kqueueBackend) removeSubsForEntriesLocked(path string, entriesPtr *map[string]*dirEntry) {
+func (b *kqueueBackend) removeSubsForEntryLocked(path string, entry *dirEntry) {
 	list := b.subsByPath[path]
 	kept := list[:0]
 	for _, sub := range list {
-		if &sub.entries == entriesPtr {
+		if sub.entries[path] == entry {
 			continue
 		}
 		kept = append(kept, sub)
@@ -426,22 +425,6 @@ func (b *kqueueBackend) removeSubsForEntriesLocked(path string, entriesPtr *map[
 		delete(b.subsByPath, path)
 	} else {
 		b.subsByPath[path] = kept
-	}
-}
-
-func (b *kqueueBackend) removeEntryAndDescendantsLocked(entriesPtr *map[string]*dirEntry, path string, includeRoot bool) {
-	entries := *entriesPtr
-	for descendant, e := range entries {
-		if descendant == path {
-			if !includeRoot {
-				continue
-			}
-		} else if !(len(descendant) > len(path) && descendant[len(path)] == filepath.Separator && descendant[:len(path)] == path) {
-			continue
-		}
-		b.closeEntryLocked(e)
-		b.removeSubsForEntriesLocked(descendant, entriesPtr)
-		delete(entries, descendant)
 	}
 }
 
@@ -476,8 +459,7 @@ func (b *kqueueBackend) subscribe(w *dirWatch) error {
 	defer b.mu.Unlock()
 
 	for path, entry := range entries {
-		fd, err := openForEvents(entry.watchPath)
-		if err != nil {
+		if err := b.openEntryLocked(entry); err != nil {
 			if path == w.dir {
 				b.cleanupEntriesLocked(entries)
 				return &dirWatchError{
@@ -488,29 +470,11 @@ func (b *kqueueBackend) subscribe(w *dirWatch) error {
 			delete(entries, path)
 			continue
 		}
-		var ev unix.Kevent_t
-		unix.SetKevent(&ev, fd, unix.EVFILT_VNODE, unix.EV_ADD|unix.EV_CLEAR|unix.EV_ENABLE)
-		ev.Fflags = unix.NOTE_DELETE | unix.NOTE_WRITE | unix.NOTE_EXTEND |
-			unix.NOTE_ATTRIB | unix.NOTE_RENAME | unix.NOTE_REVOKE
-		if _, err := unix.Kevent(b.kq, []unix.Kevent_t{ev}, nil, nil); err != nil {
-			unix.Close(fd)
-			if path == w.dir {
-				b.cleanupEntriesLocked(entries)
-				return &dirWatchError{
-					err:      fmt.Errorf("error watching %s: %w", w.dir, err),
-					dirWatch: w,
-				}
-			}
-			delete(entries, path)
-			continue
-		}
-		entry.state = fd
-		b.fdToEntry[fd] = entry
 	}
 
-	for path, entry := range entries {
-		fd := entry.state.(int)
-		sub := &kqueueSubscription{dirWatch: w, path: path, entries: entries, fd: fd}
+	b.entriesByWatch[w] = entries
+	for path := range entries {
+		sub := &kqueueSubscription{dirWatch: w, path: path, entries: entries}
 		b.subsByPath[path] = append(b.subsByPath[path], sub)
 	}
 	return nil
@@ -520,41 +484,22 @@ func (b *kqueueBackend) subscribe(w *dirWatch) error {
 // Called on subscribe failure to avoid fd leaks. Must be called under b.mu.
 func (b *kqueueBackend) cleanupEntriesLocked(entries map[string]*dirEntry) {
 	for _, e := range entries {
-		if fd, ok := e.state.(int); ok {
-			unix.Close(fd)
-			delete(b.fdToEntry, fd)
-			e.state = nil
-		}
+		b.closeEntryLocked(e)
 	}
 }
 
-// watchPath corresponds to `kqueueBackend::watchDir`.
-func (b *kqueueBackend) watchPath(w *dirWatch, path string, entries map[string]*dirEntry) bool {
+// watchPathLocked registers an entry while b.mu is held.
+func (b *kqueueBackend) watchPathLocked(w *dirWatch, path string, entries map[string]*dirEntry) bool {
 	entry := entries[path]
 	if entry == nil {
 		return false
 	}
-	b.mu.Lock()
-	defer b.mu.Unlock()
-
 	sub := &kqueueSubscription{dirWatch: w, path: path, entries: entries}
 	if entry.state == nil {
-		fd, err := openForEvents(entry.watchPath)
-		if err != nil {
+		if err := b.openEntryLocked(entry); err != nil {
 			return false
 		}
-		var ev unix.Kevent_t
-		unix.SetKevent(&ev, fd, unix.EVFILT_VNODE, unix.EV_ADD|unix.EV_CLEAR|unix.EV_ENABLE)
-		ev.Fflags = unix.NOTE_DELETE | unix.NOTE_WRITE | unix.NOTE_EXTEND |
-			unix.NOTE_ATTRIB | unix.NOTE_RENAME | unix.NOTE_REVOKE
-		if _, err := unix.Kevent(b.kq, []unix.Kevent_t{ev}, nil, nil); err != nil {
-			unix.Close(fd)
-			return false
-		}
-		entry.state = fd
-		b.fdToEntry[fd] = entry
 	}
-	sub.fd = entry.state.(int)
 	b.subsByPath[path] = append(b.subsByPath[path], sub)
 	return true
 }
@@ -564,8 +509,8 @@ func (b *kqueueBackend) watchPath(w *dirWatch, path string, entries map[string]*
 // create/remove events.
 func (b *kqueueBackend) compareDir(_ int, path string, touched map[*dirWatch]struct{}) bool {
 	b.mu.Lock()
+	defer b.mu.Unlock()
 	subs := b.findSubscriptionsLocked(path)
-	b.mu.Unlock()
 
 	// For non-recursive subscriptions, only compareDir on the root dir.
 	// NOTE_WRITE on a child dir means something changed inside it, but
@@ -633,17 +578,18 @@ func (b *kqueueBackend) compareDir(_ int, path string, touched map[*dirWatch]str
 					// (now unlinked) inode.
 					if fd, ok := existing.state.(int); ok {
 						var fdSt, pathSt unix.Stat_t
-						if unix.Fstat(fd, &fdSt) == nil && unix.Lstat(fullWatchPath, &pathSt) == nil {
+						// Event descriptors follow symlinks. Use the link's
+						// own identity only when its target cannot be resolved.
+						pathErr := unix.Stat(fullWatchPath, &pathSt)
+						if pathErr != nil {
+							pathErr = unix.Lstat(fullWatchPath, &pathSt)
+						}
+						if unix.Fstat(fd, &fdSt) == nil && pathErr == nil {
 							if fdSt.Dev != pathSt.Dev || fdSt.Ino != pathSt.Ino {
 								// Inode changed: path was replaced.
-								b.mu.Lock()
-								b.closeEntryLocked(existing)
-								b.removeSubsForEntriesLocked(fullPath, &sub.entries)
-								if existing.isDir {
-									b.removeEntryAndDescendantsLocked(&sub.entries, fullPath, false)
-								}
+								b.removePathLocked(existing, touched)
+								entries[fullPath] = existing
 								existing.isDir = ent.IsDir()
-								b.mu.Unlock()
 							}
 						}
 					}
@@ -653,10 +599,10 @@ func (b *kqueueBackend) compareDir(_ int, path string, touched map[*dirWatch]str
 				}
 				// Entry exists but fd is stale: the file was replaced.
 				// Re-watch it and emit an update.
-				if !b.watchPath(sub.dirWatch, fullPath, entries) {
+				if !b.watchPathLocked(sub.dirWatch, fullPath, entries) {
 					continue
 				}
-				sub.dirWatch.events.update(fullPath)
+				sub.dirWatch.events.create(fullPath)
 				touched[sub.dirWatch] = struct{}{}
 				if ent.IsDir() && sub.dirWatch.recursive {
 					_ = walkDir(fullWatchPath, true, func(p string, pIsDir bool) error {
@@ -667,7 +613,7 @@ func (b *kqueueBackend) compareDir(_ int, path string, touched map[*dirWatch]str
 						e := &dirEntry{path: displayPath, watchPath: p, isDir: pIsDir}
 						entries[displayPath] = e
 						sub.dirWatch.events.create(displayPath)
-						b.watchPath(sub.dirWatch, displayPath, entries)
+						b.watchPathLocked(sub.dirWatch, displayPath, entries)
 						return nil
 					})
 				}
@@ -675,7 +621,7 @@ func (b *kqueueBackend) compareDir(_ int, path string, touched map[*dirWatch]str
 			}
 			e := &dirEntry{path: fullPath, watchPath: fullWatchPath, isDir: ent.IsDir()}
 			entries[fullPath] = e
-			if !b.watchPath(sub.dirWatch, fullPath, entries) {
+			if !b.watchPathLocked(sub.dirWatch, fullPath, entries) {
 				delete(entries, fullPath)
 				continue
 			}
@@ -694,7 +640,7 @@ func (b *kqueueBackend) compareDir(_ int, path string, touched map[*dirWatch]str
 					entry := &dirEntry{path: displayPath, watchPath: p, isDir: pIsDir}
 					entries[displayPath] = entry
 					sub.dirWatch.events.create(displayPath)
-					b.watchPath(sub.dirWatch, displayPath, entries)
+					b.watchPathLocked(sub.dirWatch, displayPath, entries)
 					return nil
 				})
 			}
@@ -717,21 +663,7 @@ func (b *kqueueBackend) compareDir(_ int, path string, touched map[*dirWatch]str
 			toRemove = append(toRemove, p)
 		}
 		for _, p := range toRemove {
-			sub.dirWatch.events.remove(p)
-			touched[sub.dirWatch] = struct{}{}
-			b.mu.Lock()
-			for descendant, e := range entries {
-				if descendant != p && !(len(descendant) > len(p) && descendant[len(p)] == filepath.Separator && descendant[:len(p)] == p) {
-					continue
-				}
-				if fd, ok := e.state.(int); ok {
-					unix.Close(fd)
-					delete(b.fdToEntry, fd)
-				}
-				delete(b.subsByPath, descendant)
-			}
-			b.mu.Unlock()
-			removeEntryAndDescendants(entries, p)
+			b.removePathLocked(entries[p], touched)
 		}
 	}
 	return true
@@ -746,39 +678,10 @@ func readEntries(path string) ([]os.DirEntry, error) {
 func (b *kqueueBackend) closeWatch(w *dirWatch) error {
 	b.mu.Lock()
 	defer b.mu.Unlock()
-	for path, list := range b.subsByPath {
-		kept := list[:0]
-		removedAny := false
-		for _, s := range list {
-			if s.dirWatch == w {
-				removedAny = true
-				continue
-			}
-			kept = append(kept, s)
-		}
-		if !removedAny {
-			continue
-		}
-		if len(kept) == 0 {
-			// Closing the file descriptor automatically unwatches it in kqueue.
-			fd := list[0].fd
-			unix.Close(fd)
-			delete(b.fdToEntry, fd)
-			delete(b.subsByPath, path)
-		} else {
-			b.subsByPath[path] = kept
-		}
+	for path, entry := range b.entriesByWatch[w] {
+		b.closeEntryLocked(entry)
+		b.removeSubsForEntryLocked(path, entry)
 	}
+	delete(b.entriesByWatch, w)
 	return nil
-}
-
-// removeEntryAndDescendants removes path and all paths prefixed with
-// path + separator from the entries map.
-func removeEntryAndDescendants(entries map[string]*dirEntry, path string) {
-	delete(entries, path)
-	for k := range entries {
-		if len(k) > len(path) && k[len(path)] == filepath.Separator && k[:len(path)] == path {
-			delete(entries, k)
-		}
-	}
 }
