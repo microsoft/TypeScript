@@ -36,6 +36,49 @@ func TestMarshalMessage(t *testing.T) {
 	}
 }
 
+func TestResponseErrorString(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name string
+		err  *jsonrpc.ResponseError
+		want string
+	}{
+		{
+			name: "JSON details",
+			err: &jsonrpc.ResponseError{
+				Code:    jsonrpc.CodeInvalidParams,
+				Message: "invalid params",
+				Data: struct {
+					Details []string `json:"details"`
+				}{Details: []string{`expected "name"`, "line\nbreak"}},
+			},
+			want: "[-32602]: invalid params\n" + `{"details":["expected \"name\"","line\nbreak"]}`,
+		},
+		{
+			name: "nil receiver",
+			want: "",
+		},
+		{
+			name: "nil data",
+			err:  &jsonrpc.ResponseError{Code: jsonrpc.CodeInternalError, Message: "failed"},
+			want: "[-32603]: failed",
+		},
+		{
+			name: "unmarshalable data",
+			err:  &jsonrpc.ResponseError{Code: jsonrpc.CodeInternalError, Message: "failed", Data: make(chan int)},
+			want: "[-32603]: failed",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			assert.Equal(t, tt.err.String(), tt.want)
+			assert.Equal(t, tt.err.Error(), tt.want)
+		})
+	}
+}
+
 func BenchmarkMarshalCompletionResponse(b *testing.B) {
 	items := make([]*CompletionItem, 2000)
 	for i := range items {
