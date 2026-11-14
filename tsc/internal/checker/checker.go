@@ -5133,7 +5133,11 @@ func (c *Checker) checkInterfaceDeclaration(node *ast.Node) {
 		// run subsequent checks only if first set succeeded
 		if c.checkInheritedPropertiesAreIdentical(t, firstInterfaceDeclaration.Name()) {
 			for _, baseType := range c.getBaseTypes(t) {
-				c.checkTypeAssignableTo(typeWithThis, c.getTypeWithThisArgument(baseType, t.AsInterfaceType().thisType, false), firstInterfaceDeclaration.Name(), diagnostics.Interface_0_incorrectly_extends_interface_1)
+				message := diagnostics.Interface_0_incorrectly_extends_interface_1
+				if baseType.flags&TypeFlagsTypeParameter != 0 {
+					message = diagnostics.Interface_0_cannot_extend_type_parameter_1
+				}
+				c.checkTypeAssignableTo(typeWithThis, c.getTypeWithThisArgument(baseType, t.AsInterfaceType().thisType, false), firstInterfaceDeclaration.Name(), message)
 			}
 			c.checkIndexConstraints(t, symbol /*isStaticIndex*/, false)
 		}
