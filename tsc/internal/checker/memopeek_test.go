@@ -24,8 +24,9 @@ var memoComputeCalls = map[string]bool{
 var memoReads = map[string]bool{"cached": true, "hasCached": true, "peek": true}
 
 // memoHelpers are methods standing for a call on a memo whose storage is
-// allocated only when needed: each names the memo field and whether the
-// method reads it or computes it.
+// allocated only when needed, or which a computation may replace with
+// storage of its own: each names the memo field and whether the method reads
+// it or computes it.
 var memoHelpers = map[string]struct {
 	field string
 	reads bool
@@ -34,6 +35,8 @@ var memoHelpers = map[string]struct {
 	"setWriteType":              {"writeType", false},
 	"setNewWriteType":           {"writeType", false},
 	"cachedOuterTypeParameters": {"outerTypeParameters", true},
+	"cachedEntry":               {"relation", true},
+	"setEntry":                  {"relation", false},
 }
 
 // Whether a memo holds a result yet depends on what was computed first, so

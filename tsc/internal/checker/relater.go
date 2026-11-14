@@ -472,7 +472,13 @@ func asRecursionId[T *ast.Node | *ast.Symbol | *Type](value T) RecursionId {
 const relationStackLimit = 100
 
 // relationCountLimit is the number of results a single comparison may add to
-// a relation before it is considered too complex.
+// a relation before it is considered too complex, counted as though no result
+// were cached when it started, so that whether it is too complex does not
+// depend on what was compared before it. Reusing a cached result counts the
+// results that computing it cached, which is at least as many as computing
+// it from scratch caches. A comparison only too complex for those is counted
+// again from scratch, and compared again without counting them if it is not
+// too complex then.
 const relationCountLimit = 16_000_000 / 8
 
 // relationKeyBits returns well-mixed bits of a relation key, which is a hash.
@@ -783,26 +789,38 @@ func (c *Checker) checkTypeRelatedToWithKey(
 	constrained bool,
 	entry RelationComparisonResult,
 ) bool {
-	r := c.getRelater()
-	r.relation = relation
-	r.errorNode = errorNode
-	// The budget does not depend on how many results are cached, so that whether
-	// a comparison overflows does not depend on what was compared before it.
-	r.relationCount = relationCountLimit
-	r.topSource, r.topTarget = source, target
-	if hasKey {
-		r.topKey, r.topConstrained, r.topHasKey = id, constrained, true
-		r.topEntry, r.topEntryWrites, r.topEntryRead = entry, relation.results.writes, true
-	}
+	var r *Relater
 	var result Ternary
-	if entry&RelationComparisonResultOverflow != 0 {
-		// The comparison overflowed before, and would again.
-		r.overflow = true
-	} else {
+	for uncharged := false; ; uncharged = true {
+		r = c.getRelater()
+		r.relation = relation
+		r.errorNode = errorNode
+		r.uncharged = uncharged
+		// The budget does not depend on how many results are cached, so that whether
+		// a comparison overflows does not depend on what was compared before it.
+		r.relationCount = relationCountLimit
+		r.topSource, r.topTarget = source, target
+		if hasKey {
+			r.topKey, r.topConstrained, r.topHasKey = id, constrained, true
+			r.topEntry, r.topEntryWrites, r.topEntryRead = entry, relation.results.writes, true
+		}
+		if entry&RelationComparisonResultOverflow != 0 {
+			// The comparison overflowed before, and would again.
+			r.overflow = true
+			break
+		}
 		saveIncomplete := c.reliabilityFlags & RelationComparisonResultReportsIncomplete
 		c.reliabilityFlags &^= RelationComparisonResultReportsIncomplete
 		result = r.isRelatedToEx(source, target, RecursionFlagsBoth, errorNode != nil /*reportErrors*/, headMessage, IntersectionStateNone)
 		c.reliabilityFlags = c.reliabilityFlags&^RelationComparisonResultReportsIncomplete | saveIncomplete
+		// Reused results are charged at most what computing them caches,
+		// so a comparison overflowing for them alone is counted again from
+		// scratch, and compared again without charging them if it does not
+		// overflow then.
+		retry := r.overflow && r.charged && !r.overflowExact && !c.relationOverflowsFromScratch(source, target, relation)
+		if retry {
+			r.overflow = false
+		}
 		if r.topBegun {
 			if r.overflow {
 				// Record this relation as having failed such that we don't attempt the overflowing operation again.
@@ -810,6 +828,11 @@ func (c *Checker) checkTypeRelatedToWithKey(
 			}
 			c.endMemo()
 		}
+		if !retry {
+			break
+		}
+		c.putRelater(r)
+		hasKey, entry = false, RelationComparisonResultNone
 	}
 	if r.overflow {
 		if tr := c.tracer; tr != nil {
@@ -840,6 +863,22 @@ func (c *Checker) checkTypeRelatedToWithKey(
 	}
 	c.putRelater(r)
 	return result != TernaryFalse
+}
+
+// relationOverflowsFromScratch reports whether relating source to target
+// overflows when no result is cached; see relationCountLimit.
+func (c *Checker) relationOverflowsFromScratch(source *Type, target *Type, relation *Relation) bool {
+	r := c.getRelater()
+	r.relation = relation
+	r.relationCount = relationCountLimit
+	r.scratch = make(map[CacheHashKey]RelationComparisonResult)
+	r.topSource, r.topTarget = source, target
+	saveFlags := c.reliabilityFlags
+	r.isRelatedToEx(source, target, RecursionFlagsBoth, false /*reportErrors*/, nil /*headMessage*/, IntersectionStateNone)
+	c.reliabilityFlags = saveFlags
+	overflow := r.overflow
+	c.putRelater(r)
+	return overflow
 }
 
 func createDiagnosticChainFromErrorChain(chain *ErrorChain, errorNode *ast.Node, relatedInfo []*ast.Diagnostic) *ast.Diagnostic {
@@ -3385,7 +3424,17 @@ type Relater struct {
 	expandingTargetDepth int
 	overflow             bool
 	relationCount        int
-	next                 *Relater
+	// scratch, if not nil, caches the results of a comparison counting the
+	// results it caches from scratch, instead of the relation; see
+	// relationCountLimit.
+	scratch map[CacheHashKey]RelationComparisonResult
+	// charged is set once reusing a cached result charged its cost, and
+	// overflowExact once the comparison overflowed for a result that did.
+	charged       bool
+	overflowExact bool
+	// uncharged is set if reusing a cached result charges nothing.
+	uncharged bool
+	next      *Relater
 }
 
 type maybeKey struct {
@@ -3415,6 +3464,10 @@ func (r *Relater) beginTop() bool {
 		r.topKey, r.topConstrained = c.getRelationKey(r.topSource, r.topTarget, IntersectionStateNone, r.relation == c.identityRelation, false /*ignoreConstraints*/)
 		r.topHasKey = true
 	}
+	if r.scratch != nil {
+		r.topEntry, r.topEntryValid = RelationComparisonResultNone, true
+		return true
+	}
 	// A comparison made before now may have cached a result for the key,
 	// unless nothing was cached since the caller read it.
 	if !r.topEntryRead || r.topEntryWrites != r.relation.results.writes {
@@ -3424,6 +3477,7 @@ func (r *Relater) beginTop() bool {
 	if r.topEntry&RelationComparisonResultOverflow != 0 {
 		r.topBegun = false
 		r.overflow = true
+		r.overflowExact = true
 		return false
 	}
 	r.relation.begin(c, r.topKey)
@@ -3462,6 +3516,7 @@ func (c *Checker) putRelater(r *Relater) {
 	r.expandingFlags, r.expandingSourceDepth, r.expandingTargetDepth = ExpandingFlagsNone, 0, 0
 	r.overflow = false
 	r.relationCount = 0
+	r.scratch, r.charged, r.overflowExact, r.uncharged = nil, false, false, false
 	r.next = c.freeRelater
 	c.freeRelater = r
 }
@@ -3990,17 +4045,18 @@ func (r *Relater) recursiveTypeRelatedTo(source *Type, target *Type, reportError
 			r.topEntryValid = false
 			entry = r.topEntry
 		} else {
-			entry = r.relation.cached(r.c, id)
+			entry = r.cachedEntry(id)
 		}
 	} else {
 		id, constrained = r.c.getRelationKey(source, target, intersectionState, r.relation == r.c.identityRelation, false /*ignoreConstraints*/)
-		entry = r.relation.cached(r.c, id)
+		entry = r.cachedEntry(id)
 	}
 	if entry != RelationComparisonResultNone {
 		if entry&RelationComparisonResultOverflow != 0 {
 			// Computing the comparison overflowed, so computing this one,
 			// which needs it, overflows too.
 			r.overflow = true
+			r.overflowExact = true
 			return TernaryFalse
 		}
 		if reportErrors && entry&RelationComparisonResultFailed != 0 {
@@ -4011,6 +4067,7 @@ func (r *Relater) recursiveTypeRelatedTo(source *Type, target *Type, reportError
 				r.reach.merge(r.comparisonReach(unpackFailureReach(entry), source, target, recursionFlags))
 				r.dependsOnFailure = r.dependsOnFailure || entry&RelationComparisonResultDependsOnFailure != 0
 			}
+			r.charge(id)
 			related, _ := r.c.reuseRelation(entry)
 			return core.IfElse(related, TernaryTrue, TernaryFalse)
 		}
@@ -4037,7 +4094,8 @@ func (r *Relater) recursiveTypeRelatedTo(source *Type, target *Type, reportError
 		}
 		// What relates with unconstrained type parameters also relates with
 		// constrained ones.
-		if entry := r.relation.cached(r.c, broadestEquivalentId); entry&RelationComparisonResultSucceeded != 0 && entry&relationReachMask == 0 && r.canReuseResult(entry, source, target, recursionFlags) {
+		if entry := r.cachedEntry(broadestEquivalentId); entry&RelationComparisonResultSucceeded != 0 && entry&relationReachMask == 0 && r.canReuseResult(entry, source, target, recursionFlags) {
+			r.charge(broadestEquivalentId)
 			return TernaryTrue
 		}
 	}
@@ -4057,6 +4115,7 @@ func (r *Relater) recursiveTypeRelatedTo(source *Type, target *Type, reportError
 	}
 	depth := r.depth
 	r.depth++
+	startCount := r.relationCount
 	maybeStart := len(r.maybeKeys)
 	r.maybeKeys = append(r.maybeKeys, maybeKey{key: id, low: depth, result: TernaryMaybe, cached: recomputing})
 	if r.maybeKeysSet == nil {
@@ -4149,22 +4208,24 @@ func (r *Relater) recursiveTypeRelatedTo(source *Type, target *Type, reportError
 	r.depth--
 	low, truncated := r.low, r.truncated
 	r.low, r.truncated = saveLow, saveTruncated
+	// The results computing this comparison cached, and its own.
+	cost := startCount - r.relationCount + 1
 	switch {
 	case r.overflow:
 		// The comparison was cut short, so its result and those of the
 		// comparisons that completed assuming it are not what computing them
 		// from scratch would give. Only the overflow is cached.
-		r.resetMaybeStack(maybeStart, reachFlags, false, reachBelow, recursionFlags, modeFlags)
+		r.resetMaybeStack(maybeStart, reachFlags, false, reachBelow, recursionFlags, modeFlags, cost)
 		result = TernaryFalse
 	case readAssumed && result == TernaryFalse:
 		// The failure depends on the comparisons it assumed related.
-		r.resetMaybeStack(maybeStart, reachFlags, false, reachBelow, recursionFlags, modeFlags)
+		r.resetMaybeStack(maybeStart, reachFlags, false, reachBelow, recursionFlags, modeFlags, cost)
 		r.low = min(r.low, low)
 		r.truncated = r.truncated || truncated
 	case (incomplete || readAssumed) && low >= depth:
 		// The result observed incomplete variances, so it is not what
 		// comparing from scratch would give (see getRecursiveVariances).
-		r.resetMaybeStack(maybeStart, reachFlags, false, reachBelow, recursionFlags, modeFlags)
+		r.resetMaybeStack(maybeStart, reachFlags, false, reachBelow, recursionFlags, modeFlags, cost)
 		if result == TernaryMaybe {
 			result = TernaryTrue
 		}
@@ -4183,10 +4244,10 @@ func (r *Relater) recursiveTypeRelatedTo(source *Type, target *Type, reportError
 			r.low = min(r.low, low)
 			r.truncated = r.truncated || truncated
 		} else if !recomputing {
-			r.relation.set(r.c, id, RelationComparisonResultFailed|reachFlags|reachBelow.pack()|relationMode(recursionFlags)|modeFlags)
+			r.setEntry(id, RelationComparisonResultFailed|reachFlags|reachBelow.pack()|relationMode(recursionFlags)|modeFlags, cost)
 			r.relationCount--
 		}
-		r.resetMaybeStack(maybeStart, reachFlags, false, reachBelow, recursionFlags, modeFlags)
+		r.resetMaybeStack(maybeStart, reachFlags, false, reachBelow, recursionFlags, modeFlags, cost)
 	case low >= depth:
 		// The result depends on no comparison outside of this one, so it is the
 		// same from scratch. Comparisons that completed assuming this one hold
@@ -4194,15 +4255,15 @@ func (r *Relater) recursiveTypeRelatedTo(source *Type, target *Type, reportError
 		// scratch. Ternary.Unknown results are never recorded.
 		switch {
 		case result == TernaryUnknown:
-			r.resetMaybeStack(maybeStart, reachFlags, false, reachBelow, recursionFlags, modeFlags)
+			r.resetMaybeStack(maybeStart, reachFlags, false, reachBelow, recursionFlags, modeFlags, cost)
 		case truncated:
-			r.resetMaybeStack(maybeStart, reachFlags, false, reachBelow, recursionFlags, modeFlags)
+			r.resetMaybeStack(maybeStart, reachFlags, false, reachBelow, recursionFlags, modeFlags, cost)
 			if !recomputing {
-				r.relation.set(r.c, id, RelationComparisonResultSucceeded|RelationComparisonResultTruncated|reachFlags|flaggedReach(reachFlags, reachBelow)|relationMode(recursionFlags))
+				r.setEntry(id, RelationComparisonResultSucceeded|RelationComparisonResultTruncated|reachFlags|flaggedReach(reachFlags, reachBelow)|relationMode(recursionFlags), cost)
 				r.relationCount--
 			}
 		default:
-			r.resetMaybeStack(maybeStart, reachFlags, true, reachBelow, recursionFlags, modeFlags)
+			r.resetMaybeStack(maybeStart, reachFlags, true, reachBelow, recursionFlags, modeFlags, cost)
 		}
 		// The result no longer depends on any comparison in progress, so it
 		// is reported as related, the same as when it is read from the cache.
@@ -4401,6 +4462,35 @@ func (r *Relater) assume(i int) Ternary {
 	return m.result
 }
 
+// cachedEntry returns the result cached for id.
+func (r *Relater) cachedEntry(id CacheHashKey) RelationComparisonResult {
+	if r.scratch != nil {
+		return r.scratch[id]
+	}
+	return r.relation.cached(r.c, id)
+}
+
+// setEntry caches the result for id, which cost caching results; see
+// relationCountLimit.
+func (r *Relater) setEntry(id CacheHashKey, entry RelationComparisonResult, cost int) {
+	if r.scratch != nil {
+		r.scratch[id] = entry
+		return
+	}
+	r.relation.set(r.c, id, entry)
+	r.relation.setCost(id, cost)
+}
+
+// charge counts reusing the result cached for id as caching the results that
+// computing it from scratch would; see relationCountLimit. A comparison
+// counting from scratch reuses its own results for free.
+func (r *Relater) charge(id CacheHashKey) {
+	if r.scratch == nil && !r.uncharged {
+		r.relationCount -= r.relation.cost(id)
+		r.charged = true
+	}
+}
+
 // truncate records that the comparison in progress was cut short in a way
 // that depends on depth and the depths above it.
 func (r *Relater) truncate(depth int) {
@@ -4408,7 +4498,7 @@ func (r *Relater) truncate(depth int) {
 	r.truncated = true
 }
 
-func (r *Relater) resetMaybeStack(maybeStart int, reachFlags RelationComparisonResult, markAllAsSucceeded bool, reach failureReach, recursionFlags RecursionFlags, modeFlags RelationComparisonResult) {
+func (r *Relater) resetMaybeStack(maybeStart int, reachFlags RelationComparisonResult, markAllAsSucceeded bool, reach failureReach, recursionFlags RecursionFlags, modeFlags RelationComparisonResult, cost int) {
 	for i := maybeStart; i < len(r.maybeKeys); i++ {
 		key := r.maybeKeys[i].key
 		delete(r.maybeKeysSet, key)
@@ -4421,7 +4511,9 @@ func (r *Relater) resetMaybeStack(maybeStart int, reachFlags RelationComparisonR
 			if reachFlags != 0 {
 				entry |= reach.pack() | relationMode(recursionFlags)
 			}
-			r.relation.set(r.c, key, entry)
+			// Each comparison completed assuming the first compares the first
+			// again from scratch, so it costs no more than the first.
+			r.setEntry(key, entry, cost)
 			r.relationCount--
 		}
 	}
