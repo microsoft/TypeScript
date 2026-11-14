@@ -1,0 +1,158 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameForInOfTarget.ts] ////
+
+=== privateNameForInOfTarget.ts ===
+class A {
+>A : Symbol(A, Decl(privateNameForInOfTarget.ts, 0, 0))
+
+    #x: any = 0;
+>#x : Symbol(A.#x, Decl(privateNameForInOfTarget.ts, 0, 9))
+
+    #y: any = 0;
+>#y : Symbol(A.#y, Decl(privateNameForInOfTarget.ts, 1, 16))
+
+    set #accessor(value: any) { this.#y = value; }
+>#accessor : Symbol(A.#accessor, Decl(privateNameForInOfTarget.ts, 2, 16), Decl(privateNameForInOfTarget.ts, 3, 50))
+>value : Symbol(value, Decl(privateNameForInOfTarget.ts, 3, 18))
+>this.#y : Symbol(A.#y, Decl(privateNameForInOfTarget.ts, 1, 16))
+>this : Symbol(A, Decl(privateNameForInOfTarget.ts, 0, 0))
+>value : Symbol(value, Decl(privateNameForInOfTarget.ts, 3, 18))
+
+    get #accessor() { return this.#y; }
+>#accessor : Symbol(A.#accessor, Decl(privateNameForInOfTarget.ts, 2, 16), Decl(privateNameForInOfTarget.ts, 3, 50))
+>this.#y : Symbol(A.#y, Decl(privateNameForInOfTarget.ts, 1, 16))
+>this : Symbol(A, Decl(privateNameForInOfTarget.ts, 0, 0))
+
+    run(o: object) {
+>run : Symbol(A.run, Decl(privateNameForInOfTarget.ts, 4, 39))
+>o : Symbol(o, Decl(privateNameForInOfTarget.ts, 6, 8))
+
+        for (this.#x of [11]) {}
+>this.#x : Symbol(A.#x, Decl(privateNameForInOfTarget.ts, 0, 9))
+>this : Symbol(A, Decl(privateNameForInOfTarget.ts, 0, 0))
+
+        for (this.#x in o) {}
+>this.#x : Symbol(A.#x, Decl(privateNameForInOfTarget.ts, 0, 9))
+>this : Symbol(A, Decl(privateNameForInOfTarget.ts, 0, 0))
+>o : Symbol(o, Decl(privateNameForInOfTarget.ts, 6, 8))
+
+        return this.#x;
+>this.#x : Symbol(A.#x, Decl(privateNameForInOfTarget.ts, 0, 9))
+>this : Symbol(A, Decl(privateNameForInOfTarget.ts, 0, 0))
+    }
+
+    receiver(o: A) {
+>receiver : Symbol(A.receiver, Decl(privateNameForInOfTarget.ts, 10, 5))
+>o : Symbol(o, Decl(privateNameForInOfTarget.ts, 12, 13))
+>A : Symbol(A, Decl(privateNameForInOfTarget.ts, 0, 0))
+
+        let calls = 0;
+>calls : Symbol(calls, Decl(privateNameForInOfTarget.ts, 13, 11))
+
+        const get = () => { calls++; return o; };
+>get : Symbol(get, Decl(privateNameForInOfTarget.ts, 14, 13))
+>calls : Symbol(calls, Decl(privateNameForInOfTarget.ts, 13, 11))
+>o : Symbol(o, Decl(privateNameForInOfTarget.ts, 12, 13))
+
+        for (get().#x of [10, 20]) {}
+>get().#x : Symbol(A.#x, Decl(privateNameForInOfTarget.ts, 0, 9))
+>get : Symbol(get, Decl(privateNameForInOfTarget.ts, 14, 13))
+
+        for (o.#x in { k: 1 }) {}
+>o.#x : Symbol(A.#x, Decl(privateNameForInOfTarget.ts, 0, 9))
+>o : Symbol(o, Decl(privateNameForInOfTarget.ts, 12, 13))
+>k : Symbol(k, Decl(privateNameForInOfTarget.ts, 16, 22))
+
+        return { calls, value: o.#x };
+>calls : Symbol(calls, Decl(privateNameForInOfTarget.ts, 17, 16))
+>value : Symbol(value, Decl(privateNameForInOfTarget.ts, 17, 23))
+>o.#x : Symbol(A.#x, Decl(privateNameForInOfTarget.ts, 0, 9))
+>o : Symbol(o, Decl(privateNameForInOfTarget.ts, 12, 13))
+    }
+
+    accessor() {
+>accessor : Symbol(A.accessor, Decl(privateNameForInOfTarget.ts, 18, 5))
+
+        for (this.#accessor of [1, 2, 3]) {}
+>this.#accessor : Symbol(A.#accessor, Decl(privateNameForInOfTarget.ts, 2, 16), Decl(privateNameForInOfTarget.ts, 3, 50))
+>this : Symbol(A, Decl(privateNameForInOfTarget.ts, 0, 0))
+
+        return this.#accessor;
+>this.#accessor : Symbol(A.#accessor, Decl(privateNameForInOfTarget.ts, 2, 16), Decl(privateNameForInOfTarget.ts, 3, 50))
+>this : Symbol(A, Decl(privateNameForInOfTarget.ts, 0, 0))
+    }
+
+    pattern() {
+>pattern : Symbol(A.pattern, Decl(privateNameForInOfTarget.ts, 23, 5))
+
+        for ([this.#x, this.#y] of [[1, 2]]) {}
+>this.#x : Symbol(A.#x, Decl(privateNameForInOfTarget.ts, 0, 9))
+>this : Symbol(A, Decl(privateNameForInOfTarget.ts, 0, 0))
+>this.#y : Symbol(A.#y, Decl(privateNameForInOfTarget.ts, 1, 16))
+>this : Symbol(A, Decl(privateNameForInOfTarget.ts, 0, 0))
+
+        for ({ x: this.#x, y: this.#y } of [{ x: 3, y: 4 }]) {}
+>x : Symbol(x, Decl(privateNameForInOfTarget.ts, 27, 14))
+>this.#x : Symbol(A.#x, Decl(privateNameForInOfTarget.ts, 0, 9))
+>this : Symbol(A, Decl(privateNameForInOfTarget.ts, 0, 0))
+>y : Symbol(y, Decl(privateNameForInOfTarget.ts, 27, 26))
+>this.#y : Symbol(A.#y, Decl(privateNameForInOfTarget.ts, 1, 16))
+>this : Symbol(A, Decl(privateNameForInOfTarget.ts, 0, 0))
+>x : Symbol(x, Decl(privateNameForInOfTarget.ts, 27, 45))
+>y : Symbol(y, Decl(privateNameForInOfTarget.ts, 27, 51))
+
+        return [this.#x, this.#y];
+>this.#x : Symbol(A.#x, Decl(privateNameForInOfTarget.ts, 0, 9))
+>this : Symbol(A, Decl(privateNameForInOfTarget.ts, 0, 0))
+>this.#y : Symbol(A.#y, Decl(privateNameForInOfTarget.ts, 1, 16))
+>this : Symbol(A, Decl(privateNameForInOfTarget.ts, 0, 0))
+    }
+
+    shadow(o: A) {
+>shadow : Symbol(A.shadow, Decl(privateNameForInOfTarget.ts, 29, 5))
+>o : Symbol(o, Decl(privateNameForInOfTarget.ts, 31, 11))
+>A : Symbol(A, Decl(privateNameForInOfTarget.ts, 0, 0))
+
+        for (o.#x of [5]) {
+>o.#x : Symbol(A.#x, Decl(privateNameForInOfTarget.ts, 0, 9))
+>o : Symbol(o, Decl(privateNameForInOfTarget.ts, 31, 11))
+
+            let o: A;
+>o : Symbol(o, Decl(privateNameForInOfTarget.ts, 33, 15))
+>A : Symbol(A, Decl(privateNameForInOfTarget.ts, 0, 0))
+        }
+        for (o.#y in { k: 1 }) {
+>o.#y : Symbol(A.#y, Decl(privateNameForInOfTarget.ts, 1, 16))
+>o : Symbol(o, Decl(privateNameForInOfTarget.ts, 31, 11))
+>k : Symbol(k, Decl(privateNameForInOfTarget.ts, 35, 22))
+
+            let o: A;
+>o : Symbol(o, Decl(privateNameForInOfTarget.ts, 36, 15))
+>A : Symbol(A, Decl(privateNameForInOfTarget.ts, 0, 0))
+        }
+        return [o.#x, o.#y];
+>o.#x : Symbol(A.#x, Decl(privateNameForInOfTarget.ts, 0, 9))
+>o : Symbol(o, Decl(privateNameForInOfTarget.ts, 31, 11))
+>o.#y : Symbol(A.#y, Decl(privateNameForInOfTarget.ts, 1, 16))
+>o : Symbol(o, Decl(privateNameForInOfTarget.ts, 31, 11))
+    }
+}
+
+class B {
+>B : Symbol(B, Decl(privateNameForInOfTarget.ts, 40, 1))
+
+    static #x: any = 0;
+>#x : Symbol(B.#x, Decl(privateNameForInOfTarget.ts, 42, 9))
+
+    static run() {
+>run : Symbol(B.run, Decl(privateNameForInOfTarget.ts, 43, 23))
+
+        for (B.#x of [1, 2]) {}
+>B.#x : Symbol(B.#x, Decl(privateNameForInOfTarget.ts, 42, 9))
+>B : Symbol(B, Decl(privateNameForInOfTarget.ts, 40, 1))
+
+        return B.#x;
+>B.#x : Symbol(B.#x, Decl(privateNameForInOfTarget.ts, 42, 9))
+>B : Symbol(B, Decl(privateNameForInOfTarget.ts, 40, 1))
+    }
+}
+

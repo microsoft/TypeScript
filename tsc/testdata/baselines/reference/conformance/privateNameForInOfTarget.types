@@ -1,0 +1,193 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameForInOfTarget.ts] ////
+
+=== privateNameForInOfTarget.ts ===
+class A {
+>A : A
+
+    #x: any = 0;
+>#x : any
+>0 : 0
+
+    #y: any = 0;
+>#y : any
+>0 : 0
+
+    set #accessor(value: any) { this.#y = value; }
+>#accessor : any
+>value : any
+>this.#y = value : any
+>this.#y : any
+>this : this
+>value : any
+
+    get #accessor() { return this.#y; }
+>#accessor : any
+>this.#y : any
+>this : this
+
+    run(o: object) {
+>run : (o: object) => any
+>o : object
+
+        for (this.#x of [11]) {}
+>this.#x : any
+>this : this
+>[11] : number[]
+>11 : 11
+
+        for (this.#x in o) {}
+>this.#x : any
+>this : this
+>o : object
+
+        return this.#x;
+>this.#x : any
+>this : this
+    }
+
+    receiver(o: A) {
+>receiver : (o: A) => { calls: number; value: any; }
+>o : A
+
+        let calls = 0;
+>calls : number
+>0 : 0
+
+        const get = () => { calls++; return o; };
+>get : () => A
+>() => { calls++; return o; } : () => A
+>calls++ : number
+>calls : number
+>o : A
+
+        for (get().#x of [10, 20]) {}
+>get().#x : any
+>get() : A
+>get : () => A
+>[10, 20] : number[]
+>10 : 10
+>20 : 20
+
+        for (o.#x in { k: 1 }) {}
+>o.#x : any
+>o : A
+>{ k: 1 } : { k: number; }
+>k : number
+>1 : 1
+
+        return { calls, value: o.#x };
+>{ calls, value: o.#x } : { calls: number; value: any; }
+>calls : number
+>value : any
+>o.#x : any
+>o : A
+    }
+
+    accessor() {
+>accessor : () => any
+
+        for (this.#accessor of [1, 2, 3]) {}
+>this.#accessor : any
+>this : this
+>[1, 2, 3] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+
+        return this.#accessor;
+>this.#accessor : any
+>this : this
+    }
+
+    pattern() {
+>pattern : () => any[]
+
+        for ([this.#x, this.#y] of [[1, 2]]) {}
+>[this.#x, this.#y] : [any, any]
+>this.#x : any
+>this : this
+>this.#y : any
+>this : this
+>[[1, 2]] : number[][]
+>[1, 2] : number[]
+>1 : 1
+>2 : 2
+
+        for ({ x: this.#x, y: this.#y } of [{ x: 3, y: 4 }]) {}
+>{ x: this.#x, y: this.#y } : { x: any; y: any; }
+>x : any
+>this.#x : any
+>this : this
+>y : any
+>this.#y : any
+>this : this
+>[{ x: 3, y: 4 }] : { x: number; y: number; }[]
+>{ x: 3, y: 4 } : { x: number; y: number; }
+>x : number
+>3 : 3
+>y : number
+>4 : 4
+
+        return [this.#x, this.#y];
+>[this.#x, this.#y] : any[]
+>this.#x : any
+>this : this
+>this.#y : any
+>this : this
+    }
+
+    shadow(o: A) {
+>shadow : (o: A) => any[]
+>o : A
+
+        for (o.#x of [5]) {
+>o.#x : any
+>o : A
+>[5] : number[]
+>5 : 5
+
+            let o: A;
+>o : A
+        }
+        for (o.#y in { k: 1 }) {
+>o.#y : any
+>o : A
+>{ k: 1 } : { k: number; }
+>k : number
+>1 : 1
+
+            let o: A;
+>o : A
+        }
+        return [o.#x, o.#y];
+>[o.#x, o.#y] : any[]
+>o.#x : any
+>o : A
+>o.#y : any
+>o : A
+    }
+}
+
+class B {
+>B : B
+
+    static #x: any = 0;
+>#x : any
+>0 : 0
+
+    static run() {
+>run : () => any
+
+        for (B.#x of [1, 2]) {}
+>B.#x : any
+>B : typeof B
+>[1, 2] : number[]
+>1 : 1
+>2 : 2
+
+        return B.#x;
+>B.#x : any
+>B : typeof B
+    }
+}
+
