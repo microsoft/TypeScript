@@ -1,0 +1,24 @@
+//// [tests/cases/compiler/overrideDeclareModifierOrder.ts] ////
+
+=== overrideDeclareModifierOrder.ts ===
+class Base {
+>Base : Symbol(Base, Decl(overrideDeclareModifierOrder.ts, 0, 0))
+
+    p1: number = 1;
+>p1 : Symbol(Base.p1, Decl(overrideDeclareModifierOrder.ts, 0, 12))
+
+    p2: number = 2;
+>p2 : Symbol(Base.p2, Decl(overrideDeclareModifierOrder.ts, 1, 19))
+}
+
+class Derived extends Base {
+>Derived : Symbol(Derived, Decl(overrideDeclareModifierOrder.ts, 3, 1))
+>Base : Symbol(Base, Decl(overrideDeclareModifierOrder.ts, 0, 0))
+
+    declare override p1: number;
+>p1 : Symbol(Derived.p1, Decl(overrideDeclareModifierOrder.ts, 5, 28))
+
+    override declare p2: number;
+>p2 : Symbol(Derived.p2, Decl(overrideDeclareModifierOrder.ts, 6, 32))
+}
+

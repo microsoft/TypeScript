@@ -448,7 +448,7 @@ func (c *Checker) checkGrammarModifiers(node *ast.Node /*Union[HasModifiers, Has
 				} else if flags&ast.ModifierFlagsAsync != 0 {
 					return c.grammarErrorOnNode(modifier, diagnostics.X_0_modifier_cannot_be_used_in_an_ambient_context, "async")
 				} else if flags&ast.ModifierFlagsOverride != 0 {
-					return c.grammarErrorOnNode(modifier, diagnostics.X_0_modifier_cannot_be_used_in_an_ambient_context, "override")
+					return c.grammarErrorOnNode(modifier, diagnostics.X_0_modifier_cannot_be_used_with_1_modifier, "declare", "override")
 				} else if ast.IsClassLike(node.Parent) && !ast.IsPropertyDeclaration(node) {
 					return c.grammarErrorOnNode(modifier, diagnostics.X_0_modifier_cannot_appear_on_class_elements_of_this_kind, "declare")
 				} else if node.Kind == ast.KindParameter {
