@@ -1,13 +1,14 @@
-relationComplexityError.ts(10,5): error TS2322: Type '{ p: T1 & T2; }' is not assignable to type '{ p: T1 | null; }'.
-  Types of property 'p' are incompatible.
-    Excessive complexity comparing types 'T1 & T2' and 'T1 | null'.
+relationComplexityError.ts(10,5): error TS2859: Excessive complexity comparing types '{ p: T1 & T2; }' and '{ p: T1 | null; }'.
+relationComplexityError.ts(10,5): error TS2859: Excessive complexity comparing types '{ p: T1 & T2; }' and '{ p: T1 | null; }'.
 relationComplexityError.ts(18,5): error TS2859: Excessive complexity comparing types 'T1 & T2' and 'T1 | null'.
+relationComplexityError.ts(18,5): error TS2859: Excessive complexity comparing types 'T1 & T2' and 'T1 | null'.
+relationComplexityError.ts(22,5): error TS2859: Excessive complexity comparing types 'T1 & T2' and 'T1 | null'.
 relationComplexityError.ts(22,5): error TS2859: Excessive complexity comparing types 'T1 & T2' and 'T1 | null'.
 relationComplexityError.ts(26,5): error TS2859: Excessive complexity comparing types '{ p: T1 & T2; }' and '{ p: T1 | null; }'.
 relationComplexityError.ts(26,5): error TS2859: Excessive complexity comparing types '{ p: T1 & T2; }' and '{ p: T1 | null; }'.
 
 
-==== relationComplexityError.ts (5 errors) ====
+==== relationComplexityError.ts (8 errors) ====
     // Repro from #55630
     // Every comparison that needs a comparison that is too complex is too complex
     // itself, whether or not that comparison happened before.
@@ -19,9 +20,9 @@ relationComplexityError.ts(26,5): error TS2859: Excessive complexity comparing t
     function f0(x: { p: T1 | null }, y: { p: T1 & T2 }) {
         x = y;  // Complexity error
         ~
-!!! error TS2322: Type '{ p: T1 & T2; }' is not assignable to type '{ p: T1 | null; }'.
-!!! error TS2322:   Types of property 'p' are incompatible.
-!!! error TS2322:     Excessive complexity comparing types 'T1 & T2' and 'T1 | null'.
+!!! error TS2859: Excessive complexity comparing types '{ p: T1 & T2; }' and '{ p: T1 | null; }'.
+        ~~~~~
+!!! error TS2859: Excessive complexity comparing types '{ p: T1 & T2; }' and '{ p: T1 | null; }'.
     }
     
     function f1(x: T1, y: T1 & T2) {
@@ -32,11 +33,15 @@ relationComplexityError.ts(26,5): error TS2859: Excessive complexity comparing t
         x = y;  // Complexity error
         ~
 !!! error TS2859: Excessive complexity comparing types 'T1 & T2' and 'T1 | null'.
+        ~~~~~
+!!! error TS2859: Excessive complexity comparing types 'T1 & T2' and 'T1 | null'.
     }
     
     function f3(x: T1 | null, y: T1 & T2) {
         x = y;  // Complexity error
         ~
+!!! error TS2859: Excessive complexity comparing types 'T1 & T2' and 'T1 | null'.
+        ~~~~~
 !!! error TS2859: Excessive complexity comparing types 'T1 & T2' and 'T1 | null'.
     }
     

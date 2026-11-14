@@ -26,8 +26,8 @@ export const obsA = expand<typeof import("xa")>();
 >expand : <X>() => { [K in keyof X]: X[K]; }
 
 export const obsB = expand<typeof import("xb")>();
->obsB : { v: 0; }
->expand<typeof import("xb")>() : { v: 0; }
+>obsB : { pa: 0; readonly ma: 1; v: 0; }
+>expand<typeof import("xb")>() : { pa: 0; readonly ma: 1; v: 0; }
 >expand : <X>() => { [K in keyof X]: X[K]; }
 
 === /ambient.d.ts ===

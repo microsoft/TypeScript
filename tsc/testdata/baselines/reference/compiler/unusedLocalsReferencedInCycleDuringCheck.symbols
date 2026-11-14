@@ -1,0 +1,74 @@
+//// [tests/cases/compiler/unusedLocalsReferencedInCycleDuringCheck.ts] ////
+
+=== unusedLocalsReferencedInCycleDuringCheck.ts ===
+// Checking the call resolves it within a cycle of flow analysis, during which
+// what checking computes is recorded, yet its references are still uses.
+
+declare const assert: { deepStrictEqual<T>(actual: unknown, expected: T): asserts actual is T };
+>assert : Symbol(assert, Decl(unusedLocalsReferencedInCycleDuringCheck.ts, 3, 13))
+>deepStrictEqual : Symbol(deepStrictEqual, Decl(unusedLocalsReferencedInCycleDuringCheck.ts, 3, 23))
+>T : Symbol(T, Decl(unusedLocalsReferencedInCycleDuringCheck.ts, 3, 40))
+>actual : Symbol(actual, Decl(unusedLocalsReferencedInCycleDuringCheck.ts, 3, 43))
+>expected : Symbol(expected, Decl(unusedLocalsReferencedInCycleDuringCheck.ts, 3, 59))
+>T : Symbol(T, Decl(unusedLocalsReferencedInCycleDuringCheck.ts, 3, 40))
+>actual : Symbol(actual, Decl(unusedLocalsReferencedInCycleDuringCheck.ts, 3, 43))
+>T : Symbol(T, Decl(unusedLocalsReferencedInCycleDuringCheck.ts, 3, 40))
+
+declare function make(): { width: number };
+>make : Symbol(make, Decl(unusedLocalsReferencedInCycleDuringCheck.ts, 3, 96))
+>width : Symbol(width, Decl(unusedLocalsReferencedInCycleDuringCheck.ts, 4, 26))
+
+export function test() {
+>test : Symbol(test, Decl(unusedLocalsReferencedInCycleDuringCheck.ts, 4, 43))
+
+	const first = make();
+>first : Symbol(first, Decl(unusedLocalsReferencedInCycleDuringCheck.ts, 6, 6))
+>make : Symbol(make, Decl(unusedLocalsReferencedInCycleDuringCheck.ts, 3, 96))
+
+	let baseline: number[][] | undefined;
+>baseline : Symbol(baseline, Decl(unusedLocalsReferencedInCycleDuringCheck.ts, 7, 4))
+
+	const geometry = () => [first].map(e => [e.width]);
+>geometry : Symbol(geometry, Decl(unusedLocalsReferencedInCycleDuringCheck.ts, 8, 6))
+>[first].map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>first : Symbol(first, Decl(unusedLocalsReferencedInCycleDuringCheck.ts, 6, 6))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>e : Symbol(e, Decl(unusedLocalsReferencedInCycleDuringCheck.ts, 8, 36))
+>e.width : Symbol(width, Decl(unusedLocalsReferencedInCycleDuringCheck.ts, 4, 26))
+>e : Symbol(e, Decl(unusedLocalsReferencedInCycleDuringCheck.ts, 8, 36))
+>width : Symbol(width, Decl(unusedLocalsReferencedInCycleDuringCheck.ts, 4, 26))
+
+	for (const themeType of ['a', 'b']) {
+>themeType : Symbol(themeType, Decl(unusedLocalsReferencedInCycleDuringCheck.ts, 9, 11))
+
+		baseline ??= geometry();
+>baseline : Symbol(baseline, Decl(unusedLocalsReferencedInCycleDuringCheck.ts, 7, 4))
+>geometry : Symbol(geometry, Decl(unusedLocalsReferencedInCycleDuringCheck.ts, 8, 6))
+
+		for (const active of [true, false]) {
+>active : Symbol(active, Decl(unusedLocalsReferencedInCycleDuringCheck.ts, 11, 12))
+
+			const border = active ? themeType : 'x';
+>border : Symbol(border, Decl(unusedLocalsReferencedInCycleDuringCheck.ts, 12, 8))
+>active : Symbol(active, Decl(unusedLocalsReferencedInCycleDuringCheck.ts, 11, 12))
+>themeType : Symbol(themeType, Decl(unusedLocalsReferencedInCycleDuringCheck.ts, 9, 11))
+
+			assert.deepStrictEqual({ geometry: geometry(), w: first.width, border }, { geometry: baseline, w: 0, border: '' });
+>assert.deepStrictEqual : Symbol(deepStrictEqual, Decl(unusedLocalsReferencedInCycleDuringCheck.ts, 3, 23))
+>assert : Symbol(assert, Decl(unusedLocalsReferencedInCycleDuringCheck.ts, 3, 13))
+>deepStrictEqual : Symbol(deepStrictEqual, Decl(unusedLocalsReferencedInCycleDuringCheck.ts, 3, 23))
+>geometry : Symbol(geometry, Decl(unusedLocalsReferencedInCycleDuringCheck.ts, 13, 27))
+>geometry : Symbol(geometry, Decl(unusedLocalsReferencedInCycleDuringCheck.ts, 8, 6))
+>w : Symbol(w, Decl(unusedLocalsReferencedInCycleDuringCheck.ts, 13, 49))
+>first.width : Symbol(width, Decl(unusedLocalsReferencedInCycleDuringCheck.ts, 4, 26))
+>first : Symbol(first, Decl(unusedLocalsReferencedInCycleDuringCheck.ts, 6, 6))
+>width : Symbol(width, Decl(unusedLocalsReferencedInCycleDuringCheck.ts, 4, 26))
+>border : Symbol(border, Decl(unusedLocalsReferencedInCycleDuringCheck.ts, 13, 65))
+>geometry : Symbol(geometry, Decl(unusedLocalsReferencedInCycleDuringCheck.ts, 13, 77))
+>baseline : Symbol(baseline, Decl(unusedLocalsReferencedInCycleDuringCheck.ts, 7, 4))
+>w : Symbol(w, Decl(unusedLocalsReferencedInCycleDuringCheck.ts, 13, 97))
+>border : Symbol(border, Decl(unusedLocalsReferencedInCycleDuringCheck.ts, 13, 103))
+		}
+	}
+}
+

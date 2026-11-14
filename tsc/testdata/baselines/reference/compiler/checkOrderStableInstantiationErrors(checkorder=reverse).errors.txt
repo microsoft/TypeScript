@@ -1,3 +1,6 @@
+a.ts(2,12): error TS2589: Type instantiation is excessively deep and possibly infinite.
+a.ts(2,15): error TS2589: Type instantiation is excessively deep and possibly infinite.
+b.ts(2,12): error TS2589: Type instantiation is excessively deep and possibly infinite.
 b.ts(2,15): error TS2589: Type instantiation is excessively deep and possibly infinite.
 
 
@@ -9,13 +12,19 @@ b.ts(2,15): error TS2589: Type instantiation is excessively deep and possibly in
     export type Recur<N extends number, S extends string> =
         N extends 0 ? S : Recur<Dec<N>, `${S}_${S}`>;
     
-==== a.ts (0 errors) ====
+==== a.ts (2 errors) ====
     import { Recur } from "./lib";
     export let a: Recur<5, "a">;
+               ~
+!!! error TS2589: Type instantiation is excessively deep and possibly infinite.
+                  ~~~~~~~~~~~~~
+!!! error TS2589: Type instantiation is excessively deep and possibly infinite.
     
-==== b.ts (1 errors) ====
+==== b.ts (2 errors) ====
     import { Recur } from "./lib";
     export let b: Recur<5, "a">;
+               ~
+!!! error TS2589: Type instantiation is excessively deep and possibly infinite.
                   ~~~~~~~~~~~~~
 !!! error TS2589: Type instantiation is excessively deep and possibly infinite.
     

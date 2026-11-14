@@ -10,7 +10,7 @@ type F<T> = T extends [unknown?, ...infer R] ? [0, ...F<R>] : [];
 >F : F<T>
 
 type X = F<[]>;
->X : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ...any[]]
+>X : any
 
 // The element type of A[] is resolved whenever first needed, inside the
 // instantiation of the return type of flat or not. Reaching the limit while

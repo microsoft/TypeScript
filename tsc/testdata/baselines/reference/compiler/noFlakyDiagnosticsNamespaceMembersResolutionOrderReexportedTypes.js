@@ -161,7 +161,10 @@ exports.checkB = MB.pb.ma;
 //// [xb.d.ts]
 export = o;
 declare const o: {
-    v: {};
+    v: {
+        pa: {};
+        ma: 1;
+    };
 };
 //// [mb.d.ts]
 export { v as pb } from "./xb";
@@ -169,10 +172,7 @@ export declare const mb = 1;
 //// [xa.d.ts]
 export = o;
 declare const o: {
-    v: {
-        pb: {};
-        mb: 1;
-    };
+    v: {};
 };
 //// [ma.d.ts]
 export { v as pa } from "./xa";
@@ -181,10 +181,7 @@ export declare const ma = 1;
 export = o;
 declare const o: {
     v: {
-        pa: {
-            pb: {};
-            mb: 1;
-        };
+        pa: {};
         ma: 1;
     };
 };
@@ -192,15 +189,18 @@ declare const o: {
 export = o;
 declare const o: {
     v: {
-        pb: {};
+        pb: {
+            pa: {};
+            ma: 1;
+        };
         mb: 1;
     };
 };
 //// [main.d.ts]
-export declare const fromA: {
-    pb: {};
-    mb: 1;
+export declare const fromA: {};
+export declare const fromB: {
+    pa: {};
+    ma: 1;
 };
-export declare const fromB: {};
 export declare const checkA: 1;
 export declare const checkB: 1;

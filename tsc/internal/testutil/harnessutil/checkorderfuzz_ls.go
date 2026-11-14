@@ -69,12 +69,13 @@ func fuzzLanguageService(program *compiler.Program) *fuzzLSService {
 		lineMaps[fileName] = lineMap
 		return lineMap
 	})
-	return &fuzzLSService{ls.NewLanguageService(fuzzProjectID{}, program, host, ""), host.converters}
+	return &fuzzLSService{ls.NewLanguageService(fuzzProjectID{}, program, host, ""), host.converters, program}
 }
 
 type fuzzLSService struct {
 	*ls.LanguageService
 	converters *lsconv.Converters
+	program    *compiler.Program
 }
 
 // fuzzLSResult makes the language service request of kind at node, or for
@@ -92,6 +93,7 @@ func fuzzLSResult(ctx context.Context, lang *fuzzLSService, file *ast.SourceFile
 	}
 	var result any
 	var err error
+	defer assertCheckersAtRest(lang.program)
 	switch kind {
 	case fuzzQueryHover:
 		result, err = lang.ProvideHover(ctx, &lsproto.HoverParams{

@@ -23,7 +23,7 @@ type Inner = S<[string]> extends R<[string]> ? true : false;
 >false : false
 
 type Outer = S<string> extends R<string> ? true : false;
->Outer : false
+>Outer : true
 >true : true
 >false : false
 

@@ -1,11 +1,8 @@
-declarationEmitUnknownImport.ts(1,14): error TS2304: Cannot find name 'SomeNonExistingName'.
 declarationEmitUnknownImport.ts(1,14): error TS2503: Cannot find namespace 'SomeNonExistingName'.
 
 
-==== declarationEmitUnknownImport.ts (2 errors) ====
+==== declarationEmitUnknownImport.ts (1 errors) ====
     import Foo = SomeNonExistingName
-                 ~~~~~~~~~~~~~~~~~~~
-!!! error TS2304: Cannot find name 'SomeNonExistingName'.
                  ~~~~~~~~~~~~~~~~~~~
 !!! error TS2503: Cannot find namespace 'SomeNonExistingName'.
     export {Foo}

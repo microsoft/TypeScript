@@ -22,7 +22,7 @@ export const obsA: never = expand<typeof oxa>();
 
 export const obsB: never = expand<typeof oxb>();
 >obsB : never
->expand<typeof oxb>() : { v: 0; }
+>expand<typeof oxb>() : { pa: 0; readonly ma: 1; v: 0; }
 >expand : <X>() => { [K in keyof X]: X[K]; }
 >oxb : O
 

@@ -340,12 +340,10 @@ func (sd *snapshotData) newTypeResponse(projectID project.Handle, t *checker.Typ
 		resp.AliasSymbol = newSymbolReference(t.Alias().Symbol())
 	}
 	if t.ObjectFlags()&checker.ObjectFlagsMapped != 0 {
-		mapped := t.AsMappedType()
-		mapped.ResolveComponents(c, t)
-		resp.TypeParameter = sd.registerType(projectID, mapped.TypeParameter())
-		resp.ConstraintType = sd.registerType(projectID, mapped.ConstraintType())
-		resp.NameType = sd.registerType(projectID, mapped.NameType())
-		resp.TemplateType = sd.registerType(projectID, mapped.TemplateType())
+		resp.TypeParameter = sd.registerType(projectID, c.GetTypeParameterOfMappedType(t))
+		resp.ConstraintType = sd.registerType(projectID, c.GetConstraintTypeOfMappedType(t))
+		resp.NameType = sd.registerType(projectID, c.GetNameTypeOfMappedType(t))
+		resp.TemplateType = sd.registerType(projectID, c.GetTemplateTypeOfMappedType(t))
 	}
 	if checker.IsTupleTypeTarget(t) {
 		elementInfos := t.AsTupleType().ElementInfos()
@@ -3271,20 +3269,20 @@ func (s *Session) handleGetConstraintOfType(ctx context.Context, params *GetType
 }
 
 func (s *Session) handleGetTypeParameterOfMappedType(ctx context.Context, params *GetTypePropertyParams) (*TypeResponse, error) {
-	return s.resolveTypePropertyOfType(ctx, params, func(t *checker.Type) *checker.Type { return t.AsMappedType().TypeParameter() })
+	return s.resolveTypePropertyOfTypeWithChecker(ctx, params, (*checker.Checker).GetTypeParameterOfMappedType)
 }
 
 func (s *Session) handleGetConstraintTypeOfMappedType(ctx context.Context, params *GetTypePropertyParams) (*TypeResponse, error) {
-	return s.resolveTypePropertyOfType(ctx, params, func(t *checker.Type) *checker.Type { return t.AsMappedType().ConstraintType() })
+	return s.resolveTypePropertyOfTypeWithChecker(ctx, params, (*checker.Checker).GetConstraintTypeOfMappedType)
 }
 
 // @gen-proto-nullable
 func (s *Session) handleGetNameTypeOfMappedType(ctx context.Context, params *GetTypePropertyParams) (*TypeResponse, error) {
-	return s.resolveTypePropertyOfType(ctx, params, func(t *checker.Type) *checker.Type { return t.AsMappedType().NameType() })
+	return s.resolveTypePropertyOfTypeWithChecker(ctx, params, (*checker.Checker).GetNameTypeOfMappedType)
 }
 
 func (s *Session) handleGetTemplateTypeOfMappedType(ctx context.Context, params *GetTypePropertyParams) (*TypeResponse, error) {
-	return s.resolveTypePropertyOfType(ctx, params, func(t *checker.Type) *checker.Type { return t.AsMappedType().TemplateType() })
+	return s.resolveTypePropertyOfTypeWithChecker(ctx, params, (*checker.Checker).GetTemplateTypeOfMappedType)
 }
 
 // @gen-proto-nullable
@@ -3458,6 +3456,28 @@ func (s *Session) resolveTypePropertyOfType(ctx context.Context, params *GetType
 	}
 
 	result := getter(t)
+	if result == nil {
+		return nil, nil
+	}
+
+	return setup.sd.newTypeResponse(setup.projectID, result, setup.checker), nil
+}
+
+// resolveTypePropertyOfTypeWithChecker is resolveTypePropertyOfType for a
+// property the checker computes.
+func (s *Session) resolveTypePropertyOfTypeWithChecker(ctx context.Context, params *GetTypePropertyParams, getter func(*checker.Checker, *checker.Type) *checker.Type) (*TypeResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	t, err := setup.sd.resolveTypeHandle(params.Project, params.Type)
+	if err != nil {
+		return nil, err
+	}
+
+	result := getter(setup.checker, t)
 	if result == nil {
 		return nil, nil
 	}

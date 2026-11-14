@@ -406,11 +406,12 @@ func (r *EmitResolver) IsReferencedAliasDeclaration(node *ast.Node) bool {
 			if aliasLinks.referenced {
 				return true
 			}
-			target := aliasLinks.aliasTarget
-			if target != nil && node.ModifierFlags()&ast.ModifierFlagsExport != 0 &&
-				c.getSymbolFlags(target)&ast.SymbolFlagsValue != 0 &&
-				(c.compilerOptions.ShouldPreserveConstEnums() || !isConstEnumOrConstEnumOnlyModule(target)) {
-				return true
+			if node.ModifierFlags()&ast.ModifierFlagsExport != 0 {
+				target := c.resolveAlias(symbol)
+				if target != c.unknownSymbol && c.getSymbolFlags(target)&ast.SymbolFlagsValue != 0 &&
+					(c.compilerOptions.ShouldPreserveConstEnums() || !isConstEnumOrConstEnumOnlyModule(target)) {
+					return true
+				}
 			}
 		}
 	}
@@ -510,6 +511,8 @@ func (r *EmitResolver) MarkLinkedReferencesRecursively(file *ast.SourceFile) {
 	defer r.checkerMu.Unlock()
 
 	if file != nil {
+		r.checker.markingForEmit = true
+		defer func() { r.checker.markingForEmit = false }()
 		var visit ast.Visitor
 		visit = func(n *ast.Node) bool {
 			if ast.IsImportEqualsDeclaration(n) && n.ModifierFlags()&ast.ModifierFlagsExport == 0 {
@@ -540,7 +543,7 @@ func (r *EmitResolver) getReferenceResolver() binder.ReferenceResolver {
 	if r.referenceResolver == nil {
 		r.referenceResolver = binder.NewReferenceResolver(r.checker.compilerOptions, binder.ReferenceResolverHooks{
 			ResolveName:                            r.checker.resolveName,
-			GetResolvedSymbol:                      r.checker.getResolvedSymbolOrNil,
+			GetResolvedSymbol:                      r.checker.getSymbolOfReferenceForEmit,
 			GetMergedSymbol:                        r.checker.getMergedSymbol,
 			GetParentOfSymbol:                      r.checker.getParentOfSymbol,
 			GetSymbolOfDeclaration:                 r.checker.getSymbolOfDeclaration,

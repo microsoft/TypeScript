@@ -9,9 +9,9 @@ interface C { [k: string]: S; }
 >k : string
 
 type S = keyof C;
->S : any
+>S : never
 
 const k: S = 123;
->k : any
+>k : never
 >123 : 123
 

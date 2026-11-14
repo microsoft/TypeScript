@@ -25,8 +25,8 @@ const {
 >payload : string | number
 
     extra = kind === "a" ? payload.toFixed() : payload.toUpperCase(),
->extra : any
->kind === "a" ? payload.toFixed() : payload.toUpperCase() : any
+>extra : unknown
+>kind === "a" ? payload.toFixed() : payload.toUpperCase() : string
 >kind === "a" : boolean
 >kind : "a" | "b"
 >"a" : "a"
