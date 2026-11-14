@@ -9020,7 +9020,7 @@ const method = new N<string>().method;`;
         // f<number>.C is only meaningful as display text.
         assertTypeSyntax(await checker.typeToTypeNode(await typeOf("local"), undefined, NodeBuilderFlags.UseInstantiationExpressions));
 
-        // An instantiated signature still declares its remaining type parameters.
+        // An instantiated signature declares its remaining type parameters.
         const [signature] = await (await typeOf("method")).getCallSignatures();
         const declaration = await checker.signatureToSignatureDeclaration(signature, SyntaxKind.FunctionType, undefined, NodeBuilderFlags.WriteTypeArgumentsOfSignature);
         assert.ok(declaration && isFunctionTypeNode(declaration));
