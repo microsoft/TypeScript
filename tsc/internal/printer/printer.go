@@ -1475,11 +1475,7 @@ func (p *Printer) emitTypeParameter(node *ast.TypeParameterDeclaration) {
 }
 
 func (p *Printer) emitTypeParameterDeclarationNode(node *ast.TypeParameterDeclarationNode) {
-	if ast.IsTypeParameterDeclaration(node) {
-		p.emitTypeParameter(node.AsTypeParameterDeclaration())
-	} else {
-		p.emitTypeArgument(node)
-	}
+	p.emitTypeParameter(node.AsTypeParameterDeclaration())
 }
 
 func (p *Printer) emitParameterName(node *ast.BindingName) {
@@ -1913,16 +1909,14 @@ func (p *Printer) emitTypePredicate(node *ast.TypePredicateNode) {
 }
 
 func (p *Printer) emitTypeArgument(node *ast.TypeNode) {
-	if !p.emitDisplayNode(node) {
-		p.emitTypeNodeOutsideExtends(node)
-	}
+	p.emitTypeNodeOutsideExtends(node)
 }
 
 func (p *Printer) emitTypeArguments(parentNode *ast.Node, nodes *ast.TypeArgumentList) {
 	if nodes == nil {
 		return
 	}
-	p.emitList((*Printer).emitTypeParameterDeclarationNode, parentNode, nodes, LFTypeArguments /*|core.IfElse(p.shouldAllowTrailingComma(parentNode, nodes), LFAllowTrailingComma, LFNone)*/) // TODO: preserve trailing comma after Strada migration
+	p.emitList((*Printer).emitTypeArgument, parentNode, nodes, LFTypeArguments /*|core.IfElse(p.shouldAllowTrailingComma(parentNode, nodes), LFAllowTrailingComma, LFNone)*/) // TODO: preserve trailing comma after Strada migration
 }
 
 func (p *Printer) emitTypeReference(node *ast.TypeReferenceNode) {
@@ -2701,7 +2695,7 @@ func (p *Printer) emitArrowFunction(node *ast.ArrowFunction) {
 	indented := p.shouldEmitIndented(node.AsNode())
 	p.increaseIndentIf(indented)
 	p.pushNameGenerationScope(node.AsNode())
-	p.emitSignatureTypeArgumentsOrParameters(node.AsNode())
+	p.emitTypeParameters(node.AsNode(), node.TypeParameters)
 	p.emitParametersForArrow(node.AsNode(), node.Parameters)
 	p.emitTypeAnnotation(node.Type)
 	p.writeSpace()
