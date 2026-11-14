@@ -2748,6 +2748,10 @@ func (tx *DeclarationTransformer) getNameExpressionPreferringIdentifier(nameExpr
 			return result
 		}
 	}
+	if ast.IsNoSubstitutionTemplateLiteral(nameExpr) {
+		// template literals aren't valid module export names
+		return tx.Factory().NewStringLiteral(nameExpr.Text(), ast.TokenFlagsNone)
+	}
 	return nameExpr
 }
 
