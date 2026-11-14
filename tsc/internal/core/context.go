@@ -28,6 +28,7 @@ const (
 	CheckerLifetimeTemporary CheckerLifetime = iota
 	CheckerLifetimeDiagnostics
 	CheckerLifetimeAPI
+	CheckerLifetimeCheckedFileQuery
 )
 
 func WithCheckerLifetime(ctx context.Context, lifetime CheckerLifetime) context.Context {
