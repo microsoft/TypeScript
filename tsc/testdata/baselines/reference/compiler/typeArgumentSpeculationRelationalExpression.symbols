@@ -1,0 +1,570 @@
+//// [tests/cases/compiler/typeArgumentSpeculationRelationalExpression.ts] ////
+
+=== expressions.ts ===
+export {};
+declare const a: any, b: any, c: any, d: any, e: any, B: any, options: any, x: any;
+>a : Symbol(a, Decl(expressions.ts, 1, 13))
+>b : Symbol(b, Decl(expressions.ts, 1, 21))
+>c : Symbol(c, Decl(expressions.ts, 1, 29))
+>d : Symbol(d, Decl(expressions.ts, 1, 37))
+>e : Symbol(e, Decl(expressions.ts, 1, 45))
+>B : Symbol(B, Decl(expressions.ts, 1, 53))
+>options : Symbol(options, Decl(expressions.ts, 1, 61))
+>x : Symbol(x, Decl(expressions.ts, 1, 75))
+
+type T = any;
+>T : Symbol(T, Decl(expressions.ts, 1, 83))
+
+type U = string;
+>U : Symbol(U, Decl(expressions.ts, 2, 13))
+
+type X = number;
+>X : Symbol(X, Decl(expressions.ts, 3, 16))
+
+type Y = string;
+>Y : Symbol(Y, Decl(expressions.ts, 4, 16))
+
+declare function f<A = unknown, B = unknown>(...args: any[]): any;
+>f : Symbol(f, Decl(expressions.ts, 5, 16))
+>A : Symbol(A, Decl(expressions.ts, 6, 19))
+>B : Symbol(B, Decl(expressions.ts, 6, 31))
+>args : Symbol(args, Decl(expressions.ts, 6, 45))
+
+declare function g<A>(...args: any[]): any;
+>g : Symbol(g, Decl(expressions.ts, 6, 66))
+>A : Symbol(A, Decl(expressions.ts, 7, 19))
+>args : Symbol(args, Decl(expressions.ts, 7, 22))
+
+// Typed, empty, and async arrows remain expressions.
+a < ((x: T) => c > (d));
+>a : Symbol(a, Decl(expressions.ts, 1, 13))
+>x : Symbol(x, Decl(expressions.ts, 10, 6))
+>T : Symbol(T, Decl(expressions.ts, 1, 83))
+>c : Symbol(c, Decl(expressions.ts, 1, 29))
+>d : Symbol(d, Decl(expressions.ts, 1, 37))
+
+a < ((x: T) => c > d);
+>a : Symbol(a, Decl(expressions.ts, 1, 13))
+>x : Symbol(x, Decl(expressions.ts, 11, 6))
+>T : Symbol(T, Decl(expressions.ts, 1, 83))
+>c : Symbol(c, Decl(expressions.ts, 1, 29))
+>d : Symbol(d, Decl(expressions.ts, 1, 37))
+
+a < (() => c > (d));
+>a : Symbol(a, Decl(expressions.ts, 1, 13))
+>c : Symbol(c, Decl(expressions.ts, 1, 29))
+>d : Symbol(d, Decl(expressions.ts, 1, 37))
+
+a < (() => c > d);
+>a : Symbol(a, Decl(expressions.ts, 1, 13))
+>c : Symbol(c, Decl(expressions.ts, 1, 29))
+>d : Symbol(d, Decl(expressions.ts, 1, 37))
+
+a < (async (x: T) => c > (d));
+>a : Symbol(a, Decl(expressions.ts, 1, 13))
+>x : Symbol(x, Decl(expressions.ts, 14, 12))
+>T : Symbol(T, Decl(expressions.ts, 1, 83))
+>c : Symbol(c, Decl(expressions.ts, 1, 29))
+>d : Symbol(d, Decl(expressions.ts, 1, 37))
+
+a < (async (x: T) => c > d);
+>a : Symbol(a, Decl(expressions.ts, 1, 13))
+>x : Symbol(x, Decl(expressions.ts, 15, 12))
+>T : Symbol(T, Decl(expressions.ts, 1, 83))
+>c : Symbol(c, Decl(expressions.ts, 1, 29))
+>d : Symbol(d, Decl(expressions.ts, 1, 37))
+
+// Expression containers must be structurally complete before accepting type arguments.
+a < [b > (c)];
+>a : Symbol(a, Decl(expressions.ts, 1, 13))
+>b : Symbol(b, Decl(expressions.ts, 1, 21))
+>c : Symbol(c, Decl(expressions.ts, 1, 29))
+
+a < [b > `c`];
+>a : Symbol(a, Decl(expressions.ts, 1, 13))
+>b : Symbol(b, Decl(expressions.ts, 1, 21))
+
+a < b[c > (d)];
+>a : Symbol(a, Decl(expressions.ts, 1, 13))
+>b : Symbol(b, Decl(expressions.ts, 1, 21))
+>c : Symbol(c, Decl(expressions.ts, 1, 29))
+>d : Symbol(d, Decl(expressions.ts, 1, 37))
+
+a < c[d > (e) ? 0 : 1];
+>a : Symbol(a, Decl(expressions.ts, 1, 13))
+>c : Symbol(c, Decl(expressions.ts, 1, 29))
+>d : Symbol(d, Decl(expressions.ts, 1, 37))
+>e : Symbol(e, Decl(expressions.ts, 1, 45))
+
+a < {b: c > (d)};
+>a : Symbol(a, Decl(expressions.ts, 1, 13))
+>b : Symbol(b, Decl(expressions.ts, 22, 5))
+>c : Symbol(c, Decl(expressions.ts, 1, 29))
+>d : Symbol(d, Decl(expressions.ts, 1, 37))
+
+a < new B > (c);
+>a : Symbol(a, Decl(expressions.ts, 1, 13))
+>B : Symbol(B, Decl(expressions.ts, 1, 53))
+>c : Symbol(c, Decl(expressions.ts, 1, 29))
+
+a < keyof [b > (c)];
+>a : Symbol(a, Decl(expressions.ts, 1, 13))
+>b : Symbol(b, Decl(expressions.ts, 1, 21))
+>c : Symbol(c, Decl(expressions.ts, 1, 29))
+
+a < import("m", options) > (c);
+>a : Symbol(a, Decl(expressions.ts, 1, 13))
+>options : Symbol(options, Decl(expressions.ts, 1, 61))
+>c : Symbol(c, Decl(expressions.ts, 1, 29))
+
+// Relational expressions must preserve the outer argument list (#60874).
+console.log(a < b, (c > (d & e)));
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>a : Symbol(a, Decl(expressions.ts, 1, 13))
+>b : Symbol(b, Decl(expressions.ts, 1, 21))
+>c : Symbol(c, Decl(expressions.ts, 1, 29))
+>d : Symbol(d, Decl(expressions.ts, 1, 37))
+>e : Symbol(e, Decl(expressions.ts, 1, 45))
+
+console.log(a < b, (((c > (d & e)))));
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>a : Symbol(a, Decl(expressions.ts, 1, 13))
+>b : Symbol(b, Decl(expressions.ts, 1, 21))
+>c : Symbol(c, Decl(expressions.ts, 1, 29))
+>d : Symbol(d, Decl(expressions.ts, 1, 37))
+>e : Symbol(e, Decl(expressions.ts, 1, 45))
+
+f(a < b, [c > (d)]);
+>f : Symbol(f, Decl(expressions.ts, 5, 16))
+>a : Symbol(a, Decl(expressions.ts, 1, 13))
+>b : Symbol(b, Decl(expressions.ts, 1, 21))
+>c : Symbol(c, Decl(expressions.ts, 1, 29))
+>d : Symbol(d, Decl(expressions.ts, 1, 37))
+
+f(a < b, {c: d > (e)});
+>f : Symbol(f, Decl(expressions.ts, 5, 16))
+>a : Symbol(a, Decl(expressions.ts, 1, 13))
+>b : Symbol(b, Decl(expressions.ts, 1, 21))
+>c : Symbol(c, Decl(expressions.ts, 31, 10))
+>d : Symbol(d, Decl(expressions.ts, 1, 37))
+>e : Symbol(e, Decl(expressions.ts, 1, 45))
+
+f(a < b, [g<T>(c > (d))]);
+>f : Symbol(f, Decl(expressions.ts, 5, 16))
+>a : Symbol(a, Decl(expressions.ts, 1, 13))
+>b : Symbol(b, Decl(expressions.ts, 1, 21))
+>g : Symbol(g, Decl(expressions.ts, 6, 66))
+>T : Symbol(T, Decl(expressions.ts, 1, 83))
+>c : Symbol(c, Decl(expressions.ts, 1, 29))
+>d : Symbol(d, Decl(expressions.ts, 1, 37))
+
+// Completed type arguments still take precedence over relational expressions.
+f<T, (T)>(1);
+>f : Symbol(f, Decl(expressions.ts, 5, 16))
+>T : Symbol(T, Decl(expressions.ts, 1, 83))
+>T : Symbol(T, Decl(expressions.ts, 1, 83))
+
+f<(x: T) => T>(1);
+>f : Symbol(f, Decl(expressions.ts, 5, 16))
+>x : Symbol(x, Decl(expressions.ts, 36, 3))
+>T : Symbol(T, Decl(expressions.ts, 1, 83))
+>T : Symbol(T, Decl(expressions.ts, 1, 83))
+
+f<() => T>(1);
+>f : Symbol(f, Decl(expressions.ts, 5, 16))
+>T : Symbol(T, Decl(expressions.ts, 1, 83))
+
+f<((x: T) => T)>(1);
+>f : Symbol(f, Decl(expressions.ts, 5, 16))
+>x : Symbol(x, Decl(expressions.ts, 38, 4))
+>T : Symbol(T, Decl(expressions.ts, 1, 83))
+>T : Symbol(T, Decl(expressions.ts, 1, 83))
+
+f<<T>(x: T) => (T)>(x);
+>f : Symbol(f, Decl(expressions.ts, 5, 16))
+>T : Symbol(T, Decl(expressions.ts, 39, 3))
+>x : Symbol(x, Decl(expressions.ts, 39, 6))
+>T : Symbol(T, Decl(expressions.ts, 39, 3))
+>T : Symbol(T, Decl(expressions.ts, 39, 3))
+>x : Symbol(x, Decl(expressions.ts, 1, 75))
+
+f<{ [a < ((x: T) => c > (d))]: T }>();
+>f : Symbol(f, Decl(expressions.ts, 5, 16))
+>[a < ((x: T) => c > (d))] : Symbol([a < ((x: T) => c > (d))], Decl(expressions.ts, 40, 3))
+>a : Symbol(a, Decl(expressions.ts, 1, 13))
+>x : Symbol(x, Decl(expressions.ts, 40, 11))
+>T : Symbol(T, Decl(expressions.ts, 1, 83))
+>c : Symbol(c, Decl(expressions.ts, 1, 29))
+>d : Symbol(d, Decl(expressions.ts, 1, 37))
+>T : Symbol(T, Decl(expressions.ts, 1, 83))
+
+f<{ [a < [b > (c)]]: T }>();
+>f : Symbol(f, Decl(expressions.ts, 5, 16))
+>[a < [b > (c)]] : Symbol([a < [b > (c)]], Decl(expressions.ts, 41, 3))
+>a : Symbol(a, Decl(expressions.ts, 1, 13))
+>b : Symbol(b, Decl(expressions.ts, 1, 21))
+>c : Symbol(c, Decl(expressions.ts, 1, 29))
+>T : Symbol(T, Decl(expressions.ts, 1, 83))
+
+f<T[U]>();
+>f : Symbol(f, Decl(expressions.ts, 5, 16))
+>T : Symbol(T, Decl(expressions.ts, 1, 83))
+>U : Symbol(U, Decl(expressions.ts, 2, 13))
+
+f<[T, U]>();
+>f : Symbol(f, Decl(expressions.ts, 5, 16))
+>T : Symbol(T, Decl(expressions.ts, 1, 83))
+>U : Symbol(U, Decl(expressions.ts, 2, 13))
+
+f<{ x: T; m(x: T): U }>();
+>f : Symbol(f, Decl(expressions.ts, 5, 16))
+>x : Symbol(x, Decl(expressions.ts, 44, 3))
+>T : Symbol(T, Decl(expressions.ts, 1, 83))
+>m : Symbol(m, Decl(expressions.ts, 44, 9))
+>x : Symbol(x, Decl(expressions.ts, 44, 12))
+>T : Symbol(T, Decl(expressions.ts, 1, 83))
+>U : Symbol(U, Decl(expressions.ts, 2, 13))
+
+f<{ [K in keyof T]: T[K] }>();
+>f : Symbol(f, Decl(expressions.ts, 5, 16))
+>K : Symbol(K, Decl(expressions.ts, 45, 5))
+>T : Symbol(T, Decl(expressions.ts, 1, 83))
+>T : Symbol(T, Decl(expressions.ts, 1, 83))
+>K : Symbol(K, Decl(expressions.ts, 45, 5))
+
+f<new (x: T) => U>();
+>f : Symbol(f, Decl(expressions.ts, 5, 16))
+>x : Symbol(x, Decl(expressions.ts, 46, 7))
+>T : Symbol(T, Decl(expressions.ts, 1, 83))
+>U : Symbol(U, Decl(expressions.ts, 2, 13))
+
+f<T extends U ? X : Y>();
+>f : Symbol(f, Decl(expressions.ts, 5, 16))
+>T : Symbol(T, Decl(expressions.ts, 1, 83))
+>U : Symbol(U, Decl(expressions.ts, 2, 13))
+>X : Symbol(X, Decl(expressions.ts, 3, 16))
+>Y : Symbol(Y, Decl(expressions.ts, 4, 16))
+
+f<import("m", { with: { type: "json" } })>();
+>f : Symbol(f, Decl(expressions.ts, 5, 16))
+
+f<`prefix${T}`>();
+>f : Symbol(f, Decl(expressions.ts, 5, 16))
+>T : Symbol(T, Decl(expressions.ts, 1, 83))
+
+f<infer X extends (T)>();
+>f : Symbol(f, Decl(expressions.ts, 5, 16))
+>X : Symbol(X, Decl(expressions.ts, 50, 7))
+>T : Symbol(T, Decl(expressions.ts, 1, 83))
+
+f<infer X extends U ? X : never>();
+>f : Symbol(f, Decl(expressions.ts, 5, 16))
+>X : Symbol(X, Decl(expressions.ts, 51, 7))
+>U : Symbol(U, Decl(expressions.ts, 2, 13))
+>X : Symbol(X, Decl(expressions.ts, 3, 16))
+
+f<{ /** @type {(T} @see x */ x: T }>();
+>f : Symbol(f, Decl(expressions.ts, 5, 16))
+>x : Symbol(x, Decl(expressions.ts, 52, 3))
+>T : Symbol(T, Decl(expressions.ts, 1, 83))
+
+f<() => T>`text`;
+>f : Symbol(f, Decl(expressions.ts, 5, 16))
+>T : Symbol(T, Decl(expressions.ts, 1, 83))
+
+f<() => T>`text${1}`;
+>f : Symbol(f, Decl(expressions.ts, 5, 16))
+>T : Symbol(T, Decl(expressions.ts, 1, 83))
+
+f<() => T>;
+>f : Symbol(f, Decl(expressions.ts, 5, 16))
+>T : Symbol(T, Decl(expressions.ts, 1, 83))
+
+=== expressions.tsx ===
+export {};
+declare const a: any, b: any, c: any, d: any, e: any, B: any, options: any, x: any;
+>a : Symbol(a, Decl(expressions.tsx, 1, 13))
+>b : Symbol(b, Decl(expressions.tsx, 1, 21))
+>c : Symbol(c, Decl(expressions.tsx, 1, 29))
+>d : Symbol(d, Decl(expressions.tsx, 1, 37))
+>e : Symbol(e, Decl(expressions.tsx, 1, 45))
+>B : Symbol(B, Decl(expressions.tsx, 1, 53))
+>options : Symbol(options, Decl(expressions.tsx, 1, 61))
+>x : Symbol(x, Decl(expressions.tsx, 1, 75))
+
+type T = any;
+>T : Symbol(T, Decl(expressions.tsx, 1, 83))
+
+type U = string;
+>U : Symbol(U, Decl(expressions.tsx, 2, 13))
+
+type X = number;
+>X : Symbol(X, Decl(expressions.tsx, 3, 16))
+
+type Y = string;
+>Y : Symbol(Y, Decl(expressions.tsx, 4, 16))
+
+declare function f<A = unknown, B = unknown>(...args: any[]): any;
+>f : Symbol(f, Decl(expressions.tsx, 5, 16))
+>A : Symbol(A, Decl(expressions.tsx, 6, 19))
+>B : Symbol(B, Decl(expressions.tsx, 6, 31))
+>args : Symbol(args, Decl(expressions.tsx, 6, 45))
+
+declare function g<A>(...args: any[]): any;
+>g : Symbol(g, Decl(expressions.tsx, 6, 66))
+>A : Symbol(A, Decl(expressions.tsx, 7, 19))
+>args : Symbol(args, Decl(expressions.tsx, 7, 22))
+
+// Typed, empty, and async arrows remain expressions.
+a < ((x: T) => c > (d));
+>a : Symbol(a, Decl(expressions.tsx, 1, 13))
+>x : Symbol(x, Decl(expressions.tsx, 10, 6))
+>T : Symbol(T, Decl(expressions.tsx, 1, 83))
+>c : Symbol(c, Decl(expressions.tsx, 1, 29))
+>d : Symbol(d, Decl(expressions.tsx, 1, 37))
+
+a < ((x: T) => c > d);
+>a : Symbol(a, Decl(expressions.tsx, 1, 13))
+>x : Symbol(x, Decl(expressions.tsx, 11, 6))
+>T : Symbol(T, Decl(expressions.tsx, 1, 83))
+>c : Symbol(c, Decl(expressions.tsx, 1, 29))
+>d : Symbol(d, Decl(expressions.tsx, 1, 37))
+
+a < (() => c > (d));
+>a : Symbol(a, Decl(expressions.tsx, 1, 13))
+>c : Symbol(c, Decl(expressions.tsx, 1, 29))
+>d : Symbol(d, Decl(expressions.tsx, 1, 37))
+
+a < (() => c > d);
+>a : Symbol(a, Decl(expressions.tsx, 1, 13))
+>c : Symbol(c, Decl(expressions.tsx, 1, 29))
+>d : Symbol(d, Decl(expressions.tsx, 1, 37))
+
+a < (async (x: T) => c > (d));
+>a : Symbol(a, Decl(expressions.tsx, 1, 13))
+>x : Symbol(x, Decl(expressions.tsx, 14, 12))
+>T : Symbol(T, Decl(expressions.tsx, 1, 83))
+>c : Symbol(c, Decl(expressions.tsx, 1, 29))
+>d : Symbol(d, Decl(expressions.tsx, 1, 37))
+
+a < (async (x: T) => c > d);
+>a : Symbol(a, Decl(expressions.tsx, 1, 13))
+>x : Symbol(x, Decl(expressions.tsx, 15, 12))
+>T : Symbol(T, Decl(expressions.tsx, 1, 83))
+>c : Symbol(c, Decl(expressions.tsx, 1, 29))
+>d : Symbol(d, Decl(expressions.tsx, 1, 37))
+
+// Expression containers must be structurally complete before accepting type arguments.
+a < [b > (c)];
+>a : Symbol(a, Decl(expressions.tsx, 1, 13))
+>b : Symbol(b, Decl(expressions.tsx, 1, 21))
+>c : Symbol(c, Decl(expressions.tsx, 1, 29))
+
+a < [b > `c`];
+>a : Symbol(a, Decl(expressions.tsx, 1, 13))
+>b : Symbol(b, Decl(expressions.tsx, 1, 21))
+
+a < b[c > (d)];
+>a : Symbol(a, Decl(expressions.tsx, 1, 13))
+>b : Symbol(b, Decl(expressions.tsx, 1, 21))
+>c : Symbol(c, Decl(expressions.tsx, 1, 29))
+>d : Symbol(d, Decl(expressions.tsx, 1, 37))
+
+a < c[d > (e) ? 0 : 1];
+>a : Symbol(a, Decl(expressions.tsx, 1, 13))
+>c : Symbol(c, Decl(expressions.tsx, 1, 29))
+>d : Symbol(d, Decl(expressions.tsx, 1, 37))
+>e : Symbol(e, Decl(expressions.tsx, 1, 45))
+
+a < {b: c > (d)};
+>a : Symbol(a, Decl(expressions.tsx, 1, 13))
+>b : Symbol(b, Decl(expressions.tsx, 22, 5))
+>c : Symbol(c, Decl(expressions.tsx, 1, 29))
+>d : Symbol(d, Decl(expressions.tsx, 1, 37))
+
+a < new B > (c);
+>a : Symbol(a, Decl(expressions.tsx, 1, 13))
+>B : Symbol(B, Decl(expressions.tsx, 1, 53))
+>c : Symbol(c, Decl(expressions.tsx, 1, 29))
+
+a < keyof [b > (c)];
+>a : Symbol(a, Decl(expressions.tsx, 1, 13))
+>b : Symbol(b, Decl(expressions.tsx, 1, 21))
+>c : Symbol(c, Decl(expressions.tsx, 1, 29))
+
+a < import("m", options) > (c);
+>a : Symbol(a, Decl(expressions.tsx, 1, 13))
+>options : Symbol(options, Decl(expressions.tsx, 1, 61))
+>c : Symbol(c, Decl(expressions.tsx, 1, 29))
+
+// Relational expressions must preserve the outer argument list (#60874).
+console.log(a < b, (c > (d & e)));
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>a : Symbol(a, Decl(expressions.tsx, 1, 13))
+>b : Symbol(b, Decl(expressions.tsx, 1, 21))
+>c : Symbol(c, Decl(expressions.tsx, 1, 29))
+>d : Symbol(d, Decl(expressions.tsx, 1, 37))
+>e : Symbol(e, Decl(expressions.tsx, 1, 45))
+
+console.log(a < b, (((c > (d & e)))));
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>a : Symbol(a, Decl(expressions.tsx, 1, 13))
+>b : Symbol(b, Decl(expressions.tsx, 1, 21))
+>c : Symbol(c, Decl(expressions.tsx, 1, 29))
+>d : Symbol(d, Decl(expressions.tsx, 1, 37))
+>e : Symbol(e, Decl(expressions.tsx, 1, 45))
+
+f(a < b, [c > (d)]);
+>f : Symbol(f, Decl(expressions.tsx, 5, 16))
+>a : Symbol(a, Decl(expressions.tsx, 1, 13))
+>b : Symbol(b, Decl(expressions.tsx, 1, 21))
+>c : Symbol(c, Decl(expressions.tsx, 1, 29))
+>d : Symbol(d, Decl(expressions.tsx, 1, 37))
+
+f(a < b, {c: d > (e)});
+>f : Symbol(f, Decl(expressions.tsx, 5, 16))
+>a : Symbol(a, Decl(expressions.tsx, 1, 13))
+>b : Symbol(b, Decl(expressions.tsx, 1, 21))
+>c : Symbol(c, Decl(expressions.tsx, 31, 10))
+>d : Symbol(d, Decl(expressions.tsx, 1, 37))
+>e : Symbol(e, Decl(expressions.tsx, 1, 45))
+
+f(a < b, [g<T>(c > (d))]);
+>f : Symbol(f, Decl(expressions.tsx, 5, 16))
+>a : Symbol(a, Decl(expressions.tsx, 1, 13))
+>b : Symbol(b, Decl(expressions.tsx, 1, 21))
+>g : Symbol(g, Decl(expressions.tsx, 6, 66))
+>T : Symbol(T, Decl(expressions.tsx, 1, 83))
+>c : Symbol(c, Decl(expressions.tsx, 1, 29))
+>d : Symbol(d, Decl(expressions.tsx, 1, 37))
+
+// Completed type arguments still take precedence over relational expressions.
+f<T, (T)>(1);
+>f : Symbol(f, Decl(expressions.tsx, 5, 16))
+>T : Symbol(T, Decl(expressions.tsx, 1, 83))
+>T : Symbol(T, Decl(expressions.tsx, 1, 83))
+
+f<(x: T) => T>(1);
+>f : Symbol(f, Decl(expressions.tsx, 5, 16))
+>x : Symbol(x, Decl(expressions.tsx, 36, 3))
+>T : Symbol(T, Decl(expressions.tsx, 1, 83))
+>T : Symbol(T, Decl(expressions.tsx, 1, 83))
+
+f<() => T>(1);
+>f : Symbol(f, Decl(expressions.tsx, 5, 16))
+>T : Symbol(T, Decl(expressions.tsx, 1, 83))
+
+f<((x: T) => T)>(1);
+>f : Symbol(f, Decl(expressions.tsx, 5, 16))
+>x : Symbol(x, Decl(expressions.tsx, 38, 4))
+>T : Symbol(T, Decl(expressions.tsx, 1, 83))
+>T : Symbol(T, Decl(expressions.tsx, 1, 83))
+
+f<<T>(x: T) => (T)>(x);
+>f : Symbol(f, Decl(expressions.tsx, 5, 16))
+>T : Symbol(T, Decl(expressions.tsx, 39, 3))
+>x : Symbol(x, Decl(expressions.tsx, 39, 6))
+>T : Symbol(T, Decl(expressions.tsx, 39, 3))
+>T : Symbol(T, Decl(expressions.tsx, 39, 3))
+>x : Symbol(x, Decl(expressions.tsx, 1, 75))
+
+f<{ [a < ((x: T) => c > (d))]: T }>();
+>f : Symbol(f, Decl(expressions.tsx, 5, 16))
+>[a < ((x: T) => c > (d))] : Symbol([a < ((x: T) => c > (d))], Decl(expressions.tsx, 40, 3))
+>a : Symbol(a, Decl(expressions.tsx, 1, 13))
+>x : Symbol(x, Decl(expressions.tsx, 40, 11))
+>T : Symbol(T, Decl(expressions.tsx, 1, 83))
+>c : Symbol(c, Decl(expressions.tsx, 1, 29))
+>d : Symbol(d, Decl(expressions.tsx, 1, 37))
+>T : Symbol(T, Decl(expressions.tsx, 1, 83))
+
+f<{ [a < [b > (c)]]: T }>();
+>f : Symbol(f, Decl(expressions.tsx, 5, 16))
+>[a < [b > (c)]] : Symbol([a < [b > (c)]], Decl(expressions.tsx, 41, 3))
+>a : Symbol(a, Decl(expressions.tsx, 1, 13))
+>b : Symbol(b, Decl(expressions.tsx, 1, 21))
+>c : Symbol(c, Decl(expressions.tsx, 1, 29))
+>T : Symbol(T, Decl(expressions.tsx, 1, 83))
+
+f<T[U]>();
+>f : Symbol(f, Decl(expressions.tsx, 5, 16))
+>T : Symbol(T, Decl(expressions.tsx, 1, 83))
+>U : Symbol(U, Decl(expressions.tsx, 2, 13))
+
+f<[T, U]>();
+>f : Symbol(f, Decl(expressions.tsx, 5, 16))
+>T : Symbol(T, Decl(expressions.tsx, 1, 83))
+>U : Symbol(U, Decl(expressions.tsx, 2, 13))
+
+f<{ x: T; m(x: T): U }>();
+>f : Symbol(f, Decl(expressions.tsx, 5, 16))
+>x : Symbol(x, Decl(expressions.tsx, 44, 3))
+>T : Symbol(T, Decl(expressions.tsx, 1, 83))
+>m : Symbol(m, Decl(expressions.tsx, 44, 9))
+>x : Symbol(x, Decl(expressions.tsx, 44, 12))
+>T : Symbol(T, Decl(expressions.tsx, 1, 83))
+>U : Symbol(U, Decl(expressions.tsx, 2, 13))
+
+f<{ [K in keyof T]: T[K] }>();
+>f : Symbol(f, Decl(expressions.tsx, 5, 16))
+>K : Symbol(K, Decl(expressions.tsx, 45, 5))
+>T : Symbol(T, Decl(expressions.tsx, 1, 83))
+>T : Symbol(T, Decl(expressions.tsx, 1, 83))
+>K : Symbol(K, Decl(expressions.tsx, 45, 5))
+
+f<new (x: T) => U>();
+>f : Symbol(f, Decl(expressions.tsx, 5, 16))
+>x : Symbol(x, Decl(expressions.tsx, 46, 7))
+>T : Symbol(T, Decl(expressions.tsx, 1, 83))
+>U : Symbol(U, Decl(expressions.tsx, 2, 13))
+
+f<T extends U ? X : Y>();
+>f : Symbol(f, Decl(expressions.tsx, 5, 16))
+>T : Symbol(T, Decl(expressions.tsx, 1, 83))
+>U : Symbol(U, Decl(expressions.tsx, 2, 13))
+>X : Symbol(X, Decl(expressions.tsx, 3, 16))
+>Y : Symbol(Y, Decl(expressions.tsx, 4, 16))
+
+f<import("m", { with: { type: "json" } })>();
+>f : Symbol(f, Decl(expressions.tsx, 5, 16))
+
+f<`prefix${T}`>();
+>f : Symbol(f, Decl(expressions.tsx, 5, 16))
+>T : Symbol(T, Decl(expressions.tsx, 1, 83))
+
+f<infer X extends (T)>();
+>f : Symbol(f, Decl(expressions.tsx, 5, 16))
+>X : Symbol(X, Decl(expressions.tsx, 50, 7))
+>T : Symbol(T, Decl(expressions.tsx, 1, 83))
+
+f<infer X extends U ? X : never>();
+>f : Symbol(f, Decl(expressions.tsx, 5, 16))
+>X : Symbol(X, Decl(expressions.tsx, 51, 7))
+>U : Symbol(U, Decl(expressions.tsx, 2, 13))
+>X : Symbol(X, Decl(expressions.tsx, 3, 16))
+
+f<{ /** @type {(T} @see x */ x: T }>();
+>f : Symbol(f, Decl(expressions.tsx, 5, 16))
+>x : Symbol(x, Decl(expressions.tsx, 52, 3))
+>T : Symbol(T, Decl(expressions.tsx, 1, 83))
+
+f<() => T>`text`;
+>f : Symbol(f, Decl(expressions.tsx, 5, 16))
+>T : Symbol(T, Decl(expressions.tsx, 1, 83))
+
+f<() => T>`text${1}`;
+>f : Symbol(f, Decl(expressions.tsx, 5, 16))
+>T : Symbol(T, Decl(expressions.tsx, 1, 83))
+
+f<() => T>;
+>f : Symbol(f, Decl(expressions.tsx, 5, 16))
+>T : Symbol(T, Decl(expressions.tsx, 1, 83))
+

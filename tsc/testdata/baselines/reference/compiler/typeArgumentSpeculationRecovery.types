@@ -1,0 +1,336 @@
+//// [tests/cases/compiler/typeArgumentSpeculationRecovery.ts] ////
+
+=== recovery.ts ===
+export {};
+declare const a: any, b: any, c: any, d: any, e: any, B: any, options: any, x: any;
+>a : any
+>b : any
+>c : any
+>d : any
+>e : any
+>B : any
+>options : any
+>x : any
+
+type T = any;
+>T : any
+
+type U = string;
+>U : string
+
+type X = number;
+>X : number
+
+type Y = string;
+>Y : string
+
+declare function f<A = unknown, B = unknown>(...args: any[]): any;
+>f : <A = unknown, B = unknown>(...args: any[]) => any
+>args : any[]
+
+declare function g<A>(...args: any[]): any;
+>g : <A>(...args: any[]) => any
+>args : any[]
+
+// Recovery and rollback preserve diagnostics and the following call.
+f<a,,b>();
+>f<a,,b>() : any
+>f : <A = unknown, B = unknown>(...args: any[]) => any
+
+g<(T)>();
+>g<(T)>() : any
+>g : <A>(...args: any[]) => any
+
+f<?>;
+>f<?> : (...args: any[]) => any
+>f : <A = unknown, B = unknown>(...args: any[]) => any
+
+g<(T)>();
+>g<(T)>() : any
+>g : <A>(...args: any[]) => any
+
+f<"\xZ">();
+>f<"\xZ">() : any
+>f : <A = unknown, B = unknown>(...args: any[]) => any
+
+g<(T)>();
+>g<(T)>() : any
+>g : <A>(...args: any[]) => any
+
+f<010>();
+>f<010>() : any
+>f : <A = unknown, B = unknown>(...args: any[]) => any
+
+g<(T)>();
+>g<(T)>() : any
+>g : <A>(...args: any[]) => any
+
+f<("\xZ")>();
+>f<("\xZ")>() : any
+>f : <A = unknown, B = unknown>(...args: any[]) => any
+
+g<(T)>();
+>g<(T)>() : any
+>g : <A>(...args: any[]) => any
+
+f<(010)>();
+>f<(010)>() : any
+>f : <A = unknown, B = unknown>(...args: any[]) => any
+
+g<(T)>();
+>g<(T)>() : any
+>g : <A>(...args: any[]) => any
+
+f<((x: T) => "\xZ")>();
+>f<((x: T) => "\xZ")>() : any
+>f : <A = unknown, B = unknown>(...args: any[]) => any
+>x : any
+
+g<(T)>();
+>g<(T)>() : any
+>g : <A>(...args: any[]) => any
+
+f<import("m", { assert: { type: "json" } })>();
+>f<import("m", { assert: { type: "json" } })>() : any
+>f : <A = unknown, B = unknown>(...args: any[]) => any
+>type : any
+
+g<(T)>();
+>g<(T)>() : any
+>g : <A>(...args: any[]) => any
+
+f<("\xZ" > (x));
+>f<("\xZ" > (x)) : boolean
+>f : <A = unknown, B = unknown>(...args: any[]) => any
+>("\xZ" > (x)) : boolean
+>"\xZ" > (x) : boolean
+>"\xZ" : "\\xZ"
+>(x) : any
+>x : any
+
+g<(T)>();
+>g<(T)>() : any
+>g : <A>(...args: any[]) => any
+
+f<T extends U X : Y>();
+>f<T extends U X : Y>() : any
+>f : <A = unknown, B = unknown>(...args: any[]) => any
+
+g<(T)>();
+>g<(T)>() : any
+>g : <A>(...args: any[]) => any
+
+f<T extends U ? X Y>();
+>f<T extends U ? X Y>() : any
+>f : <A = unknown, B = unknown>(...args: any[]) => any
+
+g<(T)>();
+>g<(T)>() : any
+>g : <A>(...args: any[]) => any
+
+f<T | () => U>();
+>f<T | () => U>() : any
+>f : <A = unknown, B = unknown>(...args: any[]) => any
+
+g<(T)>();
+>g<(T)>() : any
+>g : <A>(...args: any[]) => any
+
+f<() => >();
+>f<() => >() : any
+>f : <A = unknown, B = unknown>(...args: any[]) => any
+
+g<(T)>();
+>g<(T)>() : any
+>g : <A>(...args: any[]) => any
+
+f<T.>();
+>f<T.>() : any
+>f : <A = unknown, B = unknown>(...args: any[]) => any
+>T : any
+
+g<(T)>();
+>g<(T)>() : any
+>g : <A>(...args: any[]) => any
+
+f<{ [(() => { type Bad = (T; return key; })()]: U }>();
+>f<{ [(() => { type Bad = (T; return key; })()]: U }>() : any
+>f : <A = unknown, B = unknown>(...args: any[]) => any
+>[(() => { type Bad = (T; return key; })()] : string
+>(() => { type Bad = (T; return key; })() : any
+>(() => { type Bad = (T; return key; }) : () => any
+>() => { type Bad = (T; return key; } : () => any
+>Bad : any
+>key : any
+
+g<(T)>();
+>g<(T)>() : any
+>g : <A>(...args: any[]) => any
+
+=== recovery.tsx ===
+export {};
+declare const a: any, b: any, c: any, d: any, e: any, B: any, options: any, x: any;
+>a : any
+>b : any
+>c : any
+>d : any
+>e : any
+>B : any
+>options : any
+>x : any
+
+type T = any;
+>T : any
+
+type U = string;
+>U : string
+
+type X = number;
+>X : number
+
+type Y = string;
+>Y : string
+
+declare function f<A = unknown, B = unknown>(...args: any[]): any;
+>f : <A = unknown, B = unknown>(...args: any[]) => any
+>args : any[]
+
+declare function g<A>(...args: any[]): any;
+>g : <A>(...args: any[]) => any
+>args : any[]
+
+// Recovery and rollback preserve diagnostics and the following call.
+f<a,,b>();
+>f<a,,b>() : any
+>f : <A = unknown, B = unknown>(...args: any[]) => any
+
+g<(T)>();
+>g<(T)>() : any
+>g : <A>(...args: any[]) => any
+
+f<?>;
+>f<?> : (...args: any[]) => any
+>f : <A = unknown, B = unknown>(...args: any[]) => any
+
+g<(T)>();
+>g<(T)>() : any
+>g : <A>(...args: any[]) => any
+
+f<"\xZ">();
+>f<"\xZ">() : any
+>f : <A = unknown, B = unknown>(...args: any[]) => any
+
+g<(T)>();
+>g<(T)>() : any
+>g : <A>(...args: any[]) => any
+
+f<010>();
+>f<010>() : any
+>f : <A = unknown, B = unknown>(...args: any[]) => any
+
+g<(T)>();
+>g<(T)>() : any
+>g : <A>(...args: any[]) => any
+
+f<("\xZ")>();
+>f<("\xZ")>() : any
+>f : <A = unknown, B = unknown>(...args: any[]) => any
+
+g<(T)>();
+>g<(T)>() : any
+>g : <A>(...args: any[]) => any
+
+f<(010)>();
+>f<(010)>() : any
+>f : <A = unknown, B = unknown>(...args: any[]) => any
+
+g<(T)>();
+>g<(T)>() : any
+>g : <A>(...args: any[]) => any
+
+f<((x: T) => "\xZ")>();
+>f<((x: T) => "\xZ")>() : any
+>f : <A = unknown, B = unknown>(...args: any[]) => any
+>x : any
+
+g<(T)>();
+>g<(T)>() : any
+>g : <A>(...args: any[]) => any
+
+f<import("m", { assert: { type: "json" } })>();
+>f<import("m", { assert: { type: "json" } })>() : any
+>f : <A = unknown, B = unknown>(...args: any[]) => any
+>type : any
+
+g<(T)>();
+>g<(T)>() : any
+>g : <A>(...args: any[]) => any
+
+f<("\xZ" > (x));
+>f<("\xZ" > (x)) : boolean
+>f : <A = unknown, B = unknown>(...args: any[]) => any
+>("\xZ" > (x)) : boolean
+>"\xZ" > (x) : boolean
+>"\xZ" : "\\xZ"
+>(x) : any
+>x : any
+
+g<(T)>();
+>g<(T)>() : any
+>g : <A>(...args: any[]) => any
+
+f<T extends U X : Y>();
+>f<T extends U X : Y>() : any
+>f : <A = unknown, B = unknown>(...args: any[]) => any
+
+g<(T)>();
+>g<(T)>() : any
+>g : <A>(...args: any[]) => any
+
+f<T extends U ? X Y>();
+>f<T extends U ? X Y>() : any
+>f : <A = unknown, B = unknown>(...args: any[]) => any
+
+g<(T)>();
+>g<(T)>() : any
+>g : <A>(...args: any[]) => any
+
+f<T | () => U>();
+>f<T | () => U>() : any
+>f : <A = unknown, B = unknown>(...args: any[]) => any
+
+g<(T)>();
+>g<(T)>() : any
+>g : <A>(...args: any[]) => any
+
+f<() => >();
+>f<() => >() : any
+>f : <A = unknown, B = unknown>(...args: any[]) => any
+
+g<(T)>();
+>g<(T)>() : any
+>g : <A>(...args: any[]) => any
+
+f<T.>();
+>f<T.>() : any
+>f : <A = unknown, B = unknown>(...args: any[]) => any
+>T : any
+
+g<(T)>();
+>g<(T)>() : any
+>g : <A>(...args: any[]) => any
+
+f<{ [(() => { type Bad = (T; return key; })()]: U }>();
+>f<{ [(() => { type Bad = (T; return key; })()]: U }>() : any
+>f : <A = unknown, B = unknown>(...args: any[]) => any
+>[(() => { type Bad = (T; return key; })()] : string
+>(() => { type Bad = (T; return key; })() : any
+>(() => { type Bad = (T; return key; }) : () => any
+>() => { type Bad = (T; return key; } : () => any
+>Bad : any
+>key : any
+
+g<(T)>();
+>g<(T)>() : any
+>g : <A>(...args: any[]) => any
+
