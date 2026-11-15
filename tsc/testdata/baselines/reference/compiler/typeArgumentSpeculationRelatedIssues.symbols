@@ -1,0 +1,133 @@
+//// [tests/cases/compiler/typeArgumentSpeculationRelatedIssues.ts] ////
+
+=== issue37760.ts ===
+// https://github.com/microsoft/TypeScript/issues/37760
+export {};
+function alignof<T>(): number {
+>alignof : Symbol(alignof, Decl(issue37760.ts, 1, 10))
+>T : Symbol(T, Decl(issue37760.ts, 2, 17))
+
+    return 1;
+}
+
+// A right shift already parsed correctly.
+function foo<T>(): number {
+>foo : Symbol(foo, Decl(issue37760.ts, 4, 1))
+>T : Symbol(T, Decl(issue37760.ts, 7, 13))
+
+    return 1 >> alignof<T[]>();
+>alignof : Symbol(alignof, Decl(issue37760.ts, 1, 10))
+>T : Symbol(T, Decl(issue37760.ts, 7, 13))
+}
+
+// A left shift must not become two type-argument openers.
+function bar<T>(): number {
+>bar : Symbol(bar, Decl(issue37760.ts, 9, 1))
+>T : Symbol(T, Decl(issue37760.ts, 12, 13))
+
+    return 1 << alignof<T[]>();
+>alignof : Symbol(alignof, Decl(issue37760.ts, 1, 10))
+>T : Symbol(T, Decl(issue37760.ts, 12, 13))
+}
+
+function baz<T>(): number {
+>baz : Symbol(baz, Decl(issue37760.ts, 14, 1))
+>T : Symbol(T, Decl(issue37760.ts, 16, 13))
+
+    // @ts-ignore
+    return 1 << alignof<T[]>();
+>alignof : Symbol(alignof, Decl(issue37760.ts, 1, 10))
+>T : Symbol(T, Decl(issue37760.ts, 16, 13))
+}
+
+=== issue43720.ts ===
+// https://github.com/microsoft/TypeScript/issues/43720
+export {};
+declare const res: any;
+>res : Symbol(res, Decl(issue43720.ts, 2, 13))
+
+for (let i = 0; i < (<any[]>(<any>res).Data).length; i++) { }
+>i : Symbol(i, Decl(issue43720.ts, 3, 8))
+>i : Symbol(i, Decl(issue43720.ts, 3, 8))
+>(<any[]>(<any>res).Data).length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>res : Symbol(res, Decl(issue43720.ts, 2, 13))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>i : Symbol(i, Decl(issue43720.ts, 3, 8))
+
+// The original report's extracted-condition workaround remains equivalent.
+let ln = (<any[]>(<any>res).Data).length;
+>ln : Symbol(ln, Decl(issue43720.ts, 6, 3))
+>(<any[]>(<any>res).Data).length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>res : Symbol(res, Decl(issue43720.ts, 2, 13))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+
+for (let i = 0; i < ln; i++) { }
+>i : Symbol(i, Decl(issue43720.ts, 7, 8))
+>i : Symbol(i, Decl(issue43720.ts, 7, 8))
+>ln : Symbol(ln, Decl(issue43720.ts, 6, 3))
+>i : Symbol(i, Decl(issue43720.ts, 7, 8))
+
+=== issue61975.ts ===
+// https://github.com/microsoft/TypeScript/issues/61975
+export {};
+class Pantries<A> {
+>Pantries : Symbol(Pantries, Decl(issue61975.ts, 1, 10))
+>A : Symbol(A, Decl(issue61975.ts, 2, 15))
+
+    constructor(precise: A) {
+>precise : Symbol(precise, Decl(issue61975.ts, 3, 16))
+>A : Symbol(A, Decl(issue61975.ts, 2, 15))
+
+        this.precise = precise;
+>this.precise : Symbol(Pantries.precise, Decl(issue61975.ts, 5, 5))
+>this : Symbol(Pantries, Decl(issue61975.ts, 1, 10))
+>precise : Symbol(Pantries.precise, Decl(issue61975.ts, 5, 5))
+>precise : Symbol(precise, Decl(issue61975.ts, 3, 16))
+    }
+    precise: A;
+>precise : Symbol(Pantries.precise, Decl(issue61975.ts, 5, 5))
+>A : Symbol(A, Decl(issue61975.ts, 2, 15))
+}
+
+function sparrow(): boolean {
+>sparrow : Symbol(sparrow, Decl(issue61975.ts, 7, 1))
+
+    const sobbed: boolean = true;
+>sobbed : Symbol(sobbed, Decl(issue61975.ts, 10, 9))
+
+    return "abc" < (sobbed ? new Pantries<string>("a") : new Pantries<string>("b")).precise;
+>(sobbed ? new Pantries<string>("a") : new Pantries<string>("b")).precise : Symbol(Pantries.precise, Decl(issue61975.ts, 5, 5))
+>sobbed : Symbol(sobbed, Decl(issue61975.ts, 10, 9))
+>Pantries : Symbol(Pantries, Decl(issue61975.ts, 1, 10))
+>Pantries : Symbol(Pantries, Decl(issue61975.ts, 1, 10))
+>precise : Symbol(Pantries.precise, Decl(issue61975.ts, 5, 5))
+}
+
+function sparrow1(): string {
+>sparrow1 : Symbol(sparrow1, Decl(issue61975.ts, 12, 1))
+
+    const sobbed: boolean = true;
+>sobbed : Symbol(sobbed, Decl(issue61975.ts, 15, 9))
+
+    return (sobbed ? new Pantries<string>("a") : new Pantries<string>("b")).precise;
+>(sobbed ? new Pantries<string>("a") : new Pantries<string>("b")).precise : Symbol(Pantries.precise, Decl(issue61975.ts, 5, 5))
+>sobbed : Symbol(sobbed, Decl(issue61975.ts, 15, 9))
+>Pantries : Symbol(Pantries, Decl(issue61975.ts, 1, 10))
+>Pantries : Symbol(Pantries, Decl(issue61975.ts, 1, 10))
+>precise : Symbol(Pantries.precise, Decl(issue61975.ts, 5, 5))
+}
+
+function sparrow2(): boolean {
+>sparrow2 : Symbol(sparrow2, Decl(issue61975.ts, 17, 1))
+
+    const sobbed: boolean = true;
+>sobbed : Symbol(sobbed, Decl(issue61975.ts, 20, 9))
+
+    return "abc" < (sobbed ? (new Pantries<string>("a")) : new Pantries<string>("b")).precise;
+>(sobbed ? (new Pantries<string>("a")) : new Pantries<string>("b")).precise : Symbol(Pantries.precise, Decl(issue61975.ts, 5, 5))
+>sobbed : Symbol(sobbed, Decl(issue61975.ts, 20, 9))
+>Pantries : Symbol(Pantries, Decl(issue61975.ts, 1, 10))
+>Pantries : Symbol(Pantries, Decl(issue61975.ts, 1, 10))
+>precise : Symbol(Pantries.precise, Decl(issue61975.ts, 5, 5))
+}
+
