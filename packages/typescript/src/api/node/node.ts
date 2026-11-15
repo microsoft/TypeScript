@@ -397,7 +397,7 @@ export class RemoteSourceFile extends RemoteNode implements SourceFileInfo {
         const count = reader.readArrayHeader();
         const directives = Array<MappedDiagnosticDirective>(count);
         for (let i = 0; i < count; i++) {
-            if (reader.readArrayHeader() !== 6) throw new Error("Invalid diagnostic directive");
+            if (reader.readArrayHeader() !== 7) throw new Error("Invalid diagnostic directive");
             const originalStart = reader.readUint();
             const originalLength = reader.readUint();
             const virtualStart = reader.readUint();
@@ -406,6 +406,7 @@ export class RemoteSourceFile extends RemoteNode implements SourceFileInfo {
                 originalRange: { pos: originalStart, end: originalStart + originalLength },
                 virtualRange: { pos: virtualStart, end: virtualStart + virtualLength },
                 policy: reader.readUint(),
+                diagnosticCode: reader.readUint(),
                 unusedCode: reader.readUint(),
             };
         }

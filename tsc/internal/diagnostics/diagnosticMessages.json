@@ -8968,6 +8968,10 @@
         "category": "Error",
         "code": 18141
     },
+    "Diagnostic directive {0} returned by the content mapper has a diagnostic code selector that must be positive.": {
+        "category": "Message",
+        "code": 18142
+    },
     "Content mapper '{0}' is also registered for the extension '{1}', but has a conflicting 'outputExtensions' mapping. Each registration for this extension must produce the same output file name.": {
         "category": "Error",
         "code": 18127

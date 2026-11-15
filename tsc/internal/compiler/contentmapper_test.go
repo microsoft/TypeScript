@@ -1046,6 +1046,30 @@ func TestContentMapperSourceFileState(t *testing.T) {
 		})
 		assert.Assert(t, found, "expected a localized project response diagnostic, got: %v", programDiagnostics)
 	})
+
+	t.Run("invalid diagnostic code is localized", func(t *testing.T) {
+		t.Parallel()
+		program := newContentMapperProgram(t, fakeContentMapperHost{
+			transform: func(fileName string, content string) (contentmapper.Result, error) {
+				return contentmapper.Result{}, contentmapper.NewTransformError(
+					contentmapper.TransformErrorKindResponse,
+					&contentmapper.DiagnosticDirectiveError{
+						Kind:              contentmapper.DiagnosticDirectiveErrorKindInvalidDiagnosticCode,
+						Index:             2,
+						SupplementalIndex: -1,
+					},
+				)
+			},
+		}, map[string]string{"/src/fail.vue": "original"}, []string{"/src/fail.vue"})
+		programDiagnostics := collectContentMapperDiagnostics(program)
+		found := slices.ContainsFunc(programDiagnostics, func(diagnostic *ast.Diagnostic) bool {
+			return slices.ContainsFunc(diagnostic.MessageChain(), func(message *ast.Diagnostic) bool {
+				return message.Code() == diagnostics.Diagnostic_directive_0_returned_by_the_content_mapper_has_a_diagnostic_code_selector_that_must_be_positive.Code() &&
+					message.String() == "Diagnostic directive 2 returned by the content mapper has a diagnostic code selector that must be positive."
+			})
+		})
+		assert.Assert(t, found, "expected an invalid diagnostic-code selector diagnostic, got: %v", programDiagnostics)
+	})
 }
 
 func TestContentMapperProjectErrorDiagnostics(t *testing.T) {

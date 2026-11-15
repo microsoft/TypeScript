@@ -39,8 +39,8 @@ func TestEncodeSourceFile(t *testing.T) {
 
 func TestEncodeContentMapperSourceFileMetadata(t *testing.T) {
 	t.Parallel()
-	if encoder.ProtocolVersion != 9 {
-		t.Fatalf("protocol version = %d, want 9", encoder.ProtocolVersion)
+	if encoder.ProtocolVersion != 10 {
+		t.Fatalf("protocol version = %d, want 10", encoder.ProtocolVersion)
 	}
 	sourceFile := parser.ParseSourceFile(ast.SourceFileParseOptions{
 		FileName: "/component.vue",
@@ -50,14 +50,23 @@ func TestEncodeContentMapperSourceFileMetadata(t *testing.T) {
 		OriginalText:    "😀original",
 		ContentMapper:   "mapper@1.0.0",
 		VirtualFileName: "/component.vue.ts",
-		DiagnosticDirectives: []ast.MappedDiagnosticDirective{{
-			OriginalRange:     core.NewTextRange(4, 5),
-			VirtualRange:      core.NewTextRange(4, 11),
-			Policy:            ast.MappedDiagnosticDirectivePolicyExpect,
-			UnusedCode:        2578,
-			UnusedMessageText: "Unused framework directive.",
-			Source:            "mapper",
-		}},
+		DiagnosticDirectives: []ast.MappedDiagnosticDirective{
+			{
+				OriginalRange:  core.NewTextRange(4, 5),
+				VirtualRange:   core.NewTextRange(4, 11),
+				Policy:         ast.MappedDiagnosticDirectivePolicyIgnore,
+				DiagnosticCode: 2353,
+				Source:         "mapper",
+			},
+			{
+				OriginalRange:     core.NewTextRange(4, 5),
+				VirtualRange:      core.NewTextRange(4, 11),
+				Policy:            ast.MappedDiagnosticDirectivePolicyExpect,
+				UnusedCode:        2578,
+				UnusedMessageText: "Unused framework directive.",
+				Source:            "mapper",
+			},
+		},
 	})
 
 	buf, _, err := encoder.EncodeSourceFile(sourceFile)
@@ -75,12 +84,19 @@ func TestEncodeContentMapperSourceFileMetadata(t *testing.T) {
 	assert.Equal(t, encodedString(buf, virtualFileNameIndex), "/component.vue.ts")
 	structuredDataOffset := readUint32(buf, encoder.HeaderOffsetStructuredData)
 	directiveOffset := structuredDataOffset + diagnosticDirectivesOffset
-	assert.DeepEqual(t, buf[directiveOffset:directiveOffset+10], []byte{
-		0x91, // one directive
-		0x96, // six-element tuple
+	assert.DeepEqual(t, buf[directiveOffset:directiveOffset+21], []byte{
+		0x92, // two directives
+		0x97, // seven-element selected-ignore tuple
+		2, 1, // original range [2, 3) in UTF-16
+		2, 7, // virtual range [2, 9) in UTF-16
+		0,           // ignore policy
+		0xcd, 9, 49, // diagnostic code 2353
+		0,    // unused diagnostic code
+		0x97, // seven-element expect tuple
 		2, 1, // original range [2, 3) in UTF-16
 		2, 7, // virtual range [2, 9) in UTF-16
 		1,            // expect policy
+		0,            // no diagnostic-code selector
 		0xcd, 10, 18, // unused diagnostic code 2578
 	})
 }

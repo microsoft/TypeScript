@@ -47,7 +47,9 @@ import {
     RemoteSourceFile,
 } from "../src/api/node/node.ts";
 import {
+    HEADER_OFFSET_EXTENDED_DATA,
     HEADER_OFFSET_NODES,
+    HEADER_OFFSET_STRUCTURED_DATA,
     HEADER_SIZE,
     NODE_LEN,
     NODE_OFFSET_DATA,
@@ -103,6 +105,38 @@ describe("Encoder", { concurrency }, () => {
         assert.strictEqual(decoded.diagnosticDirectives, undefined);
         assert.strictEqual(decoded.supplementalSourceFileNames, undefined);
         assert.strictEqual(decoded.canonicalSourceFileName, undefined);
+    });
+
+    test("decodes content mapper diagnostic-code selectors", () => {
+        const encoded = encodeSourceFile(makeSF("text", "/component.vue.ts", []));
+        const encodedView = new DataView(encoded.buffer, encoded.byteOffset, encoded.byteLength);
+        const nodesOffset = encodedView.getUint32(HEADER_OFFSET_NODES, true);
+        const directive = Uint8Array.from([
+            0x91, // one directive
+            0x97, // seven-element tuple
+            0, 1, // original range [0, 1)
+            2, 3, // virtual range [2, 5)
+            0, // ignore policy
+            0xcd, 9, 49, // diagnostic code 2353
+            0, // unused diagnostic code
+        ]);
+        const withDirective = new Uint8Array(encoded.length + directive.length);
+        withDirective.set(encoded.subarray(0, nodesOffset));
+        withDirective.set(directive, nodesOffset);
+        withDirective.set(encoded.subarray(nodesOffset), nodesOffset + directive.length);
+        const view = new DataView(withDirective.buffer);
+        const extendedDataOffset = view.getUint32(HEADER_OFFSET_EXTENDED_DATA, true);
+        view.setUint32(extendedDataOffset + 72, 0, true);
+        view.setUint32(HEADER_OFFSET_STRUCTURED_DATA, nodesOffset, true);
+        view.setUint32(HEADER_OFFSET_NODES, nodesOffset + directive.length, true);
+
+        assert.deepStrictEqual(decode(withDirective).diagnosticDirectives, [{
+            originalRange: { pos: 0, end: 1 },
+            virtualRange: { pos: 2, end: 5 },
+            policy: 0,
+            diagnosticCode: 2353,
+            unusedCode: 0,
+        }]);
     });
 
     test("keeps adjacent surrogate string-table entries separate", () => {
