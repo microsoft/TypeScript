@@ -2636,9 +2636,11 @@ func (c *Checker) checkJSDocComment(node *ast.Node) {
 
 func (c *Checker) resolveJSDocMemberName(name *ast.Node) *ast.Symbol {
 	if name != nil && ast.IsEntityName(name) {
-		meaning := ast.SymbolFlagsType | ast.SymbolFlagsNamespace | ast.SymbolFlagsValue
-		if symbol := c.resolveEntityName(name, meaning, true /*ignoreErrors*/, true /*dontResolveAlias*/, ast.GetHostSignatureFromJSDoc(name)); symbol != nil {
-			return symbol
+		if !isJSDocHashLinkMemberName(name) {
+			meaning := ast.SymbolFlagsType | ast.SymbolFlagsNamespace | ast.SymbolFlagsValue
+			if symbol := c.resolveEntityName(name, meaning, true /*ignoreErrors*/, true /*dontResolveAlias*/, ast.GetHostSignatureFromJSDoc(name)); symbol != nil {
+				return symbol
+			}
 		}
 		if ast.IsQualifiedName(name) {
 			if symbol := c.resolveJSDocMemberName(name.AsQualifiedName().Left); symbol != nil {
@@ -2657,6 +2659,20 @@ func (c *Checker) resolveJSDocMemberName(name *ast.Node) *ast.Symbol {
 		}
 	}
 	return nil
+}
+
+func isJSDocHashLinkMemberName(name *ast.Node) bool {
+	if !ast.IsQualifiedName(name) {
+		return false
+	}
+	qualified := name.AsQualifiedName()
+	file := ast.GetSourceFileOfNode(name)
+	if file == nil {
+		return false
+	}
+	start, end := qualified.Left.End(), qualified.Right.Pos()
+	text := file.Text()
+	return start >= 0 && end >= start && end <= len(text) && strings.Contains(text[start:end], "#")
 }
 
 func (c *Checker) checkJSDocType(node *ast.Node) {
@@ -32749,6 +32765,10 @@ func (c *Checker) getSymbolOfNameOrPropertyAccessExpression(name *ast.Node) *ast
 		} else if ast.IsPropertyAccessExpression(name) || ast.IsQualifiedName(name) {
 			links := c.symbolNodeLinks.Get(name)
 			if links.resolvedSymbol != nil {
+				return links.resolvedSymbol
+			}
+			if ast.IsQualifiedName(name) && isJSDoc && isJSDocHashLinkMemberName(name) {
+				links.resolvedSymbol = c.resolveJSDocMemberName(name)
 				return links.resolvedSymbol
 			}
 			if ast.IsPropertyAccessExpression(name) {

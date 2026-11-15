@@ -63,6 +63,57 @@ foo.bar;`
 	}
 }
 
+func TestJSDocHashLinkResolvesToInstanceMember(t *testing.T) {
+	t.Parallel()
+
+	content := `/**
+ * {@link Foo.member | static}
+ * {@link Foo#member | instance}
+ * {@link Foo#staticOnly | no instance member}
+ */
+class Foo {
+	static member = 123;
+	member = 456;
+	static staticOnly = 789;
+}`
+	fs := vfstest.FromMap(map[string]string{
+		"/foo.ts": content,
+		"/tsconfig.json": `{
+			"compilerOptions": {},
+			"files": ["foo.ts"]
+		}`,
+	}, tspath.CaseInsensitive /*caseSensitivity*/)
+	fs = bundled.WrapFS(fs)
+
+	host := compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil)
+	parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile("/tsconfig.json", &core.CompilerOptions{}, nil, tsoptions.NewDefaultParseConfigHost(fs), nil)
+	assert.Equal(t, len(errors), 0, "Expected no errors in parsed command line")
+
+	p, err := compiler.NewProgram(t.Context(), compiler.ProgramOptions{
+		Config: parsed,
+		Host:   host,
+	})
+	assert.NilError(t, err)
+	p.BindSourceFiles()
+	c, done := p.GetTypeChecker(t.Context())
+	defer done()
+	file := p.GetSourceFile("/foo.ts")
+	jsdoc := file.Statements.Nodes[0].JSDoc(file)[0]
+	links := core.Filter(jsdoc.Comments(), ast.IsJSDocLink)
+	assert.Equal(t, len(links), 3)
+
+	staticSymbol := c.GetSymbolAtLocation(links[0].Name())
+	instanceSymbol := c.GetSymbolAtLocation(links[1].Name())
+	missingInstanceSymbol := c.GetSymbolAtLocation(links[2].Name())
+	assert.Assert(t, staticSymbol != nil)
+	assert.Assert(t, instanceSymbol != nil)
+	assert.Assert(t, missingInstanceSymbol == nil)
+	assert.Assert(t, staticSymbol.ValueDeclaration() != nil)
+	assert.Assert(t, instanceSymbol.ValueDeclaration() != nil)
+	assert.Assert(t, ast.IsStatic(staticSymbol.ValueDeclaration()))
+	assert.Assert(t, !ast.IsStatic(instanceSymbol.ValueDeclaration()))
+}
+
 func TestGetTypeAtLocationOfTypeOnlyImportClause(t *testing.T) {
 	t.Parallel()
 
