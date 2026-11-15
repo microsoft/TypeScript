@@ -284,6 +284,20 @@ f<() => T>;
 >f : Symbol(f, Decl(expressions.ts, 5, 16))
 >T : Symbol(T, Decl(expressions.ts, 1, 83))
 
+// Arrow and type-argument probes must rebuild computed names and defaults.
+const probe = ({ [g<({ [x]: y }: T) => U>()]: z = g<T>() }: T) => z;
+>probe : Symbol(probe, Decl(expressions.ts, 58, 5))
+>g : Symbol(g, Decl(expressions.ts, 6, 66))
+>x : Symbol(x, Decl(expressions.ts, 1, 75))
+>y : Symbol(y, Decl(expressions.ts, 58, 22))
+>T : Symbol(T, Decl(expressions.ts, 1, 83))
+>U : Symbol(U, Decl(expressions.ts, 2, 13))
+>z : Symbol(z, Decl(expressions.ts, 58, 16))
+>g : Symbol(g, Decl(expressions.ts, 6, 66))
+>T : Symbol(T, Decl(expressions.ts, 1, 83))
+>T : Symbol(T, Decl(expressions.ts, 1, 83))
+>z : Symbol(z, Decl(expressions.ts, 58, 16))
+
 === expressions.tsx ===
 export {};
 declare const a: any, b: any, c: any, d: any, e: any, B: any, options: any, x: any;
@@ -567,4 +581,18 @@ f<() => T>`text${1}`;
 f<() => T>;
 >f : Symbol(f, Decl(expressions.tsx, 5, 16))
 >T : Symbol(T, Decl(expressions.tsx, 1, 83))
+
+// Arrow and type-argument probes must rebuild computed names and defaults.
+const probe = ({ [g<({ [x]: y }: T) => U>()]: z = g<T>() }: T) => z;
+>probe : Symbol(probe, Decl(expressions.tsx, 58, 5))
+>g : Symbol(g, Decl(expressions.tsx, 6, 66))
+>x : Symbol(x, Decl(expressions.tsx, 1, 75))
+>y : Symbol(y, Decl(expressions.tsx, 58, 22))
+>T : Symbol(T, Decl(expressions.tsx, 1, 83))
+>U : Symbol(U, Decl(expressions.tsx, 2, 13))
+>z : Symbol(z, Decl(expressions.tsx, 58, 16))
+>g : Symbol(g, Decl(expressions.tsx, 6, 66))
+>T : Symbol(T, Decl(expressions.tsx, 1, 83))
+>T : Symbol(T, Decl(expressions.tsx, 1, 83))
+>z : Symbol(z, Decl(expressions.tsx, 58, 16))
 

@@ -1,0 +1,75 @@
+//// [tests/cases/compiler/arrowFunctionSpeculationJSDoc.ts] ////
+
+=== types.d.ts ===
+
+export interface Key {}
+
+=== index.js ===
+export {};
+const key = "k";
+>key : "k"
+>"k" : "k"
+
+const result = (a) => ({
+>result : (a: any) => { [x: string]: number | (() => void); typedef(): void; callback(): void; imported(): void; }
+>(a) => ({    [String((b) => ({        [String((c) => ({ [String(key)]: 0 }))]: 0    }))]: 0,    /** @typedef {number} Local */    typedef() {},    /** @callback Callback */    callback() {},    /** @import {Key} from "./types" */    imported() {}}) : (a: any) => { [x: string]: number | (() => void); typedef(): void; callback(): void; imported(): void; }
+>a : any
+>({    [String((b) => ({        [String((c) => ({ [String(key)]: 0 }))]: 0    }))]: 0,    /** @typedef {number} Local */    typedef() {},    /** @callback Callback */    callback() {},    /** @import {Key} from "./types" */    imported() {}}) : { [x: string]: number | (() => void); typedef(): void; callback(): void; imported(): void; }
+>{    [String((b) => ({        [String((c) => ({ [String(key)]: 0 }))]: 0    }))]: 0,    /** @typedef {number} Local */    typedef() {},    /** @callback Callback */    callback() {},    /** @import {Key} from "./types" */    imported() {}} : { [x: string]: number | (() => void); typedef(): void; callback(): void; imported(): void; }
+
+    [String((b) => ({
+>[String((b) => ({        [String((c) => ({ [String(key)]: 0 }))]: 0    }))] : number
+>String((b) => ({        [String((c) => ({ [String(key)]: 0 }))]: 0    })) : string
+>String : StringConstructor
+>(b) => ({        [String((c) => ({ [String(key)]: 0 }))]: 0    }) : (b: any) => { [x: string]: number; }
+>b : any
+>({        [String((c) => ({ [String(key)]: 0 }))]: 0    }) : { [x: string]: number; }
+>{        [String((c) => ({ [String(key)]: 0 }))]: 0    } : { [x: string]: number; }
+
+        [String((c) => ({ [String(key)]: 0 }))]: 0
+>[String((c) => ({ [String(key)]: 0 }))] : number
+>String((c) => ({ [String(key)]: 0 })) : string
+>String : StringConstructor
+>(c) => ({ [String(key)]: 0 }) : (c: any) => { [x: string]: number; }
+>c : any
+>({ [String(key)]: 0 }) : { [x: string]: number; }
+>{ [String(key)]: 0 } : { [x: string]: number; }
+>[String(key)] : number
+>String(key) : string
+>String : StringConstructor
+>key : "k"
+>0 : 0
+>0 : 0
+
+    }))]: 0,
+>0 : 0
+
+    /** @typedef {number} Local */
+    typedef() {},
+>typedef : () => void
+
+    /** @callback Callback */
+    callback() {},
+>callback : () => void
+
+    /** @import {Key} from "./types" */
+    imported() {}
+>imported : () => void
+
+});
+
+/** @type {Local} */
+const local = 1;
+>local : number
+>1 : 1
+
+/** @type {Callback} */
+const callback = () => {};
+>callback : Callback
+>() => {} : () => void
+
+/** @type {Key} */
+const imported = {};
+>imported : Key
+>{} : {}
+

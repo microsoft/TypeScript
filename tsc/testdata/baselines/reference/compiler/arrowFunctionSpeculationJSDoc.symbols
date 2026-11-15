@@ -1,0 +1,57 @@
+//// [tests/cases/compiler/arrowFunctionSpeculationJSDoc.ts] ////
+
+=== types.d.ts ===
+export interface Key {}
+>Key : Symbol(Key, Decl(types.d.ts, 0, 0))
+
+=== index.js ===
+export {};
+const key = "k";
+>key : Symbol(key, Decl(index.js, 1, 5))
+
+const result = (a) => ({
+>result : Symbol(result, Decl(index.js, 2, 5))
+>a : Symbol(a, Decl(index.js, 2, 16))
+
+    [String((b) => ({
+>[String((b) => ({        [String((c) => ({ [String(key)]: 0 }))]: 0    }))] : Symbol([String((b) => ({
+        [String((c) => ({ [String(key)]: 0 }))]: 0
+    }))], Decl(index.js, 2, 24))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 7 more)
+>b : Symbol(b, Decl(index.js, 3, 13))
+
+        [String((c) => ({ [String(key)]: 0 }))]: 0
+>[String((c) => ({ [String(key)]: 0 }))] : Symbol([String((c) => ({ [String(key)]: 0 }))], Decl(index.js, 3, 21))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 7 more)
+>c : Symbol(c, Decl(index.js, 4, 17))
+>[String(key)] : Symbol([String(key)], Decl(index.js, 4, 25))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 7 more)
+>key : Symbol(key, Decl(index.js, 1, 5))
+
+    }))]: 0,
+    /** @typedef {number} Local */
+    typedef() {},
+>typedef : Symbol(typedef, Decl(index.js, 5, 12))
+
+    /** @callback Callback */
+    callback() {},
+>callback : Symbol(callback, Decl(index.js, 7, 17))
+
+    /** @import {Key} from "./types" */
+    imported() {}
+>imported : Symbol(imported, Decl(index.js, 9, 18))
+
+});
+
+/** @type {Local} */
+const local = 1;
+>local : Symbol(local, Decl(index.js, 15, 5))
+
+/** @type {Callback} */
+const callback = () => {};
+>callback : Symbol(callback, Decl(index.js, 17, 5))
+
+/** @type {Key} */
+const imported = {};
+>imported : Symbol(imported, Decl(index.js, 19, 5))
+

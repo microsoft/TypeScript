@@ -368,6 +368,19 @@ f<() => T>;
 >f<() => T> : (...args: any[]) => any
 >f : <A = unknown, B = unknown>(...args: any[]) => any
 
+// Arrow and type-argument probes must rebuild computed names and defaults.
+const probe = ({ [g<({ [x]: y }: T) => U>()]: z = g<T>() }: T) => z;
+>probe : ({ [g<({ [x]: y }: T) => U>()]: z }: T) => any
+>({ [g<({ [x]: y }: T) => U>()]: z = g<T>() }: T) => z : ({ [g<({ [x]: y }: T) => U>()]: z }: T) => any
+>g<({ [x]: y }: T) => U>() : any
+>g : <A>(...args: any[]) => any
+>x : any
+>y : any
+>z : any
+>g<T>() : any
+>g : <A>(...args: any[]) => any
+>z : any
+
 === expressions.tsx ===
 export {};
 declare const a: any, b: any, c: any, d: any, e: any, B: any, options: any, x: any;
@@ -735,4 +748,17 @@ f<() => T>`text${1}`;
 f<() => T>;
 >f<() => T> : (...args: any[]) => any
 >f : <A = unknown, B = unknown>(...args: any[]) => any
+
+// Arrow and type-argument probes must rebuild computed names and defaults.
+const probe = ({ [g<({ [x]: y }: T) => U>()]: z = g<T>() }: T) => z;
+>probe : ({ [g<({ [x]: y }: T) => U>()]: z }: T) => any
+>({ [g<({ [x]: y }: T) => U>()]: z = g<T>() }: T) => z : ({ [g<({ [x]: y }: T) => U>()]: z }: T) => any
+>g<({ [x]: y }: T) => U>() : any
+>g : <A>(...args: any[]) => any
+>x : any
+>y : any
+>z : any
+>g<T>() : any
+>g : <A>(...args: any[]) => any
+>z : any
 

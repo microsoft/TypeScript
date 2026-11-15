@@ -13,6 +13,12 @@ recovery.ts(44,6): error TS1385: Function type notation must be parenthesized wh
 recovery.ts(47,9): error TS1110: Type expected.
 recovery.ts(50,5): error TS1003: Identifier expected.
 recovery.ts(53,28): error TS1005: ')' expected.
+recovery.ts(56,13): error TS1125: Hexadecimal digit expected.
+recovery.ts(56,17): error TS1005: ')' expected.
+recovery.ts(56,19): error TS1434: Unexpected keyword or identifier.
+recovery.ts(56,20): error TS1128: Declaration or statement expected.
+recovery.ts(56,22): error TS1128: Declaration or statement expected.
+recovery.ts(56,28): error TS1109: Expression expected.
 recovery.tsx(11,5): error TS1110: Type expected.
 recovery.tsx(14,4): error TS1110: Type expected.
 recovery.tsx(17,6): error TS1125: Hexadecimal digit expected.
@@ -28,9 +34,15 @@ recovery.tsx(44,6): error TS1385: Function type notation must be parenthesized w
 recovery.tsx(47,9): error TS1110: Type expected.
 recovery.tsx(50,5): error TS1003: Identifier expected.
 recovery.tsx(53,28): error TS1005: ')' expected.
+recovery.tsx(56,13): error TS1125: Hexadecimal digit expected.
+recovery.tsx(56,17): error TS1005: ')' expected.
+recovery.tsx(56,19): error TS1434: Unexpected keyword or identifier.
+recovery.tsx(56,20): error TS1128: Declaration or statement expected.
+recovery.tsx(56,22): error TS1128: Declaration or statement expected.
+recovery.tsx(56,28): error TS1109: Expression expected.
 
 
-==== recovery.ts (15 errors) ====
+==== recovery.ts (21 errors) ====
     export {};
     declare const a: any, b: any, c: any, d: any, e: any, B: any, options: any, x: any;
     type T = any;
@@ -116,7 +128,22 @@ recovery.tsx(53,28): error TS1005: ')' expected.
 !!! error TS1005: ')' expected.
     g<(T)>();
     
-==== recovery.tsx (15 errors) ====
+    f<({ p = "\xZ" }: T) => U>();
+                
+!!! error TS1125: Hexadecimal digit expected.
+                    ~
+!!! error TS1005: ')' expected.
+                      ~
+!!! error TS1434: Unexpected keyword or identifier.
+                       ~
+!!! error TS1128: Declaration or statement expected.
+                         ~~
+!!! error TS1128: Declaration or statement expected.
+                               ~
+!!! error TS1109: Expression expected.
+    g<(T)>();
+    
+==== recovery.tsx (21 errors) ====
     export {};
     declare const a: any, b: any, c: any, d: any, e: any, B: any, options: any, x: any;
     type T = any;
@@ -200,5 +227,20 @@ recovery.tsx(53,28): error TS1005: ')' expected.
     f<{ [(() => { type Bad = (T; return key; })()]: U }>();
                                ~
 !!! error TS1005: ')' expected.
+    g<(T)>();
+    
+    f<({ p = "\xZ" }: T) => U>();
+                
+!!! error TS1125: Hexadecimal digit expected.
+                    ~
+!!! error TS1005: ')' expected.
+                      ~
+!!! error TS1434: Unexpected keyword or identifier.
+                       ~
+!!! error TS1128: Declaration or statement expected.
+                         ~~
+!!! error TS1128: Declaration or statement expected.
+                               ~
+!!! error TS1109: Expression expected.
     g<(T)>();
     

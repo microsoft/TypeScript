@@ -62,6 +62,9 @@ f<() => T>`text`;
 f<() => T>`text${1}`;
 f<() => T>;
 
+// Arrow and type-argument probes must rebuild computed names and defaults.
+const probe = ({ [g<({ [x]: y }: T) => U>()]: z = g<T>() }: T) => z;
+
 // @filename: expressions.tsx
 export {};
 declare const a: any, b: any, c: any, d: any, e: any, B: any, options: any, x: any;
@@ -119,3 +122,6 @@ f<{ /** @type {(T} @see x */ x: T }>();
 f<() => T>`text`;
 f<() => T>`text${1}`;
 f<() => T>;
+
+// Arrow and type-argument probes must rebuild computed names and defaults.
+const probe = ({ [g<({ [x]: y }: T) => U>()]: z = g<T>() }: T) => z;

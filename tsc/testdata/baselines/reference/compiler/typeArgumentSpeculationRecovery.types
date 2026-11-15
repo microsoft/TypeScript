@@ -167,6 +167,23 @@ g<(T)>();
 >g<(T)>() : any
 >g : <A>(...args: any[]) => any
 
+f<({ p = "\xZ" }: T) => U>();
+>f<({ p = "\xZ" } : boolean
+>f : <A = unknown, B = unknown>(...args: any[]) => any
+>({ p = "\xZ" } : { p: string; }
+>{ p = "\xZ" } : { p: string; }
+>p : any
+>"\xZ" : "\\xZ"
+>T : any
+>U>() : boolean
+>U : any
+>() : any
+> : any
+
+g<(T)>();
+>g<(T)>() : any
+>g : <A>(...args: any[]) => any
+
 === recovery.tsx ===
 export {};
 declare const a: any, b: any, c: any, d: any, e: any, B: any, options: any, x: any;
@@ -329,6 +346,23 @@ f<{ [(() => { type Bad = (T; return key; })()]: U }>();
 >() => { type Bad = (T; return key; } : () => any
 >Bad : any
 >key : any
+
+g<(T)>();
+>g<(T)>() : any
+>g : <A>(...args: any[]) => any
+
+f<({ p = "\xZ" }: T) => U>();
+>f<({ p = "\xZ" } : boolean
+>f : <A = unknown, B = unknown>(...args: any[]) => any
+>({ p = "\xZ" } : { p: string; }
+>{ p = "\xZ" } : { p: string; }
+>p : any
+>"\xZ" : "\\xZ"
+>T : any
+>U>() : boolean
+>U : any
+>() : any
+> : any
 
 g<(T)>();
 >g<(T)>() : any

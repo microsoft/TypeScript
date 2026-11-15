@@ -66,6 +66,14 @@ type Parser struct {
 	// Grammar policies stay immutable during a parse, including nested speculation.
 	recoveringTypes  typeParser
 	speculativeTypes typeParser
+	// Prediction facts survive speculation; no AST handles are retained.
+	typeArgumentClosures map[int]bool
+	inExpressionProbe    bool
+	// Opaque values taint the whole probe, including lookaheads that rewind.
+	hasOpaqueExpression    bool
+	failedTypeArguments    collections.Set[speculationKey]
+	failedSpeculativeTypes collections.Set[speculationKey]
+	probeExpressions       map[probeExpressionKey]probeExpressionBoundary
 
 	scanner *scanner.Scanner
 	factory ast.NodeFactory
@@ -351,12 +359,15 @@ type ParserState struct {
 	contextFlags                ast.NodeFlags
 	diagnosticsLen              int
 	jsDiagnosticsLen            int
+	jsdocDiagnosticsLen         int
 	jsdocInfosLen               int
 	reparsedClonesLen           int
+	reparseList                 []*ast.Node
 	statementHasAwaitIdentifier bool
 	hasParseError               bool
 	commonJSModuleIndicator     *ast.Node
 	jsdocHasCommonJSConstruct   bool
+	inExpressionProbe           bool
 }
 
 func (p *Parser) mark() ParserState {
@@ -365,12 +376,15 @@ func (p *Parser) mark() ParserState {
 		contextFlags:                p.contextFlags,
 		diagnosticsLen:              len(p.diagnostics),
 		jsDiagnosticsLen:            len(p.jsDiagnostics),
+		jsdocDiagnosticsLen:         len(p.jsdocDiagnostics),
 		jsdocInfosLen:               len(p.jsdocInfos),
 		reparsedClonesLen:           len(p.reparsedClones),
+		reparseList:                 p.reparseList,
 		statementHasAwaitIdentifier: p.statementHasAwaitIdentifier,
 		hasParseError:               p.hasParseError,
 		commonJSModuleIndicator:     p.commonJSModuleIndicator,
 		jsdocHasCommonJSConstruct:   p.jsdocHasCommonJSConstruct,
+		inExpressionProbe:           p.inExpressionProbe,
 	}
 }
 
@@ -380,12 +394,15 @@ func (p *Parser) rewind(state ParserState) {
 	p.contextFlags = state.contextFlags
 	p.diagnostics = p.diagnostics[0:state.diagnosticsLen]
 	p.jsDiagnostics = p.jsDiagnostics[0:state.jsDiagnosticsLen]
+	p.jsdocDiagnostics = p.jsdocDiagnostics[:state.jsdocDiagnosticsLen]
 	p.jsdocInfos = p.jsdocInfos[0:state.jsdocInfosLen]
 	p.reparsedClones = p.reparsedClones[0:state.reparsedClonesLen]
+	p.reparseList = state.reparseList
 	p.statementHasAwaitIdentifier = state.statementHasAwaitIdentifier
 	p.hasParseError = state.hasParseError
 	p.commonJSModuleIndicator = state.commonJSModuleIndicator
 	p.jsdocHasCommonJSConstruct = state.jsdocHasCommonJSConstruct
+	p.inExpressionProbe = state.inExpressionProbe
 }
 
 func (p *Parser) lookAhead(callback func(p *Parser) bool) bool {
@@ -649,8 +666,10 @@ func (p *Parser) reparseTopLevelAwait(sourceFile *ast.SourceFile) *ast.Node {
 			}
 		}
 
-		// Keep diagnostics from the reparse
+		// Keep diagnostics and pending declarations from the committed reparse.
 		state.diagnosticsLen = len(p.diagnostics)
+		state.jsdocDiagnosticsLen = len(p.jsdocDiagnostics)
+		state.reparseList = p.reparseList
 		p.rewind(state)
 	}
 
@@ -1809,7 +1828,7 @@ func (p *Parser) parseObjectBindingElement() *ast.Node {
 
 func (p *Parser) parseInitializer() *ast.Expression {
 	if p.parseOptional(ast.KindEqualsToken) {
-		return p.parseAssignmentExpressionOrHigher()
+		return p.parseValueExpression(true /*allowReturnTypeInArrowFunction*/)
 	}
 	return nil
 }
@@ -2791,7 +2810,21 @@ func (p *Parser) parseExportSpecifier() *ast.Node {
 func (p *typeParser) parseType() *ast.TypeNode {
 	saveContextFlags := p.contextFlags
 	p.setContextFlags(ast.NodeFlagsTypeExcludesFlags, false)
+	speculative := !p.allowAmbiguity && p.contextFlags&ast.NodeFlagsJSDoc == 0
+	var key speculationKey
+	if speculative {
+		key = p.speculationKey()
+		if p.failedSpeculativeTypes.Has(key) {
+			p.contextFlags = saveContextFlags
+			return nil
+		}
+	}
 	result := p.parseTypeWorker()
+	// Remember structural failure, including a nested failure. Diagnostics on a
+	// recognized type remain recoverable and do not reject the production.
+	if speculative && result == nil {
+		p.failedSpeculativeTypes.Add(key)
+	}
 	p.contextFlags = saveContextFlags
 	return result
 }
@@ -3847,7 +3880,7 @@ func (p *typeParser) parseComputedPropertyName() *ast.Node {
 	// We parse any expression (including a comma expression). But the grammar
 	// says that only an assignment expression is allowed, so the grammar checker
 	// will error if it sees a comma expression.
-	expression := p.parseExpressionAllowIn()
+	expression := p.parseComputedPropertyExpression()
 	if !p.parseExpected(ast.KindCloseBracketToken) && !p.allowAmbiguity {
 		return nil
 	}
@@ -4305,9 +4338,14 @@ func (p *Parser) skipParameterStart() bool {
 		return true
 	}
 	if p.token == ast.KindOpenBracketToken || p.token == ast.KindOpenBraceToken {
-		// Return true if we can parse an array or object binding pattern with no errors
+		// Binding lookahead requires the complete pattern to be diagnostic-free.
+		// Its AST is discarded, so computed names and defaults can reuse values
+		// recognized by earlier probes without repeating their recursive work.
 		previousErrorCount := len(p.diagnostics)
+		saveProbe := p.inExpressionProbe
+		p.inExpressionProbe = true
 		p.parseIdentifierOrPattern()
+		p.inExpressionProbe = saveProbe
 		return previousErrorCount == len(p.diagnostics)
 	}
 	return false
@@ -4371,8 +4409,7 @@ func (p *Parser) parseDecoratorExpression() *ast.Expression {
 		pos := p.nodePos()
 		awaitExpression := p.parseIdentifierWithDiagnostic(diagnostics.Expression_expected, nil)
 		p.nextToken()
-		memberExpression := p.parseMemberExpressionRest(pos, awaitExpression /*allowOptionalChain*/, true)
-		return p.parseCallExpressionRest(pos, memberExpression)
+		return p.parseCallExpressionRest(pos, awaitExpression)
 	}
 	return p.parseLeftHandSideExpressionOrHigher()
 }
@@ -4602,7 +4639,7 @@ func (p *Parser) parseAssignmentExpressionOrHigherWorker(allowReturnTypeInArrowF
 	// Note: we call reScanGreaterToken so that we get an appropriately merged token
 	// for cases like `> > =` becoming `>>=`
 	if ast.IsLeftHandSideExpression(expr) && ast.IsAssignmentOperator(p.reScanGreaterThanToken()) {
-		return p.makeBinaryExpression(expr, p.parseTokenNode(), p.parseAssignmentExpressionOrHigherWorker(allowReturnTypeInArrowFunction), pos)
+		return p.makeBinaryExpression(expr, p.parseTokenNode(), p.parseValueExpression(allowReturnTypeInArrowFunction), pos)
 	}
 	// It wasn't an assignment or a lambda.  This is a conditional expression:
 	return p.parseConditionalExpressionRest(expr, pos, allowReturnTypeInArrowFunction)
@@ -4792,10 +4829,24 @@ func (p *Parser) tryParseParenthesizedArrowFunctionExpression(allowReturnTypeInA
 		return p.parseParenthesizedArrowFunctionExpression(true /*allowAmbiguity*/, true /*allowReturnTypeInArrowFunction*/)
 	}
 	state := p.mark()
+	if !p.inExpressionProbe {
+		p.hasOpaqueExpression = false
+	}
+	p.inExpressionProbe = true
 	result := p.parsePossibleParenthesizedArrowFunctionExpression(allowReturnTypeInArrowFunction)
 	if result == nil {
 		p.rewind(state)
+		return nil
 	}
+	if !state.inExpressionProbe && p.hasOpaqueExpression {
+		p.rewind(state)
+		result = p.parseParenthesizedArrowFunctionExpression(false /*allowAmbiguity*/, allowReturnTypeInArrowFunction)
+		if result == nil {
+			p.rewind(state)
+			return nil
+		}
+	}
+	p.inExpressionProbe = state.inExpressionProbe
 	return result
 }
 
@@ -5020,12 +5071,12 @@ func (p *Parser) parseConditionalExpressionRest(leftOperand *ast.Expression, pos
 	// we do not that for the 'whenFalse' part.
 	saveContextFlags := p.contextFlags
 	p.setContextFlags(ast.NodeFlagsDisallowInContext, false)
-	trueExpression := p.parseAssignmentExpressionOrHigherWorker(false /*allowReturnTypeInArrowFunction*/)
+	trueExpression := p.parseValueExpression(false /*allowReturnTypeInArrowFunction*/)
 	p.contextFlags = saveContextFlags
 	colonToken := p.parseExpectedToken(ast.KindColonToken)
 	var falseExpression *ast.Expression
 	if ast.NodeIsPresent(colonToken) {
-		falseExpression = p.parseAssignmentExpressionOrHigherWorker(allowReturnTypeInArrowFunction)
+		falseExpression = p.parseValueExpression(allowReturnTypeInArrowFunction)
 	} else {
 		falseExpression = p.createMissingIdentifier()
 	}
@@ -5645,8 +5696,9 @@ func (p *Parser) parseLeftHandSideExpressionOrHigher() *ast.Expression {
 	//      MemberExpression
 	//      CallExpression
 	//
-	// See comment in parseMemberExpressionOrHigher on how we replaced NewExpression with
-	// MemberExpression to make our lives easier.
+	// PrimaryExpression includes function and object creation expressions. Each new
+	// expression consumes its associated argument list; additional argument lists
+	// call the constructed value.
 	//
 	// to best understand the below code, it's important to see how CallExpression expands
 	// out into its own productions:
@@ -5663,8 +5715,8 @@ func (p *Parser) parseLeftHandSideExpressionOrHigher() *ast.Expression {
 	// Because of the recursion in these calls, we need to bottom out first. There are three
 	// bottom out states we can run into: 1) We see 'super' which must start either of
 	// the last two CallExpression productions. 2) We see 'import' which must start import call.
-	// 3)we have a MemberExpression which either completes the LeftHandSideExpression,
-	// or starts the beginning of the first four CallExpression productions.
+	// 3) We have a PrimaryExpression, which the common postfix loop extends into
+	// a MemberExpression or one of the first four CallExpression productions.
 	pos := p.nodePos()
 	var expression *ast.Expression
 	if p.token == ast.KindImportKeyword {
@@ -5689,16 +5741,17 @@ func (p *Parser) parseLeftHandSideExpressionOrHigher() *ast.Expression {
 				p.sourceFlags |= ast.NodeFlagsPossiblyContainsImportMeta
 			}
 		} else {
-			expression = p.parseMemberExpressionOrHigher()
+			expression = p.parsePrimaryExpression()
 		}
 	} else if p.token == ast.KindSuperKeyword {
 		expression = p.parseSuperExpression()
 	} else {
-		expression = p.parseMemberExpressionOrHigher()
+		expression = p.parsePrimaryExpression()
 	}
 	// Now, we *may* be complete.  However, we might have consumed the start of a
 	// CallExpression or OptionalExpression.  As such, we need to consume the rest
-	// of it here to be complete.
+	// of it here to be complete. Member suffixes share this entry so a failed
+	// type-argument interpretation is not retried by an initial member pass.
 	return p.parseCallExpressionRest(pos, expression)
 }
 
@@ -5744,14 +5797,50 @@ func (p *Parser) isTemplateStartOfTaggedTemplate() bool {
 }
 
 func (p *Parser) tryParseTypeArgumentsInExpression() *ast.NodeList {
-	// TypeArguments must not be parsed in JavaScript files to avoid ambiguity with binary operators.
-	// Check the cheap preconditions before saving the parser state: unless the current token is `<`
-	// (or `<<`, which reScanLessThanToken would split), there is nothing to speculatively parse and
-	// the mark/rewind would be a no-op.
 	if p.contextFlags&ast.NodeFlagsJavaScriptFile != 0 || (p.token != ast.KindLessThanToken && p.token != ast.KindLessThanLessThanToken) {
 		return nil
 	}
+	if !p.typeArgumentsMayClose() {
+		return nil
+	}
 	state := p.mark()
+	if p.contextFlags&ast.NodeFlagsJSDoc != 0 {
+		result := p.parseTypeArgumentsInExpressionWorker()
+		if result == nil {
+			p.rewind(state)
+		}
+		return result
+	}
+	key := p.speculationKey()
+	if p.failedTypeArguments.Has(key) {
+		return nil
+	}
+	if !p.inExpressionProbe {
+		p.hasOpaqueExpression = false
+	}
+	p.inExpressionProbe = true
+	result := p.parseTypeArgumentsInExpressionWorker()
+	if result == nil {
+		p.rewind(state)
+		p.failedTypeArguments.Add(key)
+		return nil
+	}
+	if !state.inExpressionProbe && p.hasOpaqueExpression {
+		// Recognition may use opaque values, but no such AST can escape.
+		// Rebuild the recognized candidate with the ordinary expression parser.
+		p.rewind(state)
+		result = p.parseTypeArgumentsInExpressionWorker()
+		if result == nil {
+			p.rewind(state)
+			p.failedTypeArguments.Add(key)
+			return nil
+		}
+	}
+	p.inExpressionProbe = state.inExpressionProbe
+	return result
+}
+
+func (p *Parser) parseTypeArgumentsInExpressionWorker() *ast.NodeList {
 	if p.reScanLessThanToken() == ast.KindLessThanToken {
 		p.nextToken()
 		typeArguments := p.speculativeTypes.parseDelimitedList(PCTypeArguments, (*typeParser).parseType)
@@ -5768,7 +5857,6 @@ func (p *Parser) tryParseTypeArgumentsInExpression() *ast.NodeList {
 			}
 		}
 	}
-	p.rewind(state)
 	return nil
 }
 
@@ -5789,59 +5877,6 @@ func (p *Parser) canFollowTypeArgumentsInExpression() bool {
 	// We favor the type argument list interpretation when it is immediately followed by
 	// a line break, a binary operator, or something that can't start an expression.
 	return p.hasPrecedingLineBreak() || p.isBinaryOperator() || !p.isStartOfExpression()
-}
-
-func (p *Parser) parseMemberExpressionOrHigher() *ast.Node {
-	// Note: to make our lives simpler, we decompose the NewExpression productions and
-	// place ObjectCreationExpression and FunctionExpression into PrimaryExpression.
-	// like so:
-	//
-	//   PrimaryExpression : See 11.1
-	//      this
-	//      Identifier
-	//      Literal
-	//      ArrayLiteral
-	//      ObjectLiteral
-	//      (Expression)
-	//      FunctionExpression
-	//      new MemberExpression Arguments?
-	//
-	//   MemberExpression : See 11.2
-	//      PrimaryExpression
-	//      MemberExpression[Expression]
-	//      MemberExpression.IdentifierName
-	//
-	//   CallExpression : See 11.2
-	//      MemberExpression
-	//      CallExpression Arguments
-	//      CallExpression[Expression]
-	//      CallExpression.IdentifierName
-	//
-	// Technically this is ambiguous.  i.e. CallExpression defines:
-	//
-	//   CallExpression:
-	//      CallExpression Arguments
-	//
-	// If you see: "new Foo()"
-	//
-	// Then that could be treated as a single ObjectCreationExpression, or it could be
-	// treated as the invocation of "new Foo".  We disambiguate that in code (to match
-	// the original grammar) by making sure that if we see an ObjectCreationExpression
-	// we always consume arguments if they are there. So we treat "new Foo()" as an
-	// object creation only, and not at all as an invocation.  Another way to think
-	// about this is that for every "new" that we see, we will consume an argument list if
-	// it is there as part of the *associated* object creation node.  Any additional
-	// argument lists we see, will become invocation expressions.
-	//
-	// Because there are no other places in the grammar now that refer to FunctionExpression
-	// or ObjectCreationExpression, it is safe to push down into the PrimaryExpression
-	// production.
-	//
-	// Because CallExpression and MemberExpression are left recursive, we need to bottom out
-	// of the recursion immediately.  So we parse out a primary expression to start with.
-	pos := p.nodePos()
-	expression := p.parsePrimaryExpression()
-	return p.parseMemberExpressionRest(pos, expression, true /*allowOptionalChain*/)
 }
 
 func (p *Parser) parseMemberExpressionRest(pos int, expression *ast.Expression, allowOptionalChain bool) *ast.Expression {

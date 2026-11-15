@@ -60,6 +60,9 @@ g<(T)>();
 f<{ [(() => { type Bad = (T; return key; })()]: U }>();
 g<(T)>();
 
+f<({ p = "\xZ" }: T) => U>();
+g<(T)>();
+
 // @filename: recovery.tsx
 export {};
 declare const a: any, b: any, c: any, d: any, e: any, B: any, options: any, x: any;
@@ -114,4 +117,7 @@ f<T.>();
 g<(T)>();
 
 f<{ [(() => { type Bad = (T; return key; })()]: U }>();
+g<(T)>();
+
+f<({ p = "\xZ" }: T) => U>();
 g<(T)>();

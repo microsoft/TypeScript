@@ -56,6 +56,9 @@ g<(T)>();
 f<{ [(() => { type Bad = (T; return key; })()]: U }>();
 g<(T)>();
 
+f<({ p = "\xZ" }: T) => U>();
+g<(T)>();
+
 //// [recovery.tsx]
 export {};
 declare const a: any, b: any, c: any, d: any, e: any, B: any, options: any, x: any;
@@ -112,6 +115,9 @@ g<(T)>();
 f<{ [(() => { type Bad = (T; return key; })()]: U }>();
 g<(T)>();
 
+f<({ p = "\xZ" }: T) => U>();
+g<(T)>();
+
 
 //// [recovery.js]
 // Recovery and rollback preserve diagnostics and the following call.
@@ -145,6 +151,10 @@ f();
 g();
 f();
 g();
+f < ({ p = "\xZ" });
+T;
+U > ();
+g();
 export {};
 //// [recovery.jsx]
 // Recovery and rollback preserve diagnostics and the following call.
@@ -177,5 +187,9 @@ g();
 f();
 g();
 f();
+g();
+f < ({ p = "\xZ" });
+T;
+U > ();
 g();
 export {};

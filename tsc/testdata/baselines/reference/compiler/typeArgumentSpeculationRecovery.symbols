@@ -165,6 +165,14 @@ g<(T)>();
 >g : Symbol(g, Decl(recovery.ts, 6, 66))
 >T : Symbol(T, Decl(recovery.ts, 1, 83))
 
+f<({ p = "\xZ" }: T) => U>();
+>f : Symbol(f, Decl(recovery.ts, 5, 16))
+>p : Symbol(p, Decl(recovery.ts, 55, 4))
+
+g<(T)>();
+>g : Symbol(g, Decl(recovery.ts, 6, 66))
+>T : Symbol(T, Decl(recovery.ts, 1, 83))
+
 === recovery.tsx ===
 export {};
 declare const a: any, b: any, c: any, d: any, e: any, B: any, options: any, x: any;
@@ -325,6 +333,14 @@ f<{ [(() => { type Bad = (T; return key; })()]: U }>();
 >Bad : Symbol(Bad, Decl(recovery.tsx, 52, 13))
 >T : Symbol(T, Decl(recovery.tsx, 1, 83))
 >U : Symbol(U, Decl(recovery.tsx, 2, 13))
+
+g<(T)>();
+>g : Symbol(g, Decl(recovery.tsx, 6, 66))
+>T : Symbol(T, Decl(recovery.tsx, 1, 83))
+
+f<({ p = "\xZ" }: T) => U>();
+>f : Symbol(f, Decl(recovery.tsx, 5, 16))
+>p : Symbol(p, Decl(recovery.tsx, 55, 4))
 
 g<(T)>();
 >g : Symbol(g, Decl(recovery.tsx, 6, 66))
