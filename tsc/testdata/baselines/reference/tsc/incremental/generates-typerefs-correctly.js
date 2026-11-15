@@ -38,7 +38,7 @@ export type Wrap<C> = {
     "include": ["src"],
 }
 
-tsgo 
+tsc 
 ExitStatus:: Success
 Output::
 //// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
@@ -231,7 +231,7 @@ const box = (n = 0) => ({ unbox: () => n })
 
 export const bug = wrap({ n: box(1) });export const something = 1;
 
-tsgo 
+tsc 
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/outDir/src/bug.d.ts] *modified* 

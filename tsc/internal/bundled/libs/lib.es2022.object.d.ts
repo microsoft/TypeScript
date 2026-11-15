@@ -13,7 +13,6 @@ See the Apache Version 2.0 License for specific language governing permissions
 and limitations under the License.
 ***************************************************************************** */
 
-
 interface ObjectConstructor {
     /**
      * Determines whether an object has a property with the specified name.

@@ -69,7 +69,7 @@ export type SymbolsPropertyMethod = APIMethodsReturning<ProtocolSymbolResponse[]
 export type SignaturePropertyMethod = APIMethodsReturning<SignatureResponse>;
 export type TypePropertyMethod = Exclude<APIMethodsReturning<TypeResponse>, IntrinsicTypeMethod>;
 export type TypesPropertyMethod = APIMethodsReturning<TypeResponse[]>;
-export type IntrinsicTypeMethod = "getAnyType" | "getBigIntType" | "getBooleanType" | "getESSymbolType" | "getNeverType" | "getNonPrimitiveType" | "getNullType" | "getNumberType" | "getStringType" | "getUndefinedType" | "getUnknownType" | "getVoidType";
+export type IntrinsicTypeMethod = "getAnyType" | "getBigIntType" | "getBooleanType" | "getESSymbolType" | "getFalseType" | "getNeverType" | "getNonPrimitiveType" | "getNullType" | "getNumberType" | "getStringType" | "getTrueType" | "getUndefinedType" | "getUnknownType" | "getVoidType";
 
 type BatchableAPIMethod = Exclude<keyof APIMethodInfo, "batchRequests">;
 export type APIRequest = { [K in BatchableAPIMethod]: { method: K; params: APIMethodInfo[K]["params"]; }; }[BatchableAPIMethod];

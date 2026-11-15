@@ -13,7 +13,7 @@ export const b = 10;
     }
 }
 
-tsgo --noCheck
+tsc --noCheck
 ExitStatus:: DiagnosticsPresent_OutputsSkipped
 Output::
 [96ma.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
@@ -67,7 +67,7 @@ export const b = 10;
 
 Edit [0]:: no change
 
-tsgo --noCheck
+tsc --noCheck
 ExitStatus:: DiagnosticsPresent_OutputsSkipped
 Output::
 [96ma.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
@@ -92,7 +92,7 @@ Edit [1]:: Fix `a` error with noCheck
 //// [/home/src/workspaces/project/a.ts] *modified* 
 export const a = "hello";
 
-tsgo --noCheck
+tsc --noCheck
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/a.d.ts] *new* 
@@ -108,7 +108,7 @@ export const a = "hello";
 
 Edit [2]:: no change
 
-tsgo --noCheck
+tsc --noCheck
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/a.d.ts] *rewrite with same content*
@@ -120,7 +120,7 @@ Output::
 
 Edit [3]:: No Change run with checking
 
-tsgo 
+tsc 
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/a.d.ts] *rewrite with same content*
@@ -132,7 +132,7 @@ Output::
 
 Edit [4]:: No Change run with checking
 
-tsgo 
+tsc 
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/a.d.ts] *rewrite with same content*
@@ -144,7 +144,7 @@ Output::
 
 Edit [5]:: no change
 
-tsgo --noCheck
+tsc --noCheck
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/a.d.ts] *rewrite with same content*
@@ -158,7 +158,7 @@ Edit [6]:: Introduce error with noCheck
 //// [/home/src/workspaces/project/a.ts] *modified* 
 export const a = class { private p = 10; };
 
-tsgo --noCheck
+tsc --noCheck
 ExitStatus:: DiagnosticsPresent_OutputsSkipped
 Output::
 [96ma.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
@@ -185,7 +185,7 @@ export const a = class {
 
 Edit [7]:: no change
 
-tsgo --noCheck
+tsc --noCheck
 ExitStatus:: DiagnosticsPresent_OutputsSkipped
 Output::
 [96ma.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
@@ -208,7 +208,7 @@ Found 1 error in a.ts[90m:1[0m
 
 Edit [8]:: No Change run with checking
 
-tsgo 
+tsc 
 ExitStatus:: DiagnosticsPresent_OutputsSkipped
 Output::
 [96ma.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
@@ -233,7 +233,7 @@ Edit [9]:: Fix `a` error with noCheck
 //// [/home/src/workspaces/project/a.ts] *modified* 
 export const a = "hello";
 
-tsgo --noCheck
+tsc --noCheck
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/a.d.ts] *rewrite with same content*
@@ -247,7 +247,7 @@ export const a = "hello";
 
 Edit [10]:: No Change run with checking
 
-tsgo 
+tsc 
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/a.d.ts] *rewrite with same content*
@@ -261,7 +261,7 @@ Edit [11]:: Add file with error
 //// [/home/src/workspaces/project/c.ts] *new* 
 export const c: number = "hello";
 
-tsgo 
+tsc 
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96mc.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
@@ -289,7 +289,7 @@ Edit [12]:: Introduce error with noCheck
 //// [/home/src/workspaces/project/a.ts] *modified* 
 export const a = class { private p = 10; };
 
-tsgo --noCheck
+tsc --noCheck
 ExitStatus:: DiagnosticsPresent_OutputsSkipped
 Output::
 [96ma.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
@@ -320,7 +320,7 @@ Edit [13]:: Fix `a` error with noCheck
 //// [/home/src/workspaces/project/a.ts] *modified* 
 export const a = "hello";
 
-tsgo --noCheck
+tsc --noCheck
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/a.d.ts] *rewrite with same content*
@@ -336,7 +336,7 @@ export const a = "hello";
 
 Edit [14]:: No Change run with checking
 
-tsgo 
+tsc 
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96mc.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
@@ -358,7 +358,7 @@ Found 1 error in c.ts[90m:1[0m
 
 Edit [15]:: no change
 
-tsgo --noCheck
+tsc --noCheck
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/a.d.ts] *rewrite with same content*
@@ -372,7 +372,7 @@ Output::
 
 Edit [16]:: No Change run with checking
 
-tsgo 
+tsc 
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96mc.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.

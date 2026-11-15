@@ -1,0 +1,28 @@
+//// [tests/cases/compiler/declareAbstractModifierOrder.ts] ////
+
+=== classes.ts ===
+declare abstract class A {}
+>A : A
+
+abstract declare class B {}
+>B : B
+
+export declare abstract class C {}
+>C : C
+
+export abstract declare class D {}
+>D : D
+
+=== classes.d.ts ===
+declare abstract class E {}
+>E : E
+
+abstract declare class F {}
+>F : F
+
+export declare abstract class G {}
+>G : G
+
+export abstract declare class H {}
+>H : H
+

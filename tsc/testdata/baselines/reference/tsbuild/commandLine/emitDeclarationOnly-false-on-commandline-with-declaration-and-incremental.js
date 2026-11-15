@@ -25,7 +25,7 @@ import { b } from "../../project1/src/b"; export const g = b;
     "references": [{ "path": "../../project1/src" }]
 }
 
-tsgo --b project2/src --verbose
+tsc --b project2/src --verbose
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -351,7 +351,7 @@ Signatures::
 
 Edit [0]:: no change
 
-tsgo --b project2/src --verbose
+tsc --b project2/src --verbose
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -388,7 +388,7 @@ Edit [1]:: change
 //// [/home/src/workspaces/solution/project1/src/a.ts] *modified* 
 export const a = 10;const aLocal = 10;const aa = 10;
 
-tsgo --b project2/src --verbose
+tsc --b project2/src --verbose
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -538,7 +538,7 @@ Signatures::
 
 Edit [2]:: emit js files
 
-tsgo --b project2/src --verbose --emitDeclarationOnly false
+tsc --b project2/src --verbose --emitDeclarationOnly false
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -836,7 +836,7 @@ Signatures::
 
 Edit [3]:: no change
 
-tsgo --b project2/src --verbose
+tsc --b project2/src --verbose
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -871,7 +871,7 @@ Signatures::
 
 Edit [4]:: no change run with js emit
 
-tsgo --b project2/src --verbose --emitDeclarationOnly false
+tsc --b project2/src --verbose --emitDeclarationOnly false
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -908,7 +908,7 @@ Edit [5]:: js emit with change
 //// [/home/src/workspaces/solution/project1/src/b.ts] *modified* 
 export const b = 10;const bLocal = 10;const blocal = 10;
 
-tsgo --b project2/src --verbose --emitDeclarationOnly false
+tsc --b project2/src --verbose --emitDeclarationOnly false
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 

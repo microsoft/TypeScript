@@ -1,0 +1,159 @@
+//// [tests/cases/compiler/noFlakyExportEqualsWithOtherExportsCheckOrder.ts] ////
+
+=== /mm.ts ===
+/// <reference path="./ambient.d.ts" />
+declare const oxa: typeof import("xa");
+>oxa : Symbol(oxa, Decl(mm.ts, 1, 13))
+
+declare const oxb: typeof import("xb");
+>oxb : Symbol(oxb, Decl(mm.ts, 2, 13))
+
+declare const o: { x: 1 };
+>o : Symbol(o, Decl(mm.ts, 3, 13))
+>x : Symbol(x, Decl(mm.ts, 3, 18))
+
+export = o;
+>o : Symbol(o, Decl(mm.ts, 3, 13))
+
+export { v as a } from "ia";
+>v : Symbol(O.v, Decl(ambient.d.ts, 22, 27))
+>a : Symbol(a, Decl(mm.ts, 5, 8))
+
+export { v as b } from "ib";
+>v : Symbol(O.v, Decl(ambient.d.ts, 28, 27))
+>b : Symbol(b, Decl(mm.ts, 6, 8))
+
+export interface F1 {}
+>F1 : Symbol(F1, Decl(mm.ts, 6, 28))
+
+export interface F2 {}
+>F2 : Symbol(F2, Decl(mm.ts, 7, 22))
+
+export interface F3 {}
+>F3 : Symbol(F3, Decl(mm.ts, 8, 22))
+
+export interface F4 {}
+>F4 : Symbol(F4, Decl(mm.ts, 9, 22))
+
+export interface F5 {}
+>F5 : Symbol(F5, Decl(mm.ts, 10, 22))
+
+export interface F6 {}
+>F6 : Symbol(F6, Decl(mm.ts, 11, 22))
+
+export interface F7 {}
+>F7 : Symbol(F7, Decl(mm.ts, 12, 22))
+
+export interface F8 {}
+>F8 : Symbol(F8, Decl(mm.ts, 13, 22))
+
+export interface F9 {}
+>F9 : Symbol(F9, Decl(mm.ts, 14, 22))
+
+export interface F10 {}
+>F10 : Symbol(F10, Decl(mm.ts, 15, 22))
+
+export const checkA: 0 = oxa.pb;
+>checkA : Symbol(checkA, Decl(mm.ts, 17, 12))
+>oxa.pb : Symbol(pb, Decl(ambient.d.ts, 5, 12))
+>oxa : Symbol(oxa, Decl(mm.ts, 1, 13))
+>pb : Symbol(pb, Decl(ambient.d.ts, 5, 12))
+
+export const checkB: 0 = oxb.pa;
+>checkB : Symbol(checkB, Decl(mm.ts, 18, 12))
+>oxb : Symbol(oxb, Decl(mm.ts, 2, 13))
+
+=== /ambient.d.ts ===
+declare module "ma" {
+>"ma" : Symbol("ma", Decl(ambient.d.ts, 0, 0))
+
+    export { v as pa } from "xa";
+>v : Symbol(O.v, Decl(ambient.d.ts, 10, 27))
+>pa : Symbol(pa, Decl(ambient.d.ts, 1, 12))
+
+    export const ma: 1;
+>ma : Symbol(ma, Decl(ambient.d.ts, 2, 16))
+}
+declare module "mb" {
+>"mb" : Symbol("mb", Decl(ambient.d.ts, 3, 1))
+
+    export { v as pb } from "xb";
+>v : Symbol(O.v, Decl(ambient.d.ts, 16, 27))
+>pb : Symbol(pb, Decl(ambient.d.ts, 5, 12))
+
+    export const mb: 1;
+>mb : Symbol(mb, Decl(ambient.d.ts, 6, 16))
+}
+declare module "xa" {
+>"xa" : Symbol("xa", Decl(ambient.d.ts, 7, 1))
+
+    type T = typeof import("mb");
+>T : Symbol(T, Decl(ambient.d.ts, 8, 21))
+
+    interface O extends T { v: 0 }
+>O : Symbol(O, Decl(ambient.d.ts, 9, 33))
+>T : Symbol(T, Decl(ambient.d.ts, 8, 21))
+>v : Symbol(O.v, Decl(ambient.d.ts, 10, 27))
+
+    const o: O;
+>o : Symbol(o, Decl(ambient.d.ts, 11, 9))
+>O : Symbol(O, Decl(ambient.d.ts, 9, 33))
+
+    export = o;
+>o : Symbol(o, Decl(ambient.d.ts, 11, 9))
+}
+declare module "xb" {
+>"xb" : Symbol("xb", Decl(ambient.d.ts, 13, 1))
+
+    type T = typeof import("ma");
+>T : Symbol(T, Decl(ambient.d.ts, 14, 21))
+
+    interface O extends T { v: 0 }
+>O : Symbol(O, Decl(ambient.d.ts, 15, 33))
+>T : Symbol(T, Decl(ambient.d.ts, 14, 21))
+>v : Symbol(O.v, Decl(ambient.d.ts, 16, 27))
+
+    const o: O;
+>o : Symbol(o, Decl(ambient.d.ts, 17, 9))
+>O : Symbol(O, Decl(ambient.d.ts, 15, 33))
+
+    export = o;
+>o : Symbol(o, Decl(ambient.d.ts, 17, 9))
+}
+declare module "ia" {
+>"ia" : Symbol("ia", Decl(ambient.d.ts, 19, 1))
+
+    type T = typeof import("ma");
+>T : Symbol(T, Decl(ambient.d.ts, 20, 21))
+
+    interface O extends T { v: 0 }
+>O : Symbol(O, Decl(ambient.d.ts, 21, 33))
+>T : Symbol(T, Decl(ambient.d.ts, 20, 21))
+>v : Symbol(O.v, Decl(ambient.d.ts, 22, 27))
+
+    const o: O;
+>o : Symbol(o, Decl(ambient.d.ts, 23, 9))
+>O : Symbol(O, Decl(ambient.d.ts, 21, 33))
+
+    export = o;
+>o : Symbol(o, Decl(ambient.d.ts, 23, 9))
+}
+declare module "ib" {
+>"ib" : Symbol("ib", Decl(ambient.d.ts, 25, 1))
+
+    type T = typeof import("mb");
+>T : Symbol(T, Decl(ambient.d.ts, 26, 21))
+
+    interface O extends T { v: 0 }
+>O : Symbol(O, Decl(ambient.d.ts, 27, 33))
+>T : Symbol(T, Decl(ambient.d.ts, 26, 21))
+>v : Symbol(O.v, Decl(ambient.d.ts, 28, 27))
+
+    const o: O;
+>o : Symbol(o, Decl(ambient.d.ts, 29, 9))
+>O : Symbol(O, Decl(ambient.d.ts, 27, 33))
+
+    export = o;
+>o : Symbol(o, Decl(ambient.d.ts, 29, 9))
+}
+

@@ -236,6 +236,10 @@ func (s *Snapshot) GetPreferences(activeFile string) lsutil.UserPreferences {
 	return s.userPreferences
 }
 
+func (s *Snapshot) GetWorkspaceFolders() []ls.WorkspaceFolder {
+	return s.host.options.InitialWorkspaceFolders
+}
+
 func (s *Snapshot) UserPreferences() lsutil.UserPreferences {
 	return s.userPreferences
 }
@@ -579,6 +583,11 @@ func (s *Snapshot) Clone(
 	var apiError error
 	if change.apiRequest != nil {
 		apiError = projectCollectionBuilder.HandleAPIRequest(change.apiRequest, logger.Fork("HandleAPIRequest"))
+	}
+
+	if change.reason == UpdateReasonIdleCleanDiskCache {
+		var retain collections.Set[tspath.PathKey]
+		projectCollectionBuilder.cleanupConfiguredProjects(&retain, logger.Fork("cleanupConfiguredProjects"))
 	}
 
 	for _, uri := range change.Documents {

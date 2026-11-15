@@ -14,7 +14,7 @@ const b = 10;
     },
 }
 
-tsgo 
+tsc 
 ExitStatus:: Success
 Output::
 //// [/home/src/tslibs/TS/Lib/lib.es2015.d.ts] *Lib*
@@ -125,7 +125,7 @@ Signatures::
 
 Edit [0]:: with --noLib
 
-tsgo --noLib
+tsc --noLib
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [91merror[0m[90m TS2318: [0mCannot find global type 'Array'.

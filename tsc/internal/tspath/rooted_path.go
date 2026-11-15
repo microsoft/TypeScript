@@ -738,6 +738,9 @@ func (d RootedDirectoryPath) ResolveFile(path string) RootedFilePath {
 		return rootedFilePathFromResolved(appendPathToDirectory(d, path))
 	}
 	if isNormalizedSlashesRelativePath(path) {
+		if resolved, ok := appendPathWithLeadingDotSegments(d, path); ok {
+			return rootedFilePathFromResolved(resolved)
+		}
 		return rootedFilePathFromResolved(getNormalizedAbsolutePathFromNormalizedSlashes(appendPathToDirectory(d, path)))
 	}
 	return ToRootedFilePath(path, d)
@@ -795,6 +798,9 @@ func (d RootedDirectoryPath) ResolveDirectory(path string) RootedDirectoryPath {
 		return RootedDirectoryPath(rootedFilePathFromResolved(appendPathToDirectory(d, path)))
 	}
 	if isNormalizedSlashesRelativePath(path) {
+		if resolved, ok := appendPathWithLeadingDotSegments(d, path); ok {
+			return RootedDirectoryPath(rootedFilePathFromResolved(resolved))
+		}
 		return RootedDirectoryPath(rootedFilePathFromResolved(getNormalizedAbsolutePathFromNormalizedSlashes(appendPathToDirectory(d, path))))
 	}
 	return ToRootedDirectoryPath(path, d)
@@ -848,6 +854,33 @@ func isNormalizedSlashesRelativePath(path string) bool {
 	return path != "" &&
 		GetEncodedRootLength(path) == 0 &&
 		strings.IndexByte(path, '\\') < 0
+}
+
+// appendPathWithLeadingDotSegments resolves paths like "./a/b" or "../../a/b"
+// by walking up directory before appending, avoiding an intermediate string.
+// It reports false if path has dot segments beyond its leading ones or
+// would ascend past the root.
+func appendPathWithLeadingDotSegments(directory RootedDirectoryPath, path string) (string, bool) {
+	dir := directory.AsString()
+	rest := path
+	for {
+		if strings.HasPrefix(rest, "./") {
+			rest = rest[2:]
+		} else if strings.HasPrefix(rest, "../") {
+			parent := getDirectoryPathFromNormalized(dir)
+			if parent == dir {
+				return "", false
+			}
+			dir = parent
+			rest = rest[3:]
+		} else {
+			break
+		}
+	}
+	if len(rest) == len(path) || !canAppendPathWithoutNormalization(rest) {
+		return "", false
+	}
+	return appendPathToDirectory(RootedDirectoryPath(dir), rest), true
 }
 
 func appendPathToDirectory(directory RootedDirectoryPath, path string) string {

@@ -98,6 +98,9 @@ type Parser struct {
 	currentParent        *ast.Node
 	setParentFromContext ast.Visitor
 	reparsedClones       []*ast.Node
+
+	commonJSModuleIndicator   *ast.Node
+	jsdocHasCommonJSConstruct bool
 }
 
 func newParser() *Parser {
@@ -346,6 +349,8 @@ type ParserState struct {
 	reparsedClonesLen           int
 	statementHasAwaitIdentifier bool
 	hasParseError               bool
+	commonJSModuleIndicator     *ast.Node
+	jsdocHasCommonJSConstruct   bool
 }
 
 func (p *Parser) mark() ParserState {
@@ -358,6 +363,8 @@ func (p *Parser) mark() ParserState {
 		reparsedClonesLen:           len(p.reparsedClones),
 		statementHasAwaitIdentifier: p.statementHasAwaitIdentifier,
 		hasParseError:               p.hasParseError,
+		commonJSModuleIndicator:     p.commonJSModuleIndicator,
+		jsdocHasCommonJSConstruct:   p.jsdocHasCommonJSConstruct,
 	}
 }
 
@@ -371,6 +378,8 @@ func (p *Parser) rewind(state ParserState) {
 	p.reparsedClones = p.reparsedClones[0:state.reparsedClonesLen]
 	p.statementHasAwaitIdentifier = state.statementHasAwaitIdentifier
 	p.hasParseError = state.hasParseError
+	p.commonJSModuleIndicator = state.commonJSModuleIndicator
+	p.jsdocHasCommonJSConstruct = state.jsdocHasCommonJSConstruct
 }
 
 func (p *Parser) lookAhead(callback func(p *Parser) bool) bool {
@@ -451,6 +460,10 @@ func (p *Parser) parseSourceFileWorker() *ast.SourceFile {
 	if !result.IsDeclarationFile && result.ExternalModuleIndicator != nil && len(p.possibleAwaitSpans) > 0 {
 		reparse := p.finishNode(p.reparseTopLevelAwait(result), pos)
 		if node != reparse {
+			// Reparsing can change which CommonJS constructs exist, so recompute from the final tree.
+			if p.contextFlags&ast.NodeFlagsJavaScriptFile != 0 {
+				p.commonJSModuleIndicator = findCommonJSModuleIndicator(reparse)
+			}
 			result = reparse.AsSourceFile()
 			p.finishSourceFile(result, isDeclarationFile)
 		}
@@ -483,6 +496,53 @@ func (p *Parser) finishSourceFile(result *ast.SourceFile, isDeclarationFile bool
 	slices.SortFunc(p.reparsedClones, ast.CompareNodePositions)
 	result.ReparsedClones = slices.Clone(p.reparsedClones)
 	ast.SetExternalModuleIndicator(result, p.opts.ExternalModuleIndicatorOptions)
+	// CommonJS constructs only make a file a module when it has no ES module syntax.
+	if result.ExternalModuleIndicator == nil || result.ExternalModuleIndicator == result.AsNode() {
+		if p.commonJSModuleIndicator == nil && p.jsdocHasCommonJSConstruct {
+			// Only reparsed JSDoc clones that survive into the tree are bound.
+			p.commonJSModuleIndicator = findCommonJSModuleIndicator(result.AsNode())
+		}
+		result.CommonJSModuleIndicator = p.commonJSModuleIndicator
+	} else {
+		result.CommonJSModuleIndicator = nil
+	}
+}
+
+// checkCommonJSModuleIndicator records the first CommonJS construct in a JavaScript file
+// (a require call, or an assignment or Object.defineProperty on exports or module.exports).
+// The binder binds the same constructs as CommonJS exports. Nodes parsed within JSDoc are
+// only bound if reparsed, so for those we just note that the final tree needs checking.
+func (p *Parser) checkCommonJSModuleIndicator(node *ast.Node) *ast.Node {
+	if p.commonJSModuleIndicator == nil && node.Flags&ast.NodeFlagsJavaScriptFile != 0 && isCommonJSModuleIndicator(node) {
+		if node.Flags&ast.NodeFlagsJSDoc == 0 {
+			p.commonJSModuleIndicator = node
+		} else {
+			p.jsdocHasCommonJSConstruct = true
+		}
+	}
+	return node
+}
+
+func findCommonJSModuleIndicator(node *ast.Node) *ast.Node {
+	var found *ast.Node
+	var visit func(*ast.Node) bool
+	visit = func(n *ast.Node) bool {
+		if isCommonJSModuleIndicator(n) {
+			found = n
+			return true
+		}
+		return n.ForEachChild(visit)
+	}
+	visit(node)
+	return found
+}
+
+func isCommonJSModuleIndicator(node *ast.Node) bool {
+	switch ast.GetAssignmentDeclarationKind(node) {
+	case ast.JSDeclarationKindModuleExports, ast.JSDeclarationKindExportsProperty, ast.JSDeclarationKindObjectDefinePropertyExports:
+		return true
+	}
+	return ast.IsRequireCall(node, false /*requireStringLiteralLikeArgument*/)
 }
 
 func (p *Parser) createJSDocCache() map[*ast.Node][]*ast.Node {
@@ -1398,7 +1458,7 @@ func (p *Parser) parseCaseClause() *ast.Node {
 	expression := p.parseExpressionAllowIn()
 	p.parseExpected(ast.KindColonToken)
 	statements := p.parseList(PCSwitchClauseStatements, (*Parser).parseStatement)
-	result := p.finishNode(p.factory.NewCaseOrDefaultClause(ast.KindCaseClause, expression, statements), pos)
+	result := p.finishNode(p.factory.NewCaseClause(expression, statements), pos)
 	p.withJSDoc(result, jsdoc)
 	return result
 }
@@ -1409,7 +1469,7 @@ func (p *Parser) parseDefaultClause() *ast.Node {
 	p.parseExpected(ast.KindDefaultKeyword)
 	p.parseExpected(ast.KindColonToken)
 	statements := p.parseList(PCSwitchClauseStatements, (*Parser).parseStatement)
-	result := p.finishNode(p.factory.NewCaseOrDefaultClause(ast.KindDefaultClause, nil /*expression*/, statements), pos)
+	result := p.finishNode(p.factory.NewDefaultClause(statements), pos)
 	p.withJSDoc(result, jsdoc)
 	return result
 }
@@ -4691,6 +4751,9 @@ func (p *Parser) parseBinaryExpressionRest(precedence ast.OperatorPrecedence, le
 		if !shouldConsumeBinaryOperator(operator, newPrecedence, precedence) {
 			break
 		}
+		if p.hasPrecedingLineBreak() && (p.scanner.HasUnicodeEscape() || p.scanner.HasExtendedUnicodeEscape()) && ast.NodeIsPresent(leftOperand) {
+			break
+		}
 		if operator == ast.KindInKeyword && p.inDisallowInContext() {
 			break
 		}
@@ -4708,8 +4771,25 @@ func (p *Parser) parseBinaryExpressionRest(precedence ast.OperatorPrecedence, le
 				// are binary operators, we want to stop parsing when $$ would bind before ## after erasing the
 				// assertion. See https://github.com/microsoft/TypeScript/issues/63527.
 				lastPrecedence := ast.OperatorPrecedenceHighest
-				if ast.IsBinaryExpression(lastOperand) {
+				unaryOperator := ast.KindUnknown
+				// Unary expressions cannot be exposed on the left of '**', but update expressions can.
+				switch lastOperand.Kind {
+				case ast.KindBinaryExpression:
 					lastPrecedence = ast.GetBinaryOperatorPrecedence(lastOperand.AsBinaryExpression().OperatorToken.Kind)
+				case ast.KindPrefixUnaryExpression:
+					if op := lastOperand.AsPrefixUnaryExpression().Operator; op != ast.KindPlusPlusToken && op != ast.KindMinusMinusToken {
+						unaryOperator = op
+					}
+				case ast.KindDeleteExpression:
+					unaryOperator = ast.KindDeleteKeyword
+				case ast.KindTypeOfExpression:
+					unaryOperator = ast.KindTypeOfKeyword
+				case ast.KindVoidExpression:
+					unaryOperator = ast.KindVoidKeyword
+				case ast.KindAwaitExpression:
+					unaryOperator = ast.KindAwaitKeyword
+				case ast.KindTypeAssertionExpression:
+					unaryOperator = ast.KindLessThanToken
 				}
 				if operator == ast.KindSatisfiesKeyword {
 					leftOperand = p.makeSatisfiesExpression(leftOperand, p.parseType())
@@ -4719,6 +4799,9 @@ func (p *Parser) parseBinaryExpressionRest(precedence ast.OperatorPrecedence, le
 				// Stop if the next operator would bind before the last operator when the assertion is erased.
 				nextOperator := p.reScanGreaterThanToken()
 				nextPrecedence := ast.GetBinaryOperatorPrecedence(nextOperator)
+				if nextOperator == ast.KindAsteriskAsteriskToken && unaryOperator != ast.KindUnknown {
+					p.reportInvalidExponentiationLeftOperand(lastOperand, unaryOperator)
+				}
 				if shouldConsumeBinaryOperator(nextOperator, nextPrecedence, lastPrecedence) {
 					break
 				}
@@ -4740,7 +4823,7 @@ func (p *Parser) makeAsExpression(left *ast.Expression, right *ast.TypeNode) *as
 }
 
 func (p *Parser) makeBinaryExpression(left *ast.Expression, operatorToken *ast.Node, right *ast.Expression, pos int) *ast.Node {
-	return p.finishNode(p.factory.NewBinaryExpression(nil /*modifiers*/, left, nil /*typeNode*/, operatorToken, right), pos)
+	return p.checkCommonJSModuleIndicator(p.finishNode(p.factory.NewBinaryExpression(nil /*modifiers*/, left, nil /*typeNode*/, operatorToken, right), pos))
 }
 
 func (p *Parser) parseUnaryExpressionOrHigher() *ast.Expression {
@@ -4770,16 +4853,20 @@ func (p *Parser) parseUnaryExpressionOrHigher() *ast.Expression {
 	unaryOperator := p.token
 	simpleUnaryExpression := p.parseSimpleUnaryExpression()
 	if p.token == ast.KindAsteriskAsteriskToken {
-		pos := scanner.SkipTrivia(p.sourceText, simpleUnaryExpression.Pos())
-		end := simpleUnaryExpression.End()
-		if simpleUnaryExpression.Kind == ast.KindTypeAssertionExpression {
-			p.parseErrorAt(pos, end, diagnostics.A_type_assertion_expression_is_not_allowed_in_the_left_hand_side_of_an_exponentiation_expression_Consider_enclosing_the_expression_in_parentheses)
-		} else {
-			debug.Assert(isKeywordOrPunctuation(unaryOperator))
-			p.parseErrorAt(pos, end, diagnostics.An_unary_expression_with_the_0_operator_is_not_allowed_in_the_left_hand_side_of_an_exponentiation_expression_Consider_enclosing_the_expression_in_parentheses, scanner.TokenToString(unaryOperator))
-		}
+		p.reportInvalidExponentiationLeftOperand(simpleUnaryExpression, unaryOperator)
 	}
 	return simpleUnaryExpression
+}
+
+func (p *Parser) reportInvalidExponentiationLeftOperand(expression *ast.Expression, unaryOperator ast.Kind) {
+	pos := scanner.SkipTrivia(p.sourceText, expression.Pos())
+	end := expression.End()
+	if expression.Kind == ast.KindTypeAssertionExpression {
+		p.parseErrorAt(pos, end, diagnostics.A_type_assertion_expression_is_not_allowed_in_the_left_hand_side_of_an_exponentiation_expression_Consider_enclosing_the_expression_in_parentheses)
+	} else {
+		debug.Assert(isKeywordOrPunctuation(unaryOperator))
+		p.parseErrorAt(pos, end, diagnostics.An_unary_expression_with_the_0_operator_is_not_allowed_in_the_left_hand_side_of_an_exponentiation_expression_Consider_enclosing_the_expression_in_parentheses, scanner.TokenToString(unaryOperator))
+	}
 }
 
 func (p *Parser) isUpdateExpression() bool {
@@ -5556,7 +5643,7 @@ func (p *Parser) parseCallExpressionRest(pos int, expression *ast.Expression) *a
 			inner := expression
 			argumentList := p.parseArgumentList()
 			isOptionalChain := questionDotToken != nil || p.tryReparseOptionalChain(expression)
-			expression = p.checkJSSyntax(p.finishNode(p.factory.NewCallExpression(expression, questionDotToken, typeArguments, argumentList, core.IfElse(isOptionalChain, ast.NodeFlagsOptionalChain, ast.NodeFlagsNone)), pos))
+			expression = p.checkCommonJSModuleIndicator(p.checkJSSyntax(p.finishNode(p.factory.NewCallExpression(expression, questionDotToken, typeArguments, argumentList, core.IfElse(isOptionalChain, ast.NodeFlagsOptionalChain, ast.NodeFlagsNone)), pos)))
 			p.unparseExpressionWithTypeArguments(inner, typeArguments, expression)
 			continue
 		}

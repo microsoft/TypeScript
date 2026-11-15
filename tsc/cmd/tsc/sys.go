@@ -122,7 +122,7 @@ func (p *childProcess) Close() error {
 }
 
 func newSystem() *osSys {
-	cwd, err := os.Getwd()
+	cwd, err := getCurrentDirectory()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error getting current directory: %v\n", err)
 		os.Exit(int(tsc.ExitStatusInvalidProject_OutputsSkipped))

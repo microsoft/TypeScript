@@ -3,11 +3,11 @@ import * as fs from "node:fs";
 import path from "node:path";
 import { GeneratedFile } from "./generatedFile.mts";
 import {
-    formatCommandArg,
     getFileFingerprint,
     goInputs,
     repoRoot,
     run,
+    withFileFingerprintWrites,
 } from "./utils.mts";
 
 export interface CacheOptions {
@@ -19,6 +19,10 @@ export interface CacheOptions {
     envInputs?: string[];
     env?: NodeJS.ProcessEnv;
     force?: boolean;
+}
+
+export interface CacheHost {
+    run(command: string, args: readonly string[], options: { cwd: string; env: NodeJS.ProcessEnv; }): Promise<unknown>;
 }
 
 function expand(patterns: string[], cwd: string, exclude: string[] = []) {
@@ -34,7 +38,7 @@ export default async function cache({
     envInputs = ["GOOS", "GOARCH", "GOFLAGS", "GOTOOLCHAIN", "GOEXPERIMENT", "CGO_ENABLED", "GOWORK"],
     env,
     force = false,
-}: CacheOptions): Promise<boolean> {
+}: CacheOptions, host: CacheHost = { run }): Promise<boolean> {
     if (!outputs.length || !commands.length || commands.some(command => !command.length)) {
         throw new Error("Cached generation requires outputs and nonempty commands.");
     }
@@ -85,15 +89,15 @@ export default async function cache({
         );
     const previous = artifacts(outputFiles());
     const complete = () => outputs.every(pattern => expand([pattern], cwd).some(file => fs.statSync(file).isFile()));
-    const commandText = commands.map(command => command.map(formatCommandArg).join(" ")).join("; ");
     if (complete() && previous.every(file => file.isCurrent(force))) {
-        console.log(`skipped ${commandText}: codegen outputs are already up to date`);
         return true;
     }
     for (const file of previous) file.invalidate();
-    for (const [command, ...args] of commands) {
-        await run(command, args, { cwd, env: environment });
-    }
+    await withFileFingerprintWrites(async () => {
+        for (const [command, ...args] of commands) {
+            await host.run(command, args, { cwd, env: environment });
+        }
+    });
     if (!complete()) throw new Error(`Generation did not produce all declared outputs: ${outputs.join(", ")}`);
     if (snapshotInputs(true).hash === before.hash) {
         for (const file of artifacts(outputFiles())) file.markCurrent();

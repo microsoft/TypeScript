@@ -32,7 +32,7 @@ export function foo(): void;
     "types": "index.d.ts"
 }
 
-tsgo -b a b --verbose --traceResolution --explainFiles
+tsc -b a b --verbose --traceResolution --explainFiles
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -159,7 +159,7 @@ Signatures::
 
 Edit [0]:: no change
 
-tsgo -b a b --verbose --traceResolution --explainFiles
+tsc -b a b --verbose --traceResolution --explainFiles
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 

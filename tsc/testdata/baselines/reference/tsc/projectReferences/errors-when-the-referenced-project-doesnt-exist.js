@@ -14,7 +14,7 @@ export { };
     }]
 }
 
-tsgo --p primary/tsconfig.json
+tsc --p primary/tsconfig.json
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96mprimary/tsconfig.json[0m:[93m6[0m:[93m20[0m - [91merror[0m[90m TS6053: [0mFile '/home/src/workspaces/project/foo' not found.

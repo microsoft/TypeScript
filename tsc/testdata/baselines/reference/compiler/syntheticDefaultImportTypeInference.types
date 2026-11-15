@@ -1,0 +1,44 @@
+//// [tests/cases/compiler/syntheticDefaultImportTypeInference.ts] ////
+
+=== syntheticDefaultImportTypeInference.ts ===
+// https://github.com/microsoft/TypeScript/issues/65445
+
+// The type of import("x") is the module's type with a synthetic default,
+// which cannot reference type parameters, so inference from the callback
+// does not explore its members, among them stub, whose return type is
+// infinite for an erased type argument.
+
+declare module "x" {
+>"x" : typeof import("x")
+
+    type Stubable = (...args: any[]) => any;
+>Stubable : Stubable
+>args : any[]
+
+    type Result<R> = R extends Stubable ? Provider<R> : Promise<R>;
+>Result : Result<R>
+
+    type MethodOrProperty<V> = V extends (...args: infer P) => infer R ? (...args: P) => Result<R> : Result<V>;
+>MethodOrProperty : MethodOrProperty<V>
+>args : P
+>args : P
+
+    type Provider<T> = T extends Stubable ? MethodOrProperty<T> : unknown;
+>Provider : Provider<T>
+
+    export function stub<T extends Stubable>(value: T): Provider<T>;
+>stub : <T extends Stubable>(value: T) => Provider<T>
+>value : T
+}
+
+const a = import("x").then((m) => 1);
+>a : Promise<number>
+>import("x").then((m) => 1) : Promise<number>
+>import("x").then : <TResult1 = { stub<T extends import("x").Stubable>(value: T): import("x").Provider<T>; default: typeof import("x"); }, TResult2 = never>(onfulfilled?: ((value: { stub<T extends import("x").Stubable>(value: T): import("x").Provider<T>; default: typeof import("x"); }) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
+>import("x") : Promise<{ stub<T extends import("x").Stubable>(value: T): import("x").Provider<T>; default: typeof import("x"); }>
+>"x" : "x"
+>then : <TResult1 = { stub<T extends import("x").Stubable>(value: T): import("x").Provider<T>; default: typeof import("x"); }, TResult2 = never>(onfulfilled?: ((value: { stub<T extends import("x").Stubable>(value: T): import("x").Provider<T>; default: typeof import("x"); }) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
+>(m) => 1 : (m: { stub<T extends import("x").Stubable>(value: T): import("x").Provider<T>; default: typeof import("x"); }) => number
+>m : { stub<T extends import("x").Stubable>(value: T): import("x").Provider<T>; default: typeof import("x"); }
+>1 : 1
+

@@ -576,6 +576,15 @@ const visitEachChildTable: Record<number, VisitEachChildFunction> = {
         const _clauses = visitNodes(node.clauses, visitor);
         return updateCaseBlock(node, _clauses);
     },
+    [SyntaxKind.CaseClause]: (node: CaseClause, visitor: Visitor): CaseClause => {
+        const _expression = visitNode(node.expression, visitor, isExpression);
+        const _statements = visitNodes(node.statements, visitor);
+        return updateCaseClause(node, _expression, _statements);
+    },
+    [SyntaxKind.DefaultClause]: (node: DefaultClause, visitor: Visitor): DefaultClause => {
+        const _statements = visitNodes(node.statements, visitor);
+        return updateDefaultClause(node, _statements);
+    },
     [SyntaxKind.ThrowStatement]: (node: ThrowStatement, visitor: Visitor): ThrowStatement => {
         const _expression = visitNode(node.expression, visitor, isExpression);
         return updateThrowStatement(node, _expression);
@@ -1419,16 +1428,6 @@ const visitEachChildTable: Record<number, VisitEachChildFunction> = {
         const _expression = visitNode(node.expression, visitor, isExpression);
         const _statement = visitNode(node.statement, visitor, isStatement);
         return updateForOfStatement(node, _awaitModifier, _initializer, _expression, _statement);
-    },
-    [SyntaxKind.CaseClause]: (node: CaseClause, visitor: Visitor): CaseClause => {
-        const _expression = visitNode(node.expression, visitor, isExpression);
-        const _statements = visitNodes(node.statements, visitor);
-        return updateCaseClause(node, _expression, _statements);
-    },
-    [SyntaxKind.DefaultClause]: (node: DefaultClause, visitor: Visitor): DefaultClause => {
-        const _expression = visitNode(node.expression, visitor, isExpression);
-        const _statements = visitNodes(node.statements, visitor);
-        return updateDefaultClause(node, _expression, _statements);
     },
     [SyntaxKind.ObjectBindingPattern]: (node: ObjectBindingPattern, visitor: Visitor): ObjectBindingPattern => {
         const _elements = visitNodes(node.elements, visitor);

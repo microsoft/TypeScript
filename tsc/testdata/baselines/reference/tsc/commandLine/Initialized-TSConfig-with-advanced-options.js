@@ -2,7 +2,7 @@ currentDirectory::/home/src/workspaces/project
 useCaseSensitiveFileNames::true
 Input::
 
-tsgo --init --declaration --declarationDir lib --skipLibCheck --noErrorTruncation
+tsc --init --declaration --declarationDir lib --skipLibCheck --noErrorTruncation
 ExitStatus:: Success
 Output::
 

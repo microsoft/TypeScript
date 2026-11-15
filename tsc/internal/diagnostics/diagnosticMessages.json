@@ -67,10 +67,6 @@
         "category": "Error",
         "code": 1020
     },
-    "An index signature must have a type annotation.": {
-        "category": "Error",
-        "code": 1021
-    },
     "An index signature parameter must have a type annotation.": {
         "category": "Error",
         "code": 1022
@@ -1488,7 +1484,7 @@
         "code": 1449
     },
     "Dynamic imports can only accept a module specifier and an optional set of attributes as arguments": {
-        "category": "Message",
+        "category": "Error",
         "code": 1450
     },
     "Private identifiers are only allowed in class bodies and may only be used as part of a class member declaration, property access, or on the left-hand-side of an 'in' expression": {
@@ -6657,6 +6653,10 @@
         "category": "Message",
         "code": 6809
     },
+    "Disable runtime rewriting of file extensions in non-literal 'import()' and 'require()' calls when 'rewriteRelativeImportExtensions' is enabled.": {
+        "category": "Message",
+        "code": 6810
+    },
 
     "one of:": {
         "category": "Message",
@@ -7041,6 +7041,10 @@
     "A mapped type may not declare properties or methods.": {
         "category": "Error",
         "code": 7061
+    },
+    "Index signature, which lacks type annotation, implicitly has an 'any' type.": {
+        "category": "Error",
+        "code": 7062
     },
     "Declaration emit elides private members, but '{0}' refers to a private member. Write an explicit type here.": {
         "category": "Error",
@@ -8720,7 +8724,7 @@
         "category": "Error",
         "code": 18065
     },
-    "Content mapper file extension '{0}' is a built-in extension and cannot be registered by a content mapper.": {
+    "Content mapper file extension '{0}' cannot be registered because it ends in a built-in extension.": {
         "category": "Error",
         "code": 18066
     },
@@ -8955,5 +8959,65 @@
     "Content mapper extension '{0}' must not contain path separators.": {
         "category": "Error",
         "code": 18123
+    },
+    "The content mapper '{0}' returned virtual extension '{1}', whose module format does not match declaration output '{2}'.": {
+        "category": "Error",
+        "code": 18125
+    },
+    "Content mapper '{0}' must specify 'extensions' in tsconfig or its package manifest.": {
+        "category": "Error",
+        "code": 18141
+    },
+    "Content mapper '{0}' is also registered for the extension '{1}', but has a conflicting 'outputExtensions' mapping. Each registration for this extension must produce the same output file name.": {
+        "category": "Error",
+        "code": 18127
+    },
+    "Content mapper '{0}' is also registered for the extension '{1}', but has no 'outputExtensions' mapping. Each registration for this extension must produce the same output file name.": {
+        "category": "Error",
+        "code": 18128
+    },
+    "The conflicting mapper registration is declared here.": {
+        "category": "Message",
+        "code": 18130
+    },
+    "The conflicting mapper registration is declared here. Its 'outputExtensions' setting is inherited from the mapper's package.json.": {
+        "category": "Message",
+        "code": 18131
+    },
+    "This relative import path is unsafe to rewrite because the content mapper's 'outputExtensions' mapping depends on module resolution.": {
+        "category": "Error",
+        "code": 18132
+    },
+    "Non-literal import paths cannot be rewritten when a content mapper uses both 'include' and an 'outputExtensions' mapping. Set 'disableDynamicImportExtensionRewriting' to disable rewriting of non-literal import paths.": {
+        "category": "Error",
+        "code": 18133
+    },
+    "This relative import path is unsafe to rewrite because it appears to match the content mapper's 'include', but does not after resolution with 'rootDirs'.": {
+        "category": "Error",
+        "code": 18134
+    },
+    "This relative import path is unsafe to rewrite because it appears not to match the content mapper's 'include', but does after resolution with 'rootDirs'.": {
+        "category": "Error",
+        "code": 18135
+    },
+    "This relative import path is unsafe to rewrite because it appears to match the content mapper's 'include', but does not after resolution with 'moduleSuffixes'.": {
+        "category": "Error",
+        "code": 18136
+    },
+    "This relative import path is unsafe to rewrite because it appears not to match the content mapper's 'include', but does after resolution with 'moduleSuffixes'.": {
+        "category": "Error",
+        "code": 18137
+    },
+    "This relative import path is unsafe to rewrite because it appears to match the content mapper's 'include', but does not after resolution with 'rootDirs' and 'moduleSuffixes'.": {
+        "category": "Error",
+        "code": 18138
+    },
+    "This relative import path is unsafe to rewrite because it appears not to match the content mapper's 'include', but does after resolution with 'rootDirs' and 'moduleSuffixes'.": {
+        "category": "Error",
+        "code": 18139
+    },
+    "File '{0}' has a registered content mapper extension but does not match any content mapper's 'include'.": {
+        "category": "Error",
+        "code": 18140
     }
 }

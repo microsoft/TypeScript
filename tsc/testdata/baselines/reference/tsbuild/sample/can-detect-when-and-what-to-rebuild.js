@@ -60,7 +60,7 @@ export const m = mod;
     },
 }
 
-tsgo --b tests --verbose
+tsc --b tests --verbose
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -432,7 +432,7 @@ Signatures::
 
 Edit [0]:: no change
 
-tsgo --b tests --verbose
+tsc --b tests --verbose
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -453,7 +453,7 @@ Edit [1]:: Only builds the leaf node project
 //// [/user/username/projects/sample1/tests/index.ts] *modified* 
 const m = 10;
 
-tsgo --b tests --verbose
+tsc --b tests --verbose
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -542,7 +542,7 @@ export const someString: string = "WELCOME PLANET";
 export function leftPad(s: string, n: number) { return s + n; }
 export function multiply(a: number, b: number) { return a * b; }
 
-tsgo --b tests --verbose
+tsc --b tests --verbose
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -675,7 +675,7 @@ Edit [3]:: rebuilds when tsconfig changes
     },
 }
 
-tsgo --b tests --verbose
+tsc --b tests --verbose
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 

@@ -11,7 +11,7 @@ import (
 	"sync"
 	"sync/atomic"
 	"testing"
-	"time"
+	"testing/synctest"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/contentmapper"
@@ -341,57 +341,54 @@ func TestRunnerTransformResponseValidation(t *testing.T) {
 
 func TestHostClosesProcessWhenReadLoopFails(t *testing.T) {
 	t.Parallel()
-	closed := make(chan struct{}, 1)
-	spawner := contentmapper.SpawnerFunc(func(command []string, dir string, stderr io.Writer) (io.ReadWriteCloser, error) {
-		client, server := net.Pipe()
-		go func() {
-			defer server.Close()
-			protocol := ipc.NewJSONRPCProtocol(server)
-			message, err := protocol.ReadMessage()
-			assert.NilError(t, err)
-			assert.Equal(t, message.Method, contentmapper.MethodInitialize)
-			assert.NilError(t, protocol.WriteResponse(message.ID, contentmapper.InitializeResult{
-				PositionEncoding: contentmapper.PositionEncodingUTF8,
-				DiagnosticSource: "mapper",
-			}))
-			_, err = server.Write([]byte("oops\n"))
-			assert.NilError(t, err)
-		}()
-		return &closeSignalReadWriteCloser{ReadWriteCloser: client, closed: closed}, nil
+	synctest.Test(t, func(t *testing.T) {
+		closed := make(chan struct{}, 1)
+		spawner := contentmapper.SpawnerFunc(func(command []string, dir string, stderr io.Writer) (io.ReadWriteCloser, error) {
+			client, server := net.Pipe()
+			go func() {
+				defer server.Close()
+				protocol := ipc.NewJSONRPCProtocol(server)
+				message, err := protocol.ReadMessage()
+				assert.NilError(t, err)
+				assert.Equal(t, message.Method, contentmapper.MethodInitialize)
+				assert.NilError(t, protocol.WriteResponse(message.ID, contentmapper.InitializeResult{
+					PositionEncoding: contentmapper.PositionEncodingUTF8,
+					DiagnosticSource: "mapper",
+				}))
+				_, err = server.Write([]byte("oops\n"))
+				assert.NilError(t, err)
+			}()
+			return &closeSignalReadWriteCloser{ReadWriteCloser: client, closed: closed}, nil
+		})
+		host := contentmapper.NewHost(t.Context(), spawner, locale.Default)
+		defer host.Close()
+		mapper := &contentmapper.Mapper{Name: "mapper", Exec: []string{"mapper"}}
+		_, err := host.Transform(mapper, contentmapper.Request{FileName: "/a.vue", Content: ""})
+		assert.Assert(t, err != nil)
+		<-closed
 	})
-	host := contentmapper.NewHost(t.Context(), spawner, locale.Default)
-	defer host.Close()
-	mapper := &contentmapper.Mapper{Name: "mapper", Exec: []string{"mapper"}}
-	_, err := host.Transform(mapper, contentmapper.Request{FileName: "/a.vue", Content: ""})
-	assert.Assert(t, err != nil)
-	processClosed := false
-	select {
-	case <-closed:
-		processClosed = true
-	case <-time.After(time.Second):
-		processClosed = false
-	}
-	assert.Assert(t, processClosed, "mapper process was not closed after its read loop failed")
 }
 
 func TestHostReportsInitializationTimeoutBeforeClosingProcess(t *testing.T) {
 	t.Parallel()
-	spawner := contentmapper.SpawnerFunc(func(command []string, dir string, stderr io.Writer) (io.ReadWriteCloser, error) {
-		client, server := net.Pipe()
-		go func() {
-			defer server.Close()
-			_, _ = ipc.NewJSONRPCProtocol(server).ReadMessage()
-			<-t.Context().Done()
-		}()
-		return &exitOnCloseReadWriteCloser{ReadWriteCloser: client}, nil
+	synctest.Test(t, func(t *testing.T) {
+		spawner := contentmapper.SpawnerFunc(func(command []string, dir string, stderr io.Writer) (io.ReadWriteCloser, error) {
+			client, server := net.Pipe()
+			go func() {
+				defer server.Close()
+				_, _ = ipc.NewJSONRPCProtocol(server).ReadMessage()
+				<-t.Context().Done()
+			}()
+			return &exitOnCloseReadWriteCloser{ReadWriteCloser: client}, nil
+		})
+		host := contentmapper.NewHost(t.Context(), spawner, locale.Default)
+		defer host.Close()
+		mapper := &contentmapper.Mapper{Name: "mapper", Exec: []string{"mapper"}}
+		_, err := host.Transform(mapper, contentmapper.Request{FileName: "/a.vue", Content: ""})
+		initializeError, ok := errors.AsType[*contentmapper.InitializeError](err)
+		assert.Assert(t, ok, "expected InitializeError, got %v", err)
+		assert.Equal(t, initializeError.Kind, contentmapper.InitializeErrorKindNoResponse)
 	})
-	host := contentmapper.NewHost(t.Context(), spawner, locale.Default)
-	defer host.Close()
-	mapper := &contentmapper.Mapper{Name: "mapper", Exec: []string{"mapper"}}
-	_, err := host.Transform(mapper, contentmapper.Request{FileName: "/a.vue", Content: ""})
-	initializeError, ok := errors.AsType[*contentmapper.InitializeError](err)
-	assert.Assert(t, ok, "expected InitializeError, got %v", err)
-	assert.Equal(t, initializeError.Kind, contentmapper.InitializeErrorKindNoResponse)
 }
 
 func TestHostReportsProcessExitBeforeInitialization(t *testing.T) {
@@ -896,6 +893,7 @@ type recordingMapper struct {
 
 type blockingMapper struct {
 	recordingMapper
+	method  string
 	started chan struct{}
 	proceed chan struct{}
 }
@@ -903,7 +901,7 @@ type blockingMapper struct {
 func (*recordingMapper) handlesProjects() {}
 
 func (m *blockingMapper) HandleRequest(ctx context.Context, method string, params json.Value) (any, error) {
-	if method == contentmapper.MethodTransform {
+	if method == m.method {
 		close(m.started)
 		<-m.proceed
 	}
@@ -1124,6 +1122,55 @@ func TestProjectMethodsAfterHostClose(t *testing.T) {
 	assert.ErrorContains(t, err, "content mapper project is closed")
 }
 
+func TestHostCloseCancelsPendingRequests(t *testing.T) {
+	t.Parallel()
+	for _, method := range []string{
+		contentmapper.MethodInitialize,
+		contentmapper.MethodOpenProject,
+		contentmapper.MethodTransform,
+		contentmapper.MethodCloseProject,
+	} {
+		t.Run(method, func(t *testing.T) {
+			t.Parallel()
+			synctest.Test(t, func(t *testing.T) {
+				mapper := &blockingMapper{
+					method:  method,
+					started: make(chan struct{}),
+					proceed: make(chan struct{}),
+				}
+				spawner := &fakeSpawner{handler: mapper}
+				host := contentmapper.NewHost(t.Context(), spawner, locale.Default)
+				defer host.Close()
+				defer close(mapper.proceed)
+				definition := &contentmapper.Mapper{Name: "mapper", Exec: []string{"mapper"}}
+				transformDone := make(chan error, 1)
+				go func() {
+					_, err := host.Transform(definition, contentmapper.Request{FileName: "/a.vue", Content: "x"})
+					transformDone <- err
+				}()
+				<-mapper.started
+
+				closeDone := make(chan error, 1)
+				go func() { closeDone <- host.Close() }()
+				synctest.Wait()
+				select {
+				case err := <-closeDone:
+					assert.NilError(t, err)
+				default:
+					t.Fatal("Close blocked waiting for a pending mapper request")
+				}
+				err := <-transformDone
+				if method == contentmapper.MethodCloseProject {
+					assert.NilError(t, err)
+				} else {
+					assert.Assert(t, err != nil)
+				}
+				assert.Equal(t, spawner.closes.Load(), int32(1))
+			})
+		})
+	}
+}
+
 func TestProjectRejectsRelativeWatchedFiles(t *testing.T) {
 	t.Parallel()
 	mapperProcess := &recordingMapper{watchedFiles: []string{"mapper.config.js"}, dynamicConfig: true}
@@ -1289,7 +1336,7 @@ func TestHostSetLocaleRestartsMapper(t *testing.T) {
 
 func TestHostSetLocaleWaitsForTransform(t *testing.T) {
 	t.Parallel()
-	mapper := &blockingMapper{started: make(chan struct{}), proceed: make(chan struct{})}
+	mapper := &blockingMapper{method: contentmapper.MethodTransform, started: make(chan struct{}), proceed: make(chan struct{})}
 	spawner := &fakeSpawner{handler: mapper}
 	r := contentmapper.NewHost(t.Context(), spawner, locale.Default)
 	defer r.Close()

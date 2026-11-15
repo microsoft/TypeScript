@@ -6,7 +6,7 @@ export {};
 //// [/home/src/workspaces/project/tsconfig.json] *new* 
 {"compilerOptions": {"target": "es2015", "alwaysStrict": false}}
 
-tsgo --noEmit
+tsc --noEmit
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96mtsconfig.json[0m:[93m1[0m:[93m58[0m - [91merror[0m[90m TS5108: [0mOption 'alwaysStrict=false' has been removed. Please remove it from your configuration.

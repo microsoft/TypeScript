@@ -35,7 +35,7 @@ export const named = decode(namedInput);
 					"compilerOptions": { "strict": true, "composite": true, "outDir": "dist" }
 				}
 
-tsgo --build consumer
+tsc --build consumer
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96mconsumer/index.ts[0m:[93m8[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
@@ -187,7 +187,7 @@ Signatures::
 
 Edit [0]:: no change
 
-tsgo --build consumer
+tsc --build consumer
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96mconsumer/index.ts[0m:[93m8[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
@@ -236,7 +236,7 @@ export const named = decode(namedInput);
 // comment-only edit
 
 
-tsgo --build consumer
+tsc --build consumer
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96mconsumer/index.ts[0m:[93m8[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
@@ -332,7 +332,7 @@ Signatures::
 
 Edit [2]:: no change
 
-tsgo --build consumer
+tsc --build consumer
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96mconsumer/index.ts[0m:[93m8[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.

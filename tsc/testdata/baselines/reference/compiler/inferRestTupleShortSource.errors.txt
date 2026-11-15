@@ -3,7 +3,7 @@ inferRestTupleShortSource.ts(7,3): error TS2345: Argument of type '[]' is not as
 
 
 ==== inferRestTupleShortSource.ts (1 errors) ====
-    // Regression test: tsgo panics when inferring [...rest, ...T] from a tuple shorter than fixed-arity constraint
+    // Regression test: the checker panicked when inferring [...rest, ...T] from a tuple shorter than fixed-arity constraint
     
     function f<T extends [string]>(args: [...string[], ...T]) {
       // ...

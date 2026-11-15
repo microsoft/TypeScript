@@ -8,7 +8,7 @@ export {};
 //// [/home/src/workspaces/project/tsconfig.json] *new* 
 {"extends": "./base.json"}
 
-tsgo --noEmit
+tsc --noEmit
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [91merror[0m[90m TS5102: [0mOption 'baseUrl' has been removed. Please remove it from your configuration.

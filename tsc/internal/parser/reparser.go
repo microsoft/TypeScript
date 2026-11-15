@@ -18,6 +18,8 @@ func (p *Parser) finishReparsedNode(node *ast.Node, locationNode *ast.Node) {
 
 func (p *Parser) finishMutatedNode(node *ast.Node) {
 	p.overrideParentInImmediateChildren(node)
+	// Wrapping an assignment's right side can make it a CommonJS export assignment.
+	p.checkCommonJSModuleIndicator(node)
 }
 
 // Deep-clone the given node and add the clone to the reparsed clone list. The list is used by ast.GetReparsedNodeForNode

@@ -60,7 +60,7 @@ export const m = mod;
     },
 }
 
-tsgo --b tests --force
+tsc --b tests --force
 ExitStatus:: Success
 Output::
 //// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
@@ -415,7 +415,7 @@ Signatures::
 
 Edit [0]:: no change
 
-tsgo --b tests --force
+tsc --b tests --force
 ExitStatus:: Success
 Output::
 //// [/user/username/projects/sample1/core/anotherModule.d.ts] *rewrite with same content*

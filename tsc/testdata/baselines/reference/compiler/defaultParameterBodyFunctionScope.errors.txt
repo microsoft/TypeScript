@@ -1,0 +1,37 @@
+defaultParameterBodyFunctionScope.ts(19,37): error TS2304: Cannot find name 'missing'.
+
+
+==== defaultParameterBodyFunctionScope.ts (1 errors) ====
+    const styles = { root: "outer" };
+    
+    export function read(value = styles.root) {
+        function styles() {}
+        styles();
+        return value;
+    }
+    
+    export function readClosure(value = () => styles.root) {
+        function styles() {}
+        return value();
+    }
+    
+    export function readDestructured({ value = styles.root } = {}) {
+        function styles() {}
+        return value;
+    }
+    
+    export function readMissing(value = missing) {
+                                        ~~~~~~~
+!!! error TS2304: Cannot find name 'missing'.
+        function missing() {}
+        return value;
+    }
+    
+    export function readParameter(styles = { root: "parameter" }, value = styles.root) {
+        return value;
+    }
+    
+    export const readNamed = function named(value = named) {
+        return value;
+    };
+    

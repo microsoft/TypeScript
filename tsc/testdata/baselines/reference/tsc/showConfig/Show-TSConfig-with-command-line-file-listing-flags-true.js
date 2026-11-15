@@ -6,7 +6,7 @@ export const a = 1;
 //// [/home/src/workspaces/project/tsconfig.json] *new* 
 {"files": ["src/index.ts"]}
 
-tsgo --showConfig --listFiles true --listEmittedFiles true --listFilesOnly true --explainFiles true
+tsc --showConfig --listFiles true --listEmittedFiles true --listFilesOnly true --explainFiles true
 ExitStatus:: Success
 Output::
 {

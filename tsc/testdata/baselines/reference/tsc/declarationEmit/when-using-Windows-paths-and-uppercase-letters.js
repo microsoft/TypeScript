@@ -43,7 +43,7 @@ export interface MyType<T = any> extends Function {
     "include": ["src"],
 }
 
-tsgo -p D:\Work\pkg1 --explainFiles
+tsc -p D:\Work\pkg1 --explainFiles
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96mtsconfig.json[0m:[93m5[0m:[93m9[0m - [91merror[0m[90m TS5011: [0mThe common source directory of 'tsconfig.json' is './src'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.

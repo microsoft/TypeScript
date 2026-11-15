@@ -69,6 +69,29 @@ func TestContentMapperOutputExtensionsAffectIdentity(t *testing.T) {
 	}
 }
 
+func TestContentMapperIncludeAffectsIdentity(t *testing.T) {
+	t.Parallel()
+	mapper := &contentmapper.Mapper{
+		Name: "mapper", Version: "1.0.0", Extensions: []string{".toml"},
+		OutputExtensions: map[string]string{".toml": ".js"},
+	}
+	options := &core.CompilerOptions{}
+	unfiltered := mapper.TransformIdentity(options)
+	mapper.Include = []string{}
+	empty := mapper.TransformIdentity(options)
+	assert.Assert(t, empty != unfiltered)
+	mapper.Include = []string{"**/*.toml"}
+	all := mapper.TransformIdentity(options)
+	assert.Assert(t, all != unfiltered)
+	assert.Assert(t, all != empty)
+	mapper.Include = []string{"src/**/*.toml"}
+	assert.Assert(t, mapper.TransformIdentity(options) != all)
+	mapper.Include = []string{"**/*.toml"}
+	assert.Equal(t, mapper.TransformIdentity(options), all)
+	mapper.Include = nil
+	assert.Equal(t, mapper.TransformIdentity(options), unfiltered)
+}
+
 type fakeBuildInfoReader struct {
 	buildInfo *incremental.BuildInfo
 }

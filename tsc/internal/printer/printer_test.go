@@ -1146,7 +1146,7 @@ func TestParenthesizeArrowFunction1(t *testing.T) {
 					factory.NewNodeList([]*ast.Node{}),
 					nil, /*returnType*/
 					nil, /*fullSignature*/
-					factory.NewToken(ast.KindEqualsGreaterThanToken),
+					nil, /*equalsGreaterThanToken*/
 					// will be parenthesized on emit:
 					factory.NewObjectLiteralExpression(
 						factory.NewNodeList([]*ast.Node{}),

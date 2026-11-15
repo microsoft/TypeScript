@@ -40,7 +40,7 @@ export const theNum = 42;
   "size": 109
 }
 
-tsgo -b packages/pkg1 -w --verbose --traceResolution
+tsc -b packages/pkg1 -w --verbose --traceResolution
 ExitStatus:: Success
 Output::
 [2J[3J[H[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...

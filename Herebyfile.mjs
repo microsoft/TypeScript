@@ -1,8 +1,9 @@
 // @ts-check
 
 import AdmZip from "adm-zip";
+import binaryen from "binaryen";
 import chokidar from "chokidar";
-import { task } from "hereby";
+import { task as herebyTask } from "hereby";
 import assert from "node:assert";
 import crypto from "node:crypto";
 import fs from "node:fs";
@@ -15,11 +16,24 @@ import {
     styleText,
 } from "node:util";
 import * as tar from "tar";
-import { xSync } from "tinyexec";
+import {
+    x,
+    xSync,
+} from "tinyexec";
 import {
     enableFileFingerprintCache,
+    invalidateFileFingerprints,
     run,
 } from "./tools/scripts/gen/utils.mts";
+import {
+    ensureModel as ensureLSPModel,
+    outputs as lspModelOutputs,
+} from "./tools/scripts/lsp/fetchModel.mts";
+import { outputs as encoderOutputs } from "./tools/scripts/tsc/generate-encoder.ts";
+import { outputs as enumOutputs } from "./tools/scripts/tsc/generate-enums.ts";
+import { outputs as goASTOutputs } from "./tools/scripts/tsc/generate-go-ast.ts";
+import { outputs as tsASTOutputs } from "./tools/scripts/tsc/generate-ts-ast.ts";
+import generateUnicodeData, { outputs as unicodeOutputs } from "./tsc/internal/stringutil/_scripts/generate-unicode-data.mts";
 
 enableFileFingerprintCache();
 
@@ -29,6 +43,17 @@ if (process.platform === "win32") {
 
 const __filename = url.fileURLToPath(new URL(import.meta.url));
 const __dirname = path.dirname(__filename);
+
+/** @typedef {import("hereby").TaskOptions & { outputs?: readonly string[] }} TaskOptions */
+/** @type {TaskOptions[]} */
+const taskDescriptors = [];
+
+/** @param {TaskOptions} options */
+function task(options) {
+    const result = herebyTask(options);
+    taskDescriptors.push(options);
+    return result;
+}
 
 const isCI = !!process.env.CI || !!process.env.TF_BUILD;
 const stableThreeComponentVersionPatternSource = String.raw`^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$`;
@@ -51,7 +76,7 @@ function runOutput(command, args, options) {
  * @returns {boolean}
  */
 function parseEnvBoolean(name, defaultValue = false) {
-    name = "TSGO_HEREBY_" + name.toUpperCase();
+    name = "TS_HEREBY_" + name.toUpperCase();
 
     const value = process.env[name];
     if (!value) {
@@ -78,6 +103,7 @@ const { values: rawOptions } = parseArgs({
         tests: { type: "string", short: "t" },
         fix: { type: "boolean" },
         force: { type: "boolean", default: parseEnvBoolean("FORCE") },
+        generate: { type: "boolean", default: !isCI },
         api: { type: "boolean" },
         all: { type: "boolean" },
         debug: { type: "boolean" },
@@ -88,6 +114,7 @@ const { values: rawOptions } = parseArgs({
         forRelease: { type: "boolean" },
         respectGoEnv: { type: "boolean" },
         vscodeTypescriptRelease: { type: "boolean" },
+        prBuild: { type: "boolean" },
         platform: { type: "string" },
 
         race: { type: "boolean", default: parseEnvBoolean("RACE") },
@@ -106,22 +133,26 @@ const { values: rawOptions } = parseArgs({
  */
 const options = /** @type {Options} */ (rawOptions);
 
-// Native release branches can edit these constants to publish a fixed stable version.
+// Release branches can edit this constant to publish a fixed stable version.
 // Main publishes prerelease builds of the TypeScript package.
-const nativePreviewReleaseProfile = /** @type {"native-preview" | "typescript"} */ ("typescript");
-const nativePreviewReleaseVersion = /** @type {string | undefined} */ (undefined);
+const typeScriptReleaseVersion = /** @type {string | undefined} */ (undefined);
 const releaseVscodeTypescript = !!options.vscodeTypescriptRelease;
-const produceNativePreviewVsix = releaseVscodeTypescript;
-const produceTypeScriptNightlyVsix = !nativePreviewReleaseVersion && !releaseVscodeTypescript;
+const produceVscodeTypescriptVsix = releaseVscodeTypescript;
+// PR builds are published under a separate package name so that unreviewed
+// code never ends up in the real TypeScript packages.
+const prBuild = !!options.prBuild;
+const prBuildScope = "@typescript-deploys";
+const prBuildBaseName = "pr-build";
+const prBuildPrereleasePattern = /^pr\.[1-9]\d*\.[1-9]\d*$/;
+const produceTypeScriptNightlyVsix = !typeScriptReleaseVersion && !releaseVscodeTypescript && !prBuild;
 const usePublishedPlatformPackagesForVsix = releaseVscodeTypescript;
-const produceAnyVsix = produceNativePreviewVsix || produceTypeScriptNightlyVsix;
-const publishAsTypescript = nativePreviewReleaseProfile === "typescript";
+const produceAnyVsix = produceVscodeTypescriptVsix || produceTypeScriptNightlyVsix;
 
 if (releaseVscodeTypescript && options.setPrerelease) {
     throw new Error("vscode-typescript releases use the extension's package.json version and do not accept setPrerelease");
 }
-if (!releaseVscodeTypescript && options.forRelease && !options.setPrerelease && (!nativePreviewReleaseVersion || produceAnyVsix)) {
-    throw new Error("forRelease requires setPrerelease unless nativePreviewReleaseVersion is hardcoded and VSIX production is disabled");
+if (!releaseVscodeTypescript && options.forRelease && !options.setPrerelease && (!typeScriptReleaseVersion || produceAnyVsix)) {
+    throw new Error("forRelease requires setPrerelease unless typeScriptReleaseVersion is hardcoded and VSIX production is disabled");
 }
 if (options.respectGoEnv && options.forRelease) {
     throw new Error("respectGoEnv cannot be combined with forRelease");
@@ -129,8 +160,16 @@ if (options.respectGoEnv && options.forRelease) {
 if (options.respectGoEnv && options.setPrerelease) {
     throw new Error("respectGoEnv requires the version declared in the source");
 }
-if (releaseVscodeTypescript && !publishAsTypescript) {
-    throw new Error("vscode-typescript releases require nativePreviewReleaseProfile to be 'typescript'");
+if (prBuild) {
+    if (releaseVscodeTypescript) {
+        throw new Error("prBuild cannot be combined with vscodeTypescriptRelease");
+    }
+    if (typeof options.setPrerelease !== "string" || !prBuildPrereleasePattern.test(options.setPrerelease)) {
+        throw new Error("prBuild requires --setPrerelease pr.<PR number>.<build number>");
+    }
+}
+else if (typeof options.setPrerelease === "string" && options.setPrerelease.startsWith("pr.")) {
+    throw new Error("pr.* prereleases are only published as PR builds; pass --prBuild");
 }
 
 const defaultGoBuildTags = [
@@ -219,7 +258,6 @@ async function runWithConcurrencyLimit(tasks, concurrency) {
 const builtLocal = "./built/local";
 
 const libsDir = "./tsc/internal/bundled/libs";
-const libsRegexp = /(?:^|[\\/])internal[\\/]bundled[\\/]libs[\\/]/;
 
 /**
  * @param {string} out
@@ -230,7 +268,7 @@ async function generateLibs(out) {
     const libs = await fs.promises.readdir(libsDir);
 
     await Promise.all(libs.map(async lib => {
-        fs.promises.copyFile(path.join(libsDir, lib), path.join(out, lib));
+        await fs.promises.copyFile(path.join(libsDir, lib), path.join(out, lib));
     }));
 }
 
@@ -271,71 +309,6 @@ function buildTsc(opts) {
     });
 }
 
-export const tscBuild = task({
-    name: "tsc:build",
-    description: "Builds the tsc binary.",
-    run: async () => {
-        await buildTsc({ extraFlags: options.release ? getReleaseBuildFlags() : [] });
-    },
-});
-
-export const tsgo = task({
-    name: "tsgo",
-    dependencies: [lib, tscBuild],
-});
-
-export const local = task({
-    name: "local",
-    dependencies: [tsgo],
-});
-
-export const build = task({
-    name: "build",
-    dependencies: [local],
-});
-
-export const buildWatch = task({
-    name: "build:watch",
-    description: "Builds the tsc binary and watches for changes.",
-    run: async () => {
-        await watchDebounced("build:watch", async (paths, abortSignal) => {
-            let libsChanged = false;
-            let goChanged = false;
-
-            if (paths) {
-                for (const p of paths) {
-                    if (libsRegexp.test(p)) {
-                        libsChanged = true;
-                    }
-                    else if (p.endsWith(".go")) {
-                        goChanged = true;
-                    }
-                    if (libsChanged && goChanged) {
-                        break;
-                    }
-                }
-            }
-            else {
-                libsChanged = true;
-                goChanged = true;
-            }
-
-            if (libsChanged) {
-                console.log("Generating libs...");
-                await generateLibs(builtLocal);
-            }
-
-            if (goChanged) {
-                console.log("Building tsgo...");
-                await buildTsc({ abortSignal });
-            }
-        }, {
-            paths: ["tsc/cmd", "tsc/internal"],
-            ignored: path => /[\\/]testdata[\\/]/.test(path),
-        });
-    },
-});
-
 export const cleanBuilt = task({
     name: "clean:built",
     hiddenFromTaskList: true,
@@ -361,7 +334,10 @@ export const generateGo = task({
 });
 
 const getGoGenerateEnvironment = memoize(async () => {
-    const { stdout } = await runOutput("go", ["env", "-json", "GOOS", "GOARCH", "GOROOT"], { cwd: "./tsc" });
+    const { stdout } = await x("go", ["env", "-json", "GOOS", "GOARCH", "GOROOT"], {
+        throwOnError: true,
+        nodeOptions: { cwd: "./tsc" },
+    });
     return /** @type {{ GOOS: string; GOARCH: string; GOROOT: string }} */ (JSON.parse(stdout));
 });
 
@@ -409,8 +385,9 @@ async function runGoGenerator(name, { file, ...spec }) {
 /**
  * @param {string} name
  * @param {GoGenerator[] | (() => Promise<void>)} generators
+ * @param {readonly string[]} [extraOutputs]
  */
-function goGenerateTask(name, generators) {
+function goGenerateTask(name, generators, extraOutputs = []) {
     const run = typeof generators === "function" ? generators : async () => {
         for (const generator of generators) await runGoGenerator(name, generator);
     };
@@ -418,6 +395,10 @@ function goGenerateTask(name, generators) {
     return task({
         name,
         description: `Generates ${name.slice("generate:".length)} files. Pass --force to regenerate unchanged files.`,
+        outputs: [
+            ...(typeof generators === "function" ? [] : generators.flatMap(generator => generator.outputs.map(output => path.resolve(__dirname, generator.cwd ?? path.dirname(generator.file), output)))),
+            ...extraOutputs,
+        ],
         run,
     });
 }
@@ -460,11 +441,13 @@ function moqGenerator(file, type, output, { source = ".", packageName, inputs = 
     };
 }
 
+const astStringerGenerator = stringerGenerator("tsc/internal/ast/kind_generated.go", "Kind", "kind_stringer_generated.go");
+
 async function runGenerateASTStringer() {
-    await runGoGenerator("generate:ast-stringer", stringerGenerator("tsc/internal/ast/kind_generated.go", "Kind", "kind_stringer_generated.go"));
+    await runGoGenerator("generate:ast-stringer", astStringerGenerator);
 }
 
-export const generateASTStringer = goGenerateTask("generate:ast-stringer", runGenerateASTStringer);
+export const generateASTStringer = goGenerateTask("generate:ast-stringer", [astStringerGenerator]);
 
 export const generateBundled = goGenerateTask("generate:bundled", [{
     file: "tsc/internal/bundled/bundled.go",
@@ -492,6 +475,19 @@ goGenerateActions.push(runGenerateCompilerOptions);
 export const generateCompilerOptions = task({
     name: "generate:compileroptions",
     description: "Generates compiler options and their dependent API files. Pass --force to regenerate unchanged files.",
+    outputs: [
+        "packages/typescript/src/api/compilerOptions.generated.ts",
+        "packages/typescript/src/api/prepareCompilerOptions.generated.ts",
+        "packages/typescript/schemas/tsconfig.schema.json",
+        "packages/typescript/schemas/jsconfig.schema.json",
+        "tsc/internal/core/options_generated.go",
+        "tsc/internal/core/modulekind_stringer_generated.go",
+        "tsc/internal/core/scripttarget_stringer_generated.go",
+        "tsc/internal/transpile/options_generated.go",
+        "tsc/internal/tsoptions/declarations_generated.go",
+        "tsc/internal/tsoptions/options_generated.go",
+        "tsc/internal/testrunner/options_generated.go",
+    ],
     run: async () => {
         await runGenerateCompilerOptions();
         await runGenerateEnums();
@@ -516,7 +512,7 @@ export const generateDiagnostics = goGenerateTask("generate:diagnostics", [
         file: "tsc/internal/diagnostics/diagnostics.go",
         inputs: ["generate.go", "diagnosticMessages.json", "../../../tools/LocProject.json", "../{collections,json}/*.go", "loc/*.generated.json"],
         exclude: ["**/*_test.go"],
-        outputs: ["diagnostics_generated.go", "diagnosticMessages.generated.json", "loc_generated.go", "loc/*.json.gz"],
+        outputs: ["diagnostics_generated.go", "loc_generated.go", "diagnosticMessages.generated.json", "loc/*.json.gz"],
         commands: [
             [
                 "go",
@@ -537,7 +533,7 @@ export const generateDiagnostics = goGenerateTask("generate:diagnostics", [
         ],
     },
     stringerGenerator("tsc/internal/diagnostics/diagnostics.go", "Category", "stringer_generated.go"),
-]);
+], ["tsc/internal/diagnostics/loc"]);
 
 export const generateAutoImport = goGenerateTask("generate:autoimport", [
     stringerGenerator("tsc/internal/ls/autoimport/export.go", "ExportSyntax", "export_stringer_generated.go"),
@@ -571,17 +567,19 @@ export const generateVFSMatch = goGenerateTask("generate:vfsmatch", [
 ]);
 
 export const generateUnicode = goGenerateTask("generate:unicode", async () => {
-    const { default: generate } = await import("./tsc/internal/stringutil/_scripts/generate-unicode-data.mts");
-    await generate(!!options.force);
-});
+    await generateUnicodeData(!!options.force);
+}, unicodeOutputs.map(output => path.join("tsc/internal/stringutil", output)));
+
+const extensionOutputs = ["packages/vscode-typescript/l10n/bundle.l10n.json"];
+const extensionTestOutputs = ["packages/vscode-typescript/l10n/bundle.l10n.qps-ploc.json", "packages/vscode-typescript/package.nls.qps-ploc.json"];
 
 async function runGenerateExtension() {
     const { default: cache } = await import("./tools/scripts/gen/cache.mts");
     await cache({
         cwd: __dirname,
         inputs: [__filename, "tools/scripts/gen/extensionLocalization.mts", "packages/vscode-typescript/package.json", "packages/vscode-typescript/src/**/*"],
-        outputs: ["packages/vscode-typescript/l10n/bundle.l10n.json"],
-        commands: [["npm", "run", "-w", "native-preview", "generateLocBundle"]],
+        outputs: extensionOutputs,
+        commands: [["npm", "run", "-w", "packages/vscode-typescript", "generateLocBundle"]],
         envInputs: [],
         force: !!options.force,
     });
@@ -590,6 +588,7 @@ async function runGenerateExtension() {
 export const generateExtension = task({
     name: "generate:extension",
     description: "Generates files in the extension. Pass --force to regenerate unchanged files.",
+    outputs: extensionOutputs,
     run: runGenerateExtension,
 });
 
@@ -598,8 +597,8 @@ async function runGenerateExtensionTest() {
     await cache({
         cwd: __dirname,
         inputs: [__filename, "tools/scripts/gen/extensionLocalization.mts", "packages/vscode-typescript/package.json", "packages/vscode-typescript/l10n/bundle.l10n.json", "packages/vscode-typescript/package.nls.json"],
-        outputs: ["packages/vscode-typescript/l10n/bundle.l10n.qps-ploc.json", "packages/vscode-typescript/package.nls.qps-ploc.json"],
-        commands: [["npm", "run", "-w", "native-preview", "generateLocTest"]],
+        outputs: extensionTestOutputs,
+        commands: [["npm", "run", "-w", "packages/vscode-typescript", "generateLocTest"]],
         envInputs: [],
         force: !!options.force,
     });
@@ -609,20 +608,17 @@ export const generateExtensionTest = task({
     name: "generate:extension-test",
     description: "Generates pseudo-localized extension resources. Pass --force to regenerate unchanged files.",
     dependencies: [generateExtension],
+    outputs: extensionTestOutputs,
     run: runGenerateExtensionTest,
 });
+
+const lspOutputs = ["tsc/internal/lsp/lsproto/lsp_generated.go", "packages/typescript/src/vscode/protocol.generated.ts"];
 
 async function runGenerateLSP() {
     const { GeneratedFile } = await import("./tools/scripts/gen/generatedFile.mts");
     const directory = path.join(__dirname, "tools/scripts/lsp");
-    const modelFiles = ["metaModel.json", "metaModelSchema.mts"].map(file => new GeneratedFile(path.join(directory, file), [path.join(directory, "fetchModel.mts"), path.join(__dirname, "package-lock.json")]));
-    if (!modelFiles.every(file => file.isCurrent(!!options.force))) {
-        for (const file of modelFiles) file.invalidate();
-        const { default: fetchModel } = await import("./tools/scripts/lsp/fetchModel.mts");
-        await fetchModel();
-        for (const file of modelFiles) file.markCurrent();
-    }
-    const output = new GeneratedFile(path.join(__dirname, "tsc/internal/lsp/lsproto/lsp_generated.go"), [
+    const modelFiles = await ensureLSPModel(!!options.force);
+    const output = new GeneratedFile(path.join(__dirname, lspOutputs[0]), [
         __filename,
         path.join(directory, "generate.mts"),
         ...modelFiles.map(file => file.fileName),
@@ -633,10 +629,7 @@ async function runGenerateLSP() {
         await generate();
         output.markCurrent();
     }
-    else {
-        console.log("LSP bindings are up to date.");
-    }
-    const typeScriptOutput = new GeneratedFile(path.join(__dirname, "packages/typescript/src/vscode/protocol.generated.ts"), [
+    const typeScriptOutput = new GeneratedFile(path.join(__dirname, lspOutputs[1]), [
         __filename,
         path.join(directory, "generate.mts"),
         path.join(directory, "generateTypeScript.mts"),
@@ -655,6 +648,7 @@ async function runGenerateLSP() {
 export const generateLSP = task({
     name: "generate:lsp",
     description: "Generates Go LSP bindings and extension API types from the pinned protocol model. Pass --force to regenerate unchanged files.",
+    outputs: [...lspOutputs, ...lspModelOutputs.map(output => path.join("tools/scripts/lsp", output))],
     run: runGenerateLSP,
 });
 
@@ -666,6 +660,7 @@ async function runGenerateEnums() {
 export const generateEnums = task({
     name: "generate:enums",
     description: "Generates TypeScript enums from metadata and Go source. Pass --force to regenerate unchanged files.",
+    outputs: enumOutputs,
     run: runGenerateEnums,
 });
 
@@ -678,6 +673,7 @@ async function runGenerateAST() {
 export const generateAST = task({
     name: "generate:ast",
     description: "Generates AST, kind stringer, and encoder files from ast.json. Pass --force to regenerate unchanged files.",
+    outputs: [...goASTOutputs, ...tsASTOutputs, ...encoderOutputs],
     run: runGenerateAST,
 });
 
@@ -689,8 +685,15 @@ async function runGenerateSync() {
 export const generateSync = task({
     name: "generate:sync",
     description: "Generates synchronous and generator APIs and tests. Pass --force to regenerate unchanged files.",
+    outputs: ["packages/typescript/src/api/sync", "packages/typescript/test/sync", "packages/typescript/test/generators/api.bench.ts"],
     run: runGenerateSync,
 });
+
+const apiOutputs = ["packages/typescript/src/api/proto.generated.ts"];
+const preferenceOutputs = [
+    "tsc/internal/ls/lsutil/userpreferences_generated.go",
+    "packages/typescript/src/api/userPreferences.generated.ts",
+];
 
 async function runGeneratePreferences() {
     await runGoGenerator("generate:preferences", {
@@ -699,10 +702,7 @@ async function runGeneratePreferences() {
         inputs: ["tools/userPreferences.schema.json", "tools/gen-preferences/*.go"],
         exclude: ["**/*_test.go"],
         envInputs: [],
-        outputs: [
-            "tsc/internal/ls/lsutil/userpreferences_generated.go",
-            "packages/typescript/src/api/userPreferences.generated.ts",
-        ],
+        outputs: preferenceOutputs,
         commands: [
             ["go", "-C", "./tools", "run", "./gen-preferences", "./userPreferences.schema.json", "../tsc/internal/ls/lsutil/userpreferences_generated.go", "../packages/typescript/src/api/userPreferences.generated.ts"],
             ["dprint", "fmt", "tsc/internal/ls/lsutil/userpreferences_generated.go", "packages/typescript/src/api/userPreferences.generated.ts"],
@@ -710,7 +710,7 @@ async function runGeneratePreferences() {
     });
 }
 
-export const generatePreferences = goGenerateTask("generate:preferences", runGeneratePreferences);
+export const generatePreferences = goGenerateTask("generate:preferences", runGeneratePreferences, preferenceOutputs);
 
 async function runGenerateAPI() {
     await runGeneratePreferences();
@@ -728,7 +728,7 @@ async function runGenerateAPI() {
         ],
         exclude: ["**/*_test.go"],
         envInputs: [],
-        outputs: ["packages/typescript/src/api/proto.generated.ts"],
+        outputs: apiOutputs,
         commands: [
             ["go", "-C", "./tools", "run", "./gen-proto", "../tsc/internal/api/proto.go", "../packages/typescript/src/api/proto.generated.ts"],
             ["dprint", "fmt", "packages/typescript/src/api/proto.generated.ts"],
@@ -739,6 +739,7 @@ async function runGenerateAPI() {
 export const generateAPI = task({
     name: "generate:api",
     description: "Generates API files. Pass --force to regenerate unchanged files.",
+    outputs: apiOutputs,
     run: runGenerateAPI,
 });
 
@@ -758,7 +759,6 @@ async function runGenerateVendor() {
     }
     const manifest = new GeneratedFile(path.join(dest, "package.json"), [__filename, path.join(src, "package.json")]);
     if (manifest.isCurrent(!!options.force)) {
-        console.log("Vendored vscode-jsonrpc files are up to date.");
         return;
     }
     manifest.invalidate();
@@ -773,20 +773,113 @@ async function runGenerateVendor() {
 export const generateVendor = task({
     name: "generate:vendor",
     description: "Updates the vendored copy of vscode-jsonrpc from node_modules. Pass --force to regenerate unchanged files.",
+    outputs: [vendorJsonrpcDir],
     run: runGenerateVendor,
 });
 
-const generateCompiler = task({
-    name: "generate:compiler",
-    hiddenFromTaskList: true,
-    dependencies: [generateAST, generateLSP],
-    run: runGenerateGo,
-});
+async function runGenerate() {
+    await runWithConcurrencyLimit([
+        async () => {
+            await runWithConcurrencyLimit([runGenerateAST, runGenerateLSP], 2);
+            await runGenerateGo();
+        },
+        runGenerateSync,
+        async () => {
+            await runGenerateExtension();
+            await runGenerateExtensionTest();
+        },
+        runGenerateVendor,
+    ], 4);
+}
 
 export const generate = task({
     name: "generate",
     description: "Runs all code generation, including AST, LSP, APIs, extension localization, and vendored dependencies.",
-    dependencies: [generateCompiler, generateSync, generateExtensionTest, generateVendor],
+    run: runGenerate,
+});
+
+const generateDependencies = options.generate ? [generate] : [];
+
+export const tscBuild = task({
+    name: "tsc:build",
+    description: "Builds the tsc binary, generating sources by default outside CI. Pass --generate or --no-generate to override.",
+    dependencies: generateDependencies,
+    run: async () => {
+        await buildTsc({ extraFlags: options.release ? getReleaseBuildFlags() : [] });
+    },
+});
+
+export const local = task({
+    name: "local",
+    dependencies: [lib, tscBuild],
+});
+
+export const tsgo = task({
+    name: "tsgo",
+    description: "Alias for local.",
+    dependencies: [local],
+});
+
+export const build = task({
+    name: "build",
+    dependencies: [local],
+});
+
+function getGeneratedOutputPaths() {
+    const outputs = taskDescriptors.flatMap(descriptor => descriptor.outputs ?? []);
+    return new Set([...outputs, ...fs.globSync(outputs, { cwd: __dirname })].map(output => path.resolve(__dirname, output)));
+}
+
+export const buildWatch = task({
+    name: "build:watch",
+    description: "Watches sources and generator inputs, regenerating and rebuilding the tsc binary on changes.",
+    run: async () => {
+        const generatedOutputs = getGeneratedOutputPaths();
+        const generatorDirectories = [
+            "tsc/internal/stringutil/_scripts",
+        ].map(directory => path.resolve(directory));
+        await watchDebounced("build:watch", async (_paths, abortSignal) => {
+            abortSignal.throwIfAborted();
+            invalidateFileFingerprints();
+            if (options.generate) {
+                await runGenerate();
+            }
+            abortSignal.throwIfAborted();
+            await generateLibs(builtLocal);
+            abortSignal.throwIfAborted();
+            console.log("Building tsc...");
+            await buildTsc({ abortSignal });
+        }, {
+            paths: [
+                "tsc/cmd",
+                "tsc/internal",
+                "tools/scripts/tsc/ast.json",
+                "tools/gen-proto",
+                "tools/gen-preferences",
+                "tools/userPreferences.schema.json",
+                "packages/typescript/src/api/async",
+                "packages/typescript/test/async",
+                "packages/vscode-typescript/src",
+                "packages/vscode-typescript/package.json",
+                "packages/vscode-typescript/package.nls.json",
+                "node_modules/vscode-jsonrpc/package.json",
+                "package-lock.json",
+                ".dprint.jsonc",
+                "go.work",
+                "go.work.sum",
+                "tsc/go.mod",
+                "tsc/go.sum",
+                "tools/go.mod",
+                "tools/go.sum",
+            ],
+            ignored: file => {
+                const absolutePath = path.resolve(file);
+                return generatedOutputs.has(absolutePath)
+                    || generatorDirectories.some(directory => absolutePath === directory || absolutePath.startsWith(directory + path.sep))
+                    || path.normalize(file).split(path.sep).includes("testdata");
+            },
+        });
+    },
 });
 
 const coverageDir = path.join(__dirname, "coverage");
@@ -920,7 +1013,7 @@ async function runTests() {
     let cleanupTracking;
 
     if (baselineTrackingEnabled) {
-        const tempTrackingDir = fs.mkdtempSync(path.join(os.tmpdir(), "tsgo-baseline-tracking-"));
+        const tempTrackingDir = fs.mkdtempSync(path.join(os.tmpdir(), "typescript-baseline-tracking-"));
         trackingDir = tempTrackingDir;
         cleanupTracking = () => rimraf(tempTrackingDir);
     }
@@ -928,7 +1021,7 @@ async function runTests() {
     try {
         const testEnv = {
             ...goTestEnv,
-            ...(trackingDir ? { TSGO_BASELINE_TRACKING_DIR: trackingDir } : {}),
+            ...(trackingDir ? { TS_BASELINE_TRACKING_DIR: trackingDir } : {}),
         };
         await gotestsumTool.run([...gotestsumArgs("tests"), "./...", ...(isCI ? ["--timeout=45m"] : [])], {
             env: testEnv,
@@ -967,13 +1060,40 @@ async function runTests() {
 }
 
 async function runTestExtension() {
-    await run("npm", ["test", "-w", "native-preview"]);
+    await run("npm", ["test", "-w", "packages/vscode-typescript"]);
 }
 
 export const testTsc = task({
     name: "test:tsc",
     description: "Runs all tests in the tsc module.",
     run: runTests,
+});
+
+async function runTestWasm() {
+    if (process.platform === "win32") {
+        throw new Error("test:wasm requires a Unix-like host, because the whole host file system is mounted at the WebAssembly root.");
+    }
+    const runner = path.join(__dirname, "tools", "scripts", "wasm", "go-wasip1-exec.mts");
+    await gotestsumTool.run([
+        ...goTestSumFlags,
+        "--",
+        ...goBuildTags(),
+        ...(options.tests ? [`-run=${options.tests}`] : []),
+        // WebAssembly runs each test binary on a single thread, so the slowest packages take far longer than natively.
+        "-timeout=60m",
+        // Go expects a WebAssembly call stack of about 8MB.
+        `-exec=node --no-warnings --stack-size=8192 "${runner}"`,
+        "./...",
+    ], {
+        env: { ...goTestEnv, GOOS: "wasip1", GOARCH: "wasm" },
+        cwd: "./tsc",
+    });
+}
+
+export const testWasm = task({
+    name: "test:wasm",
+    description: "Runs all tests in the tsc module as wasip1 WebAssembly under Node.js.",
+    run: runTestWasm,
 });
 
 export const testExtension = task({
@@ -1006,7 +1126,27 @@ async function runTestTools() {
 
 async function runTestAPI() {
     // Running the package script doesn't work on Windows; some path escaping isn't done correctly and the test runner runs no tests.
-    await run("node", ["--conditions", "@typescript/source", "--test", "./test/**/*.test.ts"], { cwd: "./packages/typescript" });
+    await run(
+        "node",
+        ["--conditions", "@typescript/source", "--test", "./test/*.test.ts", "./test/async/**/*.test.ts", "./test/sync/**/*.test.ts"],
+        { cwd: "./packages/typescript" },
+    );
+}
+
+async function runTestAPIWasm() {
+    for (const mode of ["async", "sync"]) {
+        await run("node", [
+            "--conditions",
+            "@typescript/source",
+            "--test",
+            `./test/${mode}/api.test.ts`,
+            ...mode === "sync" ? ["./test/sync/ast.test.ts", "./test/sync/api-generators.test.ts"] : [],
+        ], { cwd: "./packages/typescript", env: { TS_API_TEST_WASM: "1" } });
+    }
+}
+
+async function runTestAPIBrowserSmoke() {
+    await run("node", ["--conditions", "@typescript/source", "--test", "./test/browser/**/*.test.ts"], { cwd: "./packages/typescript" });
 }
 
 async function runTestAPIBenchmarks() {
@@ -1023,9 +1163,8 @@ export const testTools = task({
 
 export const testCodegen = task({
     name: "test:codegen",
-    description: "Runs incremental codegen tests.",
+    description: "Runs codegen tests without regenerating sources.",
     run: async () => {
-        await run("go", ["-C", "tsc", "mod", "download"]);
         await run("node", ["--test", "--test-concurrency=1", "./tools/scripts/gen/*.test.mts", "./tools/scripts/tsc/*.test.ts"]);
     },
 });
@@ -1033,6 +1172,7 @@ export const testCodegen = task({
 export const buildAPI = task({
     name: "build:api",
     description: "Builds @typescript/typescript JS API.",
+    dependencies: generateDependencies,
     run: async () => {
         await run("npm", ["run", "-w", "@typescript/typescript", "build"]);
     },
@@ -1049,36 +1189,133 @@ export const checkAPIDeclarations = task({
     run: runCheckAPIDeclarations,
 });
 
-async function runBuildAPITests(generateSources = true) {
-    if (generateSources) await runGenerateSync();
+async function runBuildAPITests() {
+    await runBuildWasi();
     await run("npm", ["run", "-w", "@typescript/typescript", "build:test"]);
 }
+
+/**
+ * @param {string} out
+ * @param {string[]} [extraFlags]
+ */
+async function buildWasiFile(out, extraFlags = []) {
+    out = path.resolve(out);
+    await fs.promises.mkdir(path.dirname(out), { recursive: true });
+    await run("go", ["build", "-buildmode=c-shared", ...extraFlags, "-o", out, "./cmd/tsc"], {
+        cwd: "./tsc",
+        env: { GOOS: "wasip1", GOARCH: "wasm" },
+    });
+    patchWasiFile(out);
+}
+
+/**
+ * @param {string} file
+ */
+function patchWasiFile(file) {
+    const module = binaryen.readBinary(fs.readFileSync(file));
+    try {
+        module.setFeatures(
+            binaryen.Features.MutableGlobals
+                | binaryen.Features.NontrappingFPToInt
+                | binaryen.Features.BulkMemory
+                | binaryen.Features.BulkMemoryOpt
+                | binaryen.Features.SignExt,
+        );
+
+        const initialize = binaryen.getExportInfo(module.getExport("_initialize")).value;
+        const cliStart = binaryen.getExportInfo(module.getExport("__typescript_cli_start")).value;
+        // Go emits either a WASI command or reactor entrypoint, but the API binary needs both.
+        // Hide the standard reactor export from command hosts and synthesize a command entrypoint
+        // that initializes the runtime before entering the real Go CLI.
+        module.addFunction(
+            "__typescript_command_start",
+            binaryen.none,
+            binaryen.none,
+            [],
+            module.block(null, [
+                module.call(initialize, [], binaryen.none),
+                module.call(cliStart, [], binaryen.none),
+            ]),
+        );
+        module.removeExport("_initialize");
+        module.removeExport("__typescript_cli_start");
+        module.addFunctionExport(initialize, "typescript_initialize");
+        module.addFunctionExport("__typescript_command_start", "_start");
+
+        if (!module.validate()) {
+            throw new Error("patched WebAssembly module is invalid");
+        }
+        fs.writeFileSync(file, module.emitBinary());
+    }
+    finally {
+        module.dispose();
+    }
+}
+
+/**
+ * @param {string[]} [extraFlags]
+ */
+async function runBuildWasi(extraFlags = []) {
+    const packageDir = "./packages/typescript-wasip1-wasm";
+    await run("npm", ["run", "-w", "@typescript/typescript-wasip1-wasm", "build:js"]);
+    await buildWasiFile(path.join(packageDir, "lib", "tsc.wasm"), extraFlags);
+    const libDir = path.join(packageDir, "lib");
+    await generateLibs(libDir);
+    const libFiles = (await fs.promises.readdir(libDir))
+        .filter(file => file === "lib.d.ts" || file.startsWith("lib.") && file.endsWith(".d.ts"))
+        .sort();
+    await fs.promises.writeFile(
+        path.join(libDir, "libFiles.json"),
+        JSON.stringify(libFiles, undefined, 4) + "\n",
+    );
+}
+
+export const buildWasi = task({
+    name: "build:wasip1",
+    description: "Builds the @typescript/typescript-wasip1-wasm package.",
+    dependencies: [lib],
+    run: runBuildWasi,
+});
 
 export const buildAPITests = task({
     name: "build:api:test",
     description: "Builds the @typescript/typescript JS API tests.",
-    dependencies: [generateEnums, generateAPI],
+    dependencies: [...generateDependencies, lib],
     run: runBuildAPITests,
 });
 
 export const testAPI = task({
     name: "test:api",
     description: "Runs the @typescript/typescript JS API tests.",
-    dependencies: [tsgo, buildAPITests],
+    dependencies: [local, buildAPITests],
     run: runTestAPI,
+});
+
+export const testAPIWasm = task({
+    name: "test:api:wasm",
+    description: "Runs the API suites against the WASM reactor in Node.js.",
+    dependencies: [buildAPITests],
+    run: runTestAPIWasm,
 });
 
 export const testAPIBenchmarks = task({
     name: "test:benchmarks:api",
     description: "Runs async, sync, and generator API benchmarks once; excluded from validate.",
-    dependencies: [tsgo, buildAPITests],
+    dependencies: [local, buildAPITests],
     run: runTestAPIBenchmarks,
+});
+
+export const testAPIBrowserSmoke = task({
+    name: "test:api:browser-smoke",
+    description: "Runs the @typescript/typescript browser API smoke tests.",
+    dependencies: [buildAPITests],
+    run: runTestAPIBrowserSmoke,
 });
 
 export const testAll = task({
     name: "test:all",
     description: "Runs compiler, extension, benchmark, tools, and API tests. Codegen tests are opt-in via test:codegen.",
-    dependencies: [tsgo, buildAPITests],
+    dependencies: [local, buildAPITests],
     run: async () => {
         // Prevent interleaving by running these directly instead of in parallel.
         await runTests();
@@ -1086,7 +1323,9 @@ export const testAll = task({
         await runTestBenchmarks();
         await runTestTools();
         await runTestAPI();
+        await runTestAPIWasm();
         await runTestAPIBenchmarks();
+        await runTestAPIBrowserSmoke();
     },
 });
 
@@ -1167,7 +1406,8 @@ const customLinterTool = createCachedTool({
     ],
     exclude: ["**/testdata/**"],
     build: async toolPath => {
-        await run("go", ["run", golangciLintPackage(), "custom"]);
+        // GOOS/GOARCH select the lint target, but the linter must run on the host.
+        await run("go", ["run", golangciLintPackage(), "custom"], { env: { GOOS: "", GOARCH: "" } });
         await run(toolPath, ["cache", "clean"]);
     },
 });
@@ -1211,16 +1451,51 @@ export const format = task({
 
 async function runFormat() {
     await run("dprint", ["fmt"]);
+    await fixLineEndings();
+}
+
+const lineEndingExclusions = [
+    ":(exclude)tsc/testdata/**",
+];
+
+export const fixLineEndingsTask = task({
+    name: "fix:line-endings",
+    description: "Converts tracked files that Git expects to use LF.",
+    run: fixLineEndings,
+});
+
+async function fixLineEndings() {
+    const result = await runOutput("git", ["ls-files", "--eol", "-z", "--", ".", ...lineEndingExclusions]);
+    const files = [];
+    for (const record of result.stdout.split("\0")) {
+        if (!record) {
+            continue;
+        }
+        const separator = record.indexOf("\t");
+        assert(separator !== -1);
+        const eolInfo = record.slice(0, separator);
+        if (!/\bw\/(?:crlf|mixed)\b/.test(eolInfo) || !eolInfo.includes("eol=lf")) {
+            continue;
+        }
+        files.push(record.slice(separator + 1));
+    }
+
+    await Promise.all(files.map(async file => {
+        const contents = await fs.promises.readFile(file);
+        const normalized = Buffer.from(contents.toString("latin1").replaceAll("\r\n", "\n"), "latin1");
+        await fs.promises.writeFile(file, normalized);
+    }));
+
+    if (files.length) {
+        console.log(`Converted ${files.length} file(s) to LF.`);
+    }
 }
 
 export const validate = task({
     name: "validate",
-    description: "Generates, builds, tests, lints, and formats the repo. Pass --api to include API tests, or --all to include all code generation and ancillary repository tests Benchmarks are separate: test:benchmarks and test:benchmarks:api.",
-    dependencies: [options.all ? generate : generateGo],
+    description: "Generates, builds, tests, lints, and formats the repo. Pass --api to include API tests, or --all to include API and ancillary repository tests. Benchmarks are separate: test:benchmarks and test:benchmarks:api.",
+    dependencies: [build],
     run: async () => {
-        await generateLibs(builtLocal);
-        await buildTsc({ extraFlags: options.release ? getReleaseBuildFlags() : [] });
-
         /** @type {{ name: string; error: unknown }[]} */
         const failures = [];
         /** @param {string} name @param {() => Promise<void>} action */
@@ -1238,11 +1513,12 @@ export const validate = task({
         await runValidation("test:extension", runTestExtension);
         await runValidation("check:api-declarations", runCheckAPIDeclarations);
         if (options.api || options.all) {
-            if (!options.all) await runGenerateEnums();
-            await runBuildAPITests(!options.all);
+            await runBuildAPITests();
             await runValidation("test:api", runTestAPI);
+            await runValidation("test:api:wasm", runTestAPIWasm);
         }
         if (options.all) {
+            await runValidation("check:herebyfile", runCheckHerebyfile);
             await runValidation("test:tools", runTestTools);
             await runValidation("test:options", async () => {
                 await run("node", ["--test", "./tools/scripts/tsc/options.test.ts"]);
@@ -1278,35 +1554,54 @@ export const checkFormat = task({
     description: "Checks that the repo is formatted.",
     run: async () => {
         await run("dprint", ["check"]);
+        await checkLineEndings();
     },
 });
+
+async function checkLineEndings() {
+    const result = xSync(
+        "git",
+        ["grep", "--cached", "-Il", "\r", "--", ".", ...lineEndingExclusions],
+        { throwOnError: false, nodeOptions: { stdio: "pipe" } },
+    );
+    if (result.exitCode === 1) {
+        return;
+    }
+    if (result.exitCode !== 0) {
+        throw new Error(`Failed to check line endings:\n${result.stderr}`);
+    }
+    throw new Error(`Files must use LF line endings:\n${result.stdout}`);
+}
 
 export const checkHerebyfile = task({
     name: "check:herebyfile",
     description: "Type-checks Herebyfile.mjs.",
-    run: () =>
-        run("node", [
-            "./node_modules/typescript/bin/tsc",
-            "--noEmit",
-            "--allowJs",
-            "--allowImportingTsExtensions",
-            "--checkJs",
-            "--target",
-            "es2022",
-            "--lib",
-            "es2024,esnext.array,esnext.collection,esnext.iterator",
-            "--module",
-            "nodenext",
-            "--moduleResolution",
-            "nodenext",
-            "--types",
-            "node",
-            "--strict",
-            "--esModuleInterop",
-            "--skipLibCheck",
-            "Herebyfile.mjs",
-        ]),
+    run: runCheckHerebyfile,
 });
+
+async function runCheckHerebyfile() {
+    await run("node", [
+        "./node_modules/typescript/bin/tsc",
+        "--noEmit",
+        "--allowJs",
+        "--allowImportingTsExtensions",
+        "--checkJs",
+        "--target",
+        "es2022",
+        "--lib",
+        "es2024,esnext.array,esnext.collection,esnext.iterator",
+        "--module",
+        "nodenext",
+        "--moduleResolution",
+        "nodenext",
+        "--types",
+        "node",
+        "--strict",
+        "--esModuleInterop",
+        "--skipLibCheck",
+        "Herebyfile.mjs",
+    ]);
+}
 
 export const checkVsceVersion = task({
     name: "check:vsce-version",
@@ -1347,6 +1642,7 @@ const scriptTsconfigs = [
     "./tools/scripts/gen/tsconfig.json",
     "./tools/scripts/tsc/tsconfig.json",
     "./tools/scripts/lsp/tsconfig.json",
+    "./tools/scripts/wasm/tsconfig.json",
 ];
 
 export const checkScripts = task({
@@ -1601,8 +1897,8 @@ export class Debouncer {
 }
 
 const getVersion = memoize(() => {
-    if (nativePreviewReleaseVersion) {
-        return nativePreviewReleaseVersion;
+    if (typeScriptReleaseVersion && !prBuild) {
+        return typeScriptReleaseVersion;
     }
 
     const f = fs.readFileSync("./tsc/internal/core/version.go", "utf8");
@@ -1624,17 +1920,17 @@ const getVersion = memoize(() => {
 });
 
 function getPublishTag() {
-    if (publishAsTypescript) {
-        const version = getVersion();
-        if (!version) {
-            throw new Error("Publishing as 'typescript' requires a version before selecting an npm tag.");
-        }
-        const match = version.match(/-(dev|beta|rc)(?:[.-]|$)/);
-        if (match?.[1]) return match[1] === "dev" ? "next" : match[1];
-        if (version === nativePreviewReleaseVersion && stableThreeComponentVersionPattern.test(version)) return "latest";
-        throw new Error(`Refusing to publish 'typescript' with the latest tag from non-release version ${version}.`);
+    if (prBuild) {
+        return "pr";
     }
-    return "latest";
+    const version = getVersion();
+    if (!version) {
+        throw new Error("Publishing 'typescript' requires a version before selecting an npm tag.");
+    }
+    const match = version.match(/-(dev|beta|rc)(?:[.-]|$)/);
+    if (match?.[1]) return match[1] === "dev" ? "next" : match[1];
+    if (version === typeScriptReleaseVersion && stableThreeComponentVersionPattern.test(version)) return "latest";
+    throw new Error(`Refusing to publish 'typescript' with the latest tag from non-release version ${version}.`);
 }
 
 const extensionDir = path.resolve("./packages/vscode-typescript");
@@ -1646,10 +1942,6 @@ const builtPublishedPlatformPackages = path.resolve("./built/published-platform-
 const builtSignTmp = path.resolve("./built/sign-tmp");
 const publishedTypeScriptAliasPackageName = "@typescript/bundled-typescript";
 const releasePackageEnv = { COREPACK_ENABLE_STRICT: "0" };
-const getReleasePackageRegistry = memoize(async () => {
-    const { stdout } = await runOutput("npm", ["config", "get", "registry"], { env: releasePackageEnv });
-    return stdout.trim();
-});
 
 const getVscodeTypeScriptExtensionPackageJson = memoize(() => JSON.parse(fs.readFileSync(path.join(extensionDir, "package.json"), "utf8")));
 
@@ -1922,10 +2214,18 @@ function cpWithoutNodeModulesOrTsconfig(src, dest) {
     return cpRecursive(src, dest, p => !p.endsWith("/node_modules") && !p.endsWith("/tsconfig.json"));
 }
 
-const mainNativePreviewPackage = {
-    npmPackageName: publishAsTypescript ? "typescript" : "@typescript/typescript",
-    npmDir: path.join(builtNpm, publishAsTypescript ? "typescript" : "native-preview"),
-    npmTarball: path.join(builtNpm, publishAsTypescript ? "typescript.tgz" : "native-preview.tgz"),
+const mainTypeScriptPackage = {
+    npmPackageName: prBuild ? `${prBuildScope}/${prBuildBaseName}` : "typescript",
+    npmDir: path.join(builtNpm, prBuild ? prBuildBaseName : "typescript"),
+    npmTarball: path.join(builtNpm, prBuild ? `${prBuildBaseName}.tgz` : "typescript.tgz"),
+};
+
+const wasip1PackageDirName = prBuild ? `${prBuildBaseName}-wasip1-wasm` : "typescript-wasip1-wasm";
+const wasip1Package = {
+    npmPackageName: `${prBuild ? prBuildScope : "@typescript"}/${wasip1PackageDirName}`,
+    npmDirName: wasip1PackageDirName,
+    npmDir: path.join(builtNpm, wasip1PackageDirName),
+    npmTarball: path.join(builtNpm, `${wasip1PackageDirName}.tgz`),
 };
 
 const typescriptMacEntitlements = [
@@ -1951,7 +2251,7 @@ ${entries}
  * @typedef {"Microsoft400" | "LinuxSign" | "MacDeveloperHarden" | "8020" | "VSCodePublisher"} Cert
  * @typedef {`${OS | "alpine"}-${Exclude<Arch, "arm"> | "armhf"}`} VSCodeTarget
  * @typedef {{ name: string; sourceDir: string }} VsixExtensionPackage
- * @typedef {{ nodeOs: string; vscodeTarget: string; sourceDir: string; extensionDir: string; vsixPath: string; vsixManifestPath: string; vsixSignaturePath: string }} VsixExtension
+ * @typedef {{ nodeOs?: string; vscodeTarget: VSCodeTarget | "web"; sourceDir: string; extensionDir: string; vsixPath: string; vsixManifestPath: string; vsixSignaturePath: string }} VsixExtension
  * @typedef {{ GOOS: string; GOARCH: string }} GoDistTarget
  * @typedef {{ os: OS; arch: Arch; cert?: Cert; vsix?: boolean; alpine?: boolean }} Platform
  */
@@ -1959,14 +2259,44 @@ void 0;
 
 /** @type {VsixExtensionPackage[]} */
 const vsixExtensionPackages = [
-    ...(produceNativePreviewVsix ? [{ name: "native-preview", sourceDir: extensionDir }] : []),
+    ...(produceVscodeTypescriptVsix ? [{ name: "native-preview", sourceDir: extensionDir }] : []),
     ...(produceTypeScriptNightlyVsix ? [{ name: "vscode-typescript-nightly", sourceDir: nightlyExtensionDir }] : []),
 ];
 
 /**
- * npm package platforms supported by the native release.
- * The native-preview package publishes only the entries with vsix: true;
- * the typescript package publishes the full list.
+ * @param {string} packageName
+ * @param {string} sourceDir
+ * @param {VSCodeTarget | "web"} vscodeTarget
+ * @param {string} [nodeOs]
+ * @returns {VsixExtension}
+ */
+function createVsixExtension(packageName, sourceDir, vscodeTarget, nodeOs) {
+    const extensionDir = path.join(builtVsix, `${packageName}-${vscodeTarget}`);
+    return {
+        nodeOs,
+        vscodeTarget,
+        sourceDir,
+        extensionDir,
+        vsixPath: extensionDir + ".vsix",
+        vsixManifestPath: extensionDir + ".manifest",
+        vsixSignaturePath: extensionDir + ".signature.p7s",
+    };
+}
+
+function getLocalWebVsixExtensions() {
+    if (options.forRelease) {
+        return [];
+    }
+    return [
+        createVsixExtension("native-preview", extensionDir, "web"),
+        createVsixExtension("vscode-typescript-nightly", nightlyExtensionDir, "web"),
+    ];
+}
+
+/**
+ * npm package platforms supported by the release.
+ * Nightly (next) builds and VS Code extension releases use only the entries
+ * with vsix: true; other typescript releases publish the full list.
  * BSD targets that are not in Node's supported-platforms table are best-effort
  * and limited to mainstream 64-bit x64/arm64 architectures.
  * alpine is set only for the subset that also produces Alpine VSIXes.
@@ -2067,7 +2397,7 @@ function nodeToGOARCH(arch, os) {
 
 const getPlatforms = memoize(() => {
     const publishTag = releaseVscodeTypescript ? undefined : getPublishTag();
-    let supportedPlatforms = !releaseVscodeTypescript && publishAsTypescript && publishTag !== "next"
+    let supportedPlatforms = !releaseVscodeTypescript && !prBuild && publishTag !== "next"
         ? platforms
         : platforms.filter(({ vsix }) => vsix);
 
@@ -2077,38 +2407,21 @@ const getPlatforms = memoize(() => {
     }
 
     return supportedPlatforms.map(({ os, arch, cert = "LinuxSign", vsix, alpine }) => {
-        const packageBaseName = publishAsTypescript ? "typescript" : "native-preview";
-        const npmDirName = `${packageBaseName}-${os}-${arch}`;
+        const npmDirName = `${prBuild ? prBuildBaseName : "typescript"}-${os}-${arch}`;
         const npmDir = path.join(builtNpm, npmDirName);
         const npmTarball = `${npmDir}.tgz`;
-        const npmPackageName = `@typescript/${npmDirName}`;
+        const npmPackageName = `${prBuild ? prBuildScope : "@typescript"}/${npmDirName}`;
 
         /** @type {VsixExtension[]} */
         let extensions = [];
         if (produceAnyVsix && vsix) {
-            /** @type {string[]} */
+            /** @type {VSCodeTarget[]} */
             const vscodeTargets = [`${os}-${arch === "arm" ? "armhf" : arch}`];
             if (alpine) {
                 vscodeTargets.push(`alpine-${arch === "arm" ? "armhf" : arch}`);
             }
 
-            extensions = vscodeTargets.flatMap(vscodeTarget =>
-                vsixExtensionPackages.map(({ name: packageName, sourceDir }) => {
-                    const extensionDir = path.join(builtVsix, `${packageName}-${vscodeTarget}`);
-                    const vsixPath = extensionDir + ".vsix";
-                    const vsixManifestPath = extensionDir + ".manifest";
-                    const vsixSignaturePath = extensionDir + ".signature.p7s";
-                    return {
-                        nodeOs: os,
-                        vscodeTarget,
-                        sourceDir,
-                        extensionDir,
-                        vsixPath,
-                        vsixManifestPath,
-                        vsixSignaturePath,
-                    };
-                })
-            );
+            extensions = vscodeTargets.flatMap(vscodeTarget => vsixExtensionPackages.map(({ name: packageName, sourceDir }) => createVsixExtension(packageName, sourceDir, vscodeTarget, os)));
         }
 
         return {
@@ -2225,7 +2538,7 @@ async function runCheckPlatforms() {
     }
 
     if (errors.length) {
-        throw new Error(`native-preview platform list is out of sync with 'go tool dist list':\n${errors.map(e => `  - ${e}`).join("\n")}`);
+        throw new Error(`TypeScript platform list is out of sync with 'go tool dist list':\n${errors.map(e => `  - ${e}`).join("\n")}`);
     }
 }
 
@@ -2264,10 +2577,11 @@ function stripConditionsFromValue(value) {
     return value;
 }
 
-export const buildNativePreviewPackages = task({
+export const buildTypeScriptPackages = task({
     name: "typescript:build",
     description: "Builds TypeScript npm packages for the current platform. Pass --respectGoEnv to preserve caller-provided Go build settings.",
-    run: runBuildNativePreviewPackages,
+    dependencies: usePublishedPlatformPackagesForVsix ? undefined : generateDependencies,
+    run: runBuildTypeScriptPackages,
 });
 
 export const writeTypeScriptReleaseInfo = task({
@@ -2282,7 +2596,7 @@ export const writeTypeScriptReleaseInfo = task({
     },
 });
 
-async function runBuildNativePreviewPackages() {
+async function runBuildTypeScriptPackages() {
     if (usePublishedPlatformPackagesForVsix) {
         checkPublishedPlatformPackagesForVsix();
         await rimraf(builtNpm);
@@ -2293,22 +2607,23 @@ async function runBuildNativePreviewPackages() {
     await rimraf(builtNpm);
 
     const platforms = getPlatforms();
-    await buildMainNativePreviewPackage(platforms);
+    await buildMainTypeScriptPackage(platforms);
+    await buildWasip1Package();
 
     if (isCI) {
         for (const platform of platforms) {
-            await buildNativePreviewPlatform(platform);
+            await buildTypeScriptPlatform(platform);
             // Build machines have too little space.
             // Clear the Go build cache between platforms.
             await run("go", ["clean", "-cache"]);
         }
     }
     else {
-        await runWithConcurrencyLimit(platforms.map(platform => () => buildNativePreviewPlatform(platform)), os.availableParallelism());
+        await runWithConcurrencyLimit(platforms.map(platform => () => buildTypeScriptPlatform(platform)), os.availableParallelism());
     }
 }
 
-export const buildMainNativePreviewPackageTask = task({
+export const buildMainTypeScriptPackageTask = task({
     name: "typescript:build-main",
     hiddenFromTaskList: true,
     run: async () => {
@@ -2320,11 +2635,11 @@ export const buildMainNativePreviewPackageTask = task({
         }
 
         await rimraf(builtNpm);
-        await buildMainNativePreviewPackage(getPlatforms());
+        await buildMainTypeScriptPackage(getPlatforms());
     },
 });
 
-export const buildNativePreviewPlatformTask = task({
+export const buildTypeScriptPlatformTask = task({
     name: "typescript:build-platform",
     hiddenFromTaskList: true,
     run: async () => {
@@ -2335,62 +2650,92 @@ export const buildNativePreviewPlatformTask = task({
             throw new Error("typescript:build-platform requires --platform.");
         }
 
+        if (options.platform === "wasip1-wasm") {
+            await rimraf(wasip1Package.npmDir);
+            await buildWasip1Package();
+            return;
+        }
+
         const platform = getPlatforms().find(({ nodeOs, nodeArch }) => `${nodeOs}-${nodeArch}` === options.platform);
         if (!platform) {
             throw new Error(`Unknown release platform: ${options.platform}`);
         }
 
         await rimraf(platform.npmDir);
-        await buildNativePreviewPlatform(platform);
+        await buildTypeScriptPlatform(platform);
     },
 });
 
-export const buildNativePreviewPlatformMatrix = task({
+export const buildTypeScriptPlatformMatrix = task({
     name: "typescript:build-platform-matrix",
     hiddenFromTaskList: true,
     run: () => {
         const matrix = Object.fromEntries(
-            getPlatforms().map(({ nodeOs, nodeArch, npmDirName }) => {
-                const platform = `${nodeOs}-${nodeArch}`;
-                return [platform.replaceAll("-", "_"), { platform, npmDirName }];
-            }),
+            [
+                ...getPlatforms().map(({ nodeOs, nodeArch, npmDirName }) => {
+                    const platform = `${nodeOs}-${nodeArch}`;
+                    return [platform.replaceAll("-", "_"), { platform, npmDirName }];
+                }),
+                ["wasip1_wasm", { platform: "wasip1-wasm", npmDirName: wasip1Package.npmDirName }],
+            ],
         );
         console.log(`##vso[task.setvariable variable=matrix;isOutput=true]${JSON.stringify(matrix)}`);
-        console.log(`##vso[task.setvariable variable=packageBaseName;isOutput=true]${path.basename(mainNativePreviewPackage.npmDir)}`);
+        if (process.env.GITHUB_OUTPUT) {
+            const packages = {
+                main: mainTypeScriptPackage.npmPackageName,
+                platforms: getPlatforms().map(p => p.npmPackageName),
+                wasm: wasip1Package.npmPackageName,
+            };
+            fs.appendFileSync(process.env.GITHUB_OUTPUT, `matrix=${JSON.stringify({ include: Object.values(matrix) })}\npackages=${JSON.stringify(packages)}\n`);
+        }
     },
 });
 
 /**
  * @param {ReturnType<typeof getPlatforms>} platforms
  */
-async function buildMainNativePreviewPackage(platforms) {
+async function buildMainTypeScriptPackage(platforms) {
     const inputDir = "./packages/typescript";
-    const inputPackageJson = await createNativePreviewInputPackageJson();
+    const inputPackageJson = await createTypeScriptInputPackageJson();
 
     const mainPackage = {
         ...inputPackageJson,
-        name: mainNativePreviewPackage.npmPackageName,
+        name: mainTypeScriptPackage.npmPackageName,
         optionalDependencies: Object.fromEntries(platforms.map(p => [p.npmPackageName, getVersion()])),
     };
 
-    const mainPackageDir = mainNativePreviewPackage.npmDir;
+    const mainPackageDir = mainTypeScriptPackage.npmDir;
 
     await fs.promises.mkdir(mainPackageDir, { recursive: true });
 
     // Copy package contents excluding node_modules and dist (dist is copied separately after build).
     // The package.json "files" field controls what npm pack actually includes.
     await cpRecursive(inputDir, mainPackageDir, p => !p.endsWith("/node_modules") && !p.includes("/dist"));
-    if (publishAsTypescript) {
-        await fs.promises.writeFile(path.join(mainPackageDir, "bin", "tsc"), '#!/usr/bin/env node\nimport "../lib/tsc.js";\n');
-        await fs.promises.chmod(path.join(mainPackageDir, "bin", "tsc"), 0o755);
-        await fs.promises.copyFile(path.join(inputDir, "typescript-package-readme.md"), path.join(mainPackageDir, "README.md"));
-    }
 
     await fs.promises.writeFile(path.join(mainPackageDir, "package.json"), JSON.stringify(mainPackage, undefined, 4));
     await fs.promises.copyFile("LICENSE.txt", path.join(mainPackageDir, "LICENSE"));
     await fs.promises.copyFile("NOTICE.txt", path.join(mainPackageDir, "NOTICE.txt"));
+    if (prBuild) {
+        const prNumber = getVersion().match(/-pr\.(\d+)\./)?.[1];
+        const readme = [
+            `# \`${mainTypeScriptPackage.npmPackageName}\``,
+            "",
+            `This package is an unofficial, unsigned build of TypeScript, built from microsoft/TypeScript#${prNumber}.`,
+            "It is published for testing only and must not be used in production.",
+            "",
+            "To try it, install it under the \`typescript\` name:",
+            "",
+            "```sh",
+            `npm install typescript@npm:${mainTypeScriptPackage.npmPackageName}@${getVersion()}`,
+            "```",
+        ];
+        await fs.promises.writeFile(path.join(mainPackageDir, "README.md"), readme.join("\n") + "\n");
+    }
+    else {
+        await fs.promises.copyFile("README.md", path.join(mainPackageDir, "README.md"));
+    }
 
-    // Build JS API and copy dist into the package.
+    // Build the JS API and copy dist into the main package.
     await run("npm", ["run", "-w", "@typescript/typescript", "build"]);
     await runCheckAPIDeclarations();
     await cpRecursive(path.join(inputDir, "dist"), path.join(mainPackageDir, "dist"));
@@ -2420,11 +2765,40 @@ async function buildMainNativePreviewPackage(platforms) {
     }
 }
 
+async function buildWasip1Package() {
+    const inputPackageJson = await createTypeScriptInputPackageJson();
+    const wasmInputDir = "./packages/typescript-wasip1-wasm";
+    const extraFlags = options.respectGoEnv
+        ? []
+        : getReleaseBuildFlags(options.setPrerelease || typeScriptReleaseVersion ? getVersion() : undefined);
+    const wasmPackageJson = JSON.parse(fs.readFileSync(path.join(wasmInputDir, "package.json"), "utf8"));
+    wasmPackageJson.name = wasip1Package.npmPackageName;
+    wasmPackageJson.version = getVersion();
+    wasmPackageJson.gitHead = inputPackageJson.gitHead;
+    wasmPackageJson.publishConfig = {
+        access: "public",
+        tag: getPublishTag(),
+    };
+    wasmPackageJson.files = [...new Set([...(wasmPackageJson.files ?? []), "NOTICE.txt"])];
+    delete wasmPackageJson.private;
+    delete wasmPackageJson.scripts;
+    stripSourceConditions(wasmPackageJson);
+
+    await runBuildWasi(extraFlags);
+    await cpRecursive(wasmInputDir, wasip1Package.npmDir, p => !p.endsWith("/node_modules"));
+    await fs.promises.writeFile(
+        path.join(wasip1Package.npmDir, "package.json"),
+        JSON.stringify(wasmPackageJson, undefined, 4),
+    );
+    await fs.promises.copyFile("LICENSE.txt", path.join(wasip1Package.npmDir, "LICENSE"));
+    await fs.promises.copyFile("NOTICE.txt", path.join(wasip1Package.npmDir, "NOTICE.txt"));
+}
+
 /**
  * @param {ReturnType<typeof getPlatforms>[number]} platform
  */
-async function buildNativePreviewPlatform({ npmDir, npmPackageName, nodeOs, nodeArch, goos, goarch }) {
-    const inputPackageJson = await createNativePreviewInputPackageJson();
+async function buildTypeScriptPlatform({ npmDir, npmPackageName, nodeOs, nodeArch, goos, goarch }) {
+    const inputPackageJson = await createTypeScriptInputPackageJson();
 
     const packageJson = {
         ...inputPackageJson,
@@ -2449,16 +2823,16 @@ async function buildNativePreviewPlatform({ npmDir, npmPackageName, nodeOs, node
     const readme = [
         `# \`${npmPackageName}\``,
         "",
-        `This package provides ${nodeOs}-${nodeArch} support for [${mainNativePreviewPackage.npmPackageName}](https://www.npmjs.com/package/${mainNativePreviewPackage.npmPackageName}).`,
+        `This package provides ${nodeOs}-${nodeArch} support for [${mainTypeScriptPackage.npmPackageName}](https://www.npmjs.com/package/${mainTypeScriptPackage.npmPackageName}).`,
     ];
 
     await fs.promises.writeFile(path.join(npmDir, "README.md"), readme.join("\n") + "\n");
 
     await generateLibs(out);
 
-    const exeName = nativePreviewExeName(nodeOs);
+    const exeName = typeScriptExeName(nodeOs);
     await buildTsc({
-        out: publishAsTypescript ? path.join(out, exeName) : out,
+        out: path.join(out, exeName),
         env: {
             GOOS: goos,
             GOARCH: goarch,
@@ -2466,38 +2840,17 @@ async function buildNativePreviewPlatform({ npmDir, npmPackageName, nodeOs, node
         },
         extraFlags: options.respectGoEnv
             ? []
-            : getReleaseBuildFlags(options.setPrerelease || nativePreviewReleaseVersion ? getVersion() : undefined),
+            : getReleaseBuildFlags(options.setPrerelease || typeScriptReleaseVersion ? getVersion() : undefined),
     });
 }
 
-async function createNativePreviewInputPackageJson() {
+async function createTypeScriptInputPackageJson() {
     const inputPackageJson = JSON.parse(fs.readFileSync("./packages/typescript/package.json", "utf8"));
     inputPackageJson.version = getVersion();
     delete inputPackageJson.private;
     inputPackageJson.files = [...new Set([...(inputPackageJson.files ?? []), "NOTICE.txt"])];
-    if (publishAsTypescript) {
-        inputPackageJson.bin = {
-            tsc: "./bin/tsc",
-        };
-        inputPackageJson.description = "TypeScript is a language for application scale JavaScript development";
-        inputPackageJson.homepage = "https://www.typescriptlang.org/";
-        inputPackageJson.keywords = [
-            "TypeScript",
-            "Microsoft",
-            "compiler",
-            "language",
-            "javascript",
-        ];
-        inputPackageJson.bugs = {
-            url: "https://github.com/microsoft/TypeScript/issues",
-        };
-        inputPackageJson.repository = {
-            type: "git",
-            url: "https://github.com/microsoft/TypeScript.git",
-        };
-        delete inputPackageJson.scripts;
-        delete inputPackageJson.devDependencies;
-    }
+    delete inputPackageJson.scripts;
+    delete inputPackageJson.devDependencies;
     stripSourceConditions(inputPackageJson);
 
     if (fs.existsSync(".git")) {
@@ -2515,26 +2868,32 @@ async function createNativePreviewInputPackageJson() {
 /**
  * @param {ReturnType<typeof getPlatforms>} platforms
  */
-async function testNativePreviewPackage(platforms) {
+async function testTypeScriptPackage(platforms) {
     const hostPlatform = platforms.find(({ nodeOs, nodeArch }) => nodeOs === process.platform && nodeArch === process.arch);
     assert(hostPlatform, `No package was built for the host platform ${process.platform}-${process.arch}`);
 
     const testRoot = path.resolve("built/package-test");
     const nodeModules = path.join(testRoot, "node_modules");
-    const mainPackageDir = path.join(nodeModules, ...mainNativePreviewPackage.npmPackageName.split("/"));
+    const mainPackageDir = path.join(nodeModules, ...mainTypeScriptPackage.npmPackageName.split("/"));
     const platformPackageDir = path.join(nodeModules, ...hostPlatform.npmPackageName.split("/"));
+    const wasmPackageDir = path.join(nodeModules, ...wasip1Package.npmPackageName.split("/"));
     const sourceFile = path.join(testRoot, "index.ts");
 
     await rimraf(testRoot);
     try {
-        await cpRecursive(mainNativePreviewPackage.npmDir, mainPackageDir);
+        await cpRecursive(mainTypeScriptPackage.npmDir, mainPackageDir);
         await cpRecursive(hostPlatform.npmDir, platformPackageDir);
+        await cpRecursive(wasip1Package.npmDir, wasmPackageDir);
         await fs.promises.writeFile(sourceFile, 'export const value: string = "value";\n');
 
         const require = createRequire(sourceFile);
         const { stdout } = await runOutput("npm", ["pack", "--dry-run", "--json", mainPackageDir]);
         /** @type {{ files: { path: string }[] }[]} */
         const packed = JSON.parse(stdout);
+        assert(
+            packed[0].files.some(file => file.path === "dist/wasm/index.js"),
+            "Main package is missing the WASM host entrypoint",
+        );
         for (const name of ["tsconfig", "jsconfig"]) {
             const schemaPath = `schemas/${name}.schema.json`;
             assert(packed[0].files.some(file => file.path === schemaPath), `Package is missing ${schemaPath}`);
@@ -2542,11 +2901,26 @@ async function testNativePreviewPackage(platforms) {
                 await fs.promises.readFile(path.join(mainPackageDir, schemaPath)),
                 await fs.promises.readFile(path.join("packages/typescript", schemaPath)),
             );
-            assert.equal(require.resolve(`${mainNativePreviewPackage.npmPackageName}/${schemaPath}`), path.join(mainPackageDir, schemaPath));
+            assert.equal(require.resolve(`${mainTypeScriptPackage.npmPackageName}/${schemaPath}`), path.join(mainPackageDir, schemaPath));
         }
 
-        const binName = publishAsTypescript ? "tsc" : "tsgo";
-        const binPath = path.join(mainPackageDir, "bin", binName);
+        const wasmPackageJson = JSON.parse(await fs.promises.readFile(path.join(wasmPackageDir, "package.json"), "utf8"));
+        assert.equal(wasmPackageJson.version, getVersion(), "WASI artifact package must match the main package version");
+        const libFiles = JSON.parse(await fs.promises.readFile(path.join(wasmPackageDir, "lib", "libFiles.json"), "utf8"));
+        const expectedLibFiles = (await fs.promises.readdir(path.join(wasmPackageDir, "lib")))
+            .filter(file => file === "lib.d.ts" || file.startsWith("lib.") && file.endsWith(".d.ts"))
+            .sort();
+        assert.deepEqual(libFiles, expectedLibFiles);
+
+        const { stdout: wasmPackOutput } = await runOutput("npm", ["pack", "--dry-run", "--json", wasmPackageDir]);
+        /** @type {{ files: { path: string }[] }[]} */
+        const wasmPacked = JSON.parse(wasmPackOutput);
+        const wasmFiles = new Set(wasmPacked[0].files.map(file => file.path));
+        assert(wasmFiles.has("lib/tsc.wasm"), "WASI artifact package is missing its compiler");
+        assert(wasmFiles.has("dist/index.js"), "WASI artifact package is missing its URL helper");
+        assert(wasmFiles.has("lib/libFiles.json"), "WASI artifact package is missing its library file list");
+
+        const binPath = path.join(mainPackageDir, "bin", "tsc");
         const { stdout: versionOutput } = await runOutput(process.execPath, [binPath, "--version"]);
         assert.equal(versionOutput.trim(), `Version ${getVersion()}`);
 
@@ -2565,30 +2939,32 @@ async function testNativePreviewPackage(platforms) {
     }
 }
 
-export const testNativePreviewPackageTask = task({
+export const testTypeScriptPackageTask = task({
     name: "typescript:test-package",
     description: "Tests the TypeScript npm package for the current platform.",
-    dependencies: options.forRelease ? undefined : [buildNativePreviewPackages],
-    run: () => testNativePreviewPackage(getPlatforms()),
+    dependencies: options.forRelease ? undefined : [buildTypeScriptPackages],
+    run: () => testTypeScriptPackage(getPlatforms()),
 });
 
-export const signNativePreviewPackages = task({
+export const signTypeScriptPackages = task({
     name: "typescript:sign",
     hiddenFromTaskList: true,
-    run: runSignNativePreviewPackages,
+    run: runSignTypeScriptPackages,
 });
 
 /**
  * @param {string} nodeOs
  */
-function nativePreviewExeName(nodeOs) {
-    const baseName = publishAsTypescript ? "tsc" : "tsgo";
-    return nodeOs === "win32" ? `${baseName}.exe` : baseName;
+function typeScriptExeName(nodeOs) {
+    return nodeOs === "win32" ? "tsc.exe" : "tsc";
 }
 
-async function runSignNativePreviewPackages() {
+async function runSignTypeScriptPackages() {
     if (!options.forRelease) {
         throw new Error("This task should not be run in non-release builds.");
+    }
+    if (prBuild) {
+        throw new Error("PR builds contain unreviewed code and must never be signed.");
     }
     if (usePublishedPlatformPackagesForVsix) {
         checkPublishedPlatformPackagesForVsix();
@@ -2607,7 +2983,7 @@ async function runSignNativePreviewPackages() {
         }
         certFilelist.push({
             tmpName: npmDirName,
-            path: path.join(npmDir, "lib", nativePreviewExeName(nodeOs)),
+            path: path.join(npmDir, "lib", typeScriptExeName(nodeOs)),
         });
     }
 
@@ -2712,14 +3088,14 @@ async function runSignNativePreviewPackages() {
     }
 }
 
-export const packNativePreviewPackages = task({
+export const packTypeScriptPackages = task({
     name: "typescript:pack",
     hiddenFromTaskList: true,
-    dependencies: options.forRelease ? undefined : [buildNativePreviewPackages, cleanSignTempDirectory],
-    run: runPackNativePreviewPackages,
+    dependencies: options.forRelease ? undefined : [buildTypeScriptPackages, cleanSignTempDirectory],
+    run: runPackTypeScriptPackages,
 });
 
-async function runPackNativePreviewPackages() {
+async function runPackTypeScriptPackages() {
     if (usePublishedPlatformPackagesForVsix) {
         checkPublishedPlatformPackagesForVsix();
         await rimraf(builtNpm);
@@ -2728,7 +3104,7 @@ async function runPackNativePreviewPackages() {
     }
 
     const platforms = getPlatforms();
-    await Promise.all([mainNativePreviewPackage, ...platforms].map(async ({ npmDir, npmTarball }) => {
+    await Promise.all([mainTypeScriptPackage, wasip1Package, ...platforms].map(async ({ npmDir, npmTarball }) => {
         const { stdout } = await runOutput("npm", ["pack", "--json", npmDir]);
         const filename = JSON.parse(stdout)[0].filename.replace("@", "").replace("/", "-");
         await fs.promises.rename(filename, npmTarball);
@@ -2736,14 +3112,16 @@ async function runPackNativePreviewPackages() {
 
     // npm packages need to be published in dependency order: platform packages
     // first, then the main package that references them as optionalDependencies.
+    // The WASI package goes with the platform packages so that typescript/wasm
+    // never refers to a version without a matching tsc.wasm.
     const publishManifest = {
         stages: [
-            platforms.map(p => ({
+            [...platforms, wasip1Package].map(p => ({
                 filename: path.basename(p.npmTarball),
             })),
             [
                 {
-                    filename: path.basename(mainNativePreviewPackage.npmTarball),
+                    filename: path.basename(mainTypeScriptPackage.npmTarball),
                 },
             ],
         ],
@@ -2756,7 +3134,7 @@ async function runPackNativePreviewPackages() {
 export const packVsixExtensions = task({
     name: "vscode-typescript:pack",
     hiddenFromTaskList: true,
-    dependencies: options.forRelease || usePublishedPlatformPackagesForVsix ? undefined : [packNativePreviewPackages],
+    dependencies: options.forRelease || usePublishedPlatformPackagesForVsix ? undefined : [packTypeScriptPackages],
     run: runPackVsixExtensions,
 });
 
@@ -2848,38 +3226,24 @@ async function getPublishedPlatformPackageDirWorker(npmPackageName) {
     if (lockEntry.version !== version) {
         throw new Error(`package-lock.json has ${npmPackageName}@${lockEntry.version}, but ${publishedTypeScriptAliasPackageName} depends on ${version}.`);
     }
-    if (!lockEntry.resolved || typeof lockEntry.resolved !== "string") {
-        throw new Error(`package-lock.json entry for ${npmPackageName}@${version} does not contain a tarball URL.`);
-    }
     if (!lockEntry.integrity || typeof lockEntry.integrity !== "string") {
         throw new Error(`package-lock.json entry for ${npmPackageName}@${version} does not contain an integrity hash.`);
     }
 
-    const resolved = new URL(lockEntry.resolved);
-    if (resolved.origin === "https://registry.npmjs.org") {
-        const registry = new URL(await getReleasePackageRegistry());
-        resolved.protocol = registry.protocol;
-        resolved.host = registry.host;
-        resolved.pathname = path.posix.join(registry.pathname, resolved.pathname);
-    }
-
-    console.log(`Fetching locked ${npmPackageName}@${version} tarball from ${resolved}.`);
-    const response = await fetch(resolved);
-    if (!response.ok) {
-        throw new Error(`Failed to fetch ${npmPackageName}@${version}: ${response.status} ${response.statusText}.`);
-    }
-    const tarball = Buffer.from(await response.arrayBuffer());
-    const integrityMatch = /^sha512-(.+)$/.exec(lockEntry.integrity);
-    if (!integrityMatch) {
-        throw new Error(`Unsupported integrity hash for ${npmPackageName}@${version}: ${lockEntry.integrity}.`);
-    }
-    const expectedIntegrity = Buffer.from(integrityMatch[1], "base64");
-    const actualIntegrity = crypto.createHash("sha512").update(tarball).digest();
-    if (expectedIntegrity.length !== actualIntegrity.length || !crypto.timingSafeEqual(expectedIntegrity, actualIntegrity)) {
+    const { stdout } = await runOutput("npm", [
+        "pack",
+        `${npmPackageName}@${version}`,
+        "--ignore-scripts",
+        "--json",
+        "--pack-destination",
+        tarballDestination,
+    ], { env: releasePackageEnv });
+    /** @type {{ filename: string; integrity: string }[]} */
+    const [packed] = JSON.parse(stdout);
+    if (packed.integrity !== lockEntry.integrity) {
         throw new Error(`Integrity check failed for ${npmPackageName}@${version}.`);
     }
-    const tarballPath = path.join(tarballDestination, path.basename(resolved.pathname));
-    await fs.promises.writeFile(tarballPath, tarball);
+    const tarballPath = path.join(tarballDestination, packed.filename);
     await tar.x({ file: tarballPath, cwd: dest, strip: 1 });
 
     if (!fs.existsSync(lib)) {
@@ -2899,7 +3263,14 @@ async function runPackVsixExtensions() {
     }
 
     const platforms = getPlatforms();
-    const extensions = platforms.flatMap(({ npmTarball, npmPackageName, extensions }) => extensions.map(e => ({ npmTarball, npmPackageName, ...e })));
+    const extensions = [
+        ...platforms.flatMap(({ npmTarball, npmPackageName, extensions }) => extensions.map(e => ({ npmTarball, npmPackageName, ...e }))),
+        ...getLocalWebVsixExtensions().map(e => ({
+            npmTarball: wasip1Package.npmTarball,
+            npmPackageName: wasip1Package.npmPackageName,
+            ...e,
+        })),
+    ];
     if (!extensions.length) {
         console.log("No VSIX targets configured; skipping extension packaging.");
         return;
@@ -2908,6 +3279,9 @@ async function runPackVsixExtensions() {
     // We don't use vscode:prepublish, as that would run the build for each package below.
     await run("npm", ["run", "-w", "@typescript/typescript", "build"]);
     await run("npm", ["run", "bundle:release"], { cwd: extensionDir, env: releasePackageEnv });
+    if (extensions.some(extension => extension.vscodeTarget === "web")) {
+        await run("npm", ["run", "bundle:release:web"], { cwd: extensionDir, env: releasePackageEnv });
+    }
 
     let version = "0.0.0";
     if (options.forRelease) {
@@ -2933,33 +3307,61 @@ async function runPackVsixExtensions() {
     console.log("Version:", version);
 
     await Promise.all(extensions.map(async ({ npmTarball, npmPackageName, nodeOs, vscodeTarget, sourceDir, extensionDir: thisExtensionDir, vsixPath, vsixManifestPath, vsixSignaturePath }) => {
-        const nodeModules = path.join(thisExtensionDir, "node_modules");
-        const embeddedPlatformPackageDir = path.join(nodeModules, ...npmPackageName.split("/"));
-        const embeddedTypeScriptDir = path.join(nodeModules, "typescript");
-
         await cpWithoutNodeModulesOrTsconfig(sourceDir, thisExtensionDir);
-        if (usePublishedPlatformPackagesForVsix) {
-            await cpRecursive(await getPublishedPlatformPackageDir(npmPackageName), embeddedPlatformPackageDir);
-            await cpRecursive(getPublishedTypeScriptPackageDir(), embeddedTypeScriptDir, p => !p.endsWith("/node_modules"));
+        assert(npmTarball);
+        assert(npmPackageName);
+        let packageJsonDependencies;
+        if (vscodeTarget === "web") {
+            const embeddedWasmPackageDir = path.join(thisExtensionDir, "node_modules", ...npmPackageName.split("/"));
+            await fs.promises.mkdir(embeddedWasmPackageDir, { recursive: true });
+            await tar.x({ file: npmTarball, cwd: embeddedWasmPackageDir, strip: 1 });
+            const embeddedWasmPackageJson = JSON.parse(await fs.promises.readFile(path.join(embeddedWasmPackageDir, "package.json"), "utf8"));
+            packageJsonDependencies = {
+                [npmPackageName]: embeddedWasmPackageJson.version,
+            };
         }
         else {
-            await fs.promises.mkdir(embeddedPlatformPackageDir, { recursive: true });
-            await fs.promises.mkdir(embeddedTypeScriptDir, { recursive: true });
-            await tar.x({ file: npmTarball, cwd: embeddedPlatformPackageDir, strip: 1 });
-            await tar.x({ file: mainNativePreviewPackage.npmTarball, cwd: embeddedTypeScriptDir, strip: 1 });
+            assert(nodeOs);
+            const nodeModules = path.join(thisExtensionDir, "node_modules");
+            const embeddedPlatformPackageDir = path.join(nodeModules, ...npmPackageName.split("/"));
+            const embeddedTypeScriptDir = path.join(nodeModules, "typescript");
+
+            if (usePublishedPlatformPackagesForVsix) {
+                await cpRecursive(await getPublishedPlatformPackageDir(npmPackageName), embeddedPlatformPackageDir);
+                await cpRecursive(getPublishedTypeScriptPackageDir(), embeddedTypeScriptDir, p => !p.endsWith("/node_modules"));
+            }
+            else {
+                await fs.promises.mkdir(embeddedPlatformPackageDir, { recursive: true });
+                await fs.promises.mkdir(embeddedTypeScriptDir, { recursive: true });
+                await tar.x({ file: npmTarball, cwd: embeddedPlatformPackageDir, strip: 1 });
+                await tar.x({ file: mainTypeScriptPackage.npmTarball, cwd: embeddedTypeScriptDir, strip: 1 });
+            }
+            await fs.promises.chmod(path.join(embeddedPlatformPackageDir, "lib", typeScriptExeName(nodeOs)), 0o755);
+            const embeddedTypeScriptPackageJson = JSON.parse(await fs.promises.readFile(path.join(embeddedTypeScriptDir, "package.json"), "utf8"));
+            packageJsonDependencies = {
+                typescript: embeddedTypeScriptPackageJson.name === "typescript"
+                    ? embeddedTypeScriptPackageJson.version
+                    : `npm:${embeddedTypeScriptPackageJson.name}@${embeddedTypeScriptPackageJson.version}`,
+            };
         }
-        await fs.promises.chmod(path.join(embeddedPlatformPackageDir, "lib", nativePreviewExeName(nodeOs)), 0o755);
-        const embeddedTypeScriptPackageJson = JSON.parse(await fs.promises.readFile(path.join(embeddedTypeScriptDir, "package.json"), "utf8"));
 
         const packageJsonPath = path.join(thisExtensionDir, "package.json");
         const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf8"));
         packageJson.version = version;
         packageJson.bundledTypeScriptVersion = usePublishedPlatformPackagesForVsix ? getPublishedTypeScriptVersion() : getVersion();
-        packageJson.dependencies = {
-            typescript: embeddedTypeScriptPackageJson.name === "typescript"
-                ? embeddedTypeScriptPackageJson.version
-                : `npm:${embeddedTypeScriptPackageJson.name}@${embeddedTypeScriptPackageJson.version}`,
-        };
+        if (vscodeTarget === "web") {
+            delete packageJson.main;
+            packageJson.files = /** @type {string[]} */ (packageJson.files ?? []).filter(file => file !== "dist/extension.bundle.js" && file !== "node_modules/typescript");
+            if (sourceDir !== nightlyExtensionDir) {
+                packageJson.browser = "./dist/extension.web.bundle.js";
+                packageJson.extensionDependencies = [
+                    ...(packageJson.extensionDependencies ?? []),
+                    "ms-vscode.wasm-wasi-core",
+                ];
+                packageJson.files.push("dist/extension.web.bundle.js");
+            }
+        }
+        packageJson.dependencies = packageJsonDependencies;
         fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, undefined, 4));
 
         await fs.promises.copyFile("NOTICE.txt", path.join(thisExtensionDir, "NOTICE.txt"));
@@ -2984,12 +3386,13 @@ async function runPackVsixExtensions() {
  * @param {string} vsixPath
  * @param {string} extensionPath
  * @param {string} platformPackageName
- * @param {string} nodeOs
+ * @param {string | undefined} nodeOs
  * @param {string} vscodeTarget
  */
 async function testVsixPackage(vsixPath, extensionPath, platformPackageName, nodeOs, vscodeTarget) {
     const zip = new AdmZip(vsixPath);
-    for (const packageName of ["typescript", platformPackageName]) {
+    const packageNames = vscodeTarget === "web" ? [platformPackageName] : ["typescript", platformPackageName];
+    for (const packageName of packageNames) {
         const packagePath = path.join(extensionPath, "node_modules", ...packageName.split("/"));
         const files = await fs.promises.readdir(packagePath, { recursive: true, withFileTypes: true });
         for (const file of files) {
@@ -3004,12 +3407,13 @@ async function testVsixPackage(vsixPath, extensionPath, platformPackageName, nod
 
     const hostTarget = `${process.platform}-${process.arch === "arm" ? "armhf" : process.arch}`;
     if (vscodeTarget !== hostTarget) return;
+    assert(nodeOs);
 
     const directory = await fs.promises.mkdtemp(path.join(os.tmpdir(), "typescript-vsix-test-"));
     try {
         zip.extractAllTo(directory);
         const platformPath = path.join(directory, "extension", "node_modules", ...platformPackageName.split("/"));
-        await fs.promises.chmod(path.join(platformPath, "lib", nativePreviewExeName(nodeOs)), 0o755);
+        await fs.promises.chmod(path.join(platformPath, "lib", typeScriptExeName(nodeOs)), 0o755);
         await fs.promises.writeFile(path.join(directory, "tsconfig.json"), '{"files": []}\n');
         await run(process.execPath, [
             "--input-type=module",
@@ -3126,29 +3530,30 @@ export const vscodeTypescriptRelease = task({
     },
 });
 
-export const nativePreviewRelease = task({
+export const typeScriptRelease = task({
     name: "typescript:release",
     hiddenFromTaskList: true,
+    dependencies: generateDependencies,
     run: async () => {
         if (releaseVscodeTypescript) {
             throw new Error("typescript:release cannot be used with --vscodeTypescriptRelease; use vscode-typescript:release");
         }
-        if (!options.forRelease || !options.setPrerelease && (!nativePreviewReleaseVersion || produceAnyVsix)) {
-            throw new Error("typescript:release requires --forRelease and --setPrerelease flags, unless nativePreviewReleaseVersion is hardcoded and VSIX production is disabled. Example: npx hereby typescript:release --forRelease --setPrerelease=dev.1.0");
+        if (!options.forRelease || !options.setPrerelease && (!typeScriptReleaseVersion || produceAnyVsix)) {
+            throw new Error("typescript:release requires --forRelease and --setPrerelease flags, unless typeScriptReleaseVersion is hardcoded and VSIX production is disabled. Example: npx hereby typescript:release --forRelease --setPrerelease=dev.1.0");
         }
-        await runBuildNativePreviewPackages();
-        await runSignNativePreviewPackages();
-        await runPackNativePreviewPackages();
+        await runBuildTypeScriptPackages();
+        await runSignTypeScriptPackages();
+        await runPackTypeScriptPackages();
         await runPackVsixExtensions();
         await runSignVsixExtensions();
         await runCleanSignTempDirectory();
     },
 });
 
-export const nativePreview = task({
-    name: "native-preview",
+export const pack = task({
+    name: "pack",
     hiddenFromTaskList: true,
-    dependencies: options.forRelease ? undefined : [packNativePreviewPackages, packVsixExtensions],
+    dependencies: options.forRelease ? undefined : [packTypeScriptPackages, packVsixExtensions],
     run: options.forRelease ? async () => {
         throw new Error("This task should not be run in release builds.");
     } : undefined,
