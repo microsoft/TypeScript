@@ -28299,6 +28299,16 @@ func (c *Checker) getResolvedBaseConstraint(t *Type, stack []RecursionId) *Type 
 	// yet triggered the deeply nested limiter. We have no test cases that actually get to 50 levels of
 	// nesting, so it is effectively just a safety stop.
 	identity := getRecursionIdentity(t)
+	if t.flags&TypeFlagsIndexedAccess != 0 {
+		// Preserve upstream mapped-type normalization, but distinguish an
+		// indexed chain's parameter TYPE from its direct constraint SYMBOL.
+		// Shared relation/inference identities and non-parameter targets stay
+		// unchanged; fresh mapped/reference objects get no new identities.
+		target := getRecursionIdentityTarget(t)
+		if target.flags&TypeFlagsTypeParameter != 0 {
+			identity = asRecursionId(target)
+		}
+	}
 	if len(stack) < 10 || len(stack) < 50 && !slices.Contains(stack, identity) {
 		constraint = c.computeBaseConstraint(c.getSimplifiedType(t /*writing*/, false), append(stack, identity))
 	}
