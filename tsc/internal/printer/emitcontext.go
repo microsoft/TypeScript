@@ -19,7 +19,7 @@ type EmitContext struct {
 	textSource    map[*ast.StringLiteralNode]*ast.Node
 	original      map[*ast.Node]*ast.Node
 	emitNodes     core.LinkStore[*ast.Node, emitNode]
-	display       map[*ast.Node]display
+	display       map[*ast.Node]*ast.NodeList
 	assignedName  map[*ast.Node]*ast.Expression
 	classThis     map[*ast.Node]*ast.IdentifierNode
 	varScopeStack core.Stack[*varScope]
@@ -446,8 +446,8 @@ func (c *EmitContext) SetOriginalEx(node *ast.Node, original *ast.Node, allowOve
 		if emitNode := c.emitNodes.TryGet(original); emitNode != nil {
 			c.emitNodes.Get(node).copyFrom(emitNode)
 		}
-		if d, ok := c.display[original]; ok {
-			c.display[node] = d
+		if typeArguments, ok := c.display[original]; ok {
+			c.display[node] = typeArguments
 		}
 	} else if !allowOverwrite && existing != original {
 		panic("Original node already set.")
@@ -556,45 +556,26 @@ func (e *emitNode) copyFrom(source *emitNode) {
 	}
 }
 
-// display records how the printer shows a synthesized node to a user. The
-// syntax tree keeps canonical children, so declarations and API consumers
-// never see display-only syntax.
-type display struct {
-	node          *ast.Node
-	typeArguments *ast.TypeArgumentList
+// DisplayTypeArguments returns type arguments shown with node: after an
+// identifier in an entity name or property access, as in C<string>.x, or in
+// place of a signature's type parameters, as in <string>(value: string). They
+// may include type parameter declarations, as in
+// C<out T extends string = "a">.prototype. The syntax tree keeps only valid
+// children, so declaration emit and API consumers never see these.
+func (c *EmitContext) DisplayTypeArguments(node *ast.Node) *ast.NodeList {
+	return c.display[node]
 }
 
-// DisplayNode returns the node printed in place of node, such as the
-// instantiation expression f<string>.C for a type reference or a constrained
-// type parameter for a type argument.
-func (c *EmitContext) DisplayNode(node *ast.Node) *ast.Node {
-	return c.display[node].node
-}
-
-func (c *EmitContext) SetDisplayNode(node *ast.Node, displayNode *ast.Node) {
-	c.setDisplay(node, display{node: displayNode})
-}
-
-// DisplayTypeArguments returns the instantiated type arguments printed in
-// place of a signature's type parameters.
-func (c *EmitContext) DisplayTypeArguments(node *ast.Node) *ast.TypeArgumentList {
-	return c.display[node].typeArguments
-}
-
-func (c *EmitContext) SetDisplayTypeArguments(node *ast.Node, typeArguments *ast.TypeArgumentList) {
-	c.setDisplay(node, display{typeArguments: typeArguments})
-}
-
-func (c *EmitContext) setDisplay(node *ast.Node, d display) {
+func (c *EmitContext) SetDisplayTypeArguments(node *ast.Node, typeArguments *ast.NodeList) {
 	if c.display == nil {
-		c.display = make(map[*ast.Node]display)
+		c.display = make(map[*ast.Node]*ast.NodeList)
 	}
-	c.display[node] = d
+	c.display[node] = typeArguments
 }
 
-// ClearDisplay removes all display entries, so they are not retained once
-// their nodes have been printed.
-func (c *EmitContext) ClearDisplay() {
+// ClearDisplayTypeArguments removes all display type arguments, so they are
+// not retained once their nodes have been printed.
+func (c *EmitContext) ClearDisplayTypeArguments() {
 	clear(c.display)
 }
 

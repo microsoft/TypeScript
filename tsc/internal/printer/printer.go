@@ -1120,13 +1120,12 @@ func (p *Printer) emitIdentifierText(node *ast.Identifier) {
 	debug.Assert(f == nil || p.currentSourceFile == nil || f.FileName() == p.currentSourceFile.FileName())
 	text := p.getTextOfNode(node.AsNode(), false /*includeTrivia*/)
 
-	if p.IdToSymbol != nil {
-		if symbol, ok := p.IdToSymbol[node.AsNode()]; ok {
-			p.writeSymbol(text, symbol)
-			return
-		}
+	if symbol, ok := p.IdToSymbol[node.AsNode()]; ok {
+		p.writeSymbol(text, symbol)
+	} else {
+		p.write(text)
 	}
-	p.write(text)
+	p.emitTypeArguments(node.AsNode(), p.emitContext.DisplayTypeArguments(node.AsNode()))
 }
 
 func (p *Printer) emitIdentifierName(node *ast.Identifier) {
@@ -1223,25 +1222,7 @@ func (p *Printer) emitComputedPropertyName(node *ast.ComputedPropertyName) {
 	p.exitNode(node.AsNode(), state)
 }
 
-// emitDisplayNode prints the display-only substitute for a synthesized node,
-// if one exists, and reports whether it did.
-func (p *Printer) emitDisplayNode(node *ast.Node) bool {
-	display := p.emitContext.DisplayNode(node)
-	switch {
-	case display == nil:
-		return false
-	case ast.IsTypeParameterDeclaration(display):
-		p.emitTypeParameter(display.AsTypeParameterDeclaration())
-	default:
-		p.emitExpression(display, ast.OperatorPrecedenceDisallowComma)
-	}
-	return true
-}
-
 func (p *Printer) emitEntityName(node *ast.EntityName) {
-	if p.emitDisplayNode(node) {
-		return
-	}
 	switch node.Kind {
 	case ast.KindIdentifier:
 		p.emitIdentifierReference(node.AsIdentifier())
@@ -1475,7 +1456,12 @@ func (p *Printer) emitTypeParameter(node *ast.TypeParameterDeclaration) {
 }
 
 func (p *Printer) emitTypeParameterDeclarationNode(node *ast.TypeParameterDeclarationNode) {
-	p.emitTypeParameter(node.AsTypeParameterDeclaration())
+	// Display type arguments can include type parameter declarations.
+	if ast.IsTypeParameterDeclaration(node) {
+		p.emitTypeParameter(node.AsTypeParameterDeclaration())
+	} else {
+		p.emitTypeArgument(node)
+	}
 }
 
 func (p *Printer) emitParameterName(node *ast.BindingName) {
@@ -1916,15 +1902,13 @@ func (p *Printer) emitTypeArguments(parentNode *ast.Node, nodes *ast.TypeArgumen
 	if nodes == nil {
 		return
 	}
-	p.emitList((*Printer).emitTypeArgument, parentNode, nodes, LFTypeArguments /*|core.IfElse(p.shouldAllowTrailingComma(parentNode, nodes), LFAllowTrailingComma, LFNone)*/) // TODO: preserve trailing comma after Strada migration
+	p.emitList((*Printer).emitTypeParameterDeclarationNode, parentNode, nodes, LFTypeArguments /*|core.IfElse(p.shouldAllowTrailingComma(parentNode, nodes), LFAllowTrailingComma, LFNone)*/) // TODO: preserve trailing comma after Strada migration
 }
 
 func (p *Printer) emitTypeReference(node *ast.TypeReferenceNode) {
 	state := p.enterNode(node.AsNode())
-	if !p.emitDisplayNode(node.AsNode()) {
-		p.emitEntityName(node.TypeName)
-		p.emitTypeArguments(node.AsNode(), node.TypeArguments)
-	}
+	p.emitEntityName(node.TypeName)
+	p.emitTypeArguments(node.AsNode(), node.TypeArguments)
 	p.exitNode(node.AsNode(), state)
 }
 

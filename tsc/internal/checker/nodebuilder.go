@@ -290,7 +290,7 @@ func (c *Checker) getNodeBuilder() (*NodeBuilder, func()) {
 		c.typeToStringNodebuilder.EmitContext().Factory.ReleaseArenas() // Allow any allocated nodes to be freed if they're no longer in a cache
 		if c.typeToStringNodebuilder.impl.ctx == nil {
 			// Nested operations return during the outermost operation, so only the outermost one clears.
-			c.typeToStringNodebuilder.EmitContext().ClearDisplay()
+			c.typeToStringNodebuilder.EmitContext().ClearDisplayTypeArguments()
 		}
 	}
 	if c.typeToStringNodebuilder != nil {
