@@ -49,6 +49,7 @@ const (
 	DiagnosticDirectiveErrorKindExpectMissingUnusedDiagnostic
 	DiagnosticDirectiveErrorKindInvalidUnusedDiagnosticIndex
 	DiagnosticDirectiveErrorKindOverlap
+	DiagnosticDirectiveErrorKindInvalidDiagnosticCode
 )
 
 // DiagnosticDirectiveError reports an invalid diagnostic directive in a transform response.

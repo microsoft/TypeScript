@@ -476,6 +476,20 @@ func TestRunnerTransformDiagnosticDirectives(t *testing.T) {
 	assert.Equal(t, directive.UnusedCode, int32(2578))
 	assert.Equal(t, directive.UnusedMessageText, "Unused framework directive.")
 	assert.Equal(t, directive.Source, "mapper")
+	diagnosticCode := int32(2353)
+	result, err = transform(contentmapper.MappedOutput{
+		Text: "virtual source", Extension: ".ts",
+		DiagnosticDirectives: protocolDiagnosticDirectives([]contentmapper.MappedDiagnosticDirective{{
+			OriginalStart:  0,
+			OriginalLength: 9,
+			VirtualStart:   8,
+			VirtualEnd:     14,
+			Policy:         contentmapper.DiagnosticDirectivePolicyIgnore,
+			DiagnosticCode: &diagnosticCode,
+		}}),
+	})
+	assert.NilError(t, err)
+	assert.Equal(t, result.DiagnosticDirectives[0].DiagnosticCode, diagnosticCode)
 	unusedIndex := 1
 	result, err = transform(contentmapper.MappedOutput{
 		Text: "virtual source", Extension: ".ts",
@@ -524,6 +538,15 @@ func TestRunnerTransformDiagnosticDirectives(t *testing.T) {
 				Policy: 2,
 			}},
 			kind: contentmapper.DiagnosticDirectiveErrorKindInvalidPolicy,
+		},
+		{
+			name: "invalid diagnostic code",
+			text: "x",
+			directives: []contentmapper.MappedDiagnosticDirective{{
+				Policy:         contentmapper.DiagnosticDirectivePolicyIgnore,
+				DiagnosticCode: new(int32),
+			}},
+			kind: contentmapper.DiagnosticDirectiveErrorKindInvalidDiagnosticCode,
 		},
 		{
 			name: "expect requires unused diagnostic",
@@ -588,6 +611,7 @@ func TestRunnerTransformDiagnosticDirectives(t *testing.T) {
 
 func TestMappedDiagnosticDirectiveJSON(t *testing.T) {
 	t.Parallel()
+	diagnosticCode := int32(2353)
 	tests := []struct {
 		name      string
 		directive contentmapper.MappedDiagnosticDirective
@@ -601,6 +625,16 @@ func TestMappedDiagnosticDirectiveJSON(t *testing.T) {
 				Policy: contentmapper.DiagnosticDirectivePolicyIgnore,
 			},
 			want: `[0,9,8,14,0]`,
+		},
+		{
+			name: "selected ignore",
+			directive: contentmapper.MappedDiagnosticDirective{
+				VirtualStart: 8, VirtualEnd: 14,
+				OriginalStart: 0, OriginalLength: 9,
+				Policy:         contentmapper.DiagnosticDirectivePolicyIgnore,
+				DiagnosticCode: &diagnosticCode,
+			},
+			want: `[0,9,8,14,0,2353]`,
 		},
 		{
 			name: "expect",
@@ -877,18 +911,19 @@ func TestRunnerLeaseLifecycle(t *testing.T) {
 
 // recordingMapper captures project configuration and lifecycle requests for host protocol tests.
 type recordingMapper struct {
-	mu                sync.Mutex
-	received          string
-	receivedOptions   string
-	receivedLocale    string
-	projectHandles    []string
-	closedHandles     []string
-	transformHandle   string
-	transformParams   string
-	watchedFiles      []string
-	configIdentity    *string
-	dynamicConfig     bool
-	optionDiagnostics []contentmapper.OptionDiagnosticResult
+	mu                    sync.Mutex
+	received              string
+	receivedOptions       string
+	receivedLocale        string
+	receivedCodeSelectors bool
+	projectHandles        []string
+	closedHandles         []string
+	transformHandle       string
+	transformParams       string
+	watchedFiles          []string
+	configIdentity        *string
+	dynamicConfig         bool
+	optionDiagnostics     []contentmapper.OptionDiagnosticResult
 }
 
 type blockingMapper struct {
@@ -917,6 +952,7 @@ func (m *recordingMapper) HandleRequest(ctx context.Context, method string, para
 		}
 		m.mu.Lock()
 		m.receivedLocale = p.Locale
+		m.receivedCodeSelectors = p.Capabilities.DiagnosticDirectiveCodeSelectors
 		m.mu.Unlock()
 		return contentmapper.InitializeResult{PositionEncoding: contentmapper.PositionEncodingUTF8, DiagnosticSource: "mapper"}, nil
 	case contentmapper.MethodOpenProject:
@@ -1302,6 +1338,7 @@ func TestRunnerForwardsProjectOptions(t *testing.T) {
 	assert.Equal(t, mapper.received, string(want))
 	assert.Equal(t, mapper.receivedOptions, `{"strictTemplates":true}`)
 	assert.Equal(t, mapper.receivedLocale, "cs-CZ")
+	assert.Assert(t, mapper.receivedCodeSelectors)
 	assert.Assert(t, !strings.Contains(mapper.transformParams, `"options"`))
 	assert.Assert(t, !strings.Contains(mapper.transformParams, `"compilerOptions"`))
 }

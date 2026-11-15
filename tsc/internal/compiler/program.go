@@ -1744,7 +1744,8 @@ func applyContentMapperDiagnosticDirectives(sourceFile *ast.SourceFile, diags []
 			return false
 		}
 		for i, directive := range directives {
-			if diag.Pos() >= directive.VirtualRange.Pos() && diag.Pos() < directive.VirtualRange.End() {
+			if diag.Pos() >= directive.VirtualRange.Pos() && diag.Pos() < directive.VirtualRange.End() &&
+				(directive.DiagnosticCode == 0 || diag.Code() == directive.DiagnosticCode) {
 				used[i] = true
 				return true
 			}
