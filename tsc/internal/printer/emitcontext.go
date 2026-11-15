@@ -19,6 +19,7 @@ type EmitContext struct {
 	textSource    map[*ast.StringLiteralNode]*ast.Node
 	original      map[*ast.Node]*ast.Node
 	emitNodes     core.LinkStore[*ast.Node, emitNode]
+	display       map[*ast.Node]display
 	assignedName  map[*ast.Node]*ast.Expression
 	classThis     map[*ast.Node]*ast.IdentifierNode
 	varScopeStack core.Stack[*varScope]
@@ -445,6 +446,9 @@ func (c *EmitContext) SetOriginalEx(node *ast.Node, original *ast.Node, allowOve
 		if emitNode := c.emitNodes.TryGet(original); emitNode != nil {
 			c.emitNodes.Get(node).copyFrom(emitNode)
 		}
+		if d, ok := c.display[original]; ok {
+			c.display[node] = d
+		}
 	} else if !allowOverwrite && existing != original {
 		panic("Original node already set.")
 	} else if allowOverwrite {
@@ -534,7 +538,6 @@ type emitNode struct {
 	leadingComments           []SynthesizedComment
 	trailingComments          []SynthesizedComment
 	typeNode                  *ast.TypeNode
-	display                   *display
 	snippetElement            *SnippetElement
 }
 
@@ -547,7 +550,6 @@ func (e *emitNode) copyFrom(source *emitNode) {
 	e.tokenSourceMapRanges = maps.Clone(source.tokenSourceMapRanges)
 	e.helpers = slices.Clone(source.helpers)
 	e.externalHelpersModuleName = source.externalHelpersModuleName
-	e.display = source.display
 	if source.snippetElement != nil {
 		snippetElement := *source.snippetElement
 		e.snippetElement = &snippetElement
@@ -556,8 +558,7 @@ func (e *emitNode) copyFrom(source *emitNode) {
 
 // display records how the printer shows a synthesized node to a user. The
 // syntax tree keeps canonical children, so declarations and API consumers
-// never see display-only syntax. Clones share entries, so each setter stores
-// a new entry.
+// never see display-only syntax.
 type display struct {
 	node          *ast.Node
 	typeArguments *ast.TypeArgumentList
@@ -567,27 +568,34 @@ type display struct {
 // instantiation expression f<string>.C for a type reference or a constrained
 // type parameter for a type argument.
 func (c *EmitContext) DisplayNode(node *ast.Node) *ast.Node {
-	if emitNode := c.emitNodes.TryGet(node); emitNode != nil && emitNode.display != nil {
-		return emitNode.display.node
-	}
-	return nil
+	return c.display[node].node
 }
 
 func (c *EmitContext) SetDisplayNode(node *ast.Node, displayNode *ast.Node) {
-	c.emitNodes.Get(node).display = &display{node: displayNode}
+	c.setDisplay(node, display{node: displayNode})
 }
 
 // DisplayTypeArguments returns the instantiated type arguments printed in
 // place of a signature's type parameters.
 func (c *EmitContext) DisplayTypeArguments(node *ast.Node) *ast.TypeArgumentList {
-	if emitNode := c.emitNodes.TryGet(node); emitNode != nil && emitNode.display != nil {
-		return emitNode.display.typeArguments
-	}
-	return nil
+	return c.display[node].typeArguments
 }
 
 func (c *EmitContext) SetDisplayTypeArguments(node *ast.Node, typeArguments *ast.TypeArgumentList) {
-	c.emitNodes.Get(node).display = &display{typeArguments: typeArguments}
+	c.setDisplay(node, display{typeArguments: typeArguments})
+}
+
+func (c *EmitContext) setDisplay(node *ast.Node, d display) {
+	if c.display == nil {
+		c.display = make(map[*ast.Node]display)
+	}
+	c.display[node] = d
+}
+
+// ClearDisplay removes all display entries, so they are not retained once
+// their nodes have been printed.
+func (c *EmitContext) ClearDisplay() {
+	clear(c.display)
 }
 
 func (c *EmitContext) EmitFlags(node *ast.Node) EmitFlags {

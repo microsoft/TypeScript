@@ -288,23 +288,16 @@ func NewNodeBuilderEx(ch *Checker, e *printer.EmitContext, idToSymbol map[*ast.I
 func (c *Checker) getNodeBuilder() (*NodeBuilder, func()) {
 	releaseNodes := func() {
 		c.typeToStringNodebuilder.EmitContext().Factory.ReleaseArenas() // Allow any allocated nodes to be freed if they're no longer in a cache
+		if c.typeToStringNodebuilder.impl.ctx == nil {
+			// Nested operations return during the outermost operation, so only the outermost one clears.
+			c.typeToStringNodebuilder.EmitContext().ClearDisplay()
+		}
 	}
 	if c.typeToStringNodebuilder != nil {
 		return c.typeToStringNodebuilder, releaseNodes
 	}
 	c.typeToStringNodebuilder = c.getNodeBuilderEx(nil /*idToSymbol*/)
 	return c.typeToStringNodebuilder, releaseNodes
-}
-
-// getNodeBuilderForTypeFormat gives hover-only display formatting a builder
-// local to the operation, so the cached builder does not retain its display
-// metadata.
-func (c *Checker) getNodeBuilderForTypeFormat(flags TypeFormatFlags) (*NodeBuilder, func()) {
-	if flags&(TypeFormatFlagsWriteTypeArgumentsOfSignature|TypeFormatFlagsUseInstantiationExpressions) == 0 {
-		return c.getNodeBuilder()
-	}
-	builder := c.getNodeBuilderEx(nil)
-	return builder, builder.EmitContext().Factory.ReleaseArenas
 }
 
 func (c *Checker) getNodeBuilderEx(idToSymbol map[*ast.IdentifierNode]*ast.Symbol) *NodeBuilder {

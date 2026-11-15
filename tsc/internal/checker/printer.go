@@ -73,7 +73,7 @@ func (c *Checker) typeToStringEx(t *Type, enclosingDeclaration *ast.Node, flags 
 	if noTruncation {
 		combinedFlags = combinedFlags | nodebuilder.FlagsNoTruncation
 	}
-	nodeBuilder, release := c.getNodeBuilderForTypeFormat(flags)
+	nodeBuilder, release := c.getNodeBuilder()
 	defer release()
 	oldVerbosity := nodeBuilder.verbosity
 	nodeBuilder.verbosity = vc
@@ -201,7 +201,7 @@ func (c *Checker) signatureToStringEx(signature *Signature, enclosingDeclaration
 		}
 	}
 
-	nodeBuilder, release := c.getNodeBuilderForTypeFormat(flags)
+	nodeBuilder, release := c.getNodeBuilder()
 	defer release()
 	oldVerbosity := nodeBuilder.verbosity
 	nodeBuilder.verbosity = vc

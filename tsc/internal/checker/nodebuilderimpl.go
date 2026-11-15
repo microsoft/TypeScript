@@ -64,6 +64,7 @@ type moduleSpecifierResult struct {
 
 type NodeBuilderContext struct {
 	host                            Host
+	usedDisplay                     bool // Results containing display notation are not cached
 	tracker                         nodebuilder.SymbolTracker
 	approximateLength               int
 	maxTruncationLength             int
@@ -314,14 +315,14 @@ func (b *NodeBuilderImpl) appendReferenceToType(root *ast.TypeNode, ref *ast.Typ
 		if rootDisplay != nil && ast.IsExpressionWithTypeArguments(rootDisplay) ||
 			refDisplay != nil && ast.IsExpressionWithTypeArguments(refDisplay) {
 			display := b.appendReferenceToExpression(b.referenceToExpression(typeRef), b.referenceToExpression(ref.AsTypeReferenceNode()))
-			b.e.SetDisplayNode(result, display)
+			b.setDisplayNode(result, display)
 		} else if rootDisplay != nil ||
 			b.ctx.flags&nodebuilder.FlagsUseInstantiationExpressions != 0 && typeRef.TypeArguments != nil && len(typeRef.TypeArguments.Nodes) != 0 {
 			// The display omits the inner reference's type arguments; the
 			// type reference keeps them.
 			displayRef := b.createAccessExpression(ref.AsTypeReferenceNode().TypeName)
 			display := b.appendReferenceToExpression(b.referenceToExpression(typeRef), displayRef)
-			b.e.SetDisplayNode(result, display)
+			b.setDisplayNode(result, display)
 		}
 		return result
 	}
@@ -766,7 +767,7 @@ func (b *NodeBuilderImpl) symbolToTypeNode(symbol *ast.Symbol, mask ast.SymbolFl
 	result := b.f.NewTypeReferenceNode(entityName, typeArguments)
 	if b.ctx.flags&nodebuilder.FlagsUseInstantiationExpressions != 0 && ast.IsQualifiedName(entityName) &&
 		(b.e.DisplayNode(entityName) != nil || typeArguments != nil && len(typeArguments.Nodes) != 0) {
-		b.e.SetDisplayNode(result, b.createExpressionWithTypeArguments(b.createAccessExpression(entityName), typeArguments))
+		b.setDisplayNode(result, b.createExpressionWithTypeArguments(b.createAccessExpression(entityName), typeArguments))
 	}
 	return result
 }
@@ -873,7 +874,7 @@ func (b *NodeBuilderImpl) createAccessFromSymbolChain(chain []*ast.Symbol, index
 			if index < len(chain)-1 {
 				expr = b.createExpressionWithTypeArguments(expr, typeParameterNodes)
 			}
-			b.e.SetDisplayNode(name, expr)
+			b.setDisplayNode(name, expr)
 		}
 		return name
 	}
@@ -1751,7 +1752,7 @@ func (b *NodeBuilderImpl) typeParametersToTypeArgumentNodes(symbol *ast.Symbol) 
 	return core.Map(b.getTypeParametersOfSymbol(symbol), func(parameter *Type) *ast.TypeNode {
 		declaration := b.typeParameterToDeclaration(parameter)
 		reference := b.f.NewTypeReferenceNode(declaration.Name(), nil)
-		b.e.SetDisplayNode(reference, declaration)
+		b.setDisplayNode(reference, declaration)
 		return reference
 	})
 }
@@ -2029,7 +2030,7 @@ func (b *NodeBuilderImpl) signatureToSignatureDeclarationHelper(signature *Signa
 
 	// The printer shows the instantiated arguments in place of the type parameters.
 	if len(typeArguments) != 0 {
-		b.e.SetDisplayTypeArguments(node, b.f.NewNodeList(typeArguments))
+		b.setDisplayTypeArguments(node, b.f.NewNodeList(typeArguments))
 	}
 
 	cleanup()
@@ -3370,9 +3371,15 @@ func (b *NodeBuilderImpl) visitAndTransformType(t *Type, transform func(b *NodeB
 	prevTrackedSymbols := b.ctx.trackedSymbols
 	b.ctx.trackedSymbols = nil
 	startLength := b.ctx.approximateLength
+	usedDisplay := b.ctx.usedDisplay
+	b.ctx.usedDisplay = false
 	result := transform(b, t)
 	addedLength := b.ctx.approximateLength - startLength
-	if canUseCache && !b.ctx.reportedDiagnostic && !b.ctx.encounteredError {
+	// Display entries are cleared after each operation, so a cached copy of
+	// this result could not print them.
+	resultUsedDisplay := b.ctx.usedDisplay
+	b.ctx.usedDisplay = usedDisplay || resultUsedDisplay
+	if canUseCache && !resultUsedDisplay && !b.ctx.reportedDiagnostic && !b.ctx.encounteredError {
 		links := b.links.Get(b.ctx.enclosingDeclaration)
 		if links.serializedTypes == nil {
 			links.serializedTypes = make(map[CompositeTypeCacheIdentity]*SerializedTypeEntry)
@@ -3757,6 +3764,16 @@ func (b *NodeBuilderImpl) newIdentifier(text string, symbol *ast.Symbol) *ast.No
 		b.idToSymbol[id] = symbol
 	}
 	return id
+}
+
+func (b *NodeBuilderImpl) setDisplayNode(node *ast.Node, display *ast.Node) {
+	b.e.SetDisplayNode(node, display)
+	b.ctx.usedDisplay = true
+}
+
+func (b *NodeBuilderImpl) setDisplayTypeArguments(node *ast.Node, typeArguments *ast.TypeArgumentList) {
+	b.e.SetDisplayTypeArguments(node, typeArguments)
+	b.ctx.usedDisplay = true
 }
 
 func (b *NodeBuilderImpl) createAccessExpression(node *ast.EntityName) *ast.Expression {
