@@ -149,6 +149,7 @@ import {
     test,
 } from "node:test";
 import { fileURLToPath } from "node:url";
+import { Program as AsyncProgram } from "../../src/api/async/api.ts";
 import {
     getNodeId,
     parseNodeHandleFromCompiler,
@@ -168,6 +169,33 @@ import {
 } from "./api.testUtils.ts";
 
 const concurrency = areTestsFiltered();
+
+describe("Program source file requests", { concurrency }, () => {
+    test("concurrent getSourceFile calls share an in-flight request", async () => {
+        let resolveFetch!: (value: undefined) => void;
+        const fetch = new Promise<undefined>(resolve => resolveFetch = resolve);
+        let requestCount = 0;
+        const client = {
+            apiRequestBinary: async () => {
+                requestCount++;
+                return fetch;
+            },
+        };
+        const sourceFileCache = { getRetained: () => undefined };
+        const project = {
+            id: "project",
+            handle: "project",
+            api: { client, sourceFileCache },
+        } as unknown as Project;
+        const program = new AsyncProgram(1, project, fileName => fileName as PathKey);
+
+        const calls = Array.from({ length: 10 }, () => program.getSourceFile("/same.ts"));
+        assert.equal(requestCount, 1);
+        resolveFetch(undefined);
+        assert.deepEqual(await Promise.all(calls), Array(10).fill(undefined));
+        assert.equal(requestCount, 1);
+    });
+});
 
 describe("API", { concurrency }, () => {
     test("getCurrentLanguageServerSnapshot is LSP-only", async () => {

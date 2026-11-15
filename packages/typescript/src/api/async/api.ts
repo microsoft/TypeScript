@@ -1751,6 +1751,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
     private readonly project: Project<Id>;
     private readonly toPath: (fileName: string, basePath?: string) => PathKey;
     private readonly decoder = new Wtf8Decoder();
+    private readonly sourceFileRequests = new Map<PathKey, Promise<SourceFile | undefined>>();
     private readonly sourceFileMetadataCache = new Map<PathKey, Promise<SourceFileMetadata | undefined>>();
     private ownedSnapshot: Snapshot | undefined;
     private disposePromise: Promise<void> | undefined;
@@ -1823,7 +1824,21 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
     async getSourceFile(file: DocumentIdentifier): Promise<SourceFile | undefined> {
         const fileName = resolveFileName(file);
         const path = this.pathKeyForFileName(fileName);
-        return this.getSourceFileWorker(file, path);
+        return this.getSourceFileRequest(file, path);
+    }
+
+    private getSourceFileRequest(file: DocumentIdentifier, path: PathKey): Promise<SourceFile | undefined> {
+        const retained = this.sourceFileCache.getRetained(path, this.snapshotId, this.project.id);
+        if (retained) {
+            return Promise.resolve(retained as unknown as SourceFile);
+        }
+
+        let request = this.sourceFileRequests.get(path);
+        if (request === undefined) {
+            request = this.getSourceFileWorker(file, path).finally(() => this.sourceFileRequests.delete(path));
+            this.sourceFileRequests.set(path, request);
+        }
+        return request;
     }
 
     /**
@@ -1832,16 +1847,10 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
     getSourceFileByPath(path: PathKey): Promise<SourceFile | undefined> {
         // The wire format is a string, but the cache key remains the supplied
         // PathKey and is never treated as a RootedPath.
-        return this.getSourceFileWorker(path, path);
+        return this.getSourceFileRequest(path, path);
     }
 
     private async getSourceFileWorker(file: DocumentIdentifier, path: PathKey): Promise<SourceFile | undefined> {
-        // Check if we already have a retained cache entry for this (snapshot, project) pair
-        const retained = this.sourceFileCache.getRetained(path, this.snapshotId, this.project.id);
-        if (retained) {
-            return retained as unknown as SourceFile;
-        }
-
         // Fetch from server
         const binaryData = await this.client.apiRequestBinary("getSourceFile", {
             snapshot: this.snapshotId,
