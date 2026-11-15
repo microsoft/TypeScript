@@ -1,0 +1,50 @@
+//// [tests/cases/compiler/useBeforeDeclaration_declareRedeclaration.ts] ////
+
+=== useBeforeDeclaration_declareRedeclaration.ts ===
+class Base {
+>Base : Base
+
+    b: 1 = 1;
+>b : 1
+>1 : 1
+}
+
+class Plain extends Base {
+>Plain : Plain
+>Base : Base
+
+    d = this.b;
+>d : 1
+>this.b : 1
+>this : this
+>b : 1
+}
+
+class Narrowed extends Base {
+>Narrowed : Narrowed
+>Base : Base
+
+    declare b: 1;
+>b : 1
+
+    d = this.b;
+>d : 1
+>this.b : 1
+>this : this
+>b : 1
+}
+
+class Redeclared extends Base {
+>Redeclared : Redeclared
+>Base : Base
+
+    b: 1;
+>b : 1
+
+    d = this.b;
+>d : 1
+>this.b : 1
+>this : this
+>b : 1
+}
+

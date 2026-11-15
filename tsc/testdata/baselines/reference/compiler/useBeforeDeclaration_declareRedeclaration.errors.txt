@@ -1,0 +1,31 @@
+useBeforeDeclaration_declareRedeclaration.ts(15,5): error TS2564: Property 'b' has no initializer and is not definitely assigned in the constructor.
+useBeforeDeclaration_declareRedeclaration.ts(15,5): error TS2612: Property 'b' will overwrite the base property in 'Base'. If this is intentional, add an initializer. Otherwise, add a 'declare' modifier or remove the redundant declaration.
+useBeforeDeclaration_declareRedeclaration.ts(16,14): error TS2729: Property 'b' is used before its initialization.
+
+
+==== useBeforeDeclaration_declareRedeclaration.ts (3 errors) ====
+    class Base {
+        b: 1 = 1;
+    }
+    
+    class Plain extends Base {
+        d = this.b;
+    }
+    
+    class Narrowed extends Base {
+        declare b: 1;
+        d = this.b;
+    }
+    
+    class Redeclared extends Base {
+        b: 1;
+        ~
+!!! error TS2564: Property 'b' has no initializer and is not definitely assigned in the constructor.
+        ~
+!!! error TS2612: Property 'b' will overwrite the base property in 'Base'. If this is intentional, add an initializer. Otherwise, add a 'declare' modifier or remove the redundant declaration.
+        d = this.b;
+                 ~
+!!! error TS2729: Property 'b' is used before its initialization.
+!!! related TS2728 useBeforeDeclaration_declareRedeclaration.ts:15:5: 'b' is declared here.
+    }
+    

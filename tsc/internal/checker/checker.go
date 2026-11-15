@@ -11990,7 +11990,7 @@ func (c *Checker) checkPropertyNotUsedBeforeDeclaration(prop *ast.Symbol, node *
 		!(ast.IsAccessExpression(node) && ast.IsAccessExpression(node.Expression())) &&
 		!c.isBlockScopedNameDeclaredBeforeUse(valueDeclaration, right) &&
 		!(ast.IsMethodDeclaration(valueDeclaration) && c.getCombinedModifierFlagsCached(valueDeclaration)&ast.ModifierFlagsStatic != 0) &&
-		(c.compilerOptions.GetUseDefineForClassFields() || !c.isPropertyDeclaredInAncestorClass(prop)) {
+		(!c.isPropertyDeclaredInAncestorClass(prop) || c.compilerOptions.GetUseDefineForClassFields() && valueDeclaration.ModifierFlags()&ast.ModifierFlagsAmbient == 0) {
 		diagnostic = c.error(right, diagnostics.Property_0_is_used_before_its_initialization, declarationName)
 	} else if ast.IsClassDeclaration(valueDeclaration) && !ast.IsTypeReferenceNode(node.Parent) && valueDeclaration.Flags&ast.NodeFlagsAmbient == 0 && !c.isBlockScopedNameDeclaredBeforeUse(valueDeclaration, right) {
 		diagnostic = c.error(right, diagnostics.Class_0_used_before_its_declaration, declarationName)

@@ -1,0 +1,49 @@
+//// [tests/cases/compiler/useBeforeDeclaration_declareRedeclaration.ts] ////
+
+=== useBeforeDeclaration_declareRedeclaration.ts ===
+class Base {
+>Base : Symbol(Base, Decl(useBeforeDeclaration_declareRedeclaration.ts, 0, 0))
+
+    b: 1 = 1;
+>b : Symbol(Base.b, Decl(useBeforeDeclaration_declareRedeclaration.ts, 0, 12))
+}
+
+class Plain extends Base {
+>Plain : Symbol(Plain, Decl(useBeforeDeclaration_declareRedeclaration.ts, 2, 1))
+>Base : Symbol(Base, Decl(useBeforeDeclaration_declareRedeclaration.ts, 0, 0))
+
+    d = this.b;
+>d : Symbol(Plain.d, Decl(useBeforeDeclaration_declareRedeclaration.ts, 4, 26))
+>this.b : Symbol(Base.b, Decl(useBeforeDeclaration_declareRedeclaration.ts, 0, 12))
+>this : Symbol(Plain, Decl(useBeforeDeclaration_declareRedeclaration.ts, 2, 1))
+>b : Symbol(Base.b, Decl(useBeforeDeclaration_declareRedeclaration.ts, 0, 12))
+}
+
+class Narrowed extends Base {
+>Narrowed : Symbol(Narrowed, Decl(useBeforeDeclaration_declareRedeclaration.ts, 6, 1))
+>Base : Symbol(Base, Decl(useBeforeDeclaration_declareRedeclaration.ts, 0, 0))
+
+    declare b: 1;
+>b : Symbol(Narrowed.b, Decl(useBeforeDeclaration_declareRedeclaration.ts, 8, 29))
+
+    d = this.b;
+>d : Symbol(Narrowed.d, Decl(useBeforeDeclaration_declareRedeclaration.ts, 9, 17))
+>this.b : Symbol(Narrowed.b, Decl(useBeforeDeclaration_declareRedeclaration.ts, 8, 29))
+>this : Symbol(Narrowed, Decl(useBeforeDeclaration_declareRedeclaration.ts, 6, 1))
+>b : Symbol(Narrowed.b, Decl(useBeforeDeclaration_declareRedeclaration.ts, 8, 29))
+}
+
+class Redeclared extends Base {
+>Redeclared : Symbol(Redeclared, Decl(useBeforeDeclaration_declareRedeclaration.ts, 11, 1))
+>Base : Symbol(Base, Decl(useBeforeDeclaration_declareRedeclaration.ts, 0, 0))
+
+    b: 1;
+>b : Symbol(Redeclared.b, Decl(useBeforeDeclaration_declareRedeclaration.ts, 13, 31))
+
+    d = this.b;
+>d : Symbol(Redeclared.d, Decl(useBeforeDeclaration_declareRedeclaration.ts, 14, 9))
+>this.b : Symbol(Redeclared.b, Decl(useBeforeDeclaration_declareRedeclaration.ts, 13, 31))
+>this : Symbol(Redeclared, Decl(useBeforeDeclaration_declareRedeclaration.ts, 11, 1))
+>b : Symbol(Redeclared.b, Decl(useBeforeDeclaration_declareRedeclaration.ts, 13, 31))
+}
+

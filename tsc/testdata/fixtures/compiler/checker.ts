@@ -35094,7 +35094,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             && !(isAccessExpression(node) && isAccessExpression(node.expression))
             && !isBlockScopedNameDeclaredBeforeUse(valueDeclaration, right)
             && !(isMethodDeclaration(valueDeclaration) && getCombinedModifierFlagsCached(valueDeclaration) & ModifierFlags.Static)
-            && (useDefineForClassFields || !isPropertyDeclaredInAncestorClass(prop))
+            && (!isPropertyDeclaredInAncestorClass(prop) || useDefineForClassFields && !(getEffectiveModifierFlags(valueDeclaration) & ModifierFlags.Ambient))
         ) {
             diagnosticMessage = error(right, Diagnostics.Property_0_is_used_before_its_initialization, declarationName);
         }
