@@ -240,10 +240,16 @@ func (l *LanguageService) updateImportsForFileRename(program *compiler.Program, 
 			}
 		}
 
+		seenImportEdits := make(map[core.TextRange]string)
 		for _, importStringLiteral := range sourceFile.Imports() {
 			updated := l.getUpdatedImportSpecifier(program, checker, sourceFile, importStringLiteral, oldToNew, movedFiles, newImportFromPath, fileMoved, moduleSpecifierPreferences)
 			if updated != "" && updated != importStringLiteral.Text() {
-				changeTracker.ReplaceTextRangeWithText(sourceFile, createStringTextRange(sourceFile, importStringLiteral), updated)
+				textRange := createStringTextRange(sourceFile, importStringLiteral)
+				if previous, ok := seenImportEdits[textRange]; ok && previous == updated {
+					continue
+				}
+				seenImportEdits[textRange] = updated
+				changeTracker.ReplaceTextRangeWithText(sourceFile, textRange, updated)
 			}
 		}
 	}
