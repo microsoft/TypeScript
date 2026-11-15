@@ -1125,7 +1125,7 @@ func (p *Printer) emitIdentifierText(node *ast.Identifier) {
 	} else {
 		p.write(text)
 	}
-	p.emitTypeArguments(node.AsNode(), p.emitContext.DisplayTypeArguments(node.AsNode()))
+	p.emitDisplayTypeArguments(node.AsNode(), p.emitContext.DisplayTypeArguments(node.AsNode()))
 }
 
 func (p *Printer) emitIdentifierName(node *ast.Identifier) {
@@ -1456,12 +1456,7 @@ func (p *Printer) emitTypeParameter(node *ast.TypeParameterDeclaration) {
 }
 
 func (p *Printer) emitTypeParameterDeclarationNode(node *ast.TypeParameterDeclarationNode) {
-	// Display type arguments can include type parameter declarations.
-	if ast.IsTypeParameterDeclaration(node) {
-		p.emitTypeParameter(node.AsTypeParameterDeclaration())
-	} else {
-		p.emitTypeArgument(node)
-	}
+	p.emitTypeParameter(node.AsTypeParameterDeclaration())
 }
 
 func (p *Printer) emitParameterName(node *ast.BindingName) {
@@ -1517,7 +1512,7 @@ func (p *Printer) emitTypeParameters(parentNode *ast.Node, nodes *ast.TypeParame
 
 func (p *Printer) emitSignatureTypeArgumentsOrParameters(node *ast.Node) {
 	if arguments := p.emitContext.DisplayTypeArguments(node); arguments != nil {
-		p.emitTypeArguments(node, arguments)
+		p.emitDisplayTypeArguments(node, arguments)
 	} else {
 		p.emitTypeParameters(node, node.FunctionLikeData().TypeParameters)
 	}
@@ -1902,7 +1897,24 @@ func (p *Printer) emitTypeArguments(parentNode *ast.Node, nodes *ast.TypeArgumen
 	if nodes == nil {
 		return
 	}
-	p.emitList((*Printer).emitTypeParameterDeclarationNode, parentNode, nodes, LFTypeArguments /*|core.IfElse(p.shouldAllowTrailingComma(parentNode, nodes), LFAllowTrailingComma, LFNone)*/) // TODO: preserve trailing comma after Strada migration
+	p.emitList((*Printer).emitTypeArgument, parentNode, nodes, LFTypeArguments /*|core.IfElse(p.shouldAllowTrailingComma(parentNode, nodes), LFAllowTrailingComma, LFNone)*/) // TODO: preserve trailing comma after Strada migration
+}
+
+// emitDisplayTypeArguments prints type arguments recorded for display. They can
+// include type parameter declarations.
+func (p *Printer) emitDisplayTypeArguments(parentNode *ast.Node, nodes *ast.NodeList) {
+	if nodes == nil {
+		return
+	}
+	p.emitList((*Printer).emitDisplayTypeArgument, parentNode, nodes, LFTypeArguments)
+}
+
+func (p *Printer) emitDisplayTypeArgument(node *ast.Node) {
+	if ast.IsTypeParameterDeclaration(node) {
+		p.emitTypeParameter(node.AsTypeParameterDeclaration())
+	} else {
+		p.emitTypeArgument(node)
+	}
 }
 
 func (p *Printer) emitTypeReference(node *ast.TypeReferenceNode) {
