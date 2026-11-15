@@ -456,7 +456,7 @@ func (ch *objectRestSpreadTransformer) visitForOftatement(node *ast.ForInOrOfSta
 			}
 			if ast.IsBlock(node.Statement) {
 				for _, statement := range node.Statement.Statements() {
-					visited := ch.Visitor().VisitEachChild(statement)
+					visited := ch.Visitor().VisitNode(statement)
 					if visited != nil {
 						statements = append(statements, visited)
 					}
@@ -464,7 +464,7 @@ func (ch *objectRestSpreadTransformer) visitForOftatement(node *ast.ForInOrOfSta
 				bodyLocation = node.Statement.Loc
 				statementsLocation = node.Statement.StatementList().Loc
 			} else if node.Statement != nil {
-				statements = append(statements, ch.Visitor().VisitEachChild(node.Statement))
+				statements = append(statements, ch.Visitor().VisitNode(node.Statement))
 				bodyLocation = node.Statement.Loc
 				statementsLocation = node.Statement.Loc
 			}
