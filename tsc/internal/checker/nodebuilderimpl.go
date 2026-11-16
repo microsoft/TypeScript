@@ -64,7 +64,6 @@ type moduleSpecifierResult struct {
 
 type NodeBuilderContext struct {
 	host                            Host
-	usedDisplay                     bool // Results with display type arguments are not cached
 	tracker                         nodebuilder.SymbolTracker
 	approximateLength               int
 	maxTruncationLength             int
@@ -309,7 +308,7 @@ func (b *NodeBuilderImpl) appendReferenceToType(root *ast.TypeNode, ref *ast.Typ
 		if b.ctx.flags&nodebuilder.FlagsUseInstantiationExpressions != 0 && typeRef.TypeArguments != nil && len(typeRef.TypeArguments.Nodes) != 0 {
 			// The root's type arguments belong to its last name, ahead of the
 			// appended names.
-			b.setDisplayTypeArguments(getLastIdentifier(typeName), typeRef.TypeArguments)
+			b.e.SetDisplayTypeArguments(getLastIdentifier(typeName), typeRef.TypeArguments)
 		}
 		for _, id := range getAccessStack(ref) {
 			typeName = b.f.NewQualifiedName(typeName, id)
@@ -837,7 +836,7 @@ func (b *NodeBuilderImpl) createAccessFromSymbolChain(chain []*ast.Symbol, index
 	if index > stopper {
 		lhs := b.createAccessFromSymbolChain(chain, index-1, stopper, overrideTypeArguments)
 		if b.ctx.flags&nodebuilder.FlagsUseInstantiationExpressions != 0 && index < len(chain)-1 && typeParameterNodes != nil && len(typeParameterNodes.Nodes) != 0 {
-			b.setDisplayTypeArguments(identifier, typeParameterNodes)
+			b.e.SetDisplayTypeArguments(identifier, typeParameterNodes)
 		}
 		return b.f.NewQualifiedName(lhs, identifier)
 	}
@@ -1992,7 +1991,7 @@ func (b *NodeBuilderImpl) signatureToSignatureDeclarationHelper(signature *Signa
 
 	if len(typeArguments) != 0 {
 		// The printer shows these in place of the type parameters.
-		b.setDisplayTypeArguments(node, b.f.NewNodeList(typeArguments))
+		b.e.SetDisplayTypeArguments(node, b.f.NewNodeList(typeArguments))
 	}
 
 	cleanup()
@@ -3290,7 +3289,10 @@ func (b *NodeBuilderImpl) visitAndTransformType(t *Type, transform func(b *NodeB
 		key.inferTypeParameters = getTypeListKey(b.ctx.inferTypeParameters)
 	}
 	// Don't rely on type cache if we're expanding a type, because we need to compute `canIncreaseExpansionDepth`.
-	canUseCache := b.ctx.maxExpansionDepth < 0
+	// Display type arguments are cleared after each operation, and outer type
+	// parameters are written only at their first occurrence in an operation,
+	// so skip the cache when display flags are set.
+	canUseCache := b.ctx.maxExpansionDepth < 0 && b.ctx.flags&displayFlags == 0
 	if canUseCache && b.ctx.enclosingDeclaration != nil && b.links.Has(b.ctx.enclosingDeclaration) {
 		links := b.links.Get(b.ctx.enclosingDeclaration)
 		cachedResult, ok := links.serializedTypes[key]
@@ -3333,15 +3335,9 @@ func (b *NodeBuilderImpl) visitAndTransformType(t *Type, transform func(b *NodeB
 	prevTrackedSymbols := b.ctx.trackedSymbols
 	b.ctx.trackedSymbols = nil
 	startLength := b.ctx.approximateLength
-	usedDisplay := b.ctx.usedDisplay
-	b.ctx.usedDisplay = false
 	result := transform(b, t)
 	addedLength := b.ctx.approximateLength - startLength
-	// Display type arguments are cleared after each operation, so a cached
-	// copy of this result could not print them.
-	resultUsedDisplay := b.ctx.usedDisplay
-	b.ctx.usedDisplay = usedDisplay || resultUsedDisplay
-	if canUseCache && !resultUsedDisplay && !b.ctx.reportedDiagnostic && !b.ctx.encounteredError {
+	if canUseCache && !b.ctx.reportedDiagnostic && !b.ctx.encounteredError {
 		links := b.links.Get(b.ctx.enclosingDeclaration)
 		if links.serializedTypes == nil {
 			links.serializedTypes = make(map[CompositeTypeCacheIdentity]*SerializedTypeEntry)
@@ -3728,14 +3724,12 @@ func (b *NodeBuilderImpl) newIdentifier(text string, symbol *ast.Symbol) *ast.No
 	return id
 }
 
-func (b *NodeBuilderImpl) setDisplayTypeArguments(node *ast.Node, typeArguments *ast.NodeList) {
-	b.e.SetDisplayTypeArguments(node, typeArguments)
-	b.ctx.usedDisplay = true
-}
+// displayFlags make the node builder record display type arguments.
+const displayFlags = nodebuilder.FlagsUseInstantiationExpressions | nodebuilder.FlagsWriteTypeArgumentsOfSignature | nodebuilder.FlagsWriteTypeParametersInQualifiedName
 
 func (b *NodeBuilderImpl) setDisplayTypeArgumentsIfAny(node *ast.Node, typeArguments *ast.NodeList) {
 	if typeArguments != nil && len(typeArguments.Nodes) != 0 {
-		b.setDisplayTypeArguments(node, typeArguments)
+		b.e.SetDisplayTypeArguments(node, typeArguments)
 	}
 }
 
@@ -3746,7 +3740,7 @@ func (b *NodeBuilderImpl) referenceTypeArguments(name *ast.EntityName, typeArgum
 	if typeArguments == nil || !core.Some(typeArguments.Nodes, ast.IsTypeParameterDeclaration) {
 		return typeArguments
 	}
-	b.setDisplayTypeArguments(getLastIdentifier(name), typeArguments)
+	b.e.SetDisplayTypeArguments(getLastIdentifier(name), typeArguments)
 	return nil
 }
 
