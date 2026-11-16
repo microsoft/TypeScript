@@ -203,7 +203,7 @@ func (l *LanguageService) getRenameInfoForNode(ctx context.Context, newName stri
 		return RenameInfo{}, false
 	}
 
-	return getRenameInfoSuccess(node, sourceFile, ch.SymbolToString(symbol), l.converters), true
+	return getRenameInfoSuccess(node, sourceFile, symbol.Name(), l.converters), true
 }
 
 func nodeIsEligibleForRename(node *ast.Node) bool {
