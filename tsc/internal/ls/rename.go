@@ -203,7 +203,12 @@ func (l *LanguageService) getRenameInfoForNode(ctx context.Context, newName stri
 		return RenameInfo{}, false
 	}
 
-	return getRenameInfoSuccess(node, sourceFile, symbol.Name(), l.converters), true
+	displayName := symbol.Name()
+	if ast.IsPrivateIdentifier(node) {
+		// symbol.Name() is the internal key for private identifiers.
+		displayName = ch.SymbolToString(symbol)
+	}
+	return getRenameInfoSuccess(node, sourceFile, displayName, l.converters), true
 }
 
 func nodeIsEligibleForRename(node *ast.Node) bool {

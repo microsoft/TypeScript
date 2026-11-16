@@ -74,3 +74,52 @@ func TestPrepareRenamePlaceholderForQuotedProperties(t *testing.T) {
 		assert.Equal(t, res.PrepareRenamePlaceholder.Placeholder, tc.placeholder)
 	}
 }
+
+func TestPrepareRenamePlaceholderForPrivateIdentifier(t *testing.T) {
+	t.Parallel()
+	if !bundled.Embedded {
+		t.Skip("bundled files are not embedded")
+	}
+
+	const text = "class C {\n  #x = 1;\n  m() { return this.#x; }\n}\n"
+	files := map[string]string{
+		"/home/projects/tsconfig.json": `{}`,
+		"/home/projects/repro.ts":      text,
+	}
+	fs := bundled.WrapFS(vfstest.FromMap(files, tspath.CaseInsensitive))
+
+	onServerRequest := func(_ context.Context, req *lsproto.RequestMessage) *lsproto.ResponseMessage {
+		if req.Method == lsproto.MethodClientRegisterCapability || req.Method == lsproto.MethodClientUnregisterCapability {
+			return &lsproto.ResponseMessage{ID: req.ID, JSONRPC: req.JSONRPC, Result: lsproto.Null{}}
+		}
+		return nil
+	}
+
+	client, closeClient := lsptestutil.NewLSPClient(t, lsp.ServerOptions{
+		Err:                io.Discard,
+		Cwd:                "/home/projects",
+		FS:                 fs,
+		DefaultLibraryPath: bundled.LibPath(),
+	}, onServerRequest)
+	t.Cleanup(func() { _ = closeClient() })
+
+	initMsg, _, ok := client.SendRequest(t, lsproto.InitializeInfo, &lsproto.InitializeParams{
+		Capabilities: &lsproto.ClientCapabilities{},
+	})
+	assert.Assert(t, ok && initMsg.AsResponse().Error == nil, "Initialize failed")
+	client.SendNotification(t, lsproto.InitializedInfo, &lsproto.InitializedParams{})
+	<-client.Server.InitComplete()
+
+	uri := lsproto.DocumentUri("file:///home/projects/repro.ts")
+	client.SendNotification(t, lsproto.TextDocumentDidOpenInfo, &lsproto.DidOpenTextDocumentParams{
+		TextDocument: &lsproto.TextDocumentItem{Uri: uri, LanguageId: "typescript", Text: text},
+	})
+
+	msg, res, ok := client.SendRequest(t, lsproto.TextDocumentPrepareRenameInfo, &lsproto.PrepareRenameParams{
+		TextDocument: lsproto.TextDocumentIdentifier{Uri: uri},
+		Position:     lsproto.Position{Line: 1, Character: 3},
+	})
+	assert.Assert(t, ok && msg.AsResponse().Error == nil)
+	assert.Assert(t, res.PrepareRenamePlaceholder != nil)
+	assert.Equal(t, res.PrepareRenamePlaceholder.Placeholder, "#x")
+}
