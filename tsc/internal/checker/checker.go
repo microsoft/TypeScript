@@ -23971,7 +23971,7 @@ func (c *Checker) getTypeFromClassOrInterfaceReference(node *ast.Node, symbol *a
 		if !isJsImplicitAny && (numTypeArguments < minTypeArgumentCount || numTypeArguments > len(typeParameters)) {
 			var message *diagnostics.Message
 
-			missingAugmentsTag := isJs && ast.IsExpressionWithTypeArguments(node) && !ast.IsJSDocAugmentsTag(node.Parent)
+			missingAugmentsTag := isJs && ast.IsExpressionWithTypeArguments(node)
 			if missingAugmentsTag {
 				message = diagnostics.Expected_0_type_arguments_provide_these_with_an_extends_tag
 				if minTypeArgumentCount < len(typeParameters) {

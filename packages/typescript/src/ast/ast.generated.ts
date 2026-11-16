@@ -1232,11 +1232,11 @@ export interface JSDocSeeTag extends JSDocTagBase {
 }
 export interface JSDocImplementsTag extends JSDocTagBase {
     readonly kind: SyntaxKind.JSDocImplementsTag;
-    readonly className: ExpressionWithTypeArguments;
+    readonly className: TypeReferenceNode;
 }
 export interface JSDocAugmentsTag extends JSDocTagBase {
     readonly kind: SyntaxKind.JSDocAugmentsTag;
-    readonly className: ExpressionWithTypeArguments;
+    readonly className: TypeReferenceNode;
 }
 export interface JSDocSatisfiesTag extends JSDocTagBase {
     readonly kind: SyntaxKind.JSDocSatisfiesTag;

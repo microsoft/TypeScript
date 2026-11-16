@@ -1,4 +1,4 @@
-a.js(7,18): error TS8026: Expected Base<T> type arguments; provide these with an '@extends' tag.
+a.js(7,18): error TS2314: Generic type 'Base<T>' requires 1 type argument(s).
 
 
 ==== a.js (1 errors) ====
@@ -10,7 +10,7 @@ a.js(7,18): error TS8026: Expected Base<T> type arguments; provide these with an
     
     /** @implements {Base} */
                      ~~~~
-!!! error TS8026: Expected Base<T> type arguments; provide these with an '@extends' tag.
+!!! error TS2314: Generic type 'Base<T>' requires 1 type argument(s).
     class C {
         value = 1;
     }
