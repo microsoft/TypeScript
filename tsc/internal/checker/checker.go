@@ -17309,7 +17309,7 @@ func (c *Checker) checkDeclarationInitializer(declaration *ast.Node, checkMode C
 				return c.padObjectLiteralType(t, name)
 			}
 		case ast.KindArrayBindingPattern:
-			if isTupleType(t) {
+			if isTupleType(t) && c.isParameterTypedByInitializer(root) {
 				return c.padTupleType(t, name)
 			}
 		}

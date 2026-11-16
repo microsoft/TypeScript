@@ -5,12 +5,6 @@
 /main.ts(5,5): error TS7031: Binding element 'required' implicitly has an 'any' type.
 /main.ts(10,5): error TS7031: Binding element 'required' implicitly has an 'any' type.
 /main.ts(15,5): error TS7031: Binding element 'required' implicitly has an 'any' type.
-/main.ts(33,28): error TS7031: Binding element 'a' implicitly has an 'any' type.
-/main.ts(33,31): error TS7031: Binding element 'b' implicitly has an 'any' type.
-/main.ts(35,62): error TS7031: Binding element 'a' implicitly has an 'any' type.
-/main.ts(35,65): error TS7031: Binding element 'b' implicitly has an 'any' type.
-/main.ts(38,11): error TS7031: Binding element 'a' implicitly has an 'any' type.
-/main.ts(38,14): error TS7031: Binding element 'b' implicitly has an 'any' type.
 /main.ts(39,11): error TS2322: Type 'string | undefined' is not assignable to type 'number'.
   Type 'undefined' is not assignable to type 'number'.
 /main.ts(40,11): error TS2322: Type 'number | undefined' is not assignable to type 'string'.
@@ -57,7 +51,7 @@
         optional = false,
     ] = []) => {};
     
-==== /main.ts (18 errors) ====
+==== /main.ts (12 errors) ====
     import { checkedArray, checkedObject } from "./checked";
     import { uncheckedArray, uncheckedObject } from "./unchecked";
     
@@ -97,23 +91,11 @@
     
     type Arr = (input?: [string?, number?]) => number;
     export const arr1: Arr = ([a, b] = []) => (a ? 1 : 0) + (b ?? 0);
-                               ~
-!!! error TS7031: Binding element 'a' implicitly has an 'any' type.
-                                  ~
-!!! error TS7031: Binding element 'b' implicitly has an 'any' type.
     
     export const arr2: (input: [string?, number?]) => number = ([a, b] = []) => (a ? 1 : 0) + (b ?? 0);
-                                                                 ~
-!!! error TS7031: Binding element 'a' implicitly has an 'any' type.
-                                                                    ~
-!!! error TS7031: Binding element 'b' implicitly has an 'any' type.
     
     declare function takeArr(callback: Arr): void;
     takeArr(([a, b] = []) => {
-              ~
-!!! error TS7031: Binding element 'a' implicitly has an 'any' type.
-                 ~
-!!! error TS7031: Binding element 'b' implicitly has an 'any' type.
         const c: number = a;
               ~
 !!! error TS2322: Type 'string | undefined' is not assignable to type 'number'.
