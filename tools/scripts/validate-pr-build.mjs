@@ -34,6 +34,30 @@ const versionPattern = new RegExp(`^\\d+\\.\\d+\\.\\d+-${prerelease.replaceAll("
 // install-time meaning, so only allow what the packages actually contain.
 const allowedRootEntries = new Set(["LICENSE", "NOTICE.txt", "README.md", "bin", "dist", "enums", "lib", "package.json", "schemas", "vendor"]);
 
+// Many package.json fields affect installation, so only allow the ones in use.
+const allowedManifestFields = new Set([
+    "author",
+    "bin",
+    "bugs",
+    "cpu",
+    "description",
+    "engines",
+    "exports",
+    "files",
+    "gitHead",
+    "homepage",
+    "keywords",
+    "license",
+    "name",
+    "optionalDependencies",
+    "os",
+    "preferUnplugged",
+    "publishConfig",
+    "repository",
+    "type",
+    "version",
+]);
+
 /** @type {Map<string, { packageDir: string; version: string; manifest: any }>} */
 const packages = new Map();
 for (const filename of fs.readdirSync(tarballDir)) {
@@ -68,10 +92,8 @@ for (const filename of fs.readdirSync(tarballDir)) {
     assert.match(version, versionPattern, `${filename}: unexpected version`);
     assert.equal(manifest.gitHead, gitHead, `${filename}: unexpected gitHead`);
     assert.deepEqual(manifest.publishConfig, { access: "public", tag: "pr" }, `${filename}: unexpected publishConfig`);
-    // No lifecycle scripts; installing a PR build must not run code.
-    assert.equal(manifest.scripts, undefined, `${filename}: must not declare scripts`);
-    for (const field of ["dependencies", "peerDependencies", "bundleDependencies", "bundledDependencies"]) {
-        assert.equal(manifest[field], undefined, `${filename}: must not declare ${field}`);
+    for (const field of Object.keys(manifest)) {
+        assert(allowedManifestFields.has(field), `${filename}: unexpected package.json field ${field}`);
     }
     if (name === mainName) {
         assert.deepEqual(manifest.bin, { tsc: "./bin/tsc" }, `${filename}: unexpected bin`);
