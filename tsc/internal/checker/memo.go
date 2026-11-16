@@ -2297,7 +2297,24 @@ func (c *Checker) endInstantiationAbort() {
 
 // A Relation caches the results of comparisons.
 type Relation struct {
+	// results keeps each result with, above relationCostShift, the number of
+	// results computing it from scratch caches, or more, if more than one;
+	// see relationCountLimit.
 	results memoMap[CacheHashKey, RelationComparisonResult]
+}
+
+// Each cost kept above relationCostShift is capped at relationCostCap, which
+// is more than any comparison may cache.
+const (
+	relationCostShift = 7
+	relationCostCap   = 1<<(32-relationCostShift) - 1
+	relationEntryMask = 1<<relationCostShift - 1
+)
+
+// cost returns at least the number of results that computing the result
+// cached for key from scratch caches.
+func (r *Relation) cost(key CacheHashKey) int {
+	return max(int(r.results.memoEntries[key]>>relationCostShift), 1)
 }
 
 func (r *Relation) size() int {
@@ -2306,10 +2323,18 @@ func (r *Relation) size() int {
 
 func (r *Relation) cached(c *Checker, key CacheHashKey) RelationComparisonResult {
 	result, _ := r.results.cached(c, key)
-	return result
+	return result & relationEntryMask
 }
 
 func (r *Relation) set(c *Checker, key CacheHashKey, result RelationComparisonResult) {
+	r.results.set(c, key, result)
+}
+
+// setWithCost caches result for key, which cost caching results.
+func (r *Relation) setWithCost(c *Checker, key CacheHashKey, result RelationComparisonResult, cost int) {
+	if cost > 1 {
+		result |= RelationComparisonResult(min(cost, relationCostCap)) << relationCostShift
+	}
 	r.results.set(c, key, result)
 }
 
