@@ -215,3 +215,15 @@ func formatEncodedSourceFile(encoded []byte) string {
 	}
 	return result.String()
 }
+
+func TestEncodeSourceFileWithNormalizedNumericLiterals(t *testing.T) {
+	t.Parallel()
+	for _, text := range []string{".1", "1e3", "1e9", "1e2", "1", "0"} {
+		sourceFile := parser.ParseSourceFile(ast.SourceFileParseOptions{
+			FileName: "/test.ts",
+			PathKey:  "/test.ts",
+		}, text, core.ScriptKindTS)
+		_, _, err := encoder.EncodeSourceFile(sourceFile)
+		assert.NilError(t, err, "text %q", text)
+	}
+}
