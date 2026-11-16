@@ -60,10 +60,10 @@ const allowedManifestFields = new Set([
 
 /** @type {Map<string, { packageDir: string; version: string; manifest: any }>} */
 const packages = new Map();
-for (const filename of fs.readdirSync(tarballDir)) {
-    if (!filename.endsWith(".tgz")) continue;
-
-    const extractDir = path.join(outputDir, filename.slice(0, -".tgz".length));
+const tarballs = fs.readdirSync(tarballDir).filter(filename => filename.endsWith(".tgz"));
+for (const [index, filename] of tarballs.entries()) {
+    // npm publish parses some paths as git URLs, so don't use the tarball name.
+    const extractDir = path.join(outputDir, String(index));
     fs.mkdirSync(extractDir);
     execFileSync("tar", ["-xzf", path.join(tarballDir, filename), "-C", extractDir, "--no-same-owner", "--no-same-permissions"]);
 
