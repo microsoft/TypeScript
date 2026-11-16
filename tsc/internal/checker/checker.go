@@ -19423,18 +19423,21 @@ func (c *Checker) getPropertiesOfUnionOrIntersectionType(t *Type) []*ast.Symbol 
 		if t.flags&TypeFlagsUnion != 0 {
 			// Find the constituent type of the union with the fewest properties and no index signature. This type will be used
 			// as the representative for checking properties of the union, as all properties must be present in all constituent types.
-			var smallestUnion *Type
+			var smallestType *Type
 			var smallestPropertyCount int
 			for _, current := range d.types {
 				if len(c.getIndexInfosOfType(current)) == 0 {
-					if count := c.getPropertyCountOfType(current); smallestUnion == nil || count < smallestPropertyCount {
-						smallestUnion = current
+					if count := c.getPropertyCountOfType(current); smallestType == nil || count < smallestPropertyCount {
+						smallestType = current
 						smallestPropertyCount = count
+						if count == 0 {
+							break
+						}
 					}
 				}
 			}
-			if smallestUnion != nil {
-				types = []*Type{smallestUnion}
+			if smallestType != nil {
+				types = []*Type{smallestType}
 			}
 		}
 		for _, current := range types {
