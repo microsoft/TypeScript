@@ -1,0 +1,23 @@
+a.js(1,15): error TS8023: JSDoc '@extends String' does not match the 'extends String' clause.
+a.js(8,18): error TS2422: A class can only implement an object type or intersection of object types with statically known members.
+
+
+==== a.js (2 errors) ====
+    /** @extends {String} */
+                  ~~~~~~
+!!! error TS8023: JSDoc '@extends String' does not match the 'extends String' clause.
+    class S extends String {}
+    
+    class Boolean {
+        value = true;
+    }
+    
+    /** @implements {Boolean} */
+                     ~~~~~~~
+!!! error TS2422: A class can only implement an object type or intersection of object types with statically known members.
+    class B {
+        value = false;
+    }
+    
+    export {};
+    
