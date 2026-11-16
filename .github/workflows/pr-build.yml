@@ -228,7 +228,9 @@ jobs:
         run: |
           set -euo pipefail
           mkdir "$PACKAGE_DIR"
-          mapfile -t packageDirs < <(node tools/scripts/validate-pr-build.mjs "$NPM_DIR" "$PACKAGE_DIR" "$PRERELEASE" "$MERGE_SHA" "$PACKAGES")
+          # A plain assignment, so set -e sees validation failures.
+          validated="$(node tools/scripts/validate-pr-build.mjs "$NPM_DIR" "$PACKAGE_DIR" "$PRERELEASE" "$MERGE_SHA" "$PACKAGES")"
+          mapfile -t packageDirs <<< "$validated"
 
           # Trusted publishing needs npm 11.5.1 or later.
           npm install -g npm@11
