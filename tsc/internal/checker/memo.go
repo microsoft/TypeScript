@@ -2283,6 +2283,28 @@ func (c *Checker) endInstantiationAbort() {
 // A Relation caches the results of comparisons.
 type Relation struct {
 	results memoMap[CacheHashKey, RelationComparisonResult]
+	// costs keeps, for each cached result that took more than one, the
+	// number of results computing it from scratch caches, or more; see
+	// relationCountLimit.
+	costs map[CacheHashKey]uint32
+}
+
+// cost returns at least the number of results that computing the result
+// cached for key from scratch caches.
+func (r *Relation) cost(key CacheHashKey) int {
+	if n, ok := r.costs[key]; ok {
+		return int(n)
+	}
+	return 1
+}
+
+func (r *Relation) setCost(key CacheHashKey, cost int) {
+	if cost > 1 {
+		if r.costs == nil {
+			r.costs = make(map[CacheHashKey]uint32)
+		}
+		r.costs[key] = uint32(min(uint64(cost), math.MaxUint32))
+	}
 }
 
 func (r *Relation) size() int {
