@@ -683,7 +683,7 @@ func (c *Checker) elaborateArrowFunction(node *ast.Node, source *Type, target *T
 func (c *Checker) isWeakType(t *Type) bool {
 	if t.flags&TypeFlagsObject != 0 {
 		resolved := c.resolveStructuredTypeMembers(t)
-		return len(resolved.getSignatures()) == 0 && len(resolved.getIndexInfos()) == 0 && len(c.getLayoutPropertiesOfType(t)) > 0 && core.Every(c.getLayoutPropertiesOfType(t), func(p *ast.Symbol) bool {
+		return len(resolved.getSignatures()) == 0 && len(resolved.getIndexInfos()) == 0 && c.getPropertyCountOfType(t) != 0 && core.Every(c.getLayoutPropertiesOfType(t), func(p *ast.Symbol) bool {
 			return p.Flags()&ast.SymbolFlagsOptional != 0
 		})
 	}
