@@ -22,9 +22,10 @@ import (
 )
 
 // Setting TS_CHECK_ORDER_FUZZ_LS=1 as well also makes language service
-// requests queries: hover and definition at identifiers, signature help at
-// arguments, member completions after property accesses, and the inlay hints
-// of a file. Their results must not differ either.
+// requests queries: hover, definition, type definition and highlights at
+// identifiers, implementation and references at declaration names, signature
+// help at arguments, member completions after property accesses, and the
+// inlay hints of a file. Their results must not differ either.
 var fuzzLS = os.Getenv("TS_CHECK_ORDER_FUZZ_LS") != ""
 
 // fuzzLSNodeQueryKinds returns the kinds of language service request that
@@ -34,7 +35,12 @@ func fuzzLSNodeQueryKinds(node *ast.Node, kinds []fuzzQueryKind) []fuzzQueryKind
 		return kinds
 	}
 	if ast.IsIdentifier(node) {
-		kinds = append(kinds, fuzzQueryHover, fuzzQueryDefinition)
+		kinds = append(kinds, fuzzQueryHover, fuzzQueryDefinition, fuzzQueryTypeDefinition, fuzzQueryHighlights)
+		if ast.IsDeclarationName(node) {
+			// These search the whole program, so only declarations are
+			// asked, each of which their uses lead to.
+			kinds = append(kinds, fuzzQueryImplementation, fuzzQueryReferences)
+		}
 		if ast.IsPropertyAccessExpression(node.Parent) && node.Parent.Name() == node {
 			kinds = append(kinds, fuzzQueryCompletion)
 		}
@@ -113,6 +119,41 @@ func fuzzLSResult(ctx context.Context, lang *fuzzLSService, file *ast.SourceFile
 			})
 		}
 		result = completions
+	case fuzzQueryTypeDefinition, fuzzQueryImplementation:
+		var locations lsproto.LocationOrLocationsOrDefinitionLinksOrNull
+		if kind == fuzzQueryTypeDefinition {
+			locations, err = lang.ProvideTypeDefinition(ctx, uri, position(scanner.GetTokenPosOfNode(node, file, false)))
+		} else {
+			locations, err = lang.ProvideImplementations(ctx, &lsproto.ImplementationParams{
+				TextDocument: lsproto.TextDocumentIdentifier{Uri: uri},
+				Position:     position(scanner.GetTokenPosOfNode(node, file, false)),
+			}, nil /*orchestrator*/)
+		}
+		if locations.Locations != nil {
+			fuzzSortByJSON(*locations.Locations)
+		}
+		if locations.DefinitionLinks != nil {
+			fuzzSortByJSON(*locations.DefinitionLinks)
+		}
+		result = locations
+	case fuzzQueryReferences:
+		var references lsproto.ReferencesResponse
+		references, err = lang.ProvideReferences(ctx, &lsproto.ReferenceParams{
+			TextDocument: lsproto.TextDocumentIdentifier{Uri: uri},
+			Position:     position(scanner.GetTokenPosOfNode(node, file, false)),
+			Context:      &lsproto.ReferenceContext{IncludeDeclaration: true},
+		}, nil /*orchestrator*/)
+		if references.Locations != nil {
+			fuzzSortByJSON(*references.Locations)
+		}
+		result = references
+	case fuzzQueryHighlights:
+		var highlights lsproto.DocumentHighlightResponse
+		highlights, err = lang.ProvideDocumentHighlights(ctx, uri, position(scanner.GetTokenPosOfNode(node, file, false)))
+		if highlights.DocumentHighlights != nil {
+			fuzzSortByJSON(*highlights.DocumentHighlights)
+		}
+		result = highlights
 	case fuzzQueryInlayHints:
 		result, err = lang.ProvideInlayHint(ctx, &lsproto.InlayHintParams{
 			TextDocument: lsproto.TextDocumentIdentifier{Uri: uri},
@@ -130,6 +171,16 @@ func fuzzLSResult(ctx context.Context, lang *fuzzLSService, file *ast.SourceFile
 		return ""
 	}
 	return string(text)
+}
+
+// fuzzSortByJSON sorts locations, which requests find in no particular
+// order.
+func fuzzSortByJSON[T any](items []T) {
+	key := func(item T) string {
+		text, _ := json.Marshal(item)
+		return string(text)
+	}
+	slices.SortStableFunc(items, func(a, b T) int { return cmp.Compare(key(a), key(b)) })
 }
 
 func fuzzSortText(item *lsproto.CompletionItem) string {

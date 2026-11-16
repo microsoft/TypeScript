@@ -845,7 +845,7 @@ func queryNodes(c *checker.Checker, file *ast.SourceFile) {
 	file.AsNode().ForEachChild(visit)
 	for _, n := range slices.Backward(nodes) {
 		if ast.IsExpressionNode(n) || n.Kind == ast.KindIdentifier || ast.IsDeclarationName(n) {
-			for _, kind := range fuzzNodeQueryKinds(n) {
+			for _, kind := range fuzzBasicQueryKinds(n) {
 				fuzzQueryResult(c, n, kind)
 			}
 		}

@@ -42,6 +42,9 @@ const (
 	fuzzQuerySymbol
 	fuzzQueryContextualType
 	fuzzQuerySignature
+	fuzzQueryTypeOfSymbol
+	fuzzQueryMembers
+	fuzzQueryDerivedTypes
 	fuzzQueryDiagnostics
 	fuzzQueryEmit
 	fuzzQueryHover
@@ -49,6 +52,10 @@ const (
 	fuzzQuerySignatureHelp
 	fuzzQueryCompletion
 	fuzzQueryInlayHints
+	fuzzQueryReferences
+	fuzzQueryHighlights
+	fuzzQueryTypeDefinition
+	fuzzQueryImplementation
 )
 
 var fuzzQueryKindNames = [...]string{
@@ -56,10 +63,17 @@ var fuzzQueryKindNames = [...]string{
 	fuzzQuerySymbol:         "symbol",
 	fuzzQueryContextualType: "contextual type",
 	fuzzQuerySignature:      "signature",
+	fuzzQueryTypeOfSymbol:   "type of symbol",
+	fuzzQueryMembers:        "members",
+	fuzzQueryDerivedTypes:   "derived types",
 	fuzzQueryHover:          "hover",
 	fuzzQueryDefinition:     "definition",
 	fuzzQuerySignatureHelp:  "signature help",
 	fuzzQueryCompletion:     "completions",
+	fuzzQueryReferences:     "references",
+	fuzzQueryHighlights:     "highlights",
+	fuzzQueryTypeDefinition: "type definition",
+	fuzzQueryImplementation: "implementation",
 }
 
 func (q fuzzQuery) String() string {
@@ -237,7 +251,20 @@ func fuzzHasType(node *ast.Node) bool {
 
 // fuzzNodeQueryKinds returns the kinds of query that apply to node.
 func fuzzNodeQueryKinds(node *ast.Node) []fuzzQueryKind {
-	kinds := make([]fuzzQueryKind, 0, 4)
+	kinds := fuzzBasicQueryKinds(node)
+	if ast.IsIdentifier(node) {
+		kinds = append(kinds, fuzzQueryTypeOfSymbol, fuzzQueryDerivedTypes)
+		if ast.IsDeclarationName(node) {
+			kinds = append(kinds, fuzzQueryMembers)
+		}
+	}
+	return fuzzLSNodeQueryKinds(node, kinds)
+}
+
+// fuzzBasicQueryKinds returns the kinds of query that apply to node that
+// the typesfirst check order asks of every node.
+func fuzzBasicQueryKinds(node *ast.Node) []fuzzQueryKind {
+	kinds := make([]fuzzQueryKind, 0, 8)
 	if fuzzHasType(node) {
 		kinds = append(kinds, fuzzQueryType)
 		if ast.IsExpression(node) {
@@ -248,7 +275,7 @@ func fuzzNodeQueryKinds(node *ast.Node) []fuzzQueryKind {
 	if ast.IsCallLikeExpression(node) {
 		kinds = append(kinds, fuzzQuerySignature)
 	}
-	return fuzzLSNodeQueryKinds(node, kinds)
+	return kinds
 }
 
 // fuzzSymbolIDs matches the symbol IDs that the names of unique symbol
@@ -277,8 +304,59 @@ func fuzzQueryResultWithIDs(c *checker.Checker, node *ast.Node, kind fuzzQueryKi
 		if signature := c.GetResolvedSignature(node); signature != nil {
 			return c.SignatureToStringEx(signature, nil, checker.TypeFormatFlagsNone, nil)
 		}
+	case fuzzQueryTypeOfSymbol:
+		if symbol := c.GetSymbolAtLocation(node); symbol != nil {
+			result := c.TypeToString(c.GetTypeOfSymbol(symbol))
+			if symbol.Flags()&(ast.SymbolFlagsClass|ast.SymbolFlagsInterface|ast.SymbolFlagsTypeAlias|ast.SymbolFlagsEnum|ast.SymbolFlagsTypeParameter) != 0 {
+				result += "; declared " + c.TypeToString(c.GetDeclaredTypeOfSymbol(symbol))
+			}
+			return result
+		}
+	case fuzzQueryMembers:
+		return fuzzMembers(c, node)
+	case fuzzQueryDerivedTypes:
+		t := c.GetTypeAtLocation(node)
+		var parts []string
+		for _, d := range []*checker.Type{c.GetApparentType(t), c.GetAwaitedType(t), c.GetBaseConstraintOfType(t)} {
+			if d == nil {
+				parts = append(parts, "none")
+			} else {
+				parts = append(parts, c.TypeToString(d))
+			}
+		}
+		return strings.Join(parts, "; ")
 	}
 	return ""
+}
+
+// fuzzMembers returns the properties, signatures and base types of the type
+// of a declaration name, the first few of each.
+func fuzzMembers(c *checker.Checker, node *ast.Node) string {
+	const limit = 12
+	var b strings.Builder
+	t := c.GetTypeAtLocation(node)
+	for i, prop := range c.GetPropertiesOfType(t) {
+		if i == limit {
+			b.WriteString("...; ")
+			break
+		}
+		fmt.Fprintf(&b, "%s: %s; ", c.SymbolToString(prop), c.TypeToString(c.GetTypeOfSymbol(prop)))
+	}
+	for _, kind := range []checker.SignatureKind{checker.SignatureKindCall, checker.SignatureKindConstruct} {
+		for i, signature := range c.GetSignaturesOfType(t, kind) {
+			if i == limit {
+				b.WriteString("...; ")
+				break
+			}
+			fmt.Fprintf(&b, "%s; ", c.SignatureToStringEx(signature, nil, checker.TypeFormatFlagsNone, nil))
+		}
+	}
+	if symbol := c.GetSymbolAtLocation(node); symbol != nil && symbol.Flags()&(ast.SymbolFlagsClass|ast.SymbolFlagsInterface) != 0 {
+		for _, base := range c.GetBaseTypes(c.GetDeclaredTypeOfSymbol(symbol)) {
+			fmt.Fprintf(&b, "base %s; ", c.TypeToString(base))
+		}
+	}
+	return b.String()
 }
 
 // fuzzAssignCheckers returns, for half of the seeds, a random assignment of
