@@ -1,0 +1,85 @@
+//// [tests/cases/compiler/commonJsIndirectCallWrappedCallee.ts] ////
+
+=== /a.ts ===
+export function f(this: unknown, ...args: any[]) { return this; }
+>f : (this: unknown, ...args: any[]) => unknown
+>this : unknown
+>args : any[]
+>this : unknown
+
+=== /index.ts ===
+import { f } from "./a";
+>f : (this: unknown, ...args: any[]) => unknown
+
+type F = () => unknown;
+>F : F
+
+console.log(f() === undefined);
+>console.log(f() === undefined) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>f() === undefined : boolean
+>f() : unknown
+>f : (this: unknown, ...args: any[]) => unknown
+>undefined : undefined
+
+console.log((f)() === undefined);
+>console.log((f)() === undefined) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>(f)() === undefined : boolean
+>(f)() : unknown
+>(f) : (this: unknown, ...args: any[]) => unknown
+>f : (this: unknown, ...args: any[]) => unknown
+>undefined : undefined
+
+console.log((f as F)() === undefined);
+>console.log((f as F)() === undefined) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>(f as F)() === undefined : boolean
+>(f as F)() : unknown
+>(f as F) : F
+>f as F : F
+>f : (this: unknown, ...args: any[]) => unknown
+>undefined : undefined
+
+console.log((f!)() === undefined);
+>console.log((f!)() === undefined) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>(f!)() === undefined : boolean
+>(f!)() : unknown
+>(f!) : (this: unknown, ...args: any[]) => unknown
+>f! : (this: unknown, ...args: any[]) => unknown
+>f : (this: unknown, ...args: any[]) => unknown
+>undefined : undefined
+
+console.log((f satisfies F)() === undefined);
+>console.log((f satisfies F)() === undefined) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>(f satisfies F)() === undefined : boolean
+>(f satisfies F)() : unknown
+>(f satisfies F) : (this: unknown, ...args: any[]) => unknown
+>f satisfies F : (this: unknown, ...args: any[]) => unknown
+>f : (this: unknown, ...args: any[]) => unknown
+>undefined : undefined
+
+console.log((f)`x` === undefined);
+>console.log((f)`x` === undefined) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>(f)`x` === undefined : boolean
+>(f)`x` : unknown
+>(f) : (this: unknown, ...args: any[]) => unknown
+>f : (this: unknown, ...args: any[]) => unknown
+>`x` : "x"
+>undefined : undefined
+

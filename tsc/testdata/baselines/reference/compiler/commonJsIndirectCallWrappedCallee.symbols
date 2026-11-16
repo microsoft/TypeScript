@@ -1,0 +1,60 @@
+//// [tests/cases/compiler/commonJsIndirectCallWrappedCallee.ts] ////
+
+=== /a.ts ===
+export function f(this: unknown, ...args: any[]) { return this; }
+>f : Symbol(f, Decl(a.ts, 0, 0))
+>this : Symbol(this, Decl(a.ts, 0, 18))
+>args : Symbol(args, Decl(a.ts, 0, 32))
+>this : Symbol(this, Decl(a.ts, 0, 18))
+
+=== /index.ts ===
+import { f } from "./a";
+>f : Symbol(f, Decl(index.ts, 0, 8))
+
+type F = () => unknown;
+>F : Symbol(F, Decl(index.ts, 0, 24))
+
+console.log(f() === undefined);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>f : Symbol(f, Decl(index.ts, 0, 8))
+>undefined : Symbol(undefined)
+
+console.log((f)() === undefined);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>f : Symbol(f, Decl(index.ts, 0, 8))
+>undefined : Symbol(undefined)
+
+console.log((f as F)() === undefined);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>f : Symbol(f, Decl(index.ts, 0, 8))
+>F : Symbol(F, Decl(index.ts, 0, 24))
+>undefined : Symbol(undefined)
+
+console.log((f!)() === undefined);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>f : Symbol(f, Decl(index.ts, 0, 8))
+>undefined : Symbol(undefined)
+
+console.log((f satisfies F)() === undefined);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>f : Symbol(f, Decl(index.ts, 0, 8))
+>F : Symbol(F, Decl(index.ts, 0, 24))
+>undefined : Symbol(undefined)
+
+console.log((f)`x` === undefined);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>f : Symbol(f, Decl(index.ts, 0, 8))
+>undefined : Symbol(undefined)
+

@@ -1829,16 +1829,17 @@ func (tx *CommonJSModuleTransformer) visitCallExpression(node *ast.CallExpressio
 	if needsRewrite {
 		return tx.shimOrRewriteImportOrRequireCall(node.AsCallExpression())
 	}
-	if ast.IsIdentifier(node.Expression) {
+	if callee := ast.SkipOuterExpressions(node.Expression, ast.OEKAll); ast.IsIdentifier(callee) {
 		// given:
 		//   import { f } from "mod";
 		//   f();
+		//   (f as F)();
 		// emits:
 		//   const mod_1 = require("mod");
 		//   (0, mod_1.f)();
 		// note:
 		//   the indirect call is applied by the printer by way of the `EFIndirectCall` emit flag.
-		expression := tx.visitExpressionIdentifier(node.Expression)
+		expression := tx.visitExpressionIdentifier(callee)
 		updated := tx.Factory().UpdateCallExpression(
 			node,
 			expression,
@@ -1847,7 +1848,7 @@ func (tx *CommonJSModuleTransformer) visitCallExpression(node *ast.CallExpressio
 			tx.Visitor().VisitNodes(node.Arguments),
 			node.Flags,
 		)
-		if !ast.IsIdentifier(expression) && !transformers.IsHelperName(tx.EmitContext(), node.Expression) {
+		if !ast.IsIdentifier(expression) && !transformers.IsHelperName(tx.EmitContext(), callee) {
 			tx.EmitContext().AddEmitFlags(updated, printer.EFIndirectCall)
 		}
 		return updated
@@ -2011,7 +2012,7 @@ func (tx *CommonJSModuleTransformer) shimOrRewriteImportOrRequireCall(node *ast.
 
 // Visits a tagged template expression that might reference an imported symbol and thus require an indirect call.
 func (tx *CommonJSModuleTransformer) visitTaggedTemplateExpression(node *ast.TaggedTemplateExpression) *ast.Node {
-	if ast.IsIdentifier(node.Tag) {
+	if tag := ast.SkipOuterExpressions(node.Tag, ast.OEKAll); ast.IsIdentifier(tag) {
 		// given:
 		//   import { f } from "mod";
 		//   f``;
@@ -2021,7 +2022,7 @@ func (tx *CommonJSModuleTransformer) visitTaggedTemplateExpression(node *ast.Tag
 		// note:
 		//   the indirect call is applied by the printer by way of the `EFIndirectCall` emit flag.
 
-		expression := tx.visitExpressionIdentifier(node.Tag)
+		expression := tx.visitExpressionIdentifier(tag)
 		updated := tx.Factory().UpdateTaggedTemplateExpression(
 			node,
 			expression,
@@ -2030,7 +2031,7 @@ func (tx *CommonJSModuleTransformer) visitTaggedTemplateExpression(node *ast.Tag
 			tx.Visitor().VisitNode(node.Template),
 			node.Flags,
 		)
-		if !ast.IsIdentifier(expression) && !transformers.IsHelperName(tx.EmitContext(), node.Tag) {
+		if !ast.IsIdentifier(expression) && !transformers.IsHelperName(tx.EmitContext(), tag) {
 			tx.EmitContext().AddEmitFlags(updated, printer.EFIndirectCall)
 		}
 		return updated
