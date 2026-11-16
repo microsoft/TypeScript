@@ -26,8 +26,11 @@ func (l *LanguageService) ProvideDocumentHighlights(ctx context.Context, documen
 	// Extract highlights for the current file only.
 	var documentHighlights []*lsproto.DocumentHighlight
 	if result.MultiDocumentHighlights != nil {
+		// Compare file paths, not raw URI strings: clients are not required to
+		// percent-encode the same characters we do.
+		documentPathKey := documentUri.PathKey(l.CaseSensitivity())
 		for _, mh := range *result.MultiDocumentHighlights {
-			if mh.Uri == documentUri {
+			if mh.Uri.PathKey(l.CaseSensitivity()) == documentPathKey {
 				documentHighlights = append(documentHighlights, mh.Highlights...)
 			}
 		}
