@@ -13,7 +13,7 @@
 //
 // Prints the extracted package directories in publish order, one per line.
 
-import assert from "node:assert";
+import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
@@ -28,7 +28,7 @@ assert.match(gitHead, /^[0-9a-f]{40}$/);
 const { main: mainName, platforms: platformNames, wasm: wasmName } = JSON.parse(packagesJson);
 assert(typeof mainName === "string" && typeof wasmName === "string" && Array.isArray(platformNames) && platformNames.length > 0, "Invalid package list");
 const expectedNames = new Set([mainName, ...platformNames, wasmName]);
-const versionPattern = new RegExp(`^\\d+\\.\\d+\\.\\d+-${prerelease.replaceAll(".", "\\.")}$`);
+const versionPattern = new RegExp(`^(?:0|[1-9]\\d*)\\.(?:0|[1-9]\\d*)\\.(?:0|[1-9]\\d*)-${prerelease.replaceAll(".", "\\.")}$`);
 
 // npm gives some root files (binding.gyp, npm-shrinkwrap.json, node_modules)
 // install-time meaning, so only allow what the packages actually contain.
