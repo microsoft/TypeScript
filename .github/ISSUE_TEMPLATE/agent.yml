@@ -1,0 +1,8 @@
+name: 'AI-Assisted Report'
+description: 'Log an issue using an AI agent'
+body:
+  - type: textarea
+    id: contents
+    attributes:
+      label: Comment
+      value: Use the `/typescript-issue-report` skill at https://github.com/microsoft/TypeScript-skills
