@@ -23,6 +23,9 @@ class C {
     or() {
         return (this.#f) ||= rhs();
     }
+    orWithComment() {
+        return this /* receiver comment */.#f ||= rhs();
+    }
     coalesce() {
         return (this.#f as number | null | undefined) ??= rhs();
     }
@@ -97,6 +100,9 @@ class C {
     }
     or() {
         return (this.#f) ||= rhs();
+    }
+    orWithComment() {
+        return this /* receiver comment */.#f ||= rhs();
     }
     coalesce() {
         return this.#f ??= rhs();

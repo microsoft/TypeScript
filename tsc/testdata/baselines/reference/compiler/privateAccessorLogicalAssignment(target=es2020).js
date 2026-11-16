@@ -23,6 +23,9 @@ class C {
     or() {
         return (this.#f) ||= rhs();
     }
+    orWithComment() {
+        return this /* receiver comment */.#f ||= rhs();
+    }
     coalesce() {
         return (this.#f as number | null | undefined) ??= rhs();
     }
@@ -104,6 +107,9 @@ class C {
     }
     or() {
         return __classPrivateFieldGet(this, _C_instances, "a", _C_f_get) || __classPrivateFieldSet(this, _C_instances, rhs(), "a", _C_f_set);
+    }
+    orWithComment() {
+        return __classPrivateFieldGet(this /* receiver comment */, _C_instances, "a", _C_f_get) || __classPrivateFieldSet(this, _C_instances, rhs(), "a", _C_f_set);
     }
     coalesce() {
         return __classPrivateFieldGet(this, _C_instances, "a", _C_f_get) ?? __classPrivateFieldSet(this, _C_instances, rhs(), "a", _C_f_set);
