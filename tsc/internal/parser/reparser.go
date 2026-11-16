@@ -626,6 +626,15 @@ func (p *Parser) makeQuestionIfOptional(parameter *ast.JSDocParameterOrPropertyT
 	return questionToken
 }
 
+func hasJSDocThisTag(jsDoc *ast.Node) bool {
+	for _, tag := range jsDoc.AsJSDoc().Tags.Nodes {
+		if tag.Kind == ast.KindJSDocThisTag {
+			return true
+		}
+	}
+	return false
+}
+
 func findMatchingParameter(fun *ast.Node, parameterTag *ast.JSDocParameterOrPropertyTag, jsDoc *ast.Node) (*ast.ParameterDeclaration, bool) {
 	tagIndex := -1
 	paramCount := -1
@@ -638,13 +647,25 @@ func findMatchingParameter(fun *ast.Node, parameterTag *ast.JSDocParameterOrProp
 			}
 		}
 	}
+	// A @this tag inserts a synthetic `this` parameter at index 0. It is not
+	// described by a @param tag, so ignore it when matching by position.
+	paramOffset := 0
+	if hasJSDocThisTag(jsDoc) {
+		params := fun.Parameters()
+		if len(params) > 0 && ast.IsThisIdentifier(params[0].Name()) {
+			paramOffset = 1
+		}
+	}
 	for parameterIndex, parameter := range fun.Parameters() {
+		if parameterIndex < paramOffset {
+			continue
+		}
 		if parameter.Name().Kind == ast.KindIdentifier {
 			if parameterTag.Name().Kind == ast.KindIdentifier &&
-				((parameter.Name().Text() == parameterTag.Name().Text()) || (parameterIndex == tagIndex && len(parameterTag.Name().Text()) == 0)) {
+				((parameter.Name().Text() == parameterTag.Name().Text()) || (parameterIndex-paramOffset == tagIndex && len(parameterTag.Name().Text()) == 0)) {
 				return parameter.AsParameterDeclaration(), true
 			}
-		} else if parameterIndex == tagIndex {
+		} else if parameterIndex-paramOffset == tagIndex {
 			return parameter.AsParameterDeclaration(), true
 		}
 	}

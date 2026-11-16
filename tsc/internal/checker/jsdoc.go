@@ -9,6 +9,7 @@ import (
 
 func (c *Checker) checkUnmatchedJSDocParameters(node *ast.Node) {
 	var jsdocParameters []*ast.Node
+	hasThisTag := false
 	for _, tag := range getAllJSDocTags(node) {
 		if tag.Kind == ast.KindJSDocParameterTag {
 			name := tag.AsJSDocParameterOrPropertyTag().Name()
@@ -16,6 +17,9 @@ func (c *Checker) checkUnmatchedJSDocParameters(node *ast.Node) {
 				continue
 			}
 			jsdocParameters = append(jsdocParameters, tag)
+		}
+		if tag.Kind == ast.KindJSDocThisTag {
+			hasThisTag = true
 		}
 	}
 
@@ -27,13 +31,26 @@ func (c *Checker) checkUnmatchedJSDocParameters(node *ast.Node) {
 	parameters := collections.Set[string]{}
 	excludedParameters := collections.Set[int]{}
 
+	// A @this tag inserts a synthetic `this` parameter at index 0. It is not
+	// described by a @param tag, so ignore it when matching by position.
+	paramOffset := 0
+	if hasThisTag {
+		params := node.Parameters()
+		if len(params) > 0 && ast.IsThisIdentifier(params[0].Name()) {
+			paramOffset = 1
+		}
+	}
+
 	for i, param := range node.Parameters() {
+		if i < paramOffset {
+			continue
+		}
 		name := param.AsParameterDeclaration().Name()
 		if ast.IsIdentifier(name) {
 			parameters.Add(name.Text())
 		}
 		if ast.IsBindingPattern(name) {
-			excludedParameters.Add(i)
+			excludedParameters.Add(i - paramOffset)
 		}
 	}
 	if c.containsArgumentsReference(node) {
