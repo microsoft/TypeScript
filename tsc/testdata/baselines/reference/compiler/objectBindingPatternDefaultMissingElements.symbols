@@ -114,3 +114,172 @@ typedObject({ required: "value" });
 typedArray(["value"]);
 >typedArray : Symbol(typedArray, Decl(main.ts, 8, 12))
 
+// Contextual typing must win over padding for parameter defaults (#64974).
+type Obj = (input?: { a?: string; b?: number }) => number;
+>Obj : Symbol(Obj, Decl(main.ts, 25, 22))
+>input : Symbol(input, Decl(main.ts, 28, 12))
+>a : Symbol(a, Decl(main.ts, 28, 21))
+>b : Symbol(b, Decl(main.ts, 28, 33))
+
+export const obj1: Obj = ({ a, b } = {}) => (a ? 1 : 0) + (b ?? 0);
+>obj1 : Symbol(obj1, Decl(main.ts, 29, 12))
+>Obj : Symbol(Obj, Decl(main.ts, 25, 22))
+>a : Symbol(a, Decl(main.ts, 29, 27))
+>b : Symbol(b, Decl(main.ts, 29, 30))
+>a : Symbol(a, Decl(main.ts, 29, 27))
+>b : Symbol(b, Decl(main.ts, 29, 30))
+
+type Arr = (input?: [string?, number?]) => number;
+>Arr : Symbol(Arr, Decl(main.ts, 29, 67))
+>input : Symbol(input, Decl(main.ts, 31, 12))
+
+export const arr1: Arr = ([a, b] = []) => (a ? 1 : 0) + (b ?? 0);
+>arr1 : Symbol(arr1, Decl(main.ts, 32, 12))
+>Arr : Symbol(Arr, Decl(main.ts, 29, 67))
+>a : Symbol(a, Decl(main.ts, 32, 27))
+>b : Symbol(b, Decl(main.ts, 32, 29))
+>a : Symbol(a, Decl(main.ts, 32, 27))
+>b : Symbol(b, Decl(main.ts, 32, 29))
+
+export const arr2: (input: [string?, number?]) => number = ([a, b] = []) => (a ? 1 : 0) + (b ?? 0);
+>arr2 : Symbol(arr2, Decl(main.ts, 34, 12))
+>input : Symbol(input, Decl(main.ts, 34, 20))
+>a : Symbol(a, Decl(main.ts, 34, 61))
+>b : Symbol(b, Decl(main.ts, 34, 63))
+>a : Symbol(a, Decl(main.ts, 34, 61))
+>b : Symbol(b, Decl(main.ts, 34, 63))
+
+declare function takeArr(callback: Arr): void;
+>takeArr : Symbol(takeArr, Decl(main.ts, 34, 99))
+>callback : Symbol(callback, Decl(main.ts, 36, 25))
+>Arr : Symbol(Arr, Decl(main.ts, 29, 67))
+
+takeArr(([a, b] = []) => {
+>takeArr : Symbol(takeArr, Decl(main.ts, 34, 99))
+>a : Symbol(a, Decl(main.ts, 37, 10))
+>b : Symbol(b, Decl(main.ts, 37, 12))
+
+    const c: number = a;
+>c : Symbol(c, Decl(main.ts, 38, 9))
+>a : Symbol(a, Decl(main.ts, 37, 10))
+
+    const d: string = b;
+>d : Symbol(d, Decl(main.ts, 39, 9))
+>b : Symbol(b, Decl(main.ts, 37, 12))
+
+    return 0;
+});
+
+export const arr3: (input?: [{ a?: number }?]) => void = ([{ a } = {}] = []) => {
+>arr3 : Symbol(arr3, Decl(main.ts, 43, 12))
+>input : Symbol(input, Decl(main.ts, 43, 20))
+>a : Symbol(a, Decl(main.ts, 43, 30))
+>a : Symbol(a, Decl(main.ts, 43, 60))
+
+    const b: string = a;
+>b : Symbol(b, Decl(main.ts, 44, 9))
+>a : Symbol(a, Decl(main.ts, 43, 60))
+
+};
+
+export const arr4: (input?: { a?: number }[]) => void = ([...[{ a } = {}]] = []) => {
+>arr4 : Symbol(arr4, Decl(main.ts, 47, 12))
+>input : Symbol(input, Decl(main.ts, 47, 20))
+>a : Symbol(a, Decl(main.ts, 47, 29))
+>a : Symbol(a, Decl(main.ts, 47, 63))
+
+    const b: string = a;
+>b : Symbol(b, Decl(main.ts, 48, 9))
+>a : Symbol(a, Decl(main.ts, 47, 63))
+
+};
+
+// Annotations and contextual types also type the elements of nested defaults (#64431).
+interface Outer {
+>Outer : Symbol(Outer, Decl(main.ts, 49, 2))
+
+    inner?: { a?: number; b?: number };
+>inner : Symbol(Outer.inner, Decl(main.ts, 52, 17))
+>a : Symbol(a, Decl(main.ts, 53, 13))
+>b : Symbol(b, Decl(main.ts, 53, 25))
+}
+
+export function annotatedNested({ inner: { a = 1, b } = {} }: Outer) {
+>annotatedNested : Symbol(annotatedNested, Decl(main.ts, 54, 1))
+>inner : Symbol(Outer.inner, Decl(main.ts, 52, 17))
+>a : Symbol(a, Decl(main.ts, 56, 42))
+>b : Symbol(b, Decl(main.ts, 56, 49))
+>Outer : Symbol(Outer, Decl(main.ts, 49, 2))
+
+    const c: string = b;
+>c : Symbol(c, Decl(main.ts, 57, 9))
+>b : Symbol(b, Decl(main.ts, 56, 49))
+}
+
+export function annotatedNestedAlone({ inner: { b } = {} }: Outer) {
+>annotatedNestedAlone : Symbol(annotatedNestedAlone, Decl(main.ts, 58, 1))
+>inner : Symbol(Outer.inner, Decl(main.ts, 52, 17))
+>b : Symbol(b, Decl(main.ts, 60, 47))
+>Outer : Symbol(Outer, Decl(main.ts, 49, 2))
+
+    const c: string = b;
+>c : Symbol(c, Decl(main.ts, 61, 9))
+>b : Symbol(b, Decl(main.ts, 60, 47))
+}
+
+declare const items: { result?: { summary: number } }[];
+>items : Symbol(items, Decl(main.ts, 64, 13))
+>result : Symbol(result, Decl(main.ts, 64, 22))
+>summary : Symbol(summary, Decl(main.ts, 64, 33))
+
+items.map(({ result: { summary } = {} }) => {
+>items.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>items : Symbol(items, Decl(main.ts, 64, 13))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>result : Symbol(result, Decl(main.ts, 64, 22))
+>summary : Symbol(summary, Decl(main.ts, 65, 22))
+
+    const c: string = summary;
+>c : Symbol(c, Decl(main.ts, 66, 9))
+>summary : Symbol(summary, Decl(main.ts, 65, 22))
+
+});
+
+declare function takeAny(callback: (input: any) => void): void;
+>takeAny : Symbol(takeAny, Decl(main.ts, 67, 3))
+>callback : Symbol(callback, Decl(main.ts, 69, 25))
+>input : Symbol(input, Decl(main.ts, 69, 36))
+
+takeAny(({ a } = {}) => {});
+>takeAny : Symbol(takeAny, Decl(main.ts, 67, 3))
+>a : Symbol(a, Decl(main.ts, 70, 10))
+
+export const partial: (input?: { known?: number }) => void = ({ known, unknown } = {}) => {
+>partial : Symbol(partial, Decl(main.ts, 72, 12))
+>input : Symbol(input, Decl(main.ts, 72, 23))
+>known : Symbol(known, Decl(main.ts, 72, 32))
+>known : Symbol(known, Decl(main.ts, 72, 63))
+>unknown : Symbol(unknown, Decl(main.ts, 72, 70))
+
+    const c: string = known;
+>c : Symbol(c, Decl(main.ts, 73, 9))
+>known : Symbol(known, Decl(main.ts, 72, 63))
+
+};
+
+=== /jsdoc.js ===
+// @ts-check
+/** @typedef {(input: { inner?: { a?: number } }) => void} Nested */
+
+/** @type {Nested} */
+export function jsdocNested({ inner: { a } = {} }) {
+>jsdocNested : Symbol(jsdocNested, Decl(jsdoc.js, 0, 0))
+>inner : Symbol(inner, Decl(jsdoc.js, 1, 23))
+>a : Symbol(a, Decl(jsdoc.js, 4, 38))
+
+    /** @type {string} */
+    const c = a;
+>c : Symbol(c, Decl(jsdoc.js, 6, 9))
+>a : Symbol(a, Decl(jsdoc.js, 4, 38))
+}
+

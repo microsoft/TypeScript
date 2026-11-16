@@ -153,3 +153,218 @@ typedArray(["value"]);
 >["value"] : [string]
 >"value" : "value"
 
+// Contextual typing must win over padding for parameter defaults (#64974).
+type Obj = (input?: { a?: string; b?: number }) => number;
+>Obj : Obj
+>input : { a?: string; b?: number; } | undefined
+>a : string | undefined
+>b : number | undefined
+
+export const obj1: Obj = ({ a, b } = {}) => (a ? 1 : 0) + (b ?? 0);
+>obj1 : Obj
+>({ a, b } = {}) => (a ? 1 : 0) + (b ?? 0) : ({ a, b }?: { a?: string; b?: number; } | undefined) => number
+>a : string | undefined
+>b : number | undefined
+>{} : {}
+>(a ? 1 : 0) + (b ?? 0) : number
+>(a ? 1 : 0) : 0 | 1
+>a ? 1 : 0 : 0 | 1
+>a : string | undefined
+>1 : 1
+>0 : 0
+>(b ?? 0) : number
+>b ?? 0 : number
+>b : number | undefined
+>0 : 0
+
+type Arr = (input?: [string?, number?]) => number;
+>Arr : Arr
+>input : [(string | undefined)?, (number | undefined)?] | undefined
+
+export const arr1: Arr = ([a, b] = []) => (a ? 1 : 0) + (b ?? 0);
+>arr1 : Arr
+>([a, b] = []) => (a ? 1 : 0) + (b ?? 0) : ([a, b]?: [(string | undefined)?, (number | undefined)?] | undefined) => number
+>a : string | undefined
+>b : number | undefined
+>[] : []
+>(a ? 1 : 0) + (b ?? 0) : number
+>(a ? 1 : 0) : 0 | 1
+>a ? 1 : 0 : 0 | 1
+>a : string | undefined
+>1 : 1
+>0 : 0
+>(b ?? 0) : number
+>b ?? 0 : number
+>b : number | undefined
+>0 : 0
+
+export const arr2: (input: [string?, number?]) => number = ([a, b] = []) => (a ? 1 : 0) + (b ?? 0);
+>arr2 : (input: [string?, number?]) => number
+>input : [(string | undefined)?, (number | undefined)?]
+>([a, b] = []) => (a ? 1 : 0) + (b ?? 0) : ([a, b]?: [(string | undefined)?, (number | undefined)?]) => number
+>a : string | undefined
+>b : number | undefined
+>[] : []
+>(a ? 1 : 0) + (b ?? 0) : number
+>(a ? 1 : 0) : 0 | 1
+>a ? 1 : 0 : 0 | 1
+>a : string | undefined
+>1 : 1
+>0 : 0
+>(b ?? 0) : number
+>b ?? 0 : number
+>b : number | undefined
+>0 : 0
+
+declare function takeArr(callback: Arr): void;
+>takeArr : (callback: Arr) => void
+>callback : Arr
+
+takeArr(([a, b] = []) => {
+>takeArr(([a, b] = []) => {    const c: number = a;    const d: string = b;    return 0;}) : void
+>takeArr : (callback: Arr) => void
+>([a, b] = []) => {    const c: number = a;    const d: string = b;    return 0;} : ([a, b]?: [(string | undefined)?, (number | undefined)?] | undefined) => number
+>a : string | undefined
+>b : number | undefined
+>[] : []
+
+    const c: number = a;
+>c : number
+>a : string | undefined
+
+    const d: string = b;
+>d : string
+>b : number | undefined
+
+    return 0;
+>0 : 0
+
+});
+
+export const arr3: (input?: [{ a?: number }?]) => void = ([{ a } = {}] = []) => {
+>arr3 : (input?: [{ a?: number; }?]) => void
+>input : [({ a?: number; } | undefined)?] | undefined
+>a : number | undefined
+>([{ a } = {}] = []) => {    const b: string = a;} : ([{ a }]?: [({ a?: number; } | undefined)?] | undefined) => void
+>a : any
+>{} : {}
+>[] : []
+
+    const b: string = a;
+>b : string
+>a : any
+
+};
+
+export const arr4: (input?: { a?: number }[]) => void = ([...[{ a } = {}]] = []) => {
+>arr4 : (input?: { a?: number; }[]) => void
+>input : { a?: number; }[] | undefined
+>a : number | undefined
+>([...[{ a } = {}]] = []) => {    const b: string = a;} : ([...[{ a }]]?: { a?: number; }[] | undefined) => void
+>a : any
+>{} : {}
+>[] : never[]
+
+    const b: string = a;
+>b : string
+>a : any
+
+};
+
+// Annotations and contextual types also type the elements of nested defaults (#64431).
+interface Outer {
+    inner?: { a?: number; b?: number };
+>inner : { a?: number; b?: number; } | undefined
+>a : number | undefined
+>b : number | undefined
+}
+
+export function annotatedNested({ inner: { a = 1, b } = {} }: Outer) {
+>annotatedNested : ({ inner: { a, b } }: Outer) => void
+>inner : any
+>a : number
+>1 : 1
+>b : number | undefined
+>{} : {}
+
+    const c: string = b;
+>c : string
+>b : number | undefined
+}
+
+export function annotatedNestedAlone({ inner: { b } = {} }: Outer) {
+>annotatedNestedAlone : ({ inner: { b } }: Outer) => void
+>inner : any
+>b : number | undefined
+>{} : {}
+
+    const c: string = b;
+>c : string
+>b : number | undefined
+}
+
+declare const items: { result?: { summary: number } }[];
+>items : { result?: { summary: number; }; }[]
+>result : { summary: number; } | undefined
+>summary : number
+
+items.map(({ result: { summary } = {} }) => {
+>items.map(({ result: { summary } = {} }) => {    const c: string = summary;}) : void[]
+>items.map : <U>(callbackfn: (value: { result?: { summary: number; }; }, index: number, array: { result?: { summary: number; }; }[]) => U, thisArg?: any) => U[]
+>items : { result?: { summary: number; }; }[]
+>map : <U>(callbackfn: (value: { result?: { summary: number; }; }, index: number, array: { result?: { summary: number; }; }[]) => U, thisArg?: any) => U[]
+>({ result: { summary } = {} }) => {    const c: string = summary;} : ({ result: { summary } }: { result?: { summary: number; }; }) => void
+>result : any
+>summary : any
+>{} : {}
+
+    const c: string = summary;
+>c : string
+>summary : any
+
+});
+
+declare function takeAny(callback: (input: any) => void): void;
+>takeAny : (callback: (input: any) => void) => void
+>callback : (input: any) => void
+>input : any
+
+takeAny(({ a } = {}) => {});
+>takeAny(({ a } = {}) => {}) : void
+>takeAny : (callback: (input: any) => void) => void
+>({ a } = {}) => {} : ({ a }?: any) => void
+>a : any
+>{} : {}
+
+export const partial: (input?: { known?: number }) => void = ({ known, unknown } = {}) => {
+>partial : (input?: { known?: number; }) => void
+>input : { known?: number; } | undefined
+>known : number | undefined
+>({ known, unknown } = {}) => {    const c: string = known;} : ({ known, unknown }?: { known?: number; } | undefined) => void
+>known : number | undefined
+>unknown : any
+>{} : {}
+
+    const c: string = known;
+>c : string
+>known : number | undefined
+
+};
+
+=== /jsdoc.js ===
+// @ts-check
+/** @typedef {(input: { inner?: { a?: number } }) => void} Nested */
+
+/** @type {Nested} */
+export function jsdocNested({ inner: { a } = {} }) {
+>jsdocNested : (input: { inner?: { a?: number; }; }) => void
+>inner : any
+>a : any
+>{} : {}
+
+    /** @type {string} */
+    const c = a;
+>c : string
+>a : any
+}
+

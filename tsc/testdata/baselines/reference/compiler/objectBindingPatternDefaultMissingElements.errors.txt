@@ -1,8 +1,36 @@
 /checked.js(3,5): error TS7031: Binding element 'required' implicitly has an 'any' type.
 /checked.js(8,5): error TS7031: Binding element 'required' implicitly has an 'any' type.
+/jsdoc.js(5,40): error TS7031: Binding element 'a' implicitly has an 'any' type.
 /main.ts(5,5): error TS7031: Binding element 'required' implicitly has an 'any' type.
 /main.ts(10,5): error TS7031: Binding element 'required' implicitly has an 'any' type.
 /main.ts(15,5): error TS7031: Binding element 'required' implicitly has an 'any' type.
+/main.ts(30,29): error TS7031: Binding element 'a' implicitly has an 'any' type.
+/main.ts(30,32): error TS7031: Binding element 'b' implicitly has an 'any' type.
+/main.ts(33,28): error TS7031: Binding element 'a' implicitly has an 'any' type.
+/main.ts(33,31): error TS7031: Binding element 'b' implicitly has an 'any' type.
+/main.ts(35,62): error TS7031: Binding element 'a' implicitly has an 'any' type.
+/main.ts(35,65): error TS7031: Binding element 'b' implicitly has an 'any' type.
+/main.ts(38,11): error TS7031: Binding element 'a' implicitly has an 'any' type.
+/main.ts(38,14): error TS7031: Binding element 'b' implicitly has an 'any' type.
+/main.ts(39,11): error TS2322: Type 'string | undefined' is not assignable to type 'number'.
+  Type 'undefined' is not assignable to type 'number'.
+/main.ts(40,11): error TS2322: Type 'number | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+/main.ts(44,62): error TS7031: Binding element 'a' implicitly has an 'any' type.
+/main.ts(48,65): error TS7031: Binding element 'a' implicitly has an 'any' type.
+/main.ts(57,51): error TS7031: Binding element 'b' implicitly has an 'any' type.
+/main.ts(58,11): error TS2322: Type 'number | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+/main.ts(61,49): error TS7031: Binding element 'b' implicitly has an 'any' type.
+/main.ts(62,11): error TS2322: Type 'number | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+/main.ts(66,24): error TS7031: Binding element 'summary' implicitly has an 'any' type.
+/main.ts(71,12): error TS7031: Binding element 'a' implicitly has an 'any' type.
+/main.ts(73,65): error TS7031: Binding element 'known' implicitly has an 'any' type.
+/main.ts(73,72): error TS2339: Property 'unknown' does not exist on type '{ known?: number | undefined; }'.
+/main.ts(73,72): error TS7031: Binding element 'unknown' implicitly has an 'any' type.
+/main.ts(74,11): error TS2322: Type 'number | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
 
 
 ==== /unchecked.js (0 errors) ====
@@ -32,7 +60,7 @@
         optional = false,
     ] = []) => {};
     
-==== /main.ts (3 errors) ====
+==== /main.ts (25 errors) ====
     import { checkedArray, checkedObject } from "./checked";
     import { uncheckedArray, uncheckedObject } from "./unchecked";
     
@@ -65,4 +93,114 @@
     checkedArray(["value"]);
     typedObject({ required: "value" });
     typedArray(["value"]);
+    
+    // Contextual typing must win over padding for parameter defaults (#64974).
+    type Obj = (input?: { a?: string; b?: number }) => number;
+    export const obj1: Obj = ({ a, b } = {}) => (a ? 1 : 0) + (b ?? 0);
+                                ~
+!!! error TS7031: Binding element 'a' implicitly has an 'any' type.
+                                   ~
+!!! error TS7031: Binding element 'b' implicitly has an 'any' type.
+    
+    type Arr = (input?: [string?, number?]) => number;
+    export const arr1: Arr = ([a, b] = []) => (a ? 1 : 0) + (b ?? 0);
+                               ~
+!!! error TS7031: Binding element 'a' implicitly has an 'any' type.
+                                  ~
+!!! error TS7031: Binding element 'b' implicitly has an 'any' type.
+    
+    export const arr2: (input: [string?, number?]) => number = ([a, b] = []) => (a ? 1 : 0) + (b ?? 0);
+                                                                 ~
+!!! error TS7031: Binding element 'a' implicitly has an 'any' type.
+                                                                    ~
+!!! error TS7031: Binding element 'b' implicitly has an 'any' type.
+    
+    declare function takeArr(callback: Arr): void;
+    takeArr(([a, b] = []) => {
+              ~
+!!! error TS7031: Binding element 'a' implicitly has an 'any' type.
+                 ~
+!!! error TS7031: Binding element 'b' implicitly has an 'any' type.
+        const c: number = a;
+              ~
+!!! error TS2322: Type 'string | undefined' is not assignable to type 'number'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'number'.
+        const d: string = b;
+              ~
+!!! error TS2322: Type 'number | undefined' is not assignable to type 'string'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'string'.
+        return 0;
+    });
+    
+    export const arr3: (input?: [{ a?: number }?]) => void = ([{ a } = {}] = []) => {
+                                                                 ~
+!!! error TS7031: Binding element 'a' implicitly has an 'any' type.
+        const b: string = a;
+    };
+    
+    export const arr4: (input?: { a?: number }[]) => void = ([...[{ a } = {}]] = []) => {
+                                                                    ~
+!!! error TS7031: Binding element 'a' implicitly has an 'any' type.
+        const b: string = a;
+    };
+    
+    // Annotations and contextual types also type the elements of nested defaults (#64431).
+    interface Outer {
+        inner?: { a?: number; b?: number };
+    }
+    
+    export function annotatedNested({ inner: { a = 1, b } = {} }: Outer) {
+                                                      ~
+!!! error TS7031: Binding element 'b' implicitly has an 'any' type.
+        const c: string = b;
+              ~
+!!! error TS2322: Type 'number | undefined' is not assignable to type 'string'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'string'.
+    }
+    
+    export function annotatedNestedAlone({ inner: { b } = {} }: Outer) {
+                                                    ~
+!!! error TS7031: Binding element 'b' implicitly has an 'any' type.
+        const c: string = b;
+              ~
+!!! error TS2322: Type 'number | undefined' is not assignable to type 'string'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'string'.
+    }
+    
+    declare const items: { result?: { summary: number } }[];
+    items.map(({ result: { summary } = {} }) => {
+                           ~~~~~~~
+!!! error TS7031: Binding element 'summary' implicitly has an 'any' type.
+        const c: string = summary;
+    });
+    
+    declare function takeAny(callback: (input: any) => void): void;
+    takeAny(({ a } = {}) => {});
+               ~
+!!! error TS7031: Binding element 'a' implicitly has an 'any' type.
+    
+    export const partial: (input?: { known?: number }) => void = ({ known, unknown } = {}) => {
+                                                                    ~~~~~
+!!! error TS7031: Binding element 'known' implicitly has an 'any' type.
+                                                                           ~~~~~~~
+!!! error TS2339: Property 'unknown' does not exist on type '{ known?: number | undefined; }'.
+                                                                           ~~~~~~~
+!!! error TS7031: Binding element 'unknown' implicitly has an 'any' type.
+        const c: string = known;
+              ~
+!!! error TS2322: Type 'number | undefined' is not assignable to type 'string'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'string'.
+    };
+    
+==== /jsdoc.js (1 errors) ====
+    // @ts-check
+    /** @typedef {(input: { inner?: { a?: number } }) => void} Nested */
+    
+    /** @type {Nested} */
+    export function jsdocNested({ inner: { a } = {} }) {
+                                           ~
+!!! error TS7031: Binding element 'a' implicitly has an 'any' type.
+        /** @type {string} */
+        const c = a;
+    }
     
