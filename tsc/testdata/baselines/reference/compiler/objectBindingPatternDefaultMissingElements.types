@@ -153,3 +153,522 @@ typedArray(["value"]);
 >["value"] : [string]
 >"value" : "value"
 
+// Contextual typing must win over padding for parameter defaults (#64974).
+type Obj = (input?: { a?: string; b?: number }) => number;
+>Obj : Obj
+>input : { a?: string; b?: number; } | undefined
+>a : string | undefined
+>b : number | undefined
+
+export const obj1: Obj = ({ a, b } = {}) => (a ? 1 : 0) + (b ?? 0);
+>obj1 : Obj
+>({ a, b } = {}) => (a ? 1 : 0) + (b ?? 0) : ({ a, b }?: { a?: string; b?: number; } | undefined) => number
+>a : string | undefined
+>b : number | undefined
+>{} : {}
+>(a ? 1 : 0) + (b ?? 0) : number
+>(a ? 1 : 0) : 0 | 1
+>a ? 1 : 0 : 0 | 1
+>a : string | undefined
+>1 : 1
+>0 : 0
+>(b ?? 0) : number
+>b ?? 0 : number
+>b : number | undefined
+>0 : 0
+
+type Arr = (input?: [string?, number?]) => number;
+>Arr : Arr
+>input : [(string | undefined)?, (number | undefined)?] | undefined
+
+export const arr1: Arr = ([a, b] = []) => (a ? 1 : 0) + (b ?? 0);
+>arr1 : Arr
+>([a, b] = []) => (a ? 1 : 0) + (b ?? 0) : ([a, b]?: [(string | undefined)?, (number | undefined)?] | undefined) => number
+>a : string | undefined
+>b : number | undefined
+>[] : []
+>(a ? 1 : 0) + (b ?? 0) : number
+>(a ? 1 : 0) : 0 | 1
+>a ? 1 : 0 : 0 | 1
+>a : string | undefined
+>1 : 1
+>0 : 0
+>(b ?? 0) : number
+>b ?? 0 : number
+>b : number | undefined
+>0 : 0
+
+export const arr2: (input: [string?, number?]) => number = ([a, b] = []) => (a ? 1 : 0) + (b ?? 0);
+>arr2 : (input: [string?, number?]) => number
+>input : [(string | undefined)?, (number | undefined)?]
+>([a, b] = []) => (a ? 1 : 0) + (b ?? 0) : ([a, b]?: [(string | undefined)?, (number | undefined)?]) => number
+>a : string | undefined
+>b : number | undefined
+>[] : []
+>(a ? 1 : 0) + (b ?? 0) : number
+>(a ? 1 : 0) : 0 | 1
+>a ? 1 : 0 : 0 | 1
+>a : string | undefined
+>1 : 1
+>0 : 0
+>(b ?? 0) : number
+>b ?? 0 : number
+>b : number | undefined
+>0 : 0
+
+declare function takeArr(callback: Arr): void;
+>takeArr : (callback: Arr) => void
+>callback : Arr
+
+takeArr(([a, b] = []) => {
+>takeArr(([a, b] = []) => {    const c: number = a;    const d: string = b;    return 0;}) : void
+>takeArr : (callback: Arr) => void
+>([a, b] = []) => {    const c: number = a;    const d: string = b;    return 0;} : ([a, b]?: [(string | undefined)?, (number | undefined)?] | undefined) => number
+>a : string | undefined
+>b : number | undefined
+>[] : []
+
+    const c: number = a;
+>c : number
+>a : string | undefined
+
+    const d: string = b;
+>d : string
+>b : number | undefined
+
+    return 0;
+>0 : 0
+
+});
+
+export const arr3: (input?: [{ a?: number }?]) => void = ([{ a } = {}] = []) => {
+>arr3 : (input?: [{ a?: number; }?]) => void
+>input : [({ a?: number; } | undefined)?] | undefined
+>a : number | undefined
+>([{ a } = {}] = []) => {    const b: string = a;} : ([{ a }]?: [({ a?: number; } | undefined)?] | undefined) => void
+>a : any
+>{} : {}
+>[] : []
+
+    const b: string = a;
+>b : string
+>a : any
+
+};
+
+export const arr4: (input?: { a?: number }[]) => void = ([...[{ a } = {}]] = []) => {
+>arr4 : (input?: { a?: number; }[]) => void
+>input : { a?: number; }[] | undefined
+>a : number | undefined
+>([...[{ a } = {}]] = []) => {    const b: string = a;} : ([...[{ a }]]?: { a?: number; }[] | undefined) => void
+>a : any
+>{} : {}
+>[] : never[]
+
+    const b: string = a;
+>b : string
+>a : any
+
+};
+
+// Annotations and contextual types also type the elements of nested defaults (#64431).
+interface Outer {
+    inner?: { a?: number; b?: number };
+>inner : { a?: number; b?: number; } | undefined
+>a : number | undefined
+>b : number | undefined
+}
+
+export function annotatedNested({ inner: { a = 1, b } = {} }: Outer) {
+>annotatedNested : ({ inner: { a, b } }: Outer) => void
+>inner : any
+>a : number
+>1 : 1
+>b : number | undefined
+>{} : {}
+
+    const c: string = b;
+>c : string
+>b : number | undefined
+}
+
+export function annotatedNestedAlone({ inner: { b } = {} }: Outer) {
+>annotatedNestedAlone : ({ inner: { b } }: Outer) => void
+>inner : any
+>b : number | undefined
+>{} : {}
+
+    const c: string = b;
+>c : string
+>b : number | undefined
+}
+
+declare const items: { result?: { summary: number } }[];
+>items : { result?: { summary: number; }; }[]
+>result : { summary: number; } | undefined
+>summary : number
+
+items.map(({ result: { summary } = {} }) => {
+>items.map(({ result: { summary } = {} }) => {    const c: string = summary;}) : void[]
+>items.map : <U>(callbackfn: (value: { result?: { summary: number; }; }, index: number, array: { result?: { summary: number; }; }[]) => U, thisArg?: any) => U[]
+>items : { result?: { summary: number; }; }[]
+>map : <U>(callbackfn: (value: { result?: { summary: number; }; }, index: number, array: { result?: { summary: number; }; }[]) => U, thisArg?: any) => U[]
+>({ result: { summary } = {} }) => {    const c: string = summary;} : ({ result: { summary } }: { result?: { summary: number; }; }) => void
+>result : any
+>summary : any
+>{} : {}
+
+    const c: string = summary;
+>c : string
+>summary : any
+
+});
+
+declare function takeAny(callback: (input: any) => void): void;
+>takeAny : (callback: (input: any) => void) => void
+>callback : (input: any) => void
+>input : any
+
+takeAny(({ a } = {}) => {});
+>takeAny(({ a } = {}) => {}) : void
+>takeAny : (callback: (input: any) => void) => void
+>({ a } = {}) => {} : ({ a }?: any) => void
+>a : any
+>{} : {}
+
+export const partial: (input?: { known?: number }) => void = ({ known, unknown } = {}) => {
+>partial : (input?: { known?: number; }) => void
+>input : { known?: number; } | undefined
+>known : number | undefined
+>({ known, unknown } = {}) => {    const c: string = known;} : ({ known, unknown }?: { known?: number; } | undefined) => void
+>known : number | undefined
+>unknown : any
+>{} : {}
+
+    const c: string = known;
+>c : string
+>known : number | undefined
+
+};
+
+export const nonOptional: (input: { a?: string; b?: number }) => void = ({ a, b } = {}) => {
+>nonOptional : (input: { a?: string; b?: number; }) => void
+>input : { a?: string; b?: number; }
+>a : string | undefined
+>b : number | undefined
+>({ a, b } = {}) => {    const c: number = a;    const d: string = b;} : ({ a, b }?: { a?: string; b?: number; }) => void
+>a : string | undefined
+>b : number | undefined
+>{} : {}
+
+    const c: number = a;
+>c : number
+>a : string | undefined
+
+    const d: string = b;
+>d : string
+>b : number | undefined
+
+};
+
+declare function takeObject(callback: (input?: { a?: string; b?: number }) => void): void;
+>takeObject : (callback: (input?: { a?: string; b?: number; }) => void) => void
+>callback : (input?: { a?: string; b?: number; }) => void
+>input : { a?: string; b?: number; } | undefined
+>a : string | undefined
+>b : number | undefined
+
+takeObject(({ a, b } = {}) => {
+>takeObject(({ a, b } = {}) => {    const c: number = a;    const d: string = b;}) : void
+>takeObject : (callback: (input?: { a?: string; b?: number; }) => void) => void
+>({ a, b } = {}) => {    const c: number = a;    const d: string = b;} : ({ a, b }?: { a?: string; b?: number; } | undefined) => void
+>a : string | undefined
+>b : number | undefined
+>{} : {}
+
+    const c: number = a;
+>c : number
+>a : string | undefined
+
+    const d: string = b;
+>d : string
+>b : number | undefined
+
+});
+
+interface Driver {
+    rm(path: string, options?: { recursive?: boolean; force?: boolean }): void;
+>rm : (path: string, options?: { recursive?: boolean; force?: boolean; }) => void
+>path : string
+>options : { recursive?: boolean; force?: boolean; } | undefined
+>recursive : boolean | undefined
+>force : boolean | undefined
+}
+export const driver: Driver = {
+>driver : Driver
+>{    rm: (path, { recursive, force } = {}) => {        const c: string = recursive;        const d: string = force;    },} : { rm: (path: string, { recursive, force }?: { recursive?: boolean; force?: boolean; } | undefined) => void; }
+
+    rm: (path, { recursive, force } = {}) => {
+>rm : (path: string, { recursive, force }?: { recursive?: boolean; force?: boolean; } | undefined) => void
+>(path, { recursive, force } = {}) => {        const c: string = recursive;        const d: string = force;    } : (path: string, { recursive, force }?: { recursive?: boolean; force?: boolean; } | undefined) => void
+>path : string
+>recursive : boolean | undefined
+>force : boolean | undefined
+>{} : {}
+
+        const c: string = recursive;
+>c : string
+>recursive : boolean | undefined
+
+        const d: string = force;
+>d : string
+>force : boolean | undefined
+
+    },
+};
+
+export const contextualNested: (input?: { inner?: { a?: number } }) => void = ({ inner: { a } = {} } = {}) => {
+>contextualNested : (input?: { inner?: { a?: number; }; }) => void
+>input : { inner?: { a?: number; }; } | undefined
+>inner : { a?: number; } | undefined
+>a : number | undefined
+>({ inner: { a } = {} } = {}) => {    const c: string = a;} : ({ inner: { a } }?: { inner?: { a?: number; }; } | undefined) => void
+>inner : any
+>a : any
+>{} : {}
+>{} : {}
+
+    const c: string = a;
+>c : string
+>a : any
+
+};
+
+export function annotatedNestedWithDefault({ inner: { b } = {} }: Outer = {}) {
+>annotatedNestedWithDefault : ({ inner: { b } }?: Outer) => void
+>inner : any
+>b : number | undefined
+>{} : {}
+>{} : {}
+
+    const c: string = b;
+>c : string
+>b : number | undefined
+}
+
+export function annotatedWithDefault({ a, b }: { a?: string; b?: number } = {}) {
+>annotatedWithDefault : ({ a, b }?: { a?: string; b?: number; }) => void
+>a : string | undefined
+>b : number | undefined
+>a : string | undefined
+>b : number | undefined
+>{} : {}
+
+    const c: number = a;
+>c : number
+>a : string | undefined
+}
+
+interface OuterArray {
+    inner?: number[];
+>inner : number[] | undefined
+}
+
+export function annotatedNestedArray({ inner: [a = 1, b] = [] }: OuterArray) {
+>annotatedNestedArray : ({ inner: [a, b] }: OuterArray) => void
+>inner : any
+>a : number
+>1 : 1
+>b : number
+>[] : never[]
+
+    const c: string = b;
+>c : string
+>b : number
+}
+
+export const indexSignature: (input?: { [key: string]: number }) => void = ({ a } = {}) => {
+>indexSignature : (input?: { [key: string]: number; }) => void
+>input : { [key: string]: number; } | undefined
+>key : string
+>({ a } = {}) => {    const c: string = a;} : ({ a }?: { [key: string]: number; } | undefined) => void
+>a : number
+>{} : {}
+
+    const c: string = a;
+>c : string
+>a : number
+
+};
+
+export const nestedAny: (input?: any) => void = ({ a: { b } = {} } = {}) => {
+>nestedAny : (input?: any) => void
+>input : any
+>({ a: { b } = {} } = {}) => {    b;} : ({ a: { b } }?: any) => void
+>a : any
+>b : any
+>{} : {}
+>{} : {}
+
+    b;
+>b : any
+
+};
+
+declare function generic<T>(value: T, callback: (input?: Partial<T>) => void): void;
+>generic : <T>(value: T, callback: (input?: Partial<T>) => void) => void
+>value : T
+>callback : (input?: Partial<T>) => void
+>input : Partial<T> | undefined
+
+generic({ a: 1 }, ({ a } = {}) => {
+>generic({ a: 1 }, ({ a } = {}) => {    const c: string = a;}) : void
+>generic : <T>(value: T, callback: (input?: Partial<T>) => void) => void
+>{ a: 1 } : { a: number; }
+>a : number
+>1 : 1
+>({ a } = {}) => {    const c: string = a;} : ({ a }?: Partial<{ a: number; }> | undefined) => void
+>a : number | undefined
+>{} : {}
+
+    const c: string = a;
+>c : string
+>a : number | undefined
+
+});
+
+export const nonEmptyDefault: (input: { a: boolean; b?: string }) => void = ({ a, b } = { a: false }) => {
+>nonEmptyDefault : (input: { a: boolean; b?: string; }) => void
+>input : { a: boolean; b?: string; }
+>a : boolean
+>b : string | undefined
+>({ a, b } = { a: false }) => {    const c: string = a;    const d: number = b;} : ({ a, b }?: { a: boolean; b?: string; }) => void
+>a : boolean
+>b : string | undefined
+>{ a: false } : { a: false; }
+>a : false
+>false : false
+
+    const c: string = a;
+>c : string
+>a : boolean
+
+    const d: number = b;
+>d : number
+>b : string | undefined
+
+};
+
+export const mapped = (input: { a?: number; b?: string }[]) =>
+>mapped : (input: { a?: number; b?: string; }[]) => void[]
+>(input: { a?: number; b?: string }[]) =>    input.map(({ a, b } = {}) => {        const c: string = a;        const d: number = b;    }) : (input: { a?: number; b?: string; }[]) => void[]
+>input : { a?: number; b?: string; }[]
+>a : number | undefined
+>b : string | undefined
+
+    input.map(({ a, b } = {}) => {
+>input.map(({ a, b } = {}) => {        const c: string = a;        const d: number = b;    }) : void[]
+>input.map : <U>(callbackfn: (value: { a?: number; b?: string; }, index: number, array: { a?: number; b?: string; }[]) => U, thisArg?: any) => U[]
+>input : { a?: number; b?: string; }[]
+>map : <U>(callbackfn: (value: { a?: number; b?: string; }, index: number, array: { a?: number; b?: string; }[]) => U, thisArg?: any) => U[]
+>({ a, b } = {}) => {        const c: string = a;        const d: number = b;    } : ({ a, b }?: { a?: number; b?: string; }) => void
+>a : number | undefined
+>b : string | undefined
+>{} : {}
+
+        const c: string = a;
+>c : string
+>a : number | undefined
+
+        const d: number = b;
+>d : number
+>b : string | undefined
+
+    });
+
+export const mixedDefaults: (args: string[], input?: { a?: string; b?: number }) => void = (args, { a, b = 1 } = {}) => {
+>mixedDefaults : (args: string[], input?: { a?: string; b?: number; }) => void
+>args : string[]
+>input : { a?: string; b?: number; } | undefined
+>a : string | undefined
+>b : number | undefined
+>(args, { a, b = 1 } = {}) => {    const c: number = a;    const d: string = b;} : (args: string[], { a, b }?: { a?: string; b?: number; } | undefined) => void
+>args : string[]
+>a : string | undefined
+>b : number
+>1 : 1
+>{} : {}
+
+    const c: number = a;
+>c : number
+>a : string | undefined
+
+    const d: string = b;
+>d : string
+>b : number
+
+};
+
+=== /jsdoc.js ===
+// @ts-check
+/** @typedef {(input: { inner?: { a?: number } }) => void} Nested */
+
+/** @type {Nested} */
+export function jsdocNested({ inner: { a } = {} }) {
+>jsdocNested : (input: { inner?: { a?: number; }; }) => void
+>inner : any
+>a : any
+>{} : {}
+
+    /** @type {string} */
+    const c = a;
+>c : string
+>a : any
+}
+
+/** @typedef {{ a?: number }} Options */
+/** @typedef {{ method: (b: string, c?: Options) => Promise<string[]> }} Container */
+
+/** @returns {Container} */
+export function returnsContainer() {
+>returnsContainer : () => Container
+
+    return {
+>{        async method(b, { a } = {}) {            /** @type {string} */            const c = a;            return [b];        },    } : { method(b: string, { a }?: Options | undefined): Promise<string[]>; }
+
+        async method(b, { a } = {}) {
+>method : (b: string, { a }?: Options | undefined) => Promise<string[]>
+>b : string
+>a : number | undefined
+>{} : {}
+
+            /** @type {string} */
+            const c = a;
+>c : string
+>a : number | undefined
+
+            return [b];
+>[b] : string[]
+>b : string
+
+        },
+    };
+}
+
+/** @typedef {(b: number, c?: Options) => Promise<void>} Callback */
+
+export const cast = /** @type {Callback} */ (async (b, { a } = {}) => {
+>cast : Callback
+>(async (b, { a } = {}) => {    /** @type {string} */    const c = a;}) : Callback
+>async (b, { a } = {}) => {    /** @type {string} */    const c = a;} : (b: number, { a }?: Options | undefined) => Promise<void>
+>b : number
+>a : number | undefined
+>{} : {}
+
+    /** @type {string} */
+    const c = a;
+>c : string
+>a : number | undefined
+
+});
+
