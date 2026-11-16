@@ -8,6 +8,7 @@ import (
 	"testing"
 
 	"github.com/microsoft/TypeScript/tsc/internal/bundled"
+	"github.com/microsoft/TypeScript/tsc/internal/json"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/contentmappertest"
@@ -274,6 +275,8 @@ export const title = "Profile";
 	assertFallback := func(msg *lsproto.Message, ok bool, method string) {
 		t.Helper()
 		assert.Assert(t, ok && msg.AsResponse().Error == nil, "%s should return a null fallback", method)
+		result, isValue := msg.AsResponse().Result.(json.Value)
+		assert.Assert(t, isValue && string(result) == "null", "%s should return JSON null, got %#v", method, msg.AsResponse().Result)
 	}
 
 	inlayHintMsg, _, ok := client.SendRequest(t, lsproto.TextDocumentInlayHintInfo, &lsproto.InlayHintParams{
