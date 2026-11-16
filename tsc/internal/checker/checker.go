@@ -20957,12 +20957,15 @@ func (c *Checker) enteredCycleMember(start int) *TypeResolution {
 }
 
 // isCycleMember reports whether a type resolution may be resolved first in
-// place of the one a cycle re-entered: the type of a symbol, or the return
-// type of a declared signature.
+// place of the one a cycle re-entered: the type of a symbol, the base types
+// of a class or interface, or the return type of a declared signature.
 func isCycleMember(r *TypeResolution) bool {
 	switch r.propertyName {
 	case TypeSystemPropertyNameType:
 		return true
+	case TypeSystemPropertyNameResolvedBaseTypes:
+		t := r.target.(*Type)
+		return t.symbol != nil && t.symbol.Flags()&(ast.SymbolFlagsClass|ast.SymbolFlagsInterface) != 0
 	case TypeSystemPropertyNameResolvedReturnType:
 		sig := r.target.(*Signature)
 		return sig.target == nil && sig.getComposite() == nil && sig.declaration != nil
@@ -20971,19 +20974,34 @@ func isCycleMember(r *TypeResolution) bool {
 }
 
 // compareCycleMembers orders the members of a cycle in program order of
-// their declarations, symbols first among members with the same one.
+// their declarations, symbols first among members with the same one, and the
+// type of a symbol before its base types.
 func (c *Checker) compareCycleMembers(a, b *TypeResolution) int {
-	aSymbol, aIsSymbol := a.target.(*ast.Symbol)
-	bSymbol, bIsSymbol := b.target.(*ast.Symbol)
+	aSymbol, bSymbol := cycleMemberSymbol(a), cycleMemberSymbol(b)
 	switch {
-	case aIsSymbol && bIsSymbol:
-		return c.compareSymbols(aSymbol, bSymbol)
-	case aIsSymbol:
+	case aSymbol != nil && bSymbol != nil:
+		if r := c.compareSymbols(aSymbol, bSymbol); r != 0 {
+			return r
+		}
+		return cmp.Compare(a.propertyName, b.propertyName)
+	case aSymbol != nil:
 		return c.compareSymbolToNode(aSymbol, b.target.(*Signature).declaration)
-	case bIsSymbol:
+	case bSymbol != nil:
 		return -c.compareSymbolToNode(bSymbol, a.target.(*Signature).declaration)
 	}
 	return c.compareNodes(a.target.(*Signature).declaration, b.target.(*Signature).declaration)
+}
+
+// cycleMemberSymbol returns the symbol whose declarations order a member of
+// a cycle, or nil for the return type of a signature.
+func cycleMemberSymbol(r *TypeResolution) *ast.Symbol {
+	switch r.propertyName {
+	case TypeSystemPropertyNameType:
+		return r.target.(*ast.Symbol)
+	case TypeSystemPropertyNameResolvedBaseTypes:
+		return r.target.(*Type).symbol
+	}
+	return nil
 }
 
 // compareSymbolToNode orders a symbol by its first declaration against node,
@@ -21006,6 +21024,8 @@ func (c *Checker) resolveCycleMember(r TypeResolution) {
 	switch propertyName {
 	case TypeSystemPropertyNameType:
 		c.getTypeOfSymbol(target.(*ast.Symbol))
+	case TypeSystemPropertyNameResolvedBaseTypes:
+		c.getBaseTypes(target.(*Type))
 	case TypeSystemPropertyNameResolvedReturnType:
 		sig := target.(*Signature)
 		if requested := c.requestedSignature(sig); requested != sig {
@@ -22324,6 +22344,17 @@ func (c *Checker) getBaseTypesUncached(t *Type) []*Type {
 		if !c.pushTypeResolution(t, TypeSystemPropertyNameResolvedBaseTypes, &data.resolvedBaseTypes.memoHeader) {
 			return data.resolvedBaseTypes.cached(c)
 		}
+		if data.baseTypesResolved {
+			// Resolved by the first member of a cycle, computed while
+			// yielding to it (see yieldCycle).
+			c.popTypeResolution()
+			return data.resolvedBaseTypes.cached(c)
+		}
+		if data.resolvedBaseTypes.cached(c) != nil {
+			// Computing them again from scratch, as a cycle yields to, inside
+			// a computation that already found some.
+			data.resolvedBaseTypes.set(c, nil)
+		}
 		switch {
 		case t.objectFlags&ObjectFlagsTuple != 0:
 			data.resolvedBaseTypes.set(c, []*Type{c.getTupleBaseType(t)})
@@ -22411,7 +22442,12 @@ func (c *Checker) resolveBaseTypesOfClass(t *Type) {
 		c.addDiagnostic(diagnostic)
 		return
 	}
-	if t == reducedBaseType || c.hasBaseType(reducedBaseType, t) {
+	circular := t == reducedBaseType || c.hasBaseType(reducedBaseType, t)
+	if t.AsInterfaceType().baseTypesResolved {
+		// See resolveBaseTypesOfInterface.
+		return
+	}
+	if circular {
 		c.error(t.symbol.ValueDeclaration(), diagnostics.Type_0_recursively_references_itself_as_a_base_type, c.TypeToString(t))
 		return
 	}
@@ -22665,7 +22701,14 @@ func (c *Checker) resolveBaseTypesOfInterface(t *Type) {
 				baseType := c.getReducedType(c.getTypeFromTypeNode(node))
 				if !c.isErrorType(baseType) {
 					if c.isValidBaseType(baseType) {
-						if t != baseType && !c.hasBaseType(baseType, t) {
+						circular := t == baseType || c.hasBaseType(baseType, t)
+						if data.baseTypesResolved {
+							// A cycle through the base types yielded to computing
+							// them from scratch (see yieldCycle), whose result
+							// stands.
+							return
+						}
+						if !circular {
 							data.resolvedBaseTypes.set(c, append(data.resolvedBaseTypes.cached(c), baseType))
 						} else {
 							c.reportCircularBaseType(declaration, t)

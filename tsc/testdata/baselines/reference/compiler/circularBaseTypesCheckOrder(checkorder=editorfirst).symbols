@@ -10,7 +10,9 @@ declare let z: Derived2;
 >Derived2 : Symbol(Derived2, Decl(circularBaseTypesCheckOrder.ts, 14, 1))
 
 z.x;
+>z.x : Symbol(Base.x, Decl(circularBaseTypesCheckOrder.ts, 8, 33))
 >z : Symbol(z, Decl(circularBaseTypesCheckOrder.ts, 4, 11))
+>x : Symbol(Base.x, Decl(circularBaseTypesCheckOrder.ts, 8, 33))
 
 z.y;
 >z.y : Symbol(Derived.y, Decl(circularBaseTypesCheckOrder.ts, 12, 32))
@@ -46,5 +48,7 @@ declare let d: Derived;
 >Derived : Symbol(Derived, Decl(circularBaseTypesCheckOrder.ts, 10, 1))
 
 d.x;
+>d.x : Symbol(Base.x, Decl(circularBaseTypesCheckOrder.ts, 8, 33))
 >d : Symbol(d, Decl(circularBaseTypesCheckOrder.ts, 20, 11))
+>x : Symbol(Base.x, Decl(circularBaseTypesCheckOrder.ts, 8, 33))
 
