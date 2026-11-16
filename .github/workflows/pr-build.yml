@@ -221,20 +221,21 @@ jobs:
         id: publish
         env:
           NPM_DIR: ${{ runner.temp }}/npm
+          PACKAGE_DIR: ${{ runner.temp }}/packages
           PRERELEASE: ${{ needs.prepare.outputs.prerelease }}
           MERGE_SHA: ${{ needs.prepare.outputs.merge_sha }}
           PACKAGES: ${{ needs.prepare.outputs.packages }}
         run: |
           set -euo pipefail
-          mapfile -t tarballs < <(node tools/scripts/validate-pr-build.mjs "$NPM_DIR" "$PRERELEASE" "$MERGE_SHA" "$PACKAGES")
+          mkdir "$PACKAGE_DIR"
+          mapfile -t packageDirs < <(node tools/scripts/validate-pr-build.mjs "$NPM_DIR" "$PACKAGE_DIR" "$PRERELEASE" "$MERGE_SHA" "$PACKAGES")
 
           # Trusted publishing needs npm 11.5.1 or later.
           npm install -g npm@11
           toPublish=()
-          for tarball in "${tarballs[@]}"; do
-            manifest="$(tar -xzOf "$NPM_DIR/$tarball" package/package.json)"
-            name="$(jq -r .name <<< "$manifest")"
-            version="$(jq -r .version <<< "$manifest")"
+          for packageDir in "${packageDirs[@]}"; do
+            name="$(jq -r .name "$packageDir/package.json")"
+            version="$(jq -r .version "$packageDir/package.json")"
             if publishedHead="$(npm view "$name@$version" gitHead 2> /dev/null)" && [[ -n "$publishedHead" ]]; then
               if [[ "$publishedHead" != "$MERGE_SHA" ]]; then
                 echo "$name@$version was already published from $publishedHead; request a new build." >&2
@@ -243,10 +244,10 @@ jobs:
               echo "$name@$version is already published."
               continue
             fi
-            toPublish+=("$tarball")
+            toPublish+=("$packageDir")
           done
-          for tarball in "${toPublish[@]}"; do
-            npm publish "$NPM_DIR/$tarball" --access public --tag pr
+          for packageDir in "${toPublish[@]}"; do
+            npm publish "$packageDir" --access public --tag pr --ignore-scripts
           done
           echo "version=$version" >> "$GITHUB_OUTPUT"
 
