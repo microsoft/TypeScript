@@ -1,0 +1,80 @@
+//// [tests/cases/compiler/jsxDevSelfInSuperArguments.tsx] ////
+
+=== /node_modules/preact/jsx-dev-runtime/index.d.ts ===
+export namespace JSX {
+>JSX : Symbol(JSX, Decl(index.d.ts, 0, 0))
+
+    interface Element {}
+>Element : Symbol(Element, Decl(index.d.ts, 0, 22))
+
+    interface IntrinsicElements {
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(index.d.ts, 1, 24))
+
+        h2: {};
+>h2 : Symbol(IntrinsicElements.h2, Decl(index.d.ts, 2, 33))
+    }
+}
+export function jsxDEV(type: any, props: any, key?: any, isStatic?: boolean, source?: any, self?: any): JSX.Element;
+>jsxDEV : Symbol(jsxDEV, Decl(index.d.ts, 5, 1))
+>type : Symbol(type, Decl(index.d.ts, 6, 23))
+>props : Symbol(props, Decl(index.d.ts, 6, 33))
+>key : Symbol(key, Decl(index.d.ts, 6, 45))
+>isStatic : Symbol(isStatic, Decl(index.d.ts, 6, 56))
+>source : Symbol(source, Decl(index.d.ts, 6, 76))
+>self : Symbol(self, Decl(index.d.ts, 6, 90))
+>JSX : Symbol(JSX, Decl(index.d.ts, 0, 0))
+>Element : Symbol(JSX.Element, Decl(index.d.ts, 0, 22))
+
+=== /index.tsx ===
+class Base {
+>Base : Symbol(Base, Decl(index.tsx, 0, 0))
+
+    content: any;
+>content : Symbol(Base.content, Decl(index.tsx, 0, 12))
+
+    constructor(...args: any[]) { this.content = args[0]; }
+>args : Symbol(args, Decl(index.tsx, 2, 16))
+>this.content : Symbol(Base.content, Decl(index.tsx, 0, 12))
+>this : Symbol(Base, Decl(index.tsx, 0, 0))
+>content : Symbol(Base.content, Decl(index.tsx, 0, 12))
+>args : Symbol(args, Decl(index.tsx, 2, 16))
+}
+class Card extends Base {
+>Card : Symbol(Card, Decl(index.tsx, 3, 1))
+>Base : Symbol(Base, Decl(index.tsx, 0, 0))
+
+    constructor(title: string) {
+>title : Symbol(title, Decl(index.tsx, 5, 16))
+
+        super(<h2>{title}</h2>);
+>super : Symbol(Base, Decl(index.tsx, 0, 0))
+>h2 : Symbol(JSX.IntrinsicElements.h2, Decl(index.d.ts, 2, 33))
+>title : Symbol(title, Decl(index.tsx, 5, 16))
+>h2 : Symbol(JSX.IntrinsicElements.h2, Decl(index.d.ts, 2, 33))
+    }
+}
+class Nested extends Base {
+>Nested : Symbol(Nested, Decl(index.tsx, 8, 1))
+>Base : Symbol(Base, Decl(index.tsx, 0, 0))
+
+    constructor() {
+        super({ render() { return <h2 />; } });
+>super : Symbol(Base, Decl(index.tsx, 0, 0))
+>render : Symbol(render, Decl(index.tsx, 11, 15))
+>h2 : Symbol(JSX.IntrinsicElements.h2, Decl(index.d.ts, 2, 33))
+    }
+}
+class Outer extends Base {
+>Outer : Symbol(Outer, Decl(index.tsx, 13, 1))
+>Base : Symbol(Base, Decl(index.tsx, 0, 0))
+
+    constructor() {
+        super(class extends Base { constructor() { super(<h2 />); } }, <h2 />);
+>super : Symbol(Base, Decl(index.tsx, 0, 0))
+>Base : Symbol(Base, Decl(index.tsx, 0, 0))
+>super : Symbol(Base, Decl(index.tsx, 0, 0))
+>h2 : Symbol(JSX.IntrinsicElements.h2, Decl(index.d.ts, 2, 33))
+>h2 : Symbol(JSX.IntrinsicElements.h2, Decl(index.d.ts, 2, 33))
+    }
+}
+

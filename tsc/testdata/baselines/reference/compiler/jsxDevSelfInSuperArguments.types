@@ -1,0 +1,86 @@
+//// [tests/cases/compiler/jsxDevSelfInSuperArguments.tsx] ////
+
+=== /node_modules/preact/jsx-dev-runtime/index.d.ts ===
+export namespace JSX {
+    interface Element {}
+    interface IntrinsicElements {
+        h2: {};
+>h2 : {}
+    }
+}
+export function jsxDEV(type: any, props: any, key?: any, isStatic?: boolean, source?: any, self?: any): JSX.Element;
+>jsxDEV : (type: any, props: any, key?: any, isStatic?: boolean, source?: any, self?: any) => JSX.Element
+>type : any
+>props : any
+>key : any
+>isStatic : boolean | undefined
+>source : any
+>self : any
+>JSX : any
+
+=== /index.tsx ===
+class Base {
+>Base : Base
+
+    content: any;
+>content : any
+
+    constructor(...args: any[]) { this.content = args[0]; }
+>args : any[]
+>this.content = args[0] : any
+>this.content : any
+>this : this
+>content : any
+>args[0] : any
+>args : any[]
+>0 : 0
+}
+class Card extends Base {
+>Card : Card
+>Base : Base
+
+    constructor(title: string) {
+>title : string
+
+        super(<h2>{title}</h2>);
+>super(<h2>{title}</h2>) : void
+>super : typeof Base
+><h2>{title}</h2> : import("preact/jsx-dev-runtime").JSX.Element
+>h2 : any
+>title : string
+>h2 : any
+    }
+}
+class Nested extends Base {
+>Nested : Nested
+>Base : Base
+
+    constructor() {
+        super({ render() { return <h2 />; } });
+>super({ render() { return <h2 />; } }) : void
+>super : typeof Base
+>{ render() { return <h2 />; } } : { render(): import("preact/jsx-dev-runtime").JSX.Element; }
+>render : () => import("preact/jsx-dev-runtime").JSX.Element
+><h2 /> : import("preact/jsx-dev-runtime").JSX.Element
+>h2 : any
+    }
+}
+class Outer extends Base {
+>Outer : Outer
+>Base : Base
+
+    constructor() {
+        super(class extends Base { constructor() { super(<h2 />); } }, <h2 />);
+>super(class extends Base { constructor() { super(<h2 />); } }, <h2 />) : void
+>super : typeof Base
+>class extends Base { constructor() { super(<h2 />); } } : typeof (Anonymous class)
+>Base : Base
+>super(<h2 />) : void
+>super : typeof Base
+><h2 /> : import("preact/jsx-dev-runtime").JSX.Element
+>h2 : any
+><h2 /> : import("preact/jsx-dev-runtime").JSX.Element
+>h2 : any
+    }
+}
+
