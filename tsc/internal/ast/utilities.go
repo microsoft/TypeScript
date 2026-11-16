@@ -2848,20 +2848,28 @@ func ForEachDynamicImportOrRequireCall(
 	cb func(node *Node, argument *Expression) bool,
 ) bool {
 	isJavaScriptFile := IsInJSFile(file.AsNode())
+	// The text scan can match the keyword inside a string literal, which resolves
+	// back to the same import call. Visit each node once.
+	seenNodes := make(map[*Node]bool)
 	lastIndex, size := findImportOrRequire(file.Text(), 0)
 	for lastIndex >= 0 {
 		node := GetNodeAtPosition(file, lastIndex, isJavaScriptFile && includeTypeSpaceImports)
-		if isJavaScriptFile && IsRequireCall(node, requireStringLiteralLikeArgument) {
-			if cb(node, node.Arguments()[0]) {
-				return true
+		if node == nil || !seenNodes[node] {
+			if node != nil {
+				seenNodes[node] = true
 			}
-		} else if IsImportCall(node) && len(node.Arguments()) > 0 && (!requireStringLiteralLikeArgument || IsStringLiteralLike(node.Arguments()[0])) {
-			if cb(node, node.Arguments()[0]) {
-				return true
-			}
-		} else if includeTypeSpaceImports && IsLiteralImportTypeNode(node) {
-			if cb(node, node.AsImportTypeNode().Argument.AsLiteralTypeNode().Literal) {
-				return true
+			if isJavaScriptFile && IsRequireCall(node, requireStringLiteralLikeArgument) {
+				if cb(node, node.Arguments()[0]) {
+					return true
+				}
+			} else if IsImportCall(node) && len(node.Arguments()) > 0 && (!requireStringLiteralLikeArgument || IsStringLiteralLike(node.Arguments()[0])) {
+				if cb(node, node.Arguments()[0]) {
+					return true
+				}
+			} else if includeTypeSpaceImports && IsLiteralImportTypeNode(node) {
+				if cb(node, node.AsImportTypeNode().Argument.AsLiteralTypeNode().Literal) {
+					return true
+				}
 			}
 		}
 		// skip past import/require
