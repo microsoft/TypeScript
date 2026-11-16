@@ -2376,13 +2376,11 @@ func SkipTriviaEx(text string, pos int, options *SkipTriviaOptions) int {
 		}
 		ch, size := utf8.DecodeRuneInString(text[pos:])
 		switch ch {
-		case '\r':
-			if pos+1 < textLen && text[pos+1] == '\n' {
+		case '\r', '\n', '\u2028', '\u2029':
+			if ch == '\r' && pos+1 < textLen && text[pos+1] == '\n' {
 				pos++
 			}
-			fallthrough
-		case '\n':
-			pos++
+			pos += size
 			if options.StopAfterLineBreak {
 				return pos
 			}
