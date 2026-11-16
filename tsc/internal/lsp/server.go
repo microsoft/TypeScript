@@ -1268,7 +1268,17 @@ func contentMapperFallbackResponse(method lsproto.Method, err error) (any, bool)
 		lsproto.MethodTextDocumentReferences,
 		lsproto.MethodTextDocumentDocumentHighlight,
 		lsproto.MethodTextDocumentCompletion,
-		lsproto.MethodTextDocumentRename:
+		lsproto.MethodTextDocumentRename,
+		lsproto.MethodTextDocumentInlayHint,
+		lsproto.MethodTextDocumentCodeLens,
+		lsproto.MethodTextDocumentFormatting,
+		lsproto.MethodTextDocumentRangeFormatting,
+		lsproto.MethodTextDocumentOnTypeFormatting,
+		lsproto.MethodTextDocumentLinkedEditingRange,
+		lsproto.MethodTextDocumentPrepareCallHierarchy,
+		lsproto.MethodTextDocumentPrepareRename,
+		lsproto.MethodCallHierarchyIncomingCalls,
+		lsproto.MethodCallHierarchyOutgoingCalls:
 		return lsproto.Null{}, true
 	default:
 		return nil, false

@@ -259,6 +259,83 @@ export const title = "Profile";
 		assert.Assert(t, found, "expected %s unregistration", id)
 	}
 
+	position := lsproto.Position{Line: 3, Character: 15}
+	rangeValue := lsproto.Range{Start: position, End: position}
+	formattingOptions := &lsproto.FormattingOptions{TabSize: 4, InsertSpaces: true}
+	textDocument := lsproto.TextDocumentIdentifier{Uri: uri}
+	callHierarchyItem := &lsproto.CallHierarchyItem{
+		Name:           "stale",
+		Kind:           lsproto.SymbolKind(12),
+		Uri:            uri,
+		Range:          rangeValue,
+		SelectionRange: rangeValue,
+	}
+
+	assertFallback := func(msg *lsproto.Message, ok bool, method string) {
+		t.Helper()
+		assert.Assert(t, ok && msg.AsResponse().Error == nil, "%s should return a null fallback", method)
+	}
+
+	inlayHintMsg, _, ok := client.SendRequest(t, lsproto.TextDocumentInlayHintInfo, &lsproto.InlayHintParams{
+		TextDocument: textDocument,
+		Range:        rangeValue,
+	})
+	assertFallback(inlayHintMsg, ok, "textDocument/inlayHint")
+
+	codeLensMsg, _, ok := client.SendRequest(t, lsproto.TextDocumentCodeLensInfo, &lsproto.CodeLensParams{
+		TextDocument: textDocument,
+	})
+	assertFallback(codeLensMsg, ok, "textDocument/codeLens")
+
+	formattingMsg, _, ok := client.SendRequest(t, lsproto.TextDocumentFormattingInfo, &lsproto.DocumentFormattingParams{
+		TextDocument: textDocument,
+		Options:      formattingOptions,
+	})
+	assertFallback(formattingMsg, ok, "textDocument/formatting")
+
+	rangeFormattingMsg, _, ok := client.SendRequest(t, lsproto.TextDocumentRangeFormattingInfo, &lsproto.DocumentRangeFormattingParams{
+		TextDocument: textDocument,
+		Range:        rangeValue,
+		Options:      formattingOptions,
+	})
+	assertFallback(rangeFormattingMsg, ok, "textDocument/rangeFormatting")
+
+	onTypeFormattingMsg, _, ok := client.SendRequest(t, lsproto.TextDocumentOnTypeFormattingInfo, &lsproto.DocumentOnTypeFormattingParams{
+		TextDocument: textDocument,
+		Position:     position,
+		Ch:           ";",
+		Options:      formattingOptions,
+	})
+	assertFallback(onTypeFormattingMsg, ok, "textDocument/onTypeFormatting")
+
+	linkedEditingMsg, _, ok := client.SendRequest(t, lsproto.TextDocumentLinkedEditingRangeInfo, &lsproto.LinkedEditingRangeParams{
+		TextDocument: textDocument,
+		Position:     position,
+	})
+	assertFallback(linkedEditingMsg, ok, "textDocument/linkedEditingRange")
+
+	prepareCallHierarchyMsg, _, ok := client.SendRequest(t, lsproto.TextDocumentPrepareCallHierarchyInfo, &lsproto.CallHierarchyPrepareParams{
+		TextDocument: textDocument,
+		Position:     position,
+	})
+	assertFallback(prepareCallHierarchyMsg, ok, "textDocument/prepareCallHierarchy")
+
+	prepareRenameMsg, _, ok := client.SendRequest(t, lsproto.TextDocumentPrepareRenameInfo, &lsproto.PrepareRenameParams{
+		TextDocument: textDocument,
+		Position:     position,
+	})
+	assertFallback(prepareRenameMsg, ok, "textDocument/prepareRename")
+
+	incomingCallsMsg, _, ok := client.SendRequest(t, lsproto.CallHierarchyIncomingCallsInfo, &lsproto.CallHierarchyIncomingCallsParams{
+		Item: callHierarchyItem,
+	})
+	assertFallback(incomingCallsMsg, ok, "callHierarchy/incomingCalls")
+
+	outgoingCallsMsg, _, ok := client.SendRequest(t, lsproto.CallHierarchyOutgoingCallsInfo, &lsproto.CallHierarchyOutgoingCallsParams{
+		Item: callHierarchyItem,
+	})
+	assertFallback(outgoingCallsMsg, ok, "callHierarchy/outgoingCalls")
+
 	client.SendNotification(t, lsproto.TextDocumentDidCloseInfo, &lsproto.DidCloseTextDocumentParams{
 		TextDocument: lsproto.TextDocumentIdentifier{Uri: uri},
 	})
