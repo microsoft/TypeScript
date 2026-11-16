@@ -24,8 +24,8 @@ function f(...args) { return this; }
 Object.defineProperty(exports, "__esModule", { value: true });
 const a_1 = require("./a");
 console.log((0, a_1.f)() === undefined);
+console.log((0, (a_1.f))() === undefined);
 console.log((0, a_1.f)() === undefined);
+console.log((0, (a_1.f))() === undefined);
 console.log((0, a_1.f)() === undefined);
-console.log((0, a_1.f)() === undefined);
-console.log((0, a_1.f)() === undefined);
-console.log((0, a_1.f) `x` === undefined);
+console.log((0, (a_1.f)) `x` === undefined);

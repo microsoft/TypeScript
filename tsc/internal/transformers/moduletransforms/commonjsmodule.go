@@ -1842,7 +1842,7 @@ func (tx *CommonJSModuleTransformer) visitCallExpression(node *ast.CallExpressio
 		expression := tx.visitExpressionIdentifier(callee)
 		updated := tx.Factory().UpdateCallExpression(
 			node,
-			expression,
+			tx.Factory().RestoreOuterExpressions(node.Expression, expression, ast.OEKAll),
 			node.QuestionDotToken,
 			nil, /*typeArguments*/
 			tx.Visitor().VisitNodes(node.Arguments),
@@ -2025,7 +2025,7 @@ func (tx *CommonJSModuleTransformer) visitTaggedTemplateExpression(node *ast.Tag
 		expression := tx.visitExpressionIdentifier(tag)
 		updated := tx.Factory().UpdateTaggedTemplateExpression(
 			node,
-			expression,
+			tx.Factory().RestoreOuterExpressions(node.Tag, expression, ast.OEKAll),
 			nil, /*questionDotToken*/
 			nil, /*typeArguments*/
 			tx.Visitor().VisitNode(node.Template),
