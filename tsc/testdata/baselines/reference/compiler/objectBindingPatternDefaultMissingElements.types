@@ -246,13 +246,13 @@ export const arr3: (input?: [{ a?: number }?]) => void = ([{ a } = {}] = []) => 
 >input : [({ a?: number; } | undefined)?] | undefined
 >a : number | undefined
 >([{ a } = {}] = []) => {    const b: string = a;} : ([{ a }]?: [({ a?: number; } | undefined)?] | undefined) => void
->a : any
+>a : number | undefined
 >{} : {}
 >[] : []
 
     const b: string = a;
 >b : string
->a : any
+>a : number | undefined
 
 };
 
@@ -261,13 +261,13 @@ export const arr4: (input?: { a?: number }[]) => void = ([...[{ a } = {}]] = [])
 >input : { a?: number; }[] | undefined
 >a : number | undefined
 >([...[{ a } = {}]] = []) => {    const b: string = a;} : ([...[{ a }]]?: { a?: number; }[] | undefined) => void
->a : any
+>a : number | undefined
 >{} : {}
 >[] : never[]
 
     const b: string = a;
 >b : string
->a : any
+>a : number | undefined
 
 };
 
@@ -315,12 +315,12 @@ items.map(({ result: { summary } = {} }) => {
 >map : <U>(callbackfn: (value: { result?: { summary: number; }; }, index: number, array: { result?: { summary: number; }; }[]) => U, thisArg?: any) => U[]
 >({ result: { summary } = {} }) => {    const c: string = summary;} : ({ result: { summary } }: { result?: { summary: number; }; }) => void
 >result : any
->summary : any
+>summary : number | undefined
 >{} : {}
 
     const c: string = summary;
 >c : string
->summary : any
+>summary : number | undefined
 
 });
 
@@ -359,12 +359,12 @@ export const partial: (input?: { known?: number }) => void = ({ known, unknown }
 export function jsdocNested({ inner: { a } = {} }) {
 >jsdocNested : (input: { inner?: { a?: number; }; }) => void
 >inner : any
->a : any
+>a : number | undefined
 >{} : {}
 
     /** @type {string} */
     const c = a;
 >c : string
->a : any
+>a : number | undefined
 }
 

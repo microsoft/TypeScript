@@ -17300,11 +17300,12 @@ func (c *Checker) checkDeclarationInitializer(declaration *ast.Node, checkMode C
 			t = c.checkExpressionCachedEx(initializer, checkMode)
 		}
 	}
-	if ast.IsParameterDeclaration(ast.GetRootDeclaration(declaration)) {
+	root := ast.GetRootDeclaration(declaration)
+	if ast.IsParameterDeclaration(root) {
 		name := declaration.Name()
 		switch name.Kind {
 		case ast.KindObjectBindingPattern:
-			if isObjectLiteralType(t) {
+			if isObjectLiteralType(t) && c.isParameterTypedByInitializer(root) {
 				return c.padObjectLiteralType(t, name)
 			}
 		case ast.KindArrayBindingPattern:
@@ -17314,6 +17315,16 @@ func (c *Checker) checkDeclarationInitializer(declaration *ast.Node, checkMode C
 		}
 	}
 	return t
+}
+
+// isParameterTypedByInitializer reports whether a parameter gets its type from its initializer, which
+// happens only when the parameter has no type annotation, JSDoc @type signature, or contextual type.
+// Padding the initializer with the binding pattern's missing elements is meaningful only in that case;
+// otherwise the padded elements would be implicitly any and would override the parameter's type.
+func (c *Checker) isParameterTypedByInitializer(parameter *ast.Node) bool {
+	return parameter.Type() == nil &&
+		c.getParameterTypeOfFullSignature(parameter.Parent, parameter) == nil &&
+		c.getContextuallyTypedParameterType(parameter) == nil
 }
 
 func (c *Checker) padObjectLiteralType(t *Type, pattern *ast.Node) *Type {
