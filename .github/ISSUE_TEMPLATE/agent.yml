@@ -5,4 +5,4 @@ body:
     id: contents
     attributes:
       label: Comment
-      value: Use the `/typescript-issue-report` skill at https://github.com/microsoft/TypeScript-skills
+      value: Use the `/typescript-report-issue` skill at https://github.com/microsoft/TypeScript-skills
