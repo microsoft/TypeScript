@@ -23810,8 +23810,14 @@ func isSimpleIdentifierTypeReference(node *ast.Node) bool {
 	return ast.IsTypeReferenceNode(node) && ast.IsIdentifier(node.AsTypeReferenceNode().TypeName) && node.TypeArgumentList() == nil
 }
 
+// isHeritageTypeReference reports whether node names the class or interface
+// in a heritage clause or a JSDoc @augments or @implements tag.
+func isHeritageTypeReference(node *ast.Node) bool {
+	return ast.IsHeritageClause(node.Parent) || ast.IsJSDocAugmentsTag(node.Parent) || ast.IsJSDocImplementsTag(node.Parent)
+}
+
 func (c *Checker) getIntendedTypeFromJSDocTypeReference(node *ast.Node) *Type {
-	if node.Flags&ast.NodeFlagsJSDoc != 0 && ast.IsTypeReferenceNode(node) {
+	if node.Flags&ast.NodeFlagsJSDoc != 0 && ast.IsTypeReferenceNode(node) && !isHeritageTypeReference(node) {
 		typeName := node.AsTypeReferenceNode().TypeName
 		if ast.IsIdentifier(typeName) {
 			typeArgs := node.TypeArguments()
