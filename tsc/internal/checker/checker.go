@@ -19399,6 +19399,14 @@ func (c *Checker) getLayoutPropertiesOfType(t *Type) []*ast.Symbol {
 	return layout.layoutProperties
 }
 
+func (c *Checker) getPropertyCountOfType(t *Type) int {
+	t = c.getReducedApparentType(t)
+	if lazy := c.getLazyStateOfType(t); lazy != nil {
+		return lazy.layout.members.Len()
+	}
+	return len(c.getPropertiesOfType(t))
+}
+
 func (c *Checker) getLazyStateOfType(t *Type) *LazyState {
 	if t.flags&TypeFlagsObject != 0 {
 		return c.resolveStructuredTypeMembers(t).getLazyState()
@@ -19411,7 +19419,25 @@ func (c *Checker) getPropertiesOfUnionOrIntersectionType(t *Type) []*ast.Symbol 
 	if d.resolvedProperties == nil {
 		var checked collections.Set[string]
 		props := []*ast.Symbol{}
-		for _, current := range d.types {
+		types := d.types
+		if t.flags&TypeFlagsUnion != 0 {
+			// Find the constituent type of the union with the fewest properties and no index signature. This type will be used
+			// as the representative for checking properties of the union, as all properties must be present in all constituent types.
+			var smallestUnion *Type
+			var smallestPropertyCount int
+			for _, current := range d.types {
+				if len(c.getIndexInfosOfType(current)) == 0 {
+					if count := c.getPropertyCountOfType(current); smallestUnion == nil || count < smallestPropertyCount {
+						smallestUnion = current
+						smallestPropertyCount = count
+					}
+				}
+			}
+			if smallestUnion != nil {
+				types = []*Type{smallestUnion}
+			}
+		}
+		for _, current := range types {
 			for _, prop := range c.getPropertiesOfType(current) {
 				if !checked.Has(prop.Name()) {
 					checked.Add(prop.Name())
@@ -19420,11 +19446,6 @@ func (c *Checker) getPropertiesOfUnionOrIntersectionType(t *Type) []*ast.Symbol 
 						props = append(props, combinedProp)
 					}
 				}
-			}
-			// The properties of a union type are those that are present in all constituent types, so
-			// we only need to check the properties of the first type without index signature
-			if t.flags&TypeFlagsUnion != 0 && len(c.getIndexInfosOfType(current)) == 0 {
-				break
 			}
 		}
 		d.resolvedProperties = props
@@ -28199,7 +28220,7 @@ func (c *Checker) getPropertyNameFromIndex(indexType *Type, accessNode *ast.Node
 }
 
 func (c *Checker) isStringIndexSignatureOnlyTypeWorker(t *Type) bool {
-	return t.flags&TypeFlagsObject != 0 && t.objectFlags&(ObjectFlagsClassOrInterface|ObjectFlagsReference) == 0 && !c.isGenericMappedType(t) && len(c.getLayoutPropertiesOfType(t)) == 0 && len(c.getIndexInfosOfType(t)) == 1 && c.getIndexInfoOfType(t, c.stringType) != nil ||
+	return t.flags&TypeFlagsObject != 0 && t.objectFlags&(ObjectFlagsClassOrInterface|ObjectFlagsReference) == 0 && !c.isGenericMappedType(t) && c.getPropertyCountOfType(t) == 0 && len(c.getIndexInfosOfType(t)) == 1 && c.getIndexInfoOfType(t, c.stringType) != nil ||
 		t.flags&TypeFlagsUnionOrIntersection != 0 && core.Every(t.Types(), c.isStringIndexSignatureOnlyType)
 }
 
