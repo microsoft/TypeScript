@@ -57,14 +57,26 @@
 // }
 // 
 // interface D extends C {
-// --- (line: 7) skipped ---
+//     prop0: string;
+// }
+// 
+// var d: D;
+// d.prop0;
+// d.[|prop1|];
 
 
 
 // === findAllReferences ===
 // === /findAllRefsInheritedProperties4.ts ===
-// --- (line: 8) skipped ---
+// interface C extends D {
+//     prop0: string;
+//     [|prop1|]: number;
+// }
+// 
+// interface D extends C {
+//     prop0: string;
+// }
 // 
 // var d: D;
 // d.prop0;
-// d./*FIND ALL REFS*/prop1;
+// d./*FIND ALL REFS*/[|prop1|];

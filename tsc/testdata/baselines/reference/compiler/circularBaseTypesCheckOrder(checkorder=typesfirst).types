@@ -9,9 +9,9 @@ declare let z: Derived2;
 >z : Derived2
 
 z.x;
->z.x : any
+>z.x : string
 >z : Derived2
->x : any
+>x : string
 
 z.y;
 >z.y : string
@@ -37,7 +37,7 @@ declare let d: Derived;
 >d : Derived
 
 d.x;
->d.x : any
+>d.x : string
 >d : Derived
->x : any
+>x : string
 
