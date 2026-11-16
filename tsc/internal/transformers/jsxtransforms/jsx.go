@@ -25,6 +25,7 @@ type JSXTransformer struct {
 	filenameDeclaration            *ast.Node
 	utilizedImplicitRuntimeImports collections.OrderedMap[string, map[string]*ast.Node]
 	inJsxChild                     bool
+	inSuperCallArguments           bool
 
 	currentSourceFile *ast.SourceFile
 }
@@ -130,6 +131,33 @@ func (tx *JSXTransformer) visit(node *ast.Node) *ast.Node {
 	case ast.KindJsxExpression:
 		tx.setInChild(false)
 		return tx.visitJsxExpression(node.AsJsxExpression())
+	case ast.KindCallExpression:
+		if ast.IsSuperCall(node) {
+			// `this` is not available in the arguments of a super call.
+			previous := tx.inSuperCallArguments
+			tx.inSuperCallArguments = true
+			result := tx.Visitor().VisitEachChild(node)
+			tx.inSuperCallArguments = previous
+			return result
+		}
+	case ast.KindFunctionDeclaration,
+		ast.KindFunctionExpression,
+		ast.KindMethodDeclaration,
+		ast.KindGetAccessor,
+		ast.KindSetAccessor,
+		ast.KindConstructor,
+		ast.KindPropertyDeclaration,
+		ast.KindClassStaticBlockDeclaration,
+		ast.KindClassDeclaration,
+		ast.KindClassExpression:
+		// These introduce their own `this` scope. Arrow functions inherit the
+		// enclosing one, so they keep the flag.
+		previous := tx.inSuperCallArguments
+		tx.inSuperCallArguments = false
+		tx.setInChild(false)
+		result := tx.Visitor().VisitEachChild(node)
+		tx.inSuperCallArguments = previous
+		return result
 	}
 	tx.setInChild(false)
 	return tx.Visitor().VisitEachChild(node) // by default, do nothing
@@ -587,8 +615,12 @@ func (tx *JSXTransformer) visitJsxOpeningLikeElementOrFragmentJSX(
 				tx.Factory().NewPropertyAssignment(nil, tx.Factory().NewIdentifier("lineNumber"), nil, nil, tx.Factory().NewNumericLiteral(strconv.FormatInt(int64(line+1), 10), ast.TokenFlagsNone)),
 				tx.Factory().NewPropertyAssignment(nil, tx.Factory().NewIdentifier("columnNumber"), nil, nil, tx.Factory().NewNumericLiteral(strconv.FormatInt(int64(col)+1, 10), ast.TokenFlagsNone)),
 			}), false))
-			// __self development flag
-			args = append(args, tx.Factory().NewThisExpression())
+			// __self development flag. `this` is not available before super() returns.
+			if tx.inSuperCallArguments {
+				args = append(args, tx.Factory().NewVoidZeroExpression())
+			} else {
+				args = append(args, tx.Factory().NewThisExpression())
+			}
 		}
 	}
 

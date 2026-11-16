@@ -40,7 +40,7 @@ class Base {
 }
 class Card extends Base {
     constructor(title) {
-        super(_jsxDEV("h2", { children: title }, void 0, false, { fileName: _jsxFileName, lineNumber: 7, columnNumber: 15 }, this));
+        super(_jsxDEV("h2", { children: title }, void 0, false, { fileName: _jsxFileName, lineNumber: 7, columnNumber: 15 }, void 0));
     }
 }
 class Nested extends Base {
@@ -51,7 +51,7 @@ class Nested extends Base {
 class Outer extends Base {
     constructor() {
         super(class extends Base {
-            constructor() { super(_jsxDEV("h2", {}, void 0, false, { fileName: _jsxFileName, lineNumber: 17, columnNumber: 58 }, this)); }
-        }, _jsxDEV("h2", {}, void 0, false, { fileName: _jsxFileName, lineNumber: 17, columnNumber: 72 }, this));
+            constructor() { super(_jsxDEV("h2", {}, void 0, false, { fileName: _jsxFileName, lineNumber: 17, columnNumber: 58 }, void 0)); }
+        }, _jsxDEV("h2", {}, void 0, false, { fileName: _jsxFileName, lineNumber: 17, columnNumber: 72 }, void 0));
     }
 }
