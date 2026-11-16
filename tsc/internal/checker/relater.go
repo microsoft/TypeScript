@@ -679,10 +679,25 @@ func (c *Checker) elaborateArrowFunction(node *ast.Node, source *Type, target *T
 // and no required properties, call/construct signatures or index signatures
 func (c *Checker) isWeakType(t *Type) bool {
 	if t.flags&TypeFlagsObject != 0 {
+		if t.cacheFlags&typeCacheIsWeakComputed != 0 {
+			return t.cacheFlags&typeCacheIsWeak != 0
+		}
 		resolved := c.resolveStructuredTypeMembers(t)
-		return len(resolved.getSignatures()) == 0 && len(resolved.getIndexInfos()) == 0 && len(c.getLayoutPropertiesOfType(t)) > 0 && core.Every(c.getLayoutPropertiesOfType(t), func(p *ast.Symbol) bool {
-			return p.Flags()&ast.SymbolFlagsOptional != 0
-		})
+		// The answer can only be cached once the members are fully resolved.
+		cacheable := hasFinalMembers(t)
+		result := false
+		if len(resolved.getSignatures()) == 0 && len(resolved.getIndexInfos()) == 0 {
+			props := c.getLayoutPropertiesOfType(t)
+			result = len(props) > 0 && core.Every(props, func(p *ast.Symbol) bool {
+				return p.Flags()&ast.SymbolFlagsOptional != 0
+			})
+			// The properties come from the apparent type, so it must be the type itself.
+			cacheable = cacheable && c.getReducedApparentType(t) == t
+		}
+		if cacheable {
+			t.cacheFlags |= typeCacheIsWeakComputed | core.IfElse(result, typeCacheIsWeak, 0)
+		}
+		return result
 	}
 	if t.flags&TypeFlagsSubstitution != 0 {
 		return c.isWeakType(t.AsSubstitutionType().baseType)
