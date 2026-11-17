@@ -33,14 +33,14 @@ func PrintAndPositionNode(factory *ast.NodeFactory, node *ast.Node, sourceFile *
 	return text, positioned
 }
 
-// CreateSyntheticSourceFile wraps a positioned node in a synthetic source file
-// suitable for use with the formatter. The node must already have valid source
-// positions assigned (e.g. via PrintAndPositionNode or AssignPositionsToNode).
-func CreateSyntheticSourceFile(factory *ast.NodeFactory, node *ast.Node, text string, parseOptions ast.SourceFileParseOptions) *ast.SourceFile {
+// CreateSyntheticSourceFile provides text and line maps for formatting a printed
+// fragment. The fragment is formatted separately: it need not be a statement and
+// must not be added to the source file's statement list.
+func CreateSyntheticSourceFile(factory *ast.NodeFactory, text string, parseOptions ast.SourceFileParseOptions) *ast.SourceFile {
 	eof := factory.NewToken(ast.KindEndOfFile)
 	eof.Loc = core.NewTextRange(len(text), len(text))
-	statements := factory.NewNodeList([]*ast.Node{node})
-	statements.Loc = core.NewTextRange(node.Pos(), node.End())
+	statements := factory.NewNodeList(nil)
+	statements.Loc = core.NewTextRange(0, 0)
 	syntheticFile := factory.NewSourceFile(
 		parseOptions,
 		text,
