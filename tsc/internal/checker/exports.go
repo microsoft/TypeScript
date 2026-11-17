@@ -11,6 +11,7 @@ import (
 func (c *Checker) GetRelationCacheSizes() RelationCacheSizes {
 	return RelationCacheSizes{
 		Assignable:    c.assignableRelation.size(),
+		Variance:      c.varianceRelation.size(),
 		Identity:      c.identityRelation.size(),
 		Subtype:       c.subtypeRelation.size(),
 		StrictSubtype: c.strictSubtypeRelation.size(),

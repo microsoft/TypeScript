@@ -151,6 +151,19 @@ func (c *Checker) isTypeAssignableTo(source *Type, target *Type) bool {
 	return c.isTypeRelatedTo(source, target, c.assignableRelation)
 }
 
+// Determine if source is related to target using the variance-assignability relationship, which
+// behaves like plain assignability except that the combined-constraint check in
+// structuredTypeRelatedTo is skipped: variance measurement compares marker instantiations, and
+// there the hoisted constraint of an intersection may itself be an intersection with instantiable constituents
+// (e.g. deferred conditional types, as produced by heavily overloaded generic builder types),
+// so a failed comparison would re-enter that check with a structurally new and ever larger
+// source that neither the relation cache nor the deeply-nested-type guards recognize as
+// recursive, and the chase grows without bound (see microsoft/TypeScript#64423). The check
+// never contributes to the measured relation between the marker types.
+func (c *Checker) isVarianceTypeAssignableTo(source *Type, target *Type) bool {
+	return c.isTypeRelatedTo(source, target, c.varianceRelation)
+}
+
 func (c *Checker) isTypeSubtypeOf(source *Type, target *Type) bool {
 	return c.isTypeRelatedTo(source, target, c.subtypeRelation)
 }
@@ -258,7 +271,7 @@ func (c *Checker) isSimpleTypeRelatedTo(source *Type, target *Type, relation *Re
 	if s&TypeFlagsObject != 0 && t&TypeFlagsNonPrimitive != 0 && !(relation == c.strictSubtypeRelation && c.IsEmptyAnonymousObjectType(source) && source.objectFlags&ObjectFlagsFreshLiteral == 0) {
 		return true
 	}
-	if relation == c.assignableRelation || relation == c.comparableRelation {
+	if relation == c.assignableRelation || relation == c.comparableRelation || relation == c.varianceRelation {
 		if s&TypeFlagsAny != 0 {
 			return true
 		}
@@ -1378,13 +1391,13 @@ func (c *Checker) getVariancesWorker(symbol *ast.Symbol, typeParameters []*Type)
 					// invariance, covariance, contravariance or bivariance.
 					typeWithSuper := c.createMarkerType(symbol, tp, c.markerSuperType)
 					typeWithSub := c.createMarkerType(symbol, tp, c.markerSubType)
-					variance = core.IfElse(c.isTypeAssignableTo(typeWithSub, typeWithSuper), VarianceFlagsCovariant, 0) |
-						core.IfElse(c.isTypeAssignableTo(typeWithSuper, typeWithSub), VarianceFlagsContravariant, 0)
+					variance = core.IfElse(c.isVarianceTypeAssignableTo(typeWithSub, typeWithSuper), VarianceFlagsCovariant, 0) |
+						core.IfElse(c.isVarianceTypeAssignableTo(typeWithSuper, typeWithSub), VarianceFlagsContravariant, 0)
 					// If the instantiations appear to be related bivariantly it may be because the
 					// type parameter is independent (i.e. it isn't witnessed anywhere in the generic
 					// type). To determine this we compare instantiations where the type parameter is
 					// replaced with marker types that are known to be unrelated.
-					if variance == VarianceFlagsBivariant && c.isTypeAssignableTo(c.createMarkerType(symbol, tp, c.markerOtherType), typeWithSuper) {
+					if variance == VarianceFlagsBivariant && c.isVarianceTypeAssignableTo(c.createMarkerType(symbol, tp, c.markerOtherType), typeWithSuper) {
 						variance = VarianceFlagsIndependent
 					}
 					if c.reliabilityFlags&RelationComparisonResultReportsUnmeasurable != 0 {
@@ -2754,7 +2767,7 @@ func (r *Relater) hasExcessProperties(source *Type, target *Type, reportErrors b
 		return false
 	}
 	isComparingJsxAttributes := source.objectFlags&ObjectFlagsJsxAttributes != 0
-	if (r.relation == r.c.assignableRelation || r.relation == r.c.comparableRelation) && (r.c.isTypeSubsetOf(r.c.globalObjectType, target) || (!isComparingJsxAttributes && r.c.isEmptyObjectType(target))) {
+	if (r.relation == r.c.assignableRelation || r.relation == r.c.comparableRelation || r.relation == r.c.varianceRelation) && (r.c.isTypeSubsetOf(r.c.globalObjectType, target) || (!isComparingJsxAttributes && r.c.isEmptyObjectType(target))) {
 		return false
 	}
 	reducedTarget := target
@@ -3136,6 +3149,18 @@ func (r *Relater) recursiveTypeRelatedTo(source *Type, target *Type, reportError
 			return TernaryFalse
 		}
 	}
+	if r.relation == r.c.varianceRelation {
+		// Hierarchically share caches between variance-assignability and assignability: a pair
+		// that failed under plain assignability also fails under variance-assignability, since
+		// the combined-constraint check can only turn failures into successes and is skipped
+		// for this relationship. Successes are not reusable: they may have been established by
+		// the combined-constraint check. Variance measurement never reports errors, so a
+		// shared failure needs no error elaboration.
+		if entry := r.c.assignableRelation.get(id); entry&RelationComparisonResultFailed != 0 {
+			r.c.reliabilityFlags |= entry & (RelationComparisonResultReportsUnmeasurable | RelationComparisonResultReportsUnreliable)
+			return TernaryFalse
+		}
+	}
 	if r.relationCount <= 0 {
 		r.overflow = true
 		return TernaryFalse
@@ -3226,6 +3251,12 @@ func (r *Relater) resetMaybeStack(maybeStart int, propagatingVarianceFlags Relat
 		r.maybeKeysSet.Delete(r.maybeKeys[i])
 		if markAllAsSucceeded {
 			r.relation.set(r.maybeKeys[i], RelationComparisonResultSucceeded|propagatingVarianceFlags)
+			if r.relation == r.c.varianceRelation {
+				// A success under variance-assignability is a plain-assignability success as well:
+				// the combined-constraint check only runs after a failure, so a successful
+				// comparison followed the same code path under both relationships.
+				r.c.assignableRelation.set(r.maybeKeys[i], RelationComparisonResultSucceeded|propagatingVarianceFlags)
+			}
 			r.relationCount--
 		}
 	}
@@ -3261,15 +3292,16 @@ func (r *Relater) structuredTypeRelatedTo(source *Type, target *Type, reportErro
 		// needs to have its constraint hoisted into an intersection with said type parameter, this way
 		// the type param can be compared with itself in the target (with the influence of its constraint to match other parts)
 		// For example, if `T extends 1 | 2` and `U extends 2 | 3` and we compare `T & U` to `T & U & (1 | 2 | 3)`
-		// We skip the combined-constraint check while measuring variances. Variance
-		// measurement compares marker instantiations, and there the hoisted constraint may
-		// itself be an intersection with instantiable constituents (e.g. deferred conditional
-		// types, as produced by heavily overloaded generic builder types), so a failed
-		// comparison re-enters this logic with a structurally new and ever larger source
-		// that the relation cache and the deeply-nested-type guards never recognize as
-		// recursive, and the chase grows without bound (see microsoft/TypeScript#64423).
-		// The check never contributes to the measured relation between the marker types.
-		if result == TernaryFalse && len(r.c.varianceStack) == 0 && (source.flags&TypeFlagsIntersection != 0 || source.flags&TypeFlagsTypeParameter != 0 && target.flags&TypeFlagsUnion != 0) {
+		// We skip the combined-constraint check for the variance-assignability relationship
+		// used by variance measurement (see isVarianceTypeAssignableTo): variance measurement
+		// compares marker instantiations, and there the hoisted constraint may itself be an
+		// intersection with instantiable constituents (e.g. deferred conditional types, as
+		// produced by heavily overloaded generic builder types), so a failed comparison
+		// re-enters this logic with a structurally new and ever larger source that the
+		// relation cache and the deeply-nested-type guards never recognize as recursive, and
+		// the chase grows without bound (see microsoft/TypeScript#64423). The check never
+		// contributes to the measured relation between the marker types.
+		if result == TernaryFalse && r.relation != r.c.varianceRelation && (source.flags&TypeFlagsIntersection != 0 || source.flags&TypeFlagsTypeParameter != 0 && target.flags&TypeFlagsUnion != 0) {
 			var sourceTypes []*Type
 			if source.flags&TypeFlagsIntersection != 0 {
 				sourceTypes = source.Types()
@@ -3520,7 +3552,7 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 		}
 		// A type S is related to a type T[K] if S is related to C, where C is the base
 		// constraint of T[K] for writing.
-		if r.relation == r.c.assignableRelation || r.relation == r.c.comparableRelation {
+		if r.relation == r.c.assignableRelation || r.relation == r.c.comparableRelation || r.relation == r.c.varianceRelation {
 			objectType := target.AsIndexedAccessType().objectType
 			indexType := target.AsIndexedAccessType().indexType
 			baseObjectType := r.c.getBaseConstraintOrType(objectType)
