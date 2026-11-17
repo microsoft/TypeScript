@@ -1,0 +1,99 @@
+//// [tests/cases/compiler/contentMapperOutputExtensionsResolutionDependentRewrite.ts] ////
+
+=== /generated/root.toml ===
+const __VERSION = "1.0.0";
+>__VERSION : "1.0.0"
+>"1.0.0" : "1.0.0"
+
+export class Root {}
+>Root : Root
+
+export interface TypeOnly {}
+export function make() { return new Root(); }
+>make : () => Root
+>new Root() : Root
+>Root : typeof Root
+
+=== /src/suffixed.native.toml ===
+const __VERSION = "1.0.0";
+>__VERSION : "1.0.0"
+>"1.0.0" : "1.0.0"
+
+export const suffixed = 1;
+>suffixed : 1
+>1 : 1
+
+=== /generated/allowed/blob.toml ===
+const __VERSION = "1.0.0";
+>__VERSION : "1.0.0"
+>"1.0.0" : "1.0.0"
+
+export const allowed = 1;
+>allowed : 1
+>1 : 1
+
+=== /generated/second/blob.part.toml ===
+const __VERSION = "1.0.0";
+>__VERSION : "1.0.0"
+>"1.0.0" : "1.0.0"
+
+export const second = 1;
+>second : 1
+>1 : 1
+
+=== /generated/blob.identity ===
+const __VERSION = "1.0.0";
+>__VERSION : "1.0.0"
+>"1.0.0" : "1.0.0"
+
+export const identity = 1;
+>identity : 1
+>1 : 1
+
+=== /generated/declaration.d.toml.ts ===
+export const declaration: number;
+>declaration : number
+
+=== /src/main.ts ===
+import { make } from "./root.toml";
+>make : () => import("./root.toml").Root
+
+import type { TypeOnly } from "./root.toml";
+>TypeOnly : TypeOnly
+
+export { suffixed } from "./suffixed.toml";
+>suffixed : 1
+
+export { allowed } from "./allowed/blob.toml";
+>allowed : 1
+
+export { second } from "./second/blob.part.toml";
+>second : 1
+
+export { identity } from "./blob.identity";
+>identity : 1
+
+export { declaration } from "./declaration.toml";
+>declaration : number
+
+export type { TypeOnly as ExportedType } from "./root.toml";
+>TypeOnly : any
+>ExportedType : TypeOnly
+
+export const root = make();
+>root : import("./root.toml").Root
+>make() : import("./root.toml").Root
+>make : () => import("./root.toml").Root
+
+export const load = () => import("./root.toml");
+>load : () => Promise<typeof import("./root.toml")>
+>() => import("./root.toml") : () => Promise<typeof import("./root.toml")>
+>import("./root.toml") : Promise<typeof import("./root.toml")>
+>"./root.toml" : "./root.toml"
+
+export type RootType = import("./root.toml").Root;
+>RootType : import("./root.toml").Root
+
+export type DirectType = TypeOnly;
+>DirectType : TypeOnly
+

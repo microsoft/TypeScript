@@ -1,0 +1,11 @@
+// === findAllReferences ===
+// === /a.js ===
+// class C {}
+// C.D = class D {};
+// /*FIND ALL REFS*/[|module|].exports = C;
+
+// === /b.js ===
+// /** @type {import("[|./a|]")} */
+// const x = 0;
+// /** @type {InstanceType<typeof import("./a").D>} */
+// const y = 0;

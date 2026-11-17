@@ -161,9 +161,8 @@ func (r *aliasResolver) CommonSourceDirectory() tspath.RootedDirectoryPath {
 	panic("unimplemented")
 }
 
-// ContentMapperExtensions implements checker.Program.
-func (r *aliasResolver) ContentMapperExtensions() []string {
-	return nil
+func (r *aliasResolver) ContentMapperExtensionForFileName(tspath.RootedFilePath) string {
+	return ""
 }
 
 func (r *aliasResolver) ContentMapperExtensionRewrites() []tspath.ExtensionRewrite {

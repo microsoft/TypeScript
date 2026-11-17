@@ -1227,7 +1227,7 @@ func getFirstNonDecoratorTokenOfNode(node *ast.Node) ast.Kind {
 	case ast.KindFunctionDeclaration:
 		return ast.KindFunctionKeyword
 	case ast.KindEnumDeclaration:
-		return ast.KindEnumDeclaration
+		return ast.KindEnumKeyword
 	case ast.KindGetAccessor:
 		return ast.KindGetKeyword
 	case ast.KindSetAccessor:

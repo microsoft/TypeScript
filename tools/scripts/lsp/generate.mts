@@ -460,6 +460,7 @@ const customStructures: Structure[] = [
             { name: "compilerOptions", type: { kind: "array", element: { kind: "base", name: "string" } }, optional: true, documentation: "Compiler option names forwarded to the mapper." },
             { name: "dynamicConfig", type: { kind: "base", name: "boolean" }, optional: true, documentation: "Whether the mapper uses project-scoped dynamic configuration." },
             { name: "outputExtensions", type: { kind: "map", key: { kind: "base", name: "string" }, value: { kind: "base", name: "string" } }, optional: true, documentation: "Default source-to-runtime output extension mappings." },
+            { name: "extensions", type: { kind: "array", element: { kind: "base", name: "string" } }, optional: true, documentation: "Default source extensions handled by the mapper." },
         ],
         documentation: "Inline content mapper manifest supplied by a contributing extension.",
     },
@@ -475,7 +476,7 @@ const customStructures: Structure[] = [
         name: "ContentMapperContribution",
         properties: [
             { name: "contributorId", type: { kind: "base", name: "string" }, documentation: "Unique identifier of the contributor extension." },
-            { name: "extensions", type: { kind: "array", element: { kind: "base", name: "string" } }, documentation: "File extensions handled by this content mapper." },
+            { name: "extensions", type: { kind: "array", element: { kind: "base", name: "string" } }, optional: true, documentation: "File extensions handled by this content mapper." },
             { name: "inferredProjectContribution", type: { kind: "reference", name: "InferredProjectContentMapperContribution" }, optional: true, documentation: "When present, contributes this mapper to inferred projects." },
         ],
         documentation: "One extension-provided content mapper contribution.",

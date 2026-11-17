@@ -3,6 +3,17 @@ package tspath
 type ExtensionRewrite struct {
 	Source string
 	Target string
+	// Runtime permits this rewrite in helpers for non-literal imports.
+	Runtime bool
+}
+
+func HasRuntimeExtensionRewrites(rewrites []ExtensionRewrite) bool {
+	for _, rewrite := range rewrites {
+		if rewrite.Runtime && rewrite.Source != rewrite.Target {
+			return true
+		}
+	}
+	return false
 }
 
 func getExtensionRewrite(path string, rewrites []ExtensionRewrite, caseSensitivity CaseSensitivity) (ExtensionRewrite, bool) {

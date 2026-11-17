@@ -148,6 +148,68 @@ func TestContentMapperOutputExtensionsIncrementalEmit(t *testing.T) {
 	}
 }
 
+func TestContentMapperIncludeIncrementalEmit(t *testing.T) {
+	t.Parallel()
+	for _, build := range []bool{false, true} {
+		for _, include := range []string{`["**/*.vue"]`, `[]`} {
+			name := "incremental/" + include
+			if build {
+				name = "build/" + include
+			}
+			t.Run(name, func(t *testing.T) {
+				t.Parallel()
+				const root = "/home/src/workspaces/project/"
+				const config = `{
+					"compilerOptions": {
+						"composite": true, "module": "preserve",
+						"rewriteRelativeImportExtensions": true, "outDir": "dist"
+					},
+					"files": ["main.ts", "globals.d.ts"],
+					"contentMappers": [{
+						"package": "mapper", "extensions": [".vue"],
+						"outputExtensions": {".vue": ".js"}
+					}]
+				}`
+				input := &tscInput{files: FileMap{
+					root + "tsconfig.json":                    config,
+					root + "main.ts":                          `export function dynamic(path: string) { return import(path); }`,
+					root + "globals.d.ts":                     `interface Promise<T> {} declare const Promise: any;`,
+					root + "node_modules/mapper/package.json": contentmappertest.PackageJSON(contentmappertest.VerbatimMapper),
+				}}
+				testSys := newTestSys(input, false)
+				sys := &recordingContentMapperSystem{
+					TestSys: testSys,
+					spawner: &recordingContentMapperSpawner{inner: contentmappertest.NewSpawner()},
+				}
+				args := []string{"--pretty", "false", "--runExternalCode"}
+				if build {
+					args = append([]string{"--build"}, args...)
+				}
+				run := func(runtimeMapping bool) {
+					t.Helper()
+					result := execute.CommandLine(t.Context(), sys, args, testSys)
+					expected := tsc.ExitStatusSuccess
+					if !runtimeMapping {
+						expected = tsc.ExitStatusDiagnosticsPresent_OutputsGenerated
+						assert.Assert(t, strings.Contains(testSys.currentWrite.String(), "TS18133"), testSys.currentWrite.String())
+					}
+					assert.Equal(t, result.Status, expected, testSys.currentWrite.String())
+					text, ok := testSys.FS().ReadFile(tspath.RootedFilePathFromNormalized(root + "dist/main.js"))
+					assert.Assert(t, ok)
+					assert.Equal(t, strings.Contains(text, `".vue": ".js"`), runtimeMapping, text)
+				}
+				run(true)
+				testSys.clearOutput()
+				testSys.writeFileNoError(root+"tsconfig.json", strings.Replace(config, `"extensions":`, `"include": `+include+`, "extensions":`, 1))
+				run(false)
+				testSys.clearOutput()
+				testSys.writeFileNoError(root+"tsconfig.json", config)
+				run(true)
+			})
+		}
+	}
+}
+
 func TestContentMapperSupplementalDiagnosticUsesOriginalFileName(t *testing.T) {
 	t.Parallel()
 	input := &tscInput{files: FileMap{
@@ -269,7 +331,7 @@ func TestContentMapperWatchLifecycle(t *testing.T) {
 				"contentMappers": [{ "package": "mapper-b", "extensions": [".vue"] }]
 			}`)
 				testSys.mockWatchBackend.SendEvents([]fswatch.Event{{Kind: fswatch.EventUpdate, Path: configFileName}})
-				result.Watcher.DoCycle()
+				result.Watcher.DoCycle(ctx)
 
 				assert.Equal(t, spawner.spawns.Load(), int32(2))
 				assert.Equal(t, spawner.closes.Load(), int32(1))
@@ -277,7 +339,7 @@ func TestContentMapperWatchLifecycle(t *testing.T) {
 
 				testSys.writeFileNoError(configFileName, `{ "compilerOptions": { "composite": true } }`)
 				testSys.mockWatchBackend.SendEvents([]fswatch.Event{{Kind: fswatch.EventUpdate, Path: configFileName}})
-				result.Watcher.DoCycle()
+				result.Watcher.DoCycle(ctx)
 
 				assert.Equal(t, spawner.closes.Load(), int32(2))
 				<-closed
@@ -287,7 +349,7 @@ func TestContentMapperWatchLifecycle(t *testing.T) {
 				"contentMappers": [{ "package": "mapper-a", "extensions": [".vue"] }]
 			}`)
 				testSys.mockWatchBackend.SendEvents([]fswatch.Event{{Kind: fswatch.EventUpdate, Path: configFileName}})
-				result.Watcher.DoCycle()
+				result.Watcher.DoCycle(ctx)
 
 				assert.Equal(t, spawner.spawns.Load(), int32(3))
 				assert.Equal(t, spawner.closes.Load(), int32(2))
@@ -322,12 +384,12 @@ func TestContentMapperSupplementalCollisionWatch(t *testing.T) {
 
 	testSys.writeFileNoError(supplementalFileName, "export {};\n")
 	testSys.mockWatchBackend.SendEvents([]fswatch.Event{{Kind: fswatch.EventUpdate, Path: supplementalFileName}})
-	w.DoCycle()
+	w.DoCycle(ctx)
 	assert.Equal(t, w.FullBuilds(), fullBuilds+1, "creating a supplemental filename collision must force a full rebuild")
 
 	assert.NilError(t, testSys.fsFromFileMap().Remove(supplementalFileName))
 	testSys.mockWatchBackend.SendEvents([]fswatch.Event{{Kind: fswatch.EventUpdate, Path: supplementalFileName}})
-	w.DoCycle()
+	w.DoCycle(ctx)
 	assert.Equal(t, w.FullBuilds(), fullBuilds+2, "removing a supplemental filename collision must force a full rebuild")
 }
 
@@ -356,7 +418,7 @@ func TestDynamicContentMapperWatchDependency(t *testing.T) {
 
 	testSys.writeFileNoError(mapperConfigFileName, `{ "version": 2 }`)
 	testSys.mockWatchBackend.SendEvents([]fswatch.Event{{Kind: fswatch.EventUpdate, Path: mapperConfigFileName}})
-	w.DoCycle()
+	w.DoCycle(ctx)
 
 	assert.Equal(t, w.FullBuilds(), fullBuilds+1)
 	assert.Equal(t, lifecycle.Opens.Load(), int32(2))
@@ -399,7 +461,7 @@ func TestContentMapperMixedWatchBatchForcesFullRebuild(t *testing.T) {
 		{Kind: fswatch.EventUpdate, Path: mappedFileName},
 		{Kind: fswatch.EventUpdate, Path: mainFileName},
 	})
-	w.DoCycle()
+	w.DoCycle(ctx)
 
 	assert.Equal(t, w.FullBuilds(), fullBuilds+1)
 	assert.Equal(t, w.FastPathBuilds(), fastBuilds)
@@ -430,7 +492,7 @@ func TestDynamicContentMapperBuildWatchDependency(t *testing.T) {
 
 	testSys.writeFileNoError(mapperConfigFileName, `{ "version": 2 }`)
 	testSys.mockWatchBackend.SendEvents([]fswatch.Event{{Kind: fswatch.EventUpdate, Path: mapperConfigFileName}})
-	result.Watcher.DoCycle()
+	result.Watcher.DoCycle(ctx)
 
 	assert.Equal(t, lifecycle.Opens.Load(), int32(2))
 	assert.Equal(t, lifecycle.Closes.Load(), int32(1))
@@ -463,7 +525,7 @@ func TestContentMapperBuildWatchSymlinkedManifestChange(t *testing.T) {
 	updatedManifest := strings.Replace(contentmappertest.PackageJSON(contentmappertest.VerbatimMapper), `"version": "1.0.0"`, `"version": "2.0.0"`, 1)
 	testSys.writeFileNoError(manifestTarget, updatedManifest)
 	testSys.mockWatchBackend.SendEvents([]fswatch.Event{{Kind: fswatch.EventUpdate, Path: manifestTarget}})
-	result.Watcher.DoCycle()
+	result.Watcher.DoCycle(ctx)
 
 	assert.Equal(t, spawner.spawns.Load(), int32(2))
 	assert.Equal(t, spawner.closes.Load(), int32(1))
@@ -499,7 +561,7 @@ func TestContentMapperWatchManifestChangeIgnoresCase(t *testing.T) {
 	updatedManifest := strings.Replace(contentmappertest.PackageJSON(contentmappertest.VerbatimMapper), `"version": "1.0.0"`, `"version": "2.0.0"`, 1)
 	testSys.writeFileNoError(manifestEvent, updatedManifest)
 	testSys.mockWatchBackend.SendEvents([]fswatch.Event{{Kind: fswatch.EventUpdate, Path: manifestEvent}})
-	result.Watcher.DoCycle()
+	result.Watcher.DoCycle(ctx)
 
 	assert.Equal(t, spawner.spawns.Load(), int32(2))
 	assert.Equal(t, spawner.closes.Load(), int32(1))
@@ -530,7 +592,7 @@ func TestContentMapperBuildWatchSymlinkedManifestDelete(t *testing.T) {
 	testSys.clearOutput()
 	assert.NilError(t, testSys.fsFromFileMap().Remove(manifestTarget))
 	testSys.mockWatchBackend.SendEvents([]fswatch.Event{{Kind: fswatch.EventDelete, Path: manifestTarget}})
-	result.Watcher.DoCycle()
+	result.Watcher.DoCycle(ctx)
 
 	assert.Equal(t, spawner.spawns.Load(), int32(1))
 	assert.Equal(t, spawner.closes.Load(), int32(1))
@@ -569,7 +631,7 @@ func TestContentMapperBuildWatchSharedLifecycle(t *testing.T) {
 		configFileName := "/home/src/workspaces/project/" + project + "/tsconfig.json"
 		testSys.writeFileNoError(configFileName, `{ "compilerOptions": { "composite": true } }`)
 		testSys.mockWatchBackend.SendEvents([]fswatch.Event{{Kind: fswatch.EventUpdate, Path: configFileName}})
-		result.Watcher.DoCycle()
+		result.Watcher.DoCycle(ctx)
 		if project == "a" {
 			assert.Equal(t, spawner.closes.Load(), int32(0))
 		} else {

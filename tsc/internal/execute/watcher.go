@@ -164,7 +164,7 @@ func (w *Watcher) start(ctx context.Context) {
 
 	w.reportWatchStatus(ast.NewCompilerDiagnostic(diagnostics.Starting_compilation_in_watch_mode))
 	w.watchSetDirty = true
-	if err := w.doBuild(); err != nil {
+	if err := w.doBuild(ctx); err != nil {
 		w.wm.ForceOverflow()
 	}
 	w.wm.Unlock()
@@ -288,9 +288,12 @@ func (w *Watcher) caseSensitivity() tspath.CaseSensitivity {
 	return w.sys.FS().CaseSensitivity()
 }
 
-func (w *Watcher) DoCycle() {
+func (w *Watcher) DoCycle(ctx context.Context) {
 	w.wm.Lock()
 	defer w.wm.Unlock()
+	if ctx.Err() != nil {
+		return
+	}
 
 	changedPaths, overflow := w.wm.DrainEvents()
 	hasEvents := len(changedPaths) > 0 || overflow
@@ -381,7 +384,7 @@ func (w *Watcher) DoCycle() {
 	}
 
 	w.reportWatchStatus(ast.NewCompilerDiagnostic(diagnostics.File_change_detected_Starting_incremental_compilation))
-	if err := w.doBuild(); err != nil {
+	if err := w.doBuild(ctx); err != nil {
 		// Mid-cycle watch failure; force a full rebuild on the next event
 		w.wm.ForceOverflow()
 	}
@@ -416,7 +419,10 @@ func (w *Watcher) isRelevantChange(changedPaths map[tspath.RootedPath]fswatch.Ev
 	return false
 }
 
-func (w *Watcher) doBuild() error {
+func (w *Watcher) doBuild(ctx context.Context) error {
+	if err := ctx.Err(); err != nil {
+		return err
+	}
 	if w.configModified {
 		w.sourceFileCache = &collections.SyncMap[tspath.PathKey, *cachedSourceFile]{}
 		w.watchSetDirty = true
@@ -451,8 +457,11 @@ func (w *Watcher) doBuild() error {
 
 		if w.tryUpdateProgram(host) {
 			w.fastPathBuilds++
-			result := w.compileAndEmit()
+			result := w.compileAndEmit(ctx)
 			cached.DisableAndClearCache()
+			if err := ctx.Err(); err != nil {
+				return err
+			}
 
 			w.configMtimes = make(map[tspath.RootedFilePath]time.Time, len(w.configFilePaths))
 			for _, cfgPath := range w.configFilePaths {
@@ -502,15 +511,23 @@ func (w *Watcher) doBuild() error {
 		tfs.SeenFiles.Add(path.AsPath())
 	}
 
-	w.program = incremental.NewProgram(compiler.NewProgram(compiler.ProgramOptions{
+	program, err := compiler.NewProgram(ctx, compiler.ProgramOptions{
 		Config: w.config,
 		Host:   host,
-	}), w.program, nil, w.sys.Now, w.testing != nil)
+	})
+	if err != nil {
+		cached.DisableAndClearCache()
+		return err
+	}
+	w.program = incremental.NewProgram(program, w.program, nil, w.sys.Now, w.testing != nil)
 	w.programReady = true
 	w.fullBuilds++
 
-	result := w.compileAndEmit()
+	result := w.compileAndEmit(ctx)
 	cached.DisableAndClearCache()
+	if err := ctx.Err(); err != nil {
+		return err
+	}
 
 	caseSensitivity := w.sys.FS().CaseSensitivity()
 	seenSlice := tfs.SeenFiles.ToSlice()
@@ -625,8 +642,8 @@ func (w *Watcher) evictChangedSourceFiles(changedPaths map[tspath.RootedPath]fsw
 	}
 }
 
-func (w *Watcher) compileAndEmit() tsc.CompileAndEmitResult {
-	return tsc.EmitFilesAndReportErrors(tsc.EmitInput{
+func (w *Watcher) compileAndEmit(ctx context.Context) tsc.CompileAndEmitResult {
+	return tsc.EmitFilesAndReportErrors(ctx, tsc.EmitInput{
 		Sys:                w.sys,
 		ProgramLike:        w.program,
 		Program:            w.program.GetProgram(),

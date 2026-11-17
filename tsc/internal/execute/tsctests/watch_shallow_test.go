@@ -38,19 +38,19 @@ func assertShallowProjectWatches(t *testing.T, sys *TestSys) {
 	assert.Assert(t, !isWatched(sys, "/"), "/ must never be watched")
 }
 
-func editShallowProjectFiles(t *testing.T, sys *TestSys, w interface{ DoCycle() }) {
+func editShallowProjectFiles(t *testing.T, sys *TestSys, w interface{ DoCycle(ctx context.Context) }) {
 	t.Helper()
 	fs := sys.fsFromFileMap()
 
 	sys.writeFileNoError("/shared/s.ts", `export const s = 2;`)
 	sys.mockWatchBackend.SendEvents([]fswatch.Event{{Kind: fswatch.EventUpdate, Path: "/shared/s.ts"}})
-	w.DoCycle()
+	w.DoCycle(t.Context())
 	out, _ := fs.ReadFile("/app/out/shared/s.js")
 	assert.Assert(t, strings.Contains(out, "s = 2"), "editing /shared/s.ts must rebuild, got:\n%s", out)
 
 	sys.writeFileNoError("/app/index.ts", `import { s } from "../shared/s"; export const y = s;`)
 	sys.mockWatchBackend.SendEvents([]fswatch.Event{{Kind: fswatch.EventUpdate, Path: "/app/index.ts"}})
-	w.DoCycle()
+	w.DoCycle(t.Context())
 	out, _ = fs.ReadFile("/app/out/app/index.js")
 	assert.Assert(t, strings.Contains(out, "y = "), "editing /app/index.ts must rebuild, got:\n%s", out)
 }
@@ -92,20 +92,20 @@ func shallowRootFileProjectFiles(compilerOptions string) FileMap {
 
 // deleteAndRecreateShallowRootFile deletes /shared/root.ts and writes it back. While the file is missing it is not
 // part of the program, but it is still a root file, so /shared must stay watched for the rebuild on recreation.
-func deleteAndRecreateShallowRootFile(t *testing.T, sys *TestSys, w interface{ DoCycle() }) {
+func deleteAndRecreateShallowRootFile(t *testing.T, sys *TestSys, w interface{ DoCycle(ctx context.Context) }) {
 	t.Helper()
 	fs := sys.fsFromFileMap()
 	assert.Assert(t, isWatched(sys, "/shared"), "the directory of the root file /shared/root.ts must be watched")
 
 	sys.removeNoError("/shared/root.ts")
 	sys.mockWatchBackend.SendEvents([]fswatch.Event{{Kind: fswatch.EventDelete, Path: "/shared/root.ts"}})
-	w.DoCycle()
+	w.DoCycle(t.Context())
 	assert.Assert(t, isWatched(sys, "/shared"), "/shared must stay watched while the root file /shared/root.ts is missing")
 	assert.Assert(t, !isWatched(sys, "/"), "/ must never be watched")
 
 	sys.writeFileNoError("/shared/root.ts", `export const r = 2;`)
 	sys.mockWatchBackend.SendEvents([]fswatch.Event{{Kind: fswatch.EventUpdate, Path: "/shared/root.ts"}})
-	w.DoCycle()
+	w.DoCycle(t.Context())
 	out, _ := fs.ReadFile("/app/out/shared/root.js")
 	assert.Assert(t, strings.Contains(out, "r = 2"), "recreating /shared/root.ts must rebuild, got:\n%s", out)
 }
