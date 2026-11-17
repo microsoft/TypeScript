@@ -5219,7 +5219,7 @@ export function createJSDocTypedefTag(tagName: Identifier, typeExpression?: Node
     }) as unknown as JSDocTypedefTag;
 }
 
-export function createJSDocSignature(typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type?: TypeNode): JSDocSignature {
+export function createJSDocSignature(typeParameters: readonly JSDocTemplateTag[] | undefined, parameters: readonly (JSDocParameterTag | JSDocThisTag)[], type?: JSDocReturnTag): JSDocSignature {
     return new NodeObject(SyntaxKind.JSDocSignature, {
         typeParameters: typeParameters ? createNodeArray(typeParameters) : undefined,
         parameters: createNodeArray(parameters),
@@ -5991,7 +5991,7 @@ export function updateJSDocTypedefTag(node: JSDocTypedefTag, tagName: Identifier
     return node.tagName !== tagName || node.typeExpression !== typeExpression || node.name !== name || node.comment !== comment ? createJSDocTypedefTag(tagName, typeExpression, name, comment) : node;
 }
 
-export function updateJSDocSignature(node: JSDocSignature, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type?: TypeNode): JSDocSignature {
+export function updateJSDocSignature(node: JSDocSignature, typeParameters: readonly JSDocTemplateTag[] | undefined, parameters: readonly (JSDocParameterTag | JSDocThisTag)[], type?: JSDocReturnTag): JSDocSignature {
     return node.typeParameters !== typeParameters || node.parameters !== parameters || node.type !== type ? createJSDocSignature(typeParameters, parameters, type) : node;
 }
 
