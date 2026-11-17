@@ -55,6 +55,13 @@ func (c *Checker) grammarErrorOnNodeSkippedOnNoEmit(node *ast.Node, message *dia
 	return false
 }
 
+func getLastIdentifierOfEntityName(name *ast.EntityName) *ast.IdentifierNode {
+	if ast.IsQualifiedName(name) {
+		return name.AsQualifiedName().Right
+	}
+	return name
+}
+
 func getIdentifierFromEntityNameExpression(node *ast.Node) *ast.Node {
 	switch node.Kind {
 	case ast.KindIdentifier:

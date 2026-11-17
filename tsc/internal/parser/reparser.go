@@ -598,13 +598,26 @@ func (p *Parser) reparseHosted(tag *ast.Node, parent *ast.Node, jsDoc *ast.Node)
 				return node.AsHeritageClause().Token == ast.KindExtendsKeyword
 			}); extendsClause != nil && len(extendsClause.AsHeritageClause().Types.Nodes) == 1 {
 				target := extendsClause.AsHeritageClause().Types.Nodes[0].AsExpressionWithTypeArguments()
-				source := tag.ClassName().AsExpressionWithTypeArguments()
-				if target.TypeArguments == nil && source.TypeArguments != nil && target.Expression.Kind != ast.KindNullKeyword && (!ast.IsEntityNameExpression(target.Expression) || ast.HasSamePropertyAccessName(target.Expression, source.Expression)) {
+				source := tag.ClassName().AsTypeReferenceNode()
+				if target.TypeArguments == nil && source.TypeArguments != nil && target.Expression.Kind != ast.KindNullKeyword && (!ast.IsEntityNameExpression(target.Expression) || isSameEntityName(target.Expression, source.TypeName)) {
 					p.setReparsedTypeArguments(target, source.TypeArguments)
 				}
 			}
 		}
 	}
+}
+
+// isSameEntityName reports whether an entity name expression, such as a.b,
+// spells the same name as an entity name.
+func isSameEntityName(expression *ast.Expression, name *ast.EntityName) bool {
+	switch {
+	case ast.IsIdentifier(expression) && ast.IsIdentifier(name):
+		return expression.Text() == name.Text()
+	case ast.IsPropertyAccessExpression(expression) && ast.IsQualifiedName(name):
+		return expression.Name().Text() == name.AsQualifiedName().Right.Text() &&
+			isSameEntityName(expression.Expression(), name.AsQualifiedName().Left)
+	}
+	return false
 }
 
 func (p *Parser) setReparsedTypeArguments(target *ast.ExpressionWithTypeArguments, source *ast.NodeList) {

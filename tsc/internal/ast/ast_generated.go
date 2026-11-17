@@ -7671,10 +7671,10 @@ func IsJSDocSeeTag(node *Node) bool {
 
 type JSDocImplementsTag struct {
 	JSDocTagBase
-	ClassName *ExpressionWithTypeArgumentsNode
+	ClassName *TypeReferenceNodeNode
 }
 
-func (f *NodeFactory) NewJSDocImplementsTag(tagName *IdentifierNode, className *ExpressionWithTypeArgumentsNode, comment *NodeList) *Node {
+func (f *NodeFactory) NewJSDocImplementsTag(tagName *IdentifierNode, className *TypeReferenceNodeNode, comment *NodeList) *Node {
 	data := &JSDocImplementsTag{}
 	data.TagName = tagName
 	data.ClassName = className
@@ -7682,7 +7682,7 @@ func (f *NodeFactory) NewJSDocImplementsTag(tagName *IdentifierNode, className *
 	return f.newNode(KindJSDocImplementsTag, data.AsNode())
 }
 
-func (f *NodeFactory) UpdateJSDocImplementsTag(node *JSDocImplementsTag, tagName *IdentifierNode, className *ExpressionWithTypeArgumentsNode, comment *NodeList) *Node {
+func (f *NodeFactory) UpdateJSDocImplementsTag(node *JSDocImplementsTag, tagName *IdentifierNode, className *TypeReferenceNodeNode, comment *NodeList) *Node {
 	if tagName != node.TagName || className != node.ClassName || comment != node.Comment {
 		return updateNode(f.NewJSDocImplementsTag(tagName, className, comment), node.AsNode(), f.hooks)
 	}
@@ -7711,10 +7711,10 @@ func IsJSDocImplementsTag(node *Node) bool {
 
 type JSDocAugmentsTag struct {
 	JSDocTagBase
-	ClassName *ExpressionWithTypeArgumentsNode
+	ClassName *TypeReferenceNodeNode
 }
 
-func (f *NodeFactory) NewJSDocAugmentsTag(tagName *IdentifierNode, className *ExpressionWithTypeArgumentsNode, comment *NodeList) *Node {
+func (f *NodeFactory) NewJSDocAugmentsTag(tagName *IdentifierNode, className *TypeReferenceNodeNode, comment *NodeList) *Node {
 	data := &JSDocAugmentsTag{}
 	data.TagName = tagName
 	data.ClassName = className
@@ -7722,7 +7722,7 @@ func (f *NodeFactory) NewJSDocAugmentsTag(tagName *IdentifierNode, className *Ex
 	return f.newNode(KindJSDocAugmentsTag, data.AsNode())
 }
 
-func (f *NodeFactory) UpdateJSDocAugmentsTag(node *JSDocAugmentsTag, tagName *IdentifierNode, className *ExpressionWithTypeArgumentsNode, comment *NodeList) *Node {
+func (f *NodeFactory) UpdateJSDocAugmentsTag(node *JSDocAugmentsTag, tagName *IdentifierNode, className *TypeReferenceNodeNode, comment *NodeList) *Node {
 	if tagName != node.TagName || className != node.ClassName || comment != node.Comment {
 		return updateNode(f.NewJSDocAugmentsTag(tagName, className, comment), node.AsNode(), f.hooks)
 	}

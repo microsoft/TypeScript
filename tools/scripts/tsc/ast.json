@@ -4574,7 +4574,7 @@
                     },
                     {
                         "name": "ClassName",
-                        "type": "ExpressionWithTypeArguments"
+                        "type": "TypeReferenceNode"
                     },
                     {
                         "name": "Comment",
@@ -4593,7 +4593,7 @@
                     },
                     {
                         "name": "ClassName",
-                        "type": "ExpressionWithTypeArguments"
+                        "type": "TypeReferenceNode"
                     },
                     {
                         "name": "Comment",
