@@ -73,7 +73,7 @@ interface Q3 extends C { [key: string]: Q3[keyof Q3]; }
 >key : string
 
 const j3: keyof Q3 = 0;
->j3 : "c"
+>j3 : keyof Q3
 >0 : 0
 
 const k4: keyof P4 = 0;
@@ -100,17 +100,17 @@ declare const q2: Q2;
 >q2 : Q2
 
 const v2 = q2.other;
->v2 : any
->q2.other : any
+>v2 : string | number | undefined
+>q2.other : string | number | undefined
 >q2 : Q2
->other : any
+>other : string | number | undefined
 
 declare const q3: Q3;
 >q3 : Q3
 
 const v3 = q3.other;
->v3 : any
->q3.other : any
+>v3 : string | undefined
+>q3.other : string | undefined
 >q3 : Q3
->other : any
+>other : string | undefined
 

@@ -22544,6 +22544,12 @@ func (c *Checker) resolveDeclaredMembers(t *Type) *InterfaceType {
 	d := t.AsInterfaceType()
 	key := memoKeyOf(t, memoDeclaredMembers)
 	if d.declaredMembersResolved {
+		// The flag is set before the index signatures are resolved, so
+		// finding it set may be re-entering the resolution, which beginMemo
+		// would account for.
+		if i, ok := c.resolvingGet(key); ok && int(i) >= c.visibleStart {
+			c.reenter(int(i), memoReentry[memoDeclaredMembers])
+		}
 		c.observeFlagMemo(key)
 		return d
 	}
