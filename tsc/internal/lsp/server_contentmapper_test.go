@@ -239,6 +239,60 @@ export const title = "Profile";
 	})
 	assert.Assert(t, ok && renameMsg.AsResponse().Error == nil)
 	assert.Assert(t, rename.WorkspaceEdit == nil)
+	textDocument := lsproto.TextDocumentIdentifier{Uri: uri}
+	position := lsproto.Position{Line: 3, Character: 15}
+	range_ := lsproto.Range{Start: position, End: position}
+	options := &lsproto.FormattingOptions{TabSize: 4, InsertSpaces: true}
+	item := &lsproto.CallHierarchyItem{
+		Name: "stale", Kind: lsproto.SymbolKindFunction, Uri: uri, Range: range_, SelectionRange: range_,
+	}
+	for _, request := range []struct {
+		method lsproto.Method
+		params any
+	}{
+		{lsproto.MethodTextDocumentSignatureHelp, &lsproto.SignatureHelpParams{TextDocument: textDocument, Position: position}},
+		{lsproto.MethodTextDocumentDefinition, &lsproto.DefinitionParams{TextDocument: textDocument, Position: position}},
+		{lsproto.MethodTextDocumentTypeDefinition, &lsproto.TypeDefinitionParams{TextDocument: textDocument, Position: position}},
+		{lsproto.MethodTextDocumentImplementation, &lsproto.ImplementationParams{TextDocument: textDocument, Position: position}},
+		{lsproto.MethodTextDocumentDocumentHighlight, &lsproto.DocumentHighlightParams{TextDocument: textDocument, Position: position}},
+		{lsproto.MethodTextDocumentCodeAction, &lsproto.CodeActionParams{
+			TextDocument: textDocument, Range: range_, Context: &lsproto.CodeActionContext{Diagnostics: []*lsproto.Diagnostic{}},
+		}},
+		{lsproto.MethodTextDocumentSemanticTokensFull, &lsproto.SemanticTokensParams{TextDocument: textDocument}},
+		{lsproto.MethodTextDocumentSemanticTokensRange, &lsproto.SemanticTokensRangeParams{TextDocument: textDocument, Range: range_}},
+		{lsproto.MethodTextDocumentDocumentSymbol, &lsproto.DocumentSymbolParams{TextDocument: textDocument}},
+		{lsproto.MethodTextDocumentFoldingRange, &lsproto.FoldingRangeParams{TextDocument: textDocument}},
+		{lsproto.MethodTextDocumentSelectionRange, &lsproto.SelectionRangeParams{TextDocument: textDocument, Positions: []lsproto.Position{position}}},
+		{lsproto.MethodTextDocumentInlayHint, &lsproto.InlayHintParams{TextDocument: textDocument, Range: range_}},
+		{lsproto.MethodTextDocumentCodeLens, &lsproto.CodeLensParams{TextDocument: textDocument}},
+		{lsproto.MethodTextDocumentFormatting, &lsproto.DocumentFormattingParams{TextDocument: textDocument, Options: options}},
+		{lsproto.MethodTextDocumentRangeFormatting, &lsproto.DocumentRangeFormattingParams{TextDocument: textDocument, Range: range_, Options: options}},
+		{lsproto.MethodTextDocumentOnTypeFormatting, &lsproto.DocumentOnTypeFormattingParams{TextDocument: textDocument, Position: position, Ch: ";", Options: options}},
+		{lsproto.MethodTextDocumentLinkedEditingRange, &lsproto.LinkedEditingRangeParams{TextDocument: textDocument, Position: position}},
+		{lsproto.MethodTextDocumentPrepareCallHierarchy, &lsproto.CallHierarchyPrepareParams{TextDocument: textDocument, Position: position}},
+		{lsproto.MethodTextDocumentPrepareRename, &lsproto.PrepareRenameParams{TextDocument: textDocument, Position: position}},
+		{lsproto.MethodCallHierarchyIncomingCalls, &lsproto.CallHierarchyIncomingCallsParams{Item: item}},
+		{lsproto.MethodCallHierarchyOutgoingCalls, &lsproto.CallHierarchyOutgoingCallsParams{Item: item}},
+		{lsproto.MethodCompletionItemResolve, &lsproto.CompletionItem{
+			Label: "stale", Data: &lsproto.CompletionItemData{FileName: "/home/project/ProfileCard.vue", Position: 0, Name: "stale"},
+		}},
+		{lsproto.MethodWorkspaceWillRenameFiles, &lsproto.RenameFilesParams{
+			Files: []*lsproto.FileRename{{OldUri: uri, NewUri: "file:///home/project/Renamed.vue"}},
+		}},
+	} {
+		t.Run(string(request.method), func(t *testing.T) {
+			msg, result, ok := client.SendRequest(t, lsproto.RequestInfo[any, any]{Method: request.method}, request.params)
+			assert.Assert(t, msg != nil)
+			assert.Assert(t, msg.AsResponse().Error == nil, "expected null fallback, got %v", msg.AsResponse().Error)
+			assert.Assert(t, ok)
+			assert.Assert(t, result == nil, "expected null fallback, got %v", result)
+		})
+	}
+	codeLensMsg, _, _ := client.SendRequest(t, lsproto.CodeLensResolveInfo, &lsproto.CodeLens{
+		Range: range_, Data: &lsproto.CodeLensData{Uri: uri, Kind: "references", Position: 0},
+	})
+	assert.Assert(t, codeLensMsg != nil && codeLensMsg.AsResponse().Error != nil)
+	assert.Equal(t, codeLensMsg.AsResponse().Error.Code, int32(lsproto.ErrorCodeContentModified))
 	<-unregisteredSignal
 	mu.Lock()
 	unregistered := append([]*lsproto.Unregistration(nil), unregistrations...)
