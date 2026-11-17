@@ -63,14 +63,13 @@ const (
 )
 
 type Parser struct {
-	// Grammar policies stay immutable during a parse, including nested speculation.
-	recoveringTypes  typeParser
-	speculativeTypes typeParser
-	// Prediction facts survive speculation; no AST handles are retained.
+	recoveringTypes      typeParser
+	speculativeTypes     typeParser
 	typeArgumentClosures map[int]bool
 	inExpressionProbe    bool
-	// Opaque values taint the whole probe, including lookaheads that rewind.
-	hasOpaqueExpression    bool
+	// Cache hits return placeholders, so a successful outer probe must be reparsed
+	// if it used the expression cache.
+	usedExpressionCache    bool
 	failedTypeArguments    collections.Set[speculationKey]
 	failedSpeculativeTypes collections.Set[speculationKey]
 	probeExpressions       map[probeExpressionKey]probeExpressionBoundary
@@ -666,7 +665,7 @@ func (p *Parser) reparseTopLevelAwait(sourceFile *ast.SourceFile) *ast.Node {
 			}
 		}
 
-		// Keep diagnostics and pending declarations from the committed reparse.
+		// Rewinding must preserve diagnostics and declarations from this reparse.
 		state.diagnosticsLen = len(p.diagnostics)
 		state.jsdocDiagnosticsLen = len(p.jsdocDiagnostics)
 		state.reparseList = p.reparseList
@@ -2820,8 +2819,6 @@ func (p *typeParser) parseType() *ast.TypeNode {
 		}
 	}
 	result := p.parseTypeWorker()
-	// Remember structural failure, including a nested failure. Diagnostics on a
-	// recognized type remain recoverable and do not reject the production.
 	if speculative && result == nil {
 		p.failedSpeculativeTypes.Add(key)
 	}
@@ -2845,8 +2842,7 @@ func (p *typeParser) parseTypeWorker() *ast.TypeNode {
 			if extendsType == nil {
 				return nil
 			}
-			// `extends` determines the conditional-type production. Keep its
-			// branches when only a separator is missing.
+			// Missing '?' or ':' is recoverable within a conditional type.
 			p.parseExpected(ast.KindQuestionToken)
 			trueType := p.doInContext(ast.NodeFlagsDisallowConditionalTypesContext, false, (*typeParser).parseType)
 			if trueType == nil {
@@ -2959,8 +2955,7 @@ func (p *typeParser) tryParseConstraintOfInferType() (*ast.Node, bool) {
 	if p.parseOptional(ast.KindExtendsKeyword) {
 		constraint := p.doInContext(ast.NodeFlagsDisallowConditionalTypesContext, true, (*typeParser).parseType)
 		if constraint == nil {
-			// A failed constraint cannot become the same extends type of a conditional.
-			// Propagate failure instead of reparsing it at every enclosing infer type.
+			// A conditional type would require the same failed type after 'extends'.
 			p.rewind(state)
 			return nil, false
 		}
@@ -3805,7 +3800,6 @@ func (p *typeParser) parseTypeOrTypePredicate() *ast.TypeNode {
 }
 
 func (p *typeParser) parseTypeMemberSemicolon() bool {
-	// A comma or an explicit/implicit semicolon separates type members.
 	if p.parseOptional(ast.KindCommaToken) {
 		return true
 	}
@@ -4338,9 +4332,6 @@ func (p *Parser) skipParameterStart() bool {
 		return true
 	}
 	if p.token == ast.KindOpenBracketToken || p.token == ast.KindOpenBraceToken {
-		// Binding lookahead requires the complete pattern to be diagnostic-free.
-		// Its AST is discarded, so computed names and defaults can reuse values
-		// recognized by earlier probes without repeating their recursive work.
 		previousErrorCount := len(p.diagnostics)
 		saveProbe := p.inExpressionProbe
 		p.inExpressionProbe = true
@@ -4830,7 +4821,7 @@ func (p *Parser) tryParseParenthesizedArrowFunctionExpression(allowReturnTypeInA
 	}
 	state := p.mark()
 	if !p.inExpressionProbe {
-		p.hasOpaqueExpression = false
+		p.usedExpressionCache = false
 	}
 	p.inExpressionProbe = true
 	result := p.parsePossibleParenthesizedArrowFunctionExpression(allowReturnTypeInArrowFunction)
@@ -4838,7 +4829,7 @@ func (p *Parser) tryParseParenthesizedArrowFunctionExpression(allowReturnTypeInA
 		p.rewind(state)
 		return nil
 	}
-	if !state.inExpressionProbe && p.hasOpaqueExpression {
+	if !state.inExpressionProbe && p.usedExpressionCache {
 		p.rewind(state)
 		result = p.parseParenthesizedArrowFunctionExpression(false /*allowAmbiguity*/, allowReturnTypeInArrowFunction)
 		if result == nil {
@@ -5750,8 +5741,7 @@ func (p *Parser) parseLeftHandSideExpressionOrHigher() *ast.Expression {
 	}
 	// Now, we *may* be complete.  However, we might have consumed the start of a
 	// CallExpression or OptionalExpression.  As such, we need to consume the rest
-	// of it here to be complete. Member suffixes share this entry so a failed
-	// type-argument interpretation is not retried by an initial member pass.
+	// of it here to be complete.
 	return p.parseCallExpressionRest(pos, expression)
 }
 
@@ -5816,7 +5806,7 @@ func (p *Parser) tryParseTypeArgumentsInExpression() *ast.NodeList {
 		return nil
 	}
 	if !p.inExpressionProbe {
-		p.hasOpaqueExpression = false
+		p.usedExpressionCache = false
 	}
 	p.inExpressionProbe = true
 	result := p.parseTypeArgumentsInExpressionWorker()
@@ -5825,9 +5815,7 @@ func (p *Parser) tryParseTypeArgumentsInExpression() *ast.NodeList {
 		p.failedTypeArguments.Add(key)
 		return nil
 	}
-	if !state.inExpressionProbe && p.hasOpaqueExpression {
-		// Recognition may use opaque values, but no such AST can escape.
-		// Rebuild the recognized candidate with the ordinary expression parser.
+	if !state.inExpressionProbe && p.usedExpressionCache {
 		p.rewind(state)
 		result = p.parseTypeArgumentsInExpressionWorker()
 		if result == nil {
@@ -5844,8 +5832,6 @@ func (p *Parser) parseTypeArgumentsInExpressionWorker() *ast.NodeList {
 	if p.reScanLessThanToken() == ast.KindLessThanToken {
 		p.nextToken()
 		typeArguments := p.speculativeTypes.parseDelimitedList(PCTypeArguments, (*typeParser).parseType)
-		// Only a completed type production can establish the type argument interpretation.
-		// Diagnostics from a recoverable type do not make speculation fail.
 		if typeArguments != nil && p.reScanGreaterThanToken() == ast.KindGreaterThanToken {
 			p.nextToken()
 			// We successfully parsed a type argument list. The next token determines whether we want to

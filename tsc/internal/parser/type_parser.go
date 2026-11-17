@@ -2,10 +2,9 @@ package parser
 
 import "github.com/microsoft/TypeScript/tsc/internal/ast"
 
-// typeParser is an immutable grammar context shared by type productions without changing
-// the recovering parser used by nested expressions or JSDoc. A speculative type
-// production returns nil when its structure cannot be established. Diagnostics
-// on a recognized type, such as an invalid literal, do not imply failure.
+// typeParser returns nil for structurally incomplete types when allowAmbiguity
+// is false. Recoverable diagnostics do not imply failure. Nested expressions
+// and JSDoc retain their usual error recovery.
 // Optional productions return (nil, true) when absent and (nil, false) on failure.
 type typeParser struct {
 	*Parser

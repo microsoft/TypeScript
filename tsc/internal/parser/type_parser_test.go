@@ -57,7 +57,6 @@ func TestTypeArgumentClosureLookaheadRollback(t *testing.T) {
 	state := p.mark()
 	assert.Assert(t, p.typeArgumentsMayClose())
 	assert.Assert(t, reflect.DeepEqual(p.mark(), state))
-	// The real scan must still observe the directive and its lexical diagnostic.
 	p.nextToken()
 	assert.Equal(t, len(p.scanner.CommentDirectives()), 1)
 	assert.Equal(t, len(p.diagnostics), 1)
@@ -76,11 +75,10 @@ func TestProbeExpressionBoundaryRollback(t *testing.T) {
 	assert.Equal(t, len(p.probeExpressions), 1)
 	p.rewind(state)
 	assert.Assert(t, p.lookAhead(func(p *Parser) bool {
-		// A cache hit is opaque and belongs only to this disposable lookahead.
 		return p.parseValueExpression(true).Kind == ast.KindIdentifier
 	}))
 	assert.Assert(t, reflect.DeepEqual(p.mark(), state))
-	assert.Assert(t, p.hasOpaqueExpression)
+	assert.Assert(t, p.usedExpressionCache)
 	assert.Equal(t, len(p.scanner.CommentDirectives()), 0)
 	p.inExpressionProbe = false
 	committed := p.parseValueExpression(true)
@@ -133,7 +131,7 @@ func TestProbeExpressionBoundaryWithScanError(t *testing.T) {
 			assert.Equal(t, p.parseValueExpression(true).Kind, ast.KindStringLiteral)
 			p.rewind(state)
 			assert.Equal(t, p.parseValueExpression(true).Kind, ast.KindStringLiteral)
-			assert.Assert(t, !p.hasOpaqueExpression)
+			assert.Assert(t, !p.usedExpressionCache)
 			assert.Equal(t, len(p.diagnostics), 1)
 			assert.Equal(t, p.diagnostics[0].Code(), diagnostics.Hexadecimal_digit_expected.Code())
 		})

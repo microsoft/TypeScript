@@ -32,8 +32,6 @@ type probeExpressionKey struct {
 	kind probeExpressionKind
 }
 
-// Boundaries only describe diagnostic-free, disposable recognition passes.
-// They retain no AST handles and never construct committed expressions.
 type probeExpressionBoundary struct {
 	scannerState  scanner.ScannerState
 	loc           core.TextRange
@@ -46,7 +44,7 @@ func (p *Parser) speculationKey() speculationKey {
 	lastDiagnosticPosition := -1
 	if len(p.diagnostics) != 0 {
 		lastPosition := p.diagnostics[len(p.diagnostics)-1].Pos()
-		// Earlier diagnostics cannot be deduplicated with errors in this value.
+		// Earlier diagnostics cannot suppress errors within this expression.
 		if lastPosition >= position {
 			lastDiagnosticPosition = lastPosition
 		}
@@ -64,11 +62,9 @@ func (p *Parser) speculationKey() speculationKey {
 	}
 }
 
-// These entry points are used where the grammar needs a value and its end,
-// rather than inspecting the value as an assignment target or binding cover.
-// During a probe, callers must not inspect the returned expression's kind or
-// children to choose a grammar production. A successful outer probe rebuilds
-// any opaque values before committing its AST.
+// parseValueExpression and parseComputedPropertyExpression may return a
+// placeholder during speculation. Only its range and flags are meaningful;
+// callers must not inspect its kind or children to choose a grammar production.
 func (p *Parser) parseValueExpression(allowReturnTypeInArrowFunction bool) *ast.Expression {
 	if !p.inExpressionProbe || p.contextFlags&ast.NodeFlagsJSDoc != 0 {
 		return p.parseAssignmentExpressionOrHigherWorker(allowReturnTypeInArrowFunction)
@@ -92,15 +88,13 @@ func (p *Parser) parseComputedPropertyExpression() *ast.Expression {
 }
 
 func (p *Parser) parseProbeExpression(kind probeExpressionKind) *ast.Expression {
-	debug.Assert(p.inExpressionProbe && p.contextFlags&ast.NodeFlagsJSDoc == 0, "Expression boundaries are only reusable in disposable probes")
+	debug.Assert(p.inExpressionProbe && p.contextFlags&ast.NodeFlagsJSDoc == 0, "Expression caching requires speculation outside JSDoc")
 	key := probeExpressionKey{speculationKey: p.speculationKey(), kind: kind}
 	if boundary, known := p.probeExpressions[key]; known {
 		p.scanner.RewindPosition(boundary.scannerState)
 		p.token = p.scanner.Token()
 		p.hasParseError = boundary.hasParseError
-		// A nested lookahead may rewind its AST after observing this value.
-		// Keep the taint until the enclosing speculative parse is discarded.
-		p.hasOpaqueExpression = true
+		p.usedExpressionCache = true
 		result := p.factory.NewIdentifier("")
 		result.Loc = boundary.loc
 		result.Flags = boundary.flags
@@ -117,8 +111,8 @@ func (p *Parser) parseProbeExpression(kind probeExpressionKind) *ast.Expression 
 	case probeAssignmentWithoutArrowReturn:
 		result = p.parseAssignmentExpressionOrHigherWorker(false /*allowReturnTypeInArrowFunction*/)
 	}
-	// A preceding operator can consume hasParseError after scanning the first
-	// token of this value. Its existing diagnostics still prevent boundary reuse.
+	// Existing lexical diagnostics forbid reuse even if a preceding operator
+	// has already cleared hasParseError.
 	if result != nil && !state.hasParseError && key.lastDiagnosticPosition < 0 &&
 		len(p.diagnostics) == state.diagnosticsLen && len(p.jsDiagnostics) == state.jsDiagnosticsLen &&
 		len(p.jsdocDiagnostics) == state.jsdocDiagnosticsLen && len(p.reparseList) == len(state.reparseList) &&

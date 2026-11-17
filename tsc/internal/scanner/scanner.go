@@ -343,9 +343,7 @@ func (s *Scanner) Rewind(state ScannerState) {
 	s.ScannerState = state
 }
 
-// RewindPosition restores lexical state without replacing the caller's
-// collected directives. Disposable grammar probes do not replay collection
-// effects when they reuse an expression boundary.
+// RewindPosition restores lexical state while preserving collected comment directives.
 func (s *Scanner) RewindPosition(state ScannerState) {
 	directives := s.commentDirectives
 	s.ScannerState = state

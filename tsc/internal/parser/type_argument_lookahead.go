@@ -10,15 +10,10 @@ type typeArgumentDelimiter struct {
 	angleStart int
 }
 
-// typeArgumentsMayClose only rejects lists whose closing angle cannot belong
-// to the opening token. Parentheses, brackets, and braces fence off inner
-// angles, so a comparison inside a group cannot close an outer type list.
-// All openings encountered by a scan share its closure facts; nested attempts
-// do not repeatedly scan the same suffix. A lexical ambiguity leaves the
-// decision to the type grammar, including its diagnostics and recovery.
-// A negative proof uses only group fences, semicolons, and EOF in the normal
-// lexical goal. Unknown lexical goals and mismatched groups are inconclusive;
-// new lexical goals must also defer to grammar instead of rejecting a list.
+// typeArgumentsMayClose returns false only when no '>' can close the current
+// type argument list. A true result does not establish that the list is valid.
+// Ambiguous tokenization must be left to the parser. Cached results remain
+// valid after parser rewind.
 func (p *Parser) typeArgumentsMayClose() bool {
 	start := p.scanner.TokenStart()
 	if mayClose, known := p.typeArgumentClosures[start]; known {
@@ -44,7 +39,6 @@ func (p *Parser) typeArgumentsMayClose() bool {
 		}
 		switch p.token {
 		case ast.KindSlashToken, ast.KindSlashEqualsToken, ast.KindTemplateHead:
-			// Selecting the regular-expression/template lexical goal needs grammar.
 			p.recordTypeArgumentClosures(angles, true)
 			return true
 		case ast.KindLessThanToken, ast.KindLessThanLessThanToken:
@@ -52,7 +46,6 @@ func (p *Parser) typeArgumentsMayClose() bool {
 			if p.token == ast.KindLessThanLessThanToken {
 				angles = append(angles, p.scanner.TokenStart()+1)
 			}
-			// Nested starts may require the JSX lexical goal.
 			if p.languageVariant == core.LanguageVariantJSX && len(groups) != 0 {
 				p.recordTypeArgumentClosures(angles, true)
 				return true
@@ -88,14 +81,12 @@ func (p *Parser) typeArgumentsMayClose() bool {
 				return false
 			}
 		case ast.KindGreaterThanToken:
-			// Scan returns one '>' at a time; this lookahead never rescans it.
+			// Scan returns one '>' at a time.
 			angleStart := 0
 			if len(groups) != 0 {
 				angleStart = groups[len(groups)-1].angleStart
 			}
 			remaining := max(angleStart, len(angles)-1)
-			// Simple lists need no index allocation: the grammar consumes them
-			// immediately, and their lookahead contains no recursive work.
 			if hasNestedSyntax {
 				p.recordTypeArgumentClosures(angles[remaining:], true)
 			}
@@ -115,7 +106,7 @@ func (p *Parser) recordTypeArgumentClosures(angles []int, mayClose bool) {
 		p.typeArgumentClosures = make(map[int]bool)
 	}
 	for _, position := range angles {
-		// A proof of non-closure takes precedence over an inconclusive scan.
+		// An inconclusive result must not overwrite a known failure to close.
 		if previous, known := p.typeArgumentClosures[position]; !known || previous {
 			p.typeArgumentClosures[position] = mayClose
 		}
