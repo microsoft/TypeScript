@@ -3,9 +3,11 @@
 //// [inferredRestTypeFixedOnce.ts]
 function wrap<Args extends unknown[]>(_: (...args: Args) => void) {}
 wrap(({ cancelable } = {}) => {});
+wrap(({ cancelable }) => {});
 
 
 //// [inferredRestTypeFixedOnce.js]
 "use strict";
 function wrap(_) { }
 wrap(({ cancelable } = {}) => { });
+wrap(({ cancelable }) => { });

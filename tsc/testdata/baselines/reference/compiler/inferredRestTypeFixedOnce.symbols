@@ -12,3 +12,7 @@ wrap(({ cancelable } = {}) => {});
 >wrap : Symbol(wrap, Decl(inferredRestTypeFixedOnce.ts, 0, 0))
 >cancelable : Symbol(cancelable, Decl(inferredRestTypeFixedOnce.ts, 1, 7))
 
+wrap(({ cancelable }) => {});
+>wrap : Symbol(wrap, Decl(inferredRestTypeFixedOnce.ts, 0, 0))
+>cancelable : Symbol(cancelable, Decl(inferredRestTypeFixedOnce.ts, 2, 7))
+
