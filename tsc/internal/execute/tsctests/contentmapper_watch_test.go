@@ -567,6 +567,54 @@ func TestContentMapperWatchManifestChangeIgnoresCase(t *testing.T) {
 	assert.Equal(t, spawner.closes.Load(), int32(1))
 }
 
+func TestContentMapperWatchNewUppercaseExtension(t *testing.T) {
+	t.Parallel()
+	for _, test := range []struct {
+		name       string
+		ignoreCase bool
+	}{
+		{name: "case sensitive"},
+		{name: "case insensitive", ignoreCase: true},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+			synctest.Test(t, func(t *testing.T) {
+				const root = "/home/src/workspaces/project/"
+				testSys := newTestSys(&tscInput{
+					ignoreCase: test.ignoreCase,
+					files: FileMap{
+						root + "tsconfig.json": `{
+							"compilerOptions":{"listFiles":true},
+							"contentMappers":[{"package":"mapper","extensions":[".BOX"]}]
+						}`,
+						root + "first.ts":                         "export const first = 1;",
+						root + "node_modules/mapper/package.json": contentmappertest.PackageJSON(contentmappertest.VerbatimMapper),
+					},
+				}, false)
+				sys := &recordingContentMapperSystem{
+					TestSys: testSys,
+					spawner: &recordingContentMapperSpawner{inner: contentmappertest.NewSpawner()},
+				}
+				ctx, cancel := context.WithCancel(t.Context())
+				defer cancel()
+				result := execute.CommandLine(ctx, sys, []string{"--watch", "--runExternalCode"}, testSys)
+				w := result.Watcher.(*execute.Watcher)
+				assert.Assert(t, !strings.Contains(testSys.getOutput(false), "error TS"), testSys.getOutput(false))
+
+				path := root + "new.BOX"
+				testSys.writeFileNoError(path, "export const added = 2;")
+				testSys.clearOutput()
+				builds := w.FullBuilds()
+				testSys.mockWatchBackend.SendEvents([]fswatch.Event{{Kind: fswatch.EventUpdate, Path: path}})
+				w.DoCycle(ctx)
+				assert.Equal(t, w.FullBuilds(), builds+1)
+				// The root-file set must refresh even if compiling the newly discovered file reports an error.
+				assert.Assert(t, strings.Contains(testSys.getOutput(false), path), testSys.getOutput(false))
+			})
+		})
+	}
+}
+
 func TestContentMapperBuildWatchSymlinkedManifestDelete(t *testing.T) {
 	t.Parallel()
 	const manifestTarget = "/home/src/workspaces/mapper/package.json"
