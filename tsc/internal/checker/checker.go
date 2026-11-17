@@ -10682,9 +10682,10 @@ func (c *Checker) assignParameterType(parameter *ast.Symbol, contextualType *Typ
 	}
 	links.resolvedType = c.addOptionalityEx(t, false, declaration != nil && declaration.Initializer() == nil && isOptionalDeclaration(declaration))
 	if declaration != nil && !ast.IsIdentifier(declaration.Name()) {
-		// if inference didn't come up with anything but unknown, fall back to the binding pattern if present.
+		// If inference came up with nothing but unknown, fall back to the binding pattern. Nothing else
+		// types its elements, so report them as implicitly any.
 		if links.resolvedType == c.unknownType {
-			links.resolvedType = c.getTypeFromBindingPattern(declaration.Name(), false, false)
+			links.resolvedType = c.getTypeFromBindingPattern(declaration.Name(), false /*includePatternInType*/, true /*reportErrors*/)
 		}
 		c.assignBindingElementTypes(declaration.Name(), links.resolvedType)
 	}

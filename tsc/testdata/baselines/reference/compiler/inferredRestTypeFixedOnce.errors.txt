@@ -1,0 +1,13 @@
+inferredRestTypeFixedOnce.ts(2,9): error TS7031: Binding element 'cancelable' implicitly has an 'any' type.
+inferredRestTypeFixedOnce.ts(3,9): error TS7031: Binding element 'cancelable' implicitly has an 'any' type.
+
+
+==== inferredRestTypeFixedOnce.ts (2 errors) ====
+    function wrap<Args extends unknown[]>(_: (...args: Args) => void) {}
+    wrap(({ cancelable } = {}) => {});
+            ~~~~~~~~~~
+!!! error TS7031: Binding element 'cancelable' implicitly has an 'any' type.
+    wrap(({ cancelable }) => {});
+            ~~~~~~~~~~
+!!! error TS7031: Binding element 'cancelable' implicitly has an 'any' type.
+    
