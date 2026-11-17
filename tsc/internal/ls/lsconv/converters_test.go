@@ -271,6 +271,10 @@ func TestConvertersSourceFileProjectionExpansion(t *testing.T) {
 	assert.Equal(t, positions[1].Position, core.TextPos(2))
 }
 
+// A failed mapper leaves an empty virtual file without a span map, while the line map still
+// describes the non-ASCII original text. Its second line starts at byte 3, so converting
+// hover positions and inlay-hint ranges previously tried to scan the empty file from
+// offset 3 and panicked. Both requests must instead clamp to the virtual file's offset 0.
 func TestConvertersFailedContentMapperPosition(t *testing.T) {
 	t.Parallel()
 	original := "é\nhover here\n"
