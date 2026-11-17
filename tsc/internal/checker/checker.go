@@ -15135,7 +15135,19 @@ func (c *Checker) reportNode(r *currentNodeError) {
 	if c.currentNodeErrorCollectors != 0 {
 		c.currentNodeErrors = append(c.currentNodeErrors, r)
 	}
-	c.reportAtCurrentNodeOnce(r.report)
+	c.reportAtCurrentNodeOnce(func(c *Checker, node *ast.Node) { r.report(c, outermostNodeAtStart(node)) })
+}
+
+// outermostNodeAtStart returns the outermost type node that starts where the
+// type node node starts, or node if it is not a type node. Every node whose
+// check reaches an error reported at the current node reports it, and nested
+// type nodes starting at the same position, such as a union type and its
+// first constituent, then report it at the same location.
+func outermostNodeAtStart(node *ast.Node) *ast.Node {
+	for node != nil && ast.IsTypeNode(node) && node.Parent != nil && ast.IsTypeNode(node.Parent) && node.Parent.Pos() == node.Pos() {
+		node = node.Parent
+	}
+	return node
 }
 
 // reportAtCurrentNodeOnce is reportAtCurrentNode for an error whose result
