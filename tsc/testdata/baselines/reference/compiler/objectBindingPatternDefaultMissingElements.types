@@ -2,8 +2,8 @@
 
 === /unchecked.js ===
 export const uncheckedObject = ({
->uncheckedObject : ({ required, optional, }?: { optional?: boolean | undefined; required?: any; }) => void
->({    required,    optional = false,} = {}) => {} : ({ required, optional, }?: { optional?: boolean | undefined; required?: any; }) => void
+>uncheckedObject : ({ required, optional, }?: { optional?: boolean | undefined; }) => void
+>({    required,    optional = false,} = {}) => {} : ({ required, optional, }?: { optional?: boolean | undefined; }) => void
 
     required,
 >required : any
@@ -32,8 +32,8 @@ export const uncheckedArray = ([
 === /checked.js ===
 // @ts-check
 export const checkedObject = ({
->checkedObject : ({ required, optional, }?: { optional?: boolean | undefined; required?: any; }) => void
->({    required,    optional = false,} = {}) => {} : ({ required, optional, }?: { optional?: boolean | undefined; required?: any; }) => void
+>checkedObject : ({ required, optional, }?: { optional?: boolean | undefined; }) => void
+>({    required,    optional = false,} = {}) => {} : ({ required, optional, }?: { optional?: boolean | undefined; }) => void
 
     required,
 >required : any
@@ -62,15 +62,15 @@ export const checkedArray = ([
 === /main.ts ===
 import { checkedArray, checkedObject } from "./checked";
 >checkedArray : ([required, optional,]?: [any?, (boolean | undefined)?]) => void
->checkedObject : ({ required, optional, }?: { optional?: boolean | undefined; required?: any; }) => void
+>checkedObject : ({ required, optional, }?: { optional?: boolean | undefined; }) => void
 
 import { uncheckedArray, uncheckedObject } from "./unchecked";
 >uncheckedArray : ([required, optional,]?: [any?, (boolean | undefined)?]) => void
->uncheckedObject : ({ required, optional, }?: { optional?: boolean | undefined; required?: any; }) => void
+>uncheckedObject : ({ required, optional, }?: { optional?: boolean | undefined; }) => void
 
 export const typedObject = ({
->typedObject : ({ required, optional, }?: { optional?: boolean | undefined; required?: any; }) => void
->({    required,    optional = false,} = {}) => {} : ({ required, optional, }?: { optional?: boolean | undefined; required?: any; }) => void
+>typedObject : ({ required, optional, }?: { optional?: boolean | undefined; }) => void
+>({    required,    optional = false,} = {}) => {} : ({ required, optional, }?: { optional?: boolean | undefined; }) => void
 
     required,
 >required : any
@@ -97,8 +97,8 @@ export const typedArray = ([
 >[] : []
 
 export const typedObjectRest = ({
->typedObjectRest : ({ required, ...rest }?: { required?: any; }) => void
->({    required,    ...rest} = {}) => {    rest;} : ({ required, ...rest }?: { required?: any; }) => void
+>typedObjectRest : ({ required, ...rest }?: {}) => void
+>({    required,    ...rest} = {}) => {    rest;} : ({ required, ...rest }?: {}) => void
 
     required,
 >required : any
@@ -116,7 +116,7 @@ export const typedObjectRest = ({
 
 uncheckedObject({ required: "value" });
 >uncheckedObject({ required: "value" }) : void
->uncheckedObject : ({ required, optional, }?: { optional?: boolean | undefined; required?: any; }) => void
+>uncheckedObject : ({ required, optional, }?: { optional?: boolean | undefined; }) => void
 >{ required: "value" } : { required: string; }
 >required : string
 >"value" : "value"
@@ -129,7 +129,7 @@ uncheckedArray(["value"]);
 
 checkedObject({ required: "value" });
 >checkedObject({ required: "value" }) : void
->checkedObject : ({ required, optional, }?: { optional?: boolean | undefined; required?: any; }) => void
+>checkedObject : ({ required, optional, }?: { optional?: boolean | undefined; }) => void
 >{ required: "value" } : { required: string; }
 >required : string
 >"value" : "value"
@@ -142,7 +142,7 @@ checkedArray(["value"]);
 
 typedObject({ required: "value" });
 >typedObject({ required: "value" }) : void
->typedObject : ({ required, optional, }?: { optional?: boolean | undefined; required?: any; }) => void
+>typedObject : ({ required, optional, }?: { optional?: boolean | undefined; }) => void
 >{ required: "value" } : { required: string; }
 >required : string
 >"value" : "value"
@@ -246,13 +246,13 @@ export const arr3: (input?: [{ a?: number }?]) => void = ([{ a } = {}] = []) => 
 >input : [({ a?: number; } | undefined)?] | undefined
 >a : number | undefined
 >([{ a } = {}] = []) => {    const b: string = a;} : ([{ a }]?: [({ a?: number; } | undefined)?] | undefined) => void
->a : any
+>a : number | undefined
 >{} : {}
 >[] : []
 
     const b: string = a;
 >b : string
->a : any
+>a : number | undefined
 
 };
 
@@ -261,13 +261,13 @@ export const arr4: (input?: { a?: number }[]) => void = ([...[{ a } = {}]] = [])
 >input : { a?: number; }[] | undefined
 >a : number | undefined
 >([...[{ a } = {}]] = []) => {    const b: string = a;} : ([...[{ a }]]?: { a?: number; }[] | undefined) => void
->a : any
+>a : number | undefined
 >{} : {}
 >[] : never[]
 
     const b: string = a;
 >b : string
->a : any
+>a : number | undefined
 
 };
 
@@ -315,12 +315,12 @@ items.map(({ result: { summary } = {} }) => {
 >map : <U>(callbackfn: (value: { result?: { summary: number; }; }, index: number, array: { result?: { summary: number; }; }[]) => U, thisArg?: any) => U[]
 >({ result: { summary } = {} }) => {    const c: string = summary;} : ({ result: { summary } }: { result?: { summary: number; }; }) => void
 >result : any
->summary : any
+>summary : number | undefined
 >{} : {}
 
     const c: string = summary;
 >c : string
->summary : any
+>summary : number | undefined
 
 });
 
@@ -434,13 +434,13 @@ export const contextualNested: (input?: { inner?: { a?: number } }) => void = ({
 >a : number | undefined
 >({ inner: { a } = {} } = {}) => {    const c: string = a;} : ({ inner: { a } }?: { inner?: { a?: number; }; } | undefined) => void
 >inner : any
->a : any
+>a : number | undefined
 >{} : {}
 >{} : {}
 
     const c: string = a;
 >c : string
->a : any
+>a : number | undefined
 
 };
 
@@ -617,13 +617,13 @@ export const mixedDefaults: (args: string[], input?: { a?: string; b?: number })
 export function jsdocNested({ inner: { a } = {} }) {
 >jsdocNested : (input: { inner?: { a?: number; }; }) => void
 >inner : any
->a : any
+>a : number | undefined
 >{} : {}
 
     /** @type {string} */
     const c = a;
 >c : string
->a : any
+>a : number | undefined
 }
 
 /** @typedef {{ a?: number }} Options */
