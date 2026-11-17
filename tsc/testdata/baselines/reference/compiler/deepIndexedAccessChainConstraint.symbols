@@ -40,8 +40,12 @@ function victim<T extends Box>(
 
 ): string {
     return x.b + y.b;
+>x.b : Symbol(Box.b, Decl(deepIndexedAccessChainConstraint.ts, 5, 23))
 >x : Symbol(x, Decl(deepIndexedAccessChainConstraint.ts, 9, 31))
+>b : Symbol(Box.b, Decl(deepIndexedAccessChainConstraint.ts, 5, 23))
+>y.b : Symbol(Box.b, Decl(deepIndexedAccessChainConstraint.ts, 5, 23))
 >y : Symbol(y, Decl(deepIndexedAccessChainConstraint.ts, 10, 9))
+>b : Symbol(Box.b, Decl(deepIndexedAccessChainConstraint.ts, 5, 23))
 }
 
 function lone<U extends Box>(y: U["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]): string {
