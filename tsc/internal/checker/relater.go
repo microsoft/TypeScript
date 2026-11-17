@@ -370,9 +370,19 @@ func (c *Checker) checkTypeRelatedToEx(
 ) bool {
 	r := c.getRelater()
 	r.relation = relation
-	r.errorNode = errorNode
 	r.relationCount = (16_000_000 - relation.size()) / 8
-	result := r.isRelatedToEx(source, target, RecursionFlagsBoth, errorNode != nil /*reportErrors*/, headMessage, IntersectionStateNone)
+	// Comparing first without reporting errors keeps the comparison from
+	// building error messages, which print the types involved, for nested
+	// comparisons that fail on the way to a comparison that succeeds.
+	result := r.isRelatedToEx(source, target, RecursionFlagsBoth, false /*reportErrors*/, headMessage, IntersectionStateNone)
+	if errorNode != nil && result == TernaryFalse && !r.overflow {
+		c.putRelater(r)
+		r = c.getRelater()
+		r.relation = relation
+		r.errorNode = errorNode
+		r.relationCount = (16_000_000 - relation.size()) / 8
+		result = r.isRelatedToEx(source, target, RecursionFlagsBoth, true /*reportErrors*/, headMessage, IntersectionStateNone)
+	}
 	if r.overflow {
 		// Record this relation as having failed such that we don't attempt the overflowing operation again.
 		id, _ := getRelationKey(source, target, IntersectionStateNone, relation == c.identityRelation, false /*ignoreConstraints*/)
