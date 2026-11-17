@@ -4,7 +4,7 @@ Input::
 //// [/home/src/workspaces/project/script] *new* 
 const n: number = "s";
 
-tsgo script
+tsc script
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [91merror[0m[90m TS6231: [0mCould not resolve the path 'script' with the extensions: '.ts', '.tsx', '.d.ts', '.cts', '.d.cts', '.mts', '.d.mts'.

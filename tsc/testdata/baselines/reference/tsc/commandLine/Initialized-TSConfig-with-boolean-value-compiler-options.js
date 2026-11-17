@@ -2,7 +2,7 @@ currentDirectory::/home/src/workspaces/project
 useCaseSensitiveFileNames::true
 Input::
 
-tsgo --init --noUnusedLocals
+tsc --init --noUnusedLocals
 ExitStatus:: Success
 Output::
 

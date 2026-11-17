@@ -33,7 +33,7 @@ export default ky;
     },
 }
 
-tsgo --explainFiles --listEmittedFiles
+tsc --explainFiles --listEmittedFiles
 ExitStatus:: DiagnosticsPresent_OutputsSkipped
 Output::
 [96mindex.ts[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS4023: [0mExported variable 'api' has or is using name 'KyInstance' from external module "/home/src/workspaces/project/node_modules/ky/distribution/index" but cannot be named.
@@ -196,7 +196,7 @@ Signatures::
 
 Edit [0]:: no change
 
-tsgo --explainFiles --listEmittedFiles
+tsc --explainFiles --listEmittedFiles
 ExitStatus:: DiagnosticsPresent_OutputsSkipped
 Output::
 [96mindex.ts[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS4023: [0mExported variable 'api' has or is using name 'KyInstance' from external module "/home/src/workspaces/project/node_modules/ky/distribution/index" but cannot be named.
@@ -223,7 +223,7 @@ Signatures::
 
 Edit [1]:: build -b
 
-tsgo -b --explainFiles --listEmittedFiles --v
+tsc -b --explainFiles --listEmittedFiles --v
 ExitStatus:: DiagnosticsPresent_OutputsSkipped
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 

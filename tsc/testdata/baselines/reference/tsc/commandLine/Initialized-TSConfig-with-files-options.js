@@ -2,7 +2,7 @@ currentDirectory::/home/src/workspaces/project
 useCaseSensitiveFileNames::true
 Input::
 
-tsgo --init file0.st file1.ts file2.ts
+tsc --init file0.st file1.ts file2.ts
 ExitStatus:: Success
 Output::
 

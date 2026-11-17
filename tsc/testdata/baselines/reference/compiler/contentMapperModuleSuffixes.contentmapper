@@ -1,0 +1,24 @@
+//// [/card.web.box] (ScriptKind: ScriptKindTS, ContentMapper: [.box .long.box])
+--- Original ---
+export const platform = "web";
+--- Transformed ---
+const __VERSION = "1.0.0";
+export const platform = "web";
+
+//// [/card.web.long.box] (ScriptKind: ScriptKindTS, ContentMapper: [.box .long.box])
+--- Original ---
+export const platform = "web";
+--- Transformed ---
+const __VERSION = "1.0.0";
+export const platform = "web";
+
+//// [/fallback.box] (ScriptKind: ScriptKindTS, ContentMapper: [.box .long.box])
+--- Original ---
+export const platform = "default";
+--- Transformed ---
+const __VERSION = "1.0.0";
+export const platform = "default";
+
+=== Diagnostics ===
+
+<no content>

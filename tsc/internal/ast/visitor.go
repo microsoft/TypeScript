@@ -183,12 +183,20 @@ func (v *NodeVisitor) VisitSlice(nodes []*Node) (result []*Node, changed bool) {
 }
 
 // Visits each child of a Node, possibly returning a new Node of the same kind in its place.
+// Panics if visiting a non-nil required child returns nil.
 func (v *NodeVisitor) VisitEachChild(node *Node) *Node {
 	if node == nil || v.Visit == nil {
 		return node
 	}
 
 	return node.VisitEachChild(v)
+}
+
+func requiredChild[T any](original *T, child *T) *T {
+	if original != nil && child == nil {
+		panic("Visitor returned nil for a required child")
+	}
+	return child
 }
 
 func (v *NodeVisitor) visitNode(node *Node) *Node {

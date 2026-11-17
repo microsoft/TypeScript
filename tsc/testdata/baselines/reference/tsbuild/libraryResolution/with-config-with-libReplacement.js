@@ -125,7 +125,7 @@ export const z = 10
 //// [/home/src/workspace/projects/project4/utils.d.ts] *new* 
 export const y = 10;
 
-tsgo -b project1 project2 project3 project4 --verbose --explainFiles
+tsc -b project1 project2 project3 project4 --verbose --explainFiles
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 

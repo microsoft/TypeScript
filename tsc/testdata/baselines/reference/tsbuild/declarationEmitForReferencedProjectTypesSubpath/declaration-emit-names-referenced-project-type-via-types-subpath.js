@@ -68,7 +68,7 @@ export type ComponentTypes = {
     "include": ["src"]
 }
 
-tsgo --b packages/consumer --verbose
+tsc --b packages/consumer --verbose
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 

@@ -12,7 +12,7 @@ export const x = 1;
     "extends": "./base.json",
 }
 
-tsgo -p tsconfig.json --pretty false
+tsc -p tsconfig.json --pretty false
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 base.json(2,28): error TS5024: Compiler option 'include' requires a value of type string.

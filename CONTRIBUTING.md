@@ -131,7 +131,7 @@ Package-specific commands:
 ```bash
 npm run -w @typescript/typescript build
 npm run -w @typescript/typescript test
-npm run -w native-preview build
+npm run -w packages/vscode-typescript build
 ```
 
 ## Compiler tests

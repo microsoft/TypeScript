@@ -2,6 +2,7 @@ package compiler
 
 import (
 	"cmp"
+	"context"
 	"errors"
 	"fmt"
 	"slices"
@@ -56,7 +57,6 @@ type fileLoader struct {
 	caseSensitivity                                tspath.CaseSensitivity
 	supportedExtensions                            [][]string
 	supportedExtensionsWithJsonIfResolveJsonModule [][]string
-	contentMapperExtensions                        []string
 
 	filesParser *filesParser
 	rootTasks   []*parseTask
@@ -165,6 +165,7 @@ type jsxRuntimeImportSpecifier struct {
 }
 
 func processAllProgramFiles(
+	ctx context.Context,
 	opts ProgramOptions,
 	singleThreaded bool,
 ) (processedFiles, *module.ResolutionData, error) {
@@ -189,9 +190,11 @@ func processAllProgramFiles(
 		rootTasks:           make([]*parseTask, 0, len(rootFiles)+len(compilerOptions.Lib)),
 		supportedExtensions: supportedExtensions,
 		supportedExtensionsWithJsonIfResolveJsonModule: supportedExtensionsWithJsonIfResolveJsonModule,
-		contentMapperExtensions:                        opts.Config.ContentMapperExtensions(),
 	}
-	loader.addProjectReferenceTasks(singleThreaded)
+	loader.addProjectReferenceTasks(ctx, singleThreaded)
+	if err := ctx.Err(); err != nil {
+		return processedFiles{}, nil, err
+	}
 	resolverOptions := module.ResolverOptions{
 		Host:            loader.projectReferences.host,
 		CompilerOptions: compilerOptions,
@@ -208,6 +211,9 @@ func processAllProgramFiles(
 		defer opts.Tracing.Push(tracing.PhaseProgram, "processRootFiles", map[string]any{"count": len(rootFiles)}, false)()
 	}
 	for index, rootFile := range rootFiles {
+		if ctx.Err() != nil {
+			break
+		}
 		loader.addRootFileTask(rootFile, opts.Config.RootFileNameForDiagnostic(index), nil, &FileIncludeReason{kind: fileIncludeKindRootFile, index: index})
 	}
 	if len(rootFiles) > 0 && compilerOptions.NoLib.IsFalseOrUnknown() {
@@ -231,9 +237,12 @@ func processAllProgramFiles(
 		loader.addAutomaticTypeDirectiveTasks()
 	}
 
-	loader.filesParser.parse(&loader, loader.rootTasks)
+	loader.filesParser.parse(ctx, &loader, loader.rootTasks)
+	if ctx.Err() != nil {
+		return processedFiles{}, nil, ctx.Err()
+	}
 
-	return loader.filesParser.getProcessedFiles(&loader), loader.resolver.GetResolutionData(), loader.moduleResolutionError
+	return loader.filesParser.getProcessedFiles(ctx, &loader), loader.resolver.GetResolutionData(), loader.moduleResolutionError
 }
 
 func (p *fileLoader) toPath(file tspath.RootedPath) tspath.PathKey {
@@ -285,7 +294,7 @@ func (p *fileLoader) addAutomaticTypeDirectiveTasks() {
 	})
 }
 
-func (p *fileLoader) resolveAutomaticTypeDirectives(containingFileName tspath.RootedFilePath) (
+func (p *fileLoader) resolveAutomaticTypeDirectives(ctx context.Context, containingFileName tspath.RootedFilePath) (
 	toParse []resolvedRef,
 	typeResolutionsInFile module.ModeAwareCache[*module.ResolvedTypeReferenceDirective],
 	typeResolutionsTrace []module.DiagAndArgs,
@@ -296,6 +305,9 @@ func (p *fileLoader) resolveAutomaticTypeDirectives(containingFileName tspath.Ro
 		toParse = make([]resolvedRef, 0, len(automaticTypeDirectiveNames))
 		typeResolutionsInFile = make(module.ModeAwareCache[*module.ResolvedTypeReferenceDirective], len(automaticTypeDirectiveNames))
 		for _, name := range automaticTypeDirectiveNames {
+			if ctx.Err() != nil {
+				break
+			}
 			// Under node16/nodenext module resolution, load `types`/ata include names as cjs resolution results by passing an `undefined` mode.
 			// Under bundler module resolution, this also triggers the "import" condition to be used.
 			resolutionMode := core.ResolutionModeNone
@@ -339,7 +351,7 @@ func (p *fileLoader) resolveAutomaticTypeDirectives(containingFileName tspath.Ro
 	return toParse, typeResolutionsInFile, typeResolutionsTrace, pDiagnostics
 }
 
-func (p *fileLoader) addProjectReferenceTasks(singleThreaded bool) {
+func (p *fileLoader) addProjectReferenceTasks(ctx context.Context, singleThreaded bool) {
 	p.projectReferences = &projectReferenceFileMapperBuilder{
 		projectReferenceFileMapper: &projectReferenceFileMapper{
 			config:                      p.opts.Config,
@@ -357,7 +369,7 @@ func (p *fileLoader) addProjectReferenceTasks(singleThreaded bool) {
 		wg:     core.NewWorkGroup(core.WorkGroupConcurrency(singleThreaded)),
 	}
 	rootTasks := createProjectReferenceParseTasks(projectReferences)
-	parser.parse(rootTasks)
+	parser.parse(ctx, rootTasks)
 }
 
 func (p *fileLoader) sortLibs(libFiles []*ast.SourceFile) {
@@ -411,7 +423,10 @@ func (p *fileLoader) loadSourceFileMetaData(fileName tspath.RootedFilePath) ast.
 	}
 }
 
-func (p *fileLoader) parseSourceFile(t *parseTask) *ast.SourceFile {
+func (p *fileLoader) parseSourceFile(ctx context.Context, t *parseTask) *ast.SourceFile {
+	if ctx.Err() != nil {
+		return nil
+	}
 	if p.tracing != nil {
 		defer p.tracing.Push(tracing.PhaseParse, "createSourceFile", map[string]any{"path": t.normalizedFilePath.AsString()}, true)()
 	}
@@ -421,7 +436,7 @@ func (p *fileLoader) parseSourceFile(t *parseTask) *ast.SourceFile {
 		PathKey:                        t.path,
 		ExternalModuleIndicatorOptions: ast.GetExternalModuleIndicatorOptions(t.normalizedFilePath, options, t.metadata),
 	}
-	if t.normalizedFilePath.ExtensionIsOneOf(p.contentMapperExtensions) {
+	if p.opts.Config.GetContentMapperForFileName(t.normalizedFilePath) != nil {
 		return p.parseContentMappedFile(parseOptions)
 	}
 	return p.host.GetSourceFile(parseOptions)
@@ -762,7 +777,7 @@ func (p *fileLoader) resolveTripleslashPathReference(moduleName string, containi
 	}, nil
 }
 
-func (p *fileLoader) resolveTypeReferenceDirectives(t *parseTask) {
+func (p *fileLoader) resolveTypeReferenceDirectives(ctx context.Context, t *parseTask) {
 	file := t.file
 	if len(file.TypeReferenceDirectives) == 0 {
 		return
@@ -775,6 +790,9 @@ func (p *fileLoader) resolveTypeReferenceDirectives(t *parseTask) {
 	typeResolutionsInFile := make(module.ModeAwareCache[*module.ResolvedTypeReferenceDirective], len(file.TypeReferenceDirectives))
 	var typeResolutionsTrace []module.DiagAndArgs
 	for index, ref := range file.TypeReferenceDirectives {
+		if ctx.Err() != nil {
+			break
+		}
 		redirect, fileName := p.projectReferences.getRedirectForResolution(file)
 		resolutionMode := getModeForTypeReferenceDirectiveInFile(ref, file, meta, module.GetCompilerOptionsWithRedirect(p.opts.Config.CompilerOptions(), redirect))
 		resolved, trace := p.resolver.ResolveTypeReferenceDirective(ref.FileName, fileName, resolutionMode, redirect)
@@ -812,7 +830,7 @@ func (p *fileLoader) resolveTypeReferenceDirectives(t *parseTask) {
 
 const externalHelpersModuleNameText = "tslib" // TODO(jakebailey): dedupe
 
-func (p *fileLoader) resolveImportsAndModuleAugmentations(t *parseTask) {
+func (p *fileLoader) resolveImportsAndModuleAugmentations(ctx context.Context, t *parseTask) {
 	if p.tracing != nil {
 		defer p.tracing.Push(tracing.PhaseProgram, "resolveModuleNamesWorker", map[string]any{"containingFileName": t.file.FileName()}, false)()
 	}
@@ -865,12 +883,15 @@ func (p *fileLoader) resolveImportsAndModuleAugmentations(t *parseTask) {
 		var resolutionsTrace []module.DiagAndArgs
 
 		for index, entry := range moduleNames {
+			if ctx.Err() != nil {
+				break
+			}
 			moduleName := entry.Text()
 			if moduleName == "" || ast.IsSourcePhaseImport(entry.Parent) {
 				continue
 			}
 
-			mode := getModeForUsageLocation(file.FileName(), meta, entry, optionsForFile)
+			mode := getModeForUsageLocation(getModuleFormatFileName(file), meta, entry, optionsForFile)
 			// We know moduleName resolves to an ambient module provided that moduleName:
 			// - is in the list of ambient modules locally declared in the current source file.
 			if slices.Contains(file.AmbientModuleNames, moduleName) {
@@ -1029,8 +1050,17 @@ func getModeForTypeReferenceDirectiveInFile(ref *ast.FileReference, file *ast.So
 	if ref.ResolutionMode != core.ResolutionModeNone {
 		return ref.ResolutionMode
 	} else {
-		return getDefaultResolutionModeForFile(file.FileName(), meta, options)
+		return getDefaultResolutionModeForFile(getModuleFormatFileName(file), meta, options)
 	}
+}
+
+func getModuleFormatFileName(file ast.HasFileName) tspath.RootedFilePath {
+	if sourceFile, ok := file.(*ast.SourceFile); ok {
+		if virtualFileName := sourceFile.VirtualFileName(); virtualFileName != "" {
+			return virtualFileName
+		}
+	}
+	return file.FileName()
 }
 
 func getDefaultResolutionModeForFile(fileName tspath.RootedFilePath, meta ast.SourceFileMetaData, options *core.CompilerOptions) core.ResolutionMode {

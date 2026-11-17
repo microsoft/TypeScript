@@ -77,7 +77,7 @@ export function isSameTypeScriptInstallation(current: ExeInfo | undefined, selec
 
 export function resolvePackageExecutable(packageJsonPath: string, platformPackage: string, exeName: string): string {
     const require = module.createRequire(packageJsonPath);
-    const platformPackageJson = require.resolve(`@typescript/${platformPackage}/package.json`);
+    const platformPackageJson = require.resolve(`${platformPackage}/package.json`);
     return path.join(path.dirname(platformPackageJson), "lib", exeName);
 }
 

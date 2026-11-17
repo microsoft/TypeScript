@@ -48,7 +48,7 @@ export function randomFn(str: string) {
     ],
 }
 
-tsgo --b projects/server -v --traceResolution --explainFiles
+tsc --b projects/server -v --traceResolution --explainFiles
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -362,7 +362,7 @@ Signatures::
 
 Edit [0]:: no change
 
-tsgo --b projects/server -v --traceResolution --explainFiles
+tsc --b projects/server -v --traceResolution --explainFiles
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -382,7 +382,7 @@ export function log(str: string) {
     console.log(str);
 }export const x = 10;
 
-tsgo --b projects/server -v --traceResolution --explainFiles
+tsc --b projects/server -v --traceResolution --explainFiles
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -643,7 +643,7 @@ Signatures::
 
 Edit [2]:: no change
 
-tsgo --b projects/server -v --traceResolution --explainFiles
+tsc --b projects/server -v --traceResolution --explainFiles
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -660,7 +660,7 @@ Output::
 Edit [3]:: delete random file
 //// [/home/src/workspaces/solution/projects/shared/src/random.ts] *deleted*
 
-tsgo --b projects/server -v --traceResolution --explainFiles
+tsc --b projects/server -v --traceResolution --explainFiles
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -876,7 +876,7 @@ Signatures::
 
 Edit [4]:: no change
 
-tsgo --b projects/server -v --traceResolution --explainFiles
+tsc --b projects/server -v --traceResolution --explainFiles
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 

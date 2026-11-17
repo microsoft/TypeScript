@@ -73,7 +73,7 @@ export const platform = "web" as const;
     ]
 }
 
-tsgo --b --verbose
+tsc --b --verbose
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 

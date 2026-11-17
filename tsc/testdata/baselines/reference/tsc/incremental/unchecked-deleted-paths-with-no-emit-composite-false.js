@@ -6,7 +6,7 @@ export const stable = 1;
 //// [/home/src/workspaces/project/tsconfig.json] *new* 
 {"compilerOptions":{"incremental":true,"noCheck":true,"noEmit":true,"composite":false,"types":[]}}
 
-tsgo 
+tsc 
 ExitStatus:: Success
 Output::
 //// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
@@ -101,7 +101,7 @@ export const first = 1;
 //// [/home/src/workspaces/project/second.ts] *new* 
 export const second = 1;
 
-tsgo 
+tsc 
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *modified* 
@@ -204,7 +204,7 @@ Edit [1]:: delete unchecked sources
 //// [/home/src/workspaces/project/first.ts] *deleted*
 //// [/home/src/workspaces/project/second.ts] *deleted*
 
-tsgo 
+tsc 
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *modified* 
@@ -272,7 +272,7 @@ Signatures::
 
 Edit [2]:: no change
 
-tsgo 
+tsc 
 ExitStatus:: Success
 Output::
 
@@ -287,7 +287,7 @@ Edit [3]:: enable checking and emit
 //// [/home/src/workspaces/project/tsconfig.json] *modified* 
 {"compilerOptions":{"incremental":true,"noCheck":false,"noEmit":false,"composite":false,"types":[]}}
 
-tsgo 
+tsc 
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/stable.js] *new* 
@@ -346,7 +346,7 @@ Signatures::
 
 Edit [4]:: no change
 
-tsgo 
+tsc 
 ExitStatus:: Success
 Output::
 

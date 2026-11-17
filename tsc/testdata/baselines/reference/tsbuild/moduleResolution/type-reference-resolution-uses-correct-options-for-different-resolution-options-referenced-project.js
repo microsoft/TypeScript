@@ -26,7 +26,7 @@ declare type TheNum = "type1";
 //// [/home/src/workspaces/project/packages/typeroot2/sometype/index.d.ts] *new* 
 declare type TheNum2 = "type2";
 
-tsgo -b packages/pkg1.tsconfig.json packages/pkg2.tsconfig.json --verbose --traceResolution
+tsc -b packages/pkg1.tsconfig.json packages/pkg2.tsconfig.json --verbose --traceResolution
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 

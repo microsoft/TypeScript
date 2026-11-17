@@ -5,14 +5,13 @@
     "license": "Apache-2.0",
     "author": "Microsoft Corp.",
     "homepage": "https://www.typescriptlang.org/",
-    "description": "Preview CLI and JS API for the native TypeScript compiler port",
+    "description": "TypeScript is a language for application scale JavaScript development",
     "keywords": [
         "TypeScript",
         "Microsoft",
         "compiler",
         "language",
-        "javascript",
-        "tsgo"
+        "javascript"
     ],
     "bugs": {
         "url": "https://github.com/microsoft/TypeScript/issues"

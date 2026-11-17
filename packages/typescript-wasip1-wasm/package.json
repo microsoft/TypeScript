@@ -5,6 +5,10 @@
     "license": "Apache-2.0",
     "author": "Microsoft Corp.",
     "homepage": "https://www.typescriptlang.org/",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/microsoft/TypeScript.git"
+    },
     "description": "Experimental TypeScript support for wasip1/wasm",
     "type": "module",
     "files": [

@@ -41,7 +41,7 @@ export const foo2: Foo2 = { foo: "b" };
     },
 }
 
-tsgo -p .
+tsc -p .
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96m../node_modules/lib2/index.d.ts[0m:[93m1[0m:[93m26[0m - [91merror[0m[90m TS1149: [0mFile name '/home/node_modules/somelib/index.d.ts' differs from already included file name '/home/node_modules/someLib/index.d.ts' only in casing.

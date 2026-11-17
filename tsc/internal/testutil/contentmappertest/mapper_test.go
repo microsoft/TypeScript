@@ -19,7 +19,7 @@ import (
 // helperEnv, when set, makes the test binary act as the mapper subprocess instead of running tests. This
 // lets the out-of-process test spawn a real subprocess (itself) that speaks the mapper protocol over
 // stdio, exercising the same handler code that the in-process spawner runs over a pipe.
-const helperEnv = "TSGO_CONTENT_MAPPER_HELPER"
+const helperEnv = "TS_CONTENT_MAPPER_HELPER"
 
 func TestMain(m *testing.M) {
 	if os.Getenv(helperEnv) == "1" {

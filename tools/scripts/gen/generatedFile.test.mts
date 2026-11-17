@@ -83,7 +83,7 @@ test("generator options preserve repeated inputs and force overrides", async () 
 });
 
 test("generated files are current only while their inputs and formatted output match", context => {
-    const directory = fs.mkdtempSync(path.join(os.tmpdir(), "tsgo-codegen-"));
+    const directory = fs.mkdtempSync(path.join(os.tmpdir(), "typescript-codegen-"));
     context.after(() => fs.rmSync(directory, { recursive: true, force: true }));
     const input = path.join(directory, "input.ts");
     const output = path.join(directory, "output.ts");
@@ -125,7 +125,7 @@ test("generated files are current only while their inputs and formatted output m
 });
 
 test("generated files share input fingerprints and refresh changed inputs", context => {
-    const directory = fs.mkdtempSync(path.join(os.tmpdir(), "tsgo-fingerprint-"));
+    const directory = fs.mkdtempSync(path.join(os.tmpdir(), "typescript-fingerprint-"));
     context.after(() => fs.rmSync(directory, { recursive: true, force: true }));
     const input = path.join(directory, "input.ts");
     const output = path.join(directory, "output.ts");
@@ -154,7 +154,7 @@ test("generated files share input fingerprints and refresh changed inputs", cont
 });
 
 test("invocation fingerprints reuse metadata and invalidate writes", async context => {
-    const directory = fs.mkdtempSync(path.join(os.tmpdir(), "tsgo-fingerprint-"));
+    const directory = fs.mkdtempSync(path.join(os.tmpdir(), "typescript-fingerprint-"));
     context.after(() => fs.rmSync(directory, { recursive: true, force: true }));
     context.after(enableFileFingerprintCache());
     const input = path.join(directory, "input.ts");
@@ -213,7 +213,7 @@ test("invocation fingerprints reuse metadata and invalidate writes", async conte
 });
 
 test("fingerprint cache scopes can overlap", context => {
-    const directory = fs.mkdtempSync(path.join(os.tmpdir(), "tsgo-fingerprint-"));
+    const directory = fs.mkdtempSync(path.join(os.tmpdir(), "typescript-fingerprint-"));
     context.after(() => fs.rmSync(directory, { recursive: true, force: true }));
     const input = path.join(directory, "input.ts");
     fs.writeFileSync(input, "input");
@@ -245,7 +245,7 @@ test("fingerprint cache scopes can overlap", context => {
 });
 
 test("changing inputs during generation does not mark stale output current", context => {
-    const directory = fs.mkdtempSync(path.join(os.tmpdir(), "tsgo-codegen-"));
+    const directory = fs.mkdtempSync(path.join(os.tmpdir(), "typescript-codegen-"));
     context.after(() => fs.rmSync(directory, { recursive: true, force: true }));
     const input = path.join(directory, "input.ts");
     const output = path.join(directory, "output.ts");
@@ -259,7 +259,7 @@ test("changing inputs during generation does not mark stale output current", con
 });
 
 test("default metadata is isolated by repository worktree", context => {
-    const directory = fs.mkdtempSync(path.join(os.tmpdir(), "tsgo-codegen-"));
+    const directory = fs.mkdtempSync(path.join(os.tmpdir(), "typescript-codegen-"));
     context.after(() => fs.rmSync(directory, { recursive: true, force: true }));
     const output = path.join(directory, "output.ts");
     assert.equal(path.basename(defaultCacheDirectory), createHash("sha256").update(repoRoot).digest("hex"));
@@ -277,7 +277,7 @@ test("default metadata is isolated by repository worktree", context => {
 });
 
 test("metadata directories can disappear during generation", context => {
-    const directory = fs.mkdtempSync(path.join(os.tmpdir(), "tsgo-codegen-"));
+    const directory = fs.mkdtempSync(path.join(os.tmpdir(), "typescript-codegen-"));
     context.after(() => fs.rmSync(directory, { recursive: true, force: true }));
     const output = path.join(directory, "output.ts");
     const cache = path.join(directory, "cache");
@@ -292,7 +292,7 @@ test("metadata directories can disappear during generation", context => {
 });
 
 test("generated files track each output independently", context => {
-    const directory = fs.mkdtempSync(path.join(os.tmpdir(), "tsgo-codegen-"));
+    const directory = fs.mkdtempSync(path.join(os.tmpdir(), "typescript-codegen-"));
     context.after(() => fs.rmSync(directory, { recursive: true, force: true }));
     const files = ["output.go", "locale.gz"].map(file => new GeneratedFile(path.join(directory, file), [], path.join(directory, "cache")));
     for (const file of files) {

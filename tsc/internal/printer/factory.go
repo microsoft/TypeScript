@@ -1299,7 +1299,7 @@ func (f *NodeFactory) NewAssignmentTargetWrapper(paramName *ast.IdentifierNode, 
 
 // Allocates a new Call expression to the `__rewriteRelativeImportExtension` helper.
 func (f *NodeFactory) NewRewriteRelativeImportExtensionsHelper(firstArgument *ast.Node, preserveJsx bool, extraExtensions []tspath.ExtensionRewrite, caseSensitivity tspath.CaseSensitivity) *ast.Expression {
-	if len(extraExtensions) == 0 {
+	if !tspath.HasRuntimeExtensionRewrites(extraExtensions) {
 		f.emitContext.RequestEmitHelper(rewriteRelativeImportExtensionsHelper)
 		var arguments []*ast.Expression
 		if preserveJsx {
@@ -1320,6 +1320,9 @@ func (f *NodeFactory) NewRewriteRelativeImportExtensionsHelper(firstArgument *as
 	arguments = append(arguments, f.NewToken(core.IfElse(preserveJsx, ast.KindTrueKeyword, ast.KindFalseKeyword)))
 	properties := make([]*ast.Node, 0, len(extraExtensions))
 	for _, extension := range extraExtensions {
+		if !extension.Runtime {
+			continue
+		}
 		properties = append(properties, f.NewPropertyAssignment(
 			nil,
 			f.NewStringLiteral(extension.Source, ast.TokenFlagsNone),

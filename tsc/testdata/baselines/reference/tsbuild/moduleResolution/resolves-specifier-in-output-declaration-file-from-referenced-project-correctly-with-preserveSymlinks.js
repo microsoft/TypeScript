@@ -35,7 +35,7 @@ export type { TheNum } from 'const';
     },
 }
 
-tsgo -b packages/pkg1 --verbose --traceResolution
+tsc -b packages/pkg1 --verbose --traceResolution
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 

@@ -26,7 +26,7 @@ Input::
     ]
 }
 
-tsgo --project producer --listEmittedFiles
+tsc --project producer --listEmittedFiles
 ExitStatus:: Success
 Output::
 TSFILE: /home/src/workspaces/project/producer/dist/index.d.ts
@@ -124,7 +124,7 @@ Signatures::
 
 Edit [0]:: no change
 
-tsgo --project producer --listEmittedFiles
+tsc --project producer --listEmittedFiles
 ExitStatus:: Success
 Output::
 
@@ -156,7 +156,7 @@ Edit [1]:: change moduleDetection without changing source files
     ]
 }
 
-tsgo --project producer --listEmittedFiles
+tsc --project producer --listEmittedFiles
 ExitStatus:: Success
 Output::
 TSFILE: /home/src/workspaces/project/producer/dist/index.d.ts
@@ -232,7 +232,7 @@ Signatures::
 
 Edit [2]:: no change
 
-tsgo --project producer --listEmittedFiles
+tsc --project producer --listEmittedFiles
 ExitStatus:: Success
 Output::
 
@@ -243,7 +243,7 @@ Signatures::
 
 Edit [3]:: force rebuild with the same compiler options
 
-tsgo --build producer --verbose --force
+tsc --build producer --verbose --force
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -267,7 +267,7 @@ Signatures::
 
 Edit [4]:: no change
 
-tsgo --project producer --listEmittedFiles
+tsc --project producer --listEmittedFiles
 ExitStatus:: Success
 Output::
 

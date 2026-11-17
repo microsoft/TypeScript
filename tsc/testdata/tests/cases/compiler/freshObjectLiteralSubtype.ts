@@ -31,7 +31,7 @@ declare function utilValidate(): {
     msg: string;
 }
 
-validate().msg; // Error in TSGO
+validate().msg; // Was incorrectly an error
 
 // https://github.com/microsoft/TypeScript/tsc/issues/1761
 

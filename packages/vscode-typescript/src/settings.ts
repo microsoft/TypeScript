@@ -99,7 +99,7 @@ function getExplicitUseTsgo(section: string): boolean | undefined {
  * In development, it also runs when the built-in TypeScript extension is
  * disabled unless the setting explicitly turns it off.
  */
-export function shouldStartTsgo(context: vscode.ExtensionContext): boolean {
+export function shouldStartNativeServer(context: vscode.ExtensionContext): boolean {
     const useTsgo = getUseTsgo();
     if (context.extensionMode === vscode.ExtensionMode.Development && !vscode.extensions.getExtension("vscode.typescript-language-features")) {
         return useTsgo !== false;

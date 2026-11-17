@@ -6,7 +6,7 @@ Input::
 //// [/home/src/workspaces/project/tsconfig.json] *new* 
 {}
 
-tsgo --watch --incremental
+tsc --watch --incremental
 ExitStatus:: Success
 Output::
 [2J[3J[H[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...

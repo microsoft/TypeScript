@@ -122,7 +122,7 @@ class RpcClient {
             });
 
             this.process.once("error", error => {
-                reject(new Error(`Failed to start tsgo process: ${error.message}`));
+                reject(new Error(`Failed to start tsc process: ${error.message}`));
             });
 
             this.process.once("spawn", () => {

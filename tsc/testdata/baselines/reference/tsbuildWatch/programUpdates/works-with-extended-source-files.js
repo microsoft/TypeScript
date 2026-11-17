@@ -62,7 +62,7 @@ let k = 0;
     "files": ["other2.ts"],
 }
 
-tsgo -b -w -v project1.tsconfig.json project2.tsconfig.json project3.tsconfig.json
+tsc -b -w -v project1.tsconfig.json project2.tsconfig.json project3.tsconfig.json
 ExitStatus:: Success
 Output::
 [2J[3J[H[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...

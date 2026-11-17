@@ -89,7 +89,7 @@ function trackChild(process: NodeJS.Process, child: ChildProcess): void {
 
 export function createPipePath(): string {
     const process = nodeProcess();
-    return `\\\\.\\pipe\\tsgo-sync-${process.pid}-${process.getBuiltinModule("node:crypto").randomBytes(16).toString("hex")}`;
+    return `\\\\.\\pipe\\typescript-sync-${process.pid}-${process.getBuiltinModule("node:crypto").randomBytes(16).toString("hex")}`;
 }
 
 /**

@@ -73,7 +73,7 @@ export const z = 10
 //// [/home/src/workspace/projects/project4/utils.d.ts] *new* 
 export const y = 10;
 
-tsgo -p project1 --explainFiles
+tsc -p project1 --explainFiles
 ExitStatus:: Success
 Output::
 ../../tslibs/TS/Lib/lib.es5.d.ts

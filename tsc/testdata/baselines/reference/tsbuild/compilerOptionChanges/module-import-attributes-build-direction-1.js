@@ -29,7 +29,7 @@ export { value };
     ]
 }
 
-tsgo --build producer --verbose
+tsc --build producer --verbose
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -185,7 +185,7 @@ Signatures::
 
 Edit [0]:: no change
 
-tsgo --build producer --verbose
+tsc --build producer --verbose
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -331,7 +331,7 @@ Edit [1]:: change module without changing source files
     ]
 }
 
-tsgo --build producer --verbose
+tsc --build producer --verbose
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -448,7 +448,7 @@ Signatures::
 
 Edit [2]:: no change
 
-tsgo --build producer --verbose
+tsc --build producer --verbose
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -561,7 +561,7 @@ Signatures::
 
 Edit [3]:: force rebuild with the same compiler options
 
-tsgo --build producer --verbose --force
+tsc --build producer --verbose --force
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -679,7 +679,7 @@ Signatures::
 
 Edit [4]:: no change
 
-tsgo --build producer --verbose
+tsc --build producer --verbose
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 

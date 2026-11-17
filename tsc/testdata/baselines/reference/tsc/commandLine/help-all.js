@@ -2,7 +2,7 @@ currentDirectory::/home/src/workspaces/project
 useCaseSensitiveFileNames::true
 Input::
 
-tsgo --help --all
+tsc --help --all
 ExitStatus:: Success
 Output::
 tsc: The TypeScript Compiler - Version FakeTSVersion

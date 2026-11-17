@@ -26,7 +26,7 @@ export function multiply(a: number, b: number) { return a * b; }
     },
 }
 
-tsgo --b with-references
+tsc --b with-references
 ExitStatus:: Success
 Output::
 //// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*

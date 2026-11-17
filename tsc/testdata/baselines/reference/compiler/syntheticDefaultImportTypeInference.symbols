@@ -1,0 +1,66 @@
+//// [tests/cases/compiler/syntheticDefaultImportTypeInference.ts] ////
+
+=== syntheticDefaultImportTypeInference.ts ===
+// https://github.com/microsoft/TypeScript/issues/65445
+
+// The type of import("x") is the module's type with a synthetic default,
+// which cannot reference type parameters, so inference from the callback
+// does not explore its members, among them stub, whose return type is
+// infinite for an erased type argument.
+
+declare module "x" {
+>"x" : Symbol("x", Decl(syntheticDefaultImportTypeInference.ts, 0, 0))
+
+    type Stubable = (...args: any[]) => any;
+>Stubable : Symbol(Stubable, Decl(syntheticDefaultImportTypeInference.ts, 7, 20))
+>args : Symbol(args, Decl(syntheticDefaultImportTypeInference.ts, 8, 21))
+
+    type Result<R> = R extends Stubable ? Provider<R> : Promise<R>;
+>Result : Symbol(Result, Decl(syntheticDefaultImportTypeInference.ts, 8, 44))
+>R : Symbol(R, Decl(syntheticDefaultImportTypeInference.ts, 9, 16))
+>R : Symbol(R, Decl(syntheticDefaultImportTypeInference.ts, 9, 16))
+>Stubable : Symbol(Stubable, Decl(syntheticDefaultImportTypeInference.ts, 7, 20))
+>Provider : Symbol(Provider, Decl(syntheticDefaultImportTypeInference.ts, 10, 111))
+>R : Symbol(R, Decl(syntheticDefaultImportTypeInference.ts, 9, 16))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>R : Symbol(R, Decl(syntheticDefaultImportTypeInference.ts, 9, 16))
+
+    type MethodOrProperty<V> = V extends (...args: infer P) => infer R ? (...args: P) => Result<R> : Result<V>;
+>MethodOrProperty : Symbol(MethodOrProperty, Decl(syntheticDefaultImportTypeInference.ts, 9, 67))
+>V : Symbol(V, Decl(syntheticDefaultImportTypeInference.ts, 10, 26))
+>V : Symbol(V, Decl(syntheticDefaultImportTypeInference.ts, 10, 26))
+>args : Symbol(args, Decl(syntheticDefaultImportTypeInference.ts, 10, 42))
+>P : Symbol(P, Decl(syntheticDefaultImportTypeInference.ts, 10, 56))
+>R : Symbol(R, Decl(syntheticDefaultImportTypeInference.ts, 10, 68))
+>args : Symbol(args, Decl(syntheticDefaultImportTypeInference.ts, 10, 74))
+>P : Symbol(P, Decl(syntheticDefaultImportTypeInference.ts, 10, 56))
+>Result : Symbol(Result, Decl(syntheticDefaultImportTypeInference.ts, 8, 44))
+>R : Symbol(R, Decl(syntheticDefaultImportTypeInference.ts, 10, 68))
+>Result : Symbol(Result, Decl(syntheticDefaultImportTypeInference.ts, 8, 44))
+>V : Symbol(V, Decl(syntheticDefaultImportTypeInference.ts, 10, 26))
+
+    type Provider<T> = T extends Stubable ? MethodOrProperty<T> : unknown;
+>Provider : Symbol(Provider, Decl(syntheticDefaultImportTypeInference.ts, 10, 111))
+>T : Symbol(T, Decl(syntheticDefaultImportTypeInference.ts, 11, 18))
+>T : Symbol(T, Decl(syntheticDefaultImportTypeInference.ts, 11, 18))
+>Stubable : Symbol(Stubable, Decl(syntheticDefaultImportTypeInference.ts, 7, 20))
+>MethodOrProperty : Symbol(MethodOrProperty, Decl(syntheticDefaultImportTypeInference.ts, 9, 67))
+>T : Symbol(T, Decl(syntheticDefaultImportTypeInference.ts, 11, 18))
+
+    export function stub<T extends Stubable>(value: T): Provider<T>;
+>stub : Symbol(stub, Decl(syntheticDefaultImportTypeInference.ts, 11, 74))
+>T : Symbol(T, Decl(syntheticDefaultImportTypeInference.ts, 12, 25))
+>Stubable : Symbol(Stubable, Decl(syntheticDefaultImportTypeInference.ts, 7, 20))
+>value : Symbol(value, Decl(syntheticDefaultImportTypeInference.ts, 12, 45))
+>T : Symbol(T, Decl(syntheticDefaultImportTypeInference.ts, 12, 25))
+>Provider : Symbol(Provider, Decl(syntheticDefaultImportTypeInference.ts, 10, 111))
+>T : Symbol(T, Decl(syntheticDefaultImportTypeInference.ts, 12, 25))
+}
+
+const a = import("x").then((m) => 1);
+>a : Symbol(a, Decl(syntheticDefaultImportTypeInference.ts, 15, 5))
+>import("x").then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>"x" : Symbol("x", Decl(syntheticDefaultImportTypeInference.ts, 0, 0))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>m : Symbol(m, Decl(syntheticDefaultImportTypeInference.ts, 15, 28))
+

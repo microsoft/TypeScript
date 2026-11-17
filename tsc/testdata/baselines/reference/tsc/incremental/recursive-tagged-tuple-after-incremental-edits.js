@@ -39,7 +39,7 @@ export declare const doc: Doc;
 //// [/home/src/workspaces/project/tsconfig.json] *new* 
 {"compilerOptions": {"strict": true, "incremental": true, "noEmit": true, "module": "esnext", "moduleResolution": "bundler"}}
 
-tsgo 
+tsc 
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *new* 
@@ -130,7 +130,7 @@ Signatures::
 
 Edit [0]:: no change
 
-tsgo 
+tsc 
 ExitStatus:: Success
 Output::
 
@@ -152,7 +152,7 @@ export declare const doc: Doc;
 // comment-only edit
 
 
-tsgo 
+tsc 
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *modified* 
@@ -254,7 +254,7 @@ Signatures::
 
 Edit [2]:: no change
 
-tsgo 
+tsc 
 ExitStatus:: Success
 Output::
 
@@ -277,7 +277,7 @@ export declare const doc: Doc;
 // comment-only edit
 
 
-tsgo 
+tsc 
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *modified* 
@@ -379,7 +379,7 @@ Signatures::
 
 Edit [4]:: no change
 
-tsgo 
+tsc 
 ExitStatus:: Success
 Output::
 
@@ -395,7 +395,7 @@ export const value = doc;
 export const invalid: number = value;
 
 
-tsgo 
+tsc 
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96mconsumer.ts[0m:[93m3[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'Doc' is not assignable to type 'number'.
@@ -535,7 +535,7 @@ Signatures::
 
 Edit [6]:: no change
 
-tsgo 
+tsc 
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96mconsumer.ts[0m:[93m3[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'Doc' is not assignable to type 'number'.
@@ -556,7 +556,7 @@ Signatures::
 Edit [7]:: delete build info and check the edited source afresh
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *deleted*
 
-tsgo 
+tsc 
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96mconsumer.ts[0m:[93m3[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'Doc' is not assignable to type 'number'.
@@ -687,7 +687,7 @@ Signatures::
 
 Edit [8]:: no change
 
-tsgo 
+tsc 
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96mconsumer.ts[0m:[93m3[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'Doc' is not assignable to type 'number'.

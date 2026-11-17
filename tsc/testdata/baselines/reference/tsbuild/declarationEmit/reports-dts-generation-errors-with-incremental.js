@@ -33,7 +33,7 @@ export default ky;
     },
 }
 
-tsgo -b --explainFiles --listEmittedFiles --v
+tsc -b --explainFiles --listEmittedFiles --v
 ExitStatus:: DiagnosticsPresent_OutputsSkipped
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -197,7 +197,7 @@ Signatures::
 
 Edit [0]:: no change
 
-tsgo -b --explainFiles --listEmittedFiles --v
+tsc -b --explainFiles --listEmittedFiles --v
 ExitStatus:: DiagnosticsPresent_OutputsSkipped
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 

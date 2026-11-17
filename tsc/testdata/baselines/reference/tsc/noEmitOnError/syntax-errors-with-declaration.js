@@ -23,7 +23,7 @@ export { }
     },
 }
 
-tsgo 
+tsc 
 ExitStatus:: DiagnosticsPresent_OutputsSkipped
 Output::
 [96msrc/main.ts[0m:[93m4[0m:[93m1[0m - [91merror[0m[90m TS1005: [0m',' expected.
@@ -62,7 +62,7 @@ declare const console: { log(msg: any): void; };
 
 Edit [0]:: no change
 
-tsgo 
+tsc 
 ExitStatus:: DiagnosticsPresent_OutputsSkipped
 Output::
 [96msrc/main.ts[0m:[93m4[0m:[93m1[0m - [91merror[0m[90m TS1005: [0m',' expected.
@@ -83,7 +83,7 @@ const a = {
     lastName: 'sdsd'
 };
 
-tsgo 
+tsc 
 ExitStatus:: Success
 Output::
 //// [/user/username/projects/noEmitOnError/dev-build/shared/types/db.d.ts] *new* 
@@ -115,7 +115,7 @@ export {};
 
 Edit [2]:: no change
 
-tsgo 
+tsc 
 ExitStatus:: Success
 Output::
 //// [/user/username/projects/noEmitOnError/dev-build/shared/types/db.d.ts] *rewrite with same content*

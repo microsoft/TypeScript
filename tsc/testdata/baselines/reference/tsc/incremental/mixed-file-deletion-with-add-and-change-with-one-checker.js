@@ -12,7 +12,7 @@ export interface ModuleOnly { property: string; }
 //// [/home/src/workspaces/project/tsconfig.json] *new* 
 {"compilerOptions":{"incremental":true,"noEmit":true,"types":[]}}
 
-tsgo --checkers 1
+tsc --checkers 1
 ExitStatus:: Success
 Output::
 //// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
@@ -150,7 +150,7 @@ export const changed = 2;
 //// [/home/src/workspaces/project/global.d.ts] *deleted*
 //// [/home/src/workspaces/project/module.d.ts] *deleted*
 
-tsgo --checkers 1
+tsc --checkers 1
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96mconsumer.ts[0m:[93m1[0m:[93m22[0m - [91merror[0m[90m TS2304: [0mCannot find name 'RemovedGlobal'.
@@ -288,7 +288,7 @@ Signatures::
 
 Edit [1]:: no change
 
-tsgo --checkers 1
+tsc --checkers 1
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96mconsumer.ts[0m:[93m1[0m:[93m22[0m - [91merror[0m[90m TS2304: [0mCannot find name 'RemovedGlobal'.
@@ -309,7 +309,7 @@ Edit [2]:: restore global file
 //// [/home/src/workspaces/project/global.d.ts] *new* 
 interface RemovedGlobal { property: number; }
 
-tsgo --checkers 1
+tsc --checkers 1
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *modified* 
@@ -439,7 +439,7 @@ Signatures::
 Edit [3]:: delete ordinary source file
 //// [/home/src/workspaces/project/added.ts] *deleted*
 
-tsgo --checkers 1
+tsc --checkers 1
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *modified* 
@@ -541,7 +541,7 @@ Signatures::
 
 Edit [4]:: no change
 
-tsgo --checkers 1
+tsc --checkers 1
 ExitStatus:: Success
 Output::
 

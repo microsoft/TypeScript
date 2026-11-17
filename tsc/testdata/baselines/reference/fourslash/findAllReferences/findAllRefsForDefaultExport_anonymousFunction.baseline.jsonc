@@ -1,0 +1,57 @@
+// === findAllReferences ===
+// === /a.ts ===
+// /*FIND ALL REFS*/export [|default|] async function () {}
+
+// === /b.ts ===
+// import [|anonymousFunction|] from "./a";
+// [|anonymousFunction|]();
+
+
+
+// === findAllReferences ===
+// === /a.ts ===
+// export /*FIND ALL REFS*/[|default|] async function () {}
+
+// === /b.ts ===
+// import [|anonymousFunction|] from "./a";
+// [|anonymousFunction|]();
+
+
+
+// === findAllReferences ===
+// === /a.ts ===
+// export [|default|] /*FIND ALL REFS*/async function () {}
+
+// === /b.ts ===
+// import [|anonymousFunction|] from "./a";
+// [|anonymousFunction|]();
+
+
+
+// === findAllReferences ===
+// === /a.ts ===
+// export [|default|] async /*FIND ALL REFS*/function () {}
+
+// === /b.ts ===
+// import [|anonymousFunction|] from "./a";
+// [|anonymousFunction|]();
+
+
+
+// === findAllReferences ===
+// === /a.ts ===
+// export [|default|] async function () {}
+
+// === /b.ts ===
+// import /*FIND ALL REFS*/[|anonymousFunction|] from "./a";
+// [|anonymousFunction|]();
+
+
+
+// === findAllReferences ===
+// === /a.ts ===
+// export [|default|] async function () {}
+
+// === /b.ts ===
+// import [|anonymousFunction|] from "./a";
+// /*FIND ALL REFS*/[|anonymousFunction|]();

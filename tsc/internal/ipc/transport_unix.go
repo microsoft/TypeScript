@@ -19,7 +19,7 @@ func newPipeListener(dir string) (net.Listener, func() error, error) {
 }
 
 func newPrivatePipeListener(_ string) (net.Listener, func() error, error) {
-	dir, err := os.MkdirTemp("", "tsgo-api-") //nolint:forbidigo
+	dir, err := os.MkdirTemp("", "typescript-api-") //nolint:forbidigo
 	if err != nil {
 		return nil, nil, fmt.Errorf("create private socket directory: %w", err)
 	}

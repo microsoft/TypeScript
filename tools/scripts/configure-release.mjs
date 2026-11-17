@@ -24,10 +24,12 @@ updateFile(
     /var version = "[^"]+"/g,
     `var version = "${version}"`,
 );
+// Workflows run main's copy of this script against existing release branches,
+// whose Herebyfile may still use the old nativePreviewReleaseVersion name.
 updateFile(
     "Herebyfile.mjs",
-    /const nativePreviewReleaseVersion = \/\*\* @type \{string \| undefined\} \*\/ \([^)]*\);/g,
-    `const nativePreviewReleaseVersion = /** @type {string | undefined} */ ("${version}");`,
+    /const (typeScriptReleaseVersion|nativePreviewReleaseVersion) = \/\*\* @type \{string \| undefined\} \*\/ \([^)]*\);/g,
+    `const $1 = /** @type {string | undefined} */ ("${version}");`,
 );
 
 /**

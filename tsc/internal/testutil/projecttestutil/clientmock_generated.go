@@ -47,8 +47,8 @@ var _ project.Client = &ClientMock{}
 //			RefreshInlayHintsFunc: func(ctx context.Context) error {
 //				panic("mock out the RefreshInlayHints method")
 //			},
-//			RegisterContentMapperExtensionsFunc: func(ctx context.Context, extensions []string) error {
-//				panic("mock out the RegisterContentMapperExtensions method")
+//			RegisterContentMapperSelectorsFunc: func(ctx context.Context, selectors []project.ContentMapperSelector) error {
+//				panic("mock out the RegisterContentMapperSelectors method")
 //			},
 //			SendTelemetryFunc: func(ctx context.Context, telemetry lsproto.TelemetryEvent) error {
 //				panic("mock out the SendTelemetry method")
@@ -93,8 +93,8 @@ type ClientMock struct {
 	// RefreshInlayHintsFunc mocks the RefreshInlayHints method.
 	RefreshInlayHintsFunc func(ctx context.Context) error
 
-	// RegisterContentMapperExtensionsFunc mocks the RegisterContentMapperExtensions method.
-	RegisterContentMapperExtensionsFunc func(ctx context.Context, extensions []string) error
+	// RegisterContentMapperSelectorsFunc mocks the RegisterContentMapperSelectors method.
+	RegisterContentMapperSelectorsFunc func(ctx context.Context, selectors []project.ContentMapperSelector) error
 
 	// SendTelemetryFunc mocks the SendTelemetry method.
 	SendTelemetryFunc func(ctx context.Context, telemetry lsproto.TelemetryEvent) error
@@ -150,12 +150,12 @@ type ClientMock struct {
 			// Ctx is the ctx argument value.
 			Ctx context.Context
 		}
-		// RegisterContentMapperExtensions holds details about calls to the RegisterContentMapperExtensions method.
-		RegisterContentMapperExtensions []struct {
+		// RegisterContentMapperSelectors holds details about calls to the RegisterContentMapperSelectors method.
+		RegisterContentMapperSelectors []struct {
 			// Ctx is the ctx argument value.
 			Ctx context.Context
-			// Extensions is the extensions argument value.
-			Extensions []string
+			// Selectors is the selectors argument value.
+			Selectors []project.ContentMapperSelector
 		}
 		// SendTelemetry holds details about calls to the SendTelemetry method.
 		SendTelemetry []struct {
@@ -186,19 +186,19 @@ type ClientMock struct {
 			Watchers []*lsproto.FileSystemWatcher
 		}
 	}
-	lockGetLocale                       sync.RWMutex
-	lockIsActive                        sync.RWMutex
-	lockProgressFinish                  sync.RWMutex
-	lockProgressStart                   sync.RWMutex
-	lockPublishDiagnostics              sync.RWMutex
-	lockRefreshCodeLens                 sync.RWMutex
-	lockRefreshDiagnostics              sync.RWMutex
-	lockRefreshInlayHints               sync.RWMutex
-	lockRegisterContentMapperExtensions sync.RWMutex
-	lockSendTelemetry                   sync.RWMutex
-	lockSetLocale                       sync.RWMutex
-	lockUnwatchFiles                    sync.RWMutex
-	lockWatchFiles                      sync.RWMutex
+	lockGetLocale                      sync.RWMutex
+	lockIsActive                       sync.RWMutex
+	lockProgressFinish                 sync.RWMutex
+	lockProgressStart                  sync.RWMutex
+	lockPublishDiagnostics             sync.RWMutex
+	lockRefreshCodeLens                sync.RWMutex
+	lockRefreshDiagnostics             sync.RWMutex
+	lockRefreshInlayHints              sync.RWMutex
+	lockRegisterContentMapperSelectors sync.RWMutex
+	lockSendTelemetry                  sync.RWMutex
+	lockSetLocale                      sync.RWMutex
+	lockUnwatchFiles                   sync.RWMutex
+	lockWatchFiles                     sync.RWMutex
 }
 
 // GetLocale calls GetLocaleFunc.
@@ -459,40 +459,40 @@ func (mock *ClientMock) RefreshInlayHintsCalls() []struct {
 	return calls
 }
 
-// RegisterContentMapperExtensions calls RegisterContentMapperExtensionsFunc.
-func (mock *ClientMock) RegisterContentMapperExtensions(ctx context.Context, extensions []string) error {
+// RegisterContentMapperSelectors calls RegisterContentMapperSelectorsFunc.
+func (mock *ClientMock) RegisterContentMapperSelectors(ctx context.Context, selectors []project.ContentMapperSelector) error {
 	callInfo := struct {
-		Ctx        context.Context
-		Extensions []string
+		Ctx       context.Context
+		Selectors []project.ContentMapperSelector
 	}{
-		Ctx:        ctx,
-		Extensions: extensions,
+		Ctx:       ctx,
+		Selectors: selectors,
 	}
-	mock.lockRegisterContentMapperExtensions.Lock()
-	mock.calls.RegisterContentMapperExtensions = append(mock.calls.RegisterContentMapperExtensions, callInfo)
-	mock.lockRegisterContentMapperExtensions.Unlock()
-	if mock.RegisterContentMapperExtensionsFunc == nil {
+	mock.lockRegisterContentMapperSelectors.Lock()
+	mock.calls.RegisterContentMapperSelectors = append(mock.calls.RegisterContentMapperSelectors, callInfo)
+	mock.lockRegisterContentMapperSelectors.Unlock()
+	if mock.RegisterContentMapperSelectorsFunc == nil {
 		var errOut error
 		return errOut
 	}
-	return mock.RegisterContentMapperExtensionsFunc(ctx, extensions)
+	return mock.RegisterContentMapperSelectorsFunc(ctx, selectors)
 }
 
-// RegisterContentMapperExtensionsCalls gets all the calls that were made to RegisterContentMapperExtensions.
+// RegisterContentMapperSelectorsCalls gets all the calls that were made to RegisterContentMapperSelectors.
 // Check the length with:
 //
-//	len(mockedClient.RegisterContentMapperExtensionsCalls())
-func (mock *ClientMock) RegisterContentMapperExtensionsCalls() []struct {
-	Ctx        context.Context
-	Extensions []string
+//	len(mockedClient.RegisterContentMapperSelectorsCalls())
+func (mock *ClientMock) RegisterContentMapperSelectorsCalls() []struct {
+	Ctx       context.Context
+	Selectors []project.ContentMapperSelector
 } {
 	var calls []struct {
-		Ctx        context.Context
-		Extensions []string
+		Ctx       context.Context
+		Selectors []project.ContentMapperSelector
 	}
-	mock.lockRegisterContentMapperExtensions.RLock()
-	calls = mock.calls.RegisterContentMapperExtensions
-	mock.lockRegisterContentMapperExtensions.RUnlock()
+	mock.lockRegisterContentMapperSelectors.RLock()
+	calls = mock.calls.RegisterContentMapperSelectors
+	mock.lockRegisterContentMapperSelectors.RUnlock()
 	return calls
 }
 

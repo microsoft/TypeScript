@@ -28,7 +28,7 @@ import { registerSourceDefinitionFeature } from "./languageFeatures/sourceDefini
 import {
     getUseTsgo,
     needsExtHostRestartOnChange,
-    shouldStartTsgo,
+    shouldStartNativeServer,
 } from "./settings";
 import {
     outermostMountPoints,
@@ -384,7 +384,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
                 }
                 void enqueue(async () => {
                     await stop();
-                    if (shouldStartTsgo(context)) {
+                    if (shouldStartNativeServer(context)) {
                         await start();
                     }
                 });
@@ -393,17 +393,17 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     }));
     context.subscriptions.push({ dispose: () => clearTimeout(configChangeTimeout) });
 
-    const hasOnboardedTsgoStateKey = "hasOnboardedTsgo";
-    const shouldOnboardTsgo = !context.globalState.get<boolean>(hasOnboardedTsgoStateKey);
-    if (shouldOnboardTsgo) {
-        await context.globalState.update(hasOnboardedTsgoStateKey, true);
+    const hasOnboardedStateKey = "hasOnboardedTsgo";
+    const shouldOnboard = !context.globalState.get<boolean>(hasOnboardedStateKey);
+    if (shouldOnboard) {
+        await context.globalState.update(hasOnboardedStateKey, true);
     }
-    if (getUseTsgo() === undefined && shouldOnboardTsgo) {
+    if (getUseTsgo() === undefined && shouldOnboard) {
         void updateUseTsgoSetting(true);
         return;
     }
 
-    if (!shouldStartTsgo(context)) {
+    if (!shouldStartNativeServer(context)) {
         output.appendLine(vscode.l10n.t("TypeScript 7 is disabled. Select 'TypeScript: Enable TypeScript 7' in the command palette to enable it."));
         return;
     }

@@ -35,7 +35,7 @@ export function fn4() {
     },
 }
 
-tsgo --b packages/pkg2/tsconfig.json --verbose
+tsc --b packages/pkg2/tsconfig.json --verbose
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 

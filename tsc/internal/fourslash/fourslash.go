@@ -879,7 +879,7 @@ func (f *FourslashTest) goToPosition(t *testing.T, position lsproto.Position) {
 
 func (f *FourslashTest) GoToEachMarker(t *testing.T, markerNames []string, action func(marker *Marker, index int)) {
 	var markers []*Marker
-	if len(markers) == 0 {
+	if len(markerNames) == 0 {
 		markers = f.Markers()
 	} else {
 		markers = make([]*Marker, 0, len(markerNames))
@@ -4896,7 +4896,10 @@ func (f *FourslashTest) VerifyRenameSucceeded(t *testing.T, preferences *lsutil.
 		Position: f.currentCaretPosition,
 		NewName:  "RENAME_SUCCEEDED_TEST",
 	})
-	if renameResult.WorkspaceEdit == nil || renameResult.WorkspaceEdit.Changes == nil || len(*renameResult.WorkspaceEdit.Changes) == 0 {
+	edit := renameResult.WorkspaceEdit
+	if edit == nil ||
+		((edit.Changes == nil || len(*edit.Changes) == 0) &&
+			(edit.DocumentChanges == nil || len(*edit.DocumentChanges) == 0)) {
 		t.Fatal(prefix + "prepareRename succeeded but textDocument/rename returned no changes")
 	}
 }
@@ -5229,7 +5232,10 @@ func (f *FourslashTest) VerifyRenameFailed(t *testing.T, preferences *lsutil.Use
 	if renameMsg != nil && renameMsg.AsResponse().Error != nil {
 		return
 	}
-	if renameResult.WorkspaceEdit != nil && renameResult.WorkspaceEdit.Changes != nil && len(*renameResult.WorkspaceEdit.Changes) > 0 {
+	edit := renameResult.WorkspaceEdit
+	if edit != nil &&
+		((edit.Changes != nil && len(*edit.Changes) > 0) ||
+			(edit.DocumentChanges != nil && len(*edit.DocumentChanges) > 0)) {
 		t.Fatalf("%sprepareRename returned null but textDocument/rename returned changes", prefix)
 	}
 }

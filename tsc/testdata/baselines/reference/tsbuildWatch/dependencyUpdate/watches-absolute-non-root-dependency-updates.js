@@ -19,7 +19,7 @@ export const value: string = myValue;
 //// [D:/work/deps/dep.d.ts] *new* 
 export declare const myValue: string;
 
-tsgo --b --verbose --watch
+tsc --b --verbose --watch
 ExitStatus:: Success
 Output::
 [2J[3J[H[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...

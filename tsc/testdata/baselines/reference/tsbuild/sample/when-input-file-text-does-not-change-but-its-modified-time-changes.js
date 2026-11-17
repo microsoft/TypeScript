@@ -60,7 +60,7 @@ export const m = mod;
     },
 }
 
-tsgo --b tests --verbose
+tsc --b tests --verbose
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -433,7 +433,7 @@ Signatures::
 Edit [0]:: upstream project changes without changing file text
 //// [/user/username/projects/sample1/core/index.ts] *mTime changed*
 
-tsgo --b tests --verbose
+tsc --b tests --verbose
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 

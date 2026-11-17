@@ -48,7 +48,7 @@ function logMessage( person: MessageablePerson ) {
     }
 }
 
-tsgo --incremental
+tsc --incremental
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96mMessageablePerson.ts[0m:[93m7[0m:[93m26[0m - [91merror[0m[90m TS2304: [0mCannot find name 'InstanceType'.
@@ -228,7 +228,7 @@ Signatures::
 
 Edit [0]:: no change
 
-tsgo --incremental
+tsc --incremental
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96mMessageablePerson.ts[0m:[93m7[0m:[93m26[0m - [91merror[0m[90m TS2304: [0mCannot find name 'InstanceType'.
@@ -261,7 +261,7 @@ const wrapper = () => Messageable();
 type MessageablePerson = InstanceType<ReturnType<typeof wrapper>>;
 export default MessageablePerson;
 
-tsgo --incremental
+tsc --incremental
 ExitStatus:: DiagnosticsPresent_OutputsSkipped
 Output::
 [96mMessageablePerson.ts[0m:[93m6[0m:[93m7[0m - [91merror[0m[90m TS4094: [0mProperty 'message' of exported anonymous class type may not be private or protected.
@@ -431,7 +431,7 @@ Signatures::
 
 Edit [2]:: no change
 
-tsgo --incremental
+tsc --incremental
 ExitStatus:: DiagnosticsPresent_OutputsSkipped
 Output::
 [96mMessageablePerson.ts[0m:[93m6[0m:[93m7[0m - [91merror[0m[90m TS4094: [0mProperty 'message' of exported anonymous class type may not be private or protected.
@@ -473,7 +473,7 @@ const wrapper = () => Messageable();
 type MessageablePerson = InstanceType<ReturnType<typeof wrapper>>;
 export default MessageablePerson;
 
-tsgo --incremental
+tsc --incremental
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96mMessageablePerson.ts[0m:[93m7[0m:[93m26[0m - [91merror[0m[90m TS2304: [0mCannot find name 'InstanceType'.
@@ -606,7 +606,7 @@ Signatures::
 
 Edit [4]:: no change
 
-tsgo --incremental
+tsc --incremental
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96mMessageablePerson.ts[0m:[93m7[0m:[93m26[0m - [91merror[0m[90m TS2304: [0mCannot find name 'InstanceType'.
