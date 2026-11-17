@@ -1,3 +1,5 @@
+expanding.ts(4,14): error TS7056: The inferred type of this node exceeds the maximum length the compiler will serialize. An explicit type annotation is needed.
+expanding.ts(5,14): error TS2322: Type '("x" | ((((((((((any | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[])[]' is not assignable to type 'number'.
 local.ts(1,17): error TS5088: The inferred type of 'array' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
 local.ts(5,17): error TS5088: The inferred type of 'tuple' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
 local.ts(9,17): error TS5088: The inferred type of 'readonlyTuple' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
@@ -45,4 +47,15 @@ local.ts(13,17): error TS5088: The inferred type of 'union' references a type wi
         type Nested = number[][][][][][][][][][][][][];
         return null as unknown as Nested;
     }
+    
+==== expanding.ts (2 errors) ====
+    // Each level is a new instantiation, so printing it stops at a bounded depth.
+    type G<T> = T extends unknown ? (T | G<[T]>)[] : never;
+    declare const g: G<"x">;
+    export const h = g;
+                 ~
+!!! error TS7056: The inferred type of this node exceeds the maximum length the compiler will serialize. An explicit type annotation is needed.
+    export const n: number = g;
+                 ~
+!!! error TS2322: Type '("x" | ((((((((((any | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[] | any)[])[]' is not assignable to type 'number'.
     
