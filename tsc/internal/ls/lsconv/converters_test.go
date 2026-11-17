@@ -283,6 +283,13 @@ func TestConvertersFailedContentMapperPosition(t *testing.T) {
 	positions := converters.FromLSPPositionForSourceFile(file, lsproto.Position{Line: 1, Character: 2}, spanmap.FeatureHover)
 	assert.Equal(t, len(positions), 1)
 	assert.Equal(t, positions[0].Position, core.TextPos(0))
+
+	ranges := converters.FromLSPRangeIntersectingForSourceFile(file, lsproto.Range{
+		Start: lsproto.Position{Line: 1},
+		End:   lsproto.Position{Line: 1, Character: 5},
+	}, spanmap.FeatureInlayHints)
+	assert.Equal(t, len(ranges), 1)
+	assert.Equal(t, ranges[0].Span, core.NewTextRange(0, 0))
 }
 
 // TestConvertersInvalidUTF8 verifies behavior on text containing invalid UTF-8
