@@ -2,10 +2,9 @@ tupleTooLargeReportedAtUses.ts(7,10): error TS2799: Type produces a tuple type t
 tupleTooLargeReportedAtUses.ts(10,5): error TS2800: Expression produces a tuple type that is too large to represent.
 tupleTooLargeReportedAtUses.ts(10,10): error TS2800: Expression produces a tuple type that is too large to represent.
 tupleTooLargeReportedAtUses.ts(10,19): error TS2799: Type produces a tuple type that is too large to represent.
-tupleTooLargeReportedAtUses.ts(10,19): error TS2799: Type produces a tuple type that is too large to represent.
 
 
-==== tupleTooLargeReportedAtUses.ts (5 errors) ====
+==== tupleTooLargeReportedAtUses.ts (4 errors) ====
     // The tuple type the alias builds is too large to represent (64384). The
     // union type and its first constituent start at the same position, so they
     // report the error at the same location.
@@ -22,8 +21,6 @@ tupleTooLargeReportedAtUses.ts(10,19): error TS2799: Type produces a tuple type 
 !!! error TS2800: Expression produces a tuple type that is too large to represent.
              ~~~~~~~~~~~~~~~~~~~
 !!! error TS2800: Expression produces a tuple type that is too large to represent.
-                      ~
-!!! error TS2799: Type produces a tuple type that is too large to represent.
                       ~~~~~~~~~~
 !!! error TS2799: Type produces a tuple type that is too large to represent.
     }
