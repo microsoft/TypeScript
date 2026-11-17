@@ -140,7 +140,9 @@ declare const q2: Q2;
 
 const v2 = q2.other;
 >v2 : Symbol(v2, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 37, 5))
+>q2.other : Symbol(Q2.__index, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 23, 27))
 >q2 : Symbol(q2, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 36, 13))
+>other : Symbol(Q2.__index, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 23, 27))
 
 declare const q3: Q3;
 >q3 : Symbol(q3, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 38, 13))
@@ -148,5 +150,7 @@ declare const q3: Q3;
 
 const v3 = q3.other;
 >v3 : Symbol(v3, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 39, 5))
+>q3.other : Symbol(Q3.__index, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 28, 24))
 >q3 : Symbol(q3, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 38, 13))
+>other : Symbol(Q3.__index, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 28, 24))
 
