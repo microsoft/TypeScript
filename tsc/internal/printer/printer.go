@@ -3058,7 +3058,7 @@ func (p *Printer) commentWillEmitNewLine(comment ast.CommentRange) bool {
 	return comment.Kind == ast.KindSingleLineCommentTrivia || comment.HasTrailingNewLine
 }
 
-func (p *Printer) syntheticCommentWillEmitNewLine(comment SynthesizedComment) bool {
+func (p *Printer) syntheticLeadingCommentWillEmitNewLine(comment SynthesizedComment) bool {
 	return comment.Kind == ast.KindSingleLineCommentTrivia ||
 		comment.HasLeadingNewLine || comment.HasTrailingNewLine ||
 		strings.ContainsFunc(comment.Text, stringutil.IsLineBreak)
@@ -3066,7 +3066,7 @@ func (p *Printer) syntheticCommentWillEmitNewLine(comment SynthesizedComment) bo
 
 func (p *Printer) hasSyntheticLeadingCommentIntroducingNewLine(node *ast.Expression) bool {
 	return p.emitContext.EmitFlags(node)&EFNoLeadingComments == 0 &&
-		slices.ContainsFunc(p.emitContext.GetSyntheticLeadingComments(node), p.syntheticCommentWillEmitNewLine)
+		slices.ContainsFunc(p.emitContext.GetSyntheticLeadingComments(node), p.syntheticLeadingCommentWillEmitNewLine)
 }
 
 func (p *Printer) willEmitLeadingNewLine(node *ast.Expression) bool {
@@ -5513,7 +5513,9 @@ func (p *Printer) emitTrailingSyntheticCommentsOfNode(node *ast.Node, emitFlags 
 }
 
 func (p *Printer) emitTrailingSynthesizedComment(comment SynthesizedComment) {
-	if !p.writer.IsAtStartOfLine() {
+	if comment.HasLeadingNewLine {
+		p.writer.WriteLine()
+	} else if !p.writer.IsAtStartOfLine() {
 		p.writer.WriteSpace(" ")
 	}
 	p.writeSynthesizedComment(comment)

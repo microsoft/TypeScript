@@ -9133,6 +9133,25 @@ export const obj = { m: 1, s: "hi", b: true };
         );
     });
 
+    test("printNode honors newline flags on synthetic trailing comments", async () => {
+        await using api = spawnAPI(emitterFiles);
+
+        for (const kind of [SyntaxKind.MultiLineCommentTrivia, SyntaxKind.SingleLineCommentTrivia] as const) {
+            for (const hasLeadingNewLine of [false, true]) {
+                for (const hasTrailingNewLine of [false, true]) {
+                    const node = createNumericLiteral("1", 0);
+                    const emitContext = api.printer.createEmitContext();
+                    emitContext.addSyntheticTrailingComment(node, kind, " comment", hasTrailingNewLine, hasLeadingNewLine);
+
+                    const before = hasLeadingNewLine ? "\n" : " ";
+                    const comment = kind === SyntaxKind.MultiLineCommentTrivia ? "/* comment*/" : "// comment";
+                    const after = hasTrailingNewLine || kind === SyntaxKind.SingleLineCommentTrivia ? "\n" : "";
+                    assert.strictEqual(await api.printer.printNode(node, { emitContext }), `1${before}${comment}${after}`);
+                }
+            }
+        }
+    });
+
     test("printNode with emitContext SingleLine flag collapses a multi-member type literal", async () => {
         await using api = spawnAPI(emitterFiles);
 
