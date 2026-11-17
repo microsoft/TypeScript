@@ -28874,12 +28874,34 @@ const (
 	baseConstraintMaxDepth  = 50
 )
 
+// A baseConstraintFrame is a type whose base constraint a walk is computing:
+// its recursion identity and generation.
+type baseConstraintFrame struct {
+	identity   RecursionId
+	generation int
+}
+
+// repeatsInBaseConstraintWalk reports whether the walk with stack, computing
+// the base constraint of t, is in a repeating pattern: whether a type with
+// the recursion identity of t is already on the stack, and t is no older
+// than it. A newer type may be instantiated from it without end, whereas an
+// older one is a part of it, such as the object type of an indexed access,
+// of which there are only as many as the type has.
+func (c *Checker) repeatsInBaseConstraintWalk(identity RecursionId, generation int, stack []baseConstraintFrame) bool {
+	for _, f := range stack {
+		if f.identity == identity && generation >= f.generation {
+			return true
+		}
+	}
+	return false
+}
+
 type baseConstraintWalk struct {
 	depth  int32 // Deepest level the walk has reached
 	gaveUp bool
 }
 
-func (c *Checker) getResolvedBaseConstraint(t *Type, stack []RecursionId) *Type {
+func (c *Checker) getResolvedBaseConstraint(t *Type, stack []baseConstraintFrame) *Type {
 	constrained := t.AsConstrainedType()
 	if constrained == nil {
 		return t
@@ -28917,7 +28939,7 @@ func (c *Checker) getResolvedBaseConstraint(t *Type, stack []RecursionId) *Type 
 // resolveBaseConstraint computes the base constraint of t inside the walk
 // with stack as the resolution of propertyName, and returns it with the depth
 // its own walk reached and whether its own walk gave up.
-func (c *Checker) resolveBaseConstraint(t *Type, stack []RecursionId, propertyName TypeSystemPropertyName) (*Type, int32, bool) {
+func (c *Checker) resolveBaseConstraint(t *Type, stack []baseConstraintFrame, propertyName TypeSystemPropertyName) (*Type, int32, bool) {
 	if !c.pushTypeResolution(t, propertyName) {
 		return c.circularConstraintType, 0, false
 	}
@@ -28947,7 +28969,7 @@ func (c *Checker) isBaseConstraintInProgress(t *Type) bool {
 // walkBaseConstraint computes the base constraint of t inside the walk with
 // stack, and returns it with the depth its own walk reached and whether its
 // own walk gave up.
-func (c *Checker) walkBaseConstraint(t *Type, stack []RecursionId) (*Type, int32, bool) {
+func (c *Checker) walkBaseConstraint(t *Type, stack []baseConstraintFrame) (*Type, int32, bool) {
 	saveWalk := c.baseConstraintWalk
 	c.baseConstraintWalk = baseConstraintWalk{depth: int32(len(stack))}
 	var constraint *Type
@@ -28958,8 +28980,9 @@ func (c *Checker) walkBaseConstraint(t *Type, stack []RecursionId) (*Type, int32
 	// yet triggered the deeply nested limiter. We have no test cases that actually get to 50 levels of
 	// nesting, so it is effectively just a safety stop.
 	identity := getRecursionIdentity(t)
-	if len(stack) < baseConstraintFreeDepth || len(stack) < baseConstraintMaxDepth && !slices.Contains(stack, identity) {
-		constraint = c.computeBaseConstraint(c.getSimplifiedType(t /*writing*/, false), append(stack, identity))
+	generation := c.typeGeneration(t)
+	if len(stack) < baseConstraintFreeDepth || len(stack) < baseConstraintMaxDepth && !c.repeatsInBaseConstraintWalk(identity, generation, stack) {
+		constraint = c.computeBaseConstraint(c.getSimplifiedType(t /*writing*/, false), append(stack, baseConstraintFrame{identity, generation}))
 	} else {
 		c.baseConstraintWalk.gaveUp = true
 	}
@@ -28968,7 +28991,7 @@ func (c *Checker) walkBaseConstraint(t *Type, stack []RecursionId) (*Type, int32
 	return constraint, walk.depth - int32(len(stack)), walk.gaveUp
 }
 
-func (c *Checker) computeBaseConstraint(t *Type, stack []RecursionId) *Type {
+func (c *Checker) computeBaseConstraint(t *Type, stack []baseConstraintFrame) *Type {
 	switch {
 	case t.flags&TypeFlagsTypeParameter != 0:
 		constraint := c.getConstraintFromTypeParameter(t)
@@ -29071,7 +29094,7 @@ func (c *Checker) computeBaseConstraint(t *Type, stack []RecursionId) *Type {
 	return t
 }
 
-func (c *Checker) getNextBaseConstraint(t *Type, stack []RecursionId) *Type {
+func (c *Checker) getNextBaseConstraint(t *Type, stack []baseConstraintFrame) *Type {
 	if t == nil {
 		return nil
 	}
