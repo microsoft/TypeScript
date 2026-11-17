@@ -27,13 +27,21 @@ func (c *Checker) checkUnmatchedJSDocParameters(node *ast.Node) {
 	parameters := collections.Set[string]{}
 	excludedParameters := collections.Set[int]{}
 
-	for i, param := range node.Parameters() {
+	functionParameters := node.Parameters()
+	parameterOffset := 0
+	if len(functionParameters) > 0 && (functionParameters[0].Name().Kind == ast.KindThisKeyword || ast.IsThisIdentifier(functionParameters[0].Name())) {
+		parameterOffset = 1
+	}
+	for i, param := range functionParameters {
+		if i < parameterOffset {
+			continue
+		}
 		name := param.AsParameterDeclaration().Name()
 		if ast.IsIdentifier(name) {
 			parameters.Add(name.Text())
 		}
 		if ast.IsBindingPattern(name) {
-			excludedParameters.Add(i)
+			excludedParameters.Add(i - parameterOffset)
 		}
 	}
 	if c.containsArgumentsReference(node) {

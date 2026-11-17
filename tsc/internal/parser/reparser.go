@@ -638,13 +638,22 @@ func findMatchingParameter(fun *ast.Node, parameterTag *ast.JSDocParameterOrProp
 			}
 		}
 	}
-	for parameterIndex, parameter := range fun.Parameters() {
+	parameters := fun.Parameters()
+	parameterOffset := 0
+	if len(parameters) > 0 && (parameters[0].Name().Kind == ast.KindThisKeyword || ast.IsThisIdentifier(parameters[0].Name())) {
+		parameterOffset = 1
+	}
+	for parameterIndex, parameter := range parameters {
+		if parameterIndex < parameterOffset {
+			continue
+		}
+		parameterPosition := parameterIndex - parameterOffset
 		if parameter.Name().Kind == ast.KindIdentifier {
 			if parameterTag.Name().Kind == ast.KindIdentifier &&
-				((parameter.Name().Text() == parameterTag.Name().Text()) || (parameterIndex == tagIndex && len(parameterTag.Name().Text()) == 0)) {
+				((parameter.Name().Text() == parameterTag.Name().Text()) || (parameterPosition == tagIndex && len(parameterTag.Name().Text()) == 0)) {
 				return parameter.AsParameterDeclaration(), true
 			}
-		} else if parameterIndex == tagIndex {
+		} else if parameterPosition == tagIndex {
 			return parameter.AsParameterDeclaration(), true
 		}
 	}

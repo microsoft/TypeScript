@@ -1,0 +1,18 @@
+//// [tests/cases/compiler/jsdocThisTagWithDestructuredParameter.ts] ////
+
+=== /a.js ===
+/**
+ * @this {{ x: number }}
+ * @param {{ title: string }} props
+ */
+export function withThis({ title }) {
+>withThis : Symbol(withThis, Decl(a.js, 0, 0))
+>title : Symbol(title, Decl(a.js, 4, 26))
+
+  return this.x + title;
+>this.x : Symbol(x, Decl(a.js, 1, 11))
+>this : Symbol((Missing), Decl(a.js, 1, 4))
+>x : Symbol(x, Decl(a.js, 1, 11))
+>title : Symbol(title, Decl(a.js, 4, 26))
+}
+
