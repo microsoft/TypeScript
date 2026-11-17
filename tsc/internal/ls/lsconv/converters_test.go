@@ -271,6 +271,20 @@ func TestConvertersSourceFileProjectionExpansion(t *testing.T) {
 	assert.Equal(t, positions[1].Position, core.TextPos(2))
 }
 
+func TestConvertersFailedContentMapperPosition(t *testing.T) {
+	t.Parallel()
+	original := "é\nhover here\n"
+	file := parser.ParseSourceFile(ast.SourceFileParseOptions{FileName: "/component.box", PathKey: "/component.box"}, "", core.ScriptKindTS)
+	file.SetContentMapperInfo(ast.ContentMapperSourceFileInfo{OriginalText: original, ContentMapper: "mapper"})
+	assert.Assert(t, file.IsContentMapperFailureStub())
+
+	lineMap := lsconv.ComputeLSPLineStarts(original)
+	converters := lsconv.NewConverters(lsproto.PositionEncodingKindUTF16, func(_ tspath.RootedFilePath) *lsconv.LSPLineMap { return lineMap })
+	positions := converters.FromLSPPositionForSourceFile(file, lsproto.Position{Line: 1, Character: 2}, spanmap.FeatureHover)
+	assert.Equal(t, len(positions), 1)
+	assert.Equal(t, positions[0].Position, core.TextPos(0))
+}
+
 // TestConvertersInvalidUTF8 verifies behavior on text containing invalid UTF-8
 // sequences (e.g. lone continuation bytes). Node's TextDecoder substitutes such
 // bytes with U+FFFD, so the JS-reference test cannot cover this; we assert the
