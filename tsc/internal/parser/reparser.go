@@ -165,7 +165,7 @@ func (p *Parser) reparseJSDocSignature(jsSignature *ast.Node, fun *ast.Node, jsD
 		signature.FunctionLikeData().TypeParameters = p.gatherTypeParameters(jsDoc, false /*typedefOrCallback*/)
 	}
 	parameters := p.nodeSliceArena.NewSlice(0)
-	for pi, param := range jsSignature.Parameters() {
+	for pi, param := range jsSignature.AsJSDocSignature().Parameters.Nodes {
 		var parameter *ast.Node
 		if param.Kind == ast.KindJSDocThisTag {
 			thisTag := param.AsJSDocThisTag()
@@ -232,8 +232,8 @@ func (p *Parser) reparseJSDocSignature(jsSignature *ast.Node, fun *ast.Node, jsD
 	}
 	signature.FunctionLikeData().Parameters = p.newNodeList(jsSignature.AsJSDocSignature().Parameters.Loc, parameters)
 
-	if jsSignature.Type() != nil && jsSignature.Type().TypeExpression() != nil {
-		signature.FunctionLikeData().Type = p.addDeepCloneReparse(jsSignature.Type().TypeExpression().Type())
+	if returnTag := jsSignature.AsJSDocSignature().Type; returnTag != nil && returnTag.TypeExpression() != nil {
+		signature.FunctionLikeData().Type = p.addDeepCloneReparse(returnTag.TypeExpression().Type())
 	}
 	loc := jsSignature
 	if tag.Kind == ast.KindJSDocOverloadTag {

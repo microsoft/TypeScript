@@ -4761,24 +4761,17 @@
             "JSDocSignature": {
                 "extends": [
                     "JSDocTypeBase",
-                    "DeclarationBase",
-                    "FunctionLikeBase"
-                ],
-                "tsExtends": [
-                    "JSDocTypeBase",
                     "DeclarationBase"
                 ],
                 "members": [
                     {
                         "name": "TypeParameters",
-                        "inherited": true,
                         "type": "JSDocTemplateTag",
                         "list": "NodeList",
                         "optional": true
                     },
                     {
                         "name": "Parameters",
-                        "inherited": true,
                         "type": [
                             "JSDocParameterTag",
                             "JSDocThisTag"
@@ -4787,7 +4780,6 @@
                     },
                     {
                         "name": "Type",
-                        "inherited": true,
                         "type": "JSDocReturnTag",
                         "optional": true
                     }

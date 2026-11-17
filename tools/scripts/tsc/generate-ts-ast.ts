@@ -152,7 +152,7 @@ function resolveBaseExtends(base: NodeType): string {
 }
 
 function deriveNodeTsExtends(node: NodeType): string {
-    const tsExts = expandTsExtends(node.def?.tsExtends ?? node.extendsKeys)
+    const tsExts = expandTsExtends(node.extendsKeys)
         .map(e => baseTsName(e));
     return tsExts.length > 0 ? tsExts.join(", ") : "Node";
 }

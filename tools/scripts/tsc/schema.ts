@@ -27,8 +27,6 @@ export interface Member {
 export interface NodeDef {
     kind?: string | string[];
     extends: string[];
-    /** Public bases can differ from native bases used only for shared storage. */
-    tsExtends?: string[];
     members?: Member[];
     generateSubtreeFacts?: boolean;
     arena?: boolean;

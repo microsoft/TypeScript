@@ -553,7 +553,6 @@ func IsFunctionLikeKind(kind Kind) bool {
 	switch kind {
 	case KindMethodSignature,
 		KindCallSignature,
-		KindJSDocSignature,
 		KindConstructSignature,
 		KindIndexSignature,
 		KindFunctionType,

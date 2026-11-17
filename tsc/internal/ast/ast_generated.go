@@ -8058,7 +8058,9 @@ func IsJSDocTypedefTag(node *Node) bool {
 type JSDocSignature struct {
 	JSDocTypeBase
 	DeclarationBase
-	FunctionLikeBase
+	TypeParameters *NodeList // Optional
+	Parameters     *NodeList
+	Type           *JSDocReturnTagNode // Optional
 }
 
 func (f *NodeFactory) NewJSDocSignature(typeParameters *NodeList, parameters *NodeList, typeNode *JSDocReturnTagNode) *Node {
@@ -12612,9 +12614,8 @@ var nodeLocalsContainerDataDispatch = [kindFlowReduceLabelData + 1]uint8{
 	KindMappedType:                  22,
 	KindFunctionType:                23,
 	KindConstructorType:             24,
-	KindJSDocSignature:              25,
-	KindSourceFile:                  26,
-	KindModuleDeclaration:           27,
+	KindSourceFile:                  25,
+	KindModuleDeclaration:           26,
 }
 
 func (n *Node) LocalsContainerData() *LocalsContainerBase {
@@ -12692,12 +12693,9 @@ func (n *Node) LocalsContainerData() *LocalsContainerBase {
 		// SAFETY: This case only matches kinds allocated as a ConstructorTypeNode, which embeds its Node header at offset zero.
 		return (*ConstructorTypeNode)(unsafe.Pointer(n)).LocalsContainerData()
 	case 25:
-		// SAFETY: This case only matches kinds allocated as a JSDocSignature, which embeds its Node header at offset zero.
-		return (*JSDocSignature)(unsafe.Pointer(n)).LocalsContainerData()
-	case 26:
 		// SAFETY: This case only matches kinds allocated as a SourceFile, which embeds its Node header at offset zero.
 		return (*SourceFile)(unsafe.Pointer(n)).LocalsContainerData()
-	case 27:
+	case 26:
 		// SAFETY: This case only matches kinds allocated as a ModuleDeclaration, which embeds its Node header at offset zero.
 		return (*ModuleDeclaration)(unsafe.Pointer(n)).LocalsContainerData()
 	default:
@@ -12719,7 +12717,6 @@ var nodeFunctionLikeDataDispatch = [kindFlowReduceLabelData + 1]uint8{
 	KindFunctionExpression:  11,
 	KindFunctionType:        12,
 	KindConstructorType:     13,
-	KindJSDocSignature:      14,
 }
 
 func (n *Node) FunctionLikeData() *FunctionLikeBase {
@@ -12763,9 +12760,6 @@ func (n *Node) FunctionLikeData() *FunctionLikeBase {
 	case 13:
 		// SAFETY: This case only matches kinds allocated as a ConstructorTypeNode, which embeds its Node header at offset zero.
 		return (*ConstructorTypeNode)(unsafe.Pointer(n)).FunctionLikeData()
-	case 14:
-		// SAFETY: This case only matches kinds allocated as a JSDocSignature, which embeds its Node header at offset zero.
-		return (*JSDocSignature)(unsafe.Pointer(n)).FunctionLikeData()
 	default:
 		return nil
 	}
