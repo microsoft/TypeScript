@@ -748,8 +748,9 @@ func (l *LanguageService) symbolAndEntriesToIncomingCalls(ctx context.Context, p
 }
 
 type callSiteCollector struct {
-	program   *compiler.Program
-	callSites []*callSite
+	program     *compiler.Program
+	callSites   []*callSite
+	seenTargets collections.Set[*ast.Node]
 }
 
 func (c *callSiteCollector) recordCallSite(node *ast.Node) {
@@ -775,6 +776,9 @@ func (c *callSiteCollector) recordCallSite(node *ast.Node) {
 	}
 
 	if target == nil {
+		return
+	}
+	if !c.seenTargets.AddIfAbsent(target) {
 		return
 	}
 
