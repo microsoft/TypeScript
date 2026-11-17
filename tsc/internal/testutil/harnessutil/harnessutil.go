@@ -223,7 +223,7 @@ func CompileFilesEx(
 		defer contentMapperProject.Close()
 	}
 	host := createCompilerHost(fs, bundled.LibPath(), currentDirectory, contentMapperProject)
-	result := compileFilesWithHost(host, config, harnessOptions)
+	result := compileFilesWithHost(t, host, config, harnessOptions)
 	result.Symlinks = symlinks
 	result.Trace = host.tracer.String()
 	result.Repeat = func(testConfig TestConfiguration) *CompilationResult {
@@ -606,6 +606,7 @@ func createCompilerHost(fs vfs.FS, defaultLibraryPath tspath.RootedDirectoryPath
 }
 
 func compileFilesWithHost(
+	t *testing.T,
 	host compiler.CompilerHost,
 	config *tsoptions.ParsedCommandLine,
 	harnessOptions *HarnessOptions,
@@ -625,7 +626,7 @@ func compileFilesWithHost(
 	// 	delete compilerOptions.project;
 	// }
 
-	ctx := context.Background()
+	ctx := t.Context()
 
 	var preErrors []*ast.Diagnostic
 	preCompilerOptions := config.CompilerOptions().Clone()
@@ -640,7 +641,7 @@ func compileFilesWithHost(
 	preConfig.ParsedConfig.ContentMappers = config.ContentMappers()
 	preConfig.ConfigFile = config.ConfigFile
 	preConfig.Errors = config.Errors
-	preProgram := createProgram(host, preConfig)
+	preProgram := createProgram(t, host, preConfig)
 	preErrors = append(preErrors, preProgram.GetConfigFileParsingDiagnostics()...)
 	preErrors = append(preErrors, preProgram.GetProgramDiagnostics()...)
 	preErrors = append(preErrors, preProgram.GetSyntacticDiagnostics(ctx, nil)...)
@@ -654,7 +655,7 @@ func compileFilesWithHost(
 	}
 	preErrors = compiler.SortAndDeduplicateDiagnostics(preErrors)
 
-	postProgram := createProgram(host, config)
+	postProgram := createProgram(t, host, config)
 	emitResult := postProgram.Emit(ctx, compiler.EmitOptions{})
 	var postErrors []*ast.Diagnostic
 	postErrors = append(postErrors, postProgram.GetConfigFileParsingDiagnostics()...)
@@ -971,7 +972,8 @@ func getTestBuildInfoReader(host compiler.CompilerHost) *testBuildInfoReader {
 	return &testBuildInfoReader{inner: incremental.NewBuildInfoReader(host)}
 }
 
-func createProgram(host compiler.CompilerHost, config *tsoptions.ParsedCommandLine) compiler.ProgramLike {
+func createProgram(t *testing.T, host compiler.CompilerHost, config *tsoptions.ParsedCommandLine) compiler.ProgramLike {
+	t.Helper()
 	var singleThreaded core.Tristate
 	if testutil.TestProgramIsSingleThreaded() {
 		singleThreaded = core.TSTrue
@@ -982,7 +984,10 @@ func createProgram(host compiler.CompilerHost, config *tsoptions.ParsedCommandLi
 		Host:           host,
 		SingleThreaded: singleThreaded,
 	}
-	program := compiler.NewProgram(programOptions)
+	program, err := compiler.NewProgram(t.Context(), programOptions)
+	if err != nil {
+		t.Fatal(err)
+	}
 	if config.CompilerOptions().Incremental.IsTrue() {
 		oldProgram := incremental.ReadBuildInfoProgram(config, getTestBuildInfoReader(host), host)
 		incrementalProgram := incremental.NewProgram(program, oldProgram, incremental.CreateHost(host), nil, false)

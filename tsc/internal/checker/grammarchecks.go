@@ -1075,7 +1075,6 @@ func (c *Checker) checkGrammarObjectLiteralExpression(node *ast.ObjectLiteralExp
 			ast.KindPropertyAssignment:
 			var commonProp *ast.NamedMemberBase
 			if prop.Kind == ast.KindShorthandPropertyAssignment {
-				prop.ClassLikeData()
 				commonProp = &prop.AsShorthandPropertyAssignment().NamedMemberBase
 			} else {
 				commonProp = &prop.AsPropertyAssignment().NamedMemberBase

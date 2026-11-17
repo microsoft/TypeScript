@@ -893,6 +893,7 @@ type recordingMapper struct {
 
 type blockingMapper struct {
 	recordingMapper
+	method  string
 	started chan struct{}
 	proceed chan struct{}
 }
@@ -900,7 +901,7 @@ type blockingMapper struct {
 func (*recordingMapper) handlesProjects() {}
 
 func (m *blockingMapper) HandleRequest(ctx context.Context, method string, params json.Value) (any, error) {
-	if method == contentmapper.MethodTransform {
+	if method == m.method {
 		close(m.started)
 		<-m.proceed
 	}
@@ -1121,6 +1122,55 @@ func TestProjectMethodsAfterHostClose(t *testing.T) {
 	assert.ErrorContains(t, err, "content mapper project is closed")
 }
 
+func TestHostCloseCancelsPendingRequests(t *testing.T) {
+	t.Parallel()
+	for _, method := range []string{
+		contentmapper.MethodInitialize,
+		contentmapper.MethodOpenProject,
+		contentmapper.MethodTransform,
+		contentmapper.MethodCloseProject,
+	} {
+		t.Run(method, func(t *testing.T) {
+			t.Parallel()
+			synctest.Test(t, func(t *testing.T) {
+				mapper := &blockingMapper{
+					method:  method,
+					started: make(chan struct{}),
+					proceed: make(chan struct{}),
+				}
+				spawner := &fakeSpawner{handler: mapper}
+				host := contentmapper.NewHost(t.Context(), spawner, locale.Default)
+				defer host.Close()
+				defer close(mapper.proceed)
+				definition := &contentmapper.Mapper{Name: "mapper", Exec: []string{"mapper"}}
+				transformDone := make(chan error, 1)
+				go func() {
+					_, err := host.Transform(definition, contentmapper.Request{FileName: "/a.vue", Content: "x"})
+					transformDone <- err
+				}()
+				<-mapper.started
+
+				closeDone := make(chan error, 1)
+				go func() { closeDone <- host.Close() }()
+				synctest.Wait()
+				select {
+				case err := <-closeDone:
+					assert.NilError(t, err)
+				default:
+					t.Fatal("Close blocked waiting for a pending mapper request")
+				}
+				err := <-transformDone
+				if method == contentmapper.MethodCloseProject {
+					assert.NilError(t, err)
+				} else {
+					assert.Assert(t, err != nil)
+				}
+				assert.Equal(t, spawner.closes.Load(), int32(1))
+			})
+		})
+	}
+}
+
 func TestProjectRejectsRelativeWatchedFiles(t *testing.T) {
 	t.Parallel()
 	mapperProcess := &recordingMapper{watchedFiles: []string{"mapper.config.js"}, dynamicConfig: true}
@@ -1286,7 +1336,7 @@ func TestHostSetLocaleRestartsMapper(t *testing.T) {
 
 func TestHostSetLocaleWaitsForTransform(t *testing.T) {
 	t.Parallel()
-	mapper := &blockingMapper{started: make(chan struct{}), proceed: make(chan struct{})}
+	mapper := &blockingMapper{method: contentmapper.MethodTransform, started: make(chan struct{}), proceed: make(chan struct{})}
 	spawner := &fakeSpawner{handler: mapper}
 	r := contentmapper.NewHost(t.Context(), spawner, locale.Default)
 	defer r.Close()

@@ -350,7 +350,7 @@ func convertJsonOptionOfListType(
 		filteredValues := mappedValues
 		if !option.listPreserveFalsyValues {
 			filteredValues = core.Filter(mappedValues, func(v any) bool {
-				return (v != nil && v != false && v != 0 && v != "")
+				return (v != nil && v != false && v != float64(0) && v != "")
 			})
 		}
 		return filteredValues, errors
@@ -467,14 +467,14 @@ func getExtendsConfigPathOrArray(
 			if valueExpression != nil {
 				expression = valueExpression.Elements()[index]
 			}
-			if reflect.TypeOf(fileName).Kind() == reflect.String {
+			if isStringValue(fileName) {
 				val, err := getExtendsConfigPath(fileName.(string), fs, newBase, expression, sourceFile)
 				if val != "" {
 					extendedConfigPathArray = append(extendedConfigPathArray, val)
 				}
 				errors = append(errors, err...)
 			} else {
-				_, err := convertJsonOption(extendsOptionDeclaration.Elements(), value, basePath, propertyAssignment, expression, sourceFile)
+				_, err := convertJsonOption(extendsOptionDeclaration.Elements(), fileName, basePath, propertyAssignment, expression, sourceFile)
 				errors = append(errors, err...)
 			}
 		}
@@ -1019,7 +1019,7 @@ func parseConfig(
 	if slices.Contains(resolutionStack, resolvedPath) {
 		var result *parsedTsconfig
 		errors = append(errors, ast.NewCompilerDiagnostic(diagnostics.Circularity_detected_while_resolving_configuration_Colon_0, strings.Join(append(core.Map(resolutionStack[slices.Index(resolutionStack, resolvedPath):], tspath.PathKey.AsString), resolvedPath.AsString()), " -> ")))
-		if json.Size() == 0 {
+		if json != nil {
 			result = &parsedTsconfig{raw: json}
 		} else {
 			rawResult, err := convertToObject(sourceFile.SourceFile)
