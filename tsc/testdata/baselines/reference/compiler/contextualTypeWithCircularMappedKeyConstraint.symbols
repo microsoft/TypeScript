@@ -1,0 +1,232 @@
+//// [tests/cases/compiler/contextualTypeWithCircularMappedKeyConstraint.ts] ////
+
+=== library.d.ts ===
+type NoStrayRuleKeys<R> = { [K in keyof R]: unknown };
+>NoStrayRuleKeys : Symbol(NoStrayRuleKeys, Decl(library.d.ts, 0, 0))
+>R : Symbol(R, Decl(library.d.ts, 0, 21))
+>K : Symbol(K, Decl(library.d.ts, 0, 29))
+>R : Symbol(R, Decl(library.d.ts, 0, 21))
+
+type StrictRules<R, T> = ([keyof R] extends [never] ? Required<T> : NoStrayRuleKeys<R>) & {
+>StrictRules : Symbol(StrictRules, Decl(library.d.ts, 0, 54))
+>R : Symbol(R, Decl(library.d.ts, 1, 17))
+>T : Symbol(T, Decl(library.d.ts, 1, 19))
+>R : Symbol(R, Decl(library.d.ts, 1, 17))
+>Required : Symbol(Required, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(library.d.ts, 1, 19))
+>NoStrayRuleKeys : Symbol(NoStrayRuleKeys, Decl(library.d.ts, 0, 0))
+>R : Symbol(R, Decl(library.d.ts, 1, 17))
+
+    [K in R extends unknown ? Exclude<keyof R, keyof T> : never]?: never;
+>K : Symbol(K, Decl(library.d.ts, 2, 5))
+>R : Symbol(R, Decl(library.d.ts, 1, 17))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>R : Symbol(R, Decl(library.d.ts, 1, 17))
+>T : Symbol(T, Decl(library.d.ts, 1, 19))
+
+};
+export declare class Deriver<T> {
+>Deriver : Symbol(Deriver, Decl(library.d.ts, 3, 2))
+>T : Symbol(T, Decl(library.d.ts, 4, 29))
+
+    derive<R extends T & StrictRules<R, T>>(build: () => R): void;
+>derive : Symbol(Deriver.derive, Decl(library.d.ts, 4, 33))
+>R : Symbol(R, Decl(library.d.ts, 5, 11))
+>T : Symbol(T, Decl(library.d.ts, 4, 29))
+>StrictRules : Symbol(StrictRules, Decl(library.d.ts, 0, 54))
+>R : Symbol(R, Decl(library.d.ts, 5, 11))
+>T : Symbol(T, Decl(library.d.ts, 4, 29))
+>build : Symbol(build, Decl(library.d.ts, 5, 44))
+>R : Symbol(R, Decl(library.d.ts, 5, 11))
+
+    plain<R extends T>(build: () => R): void;
+>plain : Symbol(Deriver.plain, Decl(library.d.ts, 5, 66))
+>R : Symbol(R, Decl(library.d.ts, 6, 10))
+>T : Symbol(T, Decl(library.d.ts, 4, 29))
+>build : Symbol(build, Decl(library.d.ts, 6, 23))
+>R : Symbol(R, Decl(library.d.ts, 6, 10))
+}
+
+export declare class RealIndex<T> {
+>RealIndex : Symbol(RealIndex, Decl(library.d.ts, 7, 1))
+>T : Symbol(T, Decl(library.d.ts, 9, 31))
+
+    derive<R extends T & { [x: string]: undefined }>(build: () => R): void;
+>derive : Symbol(RealIndex.derive, Decl(library.d.ts, 9, 35))
+>R : Symbol(R, Decl(library.d.ts, 10, 11))
+>T : Symbol(T, Decl(library.d.ts, 9, 31))
+>x : Symbol(x, Decl(library.d.ts, 10, 28))
+>build : Symbol(build, Decl(library.d.ts, 10, 53))
+>R : Symbol(R, Decl(library.d.ts, 10, 11))
+}
+export declare class RealMappedIndex<T> {
+>RealMappedIndex : Symbol(RealMappedIndex, Decl(library.d.ts, 11, 1))
+>T : Symbol(T, Decl(library.d.ts, 12, 37))
+
+    derive<R extends T & { [K in string]?: never }>(build: () => R): void;
+>derive : Symbol(RealMappedIndex.derive, Decl(library.d.ts, 12, 41))
+>R : Symbol(R, Decl(library.d.ts, 13, 11))
+>T : Symbol(T, Decl(library.d.ts, 12, 37))
+>K : Symbol(K, Decl(library.d.ts, 13, 28))
+>build : Symbol(build, Decl(library.d.ts, 13, 52))
+>R : Symbol(R, Decl(library.d.ts, 13, 11))
+}
+export declare class AnyMappedIndex<T> {
+>AnyMappedIndex : Symbol(AnyMappedIndex, Decl(library.d.ts, 14, 1))
+>T : Symbol(T, Decl(library.d.ts, 15, 36))
+
+    derive<R extends T & { [K in any]?: never }>(build: () => R): void;
+>derive : Symbol(AnyMappedIndex.derive, Decl(library.d.ts, 15, 40))
+>R : Symbol(R, Decl(library.d.ts, 16, 11))
+>T : Symbol(T, Decl(library.d.ts, 15, 36))
+>K : Symbol(K, Decl(library.d.ts, 16, 28))
+>build : Symbol(build, Decl(library.d.ts, 16, 49))
+>R : Symbol(R, Decl(library.d.ts, 16, 11))
+}
+export declare class UnresolvedMappedIndex<T> {
+>UnresolvedMappedIndex : Symbol(UnresolvedMappedIndex, Decl(library.d.ts, 17, 1))
+>T : Symbol(T, Decl(library.d.ts, 18, 43))
+
+    derive<R extends T & { [K in MissingKeys]?: never }>(build: () => R): void;
+>derive : Symbol(UnresolvedMappedIndex.derive, Decl(library.d.ts, 18, 47))
+>R : Symbol(R, Decl(library.d.ts, 19, 11))
+>T : Symbol(T, Decl(library.d.ts, 18, 43))
+>K : Symbol(K, Decl(library.d.ts, 19, 28))
+>MissingKeys : Symbol(MissingKeys)
+>build : Symbol(build, Decl(library.d.ts, 19, 57))
+>R : Symbol(R, Decl(library.d.ts, 19, 11))
+}
+
+=== main.ts ===
+import type { Deriver, RealIndex, RealMappedIndex, AnyMappedIndex, UnresolvedMappedIndex } from "./library.js";
+>Deriver : Symbol(Deriver, Decl(main.ts, 0, 13))
+>RealIndex : Symbol(RealIndex, Decl(main.ts, 0, 22))
+>RealMappedIndex : Symbol(RealMappedIndex, Decl(main.ts, 0, 33))
+>AnyMappedIndex : Symbol(AnyMappedIndex, Decl(main.ts, 0, 50))
+>UnresolvedMappedIndex : Symbol(UnresolvedMappedIndex, Decl(main.ts, 0, 66))
+
+declare const key: string;
+>key : Symbol(key, Decl(main.ts, 2, 13))
+
+type Rule = { [x: string]: (el: number) => unknown };
+>Rule : Symbol(Rule, Decl(main.ts, 2, 26))
+>x : Symbol(x, Decl(main.ts, 3, 15))
+>el : Symbol(el, Decl(main.ts, 3, 28))
+
+declare const indexed: Deriver<Rule>;
+>indexed : Symbol(indexed, Decl(main.ts, 4, 13))
+>Deriver : Symbol(Deriver, Decl(main.ts, 0, 13))
+>Rule : Symbol(Rule, Decl(main.ts, 2, 26))
+
+declare const literal: Deriver<{ rows?: (el: number) => unknown }>;
+>literal : Symbol(literal, Decl(main.ts, 5, 13))
+>Deriver : Symbol(Deriver, Decl(main.ts, 0, 13))
+>rows : Symbol(rows, Decl(main.ts, 5, 32))
+>el : Symbol(el, Decl(main.ts, 5, 41))
+
+// Repro from #65530: a failed circular key constraint must not add an index signature.
+indexed.derive(() => ({ [key]: (el) => el.toFixed() }));
+>indexed.derive : Symbol(Deriver.derive, Decl(library.d.ts, 4, 33))
+>indexed : Symbol(indexed, Decl(main.ts, 4, 13))
+>derive : Symbol(Deriver.derive, Decl(library.d.ts, 4, 33))
+>[key] : Symbol([key], Decl(main.ts, 8, 23))
+>key : Symbol(key, Decl(main.ts, 2, 13))
+>el : Symbol(el, Decl(main.ts, 8, 32))
+>el.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>el : Symbol(el, Decl(main.ts, 8, 32))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+
+literal.derive(() => ({ rows: (el) => el.toFixed() }));
+>literal.derive : Symbol(Deriver.derive, Decl(library.d.ts, 4, 33))
+>literal : Symbol(literal, Decl(main.ts, 5, 13))
+>derive : Symbol(Deriver.derive, Decl(library.d.ts, 4, 33))
+>rows : Symbol(rows, Decl(main.ts, 9, 23))
+>el : Symbol(el, Decl(main.ts, 9, 31))
+>el.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>el : Symbol(el, Decl(main.ts, 9, 31))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+
+indexed.plain(() => ({ [key]: (el) => el.toFixed() }));
+>indexed.plain : Symbol(Deriver.plain, Decl(library.d.ts, 5, 66))
+>indexed : Symbol(indexed, Decl(main.ts, 4, 13))
+>plain : Symbol(Deriver.plain, Decl(library.d.ts, 5, 66))
+>[key] : Symbol([key], Decl(main.ts, 10, 22))
+>key : Symbol(key, Decl(main.ts, 2, 13))
+>el : Symbol(el, Decl(main.ts, 10, 31))
+>el.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>el : Symbol(el, Decl(main.ts, 10, 31))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+
+// Genuine index signatures still contribute to the contextual type, including any keys.
+declare const realIndex: RealIndex<Rule>;
+>realIndex : Symbol(realIndex, Decl(main.ts, 13, 13))
+>RealIndex : Symbol(RealIndex, Decl(main.ts, 0, 22))
+>Rule : Symbol(Rule, Decl(main.ts, 2, 26))
+
+declare const realMappedIndex: RealMappedIndex<Rule>;
+>realMappedIndex : Symbol(realMappedIndex, Decl(main.ts, 14, 13))
+>RealMappedIndex : Symbol(RealMappedIndex, Decl(main.ts, 0, 33))
+>Rule : Symbol(Rule, Decl(main.ts, 2, 26))
+
+declare const anyMappedIndex: AnyMappedIndex<Rule>;
+>anyMappedIndex : Symbol(anyMappedIndex, Decl(main.ts, 15, 13))
+>AnyMappedIndex : Symbol(AnyMappedIndex, Decl(main.ts, 0, 50))
+>Rule : Symbol(Rule, Decl(main.ts, 2, 26))
+
+realIndex.derive(() => ({ [key]: (el) => el }));
+>realIndex.derive : Symbol(RealIndex.derive, Decl(library.d.ts, 9, 35))
+>realIndex : Symbol(realIndex, Decl(main.ts, 13, 13))
+>derive : Symbol(RealIndex.derive, Decl(library.d.ts, 9, 35))
+>[key] : Symbol([key], Decl(main.ts, 16, 25))
+>key : Symbol(key, Decl(main.ts, 2, 13))
+>el : Symbol(el, Decl(main.ts, 16, 34))
+>el : Symbol(el, Decl(main.ts, 16, 34))
+
+realMappedIndex.derive(() => ({ [key]: (el) => el }));
+>realMappedIndex.derive : Symbol(RealMappedIndex.derive, Decl(library.d.ts, 12, 41))
+>realMappedIndex : Symbol(realMappedIndex, Decl(main.ts, 14, 13))
+>derive : Symbol(RealMappedIndex.derive, Decl(library.d.ts, 12, 41))
+>[key] : Symbol([key], Decl(main.ts, 17, 31))
+>key : Symbol(key, Decl(main.ts, 2, 13))
+>el : Symbol(el, Decl(main.ts, 17, 40))
+>el : Symbol(el, Decl(main.ts, 17, 40))
+
+anyMappedIndex.derive(() => ({ [key]: (el) => el }));
+>anyMappedIndex.derive : Symbol(AnyMappedIndex.derive, Decl(library.d.ts, 15, 40))
+>anyMappedIndex : Symbol(anyMappedIndex, Decl(main.ts, 15, 13))
+>derive : Symbol(AnyMappedIndex.derive, Decl(library.d.ts, 15, 40))
+>[key] : Symbol([key], Decl(main.ts, 18, 30))
+>key : Symbol(key, Decl(main.ts, 2, 13))
+>el : Symbol(el, Decl(main.ts, 18, 39))
+>el : Symbol(el, Decl(main.ts, 18, 39))
+
+// An unresolved name is an error key type, but its constraint is not circular.
+declare const unresolvedMappedIndex: UnresolvedMappedIndex<Rule>;
+>unresolvedMappedIndex : Symbol(unresolvedMappedIndex, Decl(main.ts, 21, 13))
+>UnresolvedMappedIndex : Symbol(UnresolvedMappedIndex, Decl(main.ts, 0, 66))
+>Rule : Symbol(Rule, Decl(main.ts, 2, 26))
+
+unresolvedMappedIndex.derive(() => ({ [key]: (el) => el }));
+>unresolvedMappedIndex.derive : Symbol(UnresolvedMappedIndex.derive, Decl(library.d.ts, 18, 47))
+>unresolvedMappedIndex : Symbol(unresolvedMappedIndex, Decl(main.ts, 21, 13))
+>derive : Symbol(UnresolvedMappedIndex.derive, Decl(library.d.ts, 18, 47))
+>[key] : Symbol([key], Decl(main.ts, 22, 37))
+>key : Symbol(key, Decl(main.ts, 2, 13))
+>el : Symbol(el, Decl(main.ts, 22, 46))
+>el : Symbol(el, Decl(main.ts, 22, 46))
+
+const anyKeyedCallbacks: { [K in any]: (el: number) => unknown } = {
+>anyKeyedCallbacks : Symbol(anyKeyedCallbacks, Decl(main.ts, 24, 5))
+>K : Symbol(K, Decl(main.ts, 24, 28))
+>el : Symbol(el, Decl(main.ts, 24, 40))
+
+    [key]: (el) => el.toFixed(),
+>[key] : Symbol([key], Decl(main.ts, 24, 68))
+>key : Symbol(key, Decl(main.ts, 2, 13))
+>el : Symbol(el, Decl(main.ts, 25, 12))
+>el.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>el : Symbol(el, Decl(main.ts, 25, 12))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+
+};
+

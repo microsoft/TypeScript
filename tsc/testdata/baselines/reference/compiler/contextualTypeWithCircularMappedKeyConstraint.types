@@ -1,0 +1,215 @@
+//// [tests/cases/compiler/contextualTypeWithCircularMappedKeyConstraint.ts] ////
+
+=== library.d.ts ===
+type NoStrayRuleKeys<R> = { [K in keyof R]: unknown };
+>NoStrayRuleKeys : NoStrayRuleKeys<R>
+
+type StrictRules<R, T> = ([keyof R] extends [never] ? Required<T> : NoStrayRuleKeys<R>) & {
+>StrictRules : StrictRules<R, T>
+
+    [K in R extends unknown ? Exclude<keyof R, keyof T> : never]?: never;
+};
+export declare class Deriver<T> {
+>Deriver : Deriver<T>
+
+    derive<R extends T & StrictRules<R, T>>(build: () => R): void;
+>derive : <R extends T & StrictRules<R, T>>(build: () => R) => void
+>build : () => R
+
+    plain<R extends T>(build: () => R): void;
+>plain : <R extends T>(build: () => R) => void
+>build : () => R
+}
+
+export declare class RealIndex<T> {
+>RealIndex : RealIndex<T>
+
+    derive<R extends T & { [x: string]: undefined }>(build: () => R): void;
+>derive : <R extends T & { [x: string]: undefined; }>(build: () => R) => void
+>x : string
+>build : () => R
+}
+export declare class RealMappedIndex<T> {
+>RealMappedIndex : RealMappedIndex<T>
+
+    derive<R extends T & { [K in string]?: never }>(build: () => R): void;
+>derive : <R extends T & { [K in string]?: never; }>(build: () => R) => void
+>build : () => R
+}
+export declare class AnyMappedIndex<T> {
+>AnyMappedIndex : AnyMappedIndex<T>
+
+    derive<R extends T & { [K in any]?: never }>(build: () => R): void;
+>derive : <R extends T & { [K in any]?: never; }>(build: () => R) => void
+>build : () => R
+}
+export declare class UnresolvedMappedIndex<T> {
+>UnresolvedMappedIndex : UnresolvedMappedIndex<T>
+
+    derive<R extends T & { [K in MissingKeys]?: never }>(build: () => R): void;
+>derive : <R extends T & { [K in MissingKeys]?: never; }>(build: () => R) => void
+>build : () => R
+}
+
+=== main.ts ===
+import type { Deriver, RealIndex, RealMappedIndex, AnyMappedIndex, UnresolvedMappedIndex } from "./library.js";
+>Deriver : Deriver<T>
+>RealIndex : RealIndex<T>
+>RealMappedIndex : RealMappedIndex<T>
+>AnyMappedIndex : AnyMappedIndex<T>
+>UnresolvedMappedIndex : UnresolvedMappedIndex<T>
+
+declare const key: string;
+>key : string
+
+type Rule = { [x: string]: (el: number) => unknown };
+>Rule : Rule
+>x : string
+>el : number
+
+declare const indexed: Deriver<Rule>;
+>indexed : Deriver<Rule>
+
+declare const literal: Deriver<{ rows?: (el: number) => unknown }>;
+>literal : Deriver<{ rows?: (el: number) => unknown; }>
+>rows : ((el: number) => unknown) | undefined
+>el : number
+
+// Repro from #65530: a failed circular key constraint must not add an index signature.
+indexed.derive(() => ({ [key]: (el) => el.toFixed() }));
+>indexed.derive(() => ({ [key]: (el) => el.toFixed() })) : void
+>indexed.derive : <R extends Rule & import("./library.js").StrictRules<R, Rule>>(build: () => R) => void
+>indexed : Deriver<Rule>
+>derive : <R extends Rule & import("./library.js").StrictRules<R, Rule>>(build: () => R) => void
+>() => ({ [key]: (el) => el.toFixed() }) : () => { [key]: (el: number) => string; }
+>({ [key]: (el) => el.toFixed() }) : { [key]: (el: number) => string; }
+>{ [key]: (el) => el.toFixed() } : { [key]: (el: number) => string; }
+>[key] : (el: number) => string
+>key : string
+>(el) => el.toFixed() : (el: number) => string
+>el : number
+>el.toFixed() : string
+>el.toFixed : (fractionDigits?: number) => string
+>el : number
+>toFixed : (fractionDigits?: number) => string
+
+literal.derive(() => ({ rows: (el) => el.toFixed() }));
+>literal.derive(() => ({ rows: (el) => el.toFixed() })) : void
+>literal.derive : <R extends { rows?: (el: number) => unknown; } & import("./library.js").StrictRules<R, { rows?: (el: number) => unknown; }>>(build: () => R) => void
+>literal : Deriver<{ rows?: (el: number) => unknown; }>
+>derive : <R extends { rows?: (el: number) => unknown; } & import("./library.js").StrictRules<R, { rows?: (el: number) => unknown; }>>(build: () => R) => void
+>() => ({ rows: (el) => el.toFixed() }) : () => { rows: (el: number) => string; }
+>({ rows: (el) => el.toFixed() }) : { rows: (el: number) => string; }
+>{ rows: (el) => el.toFixed() } : { rows: (el: number) => string; }
+>rows : (el: number) => string
+>(el) => el.toFixed() : (el: number) => string
+>el : number
+>el.toFixed() : string
+>el.toFixed : (fractionDigits?: number) => string
+>el : number
+>toFixed : (fractionDigits?: number) => string
+
+indexed.plain(() => ({ [key]: (el) => el.toFixed() }));
+>indexed.plain(() => ({ [key]: (el) => el.toFixed() })) : void
+>indexed.plain : <R extends Rule>(build: () => R) => void
+>indexed : Deriver<Rule>
+>plain : <R extends Rule>(build: () => R) => void
+>() => ({ [key]: (el) => el.toFixed() }) : () => { [key]: (el: number) => string; }
+>({ [key]: (el) => el.toFixed() }) : { [key]: (el: number) => string; }
+>{ [key]: (el) => el.toFixed() } : { [key]: (el: number) => string; }
+>[key] : (el: number) => string
+>key : string
+>(el) => el.toFixed() : (el: number) => string
+>el : number
+>el.toFixed() : string
+>el.toFixed : (fractionDigits?: number) => string
+>el : number
+>toFixed : (fractionDigits?: number) => string
+
+// Genuine index signatures still contribute to the contextual type, including any keys.
+declare const realIndex: RealIndex<Rule>;
+>realIndex : RealIndex<Rule>
+
+declare const realMappedIndex: RealMappedIndex<Rule>;
+>realMappedIndex : RealMappedIndex<Rule>
+
+declare const anyMappedIndex: AnyMappedIndex<Rule>;
+>anyMappedIndex : AnyMappedIndex<Rule>
+
+realIndex.derive(() => ({ [key]: (el) => el }));
+>realIndex.derive(() => ({ [key]: (el) => el })) : void
+>realIndex.derive : <R extends Rule & { [x: string]: undefined; }>(build: () => R) => void
+>realIndex : RealIndex<Rule>
+>derive : <R extends Rule & { [x: string]: undefined; }>(build: () => R) => void
+>() => ({ [key]: (el) => el }) : () => { [key]: (el: any) => any; }
+>({ [key]: (el) => el }) : { [key]: (el: any) => any; }
+>{ [key]: (el) => el } : { [key]: (el: any) => any; }
+>[key] : (el: any) => any
+>key : string
+>(el) => el : (el: any) => any
+>el : any
+>el : any
+
+realMappedIndex.derive(() => ({ [key]: (el) => el }));
+>realMappedIndex.derive(() => ({ [key]: (el) => el })) : void
+>realMappedIndex.derive : <R extends Rule & { [K in string]?: never; }>(build: () => R) => void
+>realMappedIndex : RealMappedIndex<Rule>
+>derive : <R extends Rule & { [K in string]?: never; }>(build: () => R) => void
+>() => ({ [key]: (el) => el }) : () => { [key]: (el: any) => any; }
+>({ [key]: (el) => el }) : { [key]: (el: any) => any; }
+>{ [key]: (el) => el } : { [key]: (el: any) => any; }
+>[key] : (el: any) => any
+>key : string
+>(el) => el : (el: any) => any
+>el : any
+>el : any
+
+anyMappedIndex.derive(() => ({ [key]: (el) => el }));
+>anyMappedIndex.derive(() => ({ [key]: (el) => el })) : void
+>anyMappedIndex.derive : <R extends Rule & { [K in any]?: never; }>(build: () => R) => void
+>anyMappedIndex : AnyMappedIndex<Rule>
+>derive : <R extends Rule & { [K in any]?: never; }>(build: () => R) => void
+>() => ({ [key]: (el) => el }) : () => { [key]: (el: any) => any; }
+>({ [key]: (el) => el }) : { [key]: (el: any) => any; }
+>{ [key]: (el) => el } : { [key]: (el: any) => any; }
+>[key] : (el: any) => any
+>key : string
+>(el) => el : (el: any) => any
+>el : any
+>el : any
+
+// An unresolved name is an error key type, but its constraint is not circular.
+declare const unresolvedMappedIndex: UnresolvedMappedIndex<Rule>;
+>unresolvedMappedIndex : UnresolvedMappedIndex<Rule>
+
+unresolvedMappedIndex.derive(() => ({ [key]: (el) => el }));
+>unresolvedMappedIndex.derive(() => ({ [key]: (el) => el })) : void
+>unresolvedMappedIndex.derive : <R extends Rule & { [K in MissingKeys]?: never; }>(build: () => R) => void
+>unresolvedMappedIndex : UnresolvedMappedIndex<Rule>
+>derive : <R extends Rule & { [K in MissingKeys]?: never; }>(build: () => R) => void
+>() => ({ [key]: (el) => el }) : () => { [key]: (el: any) => any; }
+>({ [key]: (el) => el }) : { [key]: (el: any) => any; }
+>{ [key]: (el) => el } : { [key]: (el: any) => any; }
+>[key] : (el: any) => any
+>key : string
+>(el) => el : (el: any) => any
+>el : any
+>el : any
+
+const anyKeyedCallbacks: { [K in any]: (el: number) => unknown } = {
+>anyKeyedCallbacks : { [x: string]: (el: number) => unknown; [x: number]: (el: number) => unknown; [x: symbol]: (el: number) => unknown; }
+>el : number
+>{    [key]: (el) => el.toFixed(),} : { [key]: (el: number) => string; }
+
+    [key]: (el) => el.toFixed(),
+>[key] : (el: number) => string
+>key : string
+>(el) => el.toFixed() : (el: number) => string
+>el : number
+>el.toFixed() : string
+>el.toFixed : (fractionDigits?: number) => string
+>el : number
+>toFixed : (fractionDigits?: number) => string
+
+};
+
