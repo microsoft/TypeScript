@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"github.com/microsoft/TypeScript/tsc/internal/json"
+	"github.com/microsoft/TypeScript/tsc/internal/spanmap"
 )
 
 // Content mapper protocol method names.
@@ -93,14 +94,14 @@ type MappedOutput struct {
 	// Extension is the extension determining the virtual source file's syntax.
 	Extension string `json:"extension"`
 	// Mappings lists the span map tuples in the selected position encoding. Absent or empty mappings describe fully synthesized output.
-	Mappings json.Value `json:"mappings,omitempty"`
+	Mappings []SpanMapSegment `json:"mappings,omitempty"`
 	// DiagnosticDirectives contains the shared unused-expect diagnostics and compact diagnostic directive tuples.
 	DiagnosticDirectives *DiagnosticDirectives `json:"diagnosticDirectives,omitempty"`
 }
 
 // SpanMapSegment is encoded as [virtualStart, virtualLength, originalStart, originalLength, kind, features?]. Segments
 // must be ordered and disjoint in virtual space and within both texts. Verbatim segments must contain identical text.
-type SpanMapSegment []int32
+type SpanMapSegment = spanmap.SegmentTuple
 
 // DiagnosticDirectivePolicy describes the diagnostic directive policy: 0 ignores diagnostics; 1 expects a diagnostic.
 type DiagnosticDirectivePolicy uint8

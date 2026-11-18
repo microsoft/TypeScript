@@ -22,14 +22,11 @@ func (synthesizingHandler) HandleRequest(ctx context.Context, method string, par
 		if err := json.Unmarshal(params, &p); err != nil {
 			return nil, err
 		}
-		mappings, err := spanmap.New(nil).Marshal()
-		if err != nil {
-			return nil, err
-		}
+		mappings := spanmap.New(nil).Tuples()
 		return contentmapper.TransformResult{
 			Text:      synthesizedOutput,
 			Extension: ".ts",
-			Mappings:  json.Value(mappings),
+			Mappings:  mappings,
 		}, nil
 	default:
 		return nil, fmt.Errorf("contentmappertest: unexpected method %q", method)

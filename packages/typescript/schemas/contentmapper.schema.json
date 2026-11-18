@@ -204,43 +204,165 @@
             },
             "required": ["text", "extension"]
         },
+        "SpanMapKind": {
+            "type": "integer",
+            "description": "Relationship between positions in a virtual span and its original span.",
+            "oneOf": [
+                {
+                    "const": 0,
+                    "title": "Verbatim",
+                    "description": "Length-preserving segment whose interior positions map one-to-one."
+                },
+                {
+                    "const": 1,
+                    "title": "Atom",
+                    "description": "Segment mapped as a whole; interior positions clamp to its endpoints."
+                },
+                {
+                    "const": 2,
+                    "title": "Alias",
+                    "description": "Atom geometry whose virtual and original texts name the same logical entity."
+                }
+            ]
+        },
+        "SpanMapFidelity": {
+            "type": "integer",
+            "description": "Faithfulness of a mapped span to the original.",
+            "oneOf": [
+                {
+                    "const": 0,
+                    "title": "Exact",
+                    "description": "Span entirely within a single verbatim segment, mapped precisely."
+                },
+                {
+                    "const": 1,
+                    "title": "Atom",
+                    "description": "Span within a single atom segment, mapped to that atom's span."
+                },
+                {
+                    "const": 2,
+                    "title": "Approximate",
+                    "description": "Span crossing segment boundaries, with mapped and clamped endpoints."
+                },
+                {
+                    "const": 3,
+                    "title": "None",
+                    "description": "Synthesized span with no original counterpart."
+                }
+            ]
+        },
+        "SpanMapFeature": {
+            "type": "integer",
+            "description": "Language-service feature bitmask. Diagnostics and exact edit mapping do not use feature filtering. Named flags may be combined.",
+            "anyOf": [
+                { "const": 1, "title": "Hover" },
+                { "const": 2, "title": "SignatureHelp" },
+                { "const": 4, "title": "Completion" },
+                { "const": 8, "title": "Definition" },
+                { "const": 16, "title": "TypeDefinition" },
+                { "const": 32, "title": "Implementation" },
+                { "const": 64, "title": "References" },
+                { "const": 128, "title": "DocumentHighlights" },
+                { "const": 256, "title": "Rename" },
+                { "const": 512, "title": "CallHierarchy" },
+                { "const": 1024, "title": "CodeActions" },
+                { "const": 2048, "title": "Formatting" },
+                { "const": 4096, "title": "InlayHints" },
+                { "const": 8192, "title": "SemanticTokens" },
+                { "const": 16384, "title": "FoldingRanges" },
+                { "const": 32768, "title": "SelectionRanges" },
+                { "const": 65536, "title": "LinkedEditing" },
+                { "const": 131072, "title": "AutoInsert" },
+                { "const": 262144, "title": "DocumentSymbols" },
+                { "const": 524288, "title": "CodeLens" },
+                { "const": 0, "title": "None" },
+                { "const": 1048575, "title": "All" },
+                { "minimum": 0, "maximum": 1048575 }
+            ]
+        },
+        "SpanMapOffset": {
+            "type": "integer",
+            "minimum": -2147483648,
+            "maximum": 2147483647
+        },
+        "SpanMapTextRange": {
+            "type": "object",
+            "properties": {
+                "pos": { "$ref": "#/definitions/SpanMapOffset" },
+                "end": { "$ref": "#/definitions/SpanMapOffset" }
+            },
+            "required": ["pos", "end"]
+        },
+        "SpanMapSourceSegment": {
+            "type": "object",
+            "description": "Mapping from a half-open virtual range to a half-open original range. Features controls language-service participation; diagnostics and exact edit mapping deliberately bypass it.",
+            "properties": {
+                "virtualStart": { "$ref": "#/definitions/SpanMapOffset" },
+                "virtualEnd": { "$ref": "#/definitions/SpanMapOffset" },
+                "originalStart": { "$ref": "#/definitions/SpanMapOffset" },
+                "originalEnd": { "$ref": "#/definitions/SpanMapOffset" },
+                "kind": { "$ref": "#/definitions/SpanMapKind" },
+                "features": { "$ref": "#/definitions/SpanMapFeature" }
+            },
+            "required": ["virtualStart", "virtualEnd", "originalStart", "originalEnd", "kind"]
+        },
+        "SpanMapPosition": {
+            "type": "object",
+            "description": "Virtual projection of an original position and its mapping fidelity.",
+            "properties": {
+                "position": { "$ref": "#/definitions/SpanMapOffset" },
+                "fidelity": { "$ref": "#/definitions/SpanMapFidelity" }
+            },
+            "required": ["position", "fidelity"]
+        },
+        "SpanMapRange": {
+            "type": "object",
+            "description": "Virtual projection of an original range and its mapping fidelity.",
+            "properties": {
+                "range": { "$ref": "#/definitions/SpanMapTextRange" },
+                "fidelity": { "$ref": "#/definitions/SpanMapFidelity" }
+            },
+            "required": ["range", "fidelity"]
+        },
         "SpanMapSegment": {
             "type": "array",
             "description": "[virtualStart, virtualLength, originalStart, originalLength, kind, features?]. Segments must be ordered and disjoint in virtual space and within both texts. Verbatim segments must contain identical text.",
             "items": [
                 {
                     "type": "integer",
+                    "title": "virtualStart",
                     "minimum": 0,
                     "maximum": 2147483647,
                     "description": "Virtual start offset."
                 },
                 {
                     "type": "integer",
+                    "title": "virtualLength",
                     "minimum": 0,
                     "maximum": 2147483647,
                     "description": "Virtual span length."
                 },
                 {
                     "type": "integer",
+                    "title": "originalStart",
                     "minimum": 0,
                     "maximum": 2147483647,
                     "description": "Original start offset."
                 },
                 {
                     "type": "integer",
+                    "title": "originalLength",
                     "minimum": 0,
                     "maximum": 2147483647,
                     "description": "Original span length."
                 },
                 {
-                    "type": "integer",
-                    "enum": [0, 1, 2],
-                    "description": "Mapping kind: 0 is verbatim, 1 is atom, and 2 is alias."
+                    "$ref": "#/definitions/SpanMapKind",
+                    "title": "kind"
                 },
                 {
-                    "type": "integer",
-                    "minimum": 0,
-                    "maximum": 1048575,
+                    "$ref": "#/definitions/SpanMapFeature",
+                    "title": "features",
                     "description": "Language-service feature bitmask. Omitted means all features (1048575); 0 disables all features. Does not suppress diagnostics."
                 }
             ],

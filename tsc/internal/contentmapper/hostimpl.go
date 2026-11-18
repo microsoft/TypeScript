@@ -1007,7 +1007,7 @@ func decodeMappedOutput(output MappedOutput, originalText string, positionEncodi
 	// synthesized output (no segment corresponds to the original), so decode to an empty map rather than
 	// nil, which would mean "not content-mapped".
 	if len(output.Mappings) > 0 {
-		mappings, unmarshalErr := spanmap.Unmarshal(output.Mappings)
+		mappings, unmarshalErr := spanmap.FromTuples(output.Mappings)
 		if unmarshalErr != nil {
 			return MappedResult{}, nil, unmarshalErr
 		}

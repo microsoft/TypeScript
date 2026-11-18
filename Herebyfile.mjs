@@ -320,6 +320,8 @@ export const cleanBuilt = task({
 const goGenerateActions = [];
 
 async function runGenerateGo() {
+    // Some Go generators load packages that depend on the generated content mapper types.
+    await runGenerateContentMapper();
     for (const generate of goGenerateActions) {
         await generate();
     }
@@ -685,7 +687,7 @@ async function runGenerateContentMapper() {
 
 export const generateContentMapper = task({
     name: "generate:contentmapper",
-    description: "Generates Go content mapper protocol declarations from the JSON schema.",
+    description: "Generates content mapper protocol and Go/TypeScript span map types from the JSON schema.",
     outputs: contentMapperOutputs,
     run: runGenerateContentMapper,
 });
@@ -796,7 +798,6 @@ async function runGenerate() {
             await runWithConcurrencyLimit([runGenerateAST, runGenerateLSP], 2);
             await runGenerateGo();
         },
-        runGenerateContentMapper,
         runGenerateSync,
         async () => {
             await runGenerateExtension();
