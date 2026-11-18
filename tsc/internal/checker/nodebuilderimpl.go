@@ -2978,7 +2978,7 @@ func (b *NodeBuilderImpl) createAnonymousTypeNodeEx(t *Type, forceClassExpansion
 				// in turn try to reuse the same node again. Mark the type as visited around the reuse
 				// attempt so the inner recursion bottoms out via the visitedTypes guard below.
 				if b.ctx.visitedTypes.Has(typeId) {
-					return b.createCyclicStructurePlaceholder()
+					return b.createElidedInformationPlaceholder()
 				}
 				b.ctx.visitedTypes.Add(typeId)
 				typeNode := b.tryReuseExistingNonParameterTypeNode(existing, t, nil, nil)
@@ -2988,7 +2988,7 @@ func (b *NodeBuilderImpl) createAnonymousTypeNodeEx(t *Type, forceClassExpansion
 				}
 			}
 			if b.ctx.visitedTypes.Has(typeId) {
-				return b.createCyclicStructurePlaceholder()
+				return b.createElidedInformationPlaceholder()
 			}
 			return b.visitAndTransformType(t, (*NodeBuilderImpl).createTypeNodeFromObjectType)
 		}
@@ -3018,14 +3018,14 @@ func (b *NodeBuilderImpl) createAnonymousTypeNodeEx(t *Type, forceClassExpansion
 				// The specified symbol flags need to be reinterpreted as type flags
 				return b.symbolToTypeNode(typeAlias, ast.SymbolFlagsType, nil)
 			} else {
-				return b.createCyclicStructurePlaceholder()
+				return b.createElidedInformationPlaceholder()
 			}
 		} else {
 			return b.visitAndTransformType(t, (*NodeBuilderImpl).createTypeNodeFromObjectType)
 		}
 	} else if t.objectFlags&ObjectFlagsReverseMapped != 0 && b.ctx.flags&nodebuilder.FlagsAllowAnonymousIdentifier == 0 {
 		if b.ctx.visitedTypes.Has(typeId) {
-			return b.createCyclicStructurePlaceholder()
+			return b.createElidedInformationPlaceholder()
 		}
 		return b.visitAndTransformType(t, (*NodeBuilderImpl).createTypeNodeFromObjectType)
 	} else {
@@ -3054,19 +3054,15 @@ func (b *NodeBuilderImpl) getTypeFromTypeNode(node *ast.TypeNode, noMappedTypes 
 func (b *NodeBuilderImpl) typeToTypeNodeOrCircularityElision(t *Type) *ast.TypeNode {
 	if t.flags&TypeFlagsUnion != 0 {
 		if b.ctx.visitedTypes.Has(t.id) {
-			return b.createCyclicStructurePlaceholder()
+			if b.ctx.flags&nodebuilder.FlagsAllowAnonymousIdentifier == 0 {
+				b.ctx.encounteredError = true
+				b.ctx.tracker.ReportCyclicStructureError()
+			}
+			return b.createElidedInformationPlaceholder()
 		}
 		return b.visitAndTransformType(t, (*NodeBuilderImpl).typeToTypeNode)
 	}
 	return b.typeToTypeNode(t)
-}
-
-func (b *NodeBuilderImpl) createCyclicStructurePlaceholder() *ast.TypeNode {
-	if b.ctx.flags&nodebuilder.FlagsAllowAnonymousIdentifier == 0 {
-		b.ctx.encounteredError = true
-		b.ctx.tracker.ReportCyclicStructureError()
-	}
-	return b.createElidedInformationPlaceholder()
 }
 
 func (b *NodeBuilderImpl) conditionalTypeToTypeNode(_t *Type) *ast.TypeNode {
@@ -3290,7 +3286,7 @@ func (b *NodeBuilderImpl) visitAndTransformType(t *Type, transform func(b *NodeB
 		typeId = b.ch.createTypeReference(t.Target(), b.ch.getTypeArguments(t)).id
 	}
 	if b.ctx.visitedTypes.Has(typeId) {
-		return b.createCyclicStructurePlaceholder()
+		return b.createElidedInformationPlaceholder()
 	}
 
 	isConstructorObject := t.objectFlags&ObjectFlagsAnonymous != 0 && t.symbol != nil && t.symbol.Flags()&ast.SymbolFlagsClass != 0
@@ -3356,7 +3352,6 @@ func (b *NodeBuilderImpl) visitAndTransformType(t *Type, transform func(b *NodeB
 	if id != nil {
 		depth = b.ctx.symbolDepth[*id]
 		if depth > 10 {
-			b.ctx.truncating = true
 			return b.createElidedInformationPlaceholder()
 		}
 		b.ctx.symbolDepth[*id] = depth + 1
