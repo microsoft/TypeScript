@@ -1,0 +1,112 @@
+//// [tests/cases/compiler/reverseMappedTypeWithAllContextSensitiveProperties.ts] ////
+
+=== reverseMappedTypeWithAllContextSensitiveProperties.ts ===
+createMachine({
+>createMachine : Symbol(createMachine, Decl(reverseMappedTypeWithAllContextSensitiveProperties.ts, 13, 13))
+
+  initial: "a",
+>initial : Symbol(initial, Decl(reverseMappedTypeWithAllContextSensitiveProperties.ts, 0, 15))
+
+  context: { foo: 1 },
+>context : Symbol(context, Decl(reverseMappedTypeWithAllContextSensitiveProperties.ts, 1, 15))
+>foo : Symbol(foo, Decl(reverseMappedTypeWithAllContextSensitiveProperties.ts, 2, 12))
+
+  states: {
+>states : Symbol(states, Decl(reverseMappedTypeWithAllContextSensitiveProperties.ts, 2, 22))
+
+    a: {
+>a : Symbol(a, Decl(reverseMappedTypeWithAllContextSensitiveProperties.ts, 3, 11))
+
+      entry: (context, state) => {
+>entry : Symbol(entry, Decl(reverseMappedTypeWithAllContextSensitiveProperties.ts, 4, 8))
+>context : Symbol(context, Decl(reverseMappedTypeWithAllContextSensitiveProperties.ts, 5, 14))
+>state : Symbol(state, Decl(reverseMappedTypeWithAllContextSensitiveProperties.ts, 5, 22))
+
+        context.foo.toFixed();
+>context.foo.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>context.foo : Symbol(foo, Decl(reverseMappedTypeWithAllContextSensitiveProperties.ts, 2, 12))
+>context : Symbol(context, Decl(reverseMappedTypeWithAllContextSensitiveProperties.ts, 5, 14))
+>foo : Symbol(foo, Decl(reverseMappedTypeWithAllContextSensitiveProperties.ts, 2, 12))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+
+        const currentState: "a" = state;
+>currentState : Symbol(currentState, Decl(reverseMappedTypeWithAllContextSensitiveProperties.ts, 7, 13))
+>state : Symbol(state, Decl(reverseMappedTypeWithAllContextSensitiveProperties.ts, 5, 22))
+      }
+    }
+  }
+})
+
+declare const createMachine:
+>createMachine : Symbol(createMachine, Decl(reverseMappedTypeWithAllContextSensitiveProperties.ts, 13, 13))
+
+  <D extends {
+>D : Symbol(D, Decl(reverseMappedTypeWithAllContextSensitiveProperties.ts, 14, 3))
+
+    initial: keyof D["states"],
+>initial : Symbol(initial, Decl(reverseMappedTypeWithAllContextSensitiveProperties.ts, 14, 14))
+>D : Symbol(D, Decl(reverseMappedTypeWithAllContextSensitiveProperties.ts, 14, 3))
+
+    context: D["context"] extends object ? D["context"] : object,
+>context : Symbol(context, Decl(reverseMappedTypeWithAllContextSensitiveProperties.ts, 15, 31))
+>D : Symbol(D, Decl(reverseMappedTypeWithAllContextSensitiveProperties.ts, 14, 3))
+>D : Symbol(D, Decl(reverseMappedTypeWithAllContextSensitiveProperties.ts, 14, 3))
+
+    states: {
+>states : Symbol(states, Decl(reverseMappedTypeWithAllContextSensitiveProperties.ts, 16, 65))
+
+      [S in keyof D["states"]]: {
+>S : Symbol(S, Decl(reverseMappedTypeWithAllContextSensitiveProperties.ts, 18, 7))
+>D : Symbol(D, Decl(reverseMappedTypeWithAllContextSensitiveProperties.ts, 14, 3))
+
+        entry?: (context: D["context"], state: S) => void
+>entry : Symbol(entry, Decl(reverseMappedTypeWithAllContextSensitiveProperties.ts, 18, 33))
+>context : Symbol(context, Decl(reverseMappedTypeWithAllContextSensitiveProperties.ts, 19, 17))
+>D : Symbol(D, Decl(reverseMappedTypeWithAllContextSensitiveProperties.ts, 14, 3))
+>state : Symbol(state, Decl(reverseMappedTypeWithAllContextSensitiveProperties.ts, 19, 39))
+>S : Symbol(S, Decl(reverseMappedTypeWithAllContextSensitiveProperties.ts, 18, 7))
+      }
+    }
+  }>
+    (definition: IdentityObject<D>) =>
+>definition : Symbol(definition, Decl(reverseMappedTypeWithAllContextSensitiveProperties.ts, 23, 5))
+>IdentityObject : Symbol(IdentityObject, Decl(reverseMappedTypeWithAllContextSensitiveProperties.ts, 32, 11))
+>D : Symbol(D, Decl(reverseMappedTypeWithAllContextSensitiveProperties.ts, 14, 3))
+
+      D
+>D : Symbol(D, Decl(reverseMappedTypeWithAllContextSensitiveProperties.ts, 14, 3))
+
+type Identity<T> =
+>Identity : Symbol(Identity, Decl(reverseMappedTypeWithAllContextSensitiveProperties.ts, 24, 7))
+>T : Symbol(T, Decl(reverseMappedTypeWithAllContextSensitiveProperties.ts, 26, 14))
+
+  T extends any
+>T : Symbol(T, Decl(reverseMappedTypeWithAllContextSensitiveProperties.ts, 26, 14))
+
+    ? ( T extends (...a: never) => unknown ? T :
+>T : Symbol(T, Decl(reverseMappedTypeWithAllContextSensitiveProperties.ts, 26, 14))
+>a : Symbol(a, Decl(reverseMappedTypeWithAllContextSensitiveProperties.ts, 28, 19))
+>T : Symbol(T, Decl(reverseMappedTypeWithAllContextSensitiveProperties.ts, 26, 14))
+
+        T extends object ? IdentityObject<T> :
+>T : Symbol(T, Decl(reverseMappedTypeWithAllContextSensitiveProperties.ts, 26, 14))
+>IdentityObject : Symbol(IdentityObject, Decl(reverseMappedTypeWithAllContextSensitiveProperties.ts, 32, 11))
+>T : Symbol(T, Decl(reverseMappedTypeWithAllContextSensitiveProperties.ts, 26, 14))
+
+        T
+>T : Symbol(T, Decl(reverseMappedTypeWithAllContextSensitiveProperties.ts, 26, 14))
+
+      )
+    : never
+
+type IdentityObject<T> =
+>IdentityObject : Symbol(IdentityObject, Decl(reverseMappedTypeWithAllContextSensitiveProperties.ts, 32, 11))
+>T : Symbol(T, Decl(reverseMappedTypeWithAllContextSensitiveProperties.ts, 34, 20))
+
+  { [K in keyof T]: Identity<T[K]> }
+>K : Symbol(K, Decl(reverseMappedTypeWithAllContextSensitiveProperties.ts, 35, 5))
+>T : Symbol(T, Decl(reverseMappedTypeWithAllContextSensitiveProperties.ts, 34, 20))
+>Identity : Symbol(Identity, Decl(reverseMappedTypeWithAllContextSensitiveProperties.ts, 24, 7))
+>T : Symbol(T, Decl(reverseMappedTypeWithAllContextSensitiveProperties.ts, 34, 20))
+>K : Symbol(K, Decl(reverseMappedTypeWithAllContextSensitiveProperties.ts, 35, 5))
+
