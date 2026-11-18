@@ -34,6 +34,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/ls"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/autoimport"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
+	"github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/module"
 	"github.com/microsoft/TypeScript/tsc/internal/nodebuilder"
@@ -904,6 +905,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetSymbolOfDeclaration(parsed.(*GetSymbolOfDeclarationParams))
 	case string(MethodInitialize):
 		return s.handleInitialize(ctx)
+	case string(MethodGetDefaultFormatCodeSettings):
+		return s.handleGetDefaultFormatCodeSettings()
 	case string(MethodCreateSnapshot):
 		return s.handleCreateSnapshot(ctx, parsed.(*CreateSnapshotParams))
 	case string(MethodUpdateSnapshot):
@@ -1440,6 +1443,11 @@ func (s *Session) handleInitialize(ctx context.Context) (*InitializeResponse, er
 		CaseSensitivity:  s.caseSensitivity(),
 		CurrentDirectory: s.currentDirectory(),
 	}, nil
+}
+
+func (s *Session) handleGetDefaultFormatCodeSettings() (*lsutil.FormatCodeSettings, error) {
+	settings := lsutil.GetDefaultFormatCodeSettings()
+	return &settings, nil
 }
 
 // handleCreateSnapshot creates a new independent snapshot.

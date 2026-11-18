@@ -107,6 +107,7 @@ import type {
     DocumentPosition,
     EmitOutputResponse as ProtocolEmitOutputResponse,
     FileNotifications,
+    FormatCodeSettings,
     ImportAdderAction,
     InferredProjectId,
     IntrinsicTypeMethod,
@@ -237,6 +238,7 @@ export type {
     EmitOutputFile,
     EmitResult,
     FileNotifications,
+    FormatCodeSettings,
     FormatDiagnosticsHost,
     FreshableType,
     GenericType,
@@ -629,6 +631,26 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                 });
                 owner.activeBuildOrchestrators.add(orchestrator);
                 return orchestrator;
+            },
+        );
+    }
+
+    /** Gets the compiler's default formatting settings, independent of snapshot preferences. */
+    get getDefaultFormatCodeSettings(): {
+        (): FormatCodeSettings;
+        gen(): Generator<ProtocolRequest, FormatCodeSettings, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getDefaultFormatCodeSettings",
+            function (): FormatCodeSettings {
+                owner.ensureInitialized();
+                return owner.client.apiRequest("getDefaultFormatCodeSettings", null);
+            },
+            function* (): Generator<ProtocolRequest, FormatCodeSettings, ProtocolResponse["result"]> {
+                yield* owner.ensureInitialized.gen();
+                return yield* apiRequest("getDefaultFormatCodeSettings", null);
             },
         );
     }

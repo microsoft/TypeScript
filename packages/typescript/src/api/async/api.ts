@@ -88,6 +88,7 @@ import type {
     DocumentPosition,
     EmitOutputResponse as ProtocolEmitOutputResponse,
     FileNotifications,
+    FormatCodeSettings,
     ImportAdderAction,
     InferredProjectId,
     IntrinsicTypeMethod,
@@ -219,6 +220,7 @@ export type {
     EmitOutputFile,
     EmitResult,
     FileNotifications,
+    FormatCodeSettings,
     FormatDiagnosticsHost,
     FreshableType,
     GenericType,
@@ -504,6 +506,12 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         });
         this.activeBuildOrchestrators.add(orchestrator);
         return orchestrator;
+    }
+
+    /** Gets the compiler's default formatting settings, independent of snapshot preferences. */
+    async getDefaultFormatCodeSettings(): Promise<FormatCodeSettings> {
+        await this.ensureInitialized();
+        return this.client.apiRequest("getDefaultFormatCodeSettings", null);
     }
 
     async parseConfigFile(file: DocumentIdentifier): Promise<ParsedCommandLine> {

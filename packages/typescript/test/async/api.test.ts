@@ -171,6 +171,42 @@ import {
 const concurrency = areTestsFiltered();
 
 describe("API", { concurrency }, () => {
+    test("getDefaultFormatCodeSettings returns native defaults independently of snapshot preferences", async () => {
+        await using api = spawnAPI();
+        const defaults = await api.getDefaultFormatCodeSettings();
+        assert.deepStrictEqual(defaults, {
+            baseIndentSize: 0,
+            indentSize: 4,
+            tabSize: 4,
+            newLineCharacter: "\n",
+            convertTabsToSpaces: true,
+            indentStyle: "smart",
+            trimTrailingWhitespace: true,
+            insertSpaceAfterConstructor: false,
+            insertSpaceAfterCommaDelimiter: true,
+            insertSpaceAfterSemicolonInForStatements: true,
+            insertSpaceBeforeAndAfterBinaryOperators: true,
+            insertSpaceAfterKeywordsInControlFlowStatements: true,
+            insertSpaceAfterFunctionKeywordForAnonymousFunctions: false,
+            insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: false,
+            insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: false,
+            insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces: true,
+            insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: false,
+            insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces: false,
+            insertSpaceBeforeFunctionParenthesis: false,
+            placeOpenBraceOnNewLineForFunctions: false,
+            placeOpenBraceOnNewLineForControlBlocks: false,
+            semicolons: "ignore",
+            indentSwitchCase: true,
+        });
+        const snapshot = await api.createSnapshot({ userPreferences: { indentSize: 8, convertTabsToSpaces: false } });
+        assert.ok(snapshot);
+        defaults.indentSize = 2;
+        const next = await api.getDefaultFormatCodeSettings();
+        assert.strictEqual(next.indentSize, 4);
+        assert.strictEqual(next.convertTabsToSpaces, true);
+    });
+
     test("getCurrentLanguageServerSnapshot is LSP-only", async () => {
         if (!!false) {
             await using standalone = new API();
