@@ -30,6 +30,37 @@ func (s *Session) encodeCheckerNode(node *ast.Node) (any, error) {
 
 // @gen-proto-result: SourceFileResponse
 // @gen-proto-nullable
+func (s *Session) handleIndexInfoToIndexSignatureDeclaration(ctx context.Context, params *IndexInfoToIndexSignatureDeclarationParams) (any, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+	keyType, err := setup.resolveTypeHandle(params.KeyType)
+	if err != nil {
+		return nil, err
+	}
+	valueType, err := setup.resolveTypeHandle(params.ValueType)
+	if err != nil {
+		return nil, err
+	}
+	declaration, err := setup.resolveLocation(params.Declaration, nil, nil)
+	if err != nil {
+		return nil, err
+	}
+	if declaration != nil && (!ast.IsIndexSignatureDeclaration(declaration) || len(declaration.Parameters()) != 1) {
+		return nil, fmt.Errorf("%w: expected an index signature declaration with one parameter", ErrClientError)
+	}
+	location, err := setup.resolveLocation(params.Location, nil, nil)
+	if err != nil {
+		return nil, err
+	}
+	info := checker.NewIndexInfo(keyType, valueType, params.IsReadonly, declaration)
+	return s.encodeCheckerNode(setup.checker.IndexInfoToIndexSignatureDeclaration(info, location, nodebuilder.Flags(params.Flags)))
+}
+
+// @gen-proto-result: SourceFileResponse
+// @gen-proto-nullable
 func (s *Session) handleTypeParameterToDeclaration(ctx context.Context, params *TypeToTypeNodeParams) (any, error) {
 	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
 	if err != nil {

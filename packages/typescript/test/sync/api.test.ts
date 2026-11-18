@@ -115,6 +115,7 @@ import {
     ModuleKind,
     ModuleResolutionKind,
     type ModuleResolver,
+    NodeBuilderFlags,
     type NumberLiteralType,
     ObjectFlags,
     type Program,
@@ -8879,6 +8880,32 @@ export const obj = { m: 1, s: "hi", b: true };
         assert.ok(declaration);
         assert.equal(declaration.kind, SyntaxKind.TypeParameter);
         assert.equal(api.printer.printNode(declaration), `T extends string = "default"`);
+    });
+
+    test("indexInfoToIndexSignatureDeclaration preserves the parameter name and readonly modifier", () => {
+        const source = `interface Map { readonly [key: string]: number[]; }`;
+        using api = spawnAPI({ "/tsconfig.json": "{}", "/main.ts": source });
+        const snapshot = api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const type = project.checker.getTypeAtPosition("/main.ts", source.indexOf("Map"));
+        assert.ok(type);
+        const [info] = type.getIndexInfos();
+        assert.ok(info);
+        const declaration = project.checker.indexInfoToIndexSignatureDeclaration(info);
+        assert.ok(declaration);
+        assert.equal(declaration.kind, SyntaxKind.IndexSignature);
+        assert.equal(api.printer.printNode(declaration), "readonly [key: string]: number[];");
+        const synthesized = project.checker.indexInfoToIndexSignatureDeclaration(
+            {
+                keyType: info.keyType,
+                valueType: info.valueType,
+                isReadonly: false,
+            },
+            undefined,
+            NodeBuilderFlags.WriteArrayAsGenericType,
+        );
+        assert.ok(synthesized);
+        assert.equal(api.printer.printNode(synthesized), "[x: string]: Array<number>;");
     });
 
     test("typeToString", () => {

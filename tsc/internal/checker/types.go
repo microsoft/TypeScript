@@ -1798,6 +1798,10 @@ type IndexInfo struct {
 	components  []*ast.Node // ElementWithComputedPropertyName
 }
 
+func NewIndexInfo(keyType *Type, valueType *Type, isReadonly bool, declaration *ast.Node) *IndexInfo {
+	return &IndexInfo{keyType: keyType, valueType: valueType, isReadonly: isReadonly, declaration: declaration}
+}
+
 func (info *IndexInfo) KeyType() *Type {
 	return info.keyType
 }

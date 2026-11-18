@@ -197,6 +197,7 @@ const (
 	MethodSymbolToParameterDeclaration               Method = "symbolToParameterDeclaration"
 	MethodSymbolToTypeParameterDeclarations          Method = "symbolToTypeParameterDeclarations"
 	MethodTypeParameterToDeclaration                 Method = "typeParameterToDeclaration"
+	MethodIndexInfoToIndexSignatureDeclaration       Method = "indexInfoToIndexSignatureDeclaration"
 	MethodSignatureToString                          Method = "signatureToString"
 	MethodIsContextSensitive                         Method = "isContextSensitive"
 	MethodGetReturnTypeOfSignature                   Method = "getReturnTypeOfSignature"
@@ -741,6 +742,7 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodSymbolToParameterDeclaration:               unmarshallerFor[SymbolToDeclarationParams],
 	MethodSymbolToTypeParameterDeclarations:          unmarshallerFor[SymbolToDeclarationParams],
 	MethodTypeParameterToDeclaration:                 unmarshallerFor[TypeToTypeNodeParams],
+	MethodIndexInfoToIndexSignatureDeclaration:       unmarshallerFor[IndexInfoToIndexSignatureDeclarationParams],
 	MethodSignatureToString:                          unmarshallerFor[SignatureToStringParams],
 	MethodIsContextSensitive:                         unmarshallerFor[GetContextualTypeParams],
 	MethodGetReturnTypeOfSignature:                   unmarshallerFor[GetSignaturePropertyParams],
@@ -1911,6 +1913,17 @@ type SymbolToDeclarationParams struct {
 	Symbol   SymbolReference `json:"symbol"`
 	Location NodeHandle      `json:"location,omitempty"`
 	Flags    uint32          `json:"flags,omitempty"`
+}
+
+type IndexInfoToIndexSignatureDeclarationParams struct {
+	Snapshot    SnapshotID     `json:"snapshot"`
+	Project     project.Handle `json:"project"`
+	KeyType     TypeID         `json:"keyType"`
+	ValueType   TypeID         `json:"valueType"`
+	IsReadonly  bool           `json:"isReadonly,omitempty"`
+	Declaration NodeHandle     `json:"declaration,omitempty"`
+	Location    NodeHandle     `json:"location,omitempty"`
+	Flags       uint32         `json:"flags,omitempty"`
 }
 
 // SignatureToSignatureDeclarationParams are the parameters for the signatureToSignatureDeclaration method.

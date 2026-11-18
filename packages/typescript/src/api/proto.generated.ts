@@ -158,6 +158,7 @@ export interface APIMethodInfo {
     symbolToParameterDeclaration: APIMethod<SymbolToDeclarationParams, SourceFileResponse | null>;
     symbolToTypeParameterDeclarations: APIMethod<SymbolToDeclarationParams, SourceFileResponse[] | null>;
     typeParameterToDeclaration: APIMethod<TypeToTypeNodeParams, SourceFileResponse | null>;
+    indexInfoToIndexSignatureDeclaration: APIMethod<IndexInfoToIndexSignatureDeclarationParams, SourceFileResponse | null>;
     signatureToString: APIMethod<SignatureToStringParams, string>;
     isContextSensitive: APIMethod<GetContextualTypeParams, boolean>;
     getReturnTypeOfSignature: APIMethod<GetSignaturePropertyParams, TypeResponse>;
@@ -971,6 +972,17 @@ export interface SymbolToDeclarationParams {
     flags?: number | undefined;
 }
 
+export interface IndexInfoToIndexSignatureDeclarationParams {
+    snapshot: number;
+    project: number;
+    keyType: number;
+    valueType: number;
+    isReadonly?: boolean | undefined;
+    declaration?: string | undefined;
+    location?: string | undefined;
+    flags?: number | undefined;
+}
+
 export interface SignatureToStringParams {
     snapshot: number;
     project: number;
@@ -1415,6 +1427,7 @@ export interface BatchRequest {
         | "getWellKnownSignatures"
         | "getWellKnownSymbols"
         | "getWidenedType"
+        | "indexInfoToIndexSignatureDeclaration"
         | "initialize"
         | "isArrayLikeType"
         | "isArrayType"
@@ -1617,6 +1630,7 @@ export interface BatchResponse {
         | "getWellKnownSignatures"
         | "getWellKnownSymbols"
         | "getWidenedType"
+        | "indexInfoToIndexSignatureDeclaration"
         | "initialize"
         | "isArrayLikeType"
         | "isArrayType"

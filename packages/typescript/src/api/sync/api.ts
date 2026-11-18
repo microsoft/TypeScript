@@ -5913,6 +5913,49 @@ export class Checker {
         );
     }
 
+    get indexInfoToIndexSignatureDeclaration(): {
+        (info: IndexInfo, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): IndexSignatureDeclaration | undefined;
+        gen(info: IndexInfo, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): Generator<ProtocolRequest, IndexSignatureDeclaration | undefined, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "indexInfoToIndexSignatureDeclaration",
+            function (info: IndexInfo, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): IndexSignatureDeclaration | undefined {
+                const declaration = info.declaration?.resolve(owner.project);
+                const binaryData = owner.client.apiRequestBinary("indexInfoToIndexSignatureDeclaration", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    keyType: info.keyType.id,
+                    valueType: info.valueType.id,
+                    isReadonly: info.isReadonly,
+                    declaration: declaration ? getNodeRequestHandle(declaration) : undefined,
+                    location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+                    flags,
+                });
+                if (!binaryData) return undefined;
+                return decodeNode(binaryData) as IndexSignatureDeclaration;
+            },
+            function* (info: IndexInfo, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): Generator<ProtocolRequest, IndexSignatureDeclaration | undefined, ProtocolResponse["result"]> {
+                const declaration = yield* info.declaration?.resolve.gen(owner.project);
+                const binaryData = sourceFileResponseToUint8Array(
+                    yield* apiRequest("indexInfoToIndexSignatureDeclaration", {
+                        snapshot: owner.snapshotId,
+                        project: owner.project.handle,
+                        keyType: info.keyType.id,
+                        valueType: info.valueType.id,
+                        isReadonly: info.isReadonly,
+                        declaration: declaration ? getNodeRequestHandle(declaration) : undefined,
+                        location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+                        flags,
+                    }),
+                );
+                if (!binaryData) return undefined;
+                return decodeNode(binaryData) as IndexSignatureDeclaration;
+            },
+        );
+    }
+
     /** Formats a call or construct signature, using the signature's own kind. */
     get signatureToString(): {
         (signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string;

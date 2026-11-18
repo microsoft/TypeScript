@@ -2958,6 +2958,22 @@ export class Checker {
         return decodeNode(binaryData) as TypeParameterDeclaration;
     }
 
+    async indexInfoToIndexSignatureDeclaration(info: IndexInfo, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): Promise<IndexSignatureDeclaration | undefined> {
+        const declaration = info.declaration ? await info.declaration.resolve(this.project) : undefined;
+        const binaryData = await this.client.apiRequestBinary("indexInfoToIndexSignatureDeclaration", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            keyType: info.keyType.id,
+            valueType: info.valueType.id,
+            isReadonly: info.isReadonly,
+            declaration: declaration ? getNodeRequestHandle(declaration) : undefined,
+            location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+            flags,
+        });
+        if (!binaryData) return undefined;
+        return decodeNode(binaryData) as IndexSignatureDeclaration;
+    }
+
     /** Formats a call or construct signature, using the signature's own kind. */
     async signatureToString(signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags): Promise<string> {
         return this.client.apiRequest("signatureToString", {
