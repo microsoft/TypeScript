@@ -184,6 +184,7 @@ export interface APIMethodInfo {
     getImmediateAliasedSymbol: APIMethod<CheckerSymbolParams, SymbolResponse | null>;
     getTargetSymbol: APIMethod<CheckerSymbolParams, SymbolResponse>;
     getMergedSymbol: APIMethod<CheckerSymbolParams, SymbolResponse>;
+    getRootSymbols: APIMethod<CheckerSymbolParams, SymbolResponse[]>;
     getSymbolOfNode: APIMethod<CheckerNodeParams, SymbolResponse | null>;
     getSymbolOfDeclarationForChecker: APIMethod<CheckerNodeParams, SymbolResponse | null>;
     getParentOfSymbolForChecker: APIMethod<CheckerSymbolParams, SymbolResponse | null>;
@@ -1338,6 +1339,7 @@ export interface BatchRequest {
         | "getResolvedTypeReferenceDirectiveFromTypeReferenceDirective"
         | "getRestTypeOfSignature"
         | "getReturnTypeOfSignature"
+        | "getRootSymbols"
         | "getSemanticDiagnostics"
         | "getShorthandAssignmentValueSymbol"
         | "getSignatureFromDeclaration"
@@ -1538,6 +1540,7 @@ export interface BatchResponse {
         | "getResolvedTypeReferenceDirectiveFromTypeReferenceDirective"
         | "getRestTypeOfSignature"
         | "getReturnTypeOfSignature"
+        | "getRootSymbols"
         | "getSemanticDiagnostics"
         | "getShorthandAssignmentValueSymbol"
         | "getSignatureFromDeclaration"

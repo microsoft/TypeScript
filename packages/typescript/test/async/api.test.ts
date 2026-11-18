@@ -176,6 +176,56 @@ import {
 
 const concurrency = areTestsFiltered();
 
+describe("Checker - getRootSymbols", { concurrency }, () => {
+    test("follows synthetic union and mapped properties to their original declarations", async () => {
+        await using api = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/index.ts": `
+interface A { value: string }
+interface B { value: number }
+declare const union: A | B;
+declare const mapped: { [K in keyof A]: A[K] };
+union.value;
+mapped.value;
+`,
+        });
+        const snapshot = await api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const a = await project.checker.getSymbolAtPosition("/index.ts", "\ninterface ".length);
+        assert.ok(a);
+        const aValue = await (await project.checker.getDeclaredTypeOfSymbol(a)).getProperty("value");
+        assert.ok(aValue);
+        const file = await project.program.getSourceFile("/index.ts");
+        assert.ok(file);
+        const union = await project.checker.getSymbolAtPosition("/index.ts", file.text.indexOf("union.value") + "union.".length);
+        const mapped = await project.checker.getSymbolAtPosition("/index.ts", file.text.indexOf("mapped.value") + "mapped.".length);
+        assert.ok(union && mapped);
+        const roots = await project.checker.getRootSymbols(union);
+        assert.equal(roots.length, 2);
+        assert.strictEqual(roots[0], aValue);
+        assert.equal(roots[1].name, "value");
+        assert.notStrictEqual(roots[1], aValue);
+        assert.deepEqual(await project.checker.getRootSymbols(mapped), [aValue]);
+        assert.deepEqual(await project.checker.getRootSymbols(aValue), [aValue]);
+    });
+
+    test("queries a shared file-owned symbol through each requesting checker", async () => {
+        await using api = spawnAPI({
+            "/a/tsconfig.json": JSON.stringify({ files: ["../shared.ts"] }),
+            "/b/tsconfig.json": JSON.stringify({ files: ["../shared.ts"] }),
+            "/shared.ts": "export interface Shared { value: string }",
+        });
+        const snapshot = await api.createSnapshot({ openProjects: ["/a/tsconfig.json", "/b/tsconfig.json"] });
+        const first = snapshot.getConfiguredProject("/a/tsconfig.json")!;
+        const second = snapshot.getConfiguredProject("/b/tsconfig.json")!;
+        const symbol = await first.checker.getSymbolAtPosition("/shared.ts", "export interface Shared { ".length);
+        assert.ok(symbol);
+        assert.strictEqual(symbol, await second.checker.getSymbolAtPosition("/shared.ts", "export interface Shared { ".length));
+        assert.deepEqual(await first.checker.getRootSymbols(symbol), [symbol]);
+        assert.deepEqual(await second.checker.getRootSymbols(symbol), [symbol]);
+    });
+});
+
 describe("Checker - getTypeArgumentsForResolvedSignature", { concurrency }, () => {
     test("instantiates inferred, explicit, and defaulted type arguments and handles non-generic calls", async () => {
         await using api = spawnAPI({

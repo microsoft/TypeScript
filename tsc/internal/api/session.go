@@ -1185,6 +1185,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleMethodGetTargetSymbol(ctx, parsed.(*CheckerSymbolParams))
 	case string(MethodGetMergedSymbol):
 		return s.handleGetMergedSymbol(ctx, parsed.(*CheckerSymbolParams))
+	case string(MethodGetRootSymbols):
+		return s.handleGetRootSymbols(ctx, parsed.(*CheckerSymbolParams))
 	case string(MethodGetSymbolOfNode):
 		return s.handleGetSymbolOfNode(ctx, parsed.(*CheckerNodeParams))
 	case string(MethodGetSymbolOfDeclarationForChecker):
@@ -3979,6 +3981,25 @@ func (s *Session) handleIsOptionalParameter(ctx context.Context, params *Checker
 		return false, fmt.Errorf("%w: expected a parameter declaration", ErrInvalidRequest)
 	}
 	return setup.checker.IsOptionalParameter(node), nil
+}
+
+func (s *Session) handleGetRootSymbols(ctx context.Context, params *CheckerSymbolParams) ([]*SymbolResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	symbol, err := setup.resolveSymbolHandle(params.Symbol)
+	if err != nil {
+		return nil, err
+	}
+	roots := setup.checker.GetRootSymbols(symbol)
+	result := make([]*SymbolResponse, len(roots))
+	for i, root := range roots {
+		result[i] = setup.newSymbolResponse(root)
+	}
+	return result, nil
 }
 
 func (s *Session) handleGetTypeArgumentsForResolvedSignature(ctx context.Context, params *GetSignaturePropertyParams) ([]*TypeResponse, error) {

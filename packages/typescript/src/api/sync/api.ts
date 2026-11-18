@@ -4220,6 +4220,34 @@ function encodeNumberLiteralValue(value: number): number | string {
 }
 
 export class Checker {
+    /** Get the original symbols underlying a synthetic, instantiated, or mapped property. */
+    get getRootSymbols(): {
+        (symbol: Symbol): readonly Symbol[];
+        gen(symbol: Symbol): Generator<ProtocolRequest, readonly Symbol[], ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getRootSymbols",
+            function (symbol: Symbol): readonly Symbol[] {
+                const data = owner.client.apiRequest("getRootSymbols", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    symbol: symbol.reference,
+                });
+                return data ? data.map(symbol => owner.objectRegistry.getOrCreateSymbol(symbol)) : [];
+            },
+            function* (symbol: Symbol): Generator<ProtocolRequest, readonly Symbol[], ProtocolResponse["result"]> {
+                const data = yield* apiRequest("getRootSymbols", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    symbol: symbol.reference,
+                });
+                return data ? data.map(symbol => owner.objectRegistry.getOrCreateSymbol(symbol)) : [];
+            },
+        );
+    }
+
     /** Get inferred or explicit signature type arguments; empty when the signature has no instantiation. */
     get getTypeArgumentsForResolvedSignature(): {
         (signature: Signature): readonly Type[];

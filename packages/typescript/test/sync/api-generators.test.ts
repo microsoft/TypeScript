@@ -1672,6 +1672,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
                 parityCase("Program", "getDeclarationEmit", program.getDeclarationEmit, assertDeepEquivalent, ["/src/index.ts"]),
 
                 parityCase("Checker", "getMergedSymbol", checker.getMergedSymbol, assertSymbolsEquivalent, interfaceSymbol),
+                parityCase("Checker", "getRootSymbols", checker.getRootSymbols, assertSymbolArraysEquivalent, boxedOptSymbol),
                 parityCase("Checker", "getSymbolOfNode", checker.getSymbolOfNode, assertOptionalSymbolsEquivalent, interfaceDeclaration),
                 parityCase("Checker", "getSymbolOfNode", checker.getSymbolOfNode, assertOptionalSymbolsEquivalent, interfaceDeclaration.name),
                 parityCase("Checker", "getSymbolOfDeclaration", checker.getSymbolOfDeclaration, assertSymbolsEquivalent, interfaceDeclaration),

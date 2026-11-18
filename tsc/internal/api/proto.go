@@ -223,6 +223,7 @@ const (
 	MethodGetImmediateAliasedSymbol                  Method = "getImmediateAliasedSymbol"
 	MethodGetTargetSymbol                            Method = "getTargetSymbol"
 	MethodGetMergedSymbol                            Method = "getMergedSymbol"
+	MethodGetRootSymbols                             Method = "getRootSymbols"
 	MethodGetSymbolOfNode                            Method = "getSymbolOfNode"
 	MethodGetSymbolOfDeclarationForChecker           Method = "getSymbolOfDeclarationForChecker"
 	MethodGetParentOfSymbolForChecker                Method = "getParentOfSymbolForChecker"
@@ -763,6 +764,7 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodGetImmediateAliasedSymbol:                  unmarshallerFor[CheckerSymbolParams],
 	MethodGetTargetSymbol:                            unmarshallerFor[CheckerSymbolParams],
 	MethodGetMergedSymbol:                            unmarshallerFor[CheckerSymbolParams],
+	MethodGetRootSymbols:                             unmarshallerFor[CheckerSymbolParams],
 	MethodGetSymbolOfNode:                            unmarshallerFor[CheckerNodeParams],
 	MethodGetSymbolOfDeclarationForChecker:           unmarshallerFor[CheckerNodeParams],
 	MethodGetParentOfSymbolForChecker:                unmarshallerFor[CheckerSymbolParams],

@@ -2336,6 +2336,16 @@ function encodeNumberLiteralValue(value: number): number | string {
 }
 
 export class Checker {
+    /** Get the original symbols underlying a synthetic, instantiated, or mapped property. */
+    async getRootSymbols(symbol: Symbol): Promise<readonly Symbol[]> {
+        const data = await this.client.apiRequest("getRootSymbols", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            symbol: symbol.reference,
+        });
+        return data ? data.map(symbol => this.objectRegistry.getOrCreateSymbol(symbol)) : [];
+    }
+
     /** Get inferred or explicit signature type arguments; empty when the signature has no instantiation. */
     async getTypeArgumentsForResolvedSignature(signature: Signature): Promise<readonly Type[]> {
         return signature.getTypeArguments();
