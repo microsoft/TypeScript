@@ -65,3 +65,22 @@ func (s *Session) handleSymbolToExpression(ctx context.Context, params *SymbolTo
 	}
 	return s.encodeCheckerNode(setup.checker.SymbolToExpression(symbol, ast.SymbolFlags(params.Meaning), location, nodebuilder.Flags(params.Flags)))
 }
+
+// @gen-proto-result: SourceFileResponse
+// @gen-proto-nullable
+func (s *Session) handleSymbolToParameterDeclaration(ctx context.Context, params *SymbolToDeclarationParams) (any, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+	symbol, err := setup.resolveSymbolHandle(params.Symbol)
+	if err != nil {
+		return nil, err
+	}
+	location, err := setup.resolveLocation(params.Location, nil, nil)
+	if err != nil {
+		return nil, err
+	}
+	return s.encodeCheckerNode(setup.checker.SymbolToParameterDeclaration(symbol, location, nodebuilder.Flags(params.Flags)))
+}

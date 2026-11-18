@@ -194,6 +194,7 @@ const (
 	MethodSymbolToString                             Method = "symbolToString"
 	MethodSymbolToEntityName                         Method = "symbolToEntityName"
 	MethodSymbolToExpression                         Method = "symbolToExpression"
+	MethodSymbolToParameterDeclaration               Method = "symbolToParameterDeclaration"
 	MethodSignatureToString                          Method = "signatureToString"
 	MethodIsContextSensitive                         Method = "isContextSensitive"
 	MethodGetReturnTypeOfSignature                   Method = "getReturnTypeOfSignature"
@@ -735,6 +736,7 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodSymbolToString:                             unmarshallerFor[SymbolToStringParams],
 	MethodSymbolToEntityName:                         unmarshallerFor[SymbolToNodeParams],
 	MethodSymbolToExpression:                         unmarshallerFor[SymbolToNodeParams],
+	MethodSymbolToParameterDeclaration:               unmarshallerFor[SymbolToDeclarationParams],
 	MethodSignatureToString:                          unmarshallerFor[SignatureToStringParams],
 	MethodIsContextSensitive:                         unmarshallerFor[GetContextualTypeParams],
 	MethodGetReturnTypeOfSignature:                   unmarshallerFor[GetSignaturePropertyParams],
@@ -1897,6 +1899,14 @@ type SignatureToStringParams struct {
 	Signature SignatureID    `json:"signature"`
 	Location  NodeHandle     `json:"location,omitempty"`
 	Flags     uint32         `json:"flags,omitempty"`
+}
+
+type SymbolToDeclarationParams struct {
+	Snapshot SnapshotID      `json:"snapshot"`
+	Project  project.Handle  `json:"project"`
+	Symbol   SymbolReference `json:"symbol"`
+	Location NodeHandle      `json:"location,omitempty"`
+	Flags    uint32          `json:"flags,omitempty"`
 }
 
 // SignatureToSignatureDeclarationParams are the parameters for the signatureToSignatureDeclaration method.

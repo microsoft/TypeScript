@@ -1121,6 +1121,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleSymbolToEntityName(ctx, parsed.(*SymbolToNodeParams))
 	case string(MethodSymbolToExpression):
 		return s.handleSymbolToExpression(ctx, parsed.(*SymbolToNodeParams))
+	case string(MethodSymbolToParameterDeclaration):
+		return s.handleSymbolToParameterDeclaration(ctx, parsed.(*SymbolToDeclarationParams))
 	case string(MethodSignatureToString):
 		return s.handleSignatureToString(ctx, parsed.(*SignatureToStringParams))
 	case string(MethodPrintNode):
@@ -1398,6 +1400,7 @@ func isSourceFileResponseMethod(method Method) bool {
 		MethodTypeToTypeNode,
 		MethodSymbolToEntityName,
 		MethodSymbolToExpression,
+		MethodSymbolToParameterDeclaration,
 		MethodSignatureToSignatureDeclaration:
 		return true
 	default:

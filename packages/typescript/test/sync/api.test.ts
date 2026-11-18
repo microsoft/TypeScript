@@ -8832,6 +8832,23 @@ export const obj = { m: 1, s: "hi", b: true };
         assert.equal(api.printer.printNode(expression), "N.value");
     });
 
+    test("symbolToParameterDeclaration preserves optional and rest parameters", () => {
+        const source = `declare function fn(first?: string, ...rest: number[]): void;`;
+        using api = spawnAPI({ "/tsconfig.json": "{}", "/main.ts": source });
+        const snapshot = api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const file = project.program.getSourceFile("/main.ts");
+        assert.ok(file);
+        for (const [name, expected] of [["first", "first?: string"], ["rest", "...rest: number[]"]]) {
+            const symbol = project.checker.getSymbolAtPosition("/main.ts", source.indexOf(name));
+            assert.ok(symbol);
+            const parameter = project.checker.symbolToParameterDeclaration(symbol, file);
+            assert.ok(parameter);
+            assert.equal(parameter.kind, SyntaxKind.Parameter);
+            assert.equal(api.printer.printNode(parameter), expected);
+        }
+    });
+
     test("typeToString", () => {
         using api = spawnAPI(emitterFiles);
 

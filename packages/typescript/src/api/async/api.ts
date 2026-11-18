@@ -2922,6 +2922,18 @@ export class Checker {
         return decodeNode(binaryData) as Expression;
     }
 
+    async symbolToParameterDeclaration(symbol: Symbol, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): Promise<ParameterDeclaration | undefined> {
+        const binaryData = await this.client.apiRequestBinary("symbolToParameterDeclaration", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            symbol: symbol.reference,
+            location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+            flags,
+        });
+        if (!binaryData) return undefined;
+        return decodeNode(binaryData) as ParameterDeclaration;
+    }
+
     /** Formats a call or construct signature, using the signature's own kind. */
     async signatureToString(signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags): Promise<string> {
         return this.client.apiRequest("signatureToString", {
