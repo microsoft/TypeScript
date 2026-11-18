@@ -103,6 +103,32 @@ test("canHaveModifiers includes the reparsed import kind in its narrowed type", 
     }
 });
 
+test("getCombinedNodeFlags follows binding declarations to their list and statement", () => {
+    using api = spawnAPI();
+    const source = api.createSourceFile(
+        "/flags.ts",
+        "/** @deprecated */ export const [{ value }] = input; let other = 1; var plain = 2;",
+    ).sourceFile;
+    for (const statement of source.statements) {
+        assert.ok(astModule.isVariableStatement(statement));
+        const list = statement.declarationList;
+        const declaration = list.declarations[0];
+        const expected = declaration.flags | list.flags | statement.flags;
+        assert.strictEqual(astModule.getCombinedNodeFlags(declaration), expected);
+        assert.strictEqual(astModule.getCombinedNodeFlags(list), list.flags | statement.flags);
+        assert.strictEqual(astModule.getCombinedNodeFlags(statement), statement.flags);
+        declaration.forEachChild(function walk(node) {
+            if (astModule.isBindingElement(node)) {
+                assert.strictEqual(astModule.getCombinedNodeFlags(node), expected);
+            }
+            node.forEachChild(walk);
+        });
+    }
+    assert.strictEqual(astModule.getCombinedNodeFlags(source), source.flags);
+    const detached = factory.createVariableDeclaration(factory.createIdentifier("detached"));
+    assert.strictEqual(astModule.getCombinedNodeFlags(detached), detached.flags);
+});
+
 test("canHaveModifiers recognizes declarations without an existing modifier list", () => {
     using api = spawnAPI();
     const source = api.createSourceFile(

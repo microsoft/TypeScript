@@ -137,17 +137,26 @@ function getModifierFlags(node: Node): ModifierFlags {
 }
 
 export function getCombinedModifierFlags(node: Declaration): ModifierFlags {
+    return getCombinedFlags(node, getModifierFlags);
+}
+
+/** Includes flags carried by a binding's root declaration, declaration list, and statement. */
+export function getCombinedNodeFlags(node: Node): NodeFlags {
+    return getCombinedFlags(node, node => node.flags);
+}
+
+function getCombinedFlags(node: Node, getFlags: (node: Node) => number): number {
     let current: Node | undefined = getRootDeclaration(node);
-    let flags = getModifierFlags(current);
+    let flags = getFlags(current);
     if (current.kind === SyntaxKind.VariableDeclaration) {
         current = current.parent;
     }
     if (current?.kind === SyntaxKind.VariableDeclarationList) {
-        flags |= getModifierFlags(current);
+        flags |= getFlags(current);
         current = current.parent;
     }
     if (current?.kind === SyntaxKind.VariableStatement) {
-        flags |= getModifierFlags(current);
+        flags |= getFlags(current);
     }
     return flags;
 }
