@@ -95,6 +95,12 @@ type UserPreferences struct {
 	AutoImportSpecifierExcludeRegexes []string
 }
 
+func (p UserPreferences) Equal(other UserPreferences) bool {
+	return p.ImportModuleSpecifierPreference == other.ImportModuleSpecifierPreference &&
+		p.ImportModuleSpecifierEnding == other.ImportModuleSpecifierEnding &&
+		core.UnorderedEqual(p.AutoImportSpecifierExcludeRegexes, other.AutoImportSpecifierExcludeRegexes)
+}
+
 type ModuleSpecifierOptions struct {
 	OverrideImportMode core.ResolutionMode
 }
