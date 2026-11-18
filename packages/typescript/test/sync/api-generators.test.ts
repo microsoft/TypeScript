@@ -3,6 +3,7 @@ import {
     type Identifier,
     isCallExpression,
     isClassDeclaration,
+    isConstructorDeclaration,
     isEnumDeclaration,
     isExportDeclaration,
     isFunctionDeclaration,
@@ -113,6 +114,7 @@ export type Union = Derived | string;
 export enum Choice { First = 1, Second = "second" }
 export class Unimported { value = "extra"; }
 export type Mapped<T> = { [K in keyof T as \`get\${Capitalize<string & K>}\`]: T[K] };
+export class ParameterProperty { constructor(public parameter: string) {} }
 `,
     "/src/index.ts": `
 /// <reference types="parity" />
@@ -1492,6 +1494,8 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
             const unionAlias = cast(modelsFile.statements[9], isTypeAliasDeclaration);
             const enumDeclaration = cast(modelsFile.statements[10], isEnumDeclaration);
             const mappedAlias = cast(modelsFile.statements[12], isTypeAliasDeclaration);
+            const parameterPropertyClass = cast(modelsFile.statements[13], isClassDeclaration);
+            const parameterProperty = cast(parameterPropertyClass.members[0], isConstructorDeclaration).parameters[0];
 
             const importedDerivedSymbol = checker.getSymbolAtLocation(importedDerived)!;
             const combineSymbol = checker.getSymbolAtLocation(combineDeclaration.name!)!;
@@ -1663,6 +1667,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
                 parityCase("Checker", "getSymbolOfNode", checker.getSymbolOfNode, assertOptionalSymbolsEquivalent, interfaceDeclaration),
                 parityCase("Checker", "getSymbolOfNode", checker.getSymbolOfNode, assertOptionalSymbolsEquivalent, interfaceDeclaration.name),
                 parityCase("Checker", "getSymbolOfDeclaration", checker.getSymbolOfDeclaration, assertSymbolsEquivalent, interfaceDeclaration),
+                parityCase("Checker", "getSymbolsOfParameterPropertyDeclaration", checker.getSymbolsOfParameterPropertyDeclaration, assertDeepEquivalent, parameterProperty),
                 parityCase("Checker", "getParentOfSymbol", checker.getParentOfSymbol, assertOptionalSymbolsEquivalent, unimportedSymbol),
                 parityCase("Checker", "getSymbolAtLocation", selectGeneratorMethod<[node: Node], Symbol | undefined>(checker.getSymbolAtLocation), assertOptionalSymbolsEquivalent, importedDerived),
                 parityCase("Checker", "getSymbolAtLocation", checker.getSymbolAtLocation, assertOptionalSymbolArraysEquivalent, [importedDerived, combineDeclaration.name!]),

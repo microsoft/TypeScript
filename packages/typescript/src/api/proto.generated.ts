@@ -130,6 +130,7 @@ export interface APIMethodInfo {
     getTargetOfSignature: APIMethod<GetSignaturePropertyParams, SignatureResponse | null>;
     isOptionalParameter: APIMethod<CheckerNodeParams, boolean>;
     isValidPropertyAccess: APIMethod<IsValidPropertyAccessParams, boolean>;
+    getSymbolsOfParameterPropertyDeclaration: APIMethod<CheckerNodeParams, ParameterPropertySymbolsResponse>;
     getContextualType: APIMethod<GetContextualTypeParams, TypeResponse | null>;
     getContextualTypeForArgument: APIMethod<GetContextualTypeForArgumentParams, TypeResponse | null>;
     getAwaitedType: APIMethod<CheckerTypeParams, TypeResponse | null>;
@@ -814,6 +815,11 @@ export interface IsValidPropertyAccessParams {
     propertyName: string;
 }
 
+export interface ParameterPropertySymbolsResponse {
+    parameter: SymbolResponse;
+    property: SymbolResponse;
+}
+
 /** GetContextualTypeParams returns the contextual type for a node. */
 export interface GetContextualTypeParams {
     snapshot: number;
@@ -1351,6 +1357,7 @@ export interface BatchRequest {
         | "getSymbolsAtLocations"
         | "getSymbolsAtPositions"
         | "getSymbolsInScope"
+        | "getSymbolsOfParameterPropertyDeclaration"
         | "getSymbolsOfSourceFiles"
         | "getSyntacticDiagnostics"
         | "getTargetOfSignature"
@@ -1548,6 +1555,7 @@ export interface BatchResponse {
         | "getSymbolsAtLocations"
         | "getSymbolsAtPositions"
         | "getSymbolsInScope"
+        | "getSymbolsOfParameterPropertyDeclaration"
         | "getSymbolsOfSourceFiles"
         | "getSyntacticDiagnostics"
         | "getTargetOfSignature"

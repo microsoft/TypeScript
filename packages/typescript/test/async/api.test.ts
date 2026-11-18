@@ -11,6 +11,7 @@ import {
     InternalSymbolName,
     isCallExpression,
     isClassDeclaration,
+    isConstructorDeclaration,
     isExpressionStatement,
     isFunctionDeclaration,
     isIdentifier,
@@ -171,6 +172,32 @@ import {
 } from "./api.testUtils.ts";
 
 const concurrency = areTestsFiltered();
+
+describe("Checker - getSymbolsOfParameterPropertyDeclaration", { concurrency }, () => {
+    test("returns distinct parameter and property symbols with canonical identities", async () => {
+        await using api = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/index.ts": `class C { constructor(public __value: string) { __value; this.__value; } }`,
+        });
+        const snapshot = await api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const file = await project.program.getSourceFile("/index.ts");
+        assert.ok(file);
+        const cls = file.statements[0];
+        assert.ok(isClassDeclaration(cls));
+        const ctor = cls.members[0];
+        assert.ok(isConstructorDeclaration(ctor));
+        const node = ctor.parameters[0];
+        const result = await project.checker.getSymbolsOfParameterPropertyDeclaration(node);
+        assert.notStrictEqual(result.parameter, result.property);
+        assert.equal(result.parameter.name, "__value");
+        assert.equal(result.property.name, "__value");
+        assert.strictEqual(result.parameter, await project.checker.getSymbolAtPosition("/index.ts", file.text.indexOf("__value;")));
+        assert.strictEqual(result.property, await project.checker.getSymbolAtLocation(node.name));
+        const type = await project.checker.getDeclaredTypeOfSymbol(await project.checker.getSymbolOfDeclaration(cls));
+        assert.strictEqual(result.property, await type.getProperty("__value"));
+    });
+});
 
 describe("Checker - isValidPropertyAccess", { concurrency }, () => {
     test("checks existence and private/protected accessibility without changing the accessed name", async () => {

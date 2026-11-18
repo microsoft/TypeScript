@@ -4218,6 +4218,40 @@ function encodeNumberLiteralValue(value: number): number | string {
 }
 
 export class Checker {
+    /** Get the distinct constructor parameter and instance property symbols of a parameter property. */
+    get getSymbolsOfParameterPropertyDeclaration(): {
+        (node: ParameterDeclaration): { parameter: Symbol; property: Symbol; };
+        gen(node: ParameterDeclaration): Generator<ProtocolRequest, { parameter: Symbol; property: Symbol; }, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getSymbolsOfParameterPropertyDeclaration",
+            function (node: ParameterDeclaration): { parameter: Symbol; property: Symbol; } {
+                const data = owner.client.apiRequest("getSymbolsOfParameterPropertyDeclaration", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    location: getNodeRequestHandle(node),
+                });
+                return {
+                    parameter: owner.objectRegistry.getOrCreateSymbol(data.parameter),
+                    property: owner.objectRegistry.getOrCreateSymbol(data.property),
+                };
+            },
+            function* (node: ParameterDeclaration): Generator<ProtocolRequest, { parameter: Symbol; property: Symbol; }, ProtocolResponse["result"]> {
+                const data = yield* apiRequest("getSymbolsOfParameterPropertyDeclaration", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    location: getNodeRequestHandle(node),
+                });
+                return {
+                    parameter: owner.objectRegistry.getOrCreateSymbol(data.parameter),
+                    property: owner.objectRegistry.getOrCreateSymbol(data.property),
+                };
+            },
+        );
+    }
+
     /** Whether the named property exists and is accessible at this access location. */
     get isValidPropertyAccess(): {
         (node: PropertyAccessExpression | QualifiedName | ImportTypeNode, propertyName: string): boolean;

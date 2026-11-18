@@ -1077,6 +1077,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleIsOptionalParameter(ctx, parsed.(*CheckerNodeParams))
 	case string(MethodIsValidPropertyAccess):
 		return s.handleIsValidPropertyAccess(ctx, parsed.(*IsValidPropertyAccessParams))
+	case string(MethodGetSymbolsOfParameterPropertyDeclaration):
+		return s.handleGetSymbolsOfParameterPropertyDeclaration(ctx, parsed.(*CheckerNodeParams))
 	case string(MethodGetContextualTypeForArgument):
 		return s.handleGetContextualTypeForArgument(ctx, parsed.(*GetContextualTypeForArgumentParams))
 	case string(MethodGetAwaitedType):
@@ -3973,6 +3975,27 @@ func (s *Session) handleIsOptionalParameter(ctx context.Context, params *Checker
 		return false, fmt.Errorf("%w: expected a parameter declaration", ErrInvalidRequest)
 	}
 	return setup.checker.IsOptionalParameter(node), nil
+}
+
+func (s *Session) handleGetSymbolsOfParameterPropertyDeclaration(ctx context.Context, params *CheckerNodeParams) (*ParameterPropertySymbolsResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	node, err := setup.sd.resolveNodeHandle(setup.program, params.Location)
+	if err != nil {
+		return nil, err
+	}
+	if !ast.IsParameterPropertyDeclaration(node, node.Parent) || !ast.IsIdentifier(node.Name()) {
+		return nil, fmt.Errorf("%w: expected a parameter property with an identifier name", ErrInvalidRequest)
+	}
+	parameter, property := setup.checker.GetSymbolsOfParameterPropertyDeclaration(node, node.Name().Text())
+	return &ParameterPropertySymbolsResponse{
+		Parameter: setup.newSymbolResponse(parameter),
+		Property:  setup.newSymbolResponse(property),
+	}, nil
 }
 
 func (s *Session) handleIsValidPropertyAccess(ctx context.Context, params *IsValidPropertyAccessParams) (bool, error) {

@@ -2334,6 +2334,19 @@ function encodeNumberLiteralValue(value: number): number | string {
 }
 
 export class Checker {
+    /** Get the distinct constructor parameter and instance property symbols of a parameter property. */
+    async getSymbolsOfParameterPropertyDeclaration(node: ParameterDeclaration): Promise<{ parameter: Symbol; property: Symbol; }> {
+        const data = await this.client.apiRequest("getSymbolsOfParameterPropertyDeclaration", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            location: getNodeRequestHandle(node),
+        });
+        return {
+            parameter: this.objectRegistry.getOrCreateSymbol(data.parameter),
+            property: this.objectRegistry.getOrCreateSymbol(data.property),
+        };
+    }
+
     /** Whether the named property exists and is accessible at this access location. */
     async isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName | ImportTypeNode, propertyName: string): Promise<boolean> {
         return this.client.apiRequest("isValidPropertyAccess", {

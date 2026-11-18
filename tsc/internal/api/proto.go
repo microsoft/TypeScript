@@ -169,6 +169,7 @@ const (
 	// Checker methods
 	MethodIsOptionalParameter                        Method = "isOptionalParameter"
 	MethodIsValidPropertyAccess                      Method = "isValidPropertyAccess"
+	MethodGetSymbolsOfParameterPropertyDeclaration   Method = "getSymbolsOfParameterPropertyDeclaration"
 	MethodGetContextualType                          Method = "getContextualType"
 	MethodGetContextualTypeForArgument               Method = "getContextualTypeForArgument"
 	MethodGetAwaitedType                             Method = "getAwaitedType"
@@ -709,6 +710,7 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodGetContextualType:                          unmarshallerFor[GetContextualTypeParams],
 	MethodIsOptionalParameter:                        unmarshallerFor[CheckerNodeParams],
 	MethodIsValidPropertyAccess:                      unmarshallerFor[IsValidPropertyAccessParams],
+	MethodGetSymbolsOfParameterPropertyDeclaration:   unmarshallerFor[CheckerNodeParams],
 	MethodGetContextualTypeForArgument:               unmarshallerFor[GetContextualTypeForArgumentParams],
 	MethodGetAwaitedType:                             unmarshallerFor[CheckerTypeParams],
 	MethodGetBaseTypeOfLiteralType:                   unmarshallerFor[GetBaseTypeOfLiteralTypeParams],
@@ -1962,6 +1964,11 @@ type IsValidPropertyAccessParams struct {
 	Project      project.Handle `json:"project"`
 	Location     NodeHandle     `json:"location"`
 	PropertyName string         `json:"propertyName"`
+}
+
+type ParameterPropertySymbolsResponse struct {
+	Parameter *SymbolResponse `json:"parameter" nonnil:"true"`
+	Property  *SymbolResponse `json:"property" nonnil:"true"`
 }
 
 // CheckerSymbolParams are parameters for checker methods that operate on a symbol.
