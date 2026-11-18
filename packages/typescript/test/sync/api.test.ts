@@ -8849,6 +8849,23 @@ export const obj = { m: 1, s: "hi", b: true };
         }
     });
 
+    test("symbolToTypeParameterDeclarations preserves constraints and defaults", () => {
+        const source = `interface Box<T extends string = "default", U = T> {} interface Plain {}`;
+        using api = spawnAPI({ "/tsconfig.json": "{}", "/main.ts": source });
+        const snapshot = api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const symbol = project.checker.getSymbolAtPosition("/main.ts", source.indexOf("Box"));
+        assert.ok(symbol);
+        const declarations = project.checker.symbolToTypeParameterDeclarations(symbol);
+        assert.ok(declarations);
+        assert.equal(declarations.length, 2);
+        assert.equal(api.printer.printNode(declarations[0]), `T extends string = "default"`);
+        assert.equal(api.printer.printNode(declarations[1]), "U = T");
+        const plain = project.checker.getSymbolAtPosition("/main.ts", source.indexOf("Plain"));
+        assert.ok(plain);
+        assert.equal(project.checker.symbolToTypeParameterDeclarations(plain), undefined);
+    });
+
     test("typeToString", () => {
         using api = spawnAPI(emitterFiles);
 

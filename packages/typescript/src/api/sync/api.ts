@@ -58,6 +58,7 @@ import {
     type StringLiteralLikeNode,
     type SyntaxKind,
     type TypeNode,
+    type TypeParameterDeclaration,
     unescapeLeadingUnderscores,
 } from "../../ast/index.ts";
 import { assertNever } from "../../internal/utils.ts";
@@ -5842,6 +5843,37 @@ export class Checker {
                 );
                 if (!binaryData) return undefined;
                 return decodeNode(binaryData) as ParameterDeclaration;
+            },
+        );
+    }
+
+    get symbolToTypeParameterDeclarations(): {
+        (symbol: Symbol, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): readonly TypeParameterDeclaration[] | undefined;
+        gen(symbol: Symbol, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): Generator<ProtocolRequest, readonly TypeParameterDeclaration[] | undefined, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "symbolToTypeParameterDeclarations",
+            function (symbol: Symbol, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): readonly TypeParameterDeclaration[] | undefined {
+                const data = owner.client.apiRequest("symbolToTypeParameterDeclarations", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    symbol: symbol.reference,
+                    location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+                    flags,
+                });
+                return data?.length ? data.map(node => decodeNode(sourceFileResponseToUint8Array(node)!) as TypeParameterDeclaration) : undefined;
+            },
+            function* (symbol: Symbol, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): Generator<ProtocolRequest, readonly TypeParameterDeclaration[] | undefined, ProtocolResponse["result"]> {
+                const data = yield* apiRequest("symbolToTypeParameterDeclarations", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    symbol: symbol.reference,
+                    location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+                    flags,
+                });
+                return data?.length ? data.map(node => decodeNode(sourceFileResponseToUint8Array(node)!) as TypeParameterDeclaration) : undefined;
             },
         );
     }

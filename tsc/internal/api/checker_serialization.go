@@ -84,3 +84,33 @@ func (s *Session) handleSymbolToParameterDeclaration(ctx context.Context, params
 	}
 	return s.encodeCheckerNode(setup.checker.SymbolToParameterDeclaration(symbol, location, nodebuilder.Flags(params.Flags)))
 }
+
+// @gen-proto-nullable
+func (s *Session) handleSymbolToTypeParameterDeclarations(ctx context.Context, params *SymbolToDeclarationParams) ([]*SourceFileResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+	symbol, err := setup.resolveSymbolHandle(params.Symbol)
+	if err != nil {
+		return nil, err
+	}
+	location, err := setup.resolveLocation(params.Location, nil, nil)
+	if err != nil {
+		return nil, err
+	}
+	nodes := setup.checker.SymbolToTypeParameterDeclarations(symbol, location, nodebuilder.Flags(params.Flags))
+	if len(nodes) == 0 {
+		return nil, nil
+	}
+	result := make([]*SourceFileResponse, len(nodes))
+	for i, node := range nodes {
+		data, _, err := encoder.EncodeNode(node, nil)
+		if err != nil {
+			return nil, fmt.Errorf("failed to encode type parameter declaration: %w", err)
+		}
+		result[i] = &SourceFileResponse{Data: base64.StdEncoding.EncodeToString(data)}
+	}
+	return result, nil
+}

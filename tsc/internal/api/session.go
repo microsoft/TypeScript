@@ -1123,6 +1123,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleSymbolToExpression(ctx, parsed.(*SymbolToNodeParams))
 	case string(MethodSymbolToParameterDeclaration):
 		return s.handleSymbolToParameterDeclaration(ctx, parsed.(*SymbolToDeclarationParams))
+	case string(MethodSymbolToTypeParameterDeclarations):
+		return s.handleSymbolToTypeParameterDeclarations(ctx, parsed.(*SymbolToDeclarationParams))
 	case string(MethodSignatureToString):
 		return s.handleSignatureToString(ctx, parsed.(*SignatureToStringParams))
 	case string(MethodPrintNode):

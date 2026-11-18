@@ -321,6 +321,12 @@ function assertOptionalNodesEquivalent(actual: Node | undefined, expected: Node 
     assertOptionalEquivalent(actual, expected, assertNodesEquivalent, message);
 }
 
+function assertOptionalNodeArraysEquivalent(actual: readonly Node[] | undefined, expected: readonly Node[] | undefined, message?: string): void {
+    assertOptionalEquivalent(actual, expected, (a, b) => {
+        assertArrayElementsEquivalent(a, b, assertNodesEquivalent, message);
+    }, message);
+}
+
 function assertSourceFilesEquivalent(actual: SourceFile, expected: SourceFile, message?: string): void {
     assertNodesEquivalent(actual, expected, message);
     assert.equal(actual.fileName, expected.fileName, message);
@@ -1712,6 +1718,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
                 parityCase("Checker", "symbolToEntityName", checker.symbolToEntityName, assertOptionalNodesEquivalent, interfaceSymbol, SymbolFlags.Type, interfaceDeclaration),
                 parityCase("Checker", "symbolToExpression", checker.symbolToExpression, assertOptionalNodesEquivalent, combineSymbol, SymbolFlags.Value, combineDeclaration),
                 parityCase("Checker", "symbolToParameterDeclaration", checker.symbolToParameterDeclaration, assertOptionalNodesEquivalent, signature.getParameters()[0], combineDeclaration),
+                parityCase("Checker", "symbolToTypeParameterDeclarations", checker.symbolToTypeParameterDeclarations, assertOptionalNodeArraysEquivalent, interfaceSymbol, interfaceDeclaration),
                 parityCase("Checker", "signatureToSignatureDeclaration", checker.signatureToSignatureDeclaration, assertOptionalNodesEquivalent, signature, SyntaxKind.FunctionDeclaration, combineDeclaration),
                 parityCase("Checker", "signatureToString", checker.signatureToString, assertDeepEquivalent, signature, combineDeclaration),
                 parityCase("Checker", "typeToString", checker.typeToString, assertDeepEquivalent, interfaceType, interfaceDeclaration),

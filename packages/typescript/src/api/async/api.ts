@@ -39,6 +39,7 @@ import {
     type StringLiteralLikeNode,
     type SyntaxKind,
     type TypeNode,
+    type TypeParameterDeclaration,
     unescapeLeadingUnderscores,
 } from "../../ast/index.ts";
 import { assertNever } from "../../internal/utils.ts";
@@ -2932,6 +2933,17 @@ export class Checker {
         });
         if (!binaryData) return undefined;
         return decodeNode(binaryData) as ParameterDeclaration;
+    }
+
+    async symbolToTypeParameterDeclarations(symbol: Symbol, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): Promise<readonly TypeParameterDeclaration[] | undefined> {
+        const data = await this.client.apiRequest("symbolToTypeParameterDeclarations", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            symbol: symbol.reference,
+            location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+            flags,
+        });
+        return data?.length ? data.map(node => decodeNode(sourceFileResponseToUint8Array(node)!) as TypeParameterDeclaration) : undefined;
     }
 
     /** Formats a call or construct signature, using the signature's own kind. */
