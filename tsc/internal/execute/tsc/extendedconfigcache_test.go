@@ -1,12 +1,14 @@
 package tsc_test
 
 import (
+	"sync"
 	"testing"
 
 	"github.com/microsoft/TypeScript/tsc/internal/execute/tsc"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs/wrapvfs"
 )
 
 func TestExtendedConfigCacheExtendsCircularity(t *testing.T) {
@@ -73,6 +75,57 @@ func TestExtendedConfigCacheExtendsCircularity(t *testing.T) {
 		}
 		assertHasCircularityDiagnostic(t, cmd)
 	})
+}
+
+func TestExtendedConfigCacheConcurrentExtendsCircularity(t *testing.T) {
+	t.Parallel()
+
+	fs := vfstest.FromMap(map[string]any{
+		"/cycle/tsconfig.json": `{"extends": "./a.json"}`,
+		"/cycle/a.json":        `{"extends": "./b.json"}`,
+		"/cycle/b.json":        `{"extends": "./tsconfig.json"}`,
+		"/p1/tsconfig.json":    `{"extends": "../cycle/a.json"}`,
+		"/p1/main.ts":          `export const x = 1;`,
+		"/p2/tsconfig.json":    `{"extends": "../cycle/b.json"}`,
+		"/p2/main.ts":          `export const x = 2;`,
+	}, tspath.CaseInsensitive)
+	var firstA, firstB sync.Once
+	var reads sync.WaitGroup
+	reads.Add(2)
+	configFS := wrapvfs.Wrap(fs, wrapvfs.Replacements{
+		ReadFile: func(path tspath.RootedFilePath) (string, bool) {
+			// Ensure both cache misses begin parsing before either follows its extends.
+			var first *sync.Once
+			switch path {
+			case "/cycle/a.json":
+				first = &firstA
+			case "/cycle/b.json":
+				first = &firstB
+			}
+			if first != nil {
+				first.Do(func() {
+					reads.Done()
+					reads.Wait()
+				})
+			}
+			return fs.ReadFile(path)
+		},
+	})
+	cache := &tsc.ExtendedConfigCache{}
+	results := make(chan *tsoptions.ParsedCommandLine, 2)
+	for _, path := range []tspath.RootedFilePath{"/p1/tsconfig.json", "/p2/tsconfig.json"} {
+		go func() {
+			cmd, _ := tsoptions.GetParsedCommandLineOfConfigFile(path, nil, nil, configFS, cache)
+			results <- cmd
+		}()
+	}
+	for range 2 {
+		cmd := <-results
+		if cmd == nil {
+			t.Fatal("expected non-nil ParsedCommandLine")
+		}
+		assertHasCircularityDiagnostic(t, cmd)
+	}
 }
 
 func TestExtendedConfigCacheNullExtendsDoesNotPanic(t *testing.T) {
