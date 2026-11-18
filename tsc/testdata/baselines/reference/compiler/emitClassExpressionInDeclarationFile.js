@@ -64,3 +64,43 @@ exports.Test = Test;
 const test = new Test();
 Test.getTags();
 test.tags();
+
+
+//// [emitClassExpressionInDeclarationFile.d.ts]
+type circularReference_recursive = {
+    tags(c: circularReference_recursive): circularReference_recursive;
+};
+export declare var simpleExample: {
+    new (): {
+        tags(): void;
+    };
+    getTags(): void;
+};
+export declare var circularReference: {
+    new (): circularReference_recursive;
+    getTags(c: circularReference_recursive): circularReference_recursive;
+};
+export declare class FooItem {
+    foo(): void;
+    name?: string;
+}
+export type Constructor<T> = new (...args: any[]) => T;
+export declare function WithTags<T extends Constructor<FooItem>>(Base: T): {
+    new (...args: any[]): {
+        tags(): void;
+        foo(): void;
+        name?: string;
+    };
+    getTags(): void;
+} & T;
+declare const Test_base: {
+    new (...args: any[]): {
+        tags(): void;
+        foo(): void;
+        name?: string;
+    };
+    getTags(): void;
+} & typeof FooItem;
+export declare class Test extends Test_base {
+}
+export {};

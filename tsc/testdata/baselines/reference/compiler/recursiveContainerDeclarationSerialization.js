@@ -69,6 +69,16 @@ export const h = g;
 export const n = g;
 
 
+//// [local.d.ts]
+type array_recursive = array_recursive[];
+type tuple_recursive = [tuple_recursive];
+type readonlyTuple_recursive = readonly [readonlyTuple_recursive];
+type union_recursive = (string | union_recursive)[];
+export declare function array(): array_recursive;
+export declare function tuple(): tuple_recursive;
+export declare function readonlyTuple(): readonlyTuple_recursive;
+export declare function union(): string | union_recursive;
+export {};
 //// [nameable.d.ts]
 export type RecursiveArray = RecursiveArray[];
 export type RecursiveTuple = readonly [RecursiveTuple];
