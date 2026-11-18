@@ -1,0 +1,44 @@
+//// [tests/cases/compiler/iteratorFlatMapRejectsPrimitiveString.ts] ////
+
+=== iteratorFlatMapRejectsPrimitiveString.ts ===
+const numbers = Iterator.from([1]);
+>numbers : Symbol(numbers, Decl(iteratorFlatMapRejectsPrimitiveString.ts, 0, 5))
+>Iterator.from : Symbol(IteratorConstructor.from, Decl(lib.es2025.iterator.d.ts, --, --))
+>Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2025.iterator.d.ts, --, --))
+>from : Symbol(IteratorConstructor.from, Decl(lib.es2025.iterator.d.ts, --, --))
+
+const fromArray: string[] = numbers.flatMap(() => ["ab"]).toArray();
+>fromArray : Symbol(fromArray, Decl(iteratorFlatMapRejectsPrimitiveString.ts, 1, 5))
+>numbers.flatMap(() => ["ab"]).toArray : Symbol(IteratorObject.toArray, Decl(lib.es2025.iterator.d.ts, --, --))
+>numbers.flatMap : Symbol(IteratorObject.flatMap, Decl(lib.es2025.iterator.d.ts, --, --))
+>numbers : Symbol(numbers, Decl(iteratorFlatMapRejectsPrimitiveString.ts, 0, 5))
+>flatMap : Symbol(IteratorObject.flatMap, Decl(lib.es2025.iterator.d.ts, --, --))
+>toArray : Symbol(IteratorObject.toArray, Decl(lib.es2025.iterator.d.ts, --, --))
+
+const fromIterator: string[] = numbers.flatMap(() => Iterator.from("ab")).toArray();
+>fromIterator : Symbol(fromIterator, Decl(iteratorFlatMapRejectsPrimitiveString.ts, 2, 5))
+>numbers.flatMap(() => Iterator.from("ab")).toArray : Symbol(IteratorObject.toArray, Decl(lib.es2025.iterator.d.ts, --, --))
+>numbers.flatMap : Symbol(IteratorObject.flatMap, Decl(lib.es2025.iterator.d.ts, --, --))
+>numbers : Symbol(numbers, Decl(iteratorFlatMapRejectsPrimitiveString.ts, 0, 5))
+>flatMap : Symbol(IteratorObject.flatMap, Decl(lib.es2025.iterator.d.ts, --, --))
+>Iterator.from : Symbol(IteratorConstructor.from, Decl(lib.es2025.iterator.d.ts, --, --))
+>Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2025.iterator.d.ts, --, --))
+>from : Symbol(IteratorConstructor.from, Decl(lib.es2025.iterator.d.ts, --, --))
+>toArray : Symbol(IteratorObject.toArray, Decl(lib.es2025.iterator.d.ts, --, --))
+
+const fromBoxedString: string[] = numbers.flatMap(() => new String("ab")).toArray();
+>fromBoxedString : Symbol(fromBoxedString, Decl(iteratorFlatMapRejectsPrimitiveString.ts, 3, 5))
+>numbers.flatMap(() => new String("ab")).toArray : Symbol(IteratorObject.toArray, Decl(lib.es2025.iterator.d.ts, --, --))
+>numbers.flatMap : Symbol(IteratorObject.flatMap, Decl(lib.es2025.iterator.d.ts, --, --))
+>numbers : Symbol(numbers, Decl(iteratorFlatMapRejectsPrimitiveString.ts, 0, 5))
+>flatMap : Symbol(IteratorObject.flatMap, Decl(lib.es2025.iterator.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 7 more)
+>toArray : Symbol(IteratorObject.toArray, Decl(lib.es2025.iterator.d.ts, --, --))
+
+numbers.flatMap(() => "ab").toArray();
+>numbers.flatMap(() => "ab").toArray : Symbol(IteratorObject.toArray, Decl(lib.es2025.iterator.d.ts, --, --))
+>numbers.flatMap : Symbol(IteratorObject.flatMap, Decl(lib.es2025.iterator.d.ts, --, --))
+>numbers : Symbol(numbers, Decl(iteratorFlatMapRejectsPrimitiveString.ts, 0, 5))
+>flatMap : Symbol(IteratorObject.flatMap, Decl(lib.es2025.iterator.d.ts, --, --))
+>toArray : Symbol(IteratorObject.toArray, Decl(lib.es2025.iterator.d.ts, --, --))
+
