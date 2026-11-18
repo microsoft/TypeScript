@@ -2946,6 +2946,18 @@ export class Checker {
         return data?.length ? data.map(node => decodeNode(sourceFileResponseToUint8Array(node)!) as TypeParameterDeclaration) : undefined;
     }
 
+    async typeParameterToDeclaration(parameter: TypeParameter, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): Promise<TypeParameterDeclaration | undefined> {
+        const binaryData = await this.client.apiRequestBinary("typeParameterToDeclaration", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            type: parameter.id,
+            location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+            flags,
+        });
+        if (!binaryData) return undefined;
+        return decodeNode(binaryData) as TypeParameterDeclaration;
+    }
+
     /** Formats a call or construct signature, using the signature's own kind. */
     async signatureToString(signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags): Promise<string> {
         return this.client.apiRequest("signatureToString", {

@@ -196,6 +196,7 @@ const (
 	MethodSymbolToExpression                         Method = "symbolToExpression"
 	MethodSymbolToParameterDeclaration               Method = "symbolToParameterDeclaration"
 	MethodSymbolToTypeParameterDeclarations          Method = "symbolToTypeParameterDeclarations"
+	MethodTypeParameterToDeclaration                 Method = "typeParameterToDeclaration"
 	MethodSignatureToString                          Method = "signatureToString"
 	MethodIsContextSensitive                         Method = "isContextSensitive"
 	MethodGetReturnTypeOfSignature                   Method = "getReturnTypeOfSignature"
@@ -739,6 +740,7 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodSymbolToExpression:                         unmarshallerFor[SymbolToNodeParams],
 	MethodSymbolToParameterDeclaration:               unmarshallerFor[SymbolToDeclarationParams],
 	MethodSymbolToTypeParameterDeclarations:          unmarshallerFor[SymbolToDeclarationParams],
+	MethodTypeParameterToDeclaration:                 unmarshallerFor[TypeToTypeNodeParams],
 	MethodSignatureToString:                          unmarshallerFor[SignatureToStringParams],
 	MethodIsContextSensitive:                         unmarshallerFor[GetContextualTypeParams],
 	MethodGetReturnTypeOfSignature:                   unmarshallerFor[GetSignaturePropertyParams],

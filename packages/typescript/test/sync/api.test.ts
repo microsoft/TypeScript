@@ -8866,6 +8866,21 @@ export const obj = { m: 1, s: "hi", b: true };
         assert.equal(project.checker.symbolToTypeParameterDeclarations(plain), undefined);
     });
 
+    test("typeParameterToDeclaration preserves constraints and defaults", () => {
+        const source = `interface Box<T extends string = "default"> { value: T; }`;
+        using api = spawnAPI({ "/tsconfig.json": "{}", "/main.ts": source });
+        const snapshot = api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const type = project.checker.getTypeAtPosition("/main.ts", source.indexOf("Box"));
+        assert.ok(type?.isClassOrInterface());
+        const [parameter] = type.getTypeParameters();
+        assert.ok(parameter);
+        const declaration = project.checker.typeParameterToDeclaration(parameter);
+        assert.ok(declaration);
+        assert.equal(declaration.kind, SyntaxKind.TypeParameter);
+        assert.equal(api.printer.printNode(declaration), `T extends string = "default"`);
+    });
+
     test("typeToString", () => {
         using api = spawnAPI(emitterFiles);
 

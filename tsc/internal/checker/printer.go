@@ -320,6 +320,12 @@ func (c *Checker) SymbolToTypeParameterDeclarations(symbol *ast.Symbol, enclosin
 	return nodeBuilder.SymbolToTypeParameterDeclarations(symbol, enclosingDeclaration, flags, nodebuilder.InternalFlagsNone, nil)
 }
 
+func (c *Checker) TypeParameterToDeclaration(parameter *Type, enclosingDeclaration *ast.Node, flags nodebuilder.Flags) *ast.Node {
+	nodeBuilder, release := c.getNodeBuilder()
+	defer release()
+	return nodeBuilder.TypeParameterToDeclaration(parameter, enclosingDeclaration, flags, nodebuilder.InternalFlagsNone, nil)
+}
+
 // ExpandSymbolForHover produces declaration strings for a symbol with verbosity support for expandable hover.
 func (c *Checker) ExpandSymbolForHover(symbol *ast.Symbol, meaning ast.SymbolFlags, vc *VerbosityContext) string {
 	nodeBuilder, release := c.getNodeBuilder()

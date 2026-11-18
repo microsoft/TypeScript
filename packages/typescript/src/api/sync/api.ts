@@ -5878,6 +5878,41 @@ export class Checker {
         );
     }
 
+    get typeParameterToDeclaration(): {
+        (parameter: TypeParameter, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): TypeParameterDeclaration | undefined;
+        gen(parameter: TypeParameter, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): Generator<ProtocolRequest, TypeParameterDeclaration | undefined, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "typeParameterToDeclaration",
+            function (parameter: TypeParameter, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): TypeParameterDeclaration | undefined {
+                const binaryData = owner.client.apiRequestBinary("typeParameterToDeclaration", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    type: parameter.id,
+                    location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+                    flags,
+                });
+                if (!binaryData) return undefined;
+                return decodeNode(binaryData) as TypeParameterDeclaration;
+            },
+            function* (parameter: TypeParameter, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): Generator<ProtocolRequest, TypeParameterDeclaration | undefined, ProtocolResponse["result"]> {
+                const binaryData = sourceFileResponseToUint8Array(
+                    yield* apiRequest("typeParameterToDeclaration", {
+                        snapshot: owner.snapshotId,
+                        project: owner.project.handle,
+                        type: parameter.id,
+                        location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+                        flags,
+                    }),
+                );
+                if (!binaryData) return undefined;
+                return decodeNode(binaryData) as TypeParameterDeclaration;
+            },
+        );
+    }
+
     /** Formats a call or construct signature, using the signature's own kind. */
     get signatureToString(): {
         (signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string;

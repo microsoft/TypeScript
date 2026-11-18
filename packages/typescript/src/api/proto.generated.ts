@@ -157,6 +157,7 @@ export interface APIMethodInfo {
     symbolToExpression: APIMethod<SymbolToNodeParams, SourceFileResponse | null>;
     symbolToParameterDeclaration: APIMethod<SymbolToDeclarationParams, SourceFileResponse | null>;
     symbolToTypeParameterDeclarations: APIMethod<SymbolToDeclarationParams, SourceFileResponse[] | null>;
+    typeParameterToDeclaration: APIMethod<TypeToTypeNodeParams, SourceFileResponse | null>;
     signatureToString: APIMethod<SignatureToStringParams, string>;
     isContextSensitive: APIMethod<GetContextualTypeParams, boolean>;
     getReturnTypeOfSignature: APIMethod<GetSignaturePropertyParams, TypeResponse>;
@@ -1447,6 +1448,7 @@ export interface BatchRequest {
         | "transpileDeclarationFromFile"
         | "transpileModule"
         | "transpileModuleFromFile"
+        | "typeParameterToDeclaration"
         | "typeToString"
         | "typeToTypeNode"
         | "updateSnapshot";
@@ -1648,6 +1650,7 @@ export interface BatchResponse {
         | "transpileDeclarationFromFile"
         | "transpileModule"
         | "transpileModuleFromFile"
+        | "typeParameterToDeclaration"
         | "typeToString"
         | "typeToTypeNode"
         | "updateSnapshot";

@@ -7,6 +7,7 @@ import (
 
 	"github.com/microsoft/TypeScript/tsc/internal/api/encoder"
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
+	"github.com/microsoft/TypeScript/tsc/internal/checker"
 	"github.com/microsoft/TypeScript/tsc/internal/nodebuilder"
 )
 
@@ -25,6 +26,28 @@ func (s *Session) encodeCheckerNode(node *ast.Node) (any, error) {
 		return RawBinary(data), nil
 	}
 	return &SourceFileResponse{Data: base64.StdEncoding.EncodeToString(data)}, nil
+}
+
+// @gen-proto-result: SourceFileResponse
+// @gen-proto-nullable
+func (s *Session) handleTypeParameterToDeclaration(ctx context.Context, params *TypeToTypeNodeParams) (any, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+	parameter, err := setup.resolveTypeHandle(params.Type)
+	if err != nil {
+		return nil, err
+	}
+	if parameter.Flags()&checker.TypeFlagsTypeParameter == 0 {
+		return nil, fmt.Errorf("%w: expected a type parameter", ErrClientError)
+	}
+	location, err := setup.resolveLocation(params.Location, nil, nil)
+	if err != nil {
+		return nil, err
+	}
+	return s.encodeCheckerNode(setup.checker.TypeParameterToDeclaration(parameter, location, nodebuilder.Flags(params.Flags)))
 }
 
 // @gen-proto-result: SourceFileResponse
