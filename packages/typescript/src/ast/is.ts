@@ -217,9 +217,12 @@ function isShorthandPropertyNameUseSite(useSite: Node): boolean {
     return isIdentifier(useSite) && isShorthandPropertyAssignment(useSite.parent) && useSite.parent.name === useSite;
 }
 
-type AncestorCallbackResult = boolean | "quit";
+export type AncestorCallbackResult = boolean | "quit";
 
-function findAncestor(node: Node, callback: (node: Node) => AncestorCallbackResult): Node | undefined {
+/** Searches a node and its ancestors, stopping if the callback returns `"quit"`. */
+export function findAncestor<T extends Node>(node: Node | undefined, callback: (node: Node) => node is T): T | undefined;
+export function findAncestor(node: Node | undefined, callback: (node: Node) => AncestorCallbackResult): Node | undefined;
+export function findAncestor(node: Node | undefined, callback: (node: Node) => AncestorCallbackResult): Node | undefined {
     while (node) {
         const result = callback(node);
         if (result === "quit") {

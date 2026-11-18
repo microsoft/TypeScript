@@ -89,6 +89,29 @@ import { runBenchmarks } from "./ast.bench.ts";
 
 const concurrency = areTestsFiltered();
 
+test("findAncestor visits the starting node and supports narrowing and early termination", () => {
+    using api = spawnAPI();
+    const source = api.createSourceFile("/ancestor.ts", "class C { method() { return 1; } }").sourceFile;
+    const declaration = source.statements[0];
+    assert.ok(astModule.isClassDeclaration(declaration));
+    const member = declaration.members[0];
+    assert.ok(astModule.isMethodDeclaration(member));
+    const ancestor: ClassDeclaration | undefined = astModule.findAncestor(member, astModule.isClassDeclaration);
+    assert.strictEqual(ancestor, declaration);
+    assert.strictEqual(astModule.findAncestor(member, node => node === member), member);
+    const visited: Node[] = [];
+    assert.strictEqual(
+        astModule.findAncestor(member, node => {
+            visited.push(node);
+            return node === declaration ? "quit" : false;
+        }),
+        undefined,
+    );
+    assert.deepStrictEqual(visited, [member, declaration]);
+    assert.strictEqual(astModule.findAncestor(source, () => false), undefined);
+    assert.strictEqual(astModule.findAncestor(undefined, () => true), undefined);
+});
+
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
