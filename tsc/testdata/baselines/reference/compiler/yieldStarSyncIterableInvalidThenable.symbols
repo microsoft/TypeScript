@@ -1,0 +1,64 @@
+//// [tests/cases/compiler/yieldStarSyncIterableInvalidThenable.ts] ////
+
+=== yieldStarSyncIterableInvalidThenable.ts ===
+declare const thenable: { then(onfulfilled: number): void };
+>thenable : Symbol(thenable, Decl(yieldStarSyncIterableInvalidThenable.ts, 0, 13))
+>then : Symbol(then, Decl(yieldStarSyncIterableInvalidThenable.ts, 0, 25))
+>onfulfilled : Symbol(onfulfilled, Decl(yieldStarSyncIterableInvalidThenable.ts, 0, 31))
+
+declare const iterable: Iterable<number, typeof thenable>;
+>iterable : Symbol(iterable, Decl(yieldStarSyncIterableInvalidThenable.ts, 1, 13))
+>Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+>thenable : Symbol(thenable, Decl(yieldStarSyncIterableInvalidThenable.ts, 0, 13))
+
+declare const union: number[] | Iterable<typeof thenable>;
+>union : Symbol(union, Decl(yieldStarSyncIterableInvalidThenable.ts, 2, 13))
+>Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+>thenable : Symbol(thenable, Decl(yieldStarSyncIterableInvalidThenable.ts, 0, 13))
+
+declare const asyncIterable: AsyncIterable<typeof thenable>;
+>asyncIterable : Symbol(asyncIterable, Decl(yieldStarSyncIterableInvalidThenable.ts, 3, 13))
+>AsyncIterable : Symbol(AsyncIterable, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>thenable : Symbol(thenable, Decl(yieldStarSyncIterableInvalidThenable.ts, 0, 13))
+
+async function* invalid() {
+>invalid : Symbol(invalid, Decl(yieldStarSyncIterableInvalidThenable.ts, 3, 60))
+
+    yield* [thenable];
+>thenable : Symbol(thenable, Decl(yieldStarSyncIterableInvalidThenable.ts, 0, 13))
+
+    yield thenable;
+>thenable : Symbol(thenable, Decl(yieldStarSyncIterableInvalidThenable.ts, 0, 13))
+
+    for await (const value of [thenable]) {}
+>value : Symbol(value, Decl(yieldStarSyncIterableInvalidThenable.ts, 8, 20))
+>thenable : Symbol(thenable, Decl(yieldStarSyncIterableInvalidThenable.ts, 0, 13))
+
+    yield* iterable;
+>iterable : Symbol(iterable, Decl(yieldStarSyncIterableInvalidThenable.ts, 1, 13))
+
+    yield* iterable;
+>iterable : Symbol(iterable, Decl(yieldStarSyncIterableInvalidThenable.ts, 1, 13))
+
+    yield* union;
+>union : Symbol(union, Decl(yieldStarSyncIterableInvalidThenable.ts, 2, 13))
+
+    for await (const value of union) {}
+>value : Symbol(value, Decl(yieldStarSyncIterableInvalidThenable.ts, 13, 20))
+>union : Symbol(union, Decl(yieldStarSyncIterableInvalidThenable.ts, 2, 13))
+
+    for await (const value of asyncIterable) {}
+>value : Symbol(value, Decl(yieldStarSyncIterableInvalidThenable.ts, 14, 20))
+>asyncIterable : Symbol(asyncIterable, Decl(yieldStarSyncIterableInvalidThenable.ts, 3, 13))
+}
+
+async function* valid() {
+>valid : Symbol(valid, Decl(yieldStarSyncIterableInvalidThenable.ts, 15, 1))
+
+    yield* [1];
+    yield* [Promise.resolve(1)];
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+}
+

@@ -6497,18 +6497,37 @@ func (c *Checker) getIterationTypesOfIterable(t *Type, use IterationUse, errorNo
 		}
 		noCache = true
 	}
-	result := c.getIterationTypesOfIterableWorker(t, use, errorNode)
+	// Keep the original use site while probing union constituents without iterable diagnostics.
+	getAsyncFromSyncIterationTypes := func(iterationTypes IterationTypes) IterationTypes {
+		if iterationTypes == (IterationTypes{c.anyType, c.anyType, c.anyType}) {
+			return iterationTypes
+		}
+		if errorNode != nil {
+			c.getGlobalAwaitedSymbol()
+		}
+		diagnostic := core.IfElse(use&IterationUseYieldStarFlag != 0,
+			diagnostics.Type_of_iterated_elements_of_a_yield_Asterisk_operand_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member,
+			diagnostics.Type_of_await_operand_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member)
+		yieldType := c.getAwaitedTypeEx(iterationTypes.yieldType, errorNode, diagnostic)
+		returnType := c.getAwaitedTypeEx(iterationTypes.returnType, errorNode, diagnostic)
+		// A cached fallback to any would hide the error at subsequent uses of this iterable.
+		if yieldType == nil || returnType == nil {
+			noCache = true
+		}
+		return IterationTypes{core.OrElse(yieldType, c.anyType), core.OrElse(returnType, c.anyType), iterationTypes.nextType}
+	}
+	result := c.getIterationTypesOfIterableWorker(t, use, errorNode, getAsyncFromSyncIterationTypes)
 	if !noCache {
 		c.iterationTypesCache[key] = result
 	}
 	return result
 }
 
-func (c *Checker) getIterationTypesOfIterableWorker(t *Type, use IterationUse, errorNode *ast.Node) IterationTypes {
+func (c *Checker) getIterationTypesOfIterableWorker(t *Type, use IterationUse, errorNode *ast.Node, getAsyncFromSyncIterationTypes func(IterationTypes) IterationTypes) IterationTypes {
 	if t.flags&TypeFlagsUnion != 0 {
 		allIterationTypes := make([]IterationTypes, 0, len(t.Types()))
 		for _, constituent := range t.Types() {
-			iterationTypes := c.getIterationTypesOfIterableWorker(constituent, use, nil)
+			iterationTypes := c.getIterationTypesOfIterableWorker(constituent, use, nil, getAsyncFromSyncIterationTypes)
 			if !iterationTypes.hasTypes() {
 				if errorNode != nil {
 					c.addDeferredDiagnostic(func() {
@@ -6526,7 +6545,7 @@ func (c *Checker) getIterationTypesOfIterableWorker(t *Type, use IterationUse, e
 		iterationTypes := c.getIterationTypesOfIterableFast(t, c.asyncIterationTypesResolver)
 		if iterationTypes.hasTypes() {
 			if use&IterationUseForOfFlag != 0 {
-				return c.getAsyncFromSyncIterationTypes(iterationTypes, errorNode)
+				return getAsyncFromSyncIterationTypes(iterationTypes)
 			}
 			return iterationTypes
 		}
@@ -6544,7 +6563,7 @@ func (c *Checker) getIterationTypesOfIterableWorker(t *Type, use IterationUse, e
 		iterationTypes := c.getIterationTypesOfIterableFast(t, c.syncIterationTypesResolver)
 		if iterationTypes.hasTypes() {
 			if use&IterationUseAllowsAsyncIterablesFlag != 0 {
-				return c.getAsyncFromSyncIterationTypes(iterationTypes, errorNode)
+				return getAsyncFromSyncIterationTypes(iterationTypes)
 			}
 			return iterationTypes
 		}
@@ -6556,7 +6575,7 @@ func (c *Checker) getIterationTypesOfIterableWorker(t *Type, use IterationUse, e
 				}
 			}
 			if use&IterationUseAllowsAsyncIterablesFlag != 0 {
-				return c.getAsyncFromSyncIterationTypes(iterationTypes, errorNode)
+				return getAsyncFromSyncIterationTypes(iterationTypes)
 			}
 			return iterationTypes
 		}
@@ -6651,22 +6670,6 @@ func (c *Checker) getIterationTypeUnion(iterationTypes []IterationTypes, f func(
 		return nil
 	}
 	return c.getUnionType(types)
-}
-
-func (c *Checker) getAsyncFromSyncIterationTypes(iterationTypes IterationTypes, errorNode *ast.Node) IterationTypes {
-	if !iterationTypes.hasTypes() ||
-		iterationTypes.yieldType == c.anyType && iterationTypes.returnType == c.anyType && iterationTypes.nextType == c.anyType {
-		return iterationTypes
-	}
-	// if we're requesting diagnostics, report errors for a missing `Awaited<T>`.
-	if errorNode != nil {
-		c.getGlobalAwaitedSymbol()
-	}
-	return IterationTypes{
-		yieldType:  core.OrElse(c.getAwaitedTypeEx(iterationTypes.yieldType, errorNode, nil), c.anyType),
-		returnType: core.OrElse(c.getAwaitedTypeEx(iterationTypes.returnType, errorNode, nil), c.anyType),
-		nextType:   iterationTypes.nextType,
-	}
 }
 
 // Gets the *yield*, *return*, and *next* types of an `Iterable`-like or `AsyncIterable`-like
@@ -21018,7 +21021,9 @@ func (c *Checker) checkAndAggregateYieldOperandTypes(fn *ast.Node, checkMode Che
 		if yieldExpr.Expression() != nil && c.isConstContext(yieldExpr.Expression()) {
 			yieldExprType = c.getRegularTypeOfLiteralType(yieldExprType)
 		}
-		yieldTypes = core.AppendIfUnique(yieldTypes, c.getYieldedTypeOfYieldExpression(yieldExpr, yieldExprType, c.anyType, isAsync))
+		if yieldType := c.getYieldedTypeOfYieldExpression(yieldExpr, yieldExprType, c.anyType, isAsync); yieldType != nil {
+			yieldTypes = core.AppendIfUnique(yieldTypes, yieldType)
+		}
 		var nextType *Type
 		if yieldExpr.AsYieldExpression().AsteriskToken != nil {
 			iterationTypes := c.getIterationTypesOfIterable(yieldExprType, core.IfElse(isAsync, IterationUseAsyncYieldStar, IterationUseYieldStar), yieldExpr.Expression())

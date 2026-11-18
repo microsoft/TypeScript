@@ -1,0 +1,49 @@
+yieldStarSyncIterableInvalidThenable.ts(7,12): error TS1322: Type of iterated elements of a 'yield*' operand must either be a valid promise or must not contain a callable 'then' member.
+yieldStarSyncIterableInvalidThenable.ts(8,11): error TS1321: Type of 'yield' operand in an async generator must either be a valid promise or must not contain a callable 'then' member.
+yieldStarSyncIterableInvalidThenable.ts(9,31): error TS1320: Type of 'await' operand must either be a valid promise or must not contain a callable 'then' member.
+yieldStarSyncIterableInvalidThenable.ts(11,12): error TS1322: Type of iterated elements of a 'yield*' operand must either be a valid promise or must not contain a callable 'then' member.
+yieldStarSyncIterableInvalidThenable.ts(12,12): error TS1322: Type of iterated elements of a 'yield*' operand must either be a valid promise or must not contain a callable 'then' member.
+yieldStarSyncIterableInvalidThenable.ts(13,12): error TS1322: Type of iterated elements of a 'yield*' operand must either be a valid promise or must not contain a callable 'then' member.
+yieldStarSyncIterableInvalidThenable.ts(14,31): error TS1320: Type of 'await' operand must either be a valid promise or must not contain a callable 'then' member.
+yieldStarSyncIterableInvalidThenable.ts(15,31): error TS1320: Type of 'await' operand must either be a valid promise or must not contain a callable 'then' member.
+
+
+==== yieldStarSyncIterableInvalidThenable.ts (8 errors) ====
+    declare const thenable: { then(onfulfilled: number): void };
+    declare const iterable: Iterable<number, typeof thenable>;
+    declare const union: number[] | Iterable<typeof thenable>;
+    declare const asyncIterable: AsyncIterable<typeof thenable>;
+    
+    async function* invalid() {
+        yield* [thenable];
+               ~~~~~~~~~~
+!!! error TS1322: Type of iterated elements of a 'yield*' operand must either be a valid promise or must not contain a callable 'then' member.
+        yield thenable;
+              ~~~~~~~~
+!!! error TS1321: Type of 'yield' operand in an async generator must either be a valid promise or must not contain a callable 'then' member.
+        for await (const value of [thenable]) {}
+                                  ~~~~~~~~~~
+!!! error TS1320: Type of 'await' operand must either be a valid promise or must not contain a callable 'then' member.
+    
+        yield* iterable;
+               ~~~~~~~~
+!!! error TS1322: Type of iterated elements of a 'yield*' operand must either be a valid promise or must not contain a callable 'then' member.
+        yield* iterable;
+               ~~~~~~~~
+!!! error TS1322: Type of iterated elements of a 'yield*' operand must either be a valid promise or must not contain a callable 'then' member.
+        yield* union;
+               ~~~~~
+!!! error TS1322: Type of iterated elements of a 'yield*' operand must either be a valid promise or must not contain a callable 'then' member.
+        for await (const value of union) {}
+                                  ~~~~~
+!!! error TS1320: Type of 'await' operand must either be a valid promise or must not contain a callable 'then' member.
+        for await (const value of asyncIterable) {}
+                                  ~~~~~~~~~~~~~
+!!! error TS1320: Type of 'await' operand must either be a valid promise or must not contain a callable 'then' member.
+    }
+    
+    async function* valid() {
+        yield* [1];
+        yield* [Promise.resolve(1)];
+    }
+    
