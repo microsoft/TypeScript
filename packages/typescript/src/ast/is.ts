@@ -52,8 +52,6 @@ import {
     isComputedPropertyName,
     isHeritageClause,
     isIdentifier,
-    isJSDocAugmentsTag,
-    isJSDocImplementsTag,
     isJSDocLink,
     isJSDocLinkCode,
     isJSDocLinkPlain,
@@ -371,9 +369,7 @@ function isInExpressionContext(node: Node): boolean {
 
 function isPartOfTypeExpressionWithTypeArguments(node: ExpressionWithTypeArguments): boolean {
     const parent = node.parent;
-    return isHeritageClause(parent) && (!isClassLikeDeclaration(parent.parent) || parent.token === SyntaxKind.ImplementsKeyword) ||
-        isJSDocImplementsTag(parent) ||
-        isJSDocAugmentsTag(parent);
+    return isHeritageClause(parent) && (!isClassLikeDeclaration(parent.parent) || parent.token === SyntaxKind.ImplementsKeyword);
 }
 
 function isForStatementExpression(node: Node, parent: ForStatement): boolean {

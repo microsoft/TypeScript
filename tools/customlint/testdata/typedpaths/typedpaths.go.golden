@@ -178,6 +178,15 @@
 		_ = tspath.RootedPathFromNormalized("")
 		                                    ~
 !!! typedpaths: constant argument to RootedPathFromNormalized must be rooted and normalized
+		_ = tspath.RootedPathFromNormalized("c:d://server/a?b")
+		                                    ~
+!!! typedpaths: constant argument to RootedPathFromNormalized must be rooted and normalized
+		_ = tspath.RootedPathFromNormalized("1:x://server/a#b")
+		                                    ~
+!!! typedpaths: constant argument to RootedPathFromNormalized must be rooted and normalized
+		_ = tspath.RootedPathFromAbsolute("1://server/a?b")
+		                                  ~
+!!! typedpaths: constant argument to RootedPathFromAbsolute must be absolute
 		_ = tspath.RootedFilePathFromNormalized("/project/../file.ts")
 		                                        ~
 !!! typedpaths: constant argument to RootedFilePathFromNormalized must be rooted and normalized
@@ -238,6 +247,11 @@
 		_ = tspath.RootedDirectoryPathFromAbsolute("file:///project")
 		_ = tspath.RootedPathFromNormalized("/")
 		_ = tspath.RootedPathFromNormalized("FILE:///C:/")
+		_ = tspath.RootedPathFromNormalized("C:/a?b#c")
+		_ = tspath.RootedPathFromAbsolute("c:/d://server/a?b")
+		_ = tspath.RootedPathFromNormalized("c:d://server/a")
+		_ = tspath.RootedPathFromNormalized("1:x://server/a")
+		_ = tspath.RootedPathFromNormalized("1://server/a")
 		_ = tspath.RootedFilePathFromNormalized(constantRoot + "/file.ts")
 		_ = tspath.RootedDirectoryPathFromNormalized("^/untitled")
 		_ = tspath.RelativePathFromNormalized("../project/")

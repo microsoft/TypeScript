@@ -526,6 +526,25 @@ func (p *ParsedCommandLine) PossiblyMatchesDirectoryName(directoryPath tspath.Pa
 	return false
 }
 
+func (p *ParsedCommandLine) IsExcludedDirectory(directoryPath tspath.RootedDirectoryPath) bool {
+	specs := p.getConfigFileSpecs()
+	if specs == nil {
+		return false
+	}
+	// Match excluded directories themselves, not just the files beneath them.
+	directorySpecs := core.Map(specs.validatedExcludeSpecs, func(spec tspath.PathPattern) tspath.PathPattern {
+		text := spec.AsString()
+		if before, ok := strings.CutSuffix(text, "/*"); ok {
+			text = before + "/**"
+		} else if vfsmatch.IsImplicitGlob(tspath.GetBaseFileName(text)) {
+			text = tspath.CombinePaths(text, "**")
+		}
+		return tspath.ToPathPattern(text)
+	})
+	matcher := vfsmatch.NewSpecMatcher(directorySpecs, p.BaseDirectory(), vfsmatch.UsageExclude, p.CaseSensitivity())
+	return matcher != nil && matcher.MatchString(directoryPath.AsString())
+}
+
 func (p *ParsedCommandLine) GetMatchedFileSpec(fileName tspath.RootedFilePath) string {
 	return p.getConfigFileSpecs().getMatchedFileSpec(p.caseSensitivity.PathKey(tspath.RootedPath(fileName))).AsString()
 }

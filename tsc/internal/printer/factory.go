@@ -494,8 +494,8 @@ type AssignedNameOptions struct {
 	IgnoreAssignedName bool // indicates whether the assigned name of a declaration shouldn't be considered.
 }
 
-func (f *NodeFactory) getName(node *ast.Declaration, emitFlags EmitFlags, opts AssignedNameOptions) *ast.IdentifierNode {
-	var nodeName *ast.IdentifierNode
+func (f *NodeFactory) getName(node *ast.Declaration, emitFlags EmitFlags, opts AssignedNameOptions) *ast.Node {
+	var nodeName *ast.Node
 	if node != nil {
 		if opts.IgnoreAssignedName {
 			nodeName = ast.GetNonAssignedNameOfDeclaration(node)
@@ -522,14 +522,14 @@ func (f *NodeFactory) getName(node *ast.Declaration, emitFlags EmitFlags, opts A
 // Gets the local name of a declaration. This is primarily used for declarations that can be referred to by name in the
 // declaration's immediate scope (classes, enums, namespaces). A local name will *never* be prefixed with a module or
 // namespace export modifier like "exports." when emitted as an expression.
-func (f *NodeFactory) GetLocalName(node *ast.Declaration) *ast.IdentifierNode {
+func (f *NodeFactory) GetLocalName(node *ast.Declaration) *ast.Node {
 	return f.GetLocalNameEx(node, AssignedNameOptions{})
 }
 
 // Gets the local name of a declaration. This is primarily used for declarations that can be referred to by name in the
 // declaration's immediate scope (classes, enums, namespaces). A local name will *never* be prefixed with a module or
 // namespace export modifier like "exports." when emitted as an expression.
-func (f *NodeFactory) GetLocalNameEx(node *ast.Declaration, opts AssignedNameOptions) *ast.IdentifierNode {
+func (f *NodeFactory) GetLocalNameEx(node *ast.Declaration, opts AssignedNameOptions) *ast.Node {
 	return f.getName(node, EFLocalName, opts)
 }
 
@@ -537,7 +537,7 @@ func (f *NodeFactory) GetLocalNameEx(node *ast.Declaration, opts AssignedNameOpt
 // referred to by name in the declaration's immediate scope (classes, enums, namespaces). An
 // export name will *always* be prefixed with an module or namespace export modifier like
 // `"exports."` when emitted as an expression if the name points to an exported symbol.
-func (f *NodeFactory) GetExportName(node *ast.Declaration) *ast.IdentifierNode {
+func (f *NodeFactory) GetExportName(node *ast.Declaration) *ast.Node {
 	return f.GetExportNameEx(node, AssignedNameOptions{})
 }
 
@@ -545,21 +545,21 @@ func (f *NodeFactory) GetExportName(node *ast.Declaration) *ast.IdentifierNode {
 // referred to by name in the declaration's immediate scope (classes, enums, namespaces). An
 // export name will *always* be prefixed with an module or namespace export modifier like
 // `"exports."` when emitted as an expression if the name points to an exported symbol.
-func (f *NodeFactory) GetExportNameEx(node *ast.Declaration, opts AssignedNameOptions) *ast.IdentifierNode {
+func (f *NodeFactory) GetExportNameEx(node *ast.Declaration, opts AssignedNameOptions) *ast.Node {
 	return f.getName(node, EFExportName, opts)
 }
 
 // Gets the name of a declaration to use during emit.
-func (f *NodeFactory) GetDeclarationName(node *ast.Declaration) *ast.IdentifierNode {
+func (f *NodeFactory) GetDeclarationName(node *ast.Declaration) *ast.Node {
 	return f.GetDeclarationNameEx(node, NameOptions{})
 }
 
 // Gets the name of a declaration to use during emit.
-func (f *NodeFactory) GetDeclarationNameEx(node *ast.Declaration, opts NameOptions) *ast.IdentifierNode {
+func (f *NodeFactory) GetDeclarationNameEx(node *ast.Declaration, opts NameOptions) *ast.Node {
 	return f.getName(node, EFNone, AssignedNameOptions{AllowComments: opts.AllowComments, AllowSourceMaps: opts.AllowSourceMaps})
 }
 
-func (f *NodeFactory) GetNamespaceMemberName(ns *ast.IdentifierNode, name *ast.IdentifierNode, opts NameOptions) *ast.IdentifierNode {
+func (f *NodeFactory) GetNamespaceMemberName(ns *ast.IdentifierNode, name *ast.IdentifierNode, opts NameOptions) *ast.PropertyAccessExpressionNode {
 	if !f.emitContext.HasAutoGenerateInfo(name) {
 		name = name.Clone(f)
 	}

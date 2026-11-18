@@ -553,7 +553,6 @@ func IsFunctionLikeKind(kind Kind) bool {
 	switch kind {
 	case KindMethodSignature,
 		KindCallSignature,
-		KindJSDocSignature,
 		KindConstructSignature,
 		KindIndexSignature,
 		KindFunctionType,
@@ -1694,16 +1693,6 @@ func IsDottedName(node *Node) bool {
 	return false
 }
 
-func HasSamePropertyAccessName(node1, node2 *Node) bool {
-	if node1.Kind == KindIdentifier && node2.Kind == KindIdentifier {
-		return node1.Text() == node2.Text()
-	} else if node1.Kind == KindPropertyAccessExpression && node2.Kind == KindPropertyAccessExpression {
-		return node1.AsPropertyAccessExpression().Name().Text() == node2.AsPropertyAccessExpression().Name().Text() &&
-			HasSamePropertyAccessName(node1.Expression(), node2.Expression())
-	}
-	return false
-}
-
 func IsAmbientModule(node *Node) bool {
 	return IsModuleDeclaration(node) && (node.AsModuleDeclaration().Name().Kind == KindStringLiteral || IsGlobalScopeAugmentation(node))
 }
@@ -2174,9 +2163,7 @@ func isPartOfTypeNodeInParent(node *Node) bool {
 
 func isPartOfTypeExpressionWithTypeArguments(node *Node) bool {
 	parent := node.Parent
-	return IsHeritageClause(parent) && (!IsClassLike(parent.Parent) || parent.AsHeritageClause().Token == KindImplementsKeyword) ||
-		IsJSDocImplementsTag(parent) ||
-		IsJSDocAugmentsTag(parent)
+	return IsHeritageClause(parent) && (!IsClassLike(parent.Parent) || parent.AsHeritageClause().Token == KindImplementsKeyword)
 }
 
 func IsJSDocLinkLike(node *Node) bool {

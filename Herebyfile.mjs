@@ -899,9 +899,9 @@ function goTestFlags(taskName) {
         ...goBuildFlags,
         ...goBuildTags(),
         ...(options.tests ? [`-run=${options.tests}`] : []),
-        // Go 1.27 duplicates promoted AST wrappers, exhausting CI disk under coverage.
+        // Go 1.27 duplicates promoted AST wrappers, exhausting CI disk under coverage and the race detector.
         // Tests strip DWARF when linking; omit it earlier to shrink temporary and cached archives.
-        ...(options.coverage && !options.debug ? ["-gcflags=all=-dwarf=false"] : []),
+        ...((options.coverage || options.race) && !options.debug ? ["-gcflags=all=-dwarf=false"] : []),
         ...(options.coverage ? [`-coverprofile=${path.join(coverageDir, "coverage." + taskName + ".out")}`, "-coverpkg=./..."] : []),
     ];
 }

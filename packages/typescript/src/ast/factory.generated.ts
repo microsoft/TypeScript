@@ -5143,7 +5143,7 @@ export function createJSDocSeeTag(tagName: Identifier, nameExpression?: TypeNode
     }) as unknown as JSDocSeeTag;
 }
 
-export function createJSDocImplementsTag(tagName: Identifier, className: ExpressionWithTypeArguments, comment?: readonly JSDocComment[]): JSDocImplementsTag {
+export function createJSDocImplementsTag(tagName: Identifier, className: TypeReferenceNode, comment?: readonly JSDocComment[]): JSDocImplementsTag {
     return new NodeObject(SyntaxKind.JSDocImplementsTag, {
         tagName,
         className,
@@ -5151,7 +5151,7 @@ export function createJSDocImplementsTag(tagName: Identifier, className: Express
     }) as unknown as JSDocImplementsTag;
 }
 
-export function createJSDocAugmentsTag(tagName: Identifier, className: ExpressionWithTypeArguments, comment?: readonly JSDocComment[]): JSDocAugmentsTag {
+export function createJSDocAugmentsTag(tagName: Identifier, className: TypeReferenceNode, comment?: readonly JSDocComment[]): JSDocAugmentsTag {
     return new NodeObject(SyntaxKind.JSDocAugmentsTag, {
         tagName,
         className,
@@ -5219,7 +5219,7 @@ export function createJSDocTypedefTag(tagName: Identifier, typeExpression?: Node
     }) as unknown as JSDocTypedefTag;
 }
 
-export function createJSDocSignature(typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type?: TypeNode): JSDocSignature {
+export function createJSDocSignature(typeParameters: readonly JSDocTemplateTag[] | undefined, parameters: readonly (JSDocParameterTag | JSDocThisTag)[], type?: JSDocReturnTag): JSDocSignature {
     return new NodeObject(SyntaxKind.JSDocSignature, {
         typeParameters: typeParameters ? createNodeArray(typeParameters) : undefined,
         parameters: createNodeArray(parameters),
@@ -5955,11 +5955,11 @@ export function updateJSDocSeeTag(node: JSDocSeeTag, tagName: Identifier, nameEx
     return node.tagName !== tagName || node.nameExpression !== nameExpression || node.comment !== comment ? createJSDocSeeTag(tagName, nameExpression, comment) : node;
 }
 
-export function updateJSDocImplementsTag(node: JSDocImplementsTag, tagName: Identifier, className: ExpressionWithTypeArguments, comment?: readonly JSDocComment[]): JSDocImplementsTag {
+export function updateJSDocImplementsTag(node: JSDocImplementsTag, tagName: Identifier, className: TypeReferenceNode, comment?: readonly JSDocComment[]): JSDocImplementsTag {
     return node.tagName !== tagName || node.className !== className || node.comment !== comment ? createJSDocImplementsTag(tagName, className, comment) : node;
 }
 
-export function updateJSDocAugmentsTag(node: JSDocAugmentsTag, tagName: Identifier, className: ExpressionWithTypeArguments, comment?: readonly JSDocComment[]): JSDocAugmentsTag {
+export function updateJSDocAugmentsTag(node: JSDocAugmentsTag, tagName: Identifier, className: TypeReferenceNode, comment?: readonly JSDocComment[]): JSDocAugmentsTag {
     return node.tagName !== tagName || node.className !== className || node.comment !== comment ? createJSDocAugmentsTag(tagName, className, comment) : node;
 }
 
@@ -5991,7 +5991,7 @@ export function updateJSDocTypedefTag(node: JSDocTypedefTag, tagName: Identifier
     return node.tagName !== tagName || node.typeExpression !== typeExpression || node.name !== name || node.comment !== comment ? createJSDocTypedefTag(tagName, typeExpression, name, comment) : node;
 }
 
-export function updateJSDocSignature(node: JSDocSignature, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type?: TypeNode): JSDocSignature {
+export function updateJSDocSignature(node: JSDocSignature, typeParameters: readonly JSDocTemplateTag[] | undefined, parameters: readonly (JSDocParameterTag | JSDocThisTag)[], type?: JSDocReturnTag): JSDocSignature {
     return node.typeParameters !== typeParameters || node.parameters !== parameters || node.type !== type ? createJSDocSignature(typeParameters, parameters, type) : node;
 }
 

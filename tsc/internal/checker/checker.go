@@ -5133,7 +5133,11 @@ func (c *Checker) checkInterfaceDeclaration(node *ast.Node) {
 		// run subsequent checks only if first set succeeded
 		if c.checkInheritedPropertiesAreIdentical(t, firstInterfaceDeclaration.Name()) {
 			for _, baseType := range c.getBaseTypes(t) {
-				c.checkTypeAssignableTo(typeWithThis, c.getTypeWithThisArgument(baseType, t.AsInterfaceType().thisType, false), firstInterfaceDeclaration.Name(), diagnostics.Interface_0_incorrectly_extends_interface_1)
+				message := diagnostics.Interface_0_incorrectly_extends_interface_1
+				if baseType.flags&TypeFlagsTypeParameter != 0 {
+					message = diagnostics.Interface_0_cannot_extend_type_parameter_1
+				}
+				c.checkTypeAssignableTo(typeWithThis, c.getTypeWithThisArgument(baseType, t.AsInterfaceType().thisType, false), firstInterfaceDeclaration.Name(), message)
 			}
 			c.checkIndexConstraints(t, symbol /*isStaticIndex*/, false)
 		}
@@ -17319,12 +17323,11 @@ func (c *Checker) checkDeclarationInitializer(declaration *ast.Node, checkMode C
 func (c *Checker) padObjectLiteralType(t *Type, pattern *ast.Node) *Type {
 	var missingElements []*ast.Node
 	for _, e := range pattern.Elements() {
-		if hasDotDotDotToken(e) {
-			continue
-		}
-		name := c.getPropertyNameFromBindingElement(e)
-		if name != ast.InternalSymbolNameMissing && c.getPropertyOfType(t, name) == nil {
-			missingElements = append(missingElements, e)
+		if e.Initializer() != nil {
+			name := c.getPropertyNameFromBindingElement(e)
+			if name != ast.InternalSymbolNameMissing && c.getPropertyOfType(t, name) == nil {
+				missingElements = append(missingElements, e)
+			}
 		}
 	}
 	if len(missingElements) == 0 {
@@ -17336,7 +17339,7 @@ func (c *Checker) padObjectLiteralType(t *Type, pattern *ast.Node) *Type {
 	}
 	for _, e := range missingElements {
 		symbol := c.newSymbol(ast.SymbolFlagsProperty|ast.SymbolFlagsOptional, c.getPropertyNameFromBindingElement(e))
-		c.valueSymbolLinks.Get(symbol).resolvedType = c.getTypeFromBindingElement(e, false /*includePatternInType*/, true /*reportErrors*/)
+		c.valueSymbolLinks.Get(symbol).resolvedType = c.getTypeFromBindingElement(e, false /*includePatternInType*/, false /*reportErrors*/)
 		members.Set(symbol.Name(), symbol)
 	}
 	result := c.newAnonymousType(t.symbol, members, nil, nil, c.getIndexInfosOfType(t))
@@ -23834,8 +23837,14 @@ func isSimpleIdentifierTypeReference(node *ast.Node) bool {
 	return ast.IsTypeReferenceNode(node) && ast.IsIdentifier(node.AsTypeReferenceNode().TypeName) && node.TypeArgumentList() == nil
 }
 
+// isHeritageTypeReference reports whether node names the class or interface
+// in a heritage clause or a JSDoc @augments or @implements tag.
+func isHeritageTypeReference(node *ast.Node) bool {
+	return ast.IsHeritageClause(node.Parent) || ast.IsJSDocAugmentsTag(node.Parent) || ast.IsJSDocImplementsTag(node.Parent)
+}
+
 func (c *Checker) getIntendedTypeFromJSDocTypeReference(node *ast.Node) *Type {
-	if node.Flags&ast.NodeFlagsJSDoc != 0 && ast.IsTypeReferenceNode(node) {
+	if node.Flags&ast.NodeFlagsJSDoc != 0 && ast.IsTypeReferenceNode(node) && !isHeritageTypeReference(node) {
 		typeName := node.AsTypeReferenceNode().TypeName
 		if ast.IsIdentifier(typeName) {
 			typeArgs := node.TypeArguments()
@@ -23995,7 +24004,7 @@ func (c *Checker) getTypeFromClassOrInterfaceReference(node *ast.Node, symbol *a
 		if !isJsImplicitAny && (numTypeArguments < minTypeArgumentCount || numTypeArguments > len(typeParameters)) {
 			var message *diagnostics.Message
 
-			missingAugmentsTag := isJs && ast.IsExpressionWithTypeArguments(node) && !ast.IsJSDocAugmentsTag(node.Parent)
+			missingAugmentsTag := isJs && ast.IsExpressionWithTypeArguments(node)
 			if missingAugmentsTag {
 				message = diagnostics.Expected_0_type_arguments_provide_these_with_an_extends_tag
 				if minTypeArgumentCount < len(typeParameters) {
@@ -24194,10 +24203,15 @@ func (n *TupleNormalizer) normalize(c *Checker, elementTypes []*Type, elementInf
 			} else if isTupleType(t) {
 				spreadTypes := c.getElementTypes(t)
 				if len(spreadTypes)+len(n.types) >= 10_000 {
-					message := core.IfElse(ast.IsPartOfTypeNode(c.currentNode),
-						diagnostics.Type_produces_a_tuple_type_that_is_too_large_to_represent,
-						diagnostics.Expression_produces_a_tuple_type_that_is_too_large_to_represent)
-					c.error(c.currentNode, message)
+					// c.currentNode is nil when declaration emit resolves a type through the emit
+					// resolver. There is no location to report against, and a diagnostic raised
+					// during emit would never be shown on the command line or in the editor.
+					if c.currentNode != nil {
+						message := core.IfElse(ast.IsPartOfTypeNode(c.currentNode),
+							diagnostics.Type_produces_a_tuple_type_that_is_too_large_to_represent,
+							diagnostics.Expression_produces_a_tuple_type_that_is_too_large_to_represent)
+						c.error(c.currentNode, message)
+					}
 					return false
 				}
 				// Spread variadic elements with tuple types into the resulting tuple.

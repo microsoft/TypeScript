@@ -1,4 +1,6 @@
-This repository contains the native TypeScript compiler and language server.
+Consult the section "Contributing to TypeScript (for Agents)" of CONTRIBUTING.md before doing any work.
+
+This repository contains the TypeScript compiler and language server.
 The source directories of interest that we have are:
 
 - `tsc/internal` - Contains the compiler and language server code.
