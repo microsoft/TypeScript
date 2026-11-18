@@ -162,6 +162,14 @@ func (c *Checker) IsOptionalParameter(node *ast.Node) bool {
 	return c.isOptionalParameter(node)
 }
 
+func (c *Checker) GetTypeArgumentsForResolvedSignature(signature *Signature) []*Type {
+	if signature.mapper == nil {
+		return nil
+	}
+	target := core.OrElse(signature.target, signature)
+	return c.instantiateTypes(target.TypeParameters(), signature.mapper)
+}
+
 func (c *Checker) IsValidPropertyAccess(node *ast.Node, propertyName string) bool {
 	return c.isValidPropertyAccess(node, propertyName)
 }

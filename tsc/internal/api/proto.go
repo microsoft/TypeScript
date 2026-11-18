@@ -161,10 +161,11 @@ const (
 	MethodGetTemplateTypeOfMappedType   Method = "getTemplateTypeOfMappedType"
 
 	// Signature sub-property methods
-	MethodGetTypeParametersOfSignature Method = "getTypeParametersOfSignature"
-	MethodGetParametersOfSignature     Method = "getParametersOfSignature"
-	MethodGetThisParameterOfSignature  Method = "getThisParameterOfSignature"
-	MethodGetTargetOfSignature         Method = "getTargetOfSignature"
+	MethodGetTypeParametersOfSignature         Method = "getTypeParametersOfSignature"
+	MethodGetTypeArgumentsForResolvedSignature Method = "getTypeArgumentsForResolvedSignature"
+	MethodGetParametersOfSignature             Method = "getParametersOfSignature"
+	MethodGetThisParameterOfSignature          Method = "getThisParameterOfSignature"
+	MethodGetTargetOfSignature                 Method = "getTargetOfSignature"
 
 	// Checker methods
 	MethodIsOptionalParameter                        Method = "isOptionalParameter"
@@ -703,10 +704,11 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodGetTrueTypeOfConditionalType:  unmarshallerFor[GetTypePropertyParams],
 	MethodGetFalseTypeOfConditionalType: unmarshallerFor[GetTypePropertyParams],
 
-	MethodGetTypeParametersOfSignature: unmarshallerFor[GetSignaturePropertyParams],
-	MethodGetParametersOfSignature:     unmarshallerFor[GetSignaturePropertyParams],
-	MethodGetThisParameterOfSignature:  unmarshallerFor[GetSignaturePropertyParams],
-	MethodGetTargetOfSignature:         unmarshallerFor[GetSignaturePropertyParams],
+	MethodGetTypeParametersOfSignature:         unmarshallerFor[GetSignaturePropertyParams],
+	MethodGetTypeArgumentsForResolvedSignature: unmarshallerFor[GetSignaturePropertyParams],
+	MethodGetParametersOfSignature:             unmarshallerFor[GetSignaturePropertyParams],
+	MethodGetThisParameterOfSignature:          unmarshallerFor[GetSignaturePropertyParams],
+	MethodGetTargetOfSignature:                 unmarshallerFor[GetSignaturePropertyParams],
 
 	MethodGetContextualType:                          unmarshallerFor[GetContextualTypeParams],
 	MethodIsOptionalParameter:                        unmarshallerFor[CheckerNodeParams],

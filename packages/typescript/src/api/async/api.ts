@@ -2336,6 +2336,11 @@ function encodeNumberLiteralValue(value: number): number | string {
 }
 
 export class Checker {
+    /** Get inferred or explicit signature type arguments; empty when the signature has no instantiation. */
+    async getTypeArgumentsForResolvedSignature(signature: Signature): Promise<readonly Type[]> {
+        return signature.getTypeArguments();
+    }
+
     /** Get the source type of an object/array assignment pattern, including nested patterns and for-of initializers. */
     async getTypeOfAssignmentPattern(node: ObjectLiteralExpression | ArrayLiteralExpression): Promise<Type | undefined> {
         const data = await this.client.apiRequest("getTypeOfAssignmentPattern", {
@@ -4161,6 +4166,7 @@ export class Signature {
     readonly thisParameter?: CompactSymbolReference | undefined;
     readonly target?: number | undefined;
     private returnType: number | false;
+    private typeArguments: readonly number[] | false;
 
     constructor(data: SignatureResponse, project: Project, objectRegistry: ProjectObjectRegistry) {
         this.id = data.id;
@@ -4174,6 +4180,7 @@ export class Signature {
         this.thisParameter = data.thisParameter;
         this.target = data.target;
         this.returnType = false;
+        this.typeArguments = false;
     }
 
     get declaration(): NodeHandle<Declaration> | undefined {
@@ -4185,6 +4192,13 @@ export class Signature {
 
     async getTypeParameters(): Promise<readonly TypeParameter[]> {
         return this.objectRegistry.fetchTypes(this, "getTypeParametersOfSignature", this.typeParameters) as Promise<readonly TypeParameter[]>;
+    }
+
+    /** Get inferred or explicit type arguments; empty when this signature has no instantiation. */
+    async getTypeArguments(): Promise<readonly Type[]> {
+        const result = await this.objectRegistry.fetchTypes(this, "getTypeArgumentsForResolvedSignature", this.typeArguments || undefined);
+        this.typeArguments = result.map(type => type.id);
+        return result;
     }
 
     async getParameters(): Promise<readonly Symbol[]> {

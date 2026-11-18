@@ -4220,6 +4220,24 @@ function encodeNumberLiteralValue(value: number): number | string {
 }
 
 export class Checker {
+    /** Get inferred or explicit signature type arguments; empty when the signature has no instantiation. */
+    get getTypeArgumentsForResolvedSignature(): {
+        (signature: Signature): readonly Type[];
+        gen(signature: Signature): Generator<ProtocolRequest, readonly Type[], ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getTypeArgumentsForResolvedSignature",
+            function (signature: Signature): readonly Type[] {
+                return signature.getTypeArguments();
+            },
+            function* (signature: Signature): Generator<ProtocolRequest, readonly Type[], ProtocolResponse["result"]> {
+                return yield* signature.getTypeArguments.gen();
+            },
+        );
+    }
+
     /** Get the source type of an object/array assignment pattern, including nested patterns and for-of initializers. */
     get getTypeOfAssignmentPattern(): {
         (node: ObjectLiteralExpression | ArrayLiteralExpression): Type | undefined;
@@ -8566,6 +8584,7 @@ export class Signature {
     readonly thisParameter?: CompactSymbolReference | undefined;
     readonly target?: number | undefined;
     private returnType: number | false;
+    private typeArguments: readonly number[] | false;
 
     constructor(data: SignatureResponse, project: Project, objectRegistry: ProjectObjectRegistry) {
         this.id = data.id;
@@ -8579,6 +8598,7 @@ export class Signature {
         this.thisParameter = data.thisParameter;
         this.target = data.target;
         this.returnType = false;
+        this.typeArguments = false;
     }
 
     get declaration(): NodeHandle<Declaration> | undefined {
@@ -8601,6 +8621,28 @@ export class Signature {
             },
             function* (): Generator<ProtocolRequest, readonly TypeParameter[], ProtocolResponse["result"]> {
                 return (yield* owner.objectRegistry.fetchTypes.gen(owner, "getTypeParametersOfSignature", owner.typeParameters)) as readonly TypeParameter[];
+            },
+        );
+    }
+
+    /** Get inferred or explicit type arguments; empty when this signature has no instantiation. */
+    get getTypeArguments(): {
+        (): readonly Type[];
+        gen(): Generator<ProtocolRequest, readonly Type[], ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getTypeArguments",
+            function (): readonly Type[] {
+                const result = owner.objectRegistry.fetchTypes(owner, "getTypeArgumentsForResolvedSignature", owner.typeArguments || undefined);
+                owner.typeArguments = result.map(type => type.id);
+                return result;
+            },
+            function* (): Generator<ProtocolRequest, readonly Type[], ProtocolResponse["result"]> {
+                const result = yield* owner.objectRegistry.fetchTypes.gen(owner, "getTypeArgumentsForResolvedSignature", owner.typeArguments || undefined);
+                owner.typeArguments = result.map(type => type.id);
+                return result;
             },
         );
     }

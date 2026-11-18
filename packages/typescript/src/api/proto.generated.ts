@@ -125,6 +125,7 @@ export interface APIMethodInfo {
     getNameTypeOfMappedType: APIMethod<GetTypePropertyParams, TypeResponse | null>;
     getTemplateTypeOfMappedType: APIMethod<GetTypePropertyParams, TypeResponse>;
     getTypeParametersOfSignature: APIMethod<GetSignaturePropertyParams, TypeResponse[] | null>;
+    getTypeArgumentsForResolvedSignature: APIMethod<GetSignaturePropertyParams, TypeResponse[]>;
     getParametersOfSignature: APIMethod<GetSignaturePropertyParams, SymbolResponse[] | null>;
     getThisParameterOfSignature: APIMethod<GetSignaturePropertyParams, SymbolResponse | null>;
     getTargetOfSignature: APIMethod<GetSignaturePropertyParams, SignatureResponse | null>;
@@ -1370,6 +1371,7 @@ export interface BatchRequest {
         | "getTrueType"
         | "getTrueTypeOfConditionalType"
         | "getTypeArguments"
+        | "getTypeArgumentsForResolvedSignature"
         | "getTypeAtLocation"
         | "getTypeAtLocations"
         | "getTypeAtPosition"
@@ -1569,6 +1571,7 @@ export interface BatchResponse {
         | "getTrueType"
         | "getTrueTypeOfConditionalType"
         | "getTypeArguments"
+        | "getTypeArgumentsForResolvedSignature"
         | "getTypeAtLocation"
         | "getTypeAtLocations"
         | "getTypeAtPosition"

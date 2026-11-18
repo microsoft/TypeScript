@@ -1065,6 +1065,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetFalseTypeOfConditionalType(ctx, parsed.(*GetTypePropertyParams))
 	case string(MethodGetTypeParametersOfSignature):
 		return s.handleGetTypeParametersOfSignature(ctx, parsed.(*GetSignaturePropertyParams))
+	case string(MethodGetTypeArgumentsForResolvedSignature):
+		return s.handleGetTypeArgumentsForResolvedSignature(ctx, parsed.(*GetSignaturePropertyParams))
 	case string(MethodGetParametersOfSignature):
 		return s.handleGetParametersOfSignature(ctx, parsed.(*GetSignaturePropertyParams))
 	case string(MethodGetThisParameterOfSignature):
@@ -3977,6 +3979,25 @@ func (s *Session) handleIsOptionalParameter(ctx context.Context, params *Checker
 		return false, fmt.Errorf("%w: expected a parameter declaration", ErrInvalidRequest)
 	}
 	return setup.checker.IsOptionalParameter(node), nil
+}
+
+func (s *Session) handleGetTypeArgumentsForResolvedSignature(ctx context.Context, params *GetSignaturePropertyParams) ([]*TypeResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	signature, err := setup.resolveSignatureHandle(params.Signature)
+	if err != nil {
+		return nil, err
+	}
+	types := setup.checker.GetTypeArgumentsForResolvedSignature(signature)
+	result := make([]*TypeResponse, len(types))
+	for i, t := range types {
+		result[i] = setup.sd.newTypeResponse(setup.projectID, t, setup.checker)
+	}
+	return result, nil
 }
 
 // @gen-proto-nullable

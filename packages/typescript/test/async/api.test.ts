@@ -176,6 +176,39 @@ import {
 
 const concurrency = areTestsFiltered();
 
+describe("Checker - getTypeArgumentsForResolvedSignature", { concurrency }, () => {
+    test("instantiates inferred, explicit, and defaulted type arguments and handles non-generic calls", async () => {
+        await using api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/index.ts": `
+declare function f<T, U = number>(value?: T): [T, U];
+declare function plain(): void;
+f("inferred");
+f<boolean>(true);
+f();
+plain();
+`,
+        });
+        const snapshot = await api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const file = await project.program.getSourceFile("/index.ts");
+        assert.ok(file);
+        const calls: Node[] = [];
+        file.forEachChild(function visit(node) {
+            if (isCallExpression(node)) calls.push(node);
+            node.forEachChild(visit);
+        });
+        const results: string[][] = [];
+        for (const call of calls) {
+            const signature = await project.checker.getResolvedSignature(call);
+            const types = await project.checker.getTypeArgumentsForResolvedSignature(signature);
+            assert.deepEqual(await signature.getTypeArguments(), types);
+            results.push(await Promise.all(types.map(type => project.checker.typeToString(type))));
+        }
+        assert.deepEqual(results, [["string", "number"], ["boolean", "number"], ["unknown", "number"], []]);
+    });
+});
+
 describe("Checker - getTypeOfAssignmentPattern", { concurrency }, () => {
     test("rejects object literals that are not assignment patterns", async () => {
         await using api = spawnAPI({ "/tsconfig.json": "{}", "/index.ts": "const value = {};" });

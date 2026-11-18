@@ -1733,6 +1733,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
                 parityCase("Checker", "isTupleType", checker.isTupleType, assertDeepEquivalent, tupleType),
                 parityCase("Checker", "isTupleTypeTarget", checker.isTupleTypeTarget, assertDeepEquivalent, tupleType),
                 parityCase("Checker", "getReturnTypeOfSignature", checker.getReturnTypeOfSignature, assertTypesEquivalent, signature),
+                parityCase("Checker", "getTypeArgumentsForResolvedSignature", checker.getTypeArgumentsForResolvedSignature, assertTypeArraysEquivalent, checker.getResolvedSignature(callExpression)),
                 parityCase("Checker", "getRestTypeOfSignature", checker.getRestTypeOfSignature, assertOptionalTypesEquivalent, signature),
                 parityCase("Checker", "getTypePredicateOfSignature", checker.getTypePredicateOfSignature, assertOptionalTypePredicatesEquivalent, predicateSignature),
                 parityCase("Checker", "getBaseTypes", checker.getBaseTypes, assertTypeArraysEquivalent, derivedType),
@@ -1828,6 +1829,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
                 parityCase("Type", "getBaseTypes", derivedType.getBaseTypes, assertOptionalTypeArrayEquivalent),
 
                 parityCase("Signature", "getTypeParameters", signature.getTypeParameters, assertTypeArraysEquivalent),
+                parityCase("Signature", "getTypeArguments", signature.getTypeArguments, assertTypeArraysEquivalent),
                 parityCase("Signature", "getParameters", signature.getParameters, assertSymbolArraysEquivalent),
                 parityCase("Signature", "getThisParameter", signature.getThisParameter, assertOptionalSymbolsEquivalent),
                 parityCase("Signature", "getTarget", constructSignature.getTarget, assertOptionalSignaturesEquivalent),
