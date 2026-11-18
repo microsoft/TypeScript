@@ -1,0 +1,139 @@
+//// [tests/cases/compiler/patternAmbientModuleUndefinedAttributesResolvedModule.ts] ////
+
+=== /types.d.ts ===
+declare module "*" {
+>"*" : Symbol("*", Decl(types.d.ts, 0, 0))
+
+    export const kind: "wildcard";
+>kind : Symbol(kind, Decl(types.d.ts, 1, 16))
+}
+
+declare module "*" with { type: "css" } {
+>"*" : Symbol("*", Decl(types.d.ts, 2, 1))
+>type : Symbol(type, Decl(types.d.ts, 4, 25))
+
+    export const kind: "css";
+>kind : Symbol(kind, Decl(types.d.ts, 5, 16))
+}
+
+=== /actual.ts ===
+export const kind = "actual";
+>kind : Symbol(kind, Decl(actual.ts, 0, 12))
+
+=== /index.ts ===
+declare const options: ImportCallOptions;
+>options : Symbol(options, Decl(index.ts, 0, 13))
+>ImportCallOptions : Symbol(ImportCallOptions, Decl(lib.es5.d.ts, --, --))
+
+declare const optionalAttributes: { type: "css" } | undefined;
+>optionalAttributes : Symbol(optionalAttributes, Decl(index.ts, 1, 13))
+>type : Symbol(type, Decl(index.ts, 1, 35))
+
+declare const cssAttributes: { type: "css" };
+>cssAttributes : Symbol(cssAttributes, Decl(index.ts, 2, 13))
+>type : Symbol(type, Decl(index.ts, 2, 30))
+
+async function test() {
+>test : Symbol(test, Decl(index.ts, 2, 45))
+
+    const withoutOptions = await import("./actual");
+>withoutOptions : Symbol(withoutOptions, Decl(index.ts, 5, 9))
+>"./actual" : Symbol("./actual", Decl(actual.ts, 0, 0))
+
+    const withoutOptionsKind: "actual" = withoutOptions.kind;
+>withoutOptionsKind : Symbol(withoutOptionsKind, Decl(index.ts, 6, 9))
+>withoutOptions.kind : Symbol(kind, Decl(actual.ts, 0, 12))
+>withoutOptions : Symbol(withoutOptions, Decl(index.ts, 5, 9))
+>kind : Symbol(kind, Decl(actual.ts, 0, 12))
+
+    const withUndefined = await import("./actual", { with: undefined });
+>withUndefined : Symbol(withUndefined, Decl(index.ts, 8, 9))
+>"./actual" : Symbol("./actual", Decl(actual.ts, 0, 0))
+>with : Symbol(with, Decl(index.ts, 8, 52))
+>undefined : Symbol(undefined)
+
+    const withUndefinedKind: "actual" = withUndefined.kind;
+>withUndefinedKind : Symbol(withUndefinedKind, Decl(index.ts, 9, 9))
+>withUndefined.kind : Symbol(kind, Decl(actual.ts, 0, 12))
+>withUndefined : Symbol(withUndefined, Decl(index.ts, 8, 9))
+>kind : Symbol(kind, Decl(actual.ts, 0, 12))
+
+    const withOptions = await import("./actual", options);
+>withOptions : Symbol(withOptions, Decl(index.ts, 11, 9))
+>"./actual" : Symbol("./actual", Decl(actual.ts, 0, 0))
+>options : Symbol(options, Decl(index.ts, 0, 13))
+
+    const withOptionsKind: "actual" = withOptions.kind;
+>withOptionsKind : Symbol(withOptionsKind, Decl(index.ts, 12, 9))
+>withOptions.kind : Symbol(kind, Decl(actual.ts, 0, 12))
+>withOptions : Symbol(withOptions, Decl(index.ts, 11, 9))
+>kind : Symbol(kind, Decl(actual.ts, 0, 12))
+
+    const withOptionalAttributes = await import("./actual", { with: optionalAttributes });
+>withOptionalAttributes : Symbol(withOptionalAttributes, Decl(index.ts, 14, 9))
+>"./actual" : Symbol("./actual", Decl(actual.ts, 0, 0))
+>with : Symbol(with, Decl(index.ts, 14, 61))
+>optionalAttributes : Symbol(optionalAttributes, Decl(index.ts, 1, 13))
+
+    const withOptionalAttributesKind: "actual" = withOptionalAttributes.kind;
+>withOptionalAttributesKind : Symbol(withOptionalAttributesKind, Decl(index.ts, 15, 9))
+>withOptionalAttributes.kind : Symbol(kind, Decl(actual.ts, 0, 12))
+>withOptionalAttributes : Symbol(withOptionalAttributes, Decl(index.ts, 14, 9))
+>kind : Symbol(kind, Decl(actual.ts, 0, 12))
+
+    const withEmptyAttributes = await import("./actual", { with: {} });
+>withEmptyAttributes : Symbol(withEmptyAttributes, Decl(index.ts, 17, 9))
+>"./actual" : Symbol("./actual", Decl(actual.ts, 0, 0))
+>with : Symbol(with, Decl(index.ts, 17, 58))
+
+    const withEmptyAttributesKind: "actual" = withEmptyAttributes.kind;
+>withEmptyAttributesKind : Symbol(withEmptyAttributesKind, Decl(index.ts, 18, 9))
+>withEmptyAttributes.kind : Symbol(kind, Decl(actual.ts, 0, 12))
+>withEmptyAttributes : Symbol(withEmptyAttributes, Decl(index.ts, 17, 9))
+>kind : Symbol(kind, Decl(actual.ts, 0, 12))
+
+    const withCssAttributes = await import("./actual", { with: cssAttributes });
+>withCssAttributes : Symbol(withCssAttributes, Decl(index.ts, 20, 9))
+>"./actual" : Symbol("*", Decl(types.d.ts, 2, 1))
+>with : Symbol(with, Decl(index.ts, 20, 56))
+>cssAttributes : Symbol(cssAttributes, Decl(index.ts, 2, 13))
+
+    const withCssAttributesKind: "css" = withCssAttributes.kind;
+>withCssAttributesKind : Symbol(withCssAttributesKind, Decl(index.ts, 21, 9))
+>withCssAttributes.kind : Symbol(kind, Decl(types.d.ts, 5, 16))
+>withCssAttributes : Symbol(withCssAttributes, Decl(index.ts, 20, 9))
+>kind : Symbol(kind, Decl(types.d.ts, 5, 16))
+
+    const unresolved = await import("./missing", { with: undefined });
+>unresolved : Symbol(unresolved, Decl(index.ts, 23, 9))
+>"./missing" : Symbol("*", Decl(types.d.ts, 0, 0))
+>with : Symbol(with, Decl(index.ts, 23, 50))
+>undefined : Symbol(undefined)
+
+    const unresolvedKind: "wildcard" = unresolved.kind;
+>unresolvedKind : Symbol(unresolvedKind, Decl(index.ts, 24, 9))
+>unresolved.kind : Symbol(kind, Decl(types.d.ts, 1, 16))
+>unresolved : Symbol(unresolved, Decl(index.ts, 23, 9))
+>kind : Symbol(kind, Decl(types.d.ts, 1, 16))
+}
+
+async function generic<T extends { type: "css" } | undefined>(attributes: T) {
+>generic : Symbol(generic, Decl(index.ts, 25, 1))
+>T : Symbol(T, Decl(index.ts, 27, 23))
+>type : Symbol(type, Decl(index.ts, 27, 34))
+>attributes : Symbol(attributes, Decl(index.ts, 27, 62))
+>T : Symbol(T, Decl(index.ts, 27, 23))
+
+    const withGenericAttributes = await import("./actual", { with: attributes });
+>withGenericAttributes : Symbol(withGenericAttributes, Decl(index.ts, 28, 9))
+>"./actual" : Symbol("./actual", Decl(actual.ts, 0, 0))
+>with : Symbol(with, Decl(index.ts, 28, 60))
+>attributes : Symbol(attributes, Decl(index.ts, 27, 62))
+
+    const withGenericAttributesKind: "actual" = withGenericAttributes.kind;
+>withGenericAttributesKind : Symbol(withGenericAttributesKind, Decl(index.ts, 29, 9))
+>withGenericAttributes.kind : Symbol(kind, Decl(actual.ts, 0, 12))
+>withGenericAttributes : Symbol(withGenericAttributes, Decl(index.ts, 28, 9))
+>kind : Symbol(kind, Decl(actual.ts, 0, 12))
+}
+

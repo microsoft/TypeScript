@@ -1,0 +1,56 @@
+//// [tests/cases/compiler/patternAmbientModuleImportAttributesIgnoreObjectMembers.ts] ////
+
+=== /types.d.ts ===
+declare module "*.style" with { type: "css" } {
+>"*.style" : Symbol("*.style", Decl(types.d.ts, 0, 0))
+>type : Symbol(type, Decl(types.d.ts, 0, 31))
+
+    export const kind: "css";
+>kind : Symbol(kind, Decl(types.d.ts, 1, 16))
+}
+
+=== /object.ts ===
+export {};
+declare global {
+>global : Symbol(global, Decl(object.ts, 0, 10))
+
+    interface Object {
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(object.ts, 1, 16))
+
+        type: "css";
+>type : Symbol(Object.type, Decl(object.ts, 2, 22))
+    }
+}
+
+=== /index.ts ===
+import * as withoutAttributes from "./a.style";
+>withoutAttributes : Symbol(withoutAttributes, Decl(index.ts, 0, 6))
+
+import * as withAttributes from "./b.style" with { type: "css" };
+>withAttributes : Symbol(withAttributes, Decl(index.ts, 1, 6))
+
+const kind: "css" = withAttributes.kind;
+>kind : Symbol(kind, Decl(index.ts, 2, 5))
+>withAttributes.kind : Symbol(withAttributes.kind, Decl(types.d.ts, 1, 16))
+>withAttributes : Symbol(withAttributes, Decl(index.ts, 1, 6))
+>kind : Symbol(withAttributes.kind, Decl(types.d.ts, 1, 16))
+
+async function test() {
+>test : Symbol(test, Decl(index.ts, 2, 40))
+
+    const dynamicWithoutAttributes = await import("./c.style");
+>dynamicWithoutAttributes : Symbol(dynamicWithoutAttributes, Decl(index.ts, 5, 9))
+
+    const dynamicWithAttributes = await import("./d.style", { with: { type: "css" } });
+>dynamicWithAttributes : Symbol(dynamicWithAttributes, Decl(index.ts, 6, 9))
+>"./d.style" : Symbol(withAttributes, Decl(types.d.ts, 0, 0))
+>with : Symbol(with, Decl(index.ts, 6, 61))
+>type : Symbol(type, Decl(index.ts, 6, 69))
+
+    const dynamicKind: "css" = dynamicWithAttributes.kind;
+>dynamicKind : Symbol(dynamicKind, Decl(index.ts, 7, 9))
+>dynamicWithAttributes.kind : Symbol(kind, Decl(types.d.ts, 1, 16))
+>dynamicWithAttributes : Symbol(dynamicWithAttributes, Decl(index.ts, 6, 9))
+>kind : Symbol(kind, Decl(types.d.ts, 1, 16))
+}
+

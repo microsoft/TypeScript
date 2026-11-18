@@ -1,0 +1,32 @@
+/index.ts(1,36): error TS2307: Cannot find module './a.style' or its corresponding type declarations.
+/index.ts(6,51): error TS2307: Cannot find module './c.style' or its corresponding type declarations.
+
+
+==== /types.d.ts (0 errors) ====
+    declare module "*.style" with { type: "css" } {
+        export const kind: "css";
+    }
+    
+==== /object.ts (0 errors) ====
+    export {};
+    declare global {
+        interface Object {
+            type: "css";
+        }
+    }
+    
+==== /index.ts (2 errors) ====
+    import * as withoutAttributes from "./a.style";
+                                       ~~~~~~~~~~~
+!!! error TS2307: Cannot find module './a.style' or its corresponding type declarations.
+    import * as withAttributes from "./b.style" with { type: "css" };
+    const kind: "css" = withAttributes.kind;
+    
+    async function test() {
+        const dynamicWithoutAttributes = await import("./c.style");
+                                                      ~~~~~~~~~~~
+!!! error TS2307: Cannot find module './c.style' or its corresponding type declarations.
+        const dynamicWithAttributes = await import("./d.style", { with: { type: "css" } });
+        const dynamicKind: "css" = dynamicWithAttributes.kind;
+    }
+    

@@ -1,0 +1,62 @@
+//// [tests/cases/compiler/globalAugmentationResolvingAliasToPatternAmbientModuleWithAttributes2.ts] ////
+
+=== /types.d.ts ===
+declare module "*.style" {
+>"*.style" : Symbol("*.style", Decl(types.d.ts, 0, 0))
+
+    export interface Bar { kind: "plain" }
+>Bar : Symbol(Bar, Decl(types.d.ts, 0, 26))
+>kind : Symbol(Bar.kind, Decl(types.d.ts, 1, 26))
+}
+declare module "*.style" with { type: "css" } {
+>"*.style" : Symbol("*.style", Decl(types.d.ts, 2, 1))
+>type : Symbol(type, Decl(types.d.ts, 3, 31))
+
+    export interface Bar { kind: "css" }
+>Bar : Symbol(Bar, Decl(types.d.ts, 3, 47), Decl(b.ts, 2, 17))
+>kind : Symbol(Bar.kind, Decl(types.d.ts, 4, 26))
+}
+
+=== /a.ts ===
+import * as NS from "./a.style" with { type: "css" };
+>NS : Symbol(NS, Decl(a.ts, 0, 6))
+
+declare global {
+>global : Symbol(global, Decl(a.ts, 0, 53))
+
+    namespace G {
+>G : Symbol(G, Decl(a.ts, 1, 16), Decl(b.ts, 1, 16))
+
+        import Foo = NS.Bar;
+>Foo : Symbol(Foo, Decl(a.ts, 2, 17))
+>NS : Symbol(NS, Decl(a.ts, 0, 6))
+>Bar : Symbol(Foo, Decl(types.d.ts, 3, 47), Decl(b.ts, 2, 17))
+
+        export { Foo };
+>Foo : Symbol(NS.Bar, Decl(a.ts, 4, 16))
+    }
+}
+
+=== /b.ts ===
+export {};
+declare global {
+>global : Symbol(global, Decl(b.ts, 0, 10))
+
+    namespace G {
+>G : Symbol(G, Decl(a.ts, 1, 16), Decl(b.ts, 1, 16))
+
+        interface Foo {
+>Foo : Symbol(G.Bar, Decl(types.d.ts, 3, 47), Decl(b.ts, 2, 17))
+
+            x: number;
+>x : Symbol(G.Bar.x, Decl(b.ts, 3, 23))
+        }
+    }
+}
+
+=== /c.ts ===
+export const kind: G.Foo["kind"] = "css";
+>kind : Symbol(kind, Decl(c.ts, 0, 12))
+>G : Symbol(G, Decl(a.ts, 1, 16), Decl(b.ts, 1, 16))
+>Foo : Symbol(G.Bar, Decl(types.d.ts, 3, 47), Decl(b.ts, 2, 17))
+
