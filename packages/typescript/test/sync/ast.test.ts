@@ -123,6 +123,21 @@ test("index signatures allow an omitted type", () => {
 });
 
 describe("JSDoc helpers", { concurrency }, () => {
+    test("isJSDocLinkLike narrows all three link kinds", () => {
+        const isLink: (node: Node) => node is astModule.JSDocLink | astModule.JSDocLinkCode | astModule.JSDocLinkPlain = astModule.isJSDocLinkLike;
+        const nodes: Node[] = [
+            factory.createJSDocLink(createIdentifier("target"), "link text"),
+            factory.createJSDocLinkCode(createIdentifier("target"), "code text"),
+            factory.createJSDocLinkPlain(createIdentifier("target"), "plain text"),
+            factory.createJSDocText("ordinary text"),
+            factory.createJSDocNameReference(createIdentifier("target")),
+            createIdentifier("target"),
+        ];
+        const links = nodes.filter(isLink);
+        assert.deepStrictEqual(links, nodes.slice(0, 3));
+        assert.deepStrictEqual(links.map(link => link.text), ["link text", "code text", "plain text"]);
+    });
+
     test("getJSDocParameterTags matches identifiers by name", () => {
         using api = spawnAPI();
         const source = api.createSourceFile(
