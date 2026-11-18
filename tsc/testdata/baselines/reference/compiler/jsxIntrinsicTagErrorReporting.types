@@ -1,0 +1,64 @@
+//// [tests/cases/compiler/jsxIntrinsicTagErrorReporting.tsx] ////
+
+=== jsxIntrinsicTagErrorReporting.tsx ===
+declare namespace JSX {
+  interface Element {}
+  interface IntrinsicElements {
+    div: any;
+>div : any
+  }
+}
+
+function Component() {
+>Component : () => JSX.Element
+
+  return (
+>(    <div>      <dov></dov>      <dav></dav>    </div>  ) : JSX.Element
+
+    <div>
+><div>      <dov></dov>      <dav></dav>    </div> : JSX.Element
+>div : any
+
+      <dov></dov>
+><dov></dov> : JSX.Element
+>dov : any
+>dov : any
+
+      <dav></dav>
+><dav></dav> : JSX.Element
+>dav : any
+>dav : any
+
+    </div>
+>div : any
+
+  );
+}
+const components = {
+>components : { readonly div: 'div'; }
+>{    div: 'div',} as const : { readonly div: 'div'; }
+>{    div: 'div',} : { readonly div: 'div'; }
+
+    div: 'div',
+>div : "div"
+>'div' : "div"
+
+} as const;
+
+function ComponentWithPropertyAccess() {
+>ComponentWithPropertyAccess : () => JSX.Element
+
+    return <components.dov />;
+><components.dov /> : JSX.Element
+>components.dov : any
+>components : { readonly div: 'div'; }
+>dov : any
+}
+function ComponentWithValidOpeningTag() {
+>ComponentWithValidOpeningTag : () => JSX.Element
+
+    return <div></dov>;
+><div></dov> : JSX.Element
+>div : any
+>dov : any
+}

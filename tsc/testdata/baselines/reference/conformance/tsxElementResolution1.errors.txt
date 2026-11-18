@@ -1,4 +1,4 @@
-file.tsx(12,1): error TS2339: Property 'span' does not exist on type 'JSX.IntrinsicElements'.
+file.tsx(12,2): error TS2339: Property 'span' does not exist on type 'JSX.IntrinsicElements'.
 
 
 ==== file.tsx (1 errors) ====
@@ -14,5 +14,5 @@ file.tsx(12,1): error TS2339: Property 'span' does not exist on type 'JSX.Intrin
     
     // Fail
     <span />;
-    ~~~~~~~~
+     ~~~~
 !!! error TS2339: Property 'span' does not exist on type 'JSX.IntrinsicElements'.

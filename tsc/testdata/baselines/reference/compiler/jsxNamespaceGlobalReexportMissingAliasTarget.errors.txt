@@ -1,5 +1,4 @@
 /index.tsx(1,27): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
-/index.tsx(1,32): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 
 
 ==== /node_modules/preact/index.d.ts (0 errors) ====
@@ -100,9 +99,7 @@
         // @ts-ignore
         export import JSX = NotFound;
     }
-==== /index.tsx (2 errors) ====
+==== /index.tsx (1 errors) ====
     export const Comp = () => <div></div>;
                               ~~~~~
-!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
-                                   ~~~~~~
 !!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
