@@ -2,11 +2,10 @@
 package json
 
 import (
+	"encoding/json/jsontext"
+	"encoding/json/v2"
 	"io"
 	"slices"
-
-	"github.com/go-json-experiment/json"
-	"github.com/go-json-experiment/json/jsontext"
 )
 
 var allowInvalid []json.Options = slices.Clip([]json.Options{jsontext.AllowInvalidUTF8(true)})

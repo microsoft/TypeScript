@@ -12,7 +12,7 @@ export const y = 20;
     "files": ["c.ts", "d.ts"]
 }
 
-tsgo 
+tsc 
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96mc.ts[0m:[93m1[0m:[93m17[0m - [91merror[0m[90m TS1261: [0mAlready included file name '/home/src/workspaces/project/D.ts' differs from file name '/home/src/workspaces/project/d.ts' only in casing.
@@ -30,7 +30,7 @@ Output::
 
 Found 1 error in c.ts[90m:1[0m
 
-//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}

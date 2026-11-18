@@ -1,0 +1,54 @@
+first.ts(4,11): error TS2430: Interface 'Incompatible' incorrectly extends interface 'NumberBase'.
+  Types of property 'value' are incompatible.
+    Type 'string' is not assignable to type 'number'.
+first.ts(6,11): error TS2430: Interface 'LaterBase' incorrectly extends interface 'NumberBase'.
+  Types of property 'value' are incompatible.
+    Type 'string' is not assignable to type 'number'.
+first.ts(7,11): error TS2320: Interface 'ConflictingBases' cannot simultaneously extend types 'NumberBase' and 'StringBase'.
+  Named property 'value' of types 'NumberBase' and 'StringBase' are not identical.
+second.ts(6,11): error TS2430: Interface 'ClassAndInterface' incorrectly extends interface 'NumberBase'.
+  Types of property 'value' are incompatible.
+    Type 'string' is not assignable to type 'number'.
+second.ts(8,29): error TS2411: Property 'value' of type 'string' is not assignable to 'string' index type 'number'.
+
+
+==== first.ts (3 errors) ====
+    interface NumberBase { value: number }
+    interface StringBase { value: string }
+    
+    interface Incompatible extends NumberBase {}
+              ~~~~~~~~~~~~
+!!! error TS2430: Interface 'Incompatible' incorrectly extends interface 'NumberBase'.
+!!! error TS2430:   Types of property 'value' are incompatible.
+!!! error TS2430:     Type 'string' is not assignable to type 'number'.
+    interface Incompatible {}
+    interface LaterBase { value: string }
+              ~~~~~~~~~
+!!! error TS2430: Interface 'LaterBase' incorrectly extends interface 'NumberBase'.
+!!! error TS2430:   Types of property 'value' are incompatible.
+!!! error TS2430:     Type 'string' is not assignable to type 'number'.
+    interface ConflictingBases extends NumberBase {}
+              ~~~~~~~~~~~~~~~~
+!!! error TS2320: Interface 'ConflictingBases' cannot simultaneously extend types 'NumberBase' and 'StringBase'.
+!!! error TS2320:   Named property 'value' of types 'NumberBase' and 'StringBase' are not identical.
+    
+    class ClassAndInterface { value = ""; }
+    
+    interface IndexConstraint { [key: string]: number }
+    
+==== second.ts (2 errors) ====
+    interface Incompatible { value: string }
+    interface LaterBase extends NumberBase {}
+    interface ConflictingBases extends StringBase {}
+    interface ConflictingBases {}
+    
+    interface ClassAndInterface extends NumberBase {}
+              ~~~~~~~~~~~~~~~~~
+!!! error TS2430: Interface 'ClassAndInterface' incorrectly extends interface 'NumberBase'.
+!!! error TS2430:   Types of property 'value' are incompatible.
+!!! error TS2430:     Type 'string' is not assignable to type 'number'.
+    
+    interface IndexConstraint { value: string }
+                                ~~~~~
+!!! error TS2411: Property 'value' of type 'string' is not assignable to 'string' index type 'number'.
+    

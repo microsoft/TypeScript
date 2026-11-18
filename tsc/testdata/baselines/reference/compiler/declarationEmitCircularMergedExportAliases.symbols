@@ -1,0 +1,51 @@
+//// [tests/cases/compiler/declarationEmitCircularMergedExportAliases.ts] ////
+
+=== a.ts ===
+export { B as A } from "./b";
+>B : Symbol(B, Decl(b.ts, 0, 8), Decl(b.ts, 0, 29))
+>A : Symbol(A, Decl(a.ts, 0, 8), Decl(a.ts, 0, 29))
+
+export declare namespace A {
+>A : Symbol(A, Decl(a.ts, 0, 8), Decl(a.ts, 0, 29))
+
+    export type FromA = number;
+>FromA : Symbol(FromA, Decl(a.ts, 1, 28))
+}
+export class Route {
+>Route : Symbol(Route, Decl(a.ts, 3, 1))
+
+    private parts = 0;
+>parts : Symbol(Route.parts, Decl(a.ts, 4, 20))
+}
+export function create() { return new Route(); }
+>create : Symbol(create, Decl(a.ts, 6, 1))
+>Route : Symbol(Route, Decl(a.ts, 3, 1))
+
+=== b.ts ===
+export { A as B } from "./a";
+>A : Symbol(A, Decl(a.ts, 0, 8), Decl(a.ts, 0, 29))
+>B : Symbol(B, Decl(b.ts, 0, 8), Decl(b.ts, 0, 29))
+
+export declare namespace B {
+>B : Symbol(B, Decl(b.ts, 0, 8), Decl(b.ts, 0, 29))
+
+    export type FromB = string;
+>FromB : Symbol(FromB, Decl(b.ts, 1, 28))
+}
+
+=== index.ts ===
+import { A } from "./a";
+>A : Symbol(A, Decl(index.ts, 0, 8))
+
+import { create } from "./a";
+>create : Symbol(create, Decl(index.ts, 1, 8))
+
+export type Label = A.FromA;
+>Label : Symbol(Label, Decl(index.ts, 1, 29))
+>A : Symbol(A, Decl(index.ts, 0, 8))
+>FromA : Symbol(A.FromA, Decl(a.ts, 1, 28))
+
+export const route = create();
+>route : Symbol(route, Decl(index.ts, 3, 12))
+>create : Symbol(create, Decl(index.ts, 1, 8))
+

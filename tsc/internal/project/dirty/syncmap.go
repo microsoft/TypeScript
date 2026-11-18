@@ -212,17 +212,26 @@ func (m *SyncMap[K, V]) Load(key K) (*SyncMapEntry[K, V], bool) {
 	}
 	if val, ok := m.base[key]; ok {
 		return &SyncMapEntry[K, V]{
-			m: m,
-			mapEntry: mapEntry[K, V]{
-				key:      key,
-				original: val,
-				value:    val,
-				dirty:    false,
-				delete:   false,
-			},
+			m:        m,
+			key:      key,
+			original: val,
+			value:    val,
+			dirty:    false,
+			delete:   false,
 		}, true
 	}
 	return nil, false
+}
+
+// LoadClean returns the base value for key without allocating an entry,
+// provided the key has not been touched in the dirty map. Callers must
+// fall back to Load when ok is false.
+func (m *SyncMap[K, V]) LoadClean(key K) (value V, ok bool) {
+	if _, inDirty := m.dirty.Load(key); inDirty {
+		return value, false
+	}
+	value, ok = m.base[key]
+	return value, ok
 }
 
 func (m *SyncMap[K, V]) LoadOrStore(key K, value V) (*SyncMapEntry[K, V], bool) {
@@ -237,23 +246,19 @@ func (m *SyncMap[K, V]) LoadOrStore(key K, value V) (*SyncMapEntry[K, V], bool) 
 			return dirty, true
 		}
 		return &SyncMapEntry[K, V]{
-			m: m,
-			mapEntry: mapEntry[K, V]{
-				key:      key,
-				original: baseValue,
-				value:    baseValue,
-				dirty:    false,
-				delete:   false,
-			},
+			m:        m,
+			key:      key,
+			original: baseValue,
+			value:    baseValue,
+			dirty:    false,
+			delete:   false,
 		}, true
 	}
 	entry, loaded := m.dirty.LoadOrStore(key, &SyncMapEntry[K, V]{
-		m: m,
-		mapEntry: mapEntry[K, V]{
-			key:   key,
-			value: value,
-			dirty: true,
-		},
+		m:     m,
+		key:   key,
+		value: value,
+		dirty: true,
 	})
 	if loaded {
 		entry.mu.Lock()
@@ -267,12 +272,10 @@ func (m *SyncMap[K, V]) LoadOrStore(key K, value V) (*SyncMapEntry[K, V], bool) 
 
 func (m *SyncMap[K, V]) Delete(key K) {
 	entry, loaded := m.dirty.LoadOrStore(key, &SyncMapEntry[K, V]{
-		m: m,
-		mapEntry: mapEntry[K, V]{
-			key:      key,
-			original: m.base[key],
-			delete:   true,
-		},
+		m:        m,
+		key:      key,
+		original: m.base[key],
+		delete:   true,
 	})
 	if loaded {
 		entry.Delete()
@@ -295,12 +298,13 @@ func (m *SyncMap[K, V]) Range(fn func(*SyncMapEntry[K, V]) bool) {
 		if _, ok := seenInDirty[key]; ok {
 			continue // already processed in dirty entries
 		}
-		if !fn(&SyncMapEntry[K, V]{m: m, mapEntry: mapEntry[K, V]{
+		if !fn(&SyncMapEntry[K, V]{
+			m:        m,
 			key:      key,
 			original: value,
 			value:    value,
 			dirty:    false,
-		}}) {
+		}) {
 			break
 		}
 	}

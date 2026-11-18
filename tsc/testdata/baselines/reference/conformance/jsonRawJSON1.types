@@ -1,0 +1,51 @@
+//// [tests/cases/conformance/es2026/jsonRawJSON1.ts] ////
+
+=== jsonRawJSON1.ts ===
+const a = JSON.rawJSON("12345678901234567890");
+>a : RawJSON
+>JSON.rawJSON("12345678901234567890") : RawJSON
+>JSON.rawJSON : (text: string) => RawJSON
+>JSON : JSON
+>rawJSON : (text: string) => RawJSON
+>"12345678901234567890" : "12345678901234567890"
+
+const b: string = a.rawJSON;
+>b : string
+>a.rawJSON : string
+>a : RawJSON
+>rawJSON : string
+
+const c: string = JSON.stringify({ value: a });
+>c : string
+>JSON.stringify({ value: a }) : string
+>JSON.stringify : { (value: any, replacer?: (this: any, key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (number | string)[] | null, space?: string | number): string; }
+>JSON : JSON
+>stringify : { (value: any, replacer?: (this: any, key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (number | string)[] | null, space?: string | number): string; }
+>{ value: a } : { value: RawJSON; }
+>value : RawJSON
+>a : RawJSON
+
+a.rawJSON = "0";
+>a.rawJSON = "0" : "0"
+>a.rawJSON : any
+>a : RawJSON
+>rawJSON : any
+>"0" : "0"
+
+declare const d: unknown;
+>d : unknown
+
+if (JSON.isRawJSON(d)) {
+>JSON.isRawJSON(d) : boolean
+>JSON.isRawJSON : (value: unknown) => value is RawJSON
+>JSON : JSON
+>isRawJSON : (value: unknown) => value is RawJSON
+>d : unknown
+
+    const e: string = d.rawJSON;
+>e : string
+>d.rawJSON : string
+>d : RawJSON
+>rawJSON : string
+}
+

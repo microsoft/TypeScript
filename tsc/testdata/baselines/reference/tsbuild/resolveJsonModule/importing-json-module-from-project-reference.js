@@ -42,7 +42,7 @@ console.log(foo);
     "files": [],
 }
 
-tsgo --b project --verbose --explainFiles
+tsc --b project --verbose --explainFiles
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -257,7 +257,7 @@ Signatures::
 
 Edit [0]:: no change
 
-tsgo --b project --verbose --explainFiles
+tsc --b project --verbose --explainFiles
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 

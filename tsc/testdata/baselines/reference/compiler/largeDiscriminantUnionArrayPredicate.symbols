@@ -1,0 +1,53 @@
+//// [tests/cases/compiler/largeDiscriminantUnionArrayPredicate.ts] ////
+
+=== largeDiscriminantUnionArrayPredicate.ts ===
+type TreeNode =
+>TreeNode : Symbol(TreeNode, Decl(largeDiscriminantUnionArrayPredicate.ts, 0, 0))
+
+    | { kind: 0 }
+>kind : Symbol(kind, Decl(largeDiscriminantUnionArrayPredicate.ts, 1, 7))
+
+    | { kind: 1 }
+>kind : Symbol(kind, Decl(largeDiscriminantUnionArrayPredicate.ts, 2, 7))
+
+    | { kind: 2 }
+>kind : Symbol(kind, Decl(largeDiscriminantUnionArrayPredicate.ts, 3, 7))
+
+    | { kind: 3 }
+>kind : Symbol(kind, Decl(largeDiscriminantUnionArrayPredicate.ts, 4, 7))
+
+    | { kind: 4 }
+>kind : Symbol(kind, Decl(largeDiscriminantUnionArrayPredicate.ts, 5, 7))
+
+    | { kind: 5 }
+>kind : Symbol(kind, Decl(largeDiscriminantUnionArrayPredicate.ts, 6, 7))
+
+    | { kind: 6 }
+>kind : Symbol(kind, Decl(largeDiscriminantUnionArrayPredicate.ts, 7, 7))
+
+    | { kind: 7 }
+>kind : Symbol(kind, Decl(largeDiscriminantUnionArrayPredicate.ts, 8, 7))
+
+    | { kind: 8 }
+>kind : Symbol(kind, Decl(largeDiscriminantUnionArrayPredicate.ts, 9, 7))
+
+    | { kind: 9 };
+>kind : Symbol(kind, Decl(largeDiscriminantUnionArrayPredicate.ts, 10, 7))
+
+declare const ancestor: TreeNode | TreeNode[];
+>ancestor : Symbol(ancestor, Decl(largeDiscriminantUnionArrayPredicate.ts, 12, 13))
+>TreeNode : Symbol(TreeNode, Decl(largeDiscriminantUnionArrayPredicate.ts, 0, 0))
+>TreeNode : Symbol(TreeNode, Decl(largeDiscriminantUnionArrayPredicate.ts, 0, 0))
+
+if (!Array.isArray(ancestor)) {
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>ancestor : Symbol(ancestor, Decl(largeDiscriminantUnionArrayPredicate.ts, 12, 13))
+
+    ancestor.kind;
+>ancestor.kind : Symbol(kind, Decl(largeDiscriminantUnionArrayPredicate.ts, 1, 7), Decl(largeDiscriminantUnionArrayPredicate.ts, 2, 7), Decl(largeDiscriminantUnionArrayPredicate.ts, 3, 7), Decl(largeDiscriminantUnionArrayPredicate.ts, 4, 7), Decl(largeDiscriminantUnionArrayPredicate.ts, 5, 7) ... and 5 more)
+>ancestor : Symbol(ancestor, Decl(largeDiscriminantUnionArrayPredicate.ts, 12, 13))
+>kind : Symbol(kind, Decl(largeDiscriminantUnionArrayPredicate.ts, 1, 7), Decl(largeDiscriminantUnionArrayPredicate.ts, 2, 7), Decl(largeDiscriminantUnionArrayPredicate.ts, 3, 7), Decl(largeDiscriminantUnionArrayPredicate.ts, 4, 7), Decl(largeDiscriminantUnionArrayPredicate.ts, 5, 7) ... and 5 more)
+}
+

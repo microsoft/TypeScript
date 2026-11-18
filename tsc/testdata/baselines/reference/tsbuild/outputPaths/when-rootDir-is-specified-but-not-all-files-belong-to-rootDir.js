@@ -13,7 +13,7 @@ export const x = 10;
 //// [/home/src/workspaces/project/types/type.ts] *new* 
 export type t = string;
 
-tsgo -b -v
+tsc -b -v
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -29,7 +29,7 @@ Output::
 
 Found 1 error.
 
-//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -83,7 +83,7 @@ export {};
 
 tsconfig.json::
 SemanticDiagnostics::
-*not cached* /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*not cached* /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *not cached* /home/src/workspaces/project/src/index.ts
 *not cached* /home/src/workspaces/project/types/type.ts
 Signatures::
@@ -91,7 +91,7 @@ Signatures::
 
 Edit [0]:: no change
 
-tsgo -b -v
+tsc -b -v
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -114,7 +114,7 @@ Found 1 error.
 
 tsconfig.json::
 SemanticDiagnostics::
-*not cached* /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*not cached* /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *not cached* /home/src/workspaces/project/src/index.ts
 *not cached* /home/src/workspaces/project/types/type.ts
 Signatures::
@@ -122,7 +122,7 @@ Signatures::
 
 Edit [1]:: Normal build without change, that does not block emit on error to show files that get emitted
 
-tsgo -p /home/src/workspaces/project/tsconfig.json
+tsc -p /home/src/workspaces/project/tsconfig.json
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [91merror[0m[90m TS6059: [0mFile '/home/src/workspaces/project/types/type.ts' is not under 'rootDir' '/home/src/workspaces/project/src'. 'rootDir' is expected to contain all source files.

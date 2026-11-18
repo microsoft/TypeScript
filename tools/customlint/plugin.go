@@ -18,10 +18,14 @@ func (f *plugin) BuildAnalyzers() ([]*analysis.Analyzer, error) {
 		bitclearAnalyzer,
 		checkChildrenAnalyzer,
 		cleanupAnalyzer,
-		emptyCaseAnalyzer,
+		caseBodyAnalyzer,
+		diagnosticArgsAnalyzer,
 		forbidParentAccessAnalyzer,
+		protectedFieldAnalyzer,
 		shadowAnalyzer,
+		typedPathsAnalyzer,
 		unexportedAPIAnalyzer,
+		unsafeSafetyAnalyzer,
 	}, nil
 }
 

@@ -1,0 +1,18 @@
+//// [tests/cases/compiler/assertedGenericPartialIndexedAssignment.ts] ////
+
+=== assertedGenericPartialIndexedAssignment.ts ===
+function write<T extends Record<string, unknown>>(values: Partial<T>, key: string) {
+>write : <T extends Record<string, unknown>>(values: Partial<T>, key: string) => void
+>values : Partial<T>
+>key : string
+
+    (values[key] as unknown) = 0;
+>(values[key] as unknown) = 0 : 0
+>(values[key] as unknown) : unknown
+>values[key] as unknown : unknown
+>values[key] : T[string] | undefined
+>values : Partial<T>
+>key : string
+>0 : 0
+}
+

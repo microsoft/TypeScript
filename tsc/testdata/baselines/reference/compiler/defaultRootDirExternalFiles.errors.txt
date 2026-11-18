@@ -1,0 +1,25 @@
+error TS6059: File '/project/src/index.ts' is not under 'rootDir' '/project/example'. 'rootDir' is expected to contain all source files.
+  The file is in the program because:
+    Part of 'files' list in tsconfig.json
+/project/example/tsconfig.json(3,9): error TS5011: The common source directory of 'tsconfig.json' is '../src'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.
+  Visit https://aka.ms/ts6 for migration information.
+
+
+!!! error TS6059: File '/project/src/index.ts' is not under 'rootDir' '/project/example'. 'rootDir' is expected to contain all source files.
+!!! error TS6059:   The file is in the program because:
+!!! error TS6059:     Part of 'files' list in tsconfig.json
+!!! related TS1410 /project/example/tsconfig.json:5:15: File is matched by 'files' list specified here.
+==== /project/example/tsconfig.json (1 errors) ====
+    {
+        "compilerOptions": {
+            "outDir": "."
+            ~~~~~~~~
+!!! error TS5011: The common source directory of 'tsconfig.json' is '../src'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.
+!!! error TS5011:   Visit https://aka.ms/ts6 for migration information.
+        },
+        "files": ["../src/index.ts"]
+    }
+    
+==== /project/src/index.ts (0 errors) ====
+    export const value = 0;
+    

@@ -55,9 +55,9 @@ a2.a;  // string | number | undefined
 >a : Symbol(a, Decl(objectLiteralNormalization.ts, 10, 11), Decl(objectLiteralNormalization.ts, 10, 27))
 
 a2.b;  // number | undefined
->a2.b : Symbol(b, Decl(objectLiteralNormalization.ts, 10, 17), Decl(objectLiteralNormalization.ts, 1, 45))
+>a2.b : Symbol(b, Decl(objectLiteralNormalization.ts, 10, 17))
 >a2 : Symbol(a2, Decl(objectLiteralNormalization.ts, 10, 3))
->b : Symbol(b, Decl(objectLiteralNormalization.ts, 10, 17), Decl(objectLiteralNormalization.ts, 1, 45))
+>b : Symbol(b, Decl(objectLiteralNormalization.ts, 10, 17))
 
 a2 = { a: 10, b: 20 };
 >a2 : Symbol(a2, Decl(objectLiteralNormalization.ts, 10, 3))
@@ -160,18 +160,18 @@ d1.pos.y;
 >y : Symbol(y, Decl(objectLiteralNormalization.ts, 33, 35))
 
 d1.pos.a;
->d1.pos.a : Symbol(a, Decl(objectLiteralNormalization.ts, 10, 27), Decl(objectLiteralNormalization.ts, 33, 73))
+>d1.pos.a : Symbol(a, Decl(objectLiteralNormalization.ts, 33, 73))
 >d1.pos : Symbol(pos, Decl(objectLiteralNormalization.ts, 33, 22), Decl(objectLiteralNormalization.ts, 33, 58))
 >d1 : Symbol(d1, Decl(objectLiteralNormalization.ts, 33, 3))
 >pos : Symbol(pos, Decl(objectLiteralNormalization.ts, 33, 22), Decl(objectLiteralNormalization.ts, 33, 58))
->a : Symbol(a, Decl(objectLiteralNormalization.ts, 10, 27), Decl(objectLiteralNormalization.ts, 33, 73))
+>a : Symbol(a, Decl(objectLiteralNormalization.ts, 33, 73))
 
 d1.pos.b;
->d1.pos.b : Symbol(b, Decl(objectLiteralNormalization.ts, 1, 45), Decl(objectLiteralNormalization.ts, 33, 86))
+>d1.pos.b : Symbol(b, Decl(objectLiteralNormalization.ts, 33, 86))
 >d1.pos : Symbol(pos, Decl(objectLiteralNormalization.ts, 33, 22), Decl(objectLiteralNormalization.ts, 33, 58))
 >d1 : Symbol(d1, Decl(objectLiteralNormalization.ts, 33, 3))
 >pos : Symbol(pos, Decl(objectLiteralNormalization.ts, 33, 22), Decl(objectLiteralNormalization.ts, 33, 58))
->b : Symbol(b, Decl(objectLiteralNormalization.ts, 1, 45), Decl(objectLiteralNormalization.ts, 33, 86))
+>b : Symbol(b, Decl(objectLiteralNormalization.ts, 33, 86))
 
 declare function f<T>(...items: T[]): T;
 >f : Symbol(f, Decl(objectLiteralNormalization.ts, 39, 9))

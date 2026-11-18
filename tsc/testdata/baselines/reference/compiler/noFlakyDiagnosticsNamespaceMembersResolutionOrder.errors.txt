@@ -1,0 +1,61 @@
+/main.ts(8,32): error TS2339: Property 'ma' does not exist on type '{}'.
+
+
+==== /main.ts (1 errors) ====
+    import * as idx from "./index";
+    const all = { ...idx };
+    import * as MA from "./ma";
+    import * as MB from "./mb";
+    export const fromA = MA.pa;
+    export const fromB = MB.pb;
+    export const checkA: 1 = MA.pa.mb;
+    export const checkB: 1 = MB.pb.ma;
+                                   ~~
+!!! error TS2339: Property 'ma' does not exist on type '{}'.
+    
+==== /ma.js (0 errors) ====
+    export { v as pa } from "./xa";
+    export const ma = 1;
+    
+==== /mb.js (0 errors) ====
+    export { v as pb } from "./xb";
+    export const mb = 1;
+    
+==== /xa.js (0 errors) ====
+    /** @type {typeof import("./mb")} */
+    const M = /** @type {any} */ (null);
+    const o = { v: { ...M } };
+    module.exports = o;
+    
+==== /xb.js (0 errors) ====
+    /** @type {typeof import("./ma")} */
+    const M = /** @type {any} */ (null);
+    const o = { v: { ...M } };
+    module.exports = o;
+    
+==== /ia.js (0 errors) ====
+    /** @type {typeof import("./ma")} */
+    const M = /** @type {any} */ (null);
+    const o = { v: { ...M } };
+    module.exports = o;
+    
+==== /ib.js (0 errors) ====
+    /** @type {typeof import("./mb")} */
+    const M = /** @type {any} */ (null);
+    const o = { v: { ...M } };
+    module.exports = o;
+    
+==== /index.js (0 errors) ====
+    export { v as a } from "./ia";
+    export { v as b } from "./ib";
+    export const f1 = 1;
+    export const f2 = 2;
+    export const f3 = 3;
+    export const f4 = 4;
+    export const f5 = 5;
+    export const f6 = 6;
+    export const f7 = 7;
+    export const f8 = 8;
+    export const f9 = 9;
+    export const f10 = 10;
+    

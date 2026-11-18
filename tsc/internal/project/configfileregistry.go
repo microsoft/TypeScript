@@ -4,21 +4,23 @@ import (
 	"iter"
 	"maps"
 	"slices"
+	"strings"
 
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfsmatch"
 )
 
 type ConfigFileRegistry struct {
 	// configs is a map of config file paths to their entries.
-	configs map[tspath.Path]*configFileEntry
+	configs map[tspath.PathKey]*configFileEntry
 	// configFileNames is a map of open file paths to information
 	// about their ancestor config file names. It is only used as
 	// a cache during
-	configFileNames map[tspath.Path]*configFileNames
+	configFileNames map[tspath.PathKey]*configFileNames
 	// customConfigFileName is the custom config file name preference that was
 	// used when building this registry's configFileNames cache.
 	customConfigFileName        string
@@ -27,11 +29,51 @@ type ConfigFileRegistry struct {
 
 type configuredContentMappers struct {
 	extensions []string
+	selectors  []ContentMapperSelector
+}
+
+func contentMapperSelectorPattern(include, extension string) (string, bool) {
+	pattern := tspath.NormalizeSlashes(include)
+	if vfsmatch.IsImplicitGlob(tspath.GetBaseFileName(pattern)) {
+		pattern = tspath.CombinePaths(pattern, "**/*")
+	}
+	pattern = strings.NewReplacer("[", "?", "]", "?", "{", "?", "}", "?").Replace(pattern)
+	lowerPattern := strings.ToLower(pattern)
+	lowerExtension := strings.ToLower(extension)
+	if strings.HasSuffix(lowerPattern, lowerExtension) {
+		return pattern, true
+	}
+	if !strings.ContainsAny(pattern, "*?") {
+		return "", false
+	}
+	if strings.HasSuffix(pattern, "*") {
+		// Append only after a literal prefix and one terminal wildcard.
+		// Broader selectors are safe because the server rechecks claims.
+		last := tspath.GetBaseFileName(pattern)
+		if !strings.ContainsAny(last[:len(last)-1], ".*?") {
+			return pattern + extension, true
+		}
+	}
+	return pattern, true
+}
+
+func contentMapperSelector(base tspath.RootedDirectoryPath, pattern, extension string) ContentMapperSelector {
+	prefix := pattern
+	if wildcard := strings.IndexAny(pattern, "*?"); wildcard >= 0 {
+		prefix = pattern[:wildcard]
+	}
+	baseLength := max(tspath.GetRootLength(pattern), strings.LastIndex(prefix, "/"))
+	if baseLength > 0 {
+		base = base.ResolveDirectory(pattern[:baseLength])
+		pattern = strings.TrimPrefix(pattern[baseLength:], "/")
+	}
+	return ContentMapperSelector{Base: base, Pattern: pattern, Extension: extension}
 }
 
 func collectConfiguredContentMappers(commandLines []*tsoptions.ParsedCommandLine) *configuredContentMappers {
 	var seenExtensions collections.Set[string]
 	var extensions []string
+	var selectors []ContentMapperSelector
 	for _, commandLine := range commandLines {
 		for _, mapper := range commandLine.ContentMappers() {
 			for _, extension := range mapper.Definition.Extensions {
@@ -39,10 +81,25 @@ func collectConfiguredContentMappers(commandLines []*tsoptions.ParsedCommandLine
 					extensions = append(extensions, extension)
 				}
 			}
+			for _, include := range mapper.Definition.Include {
+				include = tspath.GetNormalizedAbsolutePath(include, commandLine.BaseDirectory())
+				for _, extension := range mapper.Definition.Extensions {
+					if pattern, ok := contentMapperSelectorPattern(include, extension); ok {
+						selectors = append(selectors, contentMapperSelector(commandLine.BaseDirectory(), pattern, extension))
+					}
+				}
+			}
+
+			if mapper.Definition.Include == nil {
+				for _, extension := range mapper.Definition.Extensions {
+					selectors = append(selectors, ContentMapperSelector{Pattern: ContentMapperExtensionPattern(extension), Extension: extension})
+				}
+			}
 		}
 	}
 	slices.Sort(extensions)
-	return &configuredContentMappers{extensions: extensions}
+	slices.SortFunc(selectors, compareContentMapperSelectors)
+	return &configuredContentMappers{extensions: extensions, selectors: selectors}
 }
 
 func (c *ConfigFileRegistry) contentMappers() *configuredContentMappers {
@@ -59,38 +116,38 @@ func (c *ConfigFileRegistry) contentMappers() *configuredContentMappers {
 }
 
 type configFileEntry struct {
-	fileName      string
+	fileName      tspath.RootedFilePath
 	pendingReload PendingReload
 	commandLine   *tsoptions.ParsedCommandLine
 	// retainingProjects is the set of projects that have called acquireConfig
 	// without releasing it. A config file entry may be acquired by a project
 	// either because it is the config for that project or because it is the
 	// config for a referenced project.
-	retainingProjects map[tspath.Path]struct{}
+	retainingProjects map[ID]struct{}
 	// retainingOpenFiles is the set of open files that caused this config to
 	// load during project collection building. This config file may or may not
 	// end up being the config for the default project for these files, but
 	// determining the default project loaded this config as a candidate, so
 	// subsequent calls to `projectCollectionBuilder.findDefaultConfiguredProject`
 	// will use this config as part of the search, so it must be retained.
-	retainingOpenFiles map[tspath.Path]struct{}
+	retainingOpenFiles map[tspath.PathKey]struct{}
 	// retainingConfigs is the set of config files that extend this one. This
 	// provides a cheap reverse mapping for a project config's
 	// `commandLine.ExtendedSourceFiles()` that can be used to notify the
 	// extending projects when this config changes. An extended config file may
 	// or may not also be used directly by a project, so it's possible that
 	// when this is set, no other fields will be used.
-	retainingConfigs map[tspath.Path]struct{}
+	retainingConfigs map[tspath.PathKey]struct{}
 	// rootFilesWatch is a watch for the root files of this config file.
 	rootFilesWatch *WatchedFiles[PatternsAndIgnored]
 }
 
-func newConfigFileEntry(hasRelativePatternCapability bool, fileName string) *configFileEntry {
+func newConfigFileEntry(hasRelativePatternCapability bool, fileName tspath.RootedFilePath) *configFileEntry {
 	return &configFileEntry{
 		fileName:      fileName,
 		pendingReload: PendingReloadFull,
 		rootFilesWatch: NewWatchedFiles(
-			"root files for "+fileName,
+			"root files for "+fileName.AsString(),
 			lsproto.WatchKindCreate|lsproto.WatchKindChange|lsproto.WatchKindDelete,
 			hasRelativePatternCapability,
 			core.Identity,
@@ -98,11 +155,11 @@ func newConfigFileEntry(hasRelativePatternCapability bool, fileName string) *con
 	}
 }
 
-func newExtendedConfigFileEntry(fileName string, extendingConfigPath tspath.Path) *configFileEntry {
+func newExtendedConfigFileEntry(fileName tspath.RootedFilePath, extendingConfigPath tspath.PathKey) *configFileEntry {
 	return &configFileEntry{
 		fileName:         fileName,
 		pendingReload:    PendingReloadFull,
-		retainingConfigs: map[tspath.Path]struct{}{extendingConfigPath: {}},
+		retainingConfigs: map[tspath.PathKey]struct{}{extendingConfigPath: {}},
 	}
 }
 
@@ -120,26 +177,26 @@ func (e *configFileEntry) Clone() *configFileEntry {
 	}
 }
 
-func (c *ConfigFileRegistry) GetConfig(path tspath.Path) *tsoptions.ParsedCommandLine {
+func (c *ConfigFileRegistry) GetConfig(path tspath.PathKey) *tsoptions.ParsedCommandLine {
 	if entry, ok := c.configs[path]; ok {
 		return entry.commandLine
 	}
 	return nil
 }
 
-func (c *ConfigFileRegistry) isTracked(path tspath.Path) bool {
+func (c *ConfigFileRegistry) isTracked(path tspath.PathKey) bool {
 	_, ok := c.configs[path]
 	return ok
 }
 
-func (c *ConfigFileRegistry) GetConfigFileName(path tspath.Path) string {
+func (c *ConfigFileRegistry) GetConfigFileName(path tspath.PathKey) tspath.RootedFilePath {
 	if entry, ok := c.configFileNames[path]; ok {
 		return entry.nearestConfigFileName
 	}
 	return ""
 }
 
-func (c *ConfigFileRegistry) GetAncestorConfigFileName(path tspath.Path, higherThanConfig string) string {
+func (c *ConfigFileRegistry) GetAncestorConfigFileName(path tspath.PathKey, higherThanConfig tspath.RootedFilePath) tspath.RootedFilePath {
 	if entry, ok := c.configFileNames[path]; ok {
 		return entry.ancestors[higherThanConfig]
 	}
@@ -158,14 +215,14 @@ func (c *ConfigFileRegistry) clone() *ConfigFileRegistry {
 
 // For testing
 type TestConfigEntry struct {
-	FileName           string
-	RetainingProjects  iter.Seq[tspath.Path]
-	RetainingOpenFiles iter.Seq[tspath.Path]
-	RetainingConfigs   iter.Seq[tspath.Path]
+	FileName           tspath.RootedFilePath
+	RetainingProjects  iter.Seq[ID]
+	RetainingOpenFiles iter.Seq[tspath.PathKey]
+	RetainingConfigs   iter.Seq[tspath.PathKey]
 }
 
 // For testing
-func (c *ConfigFileRegistry) ForEachTestConfigEntry(cb func(tspath.Path, *TestConfigEntry)) {
+func (c *ConfigFileRegistry) ForEachTestConfigEntry(cb func(tspath.PathKey, *TestConfigEntry)) {
 	if c != nil {
 		for path, entry := range c.configs {
 			cb(path, &TestConfigEntry{
@@ -179,7 +236,7 @@ func (c *ConfigFileRegistry) ForEachTestConfigEntry(cb func(tspath.Path, *TestCo
 }
 
 // For testing
-func (c *ConfigFileRegistry) GetTestConfigEntry(path tspath.Path) *TestConfigEntry {
+func (c *ConfigFileRegistry) GetTestConfigEntry(path tspath.PathKey) *TestConfigEntry {
 	if c != nil {
 		if entry, ok := c.configs[path]; ok {
 			return &TestConfigEntry{
@@ -194,12 +251,12 @@ func (c *ConfigFileRegistry) GetTestConfigEntry(path tspath.Path) *TestConfigEnt
 }
 
 type TestConfigFileNamesEntry struct {
-	NearestConfigFileName string
-	Ancestors             map[string]string
+	NearestConfigFileName tspath.RootedFilePath
+	Ancestors             map[tspath.RootedFilePath]tspath.RootedFilePath
 }
 
 // For testing
-func (c *ConfigFileRegistry) ForEachTestConfigFileNamesEntry(cb func(tspath.Path, *TestConfigFileNamesEntry)) {
+func (c *ConfigFileRegistry) ForEachTestConfigFileNamesEntry(cb func(tspath.PathKey, *TestConfigFileNamesEntry)) {
 	if c != nil {
 		for path, entry := range c.configFileNames {
 			cb(path, &TestConfigFileNamesEntry{
@@ -211,7 +268,7 @@ func (c *ConfigFileRegistry) ForEachTestConfigFileNamesEntry(cb func(tspath.Path
 }
 
 // For testing
-func (c *ConfigFileRegistry) GetTestConfigFileNamesEntry(path tspath.Path) *TestConfigFileNamesEntry {
+func (c *ConfigFileRegistry) GetTestConfigFileNamesEntry(path tspath.PathKey) *TestConfigFileNamesEntry {
 	if c != nil {
 		if entry, ok := c.configFileNames[path]; ok {
 			return &TestConfigFileNamesEntry{
@@ -225,7 +282,7 @@ func (c *ConfigFileRegistry) GetTestConfigFileNamesEntry(path tspath.Path) *Test
 
 type configFileNames struct {
 	// nearestConfigFileName is the file name of the nearest ancestor config file.
-	nearestConfigFileName string
+	nearestConfigFileName tspath.RootedFilePath
 	// ancestors is a map from one ancestor config file path to the next.
 	// For example, if `/a`, `/a/b`, and `/a/b/c` all contain config files,
 	// the fully loaded map will look like:
@@ -233,7 +290,7 @@ type configFileNames struct {
 	//			"/a/b/c/tsconfig.json": "/a/b/tsconfig.json",
 	//			"/a/b/tsconfig.json": "/a/tsconfig.json"
 	//		}
-	ancestors map[string]string
+	ancestors map[tspath.RootedFilePath]tspath.RootedFilePath
 }
 
 func (c *configFileNames) Clone() *configFileNames {

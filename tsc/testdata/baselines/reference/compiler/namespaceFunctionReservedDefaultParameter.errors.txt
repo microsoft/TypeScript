@@ -1,0 +1,18 @@
+namespaceFunctionReservedDefaultParameter.ts(2,29): error TS1212: Identifier expected. 'static' is a reserved word in strict mode.
+namespaceFunctionReservedDefaultParameter.ts(3,13): error TS1212: Identifier expected. 'static' is a reserved word in strict mode.
+
+
+==== namespaceFunctionReservedDefaultParameter.ts (2 errors) ====
+    namespace Dependencies {
+        export function scripts(static = false) {
+                                ~~~~~~
+!!! error TS1212: Identifier expected. 'static' is a reserved word in strict mode.
+            if (static) {
+                ~~~~~~
+!!! error TS1212: Identifier expected. 'static' is a reserved word in strict mode.
+                return "static.js";
+            }
+            return "interactive.js";
+        }
+    }
+    

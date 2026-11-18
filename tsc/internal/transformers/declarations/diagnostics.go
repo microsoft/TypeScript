@@ -584,7 +584,7 @@ func addParentDeclarationRelatedInfo(node *ast.Node, diag *ast.Diagnostic) {
 }
 
 func createAccessorTypeError(node *ast.Node) *ast.Diagnostic {
-	allDeclarations := ast.GetAllAccessorDeclarationsForDeclaration(node, node.Symbol().Declarations)
+	allDeclarations := ast.GetAllAccessorDeclarationsForDeclaration(node, node.Symbol().Declarations())
 	getAccessor := allDeclarations.GetAccessor
 	setAccessor := allDeclarations.SetAccessor
 	targetNode := node
@@ -732,5 +732,39 @@ func createGetIsolatedDeclarationErrors(resolver printer.EmitResolver) func(node
 		default:
 			return createExpressionError(node)
 		}
+	}
+}
+
+// symbolAccessibilityDiagnosticContext describes how to produce a symbol accessibility diagnostic
+// for the declaration currently being emitted. Diagnostics are rarely reported, so for the common
+// node-based contexts the selector closure is only created once a diagnostic is actually needed.
+type symbolAccessibilityDiagnosticContext struct {
+	node        *ast.Node
+	forNodeName bool
+	custom      GetSymbolAccessibilityDiagnostic
+}
+
+func diagnosticContextForNode(node *ast.Node) symbolAccessibilityDiagnosticContext {
+	return symbolAccessibilityDiagnosticContext{node: node}
+}
+
+func diagnosticContextForNodeName(node *ast.Node) symbolAccessibilityDiagnosticContext {
+	return symbolAccessibilityDiagnosticContext{node: node, forNodeName: true}
+}
+
+func customDiagnosticContext(fn GetSymbolAccessibilityDiagnostic) symbolAccessibilityDiagnosticContext {
+	return symbolAccessibilityDiagnosticContext{custom: fn}
+}
+
+func (c symbolAccessibilityDiagnosticContext) getDiagnostic(symbolAccessibilityResult printer.SymbolAccessibilityResult) *SymbolAccessibilityDiagnostic {
+	switch {
+	case c.custom != nil:
+		return c.custom(symbolAccessibilityResult)
+	case c.node == nil:
+		return throwDiagnostic(symbolAccessibilityResult)
+	case c.forNodeName:
+		return createGetSymbolAccessibilityDiagnosticForNodeName(c.node)(symbolAccessibilityResult)
+	default:
+		return createGetSymbolAccessibilityDiagnosticForNode(c.node)(symbolAccessibilityResult)
 	}
 }

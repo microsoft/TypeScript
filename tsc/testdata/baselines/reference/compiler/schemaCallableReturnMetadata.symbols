@@ -1,0 +1,31 @@
+//// [tests/cases/compiler/schemaCallableReturnMetadata.ts] ////
+
+=== schemaCallableReturnMetadata.ts ===
+type Test = (() => void) & { options?: {} };
+>Test : Symbol(Test, Decl(schemaCallableReturnMetadata.ts, 0, 0))
+>options : Symbol(options, Decl(schemaCallableReturnMetadata.ts, 0, 28))
+
+interface ISchema {
+>ISchema : Symbol(ISchema, Decl(schemaCallableReturnMetadata.ts, 0, 44))
+
+    resolve(): ISchema;
+>resolve : Symbol(ISchema.resolve, Decl(schemaCallableReturnMetadata.ts, 1, 19))
+>ISchema : Symbol(ISchema, Decl(schemaCallableReturnMetadata.ts, 0, 44))
+
+    asNestedTest(): Test;
+>asNestedTest : Symbol(ISchema.asNestedTest, Decl(schemaCallableReturnMetadata.ts, 2, 23))
+>Test : Symbol(Test, Decl(schemaCallableReturnMetadata.ts, 0, 0))
+}
+
+class Schema implements ISchema {
+>Schema : Symbol(Schema, Decl(schemaCallableReturnMetadata.ts, 4, 1))
+>ISchema : Symbol(ISchema, Decl(schemaCallableReturnMetadata.ts, 0, 44))
+
+    resolve() { return this; }
+>resolve : Symbol(Schema.resolve, Decl(schemaCallableReturnMetadata.ts, 6, 33))
+>this : Symbol(Schema, Decl(schemaCallableReturnMetadata.ts, 4, 1))
+
+    asNestedTest(): () => void { return () => {}; }
+>asNestedTest : Symbol(Schema.asNestedTest, Decl(schemaCallableReturnMetadata.ts, 7, 30))
+}
+

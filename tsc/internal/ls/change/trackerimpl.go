@@ -15,16 +15,18 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/parser"
 	"github.com/microsoft/TypeScript/tsc/internal/printer"
 	"github.com/microsoft/TypeScript/tsc/internal/scanner"
+	"github.com/microsoft/TypeScript/tsc/internal/spanmap"
 	"github.com/microsoft/TypeScript/tsc/internal/stringutil"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
-func (t *Tracker) getTextChangesFromChanges() map[string][]*lsproto.TextEdit {
-	changes := map[string][]*lsproto.TextEdit{}
+func (t *Tracker) getTextChangesFromChanges() map[tspath.RootedFilePath][]*lsproto.TextEdit {
+	changes := map[tspath.RootedFilePath][]*lsproto.TextEdit{}
 	// A content-mapped file can have several projections, each keyed separately in t.changes but
 	// all sharing one original file. Their edits are collected together before being ordered and checked,
 	// so duplicate edits are emitted once and conflicting edits are rejected regardless of map iteration
 	// order.
-	projections := map[string]int{}
+	projections := map[tspath.RootedFilePath]int{}
 	for sourceFile, changesInFile := range t.changes.M {
 		fileName := sourceFile.OriginalFileName()
 		if t.unmappableFiles.Has(fileName) {
@@ -117,30 +119,54 @@ func (t *Tracker) computeNewText(change *trackerEdit, targetSourceFile *ast.Sour
 		return change.NewText
 	}
 
-	pos := change.TextRange.Pos()
-	formatNode := func(n *ast.Node) string {
-		return t.getFormattedTextOfNode(n, targetSourceFile, sourceFile, pos, change.options)
-	}
-
-	var text string
-	switch change.kind {
-	case trackerEditKindReplaceWithMultipleNodes:
-		joiner := change.options.joiner
-		if joiner == "" {
-			joiner = t.newLine
+	positions := t.converters.FromLSPPositionForSourceFile(
+		sourceFile,
+		t.toLSPEditRange(sourceFile, change.TextRange).Start,
+		spanmap.FeatureAll,
+	)
+	var result string
+	found := false
+	// The original range may have multiple verbatim copies; it is safe to lose their identity only when
+	// formatting at every exact projection produces the same edit.
+	for _, mapped := range positions {
+		if !mapped.Fidelity.IsExact() {
+			continue
 		}
-		text = strings.Join(core.Map(change.nodes, func(n *ast.Node) string { return strings.TrimSuffix(formatNode(n), t.newLine) }), joiner)
-	case trackerEditKindReplaceWithSingleNode:
-		text = formatNode(change.Node)
-	default:
-		panic(fmt.Sprintf("change kind %d should have been handled earlier", change.kind))
+		projection := mapped.Script
+		pos := int(mapped.Position)
+		formatNode := func(n *ast.Node) string {
+			return t.getFormattedTextOfNode(n, targetSourceFile, projection, pos, change.options)
+		}
+
+		var text string
+		switch change.kind {
+		case trackerEditKindReplaceWithMultipleNodes:
+			joiner := change.options.joiner
+			if joiner == "" {
+				joiner = t.newLine
+			}
+			text = strings.Join(core.Map(change.nodes, func(n *ast.Node) string { return strings.TrimSuffix(formatNode(n), t.newLine) }), joiner)
+		case trackerEditKindReplaceWithSingleNode:
+			text = formatNode(change.Node)
+		default:
+			panic(fmt.Sprintf("change kind %d should have been handled earlier", change.kind))
+		}
+		// Strip initial indentation if text will be inserted in the middle of the line.
+		noIndent := text
+		if !(change.options.indentation != nil || format.GetLineStartPositionForPosition(pos, projection) == pos) {
+			noIndent = strings.TrimLeftFunc(text, unicode.IsSpace)
+		}
+		candidate := change.options.Prefix + noIndent + core.IfElse(strings.HasSuffix(noIndent, change.options.Suffix), "", change.options.Suffix)
+		if found && candidate != result {
+			t.unmappableFiles.Add(sourceFile.OriginalFileName())
+			return ""
+		}
+		result = candidate
+		found = true
 	}
-	// Strip initial indentation if text will be inserted in the middle of the line.
-	noIndent := text
-	if !(change.options.indentation != nil || format.GetLineStartPositionForPosition(pos, sourceFile) == pos) {
-		noIndent = strings.TrimLeftFunc(text, unicode.IsSpace)
+	if !found {
+		t.unmappableFiles.Add(sourceFile.OriginalFileName())
 	}
-	result := change.options.Prefix + noIndent + core.IfElse(strings.HasSuffix(noIndent, change.options.Suffix), "", change.options.Suffix)
 	return t.reindentInsertedLines(sourceFile, change, result)
 }
 
@@ -203,7 +229,8 @@ func leadingIndentation(text string) string {
 }
 
 func (t *Tracker) getFormattedTextOfNode(nodeIn *ast.Node, targetSourceFile *ast.SourceFile, sourceFile *ast.SourceFile, pos int, options NodeOptions) string {
-	text, sourceFileLike := t.getNonformattedText(nodeIn, targetSourceFile)
+	text, nodeOut := t.getNonformattedText(nodeIn, targetSourceFile)
+	formatFile := printer.CreateSyntheticSourceFile(t.NodeFactory, text, targetSourceFile.ParseOptions())
 	// !!! if (validate) validate(node, text);
 	formatOptions := GetFormatCodeSettingsForWriting(t.formatSettings, targetSourceFile)
 
@@ -220,7 +247,7 @@ func (t *Tracker) getFormattedTextOfNode(nodeIn *ast.Node, targetSourceFile *ast
 		delta = formatOptions.IndentSize
 	}
 
-	changes := format.FormatNodeGivenIndentation(t.ctx, sourceFileLike, sourceFileLike.AsSourceFile(), targetSourceFile.LanguageVariant, initialIndentation, delta)
+	changes := format.FormatNodeGivenIndentation(t.ctx, nodeOut, formatFile, targetSourceFile.LanguageVariant, initialIndentation, delta)
 	return core.ApplyBulkEdits(text, changes)
 }
 
@@ -235,14 +262,7 @@ func GetFormatCodeSettingsForWriting(options lsutil.FormatCodeSettings, sourceFi
 }
 
 func (t *Tracker) getNonformattedText(node *ast.Node, sourceFile *ast.SourceFile) (string, *ast.Node) {
-	text, nodeOut := printer.PrintAndPositionNode(t.NodeFactory, node, sourceFile, t.newLine, t.formatSettings.IndentSize, t.EmitContext)
-	sourceFileLike := printer.CreateSyntheticSourceFile(
-		t.NodeFactory,
-		nodeOut,
-		text,
-		ast.SourceFileParseOptions{FileName: sourceFile.FileName(), Path: sourceFile.Path()},
-	)
-	return text, sourceFileLike.AsNode()
+	return printer.PrintAndPositionNode(t.NodeFactory, node, sourceFile, t.newLine, t.formatSettings.IndentSize, t.EmitContext)
 }
 
 // method on the changeTracker because use of converters

@@ -2,13 +2,16 @@ package tsc
 
 import (
 	"bytes"
+	"context"
 	"errors"
+	"fmt"
 	"io"
 	"strings"
 	"sync"
 	"testing"
 	"time"
 
+	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/compiler"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/execute/incremental"
@@ -18,6 +21,156 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
 	"gotest.tools/v3/assert"
 )
+
+type cancellingProgram struct {
+	compiler.ProgramLike
+	cancel context.CancelFunc
+	phase  string
+	checks int
+	emits  int
+}
+
+func (p *cancellingProgram) GetGlobalDiagnostics(context.Context) []*ast.Diagnostic {
+	return nil
+}
+
+func (p *cancellingProgram) GetSemanticDiagnostics(ctx context.Context, _ *ast.SourceFile) []*ast.Diagnostic {
+	p.checks++
+	if p.phase == "check" {
+		p.cancel()
+		assertContextCancelled(ctx)
+	}
+	return nil
+}
+
+func assertContextCancelled(ctx context.Context) {
+	if ctx.Err() == nil {
+		panic("compilation did not pass the cancellation context")
+	}
+}
+
+func (p *cancellingProgram) Emit(ctx context.Context, _ compiler.EmitOptions) *compiler.EmitResult {
+	p.emits++
+	if p.phase == "emit" {
+		p.cancel()
+		assertContextCancelled(ctx)
+		return nil
+	}
+	return &compiler.EmitResult{}
+}
+
+func TestEmitStopsOnCancellation(t *testing.T) {
+	t.Parallel()
+	for _, phase := range []string{"before", "check", "emit"} {
+		t.Run(phase, func(t *testing.T) {
+			t.Parallel()
+			fs := vfstest.FromMap(map[string]any{"/project/a.ts": "export const a = 1;"}, tspath.CaseSensitive)
+			config := tsoptions.NewParsedCommandLine(&core.CompilerOptions{NoLib: core.TSTrue, ExtendedDiagnostics: core.TSTrue}, []tspath.RootedFilePath{"/project/a.ts"}, nil, "/project", tspath.CaseSensitive)
+			program, err := compiler.NewProgram(t.Context(), compiler.ProgramOptions{
+				Config: config,
+				Host:   compiler.NewCompilerHost(fs, "/lib", nil, nil, nil),
+			})
+			assert.NilError(t, err)
+			ctx, cancel := context.WithCancel(t.Context())
+			defer cancel()
+			if phase == "before" {
+				cancel()
+			}
+			cancelling := &cancellingProgram{ProgramLike: program, cancel: cancel, phase: phase}
+			var output bytes.Buffer
+			reported := false
+			result, statistics := EmitAndReportStatistics(ctx, EmitInput{
+				Sys:         &timingTestSystem{fs: fs, clock: &controlledClock{now: time.Unix(0, 0)}},
+				ProgramLike: cancelling,
+				Program:     program,
+				Config:      config,
+				ReportDiagnostic: func(*ast.Diagnostic) {
+					reported = true
+				},
+				ReportErrorSummary: func([]*ast.Diagnostic) {
+					reported = true
+				},
+				Writer:       &output,
+				CompileTimes: &CompileTimes{},
+			})
+			assert.Equal(t, result.Status, ExitStatusCancelled)
+			assert.Assert(t, result.EmitResult.EmitSkipped)
+			assert.Assert(t, statistics == nil)
+			assert.Assert(t, !reported)
+			assert.Equal(t, output.Len(), 0)
+			if phase == "emit" {
+				assert.Equal(t, cancelling.emits, 1)
+			} else {
+				assert.Equal(t, cancelling.emits, 0)
+			}
+		})
+	}
+}
+
+type cancellingListingWriter struct {
+	bytes.Buffer
+	cancel      context.CancelFunc
+	cancelAfter int
+	writes      int
+}
+
+func (w *cancellingListingWriter) Write(text []byte) (int, error) {
+	n, err := w.Buffer.Write(text)
+	w.writes++
+	if w.writes == w.cancelAfter {
+		w.cancel()
+	}
+	return n, err
+}
+
+func TestExplainFilesStopsOnCancellation(t *testing.T) {
+	t.Parallel()
+	for _, cancelAfter := range []int{1, 2} {
+		t.Run(fmt.Sprintf("writes=%d", cancelAfter), func(t *testing.T) {
+			t.Parallel()
+			fs := vfstest.FromMap(map[string]any{
+				"/project/a.ts": "export const a = 1;",
+				"/project/b.ts": "export const b = 2;",
+			}, tspath.CaseSensitive)
+			config := tsoptions.NewParsedCommandLine(&core.CompilerOptions{
+				NoLib:         core.TSTrue,
+				ListFilesOnly: core.TSTrue,
+				ExplainFiles:  core.TSTrue,
+			}, []tspath.RootedFilePath{"/project/a.ts", "/project/b.ts"}, nil, "/project", tspath.CaseSensitive)
+			program, err := compiler.NewProgram(t.Context(), compiler.ProgramOptions{
+				Config: config,
+				Host:   compiler.NewCompilerHost(fs, "/lib", nil, nil, nil),
+			})
+			assert.NilError(t, err)
+			ctx, cancel := context.WithCancel(t.Context())
+			defer cancel()
+			output := &cancellingListingWriter{cancel: cancel, cancelAfter: cancelAfter}
+			reported := false
+
+			result, statistics := EmitAndReportStatistics(ctx, EmitInput{
+				Sys:         &timingTestSystem{fs: fs, clock: &controlledClock{now: time.Unix(0, 0)}},
+				ProgramLike: program,
+				Program:     program,
+				Config:      config,
+				ReportDiagnostic: func(*ast.Diagnostic) {
+					reported = true
+				},
+				ReportErrorSummary: func([]*ast.Diagnostic) {
+					reported = true
+				},
+				Writer:       output,
+				CompileTimes: &CompileTimes{},
+			})
+
+			assert.Equal(t, result.Status, ExitStatusCancelled)
+			assert.Assert(t, statistics == nil)
+			assert.Assert(t, !reported)
+			assert.Equal(t, output.writes, cancelAfter)
+			assert.Assert(t, strings.HasPrefix(output.String(), "a.ts\n"))
+			assert.Assert(t, !strings.Contains(output.String(), "b.ts"))
+		})
+	}
+}
 
 type contentMapperLoggingTestSystem struct {
 	*timingTestSystem
@@ -106,13 +259,13 @@ type timingTestSystem struct {
 	clock *controlledClock
 }
 
-func (s *timingTestSystem) Writer() io.Writer           { return io.Discard }
-func (s *timingTestSystem) ErrorWriter() io.Writer      { return io.Discard }
-func (s *timingTestSystem) FS() vfs.FS                  { return s.fs }
-func (s *timingTestSystem) DefaultLibraryPath() string  { return "/lib" }
-func (s *timingTestSystem) GetCurrentDirectory() string { return "/project" }
-func (s *timingTestSystem) WriteOutputIsTTY() bool      { return false }
-func (s *timingTestSystem) GetWidthOfTerminal() int     { return 0 }
+func (s *timingTestSystem) Writer() io.Writer                               { return io.Discard }
+func (s *timingTestSystem) ErrorWriter() io.Writer                          { return io.Discard }
+func (s *timingTestSystem) FS() vfs.FS                                      { return s.fs }
+func (s *timingTestSystem) DefaultLibraryPath() tspath.RootedDirectoryPath  { return "/lib" }
+func (s *timingTestSystem) GetCurrentDirectory() tspath.RootedDirectoryPath { return "/project" }
+func (s *timingTestSystem) WriteOutputIsTTY() bool                          { return false }
+func (s *timingTestSystem) GetWidthOfTerminal() int                         { return 0 }
 func (s *timingTestSystem) GetEnvironmentVariable(name string) (string, bool) {
 	return "", false
 }
@@ -149,7 +302,7 @@ export const make = (): Box => ({ value: "ok" });
 	}
 	clock := &controlledClock{now: time.Unix(0, 0)}
 	sys := &timingTestSystem{
-		fs:    vfstest.FromMapWithClock(files, true, &fileClock{}),
+		fs:    vfstest.FromMapWithClock(files, tspath.CaseSensitive, &fileClock{}),
 		clock: clock,
 	}
 	options := &core.CompilerOptions{
@@ -159,23 +312,24 @@ export const make = (): Box => ({ value: "ok" });
 		NoEmit:          core.TSTrue,
 		TsBuildInfoFile: "/project/tsconfig.tsbuildinfo",
 	}
-	config := tsoptions.NewParsedCommandLine(options, []string{"/lib/lib.d.ts", "/project/hub.ts", "/project/spoke.ts"}, nil, tspath.ComparePathsOptions{
-		UseCaseSensitiveFileNames: true,
-		CurrentDirectory:          "/project",
-	})
+	currentDirectory := tspath.RootedDirectoryPath("/project")
+	config := tsoptions.NewParsedCommandLine(options, core.Map([]string{"/lib/lib.d.ts", "/project/hub.ts", "/project/spoke.ts"}, func(fileName string) tspath.RootedFilePath {
+		return tspath.ToRootedFilePath(fileName, currentDirectory)
+	}), nil, currentDirectory, tspath.CaseSensitive)
 
 	compile := func(oldProgram *incremental.Program) (*incremental.Program, *CompileTimes) {
-		host := compiler.NewCachedFSCompilerHost(sys.GetCurrentDirectory(), sys.FS(), sys.DefaultLibraryPath(), nil, nil, nil)
-		program := compiler.NewProgram(compiler.ProgramOptions{
+		host := compiler.NewCachedFSCompilerHost(sys.FS(), sys.DefaultLibraryPath(), nil, nil, nil)
+		program, err := compiler.NewProgram(t.Context(), compiler.ProgramOptions{
 			Config: config,
 			Host:   host,
 		})
+		assert.NilError(t, err)
 		if program.GetSourceFile("/lib/lib.d.ts") == nil {
 			t.Fatal("default library was not loaded")
 		}
 		incrementalProgram := incremental.NewProgram(program, oldProgram, incremental.CreateHost(host), clock.NestedEmitNow, false)
 		times := &CompileTimes{}
-		EmitFilesAndReportErrors(EmitInput{
+		EmitFilesAndReportErrors(t.Context(), EmitInput{
 			Sys:                sys,
 			ProgramLike:        incrementalProgram,
 			Program:            program,
@@ -183,7 +337,7 @@ export const make = (): Box => ({ value: "ok" });
 			ReportDiagnostic:   QuietDiagnosticReporter,
 			ReportErrorSummary: QuietDiagnosticsReporter,
 			Writer:             io.Discard,
-			WriteFile: func(fileName string, text string, data *compiler.WriteFileData) error {
+			WriteFile: func(fileName tspath.RootedFilePath, text string, data *compiler.WriteFileData) error {
 				return sys.fs.WriteFile(fileName, text)
 			},
 			CompileTimes: times,

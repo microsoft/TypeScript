@@ -1,0 +1,35 @@
+//// [tests/cases/compiler/messagePortHandlerEventTypes.ts] ////
+
+=== messagePortHandlerEventTypes.ts ===
+declare const port: MessagePort;
+>port : MessagePort
+
+port.onmessage = event => {
+>port.onmessage = event => {    event.data;} : (this: MessagePort, event: MessageEvent<any>) => void
+>port.onmessage : ((this: MessagePort, ev: MessageEvent) => any) | null
+>port : MessagePort
+>onmessage : ((this: MessagePort, ev: MessageEvent) => any) | null
+>event => {    event.data;} : (this: MessagePort, event: MessageEvent<any>) => void
+>event : MessageEvent<any>
+
+    event.data;
+>event.data : any
+>event : MessageEvent<any>
+>data : any
+
+};
+port.onmessageerror = event => {
+>port.onmessageerror = event => {    event.data;} : (this: MessagePort, event: MessageEvent<any>) => void
+>port.onmessageerror : ((this: MessagePort, ev: MessageEvent) => any) | null
+>port : MessagePort
+>onmessageerror : ((this: MessagePort, ev: MessageEvent) => any) | null
+>event => {    event.data;} : (this: MessagePort, event: MessageEvent<any>) => void
+>event : MessageEvent<any>
+
+    event.data;
+>event.data : any
+>event : MessageEvent<any>
+>data : any
+
+};
+

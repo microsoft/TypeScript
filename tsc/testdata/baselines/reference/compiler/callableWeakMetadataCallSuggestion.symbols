@@ -1,0 +1,19 @@
+//// [tests/cases/compiler/callableWeakMetadataCallSuggestion.ts] ////
+
+=== callableWeakMetadataCallSuggestion.ts ===
+type Initializer = (() => number) & { mutators?: [] };
+>Initializer : Symbol(Initializer, Decl(callableWeakMetadataCallSuggestion.ts, 0, 0))
+>mutators : Symbol(mutators, Decl(callableWeakMetadataCallSuggestion.ts, 0, 37))
+
+declare function createStore(initializer: Initializer): void;
+>createStore : Symbol(createStore, Decl(callableWeakMetadataCallSuggestion.ts, 0, 54))
+>initializer : Symbol(initializer, Decl(callableWeakMetadataCallSuggestion.ts, 2, 29))
+>Initializer : Symbol(Initializer, Decl(callableWeakMetadataCallSuggestion.ts, 0, 0))
+
+declare const initializer: () => any;
+>initializer : Symbol(initializer, Decl(callableWeakMetadataCallSuggestion.ts, 3, 13))
+
+createStore(initializer);
+>createStore : Symbol(createStore, Decl(callableWeakMetadataCallSuggestion.ts, 0, 54))
+>initializer : Symbol(initializer, Decl(callableWeakMetadataCallSuggestion.ts, 3, 13))
+

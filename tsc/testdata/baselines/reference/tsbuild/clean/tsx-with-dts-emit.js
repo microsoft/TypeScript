@@ -9,7 +9,7 @@ export const x = 10;
     "include": ["src/**/*.tsx", "src/**/*.ts"]
 }
 
-tsgo --b project -v --explainFiles
+tsc --b project -v --explainFiles
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -19,11 +19,11 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project 'project/tsconfig.json'...
 
-../../tslibs/TS/Lib/lib.es2025.full.d.ts
-   Default library for target 'ES2025'
+../../tslibs/TS/Lib/lib.es2026.full.d.ts
+   Default library for target 'ES2026'
 project/src/main.tsx
    Matched by include pattern 'src/**/*.tsx' in 'project/tsconfig.json'
-//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -70,14 +70,14 @@ export const x = 10;
 
 project/tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *refresh*    /home/src/workspaces/solution/project/src/main.tsx
 Signatures::
 
 
 Edit [0]:: no change
 
-tsgo --b project -v --explainFiles
+tsc --b project -v --explainFiles
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -90,7 +90,7 @@ Output::
 
 Edit [1]:: clean build
 
-tsgo -b project --clean
+tsc -b project --clean
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/solution/project/src/main.d.ts] *deleted*

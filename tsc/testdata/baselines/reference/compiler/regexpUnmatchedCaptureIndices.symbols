@@ -1,0 +1,40 @@
+//// [tests/cases/compiler/regexpUnmatchedCaptureIndices.ts] ////
+
+=== regexpUnmatchedCaptureIndices.ts ===
+const match = /(section)?/d.exec("");
+>match : Symbol(match, Decl(regexpUnmatchedCaptureIndices.ts, 0, 5))
+>/(section)?/d.exec : Symbol(RegExp.exec, Decl(lib.es5.d.ts, --, --))
+>exec : Symbol(RegExp.exec, Decl(lib.es5.d.ts, --, --))
+
+if (match) {
+>match : Symbol(match, Decl(regexpUnmatchedCaptureIndices.ts, 0, 5))
+
+    match.indices![1][0];
+>match.indices : Symbol(RegExpExecArray.indices, Decl(lib.es2022.regexp.d.ts, --, --))
+>match : Symbol(match, Decl(regexpUnmatchedCaptureIndices.ts, 0, 5))
+>indices : Symbol(RegExpExecArray.indices, Decl(lib.es2022.regexp.d.ts, --, --))
+
+    match.indices![1][1];
+>match.indices : Symbol(RegExpExecArray.indices, Decl(lib.es2022.regexp.d.ts, --, --))
+>match : Symbol(match, Decl(regexpUnmatchedCaptureIndices.ts, 0, 5))
+>indices : Symbol(RegExpExecArray.indices, Decl(lib.es2022.regexp.d.ts, --, --))
+
+    const indices = match.indices![1];
+>indices : Symbol(indices, Decl(regexpUnmatchedCaptureIndices.ts, 5, 9))
+>match.indices : Symbol(RegExpExecArray.indices, Decl(lib.es2022.regexp.d.ts, --, --))
+>match : Symbol(match, Decl(regexpUnmatchedCaptureIndices.ts, 0, 5))
+>indices : Symbol(RegExpExecArray.indices, Decl(lib.es2022.regexp.d.ts, --, --))
+
+    if (indices) {
+>indices : Symbol(indices, Decl(regexpUnmatchedCaptureIndices.ts, 5, 9))
+
+        indices[0];
+>indices : Symbol(indices, Decl(regexpUnmatchedCaptureIndices.ts, 5, 9))
+>0 : Symbol(0)
+
+        indices[1];
+>indices : Symbol(indices, Decl(regexpUnmatchedCaptureIndices.ts, 5, 9))
+>1 : Symbol(1)
+    }
+}
+

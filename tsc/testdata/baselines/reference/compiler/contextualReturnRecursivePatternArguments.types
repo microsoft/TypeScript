@@ -1,0 +1,61 @@
+//// [tests/cases/compiler/contextualReturnRecursivePatternArguments.ts] ////
+
+=== contextualReturnRecursivePatternArguments.ts ===
+interface Matcher<Input, Pattern = unknown> {
+    matcher(): { match(value: Input): boolean; pattern?: Pattern };
+>matcher : () => { match(value: Input): boolean; pattern?: Pattern; }
+>match : (value: Input) => boolean
+>value : Input
+>pattern : Pattern | undefined
+}
+type Pattern<Input> = Input | Matcher<Input> | { [Key in keyof Input]?: Pattern<Input[Key]> };
+>Pattern : Pattern<Input>
+
+declare function union<Input, Patterns extends readonly [Pattern<Input>, ...Pattern<Input>[]]>(...patterns: Patterns): Matcher<Input, Patterns>;
+>union : <Input, Patterns extends readonly [Pattern<Input>, ...Pattern<Input>[]]>(...patterns: Patterns) => Matcher<Input, Patterns>
+>patterns : Patterns
+
+declare function optional<Input, Value extends unknown extends Input ? unknown : Pattern<Input>>(value: Value): Matcher<Input, Value>;
+>optional : <Input, Value extends unknown extends Input ? unknown : Pattern<Input>>(value: Value) => Matcher<Input, Value>
+>value : Value
+
+declare function intersection<Input, Values extends readonly [Pattern<Input>, ...Pattern<Input>[]]>(...values: Values): Matcher<Input, Values>;
+>intersection : <Input, Values extends readonly [Pattern<Input>, ...Pattern<Input>[]]>(...values: Values) => Matcher<Input, Values>
+>values : Values
+
+declare function accept<Value extends Pattern<{ type: "a" | "b" }>>(value: Value): void;
+>accept : <Value extends Pattern<{ type: "a" | "b"; }>>(value: Value) => void
+>type : "a" | "b"
+>value : Value
+
+accept(optional({
+>accept(optional({    // @ts-expect-error    type: union("oops"),})) : void
+>accept : <Value extends Pattern<{ type: "a" | "b"; }>>(value: Value) => void
+>optional({    // @ts-expect-error    type: union("oops"),}) : Matcher<unknown, { type: Matcher<"a" | "b", readonly [Pattern<"a" | "b">, ...Pattern<"a" | "b">[]]>; }>
+>optional : <Input, Value extends unknown extends Input ? unknown : Pattern<Input>>(value: Value) => Matcher<Input, Value>
+>{    // @ts-expect-error    type: union("oops"),} : { type: Matcher<"a" | "b", readonly [Pattern<"a" | "b">, ...Pattern<"a" | "b">[]]>; }
+
+    // @ts-expect-error
+    type: union("oops"),
+>type : Matcher<"a" | "b", readonly [Pattern<"a" | "b">, ...Pattern<"a" | "b">[]]>
+>union("oops") : Matcher<"a" | "b", readonly [Pattern<"a" | "b">, ...Pattern<"a" | "b">[]]>
+>union : <Input, Patterns extends readonly [Pattern<Input>, ...Pattern<Input>[]]>(...patterns: Patterns) => Matcher<Input, Patterns>
+>"oops" : "oops"
+
+}));
+accept(intersection({
+>accept(intersection({    // @ts-expect-error    type: union("oops"),})) : void
+>accept : <Value extends Pattern<{ type: "a" | "b"; }>>(value: Value) => void
+>intersection({    // @ts-expect-error    type: union("oops"),}) : Matcher<unknown, [{ type: Matcher<"a" | "b", readonly [Pattern<"a" | "b">, ...Pattern<"a" | "b">[]]>; }]>
+>intersection : <Input, Values extends readonly [Pattern<Input>, ...Pattern<Input>[]]>(...values: Values) => Matcher<Input, Values>
+>{    // @ts-expect-error    type: union("oops"),} : { type: Matcher<"a" | "b", readonly [Pattern<"a" | "b">, ...Pattern<"a" | "b">[]]>; }
+
+    // @ts-expect-error
+    type: union("oops"),
+>type : Matcher<"a" | "b", readonly [Pattern<"a" | "b">, ...Pattern<"a" | "b">[]]>
+>union("oops") : Matcher<"a" | "b", readonly [Pattern<"a" | "b">, ...Pattern<"a" | "b">[]]>
+>union : <Input, Patterns extends readonly [Pattern<Input>, ...Pattern<Input>[]]>(...patterns: Patterns) => Matcher<Input, Patterns>
+>"oops" : "oops"
+
+}));
+

@@ -1,0 +1,29 @@
+// === findAllReferences ===
+// === /b.ts ===
+// import source [|b|] from "./a.wasm";
+// /*FIND ALL REFS*/[|b|];
+// export { [|b|] };
+// 
+
+// === /d.ts ===
+// import { [|b|] as [|d|] } from "./b";
+// [|d|];
+// 
+
+// === /e.ts ===
+// export { [|b|] as [|e|] } from "./b";
+// 
+
+// === /f.ts ===
+// import { [|e|] as [|f|] } from "./e";
+// [|f|];
+// import * as ns from "./e";
+// ns.[|e|];
+
+
+
+// === findAllReferences ===
+// === /c.ts ===
+// import source [|c|] from "./a.wasm";
+// /*FIND ALL REFS*/[|c|];
+// 

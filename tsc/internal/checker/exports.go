@@ -1,9 +1,21 @@
 package checker
 
 import (
+	"slices"
+
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
+	"github.com/microsoft/TypeScript/tsc/internal/jsnum"
 )
+
+func (c *Checker) GetRelationCacheSizes() RelationCacheSizes {
+	return RelationCacheSizes{
+		Assignable:    c.assignableRelation.size(),
+		Identity:      c.identityRelation.size(),
+		Subtype:       c.subtypeRelation.size(),
+		StrictSubtype: c.strictSubtypeRelation.size(),
+	}
+}
 
 func (c *Checker) GetStringType() *Type {
 	return c.stringType
@@ -57,8 +69,43 @@ func (c *Checker) GetNonPrimitiveType() *Type {
 	return c.nonPrimitiveType
 }
 
+func (c *Checker) GetStringLiteralType(value string) *Type {
+	return c.getStringLiteralType(value)
+}
+
+func (c *Checker) GetNumberLiteralType(value jsnum.Number) *Type {
+	return c.getNumberLiteralType(value)
+}
+
+func (c *Checker) GetBigIntLiteralType(value jsnum.PseudoBigInt) *Type {
+	return c.getBigIntLiteralType(value)
+}
+
+func (c *Checker) GetNullableType(t *Type, flags TypeFlags) *Type {
+	return c.getNullableType(t, flags)
+}
+
+func (c *Checker) GetFalseType() *Type {
+	return c.regularFalseType
+}
+
+func (c *Checker) GetTrueType() *Type {
+	return c.regularTrueType
+}
+
 func (c *Checker) GetBaseTypeOfLiteralType(t *Type) *Type {
 	return c.getBaseTypeOfLiteralType(t)
+}
+
+// GetPrivateIdentifierPropertyOfType looks up a private identifier named name (e.g. "#foo", including
+// the leading '#') lexically in scope at location, and if it resolves to a symbol, returns the
+// corresponding property of leftType (or nil if leftType has no such property).
+func (c *Checker) GetPrivateIdentifierPropertyOfType(leftType *Type, name string, location *ast.Node) *ast.Symbol {
+	lexicallyScopedIdentifier := c.lookupSymbolForPrivateIdentifierDeclaration(name, location)
+	if lexicallyScopedIdentifier == nil {
+		return nil
+	}
+	return c.getPrivateIdentifierPropertyOfType(leftType, lexicallyScopedIdentifier)
 }
 
 func (c *Checker) GetUnknownSymbol() *ast.Symbol {
@@ -82,10 +129,10 @@ func (c *Checker) GetUnionType(types []*Type) *Type {
 }
 
 func (c *Checker) GetNameTypeOfSymbol(symbol *ast.Symbol) *Type {
-	if !c.valueSymbolLinks.Has(symbol) {
-		return nil
+	if links := c.valueSymbolLinks.TryGet(symbol); links != nil {
+		return links.getNameType()
 	}
-	return c.valueSymbolLinks.TryGet(symbol).nameType
+	return nil
 }
 
 func IsTypeUsableAsPropertyName(t *Type) bool {
@@ -102,6 +149,18 @@ func (c *Checker) GetGlobalSymbol(name string, meaning ast.SymbolFlags, diagnost
 
 func (c *Checker) GetMergedSymbol(symbol *ast.Symbol) *ast.Symbol {
 	return c.getMergedSymbol(symbol)
+}
+
+func (c *Checker) GetSymbolOfNode(node *ast.Node) *ast.Symbol {
+	return c.getSymbolOfNode(node)
+}
+
+func (c *Checker) GetSymbolOfDeclaration(node *ast.Node) *ast.Symbol {
+	return c.getSymbolOfDeclaration(node)
+}
+
+func (c *Checker) GetParentOfSymbol(symbol *ast.Symbol) *ast.Symbol {
+	return c.getParentOfSymbol(symbol)
 }
 
 func (c *Checker) TryFindAmbientModule(moduleName string) *ast.Symbol {
@@ -220,6 +279,10 @@ func IsTupleType(t *Type) bool {
 	return isTupleType(t)
 }
 
+func GetEndElementCount(t *TupleType, flags ElementFlags) int {
+	return getEndElementCount(t, flags)
+}
+
 func IsTupleTypeTarget(t *Type) bool {
 	return isTupleType(t) && t.Target() == t
 }
@@ -267,6 +330,10 @@ func (c *Checker) GetTypeOfPropertyOfType(t *Type, name string) *Type {
 
 func (c *Checker) GetContextualTypeForArgumentAtIndex(node *ast.Node, argIndex int) *Type {
 	return c.getContextualTypeForArgumentAtIndex(node, argIndex)
+}
+
+func (c *Checker) GetAwaitedType(t *Type) *Type {
+	return c.getAwaitedType(t)
 }
 
 func (c *Checker) GetIndexSignaturesAtLocation(node *ast.Node) []*ast.Node {
@@ -335,8 +402,20 @@ func (c *Checker) GetIndexInfoOfType(t *Type, keyType *Type) *IndexInfo {
 	return c.getIndexInfoOfType(t, keyType)
 }
 
+func (c *Checker) GetIndexTypeOfType(t *Type, keyType *Type) *Type {
+	return c.getIndexTypeOfType(t, keyType)
+}
+
 func (c *Checker) GetIndexInfosOfType(t *Type) []*IndexInfo {
 	return c.getIndexInfosOfType(t)
+}
+
+func (c *Checker) GetIndexInfosOfIndexSymbol(symbol *ast.Symbol) []*IndexInfo {
+	var siblingSymbols []*ast.Symbol
+	if symbol.Parent() != nil {
+		siblingSymbols = slices.Collect(c.getMembersOfSymbol(symbol.Parent()).Values())
+	}
+	return c.getIndexInfosOfIndexSymbol(symbol, siblingSymbols)
 }
 
 func (c *Checker) IsContextSensitive(node *ast.Node) bool {
@@ -372,7 +451,7 @@ func (c *Checker) RequiresAddingImplicitUndefined(node *ast.Node) bool {
 	if symbol == nil {
 		return false
 	}
-	return c.GetEmitResolver().RequiresAddingImplicitUndefined(node, symbol, enclosingDeclaration)
+	return c.requiresAddingImplicitUndefined(node, symbol, enclosingDeclaration)
 }
 
 func (c *Checker) RemoveMissingOrUndefinedType(t *Type) *Type {
@@ -385,4 +464,8 @@ func (c *Checker) GetWidenedType(t *Type) *Type {
 
 func (c *Checker) CompareSymbols(s1, s2 *ast.Symbol) int {
 	return c.compareSymbols(s1, s2)
+}
+
+func IsDistributedTypeParameter(t *Type) bool {
+	return t.flags&TypeFlagsTypeParameter != 0 && t.AsTypeParameter().isDistributed
 }

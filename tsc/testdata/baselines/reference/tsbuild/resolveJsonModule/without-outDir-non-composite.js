@@ -23,7 +23,7 @@ export default hello.hello
     "files": [ "src/index.ts", "src/hello.json", ],
 }
 
-tsgo --b project --v --explainFiles --listEmittedFiles
+tsc --b project --v --explainFiles --listEmittedFiles
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -35,14 +35,14 @@ Output::
 
 TSFILE: /home/src/workspaces/solution/project/src/index.js
 TSFILE: /home/src/workspaces/solution/project/tsconfig.tsbuildinfo
-../../tslibs/TS/Lib/lib.es2025.full.d.ts
-   Default library for target 'ES2025'
+../../tslibs/TS/Lib/lib.es2026.full.d.ts
+   Default library for target 'ES2026'
 project/src/hello.json
    Imported via "./hello.json" from file 'project/src/index.ts'
    Part of 'files' list in tsconfig.json
 project/src/index.ts
    Part of 'files' list in tsconfig.json
-//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -98,7 +98,7 @@ exports.default = hello_json_1.default.hello;
 
 project/tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *refresh*    /home/src/workspaces/solution/project/src/hello.json
 *refresh*    /home/src/workspaces/solution/project/src/index.ts
 Signatures::
@@ -106,7 +106,7 @@ Signatures::
 
 Edit [0]:: no change
 
-tsgo --b project --v --explainFiles --listEmittedFiles
+tsc --b project --v --explainFiles --listEmittedFiles
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 

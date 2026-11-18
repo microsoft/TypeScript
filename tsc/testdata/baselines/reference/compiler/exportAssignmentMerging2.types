@@ -2,18 +2,18 @@
 
 === b.ts ===
 import a = require("./a");
->a : typeof mod
+>a : typeof a
 
 const c1 = a.a;
 >c1 : 1
 >a.a : 1
->a : typeof mod
+>a : typeof a
 >a : 1
 
 const c2 = a.b;
 >c2 : "hello"
 >a.b : "hello"
->a : typeof mod
+>a : typeof a
 >b : "hello"
 
 let v1: a.Foo = { x: "test" };

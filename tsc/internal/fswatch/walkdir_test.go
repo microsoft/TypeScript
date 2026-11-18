@@ -87,8 +87,8 @@ func TestWalkDirIgnoresUnreadableSubdir(t *testing.T) { //nolint:paralleltest //
 }
 
 func testWalkDirIgnoresUnreadableSubdir(t *testing.T, walk walkDirFunc) {
-	if runtime.GOOS == "windows" {
-		t.Skip("Windows does not enforce POSIX directory permission bits")
+	if runtime.GOOS == "windows" || runtime.GOOS == "wasip1" {
+		t.Skip("directory permission bits are not enforced on " + runtime.GOOS)
 	}
 	if os.Geteuid() == 0 {
 		t.Skip("root can read directories regardless of mode bits")

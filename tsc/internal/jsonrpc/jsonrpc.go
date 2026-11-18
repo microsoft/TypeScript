@@ -106,8 +106,8 @@ func (r *ResponseError) String() string {
 		return ""
 	}
 	data, err := json.Marshal(r.Data)
-	if err != nil {
-		return fmt.Sprintf("[%d]: %s\n%v", r.Code, r.Message, data)
+	if err == nil && r.Data != nil {
+		return fmt.Sprintf("[%d]: %s\n%s", r.Code, r.Message, data)
 	}
 	return fmt.Sprintf("[%d]: %s", r.Code, r.Message)
 }

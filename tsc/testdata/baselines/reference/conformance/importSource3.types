@@ -1,0 +1,80 @@
+//// [tests/cases/conformance/importSource/importSource3.ts] ////
+
+=== a.ts ===
+export default 1;
+export const a = 2;
+>a : 2
+>2 : 2
+
+=== b.ts ===
+import source from "./a.js";
+>source : 1
+
+const a: number = source;
+>a : number
+>source : 1
+
+=== c.ts ===
+import source, { a } from "./a.js";
+>source : 1
+>a : 2
+
+const b: number = source + a;
+>b : number
+>source + a : number
+>source : 1
+>a : 2
+
+=== d.ts ===
+import source = require("./a");
+>source : typeof source
+
+const a: typeof source = source;
+>a : typeof source
+>source : typeof source
+>source : typeof source
+
+=== e.ts ===
+const source = 1;
+>source : 1
+>1 : 1
+
+const a: number = source;
+>a : number
+>source : 1
+
+=== g.ts ===
+import source from from "./f.wasm";
+>from : AbstractModuleSource
+
+const a: AbstractModuleSource = from;
+>a : AbstractModuleSource
+>from : AbstractModuleSource
+
+=== h.ts ===
+import source type from "./f.wasm";
+>type : AbstractModuleSource
+
+const a: AbstractModuleSource = type;
+>a : AbstractModuleSource
+>type : AbstractModuleSource
+
+=== i.ts ===
+import source source from "./f.wasm";
+>source : AbstractModuleSource
+
+const a: AbstractModuleSource = source;
+>a : AbstractModuleSource
+>source : AbstractModuleSource
+
+=== j.ts ===
+import
+source
+a
+>a : AbstractModuleSource
+
+from "./f.wasm";
+const b: AbstractModuleSource = a;
+>b : AbstractModuleSource
+>a : AbstractModuleSource
+

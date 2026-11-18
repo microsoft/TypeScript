@@ -1,0 +1,26 @@
+a.ts(1,39): error TS1005: ';' expected.
+a.ts(1,42): error TS1128: Declaration or statement expected.
+
+
+==== a.ts (2 errors) ====
+    interface A<T> { private a(): boolean {} }
+                                          ~
+!!! error TS1005: ';' expected.
+                                             ~
+!!! error TS1128: Declaration or statement expected.
+    
+    interface B {
+        /** Method documentation. */
+        private a<T>(x: T): T;
+        private b(x: string): string;
+        private b(x: number): number;
+        private c?(): boolean;
+    }
+    
+    type C = {
+        /** Method documentation. */
+        private a(): boolean;
+        private b(x: string): string;
+        private b(x: number): number;
+    };
+    

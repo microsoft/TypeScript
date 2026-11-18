@@ -10,18 +10,20 @@
  *   - packages/typescript/src/api/node/protocol.generated.ts
  */
 
-import * as fs from "node:fs";
 import * as path from "node:path";
 import { fileURLToPath } from "node:url";
-import { xSync } from "tinyexec";
+import { GeneratedFile } from "../gen/generatedFile.mts";
+import {
+    formatFilesSync,
+    parseGeneratorArgs,
+    repoRoot as ROOT,
+} from "../gen/utils.mts";
 import type {
     KindType,
     MemberInfo,
     NodeType,
 } from "./schema.ts";
 import { api } from "./schema.ts";
-
-const ROOT = path.resolve(import.meta.dirname!, "../../..");
 
 // ═══════════════════════════════════════════════════════════════════════════
 // Code writer
@@ -612,7 +614,12 @@ function generateGoCreateStringNode(w: CodeWriter) {
     w.write("func (d *astDecoder) createStringNode(kind ast.Kind, data uint32, commonData uint8) (*ast.Node, error) {");
     w.push();
     w.write("strIdx := data & NodeDataStringIndexMask");
-    w.write("text := d.getString(strIdx)");
+    w.write("text, err := d.getString(strIdx)");
+    w.write("if err != nil {");
+    w.push();
+    w.write("return nil, err");
+    w.pop();
+    w.write("}");
     w.write("");
     w.write("switch kind {");
 
@@ -1544,6 +1551,10 @@ function emitRemoteNodeList(w: CodeWriter) {
     w.write(`        return this.view.getUint32(this._byteIndex + NODE_OFFSET_NEXT, true);`);
     w.write(`    }`);
     w.write(``);
+    w.write(`    get firstNodeIndex(): number {`);
+    w.write(`        return this.index + 1;`);
+    w.write(`    }`);
+    w.write(``);
     w.write(`    private get data(): number {`);
     w.write(`        return this.view.getUint32(this._byteIndex + NODE_OFFSET_DATA, true);`);
     w.write(`    }`);
@@ -1635,7 +1646,7 @@ function emitRemoteNodeList(w: CodeWriter) {
     w.write(`        return this.getOrCreateChildAtNodeIndex(next) as RemoteNode;`);
     w.write(`    }`);
     w.write(``);
-    w.write(`    private getOrCreateChildAtNodeIndex(index: number): RemoteNode | RemoteNodeList {`);
+    w.write(`    getOrCreateChildAtNodeIndex(index: number): RemoteNode | RemoteNodeList {`);
     w.write(`        let child = this.sourceFile.nodes[index];`);
     w.write(`        if (!child) {`);
     w.write(`            const kind = this.view.getUint32(this.sourceFile._offsetNodes + index * NODE_LEN + NODE_OFFSET_KIND, true);`);
@@ -1698,6 +1709,36 @@ function emitRemoteNodeClassOpen(w: CodeWriter) {
     w.write(`                }`);
     w.write(`                else if (child.kind !== SyntaxKind.JSDoc) {`);
     w.write(`                    const result = visitNode(child);`);
+    w.write(`                    if (result) {`);
+    w.write(`                        return result;`);
+    w.write(`                    }`);
+    w.write(`                }`);
+    w.write(`                next = child.next;`);
+    w.write(`            }`);
+    w.write(`            while (next);`);
+    w.write(`        }`);
+    w.write(`    }`);
+    w.write(``);
+    w.write(`    *childrenIter<TNext = void>(): Generator<Node, TNext | undefined, TNext> {`);
+    w.write(`        if (this.hasChildren()) {`);
+    w.write(`            let next = this.index + 1;`);
+    w.write(`            do {`);
+    w.write(`                const child = this.getOrCreateChildAtNodeIndex(next);`);
+    w.write(`                if (child instanceof RemoteNodeList) {`);
+    w.write(`                    if (child.length) {`);
+    w.write(`                        let listNext = child.firstNodeIndex;`);
+    w.write(`                        while (listNext) {`);
+    w.write(`                            const node = child.getOrCreateChildAtNodeIndex(listNext) as RemoteNode;`);
+    w.write(`                            listNext = node.next;`);
+    w.write(`                            const result = yield node;`);
+    w.write(`                            if (result) {`);
+    w.write(`                                return result;`);
+    w.write(`                            }`);
+    w.write(`                        }`);
+    w.write(`                    }`);
+    w.write(`                }`);
+    w.write(`                else if (child.kind !== SyntaxKind.JSDoc) {`);
+    w.write(`                    const result = yield child;`);
     w.write(`                    if (result) {`);
     w.write(`                        return result;`);
     w.write(`                    }`);
@@ -2009,14 +2050,13 @@ function emitRemoteNodeClassClose(w: CodeWriter) {
 // Main: generate and write all files
 // ═══════════════════════════════════════════════════════════════════════════
 
-function writeAndFormat(filePath: string, content: string, formatter: string) {
-    fs.writeFileSync(filePath, content);
+function writeAndFormat(filePath: string, generate: () => string, force: boolean) {
+    const generated = new GeneratedFile(filePath, [import.meta.filename, path.join(ROOT, "tools/scripts/tsc/schema.ts"), path.join(ROOT, "tools/scripts/tsc/ast.json")]);
+    if (generated.isCurrent(force)) return;
+    generated.write(generate() + "\n");
     try {
-        const [cmd, ...args] = formatter.split(" ");
-        xSync(cmd, [...args, filePath], {
-            throwOnError: true,
-            nodeOptions: { stdio: "inherit", cwd: ROOT },
-        });
+        formatFilesSync([filePath]);
+        generated.markCurrent();
     }
     catch {
         console.warn(`Warning: formatter failed for ${filePath}`);
@@ -2024,47 +2064,46 @@ function writeAndFormat(filePath: string, content: string, formatter: string) {
     console.log(`Wrote ${filePath}`);
 }
 
-export default function main() {
-    console.log("Generating encoder/decoder code...");
+export const outputs = [
+    "tsc/internal/api/encoder/encoder_generated.go",
+    "tsc/internal/api/encoder/decoder_generated.go",
+    "packages/typescript/src/api/node/protocol.generated.ts",
+    "packages/typescript/src/api/node/encoder.generated.ts",
+    "packages/typescript/src/api/node/node.generated.ts",
+] as const;
 
-    const goEncoder = generateGoEncoder();
+export default function main(force = false) {
     writeAndFormat(
-        path.join(ROOT, "tsc/internal/api/encoder/encoder_generated.go"),
-        goEncoder + "\n",
-        "dprint fmt",
+        path.join(ROOT, outputs[0]),
+        generateGoEncoder,
+        force,
     );
 
-    const goDecoder = generateGoDecoder();
     writeAndFormat(
-        path.join(ROOT, "tsc/internal/api/encoder/decoder_generated.go"),
-        goDecoder + "\n",
-        "dprint fmt",
+        path.join(ROOT, outputs[1]),
+        generateGoDecoder,
+        force,
     );
 
-    const tsProtocol = generateTSProtocol();
     writeAndFormat(
-        path.join(ROOT, "packages/typescript/src/api/node/protocol.generated.ts"),
-        tsProtocol + "\n",
-        "dprint fmt",
+        path.join(ROOT, outputs[2]),
+        generateTSProtocol,
+        force,
     );
 
-    const tsEncoder = generateTSEncoder();
     writeAndFormat(
-        path.join(ROOT, "packages/typescript/src/api/node/encoder.generated.ts"),
-        tsEncoder + "\n",
-        "dprint fmt",
+        path.join(ROOT, outputs[3]),
+        generateTSEncoder,
+        force,
     );
 
-    const tsNode = generateTSNodeGenerated();
     writeAndFormat(
-        path.join(ROOT, "packages/typescript/src/api/node/node.generated.ts"),
-        tsNode + "\n",
-        "dprint fmt",
+        path.join(ROOT, outputs[4]),
+        generateTSNodeGenerated,
+        force,
     );
-
-    console.log("Done!");
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
-    main();
+    main(parseGeneratorArgs({}).force);
 }

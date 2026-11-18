@@ -1,0 +1,87 @@
+//// [tests/cases/compiler/comparisonAnonymousMappedTypes.ts] ////
+
+=== comparisonAnonymousMappedTypes.ts ===
+declare function mapped<T>(): { [K in "value"]: T };
+>mapped : <T>() => { [K in "value"]: T; }
+
+declare function object<T>(): { value: T };
+>object : <T>() => { value: T; }
+>value : T
+
+declare function homomorphic<T>(): { [K in keyof T]: T[K] };
+>homomorphic : <T>() => { [K in keyof T]: T[K]; }
+
+export const mappedValues = [mapped<number>(), mapped<string>(), mapped<boolean>()];
+>mappedValues : ({ value: string; } | { value: number; } | { value: boolean; })[]
+>[mapped<number>(), mapped<string>(), mapped<boolean>()] : ({ value: string; } | { value: number; } | { value: boolean; })[]
+>mapped<number>() : { value: number; }
+>mapped : <T>() => { [K in "value"]: T; }
+>mapped<string>() : { value: string; }
+>mapped : <T>() => { [K in "value"]: T; }
+>mapped<boolean>() : { value: boolean; }
+>mapped : <T>() => { [K in "value"]: T; }
+
+export const objectValues = [object<number>(), object<string>(), object<boolean>()];
+>objectValues : ({ value: string; } | { value: number; } | { value: boolean; })[]
+>[object<number>(), object<string>(), object<boolean>()] : ({ value: string; } | { value: number; } | { value: boolean; })[]
+>object<number>() : { value: number; }
+>object : <T>() => { value: T; }
+>object<string>() : { value: string; }
+>object : <T>() => { value: T; }
+>object<boolean>() : { value: boolean; }
+>object : <T>() => { value: T; }
+
+export const reversedMappedValues = [mapped<boolean>(), mapped<string>(), mapped<number>()];
+>reversedMappedValues : ({ value: string; } | { value: number; } | { value: boolean; })[]
+>[mapped<boolean>(), mapped<string>(), mapped<number>()] : ({ value: string; } | { value: number; } | { value: boolean; })[]
+>mapped<boolean>() : { value: boolean; }
+>mapped : <T>() => { [K in "value"]: T; }
+>mapped<string>() : { value: string; }
+>mapped : <T>() => { [K in "value"]: T; }
+>mapped<number>() : { value: number; }
+>mapped : <T>() => { [K in "value"]: T; }
+
+interface StringValue { value: string }
+>value : string
+
+interface NumberValue { value: number }
+>value : number
+
+interface BooleanValue { value: boolean }
+>value : boolean
+
+export const homomorphicValues = [
+>homomorphicValues : ({ value: boolean; } | { value: number; } | { value: string; })[]
+>[    homomorphic<NumberValue>(),    homomorphic<StringValue>(),    homomorphic<BooleanValue>()] : ({ value: boolean; } | { value: number; } | { value: string; })[]
+
+    homomorphic<NumberValue>(),
+>homomorphic<NumberValue>() : { value: number; }
+>homomorphic : <T>() => { [K in keyof T]: T[K]; }
+
+    homomorphic<StringValue>(),
+>homomorphic<StringValue>() : { value: string; }
+>homomorphic : <T>() => { [K in keyof T]: T[K]; }
+
+    homomorphic<BooleanValue>()
+>homomorphic<BooleanValue>() : { value: boolean; }
+>homomorphic : <T>() => { [K in keyof T]: T[K]; }
+
+];
+export const reversedHomomorphicValues = [
+>reversedHomomorphicValues : ({ value: boolean; } | { value: number; } | { value: string; })[]
+>[    homomorphic<BooleanValue>(),    homomorphic<StringValue>(),    homomorphic<NumberValue>()] : ({ value: boolean; } | { value: number; } | { value: string; })[]
+
+    homomorphic<BooleanValue>(),
+>homomorphic<BooleanValue>() : { value: boolean; }
+>homomorphic : <T>() => { [K in keyof T]: T[K]; }
+
+    homomorphic<StringValue>(),
+>homomorphic<StringValue>() : { value: string; }
+>homomorphic : <T>() => { [K in keyof T]: T[K]; }
+
+    homomorphic<NumberValue>()
+>homomorphic<NumberValue>() : { value: number; }
+>homomorphic : <T>() => { [K in keyof T]: T[K]; }
+
+];
+

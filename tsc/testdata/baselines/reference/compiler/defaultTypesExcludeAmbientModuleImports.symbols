@@ -1,0 +1,9 @@
+//// [tests/cases/compiler/defaultTypesExcludeAmbientModuleImports.ts] ////
+
+=== /main.mts ===
+import { value } from "engine";
+>value : Symbol(value, Decl(main.mts, 0, 8))
+
+export { default as engine } from "engine";
+>engine : Symbol(engine, Decl(main.mts, 1, 8))
+

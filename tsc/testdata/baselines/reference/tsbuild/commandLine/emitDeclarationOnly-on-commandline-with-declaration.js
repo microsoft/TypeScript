@@ -25,7 +25,7 @@ import { b } from "../../project1/src/b"; export const g = b;
     "references": [{ "path": "../../project1/src" }]
 }
 
-tsgo --b project2/src --verbose --emitDeclarationOnly
+tsc --b project2/src --verbose --emitDeclarationOnly
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -48,7 +48,7 @@ Output::
 
 Found 1 error in project2/src/tsconfig.json[90m:3[0m
 
-//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -156,7 +156,7 @@ export declare const g = 10;
 
 project1/src/tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *refresh*    /home/src/workspaces/solution/project1/src/a.ts
 *refresh*    /home/src/workspaces/solution/project1/src/b.ts
 *refresh*    /home/src/workspaces/solution/project1/src/c.ts
@@ -165,7 +165,7 @@ Signatures::
 
 project2/src/tsconfig.json::
 SemanticDiagnostics::
-*not cached* /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*not cached* /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *not cached* /home/src/workspaces/solution/project2/src/e.ts
 *not cached* /home/src/workspaces/solution/project1/src/a.d.ts
 *not cached* /home/src/workspaces/solution/project2/src/f.ts
@@ -176,7 +176,7 @@ Signatures::
 
 Edit [0]:: no change
 
-tsgo --b project2/src --verbose --emitDeclarationOnly
+tsc --b project2/src --verbose --emitDeclarationOnly
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -205,7 +205,7 @@ Found 1 error in project2/src/tsconfig.json[90m:3[0m
 
 project2/src/tsconfig.json::
 SemanticDiagnostics::
-*not cached* /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*not cached* /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *not cached* /home/src/workspaces/solution/project2/src/e.ts
 *not cached* /home/src/workspaces/solution/project1/src/a.d.ts
 *not cached* /home/src/workspaces/solution/project2/src/f.ts
@@ -218,7 +218,7 @@ Edit [1]:: local change
 //// [/home/src/workspaces/solution/project1/src/a.ts] *modified* 
 export const a = 10;const aLocal = 10;const aa = 10;
 
-tsgo --b project2/src --verbose --emitDeclarationOnly
+tsc --b project2/src --verbose --emitDeclarationOnly
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -255,7 +255,7 @@ Found 1 error in project2/src/tsconfig.json[90m:3[0m
 
 project1/src/tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *refresh*    /home/src/workspaces/solution/project1/src/a.ts
 *refresh*    /home/src/workspaces/solution/project1/src/b.ts
 *refresh*    /home/src/workspaces/solution/project1/src/c.ts
@@ -264,7 +264,7 @@ Signatures::
 
 project2/src/tsconfig.json::
 SemanticDiagnostics::
-*not cached* /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*not cached* /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *not cached* /home/src/workspaces/solution/project2/src/e.ts
 *not cached* /home/src/workspaces/solution/project1/src/a.d.ts
 *not cached* /home/src/workspaces/solution/project2/src/f.ts
@@ -277,7 +277,7 @@ Edit [2]:: non local change
 //// [/home/src/workspaces/solution/project1/src/a.ts] *modified* 
 export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;
 
-tsgo --b project2/src --verbose --emitDeclarationOnly
+tsc --b project2/src --verbose --emitDeclarationOnly
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -317,7 +317,7 @@ export declare const aaa = 10;
 
 project1/src/tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *refresh*    /home/src/workspaces/solution/project1/src/a.ts
 *refresh*    /home/src/workspaces/solution/project1/src/b.ts
 *refresh*    /home/src/workspaces/solution/project1/src/c.ts
@@ -326,7 +326,7 @@ Signatures::
 
 project2/src/tsconfig.json::
 SemanticDiagnostics::
-*not cached* /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*not cached* /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *not cached* /home/src/workspaces/solution/project2/src/e.ts
 *not cached* /home/src/workspaces/solution/project1/src/a.d.ts
 *not cached* /home/src/workspaces/solution/project2/src/f.ts
@@ -337,7 +337,7 @@ Signatures::
 
 Edit [3]:: emit js files
 
-tsgo --b project2/src --verbose
+tsc --b project2/src --verbose
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -403,7 +403,7 @@ export const g = b;
 
 project1/src/tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *refresh*    /home/src/workspaces/solution/project1/src/a.ts
 *refresh*    /home/src/workspaces/solution/project1/src/b.ts
 *refresh*    /home/src/workspaces/solution/project1/src/c.ts
@@ -412,7 +412,7 @@ Signatures::
 
 project2/src/tsconfig.json::
 SemanticDiagnostics::
-*not cached* /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*not cached* /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *not cached* /home/src/workspaces/solution/project2/src/e.ts
 *not cached* /home/src/workspaces/solution/project1/src/a.d.ts
 *not cached* /home/src/workspaces/solution/project2/src/f.ts
@@ -423,7 +423,7 @@ Signatures::
 
 Edit [4]:: no change
 
-tsgo --b project2/src --verbose --emitDeclarationOnly
+tsc --b project2/src --verbose --emitDeclarationOnly
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -452,7 +452,7 @@ Found 1 error in project2/src/tsconfig.json[90m:3[0m
 
 project2/src/tsconfig.json::
 SemanticDiagnostics::
-*not cached* /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*not cached* /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *not cached* /home/src/workspaces/solution/project2/src/e.ts
 *not cached* /home/src/workspaces/solution/project1/src/a.d.ts
 *not cached* /home/src/workspaces/solution/project2/src/f.ts
@@ -465,7 +465,7 @@ Edit [5]:: js emit with change without emitDeclarationOnly
 //// [/home/src/workspaces/solution/project1/src/b.ts] *modified* 
 export const b = 10;const bLocal = 10;const alocal = 10;
 
-tsgo --b project2/src --verbose
+tsc --b project2/src --verbose
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -513,7 +513,7 @@ const alocal = 10;
 
 project1/src/tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *refresh*    /home/src/workspaces/solution/project1/src/a.ts
 *refresh*    /home/src/workspaces/solution/project1/src/b.ts
 *refresh*    /home/src/workspaces/solution/project1/src/c.ts
@@ -522,7 +522,7 @@ Signatures::
 
 project2/src/tsconfig.json::
 SemanticDiagnostics::
-*not cached* /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*not cached* /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *not cached* /home/src/workspaces/solution/project2/src/e.ts
 *not cached* /home/src/workspaces/solution/project1/src/a.d.ts
 *not cached* /home/src/workspaces/solution/project2/src/f.ts
@@ -535,7 +535,7 @@ Edit [6]:: local change
 //// [/home/src/workspaces/solution/project1/src/b.ts] *modified* 
 export const b = 10;const bLocal = 10;const alocal = 10;const aaaa = 10;
 
-tsgo --b project2/src --verbose --emitDeclarationOnly
+tsc --b project2/src --verbose --emitDeclarationOnly
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -572,7 +572,7 @@ Found 1 error in project2/src/tsconfig.json[90m:3[0m
 
 project1/src/tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *refresh*    /home/src/workspaces/solution/project1/src/a.ts
 *refresh*    /home/src/workspaces/solution/project1/src/b.ts
 *refresh*    /home/src/workspaces/solution/project1/src/c.ts
@@ -581,7 +581,7 @@ Signatures::
 
 project2/src/tsconfig.json::
 SemanticDiagnostics::
-*not cached* /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*not cached* /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *not cached* /home/src/workspaces/solution/project2/src/e.ts
 *not cached* /home/src/workspaces/solution/project1/src/a.d.ts
 *not cached* /home/src/workspaces/solution/project2/src/f.ts
@@ -594,7 +594,7 @@ Edit [7]:: non local change
 //// [/home/src/workspaces/solution/project1/src/b.ts] *modified* 
 export const b = 10;const bLocal = 10;const alocal = 10;const aaaa = 10;export const aaaaa = 10;
 
-tsgo --b project2/src --verbose --emitDeclarationOnly
+tsc --b project2/src --verbose --emitDeclarationOnly
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -634,7 +634,7 @@ export declare const aaaaa = 10;
 
 project1/src/tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *refresh*    /home/src/workspaces/solution/project1/src/a.ts
 *refresh*    /home/src/workspaces/solution/project1/src/b.ts
 *refresh*    /home/src/workspaces/solution/project1/src/c.ts
@@ -643,7 +643,7 @@ Signatures::
 
 project2/src/tsconfig.json::
 SemanticDiagnostics::
-*not cached* /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*not cached* /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *not cached* /home/src/workspaces/solution/project2/src/e.ts
 *not cached* /home/src/workspaces/solution/project1/src/a.d.ts
 *not cached* /home/src/workspaces/solution/project2/src/f.ts
@@ -656,7 +656,7 @@ Edit [8]:: js emit with change without emitDeclarationOnly
 //// [/home/src/workspaces/solution/project1/src/b.ts] *modified* 
 export const b = 10;const bLocal = 10;const alocal = 10;const aaaa = 10;export const aaaaa = 10;export const a2 = 10;
 
-tsgo --b project2/src --verbose
+tsc --b project2/src --verbose
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -711,7 +711,7 @@ export const a2 = 10;
 
 project1/src/tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *refresh*    /home/src/workspaces/solution/project1/src/a.ts
 *refresh*    /home/src/workspaces/solution/project1/src/b.ts
 *refresh*    /home/src/workspaces/solution/project1/src/c.ts
@@ -720,7 +720,7 @@ Signatures::
 
 project2/src/tsconfig.json::
 SemanticDiagnostics::
-*not cached* /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*not cached* /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *not cached* /home/src/workspaces/solution/project2/src/e.ts
 *not cached* /home/src/workspaces/solution/project1/src/a.d.ts
 *not cached* /home/src/workspaces/solution/project2/src/f.ts

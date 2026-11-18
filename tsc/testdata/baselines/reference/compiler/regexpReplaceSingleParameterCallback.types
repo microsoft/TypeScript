@@ -1,0 +1,18 @@
+//// [tests/cases/compiler/regexpReplaceSingleParameterCallback.ts] ////
+
+=== regexpReplaceSingleParameterCallback.ts ===
+declare const pattern: RegExp;
+>pattern : RegExp
+
+declare const replace: (value: string) => string;
+>replace : (value: string) => string
+>value : string
+
+"".replace(pattern, replace);
+>"".replace(pattern, replace) : string
+>"".replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; (searchValue: { [Symbol.replace](string: string, replaceValue: string): string; }, replaceValue: string): string; (searchValue: { [Symbol.replace](string: string, replacer: (substring: string, ...args: any[]) => string): string; }, replacer: (substring: string, ...args: any[]) => string): string; }
+>"" : ""
+>replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; (searchValue: { [Symbol.replace](string: string, replaceValue: string): string; }, replaceValue: string): string; (searchValue: { [Symbol.replace](string: string, replacer: (substring: string, ...args: any[]) => string): string; }, replacer: (substring: string, ...args: any[]) => string): string; }
+>pattern : RegExp
+>replace : (value: string) => string
+

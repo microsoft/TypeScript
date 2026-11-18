@@ -10,8 +10,44 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/compiler"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
 )
+
+func TestEmitStopsWritingOnCancellation(t *testing.T) {
+	t.Parallel()
+	fs := vfstest.FromMap(map[string]string{
+		"/src/a.ts": "export const a = 1;",
+		"/src/b.ts": "export const b = 2;",
+	}, tspath.CaseSensitive)
+	program, err := compiler.NewProgram(t.Context(), compiler.ProgramOptions{
+		Config: tsoptions.NewParsedCommandLine(
+			&core.CompilerOptions{NoLib: core.TSTrue, Declaration: core.TSTrue, SourceMap: core.TSTrue},
+			testFileNames("/src/a.ts", "/src/b.ts"), nil, "/src", tspath.CaseSensitive,
+		),
+		SingleThreaded: core.TSTrue,
+		Host:           compiler.NewCompilerHost(fs, "/", nil, nil, nil),
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	ctx, cancel := context.WithCancel(t.Context())
+	defer cancel()
+	writes := 0
+	result := program.Emit(ctx, compiler.EmitOptions{
+		WriteFile: func(fileName tspath.RootedFilePath, text string, data *compiler.WriteFileData) error {
+			writes++
+			cancel()
+			return nil
+		},
+	})
+	if writes != 1 {
+		t.Fatalf("wrote %d files after cancellation; want 1", writes)
+	}
+	if result != nil {
+		t.Fatal("cancelled emit returned a completed result")
+	}
+}
 
 // generateLongLineTS generates TypeScript source code that produces a single very long line.
 // This simulates generated code (e.g., from code generators) that has no line breaks,
@@ -42,7 +78,7 @@ func BenchmarkEmitLongLines(b *testing.B) {
 
 			fs := vfstest.FromMap(map[string]string{
 				"/dev/src/index.ts": source,
-			}, true /*useCaseSensitiveFileNames*/)
+			}, tspath.CaseSensitive /*caseSensitivity*/)
 			fs = bundled.WrapFS(fs)
 
 			opts := core.CompilerOptions{
@@ -51,20 +87,18 @@ func BenchmarkEmitLongLines(b *testing.B) {
 				OutDir:    "/dev/out",
 			}
 
-			host := compiler.NewCompilerHost("/dev/src", fs, bundled.LibPath(), nil, nil, nil)
+			host := compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil)
 
-			p := compiler.NewProgram(compiler.ProgramOptions{
-				Config: &tsoptions.ParsedCommandLine{
-					ParsedConfig: &tsoptions.ParsedOptions{
-						FileNames:       []string{"/dev/src/index.ts"},
-						CompilerOptions: &opts,
-					},
-				},
-				Host: host,
+			p, err := compiler.NewProgram(b.Context(), compiler.ProgramOptions{
+				Config: tsoptions.NewParsedCommandLine(&opts, testFileNames("/dev/src/index.ts"), nil, "/dev/src", fs.CaseSensitivity()),
+				Host:   host,
 			})
+			if err != nil {
+				b.Fatal(err)
+			}
 
 			// Discard written files — we only care about emit performance.
-			nopWriteFile := func(fileName string, text string, data *compiler.WriteFileData) error {
+			nopWriteFile := func(fileName tspath.RootedFilePath, text string, data *compiler.WriteFileData) error {
 				return nil
 			}
 
@@ -97,7 +131,7 @@ func BenchmarkEmitManyFiles(b *testing.B) {
 		fileNames = append(fileNames, name)
 	}
 
-	fs := vfstest.FromMap(files, true)
+	fs := vfstest.FromMap(files, tspath.CaseSensitive)
 	fs = bundled.WrapFS(fs)
 
 	opts := core.CompilerOptions{
@@ -106,19 +140,17 @@ func BenchmarkEmitManyFiles(b *testing.B) {
 		OutDir:    "/dev/out",
 	}
 
-	host := compiler.NewCompilerHost("/dev/src", fs, bundled.LibPath(), nil, nil, nil)
+	host := compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil)
 
-	p := compiler.NewProgram(compiler.ProgramOptions{
-		Config: &tsoptions.ParsedCommandLine{
-			ParsedConfig: &tsoptions.ParsedOptions{
-				FileNames:       fileNames,
-				CompilerOptions: &opts,
-			},
-		},
-		Host: host,
+	p, err := compiler.NewProgram(b.Context(), compiler.ProgramOptions{
+		Config: tsoptions.NewParsedCommandLine(&opts, testFileNames(fileNames...), nil, "/dev/src", fs.CaseSensitivity()),
+		Host:   host,
 	})
+	if err != nil {
+		b.Fatal(err)
+	}
 
-	nopWriteFile := func(fileName string, text string, data *compiler.WriteFileData) error {
+	nopWriteFile := func(fileName tspath.RootedFilePath, text string, data *compiler.WriteFileData) error {
 		return nil
 	}
 
@@ -155,7 +187,7 @@ func BenchmarkEmitLongLinesWithLineBreaks(b *testing.B) {
 
 	fs := vfstest.FromMap(map[string]string{
 		"/dev/src/index.ts": source,
-	}, true)
+	}, tspath.CaseSensitive)
 	fs = bundled.WrapFS(fs)
 
 	opts := core.CompilerOptions{
@@ -164,19 +196,17 @@ func BenchmarkEmitLongLinesWithLineBreaks(b *testing.B) {
 		OutDir:    "/dev/out",
 	}
 
-	host := compiler.NewCompilerHost("/dev/src", fs, bundled.LibPath(), nil, nil, nil)
+	host := compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil)
 
-	p := compiler.NewProgram(compiler.ProgramOptions{
-		Config: &tsoptions.ParsedCommandLine{
-			ParsedConfig: &tsoptions.ParsedOptions{
-				FileNames:       []string{"/dev/src/index.ts"},
-				CompilerOptions: &opts,
-			},
-		},
-		Host: host,
+	p, err := compiler.NewProgram(b.Context(), compiler.ProgramOptions{
+		Config: tsoptions.NewParsedCommandLine(&opts, testFileNames("/dev/src/index.ts"), nil, "/dev/src", fs.CaseSensitivity()),
+		Host:   host,
 	})
+	if err != nil {
+		b.Fatal(err)
+	}
 
-	nopWriteFile := func(fileName string, text string, data *compiler.WriteFileData) error {
+	nopWriteFile := func(fileName tspath.RootedFilePath, text string, data *compiler.WriteFileData) error {
 		return nil
 	}
 

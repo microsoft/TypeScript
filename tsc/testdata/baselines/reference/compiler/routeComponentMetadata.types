@@ -1,0 +1,50 @@
+//// [tests/cases/compiler/routeComponentMetadata.ts] ////
+
+=== routeComponentMetadata.ts ===
+type Component = (() => number) | ((() => number) & { readonly $$typeof: symbol });
+>Component : Component
+>$$typeof : symbol
+
+type RouteComponent = Component & { preload?: () => Promise<void> };
+>RouteComponent : RouteComponent
+>preload : (() => Promise<void>) | undefined
+
+declare function createRoute<Search = {}>(options: { component?: RouteComponent; validateSearch?: (search: unknown) => Search }): { useSearch(): Search };
+>createRoute : <Search = {}>(options: { component?: RouteComponent; validateSearch?: (search: unknown) => Search; }) => { useSearch(): Search; }
+>options : { component?: RouteComponent; validateSearch?: (search: unknown) => Search; }
+>component : RouteComponent | undefined
+>validateSearch : ((search: unknown) => Search) | undefined
+>search : unknown
+>useSearch : () => Search
+
+declare const schema: { parse(search: unknown): { page: number } };
+>schema : { parse(search: unknown): { page: number; }; }
+>parse : (search: unknown) => { page: number; }
+>search : unknown
+>page : number
+
+const route = createRoute({ component: () => 0, validateSearch: search => schema.parse(search) });
+>route : { useSearch(): { page: number; }; }
+>createRoute({ component: () => 0, validateSearch: search => schema.parse(search) }) : { useSearch(): { page: number; }; }
+>createRoute : <Search = {}>(options: { component?: RouteComponent; validateSearch?: (search: unknown) => Search; }) => { useSearch(): Search; }
+>{ component: () => 0, validateSearch: search => schema.parse(search) } : { component: () => number; validateSearch: (search: unknown) => { page: number; }; }
+>component : () => number
+>() => 0 : () => number
+>0 : 0
+>validateSearch : (search: unknown) => { page: number; }
+>search => schema.parse(search) : (search: unknown) => { page: number; }
+>search : unknown
+>schema.parse(search) : { page: number; }
+>schema.parse : (search: unknown) => { page: number; }
+>schema : { parse(search: unknown): { page: number; }; }
+>parse : (search: unknown) => { page: number; }
+>search : unknown
+
+route.useSearch().page;
+>route.useSearch().page : number
+>route.useSearch() : { page: number; }
+>route.useSearch : () => { page: number; }
+>route : { useSearch(): { page: number; }; }
+>useSearch : () => { page: number; }
+>page : number
+

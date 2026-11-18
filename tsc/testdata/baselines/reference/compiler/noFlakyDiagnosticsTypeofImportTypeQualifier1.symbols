@@ -1,0 +1,7 @@
+//// [tests/cases/compiler/noFlakyDiagnosticsTypeofImportTypeQualifier1.ts] ////
+
+=== noFlakyDiagnosticsTypeofImportTypeQualifier1.ts ===
+export function f(x: typeof import("foo").sys.readDirectory) {}
+>f : Symbol(f, Decl(noFlakyDiagnosticsTypeofImportTypeQualifier1.ts, 0, 0))
+>x : Symbol(x, Decl(noFlakyDiagnosticsTypeofImportTypeQualifier1.ts, 0, 18))
+

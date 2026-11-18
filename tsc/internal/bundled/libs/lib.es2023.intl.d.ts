@@ -13,7 +13,6 @@ See the Apache Version 2.0 License for specific language governing permissions
 and limitations under the License.
 ***************************************************************************** */
 
-
 declare namespace Intl {
     interface NumberFormatOptionsUseGroupingRegistry {
         min2: never;
@@ -58,5 +57,9 @@ declare namespace Intl {
         formatToParts(value: number | bigint | StringNumericLiteral): NumberFormatPart[];
         formatRange(start: number | bigint | StringNumericLiteral, end: number | bigint | StringNumericLiteral): string;
         formatRangeToParts(start: number | bigint | StringNumericLiteral, end: number | bigint | StringNumericLiteral): NumberRangeFormatPart[];
+    }
+
+    interface PluralRules {
+        selectRange(start: number, end: number): LDMLPluralRule;
     }
 }

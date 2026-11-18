@@ -9,7 +9,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/scanner"
 )
 
-func IsGeneratedIdentifier(emitContext *printer.EmitContext, name *ast.IdentifierNode) bool {
+func IsGeneratedIdentifier(emitContext *printer.EmitContext, name *ast.Node) bool {
 	return emitContext.HasAutoGenerateInfo(name)
 }
 
@@ -116,13 +116,13 @@ func convertBindingElementToArrayAssignmentElement(emitContext *printer.EmitCont
 		emitContext.AssignCommentAndSourceMapRanges(elision, element.AsNode())
 		return elision
 	}
+	expression := convertBindingNameToAssignmentElementTarget(emitContext, element.Name())
 	if element.DotDotDotToken != nil {
-		spread := emitContext.Factory.NewSpreadElement(element.Name())
+		spread := emitContext.Factory.NewSpreadElement(expression)
 		emitContext.SetOriginal(spread, element.AsNode())
 		emitContext.AssignCommentAndSourceMapRanges(spread, element.AsNode())
 		return spread
 	}
-	expression := convertBindingNameToAssignmentElementTarget(emitContext, element.Name())
 	if element.Initializer != nil {
 		assignment := emitContext.Factory.NewAssignmentExpression(expression, element.Initializer)
 		emitContext.SetOriginal(assignment, element.AsNode())

@@ -11,10 +11,10 @@ const a = class { private p = 10; };
     }
 }
 
-tsgo --noEmit
+tsc --noEmit
 ExitStatus:: Success
 Output::
-//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -42,7 +42,7 @@ declare const console: { log(msg: any): void; };
 
 Edit [0]:: no change
 
-tsgo --noEmit
+tsc --noEmit
 ExitStatus:: Success
 Output::
 
@@ -52,7 +52,7 @@ Edit [1]:: Fix error
 //// [/home/src/projects/project/a.ts] *modified* 
 const a = "hello";
 
-tsgo --noEmit
+tsc --noEmit
 ExitStatus:: Success
 Output::
 
@@ -60,7 +60,7 @@ Output::
 
 Edit [2]:: no change
 
-tsgo --noEmit
+tsc --noEmit
 ExitStatus:: Success
 Output::
 
@@ -68,7 +68,7 @@ Output::
 
 Edit [3]:: Emit after fixing error
 
-tsgo 
+tsc 
 ExitStatus:: Success
 Output::
 //// [/home/src/projects/project/a.js] *new* 
@@ -80,7 +80,7 @@ const a = "hello";
 
 Edit [4]:: no change
 
-tsgo --noEmit
+tsc --noEmit
 ExitStatus:: Success
 Output::
 
@@ -90,7 +90,7 @@ Edit [5]:: Introduce error
 //// [/home/src/projects/project/a.ts] *modified* 
 const a = class { private p = 10; };
 
-tsgo --noEmit
+tsc --noEmit
 ExitStatus:: Success
 Output::
 
@@ -98,7 +98,7 @@ Output::
 
 Edit [6]:: Emit when error
 
-tsgo 
+tsc 
 ExitStatus:: Success
 Output::
 //// [/home/src/projects/project/a.js] *modified* 
@@ -112,7 +112,7 @@ const a = class {
 
 Edit [7]:: no change
 
-tsgo --noEmit
+tsc --noEmit
 ExitStatus:: Success
 Output::
 

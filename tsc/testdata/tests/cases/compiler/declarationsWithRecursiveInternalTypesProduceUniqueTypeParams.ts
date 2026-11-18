@@ -3,8 +3,8 @@
 // @declaration: true
 // @lib: es6
 
-// Note that both of the following have an `any` in their return type from where we bottom out the type printout
-// for having too many instances of the same symbol nesting.
+// Both return types exceed the serializer's nesting limit. Declaration emit must report an error
+// rather than silently replacing the remaining type with `any`.
 
 // Slightly simplified repro from https://github.com/microsoft/TypeScript/issues/30732 so it's easier to read and debug
 export type Key<U> = keyof U;

@@ -1,0 +1,30 @@
+//// [tests/cases/compiler/domElementStringKeyConstraint.ts] ////
+
+=== domElementStringKeyConstraint.ts ===
+declare function setProperty<T extends Element, K extends keyof T & string>(element: T, property: K, value: T[K]): void;
+>setProperty : Symbol(setProperty, Decl(domElementStringKeyConstraint.ts, 0, 0))
+>T : Symbol(T, Decl(domElementStringKeyConstraint.ts, 0, 29))
+>Element : Symbol(Element, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>K : Symbol(K, Decl(domElementStringKeyConstraint.ts, 0, 47))
+>T : Symbol(T, Decl(domElementStringKeyConstraint.ts, 0, 29))
+>element : Symbol(element, Decl(domElementStringKeyConstraint.ts, 0, 76))
+>T : Symbol(T, Decl(domElementStringKeyConstraint.ts, 0, 29))
+>property : Symbol(property, Decl(domElementStringKeyConstraint.ts, 0, 87))
+>K : Symbol(K, Decl(domElementStringKeyConstraint.ts, 0, 47))
+>value : Symbol(value, Decl(domElementStringKeyConstraint.ts, 0, 100))
+>T : Symbol(T, Decl(domElementStringKeyConstraint.ts, 0, 29))
+>K : Symbol(K, Decl(domElementStringKeyConstraint.ts, 0, 47))
+
+declare const element: Element;
+>element : Symbol(element, Decl(domElementStringKeyConstraint.ts, 1, 13))
+>Element : Symbol(Element, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+declare const key: keyof Element;
+>key : Symbol(key, Decl(domElementStringKeyConstraint.ts, 2, 13))
+>Element : Symbol(Element, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+setProperty(element, key, true);
+>setProperty : Symbol(setProperty, Decl(domElementStringKeyConstraint.ts, 0, 0))
+>element : Symbol(element, Decl(domElementStringKeyConstraint.ts, 1, 13))
+>key : Symbol(key, Decl(domElementStringKeyConstraint.ts, 2, 13))
+

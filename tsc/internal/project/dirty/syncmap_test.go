@@ -243,3 +243,38 @@ func TestSyncMapProxyFor(t *testing.T) {
 		assert.Equal(t, "changed", entry.Value().data)
 	})
 }
+
+func TestSyncMapLoadClean(t *testing.T) {
+	t.Parallel()
+
+	base := map[string]*testValue{"a": {data: "a"}, "b": {data: "b"}, "c": {data: "c"}}
+	m := NewSyncMap(base)
+
+	value, ok := m.LoadClean("a")
+	assert.Assert(t, ok)
+	assert.Equal(t, value, base["a"])
+	_, ok = m.LoadClean("missing")
+	assert.Assert(t, !ok)
+
+	entry, _ := m.Load("a")
+	entry.Change(func(v *testValue) { v.data = "changed" })
+	_, ok = m.LoadClean("a")
+	assert.Assert(t, !ok, "changed keys must fall back to Load")
+	entry, _ = m.Load("a")
+	assert.Equal(t, entry.Value().data, "changed")
+	assert.Equal(t, base["a"].data, "a")
+
+	m.Delete("b")
+	_, ok = m.LoadClean("b")
+	assert.Assert(t, !ok, "deleted keys must fall back to Load")
+	_, ok = m.Load("b")
+	assert.Assert(t, !ok)
+
+	m.LoadOrStore("d", &testValue{data: "d"})
+	_, ok = m.LoadClean("d")
+	assert.Assert(t, !ok, "stored keys must fall back to Load")
+
+	value, ok = m.LoadClean("c")
+	assert.Assert(t, ok)
+	assert.Equal(t, value, base["c"])
+}

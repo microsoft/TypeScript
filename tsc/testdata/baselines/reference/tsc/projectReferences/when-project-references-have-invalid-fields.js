@@ -38,7 +38,7 @@ export const z = 10;
     }
 }
 
-tsgo --p project
+tsc --p project
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96mproject/tsconfig.json[0m:[93m7[0m:[93m19[0m - [91merror[0m[90m TS5024: [0mCompiler option 'reference.path' requires a value of type string.
@@ -64,7 +64,7 @@ Output::
 
 Found 4 errors in the same file, starting at: project/tsconfig.json[90m:7[0m
 
-//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}

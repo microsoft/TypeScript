@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.VisualStudioEng.MicroBuild.Core" Version="1.0.0" />
+  </ItemGroup>
+
+  <Import Project="$(FilesToSignPropsFile)" Condition="'$(FilesToSignPropsFile)' != ''" />
+
+  <Target Name="PrepSign" BeforeTargets="AfterBuild">
+    <Error Condition="'$(FilesToSignPropsFile)' == '' or !Exists('$(FilesToSignPropsFile)')" Text="FilesToSignPropsFile is missing." />
+    <Error Condition="'$(SignFilesDir)' == ''" Text="SignFilesDir is missing." />
+    <PropertyGroup>
+      <OutDir>$([MSBuild]::NormalizeDirectory('$(SignFilesDir)'))</OutDir>
+    </PropertyGroup>
+  </Target>
+
+  <Target Name="SignFiles" BeforeTargets="PrepSign">
+    <Error Text="MicroBuild signing targets were not imported." />
+  </Target>
+</Project>

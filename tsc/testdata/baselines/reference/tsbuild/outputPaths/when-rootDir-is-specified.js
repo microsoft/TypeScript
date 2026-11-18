@@ -11,7 +11,7 @@ export const x = 10;
     },
 }
 
-tsgo -b -v
+tsc -b -v
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -21,7 +21,7 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project 'tsconfig.json'...
 
-//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -65,14 +65,14 @@ export const x = 10;
 
 tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *refresh*    /home/src/workspaces/project/src/index.ts
 Signatures::
 
 
 Edit [0]:: no change
 
-tsgo -b -v
+tsc -b -v
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -85,7 +85,7 @@ Output::
 
 Edit [1]:: Normal build without change, that does not block emit on error to show files that get emitted
 
-tsgo -p /home/src/workspaces/project/tsconfig.json
+tsc -p /home/src/workspaces/project/tsconfig.json
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/dist/index.js] *rewrite with same content*

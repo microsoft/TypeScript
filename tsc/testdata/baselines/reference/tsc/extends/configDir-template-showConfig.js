@@ -19,9 +19,6 @@ Input::
             "@myscope/*": ["${configDir}/types/*"],
         },
     },
-    "watchOptions": {
-        "excludeFiles": ["${configDir}/main.ts"],
-    },
 }
 //// [/home/src/projects/myproject/main.ts] *new* 
 // some comment
@@ -39,7 +36,7 @@ import { x } from "@myscope/sometype";
 //// [/home/src/projects/myproject/types/sometype.ts] *new* 
 export const x = 10;
 
-tsgo --showConfig
+tsc --showConfig
 ExitStatus:: Success
 Output::
 {

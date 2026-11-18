@@ -8,7 +8,9 @@ import (
 	"os"
 	"runtime"
 	"slices"
+	"strings"
 	"syscall"
+	"unicode/utf8"
 	"unsafe"
 
 	"golang.org/x/sys/unix"
@@ -121,6 +123,8 @@ func cfRelease(ref uintptr) {
 var fse_CFStringCreateWithCString_trampoline_addr uintptr
 
 func cfStringCreate(allocator uintptr, cstr unsafe.Pointer, encoding uint32) uintptr {
+	// SAFETY: Converted in the argument list of a bodyless (assembly) call,
+	// which keeps the pointee alive and unmoved until the call returns.
 	ret, _, _ := syscall_syscall6(fse_CFStringCreateWithCString_trampoline_addr, allocator, uintptr(cstr), uintptr(encoding), 0, 0, 0)
 	runtime.KeepAlive(cstr)
 	return ret
@@ -131,6 +135,8 @@ func cfStringCreate(allocator uintptr, cstr unsafe.Pointer, encoding uint32) uin
 var fse_CFArrayCreate_trampoline_addr uintptr
 
 func cfArrayCreate(allocator uintptr, values unsafe.Pointer, count int, callbacks uintptr) uintptr {
+	// SAFETY: Converted in the argument list of a bodyless (assembly) call,
+	// which keeps the pointee alive and unmoved until the call returns.
 	ret, _, _ := syscall_syscall6(fse_CFArrayCreate_trampoline_addr, allocator, uintptr(values), uintptr(count), callbacks, 0, 0)
 	runtime.KeepAlive(values)
 	return ret
@@ -150,12 +156,15 @@ func cfArrayGetValueAtIndex(array uintptr, index int) uintptr {
 // FSEvents reports paths using whatever bytes are stored on disk. APFS is
 // normalization-insensitive for lookups (a file created as NFD opens fine
 // under the NFC form, and vice versa) but it stores and reports the original
-// bytes. The library normalizes every path that crosses the darwin boundary
-// to Unicode NFC so that:
+// bytes. The library normalizes watch paths and incoming FSEvents paths to
+// Unicode NFC so that:
 //   - WatchDirectory("/.../caf\u00e9") and WatchDirectory("/.../cafe\u0301")
 //     coalesce to a single dir watch;
-//   - WatchFile filters by exact-string compare in NFC always match;
+//   - WatchFile filters and directory routing compare the same normalized paths;
 //   - subscribers can compare event paths against their own NFC strings.
+//
+// kqueue retains on-disk child spellings; its WatchFile comparisons also use
+// the native fold below on volumes reporting case-insensitive lookup.
 //
 // All-ASCII inputs are bit-identical in NFC and NFD, so the hot path skips
 // the FFI entirely. The rare non-ASCII case round-trips through CoreFoundation
@@ -183,6 +192,47 @@ func cfStringNormalize(mutStr uintptr, form uintptr) {
 	_, _, _ = syscall_syscall6(fse_CFStringNormalize_trampoline_addr, mutStr, form, 0, 0, 0, 0)
 }
 
+//go:cgo_import_dynamic fse_CFStringFold CFStringFold "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation"
+
+var fse_CFStringFold_trampoline_addr uintptr
+
+const nativePathFolding = true
+
+// foldNativePath is a comparison form, never a displayed or opened path.
+// Case folding expands sharp s and ligatures without making diacritics,
+// dotless i, circled letters, or character widths interchangeable.
+func foldNativePath(s string) string {
+	if isASCII(s) {
+		return strings.ToLower(s)
+	}
+	if !utf8.ValidString(s) || strings.IndexByte(s, 0) >= 0 {
+		return ""
+	}
+	cstr := append([]byte(s), 0)
+	// SAFETY: cstr is NUL-terminated and stays alive for the call, which copies it.
+	src := cfStringCreate(0, unsafe.Pointer(&cstr[0]), cfStringEncodingUTF8)
+	if src == 0 {
+		panic("fswatch: cannot create CFString for path folding")
+	}
+	defer cfRelease(src)
+	mut := cfStringCreateMutableCopy(0, 0, src)
+	if mut == 0 {
+		panic("fswatch: cannot copy CFString for path folding")
+	}
+	defer cfRelease(mut)
+	// Normalize before folding as well: a decomposed capital I with dot
+	// must have the same comparison form as precomposed dotted capital I.
+	cfStringNormalize(mut, cfStringNormalizationFormC)
+	const cfCompareCaseInsensitive = 1
+	_, _, _ = syscall_syscall6(fse_CFStringFold_trampoline_addr, mut, cfCompareCaseInsensitive, 0, 0, 0, 0)
+	cfStringNormalize(mut, cfStringNormalizationFormC)
+	folded := cfStringToGo(mut)
+	if folded == "" {
+		panic("fswatch: cannot extract folded CFString")
+	}
+	return folded
+}
+
 //go:cgo_import_dynamic fse_CFStringGetLength CFStringGetLength "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation"
 
 var fse_CFStringGetLength_trampoline_addr uintptr
@@ -206,6 +256,8 @@ func cfStringGetMaximumSizeForEncoding(length int, encoding uint32) int {
 var fse_CFStringGetCString_trampoline_addr uintptr
 
 func cfStringGetCString(str uintptr, buf unsafe.Pointer, bufSize int, encoding uint32) bool {
+	// SAFETY: Converted in the argument list of a bodyless (assembly) call,
+	// which keeps the pointee alive and unmoved until the call returns.
 	ret, _, _ := syscall_syscall6(fse_CFStringGetCString_trampoline_addr, str, uintptr(buf), uintptr(bufSize), uintptr(encoding), 0, 0)
 	runtime.KeepAlive(buf)
 	return ret != 0
@@ -256,6 +308,7 @@ func cfStringToGo(src uintptr) string {
 	length := cfStringGetLength(src)
 	bufSize := cfStringGetMaximumSizeForEncoding(length, cfStringEncodingUTF8) + 1
 	buf := make([]byte, bufSize)
+	// SAFETY: buf is bufSize bytes, which is the most the call will write.
 	if !cfStringGetCString(src, unsafe.Pointer(&buf[0]), bufSize, cfStringEncodingUTF8) {
 		return ""
 	}
@@ -277,6 +330,7 @@ func normalizeNFC(s string) string {
 	}
 
 	cstr := append([]byte(s), 0)
+	// SAFETY: cstr is NUL-terminated and stays alive for the call, which copies it.
 	src := cfStringCreate(0, unsafe.Pointer(&cstr[0]), cfStringEncodingUTF8)
 	runtime.KeepAlive(cstr)
 	if src == 0 {
@@ -300,6 +354,8 @@ func normalizeNFC(s string) string {
 var fse_dispatch_queue_create_trampoline_addr uintptr
 
 func dispatchQueueCreate(label unsafe.Pointer) uintptr {
+	// SAFETY: Converted in the argument list of a bodyless (assembly) call,
+	// which keeps the pointee alive and unmoved until the call returns.
 	ret, _, _ := syscall_syscall6(fse_dispatch_queue_create_trampoline_addr, uintptr(label), 0, 0, 0, 0, 0)
 	runtime.KeepAlive(label)
 	return ret
@@ -341,6 +397,8 @@ func fsEventStreamCreate(allocator, callback uintptr, ctx unsafe.Pointer, paths 
 		fse_FSEventStreamCreate_trampoline_addr,
 		allocator,
 		callback,
+		// SAFETY: Converted in the argument list of a bodyless (assembly)
+		// call, which keeps ctx alive and unmoved until the call returns.
 		uintptr(ctx),
 		paths,
 		uintptr(since),
@@ -480,6 +538,7 @@ func (p *fsEventsCallbackPayload) close() {
 	}
 	libcFree(p.flags)
 	libcFree(p.ids)
+	// SAFETY: The callback assembly allocates payloads with malloc, and p is not used after this.
 	libcFree(uintptr(unsafe.Pointer(p)))
 }
 
@@ -497,6 +556,7 @@ func newStreamCallback(watches []fseventsWatchSnapshot) (*streamCallback, error)
 	unix.CloseOnExec(eventPipe[1])
 
 	label := []byte("typescript.fswatch.fsevents.stream\x00")
+	// SAFETY: label is NUL-terminated and stays alive for the call, which copies it.
 	queue := dispatchQueueCreate(unsafe.Pointer(&label[0]))
 	runtime.KeepAlive(label)
 	if queue == 0 {
@@ -541,6 +601,8 @@ func (cb *streamCallback) close() {
 func (cb *streamCallback) eventLoop() {
 	defer close(cb.done)
 	var payload *fsEventsCallbackPayload
+	// SAFETY: buf covers exactly the bytes of payload, which outlives it. The pipe only carries
+	// pointers to C-allocated payloads, so the GC never needs to track the written pointer.
 	buf := unsafe.Slice((*byte)(unsafe.Pointer(&payload)), unsafe.Sizeof(payload))
 	for {
 		payload = nil

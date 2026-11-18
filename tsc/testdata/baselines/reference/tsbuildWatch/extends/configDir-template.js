@@ -19,9 +19,6 @@ Input::
             "@myscope/*": ["${configDir}/types/*"],
         },
     },
-    "watchOptions": {
-        "excludeFiles": ["${configDir}/main.ts"],
-    },
 }
 //// [/home/src/projects/myproject/main.ts] *new* 
 // some comment
@@ -39,7 +36,7 @@ import { x } from "@myscope/sometype";
 //// [/home/src/projects/myproject/types/sometype.ts] *new* 
 export const x = 10;
 
-tsgo --b -w --explainFiles --v
+tsc --b -w --explainFiles --v
 ExitStatus:: Success
 Output::
 [2J[3J[H[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
@@ -60,8 +57,8 @@ Trying substitution '/home/src/projects/myproject/types/*', candidate module loc
 Loading module as file / folder, candidate module location '/home/src/projects/myproject/types/sometype', target file types: TypeScript, JavaScript, Declaration, JSON.
 File '/home/src/projects/myproject/types/sometype.ts' exists - use it as a name resolution result.
 ======== Module name '@myscope/sometype' was successfully resolved to '/home/src/projects/myproject/types/sometype.ts'. ========
-../../tslibs/TS/Lib/lib.es2025.full.d.ts
-   Default library for target 'ES2025'
+../../tslibs/TS/Lib/lib.es2026.full.d.ts
+   Default library for target 'ES2026'
 types/sometype.ts
    Imported via "@myscope/sometype" from file 'main.ts'
 main.ts
@@ -96,7 +93,7 @@ export const y = 10;
 //// [/home/src/projects/myproject/outDir/types/sometype.js] *new* 
 export const x = 10;
 
-//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -128,7 +125,7 @@ Directory watches::
   /home/src/projects/myproject/types
 tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *refresh*    /home/src/projects/myproject/types/sometype.ts
 *refresh*    /home/src/projects/myproject/main.ts
 Signatures::
@@ -165,8 +162,8 @@ Trying substitution '/home/src/projects/myproject/types/*', candidate module loc
 Loading module as file / folder, candidate module location '/home/src/projects/myproject/types/sometype', target file types: TypeScript, JavaScript, Declaration, JSON.
 File '/home/src/projects/myproject/types/sometype.ts' exists - use it as a name resolution result.
 ======== Module name '@myscope/sometype' was successfully resolved to '/home/src/projects/myproject/types/sometype.ts'. ========
-../../tslibs/TS/Lib/lib.es2025.full.d.ts
-   Default library for target 'ES2025'
+../../tslibs/TS/Lib/lib.es2026.full.d.ts
+   Default library for target 'ES2026'
 types/sometype.ts
    Imported via "@myscope/sometype" from file 'main.ts'
 main.ts
@@ -188,7 +185,7 @@ Directory watches::
   /home/src/projects/myproject/types
 tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *refresh*    /home/src/projects/myproject/types/sometype.ts
 *refresh*    /home/src/projects/myproject/main.ts
 Signatures::

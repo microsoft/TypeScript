@@ -11,11 +11,13 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/internal/parser"
 	"github.com/microsoft/TypeScript/tsc/internal/repo"
 	"github.com/microsoft/TypeScript/tsc/internal/scanner"
 	"github.com/microsoft/TypeScript/tsc/internal/testrunner"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/fixtures"
+	"github.com/microsoft/TypeScript/tsc/internal/testutil/parsetestutil"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/osvfs"
 	"gotest.tools/v3/assert"
@@ -26,14 +28,14 @@ func BenchmarkParse(b *testing.B) {
 		b.Run(f.Name(), func(b *testing.B) {
 			f.SkipIfNotExist(b)
 
-			fileName := tspath.GetNormalizedAbsolutePath(f.Path(), "/")
-			path := tspath.ToPath(fileName, "/", osvfs.FS().UseCaseSensitiveFileNames())
+			fileName := tspath.ToRootedFilePath(f.Path(), "/")
+			path := osvfs.FS().CaseSensitivity().PathKey(tspath.RootedPath(fileName))
 			sourceText := f.ReadFile(b)
 			scriptKind := core.GetScriptKindFromFileName(fileName)
 
 			opts := ast.SourceFileParseOptions{
 				FileName: fileName,
-				Path:     path,
+				PathKey:  path,
 			}
 
 			for b.Loop() {
@@ -139,12 +141,12 @@ func FuzzParser(f *testing.F) {
 			t.Skip()
 		}
 
-		fileName := "/index" + extension
-		path := tspath.Path(fileName)
+		fileName := tspath.RootedFilePathFromNormalized("/index" + extension)
+		path := tspath.PathKeyFromCanonical(fileName.AsString())
 
 		opts := ast.SourceFileParseOptions{
 			FileName: fileName,
-			Path:     path,
+			PathKey:  path,
 			ExternalModuleIndicatorOptions: ast.ExternalModuleIndicatorOptions{
 				JSX:   externalModuleIndicatorOptionsJSX,
 				Force: externalModuleIndicatorOptionsForce,
@@ -166,7 +168,7 @@ class MissingImplements implements B. {}
 `
 	file := parser.ParseSourceFile(ast.SourceFileParseOptions{
 		FileName: "/index.ts",
-		Path:     "/index.ts",
+		PathKey:  "/index.ts",
 	}, sourceText, core.ScriptKindTS)
 
 	classDecl := file.Statements.Nodes[0].AsClassDeclaration()
@@ -184,6 +186,235 @@ class MissingImplements implements B. {}
 
 	missingImplementsDecl := file.Statements.Nodes[4].AsClassDeclaration()
 	assert.Equal(t, missingImplementsDecl.HeritageClauses.Nodes[0].AsHeritageClause().Types.Nodes[0].Kind, ast.KindExpressionWithTypeArguments)
+}
+
+func TestParseStaticSourcePhaseImport(t *testing.T) {
+	t.Parallel()
+	tests := []struct {
+		name          string
+		source        string
+		phaseModifier ast.Kind
+		bindingName   string
+		hasAttributes bool
+	}{
+		{
+			name:          "source phase",
+			source:        `import source a from "./a.wasm";`,
+			phaseModifier: ast.KindSourceKeyword,
+			bindingName:   "a",
+		},
+		{
+			name:          "source phase with import attributes",
+			source:        `import source a from "./a.wasm" with { type: "webassembly" };`,
+			phaseModifier: ast.KindSourceKeyword,
+			bindingName:   "a",
+			hasAttributes: true,
+		},
+		{
+			name:          "from as source phase binding",
+			source:        `import source from from "./module.js";`,
+			phaseModifier: ast.KindSourceKeyword,
+			bindingName:   "from",
+		},
+		{
+			name:          "source as ordinary default binding",
+			source:        `import source from "./module.js";`,
+			phaseModifier: ast.KindUnknown,
+			bindingName:   "source",
+		},
+		{
+			name:          "source as ordinary default binding with named imports",
+			source:        `import source, { value } from "./module.js";`,
+			phaseModifier: ast.KindUnknown,
+			bindingName:   "source",
+		},
+		{
+			name:          "escaped source as ordinary default binding",
+			source:        `import s\u006furce from "./module.js";`,
+			phaseModifier: ast.KindUnknown,
+			bindingName:   "source",
+		},
+		{
+			name:          "escaped defer as ordinary default binding",
+			source:        `import d\u0065fer from "./module.js";`,
+			phaseModifier: ast.KindUnknown,
+			bindingName:   "defer",
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+			file := parsetestutil.ParseTypeScript(test.source, false)
+			parsetestutil.CheckDiagnostics(t, file)
+			assert.Equal(t, len(file.Statements.Nodes), 1)
+
+			statement := file.Statements.Nodes[0]
+			assert.Assert(t, ast.IsImportDeclaration(statement))
+
+			declaration := statement.AsImportDeclaration()
+			assert.Assert(t, declaration.ImportClause != nil)
+
+			clause := declaration.ImportClause.AsImportClause()
+			assert.Equal(t, clause.PhaseModifier, test.phaseModifier)
+			assert.Assert(t, clause.Name() != nil)
+			assert.Equal(t, clause.Name().Text(), test.bindingName)
+			assert.Equal(t, declaration.Attributes != nil, test.hasAttributes)
+		})
+	}
+}
+
+func TestParseSourceAsImportEqualsBinding(t *testing.T) {
+	t.Parallel()
+	file := parsetestutil.ParseTypeScript(`import source = require("./module.js");`, false)
+	parsetestutil.CheckDiagnostics(t, file)
+	assert.Equal(t, len(file.Statements.Nodes), 1)
+
+	statement := file.Statements.Nodes[0]
+	assert.Assert(t, ast.IsImportEqualsDeclaration(statement))
+
+	assert.Equal(t, statement.Name().Text(), "source")
+}
+
+func TestParseInvalidStaticSourcePhaseImports(t *testing.T) {
+	t.Parallel()
+	tests := []struct {
+		source           string
+		hasName          bool
+		hasNamedBindings bool
+	}{
+		{source: `import source "./a.js";`},
+		{source: `import source * as a from "./a.js";`, hasNamedBindings: true},
+		{source: `import source { a } from "./a.js";`, hasNamedBindings: true},
+		{source: `import source a, { b } from "./a.js";`, hasName: true, hasNamedBindings: true},
+	}
+
+	for _, test := range tests {
+		file := parsetestutil.ParseTypeScript(test.source, false)
+		parsetestutil.CheckDiagnostics(t, file)
+		assert.Equal(t, len(file.Statements.Nodes), 1)
+
+		statement := file.Statements.Nodes[0]
+		assert.Assert(t, ast.IsImportDeclaration(statement))
+
+		declaration := statement.AsImportDeclaration()
+		assert.Assert(t, declaration.ImportClause != nil)
+
+		clause := declaration.ImportClause.AsImportClause()
+		assert.Equal(t, clause.PhaseModifier, ast.KindSourceKeyword)
+		assert.Equal(t, clause.Name() != nil, test.hasName)
+		assert.Equal(t, clause.NamedBindings != nil, test.hasNamedBindings)
+	}
+}
+
+func TestParseDynamicSourcePhaseImport(t *testing.T) {
+	t.Parallel()
+	file := parsetestutil.ParseTypeScript(`import.source("./a.wasm", { with: { type: "webassembly" } });`, false)
+	parsetestutil.CheckDiagnostics(t, file)
+	assert.Equal(t, len(file.Statements.Nodes), 1)
+
+	statement := file.Statements.Nodes[0]
+	assert.Assert(t, ast.IsExpressionStatement(statement))
+
+	call := statement.AsExpressionStatement().Expression
+	assert.Assert(t, ast.IsCallExpression(call))
+	assert.Assert(t, ast.IsImportCall(call))
+	assert.Assert(t, call.SubtreeFacts()&ast.SubtreeContainsDynamicImport != 0)
+
+	metaProperty := call.Expression()
+	assert.Assert(t, ast.IsMetaProperty(metaProperty))
+	assert.Equal(t, metaProperty.AsMetaProperty().KeywordToken, ast.KindImportKeyword)
+	assert.Equal(t, metaProperty.Text(), "source")
+	assert.Equal(t, len(call.Arguments()), 2)
+	assert.Equal(t, file.Flags&ast.NodeFlagsPossiblyContainsDynamicImport != 0, true)
+	assert.Equal(t, file.Flags&ast.NodeFlagsPossiblyContainsImportMeta != 0, false)
+	assert.Equal(t, file.ExternalModuleIndicator == nil, true)
+}
+
+func TestParseEscapedDynamicImportPhase(t *testing.T) {
+	t.Parallel()
+	tests := []struct {
+		source    string
+		phaseName string
+	}{
+		{source: `import.d\u0065fer("./a.js");`, phaseName: "defer"},
+		{source: `import.s\u006furce("./a.wasm");`, phaseName: "source"},
+	}
+
+	for _, test := range tests {
+		t.Run(test.phaseName, func(t *testing.T) {
+			t.Parallel()
+			file := parsetestutil.ParseTypeScript(test.source, false)
+			assert.Equal(t, len(file.Diagnostics()), 1)
+			assert.Equal(t, file.Diagnostics()[0].Code(), diagnostics.Keywords_cannot_contain_escape_characters.Code())
+			assert.Equal(t, len(file.Statements.Nodes), 1)
+
+			statement := file.Statements.Nodes[0]
+			assert.Assert(t, ast.IsExpressionStatement(statement))
+
+			call := statement.AsExpressionStatement().Expression
+			assert.Assert(t, ast.IsCallExpression(call))
+			assert.Assert(t, ast.IsImportCall(call))
+
+			metaProperty := call.Expression()
+			assert.Assert(t, ast.IsMetaProperty(metaProperty))
+			assert.Equal(t, metaProperty.Text(), test.phaseName)
+			assert.Equal(t, file.Flags&ast.NodeFlagsPossiblyContainsDynamicImport != 0, true)
+			assert.Equal(t, file.Flags&ast.NodeFlagsPossiblyContainsImportMeta != 0, false)
+		})
+	}
+}
+
+func TestJSDocInlineLinksInOptionalTypePositions(t *testing.T) {
+	t.Parallel()
+	for _, tag := range []string{"throws", "returns", "param value"} {
+		for _, link := range []struct {
+			name string
+			kind ast.Kind
+		}{
+			{"link", ast.KindJSDocLink},
+			{"linkcode", ast.KindJSDocLinkCode},
+			{"linkplain", ast.KindJSDocLinkPlain},
+		} {
+			t.Run(tag+"/"+link.name, func(t *testing.T) {
+				t.Parallel()
+				file := parser.ParseSourceFile(ast.SourceFileParseOptions{
+					FileName: "/index.ts",
+					PathKey:  "/index.ts",
+				}, "/** @"+tag+" {@"+link.name+" C} */\nfunction f(value) {}", core.ScriptKindTS)
+				jsDocs := file.Statements.Nodes[0].JSDoc(file)
+				assert.Equal(t, len(jsDocs), 1)
+				tags := jsDocs[0].AsJSDoc().Tags.Nodes
+				assert.Equal(t, len(tags), 1)
+				assert.Assert(t, tags[0].TypeExpression() == nil)
+				comments := tags[0].CommentList()
+				assert.Assert(t, comments != nil)
+				links := core.Filter(comments.Nodes, ast.IsJSDocLinkLike)
+				assert.Equal(t, len(links), 1)
+				assert.Equal(t, links[0].Kind, link.kind)
+			})
+		}
+	}
+}
+
+func TestJSDocTypesInOptionalTypePositions(t *testing.T) {
+	t.Parallel()
+	for _, tag := range []string{"throws", "returns", "param value"} {
+		t.Run(tag, func(t *testing.T) {
+			t.Parallel()
+			file := parser.ParseSourceFile(ast.SourceFileParseOptions{
+				FileName: "/index.ts",
+				PathKey:  "/index.ts",
+			}, "/** @"+tag+" {C} description */\nfunction f(value) {}", core.ScriptKindTS)
+			jsDocs := file.Statements.Nodes[0].JSDoc(file)
+			assert.Equal(t, len(jsDocs), 1)
+			tags := jsDocs[0].AsJSDoc().Tags.Nodes
+			assert.Equal(t, len(tags), 1)
+			typeExpression := tags[0].TypeExpression()
+			assert.Assert(t, typeExpression != nil)
+			assert.Equal(t, scanner.GetTextOfNode(typeExpression.Type()), "C")
+		})
+	}
 }
 
 func TestJSDocImportTypeParentChain(t *testing.T) {
@@ -213,7 +444,7 @@ test("", async function () {
 `
 	opts := ast.SourceFileParseOptions{
 		FileName: "/index.js",
-		Path:     "/index.js",
+		PathKey:  "/index.js",
 	}
 
 	file := parser.ParseSourceFile(opts, sourceText, core.ScriptKindJS)
@@ -244,7 +475,7 @@ func TestJSDocTypeSourceSurvivesReparse(t *testing.T) {
 const value = 0;`
 	opts := ast.SourceFileParseOptions{
 		FileName: "/index.js",
-		Path:     "/index.js",
+		PathKey:  "/index.js",
 	}
 
 	file := parser.ParseSourceFile(opts, sourceText, core.ScriptKindJS)
@@ -291,7 +522,7 @@ func TestJSDocTypeSourcePropagatesToConstructedReparse(t *testing.T) {
 function foo(options) {}`
 	opts := ast.SourceFileParseOptions{
 		FileName: "/index.js",
-		Path:     "/index.js",
+		PathKey:  "/index.js",
 	}
 
 	file := parser.ParseSourceFile(opts, sourceText, core.ScriptKindJS)
@@ -308,6 +539,69 @@ function foo(options) {}`
 	assert.Equal(t, scanner.GetTokenPosOfNode(typeNode, file, false /*includeJSDoc*/), strings.Index(sourceText, "{{")+1)
 }
 
+func TestJSDocAugmentsHeritage(t *testing.T) {
+	t.Parallel()
+	for _, test := range []struct {
+		name       string
+		expression string
+		tagName    string
+		augments   bool
+	}{
+		{"identifier", "A", "A", true},
+		{"dotted name", "ns.A", "ns.A", true},
+		{"call", "A.extend()", "A", true},
+		{"mixin", "mixin(A)", "A", true},
+		{"element access", `ns["A"]`, "A", true},
+		{"conditional", "(cond ? A : A)", "A", true},
+		{"parenthesized name", "(A)", "A", true},
+		{"null", "null", "A", false},
+		{"mismatched identifier", "A", "Other", false},
+		{"mismatched dotted name", "ns.A", "ns.Other", false},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+			sourceText := "/** @extends {" + test.tagName + "<string>} */\nclass B extends " + test.expression + " {}"
+			opts := ast.SourceFileParseOptions{
+				FileName: "/index.js",
+				PathKey:  "/index.js",
+			}
+			file := parser.ParseSourceFile(opts, sourceText, core.ScriptKindJS)
+			parsetestutil.CheckDiagnostics(t, file)
+			assert.Equal(t, len(file.Statements.Nodes), 1)
+			classB := file.Statements.Nodes[0]
+			assert.Assert(t, ast.IsClassDeclaration(classB))
+
+			baseType := ast.GetClassExtendsHeritageElement(classB)
+			assert.Assert(t, baseType != nil)
+			assert.Equal(t, scanner.GetTextOfNode(baseType.Expression()), test.expression)
+
+			jsDocs := classB.JSDoc(file)
+			assert.Equal(t, len(jsDocs), 1)
+			tags := jsDocs[0].AsJSDoc().Tags
+			assert.Assert(t, tags != nil)
+			assert.Equal(t, len(tags.Nodes), 1)
+			tag := tags.Nodes[0]
+			assert.Assert(t, ast.IsJSDocAugmentsTag(tag))
+			sourceTypeArguments := tag.ClassName().TypeArguments()
+			assert.Equal(t, len(sourceTypeArguments), 1)
+
+			typeArguments := baseType.TypeArguments()
+			if test.augments {
+				assert.Equal(t, len(typeArguments), 1)
+				typeArgument := typeArguments[0]
+				assert.Equal(t, typeArgument.Kind, ast.KindStringKeyword)
+				assert.Assert(t, typeArgument.Flags&ast.NodeFlagsReparsed != 0)
+				assert.Equal(t, typeArgument.Parent, baseType)
+				assert.Equal(t, scanner.GetTextOfNode(typeArgument), "string")
+				assert.Equal(t, ast.GetReparsedNodeForNode(sourceTypeArguments[0]), typeArgument)
+			} else {
+				assert.Equal(t, len(typeArguments), 0)
+				assert.Equal(t, ast.GetReparsedNodeForNode(sourceTypeArguments[0]), sourceTypeArguments[0])
+			}
+		})
+	}
+}
+
 func TestSourceFilePositionMapWithNonASCIIStringLiteral(t *testing.T) {
 	t.Parallel()
 	sourceText := `const x = "─";
@@ -318,7 +612,7 @@ namespace N {
 `
 	opts := ast.SourceFileParseOptions{
 		FileName: "/index.ts",
-		Path:     "/index.ts",
+		PathKey:  "/index.ts",
 	}
 
 	file := parser.ParseSourceFile(opts, sourceText, core.ScriptKindTS)
@@ -328,4 +622,44 @@ namespace N {
 	afterBoxDrawingCharacter := strings.Index(sourceText, "─") + len("─")
 	assert.Equal(t, positionMap.UTF8ToUTF16(afterBoxDrawingCharacter), afterBoxDrawingCharacter-2)
 	assert.Equal(t, positionMap.UTF8ToUTF16(len(sourceText)), len(sourceText)-2)
+}
+
+func TestCommonJSModuleIndicator(t *testing.T) {
+	t.Parallel()
+	tests := []struct {
+		fileName tspath.RootedFilePath
+		source   string
+		expected bool
+	}{
+		{"/a.js", `const x = require("x");`, true},
+		{"/a.js", `module.exports = {};`, true},
+		{"/a.js", `exports.x = 1;`, true},
+		{"/a.js", `module.exports.x = 1;`, true},
+		{"/a.js", `Object.defineProperty(exports, "x", { value: 1 });`, true},
+		{"/a.js", `function f() { exports.x = 1; }`, true},
+		{"/a.js", `var x = 1; foo(x);`, false},
+		{"/a.js", `/** @type {{ [require("x")]: number }} */ var x;`, true},
+		{"/a.js", `/** @param {number} [x=require("x")] */ function f(x) {}`, false},
+		{"/a.js", "/**\n * @type {{ [require('x')]: () => void }}\n * @type {() => void}\n */\nfunction f() {}", false},
+		{"/a.js", "/**\n * @type {{ [require('x')]: number }}\n * @type {number}\n */\nthis.x = 1;", false},
+		{"/a.js", "/**\n * @template {{ [require('x')]: number }} T\n * @typedef\n */\nfunction f() {}", false},
+		{"/a.js", `exports.x = 1; export {};`, false},
+		{"/a.js", `export const y = require("x");`, false},
+		{"/a.js", `/** @satisfies {any} */ module.exports = exports;`, true},
+		{"/a.js", "await / import.meta / 1;\nawait / require('x') / 1;", false},
+		{"/a.js", `await / 1 ; export {}; / ; require('x');`, true},
+		{"/a.cjs", `exports.x = 1;`, true},
+		{"/a.cjs", `await / 1 ; export {}; / ; require('x');`, true},
+		{"/a.mjs", `await /require("x")/;`, false},
+		{"/a.ts", `exports.x = 1; const y = require("x");`, false},
+	}
+	for _, test := range tests {
+		t.Run(test.fileName.AsString()+" "+test.source, func(t *testing.T) {
+			t.Parallel()
+			opts := ast.SourceFileParseOptions{FileName: test.fileName, PathKey: tspath.CaseSensitive.PathKey(test.fileName.AsPath())}
+			opts.ExternalModuleIndicatorOptions.Force = test.fileName.ExtensionIsOneOf([]string{tspath.ExtensionCjs, tspath.ExtensionMjs})
+			file := parser.ParseSourceFile(opts, test.source, core.GetScriptKindFromFileName(test.fileName))
+			assert.Equal(t, file.CommonJSModuleIndicator != nil, test.expected)
+		})
+	}
 }

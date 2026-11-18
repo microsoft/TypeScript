@@ -8,6 +8,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/diagnosticwriter"
 	"github.com/microsoft/TypeScript/tsc/internal/outputpaths"
@@ -21,11 +22,7 @@ import (
 
 var transpileBaselineRegex = regexp.MustCompile(`\.[cm]?[tj]sx?$`)
 
-var transpileVaryBy = map[string]struct{}{
-	"declarationmap":  {},
-	"sourcemap":       {},
-	"inlinesourcemap": {},
-}
+var transpileVaryBy = collections.NewSetFromItems("declarationmap", "sourcemap", "inlinesourcemap")
 
 type TranspileBaselineRunner struct {
 	testFiles []string
@@ -59,7 +56,7 @@ func (r *TranspileBaselineRunner) RunTests(t *testing.T) {
 }
 
 func (r *TranspileBaselineRunner) runTest(t *testing.T, fileName string) {
-	content, ok := osvfs.FS().ReadFile(fileName)
+	content, ok := osvfs.FS().ReadFile(tspath.RootedFilePathFromNormalized(fileName))
 	if !ok {
 		panic("Could not read transpile test file: " + fileName)
 	}
@@ -69,7 +66,7 @@ func (r *TranspileBaselineRunner) runTest(t *testing.T, fileName string) {
 		configurations = []*harnessutil.NamedTestConfiguration{{Config: settings}}
 	}
 
-	extension := tspath.GetAnyExtensionFromPath(fileName, nil, false)
+	extension := tspath.GetAnyExtensionFromPath(fileName, nil, tspath.CaseSensitive)
 	baseName := tspath.GetBaseFileName(fileName)
 	justName := strings.TrimSuffix(baseName, extension)
 	units := makeUnitsFromTest(content, baseName).testUnitData
@@ -143,7 +140,7 @@ func (r *TranspileBaselineRunner) runKind(
 			result.WriteString("\r\n\r\n//// [Diagnostics reported]\r\n")
 			diagnosticFileName := unit.name
 			if file := output.Diagnostics[0].File(); file != nil {
-				diagnosticFileName = file.FileName()
+				diagnosticFileName = file.FileName().AsString()
 			}
 			errorBaseline := tsbaseline.GetErrorBaseline(
 				t,

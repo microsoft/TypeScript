@@ -1,0 +1,48 @@
+/main.ts(1,27): error TS2876: This relative import path is unsafe to rewrite because it looks like a file name, but actually resolves to "./components.astro/index.ts".
+/main.ts(3,25): error TS2876: This relative import path is unsafe to rewrite because it looks like a file name, but actually resolves to "./ambient.d.astro.ts".
+/main.ts(4,35): error TS2877: This import uses a '.astro' extension to resolve to an input TypeScript file, but will not be rewritten during emit because it is not a relative path.
+
+
+==== /tsconfig.json (0 errors) ====
+    {
+        "compilerOptions": {
+            "target": "esnext",
+            "module": "preserve",
+            "rewriteRelativeImportExtensions": true,
+            "allowArbitraryExtensions": true,
+            "paths": { "alias": ["./actual.astro"] },
+            "outDir": "/dist"
+        },
+        "contentMappers": [{
+            "package": "mapper",
+            "extensions": [".astro"],
+            "outputExtensions": { ".astro": ".js" }
+        }]
+    }
+    
+==== /components.astro/index.ts (0 errors) ====
+    export const directory = 1;
+    
+==== /ambient.d.astro.ts (0 errors) ====
+    export const ambient: number;
+    
+==== /main.ts (3 errors) ====
+    import { directory } from "./components.astro";
+                              ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2876: This relative import path is unsafe to rewrite because it looks like a file name, but actually resolves to "./components.astro/index.ts".
+    import { actual } from "./actual.astro";
+    import { ambient } from "./ambient.astro";
+                            ~~~~~~~~~~~~~~~~~
+!!! error TS2876: This relative import path is unsafe to rewrite because it looks like a file name, but actually resolves to "./ambient.d.astro.ts".
+    import { actual as aliased } from "alias";
+                                      ~~~~~~~
+!!! error TS2877: This import uses a '.astro' extension to resolve to an input TypeScript file, but will not be rewritten during emit because it is not a relative path.
+    console.log(directory, actual, ambient, aliased);
+    
+==== /node_modules/mapper/package.json (0 errors) ====
+    {
+        "name": "mapper",
+        "version": "1.0.0",
+        "typescript": { "contentMapper": { "exec": ["compiler-test-mapper"] } }
+    }
+    

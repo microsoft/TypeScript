@@ -6,7 +6,7 @@ const x = null; const y: string = x;
 //// [/home/src/workspaces/project/tsconfig.json] *new* 
 {}
 
-tsgo --watch
+tsc --watch
 ExitStatus:: Success
 Output::
 [2J[3J[H[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
@@ -21,7 +21,7 @@ Found 1 error in index.ts[90m:1[0m
 
 [[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
-//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -56,7 +56,7 @@ Directory watches::
   /home/src/workspaces/project (recursive)
 tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *refresh*    /home/src/workspaces/project/index.ts
 Signatures::
 

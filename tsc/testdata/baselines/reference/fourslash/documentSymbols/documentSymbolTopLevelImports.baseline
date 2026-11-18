@@ -1,0 +1,18 @@
+// === Document Symbols ===
+// === /documentSymbolTopLevelImports.ts ===
+// /** <|@typedef {number} [|{| name: ImportedType, kind: Class |}ImportedType|]|> */
+// import DefaultComponent from "./component";
+// /** <|@callback [|{| name: ImportedCallback, kind: Class |}ImportedCallback|]
+//  * @param {string} value
+//  * @returns {number}
+//  |>*/
+// import * as utils from "./utils";
+// import { value, original as renamed } from "./values";
+// import type { Options } from "./types";
+// 
+// const <|[|{| name: local, kind: Variable |}local|] = 1|>;
+
+// === Details ===
+(Class) ImportedType
+(Class) ImportedCallback
+(Variable) local

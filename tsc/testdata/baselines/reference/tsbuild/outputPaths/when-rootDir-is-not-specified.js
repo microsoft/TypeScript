@@ -10,7 +10,7 @@ export const x = 10;
     },
 }
 
-tsgo -b -v
+tsc -b -v
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -29,7 +29,7 @@ Output::
 
 Found 1 error in tsconfig.json[90m:3[0m
 
-//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -74,14 +74,14 @@ export const x = 10;
 
 tsconfig.json::
 SemanticDiagnostics::
-*not cached* /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*not cached* /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *not cached* /home/src/workspaces/project/src/index.ts
 Signatures::
 
 
 Edit [0]:: no change
 
-tsgo -b -v
+tsc -b -v
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -106,14 +106,14 @@ Found 1 error in tsconfig.json[90m:3[0m
 
 tsconfig.json::
 SemanticDiagnostics::
-*not cached* /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*not cached* /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *not cached* /home/src/workspaces/project/src/index.ts
 Signatures::
 
 
 Edit [1]:: Normal build without change, that does not block emit on error to show files that get emitted
 
-tsgo -p /home/src/workspaces/project/tsconfig.json
+tsc -p /home/src/workspaces/project/tsconfig.json
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96mtsconfig.json[0m:[93m3[0m:[93m9[0m - [91merror[0m[90m TS5011: [0mThe common source directory of 'tsconfig.json' is './src'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.

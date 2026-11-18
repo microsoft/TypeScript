@@ -1,0 +1,47 @@
+//// [tests/cases/compiler/promiseUnionCallbackStateInference.ts] ////
+
+=== promiseUnionCallbackStateInference.ts ===
+declare function createAction<State>(
+>createAction : { <State>(action: (state: State) => State | Promise<State>, initialState: State): () => void; <State_1>(action: (state: State_1, payload: string) => State_1 | Promise<State_1>, initialState: State_1): (payload: string) => void; }
+
+    action: (state: State) => State | Promise<State>,
+>action : (state: State) => State | Promise<State>
+>state : State
+
+    initialState: State,
+>initialState : State
+
+): () => void;
+declare function createAction<State>(
+>createAction : { <State_1>(action: (state: State_1) => State_1 | Promise<State_1>, initialState: State_1): () => void; <State>(action: (state: State, payload: string) => State | Promise<State>, initialState: State): (payload: string) => void; }
+
+    action: (state: State, payload: string) => State | Promise<State>,
+>action : (state: State, payload: string) => State | Promise<State>
+>state : State
+>payload : string
+
+    initialState: State,
+>initialState : State
+
+): (payload: string) => void;
+>payload : string
+
+declare const action: (previous: unknown, value: string) => Promise<string>;
+>action : (previous: unknown, value: string) => Promise<string>
+>previous : unknown
+>value : string
+
+const dispatch = createAction(action, null);
+>dispatch : (payload: string) => void
+>createAction(action, null) : (payload: string) => void
+>createAction : { <State>(action: (state: State) => State | Promise<State>, initialState: State): () => void; <State>(action: (state: State, payload: string) => State | Promise<State>, initialState: State): (payload: string) => void; }
+>action : (previous: unknown, value: string) => Promise<string>
+
+const bound = dispatch.bind(null, "value");
+>bound : () => void
+>dispatch.bind(null, "value") : () => void
+>dispatch.bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(this: (this: T, ...args: [...A, ...B]) => R, thisArg: T, ...args: A): (...args: B) => R; }
+>dispatch : (payload: string) => void
+>bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(this: (this: T, ...args: [...A, ...B]) => R, thisArg: T, ...args: A): (...args: B) => R; }
+>"value" : "value"
+

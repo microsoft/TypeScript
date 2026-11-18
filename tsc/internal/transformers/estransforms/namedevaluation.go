@@ -67,14 +67,12 @@ func isAnonymousFunctionDefinition(emitContext *printer.EmitContext, node *ast.E
 		if classHasDeclaredOrExplicitlyAssignedName(emitContext, node) {
 			return false
 		}
-		break
 	case ast.KindFunctionExpression:
 		if node.AsFunctionExpression().Name() != nil {
 			return false
 		}
-		break
 	case ast.KindArrowFunction:
-		break
+		// arrow functions are always anonymous
 	default:
 		return false
 	}
@@ -272,7 +270,7 @@ func finishTransformNamedEvaluation(
 	return factory.RestoreOuterExpressions(expression, updatedExpression, ast.OEKAll)
 }
 
-func transformNamedEvaluationOfPropertyAssignment(context *printer.EmitContext, node *ast.PropertyAssignment /*NamedEvaluation & PropertyAssignment*/, ignoreEmptyStringLiteral bool, assignedNameText string) *ast.Expression {
+func transformNamedEvaluationOfPropertyAssignment(context *printer.EmitContext, node *ast.PropertyAssignment /*NamedEvaluation & PropertyAssignment*/, ignoreEmptyStringLiteral bool, assignedNameText string) *ast.PropertyAssignmentNode {
 	// 13.2.5.5 RS: PropertyDefinitionEvaluation
 	//   PropertyAssignment : PropertyName `:` AssignmentExpression
 	//     ...
@@ -286,7 +284,7 @@ func transformNamedEvaluationOfPropertyAssignment(context *printer.EmitContext, 
 	return factory.UpdatePropertyAssignment(node, nil /*modifiers*/, name, nil /*postfixToken*/, nil /*typeNode*/, initializer)
 }
 
-func transformNamedEvaluationOfShorthandAssignmentProperty(emitContext *printer.EmitContext, node *ast.ShorthandPropertyAssignment /*NamedEvaluation & ShorthandPropertyAssignment*/, ignoreEmptyStringLiteral bool, assignedNameText string) *ast.Expression {
+func transformNamedEvaluationOfShorthandAssignmentProperty(emitContext *printer.EmitContext, node *ast.ShorthandPropertyAssignment /*NamedEvaluation & ShorthandPropertyAssignment*/, ignoreEmptyStringLiteral bool, assignedNameText string) *ast.ShorthandPropertyAssignmentNode {
 	// 13.15.5.3 RS: PropertyDestructuringAssignmentEvaluation
 	//   AssignmentProperty : IdentifierReference Initializer?
 	//     ...
@@ -314,7 +312,7 @@ func transformNamedEvaluationOfShorthandAssignmentProperty(emitContext *printer.
 	)
 }
 
-func transformNamedEvaluationOfVariableDeclaration(emitContext *printer.EmitContext, node *ast.VariableDeclaration /*NamedEvaluation & VariableDeclaration*/, ignoreEmptyStringLiteral bool, assignedNameText string) *ast.Expression {
+func transformNamedEvaluationOfVariableDeclaration(emitContext *printer.EmitContext, node *ast.VariableDeclaration /*NamedEvaluation & VariableDeclaration*/, ignoreEmptyStringLiteral bool, assignedNameText string) *ast.VariableDeclarationNode {
 	// 14.3.1.2 RS: Evaluation
 	//   LexicalBinding : BindingIdentifier Initializer
 	//     ...
@@ -346,7 +344,7 @@ func transformNamedEvaluationOfVariableDeclaration(emitContext *printer.EmitCont
 	)
 }
 
-func transformNamedEvaluationOfParameterDeclaration(emitContext *printer.EmitContext, node *ast.ParameterDeclaration /*NamedEvaluation & ParameterDeclaration*/, ignoreEmptyStringLiteral bool, assignedNameText string) *ast.Expression {
+func transformNamedEvaluationOfParameterDeclaration(emitContext *printer.EmitContext, node *ast.ParameterDeclaration /*NamedEvaluation & ParameterDeclaration*/, ignoreEmptyStringLiteral bool, assignedNameText string) *ast.ParameterDeclarationNode {
 	// 8.6.3 RS: IteratorBindingInitialization
 	//   SingleNameBinding : BindingIdentifier Initializer?
 	//     ...
@@ -382,7 +380,7 @@ func transformNamedEvaluationOfParameterDeclaration(emitContext *printer.EmitCon
 	)
 }
 
-func transformNamedEvaluationOfBindingElement(emitContext *printer.EmitContext, node *ast.BindingElement /*NamedEvaluation & BindingElement*/, ignoreEmptyStringLiteral bool, assignedNameText string) *ast.Expression {
+func transformNamedEvaluationOfBindingElement(emitContext *printer.EmitContext, node *ast.BindingElement /*NamedEvaluation & BindingElement*/, ignoreEmptyStringLiteral bool, assignedNameText string) *ast.BindingElementNode {
 	// 8.6.3 RS: IteratorBindingInitialization
 	//   SingleNameBinding : BindingIdentifier Initializer?
 	//     ...
@@ -416,7 +414,7 @@ func transformNamedEvaluationOfBindingElement(emitContext *printer.EmitContext, 
 	)
 }
 
-func transformNamedEvaluationOfPropertyDeclaration(emitContext *printer.EmitContext, node *ast.PropertyDeclaration /*NamedEvaluation & PropertyDeclaration*/, ignoreEmptyStringLiteral bool, assignedNameText string) *ast.Expression {
+func transformNamedEvaluationOfPropertyDeclaration(emitContext *printer.EmitContext, node *ast.PropertyDeclaration /*NamedEvaluation & PropertyDeclaration*/, ignoreEmptyStringLiteral bool, assignedNameText string) *ast.PropertyDeclarationNode {
 	// 10.2.1.3 RS: EvaluateBody
 	//   Initializer : `=` AssignmentExpression
 	//     ...
@@ -482,7 +480,7 @@ func transformNamedEvaluationOfAssignmentExpression(emitContext *printer.EmitCon
 	)
 }
 
-func transformNamedEvaluationOfExportAssignment(emitContext *printer.EmitContext, node *ast.ExportAssignment /*NamedEvaluation & ExportAssignment*/, ignoreEmptyStringLiteral bool, assignedNameText string) *ast.Expression {
+func transformNamedEvaluationOfExportAssignment(emitContext *printer.EmitContext, node *ast.ExportAssignment /*NamedEvaluation & ExportAssignment*/, ignoreEmptyStringLiteral bool, assignedNameText string) *ast.ExportAssignmentNode {
 	// 16.2.3.7 RS: Evaluation
 	//   ExportDeclaration : `export` `default` AssignmentExpression `;`
 	//     1. If IsAnonymousFunctionDefinition(|AssignmentExpression|) is *true*, then
@@ -512,7 +510,7 @@ func transformNamedEvaluationOfExportAssignment(emitContext *printer.EmitContext
 }
 
 // Performs a shallow transformation of a `NamedEvaluation` node, such that a valid name will be assigned.
-func transformNamedEvaluation(context *printer.EmitContext, node *ast.Node /*NamedEvaluation*/, ignoreEmptyStringLiteral bool, assignedName string) *ast.Expression {
+func transformNamedEvaluation(context *printer.EmitContext, node *ast.Node /*NamedEvaluation*/, ignoreEmptyStringLiteral bool, assignedName string) *ast.Node {
 	switch node.Kind {
 	case ast.KindPropertyAssignment:
 		return transformNamedEvaluationOfPropertyAssignment(context, node.AsPropertyAssignment(), ignoreEmptyStringLiteral, assignedName)

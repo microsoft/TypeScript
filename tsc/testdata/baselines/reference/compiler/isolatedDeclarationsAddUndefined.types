@@ -60,3 +60,67 @@ export class Bar2 {
 >f : number
 >2 : 2
 }
+
+=== file3.ts ===
+type T = number;
+>T : number
+
+export const intersection = (p = 1 as number & (T | undefined), required: number): void => {};
+>intersection : (p: (number & (T | undefined)) | undefined, required: number) => void
+>(p = 1 as number & (T | undefined), required: number): void => {} : (p: (number & (T | undefined)) | undefined, required: number) => void
+>p : number
+>1 as number & (T | undefined) : number
+>1 : 1
+>required : number
+
+export const reversedIntersection = (p = 1 as (T | undefined) & number, required: number): void => {};
+>reversedIntersection : (p: ((T | undefined) & number) | undefined, required: number) => void
+>(p = 1 as (T | undefined) & number, required: number): void => {} : (p: ((T | undefined) & number) | undefined, required: number) => void
+>p : number
+>1 as (T | undefined) & number : number
+>1 : 1
+>required : number
+
+export const possiblyUndefinedIntersection = (p = undefined as (T | undefined) & (number | undefined), required: number): void => {};
+>possiblyUndefinedIntersection : (p: (T | undefined) & (number | undefined), required: number) => void
+>(p = undefined as (T | undefined) & (number | undefined), required: number): void => {} : (p: (T | undefined) & (number | undefined), required: number) => void
+>p : number | undefined
+>undefined as (T | undefined) & (number | undefined) : number | undefined
+>undefined : undefined
+>required : number
+
+export const anyIntersection = (p = "" as any & (T | undefined), required: number): void => {};
+>anyIntersection : (p: (any & (T | undefined)) | undefined, required: number) => void
+>(p = "" as any & (T | undefined), required: number): void => {} : (p: (any & (T | undefined)) | undefined, required: number) => void
+>p : any
+>"" as any & (T | undefined) : any
+>"" : ""
+>required : number
+
+export const unknownIntersection = (p = undefined as unknown & (T | undefined), required: number): void => {};
+>unknownIntersection : (p: (unknown & (T | undefined)) | undefined, required: number) => void
+>(p = undefined as unknown & (T | undefined), required: number): void => {} : (p: (unknown & (T | undefined)) | undefined, required: number) => void
+>p : number | undefined
+>undefined as unknown & (T | undefined) : number | undefined
+>undefined : undefined
+>required : number
+
+export const neverIntersection = (p = undefined as never & (T | undefined), required: number): void => {};
+>neverIntersection : (p: (never & (T | undefined)) | undefined, required: number) => void
+>(p = undefined as never & (T | undefined), required: number): void => {} : (p: (never & (T | undefined)) | undefined, required: number) => void
+>p : never
+>undefined as never & (T | undefined) : never
+>undefined : undefined
+>required : number
+
+type MaybeNumber = number | undefined;
+>MaybeNumber : MaybeNumber
+
+export const aliasIntersection = (p = 1 as MaybeNumber & (T | undefined), required: number): void => {};
+>aliasIntersection : (p: MaybeNumber & (T | undefined), required: number) => void
+>(p = 1 as MaybeNumber & (T | undefined), required: number): void => {} : (p: MaybeNumber & (T | undefined), required: number) => void
+>p : number | undefined
+>1 as MaybeNumber & (T | undefined) : number | undefined
+>1 : 1
+>required : number
+

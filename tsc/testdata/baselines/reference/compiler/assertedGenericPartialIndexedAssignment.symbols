@@ -1,0 +1,17 @@
+//// [tests/cases/compiler/assertedGenericPartialIndexedAssignment.ts] ////
+
+=== assertedGenericPartialIndexedAssignment.ts ===
+function write<T extends Record<string, unknown>>(values: Partial<T>, key: string) {
+>write : Symbol(write, Decl(assertedGenericPartialIndexedAssignment.ts, 0, 0))
+>T : Symbol(T, Decl(assertedGenericPartialIndexedAssignment.ts, 0, 15))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>values : Symbol(values, Decl(assertedGenericPartialIndexedAssignment.ts, 0, 50))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(assertedGenericPartialIndexedAssignment.ts, 0, 15))
+>key : Symbol(key, Decl(assertedGenericPartialIndexedAssignment.ts, 0, 69))
+
+    (values[key] as unknown) = 0;
+>values : Symbol(values, Decl(assertedGenericPartialIndexedAssignment.ts, 0, 50))
+>key : Symbol(key, Decl(assertedGenericPartialIndexedAssignment.ts, 0, 69))
+}
+

@@ -37,10 +37,8 @@ export abstract class ABC {
 			f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 			defer done()
 			f.VerifyBaselineCodeLens(t, &lsutil.UserPreferences{
-				CodeLens: lsutil.CodeLensUserPreferences{
-					ImplementationsCodeLensEnabled:               core.TSTrue,
-					ImplementationsCodeLensShowOnAllClassMethods: value,
-				},
+				ImplementationsCodeLensEnabled:               core.TSTrue,
+				ImplementationsCodeLensShowOnAllClassMethods: value,
 			})
 		})
 	}

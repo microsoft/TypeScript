@@ -1,0 +1,44 @@
+//// [tests/cases/compiler/domObserverArrayCallbacks.ts] ////
+
+=== domObserverArrayCallbacks.ts ===
+new ResizeObserver(entries => entries[0]);
+>new ResizeObserver(entries => entries[0]) : ResizeObserver
+>ResizeObserver : { new (callback: ResizeObserverCallback): ResizeObserver; prototype: ResizeObserver; }
+>entries => entries[0] : (entries: ResizeObserverEntry[]) => ResizeObserverEntry
+>entries : ResizeObserverEntry[]
+>entries[0] : ResizeObserverEntry
+>entries : ResizeObserverEntry[]
+>0 : 0
+
+new MutationObserver(records => records.some(record => record.attributeName === "style"));
+>new MutationObserver(records => records.some(record => record.attributeName === "style")) : MutationObserver
+>MutationObserver : { new (callback: MutationCallback): MutationObserver; prototype: MutationObserver; }
+>records => records.some(record => record.attributeName === "style") : (records: MutationRecord[]) => boolean
+>records : MutationRecord[]
+>records.some(record => record.attributeName === "style") : boolean
+>records.some : (predicate: (value: MutationRecord, index: number, array: MutationRecord[]) => unknown, thisArg?: any) => boolean
+>records : MutationRecord[]
+>some : (predicate: (value: MutationRecord, index: number, array: MutationRecord[]) => unknown, thisArg?: any) => boolean
+>record => record.attributeName === "style" : (record: MutationRecord) => boolean
+>record : MutationRecord
+>record.attributeName === "style" : boolean
+>record.attributeName : string | null
+>record : MutationRecord
+>attributeName : string | null
+>"style" : "style"
+
+new IntersectionObserver(entries => entries.forEach(entry => entry.isIntersecting));
+>new IntersectionObserver(entries => entries.forEach(entry => entry.isIntersecting)) : IntersectionObserver
+>IntersectionObserver : { new (callback: IntersectionObserverCallback, options?: IntersectionObserverInit): IntersectionObserver; prototype: IntersectionObserver; }
+>entries => entries.forEach(entry => entry.isIntersecting) : (entries: IntersectionObserverEntry[]) => void
+>entries : IntersectionObserverEntry[]
+>entries.forEach(entry => entry.isIntersecting) : void
+>entries.forEach : (callbackfn: (value: IntersectionObserverEntry, index: number, array: IntersectionObserverEntry[]) => void, thisArg?: any) => void
+>entries : IntersectionObserverEntry[]
+>forEach : (callbackfn: (value: IntersectionObserverEntry, index: number, array: IntersectionObserverEntry[]) => void, thisArg?: any) => void
+>entry => entry.isIntersecting : (entry: IntersectionObserverEntry) => boolean
+>entry : IntersectionObserverEntry
+>entry.isIntersecting : boolean
+>entry : IntersectionObserverEntry
+>isIntersecting : boolean
+

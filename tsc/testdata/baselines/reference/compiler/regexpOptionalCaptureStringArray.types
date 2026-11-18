@@ -1,0 +1,11 @@
+//// [tests/cases/compiler/regexpOptionalCaptureStringArray.ts] ////
+
+=== regexpOptionalCaptureStringArray.ts ===
+const result: string[] | null = /^(a)?$/.exec("");
+>result : string[] | null
+>/^(a)?$/.exec("") : RegExpExecArray | null
+>/^(a)?$/.exec : (string: string) => RegExpExecArray | null
+>/^(a)?$/ : RegExp
+>exec : (string: string) => RegExpExecArray | null
+>"" : ""
+

@@ -6,7 +6,7 @@ Input::
                     "files": ["./src/doesNotExist.ts"]
                     }
 
-tsgo -p ./tsconfig.json
+tsc -p ./tsconfig.json
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [91merror[0m[90m TS6053: [0mFile '/home/src/workspaces/project/src/doesNotExist.ts' not found.
@@ -19,7 +19,7 @@ Output::
 
 Found 1 error.
 
-//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}

@@ -1,0 +1,22 @@
+//// [tests/cases/compiler/iteratorResultNullishValueAssignment.ts] ////
+
+=== iteratorResultNullishValueAssignment.ts ===
+function initialize(result: IteratorResult<object, void>) {
+>initialize : (result: IteratorResult<object, void>) => void
+>result : IteratorResult<object, void>
+
+    if (result.value == null) {
+>result.value == null : boolean
+>result.value : void | object
+>result : IteratorResult<object, void>
+>value : void | object
+
+        result.value = {};
+>result.value = {} : {}
+>result.value : void | object
+>result : IteratorResult<object, void>
+>value : void | object
+>{} : {}
+    }
+}
+

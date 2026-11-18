@@ -33,13 +33,13 @@ export interface RequestTiming {
      * in from the server's own timing collection. Undefined when server timing
      * for the request could not be matched.
      */
-    serverTimeMs?: number;
+    serverTimeMs?: number | undefined;
     /**
      * Estimated transport overhead for this request, in milliseconds
      * (`roundTripMs - serverTimeMs`, clamped to be non-negative). Present
      * exactly when {@link serverTimeMs} is.
      */
-    transportOverheadMs?: number;
+    transportOverheadMs?: number | undefined;
 }
 
 /** Running totals accumulated across every measured request. */
@@ -182,7 +182,7 @@ export function disabledServerTimingInfo(): ServerTimingInfo {
  * requests used to fetch timing) do not misalign the two ring buffers.
  */
 export function combineTimingInfo(client: TimingInfo, server: ServerTimingInfo): TimingInfo {
-    if (!client.enabled) {
+    if (!client.enabled || !server.enabled) {
         return client;
     }
 

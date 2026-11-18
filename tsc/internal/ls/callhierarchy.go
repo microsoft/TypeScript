@@ -1,6 +1,7 @@
 package ls
 
 import (
+	"cmp"
 	"context"
 	"slices"
 	"strings"
@@ -18,6 +19,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/printer"
 	"github.com/microsoft/TypeScript/tsc/internal/scanner"
 	"github.com/microsoft/TypeScript/tsc/internal/spanmap"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
 type CallHierarchyDeclaration = *ast.Node
@@ -161,7 +163,7 @@ func getSymbolOfCallHierarchyDeclaration(c *checker.Checker, node *ast.Node) *as
 func getCallHierarchyItemName(program *compiler.Program, node *ast.Node) (text string, pos int, end int) {
 	if ast.IsSourceFile(node) {
 		sourceFile := node.AsSourceFile()
-		return sourceFile.FileName(), 0, 0
+		return sourceFile.OriginalFileName().BaseName(), 0, 0
 	}
 
 	if (ast.IsFunctionDeclaration(node) || ast.IsClassDeclaration(node)) && node.Name() == nil {
@@ -323,9 +325,9 @@ func findImplementation(c *checker.Checker, node *ast.Node) *ast.Node {
 
 	if ast.IsFunctionDeclaration(node) || ast.IsMethodDeclaration(node) {
 		symbol := getSymbolOfCallHierarchyDeclaration(c, node)
-		if symbol != nil && symbol.ValueDeclaration != nil {
-			if ast.IsFunctionLikeDeclaration(symbol.ValueDeclaration) && symbol.ValueDeclaration.Body() != nil {
-				return symbol.ValueDeclaration
+		if symbol != nil && symbol.ValueDeclaration() != nil {
+			if ast.IsFunctionLikeDeclaration(symbol.ValueDeclaration()) && symbol.ValueDeclaration().Body() != nil {
+				return symbol.ValueDeclaration()
 			}
 		}
 		return nil
@@ -340,21 +342,21 @@ func findAllInitialDeclarations(c *checker.Checker, node *ast.Node) []*ast.Node 
 	}
 
 	symbol := getSymbolOfCallHierarchyDeclaration(c, node)
-	if symbol == nil || symbol.Declarations == nil {
+	if symbol == nil || symbol.Declarations() == nil {
 		return nil
 	}
 
 	type declKey struct {
-		file string
+		file tspath.RootedFilePath
 		pos  int
 	}
 
-	indices := make([]int, len(symbol.Declarations))
+	indices := make([]int, len(symbol.Declarations()))
 	for i := range indices {
 		indices[i] = i
 	}
-	keys := make([]declKey, len(symbol.Declarations))
-	for i, decl := range symbol.Declarations {
+	keys := make([]declKey, len(symbol.Declarations()))
+	for i, decl := range symbol.Declarations() {
 		keys[i] = declKey{
 			file: ast.GetSourceFileOfNode(decl).FileName(),
 			pos:  decl.Pos(),
@@ -363,7 +365,7 @@ func findAllInitialDeclarations(c *checker.Checker, node *ast.Node) []*ast.Node 
 
 	slices.SortFunc(indices, func(a, b int) int {
 		if keys[a].file != keys[b].file {
-			return strings.Compare(keys[a].file, keys[b].file)
+			return cmp.Compare(keys[a].file, keys[b].file)
 		}
 		return keys[a].pos - keys[b].pos
 	})
@@ -372,7 +374,7 @@ func findAllInitialDeclarations(c *checker.Checker, node *ast.Node) []*ast.Node 
 	var lastDecl *ast.Node
 
 	for _, i := range indices {
-		decl := symbol.Declarations[i]
+		decl := symbol.Declarations()[i]
 		if isValidCallHierarchyDeclaration(decl) {
 			if lastDecl == nil || lastDecl.Parent != decl.Parent || lastDecl.End() != decl.Pos() {
 				declarations = append(declarations, decl)
@@ -480,12 +482,12 @@ func resolveCallHierarchyDeclaration(program *compiler.Program, location *ast.No
 		if !followingSymbol {
 			symbol := c.GetSymbolAtLocation(location)
 			if symbol != nil {
-				if (symbol.Flags & ast.SymbolFlagsAlias) != 0 {
+				if (symbol.Flags() & ast.SymbolFlagsAlias) != 0 {
 					symbol = c.GetAliasedSymbol(symbol)
 				}
-				if symbol.ValueDeclaration != nil {
+				if symbol.ValueDeclaration() != nil {
 					followingSymbol = true
-					location = symbol.ValueDeclaration
+					location = symbol.ValueDeclaration()
 					continue
 				}
 			}
@@ -502,6 +504,20 @@ func (l *LanguageService) createCallHierarchyItem(program *compiler.Program, nod
 	sourceFile := ast.GetSourceFileOfNode(node)
 	nameText, namePos, nameEnd := getCallHierarchyItemName(program, node)
 	containerName := getCallHierarchyItemContainerName(program, node)
+	if ast.IsSourceFile(node) {
+		directory := sourceFile.OriginalFileName().Directory()
+		directoryPath := directory.AsPath()
+		containerName = directory.AsString()
+		workspaceFolders := l.host.GetWorkspaceFolders()
+		containingFolder := getContainingWorkspaceFolder(directory, workspaceFolders, l.CaseSensitivity())
+		if containingFolder != nil {
+			relativePath, _ := l.CaseSensitivity().RelativePathWithinDirectory(containingFolder.Path, directoryPath)
+			containerName = relativePath.AsString()
+			if len(workspaceFolders) > 1 && containingFolder.Name != "" {
+				containerName = containingFolder.Name + "/" + containerName
+			}
+		}
+	}
 
 	kind := getSymbolKindFromNode(node)
 
@@ -528,6 +544,29 @@ func (l *LanguageService) createCallHierarchyItem(program *compiler.Program, nod
 	}
 
 	return item
+}
+
+func getContainingWorkspaceFolder(directory tspath.RootedDirectoryPath, workspaceFolders []WorkspaceFolder, caseSensitivity tspath.CaseSensitivity) *WorkspaceFolder {
+	directoryPath := directory.AsPath()
+	var containingFolder *WorkspaceFolder
+	for i := range workspaceFolders {
+		folder := &workspaceFolders[i]
+		searchDirectory := directoryPath
+		// Like workspace.asRelativePath, resolve a workspace directory through its parent.
+		if caseSensitivity.ComparePaths(folder.Path.AsPath(), directoryPath) == 0 {
+			searchDirectory = directoryPath.Directory().AsPath()
+		}
+		if !caseSensitivity.ContainsPath(folder.Path, searchDirectory) {
+			continue
+		}
+		if containingFolder != nil &&
+			(caseSensitivity.ComparePaths(containingFolder.Path.AsPath(), folder.Path.AsPath()) == 0 ||
+				!caseSensitivity.ContainsPath(containingFolder.Path, folder.Path.AsPath())) {
+			continue
+		}
+		containingFolder = folder
+	}
+	return containingFolder
 }
 
 type callSite struct {
@@ -650,8 +689,7 @@ func (l *LanguageService) getIncomingCalls(ctx context.Context, program *compile
 		node: location,
 	}
 
-	result, err := handleCrossProject(
-		l,
+	result, err := l.handleCrossProject(
 		ctx,
 		incomingEntry,
 		orchestrator,
@@ -1104,7 +1142,7 @@ func (l *LanguageService) ProvideCallHierarchyOutgoingCalls(
 }
 
 func (l *LanguageService) callHierarchyDeclarations(file *ast.SourceFile, position lsproto.Position, program *compiler.Program, allowSourceFile bool) []*ast.Node {
-	positions := lsconv.FromLSPPositionForSourceFile(l.converters, file, position, spanmap.FeatureCallHierarchy)
+	positions := l.converters.FromLSPPositionForSourceFile(file, position, spanmap.FeatureCallHierarchy)
 	var declarations []*ast.Node
 	var seen collections.Set[*ast.Node]
 	for _, mapped := range positions {

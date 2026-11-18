@@ -20,11 +20,11 @@ export const value = 1;
     ]
 }
 
-tsgo --runExternalCode --pretty false
+tsc --runExternalCode --pretty false
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 tsconfig.json(6,48): error mapper123: Option 'name' requires a string.
-//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}

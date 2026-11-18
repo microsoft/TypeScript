@@ -1,0 +1,10 @@
+//// [tests/cases/compiler/declarationEmitStripInternalTypeAliasRHS.ts] ////
+
+=== declarationEmitStripInternalTypeAliasRHS.ts ===
+interface Foo {}
+export type T =
+>T : Foo
+
+    /** @internal */
+    Foo;
+

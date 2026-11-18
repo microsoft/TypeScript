@@ -21,7 +21,7 @@ export { }
     },
 }
 
-tsgo 
+tsc 
 ExitStatus:: DiagnosticsPresent_OutputsSkipped
 Output::
 [96msrc/main.ts[0m:[93m2[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'number' is not assignable to type 'string'.
@@ -32,7 +32,7 @@ Output::
 
 Found 1 error in src/main.ts[90m:2[0m
 
-//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -60,7 +60,7 @@ declare const console: { log(msg: any): void; };
 
 Edit [0]:: no change
 
-tsgo 
+tsc 
 ExitStatus:: DiagnosticsPresent_OutputsSkipped
 Output::
 [96msrc/main.ts[0m:[93m2[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'number' is not assignable to type 'string'.
@@ -79,7 +79,7 @@ Edit [1]:: Fix error
 import { A } from "../shared/types/db";
 const a: string = "hello";
 
-tsgo 
+tsc 
 ExitStatus:: Success
 Output::
 //// [/user/username/projects/noEmitOnError/dev-build/shared/types/db.d.ts] *new* 
@@ -109,7 +109,7 @@ export {};
 
 Edit [2]:: no change
 
-tsgo 
+tsc 
 ExitStatus:: Success
 Output::
 //// [/user/username/projects/noEmitOnError/dev-build/shared/types/db.d.ts] *rewrite with same content*

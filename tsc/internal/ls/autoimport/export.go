@@ -8,21 +8,64 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
-//go:generate go tool golang.org/x/tools/cmd/stringer -type=ExportSyntax -output=export_stringer_generated.go
-//go:generate npx dprint fmt export_stringer_generated.go
+//go:generate npx hereby generate:autoimport
 
-// ModuleID uniquely identifies a module across multiple declarations.
-// If the export is from an ambient module declaration, this is the module name.
-// If the export is from a module augmentation, this is the Path() of the resolved module file.
-// Otherwise this is the Path() of the exporting source file.
-type ModuleID string
+type moduleIDKind uint8
+
+const (
+	moduleIDKindInvalid moduleIDKind = iota
+	moduleIDKindFile
+	moduleIDKindAmbient
+)
+
+// ModuleID uniquely identifies either a file module or an ambient module.
+// For file modules, value is a tspath.PathKey; for ambient modules, a tspath.ModuleSpecifier.
+type ModuleID struct {
+	value string
+	kind  moduleIDKind
+}
+
+func fileModuleID(path tspath.PathKey) ModuleID {
+	return ModuleID{value: string(path), kind: moduleIDKindFile}
+}
+
+func ambientModuleID(specifier string) ModuleID {
+	return ModuleID{value: string(tspath.ToModuleSpecifier(specifier)), kind: moduleIDKindAmbient}
+}
+
+func (m ModuleID) AsString() string {
+	return m.value
+}
+
+func (m ModuleID) IsAmbient() bool {
+	return m.kind == moduleIDKindAmbient
+}
+
+func (m ModuleID) AsPathKey() (tspath.PathKey, bool) {
+	if m.kind != moduleIDKindFile {
+		return "", false
+	}
+	return tspath.PathKeyFromCanonical(m.value), true
+}
+
+// IsFile reports whether m identifies the file module at path.
+func (m ModuleID) IsFile(path tspath.PathKey) bool {
+	return m.kind == moduleIDKindFile && m.value == path.AsString()
+}
+
+func (m ModuleID) AsModuleSpecifier() (tspath.ModuleSpecifier, bool) {
+	if m.kind != moduleIDKindAmbient {
+		return "", false
+	}
+	return tspath.ToModuleSpecifier(m.value), true
+}
 
 type ExportID struct {
 	ModuleID   ModuleID
 	ExportName string
 }
 
-type ExportSyntax int
+type ExportSyntax uint8
 
 const (
 	ExportSyntaxNone ExportSyntax = iota
@@ -48,10 +91,11 @@ const (
 
 type Export struct {
 	ExportID
-	ModuleFileName string
-	Syntax         ExportSyntax
-	Flags          ast.SymbolFlags
-	localName      string
+	ModuleFileName            tspath.RootedFilePath
+	UnresolvedModuleSpecifier tspath.ModuleSpecifier
+	Flags                     ast.SymbolFlags
+	Syntax                    ExportSyntax
+	localName                 string
 	// through is the name of the module symbol's export that this export was found on,
 	// either 'export=', InternalSymbolNameExportStar, or empty string.
 	through string
@@ -59,12 +103,12 @@ type Export struct {
 	// Checker-set fields
 
 	Target                     ExportID
-	IsTypeOnly                 bool
-	ScriptElementKind          lsutil.ScriptElementKind
 	ScriptElementKindModifiers lsutil.ScriptElementKindModifier
+	ScriptElementKind          lsutil.ScriptElementKind
+	IsTypeOnly                 bool
 
 	// The file where the export was found.
-	Path tspath.Path
+	Path tspath.PathKey
 
 	PackageName string
 }
@@ -84,8 +128,8 @@ func (e *Export) IsRenameable() bool {
 }
 
 func (e *Export) AmbientModuleName() string {
-	if !tspath.IsExternalModuleNameRelative(string(e.ModuleID)) {
-		return string(e.ModuleID)
+	if e.ModuleID.IsAmbient() {
+		return e.ModuleID.AsString()
 	}
 	return ""
 }
@@ -95,14 +139,14 @@ func (e *Export) IsUnresolvedAlias() bool {
 }
 
 func SymbolToExport(symbol *ast.Symbol, ch *checker.Checker) *Export {
-	if symbol.Parent != nil && checker.IsExternalModuleSymbol(symbol.Parent) {
-		if moduleID, moduleFileName, ok := tryGetModuleIDAndFileNameOfModuleSymbol(symbol.Parent); ok {
-			return extractFirstExport(symbol, ch, moduleID, moduleFileName, ast.GetSourceFileOfModule(symbol.Parent))
+	if symbol.Parent() != nil && checker.IsExternalModuleSymbol(symbol.Parent()) {
+		if moduleID, moduleFileName, ok := tryGetModuleIDAndFileNameOfModuleSymbol(symbol.Parent()); ok {
+			return extractFirstExport(symbol, ch, moduleID, moduleFileName, ast.GetSourceFileOfModule(symbol.Parent()))
 		}
 		return nil
 	}
 
-	declaration := core.FirstOrNil(symbol.Declarations)
+	declaration := core.FirstOrNil(symbol.Declarations())
 	if declaration == nil {
 		return nil
 	}
@@ -113,7 +157,7 @@ func SymbolToExport(symbol *ast.Symbol, ch *checker.Checker) *Export {
 	}
 
 	moduleSymbol := ch.GetMergedSymbol(file.Symbol)
-	moduleID := ModuleID(file.Path())
+	moduleID := fileModuleID(file.PathKey())
 	moduleFileName := file.FileName()
 	target := ch.GetMergedSymbol(ch.SkipAlias(symbol))
 
@@ -123,10 +167,10 @@ func SymbolToExport(symbol *ast.Symbol, ch *checker.Checker) *Export {
 	if export := tryGetModuleExport(ast.InternalSymbolNameExportEquals, target, moduleSymbol, ch, moduleID, moduleFileName, file); export != nil {
 		return export
 	}
-	return tryGetModuleExport(symbol.Name, target, moduleSymbol, ch, moduleID, moduleFileName, file)
+	return tryGetModuleExport(symbol.Name(), target, moduleSymbol, ch, moduleID, moduleFileName, file)
 }
 
-func tryGetModuleExport(exportName string, target *ast.Symbol, moduleSymbol *ast.Symbol, ch *checker.Checker, moduleID ModuleID, moduleFileName string, file *ast.SourceFile) *Export {
+func tryGetModuleExport(exportName string, target *ast.Symbol, moduleSymbol *ast.Symbol, ch *checker.Checker, moduleID ModuleID, moduleFileName tspath.RootedFilePath, file *ast.SourceFile) *Export {
 	exported := ch.TryGetMemberInModuleExportsAndProperties(exportName, moduleSymbol)
 	if exported != nil && ch.GetMergedSymbol(ch.SkipAlias(exported)) == target {
 		return extractFirstExport(exported, ch, moduleID, moduleFileName, file)
@@ -134,9 +178,9 @@ func tryGetModuleExport(exportName string, target *ast.Symbol, moduleSymbol *ast
 	return nil
 }
 
-func extractFirstExport(symbol *ast.Symbol, ch *checker.Checker, moduleID ModuleID, moduleFileName string, file *ast.SourceFile) *Export {
+func extractFirstExport(symbol *ast.Symbol, ch *checker.Checker, moduleID ModuleID, moduleFileName tspath.RootedFilePath, file *ast.SourceFile) *Export {
 	var exports []*Export
-	extractor := newSymbolExtractor("", ch, nil, nil)
-	extractor.extractFromSymbol(symbol.Name, symbol, moduleID, moduleFileName, file, &exports)
+	extractor := newSymbolExtractor("", ch, tspath.CaseInsensitive, nil)
+	extractor.extractFromSymbol(symbol.Name(), symbol, moduleID, moduleFileName, file, &exports)
 	return core.FirstOrNil(exports)
 }

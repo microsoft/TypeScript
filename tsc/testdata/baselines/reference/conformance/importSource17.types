@@ -1,0 +1,72 @@
+//// [tests/cases/conformance/importSource/importSource17.ts] ////
+
+=== index.ts ===
+import source a from "./a.wasm";
+>a : AbstractModuleSource
+
+const b: string = a;
+>b : string
+>a : AbstractModuleSource
+
+a.exports;
+>a.exports : any
+>a : AbstractModuleSource
+>exports : any
+
+a.value;
+>a.value : any
+>a : AbstractModuleSource
+>value : any
+
+import(a);
+>import(a) : Promise<any>
+>a : AbstractModuleSource
+
+import.source(a);
+>import.source(a) : Promise<AbstractModuleSource>
+>source : any
+>a : AbstractModuleSource
+
+import.source(1);
+>import.source(1) : Promise<AbstractModuleSource>
+>source : any
+>1 : 1
+
+import.source(undefined);
+>import.source(undefined) : Promise<AbstractModuleSource>
+>source : any
+>undefined : undefined
+
+import.source("./a.wasm", 1);
+>import.source("./a.wasm", 1) : Promise<AbstractModuleSource>
+>source : any
+>"./a.wasm" : "./a.wasm"
+>1 : 1
+
+import.source("./a.wasm", { with: { type: 1 } });
+>import.source("./a.wasm", { with: { type: 1 } }) : Promise<AbstractModuleSource>
+>source : any
+>"./a.wasm" : "./a.wasm"
+>{ with: { type: 1 } } : { with: { readonly type: 1; }; }
+>with : { readonly type: 1; }
+>{ type: 1 } : { readonly type: 1; }
+>type : 1
+>1 : 1
+
+import.source("./a.wasm", { assert: { type: "webassembly" } });
+>import.source("./a.wasm", { assert: { type: "webassembly" } }) : Promise<AbstractModuleSource>
+>source : any
+>"./a.wasm" : "./a.wasm"
+>{ assert: { type: "webassembly" } } : { assert: { type: string; }; }
+>assert : { type: string; }
+>{ type: "webassembly" } : { type: string; }
+>type : string
+>"webassembly" : "webassembly"
+
+new AbstractModuleSource();
+>new AbstractModuleSource() : any
+>AbstractModuleSource : any
+
+type C = AbstractModuleSource<string>;
+>C : any
+

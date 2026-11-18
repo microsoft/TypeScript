@@ -1,8 +1,11 @@
+declarationEmitInferredTypeAlias4.ts(1,10): error TS5088: The inferred type of 'f' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
 declarationEmitInferredTypeAlias4.ts(4,12): error TS2454: Variable 'x' is used before being assigned.
 
 
-==== declarationEmitInferredTypeAlias4.ts (1 errors) ====
+==== declarationEmitInferredTypeAlias4.ts (2 errors) ====
     function f<A>() {
+             ~
+!!! error TS5088: The inferred type of 'f' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
         type Foo<T> = T | { x: Foo<T> };
         var x: Foo<A[]>;
         return x;

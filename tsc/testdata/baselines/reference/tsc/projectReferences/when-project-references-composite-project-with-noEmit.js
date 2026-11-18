@@ -19,7 +19,7 @@ export const x = 10;
     }
 }
 
-tsgo --p project
+tsc --p project
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96mproject/tsconfig.json[0m:[93m3[0m:[93m9[0m - [91merror[0m[90m TS6310: [0mReferenced project '/home/src/workspaces/solution/utils' may not disable emit.
@@ -30,7 +30,7 @@ Output::
 
 Found 1 error in project/tsconfig.json[90m:3[0m
 
-//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}

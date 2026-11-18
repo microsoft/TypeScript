@@ -1,0 +1,28 @@
+//// [tests/cases/compiler/contextualFactoryReturnToOptionalClassField.ts] ////
+
+=== contextualFactoryReturnToOptionalClassField.ts ===
+class Reply<T extends string | number> { value!: T; }
+>Reply : Reply<T>
+>value : T
+
+declare function create<Ctor extends new () => unknown, R extends InstanceType<Ctor>>(ctor: Ctor): R;
+>create : <Ctor extends new () => unknown, R extends InstanceType<Ctor>>(ctor: Ctor) => R
+>ctor : Ctor
+
+class Container<T extends string | number> {
+>Container : Container<T>
+
+    item?: Reply<T>;
+>item : Reply<T> | undefined
+
+    initialize() { this.item = create(Reply); }
+>initialize : () => void
+>this.item = create(Reply) : Reply<T>
+>this.item : Reply<T> | undefined
+>this : this
+>item : Reply<T> | undefined
+>create(Reply) : Reply<T>
+>create : <Ctor extends new () => unknown, R extends InstanceType<Ctor>>(ctor: Ctor) => R
+>Reply : typeof Reply
+}
+

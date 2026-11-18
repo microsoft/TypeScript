@@ -18,7 +18,7 @@ export const x = 10;
     }
 }
 
-tsgo --p project
+tsc --p project
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96mproject/index.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS6305: [0mOutput file '/home/src/workspaces/solution/utils/index.d.ts' has not been built from source file '/home/src/workspaces/solution/utils/index.ts'.
@@ -29,7 +29,7 @@ Output::
 
 Found 1 error in project/index.ts[90m:1[0m
 
-//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}

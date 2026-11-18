@@ -2,6 +2,7 @@ package lsproto
 
 import (
 	"reflect"
+	"strconv"
 	"strings"
 	"testing"
 
@@ -111,6 +112,66 @@ func TestUnmarshalRejectsNullForOptionalNonNullableFields(t *testing.T) {
 			assert.ErrorContains(t, err, tt.errText)
 		})
 	}
+}
+
+func TestUnmarshalURI(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name     string
+		uri      string
+		expected DocumentUri
+		wantErr  bool
+	}{
+		{name: "file", uri: "file:///test.ts", expected: "file:///test.ts"},
+		{name: "untitled", uri: "untitled:Untitled-1", expected: "untitled:Untitled-1"},
+		{name: "empty file path", uri: "file://", expected: "file:///"},
+		{name: "relative file path", uri: "file:test.ts", expected: "file:///test.ts"},
+		{name: "missing scheme", uri: "/test.ts", expected: "file:///test.ts"},
+		{name: "invalid escape", uri: "file:///test%xx.ts", wantErr: true},
+		{name: "path without authority", uri: "file:////server/share", wantErr: true},
+	}
+
+	for _, tt := range tests {
+		for _, uriType := range []string{"DocumentUri", "URI"} {
+			t.Run(uriType+"/"+tt.name, func(t *testing.T) {
+				t.Parallel()
+				var target any
+				switch uriType {
+				case "DocumentUri":
+					target = new(DocumentUri)
+				case "URI":
+					target = new(URI)
+				}
+				err := json.Unmarshal([]byte(strconv.Quote(tt.uri)), target)
+				if tt.wantErr {
+					assert.ErrorContains(t, err, "invalid URI")
+				} else {
+					assert.NilError(t, err)
+					assert.Equal(t, reflect.ValueOf(target).Elem().String(), string(tt.expected))
+				}
+			})
+		}
+	}
+
+	request := &RequestMessage{
+		Params: json.Value(`{"textDocument":{"uri":"file:////server/share","languageId":"typescript","version":1,"text":""}}`),
+	}
+	_, err := request.UnmarshalParams[*DidOpenTextDocumentParams]()
+	assert.ErrorIs(t, err, ErrorCodeInvalidParams)
+	assert.ErrorContains(t, err, "invalid URI")
+}
+
+func TestUnmarshalDocumentUriMapKey(t *testing.T) {
+	t.Parallel()
+
+	var value map[DocumentUri]int
+	err := json.Unmarshal([]byte(`{"file://":1}`), &value)
+	assert.NilError(t, err)
+	assert.DeepEqual(t, value, map[DocumentUri]int{"file:///": 1})
+
+	err = json.Unmarshal([]byte(`{"file:////server/share":1}`), &value)
+	assert.ErrorContains(t, err, "invalid URI")
 }
 
 func TestUnmarshalAcceptsNullForNullableFields(t *testing.T) {
@@ -594,6 +655,11 @@ func TestUnmarshalBooleanUnionTypes(t *testing.T) {
 	})
 }
 
+type optionalDiscriminatorArm struct {
+	Kind  *StringLiteralBegin `json:"kind,omitzero"`
+	Title string              `json:"title" lsp:"required"`
+}
+
 func TestUnmarshalDiscriminatorUnion(t *testing.T) {
 	t.Parallel()
 
@@ -630,11 +696,48 @@ func TestUnmarshalDiscriminatorUnion(t *testing.T) {
 		assert.Assert(t, v.End != nil)
 	})
 
+	t.Run("discriminator after variant fields", func(t *testing.T) {
+		t.Parallel()
+		var v WorkDoneProgressBeginOrReportOrEnd
+		err := json.Unmarshal([]byte(`{"title": "Indexing", "percentage": 25, "kind": "begin"}`), &v)
+		assert.NilError(t, err)
+		assert.Assert(t, v.Begin != nil)
+		assert.Equal(t, v.Begin.Title, "Indexing")
+		assert.Assert(t, v.Begin.Percentage != nil)
+		assert.Equal(t, *v.Begin.Percentage, uint32(25))
+	})
+
+	t.Run("optional discriminator is preserved", func(t *testing.T) {
+		t.Parallel()
+		dec := json.NewDecoder(strings.NewReader(`{"kind": "begin", "title": "Indexing"}`))
+		state, err := scanDiscriminatedStruct(dec, "optionalDiscriminatorArm", "kind")
+		assert.NilError(t, err)
+		var v *optionalDiscriminatorArm
+		assert.NilError(t, unmarshalDiscriminatedArm(state, &v))
+		assert.Assert(t, v != nil)
+		assert.Assert(t, v.Kind != nil)
+		assert.Equal(t, v.Title, "Indexing")
+	})
+
 	t.Run("invalid discriminator", func(t *testing.T) {
 		t.Parallel()
 		var v WorkDoneProgressBeginOrReportOrEnd
 		err := json.Unmarshal([]byte(`{"kind": "invalid"}`), &v)
 		assert.Assert(t, err != nil)
+	})
+
+	t.Run("non-string discriminator", func(t *testing.T) {
+		t.Parallel()
+		var v WorkDoneProgressBeginOrReportOrEnd
+		err := json.Unmarshal([]byte(`{"kind": null}`), &v)
+		assert.Assert(t, err != nil)
+	})
+
+	t.Run("missing discriminator", func(t *testing.T) {
+		t.Parallel()
+		var v WorkDoneProgressBeginOrReportOrEnd
+		err := json.Unmarshal([]byte(`{"message": "missing kind"}`), &v)
+		assert.ErrorContains(t, err, `missing discriminator "kind"`)
 	})
 }
 
@@ -711,12 +814,36 @@ func TestUnmarshalDocumentEditUnion(t *testing.T) {
 		assert.Assert(t, v.DeleteFile == nil)
 	})
 
+	t.Run("TextDocumentEdit with non-string kind", func(t *testing.T) {
+		t.Parallel()
+		var v TextDocumentEditOrCreateFileOrRenameFileOrDeleteFile
+		err := json.Unmarshal([]byte(`{
+			"kind": null,
+			"textDocument": {"uri": "file:///a.ts", "version": 1},
+			"edits": []
+		}`), &v)
+		assert.NilError(t, err)
+		assert.Assert(t, v.TextDocumentEdit != nil)
+		assert.Assert(t, v.CreateFile == nil)
+		assert.Assert(t, v.RenameFile == nil)
+		assert.Assert(t, v.DeleteFile == nil)
+	})
+
 	t.Run("CreateFile with kind create", func(t *testing.T) {
 		t.Parallel()
 		var v TextDocumentEditOrCreateFileOrRenameFileOrDeleteFile
 		err := json.Unmarshal([]byte(`{"kind": "create", "uri": "file:///new.ts"}`), &v)
 		assert.NilError(t, err)
 		assert.Assert(t, v.TextDocumentEdit == nil)
+		assert.Assert(t, v.CreateFile != nil)
+		assert.Equal(t, v.CreateFile.Uri, DocumentUri("file:///new.ts"))
+	})
+
+	t.Run("CreateFile with kind after fields", func(t *testing.T) {
+		t.Parallel()
+		var v TextDocumentEditOrCreateFileOrRenameFileOrDeleteFile
+		err := json.Unmarshal([]byte(`{"uri": "file:///new.ts", "kind": "create"}`), &v)
+		assert.NilError(t, err)
 		assert.Assert(t, v.CreateFile != nil)
 		assert.Equal(t, v.CreateFile.Uri, DocumentUri("file:///new.ts"))
 	})
@@ -767,6 +894,15 @@ func TestUnmarshalFieldOrdering(t *testing.T) {
 		assert.Assert(t, hint.Kind != nil)
 		assert.Equal(t, *hint.Kind, InlayHintKindType)
 	})
+}
+
+func TestUnmarshalCompletionItemDataFileName(t *testing.T) {
+	t.Parallel()
+
+	var data CompletionItemData
+	err := json.Unmarshal([]byte(`{"fileName":"/src/index.ts","position":1,"name":"value"}`), &data)
+	assert.NilError(t, err)
+	assert.Equal(t, data.FileName, "/src/index.ts")
 }
 
 func TestUnmarshalEmptyObject(t *testing.T) {
@@ -998,7 +1134,7 @@ func TestUnmarshalParamsRequiresParams(t *testing.T) {
 	for _, tt := range noParamsTests {
 		t.Run("NoParams/"+tt.name, func(t *testing.T) {
 			t.Parallel()
-			_, err := UnmarshalParams[NoParams](&RequestMessage{Params: tt.params})
+			_, err := (&RequestMessage{Params: tt.params}).UnmarshalParams[NoParams]()
 			if tt.wantErr {
 				assert.ErrorIs(t, err, ErrorCodeInvalidParams)
 			} else {
@@ -1024,13 +1160,68 @@ func TestUnmarshalParamsRequiresParams(t *testing.T) {
 	for _, tt := range typedTests {
 		t.Run("typed/"+tt.name, func(t *testing.T) {
 			t.Parallel()
-			got, err := UnmarshalParams[*DidChangeConfigurationParams](&RequestMessage{Params: tt.params})
+			got, err := (&RequestMessage{Params: tt.params}).UnmarshalParams[*DidChangeConfigurationParams]()
 			if tt.wantErr {
 				assert.ErrorIs(t, err, ErrorCodeInvalidParams)
 			} else {
 				assert.NilError(t, err)
 				assert.Assert(t, got != nil && got.Settings != nil)
 			}
+		})
+	}
+}
+
+type bufferedWorkDoneProgressUnion struct {
+	begin  *WorkDoneProgressBegin
+	report *WorkDoneProgressReport
+	end    *WorkDoneProgressEnd
+}
+
+func (o *bufferedWorkDoneProgressUnion) UnmarshalJSONFrom(dec *json.Decoder) error {
+	data, err := dec.ReadValue()
+	if err != nil {
+		return err
+	}
+	switch string(jsonObjectRawField(data, "kind")) {
+	case `"begin"`:
+		o.begin = new(WorkDoneProgressBegin)
+		return json.Unmarshal(data, o.begin)
+	case `"report"`:
+		o.report = new(WorkDoneProgressReport)
+		return json.Unmarshal(data, o.report)
+	case `"end"`:
+		o.end = new(WorkDoneProgressEnd)
+		return json.Unmarshal(data, o.end)
+	default:
+		return errInvalidValue("bufferedWorkDoneProgressUnion", data)
+	}
+}
+
+func BenchmarkUnmarshalDiscriminatedUnion(b *testing.B) {
+	inputs := map[string][]byte{
+		"discriminator-first": []byte(`{"kind":"begin","title":"Indexing","cancellable":true,"message":"Scanning files","percentage":25}`),
+		"discriminator-last":  []byte(`{"title":"Indexing","cancellable":true,"message":"Scanning files","percentage":25,"kind":"begin"}`),
+	}
+	for order, input := range inputs {
+		b.Run(order, func(b *testing.B) {
+			b.Run("buffered", func(b *testing.B) {
+				b.ReportAllocs()
+				for b.Loop() {
+					var value bufferedWorkDoneProgressUnion
+					if err := json.Unmarshal(input, &value); err != nil {
+						b.Fatal(err)
+					}
+				}
+			})
+			b.Run("streaming", func(b *testing.B) {
+				b.ReportAllocs()
+				for b.Loop() {
+					var value WorkDoneProgressBeginOrReportOrEnd
+					if err := json.Unmarshal(input, &value); err != nil {
+						b.Fatal(err)
+					}
+				}
+			})
 		})
 	}
 }

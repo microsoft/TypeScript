@@ -1,0 +1,33 @@
+//// [tests/cases/compiler/jsExpandoUniqueSymbolDeclarationEmit.ts] ////
+
+=== index.js ===
+const bar = function () {};
+>bar : { (): void; s: symbol; g: () => symbol; }
+>function () {} : { (): void; s: symbol; g: () => symbol; }
+
+/** @type {unique symbol} */
+bar.s = Symbol();
+>bar.s = Symbol() : symbol
+>bar.s : symbol
+>bar : { (): void; s: symbol; g: () => symbol; }
+>s : symbol
+>Symbol() : symbol
+>Symbol : SymbolConstructor
+
+bar.g = () => bar.s;
+>bar.g = () => bar.s : () => symbol
+>bar.g : () => symbol
+>bar : { (): void; s: symbol; g: () => symbol; }
+>g : () => symbol
+>() => bar.s : () => symbol
+>bar.s : symbol
+>bar : { (): void; s: symbol; g: () => symbol; }
+>s : symbol
+
+module.exports = bar;
+>module.exports = bar : { (): void; s: symbol; g: () => symbol; }
+>module.exports : { (): void; s: symbol; g: () => symbol; }
+>module : { exports: { (): void; s: symbol; g: () => symbol; }; }
+>exports : { (): void; s: symbol; g: () => symbol; }
+>bar : { (): void; s: symbol; g: () => symbol; }
+

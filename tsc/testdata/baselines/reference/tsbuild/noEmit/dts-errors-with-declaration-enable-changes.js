@@ -10,7 +10,7 @@ const a = class { private p = 10; };
     }
 }
 
-tsgo -b -v --noEmit
+tsc -b -v --noEmit
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -35,7 +35,7 @@ Output::
   ],
   "size": 45
 }
-//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -61,14 +61,14 @@ declare const console: { log(msg: any): void; };
 
 tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *refresh*    /home/src/projects/project/a.ts
 Signatures::
 
 
 Edit [0]:: no change
 
-tsgo -b -v --noEmit
+tsc -b -v --noEmit
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -83,14 +83,14 @@ Output::
 
 tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *refresh*    /home/src/projects/project/a.ts
 Signatures::
 
 
 Edit [1]:: With declaration enabled noEmit - Should report errors
 
-tsgo -b -v --noEmit --declaration
+tsc -b -v --noEmit --declaration
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -131,14 +131,14 @@ Found 1 error in a.ts[90m:1[0m
 
 tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *refresh*    /home/src/projects/project/a.ts
 Signatures::
 
 
 Edit [2]:: With declaration and declarationMap noEmit - Should report errors
 
-tsgo -b -v --noEmit --declaration --declarationMap
+tsc -b -v --noEmit --declaration --declarationMap
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -165,14 +165,14 @@ Found 1 error in a.ts[90m:1[0m
 
 tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *refresh*    /home/src/projects/project/a.ts
 Signatures::
 
 
 Edit [3]:: no change
 
-tsgo -b -v --noEmit
+tsc -b -v --noEmit
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -200,14 +200,14 @@ Output::
 
 tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *refresh*    /home/src/projects/project/a.ts
 Signatures::
 
 
 Edit [4]:: Dts Emit with error
 
-tsgo -b -v --declaration
+tsc -b -v --declaration
 ExitStatus:: DiagnosticsPresent_OutputsSkipped
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -256,7 +256,7 @@ const a = class {
 
 tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *refresh*    /home/src/projects/project/a.ts
 Signatures::
 
@@ -265,7 +265,7 @@ Edit [5]:: Fix the error
 //// [/home/src/projects/project/a.ts] *modified* 
 const a = class { public p = 10; };
 
-tsgo -b -v --noEmit
+tsc -b -v --noEmit
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -293,14 +293,14 @@ Output::
 
 tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *refresh*    /home/src/projects/project/a.ts
 Signatures::
 
 
 Edit [6]:: With declaration enabled noEmit
 
-tsgo -b -v --noEmit --declaration
+tsc -b -v --noEmit --declaration
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -315,14 +315,14 @@ Output::
 
 tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *refresh*    /home/src/projects/project/a.ts
 Signatures::
 
 
 Edit [7]:: With declaration and declarationMap noEmit
 
-tsgo -b -v --noEmit --declaration --declarationMap
+tsc -b -v --noEmit --declaration --declarationMap
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -337,6 +337,6 @@ Output::
 
 tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *refresh*    /home/src/projects/project/a.ts
 Signatures::

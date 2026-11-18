@@ -1,0 +1,17 @@
+//// [tests/cases/compiler/regexpReplaceSingleParameterCallback.ts] ////
+
+=== regexpReplaceSingleParameterCallback.ts ===
+declare const pattern: RegExp;
+>pattern : Symbol(pattern, Decl(regexpReplaceSingleParameterCallback.ts, 0, 13))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+declare const replace: (value: string) => string;
+>replace : Symbol(replace, Decl(regexpReplaceSingleParameterCallback.ts, 1, 13))
+>value : Symbol(value, Decl(regexpReplaceSingleParameterCallback.ts, 1, 24))
+
+"".replace(pattern, replace);
+>"".replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>pattern : Symbol(pattern, Decl(regexpReplaceSingleParameterCallback.ts, 0, 13))
+>replace : Symbol(replace, Decl(regexpReplaceSingleParameterCallback.ts, 1, 13))
+

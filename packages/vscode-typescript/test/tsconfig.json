@@ -2,5 +2,9 @@
     "extends": "../tsconfig.json",
     "compilerOptions": {
         "rootDir": ".."
-    }
+    },
+    "include": ["."],
+    "references": [
+        { "path": "../../typescript" }
+    ]
 }

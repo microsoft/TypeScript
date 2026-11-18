@@ -1,0 +1,11 @@
+//// [tests/cases/compiler/strictModeEvalOrArgumentsInNonStrictScript.ts] ////
+
+=== strictModeEvalOrArgumentsInNonStrictScript.ts ===
+class arguments {}
+>arguments : arguments
+
+const C = class eval {};
+>C : typeof eval
+>class eval {} : typeof eval
+>eval : typeof eval
+

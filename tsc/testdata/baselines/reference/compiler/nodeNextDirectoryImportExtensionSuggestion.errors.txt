@@ -1,0 +1,17 @@
+/index.ts(1,8): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+
+
+==== /package.json (0 errors) ====
+    { "type": "module" }
+    
+==== /foo.ts (0 errors) ====
+    export {};
+    
+==== /foo/index.ts (0 errors) ====
+    export {};
+    
+==== /index.ts (1 errors) ====
+    import "./foo/";
+           ~~~~~~~~
+!!! error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+    

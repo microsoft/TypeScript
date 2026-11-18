@@ -11,7 +11,7 @@ const a = class { private p = 10; };
     }
 }
 
-tsgo -b -v --noEmit
+tsc -b -v --noEmit
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -36,7 +36,7 @@ Output::
   ],
   "size": 45
 }
-//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -62,14 +62,14 @@ declare const console: { log(msg: any): void; };
 
 tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *refresh*    /home/src/projects/project/a.ts
 Signatures::
 
 
 Edit [0]:: no change
 
-tsgo -b -v --noEmit
+tsc -b -v --noEmit
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -84,7 +84,7 @@ Output::
 
 tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *refresh*    /home/src/projects/project/a.ts
 Signatures::
 
@@ -93,7 +93,7 @@ Edit [1]:: Fix error
 //// [/home/src/projects/project/a.ts] *modified* 
 const a = "hello";
 
-tsgo -b -v --noEmit
+tsc -b -v --noEmit
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -108,14 +108,14 @@ Output::
 
 tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *refresh*    /home/src/projects/project/a.ts
 Signatures::
 
 
 Edit [2]:: no change
 
-tsgo -b -v --noEmit
+tsc -b -v --noEmit
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -130,14 +130,14 @@ Output::
 
 tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *refresh*    /home/src/projects/project/a.ts
 Signatures::
 
 
 Edit [3]:: Emit after fixing error
 
-tsgo -b -v
+tsc -b -v
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -156,14 +156,14 @@ const a = "hello";
 
 tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *refresh*    /home/src/projects/project/a.ts
 Signatures::
 
 
 Edit [4]:: no change
 
-tsgo -b -v --noEmit
+tsc -b -v --noEmit
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -178,7 +178,7 @@ Edit [5]:: Introduce error
 //// [/home/src/projects/project/a.ts] *modified* 
 const a = class { private p = 10; };
 
-tsgo -b -v --noEmit
+tsc -b -v --noEmit
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -193,14 +193,14 @@ Output::
 
 tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *refresh*    /home/src/projects/project/a.ts
 Signatures::
 
 
 Edit [6]:: Emit when error
 
-tsgo -b -v
+tsc -b -v
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -221,14 +221,14 @@ const a = class {
 
 tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *refresh*    /home/src/projects/project/a.ts
 Signatures::
 
 
 Edit [7]:: no change
 
-tsgo -b -v --noEmit
+tsc -b -v --noEmit
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 

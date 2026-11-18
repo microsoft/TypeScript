@@ -1,0 +1,33 @@
+//// [tests/cases/compiler/jsxChildrenExcessPropertySuppression.tsx] ////
+
+=== jsxChildrenExcessPropertySuppression.tsx ===
+declare namespace JSX {
+>JSX : Symbol(JSX, Decl(jsxChildrenExcessPropertySuppression.tsx, 0, 0))
+
+    interface Element {}
+>Element : Symbol(Element, Decl(jsxChildrenExcessPropertySuppression.tsx, 0, 23))
+
+    interface ElementChildrenAttribute { children: {}; }
+>ElementChildrenAttribute : Symbol(ElementChildrenAttribute, Decl(jsxChildrenExcessPropertySuppression.tsx, 1, 24))
+>children : Symbol(ElementChildrenAttribute.children, Decl(jsxChildrenExcessPropertySuppression.tsx, 2, 40))
+}
+declare function Item(props: { depth: number }): JSX.Element;
+>Item : Symbol(Item, Decl(jsxChildrenExcessPropertySuppression.tsx, 3, 1))
+>props : Symbol(props, Decl(jsxChildrenExcessPropertySuppression.tsx, 4, 22))
+>depth : Symbol(depth, Decl(jsxChildrenExcessPropertySuppression.tsx, 4, 30))
+>JSX : Symbol(JSX, Decl(jsxChildrenExcessPropertySuppression.tsx, 0, 0))
+>Element : Symbol(JSX.Element, Decl(jsxChildrenExcessPropertySuppression.tsx, 0, 23))
+
+// @ts-ignore
+<Item
+>Item : Symbol(Item, Decl(jsxChildrenExcessPropertySuppression.tsx, 3, 1))
+
+    depth={0}
+>depth : Symbol(depth, Decl(jsxChildrenExcessPropertySuppression.tsx, 6, 5))
+
+    href=""
+>href : Symbol(href, Decl(jsxChildrenExcessPropertySuppression.tsx, 7, 13))
+
+>text</Item>;
+>Item : Symbol(Item, Decl(jsxChildrenExcessPropertySuppression.tsx, 3, 1))
+

@@ -11,10 +11,10 @@ export const a = 1
     }
 }
 
-tsgo 
+tsc 
 ExitStatus:: Success
 Output::
-//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}

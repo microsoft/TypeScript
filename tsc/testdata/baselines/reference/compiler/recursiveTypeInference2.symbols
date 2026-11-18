@@ -1,0 +1,313 @@
+//// [tests/cases/compiler/recursiveTypeInference2.ts] ////
+
+=== recursiveTypeInference2.ts ===
+// https://github.com/microsoft/TypeScript/issues/64415
+
+type output<T> = T extends { _zod: { output: any } } ? T["_zod"]["output"] : unknown;
+>output : Symbol(output, Decl(recursiveTypeInference2.ts, 0, 0))
+>T : Symbol(T, Decl(recursiveTypeInference2.ts, 2, 12))
+>T : Symbol(T, Decl(recursiveTypeInference2.ts, 2, 12))
+>_zod : Symbol(_zod, Decl(recursiveTypeInference2.ts, 2, 28))
+>output : Symbol(output, Decl(recursiveTypeInference2.ts, 2, 36))
+>T : Symbol(T, Decl(recursiveTypeInference2.ts, 2, 12))
+
+type input<T> = T extends { _zod: { input: any } } ? T["_zod"]["input"] : unknown;
+>input : Symbol(input, Decl(recursiveTypeInference2.ts, 2, 85))
+>T : Symbol(T, Decl(recursiveTypeInference2.ts, 3, 11))
+>T : Symbol(T, Decl(recursiveTypeInference2.ts, 3, 11))
+>_zod : Symbol(_zod, Decl(recursiveTypeInference2.ts, 3, 27))
+>input : Symbol(input, Decl(recursiveTypeInference2.ts, 3, 35))
+>T : Symbol(T, Decl(recursiveTypeInference2.ts, 3, 11))
+
+type NoUndefined<T> = T extends undefined ? never : T;
+>NoUndefined : Symbol(NoUndefined, Decl(recursiveTypeInference2.ts, 3, 82))
+>T : Symbol(T, Decl(recursiveTypeInference2.ts, 4, 17))
+>T : Symbol(T, Decl(recursiveTypeInference2.ts, 4, 17))
+>T : Symbol(T, Decl(recursiveTypeInference2.ts, 4, 17))
+
+type Writeable<T> = { -readonly [P in keyof T]: T[P] };
+>Writeable : Symbol(Writeable, Decl(recursiveTypeInference2.ts, 4, 54))
+>T : Symbol(T, Decl(recursiveTypeInference2.ts, 5, 15))
+>P : Symbol(P, Decl(recursiveTypeInference2.ts, 5, 33))
+>T : Symbol(T, Decl(recursiveTypeInference2.ts, 5, 15))
+>T : Symbol(T, Decl(recursiveTypeInference2.ts, 5, 15))
+>P : Symbol(P, Decl(recursiveTypeInference2.ts, 5, 33))
+
+type Prettify<T> = { [K in keyof T]: T[K] } & {};
+>Prettify : Symbol(Prettify, Decl(recursiveTypeInference2.ts, 5, 55))
+>T : Symbol(T, Decl(recursiveTypeInference2.ts, 6, 14))
+>K : Symbol(K, Decl(recursiveTypeInference2.ts, 6, 22))
+>T : Symbol(T, Decl(recursiveTypeInference2.ts, 6, 14))
+>T : Symbol(T, Decl(recursiveTypeInference2.ts, 6, 14))
+>K : Symbol(K, Decl(recursiveTypeInference2.ts, 6, 22))
+
+interface $ZodTypeInternals<out O = unknown, out I = unknown> { def: unknown; output: O; input: I; optin?: "optional" | undefined; optout?: "optional" | undefined }
+>$ZodTypeInternals : Symbol($ZodTypeInternals, Decl(recursiveTypeInference2.ts, 6, 49))
+>O : Symbol(O, Decl(recursiveTypeInference2.ts, 7, 28))
+>I : Symbol(I, Decl(recursiveTypeInference2.ts, 7, 44))
+>def : Symbol($ZodTypeInternals.def, Decl(recursiveTypeInference2.ts, 7, 63))
+>output : Symbol($ZodTypeInternals.output, Decl(recursiveTypeInference2.ts, 7, 77))
+>O : Symbol(O, Decl(recursiveTypeInference2.ts, 7, 28))
+>input : Symbol($ZodTypeInternals.input, Decl(recursiveTypeInference2.ts, 7, 88))
+>I : Symbol(I, Decl(recursiveTypeInference2.ts, 7, 44))
+>optin : Symbol($ZodTypeInternals.optin, Decl(recursiveTypeInference2.ts, 7, 98))
+>optout : Symbol($ZodTypeInternals.optout, Decl(recursiveTypeInference2.ts, 7, 130))
+
+interface StandardProps<I, O> { readonly types?: { readonly input: I; readonly output: O } | undefined }
+>StandardProps : Symbol(StandardProps, Decl(recursiveTypeInference2.ts, 7, 164))
+>I : Symbol(I, Decl(recursiveTypeInference2.ts, 8, 24))
+>O : Symbol(O, Decl(recursiveTypeInference2.ts, 8, 26))
+>types : Symbol(StandardProps.types, Decl(recursiveTypeInference2.ts, 8, 31))
+>input : Symbol(input, Decl(recursiveTypeInference2.ts, 8, 50))
+>I : Symbol(I, Decl(recursiveTypeInference2.ts, 8, 24))
+>output : Symbol(output, Decl(recursiveTypeInference2.ts, 8, 69))
+>O : Symbol(O, Decl(recursiveTypeInference2.ts, 8, 26))
+
+interface $ZodType<O = unknown, I = unknown, Internals extends $ZodTypeInternals<O, I> = $ZodTypeInternals<O, I>> {
+>$ZodType : Symbol($ZodType, Decl(recursiveTypeInference2.ts, 8, 104))
+>O : Symbol(O, Decl(recursiveTypeInference2.ts, 9, 19))
+>I : Symbol(I, Decl(recursiveTypeInference2.ts, 9, 31))
+>Internals : Symbol(Internals, Decl(recursiveTypeInference2.ts, 9, 44))
+>$ZodTypeInternals : Symbol($ZodTypeInternals, Decl(recursiveTypeInference2.ts, 6, 49))
+>O : Symbol(O, Decl(recursiveTypeInference2.ts, 9, 19))
+>I : Symbol(I, Decl(recursiveTypeInference2.ts, 9, 31))
+>$ZodTypeInternals : Symbol($ZodTypeInternals, Decl(recursiveTypeInference2.ts, 6, 49))
+>O : Symbol(O, Decl(recursiveTypeInference2.ts, 9, 19))
+>I : Symbol(I, Decl(recursiveTypeInference2.ts, 9, 31))
+
+  _zod: Internals;
+>_zod : Symbol($ZodType._zod, Decl(recursiveTypeInference2.ts, 9, 115))
+>Internals : Symbol(Internals, Decl(recursiveTypeInference2.ts, 9, 44))
+
+  "~standard": StandardProps<input<this>, output<this>>;
+>"~standard" : Symbol($ZodType["~standard"], Decl(recursiveTypeInference2.ts, 10, 18))
+>StandardProps : Symbol(StandardProps, Decl(recursiveTypeInference2.ts, 7, 164))
+>input : Symbol(input, Decl(recursiveTypeInference2.ts, 2, 85))
+>output : Symbol(output, Decl(recursiveTypeInference2.ts, 0, 0))
+}
+interface ZodType<out Internals extends $ZodTypeInternals = $ZodTypeInternals> extends $ZodType<any, any, Internals> {
+>ZodType : Symbol(ZodType, Decl(recursiveTypeInference2.ts, 12, 1))
+>Internals : Symbol(Internals, Decl(recursiveTypeInference2.ts, 13, 18))
+>$ZodTypeInternals : Symbol($ZodTypeInternals, Decl(recursiveTypeInference2.ts, 6, 49))
+>$ZodTypeInternals : Symbol($ZodTypeInternals, Decl(recursiveTypeInference2.ts, 6, 49))
+>$ZodType : Symbol($ZodType, Decl(recursiveTypeInference2.ts, 8, 104))
+>Internals : Symbol(Internals, Decl(recursiveTypeInference2.ts, 13, 18))
+
+  default(def: NoUndefined<output<this>>): ZodDefault<this>;
+>default : Symbol(ZodType.default, Decl(recursiveTypeInference2.ts, 13, 118), Decl(recursiveTypeInference2.ts, 14, 60))
+>def : Symbol(def, Decl(recursiveTypeInference2.ts, 14, 10))
+>NoUndefined : Symbol(NoUndefined, Decl(recursiveTypeInference2.ts, 3, 82))
+>output : Symbol(output, Decl(recursiveTypeInference2.ts, 0, 0))
+>ZodDefault : Symbol(ZodDefault, Decl(recursiveTypeInference2.ts, 37, 195))
+
+  default(def: () => NoUndefined<output<this>>): ZodDefault<this>;
+>default : Symbol(ZodType.default, Decl(recursiveTypeInference2.ts, 13, 118), Decl(recursiveTypeInference2.ts, 14, 60))
+>def : Symbol(def, Decl(recursiveTypeInference2.ts, 15, 10))
+>NoUndefined : Symbol(NoUndefined, Decl(recursiveTypeInference2.ts, 3, 82))
+>output : Symbol(output, Decl(recursiveTypeInference2.ts, 0, 0))
+>ZodDefault : Symbol(ZodDefault, Decl(recursiveTypeInference2.ts, 37, 195))
+}
+type Shape = Readonly<{ [k: string]: $ZodType }>;
+>Shape : Symbol(Shape, Decl(recursiveTypeInference2.ts, 16, 1))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>k : Symbol(k, Decl(recursiveTypeInference2.ts, 17, 25))
+>$ZodType : Symbol($ZodType, Decl(recursiveTypeInference2.ts, 8, 104))
+
+type OptionalOut = { _zod: { optout: "optional" } };
+>OptionalOut : Symbol(OptionalOut, Decl(recursiveTypeInference2.ts, 17, 49))
+>_zod : Symbol(_zod, Decl(recursiveTypeInference2.ts, 18, 20))
+>optout : Symbol(optout, Decl(recursiveTypeInference2.ts, 18, 28))
+
+type OptionalIn = { _zod: { optin: "optional" } };
+>OptionalIn : Symbol(OptionalIn, Decl(recursiveTypeInference2.ts, 18, 52))
+>_zod : Symbol(_zod, Decl(recursiveTypeInference2.ts, 19, 19))
+>optin : Symbol(optin, Decl(recursiveTypeInference2.ts, 19, 27))
+
+type $InferObjectOutput<T extends Shape> = Prettify<
+>$InferObjectOutput : Symbol($InferObjectOutput, Decl(recursiveTypeInference2.ts, 19, 50))
+>T : Symbol(T, Decl(recursiveTypeInference2.ts, 20, 24))
+>Shape : Symbol(Shape, Decl(recursiveTypeInference2.ts, 16, 1))
+>Prettify : Symbol(Prettify, Decl(recursiveTypeInference2.ts, 5, 55))
+
+  { -readonly [k in keyof T as T[k] extends OptionalOut ? never : k]: T[k]["_zod"]["output"] } &
+>k : Symbol(k, Decl(recursiveTypeInference2.ts, 21, 15))
+>T : Symbol(T, Decl(recursiveTypeInference2.ts, 20, 24))
+>T : Symbol(T, Decl(recursiveTypeInference2.ts, 20, 24))
+>k : Symbol(k, Decl(recursiveTypeInference2.ts, 21, 15))
+>OptionalOut : Symbol(OptionalOut, Decl(recursiveTypeInference2.ts, 17, 49))
+>k : Symbol(k, Decl(recursiveTypeInference2.ts, 21, 15))
+>T : Symbol(T, Decl(recursiveTypeInference2.ts, 20, 24))
+>k : Symbol(k, Decl(recursiveTypeInference2.ts, 21, 15))
+
+  { -readonly [k in keyof T as T[k] extends OptionalOut ? k : never]?: T[k]["_zod"]["output"] }
+>k : Symbol(k, Decl(recursiveTypeInference2.ts, 22, 15))
+>T : Symbol(T, Decl(recursiveTypeInference2.ts, 20, 24))
+>T : Symbol(T, Decl(recursiveTypeInference2.ts, 20, 24))
+>k : Symbol(k, Decl(recursiveTypeInference2.ts, 22, 15))
+>OptionalOut : Symbol(OptionalOut, Decl(recursiveTypeInference2.ts, 17, 49))
+>k : Symbol(k, Decl(recursiveTypeInference2.ts, 22, 15))
+>T : Symbol(T, Decl(recursiveTypeInference2.ts, 20, 24))
+>k : Symbol(k, Decl(recursiveTypeInference2.ts, 22, 15))
+
+>;
+type $InferObjectInput<T extends Shape> = Prettify<
+>$InferObjectInput : Symbol($InferObjectInput, Decl(recursiveTypeInference2.ts, 23, 2))
+>T : Symbol(T, Decl(recursiveTypeInference2.ts, 24, 23))
+>Shape : Symbol(Shape, Decl(recursiveTypeInference2.ts, 16, 1))
+>Prettify : Symbol(Prettify, Decl(recursiveTypeInference2.ts, 5, 55))
+
+  { -readonly [k in keyof T as T[k] extends OptionalIn ? never : k]: T[k]["_zod"]["input"] } &
+>k : Symbol(k, Decl(recursiveTypeInference2.ts, 25, 15))
+>T : Symbol(T, Decl(recursiveTypeInference2.ts, 24, 23))
+>T : Symbol(T, Decl(recursiveTypeInference2.ts, 24, 23))
+>k : Symbol(k, Decl(recursiveTypeInference2.ts, 25, 15))
+>OptionalIn : Symbol(OptionalIn, Decl(recursiveTypeInference2.ts, 18, 52))
+>k : Symbol(k, Decl(recursiveTypeInference2.ts, 25, 15))
+>T : Symbol(T, Decl(recursiveTypeInference2.ts, 24, 23))
+>k : Symbol(k, Decl(recursiveTypeInference2.ts, 25, 15))
+
+  { -readonly [k in keyof T as T[k] extends OptionalIn ? k : never]?: T[k]["_zod"]["input"] }
+>k : Symbol(k, Decl(recursiveTypeInference2.ts, 26, 15))
+>T : Symbol(T, Decl(recursiveTypeInference2.ts, 24, 23))
+>T : Symbol(T, Decl(recursiveTypeInference2.ts, 24, 23))
+>k : Symbol(k, Decl(recursiveTypeInference2.ts, 26, 15))
+>OptionalIn : Symbol(OptionalIn, Decl(recursiveTypeInference2.ts, 18, 52))
+>k : Symbol(k, Decl(recursiveTypeInference2.ts, 26, 15))
+>T : Symbol(T, Decl(recursiveTypeInference2.ts, 24, 23))
+>k : Symbol(k, Decl(recursiveTypeInference2.ts, 26, 15))
+
+>;
+interface $ZodStringInternals extends $ZodTypeInternals { def: { type: "string" }; output: string; input: string }
+>$ZodStringInternals : Symbol($ZodStringInternals, Decl(recursiveTypeInference2.ts, 27, 2))
+>$ZodTypeInternals : Symbol($ZodTypeInternals, Decl(recursiveTypeInference2.ts, 6, 49))
+>def : Symbol($ZodStringInternals.def, Decl(recursiveTypeInference2.ts, 28, 57))
+>type : Symbol(type, Decl(recursiveTypeInference2.ts, 28, 64))
+>output : Symbol($ZodStringInternals.output, Decl(recursiveTypeInference2.ts, 28, 82))
+>input : Symbol($ZodStringInternals.input, Decl(recursiveTypeInference2.ts, 28, 98))
+
+interface ZodString extends ZodType<$ZodStringInternals> {}
+>ZodString : Symbol(ZodString, Decl(recursiveTypeInference2.ts, 28, 114))
+>ZodType : Symbol(ZodType, Decl(recursiveTypeInference2.ts, 12, 1))
+>$ZodStringInternals : Symbol($ZodStringInternals, Decl(recursiveTypeInference2.ts, 27, 2))
+
+declare function string(): ZodString;
+>string : Symbol(string, Decl(recursiveTypeInference2.ts, 29, 59))
+>ZodString : Symbol(ZodString, Decl(recursiveTypeInference2.ts, 28, 114))
+
+interface $ZodObjectInternals<S extends Shape> extends $ZodTypeInternals { def: { type: "object"; shape: S }; output: $InferObjectOutput<S>; input: $InferObjectInput<S> }
+>$ZodObjectInternals : Symbol($ZodObjectInternals, Decl(recursiveTypeInference2.ts, 30, 37))
+>S : Symbol(S, Decl(recursiveTypeInference2.ts, 31, 30))
+>Shape : Symbol(Shape, Decl(recursiveTypeInference2.ts, 16, 1))
+>$ZodTypeInternals : Symbol($ZodTypeInternals, Decl(recursiveTypeInference2.ts, 6, 49))
+>def : Symbol($ZodObjectInternals.def, Decl(recursiveTypeInference2.ts, 31, 74))
+>type : Symbol(type, Decl(recursiveTypeInference2.ts, 31, 81))
+>shape : Symbol(shape, Decl(recursiveTypeInference2.ts, 31, 97))
+>S : Symbol(S, Decl(recursiveTypeInference2.ts, 31, 30))
+>output : Symbol($ZodObjectInternals.output, Decl(recursiveTypeInference2.ts, 31, 109))
+>$InferObjectOutput : Symbol($InferObjectOutput, Decl(recursiveTypeInference2.ts, 19, 50))
+>S : Symbol(S, Decl(recursiveTypeInference2.ts, 31, 30))
+>input : Symbol($ZodObjectInternals.input, Decl(recursiveTypeInference2.ts, 31, 140))
+>$InferObjectInput : Symbol($InferObjectInput, Decl(recursiveTypeInference2.ts, 23, 2))
+>S : Symbol(S, Decl(recursiveTypeInference2.ts, 31, 30))
+
+interface ZodObject<S extends Shape> extends ZodType<$ZodObjectInternals<S>> { shape: S }
+>ZodObject : Symbol(ZodObject, Decl(recursiveTypeInference2.ts, 31, 170))
+>S : Symbol(S, Decl(recursiveTypeInference2.ts, 32, 20))
+>Shape : Symbol(Shape, Decl(recursiveTypeInference2.ts, 16, 1))
+>ZodType : Symbol(ZodType, Decl(recursiveTypeInference2.ts, 12, 1))
+>$ZodObjectInternals : Symbol($ZodObjectInternals, Decl(recursiveTypeInference2.ts, 30, 37))
+>S : Symbol(S, Decl(recursiveTypeInference2.ts, 32, 20))
+>shape : Symbol(ZodObject.shape, Decl(recursiveTypeInference2.ts, 32, 78))
+>S : Symbol(S, Decl(recursiveTypeInference2.ts, 32, 20))
+
+declare function object<T extends Shape>(shape: T): ZodObject<Writeable<T>>;
+>object : Symbol(object, Decl(recursiveTypeInference2.ts, 32, 89))
+>T : Symbol(T, Decl(recursiveTypeInference2.ts, 33, 24))
+>Shape : Symbol(Shape, Decl(recursiveTypeInference2.ts, 16, 1))
+>shape : Symbol(shape, Decl(recursiveTypeInference2.ts, 33, 41))
+>T : Symbol(T, Decl(recursiveTypeInference2.ts, 33, 24))
+>ZodObject : Symbol(ZodObject, Decl(recursiveTypeInference2.ts, 31, 170))
+>Writeable : Symbol(Writeable, Decl(recursiveTypeInference2.ts, 4, 54))
+>T : Symbol(T, Decl(recursiveTypeInference2.ts, 33, 24))
+
+interface $ZodArrayInternals<T extends $ZodType> extends $ZodTypeInternals { def: { type: "array"; element: T }; output: output<T>[]; input: input<T>[] }
+>$ZodArrayInternals : Symbol($ZodArrayInternals, Decl(recursiveTypeInference2.ts, 33, 76))
+>T : Symbol(T, Decl(recursiveTypeInference2.ts, 34, 29))
+>$ZodType : Symbol($ZodType, Decl(recursiveTypeInference2.ts, 8, 104))
+>$ZodTypeInternals : Symbol($ZodTypeInternals, Decl(recursiveTypeInference2.ts, 6, 49))
+>def : Symbol($ZodArrayInternals.def, Decl(recursiveTypeInference2.ts, 34, 76))
+>type : Symbol(type, Decl(recursiveTypeInference2.ts, 34, 83))
+>element : Symbol(element, Decl(recursiveTypeInference2.ts, 34, 98))
+>T : Symbol(T, Decl(recursiveTypeInference2.ts, 34, 29))
+>output : Symbol($ZodArrayInternals.output, Decl(recursiveTypeInference2.ts, 34, 112))
+>output : Symbol(output, Decl(recursiveTypeInference2.ts, 0, 0))
+>T : Symbol(T, Decl(recursiveTypeInference2.ts, 34, 29))
+>input : Symbol($ZodArrayInternals.input, Decl(recursiveTypeInference2.ts, 34, 133))
+>input : Symbol(input, Decl(recursiveTypeInference2.ts, 2, 85))
+>T : Symbol(T, Decl(recursiveTypeInference2.ts, 34, 29))
+
+interface ZodArray<T extends $ZodType> extends ZodType<$ZodArrayInternals<T>> { element: T }
+>ZodArray : Symbol(ZodArray, Decl(recursiveTypeInference2.ts, 34, 153))
+>T : Symbol(T, Decl(recursiveTypeInference2.ts, 35, 19))
+>$ZodType : Symbol($ZodType, Decl(recursiveTypeInference2.ts, 8, 104))
+>ZodType : Symbol(ZodType, Decl(recursiveTypeInference2.ts, 12, 1))
+>$ZodArrayInternals : Symbol($ZodArrayInternals, Decl(recursiveTypeInference2.ts, 33, 76))
+>T : Symbol(T, Decl(recursiveTypeInference2.ts, 35, 19))
+>element : Symbol(ZodArray.element, Decl(recursiveTypeInference2.ts, 35, 79))
+>T : Symbol(T, Decl(recursiveTypeInference2.ts, 35, 19))
+
+declare function array<T extends $ZodType>(element: T): ZodArray<T>;
+>array : Symbol(array, Decl(recursiveTypeInference2.ts, 35, 92))
+>T : Symbol(T, Decl(recursiveTypeInference2.ts, 36, 23))
+>$ZodType : Symbol($ZodType, Decl(recursiveTypeInference2.ts, 8, 104))
+>element : Symbol(element, Decl(recursiveTypeInference2.ts, 36, 43))
+>T : Symbol(T, Decl(recursiveTypeInference2.ts, 36, 23))
+>ZodArray : Symbol(ZodArray, Decl(recursiveTypeInference2.ts, 34, 153))
+>T : Symbol(T, Decl(recursiveTypeInference2.ts, 36, 23))
+
+interface $ZodDefaultInternals<T extends $ZodType> extends $ZodTypeInternals { def: { type: "default"; inner: T }; output: NoUndefined<output<T>>; input: input<T> | undefined; optin: "optional" }
+>$ZodDefaultInternals : Symbol($ZodDefaultInternals, Decl(recursiveTypeInference2.ts, 36, 68))
+>T : Symbol(T, Decl(recursiveTypeInference2.ts, 37, 31))
+>$ZodType : Symbol($ZodType, Decl(recursiveTypeInference2.ts, 8, 104))
+>$ZodTypeInternals : Symbol($ZodTypeInternals, Decl(recursiveTypeInference2.ts, 6, 49))
+>def : Symbol($ZodDefaultInternals.def, Decl(recursiveTypeInference2.ts, 37, 78))
+>type : Symbol(type, Decl(recursiveTypeInference2.ts, 37, 85))
+>inner : Symbol(inner, Decl(recursiveTypeInference2.ts, 37, 102))
+>T : Symbol(T, Decl(recursiveTypeInference2.ts, 37, 31))
+>output : Symbol($ZodDefaultInternals.output, Decl(recursiveTypeInference2.ts, 37, 114))
+>NoUndefined : Symbol(NoUndefined, Decl(recursiveTypeInference2.ts, 3, 82))
+>output : Symbol(output, Decl(recursiveTypeInference2.ts, 0, 0))
+>T : Symbol(T, Decl(recursiveTypeInference2.ts, 37, 31))
+>input : Symbol($ZodDefaultInternals.input, Decl(recursiveTypeInference2.ts, 37, 146))
+>input : Symbol(input, Decl(recursiveTypeInference2.ts, 2, 85))
+>T : Symbol(T, Decl(recursiveTypeInference2.ts, 37, 31))
+>optin : Symbol($ZodDefaultInternals.optin, Decl(recursiveTypeInference2.ts, 37, 175))
+
+interface ZodDefault<T extends $ZodType> extends ZodType<$ZodDefaultInternals<T>> {}
+>ZodDefault : Symbol(ZodDefault, Decl(recursiveTypeInference2.ts, 37, 195))
+>T : Symbol(T, Decl(recursiveTypeInference2.ts, 38, 21))
+>$ZodType : Symbol($ZodType, Decl(recursiveTypeInference2.ts, 8, 104))
+>ZodType : Symbol(ZodType, Decl(recursiveTypeInference2.ts, 12, 1))
+>$ZodDefaultInternals : Symbol($ZodDefaultInternals, Decl(recursiveTypeInference2.ts, 36, 68))
+>T : Symbol(T, Decl(recursiveTypeInference2.ts, 38, 21))
+
+const Tree = object({
+>Tree : Symbol(Tree, Decl(recursiveTypeInference2.ts, 40, 5))
+>object : Symbol(object, Decl(recursiveTypeInference2.ts, 32, 89))
+
+  name: string(),
+>name : Symbol(name, Decl(recursiveTypeInference2.ts, 40, 21))
+>string : Symbol(string, Decl(recursiveTypeInference2.ts, 29, 59))
+
+  get children() {
+>children : Symbol(children, Decl(recursiveTypeInference2.ts, 41, 17))
+
+    return array(Tree).default([])
+>array(Tree).default : Symbol(ZodType.default, Decl(recursiveTypeInference2.ts, 13, 118), Decl(recursiveTypeInference2.ts, 14, 60))
+>array : Symbol(array, Decl(recursiveTypeInference2.ts, 35, 92))
+>Tree : Symbol(Tree, Decl(recursiveTypeInference2.ts, 40, 5))
+>default : Symbol(ZodType.default, Decl(recursiveTypeInference2.ts, 13, 118), Decl(recursiveTypeInference2.ts, 14, 60))
+
+  },
+});
+

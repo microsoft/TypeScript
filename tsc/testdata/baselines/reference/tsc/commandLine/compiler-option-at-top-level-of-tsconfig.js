@@ -6,11 +6,11 @@ Input::
 //// [/home/src/workspaces/project/tsconfig.json] *new* 
 { "strict": true }
 
-tsgo --pretty false
+tsc --pretty false
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 tsconfig.json(1,3): error TS6258: 'strict' should be set inside the 'compilerOptions' object of the config json file
-//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}

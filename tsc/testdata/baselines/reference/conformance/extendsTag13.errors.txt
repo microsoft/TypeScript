@@ -1,0 +1,80 @@
+a.js(26,14): error TS8023: JSDoc '@extends Other' does not match the 'extends A' clause.
+a.js(32,14): error TS8023: JSDoc '@extends Other' does not match the 'extends A.extend()' clause.
+a.js(33,15): error TS8023: JSDoc '@augments Other' does not match the 'extends A.extend()' clause.
+a.js(38,15): error TS8023: JSDoc '@extends Other' does not match the 'extends A' clause.
+a.js(43,16): error TS8023: JSDoc '@augments Other' does not match the 'extends ns["A"]' clause.
+a.js(47,14): error TS8023: JSDoc '@extends Other' does not match the 'extends A.extend()' clause.
+
+
+==== a.js (6 errors) ====
+    /** @template T */
+    class A {
+        /** @param {T} value */
+        constructor(value) {
+            this.value = value;
+        }
+    
+        /** @returns {typeof A} */
+        static extend() {
+            return this;
+        }
+    }
+    
+    /** @template T */
+    class Other {
+        /** @param {T} other */
+        constructor(other) {
+            this.other = other;
+        }
+    }
+    
+    const ns = { A };
+    
+    /**
+     * @extends {A<string>}
+     * @extends {Other<string>}
+                 ~~~~~
+!!! error TS8023: JSDoc '@extends Other' does not match the 'extends A' clause.
+     */
+    class Direct extends A {}
+    
+    /**
+     * @extends {A<string>}
+     * @extends {Other<string>}
+                 ~~~~~
+!!! error TS8023: JSDoc '@extends Other' does not match the 'extends A.extend()' clause.
+     * @augments {Other<string>}
+                  ~~~~~
+!!! error TS8023: JSDoc '@augments Other' does not match the 'extends A.extend()' clause.
+     */
+    class Call extends A.extend() {}
+    
+    /** @extends {A<string>} */
+    /** @extends {Other<string>} */
+                  ~~~~~
+!!! error TS8023: JSDoc '@extends Other' does not match the 'extends A' clause.
+    /** @extends {A<string>} */
+    class SeparateDirect extends A {}
+    
+    /** @extends {A<string>} */
+    /** @augments {Other<string>} */
+                   ~~~~~
+!!! error TS8023: JSDoc '@augments Other' does not match the 'extends ns["A"]' clause.
+    class SeparateElement extends ns["A"] {}
+    
+    /**
+     * @extends {Other<string>}
+                 ~~~~~
+!!! error TS8023: JSDoc '@extends Other' does not match the 'extends A.extend()' clause.
+     * @extends {A<string>}
+     */
+    class FirstMismatch extends A.extend() {}
+    
+    /**
+     * @extends {A<string>}
+     * @augments {A<string>}
+     */
+    class CompatibleTags extends A.extend() {}
+    /** @type {string} */
+    const value = new CompatibleTags("ok").value;
+    

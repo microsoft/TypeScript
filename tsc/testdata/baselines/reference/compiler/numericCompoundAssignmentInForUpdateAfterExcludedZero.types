@@ -1,0 +1,21 @@
+//// [tests/cases/compiler/numericCompoundAssignmentInForUpdateAfterExcludedZero.ts] ////
+
+=== numericCompoundAssignmentInForUpdateAfterExcludedZero.ts ===
+function shift(bitmap: number) {
+>shift : (bitmap: number) => void
+>bitmap : number
+
+    for (let index = 0; bitmap !== 0; index++, bitmap >>>= 1) {}
+>index : number
+>0 : 0
+>bitmap !== 0 : boolean
+>bitmap : number
+>0 : 0
+>index++, bitmap >>>= 1 : number
+>index++ : number
+>index : number
+>bitmap >>>= 1 : number
+>bitmap : number
+>1 : 1
+}
+

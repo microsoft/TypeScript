@@ -1,0 +1,30 @@
+//// [tests/cases/compiler/objectEntriesGenericMappedValues.ts] ////
+
+=== objectEntriesGenericMappedValues.ts ===
+function read<T extends { tabIndex: number }>(attributes: Partial<T>) {
+>read : <T extends { tabIndex: number; }>(attributes: Partial<T>) => void
+>tabIndex : number
+>attributes : Partial<T>
+
+    const [, value] = Object.entries(attributes)[0];
+>value : any
+>Object.entries(attributes)[0] : [string, any]
+>Object.entries(attributes) : [string, any][]
+>Object.entries : { <T_1>(o: { [s: string]: T_1; } | ArrayLike<T_1>): [string, T_1][]; (o: {}): [string, any][]; }
+>Object : ObjectConstructor
+>entries : { <T_1>(o: { [s: string]: T_1; } | ArrayLike<T_1>): [string, T_1][]; (o: {}): [string, any][]; }
+>attributes : Partial<T>
+>0 : 0
+
+    Object.entries(value);
+>Object.entries(value) : [string, unknown][]
+>Object.entries : { <T_1>(o: { [s: string]: T_1; } | ArrayLike<T_1>): [string, T_1][]; (o: {}): [string, any][]; }
+>Object : ObjectConstructor
+>entries : { <T_1>(o: { [s: string]: T_1; } | ArrayLike<T_1>): [string, T_1][]; (o: {}): [string, any][]; }
+>value : any
+
+    const tabIndex: number = value;
+>tabIndex : number
+>value : any
+}
+

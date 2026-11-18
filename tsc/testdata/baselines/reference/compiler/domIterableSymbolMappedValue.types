@@ -1,0 +1,15 @@
+//// [tests/cases/compiler/domIterableSymbolMappedValue.ts] ////
+
+=== domIterableSymbolMappedValue.ts ===
+declare const styles: Partial<Pick<CSSStyleDeclaration, keyof CSSStyleDeclaration & symbol>>;
+>styles : Partial<Pick<CSSStyleDeclaration, unique symbol>>
+
+declare function element(styles: Partial<Record<keyof CSSStyleDeclaration, string>>): void;
+>element : (styles: Partial<Record<keyof CSSStyleDeclaration, string>>) => void
+>styles : Partial<Record<keyof CSSStyleDeclaration, string>>
+
+element(styles);
+>element(styles) : void
+>element : (styles: Partial<Record<keyof CSSStyleDeclaration, string>>) => void
+>styles : Partial<Pick<CSSStyleDeclaration, unique symbol>>
+

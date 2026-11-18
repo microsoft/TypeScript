@@ -1,0 +1,360 @@
+//// [tests/cases/compiler/flakyDiagnosticsJsClassPropertyInitializedToUndefined.ts] ////
+
+=== /index.js ===
+export class C {
+>C : Symbol(C, Decl(index.js, 0, 0))
+
+    constructor() {
+        this.base = undefined;
+>this.base : Symbol(C.base, Decl(index.js, 1, 19))
+>this : Symbol(C, Decl(index.js, 0, 0))
+>base : Symbol(C.base, Decl(index.js, 1, 19))
+>undefined : Symbol(undefined)
+
+        const nullableRead = this.base;
+>nullableRead : Symbol(nullableRead, Decl(index.js, 3, 13))
+>this.base : Symbol(C.base, Decl(index.js, 1, 19))
+>this : Symbol(C, Decl(index.js, 0, 0))
+>base : Symbol(C.base, Decl(index.js, 1, 19))
+
+        /** @type {undefined} */
+        const nullableCheck = nullableRead;
+>nullableCheck : Symbol(nullableCheck, Decl(index.js, 5, 13))
+>nullableRead : Symbol(nullableRead, Decl(index.js, 3, 13))
+    }
+}
+
+export const nullableResult = new C().base;
+>nullableResult : Symbol(nullableResult, Decl(index.js, 9, 12))
+>new C().base : Symbol(C.base, Decl(index.js, 1, 19))
+>C : Symbol(C, Decl(index.js, 0, 0))
+>base : Symbol(C.base, Decl(index.js, 1, 19))
+
+export const NullClass = class {
+>NullClass : Symbol(NullClass, Decl(index.js, 11, 12))
+
+    constructor() {
+        this.base = null;
+>this.base : Symbol(NullClass.base, Decl(index.js, 12, 19))
+>this : Symbol(NullClass, Decl(index.js, 11, 24))
+>base : Symbol(NullClass.base, Decl(index.js, 12, 19))
+    }
+};
+
+export class LaterWrite {
+>LaterWrite : Symbol(LaterWrite, Decl(index.js, 15, 2))
+
+    constructor() {
+        this.base = undefined;
+>this.base : Symbol(LaterWrite.base, Decl(index.js, 18, 19), Decl(index.js, 19, 30))
+>this : Symbol(LaterWrite, Decl(index.js, 15, 2))
+>base : Symbol(LaterWrite.base, Decl(index.js, 18, 19), Decl(index.js, 19, 30))
+>undefined : Symbol(undefined)
+
+        this.base = 1;
+>this.base : Symbol(LaterWrite.base, Decl(index.js, 18, 19), Decl(index.js, 19, 30))
+>this : Symbol(LaterWrite, Decl(index.js, 15, 2))
+>base : Symbol(LaterWrite.base, Decl(index.js, 18, 19), Decl(index.js, 19, 30))
+    }
+}
+
+export class BranchWrite {
+>BranchWrite : Symbol(BranchWrite, Decl(index.js, 22, 1))
+
+    /** @param {boolean} condition */
+    constructor(condition) {
+>condition : Symbol(condition, Decl(index.js, 26, 16))
+
+        this.base = undefined;
+>this.base : Symbol(BranchWrite.base, Decl(index.js, 26, 28), Decl(index.js, 28, 24), Decl(index.js, 30, 16))
+>this : Symbol(BranchWrite, Decl(index.js, 22, 1))
+>base : Symbol(BranchWrite.base, Decl(index.js, 26, 28), Decl(index.js, 28, 24), Decl(index.js, 30, 16))
+>undefined : Symbol(undefined)
+
+        if (condition) {
+>condition : Symbol(condition, Decl(index.js, 26, 16))
+
+            this.base = 1;
+>this.base : Symbol(BranchWrite.base, Decl(index.js, 26, 28), Decl(index.js, 28, 24), Decl(index.js, 30, 16))
+>this : Symbol(BranchWrite, Decl(index.js, 22, 1))
+>base : Symbol(BranchWrite.base, Decl(index.js, 26, 28), Decl(index.js, 28, 24), Decl(index.js, 30, 16))
+
+        } else {
+            this.base = "value";
+>this.base : Symbol(BranchWrite.base, Decl(index.js, 26, 28), Decl(index.js, 28, 24), Decl(index.js, 30, 16))
+>this : Symbol(BranchWrite, Decl(index.js, 22, 1))
+>base : Symbol(BranchWrite.base, Decl(index.js, 26, 28), Decl(index.js, 28, 24), Decl(index.js, 30, 16))
+        }
+    }
+}
+
+export class Annotated {
+>Annotated : Symbol(Annotated, Decl(index.js, 34, 1))
+
+    constructor() {
+        /** @type {number | undefined} */
+        this.base = undefined;
+>this.base : Symbol(Annotated.base, Decl(index.js, 37, 19))
+>this : Symbol(Annotated, Decl(index.js, 34, 1))
+>base : Symbol(Annotated.base, Decl(index.js, 37, 19))
+>undefined : Symbol(undefined)
+    }
+}
+
+export class MutualNestedNullable {
+>MutualNestedNullable : Symbol(MutualNestedNullable, Decl(index.js, 41, 1))
+
+    constructor() {
+        this.first = (this.second = undefined);
+>this.first : Symbol(MutualNestedNullable.first, Decl(index.js, 44, 19), Decl(index.js, 46, 23))
+>this : Symbol(MutualNestedNullable, Decl(index.js, 41, 1))
+>first : Symbol(MutualNestedNullable.first, Decl(index.js, 44, 19), Decl(index.js, 46, 23))
+>this.second : Symbol(MutualNestedNullable.second, Decl(index.js, 45, 22), Decl(index.js, 45, 47))
+>this : Symbol(MutualNestedNullable, Decl(index.js, 41, 1))
+>second : Symbol(MutualNestedNullable.second, Decl(index.js, 45, 22), Decl(index.js, 45, 47))
+>undefined : Symbol(undefined)
+
+        this.second = (this.first = undefined);
+>this.second : Symbol(MutualNestedNullable.second, Decl(index.js, 45, 22), Decl(index.js, 45, 47))
+>this : Symbol(MutualNestedNullable, Decl(index.js, 41, 1))
+>second : Symbol(MutualNestedNullable.second, Decl(index.js, 45, 22), Decl(index.js, 45, 47))
+>this.first : Symbol(MutualNestedNullable.first, Decl(index.js, 44, 19), Decl(index.js, 46, 23))
+>this : Symbol(MutualNestedNullable, Decl(index.js, 41, 1))
+>first : Symbol(MutualNestedNullable.first, Decl(index.js, 44, 19), Decl(index.js, 46, 23))
+>undefined : Symbol(undefined)
+    }
+}
+
+export const NestedNullableExpression = class {
+>NestedNullableExpression : Symbol(NestedNullableExpression, Decl(index.js, 50, 12))
+
+    constructor() {
+        this.first = (this.second = null);
+>this.first : Symbol(NestedNullableExpression.first, Decl(index.js, 51, 19), Decl(index.js, 53, 23))
+>this : Symbol(NestedNullableExpression, Decl(index.js, 50, 39))
+>first : Symbol(NestedNullableExpression.first, Decl(index.js, 51, 19), Decl(index.js, 53, 23))
+>this.second : Symbol(NestedNullableExpression.second, Decl(index.js, 52, 22), Decl(index.js, 52, 42))
+>this : Symbol(NestedNullableExpression, Decl(index.js, 50, 39))
+>second : Symbol(NestedNullableExpression.second, Decl(index.js, 52, 22), Decl(index.js, 52, 42))
+
+        this.second = (this.first = null);
+>this.second : Symbol(NestedNullableExpression.second, Decl(index.js, 52, 22), Decl(index.js, 52, 42))
+>this : Symbol(NestedNullableExpression, Decl(index.js, 50, 39))
+>second : Symbol(NestedNullableExpression.second, Decl(index.js, 52, 22), Decl(index.js, 52, 42))
+>this.first : Symbol(NestedNullableExpression.first, Decl(index.js, 51, 19), Decl(index.js, 53, 23))
+>this : Symbol(NestedNullableExpression, Decl(index.js, 50, 39))
+>first : Symbol(NestedNullableExpression.first, Decl(index.js, 51, 19), Decl(index.js, 53, 23))
+    }
+};
+
+export const nestedNullableResult = new MutualNestedNullable().first;
+>nestedNullableResult : Symbol(nestedNullableResult, Decl(index.js, 57, 12))
+>new MutualNestedNullable().first : Symbol(MutualNestedNullable.first, Decl(index.js, 44, 19), Decl(index.js, 46, 23))
+>MutualNestedNullable : Symbol(MutualNestedNullable, Decl(index.js, 41, 1))
+>first : Symbol(MutualNestedNullable.first, Decl(index.js, 44, 19), Decl(index.js, 46, 23))
+
+export const expressionNullableResult = new NestedNullableExpression().second;
+>expressionNullableResult : Symbol(expressionNullableResult, Decl(index.js, 58, 12))
+>new NestedNullableExpression().second : Symbol(NestedNullableExpression.second, Decl(index.js, 52, 22), Decl(index.js, 52, 42))
+>NestedNullableExpression : Symbol(NestedNullableExpression, Decl(index.js, 50, 12))
+>second : Symbol(NestedNullableExpression.second, Decl(index.js, 52, 22), Decl(index.js, 52, 42))
+
+export class MutualNestedNumber {
+>MutualNestedNumber : Symbol(MutualNestedNumber, Decl(index.js, 58, 78))
+
+    constructor() {
+        this.first = (this.second = undefined);
+>this.first : Symbol(MutualNestedNumber.first, Decl(index.js, 61, 19), Decl(index.js, 63, 23), Decl(index.js, 63, 47))
+>this : Symbol(MutualNestedNumber, Decl(index.js, 58, 78))
+>first : Symbol(MutualNestedNumber.first, Decl(index.js, 61, 19), Decl(index.js, 63, 23), Decl(index.js, 63, 47))
+>this.second : Symbol(MutualNestedNumber.second, Decl(index.js, 62, 22), Decl(index.js, 62, 47), Decl(index.js, 64, 23))
+>this : Symbol(MutualNestedNumber, Decl(index.js, 58, 78))
+>second : Symbol(MutualNestedNumber.second, Decl(index.js, 62, 22), Decl(index.js, 62, 47), Decl(index.js, 64, 23))
+>undefined : Symbol(undefined)
+
+        this.second = (this.first = undefined);
+>this.second : Symbol(MutualNestedNumber.second, Decl(index.js, 62, 22), Decl(index.js, 62, 47), Decl(index.js, 64, 23))
+>this : Symbol(MutualNestedNumber, Decl(index.js, 58, 78))
+>second : Symbol(MutualNestedNumber.second, Decl(index.js, 62, 22), Decl(index.js, 62, 47), Decl(index.js, 64, 23))
+>this.first : Symbol(MutualNestedNumber.first, Decl(index.js, 61, 19), Decl(index.js, 63, 23), Decl(index.js, 63, 47))
+>this : Symbol(MutualNestedNumber, Decl(index.js, 58, 78))
+>first : Symbol(MutualNestedNumber.first, Decl(index.js, 61, 19), Decl(index.js, 63, 23), Decl(index.js, 63, 47))
+>undefined : Symbol(undefined)
+
+        this.first = 1;
+>this.first : Symbol(MutualNestedNumber.first, Decl(index.js, 61, 19), Decl(index.js, 63, 23), Decl(index.js, 63, 47))
+>this : Symbol(MutualNestedNumber, Decl(index.js, 58, 78))
+>first : Symbol(MutualNestedNumber.first, Decl(index.js, 61, 19), Decl(index.js, 63, 23), Decl(index.js, 63, 47))
+
+        this.second = 2;
+>this.second : Symbol(MutualNestedNumber.second, Decl(index.js, 62, 22), Decl(index.js, 62, 47), Decl(index.js, 64, 23))
+>this : Symbol(MutualNestedNumber, Decl(index.js, 58, 78))
+>second : Symbol(MutualNestedNumber.second, Decl(index.js, 62, 22), Decl(index.js, 62, 47), Decl(index.js, 64, 23))
+    }
+}
+
+/** @type {number} */
+export const nestedFirst = new MutualNestedNumber().first;
+>nestedFirst : Symbol(nestedFirst, Decl(index.js, 70, 12))
+>new MutualNestedNumber().first : Symbol(MutualNestedNumber.first, Decl(index.js, 61, 19), Decl(index.js, 63, 23), Decl(index.js, 63, 47))
+>MutualNestedNumber : Symbol(MutualNestedNumber, Decl(index.js, 58, 78))
+>first : Symbol(MutualNestedNumber.first, Decl(index.js, 61, 19), Decl(index.js, 63, 23), Decl(index.js, 63, 47))
+
+/** @type {number} */
+export const nestedSecond = new MutualNestedNumber().second;
+>nestedSecond : Symbol(nestedSecond, Decl(index.js, 72, 12))
+>new MutualNestedNumber().second : Symbol(MutualNestedNumber.second, Decl(index.js, 62, 22), Decl(index.js, 62, 47), Decl(index.js, 64, 23))
+>MutualNestedNumber : Symbol(MutualNestedNumber, Decl(index.js, 58, 78))
+>second : Symbol(MutualNestedNumber.second, Decl(index.js, 62, 22), Decl(index.js, 62, 47), Decl(index.js, 64, 23))
+
+/** @type {string} */
+export const invalidNestedString = new MutualNestedNumber().first;
+>invalidNestedString : Symbol(invalidNestedString, Decl(index.js, 74, 12))
+>new MutualNestedNumber().first : Symbol(MutualNestedNumber.first, Decl(index.js, 61, 19), Decl(index.js, 63, 23), Decl(index.js, 63, 47))
+>MutualNestedNumber : Symbol(MutualNestedNumber, Decl(index.js, 58, 78))
+>first : Symbol(MutualNestedNumber.first, Decl(index.js, 61, 19), Decl(index.js, 63, 23), Decl(index.js, 63, 47))
+
+export class AssignmentValues {
+>AssignmentValues : Symbol(AssignmentValues, Decl(index.js, 74, 66))
+
+    constructor() {
+        const initialValue = (this.base = undefined);
+>initialValue : Symbol(initialValue, Decl(index.js, 78, 13))
+>this.base : Symbol(AssignmentValues.base, Decl(index.js, 78, 30), Decl(index.js, 80, 29), Decl(index.js, 81, 29))
+>this : Symbol(AssignmentValues, Decl(index.js, 74, 66))
+>base : Symbol(AssignmentValues.base, Decl(index.js, 78, 30), Decl(index.js, 80, 29), Decl(index.js, 81, 29))
+>undefined : Symbol(undefined)
+
+        const initialRead = this.base;
+>initialRead : Symbol(initialRead, Decl(index.js, 79, 13))
+>this.base : Symbol(AssignmentValues.base, Decl(index.js, 78, 30), Decl(index.js, 80, 29), Decl(index.js, 81, 29))
+>this : Symbol(AssignmentValues, Decl(index.js, 74, 66))
+>base : Symbol(AssignmentValues.base, Decl(index.js, 78, 30), Decl(index.js, 80, 29), Decl(index.js, 81, 29))
+
+        const numberValue = (this.base = 1);
+>numberValue : Symbol(numberValue, Decl(index.js, 80, 13))
+>this.base : Symbol(AssignmentValues.base, Decl(index.js, 78, 30), Decl(index.js, 80, 29), Decl(index.js, 81, 29))
+>this : Symbol(AssignmentValues, Decl(index.js, 74, 66))
+>base : Symbol(AssignmentValues.base, Decl(index.js, 78, 30), Decl(index.js, 80, 29), Decl(index.js, 81, 29))
+
+        const stringValue = (this.base = "value");
+>stringValue : Symbol(stringValue, Decl(index.js, 81, 13))
+>this.base : Symbol(AssignmentValues.base, Decl(index.js, 78, 30), Decl(index.js, 80, 29), Decl(index.js, 81, 29))
+>this : Symbol(AssignmentValues, Decl(index.js, 74, 66))
+>base : Symbol(AssignmentValues.base, Decl(index.js, 78, 30), Decl(index.js, 80, 29), Decl(index.js, 81, 29))
+
+        const finalRead = this.base;
+>finalRead : Symbol(finalRead, Decl(index.js, 82, 13))
+>this.base : Symbol(AssignmentValues.base, Decl(index.js, 78, 30), Decl(index.js, 80, 29), Decl(index.js, 81, 29))
+>this : Symbol(AssignmentValues, Decl(index.js, 74, 66))
+>base : Symbol(AssignmentValues.base, Decl(index.js, 78, 30), Decl(index.js, 80, 29), Decl(index.js, 81, 29))
+
+        /** @type {undefined} */
+        const initialCheck = initialValue;
+>initialCheck : Symbol(initialCheck, Decl(index.js, 84, 13))
+>initialValue : Symbol(initialValue, Decl(index.js, 78, 13))
+
+        /** @type {undefined} */
+        const initialReadCheck = initialRead;
+>initialReadCheck : Symbol(initialReadCheck, Decl(index.js, 86, 13))
+>initialRead : Symbol(initialRead, Decl(index.js, 79, 13))
+
+        /** @type {number} */
+        const numberCheck = numberValue;
+>numberCheck : Symbol(numberCheck, Decl(index.js, 88, 13))
+>numberValue : Symbol(numberValue, Decl(index.js, 80, 13))
+
+        /** @type {string} */
+        const stringCheck = stringValue;
+>stringCheck : Symbol(stringCheck, Decl(index.js, 90, 13))
+>stringValue : Symbol(stringValue, Decl(index.js, 81, 13))
+
+        /** @type {string} */
+        const finalReadCheck = finalRead;
+>finalReadCheck : Symbol(finalReadCheck, Decl(index.js, 92, 13))
+>finalRead : Symbol(finalRead, Decl(index.js, 82, 13))
+
+        /** @type {number} */
+        const invalidNumber = this.base;
+>invalidNumber : Symbol(invalidNumber, Decl(index.js, 94, 13))
+>this.base : Symbol(AssignmentValues.base, Decl(index.js, 78, 30), Decl(index.js, 80, 29), Decl(index.js, 81, 29))
+>this : Symbol(AssignmentValues, Decl(index.js, 74, 66))
+>base : Symbol(AssignmentValues.base, Decl(index.js, 78, 30), Decl(index.js, 80, 29), Decl(index.js, 81, 29))
+    }
+}
+
+export class Reentrant {
+>Reentrant : Symbol(Reentrant, Decl(index.js, 96, 1))
+
+    constructor() {
+        this.base = undefined;
+>this.base : Symbol(Reentrant.base, Decl(index.js, 99, 19), Decl(index.js, 101, 36))
+>this : Symbol(Reentrant, Decl(index.js, 96, 1))
+>base : Symbol(Reentrant.base, Decl(index.js, 99, 19), Decl(index.js, 101, 36))
+>undefined : Symbol(undefined)
+
+        this.read = this.getValue();
+>this.read : Symbol(Reentrant.read, Decl(index.js, 100, 30))
+>this : Symbol(Reentrant, Decl(index.js, 96, 1))
+>read : Symbol(Reentrant.read, Decl(index.js, 100, 30))
+>this.getValue : Symbol(Reentrant.getValue, Decl(index.js, 103, 5))
+>this : Symbol(Reentrant, Decl(index.js, 96, 1))
+>getValue : Symbol(Reentrant.getValue, Decl(index.js, 103, 5))
+
+        this.base = 1;
+>this.base : Symbol(Reentrant.base, Decl(index.js, 99, 19), Decl(index.js, 101, 36))
+>this : Symbol(Reentrant, Decl(index.js, 96, 1))
+>base : Symbol(Reentrant.base, Decl(index.js, 99, 19), Decl(index.js, 101, 36))
+    }
+    getValue() {
+>getValue : Symbol(Reentrant.getValue, Decl(index.js, 103, 5))
+
+        return this.base;
+>this.base : Symbol(Reentrant.base, Decl(index.js, 99, 19), Decl(index.js, 101, 36))
+>this : Symbol(Reentrant, Decl(index.js, 96, 1))
+>base : Symbol(Reentrant.base, Decl(index.js, 99, 19), Decl(index.js, 101, 36))
+    }
+}
+
+/** @type {number} */
+export const reentrantResult = new Reentrant().read;
+>reentrantResult : Symbol(reentrantResult, Decl(index.js, 110, 12))
+>new Reentrant().read : Symbol(Reentrant.read, Decl(index.js, 100, 30))
+>Reentrant : Symbol(Reentrant, Decl(index.js, 96, 1))
+>read : Symbol(Reentrant.read, Decl(index.js, 100, 30))
+
+/** @type {string} */
+export const invalidReentrantString = new Reentrant().read;
+>invalidReentrantString : Symbol(invalidReentrantString, Decl(index.js, 112, 12))
+>new Reentrant().read : Symbol(Reentrant.read, Decl(index.js, 100, 30))
+>Reentrant : Symbol(Reentrant, Decl(index.js, 96, 1))
+>read : Symbol(Reentrant.read, Decl(index.js, 100, 30))
+
+/** @type {string} */
+export const finalValue = new AssignmentValues().base;
+>finalValue : Symbol(finalValue, Decl(index.js, 115, 12))
+>new AssignmentValues().base : Symbol(AssignmentValues.base, Decl(index.js, 78, 30), Decl(index.js, 80, 29), Decl(index.js, 81, 29))
+>AssignmentValues : Symbol(AssignmentValues, Decl(index.js, 74, 66))
+>base : Symbol(AssignmentValues.base, Decl(index.js, 78, 30), Decl(index.js, 80, 29), Decl(index.js, 81, 29))
+
+/** @type {number} */
+export const numberValue = new LaterWrite().base;
+>numberValue : Symbol(numberValue, Decl(index.js, 118, 12))
+>new LaterWrite().base : Symbol(LaterWrite.base, Decl(index.js, 18, 19), Decl(index.js, 19, 30))
+>LaterWrite : Symbol(LaterWrite, Decl(index.js, 15, 2))
+>base : Symbol(LaterWrite.base, Decl(index.js, 18, 19), Decl(index.js, 19, 30))
+
+/** @type {string} */
+export const invalidString = new LaterWrite().base;
+>invalidString : Symbol(invalidString, Decl(index.js, 120, 12))
+>new LaterWrite().base : Symbol(LaterWrite.base, Decl(index.js, 18, 19), Decl(index.js, 19, 30))
+>LaterWrite : Symbol(LaterWrite, Decl(index.js, 15, 2))
+>base : Symbol(LaterWrite.base, Decl(index.js, 18, 19), Decl(index.js, 19, 30))
+
+/** @type {number | string} */
+export const branchValue = new BranchWrite(true).base;
+>branchValue : Symbol(branchValue, Decl(index.js, 122, 12))
+>new BranchWrite(true).base : Symbol(BranchWrite.base, Decl(index.js, 26, 28), Decl(index.js, 28, 24), Decl(index.js, 30, 16))
+>BranchWrite : Symbol(BranchWrite, Decl(index.js, 22, 1))
+>base : Symbol(BranchWrite.base, Decl(index.js, 26, 28), Decl(index.js, 28, 24), Decl(index.js, 30, 16))
+

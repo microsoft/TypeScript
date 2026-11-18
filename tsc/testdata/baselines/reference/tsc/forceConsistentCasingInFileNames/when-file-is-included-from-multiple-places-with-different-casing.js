@@ -21,7 +21,7 @@ import * as xs4 from "./struct";
 //// [/home/src/projects/project/tsconfig.json] *new* 
 {}
 
-tsgo --explainFiles
+tsc --explainFiles
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96msrc/Struct.d.ts[0m:[93m2[0m:[93m22[0m - [91merror[0m[90m TS1149: [0mFile name '/home/src/projects/project/node_modules/fp-ts/lib/struct.d.ts' differs from already included file name '/home/src/projects/project/node_modules/fp-ts/lib/Struct.d.ts' only in casing.
@@ -252,8 +252,8 @@ Output::
     [7m3[0m import * as xs3 from "./Struct";
     [7m [0m [96m                     ~~~~~~~~~~[0m
 
-../../tslibs/TS/Lib/lib.es2025.full.d.ts
-   Default library for target 'ES2025'
+../../tslibs/TS/Lib/lib.es2026.full.d.ts
+   Default library for target 'ES2026'
 node_modules/fp-ts/lib/Struct.d.ts
    Imported via "fp-ts/lib/Struct" from file 'src/anotherFile.ts'
    Imported via "fp-ts/lib/struct" from file 'src/anotherFile.ts'
@@ -287,7 +287,7 @@ export {};
 //// [/home/src/projects/project/src/oneMore.js] *new* 
 export {};
 
-//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}

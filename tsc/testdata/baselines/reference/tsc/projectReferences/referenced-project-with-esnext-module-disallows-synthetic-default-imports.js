@@ -33,12 +33,12 @@ export const test = () => 'test';
     "include": ["src"]
 }
 
-tsgo --p app --pretty false
+tsc --p app --pretty false
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 app/index.ts(1,8): error TS1192: Module '"/home/src/workspaces/project/lib/dist/utils"' has no default export.
 app/index.ts(2,8): error TS1192: Module '"/home/src/workspaces/project/lib/dist/utils"' has no default export.
-//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}

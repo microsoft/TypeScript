@@ -11,6 +11,7 @@
  *   // @sync-skip-block-start/end     — omit all lines between (inclusive)
  *   // @sync-only-start/end           — uncomment lines between (strip "// " prefix)
  *   // @sync: <code>                  — replace this line with <code> (preserving indent)
+ *   // @generators: <code>            - replace this line only in generator output
  *
  * AST-based transforms (applied after directives using the TypeScript compiler API):
  *   - Generate synchronous implementations from async methods
@@ -21,18 +22,17 @@
  *   node generateSync.ts
  */
 
+import { readFileSync } from "node:fs";
 import {
-    mkdirSync,
-    readFileSync,
-    writeFileSync,
-} from "node:fs";
-import {
-    dirname,
     join,
     relative,
 } from "node:path";
-import { xSync } from "tinyexec";
 import ts from "typescript";
+import { GeneratedFile } from "../../../tools/scripts/gen/generatedFile.mts";
+import {
+    formatFilesSync,
+    parseGeneratorArgs,
+} from "../../../tools/scripts/gen/utils.mts";
 
 function generatedHeader(asyncSourceRelPath: string): string {
     return [
@@ -53,19 +53,25 @@ const SRC = join(ROOT, "src", "api");
 const TEST = join(ROOT, "test");
 
 type SourceTransform = (source: string, fileName: string) => string;
+type SyncVariant = "sync" | "generators";
 
 function generateSyncFile(
     srcPath: string,
     destPath: string,
     transform: SourceTransform,
-): string {
+    force: boolean,
+    variant: SyncVariant = "sync",
+    preserveGeneratorOverrides = false,
+): GeneratedFile | undefined {
+    const generated = new GeneratedFile(destPath, [import.meta.filename, srcPath]);
+    if (generated.isCurrent(force)) return;
     const source = readFileSync(srcPath, "utf-8");
 
     // Normalize line endings to LF
     const normalized = source.replace(/\r/g, "");
 
     // Phase 1: Process sync directives (text-based, operates on comments/lines)
-    const afterDirectives = processDirectives(normalized.split("\n")).join("\n");
+    const afterDirectives = processDirectives(normalized.split("\n"), variant, preserveGeneratorOverrides).join("\n");
 
     // Phase 2: AST-based async→sync transforms
     const fileName = destPath.split("/").pop()!;
@@ -75,23 +81,32 @@ function generateSyncFile(
     const srcRelPath = relative(ROOT, srcPath).replaceAll("\\", "/");
     result = generatedHeader(srcRelPath) + result;
 
-    mkdirSync(dirname(destPath), { recursive: true });
-    writeFileSync(destPath, result);
+    generated.write(result);
     const label = relative(ROOT, srcPath).replaceAll("\\", "/");
     const destLabel = relative(ROOT, destPath).replaceAll("\\", "/");
     console.log(`  ${label} → ${destLabel}`);
-    return destPath;
+    return generated;
 }
 
 // ── Directive processing ─────────────────────────────────────────
 
-function processDirectives(lines: string[]): string[] {
+function processDirectives(lines: string[], variant: SyncVariant, preserveGeneratorOverrides = false): string[] {
     const output: string[] = [];
     let skipBlock = false;
     let syncOnlyBlock = false;
+    let generatorsOnlyBlock = false;
 
     for (const line of lines) {
         const trimmed = line.trim();
+
+        if (trimmed === "// @generators-skip-block-start") {
+            skipBlock = variant === "generators";
+            continue;
+        }
+        if (trimmed === "// @generators-skip-block-end") {
+            skipBlock = false;
+            continue;
+        }
 
         // Block-skip markers
         if (trimmed === "// @sync-skip-block-start") {
@@ -104,6 +119,20 @@ function processDirectives(lines: string[]): string[] {
         }
         if (skipBlock) continue;
 
+        if (trimmed === "// @generators-only-start") {
+            generatorsOnlyBlock = true;
+            continue;
+        }
+        if (trimmed === "// @generators-only-end") {
+            generatorsOnlyBlock = false;
+            continue;
+        }
+
+        if (generatorsOnlyBlock) {
+            if (variant === "generators") output.push(uncommentLine(line));
+            continue;
+        }
+
         // Sync-only markers (uncomment block)
         if (trimmed === "// @sync-only-start") {
             syncOnlyBlock = true;
@@ -115,17 +144,11 @@ function processDirectives(lines: string[]): string[] {
         }
 
         if (syncOnlyBlock) {
-            const indent = line.match(/^(\s*)/)![1];
-            const rest = line.slice(indent.length);
-            if (rest.startsWith("// ")) {
-                output.push(indent + rest.slice(3));
-            }
-            else if (rest === "//") {
-                output.push(indent);
-            }
-            else {
-                output.push(line);
-            }
+            output.push(uncommentLine(line));
+            continue;
+        }
+
+        if (variant === "generators" && line.includes("// @generators-skip")) {
             continue;
         }
 
@@ -135,17 +158,35 @@ function processDirectives(lines: string[]): string[] {
         }
 
         // Single-line replacement: // @sync: <replacement>
-        const syncReplaceMatch = line.match(/\/\/ @sync: (.+)$/);
-        if (syncReplaceMatch) {
+        const generatorsReplaceMatch = line.match(/\/\/ @generators: (.+)$/);
+        if (variant === "generators" && generatorsReplaceMatch) {
             const indent = line.match(/^(\s*)/)![1];
+            output.push(indent + generatorsReplaceMatch[1]);
+            continue;
+        }
+
+        const lineWithoutGeneratorsDirective = generatorsReplaceMatch && !preserveGeneratorOverrides
+            ? line.slice(0, generatorsReplaceMatch.index).trimEnd()
+            : line;
+        const syncReplaceMatch = lineWithoutGeneratorsDirective.match(/\/\/ @sync: (.+)$/);
+        if (syncReplaceMatch) {
+            const indent = lineWithoutGeneratorsDirective.match(/^(\s*)/)![1];
             output.push(indent + syncReplaceMatch[1]);
             continue;
         }
 
-        output.push(line);
+        output.push(lineWithoutGeneratorsDirective);
     }
 
     return output;
+}
+
+function uncommentLine(line: string): string {
+    const indent = line.match(/^(\s*)/)![1];
+    const rest = line.slice(indent.length);
+    if (rest.startsWith("// ")) return indent + rest.slice(3);
+    if (rest === "//") return indent;
+    return line;
 }
 
 // ── AST-based transforms ────────────────────────────────────────
@@ -172,13 +213,34 @@ function transformAsyncSource(source: string, fileName: string, attachGenerators
     const edits: Edit[] = [];
     const asyncMethodNames = new Set<string>();
     const synchronousMethodNames = new Set<string>();
+    const batchedMethodNames = new Set<string>();
+    const asyncMethods: ts.MethodDeclaration[] = [];
 
     for (const classDeclaration of getNamedClasses(sourceFile).values()) {
         for (const group of getMethodGroups(classDeclaration).values()) {
             const method = group.implementation;
-            if (isGeneratorMethod(method)) asyncMethodNames.add((method.name as ts.Identifier).text);
+            if (isGeneratorMethod(method)) {
+                asyncMethodNames.add((method.name as ts.Identifier).text);
+                asyncMethods.push(method);
+            }
             else synchronousMethodNames.add((method.name as ts.Identifier).text);
         }
+    }
+    let changed = true;
+    while (changed) {
+        changed = false;
+        for (const method of asyncMethods) {
+            const name = (method.name as ts.Identifier).text;
+            if (!batchedMethodNames.has(name) && containsBatchedCall(method.body!)) {
+                batchedMethodNames.add(name);
+                changed = true;
+            }
+        }
+    }
+
+    function containsBatchedCall(node: ts.Node): boolean {
+        if (isPromiseAllCall(node) || ts.isCallExpression(node) && ts.isPropertyAccessExpression(node.expression) && batchedMethodNames.has(node.expression.name.text)) return true;
+        return ts.forEachChild(node, containsBatchedCall) ?? false;
     }
 
     visit(sourceFile);
@@ -282,6 +344,9 @@ function transformAsyncSource(source: string, fileName: string, attachGenerators
         if (!node.type) return "void";
         if (mode === "generator" && isPromiseType(node.type)) {
             const returnType = getUnwrappedPromiseText(node.type, source, sourceFile);
+            if (node.name && ts.isIdentifier(node.name) && batchedMethodNames.has(node.name.text)) {
+                return `APIRequestGenerator<${returnType}>`;
+            }
             return `Generator<ProtocolRequest, ${returnType}, ProtocolResponse["result"]>`;
         }
         return transformNodeText(node.type, mode, false);
@@ -308,7 +373,10 @@ function transformAsyncSource(source: string, fileName: string, attachGenerators
         }
 
         visitNode(node);
-        return applyEdits(source.slice(start, node.end), localEdits);
+        const result = applyEdits(source.slice(start, node.end), localEdits);
+        return ts.isBlock(node)
+            ? processDirectives(result.split("\n"), mode === "generator" ? "generators" : "sync").join("\n")
+            : result;
     }
 
     function addGeneratorEdit(node: ts.Node, offset: number, targetEdits: Edit[]): boolean {
@@ -348,6 +416,24 @@ function transformAsyncSource(source: string, fileName: string, attachGenerators
     }
 
     function getGeneratorAwaitText(node: ts.AwaitExpression): string {
+        if (isPromiseAllCall(node.expression)) {
+            const argument = node.expression.arguments[0];
+            if (
+                !ts.isCallExpression(argument) ||
+                !ts.isPropertyAccessExpression(argument.expression) ||
+                argument.expression.name.text !== "map" ||
+                argument.arguments.length !== 1 ||
+                !ts.isArrowFunction(argument.arguments[0]) ||
+                !ts.isCallExpression(argument.arguments[0].body) ||
+                !isGeneratorCall(argument.arguments[0].body)
+            ) {
+                throw new Error("Promise.all requires a map callback returning an API method call");
+            }
+            const callback = argument.arguments[0];
+            const receiver = getTextWithOwner(argument.expression.expression);
+            const parameters = callback.parameters.map(parameter => getTextWithOwner(parameter)).join(", ");
+            return `(yield* all(...${receiver}.map((${parameters}) => ${getGeneratorCallText(argument.arguments[0].body)})))`;
+        }
         if (isAPIRequestCall(node.expression)) {
             const receiver = node.expression.expression.expression;
             if (ts.isPropertyAccessExpression(receiver) && receiver.name.text === "client") return getRequestYieldText(node.expression);
@@ -374,7 +460,10 @@ function transformAsyncSource(source: string, fileName: string, attachGenerators
         const [method, params] = call.arguments;
         const methodText = getTextWithOwner(method);
         const paramsText = params ? getTextWithOwner(params) : "undefined";
-        return `yield* apiRequest(${methodText}, ${paramsText})`;
+        const request = `yield* apiRequest(${methodText}, ${paramsText})`;
+        return ts.isPropertyAccessExpression(call.expression) && call.expression.name.text === "apiRequestBinary"
+            ? `sourceFileResponseToUint8Array((${request}))`
+            : request;
     }
 
     function getGeneratorCallText(call: ts.CallExpression): string {
@@ -424,7 +513,9 @@ function transformAsyncSource(source: string, fileName: string, attachGenerators
     }
 
     function isAPIRequestCall(node: ts.Expression): node is ts.CallExpression & { expression: ts.PropertyAccessExpression; } {
-        return ts.isCallExpression(node) && ts.isPropertyAccessExpression(node.expression) && node.expression.name.text === "apiRequest";
+        return ts.isCallExpression(node)
+            && ts.isPropertyAccessExpression(node.expression)
+            && (node.expression.name.text === "apiRequest" || node.expression.name.text === "apiRequestBinary");
     }
 
     function getCallExpression(node: ts.Expression): ts.CallExpression | undefined {
@@ -443,6 +534,11 @@ function transformAsyncSource(source: string, fileName: string, attachGenerators
 }
 
 function addSyncEdit(node: ts.Node, source: string, sourceFile: ts.SourceFile, edits: Edit[], offset: number = 0): boolean {
+    if (isPromiseAllCall(node)) {
+        const argument = node.arguments[0];
+        edits.push({ start: node.getStart(sourceFile) - offset, end: argument.getStart(sourceFile) - offset, newText: "" });
+        edits.push({ start: argument.end - offset, end: node.end - offset, newText: "" });
+    }
     if (
         (ts.isFunctionDeclaration(node) || ts.isMethodDeclaration(node) || ts.isArrowFunction(node) || ts.isFunctionExpression(node)) &&
         node.modifiers
@@ -494,6 +590,15 @@ function addSyncEdit(node: ts.Node, source: string, sourceFile: ts.SourceFile, e
         return true;
     }
     return false;
+}
+
+function isPromiseAllCall(node: ts.Node): node is ts.CallExpression {
+    return ts.isCallExpression(node) &&
+        ts.isPropertyAccessExpression(node.expression) &&
+        ts.isIdentifier(node.expression.expression) &&
+        node.expression.expression.text === "Promise" &&
+        node.expression.name.text === "all" &&
+        node.arguments.length === 1;
 }
 
 function isPromiseTypeReference(node: ts.Node | undefined): node is ts.TypeReferenceNode {
@@ -583,15 +688,10 @@ function getIndent(source: string, position: number): string {
 
 // ── Formatting ───────────────────────────────────────────────────
 
-function formatFiles(paths: string[]): void {
-    xSync("dprint", ["fmt", ...paths], { throwOnError: true });
-}
-
 // ── Main ─────────────────────────────────────────────────────────
 
-export function generateSync(): void {
-    console.log("Generating sync API from async source...");
-    const generatedFiles: string[] = [];
+export function generateSync(force = false): void {
+    const generatedFiles: (GeneratedFile | undefined)[] = [];
 
     // Source files
     for (const relPath of ["types.ts", "api.ts"]) {
@@ -602,7 +702,7 @@ export function generateSync(): void {
                 ? (source, fileName) =>
                     [
                         'import type { APIRequest as ProtocolRequest, APIResponse as ProtocolResponse } from "../proto.ts";',
-                        'import { apiRequest, cacheGeneratorMethod } from "./generatorSupport.ts";',
+                        'import { all, apiRequest, cacheGeneratorMethod, type APIRequestGenerator } from "./generatorSupport.ts";',
                         "",
                         transformAsyncSource(source, fileName, true),
                     ].join("\n")
@@ -612,6 +712,9 @@ export function generateSync(): void {
                         "",
                         transformAsyncSource(source, fileName, true),
                     ].join("\n"),
+            force,
+            "sync",
+            relPath === "api.ts",
         ));
     }
 
@@ -621,14 +724,28 @@ export function generateSync(): void {
             join(TEST, "async", relPath),
             join(TEST, "sync", relPath),
             (source, fileName) => transformAsyncSource(source, fileName, false),
+            force,
         ));
     }
 
+    generatedFiles.push(generateSyncFile(
+        join(TEST, "async", "api.bench.ts"),
+        join(TEST, "generators", "api.bench.ts"),
+        (source, fileName) => transformAsyncSource(source, fileName, false),
+        force,
+        "generators",
+    ));
+
+    const changedFiles = generatedFiles.filter(file => file !== undefined);
+    if (!changedFiles.length) {
+        return;
+    }
     console.log("Formatting...");
-    formatFiles(generatedFiles);
+    formatFilesSync(changedFiles.map(file => file.fileName));
+    for (const file of changedFiles) file.markCurrent();
     console.log("Done.");
 }
 
 if (process.argv[1] === import.meta.filename) {
-    generateSync();
+    generateSync(parseGeneratorArgs({}).force);
 }

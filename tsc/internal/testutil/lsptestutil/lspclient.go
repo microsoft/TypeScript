@@ -247,7 +247,7 @@ func (c *LSPClient) WriteMsg(t *testing.T, msg *lsproto.Message) {
 }
 
 // SendRequest sends a typed request and waits for the response.
-func SendRequest[Params, Resp any](t *testing.T, c *LSPClient, info lsproto.RequestInfo[Params, Resp], params Params) (*lsproto.Message, Resp, bool) {
+func (c *LSPClient) SendRequest[Params, Resp any](t *testing.T, info lsproto.RequestInfo[Params, Resp], params Params) (*lsproto.Message, Resp, bool) {
 	id := c.NextID()
 	reqID := lsproto.NewID(lsproto.IntegerOrString{Integer: &id})
 	req := info.NewRequestMessage(reqID, params)
@@ -262,7 +262,7 @@ func SendRequest[Params, Resp any](t *testing.T, c *LSPClient, info lsproto.Requ
 }
 
 // SendRequestAsync sends a typed request and returns a waiter for its response.
-func SendRequestAsync[Params, Resp any](t *testing.T, c *LSPClient, info lsproto.RequestInfo[Params, Resp], params Params) func() (*lsproto.Message, Resp, bool) {
+func (c *LSPClient) SendRequestAsync[Params, Resp any](t *testing.T, info lsproto.RequestInfo[Params, Resp], params Params) func() (*lsproto.Message, Resp, bool) {
 	id := c.NextID()
 	reqID := lsproto.NewID(lsproto.IntegerOrString{Integer: &id})
 	req := info.NewRequestMessage(reqID, params)
@@ -314,7 +314,7 @@ func (c *LSPClient) waitForResponse(t *testing.T, reqID *jsonrpc.ID, responseCha
 }
 
 // SendNotification sends a typed notification.
-func SendNotification[Params any](t *testing.T, c *LSPClient, info lsproto.NotificationInfo[Params], params Params) {
+func (c *LSPClient) SendNotification[Params any](t *testing.T, info lsproto.NotificationInfo[Params], params Params) {
 	notification := info.NewNotificationMessage(
 		params,
 	)

@@ -1,0 +1,87 @@
+//// [tests/cases/compiler/defaultParameterBodyFunctionScope.ts] ////
+
+=== defaultParameterBodyFunctionScope.ts ===
+const styles = { root: "outer" };
+>styles : Symbol(styles, Decl(defaultParameterBodyFunctionScope.ts, 0, 5))
+>root : Symbol(root, Decl(defaultParameterBodyFunctionScope.ts, 0, 16))
+
+export function read(value = styles.root) {
+>read : Symbol(read, Decl(defaultParameterBodyFunctionScope.ts, 0, 33))
+>value : Symbol(value, Decl(defaultParameterBodyFunctionScope.ts, 2, 21))
+>styles.root : Symbol(root, Decl(defaultParameterBodyFunctionScope.ts, 0, 16))
+>styles : Symbol(styles, Decl(defaultParameterBodyFunctionScope.ts, 0, 5))
+>root : Symbol(root, Decl(defaultParameterBodyFunctionScope.ts, 0, 16))
+
+    function styles() {}
+>styles : Symbol(styles, Decl(defaultParameterBodyFunctionScope.ts, 2, 43))
+
+    styles();
+>styles : Symbol(styles, Decl(defaultParameterBodyFunctionScope.ts, 2, 43))
+
+    return value;
+>value : Symbol(value, Decl(defaultParameterBodyFunctionScope.ts, 2, 21))
+}
+
+export function readClosure(value = () => styles.root) {
+>readClosure : Symbol(readClosure, Decl(defaultParameterBodyFunctionScope.ts, 6, 1))
+>value : Symbol(value, Decl(defaultParameterBodyFunctionScope.ts, 8, 28))
+>styles.root : Symbol(root, Decl(defaultParameterBodyFunctionScope.ts, 0, 16))
+>styles : Symbol(styles, Decl(defaultParameterBodyFunctionScope.ts, 0, 5))
+>root : Symbol(root, Decl(defaultParameterBodyFunctionScope.ts, 0, 16))
+
+    function styles() {}
+>styles : Symbol(styles, Decl(defaultParameterBodyFunctionScope.ts, 8, 56))
+
+    return value();
+>value : Symbol(value, Decl(defaultParameterBodyFunctionScope.ts, 8, 28))
+}
+
+export function readDestructured({ value = styles.root } = {}) {
+>readDestructured : Symbol(readDestructured, Decl(defaultParameterBodyFunctionScope.ts, 11, 1))
+>value : Symbol(value, Decl(defaultParameterBodyFunctionScope.ts, 13, 34))
+>styles.root : Symbol(root, Decl(defaultParameterBodyFunctionScope.ts, 0, 16))
+>styles : Symbol(styles, Decl(defaultParameterBodyFunctionScope.ts, 0, 5))
+>root : Symbol(root, Decl(defaultParameterBodyFunctionScope.ts, 0, 16))
+
+    function styles() {}
+>styles : Symbol(styles, Decl(defaultParameterBodyFunctionScope.ts, 13, 64))
+
+    return value;
+>value : Symbol(value, Decl(defaultParameterBodyFunctionScope.ts, 13, 34))
+}
+
+export function readMissing(value = missing) {
+>readMissing : Symbol(readMissing, Decl(defaultParameterBodyFunctionScope.ts, 16, 1))
+>value : Symbol(value, Decl(defaultParameterBodyFunctionScope.ts, 18, 28))
+
+    function missing() {}
+>missing : Symbol(missing, Decl(defaultParameterBodyFunctionScope.ts, 18, 46))
+
+    return value;
+>value : Symbol(value, Decl(defaultParameterBodyFunctionScope.ts, 18, 28))
+}
+
+export function readParameter(styles = { root: "parameter" }, value = styles.root) {
+>readParameter : Symbol(readParameter, Decl(defaultParameterBodyFunctionScope.ts, 21, 1))
+>styles : Symbol(styles, Decl(defaultParameterBodyFunctionScope.ts, 23, 30))
+>root : Symbol(root, Decl(defaultParameterBodyFunctionScope.ts, 23, 40))
+>value : Symbol(value, Decl(defaultParameterBodyFunctionScope.ts, 23, 61))
+>styles.root : Symbol(root, Decl(defaultParameterBodyFunctionScope.ts, 23, 40))
+>styles : Symbol(styles, Decl(defaultParameterBodyFunctionScope.ts, 23, 30))
+>root : Symbol(root, Decl(defaultParameterBodyFunctionScope.ts, 23, 40))
+
+    return value;
+>value : Symbol(value, Decl(defaultParameterBodyFunctionScope.ts, 23, 61))
+}
+
+export const readNamed = function named(value = named) {
+>readNamed : Symbol(readNamed, Decl(defaultParameterBodyFunctionScope.ts, 27, 12))
+>named : Symbol(named, Decl(defaultParameterBodyFunctionScope.ts, 27, 24))
+>value : Symbol(value, Decl(defaultParameterBodyFunctionScope.ts, 27, 40))
+>named : Symbol(named, Decl(defaultParameterBodyFunctionScope.ts, 27, 24))
+
+    return value;
+>value : Symbol(value, Decl(defaultParameterBodyFunctionScope.ts, 27, 40))
+
+};
+

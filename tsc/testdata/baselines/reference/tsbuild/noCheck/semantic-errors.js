@@ -13,7 +13,7 @@ export const b = 10;
     }
 }
 
-tsgo -b -v --noCheck
+tsc -b -v --noCheck
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -23,7 +23,7 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project 'tsconfig.json'...
 
-//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -83,7 +83,7 @@ export const b = 10;
 
 tsconfig.json::
 SemanticDiagnostics::
-*not cached* /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*not cached* /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *not cached* /home/src/workspaces/project/a.ts
 *not cached* /home/src/workspaces/project/b.ts
 Signatures::
@@ -91,7 +91,7 @@ Signatures::
 
 Edit [0]:: no change
 
-tsgo -b -v --noCheck
+tsc -b -v --noCheck
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -106,7 +106,7 @@ Edit [1]:: Fix `a` error with noCheck
 //// [/home/src/workspaces/project/a.ts] *modified* 
 export const a = "hello";
 
-tsgo -b -v --noCheck
+tsc -b -v --noCheck
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -127,7 +127,7 @@ export declare const a = "hello";
 
 tsconfig.json::
 SemanticDiagnostics::
-*not cached* /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*not cached* /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *not cached* /home/src/workspaces/project/a.ts
 *not cached* /home/src/workspaces/project/b.ts
 Signatures::
@@ -135,7 +135,7 @@ Signatures::
 
 Edit [2]:: no change
 
-tsgo -b -v --noCheck
+tsc -b -v --noCheck
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -148,7 +148,7 @@ Output::
 
 Edit [3]:: No Change run with checking
 
-tsgo -b -v
+tsc -b -v
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -186,7 +186,7 @@ Output::
 
 tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *refresh*    /home/src/workspaces/project/a.ts
 *refresh*    /home/src/workspaces/project/b.ts
 Signatures::
@@ -194,7 +194,7 @@ Signatures::
 
 Edit [4]:: No Change run with checking
 
-tsgo -b -v
+tsc -b -v
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -207,7 +207,7 @@ Output::
 
 Edit [5]:: no change
 
-tsgo -b -v --noCheck
+tsc -b -v --noCheck
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -222,7 +222,7 @@ Edit [6]:: Introduce error with noCheck
 //// [/home/src/workspaces/project/a.ts] *modified* 
 export const a: number = "hello";
 
-tsgo -b -v --noCheck
+tsc -b -v --noCheck
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -263,7 +263,7 @@ export declare const a: number;
 
 tsconfig.json::
 SemanticDiagnostics::
-*not cached* /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*not cached* /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *not cached* /home/src/workspaces/project/a.ts
 *not cached* /home/src/workspaces/project/b.ts
 Signatures::
@@ -271,7 +271,7 @@ Signatures::
 
 Edit [7]:: no change
 
-tsgo -b -v --noCheck
+tsc -b -v --noCheck
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -284,7 +284,7 @@ Output::
 
 Edit [8]:: No Change run with checking
 
-tsgo -b -v
+tsc -b -v
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -331,7 +331,7 @@ Found 1 error in a.ts[90m:1[0m
 
 tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *refresh*    /home/src/workspaces/project/a.ts
 *refresh*    /home/src/workspaces/project/b.ts
 Signatures::
@@ -341,7 +341,7 @@ Edit [9]:: Fix `a` error with noCheck
 //// [/home/src/workspaces/project/a.ts] *modified* 
 export const a = "hello";
 
-tsgo -b -v --noCheck
+tsc -b -v --noCheck
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -382,7 +382,7 @@ export declare const a = "hello";
 
 tsconfig.json::
 SemanticDiagnostics::
-*not cached* /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*not cached* /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *not cached* /home/src/workspaces/project/a.ts
 *not cached* /home/src/workspaces/project/b.ts
 Signatures::
@@ -390,7 +390,7 @@ Signatures::
 
 Edit [10]:: No Change run with checking
 
-tsgo -b -v
+tsc -b -v
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -428,7 +428,7 @@ Output::
 
 tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *refresh*    /home/src/workspaces/project/a.ts
 *refresh*    /home/src/workspaces/project/b.ts
 Signatures::
@@ -438,7 +438,7 @@ Edit [11]:: Add file with error
 //// [/home/src/workspaces/project/c.ts] *new* 
 export const c: number = "hello";
 
-tsgo -b -v
+tsc -b -v
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -497,7 +497,7 @@ export const c = "hello";
 
 tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *refresh*    /home/src/workspaces/project/a.ts
 *refresh*    /home/src/workspaces/project/b.ts
 *refresh*    /home/src/workspaces/project/c.ts
@@ -508,7 +508,7 @@ Edit [12]:: Introduce error with noCheck
 //// [/home/src/workspaces/project/a.ts] *modified* 
 export const a: number = "hello";
 
-tsgo -b -v --noCheck
+tsc -b -v --noCheck
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -557,7 +557,7 @@ export declare const a: number;
 
 tsconfig.json::
 SemanticDiagnostics::
-*not cached* /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*not cached* /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *not cached* /home/src/workspaces/project/a.ts
 *not cached* /home/src/workspaces/project/b.ts
 *not cached* /home/src/workspaces/project/c.ts
@@ -568,7 +568,7 @@ Edit [13]:: Fix `a` error with noCheck
 //// [/home/src/workspaces/project/a.ts] *modified* 
 export const a = "hello";
 
-tsgo -b -v --noCheck
+tsc -b -v --noCheck
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -591,7 +591,7 @@ export declare const a = "hello";
 
 tsconfig.json::
 SemanticDiagnostics::
-*not cached* /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*not cached* /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *not cached* /home/src/workspaces/project/a.ts
 *not cached* /home/src/workspaces/project/b.ts
 *not cached* /home/src/workspaces/project/c.ts
@@ -600,7 +600,7 @@ Signatures::
 
 Edit [14]:: No Change run with checking
 
-tsgo -b -v
+tsc -b -v
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -655,7 +655,7 @@ Found 1 error in c.ts[90m:1[0m
 
 tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *refresh*    /home/src/workspaces/project/a.ts
 *refresh*    /home/src/workspaces/project/b.ts
 *refresh*    /home/src/workspaces/project/c.ts
@@ -664,7 +664,7 @@ Signatures::
 
 Edit [15]:: no change
 
-tsgo -b -v --noCheck
+tsc -b -v --noCheck
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -677,7 +677,7 @@ Output::
 
 Edit [16]:: No Change run with checking
 
-tsgo -b -v
+tsc -b -v
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -706,7 +706,7 @@ Found 1 error in c.ts[90m:1[0m
 
 tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *refresh*    /home/src/workspaces/project/a.ts
 *refresh*    /home/src/workspaces/project/b.ts
 *refresh*    /home/src/workspaces/project/c.ts

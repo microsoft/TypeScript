@@ -1,0 +1,36 @@
+iteratorConstructorAugmentation.ts(15,7): error TS2322: Type 'IteratorObject<number, undefined, unknown>' is not assignable to type 'IteratorObject<string, undefined, unknown>'.
+  Types of property 'map' are incompatible.
+    Type '<U>(callbackfn: (value: number, index: number) => U) => IteratorObject<U, undefined, unknown>' is not assignable to type '<U>(callbackfn: (value: string, index: number) => U) => IteratorObject<U, undefined, unknown>'.
+      Types of parameters 'callbackfn' and 'callbackfn' are incompatible.
+        Types of parameters 'value' and 'value' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+iteratorConstructorAugmentation.ts(16,15): error TS2345: Argument of type 'number' is not assignable to parameter of type 'Iterable<unknown, unknown, undefined> | Iterator<unknown, unknown, undefined>'.
+
+
+==== iteratorConstructorAugmentation.ts (2 errors) ====
+    interface IteratorConstructor {
+        f(): void;
+    }
+    
+    declare const a: Iterator<number>;
+    declare const b: Iterable<string>;
+    
+    const c: IteratorObject<number, undefined, unknown> = Iterator.from(a);
+    const d: IteratorObject<string, undefined, unknown> = Iterator.from(b);
+    const e = Iterator.from;
+    const f = Iterator.from<number>;
+    
+    Iterator.f();
+    
+    const g: IteratorObject<string, undefined, unknown> = Iterator.from(a);
+          ~
+!!! error TS2322: Type 'IteratorObject<number, undefined, unknown>' is not assignable to type 'IteratorObject<string, undefined, unknown>'.
+!!! error TS2322:   Types of property 'map' are incompatible.
+!!! error TS2322:     Type '<U>(callbackfn: (value: number, index: number) => U) => IteratorObject<U, undefined, unknown>' is not assignable to type '<U>(callbackfn: (value: string, index: number) => U) => IteratorObject<U, undefined, unknown>'.
+!!! error TS2322:       Types of parameters 'callbackfn' and 'callbackfn' are incompatible.
+!!! error TS2322:         Types of parameters 'value' and 'value' are incompatible.
+!!! error TS2322:           Type 'number' is not assignable to type 'string'.
+    Iterator.from(1);
+                  ~
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'Iterable<unknown, unknown, undefined> | Iterator<unknown, unknown, undefined>'.
+    

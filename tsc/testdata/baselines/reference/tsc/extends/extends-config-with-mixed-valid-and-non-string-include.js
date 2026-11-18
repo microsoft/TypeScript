@@ -12,14 +12,14 @@ export const x = 1;
     "extends": "./base.json",
 }
 
-tsgo -p tsconfig.json --pretty false
+tsc -p tsconfig.json --pretty false
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 base.json(2,28): error TS5024: Compiler option 'include' requires a value of type string.
 //// [/home/src/projects/project/main.js] *new* 
 export const x = 1;
 
-//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}

@@ -14,11 +14,57 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
-type DocumentUri string // !!!
+type DocumentUri string
 
-func (uri DocumentUri) FileName() string {
+var _ json.UnmarshalerFrom = (*DocumentUri)(nil)
+
+func (uri *DocumentUri) UnmarshalJSONFrom(dec *json.Decoder) error {
+	value, err := unmarshalURI(dec)
+	if err != nil {
+		return err
+	}
+	*uri = DocumentUri(value)
+	return nil
+}
+
+func unmarshalURI(dec *json.Decoder) (string, error) {
+	var value string
+	if err := json.UnmarshalDecode(dec, &value); err != nil {
+		return "", err
+	}
+
+	parsed, err := url.Parse(value)
+	if err != nil {
+		return "", fmt.Errorf("invalid URI %q", value)
+	}
+	// Match vscode-uri's compatibility behavior, which is used by
+	// vscode-languageclient: schemeless values use the file scheme, and file
+	// URI paths are resolved against the root.
+	if parsed.Scheme == "" {
+		parsed.Scheme = "file"
+	}
+	if parsed.Scheme == "file" {
+		if parsed.Opaque != "" {
+			parsed.Path = parsed.Opaque
+			parsed.Opaque = ""
+		}
+		if parsed.Path == "" {
+			parsed.Path = "/"
+		} else if parsed.Path[0] != '/' {
+			parsed.Path = "/" + parsed.Path
+		}
+		if parsed.Host == "" && strings.HasPrefix(parsed.Path, "//") {
+			return "", fmt.Errorf("invalid URI %q: path cannot start with // without an authority", value)
+		}
+		value = parsed.String()
+	}
+
+	return value, nil
+}
+
+func (uri DocumentUri) Path() tspath.RootedPath {
 	if bundled.IsBundled(string(uri)) {
-		return string(uri)
+		return tspath.RootedPathFromAbsolute(string(uri))
 	}
 	if strings.HasPrefix(string(uri), "file://") {
 		parsed, err := url.Parse(string(uri))
@@ -26,9 +72,9 @@ func (uri DocumentUri) FileName() string {
 			panic(fmt.Sprintf("invalid file URI: %s", uri))
 		}
 		if parsed.Host != "" {
-			return "//" + parsed.Host + parsed.Path
+			return tspath.RootedPathFromAbsolute("//" + parsed.Host + parsed.Path)
 		}
-		return fixWindowsURIPath(parsed.Path)
+		return tspath.RootedPathFromAbsolute(fixWindowsURIPath(parsed.Path))
 	}
 
 	// Leave all other URIs escaped so we can round-trip them.
@@ -37,27 +83,114 @@ func (uri DocumentUri) FileName() string {
 	if !ok {
 		panic(fmt.Sprintf("invalid URI: %s", uri))
 	}
-
-	authority := "ts-nul-authority"
-	if rest, ok := strings.CutPrefix(path, "//"); ok {
-		authority, path, ok = strings.Cut(rest, "/")
-		if !ok {
-			panic(fmt.Sprintf("invalid URI: %s", uri))
-		}
+	var suffix string
+	if suffixStart := strings.IndexAny(path, "?#"); suffixStart != -1 {
+		path, suffix = path[:suffixStart], path[suffixStart:]
 	}
 
-	return "^/" + scheme + "/" + authority + "/" + path
+	authority := "ts-nul-authority"
+	hasAuthority := false
+	hasPath := true
+	if rest, ok := strings.CutPrefix(path, "//"); ok {
+		hasAuthority = true
+		authority, path, ok = strings.Cut(rest, "/")
+		if !ok {
+			authority = rest
+			path = ""
+			hasPath = false
+		}
+	}
+	encodedAuthority := authority
+	if hasAuthority {
+		if authority == "ts-nul-authority" {
+			encodedAuthority = tspath.ForceEncodeDynamicURIPathSegment(authority, false)
+		} else {
+			encodedAuthority = tspath.EncodeDynamicURIPath(authority)
+		}
+	}
+	var encodedPath string
+	if hasPath {
+		encodedPath = tspath.EncodeDynamicURIPathWithSuffix(path, suffix)
+	} else {
+		encodedPath = tspath.EncodeDynamicURINoPath(suffix)
+	}
+
+	return tspath.RootedPathFromNormalized(
+		tspath.DynamicURIFileNamePrefix + scheme + "/" + encodedAuthority + "/" + encodedPath,
+	)
 }
 
-func (uri DocumentUri) Path(useCaseSensitiveFileNames bool) tspath.Path {
-	fileName := uri.FileName()
-	return tspath.ToPath(fileName, "", useCaseSensitiveFileNames)
+func (uri DocumentUri) FileName() tspath.RootedFilePath {
+	return tspath.RootedFilePathFromPath(uri.Path())
+}
+
+func (uri DocumentUri) PathKey(caseSensitivity tspath.CaseSensitivity) tspath.PathKey {
+	return caseSensitivity.PathKey(uri.Path())
+}
+
+func DynamicFileNameToDocumentUri(fileName tspath.RootedPath) DocumentUri {
+	uri, ok := dynamicFileNameToDocumentUri(fileName, false)
+	if !ok {
+		panic("invalid file name: " + fileName.AsString())
+	}
+	return uri
+}
+
+func TryDynamicFileNameToDocumentUri(fileName tspath.RootedPath) (DocumentUri, bool) {
+	return dynamicFileNameToDocumentUri(fileName, true)
+}
+
+func dynamicFileNameToDocumentUri(fileName tspath.RootedPath, strict bool) (DocumentUri, bool) {
+	path := fileName.AsString()
+	encoded := tspath.IsEncodedDynamicFileName(path)
+	start := 2
+	if encoded {
+		start = len(tspath.DynamicURIFileNamePrefix)
+	}
+	scheme, rest, ok := strings.Cut(path[start:], "/")
+	if !ok || strict && scheme == "" {
+		return "", false
+	}
+	authority, uriPath, ok := strings.Cut(rest, "/")
+	if !ok {
+		return "", false
+	}
+	hasAuthority := authority != "ts-nul-authority"
+	if encoded {
+		if strict {
+			authority, ok = tspath.TryDecodeDynamicURIPathSegment(authority)
+			if !ok {
+				return "", false
+			}
+		} else {
+			authority = tspath.DecodeDynamicURIPathSegment(authority)
+		}
+	}
+	if encoded && hasAuthority {
+		if suffix, decodedNoPath := tspath.DecodeDynamicURINoPath(uriPath); decodedNoPath {
+			return DocumentUri(scheme + "://" + authority + suffix), true
+		}
+	}
+	if encoded {
+		if strict {
+			uriPath, ok = tspath.TryDecodeDynamicURIPath(uriPath)
+			if !ok {
+				return "", false
+			}
+		} else {
+			uriPath = tspath.DecodeDynamicURIPath(uriPath)
+		}
+	}
+	if !hasAuthority {
+		return DocumentUri(scheme + ":" + uriPath), true
+	}
+	return DocumentUri(scheme + "://" + authority + "/" + uriPath), true
 }
 
 func fixWindowsURIPath(path string) string {
 	if rest, ok := strings.CutPrefix(path, "/"); ok {
-		if volume, rest, ok := tspath.SplitVolumePath(rest); ok {
-			return volume + rest
+		if len(rest) >= 2 && tspath.IsVolumeCharacter(rest[0]) && rest[1] == ':' {
+			return rest
 		}
 	}
 	return path
@@ -80,7 +213,18 @@ type HasLocation interface {
 	GetLocation() Location
 }
 
-type URI string // !!!
+type URI string
+
+var _ json.UnmarshalerFrom = (*URI)(nil)
+
+func (uri *URI) UnmarshalJSONFrom(dec *json.Decoder) error {
+	value, err := unmarshalURI(dec)
+	if err != nil {
+		return err
+	}
+	*uri = URI(value)
+	return nil
+}
 
 type Method string
 
@@ -142,11 +286,11 @@ func jsonObjectRawField(data []byte, field string) json.Value {
 			return nil
 		}
 		if jsonKeyCheck(name, field) {
-			val, err := dec.ReadValue()
+			value, err := dec.ReadValue()
 			if err != nil {
 				return nil
 			}
-			return val
+			return value
 		}
 		if err := dec.SkipValue(); err != nil {
 			return nil
@@ -232,13 +376,13 @@ func (info NotificationInfo[Params]) NewNotificationMessage(params Params) *Requ
 //
 // A [NoParams] method must be given no params; every other method must be given
 // params as an object or array. A violation returns [ErrorCodeInvalidParams].
-func UnmarshalParams[T any](req *RequestMessage) (T, error) {
+func (r *RequestMessage) UnmarshalParams[T any]() (T, error) {
 	var params T
 	var raw json.Value
-	if req.Params != nil {
-		v, ok := req.Params.(json.Value)
+	if r.Params != nil {
+		v, ok := r.Params.(json.Value)
 		if !ok {
-			return params, fmt.Errorf("%w: unexpected params type %T", ErrorCodeInvalidParams, req.Params)
+			return params, fmt.Errorf("%w: unexpected params type %T", ErrorCodeInvalidParams, r.Params)
 		}
 		raw = v
 	}

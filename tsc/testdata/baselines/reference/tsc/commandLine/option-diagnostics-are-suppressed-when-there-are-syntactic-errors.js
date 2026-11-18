@@ -4,7 +4,7 @@ Input::
 //// [/home/src/workspaces/project/a.ts] *new* 
 const x: = 1;
 
-tsgo --strictPropertyInitialization --strictNullChecks false a.ts
+tsc --strictPropertyInitialization --strictNullChecks false a.ts
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96ma.ts[0m:[93m1[0m:[93m10[0m - [91merror[0m[90m TS1110: [0mType expected.
@@ -15,7 +15,7 @@ Output::
 
 Found 1 error in a.ts[90m:1[0m
 
-//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}

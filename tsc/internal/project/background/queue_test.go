@@ -5,6 +5,7 @@ import (
 	"sync"
 	"sync/atomic"
 	"testing"
+	"testing/synctest"
 
 	"github.com/microsoft/TypeScript/tsc/internal/project/background"
 	"gotest.tools/v3/assert"
@@ -87,5 +88,39 @@ func TestQueue(t *testing.T) {
 		q.Wait()
 
 		assert.Check(t, !executed, "Task should not execute after queue is closed")
+	})
+
+	t.Run("CloseWaitsForActiveTasks", func(t *testing.T) {
+		t.Parallel()
+		synctest.Test(t, func(t *testing.T) {
+			q := background.NewQueue()
+			started := make(chan struct{})
+			finish := make(chan struct{})
+			closed := make(chan struct{})
+
+			q.Enqueue(context.Background(), func(ctx context.Context) {
+				close(started)
+				<-finish
+			})
+			<-started
+
+			go func() {
+				q.Close()
+				close(closed)
+			}()
+
+			synctest.Wait()
+			var closeReturned bool
+			select {
+			case <-closed:
+				closeReturned = true
+			default:
+				closeReturned = false
+			}
+			assert.Check(t, !closeReturned, "Close returned before the active task completed")
+
+			close(finish)
+			<-closed
+		})
 	})
 }

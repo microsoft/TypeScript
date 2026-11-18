@@ -1,0 +1,141 @@
+//// [tests/cases/compiler/declarationEmitAlternativeContainingModules.ts] ////
+
+=== internal/deep/model.ts ===
+export interface Named { value: string; }
+>value : string
+
+export interface Aliased { value: string; }
+>value : string
+
+export interface Assigned { value: string; }
+>value : string
+
+export interface Ordered { value: string; }
+>value : string
+
+export interface Unlisted { value: string; }
+>value : string
+
+export function makeNamed(): Named { return { value: "" }; }
+>makeNamed : () => Named
+>{ value: "" } : { value: string; }
+>value : string
+>"" : ""
+
+export function makeAliased(): Aliased { return { value: "" }; }
+>makeAliased : () => Aliased
+>{ value: "" } : { value: string; }
+>value : string
+>"" : ""
+
+export function makeAssigned(): Assigned { return { value: "" }; }
+>makeAssigned : () => Assigned
+>{ value: "" } : { value: string; }
+>value : string
+>"" : ""
+
+export function makeOrdered(): Ordered { return { value: "" }; }
+>makeOrdered : () => Ordered
+>{ value: "" } : { value: string; }
+>value : string
+>"" : ""
+
+export function makeUnlisted(): Unlisted { return { value: "" }; }
+>makeUnlisted : () => Unlisted
+>{ value: "" } : { value: string; }
+>value : string
+>"" : ""
+
+=== internal/deep/starred.ts ===
+export interface Starred { value: string; }
+>value : string
+
+export function makeStarred(): Starred { return { value: "" }; }
+>makeStarred : () => Starred
+>{ value: "" } : { value: string; }
+>value : string
+>"" : ""
+
+=== factory.ts ===
+export { makeNamed, makeAliased, makeAssigned, makeOrdered, makeUnlisted } from "./internal/deep/model";
+>makeNamed : () => import("./internal/deep/model").Named
+>makeAliased : () => import("./internal/deep/model").Aliased
+>makeAssigned : () => import("./internal/deep/model").Assigned
+>makeOrdered : () => import("./internal/deep/model").Ordered
+>makeUnlisted : () => import("./internal/deep/model").Unlisted
+
+export { makeStarred } from "./internal/deep/starred";
+>makeStarred : () => import("./internal/deep/starred").Starred
+
+=== named.ts ===
+export { Named } from "./internal/deep/model";
+>Named : any
+
+=== aliased.ts ===
+export { Aliased as Alias } from "./internal/deep/model";
+>Aliased : any
+>Alias : any
+
+=== star.ts ===
+
+export * from "./internal/deep/starred";
+
+=== assigned.ts ===
+import { Assigned } from "./internal/deep/model";
+>Assigned : any
+
+export = Assigned;
+>Assigned : Assigned
+
+=== orderedFirst.ts ===
+export { Ordered } from "./internal/deep/model";
+>Ordered : any
+
+=== orderedSecond.ts ===
+export { Ordered } from "./internal/deep/model";
+>Ordered : any
+
+=== index.ts ===
+import { makeNamed, makeAliased, makeStarred, makeAssigned, makeOrdered, makeUnlisted } from "./factory";
+>makeNamed : () => import("./named").Named
+>makeAliased : () => import("./aliased").Alias
+>makeStarred : () => import("./star").Starred
+>makeAssigned : () => import("./assigned")
+>makeOrdered : () => import("./orderedFirst").Ordered
+>makeUnlisted : () => import("./internal/deep/model").Unlisted
+
+export const named = makeNamed();
+>named : import("./named").Named
+>makeNamed() : import("./named").Named
+>makeNamed : () => import("./named").Named
+
+export const repeated = makeNamed();
+>repeated : import("./named").Named
+>makeNamed() : import("./named").Named
+>makeNamed : () => import("./named").Named
+
+export const aliased = makeAliased();
+>aliased : import("./aliased").Alias
+>makeAliased() : import("./aliased").Alias
+>makeAliased : () => import("./aliased").Alias
+
+export const starred = makeStarred();
+>starred : import("./star").Starred
+>makeStarred() : import("./star").Starred
+>makeStarred : () => import("./star").Starred
+
+export const assigned = makeAssigned();
+>assigned : import("./assigned")
+>makeAssigned() : import("./assigned")
+>makeAssigned : () => import("./assigned")
+
+export const ordered = makeOrdered();
+>ordered : import("./orderedFirst").Ordered
+>makeOrdered() : import("./orderedFirst").Ordered
+>makeOrdered : () => import("./orderedFirst").Ordered
+
+export const unlisted = makeUnlisted();
+>unlisted : import("./internal/deep/model").Unlisted
+>makeUnlisted() : import("./internal/deep/model").Unlisted
+>makeUnlisted : () => import("./internal/deep/model").Unlisted
+

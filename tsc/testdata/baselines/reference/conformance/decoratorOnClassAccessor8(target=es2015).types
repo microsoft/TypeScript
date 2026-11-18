@@ -76,3 +76,91 @@ class F {
 >x : number
 >value : number
 }
+
+class G {
+>G : G
+
+    @dec get x(): string { return ""; }
+>dec : <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>
+>x : string
+>"" : ""
+
+    set x(value) { }
+>x : string
+>value : string
+}
+
+class H {
+>H : H
+
+    get x(): string { return ""; }
+>x : string
+>"" : ""
+
+    @dec set x(value) { }
+>dec : <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>
+>x : string
+>value : string
+}
+
+class I {
+>I : I
+
+    @dec set x(value) { }
+>dec : <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>
+>x : string
+>value : string
+
+    get x(): string { return ""; }
+>x : string
+>"" : ""
+}
+
+class J {
+>J : J
+
+    set x(value) { }
+>x : string
+>value : string
+
+    @dec get x(): string { return ""; }
+>dec : <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>
+>x : string
+>"" : ""
+}
+
+class K {
+>K : K
+
+    @dec get x(): string { return ""; }
+>dec : <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>
+>x : string
+>"" : ""
+}
+
+class L {
+>L : L
+
+    @dec get x(): string { return ""; }
+>dec : <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>
+>x : string
+>"" : ""
+
+    set x(value: any) { }
+>x : string
+>value : any
+}
+
+class M {
+>M : M
+
+    @dec static get x(): number { return 0; }
+>dec : <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>
+>x : number
+>0 : 0
+
+    static set x(value) { }
+>x : number
+>value : number
+}
+

@@ -1,0 +1,19 @@
+//// [tests/cases/conformance/es2026/errorIsError.ts] ////
+
+=== errorIsError.ts ===
+declare const value: unknown;
+>value : Symbol(value, Decl(errorIsError.ts, 0, 13))
+
+if (Error.isError(value)) {
+>Error.isError : Symbol(ErrorConstructor.isError, Decl(lib.es2026.error.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+>isError : Symbol(ErrorConstructor.isError, Decl(lib.es2026.error.d.ts, --, --))
+>value : Symbol(value, Decl(errorIsError.ts, 0, 13))
+
+    const message: string = value.message;
+>message : Symbol(message, Decl(errorIsError.ts, 3, 9))
+>value.message : Symbol(Error.message, Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(errorIsError.ts, 0, 13))
+>message : Symbol(Error.message, Decl(lib.es5.d.ts, --, --))
+}
+

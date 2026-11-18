@@ -116,7 +116,7 @@ func iterateErrorBaseline[T diagnosticwriter.Diagnostic](t *testing.T, inputFile
 				location = " " + formatLocation(info.File(), info.Pos(), formatOpts, func(output io.Writer, text string, formatStyle string) { fmt.Fprint(output, text) })
 			}
 			location = removeTestPathPrefixes(location, false)
-			if len(location) > 0 && isDefaultLibraryFile(info.File().FileName()) {
+			if len(location) > 0 && isDefaultLibraryFile(info.File().FileName().AsString()) {
 				location = diagnosticsLocationPattern.ReplaceAllString(location, "$1:--:--")
 			}
 			errLines = append(errLines, fmt.Sprintf("!!! related TS%d%s: %s", info.Code(), location, diagnosticwriter.FlattenDiagnosticMessage(info, harnessNewLine, locale.Default)))
@@ -135,7 +135,7 @@ func iterateErrorBaseline[T diagnosticwriter.Diagnostic](t *testing.T, inputFile
 		// Similarly for tsconfig, which may be in the input files and contain errors.
 		// 'totalErrorsReportedInNonLibraryNonTsconfigFiles + numLibraryDiagnostics + numTsconfigDiagnostics, diagnostics.length
 
-		if diag.File() == nil || !isDefaultLibraryFile(diag.File().FileName()) && !isTsConfigFile(diag.File().FileName()) {
+		if diag.File() == nil || !isDefaultLibraryFile(diag.File().FileName().AsString()) && !isTsConfigFile(diag.File().FileName().AsString()) {
 			totalErrorsReportedInNonLibraryNonTsconfigFiles++
 		}
 	}
@@ -163,7 +163,11 @@ func iterateErrorBaseline[T diagnosticwriter.Diagnostic](t *testing.T, inputFile
 		// Filter down to the errors in the file
 		fileErrors := core.Filter(diagnostics, func(e T) bool {
 			return e.File() != nil &&
-				tspath.ComparePaths(removeTestPathPrefixes(e.File().FileName(), false), removeTestPathPrefixes(inputFile.UnitName, false), tspath.ComparePathsOptions{}) == 0
+				tspath.ComparePaths(
+					removeTestPathPrefixes(e.File().FileName().AsString(), false),
+					removeTestPathPrefixes(inputFile.UnitName, false),
+					tspath.CaseInsensitive,
+				) == 0
 		})
 
 		// Header
@@ -243,13 +247,13 @@ func iterateErrorBaseline[T diagnosticwriter.Diagnostic](t *testing.T, inputFile
 	numLibraryDiagnostics := core.CountWhere(
 		diagnostics,
 		func(d T) bool {
-			return d.File() != nil && (isDefaultLibraryFile(d.File().FileName()) || isBuiltFile(d.File().FileName()))
+			return d.File() != nil && (isDefaultLibraryFile(d.File().FileName().AsString()) || isBuiltFile(d.File().FileName().AsString()))
 		},
 	)
 	numTsconfigDiagnostics := core.CountWhere(
 		diagnostics,
 		func(d T) bool {
-			return d.File() != nil && isTsConfigFile(d.File().FileName())
+			return d.File() != nil && isTsConfigFile(d.File().FileName().AsString())
 		},
 	)
 	numContentMapperSupplementalDiagnostics := core.CountWhere(

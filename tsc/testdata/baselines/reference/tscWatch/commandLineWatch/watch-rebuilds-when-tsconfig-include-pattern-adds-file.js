@@ -9,14 +9,14 @@ const x = 1;
 	"include": ["*.ts"]
 }
 
-tsgo --watch
+tsc --watch
 ExitStatus:: Success
 Output::
 [2J[3J[H[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
-//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -50,7 +50,7 @@ Directory watches::
   /home/src/workspaces/project
 tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *refresh*    /home/src/workspaces/project/index.ts
 Signatures::
 

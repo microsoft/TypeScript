@@ -1,0 +1,141 @@
+//// [tests/cases/compiler/recursiveTypeInferenceReturnTypeConstraint.ts] ////
+
+=== recursiveTypeInferenceReturnTypeConstraint.ts ===
+// A pure return type inference stays filtered by its constraint in a recursive call resolution.
+
+interface Schema<O> { readonly out: O }
+>out : O
+
+type Shape = Record<string, Schema<any>>;
+>Shape : Shape
+
+type Lookup = { x: 1; dflt: 2 };
+>Lookup : Lookup
+>x : 1
+>dflt : 2
+
+declare function object<S extends Shape, P extends keyof Lookup>(shape: S): Schema<{ [K in keyof S]: S[K]["out"] }> & { p: P; q: Lookup[P]; f: (x: P) => void };
+>object : <S extends Shape, P extends keyof Lookup>(shape: S) => Schema<{ [K in keyof S]: S[K]["out"]; }> & { p: P; q: Lookup[P]; f: (x: P) => void; }
+>shape : S
+>p : P
+>q : Lookup[P]
+>f : (x: P) => void
+>x : P
+
+declare const str: Schema<string>;
+>str : Schema<string>
+
+const u = object({ name: str }) satisfies { p: number | "x" };
+>u : Schema<{ name: string; }> & { p: "x"; q: 1; f: (x: "x") => void; }
+>object({ name: str }) satisfies { p: number | "x" } : Schema<{ name: string; }> & { p: "x"; q: 1; f: (x: "x") => void; }
+>object({ name: str }) : Schema<{ name: string; }> & { p: "x"; q: 1; f: (x: "x") => void; }
+>object : <S extends Shape, P extends keyof Lookup>(shape: S) => Schema<{ [K in keyof S]: S[K]["out"]; }> & { p: P; q: Lookup[P]; f: (x: P) => void; }
+>{ name: str } : { name: Schema<string>; }
+>name : Schema<string>
+>str : Schema<string>
+>p : number | "x"
+
+u.f(42); // error
+>u.f(42) : void
+>u.f : (x: "x") => void
+>u : Schema<{ name: string; }> & { p: "x"; q: 1; f: (x: "x") => void; }
+>f : (x: "x") => void
+>42 : 42
+
+const t = object({ name: str, get rec() { return object({ inner: t }); } }) satisfies { p: number | "x" };
+>t : Schema<{ name: string; readonly rec: { inner: any; }; }> & { p: "x"; q: 1; f: (x: "x") => void; }
+>object({ name: str, get rec() { return object({ inner: t }); } }) satisfies { p: number | "x" } : Schema<{ name: string; readonly rec: { inner: any; }; }> & { p: "x"; q: 1; f: (x: "x") => void; }
+>object({ name: str, get rec() { return object({ inner: t }); } }) : Schema<{ name: string; readonly rec: { inner: any; }; }> & { p: "x"; q: 1; f: (x: "x") => void; }
+>object : <S extends Shape, P extends keyof Lookup>(shape: S) => Schema<{ [K in keyof S]: S[K]["out"]; }> & { p: P; q: Lookup[P]; f: (x: P) => void; }
+>{ name: str, get rec() { return object({ inner: t }); } } : { name: Schema<string>; readonly rec: Schema<{ inner: { name: string; readonly rec: any; }; }> & { p: keyof Lookup; q: 1 | 2; f: (x: keyof Lookup) => void; }; }
+>name : Schema<string>
+>str : Schema<string>
+>rec : Schema<{ inner: { name: string; readonly rec: any; }; }> & { p: keyof Lookup; q: 1 | 2; f: (x: keyof Lookup) => void; }
+>object({ inner: t }) : Schema<{ inner: { name: string; readonly rec: any; }; }> & { p: keyof Lookup; q: 1 | 2; f: (x: keyof Lookup) => void; }
+>object : <S extends Shape, P extends keyof Lookup>(shape: S) => Schema<{ [K in keyof S]: S[K]["out"]; }> & { p: P; q: Lookup[P]; f: (x: P) => void; }
+>{ inner: t } : { inner: Schema<{ name: string; readonly rec: { inner: any; }; }> & { p: "x"; q: 1; f: (x: "x") => void; }; }
+>inner : Schema<{ name: string; readonly rec: { inner: any; }; }> & { p: "x"; q: 1; f: (x: "x") => void; }
+>t : Schema<{ name: string; readonly rec: { inner: any; }; }> & { p: "x"; q: 1; f: (x: "x") => void; }
+>p : number | "x"
+
+t.f(42); // error
+>t.f(42) : void
+>t.f : (x: "x") => void
+>t : Schema<{ name: string; readonly rec: { inner: any; }; }> & { p: "x"; q: 1; f: (x: "x") => void; }
+>f : (x: "x") => void
+>42 : 42
+
+const tq: 1 = t.q;
+>tq : 1
+>t.q : 1
+>t : Schema<{ name: string; readonly rec: { inner: any; }; }> & { p: "x"; q: 1; f: (x: "x") => void; }
+>q : 1
+
+const a = object({ name: str, get r() { return b; } }) satisfies { p: number | "x" };
+>a : Schema<{ name: string; readonly r: { name: string; readonly r: any; }; }> & { p: "x"; q: 1; f: (x: "x") => void; }
+>object({ name: str, get r() { return b; } }) satisfies { p: number | "x" } : Schema<{ name: string; readonly r: { name: string; readonly r: any; }; }> & { p: "x"; q: 1; f: (x: "x") => void; }
+>object({ name: str, get r() { return b; } }) : Schema<{ name: string; readonly r: { name: string; readonly r: any; }; }> & { p: "x"; q: 1; f: (x: "x") => void; }
+>object : <S extends Shape, P extends keyof Lookup>(shape: S) => Schema<{ [K in keyof S]: S[K]["out"]; }> & { p: P; q: Lookup[P]; f: (x: P) => void; }
+>{ name: str, get r() { return b; } } : { name: Schema<string>; readonly r: Schema<{ name: string; readonly r: { name: string; readonly r: any; }; }> & { p: "x"; q: 1; f: (x: "x") => void; }; }
+>name : Schema<string>
+>str : Schema<string>
+>r : Schema<{ name: string; readonly r: { name: string; readonly r: any; }; }> & { p: "x"; q: 1; f: (x: "x") => void; }
+>b : Schema<{ name: string; readonly r: { name: string; readonly r: any; }; }> & { p: "x"; q: 1; f: (x: "x") => void; }
+>p : number | "x"
+
+const b = object({ name: str, get r() { return a; } }) satisfies { p: number | "x" };
+>b : Schema<{ name: string; readonly r: { name: string; readonly r: any; }; }> & { p: "x"; q: 1; f: (x: "x") => void; }
+>object({ name: str, get r() { return a; } }) satisfies { p: number | "x" } : Schema<{ name: string; readonly r: { name: string; readonly r: any; }; }> & { p: "x"; q: 1; f: (x: "x") => void; }
+>object({ name: str, get r() { return a; } }) : Schema<{ name: string; readonly r: { name: string; readonly r: any; }; }> & { p: "x"; q: 1; f: (x: "x") => void; }
+>object : <S extends Shape, P extends keyof Lookup>(shape: S) => Schema<{ [K in keyof S]: S[K]["out"]; }> & { p: P; q: Lookup[P]; f: (x: P) => void; }
+>{ name: str, get r() { return a; } } : { name: Schema<string>; readonly r: Schema<{ name: string; readonly r: { name: string; readonly r: any; }; }> & { p: "x"; q: 1; f: (x: "x") => void; }; }
+>name : Schema<string>
+>str : Schema<string>
+>r : Schema<{ name: string; readonly r: { name: string; readonly r: any; }; }> & { p: "x"; q: 1; f: (x: "x") => void; }
+>a : Schema<{ name: string; readonly r: { name: string; readonly r: any; }; }> & { p: "x"; q: 1; f: (x: "x") => void; }
+>p : number | "x"
+
+const aq: 1 = a.q;
+>aq : 1
+>a.q : 1
+>a : Schema<{ name: string; readonly r: { name: string; readonly r: any; }; }> & { p: "x"; q: 1; f: (x: "x") => void; }
+>q : 1
+
+const bq: 1 = b.q;
+>bq : 1
+>b.q : 1
+>b : Schema<{ name: string; readonly r: { name: string; readonly r: any; }; }> & { p: "x"; q: 1; f: (x: "x") => void; }
+>q : 1
+
+declare function pick(x: { p: "x" }): Schema<"picked-x">;
+>pick : { (x: { p: "x"; }): Schema<"picked-x">; (x: { p: number | "x"; }): Schema<"picked-wide">; }
+>x : { p: "x"; }
+>p : "x"
+
+declare function pick(x: { p: number | "x" }): Schema<"picked-wide">;
+>pick : { (x: { p: "x"; }): Schema<"picked-x">; (x: { p: number | "x"; }): Schema<"picked-wide">; }
+>x : { p: number | "x"; }
+>p : number | "x"
+
+const s = object({ name: str, get rec() { return pick(s); } }) satisfies { p: number | "x" };
+>s : Schema<{ name: string; readonly rec: "picked-x"; }> & { p: "x"; q: 1; f: (x: "x") => void; }
+>object({ name: str, get rec() { return pick(s); } }) satisfies { p: number | "x" } : Schema<{ name: string; readonly rec: "picked-x"; }> & { p: "x"; q: 1; f: (x: "x") => void; }
+>object({ name: str, get rec() { return pick(s); } }) : Schema<{ name: string; readonly rec: "picked-x"; }> & { p: "x"; q: 1; f: (x: "x") => void; }
+>object : <S extends Shape, P extends keyof Lookup>(shape: S) => Schema<{ [K in keyof S]: S[K]["out"]; }> & { p: P; q: Lookup[P]; f: (x: P) => void; }
+>{ name: str, get rec() { return pick(s); } } : { name: Schema<string>; readonly rec: Schema<"picked-x">; }
+>name : Schema<string>
+>str : Schema<string>
+>rec : Schema<"picked-x">
+>pick(s) : Schema<"picked-x">
+>pick : { (x: { p: "x"; }): Schema<"picked-x">; (x: { p: number | "x"; }): Schema<"picked-wide">; }
+>s : Schema<{ name: string; readonly rec: "picked-x"; }> & { p: "x"; q: 1; f: (x: "x") => void; }
+>p : number | "x"
+
+const sk: "picked-x" = pick(s).out;
+>sk : "picked-x"
+>pick(s).out : "picked-x"
+>pick(s) : Schema<"picked-x">
+>pick : { (x: { p: "x"; }): Schema<"picked-x">; (x: { p: number | "x"; }): Schema<"picked-wide">; }
+>s : Schema<{ name: string; readonly rec: "picked-x"; }> & { p: "x"; q: 1; f: (x: "x") => void; }
+>out : "picked-x"
+

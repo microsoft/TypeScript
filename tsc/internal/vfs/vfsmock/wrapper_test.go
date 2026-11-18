@@ -4,6 +4,7 @@ import (
 	"reflect"
 	"testing"
 
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
 	"gotest.tools/v3/assert"
 )
@@ -11,7 +12,7 @@ import (
 func TestWrap(t *testing.T) {
 	t.Parallel()
 
-	wrapper := Wrap(vfstest.FromMap(map[string]string{}, true))
+	wrapper := Wrap(vfstest.FromMap(map[string]string{}, tspath.CaseSensitive))
 
 	wrapperValue := reflect.ValueOf(wrapper).Elem()
 	wrapperType := wrapperValue.Type()

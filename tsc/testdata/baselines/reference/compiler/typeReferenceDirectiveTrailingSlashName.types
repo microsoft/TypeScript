@@ -1,0 +1,13 @@
+//// [tests/cases/compiler/typeReferenceDirectiveTrailingSlashName.ts] ////
+
+=== /a.ts ===
+fromDirectory;
+>fromDirectory : number
+
+fromFile;
+>fromFile : any
+
+=== /typings/package/index.d.ts ===
+declare const fromDirectory: number;
+>fromDirectory : number
+

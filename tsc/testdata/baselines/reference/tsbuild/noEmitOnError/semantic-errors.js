@@ -21,7 +21,7 @@ export { }
     },
 }
 
-tsgo -b -v
+tsc -b -v
 ExitStatus:: DiagnosticsPresent_OutputsSkipped
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -39,7 +39,7 @@ Output::
 
 Found 1 error in src/main.ts[90m:2[0m
 
-//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -93,7 +93,7 @@ declare const console: { log(msg: any): void; };
 
 tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *refresh*    /user/username/projects/noEmitOnError/shared/types/db.ts
 *refresh*    /user/username/projects/noEmitOnError/src/main.ts
 *refresh*    /user/username/projects/noEmitOnError/src/other.ts
@@ -102,7 +102,7 @@ Signatures::
 
 Edit [0]:: no change
 
-tsgo -b -v
+tsc -b -v
 ExitStatus:: DiagnosticsPresent_OutputsSkipped
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -125,7 +125,7 @@ Found 1 error in src/main.ts[90m:2[0m
 
 tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *refresh*    /user/username/projects/noEmitOnError/shared/types/db.ts
 *refresh*    /user/username/projects/noEmitOnError/src/main.ts
 *refresh*    /user/username/projects/noEmitOnError/src/other.ts
@@ -137,7 +137,7 @@ Edit [1]:: Fix error
 import { A } from "../shared/types/db";
 const a: string = "hello";
 
-tsgo -b -v
+tsc -b -v
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -188,7 +188,7 @@ export {};
 
 tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
 *refresh*    /user/username/projects/noEmitOnError/shared/types/db.ts
 *refresh*    /user/username/projects/noEmitOnError/src/main.ts
 *refresh*    /user/username/projects/noEmitOnError/src/other.ts
@@ -197,7 +197,7 @@ Signatures::
 
 Edit [2]:: no change
 
-tsgo -b -v
+tsc -b -v
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 

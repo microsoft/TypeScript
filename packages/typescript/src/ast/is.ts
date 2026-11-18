@@ -1,11 +1,11 @@
 // is.ts — Hand-written type guard functions
 // Generated guards are in is.generated.ts
 
-import { ModifierFlags } from "#enums/modifierFlags";
-import { NodeFlags } from "#enums/nodeFlags";
-import { OuterExpressionKinds } from "#enums/outerExpressionKinds";
-import { ScriptKind } from "#enums/scriptKind";
-import { SyntaxKind } from "#enums/syntaxKind";
+import { ModifierFlags } from "../../enums/modifierFlags.js";
+import { NodeFlags } from "../../enums/nodeFlags.js";
+import { OuterExpressionKinds } from "../../enums/outerExpressionKinds.js";
+import { ScriptKind } from "../../enums/scriptKind.js";
+import { SyntaxKind } from "../../enums/syntaxKind.js";
 import type {
     AsExpression,
     BindingPattern,
@@ -52,8 +52,6 @@ import {
     isComputedPropertyName,
     isHeritageClause,
     isIdentifier,
-    isJSDocAugmentsTag,
-    isJSDocImplementsTag,
     isJSDocLink,
     isJSDocLinkCode,
     isJSDocLinkPlain,
@@ -371,9 +369,7 @@ function isInExpressionContext(node: Node): boolean {
 
 function isPartOfTypeExpressionWithTypeArguments(node: ExpressionWithTypeArguments): boolean {
     const parent = node.parent;
-    return isHeritageClause(parent) && (!isClassLikeDeclaration(parent.parent) || parent.token === SyntaxKind.ImplementsKeyword) ||
-        isJSDocImplementsTag(parent) ||
-        isJSDocAugmentsTag(parent);
+    return isHeritageClause(parent) && (!isClassLikeDeclaration(parent.parent) || parent.token === SyntaxKind.ImplementsKeyword);
 }
 
 function isForStatementExpression(node: Node, parent: ForStatement): boolean {
@@ -449,7 +445,6 @@ function isLeftHandSideExpressionKind(kind: SyntaxKind): boolean {
         case SyntaxKind.ExpressionWithTypeArguments:
         case SyntaxKind.MetaProperty:
         case SyntaxKind.ImportKeyword: // technically this is only an Expression if it's in a CallExpression
-        case SyntaxKind.MissingDeclaration:
             return true;
         default:
             return false;

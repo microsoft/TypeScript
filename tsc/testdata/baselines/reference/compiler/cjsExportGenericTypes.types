@@ -2,8 +2,8 @@
 
 === index.js ===
 const Set = require("./set");
->Set : typeof SomeGenericClass
->require("./set") : typeof SomeGenericClass
+>Set : typeof Set
+>require("./set") : typeof Set
 >require : any
 >"./set" : "./set"
 

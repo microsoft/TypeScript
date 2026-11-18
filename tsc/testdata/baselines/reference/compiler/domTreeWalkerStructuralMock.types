@@ -1,0 +1,47 @@
+//// [tests/cases/compiler/domTreeWalkerStructuralMock.ts] ////
+
+=== domTreeWalkerStructuralMock.ts ===
+declare class Walker implements TreeWalker {
+>Walker : Walker
+
+    currentNode: Node;
+>currentNode : Node
+
+    readonly filter: NodeFilter | null;
+>filter : NodeFilter | null
+
+    readonly root: Node;
+>root : Node
+
+    readonly whatToShow: number;
+>whatToShow : number
+
+    firstChild(): Node | null;
+>firstChild : () => Node | null
+
+    lastChild(): Node | null;
+>lastChild : () => Node | null
+
+    nextNode(): Node | null;
+>nextNode : () => Node | null
+
+    nextSibling(): Node | null;
+>nextSibling : () => Node | null
+
+    parentNode(): Node | null;
+>parentNode : () => Node | null
+
+    previousNode(): Node | null;
+>previousNode : () => Node | null
+
+    previousSibling(): Node | null;
+>previousSibling : () => Node | null
+}
+
+declare const walker: Walker;
+>walker : Walker
+
+const result: TreeWalker = walker;
+>result : TreeWalker
+>walker : Walker
+

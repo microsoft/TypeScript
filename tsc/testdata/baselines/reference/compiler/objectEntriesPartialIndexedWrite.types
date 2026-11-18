@@ -1,0 +1,40 @@
+//// [tests/cases/compiler/objectEntriesPartialIndexedWrite.ts] ////
+
+=== objectEntriesPartialIndexedWrite.ts ===
+type Row = { amount: number } & Record<string, string>;
+>Row : Row
+>amount : number
+
+export function copy(row: Row, mapping: { amount: string; notes: string }) {
+>copy : (row: Row, mapping: { amount: string; notes: string; }) => Partial<Row>
+>row : Row
+>mapping : { amount: string; notes: string; }
+>amount : string
+>notes : string
+
+    const result: Partial<Row> = {};
+>result : Partial<Row>
+>{} : {}
+
+    for (const [field, target] of Object.entries(mapping)) {
+>field : string
+>target : string
+>Object.entries(mapping) : [string, string][]
+>Object.entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
+>Object : ObjectConstructor
+>entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
+>mapping : { amount: string; notes: string; }
+
+        result[field] = row[target];
+>result[field] = row[target] : string
+>result[field] : string
+>result : Partial<Row>
+>field : string
+>row[target] : string
+>row : Row
+>target : string
+    }
+    return result;
+>result : Partial<Row>
+}
+

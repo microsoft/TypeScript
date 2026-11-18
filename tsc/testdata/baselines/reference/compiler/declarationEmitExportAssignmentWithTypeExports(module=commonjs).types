@@ -1,0 +1,100 @@
+//// [tests/cases/compiler/declarationEmitExportAssignmentWithTypeExports.ts] ////
+
+=== route.d.ts ===
+export type Schema = { value: number };
+>Schema : Schema
+>value : number
+
+declare class Route<T> {
+>Route : Route<T>
+
+    private parts;
+>parts : any
+
+    protected typeHints: unknown;
+>typeHints : unknown
+
+    readonly schema: T;
+>schema : T
+
+    constructor(schema: T);
+>schema : T
+}
+export = Route;
+>Route : Route<T>
+
+=== defaultImport.ts ===
+import Route, { Schema } from "./route";
+>Route : typeof Route
+>Schema : any
+
+export const route = new Route<Schema>({ value: 0 });
+>route : Route<Schema>
+>new Route<Schema>({ value: 0 }) : Route<Schema>
+>Route : typeof Route
+>{ value: 0 } : { value: number; }
+>value : number
+>0 : 0
+
+export const constructor = Route;
+>constructor : typeof Route
+>Route : typeof Route
+
+export function createRoute() {
+>createRoute : () => Route<{ value: string; }>
+
+    return new Route({ value: "" });
+>new Route({ value: "" }) : Route<{ value: string; }>
+>Route : typeof Route
+>{ value: "" } : { value: string; }
+>value : string
+>"" : ""
+}
+
+=== namedDefaultImport.ts ===
+import { default as Route, Schema } from "./route";
+>default : typeof Route
+>Route : typeof Route
+>Schema : any
+
+export const route = new Route<Schema>({ value: 0 });
+>route : Route<Schema>
+>new Route<Schema>({ value: 0 }) : Route<Schema>
+>Route : typeof Route
+>{ value: 0 } : { value: number; }
+>value : number
+>0 : 0
+
+=== importEquals.ts ===
+import Route = require("./route");
+>Route : typeof Route
+
+export const route = new Route<Route.Schema>({ value: 0 });
+>route : Route<Route.Schema>
+>new Route<Route.Schema>({ value: 0 }) : Route<Route.Schema>
+>Route : typeof Route
+>Route : any
+>{ value: 0 } : { value: number; }
+>value : number
+>0 : 0
+
+=== reexport.ts ===
+export { default } from "./route";
+>default : typeof Route
+
+export type { Schema } from "./route";
+>Schema : import("./route").Schema
+
+=== reexportImport.ts ===
+import Route, { Schema } from "./reexport";
+>Route : typeof Route
+>Schema : any
+
+export const route = new Route<Schema>({ value: 0 });
+>route : Route<Schema>
+>new Route<Schema>({ value: 0 }) : Route<Schema>
+>Route : typeof Route
+>{ value: 0 } : { value: number; }
+>value : number
+>0 : 0
+

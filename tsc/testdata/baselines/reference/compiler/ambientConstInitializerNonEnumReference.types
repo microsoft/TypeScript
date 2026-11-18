@@ -1,0 +1,64 @@
+//// [tests/cases/compiler/ambientConstInitializerNonEnumReference.ts] ////
+
+=== a.d.ts ===
+declare enum E { A = 1, B = "b" }
+>E : E
+>A : E.A
+>1 : 1
+>B : E.B
+>"b" : "b"
+
+declare namespace NS { const v: 1; }
+>NS : typeof NS
+>v : 1
+
+declare const obj: { readonly x: 1 };
+>obj : { readonly x: 1; }
+>x : 1
+
+declare const e1 = E.A;
+>e1 : E.A
+>E.A : E.A
+>E : typeof E
+>A : E.A
+
+declare const e2 = E["B"];
+>e2 : E.B
+>E["B"] : E.B
+>E : typeof E
+>"B" : "B"
+
+declare const n1 = NS.v;
+>n1 : 1
+>NS.v : 1
+>NS : typeof NS
+>v : 1
+
+declare const n2 = NS["v"];
+>n2 : 1
+>NS["v"] : 1
+>NS : typeof NS
+>"v" : "v"
+
+declare const o1 = obj.x;
+>o1 : 1
+>obj.x : 1
+>obj : { readonly x: 1; }
+>x : 1
+
+declare class C {
+>C : C
+
+    static readonly r1 = E.A;
+>r1 : E.A
+>E.A : E.A
+>E : typeof E
+>A : E.A
+
+    static readonly r2 = NS.v;
+>r2 : 1
+>NS.v : 1
+>NS : typeof NS
+>v : 1
+}
+
