@@ -1206,7 +1206,7 @@ func (s *Server) handleRequestOrNotification(ctx context.Context, req *lsproto.R
 			idStr = " (" + req.ID.String() + ")"
 		}
 		if err != nil {
-			if resp, ok := contentMapperFallbackResponse(req.Method, err); ok {
+			if resp, ok := contentMapperFallbackResponse(req.Method, req.Params, err); ok {
 				if !s.logger.IsTracing() {
 					s.logger.Info("handled method '", req.Method, "'", idStr, " in ", time.Since(start))
 				}
@@ -1249,7 +1249,7 @@ func (s *Server) handleRequestOrNotification(ctx context.Context, req *lsproto.R
 // unknown file types not handled by any content mapper. This typically serves a
 // short window in time between when the server has unregistered content mapper
 // extensions and when the client has stopped sending requests for those file types.
-func contentMapperFallbackResponse(method lsproto.Method, err error) (any, bool) {
+func contentMapperFallbackResponse(method lsproto.Method, params any, err error) (any, bool) {
 	if !errors.Is(err, project.ErrNoProjectForUnknownScriptKind) {
 		return nil, false
 	}
@@ -1260,6 +1260,8 @@ func contentMapperFallbackResponse(method lsproto.Method, err error) (any, bool)
 				Items: []*lsproto.Diagnostic{},
 			},
 		}, true
+	case lsproto.MethodCompletionItemResolve:
+		return params, true
 	case lsproto.MethodTextDocumentHover,
 		lsproto.MethodTextDocumentSignatureHelp,
 		lsproto.MethodTextDocumentDefinition,
@@ -1268,7 +1270,23 @@ func contentMapperFallbackResponse(method lsproto.Method, err error) (any, bool)
 		lsproto.MethodTextDocumentReferences,
 		lsproto.MethodTextDocumentDocumentHighlight,
 		lsproto.MethodTextDocumentCompletion,
-		lsproto.MethodTextDocumentRename:
+		lsproto.MethodTextDocumentRename,
+		lsproto.MethodTextDocumentCodeAction,
+		lsproto.MethodTextDocumentSemanticTokensFull,
+		lsproto.MethodTextDocumentSemanticTokensRange,
+		lsproto.MethodTextDocumentDocumentSymbol,
+		lsproto.MethodTextDocumentFoldingRange,
+		lsproto.MethodTextDocumentSelectionRange,
+		lsproto.MethodTextDocumentInlayHint,
+		lsproto.MethodTextDocumentCodeLens,
+		lsproto.MethodTextDocumentFormatting,
+		lsproto.MethodTextDocumentRangeFormatting,
+		lsproto.MethodTextDocumentOnTypeFormatting,
+		lsproto.MethodTextDocumentLinkedEditingRange,
+		lsproto.MethodTextDocumentPrepareCallHierarchy,
+		lsproto.MethodTextDocumentPrepareRename,
+		lsproto.MethodCallHierarchyIncomingCalls,
+		lsproto.MethodCallHierarchyOutgoingCalls:
 		return lsproto.Null{}, true
 	default:
 		return nil, false
