@@ -45,6 +45,7 @@ import type {
     KeywordSyntaxKind,
     MethodDeclaration,
     MethodSignatureDeclaration,
+    Modifier,
     ModifierSyntaxKind,
     ModuleDeclaration,
     ParameterDeclaration,
@@ -214,6 +215,8 @@ export interface Node extends ReadonlyTextRange {
     getChildren(sourceFile?: SourceFile): readonly Node[];
     getFirstToken(sourceFile?: SourceFile): Node | undefined;
     getLastToken(sourceFile?: SourceFile): Node | undefined;
+    /** Gets syntactic modifiers without decorators, or `undefined` if there are none. */
+    getModifiers(): readonly Modifier[] | undefined;
 }
 
 export interface FileReference extends TextRange {

@@ -103,6 +103,36 @@ test("canHaveModifiers includes the reparsed import kind in its narrowed type", 
     }
 });
 
+test("Node.getModifiers excludes decorators on parsed, synthesized, and cloned nodes", () => {
+    using api = spawnAPI();
+    const source = api.createSourceFile(
+        "/nodeModifiers.ts",
+        "@dec export class C { @dec public static method() {} } @dec class Decorated {} class Plain {}",
+    ).sourceFile;
+    const declaration = source.statements[0];
+    assert.ok(astModule.isClassDeclaration(declaration));
+    const node: Node = declaration;
+    const modifiers: readonly astModule.Modifier[] | undefined = node.getModifiers();
+    assert.deepStrictEqual(modifiers?.map(modifier => modifier.kind), [SyntaxKind.ExportKeyword]);
+    assert.deepStrictEqual(
+        declaration.members[0].getModifiers()?.map(modifier => modifier.kind),
+        [SyntaxKind.PublicKeyword, SyntaxKind.StaticKeyword],
+    );
+    assert.strictEqual(source.statements[1].getModifiers(), undefined);
+    assert.strictEqual(source.statements[2].getModifiers(), undefined);
+    assert.strictEqual(source.getModifiers(), undefined);
+    const synthesized = factory.createClassDeclaration(declaration.modifiers, declaration.name, undefined, undefined, []);
+    assert.deepStrictEqual(synthesized.getModifiers()?.map(modifier => modifier.kind), [SyntaxKind.ExportKeyword]);
+    assert.deepStrictEqual(cloneNode(synthesized).getModifiers()?.map(modifier => modifier.kind), [SyntaxKind.ExportKeyword]);
+    assert.strictEqual(factory.createClassDeclaration([], undefined, undefined, undefined, []).getModifiers(), undefined);
+    const recovery = factory.createMissingDeclaration([
+        factory.createDecorator(factory.createIdentifier("dec")),
+        factory.createToken(SyntaxKind.ExportKeyword),
+    ]);
+    assert.strictEqual(astModule.canHaveModifiers(recovery), false);
+    assert.deepStrictEqual(recovery.getModifiers()?.map(modifier => modifier.kind), [SyntaxKind.ExportKeyword]);
+});
+
 test("hasRestParameter handles syntax, JSDoc signatures, and empty parameter lists", () => {
     using api = spawnAPI();
     const source = api.createSourceFile(

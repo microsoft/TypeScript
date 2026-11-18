@@ -5,12 +5,14 @@ import {
     getFirstToken,
     getLastToken,
     getTokenPosOfNode,
+    type Modifier,
     ModifierFlags,
     type Node,
     type NodeArray,
     type SourceFile,
     SyntaxKind,
 } from "../../ast/index.ts";
+import { getModifiers } from "../../ast/modifiers.ts";
 import {
     modifierToFlag,
     NODE_CHILD_MASK,
@@ -960,6 +962,10 @@ export class RemoteNode extends RemoteNodeBase implements Node {
     }
 
     // ═══ Generated extended data property getters ═══
+
+    getModifiers(): readonly Modifier[] | undefined {
+        return getModifiers(this as unknown as Node);
+    }
 
     // ═══ Other property getters ═══
 

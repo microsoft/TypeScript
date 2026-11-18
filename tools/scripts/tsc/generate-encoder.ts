@@ -1486,11 +1486,13 @@ function emitNodeGeneratedImports(w: CodeWriter) {
     w.write(`    getLastToken,`);
     w.write(`    getTokenPosOfNode,`);
     w.write(`    ModifierFlags,`);
+    w.write(`    type Modifier,`);
     w.write(`    type Node,`);
     w.write(`    type NodeArray,`);
     w.write(`    type SourceFile,`);
     w.write(`    SyntaxKind,`);
     w.write(`} from "../../ast/index.ts";`);
+    w.write(`import { getModifiers } from "../../ast/modifiers.ts";`);
     w.write(`import {`);
     w.write(`    childProperties,`);
     w.write(`    KIND_NODE_LIST,`);
@@ -2028,6 +2030,10 @@ function emitExtendedDataGetters(w: CodeWriter) {
 }
 
 function emitRemoteNodeClassClose(w: CodeWriter) {
+    w.write(`    getModifiers(): readonly Modifier[] | undefined {`);
+    w.write(`        return getModifiers(this as unknown as Node);`);
+    w.write(`    }`);
+    w.write(``);
     w.write(`    // ═══ Other property getters ═══`);
     w.write(``);
     w.write(`    get flags(): number {`);

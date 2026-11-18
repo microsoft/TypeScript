@@ -1,5 +1,17 @@
 import { ModifierFlags } from "../../enums/modifierFlags.js";
 import { SyntaxKind } from "../../enums/syntaxKind.js";
+import type {
+    Modifier,
+    ModifierLike,
+    Node,
+} from "./ast.ts";
+import { isModifier } from "./is.generated.ts";
+
+/** @internal */
+export function getModifiers(node: Node & { readonly modifiers?: readonly ModifierLike[] | undefined; }): readonly Modifier[] | undefined {
+    const modifiers = node.modifiers?.filter(isModifier);
+    return modifiers?.length ? modifiers : undefined;
+}
 
 export function modifierToFlag(kind: SyntaxKind): ModifierFlags {
     switch (kind) {
