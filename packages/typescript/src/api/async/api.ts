@@ -23,6 +23,7 @@ import {
     type __String,
     type CallLikeExpression,
     type Declaration,
+    type EntityName,
     type Expression,
     type FileReference,
     type Identifier,
@@ -2893,6 +2894,19 @@ export class Checker {
         });
         if (!binaryData) return undefined;
         return decodeNode(binaryData) as Node;
+    }
+
+    async symbolToEntityName(symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): Promise<EntityName | undefined> {
+        const binaryData = await this.client.apiRequestBinary("symbolToEntityName", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            symbol: symbol.reference,
+            meaning,
+            location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+            flags,
+        });
+        if (!binaryData) return undefined;
+        return decodeNode(binaryData) as EntityName;
     }
 
     /** Formats a call or construct signature, using the signature's own kind. */

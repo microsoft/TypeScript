@@ -8799,6 +8799,24 @@ export const obj = { m: 1, s: "hi", b: true };
         assert.equal(project.checker.signatureToString(construct), "new (x: number): object");
     });
 
+    test("symbolToEntityName returns a qualified, printable name", () => {
+        const source = `namespace N { export interface Item {} } let item: N.Item;`;
+        using api = spawnAPI({ "/tsconfig.json": "{}", "/main.ts": source });
+        const snapshot = api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const file = project.program.getSourceFile("/main.ts");
+        assert.ok(file);
+        const symbol = project.checker.getSymbolAtPosition("/main.ts", source.indexOf("Item"));
+        assert.ok(symbol);
+        const name = project.checker.symbolToEntityName(symbol, SymbolFlags.Type, file);
+        assert.ok(name);
+        assert.equal(name.kind, SyntaxKind.QualifiedName);
+        assert.equal(api.printer.printNode(name), "N.Item");
+        const unqualified = project.checker.symbolToEntityName(symbol, SymbolFlags.Type);
+        assert.ok(unqualified);
+        assert.equal(api.printer.printNode(unqualified), "Item");
+    });
+
     test("typeToString", () => {
         using api = spawnAPI(emitterFiles);
 

@@ -153,6 +153,7 @@ export interface APIMethodInfo {
     signatureToSignatureDeclaration: APIMethod<SignatureToSignatureDeclarationParams, SourceFileResponse | null>;
     typeToString: APIMethod<TypeToTypeNodeParams, unknown>;
     symbolToString: APIMethod<SymbolToStringParams, string>;
+    symbolToEntityName: APIMethod<SymbolToNodeParams, SourceFileResponse | null>;
     signatureToString: APIMethod<SignatureToStringParams, string>;
     isContextSensitive: APIMethod<GetContextualTypeParams, boolean>;
     getReturnTypeOfSignature: APIMethod<GetSignaturePropertyParams, TypeResponse>;
@@ -949,6 +950,15 @@ export interface SymbolToStringParams {
     flags?: number | undefined;
 }
 
+export interface SymbolToNodeParams {
+    snapshot: number;
+    project: number;
+    symbol: SymbolReference;
+    meaning: number;
+    location?: string | undefined;
+    flags?: number | undefined;
+}
+
 export interface SignatureToStringParams {
     snapshot: number;
     project: number;
@@ -1417,6 +1427,7 @@ export interface BatchRequest {
         | "signatureToString"
         | "startCPUProfile"
         | "stopCPUProfile"
+        | "symbolToEntityName"
         | "symbolToString"
         | "transpileDeclaration"
         | "transpileDeclarationFromFile"
@@ -1614,6 +1625,7 @@ export interface BatchResponse {
         | "signatureToString"
         | "startCPUProfile"
         | "stopCPUProfile"
+        | "symbolToEntityName"
         | "symbolToString"
         | "transpileDeclaration"
         | "transpileDeclarationFromFile"

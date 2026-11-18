@@ -42,6 +42,7 @@ import {
     type __String,
     type CallLikeExpression,
     type Declaration,
+    type EntityName,
     type Expression,
     type FileReference,
     type Identifier,
@@ -5732,6 +5733,43 @@ export class Checker {
                 );
                 if (!binaryData) return undefined;
                 return decodeNode(binaryData) as Node;
+            },
+        );
+    }
+
+    get symbolToEntityName(): {
+        (symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): EntityName | undefined;
+        gen(symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): Generator<ProtocolRequest, EntityName | undefined, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "symbolToEntityName",
+            function (symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): EntityName | undefined {
+                const binaryData = owner.client.apiRequestBinary("symbolToEntityName", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    symbol: symbol.reference,
+                    meaning,
+                    location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+                    flags,
+                });
+                if (!binaryData) return undefined;
+                return decodeNode(binaryData) as EntityName;
+            },
+            function* (symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): Generator<ProtocolRequest, EntityName | undefined, ProtocolResponse["result"]> {
+                const binaryData = sourceFileResponseToUint8Array(
+                    yield* apiRequest("symbolToEntityName", {
+                        snapshot: owner.snapshotId,
+                        project: owner.project.handle,
+                        symbol: symbol.reference,
+                        meaning,
+                        location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+                        flags,
+                    }),
+                );
+                if (!binaryData) return undefined;
+                return decodeNode(binaryData) as EntityName;
             },
         );
     }
