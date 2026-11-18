@@ -34,6 +34,13 @@ export function finiteArray() {
     return null as unknown as Nested;
 }
 
+//// [expanding.ts]
+// Each level is a new instantiation, so printing it stops at a bounded depth.
+type G<T> = T extends unknown ? (T | G<[T]>)[] : never;
+declare const g: G<"x">;
+export const h = g;
+export const n: number = g;
+
 
 //// [local.js]
 export function array() {
@@ -57,6 +64,9 @@ export function finite() {
 export function finiteArray() {
     return null;
 }
+//// [expanding.js]
+export const h = g;
+export const n = g;
 
 
 //// [nameable.d.ts]
