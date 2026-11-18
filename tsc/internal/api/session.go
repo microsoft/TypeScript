@@ -1075,6 +1075,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetContextualType(ctx, parsed.(*GetContextualTypeParams))
 	case string(MethodIsOptionalParameter):
 		return s.handleIsOptionalParameter(ctx, parsed.(*CheckerNodeParams))
+	case string(MethodIsValidPropertyAccess):
+		return s.handleIsValidPropertyAccess(ctx, parsed.(*IsValidPropertyAccessParams))
 	case string(MethodGetContextualTypeForArgument):
 		return s.handleGetContextualTypeForArgument(ctx, parsed.(*GetContextualTypeForArgumentParams))
 	case string(MethodGetAwaitedType):
@@ -3971,6 +3973,25 @@ func (s *Session) handleIsOptionalParameter(ctx context.Context, params *Checker
 		return false, fmt.Errorf("%w: expected a parameter declaration", ErrInvalidRequest)
 	}
 	return setup.checker.IsOptionalParameter(node), nil
+}
+
+func (s *Session) handleIsValidPropertyAccess(ctx context.Context, params *IsValidPropertyAccessParams) (bool, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return false, err
+	}
+	defer setup.done()
+
+	node, err := setup.sd.resolveNodeHandle(setup.program, params.Location)
+	if err != nil {
+		return false, err
+	}
+	switch node.Kind {
+	case ast.KindPropertyAccessExpression, ast.KindQualifiedName, ast.KindImportType:
+		return setup.checker.IsValidPropertyAccess(node, params.PropertyName), nil
+	default:
+		return false, fmt.Errorf("%w: expected a property access, qualified name, or import type", ErrInvalidRequest)
+	}
 }
 
 func (s *Session) handleIsArrayLikeType(ctx context.Context, params *IsArrayLikeTypeParams) (bool, error) {

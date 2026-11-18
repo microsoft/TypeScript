@@ -129,6 +129,7 @@ export interface APIMethodInfo {
     getThisParameterOfSignature: APIMethod<GetSignaturePropertyParams, SymbolResponse | null>;
     getTargetOfSignature: APIMethod<GetSignaturePropertyParams, SignatureResponse | null>;
     isOptionalParameter: APIMethod<CheckerNodeParams, boolean>;
+    isValidPropertyAccess: APIMethod<IsValidPropertyAccessParams, boolean>;
     getContextualType: APIMethod<GetContextualTypeParams, TypeResponse | null>;
     getContextualTypeForArgument: APIMethod<GetContextualTypeForArgumentParams, TypeResponse | null>;
     getAwaitedType: APIMethod<CheckerTypeParams, TypeResponse | null>;
@@ -806,6 +807,13 @@ export interface CheckerNodeParams {
     location: string;
 }
 
+export interface IsValidPropertyAccessParams {
+    snapshot: number;
+    project: number;
+    location: string;
+    propertyName: string;
+}
+
 /** GetContextualTypeParams returns the contextual type for a node. */
 export interface GetContextualTypeParams {
     snapshot: number;
@@ -1383,6 +1391,7 @@ export interface BatchRequest {
         | "isOptionalParameter"
         | "isReadonlySymbol"
         | "isTypeAssignableTo"
+        | "isValidPropertyAccess"
         | "parseCommandLine"
         | "parseConfigFile"
         | "parseConfigFileTextToJson"
@@ -1579,6 +1588,7 @@ export interface BatchResponse {
         | "isOptionalParameter"
         | "isReadonlySymbol"
         | "isTypeAssignableTo"
+        | "isValidPropertyAccess"
         | "parseCommandLine"
         | "parseConfigFile"
         | "parseConfigFileTextToJson"

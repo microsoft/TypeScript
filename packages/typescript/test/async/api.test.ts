@@ -42,6 +42,7 @@ import {
     NodeFlags,
     type ParameterDeclaration,
     type PathKey,
+    type PropertyAccessExpression,
     type RootedFilePath,
     type SourceFile,
     SyntaxKind,
@@ -170,6 +171,39 @@ import {
 } from "./api.testUtils.ts";
 
 const concurrency = areTestsFiltered();
+
+describe("Checker - isValidPropertyAccess", { concurrency }, () => {
+    test("checks existence and private/protected accessibility without changing the accessed name", async () => {
+        await using api = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/index.ts": `
+class C {
+    public visible = 1;
+    private secret = 2;
+    protected inherited = 3;
+    method() { this.visible; }
+}
+new C().visible;
+declare const anything: any;
+anything.unknown;
+`,
+        });
+        const snapshot = await api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const file = await project.program.getSourceFile("/index.ts");
+        assert.ok(file);
+        const accesses: PropertyAccessExpression[] = [];
+        file.forEachChild(function visit(node) {
+            if (isPropertyAccessExpression(node)) accesses.push(node);
+            node.forEachChild(visit);
+        });
+        assert.equal(accesses.length, 3);
+        for (const name of ["visible", "secret", "inherited", "missing"]) {
+            const results = await Promise.all(accesses.map(node => project.checker.isValidPropertyAccess(node, name)));
+            assert.deepEqual(results, name === "visible" ? [true, true, true] : name === "missing" ? [false, false, true] : [true, false, true]);
+        }
+    });
+});
 
 describe("Checker - isOptionalParameter", { concurrency }, () => {
     test("distinguishes defaults before required parameters and omitted IIFE arguments", async () => {

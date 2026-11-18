@@ -44,12 +44,15 @@ import {
     type Expression,
     type FileReference,
     type Identifier,
+    type ImportTypeNode,
     type IndexSignatureDeclaration,
     ModifierFlags,
     type NamedTupleMember,
     type Node,
     type ParameterDeclaration,
     type PathKey,
+    type PropertyAccessExpression,
+    type QualifiedName,
     type RootedDirectoryPath,
     type RootedFilePath,
     type SourceFile,
@@ -4215,6 +4218,34 @@ function encodeNumberLiteralValue(value: number): number | string {
 }
 
 export class Checker {
+    /** Whether the named property exists and is accessible at this access location. */
+    get isValidPropertyAccess(): {
+        (node: PropertyAccessExpression | QualifiedName | ImportTypeNode, propertyName: string): boolean;
+        gen(node: PropertyAccessExpression | QualifiedName | ImportTypeNode, propertyName: string): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "isValidPropertyAccess",
+            function (node: PropertyAccessExpression | QualifiedName | ImportTypeNode, propertyName: string): boolean {
+                return owner.client.apiRequest("isValidPropertyAccess", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    location: getNodeRequestHandle(node),
+                    propertyName,
+                });
+            },
+            function* (node: PropertyAccessExpression | QualifiedName | ImportTypeNode, propertyName: string): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]> {
+                return yield* apiRequest("isValidPropertyAccess", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    location: getNodeRequestHandle(node),
+                    propertyName,
+                });
+            },
+        );
+    }
+
     /** Whether a parameter may be omitted, including defaults and untyped IIFE parameters. */
     get isOptionalParameter(): {
         (node: ParameterDeclaration): boolean;

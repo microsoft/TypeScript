@@ -25,12 +25,15 @@ import {
     type Expression,
     type FileReference,
     type Identifier,
+    type ImportTypeNode,
     type IndexSignatureDeclaration,
     ModifierFlags,
     type NamedTupleMember,
     type Node,
     type ParameterDeclaration,
     type PathKey,
+    type PropertyAccessExpression,
+    type QualifiedName,
     type RootedDirectoryPath,
     type RootedFilePath,
     type SourceFile,
@@ -2331,6 +2334,16 @@ function encodeNumberLiteralValue(value: number): number | string {
 }
 
 export class Checker {
+    /** Whether the named property exists and is accessible at this access location. */
+    async isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName | ImportTypeNode, propertyName: string): Promise<boolean> {
+        return this.client.apiRequest("isValidPropertyAccess", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            location: getNodeRequestHandle(node),
+            propertyName,
+        });
+    }
+
     /** Whether a parameter may be omitted, including defaults and untyped IIFE parameters. */
     async isOptionalParameter(node: ParameterDeclaration): Promise<boolean> {
         return this.client.apiRequest("isOptionalParameter", {
