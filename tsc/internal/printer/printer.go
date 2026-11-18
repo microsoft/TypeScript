@@ -3312,8 +3312,6 @@ func (p *Printer) emitExpression(node *ast.Expression, precedence ast.OperatorPr
 		p.emitMetaProperty(node.AsMetaProperty())
 	case ast.KindSyntheticExpression:
 		panic("SyntheticExpression should never be printed.")
-	case ast.KindMissingDeclaration:
-		// Missing declarations do not emit an expression.
 
 	// JSX
 	case ast.KindJsxElement:
