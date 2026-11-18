@@ -560,8 +560,7 @@ func (e *emitNode) copyFrom(source *emitNode) {
 // identifier in an entity name or property access, as in C<string>.x, or in
 // place of a signature's type parameters, as in <string>(value: string). They
 // may include type parameter declarations, as in
-// C<out T extends string = "a">.prototype. The syntax tree keeps only valid
-// children, so declaration emit and API consumers never see these.
+// C<out T extends string = "a">.prototype.
 func (c *EmitContext) DisplayTypeArguments(node *ast.Node) *ast.NodeList {
 	return c.display[node]
 }
