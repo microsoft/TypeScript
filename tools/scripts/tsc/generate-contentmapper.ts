@@ -28,6 +28,7 @@ interface Schema {
     maximum?: number;
     minItems?: number;
     maxItems?: number;
+    title?: string;
 }
 
 export interface SchemaDocument {
@@ -115,7 +116,10 @@ export function generateContentMapper(document: SchemaDocument): string {
         "",
         "package contentmapper",
         "",
-        'import "github.com/microsoft/TypeScript/tsc/internal/json"',
+        "import (",
+        '\t"fmt"',
+        '\t"github.com/microsoft/TypeScript/tsc/internal/json"',
+        ")",
         "",
         "// Content mapper protocol method names.",
         "const (",
@@ -209,16 +213,58 @@ export function generateContentMapper(document: SchemaDocument): string {
                 );
                 lines.push(`type ${name} []int32`);
             }
-            else if (name === "MappedDiagnosticDirective") {
-                assert(schema.description?.startsWith("[originalStart, originalLength, virtualStart, virtualEnd, policy, unusedExpectDirectiveIndex?]"), `Unsupported ${name} tuple order`);
-                const names = ["OriginalStart", "OriginalLength", "VirtualStart", "VirtualEnd", "Policy", "UnusedExpectDirectiveIndex"];
+            else if (schema.items.every(item => item.title)) {
+                const names = schema.items.map(item => goName(item.title!));
+                assert(schema.title, `Missing ${name} tuple title`);
+                const label = schema.title[0].toLowerCase() + schema.title.slice(1);
+                assert(schema.maxItems - schema.minItems === 1, `Unsupported ${name} tuple optional fields`);
                 assert(schema.items.every((item, index) => index === 4 ? item.$ref === "#/definitions/DiagnosticDirectivePolicy" : item.type === "integer"), `Unsupported ${name} tuple items`);
                 lines.push(`type ${name} struct {`);
                 for (const [index, item] of schema.items.entries()) {
-                    lines.push(...fieldDescription(names[index], item, definitions).map(line => `\t${line}`));
-                    lines.push(`\t${names[index]} ${index >= schema.minItems ? "*" : ""}${goType(item, definitions)}`);
+                    const field = names[index];
+                    lines.push(...fieldDescription(field, item, definitions).map(line => `\t${line}`));
+                    lines.push(`\t${field} ${index >= schema.minItems ? "*" : ""}${goType(item, definitions)}`);
                 }
-                lines.push("}");
+                lines.push(
+                    "}",
+                    "",
+                    "var (",
+                    `\t_ json.MarshalerTo     = ${name}{}`,
+                    `\t_ json.UnmarshalerFrom = (*${name})(nil)`,
+                    ")",
+                    "",
+                    `func (d ${name}) MarshalJSONTo(enc *json.Encoder) error {`,
+                    `\ttuple := []any{${names.slice(0, schema.minItems).map(field => `d.${field}`).join(", ")}}`,
+                    `\tif d.${names[schema.minItems]} != nil {`,
+                    `\t\ttuple = append(tuple, *d.${names[schema.minItems]})`,
+                    "\t}",
+                    "\treturn json.MarshalEncode(enc, tuple)",
+                    "}",
+                    "",
+                    `func (d *${name}) UnmarshalJSONFrom(dec *json.Decoder) error {`,
+                    "\tvar tuple []json.Value",
+                    "\tif err := json.UnmarshalDecode(dec, &tuple); err != nil {",
+                    "\t\treturn err",
+                    "\t}",
+                    `\tif len(tuple) != ${schema.minItems} && len(tuple) != ${schema.maxItems} {`,
+                    `\t\treturn fmt.Errorf(${JSON.stringify(`${label} tuple must contain ${schema.minItems} or ${schema.maxItems} elements, got %d`)}, len(tuple))`,
+                    "\t}",
+                    `\t*d = ${name}{}`,
+                    `\tfields := []any{${names.slice(0, schema.minItems).map(field => `&d.${field}`).join(", ")}}`,
+                    "\tfor i, field := range fields {",
+                    "\t\tif err := json.Unmarshal(tuple[i], field); err != nil {",
+                    `\t\t\treturn fmt.Errorf(${JSON.stringify(`invalid ${label} tuple element %d: %w`)}, i, err)`,
+                    "\t\t}",
+                    "\t}",
+                    `\tif len(tuple) == ${schema.maxItems} {`,
+                    `\t\td.${names[schema.minItems]} = new(${goType(schema.items[schema.minItems], definitions)})`,
+                    `\t\tif err := json.Unmarshal(tuple[${schema.minItems}], d.${names[schema.minItems]}); err != nil {`,
+                    `\t\t\treturn fmt.Errorf(${JSON.stringify(`invalid ${label} tuple element ${schema.minItems}: %w`)}, err)`,
+                    "\t\t}",
+                    "\t}",
+                    "\treturn nil",
+                    "}",
+                );
             }
             else {
                 throw new Error(`Unsupported ${name} tuple`);

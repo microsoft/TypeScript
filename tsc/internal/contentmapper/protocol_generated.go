@@ -2,7 +2,11 @@
 
 package contentmapper
 
-import "github.com/microsoft/TypeScript/tsc/internal/json"
+import (
+	"fmt"
+
+	"github.com/microsoft/TypeScript/tsc/internal/json"
+)
 
 // Content mapper protocol method names.
 const (
@@ -135,6 +139,43 @@ type MappedDiagnosticDirective struct {
 	Policy DiagnosticDirectivePolicy
 	// UnusedExpectDirectiveIndex is the index into unusedExpectDirectiveDiagnostics, used by expect directives.
 	UnusedExpectDirectiveIndex *int
+}
+
+var (
+	_ json.MarshalerTo     = MappedDiagnosticDirective{}
+	_ json.UnmarshalerFrom = (*MappedDiagnosticDirective)(nil)
+)
+
+func (d MappedDiagnosticDirective) MarshalJSONTo(enc *json.Encoder) error {
+	tuple := []any{d.OriginalStart, d.OriginalLength, d.VirtualStart, d.VirtualEnd, d.Policy}
+	if d.UnusedExpectDirectiveIndex != nil {
+		tuple = append(tuple, *d.UnusedExpectDirectiveIndex)
+	}
+	return json.MarshalEncode(enc, tuple)
+}
+
+func (d *MappedDiagnosticDirective) UnmarshalJSONFrom(dec *json.Decoder) error {
+	var tuple []json.Value
+	if err := json.UnmarshalDecode(dec, &tuple); err != nil {
+		return err
+	}
+	if len(tuple) != 5 && len(tuple) != 6 {
+		return fmt.Errorf("diagnostic directive tuple must contain 5 or 6 elements, got %d", len(tuple))
+	}
+	*d = MappedDiagnosticDirective{}
+	fields := []any{&d.OriginalStart, &d.OriginalLength, &d.VirtualStart, &d.VirtualEnd, &d.Policy}
+	for i, field := range fields {
+		if err := json.Unmarshal(tuple[i], field); err != nil {
+			return fmt.Errorf("invalid diagnostic directive tuple element %d: %w", i, err)
+		}
+	}
+	if len(tuple) == 6 {
+		d.UnusedExpectDirectiveIndex = new(int)
+		if err := json.Unmarshal(tuple[5], d.UnusedExpectDirectiveIndex); err != nil {
+			return fmt.Errorf("invalid diagnostic directive tuple element 5: %w", err)
+		}
+	}
+	return nil
 }
 
 type SupplementalOutput struct {

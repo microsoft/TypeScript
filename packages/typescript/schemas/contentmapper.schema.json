@@ -290,31 +290,38 @@
         "MappedDiagnosticDirective": {
             "type": "array",
             "description": "[originalStart, originalLength, virtualStart, virtualEnd, policy, unusedExpectDirectiveIndex?]. Expect directives require a valid original range. An omitted index selects the only shared unused-expect diagnostic and requires exactly one such diagnostic.",
+            "title": "Diagnostic directive",
             "items": [
                 {
                     "type": "integer",
+                    "title": "originalStart",
                     "description": "Original start offset. It is ignored for ignore directives if the original range is invalid."
                 },
                 {
                     "type": "integer",
+                    "title": "originalLength",
                     "description": "Original span length. It is ignored for ignore directives if the original range is invalid."
                 },
                 {
                     "type": "integer",
                     "minimum": 0,
+                    "title": "virtualStart",
                     "description": "Inclusive virtual start offset."
                 },
                 {
                     "type": "integer",
                     "minimum": 0,
+                    "title": "virtualEnd",
                     "description": "Exclusive virtual end offset, which must not precede the start."
                 },
                 {
-                    "$ref": "#/definitions/DiagnosticDirectivePolicy"
+                    "$ref": "#/definitions/DiagnosticDirectivePolicy",
+                    "title": "policy"
                 },
                 {
                     "type": "integer",
                     "minimum": 0,
+                    "title": "unusedExpectDirectiveIndex",
                     "description": "Index into unusedExpectDirectiveDiagnostics, used by expect directives."
                 }
             ],
