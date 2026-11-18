@@ -19,6 +19,7 @@ import {
     type Identifier,
     InternalSymbolName,
     isArrayLiteralExpression,
+    isBinaryExpression,
     isCallExpression,
     isClassDeclaration,
     isConstructorDeclaration,
@@ -183,6 +184,80 @@ import {
 } from "./api.testUtils.ts";
 
 const concurrency = areTestsFiltered();
+
+describe("Checker - getSymbolOfExpando", { concurrency }, () => {
+    test("recognizes const-like function initializers and optionally function declarations", () => {
+        using api = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/index.ts": `
+const arrow = () => {};
+const expression = function () {};
+let mutable = () => {};
+const object = {};
+function declaration() {}
+`,
+        });
+        const snapshot = api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const file = project.program.getSourceFile("/index.ts");
+        assert.ok(file);
+        const results: (string | undefined)[] = [];
+        for (const statement of file.statements) {
+            if (isVariableStatement(statement)) {
+                const declaration = statement.declarationList.declarations[0];
+                assert.ok(declaration.initializer);
+                const symbol = project.checker.getSymbolOfExpando(declaration.initializer);
+                results.push(symbol?.name);
+                if (symbol) assert.strictEqual(symbol, project.checker.getSymbolAtLocation(declaration.name));
+            }
+            else {
+                assert.ok(isFunctionDeclaration(statement));
+                assert.equal(project.checker.getSymbolOfExpando(statement), undefined);
+                const symbol = project.checker.getSymbolOfExpando(statement, true);
+                assert.strictEqual(symbol, project.checker.getSymbolOfDeclaration(statement));
+            }
+        }
+        assert.deepEqual(results, ["arrow", "expression", undefined, undefined]);
+    });
+
+    test("recognizes JavaScript class/object initializers and assignment declarations", () => {
+        using api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { allowJs: true } }),
+            "/index.js": `
+var fn = function () {};
+var cls = class {};
+var empty = {};
+var populated = { value: 1 };
+/** @type {{}} */
+var annotated = {};
+exports.assigned = function () {};
+`,
+        });
+        const snapshot = api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const file = project.program.getSourceFile("/index.js");
+        assert.ok(file);
+        const results: (string | undefined)[] = [];
+        for (const statement of file.statements) {
+            if (isVariableStatement(statement)) {
+                const node = statement.declarationList.declarations[0].initializer;
+                assert.ok(node);
+                results.push((project.checker.getSymbolOfExpando(node))?.name);
+            }
+            else {
+                assert.ok(isExpressionStatement(statement));
+                const node = statement.expression;
+                assert.ok(isBinaryExpression(node));
+                const symbol = project.checker.getSymbolOfExpando(node.right);
+                assert.ok(symbol);
+                assert.equal(symbol.name, "assigned");
+                assert.equal(project.checker.getSymbolOfExpando(node.left), undefined);
+                assert.strictEqual(project.checker.getSymbolOfExpando(node.left, true), symbol);
+            }
+        }
+        assert.deepEqual(results, ["fn", "cls", "empty", undefined, undefined]);
+    });
+});
 
 describe("Checker - getRootSymbols", { concurrency }, () => {
     test("follows synthetic union and mapped properties to their original declarations", () => {

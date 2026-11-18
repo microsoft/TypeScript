@@ -4220,6 +4220,40 @@ function encodeNumberLiteralValue(value: number): number | string {
 }
 
 export class Checker {
+    /**
+     * Find the symbol initialized by a function/arrow expression, or by a class or
+     * unannotated empty object literal in JavaScript. TypeScript variables must be const-like.
+     * With `allowDeclaration`, also accept function declarations and assignment declaration sides.
+     */
+    get getSymbolOfExpando(): {
+        (node: Node, allowDeclaration?: boolean): Symbol | undefined;
+        gen(node: Node, allowDeclaration?: boolean): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getSymbolOfExpando",
+            function (node: Node, allowDeclaration: boolean = false): Symbol | undefined {
+                const data = owner.client.apiRequest("getSymbolOfExpando", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    location: getNodeRequestHandle(node),
+                    allowDeclaration,
+                });
+                return data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined;
+            },
+            function* (node: Node, allowDeclaration: boolean = false): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]> {
+                const data = yield* apiRequest("getSymbolOfExpando", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    location: getNodeRequestHandle(node),
+                    allowDeclaration,
+                });
+                return data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined;
+            },
+        );
+    }
+
     /** Get the original symbols underlying a synthetic, instantiated, or mapped property. */
     get getRootSymbols(): {
         (symbol: Symbol): readonly Symbol[];

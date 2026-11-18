@@ -185,6 +185,7 @@ export interface APIMethodInfo {
     getTargetSymbol: APIMethod<CheckerSymbolParams, SymbolResponse>;
     getMergedSymbol: APIMethod<CheckerSymbolParams, SymbolResponse>;
     getRootSymbols: APIMethod<CheckerSymbolParams, SymbolResponse[]>;
+    getSymbolOfExpando: APIMethod<GetSymbolOfExpandoParams, SymbolResponse | null>;
     getSymbolOfNode: APIMethod<CheckerNodeParams, SymbolResponse | null>;
     getSymbolOfDeclarationForChecker: APIMethod<CheckerNodeParams, SymbolResponse | null>;
     getParentOfSymbolForChecker: APIMethod<CheckerSymbolParams, SymbolResponse | null>;
@@ -1019,6 +1020,13 @@ export interface CheckerSymbolParams {
     symbol: SymbolReference;
 }
 
+export interface GetSymbolOfExpandoParams {
+    snapshot: number;
+    project: number;
+    location: string;
+    allowDeclaration: boolean;
+}
+
 /** GetMemberInModuleExportsParams are parameters for getMemberInModuleExports. */
 export interface GetMemberInModuleExportsParams {
     snapshot: number;
@@ -1355,6 +1363,7 @@ export interface BatchRequest {
         | "getSymbolAtPosition"
         | "getSymbolOfDeclaration"
         | "getSymbolOfDeclarationForChecker"
+        | "getSymbolOfExpando"
         | "getSymbolOfNode"
         | "getSymbolOfSourceFile"
         | "getSymbolOfType"
@@ -1556,6 +1565,7 @@ export interface BatchResponse {
         | "getSymbolAtPosition"
         | "getSymbolOfDeclaration"
         | "getSymbolOfDeclarationForChecker"
+        | "getSymbolOfExpando"
         | "getSymbolOfNode"
         | "getSymbolOfSourceFile"
         | "getSymbolOfType"

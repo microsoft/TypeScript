@@ -2336,6 +2336,21 @@ function encodeNumberLiteralValue(value: number): number | string {
 }
 
 export class Checker {
+    /**
+     * Find the symbol initialized by a function/arrow expression, or by a class or
+     * unannotated empty object literal in JavaScript. TypeScript variables must be const-like.
+     * With `allowDeclaration`, also accept function declarations and assignment declaration sides.
+     */
+    async getSymbolOfExpando(node: Node, allowDeclaration: boolean = false): Promise<Symbol | undefined> {
+        const data = await this.client.apiRequest("getSymbolOfExpando", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            location: getNodeRequestHandle(node),
+            allowDeclaration,
+        });
+        return data ? this.objectRegistry.getOrCreateSymbol(data) : undefined;
+    }
+
     /** Get the original symbols underlying a synthetic, instantiated, or mapped property. */
     async getRootSymbols(symbol: Symbol): Promise<readonly Symbol[]> {
         const data = await this.client.apiRequest("getRootSymbols", {

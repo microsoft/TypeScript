@@ -162,6 +162,34 @@ func (c *Checker) IsOptionalParameter(node *ast.Node) bool {
 	return c.isOptionalParameter(node)
 }
 
+// GetSymbolOfExpando finds the declaration whose initializer can acquire expando properties.
+// With allowDeclaration, it also accepts the declaration side of assignments and function declarations.
+func (c *Checker) GetSymbolOfExpando(node *ast.Node, allowDeclaration bool) *ast.Symbol {
+	parent := node.Parent
+	if parent == nil {
+		return nil
+	}
+	var declaration *ast.Node
+	switch {
+	case ast.IsVariableDeclaration(parent) && parent.Initializer() == node:
+		if !ast.IsInJSFile(node) && !(ast.IsVarConstLike(parent) && ast.IsFunctionLikeDeclaration(node)) {
+			return nil
+		}
+		declaration = parent
+	case ast.IsBinaryExpression(parent):
+		binary := parent.AsBinaryExpression()
+		if binary.OperatorToken.Kind == ast.KindEqualsToken && (allowDeclaration || binary.Right == node) {
+			declaration = parent
+		}
+	case allowDeclaration && ast.IsFunctionDeclaration(node):
+		declaration = node
+	}
+	if declaration == nil || !allowDeclaration && !ast.IsExpandoInitializer(declaration, node) {
+		return nil
+	}
+	return c.getSymbolOfNode(declaration)
+}
+
 func (c *Checker) GetTypeArgumentsForResolvedSignature(signature *Signature) []*Type {
 	if signature.mapper == nil {
 		return nil

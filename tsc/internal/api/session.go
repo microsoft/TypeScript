@@ -1187,6 +1187,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetMergedSymbol(ctx, parsed.(*CheckerSymbolParams))
 	case string(MethodGetRootSymbols):
 		return s.handleGetRootSymbols(ctx, parsed.(*CheckerSymbolParams))
+	case string(MethodGetSymbolOfExpando):
+		return s.handleGetSymbolOfExpando(ctx, parsed.(*GetSymbolOfExpandoParams))
 	case string(MethodGetSymbolOfNode):
 		return s.handleGetSymbolOfNode(ctx, parsed.(*CheckerNodeParams))
 	case string(MethodGetSymbolOfDeclarationForChecker):
@@ -3981,6 +3983,25 @@ func (s *Session) handleIsOptionalParameter(ctx context.Context, params *Checker
 		return false, fmt.Errorf("%w: expected a parameter declaration", ErrInvalidRequest)
 	}
 	return setup.checker.IsOptionalParameter(node), nil
+}
+
+// @gen-proto-nullable
+func (s *Session) handleGetSymbolOfExpando(ctx context.Context, params *GetSymbolOfExpandoParams) (*SymbolResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	node, err := setup.sd.resolveNodeHandle(setup.program, params.Location)
+	if err != nil {
+		return nil, err
+	}
+	symbol := setup.checker.GetSymbolOfExpando(node, params.AllowDeclaration)
+	if symbol == nil {
+		return nil, nil
+	}
+	return setup.newSymbolResponse(symbol), nil
 }
 
 func (s *Session) handleGetRootSymbols(ctx context.Context, params *CheckerSymbolParams) ([]*SymbolResponse, error) {

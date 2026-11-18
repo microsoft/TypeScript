@@ -224,6 +224,7 @@ const (
 	MethodGetTargetSymbol                            Method = "getTargetSymbol"
 	MethodGetMergedSymbol                            Method = "getMergedSymbol"
 	MethodGetRootSymbols                             Method = "getRootSymbols"
+	MethodGetSymbolOfExpando                         Method = "getSymbolOfExpando"
 	MethodGetSymbolOfNode                            Method = "getSymbolOfNode"
 	MethodGetSymbolOfDeclarationForChecker           Method = "getSymbolOfDeclarationForChecker"
 	MethodGetParentOfSymbolForChecker                Method = "getParentOfSymbolForChecker"
@@ -765,6 +766,7 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodGetTargetSymbol:                            unmarshallerFor[CheckerSymbolParams],
 	MethodGetMergedSymbol:                            unmarshallerFor[CheckerSymbolParams],
 	MethodGetRootSymbols:                             unmarshallerFor[CheckerSymbolParams],
+	MethodGetSymbolOfExpando:                         unmarshallerFor[GetSymbolOfExpandoParams],
 	MethodGetSymbolOfNode:                            unmarshallerFor[CheckerNodeParams],
 	MethodGetSymbolOfDeclarationForChecker:           unmarshallerFor[CheckerNodeParams],
 	MethodGetParentOfSymbolForChecker:                unmarshallerFor[CheckerSymbolParams],
@@ -1963,6 +1965,13 @@ type CheckerNodeParams struct {
 	Snapshot SnapshotID     `json:"snapshot"`
 	Project  project.Handle `json:"project"`
 	Location NodeHandle     `json:"location"`
+}
+
+type GetSymbolOfExpandoParams struct {
+	Snapshot         SnapshotID     `json:"snapshot"`
+	Project          project.Handle `json:"project"`
+	Location         NodeHandle     `json:"location"`
+	AllowDeclaration bool           `json:"allowDeclaration"`
 }
 
 type IsValidPropertyAccessParams struct {
