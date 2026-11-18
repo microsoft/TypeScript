@@ -17,16 +17,16 @@ class A {
 >target : typeof A
     }
     static c = function () { return new.target; }
->c : () => any
->function () { return new.target; } : () => any
->new.target : () => any
->target : () => any
+>c : () => (typeof A)["c"]
+>function () { return new.target; } : () => (typeof A)["c"]
+>new.target : () => (typeof A)["c"]
+>target : () => (typeof A)["c"]
 
     d = function () { return new.target; }
->d : () => any
->function () { return new.target; } : () => any
->new.target : () => any
->target : () => any
+>d : () => A["d"]
+>function () { return new.target; } : () => A["d"]
+>new.target : () => A["d"]
+>target : () => A["d"]
 }
 
 class B extends A {
@@ -83,14 +83,14 @@ const f2 = function () {
 }
 
 const O = {
->O : { k: () => () => any; }
->{    k: function () { return new.target; }} : { k: () => () => any; }
+>O : { k: () => (typeof O)["k"]; }
+>{    k: function () { return new.target; }} : { k: () => (typeof O)["k"]; }
 
     k: function () { return new.target; }
->k : () => any
->function () { return new.target; } : () => any
->new.target : () => any
->target : () => any
+>k : () => (typeof O)["k"]
+>function () { return new.target; } : () => (typeof O)["k"]
+>new.target : () => (typeof O)["k"]
+>target : () => (typeof O)["k"]
 
 };
 

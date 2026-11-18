@@ -192,17 +192,17 @@ const items = [1, 2, 3];
 >3 : 3
 
 const iterable = {
->iterable : { [Symbol.asyncIterator](): any; next(): Promise<{ done: boolean; value: number; }>; }
->{  [Symbol.asyncIterator]() {    return this;  },  next() {    const value = items[0];    items.shift();    return Promise.resolve({      done: items.length === 0,      value,    });  },} : { [Symbol.asyncIterator](): { [Symbol.asyncIterator](): any; next(): Promise<{ done: boolean; value: number; }>; }; next(): Promise<{ done: boolean; value: number; }>; }
+>iterable : { [Symbol.asyncIterator](): typeof iterable; next(): Promise<{ done: boolean; value: number; }>; }
+>{  [Symbol.asyncIterator]() {    return this;  },  next() {    const value = items[0];    items.shift();    return Promise.resolve({      done: items.length === 0,      value,    });  },} : { [Symbol.asyncIterator](): typeof iterable; next(): Promise<{ done: boolean; value: number; }>; }
 
   [Symbol.asyncIterator]() {
->[Symbol.asyncIterator] : () => { [Symbol.asyncIterator](): any; next(): Promise<{ done: boolean; value: number; }>; }
+>[Symbol.asyncIterator] : () => { [Symbol.asyncIterator](): typeof iterable; next(): Promise<{ done: boolean; value: number; }>; }
 >Symbol.asyncIterator : unique symbol
 >Symbol : SymbolConstructor
 >asyncIterator : unique symbol
 
     return this;
->this : { [Symbol.asyncIterator](): any; next(): Promise<{ done: boolean; value: number; }>; }
+>this : { [Symbol.asyncIterator](): typeof iterable; next(): Promise<{ done: boolean; value: number; }>; }
 
   },
   next() {
@@ -246,7 +246,7 @@ const doubles = mapAsyncIterable(iterable, (x) => x + x);
 >doubles : AsyncGenerator<number, number, void>
 >mapAsyncIterable(iterable, (x) => x + x) : AsyncGenerator<number, number, void>
 >mapAsyncIterable : <T, U, R = undefined>(iterable: AsyncGenerator<T, R, undefined> | AsyncIterable<T, R, undefined>, callback: (value: T) => PromiseOrValue<U>) => AsyncGenerator<U, R, void>
->iterable : { [Symbol.asyncIterator](): any; next(): Promise<{ done: boolean; value: number; }>; }
+>iterable : { [Symbol.asyncIterator](): typeof iterable; next(): Promise<{ done: boolean; value: number; }>; }
 >(x) => x + x : (x: number) => number
 >x : number
 >x + x : number
