@@ -8908,6 +8908,43 @@ export const obj = { m: 1, s: "hi", b: true };
         assert.equal(api.printer.printNode(synthesized), "[x: string]: Array<number>;");
     });
 
+    test("typePredicateToString formats ordinary and assertion predicates", () => {
+        const source = `
+            declare function strings(x: unknown): x is string[];
+            declare function assertValue(x: unknown): asserts x;
+            declare function assertStrings(x: unknown): asserts x is string[];
+            interface Guard { check(): this is Guard; assert(): asserts this; }
+        `;
+        using api = spawnAPI({ "/tsconfig.json": "{}", "/main.ts": source });
+        const snapshot = api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const file = project.program.getSourceFile("/main.ts");
+        assert.ok(file);
+        for (
+            const [name, expected] of [
+                ["strings(", "x is string[]"],
+                ["assertValue(", "asserts x"],
+                ["assertStrings(", "asserts x is string[]"],
+                ["check(", "this is Guard"],
+                ["assert(", "asserts this"],
+            ]
+        ) {
+            const type = project.checker.getTypeAtPosition("/main.ts", source.indexOf(name));
+            assert.ok(type);
+            const [signature] = type.getCallSignatures();
+            assert.ok(signature);
+            const predicate = project.checker.getTypePredicateOfSignature(signature);
+            assert.ok(predicate);
+            assert.equal(project.checker.typePredicateToString(predicate), expected);
+            if (name === "strings(") {
+                assert.equal(
+                    project.checker.typePredicateToString(predicate, file, TypeFormatFlags.WriteArrayAsGenericType),
+                    "x is Array<string>",
+                );
+            }
+        }
+    });
+
     test("typeToString", () => {
         using api = spawnAPI(emitterFiles);
 

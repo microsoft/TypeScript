@@ -1771,6 +1771,10 @@ type TypePredicate struct {
 	t              *Type
 }
 
+func NewTypePredicate(kind TypePredicateKind, parameterName string, parameterIndex int32, t *Type) *TypePredicate {
+	return &TypePredicate{kind: kind, parameterName: parameterName, parameterIndex: parameterIndex, t: t}
+}
+
 func (typePredicate *TypePredicate) Type() *Type {
 	return typePredicate.t
 }

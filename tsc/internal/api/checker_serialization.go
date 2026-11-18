@@ -28,6 +28,40 @@ func (s *Session) encodeCheckerNode(node *ast.Node) (any, error) {
 	return &SourceFileResponse{Data: base64.StdEncoding.EncodeToString(data)}, nil
 }
 
+func (s *Session) handleTypePredicateToString(ctx context.Context, params *TypePredicateToStringParams) (string, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return "", err
+	}
+	defer setup.done()
+	kind := checker.TypePredicateKind(params.Kind)
+	if kind < checker.TypePredicateKindThis || kind > checker.TypePredicateKindAssertsIdentifier {
+		return "", fmt.Errorf("%w: invalid type predicate kind", ErrClientError)
+	}
+	if (kind == checker.TypePredicateKindIdentifier || kind == checker.TypePredicateKindAssertsIdentifier) && params.ParameterName == "" {
+		return "", fmt.Errorf("%w: identifier type predicate requires a parameter name", ErrClientError)
+	}
+	var t *checker.Type
+	if params.Type != 0 {
+		t, err = setup.resolveTypeHandle(params.Type)
+		if err != nil {
+			return "", err
+		}
+	} else if kind == checker.TypePredicateKindThis || kind == checker.TypePredicateKindIdentifier {
+		return "", fmt.Errorf("%w: non-assertion type predicate requires a type", ErrClientError)
+	}
+	location, err := setup.resolveLocation(params.Location, nil, nil)
+	if err != nil {
+		return "", err
+	}
+	flags := checker.TypeFormatFlagsUseAliasDefinedOutsideCurrentScope
+	if params.Flags != nil {
+		flags = checker.TypeFormatFlags(*params.Flags)
+	}
+	predicate := checker.NewTypePredicate(kind, params.ParameterName, params.ParameterIndex, t)
+	return setup.checker.TypePredicateToStringEx(predicate, location, flags), nil
+}
+
 // @gen-proto-result: SourceFileResponse
 // @gen-proto-nullable
 func (s *Session) handleIndexInfoToIndexSignatureDeclaration(ctx context.Context, params *IndexInfoToIndexSignatureDeclarationParams) (any, error) {

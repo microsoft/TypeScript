@@ -9150,6 +9150,43 @@ export const obj = { m: 1, s: "hi", b: true };
         assert.equal(await api.printer.printNode(synthesized), "[x: string]: Array<number>;");
     });
 
+    test("typePredicateToString formats ordinary and assertion predicates", async () => {
+        const source = `
+            declare function strings(x: unknown): x is string[];
+            declare function assertValue(x: unknown): asserts x;
+            declare function assertStrings(x: unknown): asserts x is string[];
+            interface Guard { check(): this is Guard; assert(): asserts this; }
+        `;
+        await using api = spawnAPI({ "/tsconfig.json": "{}", "/main.ts": source });
+        const snapshot = await api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const file = await project.program.getSourceFile("/main.ts");
+        assert.ok(file);
+        for (
+            const [name, expected] of [
+                ["strings(", "x is string[]"],
+                ["assertValue(", "asserts x"],
+                ["assertStrings(", "asserts x is string[]"],
+                ["check(", "this is Guard"],
+                ["assert(", "asserts this"],
+            ]
+        ) {
+            const type = await project.checker.getTypeAtPosition("/main.ts", source.indexOf(name));
+            assert.ok(type);
+            const [signature] = await type.getCallSignatures();
+            assert.ok(signature);
+            const predicate = await project.checker.getTypePredicateOfSignature(signature);
+            assert.ok(predicate);
+            assert.equal(await project.checker.typePredicateToString(predicate), expected);
+            if (name === "strings(") {
+                assert.equal(
+                    await project.checker.typePredicateToString(predicate, file, TypeFormatFlags.WriteArrayAsGenericType),
+                    "x is Array<string>",
+                );
+            }
+        }
+    });
+
     test("typeToString", async () => {
         await using api = spawnAPI(emitterFiles);
 

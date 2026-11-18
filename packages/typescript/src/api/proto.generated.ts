@@ -159,6 +159,7 @@ export interface APIMethodInfo {
     symbolToTypeParameterDeclarations: APIMethod<SymbolToDeclarationParams, SourceFileResponse[] | null>;
     typeParameterToDeclaration: APIMethod<TypeToTypeNodeParams, SourceFileResponse | null>;
     indexInfoToIndexSignatureDeclaration: APIMethod<IndexInfoToIndexSignatureDeclarationParams, SourceFileResponse | null>;
+    typePredicateToString: APIMethod<TypePredicateToStringParams, string>;
     signatureToString: APIMethod<SignatureToStringParams, string>;
     isContextSensitive: APIMethod<GetContextualTypeParams, boolean>;
     getReturnTypeOfSignature: APIMethod<GetSignaturePropertyParams, TypeResponse>;
@@ -983,6 +984,17 @@ export interface IndexInfoToIndexSignatureDeclarationParams {
     flags?: number | undefined;
 }
 
+export interface TypePredicateToStringParams {
+    snapshot: number;
+    project: number;
+    kind: number;
+    parameterName?: string | undefined;
+    parameterIndex?: number | undefined;
+    type?: number | undefined;
+    location?: string | undefined;
+    flags?: number | undefined;
+}
+
 export interface SignatureToStringParams {
     snapshot: number;
     project: number;
@@ -1462,6 +1474,7 @@ export interface BatchRequest {
         | "transpileModule"
         | "transpileModuleFromFile"
         | "typeParameterToDeclaration"
+        | "typePredicateToString"
         | "typeToString"
         | "typeToTypeNode"
         | "updateSnapshot";
@@ -1665,6 +1678,7 @@ export interface BatchResponse {
         | "transpileModule"
         | "transpileModuleFromFile"
         | "typeParameterToDeclaration"
+        | "typePredicateToString"
         | "typeToString"
         | "typeToTypeNode"
         | "updateSnapshot";

@@ -1129,6 +1129,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleTypeParameterToDeclaration(ctx, parsed.(*TypeToTypeNodeParams))
 	case string(MethodIndexInfoToIndexSignatureDeclaration):
 		return s.handleIndexInfoToIndexSignatureDeclaration(ctx, parsed.(*IndexInfoToIndexSignatureDeclarationParams))
+	case string(MethodTypePredicateToString):
+		return s.handleTypePredicateToString(ctx, parsed.(*TypePredicateToStringParams))
 	case string(MethodSignatureToString):
 		return s.handleSignatureToString(ctx, parsed.(*SignatureToStringParams))
 	case string(MethodPrintNode):

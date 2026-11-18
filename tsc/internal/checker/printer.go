@@ -230,6 +230,10 @@ func (c *Checker) typePredicateToString(typePredicate *TypePredicate) string {
 	return c.typePredicateToStringEx(typePredicate, nil, TypeFormatFlagsUseAliasDefinedOutsideCurrentScope)
 }
 
+func (c *Checker) TypePredicateToStringEx(typePredicate *TypePredicate, enclosingDeclaration *ast.Node, flags TypeFormatFlags) string {
+	return c.typePredicateToStringEx(typePredicate, enclosingDeclaration, flags)
+}
+
 func (c *Checker) typePredicateToStringEx(typePredicate *TypePredicate, enclosingDeclaration *ast.Node, flags TypeFormatFlags) string {
 	writer, putWriter := printer.GetSingleLineStringWriter()
 	defer putWriter()

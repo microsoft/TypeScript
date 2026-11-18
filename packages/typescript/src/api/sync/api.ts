@@ -5922,7 +5922,7 @@ export class Checker {
             owner,
             "indexInfoToIndexSignatureDeclaration",
             function (info: IndexInfo, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): IndexSignatureDeclaration | undefined {
-                const declaration = info.declaration?.resolve(owner.project);
+                const declaration = info.declaration ? info.declaration.resolve(owner.project) : undefined;
                 const binaryData = owner.client.apiRequestBinary("indexInfoToIndexSignatureDeclaration", {
                     snapshot: owner.snapshotId,
                     project: owner.project.handle,
@@ -5937,7 +5937,7 @@ export class Checker {
                 return decodeNode(binaryData) as IndexSignatureDeclaration;
             },
             function* (info: IndexInfo, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): Generator<ProtocolRequest, IndexSignatureDeclaration | undefined, ProtocolResponse["result"]> {
-                const declaration = yield* info.declaration?.resolve.gen(owner.project);
+                const declaration = info.declaration ? (yield* info.declaration.resolve.gen(owner.project)) : undefined;
                 const binaryData = sourceFileResponseToUint8Array(
                     yield* apiRequest("indexInfoToIndexSignatureDeclaration", {
                         snapshot: owner.snapshotId,
@@ -5952,6 +5952,41 @@ export class Checker {
                 );
                 if (!binaryData) return undefined;
                 return decodeNode(binaryData) as IndexSignatureDeclaration;
+            },
+        );
+    }
+
+    get typePredicateToString(): {
+        (predicate: TypePredicate, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string;
+        gen(predicate: TypePredicate, enclosingDeclaration?: Node, flags?: TypeFormatFlags): Generator<ProtocolRequest, string, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "typePredicateToString",
+            function (predicate: TypePredicate, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string {
+                return owner.client.apiRequest("typePredicateToString", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    kind: predicate.kind,
+                    parameterName: predicate.parameterName,
+                    parameterIndex: predicate.parameterIndex,
+                    type: predicate.type?.id,
+                    location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+                    flags,
+                });
+            },
+            function* (predicate: TypePredicate, enclosingDeclaration?: Node, flags?: TypeFormatFlags): Generator<ProtocolRequest, string, ProtocolResponse["result"]> {
+                return yield* apiRequest("typePredicateToString", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    kind: predicate.kind,
+                    parameterName: predicate.parameterName,
+                    parameterIndex: predicate.parameterIndex,
+                    type: predicate.type?.id,
+                    location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+                    flags,
+                });
             },
         );
     }

@@ -2974,6 +2974,19 @@ export class Checker {
         return decodeNode(binaryData) as IndexSignatureDeclaration;
     }
 
+    async typePredicateToString(predicate: TypePredicate, enclosingDeclaration?: Node, flags?: TypeFormatFlags): Promise<string> {
+        return this.client.apiRequest("typePredicateToString", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            kind: predicate.kind,
+            parameterName: predicate.parameterName,
+            parameterIndex: predicate.parameterIndex,
+            type: predicate.type?.id,
+            location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+            flags,
+        });
+    }
+
     /** Formats a call or construct signature, using the signature's own kind. */
     async signatureToString(signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags): Promise<string> {
         return this.client.apiRequest("signatureToString", {
