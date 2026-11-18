@@ -127,7 +127,8 @@ function filterOwnedJSDocTags(hostNode: Node, comments: JSDoc[]): (JSDoc | JSDoc
     return result;
 }
 
-function getJSDocParameterTags(param: ParameterDeclaration): JSDocParameterTag[] {
+/** Gets the JSDoc parameter tags that match a parameter declaration. */
+export function getJSDocParameterTags(param: ParameterDeclaration): readonly JSDocParameterTag[] {
     const result: JSDocParameterTag[] = [];
     const name = param.name;
     const parentTags = getJSDocTags(param.parent);

@@ -122,6 +122,49 @@ test("index signatures allow an omitted type", () => {
     assert.strictEqual(declaration.members.length, 2);
 });
 
+describe("JSDoc helpers", { concurrency }, () => {
+    test("getJSDocParameterTags matches identifiers by name", () => {
+        using api = spawnAPI();
+        const source = api.createSourceFile(
+            "/parameters.ts",
+            `/**
+ * @param second the second parameter
+ * @param first the first parameter
+ * @param first another description
+ * @param first.property a nested property
+ */
+function f(first: object, second: string, undocumented: number) {}
+`,
+        ).sourceFile;
+        const declaration = source.statements[0];
+        assert.ok(astModule.isFunctionDeclaration(declaration));
+        const tags = astModule.getJSDocTags(declaration).filter(astModule.isJSDocParameterTag);
+        assert.deepStrictEqual(astModule.getJSDocParameterTags(declaration.parameters[0]), [tags[1], tags[2]]);
+        assert.deepStrictEqual(astModule.getJSDocParameterTags(declaration.parameters[1]), [tags[0]]);
+        assert.deepStrictEqual(astModule.getJSDocParameterTags(declaration.parameters[2]), []);
+    });
+
+    test("getJSDocParameterTags matches binding patterns by position", () => {
+        using api = spawnAPI();
+        const source = api.createSourceFile(
+            "/bindings.js",
+            `/**
+ * @param {string} named a named parameter
+ * @param {object} options an object parameter
+ * @param {Array} entries an array parameter
+ */
+function f(named, { value }, [entry], { undocumented }) {}
+`,
+        ).sourceFile;
+        const declaration = source.statements[0];
+        assert.ok(astModule.isFunctionDeclaration(declaration));
+        const tags = astModule.getJSDocTags(declaration).filter(astModule.isJSDocParameterTag);
+        assert.deepStrictEqual(astModule.getJSDocParameterTags(declaration.parameters[1]), [tags[1]]);
+        assert.deepStrictEqual(astModule.getJSDocParameterTags(declaration.parameters[2]), [tags[2]]);
+        assert.deepStrictEqual(astModule.getJSDocParameterTags(declaration.parameters[3]), []);
+    });
+});
+
 describe("AST property contracts", { concurrency }, () => {
     test("JSDoc signatures expose tags rather than declaration children", () => {
         using api = spawnAPI();
