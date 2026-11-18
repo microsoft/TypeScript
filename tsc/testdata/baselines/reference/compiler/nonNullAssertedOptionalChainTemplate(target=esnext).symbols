@@ -1,0 +1,33 @@
+//// [tests/cases/compiler/nonNullAssertedOptionalChainTemplate.ts] ////
+
+=== nonNullAssertedOptionalChainTemplate.ts ===
+var f: any;
+>f : Symbol(f, Decl(nonNullAssertedOptionalChainTemplate.ts, 0, 3))
+
+f?.x!`text`;
+>f : Symbol(f, Decl(nonNullAssertedOptionalChainTemplate.ts, 0, 3))
+
+f?.x!!`text`;
+>f : Symbol(f, Decl(nonNullAssertedOptionalChainTemplate.ts, 0, 3))
+
+f?.[0]!`text${1}`;
+>f : Symbol(f, Decl(nonNullAssertedOptionalChainTemplate.ts, 0, 3))
+
+f?.()!`text`;
+>f : Symbol(f, Decl(nonNullAssertedOptionalChainTemplate.ts, 0, 3))
+
+f?.x!`text`();
+>f : Symbol(f, Decl(nonNullAssertedOptionalChainTemplate.ts, 0, 3))
+
+f?.x!`text`.x;
+>f : Symbol(f, Decl(nonNullAssertedOptionalChainTemplate.ts, 0, 3))
+
+(f?.x)!`text`;
+>f : Symbol(f, Decl(nonNullAssertedOptionalChainTemplate.ts, 0, 3))
+
+(f?.x!)`text`;
+>f : Symbol(f, Decl(nonNullAssertedOptionalChainTemplate.ts, 0, 3))
+
+f.x!`text`;
+>f : Symbol(f, Decl(nonNullAssertedOptionalChainTemplate.ts, 0, 3))
+
