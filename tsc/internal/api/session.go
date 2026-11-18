@@ -1117,6 +1117,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleTypeToString(ctx, parsed.(*TypeToTypeNodeParams))
 	case string(MethodSymbolToString):
 		return s.handleSymbolToString(ctx, parsed.(*SymbolToStringParams))
+	case string(MethodSignatureToString):
+		return s.handleSignatureToString(ctx, parsed.(*SignatureToStringParams))
 	case string(MethodPrintNode):
 		return s.handlePrintNode(ctx, parsed.(*PrintNodeParams))
 	case string(MethodEmit):
@@ -4148,6 +4150,26 @@ func (s *Session) handleTypeToString(ctx context.Context, params *TypeToTypeNode
 		return setup.checker.TypeToStringEx(t, enclosingDeclaration, checker.TypeFormatFlags(params.Flags), nil), nil
 	}
 	return setup.checker.TypeToStringEx(t, enclosingDeclaration, checker.TypeFormatFlagsAllowUniqueESSymbolType|checker.TypeFormatFlagsUseAliasDefinedOutsideCurrentScope, nil), nil
+}
+
+func (s *Session) handleSignatureToString(ctx context.Context, params *SignatureToStringParams) (string, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return "", err
+	}
+	defer setup.done()
+	signature, err := setup.resolveSignatureHandle(params.Signature)
+	if err != nil {
+		return "", err
+	}
+	var location *ast.Node
+	if params.Location != "" {
+		location, err = setup.sd.resolveNodeHandle(setup.program, params.Location)
+		if err != nil {
+			return "", err
+		}
+	}
+	return setup.checker.SignatureToStringEx(signature, location, checker.TypeFormatFlags(params.Flags), nil), nil
 }
 
 func (s *Session) handleSymbolToString(ctx context.Context, params *SymbolToStringParams) (string, error) {

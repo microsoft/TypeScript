@@ -5736,6 +5736,36 @@ export class Checker {
         );
     }
 
+    /** Formats a call or construct signature, using the signature's own kind. */
+    get signatureToString(): {
+        (signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string;
+        gen(signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags): Generator<ProtocolRequest, string, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "signatureToString",
+            function (signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string {
+                return owner.client.apiRequest("signatureToString", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    signature: signature.id,
+                    location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+                    flags,
+                });
+            },
+            function* (signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags): Generator<ProtocolRequest, string, ProtocolResponse["result"]> {
+                return yield* apiRequest("signatureToString", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    signature: signature.id,
+                    location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+                    flags,
+                });
+            },
+        );
+    }
+
     /** Formats a symbol, optionally qualifying its name relative to an enclosing declaration. */
     get symbolToString(): {
         (symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags): string;

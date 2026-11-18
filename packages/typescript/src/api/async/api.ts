@@ -2895,6 +2895,17 @@ export class Checker {
         return decodeNode(binaryData) as Node;
     }
 
+    /** Formats a call or construct signature, using the signature's own kind. */
+    async signatureToString(signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags): Promise<string> {
+        return this.client.apiRequest("signatureToString", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            signature: signature.id,
+            location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+            flags,
+        });
+    }
+
     /** Formats a symbol, optionally qualifying its name relative to an enclosing declaration. */
     async symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags): Promise<string> {
         return this.client.apiRequest("symbolToString", {

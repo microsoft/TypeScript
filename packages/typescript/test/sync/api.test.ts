@@ -8776,6 +8776,29 @@ export const obj = { m: 1, s: "hi", b: true };
         );
     });
 
+    test("signatureToString formats call and construct signatures", () => {
+        const source = `declare const fn: (x: string) => string[]; declare const ctor: new (x: number) => object;`;
+        using api = spawnAPI({ "/tsconfig.json": "{}", "/main.ts": source });
+        const snapshot = api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const file = project.program.getSourceFile("/main.ts");
+        assert.ok(file);
+        const type = project.checker.getTypeAtPosition("/main.ts", source.indexOf("fn:"));
+        assert.ok(type);
+        const [signature] = type.getCallSignatures();
+        assert.ok(signature);
+        assert.equal(project.checker.signatureToString(signature), "(x: string): string[]");
+        assert.equal(
+            project.checker.signatureToString(signature, file, TypeFormatFlags.WriteArrowStyleSignature),
+            "(x: string) => string[]",
+        );
+        const ctor = project.checker.getTypeAtPosition("/main.ts", source.indexOf("ctor:"));
+        assert.ok(ctor);
+        const [construct] = ctor.getConstructSignatures();
+        assert.ok(construct);
+        assert.equal(project.checker.signatureToString(construct), "new (x: number): object");
+    });
+
     test("typeToString", () => {
         using api = spawnAPI(emitterFiles);
 

@@ -153,6 +153,7 @@ export interface APIMethodInfo {
     signatureToSignatureDeclaration: APIMethod<SignatureToSignatureDeclarationParams, SourceFileResponse | null>;
     typeToString: APIMethod<TypeToTypeNodeParams, unknown>;
     symbolToString: APIMethod<SymbolToStringParams, string>;
+    signatureToString: APIMethod<SignatureToStringParams, string>;
     isContextSensitive: APIMethod<GetContextualTypeParams, boolean>;
     getReturnTypeOfSignature: APIMethod<GetSignaturePropertyParams, TypeResponse>;
     getRestTypeOfSignature: APIMethod<CheckerSignatureParams, TypeResponse>;
@@ -948,6 +949,14 @@ export interface SymbolToStringParams {
     flags?: number | undefined;
 }
 
+export interface SignatureToStringParams {
+    snapshot: number;
+    project: number;
+    signature: number;
+    location?: string | undefined;
+    flags?: number | undefined;
+}
+
 /** CheckerSignatureParams are parameters for checker methods that operate on a signature. */
 export interface CheckerSignatureParams {
     snapshot: number;
@@ -1405,6 +1414,7 @@ export interface BatchRequest {
         | "retainSourceFile"
         | "saveHeapProfile"
         | "signatureToSignatureDeclaration"
+        | "signatureToString"
         | "startCPUProfile"
         | "stopCPUProfile"
         | "symbolToString"
@@ -1601,6 +1611,7 @@ export interface BatchResponse {
         | "retainSourceFile"
         | "saveHeapProfile"
         | "signatureToSignatureDeclaration"
+        | "signatureToString"
         | "startCPUProfile"
         | "stopCPUProfile"
         | "symbolToString"

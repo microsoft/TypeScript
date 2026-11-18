@@ -9018,6 +9018,29 @@ export const obj = { m: 1, s: "hi", b: true };
         );
     });
 
+    test("signatureToString formats call and construct signatures", async () => {
+        const source = `declare const fn: (x: string) => string[]; declare const ctor: new (x: number) => object;`;
+        await using api = spawnAPI({ "/tsconfig.json": "{}", "/main.ts": source });
+        const snapshot = await api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const file = await project.program.getSourceFile("/main.ts");
+        assert.ok(file);
+        const type = await project.checker.getTypeAtPosition("/main.ts", source.indexOf("fn:"));
+        assert.ok(type);
+        const [signature] = await type.getCallSignatures();
+        assert.ok(signature);
+        assert.equal(await project.checker.signatureToString(signature), "(x: string): string[]");
+        assert.equal(
+            await project.checker.signatureToString(signature, file, TypeFormatFlags.WriteArrowStyleSignature),
+            "(x: string) => string[]",
+        );
+        const ctor = await project.checker.getTypeAtPosition("/main.ts", source.indexOf("ctor:"));
+        assert.ok(ctor);
+        const [construct] = await ctor.getConstructSignatures();
+        assert.ok(construct);
+        assert.equal(await project.checker.signatureToString(construct), "new (x: number): object");
+    });
+
     test("typeToString", async () => {
         await using api = spawnAPI(emitterFiles);
 
