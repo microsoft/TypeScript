@@ -1,0 +1,109 @@
+//// [tests/cases/compiler/arrayLiteralIdenticalObjectLiteralsSubtypeReduction.ts] ////
+
+=== /data.json ===
+[
+    { "code": "#f3dc00", "label": "526-G", "name": "Saharagelb" },
+>"code" : Symbol("code", Decl(data.json, 1, 5))
+>"label" : Symbol("label", Decl(data.json, 1, 24))
+>"name" : Symbol("name", Decl(data.json, 1, 42))
+
+    { "code": "#f6ca00", "label": "527-G", "name": "Buttergelb" },
+>"code" : Symbol("code", Decl(data.json, 2, 5))
+>"label" : Symbol("label", Decl(data.json, 2, 24))
+>"name" : Symbol("name", Decl(data.json, 2, 42))
+
+    { "name": "Primelgelb", "label": "504-G", "code": "#ffbe00" },
+>"name" : Symbol("name", Decl(data.json, 3, 5))
+>"label" : Symbol("label", Decl(data.json, 3, 27))
+>"code" : Symbol("code", Decl(data.json, 3, 45))
+
+    { "name": "Rapsgelb", "label": 505, "code": "#ffb000" },
+>"name" : Symbol("name", Decl(data.json, 4, 5))
+>"label" : Symbol("label", Decl(data.json, 4, 25))
+>"code" : Symbol("code", Decl(data.json, 4, 39))
+
+    { "code": "#ff9a00", "label": "506-G", "name": "Maisgelb" },
+>"code" : Symbol("code", Decl(data.json, 5, 5))
+>"label" : Symbol("label", Decl(data.json, 5, 24))
+>"name" : Symbol("name", Decl(data.json, 5, 42))
+
+    { "code": "#ff8200", "label": "507-G", "name": null },
+>"code" : Symbol("code", Decl(data.json, 6, 5))
+>"label" : Symbol("label", Decl(data.json, 6, 24))
+>"name" : Symbol("name", Decl(data.json, 6, 42))
+
+    { "code": "#ff6c00", "label": "508-G", "name": null, "extra": true },
+>"code" : Symbol("code", Decl(data.json, 7, 5))
+>"label" : Symbol("label", Decl(data.json, 7, 24))
+>"name" : Symbol("name", Decl(data.json, 7, 42))
+>"extra" : Symbol("extra", Decl(data.json, 7, 56))
+
+    { "name": "Orangegelb", "label": 509, "code": "#ff5a00" }
+>"name" : Symbol("name", Decl(data.json, 8, 5))
+>"label" : Symbol("label", Decl(data.json, 8, 27))
+>"code" : Symbol("code", Decl(data.json, 8, 41))
+
+]
+
+=== /main.ts ===
+// https://github.com/microsoft/TypeScript/issues/48364
+import data from "./data.json";
+>data : Symbol(data, Decl(main.ts, 1, 6))
+
+export const fromJson = data;
+>fromJson : Symbol(fromJson, Decl(main.ts, 3, 12))
+>data : Symbol(data, Decl(main.ts, 1, 6))
+
+declare const o: { x: number };
+>o : Symbol(o, Decl(main.ts, 5, 13))
+>x : Symbol(x, Decl(main.ts, 5, 18))
+
+declare const n: number;
+>n : Symbol(n, Decl(main.ts, 6, 13))
+
+export const differentOrder = [{ a: 1, b: "" }, { b: "", a: 1 }, { a: 2, b: "x" }];
+>differentOrder : Symbol(differentOrder, Decl(main.ts, 8, 12))
+>a : Symbol(a, Decl(main.ts, 8, 32))
+>b : Symbol(b, Decl(main.ts, 8, 38))
+>b : Symbol(b, Decl(main.ts, 8, 49))
+>a : Symbol(a, Decl(main.ts, 8, 56))
+>a : Symbol(a, Decl(main.ts, 8, 66))
+>b : Symbol(b, Decl(main.ts, 8, 72))
+
+export const optionalProperties = [{ a: 1, b: n > 0 ? "" : undefined }, { a: 2, b: n > 0 ? "x" : undefined }];
+>optionalProperties : Symbol(optionalProperties, Decl(main.ts, 9, 12))
+>a : Symbol(a, Decl(main.ts, 9, 36))
+>b : Symbol(b, Decl(main.ts, 9, 42))
+>n : Symbol(n, Decl(main.ts, 6, 13))
+>undefined : Symbol(undefined)
+>a : Symbol(a, Decl(main.ts, 9, 73))
+>b : Symbol(b, Decl(main.ts, 9, 79))
+>n : Symbol(n, Decl(main.ts, 6, 13))
+>undefined : Symbol(undefined)
+
+export const spreads = [{ ...o }, { ...o }, { ...o, y: "" }];
+>spreads : Symbol(spreads, Decl(main.ts, 10, 12))
+>o : Symbol(o, Decl(main.ts, 5, 13))
+>o : Symbol(o, Decl(main.ts, 5, 13))
+>o : Symbol(o, Decl(main.ts, 5, 13))
+>y : Symbol(y, Decl(main.ts, 10, 51))
+
+export const methods = [{ m() { return 1; } }, { m() { return 2; } }, { m() { return ""; } }];
+>methods : Symbol(methods, Decl(main.ts, 11, 12))
+>m : Symbol(m, Decl(main.ts, 11, 25))
+>m : Symbol(m, Decl(main.ts, 11, 48))
+>m : Symbol(m, Decl(main.ts, 11, 71))
+
+export const accessors = [{ get a() { return 1; } }, { get a() { return 2; } }, { a: 3 }];
+>accessors : Symbol(accessors, Decl(main.ts, 12, 12))
+>a : Symbol(a, Decl(main.ts, 12, 27))
+>a : Symbol(a, Decl(main.ts, 12, 54))
+>a : Symbol(a, Decl(main.ts, 12, 81))
+
+export const constAssertion = [{ a: 1 }, { a: 1 }, { a: 2 }] as const;
+>constAssertion : Symbol(constAssertion, Decl(main.ts, 13, 12))
+>a : Symbol(a, Decl(main.ts, 13, 32))
+>a : Symbol(a, Decl(main.ts, 13, 42))
+>a : Symbol(a, Decl(main.ts, 13, 52))
+>const : Symbol(const)
+

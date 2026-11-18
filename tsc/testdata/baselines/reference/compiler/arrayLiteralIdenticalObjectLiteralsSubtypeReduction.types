@@ -1,0 +1,191 @@
+//// [tests/cases/compiler/arrayLiteralIdenticalObjectLiteralsSubtypeReduction.ts] ////
+
+=== /data.json ===
+[
+>[    { "code": "#f3dc00", "label": "526-G", "name": "Saharagelb" },    { "code": "#f6ca00", "label": "527-G", "name": "Buttergelb" },    { "name": "Primelgelb", "label": "504-G", "code": "#ffbe00" },    { "name": "Rapsgelb", "label": 505, "code": "#ffb000" },    { "code": "#ff9a00", "label": "506-G", "name": "Maisgelb" },    { "code": "#ff8200", "label": "507-G", "name": null },    { "code": "#ff6c00", "label": "508-G", "name": null, "extra": true },    { "name": "Orangegelb", "label": 509, "code": "#ff5a00" }] : ({ code: string; label: string; name: string; } | { name: string; label: number; code: string; } | { code: string; label: string; name: null; } | { code: string; label: string; name: null; extra: boolean; })[]
+
+    { "code": "#f3dc00", "label": "526-G", "name": "Saharagelb" },
+>{ "code": "#f3dc00", "label": "526-G", "name": "Saharagelb" } : { code: string; label: string; name: string; }
+>"code" : string
+>"#f3dc00" : "#f3dc00"
+>"label" : string
+>"526-G" : "526-G"
+>"name" : string
+>"Saharagelb" : "Saharagelb"
+
+    { "code": "#f6ca00", "label": "527-G", "name": "Buttergelb" },
+>{ "code": "#f6ca00", "label": "527-G", "name": "Buttergelb" } : { code: string; label: string; name: string; }
+>"code" : string
+>"#f6ca00" : "#f6ca00"
+>"label" : string
+>"527-G" : "527-G"
+>"name" : string
+>"Buttergelb" : "Buttergelb"
+
+    { "name": "Primelgelb", "label": "504-G", "code": "#ffbe00" },
+>{ "name": "Primelgelb", "label": "504-G", "code": "#ffbe00" } : { name: string; label: string; code: string; }
+>"name" : string
+>"Primelgelb" : "Primelgelb"
+>"label" : string
+>"504-G" : "504-G"
+>"code" : string
+>"#ffbe00" : "#ffbe00"
+
+    { "name": "Rapsgelb", "label": 505, "code": "#ffb000" },
+>{ "name": "Rapsgelb", "label": 505, "code": "#ffb000" } : { name: string; label: number; code: string; }
+>"name" : string
+>"Rapsgelb" : "Rapsgelb"
+>"label" : number
+>505 : 505
+>"code" : string
+>"#ffb000" : "#ffb000"
+
+    { "code": "#ff9a00", "label": "506-G", "name": "Maisgelb" },
+>{ "code": "#ff9a00", "label": "506-G", "name": "Maisgelb" } : { code: string; label: string; name: string; }
+>"code" : string
+>"#ff9a00" : "#ff9a00"
+>"label" : string
+>"506-G" : "506-G"
+>"name" : string
+>"Maisgelb" : "Maisgelb"
+
+    { "code": "#ff8200", "label": "507-G", "name": null },
+>{ "code": "#ff8200", "label": "507-G", "name": null } : { code: string; label: string; name: null; }
+>"code" : string
+>"#ff8200" : "#ff8200"
+>"label" : string
+>"507-G" : "507-G"
+>"name" : null
+
+    { "code": "#ff6c00", "label": "508-G", "name": null, "extra": true },
+>{ "code": "#ff6c00", "label": "508-G", "name": null, "extra": true } : { code: string; label: string; name: null; extra: boolean; }
+>"code" : string
+>"#ff6c00" : "#ff6c00"
+>"label" : string
+>"508-G" : "508-G"
+>"name" : null
+>"extra" : boolean
+>true : true
+
+    { "name": "Orangegelb", "label": 509, "code": "#ff5a00" }
+>{ "name": "Orangegelb", "label": 509, "code": "#ff5a00" } : { name: string; label: number; code: string; }
+>"name" : string
+>"Orangegelb" : "Orangegelb"
+>"label" : number
+>509 : 509
+>"code" : string
+>"#ff5a00" : "#ff5a00"
+
+]
+
+=== /main.ts ===
+// https://github.com/microsoft/TypeScript/issues/48364
+import data from "./data.json";
+>data : ({ code: string; label: string; name: string; extra?: undefined; } | { name: string; label: number; code: string; extra?: undefined; } | { code: string; label: string; name: null; extra?: undefined; } | { code: string; label: string; name: null; extra: boolean; })[]
+
+export const fromJson = data;
+>fromJson : ({ code: string; label: string; name: string; extra?: undefined; } | { name: string; label: number; code: string; extra?: undefined; } | { code: string; label: string; name: null; extra?: undefined; } | { code: string; label: string; name: null; extra: boolean; })[]
+>data : ({ code: string; label: string; name: string; extra?: undefined; } | { name: string; label: number; code: string; extra?: undefined; } | { code: string; label: string; name: null; extra?: undefined; } | { code: string; label: string; name: null; extra: boolean; })[]
+
+declare const o: { x: number };
+>o : { x: number; }
+>x : number
+
+declare const n: number;
+>n : number
+
+export const differentOrder = [{ a: 1, b: "" }, { b: "", a: 1 }, { a: 2, b: "x" }];
+>differentOrder : { a: number; b: string; }[]
+>[{ a: 1, b: "" }, { b: "", a: 1 }, { a: 2, b: "x" }] : { a: number; b: string; }[]
+>{ a: 1, b: "" } : { a: number; b: string; }
+>a : number
+>1 : 1
+>b : string
+>"" : ""
+>{ b: "", a: 1 } : { b: string; a: number; }
+>b : string
+>"" : ""
+>a : number
+>1 : 1
+>{ a: 2, b: "x" } : { a: number; b: string; }
+>a : number
+>2 : 2
+>b : string
+>"x" : "x"
+
+export const optionalProperties = [{ a: 1, b: n > 0 ? "" : undefined }, { a: 2, b: n > 0 ? "x" : undefined }];
+>optionalProperties : { a: number; b: string | undefined; }[]
+>[{ a: 1, b: n > 0 ? "" : undefined }, { a: 2, b: n > 0 ? "x" : undefined }] : { a: number; b: string | undefined; }[]
+>{ a: 1, b: n > 0 ? "" : undefined } : { a: number; b: string | undefined; }
+>a : number
+>1 : 1
+>b : string | undefined
+>n > 0 ? "" : undefined : "" | undefined
+>n > 0 : boolean
+>n : number
+>0 : 0
+>"" : ""
+>undefined : undefined
+>{ a: 2, b: n > 0 ? "x" : undefined } : { a: number; b: string | undefined; }
+>a : number
+>2 : 2
+>b : string | undefined
+>n > 0 ? "x" : undefined : "x" | undefined
+>n > 0 : boolean
+>n : number
+>0 : 0
+>"x" : "x"
+>undefined : undefined
+
+export const spreads = [{ ...o }, { ...o }, { ...o, y: "" }];
+>spreads : ({ x: number; } | { x: number; y: string; })[]
+>[{ ...o }, { ...o }, { ...o, y: "" }] : ({ x: number; } | { x: number; y: string; })[]
+>{ ...o } : { x: number; }
+>o : { x: number; }
+>{ ...o } : { x: number; }
+>o : { x: number; }
+>{ ...o, y: "" } : { x: number; y: string; }
+>o : { x: number; }
+>y : string
+>"" : ""
+
+export const methods = [{ m() { return 1; } }, { m() { return 2; } }, { m() { return ""; } }];
+>methods : ({ m(): number; } | { m(): string; })[]
+>[{ m() { return 1; } }, { m() { return 2; } }, { m() { return ""; } }] : ({ m(): number; } | { m(): string; })[]
+>{ m() { return 1; } } : { m(): number; }
+>m : () => number
+>1 : 1
+>{ m() { return 2; } } : { m(): number; }
+>m : () => number
+>2 : 2
+>{ m() { return ""; } } : { m(): string; }
+>m : () => string
+>"" : ""
+
+export const accessors = [{ get a() { return 1; } }, { get a() { return 2; } }, { a: 3 }];
+>accessors : { readonly a: number; }[]
+>[{ get a() { return 1; } }, { get a() { return 2; } }, { a: 3 }] : { readonly a: number; }[]
+>{ get a() { return 1; } } : { readonly a: number; }
+>a : number
+>1 : 1
+>{ get a() { return 2; } } : { readonly a: number; }
+>a : number
+>2 : 2
+>{ a: 3 } : { a: number; }
+>a : number
+>3 : 3
+
+export const constAssertion = [{ a: 1 }, { a: 1 }, { a: 2 }] as const;
+>constAssertion : readonly [{ readonly a: 1; }, { readonly a: 1; }, { readonly a: 2; }]
+>[{ a: 1 }, { a: 1 }, { a: 2 }] as const : readonly [{ readonly a: 1; }, { readonly a: 1; }, { readonly a: 2; }]
+>[{ a: 1 }, { a: 1 }, { a: 2 }] : readonly [{ readonly a: 1; }, { readonly a: 1; }, { readonly a: 2; }]
+>{ a: 1 } : { readonly a: 1; }
+>a : 1
+>1 : 1
+>{ a: 1 } : { readonly a: 1; }
+>a : 1
+>1 : 1
+>{ a: 2 } : { readonly a: 2; }
+>a : 2
+>2 : 2
+
