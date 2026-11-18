@@ -1,0 +1,78 @@
+//// [tests/cases/compiler/arrayFromAsyncNullishProtocol.ts] ////
+
+=== arrayFromAsyncNullishProtocol.ts ===
+const withNull = Object.assign([Promise.resolve(1)], { [Symbol.asyncIterator]: null });
+>withNull : Symbol(withNull, Decl(arrayFromAsyncNullishProtocol.ts, 0, 5))
+>Object.assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>[Symbol.asyncIterator] : Symbol([Symbol.asyncIterator], Decl(arrayFromAsyncNullishProtocol.ts, 0, 54))
+>Symbol.asyncIterator : Symbol(SymbolConstructor.asyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>asyncIterator : Symbol(SymbolConstructor.asyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+
+const withUndefined = Object.assign([Promise.resolve(1)], { [Symbol.asyncIterator]: undefined });
+>withUndefined : Symbol(withUndefined, Decl(arrayFromAsyncNullishProtocol.ts, 1, 5))
+>Object.assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>[Symbol.asyncIterator] : Symbol([Symbol.asyncIterator], Decl(arrayFromAsyncNullishProtocol.ts, 1, 59))
+>Symbol.asyncIterator : Symbol(SymbolConstructor.asyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>asyncIterator : Symbol(SymbolConstructor.asyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>undefined : Symbol(undefined)
+
+const fromNull: Promise<string[]> = Array.fromAsync(withNull, value => value.toFixed());
+>fromNull : Symbol(fromNull, Decl(arrayFromAsyncNullishProtocol.ts, 2, 5))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Array.fromAsync : Symbol(ArrayConstructor.fromAsync, Decl(lib.es2026.array.d.ts, --, --), Decl(lib.es2026.array.d.ts, --, --), Decl(lib.es2026.array.d.ts, --, --), Decl(lib.es2026.array.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>fromAsync : Symbol(ArrayConstructor.fromAsync, Decl(lib.es2026.array.d.ts, --, --), Decl(lib.es2026.array.d.ts, --, --), Decl(lib.es2026.array.d.ts, --, --), Decl(lib.es2026.array.d.ts, --, --))
+>withNull : Symbol(withNull, Decl(arrayFromAsyncNullishProtocol.ts, 0, 5))
+>value : Symbol(value, Decl(arrayFromAsyncNullishProtocol.ts, 2, 61))
+>value.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(arrayFromAsyncNullishProtocol.ts, 2, 61))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+
+const fromUndefined: Promise<string[]> = Array.fromAsync(withUndefined, value => value.toFixed());
+>fromUndefined : Symbol(fromUndefined, Decl(arrayFromAsyncNullishProtocol.ts, 3, 5))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Array.fromAsync : Symbol(ArrayConstructor.fromAsync, Decl(lib.es2026.array.d.ts, --, --), Decl(lib.es2026.array.d.ts, --, --), Decl(lib.es2026.array.d.ts, --, --), Decl(lib.es2026.array.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>fromAsync : Symbol(ArrayConstructor.fromAsync, Decl(lib.es2026.array.d.ts, --, --), Decl(lib.es2026.array.d.ts, --, --), Decl(lib.es2026.array.d.ts, --, --), Decl(lib.es2026.array.d.ts, --, --))
+>withUndefined : Symbol(withUndefined, Decl(arrayFromAsyncNullishProtocol.ts, 1, 5))
+>value : Symbol(value, Decl(arrayFromAsyncNullishProtocol.ts, 3, 71))
+>value.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(arrayFromAsyncNullishProtocol.ts, 3, 71))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+
+declare const dual: AsyncIterable<Promise<number>> & Iterable<number>;
+>dual : Symbol(dual, Decl(arrayFromAsyncNullishProtocol.ts, 5, 13))
+>AsyncIterable : Symbol(AsyncIterable, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+
+const fromDual: Promise<number[]> = Array.fromAsync(dual, value => value);
+>fromDual : Symbol(fromDual, Decl(arrayFromAsyncNullishProtocol.ts, 6, 5))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Array.fromAsync : Symbol(ArrayConstructor.fromAsync, Decl(lib.es2026.array.d.ts, --, --), Decl(lib.es2026.array.d.ts, --, --), Decl(lib.es2026.array.d.ts, --, --), Decl(lib.es2026.array.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>fromAsync : Symbol(ArrayConstructor.fromAsync, Decl(lib.es2026.array.d.ts, --, --), Decl(lib.es2026.array.d.ts, --, --), Decl(lib.es2026.array.d.ts, --, --), Decl(lib.es2026.array.d.ts, --, --))
+>dual : Symbol(dual, Decl(arrayFromAsyncNullishProtocol.ts, 5, 13))
+>value : Symbol(value, Decl(arrayFromAsyncNullishProtocol.ts, 6, 57))
+>value : Symbol(value, Decl(arrayFromAsyncNullishProtocol.ts, 6, 57))
+
+Array.fromAsync(dual, value => value.toFixed());
+>Array.fromAsync : Symbol(ArrayConstructor.fromAsync, Decl(lib.es2026.array.d.ts, --, --), Decl(lib.es2026.array.d.ts, --, --), Decl(lib.es2026.array.d.ts, --, --), Decl(lib.es2026.array.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>fromAsync : Symbol(ArrayConstructor.fromAsync, Decl(lib.es2026.array.d.ts, --, --), Decl(lib.es2026.array.d.ts, --, --), Decl(lib.es2026.array.d.ts, --, --), Decl(lib.es2026.array.d.ts, --, --))
+>dual : Symbol(dual, Decl(arrayFromAsyncNullishProtocol.ts, 5, 13))
+>value : Symbol(value, Decl(arrayFromAsyncNullishProtocol.ts, 7, 21))
+>value : Symbol(value, Decl(arrayFromAsyncNullishProtocol.ts, 7, 21))
+

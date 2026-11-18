@@ -1,0 +1,16 @@
+arrayFromAsyncNullishProtocol.ts(8,38): error TS2339: Property 'toFixed' does not exist on type 'Promise<number>'.
+
+
+==== arrayFromAsyncNullishProtocol.ts (1 errors) ====
+    const withNull = Object.assign([Promise.resolve(1)], { [Symbol.asyncIterator]: null });
+    const withUndefined = Object.assign([Promise.resolve(1)], { [Symbol.asyncIterator]: undefined });
+    const fromNull: Promise<string[]> = Array.fromAsync(withNull, value => value.toFixed());
+    const fromUndefined: Promise<string[]> = Array.fromAsync(withUndefined, value => value.toFixed());
+    
+    declare const dual: AsyncIterable<Promise<number>> & Iterable<number>;
+    const fromDual: Promise<number[]> = Array.fromAsync(dual, value => value);
+    Array.fromAsync(dual, value => value.toFixed());
+                                         ~~~~~~~
+!!! error TS2339: Property 'toFixed' does not exist on type 'Promise<number>'.
+!!! related TS2773 arrayFromAsyncNullishProtocol.ts:8:38: Did you forget to use 'await'?
+    
