@@ -7084,6 +7084,43 @@ export const n: number = 0;
     });
 });
 
+describe("Type - isClass", { concurrency }, () => {
+    test("distinguishes originating class types from interfaces, instances, and constructors", async () => {
+        const source = `
+export class Plain {}
+export class Generic<T> { value!: T; }
+export interface Shape {}
+export type Specialized = Generic<string>;
+export const constructor = Plain;
+export const object = {};
+export const number = 0;
+`;
+        await using api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": source,
+        });
+        const snapshot = await api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+
+        for (const [name, expected] of [["Plain", true], ["Generic", true], ["Shape", false], ["Specialized", false]] as const) {
+            const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", source.indexOf(name));
+            assert.ok(symbol);
+            const type = await project.checker.getDeclaredTypeOfSymbol(symbol);
+            assert.equal(type.isClass(), expected, name);
+            if (type.isClass()) {
+                const classType: InterfaceType = type;
+                assert.ok(classType.isClassOrInterface());
+            }
+        }
+        for (const name of ["constructor", "object", "number"]) {
+            const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", source.indexOf(name));
+            assert.ok(symbol);
+            const type = await project.checker.getTypeOfSymbol(symbol);
+            assert.equal(type.isClass(), false, name);
+        }
+    });
+});
+
 describe("Type - isErrorType", { concurrency }, () => {
     test("identifies the error type from an unresolvable annotation", async () => {
         await using api = spawnAPI({

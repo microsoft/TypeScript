@@ -148,6 +148,8 @@ export interface Type {
 
     /** Whether this type is a class or interface type */
     isClassOrInterface(): this is InterfaceType;
+    /** Whether this is an originating class type, rather than a constructor or instantiated type reference */
+    isClass(): this is InterfaceType;
     /** Whether this type is a union type */
     isUnionType(): this is UnionType;
     /** Whether this type is an intersection type */

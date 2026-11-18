@@ -8257,6 +8257,10 @@ class TypeObject implements Type {
         return isClassOrInterfaceType(this);
     }
 
+    isClass(): this is InterfaceType {
+        return isObjectType(this) && (this.objectFlags & ObjectFlags.Class) !== 0;
+    }
+
     isUnionType(): this is UnionType {
         return isUnionType(this);
     }
