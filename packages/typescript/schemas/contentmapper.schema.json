@@ -1,0 +1,384 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "TypeScript content mapper protocol",
+    "description": "Content mapper JSON-RPC methods and reusable parameter and result definitions. Reference individual protocol types through #/definitions/<TypeName>. Positions use the encoding selected during initialization.",
+    "x-methods": {
+        "initialize": {
+            "params": {
+                "$ref": "#/definitions/InitializeParams"
+            },
+            "result": {
+                "$ref": "#/definitions/InitializeResult"
+            }
+        },
+        "openProject": {
+            "params": {
+                "$ref": "#/definitions/OpenProjectParams"
+            },
+            "result": {
+                "$ref": "#/definitions/OpenProjectResult"
+            }
+        },
+        "closeProject": {
+            "params": {
+                "$ref": "#/definitions/CloseProjectParams"
+            },
+            "result": {
+                "type": "null"
+            }
+        },
+        "transform": {
+            "params": {
+                "$ref": "#/definitions/TransformParams"
+            },
+            "result": {
+                "$ref": "#/definitions/TransformResult"
+            }
+        }
+    },
+    "definitions": {
+        "InitializeParams": {
+            "type": "object",
+            "description": "Parameters for the initialize request.",
+            "properties": {
+                "locale": {
+                    "type": "string",
+                    "description": "BCP 47 locale for mapper-authored diagnostic messages, when configured."
+                },
+                "positionEncodings": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/PositionEncoding"
+                    },
+                    "description": "Coordinate spaces accepted by the host."
+                }
+            },
+            "required": ["positionEncodings"]
+        },
+        "InitializeResult": {
+            "type": "object",
+            "description": "Response to the initialize request.",
+            "properties": {
+                "positionEncoding": {
+                    "$ref": "#/definitions/PositionEncoding"
+                },
+                "diagnosticSource": {
+                    "type": "string",
+                    "pattern": "\\S",
+                    "description": "Prefix for mapper-authored diagnostic codes. It must not be whitespace-only or, ignoring case, typescript, tsc, or a native source extension without its leading dot."
+                }
+            },
+            "required": ["positionEncoding", "diagnosticSource"]
+        },
+        "OpenProjectParams": {
+            "type": "object",
+            "description": "Parameters for the openProject request.",
+            "properties": {
+                "configFileName": {
+                    "type": "string",
+                    "description": "Absolute project configuration file name, or an empty string when there is none."
+                },
+                "projectHandle": {
+                    "type": "string",
+                    "description": "Opaque, process-local project handle assigned by the host."
+                },
+                "options": {
+                    "description": "Mapper entry's options from the project's contentMappers configuration."
+                },
+                "compilerOptions": {
+                    "description": "Project's effective compiler options, serialized by the host."
+                }
+            },
+            "required": ["configFileName", "projectHandle", "compilerOptions"]
+        },
+        "OpenProjectResult": {
+            "type": "object",
+            "description": "Response to an openProject request. Only mappers declaring dynamicConfig may return a non-empty configIdentity or watchedFiles.",
+            "properties": {
+                "configIdentity": {
+                    "type": "string",
+                    "description": "Stable fingerprint of all dynamic configuration affecting transforms. It must be non-empty for dynamicConfig mappers; otherwise it must be empty or omitted."
+                },
+                "watchedFiles": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "description": "Absolute file names whose changes may alter configIdentity or transform output."
+                },
+                "optionDiagnostics": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/OptionDiagnosticResult"
+                    },
+                    "description": "Diagnostics reporting invalid mapper options."
+                }
+            }
+        },
+        "OptionDiagnosticResult": {
+            "type": "object",
+            "properties": {
+                "path": {
+                    "type": "array",
+                    "items": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "integer",
+                                "minimum": 0
+                            }
+                        ]
+                    },
+                    "description": "Property names and array indices relative to the mapper entry's options object."
+                },
+                "messageText": {
+                    "type": "string"
+                },
+                "code": {
+                    "type": "integer",
+                    "minimum": -2147483648,
+                    "maximum": 2147483647
+                }
+            },
+            "required": ["path", "messageText", "code"]
+        },
+        "CloseProjectParams": {
+            "type": "object",
+            "description": "Parameters for the closeProject request.",
+            "properties": {
+                "projectHandle": {
+                    "type": "string"
+                }
+            },
+            "required": ["projectHandle"]
+        },
+        "PositionEncoding": {
+            "type": "string",
+            "enum": ["utf-8", "utf-16"],
+            "description": "Coordinate space for mappings and diagnostics: UTF-8 byte offsets or UTF-16 code unit offsets."
+        },
+        "TransformParams": {
+            "type": "object",
+            "description": "Parameters for the transform request.",
+            "properties": {
+                "fileName": {
+                    "type": "string",
+                    "description": "Absolute name of the content-mapped source file."
+                },
+                "content": {
+                    "type": "string",
+                    "description": "Original source text."
+                },
+                "projectHandle": {
+                    "type": "string",
+                    "description": "Handle for the project configuration opened for this transform."
+                }
+            },
+            "required": ["fileName", "content", "projectHandle"]
+        },
+        "MappedOutput": {
+            "type": "object",
+            "description": "Virtual source text and its mapping to the original input.",
+            "properties": {
+                "text": {
+                    "type": "string",
+                    "description": "Virtual source text."
+                },
+                "extension": {
+                    "type": "string",
+                    "enum": [".js", ".jsx", ".mjs", ".cjs", ".ts", ".tsx", ".mts", ".cts", ".json"],
+                    "description": "Extension determining the virtual source file's syntax."
+                },
+                "mappings": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/SpanMapSegment"
+                    },
+                    "description": "Span map tuples in the selected position encoding. Absent or empty mappings describe fully synthesized output."
+                },
+                "diagnosticDirectives": {
+                    "$ref": "#/definitions/DiagnosticDirectives"
+                }
+            },
+            "required": ["text", "extension"]
+        },
+        "SpanMapSegment": {
+            "type": "array",
+            "description": "[virtualStart, virtualLength, originalStart, originalLength, kind, features?]. Segments must be ordered and disjoint in virtual space and within both texts. Verbatim segments must contain identical text.",
+            "items": [
+                {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 2147483647,
+                    "description": "Virtual start offset."
+                },
+                {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 2147483647,
+                    "description": "Virtual span length."
+                },
+                {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 2147483647,
+                    "description": "Original start offset."
+                },
+                {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 2147483647,
+                    "description": "Original span length."
+                },
+                {
+                    "type": "integer",
+                    "enum": [0, 1, 2],
+                    "description": "Mapping kind: 0 is verbatim, 1 is atom, and 2 is alias."
+                },
+                {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 1048575,
+                    "description": "Language-service feature bitmask. Omitted means all features (1048575); 0 disables all features. Does not suppress diagnostics."
+                }
+            ],
+            "minItems": 5,
+            "maxItems": 6
+        },
+        "DiagnosticDirectivePolicy": {
+            "type": "integer",
+            "enum": [0, 1],
+            "description": "Diagnostic directive policy: 0 ignores diagnostics; 1 expects a diagnostic."
+        },
+        "UnusedExpectDirectiveDiagnostic": {
+            "type": "object",
+            "description": "Diagnostic reported when an expect directive suppresses no diagnostic.",
+            "properties": {
+                "code": {
+                    "type": "integer",
+                    "minimum": -2147483648,
+                    "maximum": 2147483647
+                },
+                "messageText": {
+                    "type": "string"
+                }
+            },
+            "required": ["code", "messageText"]
+        },
+        "DiagnosticDirectives": {
+            "type": "object",
+            "description": "Shared unused-expect diagnostics and compact diagnostic directive tuples.",
+            "properties": {
+                "unusedExpectDirectiveDiagnostics": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/UnusedExpectDirectiveDiagnostic"
+                    }
+                },
+                "directives": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/MappedDiagnosticDirective"
+                    },
+                    "description": "Directives with non-overlapping virtual ranges."
+                }
+            },
+            "required": ["unusedExpectDirectiveDiagnostics", "directives"]
+        },
+        "MappedDiagnosticDirective": {
+            "type": "array",
+            "description": "[originalStart, originalLength, virtualStart, virtualEnd, policy, unusedExpectDirectiveIndex?]. Expect directives require a valid original range. An omitted index selects the only shared unused-expect diagnostic and requires exactly one such diagnostic.",
+            "items": [
+                {
+                    "type": "integer",
+                    "description": "Original start offset. It is ignored for ignore directives if the original range is invalid."
+                },
+                {
+                    "type": "integer",
+                    "description": "Original span length. It is ignored for ignore directives if the original range is invalid."
+                },
+                {
+                    "type": "integer",
+                    "minimum": 0,
+                    "description": "Inclusive virtual start offset."
+                },
+                {
+                    "type": "integer",
+                    "minimum": 0,
+                    "description": "Exclusive virtual end offset, which must not precede the start."
+                },
+                {
+                    "$ref": "#/definitions/DiagnosticDirectivePolicy"
+                },
+                {
+                    "type": "integer",
+                    "minimum": 0,
+                    "description": "Index into unusedExpectDirectiveDiagnostics, used by expect directives."
+                }
+            ],
+            "minItems": 5,
+            "maxItems": 6,
+            "if": {
+                "items": [{}, {}, {}, {}, { "const": 1 }]
+            },
+            "then": {
+                "items": [{ "minimum": 0 }, { "minimum": 0 }]
+            }
+        },
+        "SupplementalOutput": {
+            "$ref": "#/definitions/MappedOutput"
+        },
+        "TransformResult": {
+            "description": "Canonical output for one input file, with optional mapper diagnostics and supplemental compiler inputs.",
+            "allOf": [
+                {
+                    "$ref": "#/definitions/MappedOutput"
+                },
+                {
+                    "type": "object",
+                    "properties": {
+                        "diagnostics": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Diagnostic"
+                            },
+                            "description": "Mapper-authored errors in original-source coordinates."
+                        },
+                        "supplemental": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/SupplementalOutput"
+                            },
+                            "description": "Additional unnamed compiler inputs associated with this source file."
+                        }
+                    }
+                }
+            ]
+        },
+        "Diagnostic": {
+            "type": "object",
+            "description": "Mapper-authored error in original-source coordinates using the selected position encoding.",
+            "properties": {
+                "messageText": {
+                    "type": "string"
+                },
+                "start": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "length": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "code": {
+                    "type": "integer",
+                    "minimum": -2147483648,
+                    "maximum": 2147483647
+                }
+            },
+            "required": ["messageText", "start", "length", "code"]
+        }
+    }
+}

@@ -29,6 +29,7 @@ import {
     ensureModel as ensureLSPModel,
     outputs as lspModelOutputs,
 } from "./tools/scripts/lsp/fetchModel.mts";
+import { outputs as contentMapperOutputs } from "./tools/scripts/tsc/generate-contentmapper.ts";
 import { outputs as encoderOutputs } from "./tools/scripts/tsc/generate-encoder.ts";
 import { outputs as enumOutputs } from "./tools/scripts/tsc/generate-enums.ts";
 import { outputs as goASTOutputs } from "./tools/scripts/tsc/generate-go-ast.ts";
@@ -677,6 +678,18 @@ export const generateAST = task({
     run: runGenerateAST,
 });
 
+async function runGenerateContentMapper() {
+    const { default: generate } = await import("./tools/scripts/tsc/generate-contentmapper.ts");
+    generate(!!options.force);
+}
+
+export const generateContentMapper = task({
+    name: "generate:contentmapper",
+    description: "Generates Go content mapper protocol declarations from the JSON schema.",
+    outputs: contentMapperOutputs,
+    run: runGenerateContentMapper,
+});
+
 async function runGenerateSync() {
     const { generateSync } = await import("./packages/typescript/scripts/generateSync.ts");
     generateSync(!!options.force);
@@ -783,6 +796,7 @@ async function runGenerate() {
             await runWithConcurrencyLimit([runGenerateAST, runGenerateLSP], 2);
             await runGenerateGo();
         },
+        runGenerateContentMapper,
         runGenerateSync,
         async () => {
             await runGenerateExtension();
@@ -1164,10 +1178,12 @@ export const testTools = task({
 export const testCodegen = task({
     name: "test:codegen",
     description: "Runs codegen tests without regenerating sources.",
-    run: async () => {
-        await run("node", ["--test", "--test-concurrency=1", "./tools/scripts/gen/*.test.mts", "./tools/scripts/tsc/*.test.ts"]);
-    },
+    run: runTestCodegen,
 });
+
+async function runTestCodegen() {
+    await run("node", ["--test", "--test-concurrency=1", "./tools/scripts/gen/*.test.mts", "./tools/scripts/tsc/*.test.ts"]);
+}
 
 export const buildAPI = task({
     name: "build:api",
@@ -1520,9 +1536,7 @@ export const validate = task({
         if (options.all) {
             await runValidation("check:herebyfile", runCheckHerebyfile);
             await runValidation("test:tools", runTestTools);
-            await runValidation("test:options", async () => {
-                await run("node", ["--test", "./tools/scripts/tsc/options.test.ts"]);
-            });
+            await runValidation("test:codegen", runTestCodegen);
             await runValidation("test:smoke", runSmokeTest); // in CI this is run with `--race`
         }
         await runValidation("lint", runLint);
