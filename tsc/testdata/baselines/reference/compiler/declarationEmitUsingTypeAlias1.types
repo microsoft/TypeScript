@@ -41,3 +41,95 @@ export const bar = (thing: SomeType) => {
 >arg : import("../node_modules/some-dep/dist/inner").Other
 
 };
+
+=== node_modules/deep-types/index.d.ts ===
+export type { HelperDeep, InlineDeep, PublicMapped } from "./source.js";
+>HelperDeep : import("./source.js").HelperDeep<T>
+>InlineDeep : import("./source.js").InlineDeep<T>
+>PublicMapped : import("./source.js").PublicMapped<T>
+
+export { mapped } from "./source.js";
+>mapped : <T>(value: T) => import("./source.js")._HelperObjectDeep<T>
+
+=== node_modules/deep-types/source.d.ts ===
+export type HelperDeep<T> = T extends object ? _HelperObjectDeep<T> : T;
+>HelperDeep : HelperDeep<T>
+
+export type _HelperObjectDeep<T> = { readonly [K in keyof T]: HelperDeep<T[K]> };
+>_HelperObjectDeep : _HelperObjectDeep<T>
+
+export type InlineDeep<T> = T extends object ? { readonly [K in keyof T]: InlineDeep<T[K]> } : T;
+>InlineDeep : InlineDeep<T>
+
+export type PublicMapped<T> = { readonly [K in keyof T]: T[K] };
+>PublicMapped : PublicMapped<T>
+
+export declare function mapped<T>(value: T): _HelperObjectDeep<T>;
+>mapped : <T>(value: T) => _HelperObjectDeep<T>
+>value : T
+
+=== src/mapped.ts ===
+import type { HelperDeep, InlineDeep, PublicMapped } from "deep-types";
+>HelperDeep : HelperDeep<T>
+>InlineDeep : InlineDeep<T>
+>PublicMapped : PublicMapped<T>
+
+type Tree = { value: string; children: Tree[] };
+>Tree : Tree
+>value : string
+>children : Tree[]
+
+declare function helper<T>(value: T): HelperDeep<T>;
+>helper : <T>(value: T) => HelperDeep<T>
+>value : T
+
+declare function inline<T>(value: T): InlineDeep<T>;
+>inline : <T>(value: T) => InlineDeep<T>
+>value : T
+
+declare function publicMapped<T>(value: T): PublicMapped<T>;
+>publicMapped : <T>(value: T) => PublicMapped<T>
+>value : T
+
+export const recursive = helper({} as Tree);
+>recursive : import("../node_modules/deep-types/source")._HelperObjectDeep<Tree>
+>helper({} as Tree) : import("../node_modules/deep-types/source")._HelperObjectDeep<Tree>
+>helper : <T>(value: T) => HelperDeep<T>
+>{} as Tree : Tree
+>{} : {}
+
+export const finite = helper({ value: "text" });
+>finite : import("../node_modules/deep-types/source")._HelperObjectDeep<{ value: string; }>
+>helper({ value: "text" }) : import("../node_modules/deep-types/source")._HelperObjectDeep<{ value: string; }>
+>helper : <T>(value: T) => HelperDeep<T>
+>{ value: "text" } : { value: string; }
+>value : string
+>"text" : "text"
+
+export const inlined = inline({} as Tree);
+>inlined : { readonly value: string; readonly children: readonly any[]; }
+>inline({} as Tree) : { readonly value: string; readonly children: readonly any[]; }
+>inline : <T>(value: T) => InlineDeep<T>
+>{} as Tree : Tree
+>{} : {}
+
+export const named = publicMapped({ value: "text" });
+>named : PublicMapped<{ value: string; }>
+>publicMapped({ value: "text" }) : PublicMapped<{ value: string; }>
+>publicMapped : <T>(value: T) => PublicMapped<T>
+>{ value: "text" } : { value: string; }
+>value : string
+>"text" : "text"
+
+=== src/genericMapped.ts ===
+import { mapped } from "deep-types";
+>mapped : <T>(value: T) => import("../node_modules/deep-types/source")._HelperObjectDeep<T>
+
+export const generic = <T>(value: T) => mapped(value);
+>generic : <T>(value: T) => import("../node_modules/deep-types/source")._HelperObjectDeep<T>
+><T>(value: T) => mapped(value) : <T>(value: T) => import("../node_modules/deep-types/source")._HelperObjectDeep<T>
+>value : T
+>mapped(value) : import("../node_modules/deep-types/source")._HelperObjectDeep<T>
+>mapped : <T_1>(value: T_1) => import("../node_modules/deep-types/source")._HelperObjectDeep<T_1>
+>value : T
+
