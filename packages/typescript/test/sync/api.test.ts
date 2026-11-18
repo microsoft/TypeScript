@@ -6575,6 +6575,131 @@ function f(x: number | string): number | string {
     });
 });
 
+describe("Checker - getMembersOfType and getSymbolDocumentations", { concurrency }, () => {
+    const source = `
+export class Base {
+    /** base doc */
+    readonly baseProp: string = "";
+}
+export class Derived extends Base {
+    /** @internal */
+    readonly hidden = 2;
+    readonly _under = 4;
+    /** own doc */
+    readonly own: number = 1;
+    private secret = 3;
+    /** accessor doc */
+    get size(): number { return 0; }
+    method(): void {}
+    constructor(public readonly fromCtor: string) { super(); }
+}
+`;
+
+    test("getMembersOfType returns the surviving members with their documentation, owner and declared type", () => {
+        using api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": source,
+        });
+
+        const snapshot = api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const sourceFile = project.program.getSourceFile("/src/main.ts");
+        assert.ok(sourceFile);
+        const [base, derived] = sourceFile.statements.filter(isClassDeclaration);
+        const baseSymbol = project.checker.getSymbolAtLocation(base.name!);
+        const derivedSymbol = project.checker.getSymbolAtLocation(derived.name!);
+        assert.ok(baseSymbol);
+        assert.ok(derivedSymbol);
+        const type = project.checker.getTypeAtLocation(derived);
+        const properties = project.checker.getPropertiesOfType(type);
+
+        const members = project.checker.getMembersOfType(type, {
+            visibility: ["public", "protected"],
+            excludeJsDocTags: ["internal"],
+            excludeNamePattern: "^_",
+            includeInheritedFrom: { declaringTypes: [baseSymbol] },
+            includeDeclaredType: true,
+        });
+        const survivors = new Set(["own", "size", "method", "fromCtor", "baseProp"]);
+        assert.deepEqual(
+            members.map(m => m.symbol.name),
+            properties.filter(p => survivors.has(p.name)).map(p => p.name),
+            "the filter drops @internal, underscore and private members and keeps property order",
+        );
+        for (const member of members) {
+            assert.strictEqual(member.symbol, properties.find(p => p.name === member.symbol.name), "member symbols are the symbols getPropertiesOfType returns");
+        }
+        const byName = new Map(members.map(m => [m.symbol.name, m]));
+
+        const own = byName.get("own")!;
+        assert.equal(own.comment, "own doc");
+        assert.deepEqual(own.tags, []);
+        assert.equal(own.isMethod, false);
+        assert.equal(own.isParameterProperty, false);
+        assert.strictEqual(own.owner, derivedSymbol);
+        assert.strictEqual(own.declaredType, project.checker.getTypeOfSymbol(own.symbol));
+
+        const size = byName.get("size")!;
+        assert.equal(size.isMethod, false, "an accessor is not a method");
+        assert.equal(size.comment, "accessor doc");
+        assert.ok(size.declaredType);
+
+        const method = byName.get("method")!;
+        assert.equal(method.isMethod, true);
+        assert.equal(method.declaredType, undefined, "methods carry no declared type");
+
+        const fromCtor = byName.get("fromCtor")!;
+        assert.equal(fromCtor.isParameterProperty, true);
+        assert.strictEqual(fromCtor.owner, derivedSymbol);
+
+        const baseProp = byName.get("baseProp")!;
+        assert.strictEqual(baseProp.owner, baseSymbol);
+        assert.equal(baseProp.comment, "base doc");
+
+        const ownOnly = project.checker.getMembersOfType(type, { includeInheritedFrom: {} });
+        assert.ok(!ownOnly.some(m => m.symbol.name === "baseProp"), "an empty includeInheritedFrom keeps the queried type's own members only");
+        const everything = project.checker.getMembersOfType(type);
+        assert.deepEqual(everything.map(m => m.symbol), properties, "no filter means getPropertiesOfType");
+        assert.ok(everything.every(m => m.declaredType === undefined), "declared types only on request");
+
+        // Optional filter fields accept an explicit `undefined` under exactOptionalPropertyTypes.
+        const explicit = project.checker.getMembersOfType(type, {
+            visibility: undefined,
+            kinds: undefined,
+            excludeJsDocTags: undefined,
+            excludeNamePattern: undefined,
+            includeInheritedFrom: { all: undefined, declaringTypes: undefined },
+            includeDeclaredType: undefined,
+        });
+        assert.deepEqual(explicit.map(m => m.symbol), ownOnly.map(m => m.symbol), "explicit undefined fields mean the same as absent ones");
+        assert.equal((project.checker.getMembersOfType(type, { excludeNamePattern: "" })).length, 0, "an empty pattern is a pattern, not an absent one");
+    });
+
+    test("getSymbolDocumentations equals getJsDocTagsOfSymbol and getDocumentationCommentOfSymbol per symbol", () => {
+        using api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": source,
+        });
+
+        const snapshot = api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const sourceFile = project.program.getSourceFile("/src/main.ts");
+        assert.ok(sourceFile);
+        const derived = sourceFile.statements.filter(isClassDeclaration)[1];
+        const properties = project.checker.getPropertiesOfType(project.checker.getTypeAtLocation(derived));
+        assert.ok(properties.length > 3);
+
+        const docs = project.checker.getSymbolDocumentations(properties);
+        assert.equal(docs.length, properties.length);
+        for (let i = 0; i < properties.length; i++) {
+            assert.deepEqual(docs[i].tags, project.checker.getJsDocTagsOfSymbol(properties[i]), properties[i].name);
+            assert.equal(docs[i].comment, project.checker.getDocumentationCommentOfSymbol(properties[i]), properties[i].name);
+        }
+        assert.deepEqual(docs.find((_, i) => properties[i].name === "hidden")!.tags.map(t => t.name), ["internal"]);
+        assert.deepEqual(project.checker.getSymbolDocumentations([]), []);
+    });
+});
+
 describe("Checker - getReturnTypeOfSignature", { concurrency }, () => {
     test("returns the return type of a function signature", () => {
         using api = spawnAPI({
