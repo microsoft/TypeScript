@@ -1,18 +1,24 @@
 package ls
 
 import (
+	"slices"
 	"strconv"
+	"strings"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/checker"
+	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/compiler"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
+	"github.com/microsoft/TypeScript/tsc/internal/jsnum"
 	"github.com/microsoft/TypeScript/tsc/internal/locale"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/autoimport"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/change"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
+	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/nodebuilder"
+	"github.com/microsoft/TypeScript/tsc/internal/scanner"
 )
 
 type preserveOptionalFlags int
@@ -24,12 +30,14 @@ const (
 )
 
 type missingMemberFixer struct {
-	changeTracker *change.Tracker
-	typeChecker   *checker.Checker
-	program       *compiler.Program
-	preferences   lsutil.UserPreferences
-	importAdder   autoimport.ImportAdder
-	locale        locale.Locale
+	changeTracker    *change.Tracker
+	typeChecker      *checker.Checker
+	program          *compiler.Program
+	preferences      lsutil.UserPreferences
+	importAdder      autoimport.ImportAdder
+	locale           locale.Locale
+	symbolsToImport  map[*ast.Symbol]bool
+	importsToPromote collections.Set[*ast.Node]
 }
 
 func newMissingMemberFixer(changeTracker *change.Tracker, program *compiler.Program, typeChecker *checker.Checker, preferences lsutil.UserPreferences, importAdder autoimport.ImportAdder, locale locale.Locale) *missingMemberFixer {
@@ -260,7 +268,7 @@ func (f *missingMemberFixer) createSignatureDeclarationFromSignature(signature *
 			}
 
 			parameter := p.AsParameterDeclaration()
-			parameterTypeNode := parameter.Type
+			parameterTypeNode := core.IfElse(isJS, nil /*parameterTypeNode*/, parameter.Type)
 			if parameterTypeNode != nil {
 				parameterTypeNode = f.importTypeNode(parameterTypeNode, idToSymbol)
 			}
@@ -382,7 +390,7 @@ func (f *missingMemberFixer) importTypeNode(typeNode *ast.TypeNode, idToSymbol m
 			if exportSymbol == nil {
 				continue
 			}
-			f.importAdder.AddImportFromExportedSymbol(exportSymbol, true /*isValidTypeOnlyUseSite*/)
+			f.addSymbolToImport(exportSymbol, true /*isValidTypeOnlyUseSite*/)
 		}
 		return importedTypeNode
 	}
@@ -397,9 +405,32 @@ func (f *missingMemberFixer) importTypeNode(typeNode *ast.TypeNode, idToSymbol m
 		if exportSymbol == nil {
 			continue
 		}
-		f.importAdder.AddImportFromExportedSymbol(exportSymbol, true /*isValidTypeOnlyUseSite*/)
+		f.addSymbolToImport(exportSymbol, true /*isValidTypeOnlyUseSite*/)
 	}
 	return typeNode
+}
+
+func (f *missingMemberFixer) addSymbolToImport(symbol *ast.Symbol, isValidTypeOnlyUseSite bool) {
+	if f.symbolsToImport == nil {
+		f.symbolsToImport = make(map[*ast.Symbol]bool)
+	}
+	previous, exists := f.symbolsToImport[symbol]
+	f.symbolsToImport[symbol] = isValidTypeOnlyUseSite && (!exists || previous)
+}
+
+func (f *missingMemberFixer) addImports() {
+	if f.importAdder == nil {
+		return
+	}
+	for symbol, isValidTypeOnlyUseSite := range f.symbolsToImport {
+		f.importAdder.AddImportFromExportedSymbol(symbol, isValidTypeOnlyUseSite)
+	}
+	for declaration := range f.importsToPromote.Keys() {
+		f.importAdder.AddImportFix(&autoimport.Fix{
+			AutoImportFix:            &lsproto.AutoImportFix{Kind: lsproto.AutoImportFixKindPromoteTypeOnly},
+			TypeOnlyAliasDeclaration: declaration,
+		})
+	}
 }
 
 func (f *missingMemberFixer) getExportedSymbol(symbol *ast.Symbol) *ast.Symbol {
@@ -432,6 +463,10 @@ func (f *missingMemberFixer) createBody(body *ast.FunctionBody, quotePreference 
 }
 
 func (f *missingMemberFixer) createStubbedMethodBody(quotePreference lsutil.QuotePreference) *ast.FunctionBody {
+	return f.createStubbedBody(quotePreference, diagnostics.Method_not_implemented.Localize(f.locale))
+}
+
+func (f *missingMemberFixer) createStubbedBody(quotePreference lsutil.QuotePreference, message string) *ast.FunctionBody {
 	tokenFlags := ast.TokenFlagsNone
 	if quotePreference == lsutil.QuotePreferenceSingle {
 		tokenFlags = ast.TokenFlagsSingleQuote
@@ -441,11 +476,177 @@ func (f *missingMemberFixer) createStubbedMethodBody(quotePreference lsutil.Quot
 		f.changeTracker.NodeFactory.NewThrowStatement(
 			f.changeTracker.NodeFactory.NewNewExpression(
 				f.changeTracker.NodeFactory.NewIdentifier("Error"), nil /*typeArguments*/, f.changeTracker.NodeFactory.NewNodeList([]*ast.Node{
-					f.changeTracker.NodeFactory.NewStringLiteral(diagnostics.Method_not_implemented.Localize(f.locale), tokenFlags),
+					f.changeTracker.NodeFactory.NewStringLiteral(message, tokenFlags),
 				}),
 			),
 		),
 	}), true /*multiLine*/)
+}
+
+func (f *missingMemberFixer) createPropertyNameFromSymbol(symbol *ast.Symbol, enclosingDeclaration *ast.Node, quotePreference lsutil.QuotePreference) *ast.Node {
+	factory := f.changeTracker.NodeFactory
+	if symbol.Flags()&ast.SymbolFlagsTransient != 0 {
+		nameType := f.typeChecker.GetNameTypeOfSymbol(symbol)
+		if nameType != nil && nameType.Flags()&(checker.TypeFlagsEnumLiteral|checker.TypeFlagsUniqueESSymbol) != 0 {
+			expression := f.createExpressionFromSymbol(nameType.Symbol(), enclosingDeclaration)
+			if expression != nil {
+				return factory.NewComputedPropertyName(expression)
+			}
+		}
+		builder := checker.NewNodeBuilder(f.typeChecker, f.changeTracker.EmitContext)
+		name := builder.SymbolToNode(symbol, ast.SymbolFlagsValue, enclosingDeclaration, nodebuilder.FlagsNone, nodebuilder.InternalFlagsWriteComputedProps, nil /*tracker*/)
+		if name != nil && ast.IsComputedPropertyName(name) {
+			nameSymbol := f.typeChecker.GetSymbolAtLocation(name.Expression())
+			if nameSymbol != nil {
+				expression := f.createExpressionFromSymbol(nameSymbol, enclosingDeclaration)
+				if expression != nil {
+					return factory.NewComputedPropertyName(expression)
+				}
+			}
+			return factory.DeepCloneNode(name)
+		}
+	}
+	if scanner.IsIdentifierText(symbol.Name(), core.LanguageVariantStandard) {
+		return factory.NewIdentifier(symbol.Name())
+	}
+	value := jsnum.FromString(symbol.Name())
+	if value >= 0 && value.String() == symbol.Name() {
+		return factory.NewNumericLiteral(symbol.Name(), ast.TokenFlagsNone)
+	}
+	return factory.NewStringLiteral(symbol.Name(), core.IfElse(quotePreference == lsutil.QuotePreferenceSingle, ast.TokenFlagsSingleQuote, ast.TokenFlagsNone))
+}
+
+func (f *missingMemberFixer) createExpressionFromSymbol(symbol *ast.Symbol, enclosingDeclaration *ast.Node) *ast.Node {
+	builder, idToSymbol := f.createNodeBuilder()
+	expression := builder.SymbolToExpression(symbol, ast.SymbolFlagsValue, enclosingDeclaration, nodebuilder.FlagsUseFullyQualifiedType, nodebuilder.InternalFlagsNone, nil /*tracker*/)
+	if expression == nil || f.importAdder == nil {
+		return expression
+	}
+
+	identifier := ast.GetLeftmostExpression(expression, true /*stopAtCallExpressions*/)
+	rootSymbol := idToSymbol[identifier]
+	if rootSymbol == nil {
+		return expression
+	}
+	declaration := f.typeChecker.GetTypeOnlyAliasDeclaration(rootSymbol)
+	if declaration != nil && ast.GetSourceFileOfNode(declaration) == ast.GetSourceFileOfNode(enclosingDeclaration) {
+		f.importsToPromote.Add(declaration)
+	} else {
+		resolvedSymbol := f.typeChecker.ResolveName(identifier.Text(), enclosingDeclaration, ast.SymbolFlagsValue, false /*excludeGlobals*/)
+		if resolvedSymbol != nil && f.typeChecker.GetMergedSymbol(f.typeChecker.SkipAlias(resolvedSymbol)) == f.typeChecker.GetMergedSymbol(f.typeChecker.SkipAlias(rootSymbol)) {
+			return expression
+		}
+		exportSymbol := f.getExportedSymbol(rootSymbol)
+		if exportSymbol != nil {
+			f.addSymbolToImport(exportSymbol, false /*isValidTypeOnlyUseSite*/)
+		}
+	}
+	return expression
+}
+
+func (f *missingMemberFixer) tryGetValueFromType(t *checker.Type, enclosingDeclaration *ast.Node, sourceFile *ast.SourceFile, quotePreference lsutil.QuotePreference, typeStack []*checker.Type) *ast.Node {
+	factory := f.changeTracker.NodeFactory
+	if slices.Contains(typeStack, t) || f.typeChecker.IsDeeplyNestedType(t, typeStack, 3 /*maxDepth*/) {
+		return factory.NewIdentifier("undefined")
+	}
+	typeStack = append(typeStack, t)
+	tokenFlags := core.IfElse(quotePreference == lsutil.QuotePreferenceSingle, ast.TokenFlagsSingleQuote, ast.TokenFlagsNone)
+	flags := t.Flags()
+	switch {
+	case flags&checker.TypeFlagsAnyOrUnknown != 0:
+		return factory.NewIdentifier("undefined")
+	case flags&(checker.TypeFlagsString|checker.TypeFlagsTemplateLiteral) != 0:
+		return factory.NewStringLiteral("", tokenFlags)
+	case flags&checker.TypeFlagsNumber != 0:
+		return factory.NewNumericLiteral("0", ast.TokenFlagsNone)
+	case flags&checker.TypeFlagsBigInt != 0:
+		return factory.NewBigIntLiteral("0n", ast.TokenFlagsNone)
+	case flags&checker.TypeFlagsBoolean != 0:
+		return factory.NewKeywordExpression(ast.KindFalseKeyword)
+	case flags&checker.TypeFlagsEnumLike != 0:
+		member := t.Symbol()
+		if member.Flags()&ast.SymbolFlagsEnum != 0 {
+			member = nil
+			for _, declaration := range t.Symbol().Declarations() {
+				if ast.IsEnumDeclaration(declaration) && len(declaration.AsEnumDeclaration().Members.Nodes) > 0 {
+					member = f.typeChecker.GetSymbolOfDeclaration(declaration.AsEnumDeclaration().Members.Nodes[0])
+					break
+				}
+			}
+		}
+		if member != nil {
+			expression := f.createExpressionFromSymbol(member, enclosingDeclaration)
+			if expression != nil {
+				return expression
+			}
+		}
+		return factory.NewNumericLiteral("0", ast.TokenFlagsNone)
+	case flags&checker.TypeFlagsStringLiteral != 0:
+		return factory.NewStringLiteral(t.AsLiteralType().Value().(string), tokenFlags)
+	case flags&(checker.TypeFlagsNumberLiteral|checker.TypeFlagsBigIntLiteral) != 0:
+		text := t.AsLiteralType().String()
+		negative := strings.HasPrefix(text, "-")
+		text = strings.TrimPrefix(text, "-")
+		var literal *ast.Node
+		if flags&checker.TypeFlagsBigIntLiteral != 0 {
+			literal = factory.NewBigIntLiteral(text, ast.TokenFlagsNone)
+		} else {
+			literal = factory.NewNumericLiteral(text, ast.TokenFlagsNone)
+		}
+		if negative {
+			return factory.NewPrefixUnaryExpression(ast.KindMinusToken, literal)
+		}
+		return literal
+	case flags&checker.TypeFlagsBooleanLiteral != 0:
+		return factory.NewKeywordExpression(core.IfElse(t.AsLiteralType().Value().(bool), ast.KindTrueKeyword, ast.KindFalseKeyword))
+	case flags&checker.TypeFlagsNull != 0:
+		return factory.NewKeywordExpression(ast.KindNullKeyword)
+	case t.IsUnion():
+		return f.tryGetValueFromType(t.Types()[0], enclosingDeclaration, sourceFile, quotePreference, typeStack)
+	case f.typeChecker.IsArrayLikeType(t):
+		return factory.NewArrayLiteralExpression(nil /*elements*/, false /*multiLine*/)
+	}
+
+	symbol := t.Symbol()
+	if flags&checker.TypeFlagsObject != 0 && (t.ObjectFlags()&checker.ObjectFlagsObjectLiteral != 0 || symbol != nil && len(symbol.Declarations()) == 1 && ast.IsTypeLiteralNode(symbol.Declarations()[0])) {
+		var properties []*ast.Node
+		for _, property := range f.typeChecker.GetPropertiesOfType(t) {
+			initializer := f.tryGetValueFromType(f.typeChecker.GetTypeOfSymbol(property), enclosingDeclaration, sourceFile, quotePreference, typeStack)
+			properties = append(properties, factory.NewPropertyAssignment(nil /*modifiers*/, f.createPropertyNameFromSymbol(property, enclosingDeclaration, quotePreference), nil /*postfixToken*/, nil /*typeNode*/, initializer))
+		}
+		return factory.NewObjectLiteralExpression(factory.NewNodeList(properties), true /*multiLine*/)
+	}
+	if t.ObjectFlags()&checker.ObjectFlagsAnonymous != 0 && symbol != nil {
+		for _, declaration := range symbol.Declarations() {
+			if ast.IsFunctionTypeNode(declaration) || declaration.Kind == ast.KindMethodSignature || ast.IsMethodDeclaration(declaration) {
+				signature := core.FirstOrNil(f.typeChecker.GetCallSignatures(t))
+				if signature != nil {
+					body := f.createStubbedBody(quotePreference, diagnostics.Function_not_implemented.Localize(f.locale))
+					function := f.createSignatureDeclarationFromSignature(signature, ast.KindFunctionExpression, sourceFile, enclosingDeclaration, body, nil /*modifiers*/, nil /*name*/, false /*optional*/)
+					if function != nil {
+						return function
+					}
+				}
+				break
+			}
+		}
+	}
+	if t.IsClass() {
+		declaration := ast.GetClassLikeDeclarationOfSymbol(symbol)
+		if declaration != nil && !ast.HasAbstractModifier(declaration) {
+			constructorType := f.typeChecker.GetTypeOfSymbol(symbol)
+			signatures := f.typeChecker.GetSignaturesOfType(constructorType, checker.SignatureKindConstruct)
+			if f.typeChecker.IsConstructorAccessible(enclosingDeclaration, signatures) && core.Some(signatures, func(signature *checker.Signature) bool {
+				return f.typeChecker.GetMinArgumentCount(signature) == 0
+			}) {
+				expression := f.createExpressionFromSymbol(symbol, enclosingDeclaration)
+				if expression != nil {
+					return factory.NewNewExpression(expression, nil /*typeArguments*/, nil /*arguments*/)
+				}
+			}
+		}
+	}
+	return factory.NewIdentifier("undefined")
 }
 
 func createDummyParameters(factory *ast.NodeFactory, argCount int, names []string, types []*ast.TypeNode, minArgumentCount int, inJS bool) *ast.ParameterList {
