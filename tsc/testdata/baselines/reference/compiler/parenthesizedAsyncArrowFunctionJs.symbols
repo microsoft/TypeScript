@@ -1,0 +1,246 @@
+//// [tests/cases/compiler/parenthesizedAsyncArrowFunctionJs.ts] ////
+
+=== a.js ===
+const a = true;
+>a : Symbol(a, Decl(a.js, 0, 5))
+
+const b = 1;
+>b : Symbol(b, Decl(a.js, 1, 5))
+
+const c = [b];
+>c : Symbol(c, Decl(a.js, 2, 5))
+>b : Symbol(b, Decl(a.js, 1, 5))
+
+function async(...c) {
+>async : Symbol(async, Decl(a.js, 2, 14))
+>c : Symbol(c, Decl(a.js, 4, 15))
+
+    return b;
+>b : Symbol(b, Decl(a.js, 1, 5))
+}
+
+const f1 = a ? async(...c) : 0;
+>f1 : Symbol(f1, Decl(a.js, 8, 5))
+>a : Symbol(a, Decl(a.js, 0, 5))
+>async : Symbol(async, Decl(a.js, 2, 14))
+>c : Symbol(c, Decl(a.js, 2, 5))
+
+const f2 = a ? async(...c) : x => x;
+>f2 : Symbol(f2, Decl(a.js, 9, 5))
+>a : Symbol(a, Decl(a.js, 0, 5))
+>async : Symbol(async, Decl(a.js, 2, 14))
+>c : Symbol(c, Decl(a.js, 2, 5))
+>x : Symbol(x, Decl(a.js, 9, 28))
+>x : Symbol(x, Decl(a.js, 9, 28))
+
+const f3 = a ? async () => async() : x => x;
+>f3 : Symbol(f3, Decl(a.js, 10, 5))
+>a : Symbol(a, Decl(a.js, 0, 5))
+>async : Symbol(async, Decl(a.js, 2, 14))
+>x : Symbol(x, Decl(a.js, 10, 36))
+>x : Symbol(x, Decl(a.js, 10, 36))
+
+const f4 = a ? async (...c) => async() : x => x;
+>f4 : Symbol(f4, Decl(a.js, 11, 5))
+>a : Symbol(a, Decl(a.js, 0, 5))
+>c : Symbol(c, Decl(a.js, 11, 22))
+>async : Symbol(async, Decl(a.js, 2, 14))
+>x : Symbol(x, Decl(a.js, 11, 40))
+>x : Symbol(x, Decl(a.js, 11, 40))
+
+const f5 = a ? () => async() : x => x;
+>f5 : Symbol(f5, Decl(a.js, 12, 5))
+>a : Symbol(a, Decl(a.js, 0, 5))
+>async : Symbol(async, Decl(a.js, 2, 14))
+>x : Symbol(x, Decl(a.js, 12, 30))
+>x : Symbol(x, Decl(a.js, 12, 30))
+
+const f6 = a ? async() : 0
+>f6 : Symbol(f6, Decl(a.js, 14, 5))
+>a : Symbol(a, Decl(a.js, 0, 5))
+>async : Symbol(async, Decl(a.js, 2, 14))
+
+{}
+const f7 = a ? async() : {}
+>f7 : Symbol(f7, Decl(a.js, 16, 5))
+>a : Symbol(a, Decl(a.js, 0, 5))
+>async : Symbol(async, Decl(a.js, 2, 14))
+
+{}
+
+function* g() {
+>g : Symbol(g, Decl(a.js, 17, 2))
+
+    const f1 = a ? yield async(...c) : 0;
+>f1 : Symbol(f1, Decl(a.js, 20, 9))
+>a : Symbol(a, Decl(a.js, 0, 5))
+>async : Symbol(async, Decl(a.js, 2, 14))
+>c : Symbol(c, Decl(a.js, 2, 5))
+
+    const f2 = a ? yield async(...c) : x => x;
+>f2 : Symbol(f2, Decl(a.js, 21, 9))
+>a : Symbol(a, Decl(a.js, 0, 5))
+>async : Symbol(async, Decl(a.js, 2, 14))
+>c : Symbol(c, Decl(a.js, 2, 5))
+>x : Symbol(x, Decl(a.js, 21, 38))
+>x : Symbol(x, Decl(a.js, 21, 38))
+}
+
+const d = { a: c };
+>d : Symbol(d, Decl(a.js, 24, 5))
+>a : Symbol(a, Decl(a.js, 24, 11))
+>c : Symbol(c, Decl(a.js, 2, 5))
+
+const e = () => c;
+>e : Symbol(e, Decl(a.js, 25, 5))
+>c : Symbol(c, Decl(a.js, 2, 5))
+
+const f8 = async(...d.a);
+>f8 : Symbol(f8, Decl(a.js, 26, 5))
+>async : Symbol(async, Decl(a.js, 2, 14))
+>d.a : Symbol(a, Decl(a.js, 24, 11))
+>d : Symbol(d, Decl(a.js, 24, 5))
+>a : Symbol(a, Decl(a.js, 24, 11))
+
+const f9 = async(...e());
+>f9 : Symbol(f9, Decl(a.js, 27, 5))
+>async : Symbol(async, Decl(a.js, 2, 14))
+>e : Symbol(e, Decl(a.js, 25, 5))
+
+const f10 = async(...[b]);
+>f10 : Symbol(f10, Decl(a.js, 28, 5))
+>async : Symbol(async, Decl(a.js, 2, 14))
+>b : Symbol(b, Decl(a.js, 1, 5))
+
+const f11 = a ? async() : function() {};
+>f11 : Symbol(f11, Decl(a.js, 29, 5))
+>a : Symbol(a, Decl(a.js, 0, 5))
+>async : Symbol(async, Decl(a.js, 2, 14))
+
+const f12 = a ? async() : "b"
+>f12 : Symbol(f12, Decl(a.js, 30, 5))
+>a : Symbol(a, Decl(a.js, 0, 5))
+>async : Symbol(async, Decl(a.js, 2, 14))
+
+{}
+const f13 = a ? async(...c) : 0
+>f13 : Symbol(f13, Decl(a.js, 32, 5))
+>a : Symbol(a, Decl(a.js, 0, 5))
+>async : Symbol(async, Decl(a.js, 2, 14))
+>c : Symbol(c, Decl(a.js, 2, 5))
+
+{}
+const f14 = a ? (c) : 0
+>f14 : Symbol(f14, Decl(a.js, 34, 5))
+>a : Symbol(a, Decl(a.js, 0, 5))
+>c : Symbol(c, Decl(a.js, 2, 5))
+
+{}
+const f15 = a ? async() : 0;
+>f15 : Symbol(f15, Decl(a.js, 36, 5))
+>a : Symbol(a, Decl(a.js, 0, 5))
+>async : Symbol(async, Decl(a.js, 2, 14))
+
+{}
+
+const f16 = a ? a ? async() : d => d : b;
+>f16 : Symbol(f16, Decl(a.js, 39, 5))
+>a : Symbol(a, Decl(a.js, 0, 5))
+>a : Symbol(a, Decl(a.js, 0, 5))
+>async : Symbol(async, Decl(a.js, 2, 14))
+>d : Symbol(d, Decl(a.js, 39, 29))
+>d : Symbol(d, Decl(a.js, 39, 29))
+>b : Symbol(b, Decl(a.js, 1, 5))
+
+const f17 = a ? a ? async(b) : d => d : b;
+>f17 : Symbol(f17, Decl(a.js, 40, 5))
+>a : Symbol(a, Decl(a.js, 0, 5))
+>a : Symbol(a, Decl(a.js, 0, 5))
+>async : Symbol(async, Decl(a.js, 2, 14))
+>b : Symbol(b, Decl(a.js, 1, 5))
+>d : Symbol(d, Decl(a.js, 40, 30))
+>d : Symbol(d, Decl(a.js, 40, 30))
+>b : Symbol(b, Decl(a.js, 1, 5))
+
+const f18 = a ? a ? async(...c) : d => d : b;
+>f18 : Symbol(f18, Decl(a.js, 41, 5))
+>a : Symbol(a, Decl(a.js, 0, 5))
+>a : Symbol(a, Decl(a.js, 0, 5))
+>async : Symbol(async, Decl(a.js, 2, 14))
+>c : Symbol(c, Decl(a.js, 2, 5))
+>d : Symbol(d, Decl(a.js, 41, 33))
+>d : Symbol(d, Decl(a.js, 41, 33))
+>b : Symbol(b, Decl(a.js, 1, 5))
+
+const f19 = a ? a ? a ? async() : d => d : b : b;
+>f19 : Symbol(f19, Decl(a.js, 42, 5))
+>a : Symbol(a, Decl(a.js, 0, 5))
+>a : Symbol(a, Decl(a.js, 0, 5))
+>a : Symbol(a, Decl(a.js, 0, 5))
+>async : Symbol(async, Decl(a.js, 2, 14))
+>d : Symbol(d, Decl(a.js, 42, 33))
+>d : Symbol(d, Decl(a.js, 42, 33))
+>b : Symbol(b, Decl(a.js, 1, 5))
+>b : Symbol(b, Decl(a.js, 1, 5))
+
+const f20 = a ? d => a ? (0) : a ? async(b) : async() : (d => d = a);
+>f20 : Symbol(f20, Decl(a.js, 44, 5))
+>a : Symbol(a, Decl(a.js, 0, 5))
+>d : Symbol(d, Decl(a.js, 44, 15))
+>a : Symbol(a, Decl(a.js, 0, 5))
+>a : Symbol(a, Decl(a.js, 0, 5))
+>async : Symbol(async, Decl(a.js, 2, 14))
+>b : Symbol(b, Decl(a.js, 1, 5))
+>async : Symbol(async, Decl(a.js, 2, 14))
+>d : Symbol(d, Decl(a.js, 44, 57))
+>d : Symbol(d, Decl(a.js, 44, 57))
+>a : Symbol(a, Decl(a.js, 0, 5))
+
+const f21 = a ? d => d = async () => async() : (d => d = 0);
+>f21 : Symbol(f21, Decl(a.js, 45, 5))
+>a : Symbol(a, Decl(a.js, 0, 5))
+>d : Symbol(d, Decl(a.js, 45, 15))
+>d : Symbol(d, Decl(a.js, 45, 15))
+>async : Symbol(async, Decl(a.js, 2, 14))
+>d : Symbol(d, Decl(a.js, 45, 48))
+>d : Symbol(d, Decl(a.js, 45, 48))
+
+const f22 = h => a ? async(h = a ? async() : d => d) : d => d;
+>f22 : Symbol(f22, Decl(a.js, 46, 5))
+>h : Symbol(h, Decl(a.js, 46, 11))
+>a : Symbol(a, Decl(a.js, 0, 5))
+>async : Symbol(async, Decl(a.js, 2, 14))
+>h : Symbol(h, Decl(a.js, 46, 11))
+>a : Symbol(a, Decl(a.js, 0, 5))
+>async : Symbol(async, Decl(a.js, 2, 14))
+>d : Symbol(d, Decl(a.js, 46, 44))
+>d : Symbol(d, Decl(a.js, 46, 44))
+>d : Symbol(d, Decl(a.js, 46, 54))
+>d : Symbol(d, Decl(a.js, 46, 54))
+
+const f23 = a ? async() : (d => d);
+>f23 : Symbol(f23, Decl(a.js, 47, 5))
+>a : Symbol(a, Decl(a.js, 0, 5))
+>async : Symbol(async, Decl(a.js, 2, 14))
+>d : Symbol(d, Decl(a.js, 47, 27))
+>d : Symbol(d, Decl(a.js, 47, 27))
+
+const f24 = a ? async() : d => (a ? async() : d => d);
+>f24 : Symbol(f24, Decl(a.js, 48, 5))
+>a : Symbol(a, Decl(a.js, 0, 5))
+>async : Symbol(async, Decl(a.js, 2, 14))
+>d : Symbol(d, Decl(a.js, 48, 25))
+>a : Symbol(a, Decl(a.js, 0, 5))
+>async : Symbol(async, Decl(a.js, 2, 14))
+>d : Symbol(d, Decl(a.js, 48, 45))
+>d : Symbol(d, Decl(a.js, 48, 45))
+
+const f25 = a ? a ? as\u0079nc() : d => d : b;
+>f25 : Symbol(f25, Decl(a.js, 49, 5))
+>a : Symbol(a, Decl(a.js, 0, 5))
+>a : Symbol(a, Decl(a.js, 0, 5))
+>as\u0079nc : Symbol(async, Decl(a.js, 2, 14))
+>d : Symbol(d, Decl(a.js, 49, 34))
+>d : Symbol(d, Decl(a.js, 49, 34))
+>b : Symbol(b, Decl(a.js, 1, 5))
+

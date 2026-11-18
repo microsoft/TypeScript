@@ -12,3 +12,19 @@ const (
 	ParseFlagsIgnoreMissingOpenBrace ParseFlags = 1 << 4
 	ParseFlagsJSDoc                  ParseFlags = 1 << 5
 )
+
+type ExpressionParseFlags uint32
+
+const (
+	ExpressionParseFlagsNone                       ExpressionParseFlags = 0
+	ExpressionParseFlagsDisallowArrowReturnType    ExpressionParseFlags = 1 << 0
+	ExpressionParseFlagsAllowAmbiguousAsyncArrow   ExpressionParseFlags = 1 << 1
+	ExpressionParseFlagsAllowArrowFunctionRecovery ExpressionParseFlags = 1 << 2
+)
+
+type ParsingFlags uint8
+
+const (
+	ParsingFlagsNone      ParsingFlags = 0
+	ParsingFlagsTentative ParsingFlags = 1 << 0
+)
