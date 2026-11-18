@@ -286,9 +286,9 @@ export const title = "Profile";
 	staleCompletionItem := &lsproto.CompletionItem{
 		Label: "stale", Data: &lsproto.CompletionItemData{FileName: "/home/project/ProfileCard.vue", Position: 0, Name: "stale"},
 	}
-	completionResolveMsg, completionItem, ok := client.SendRequest(t, lsproto.CompletionItemResolveInfo, staleCompletionItem)
+	completionResolveMsg, completionItem, resolveOK := client.SendRequest(t, lsproto.CompletionItemResolveInfo, staleCompletionItem)
 	assert.Assert(t, completionResolveMsg != nil && completionResolveMsg.AsResponse().Error == nil)
-	assert.Assert(t, ok)
+	assert.Assert(t, resolveOK)
 	assert.DeepEqual(t, completionItem, staleCompletionItem)
 	codeLensMsg, _, _ := client.SendRequest(t, lsproto.CodeLensResolveInfo, &lsproto.CodeLens{
 		Range: range_, Data: &lsproto.CodeLensData{Uri: uri, Kind: "references", Position: 0},
