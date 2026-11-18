@@ -1,0 +1,49 @@
+//// [tests/cases/compiler/spreadOverridingPropertyElaboratesOnSpread.ts] ////
+
+=== spreadOverridingPropertyElaboratesOnSpread.ts ===
+type Item = {
+>Item : Symbol(Item, Decl(spreadOverridingPropertyElaboratesOnSpread.ts, 0, 0))
+
+    attribute: string;
+>attribute : Symbol(attribute, Decl(spreadOverridingPropertyElaboratesOnSpread.ts, 0, 13))
+
+};
+
+declare const result: Partial<Record<"attribute", string | null>>;
+>result : Symbol(result, Decl(spreadOverridingPropertyElaboratesOnSpread.ts, 4, 13))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+const item: Item = {
+>item : Symbol(item, Decl(spreadOverridingPropertyElaboratesOnSpread.ts, 6, 5))
+>Item : Symbol(Item, Decl(spreadOverridingPropertyElaboratesOnSpread.ts, 0, 0))
+
+    attribute: "",
+>attribute : Symbol(attribute, Decl(spreadOverridingPropertyElaboratesOnSpread.ts, 6, 20))
+
+    ...result,
+>result : Symbol(result, Decl(spreadOverridingPropertyElaboratesOnSpread.ts, 4, 13))
+
+};
+
+const item2: Item = {
+>item2 : Symbol(item2, Decl(spreadOverridingPropertyElaboratesOnSpread.ts, 11, 5))
+>Item : Symbol(Item, Decl(spreadOverridingPropertyElaboratesOnSpread.ts, 0, 0))
+
+    ...result,
+>result : Symbol(result, Decl(spreadOverridingPropertyElaboratesOnSpread.ts, 4, 13))
+
+    attribute: "",
+>attribute : Symbol(attribute, Decl(spreadOverridingPropertyElaboratesOnSpread.ts, 12, 14))
+
+};
+
+const item3: Item = {
+>item3 : Symbol(item3, Decl(spreadOverridingPropertyElaboratesOnSpread.ts, 16, 5))
+>Item : Symbol(Item, Decl(spreadOverridingPropertyElaboratesOnSpread.ts, 0, 0))
+
+    attribute: null,
+>attribute : Symbol(attribute, Decl(spreadOverridingPropertyElaboratesOnSpread.ts, 16, 21))
+
+};
+
