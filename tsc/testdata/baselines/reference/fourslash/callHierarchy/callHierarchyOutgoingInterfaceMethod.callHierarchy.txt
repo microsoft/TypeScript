@@ -1,0 +1,36 @@
+// === Call Hierarchy ===
+╭ name: probe
+├ kind: function
+├ file: /callHierarchyOutgoingInterfaceMethod.ts
+├ span:
+│ ╭ /callHierarchyOutgoingInterfaceMethod.ts:2:1-2:32
+│ │ 2: function probe(g: G) { g.m(); }
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /callHierarchyOutgoingInterfaceMethod.ts:2:10-2:15
+│ │ 2: function probe(g: G) { g.m(); }
+│ │             ^^^^^
+│ ╰
+├ incoming: none
+├ outgoing:
+│ ╭ to:
+│ │ ╭ name: m
+│ │ ├ kind: method
+│ │ ├ file: /callHierarchyOutgoingInterfaceMethod.ts
+│ │ ├ span:
+│ │ │ ╭ /callHierarchyOutgoingInterfaceMethod.ts:1:15-1:25
+│ │ │ │ 1: interface G { m(): void; }
+│ │ │ │                  ^^^^^^^^^^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /callHierarchyOutgoingInterfaceMethod.ts:1:15-1:16
+│ │ │ │ 1: interface G { m(): void; }
+│ │ │ │                  ^
+│ │ │ ╰
+│ │ ╰ outgoing: none
+│ ├ fromSpans:
+│ │ ╭ /callHierarchyOutgoingInterfaceMethod.ts:2:24-2:27
+│ │ │ 2: function probe(g: G) { g.m(); }
+│ │ │                           ^^^
+╰ ╰ ╰
