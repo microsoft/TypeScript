@@ -298,11 +298,13 @@ func TestKqueueReplacementWatchBeforeParentDispatch(t *testing.T) { //nolint:par
 	rootFD := kqueueTestDescriptor(t, root, int(lower.Fd()))
 	childFD := kqueueTestDescriptor(t, child, int(lower.Fd()))
 
-	// Hold actual kernel delivery while the public API subscribes to the
-	// replacement. No backend subscription bookkeeping is modified.
+	// Pause kernel event delivery while the public API subscribes to the
+	// replacement. On macOS, EV_DISABLE and EV_ENABLE also set the watch's
+	// event mask, so both pass the backend's full mask.
 	changes := make([]unix.Kevent_t, 2)
 	for i, fd := range []int{rootFD, childFD} {
 		unix.SetKevent(&changes[i], fd, unix.EVFILT_VNODE, unix.EV_DISABLE)
+		changes[i].Fflags = kqueueVnodeFflags
 	}
 	if _, err := unix.Kevent(impl.kq, changes, nil, nil); err != nil {
 		t.Fatal(err)
@@ -315,6 +317,7 @@ func TestKqueueReplacementWatchBeforeParentDispatch(t *testing.T) { //nolint:par
 	}
 	childRec, _ := subscribeFor(t, child, w)
 	unix.SetKevent(&changes[0], rootFD, unix.EVFILT_VNODE, unix.EV_ENABLE)
+	changes[0].Fflags = kqueueVnodeFflags
 	if _, err := unix.Kevent(impl.kq, changes[:1], nil, nil); err != nil {
 		t.Fatal(err)
 	}
