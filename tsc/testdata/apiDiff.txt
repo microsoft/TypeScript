@@ -94,17 +94,11 @@ typePredicateToString
 
 
 # Program (old) methods compared to Program (new).
-## (15) Program methods matched in async Program  ##
+## (21) Program methods matched in async Program  ##
 
-## Program methods missing from async Program (8) ##
-getIdentifierCount
-getInstantiationCount
-getNodeCount
-getRelationCacheSizes
+## Program methods missing from async Program (2) ##
 getResolvedProjectReferences
 getSourceFiles
-getSymbolCount
-getTypeCount
 
 
 # SolutionBuilder (old) methods compared to BuildOrchestrator (new).
@@ -238,9 +232,9 @@ isUnionOrIntersection
 
 
 # NodeFactory (old) methods compared to ts (new).
-## (389) NodeFactory methods matched in async ts  ##
+## (385) NodeFactory methods matched in async ts  ##
 
-## NodeFactory methods missing from async ts (58) ##
+## NodeFactory methods missing from async ts (62) ##
 createAdd
 createAssignment
 createBitwiseAnd
@@ -267,6 +261,7 @@ createLessThanEquals
 createLogicalAnd
 createLogicalNot
 createLogicalOr
+createLoopVariable
 createModifier
 createModifiersFromModifierFlags
 createModulo
@@ -285,10 +280,13 @@ createStrictEquality
 createStrictInequality
 createSubtract
 createSuper
+createTempVariable
 createThis
 createTrue
+createUniqueName
 createUnsignedRightShift
 createVoidZero
+getGeneratedNameForNode
 replaceDecoratorsAndModifiers
 replaceModifiers
 replacePropertyName
@@ -540,12 +538,11 @@ getSignatureUsage
 getCompletionsAtPosition
 formatNodeForInsertion
 
-## New Program methods in async API (22) ##
+## New Program methods in async API (21) ##
 getCanonicalFileName
 getNewLine
 setOwnedSnapshot
 dispose
-getStatistics
 getSourceFileByPath
 getResolvedModule
 getResolvedModuleFromModuleSpecifier
