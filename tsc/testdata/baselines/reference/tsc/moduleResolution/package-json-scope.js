@@ -28,7 +28,7 @@ export const x = 10;
     ],
 }
 
-tsgo -p src --explainFiles --extendedDiagnostics
+tsc -p src --explainFiles --extendedDiagnostics
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 ======== Resolving module './fileB.mjs' from '/home/src/workspaces/project/src/fileA.ts'. ========
@@ -246,7 +246,7 @@ Signatures::
 Edit [0]:: Delete package.json
 //// [/home/src/workspaces/project/package.json] *deleted*
 
-tsgo -p src --explainFiles --extendedDiagnostics
+tsc -p src --explainFiles --extendedDiagnostics
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 ======== Resolving module './fileB.mjs' from '/home/src/workspaces/project/src/fileA.ts'. ========

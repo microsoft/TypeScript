@@ -2,7 +2,7 @@ currentDirectory::/home/src/workspaces/project
 useCaseSensitiveFileNames::true
 Input::
 
-tsgo --init --target es5 --jsx react
+tsc --init --target es5 --jsx react
 ExitStatus:: Success
 Output::
 

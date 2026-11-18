@@ -8,7 +8,7 @@ console.log(a);
 //// [/home/src/workspaces/project/x.ts] *new* 
 const a = 1;
 
-tsgo --watch
+tsc --watch
 ExitStatus:: Success
 Output::
 [2J[3J[H[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...

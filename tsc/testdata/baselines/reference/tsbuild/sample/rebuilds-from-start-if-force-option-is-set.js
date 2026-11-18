@@ -60,7 +60,7 @@ export const m = mod;
     },
 }
 
-tsgo --b tests
+tsc --b tests
 ExitStatus:: Success
 Output::
 //// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
@@ -415,7 +415,7 @@ Signatures::
 
 Edit [0]:: --force build
 
-tsgo --b tests --verbose --force
+tsc --b tests --verbose --force
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 

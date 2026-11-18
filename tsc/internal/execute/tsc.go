@@ -51,6 +51,9 @@ func stopTracing(sys tsc.System, tr *tracing.Tracing) {
 }
 
 func CommandLine(ctx context.Context, sys tsc.System, commandLineArgs []string, testing tsc.CommandLineTesting) tsc.CommandLineResult {
+	if ctx.Err() != nil {
+		return tsc.CommandLineResult{Status: tsc.ExitStatusCancelled}
+	}
 	if len(commandLineArgs) > 0 {
 		switch strings.ToLower(commandLineArgs[0]) {
 		case "-b", "--b", "-build", "--build":
@@ -246,6 +249,9 @@ func tscCompilation(ctx context.Context, sys tsc.System, commandLine *tsoptions.
 			testing,
 		)
 		watcher.start(ctx)
+		if ctx.Err() != nil {
+			return tsc.CommandLineResult{Status: tsc.ExitStatusCancelled, Watcher: watcher}
+		}
 		return tsc.CommandLineResult{Status: tsc.ExitStatusSuccess, Watcher: watcher}
 	} else if configForCompilation.CompilerOptions().IsIncremental() {
 		return performIncrementalCompilation(
@@ -318,11 +324,15 @@ func performIncrementalCompilation(
 	tr := startTracingIfNeeded(sys, config, testing)
 
 	parseStart := sys.Now()
-	program := compiler.NewProgram(compiler.ProgramOptions{
+	program, err := compiler.NewProgram(ctx, compiler.ProgramOptions{
 		Config:  config,
 		Host:    host,
 		Tracing: tr,
 	})
+	if err != nil {
+		stopTracing(sys, tr)
+		return tsc.CommandLineResult{Status: tsc.ExitStatusCancelled}
+	}
 	compileTimes.ParseTime = sys.Now().Sub(parseStart)
 	changesComputeStart := sys.Now()
 	incrementalProgram := incremental.NewProgram(program, oldProgram, incremental.CreateHost(host), sys.Now, testing != nil)
@@ -330,7 +340,7 @@ func performIncrementalCompilation(
 	if contentMapperHost != nil {
 		compileTimes.ContentMapperTimes = contentMapperHost.Timings()
 	}
-	result, _ := tsc.EmitAndReportStatistics(tsc.EmitInput{
+	result, _ := tsc.EmitAndReportStatistics(ctx, tsc.EmitInput{
 		Sys:                sys,
 		ProgramLike:        incrementalProgram,
 		Program:            incrementalProgram.GetProgram(),
@@ -379,16 +389,20 @@ func performCompilation(
 	tr := startTracingIfNeeded(sys, config, testing)
 
 	parseStart := sys.Now()
-	program := compiler.NewProgram(compiler.ProgramOptions{
+	program, err := compiler.NewProgram(ctx, compiler.ProgramOptions{
 		Config:  config,
 		Host:    host,
 		Tracing: tr,
 	})
+	if err != nil {
+		stopTracing(sys, tr)
+		return tsc.CommandLineResult{Status: tsc.ExitStatusCancelled}
+	}
 	compileTimes.ParseTime = sys.Now().Sub(parseStart)
 	if contentMapperHost != nil {
 		compileTimes.ContentMapperTimes = contentMapperHost.Timings()
 	}
-	result, _ := tsc.EmitAndReportStatistics(tsc.EmitInput{
+	result, _ := tsc.EmitAndReportStatistics(ctx, tsc.EmitInput{
 		Sys:                sys,
 		ProgramLike:        program,
 		Program:            program,

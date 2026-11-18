@@ -9,7 +9,7 @@ import * as xs2 from "fp-ts/lib/struct";
 import * as xs3 from "./Struct";
 import * as xs4 from "./struct";
 
-tsgo /user/username/projects/myproject/src/struct.d.ts --forceConsistentCasingInFileNames --explainFiles
+tsc /user/username/projects/myproject/src/struct.d.ts --forceConsistentCasingInFileNames --explainFiles
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96msrc/struct.d.ts[0m:[93m2[0m:[93m22[0m - [91merror[0m[90m TS1149: [0mFile name '/user/username/projects/myproject/node_modules/fp-ts/lib/struct.d.ts' differs from already included file name '/user/username/projects/myproject/node_modules/fp-ts/lib/Struct.d.ts' only in casing.

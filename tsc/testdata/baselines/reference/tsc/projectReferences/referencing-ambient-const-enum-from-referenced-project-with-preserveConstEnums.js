@@ -25,7 +25,7 @@ export const enum E { A = 1 }
     },
 }
 
-tsgo --p project
+tsc --p project
 ExitStatus:: Success
 Output::
 //// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*

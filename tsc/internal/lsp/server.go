@@ -206,7 +206,7 @@ type Server struct {
 	watcherID        atomic.Uint32
 	watchers         collections.SyncSet[project.WatcherID]
 
-	// contentMapperRegistrationMu serializes RegisterContentMapperExtensions so the method is correctly
+	// contentMapperRegistrationMu serializes RegisterContentMapperSelectors so the method is correctly
 	// synchronized on its own rather than relying on callers to serialize it. It guards
 	// contentMapperExtensionsRegistered and the ordered unregister/register requests the method sends.
 	contentMapperRegistrationMu sync.Mutex
@@ -452,11 +452,24 @@ func (s *Server) supportsContentMapperRegistration(id string) bool {
 	}
 }
 
-// RegisterContentMapperExtensions implements project.Client. It dynamically registers text document
-// synchronization and pull diagnostics for the given otherwise unsupported file extensions so the editor forwards their
-// open/change/close notifications to the server and requests diagnostics for them. It is called with the
-// full desired set each time it changes; an empty slice removes any prior registration.
-func (s *Server) RegisterContentMapperExtensions(ctx context.Context, extensions []string) error {
+func contentMapperDocumentPattern(selector project.ContentMapperSelector, relativePatternSupport bool) lsproto.PatternOrRelativePattern {
+	if selector.Base == "" {
+		return lsproto.PatternOrRelativePattern{Pattern: new(selector.Pattern)}
+	}
+	if !relativePatternSupport {
+		return lsproto.PatternOrRelativePattern{Pattern: new(tspath.CombinePaths(selector.Base.AsString(), selector.Pattern))}
+	}
+	baseURI := lsproto.URI(lsconv.FileNameToDocumentURI(tspath.RootedFilePathFromPath(selector.Base.AsPath())))
+	return lsproto.PatternOrRelativePattern{
+		RelativePattern: &lsproto.RelativePattern{
+			BaseUri: lsproto.WorkspaceFolderOrURI{URI: &baseURI},
+			Pattern: selector.Pattern,
+		},
+	}
+}
+
+// RegisterContentMapperSelectors replaces the client registrations; an empty slice removes them.
+func (s *Server) RegisterContentMapperSelectors(ctx context.Context, selectors []project.ContentMapperSelector) error {
 	if !s.clientCapabilities.TextDocument.Synchronization.DynamicRegistration {
 		return nil
 	}
@@ -504,25 +517,29 @@ func (s *Server) RegisterContentMapperExtensions(ctx context.Context, extensions
 		s.contentMapperExtensionsRegistered = false
 	}
 
-	if len(extensions) == 0 {
+	if len(selectors) == 0 {
 		return nil
 	}
 
-	filters := make([]lsproto.TextDocumentFilterLanguageOrSchemeOrPattern, 0, len(extensions))
-	for _, ext := range extensions {
+	filters := make([]lsproto.TextDocumentFilterLanguageOrSchemeOrPattern, 0, len(selectors))
+	for _, selector := range selectors {
 		filters = append(filters, lsproto.TextDocumentFilterLanguageOrSchemeOrPattern{
 			Pattern: &lsproto.TextDocumentFilterPattern{
-				Pattern: lsproto.PatternOrRelativePattern{Pattern: new("**/*" + ext)},
+				Pattern: contentMapperDocumentPattern(selector, s.clientCapabilities.TextDocument.Filters.RelativePatternSupport),
 			},
 		})
 	}
 	selector := lsproto.DocumentSelectorOrNull{DocumentSelector: &filters}
-	contentMapperFileRenameFilters := make([]*lsproto.FileOperationFilter, 0, len(extensions))
-	for _, extension := range extensions {
+	contentMapperFileRenameFilters := make([]*lsproto.FileOperationFilter, 0, len(selectors))
+	var seenExtensions collections.Set[string]
+	for _, selector := range selectors {
+		if !seenExtensions.AddIfAbsent(selector.Extension) {
+			continue
+		}
 		contentMapperFileRenameFilters = append(contentMapperFileRenameFilters, &lsproto.FileOperationFilter{
 			Scheme: new("file"),
 			Pattern: &lsproto.FileOperationPattern{
-				Glob: "**/*" + extension,
+				Glob: project.ContentMapperExtensionPattern(selector.Extension),
 			},
 		})
 	}
@@ -1189,7 +1206,7 @@ func (s *Server) handleRequestOrNotification(ctx context.Context, req *lsproto.R
 			idStr = " (" + req.ID.String() + ")"
 		}
 		if err != nil {
-			if resp, ok := contentMapperFallbackResponse(req.Method, err); ok {
+			if resp, ok := contentMapperFallbackResponse(req.Method, req.Params, err); ok {
 				if !s.logger.IsTracing() {
 					s.logger.Info("handled method '", req.Method, "'", idStr, " in ", time.Since(start))
 				}
@@ -1232,7 +1249,7 @@ func (s *Server) handleRequestOrNotification(ctx context.Context, req *lsproto.R
 // unknown file types not handled by any content mapper. This typically serves a
 // short window in time between when the server has unregistered content mapper
 // extensions and when the client has stopped sending requests for those file types.
-func contentMapperFallbackResponse(method lsproto.Method, err error) (any, bool) {
+func contentMapperFallbackResponse(method lsproto.Method, params any, err error) (any, bool) {
 	if !errors.Is(err, project.ErrNoProjectForUnknownScriptKind) {
 		return nil, false
 	}
@@ -1243,6 +1260,8 @@ func contentMapperFallbackResponse(method lsproto.Method, err error) (any, bool)
 				Items: []*lsproto.Diagnostic{},
 			},
 		}, true
+	case lsproto.MethodCompletionItemResolve:
+		return params, true
 	case lsproto.MethodTextDocumentHover,
 		lsproto.MethodTextDocumentSignatureHelp,
 		lsproto.MethodTextDocumentDefinition,
@@ -1251,7 +1270,23 @@ func contentMapperFallbackResponse(method lsproto.Method, err error) (any, bool)
 		lsproto.MethodTextDocumentReferences,
 		lsproto.MethodTextDocumentDocumentHighlight,
 		lsproto.MethodTextDocumentCompletion,
-		lsproto.MethodTextDocumentRename:
+		lsproto.MethodTextDocumentRename,
+		lsproto.MethodTextDocumentCodeAction,
+		lsproto.MethodTextDocumentSemanticTokensFull,
+		lsproto.MethodTextDocumentSemanticTokensRange,
+		lsproto.MethodTextDocumentDocumentSymbol,
+		lsproto.MethodTextDocumentFoldingRange,
+		lsproto.MethodTextDocumentSelectionRange,
+		lsproto.MethodTextDocumentInlayHint,
+		lsproto.MethodTextDocumentCodeLens,
+		lsproto.MethodTextDocumentFormatting,
+		lsproto.MethodTextDocumentRangeFormatting,
+		lsproto.MethodTextDocumentOnTypeFormatting,
+		lsproto.MethodTextDocumentLinkedEditingRange,
+		lsproto.MethodTextDocumentPrepareCallHierarchy,
+		lsproto.MethodTextDocumentPrepareRename,
+		lsproto.MethodCallHierarchyIncomingCalls,
+		lsproto.MethodCallHierarchyOutgoingCalls:
 		return lsproto.Null{}, true
 	default:
 		return nil, false
@@ -1746,6 +1781,22 @@ func (s *Server) handleInitialized(ctx context.Context, params *lsproto.Initiali
 	}
 
 	workspaceRoots := getInitialWorkspaceRoots(s.initializeParams)
+	var workspaceFolders []ls.WorkspaceFolder
+	if s.initializeParams.WorkspaceFolders != nil && s.initializeParams.WorkspaceFolders.WorkspaceFolders != nil {
+		for _, folder := range *s.initializeParams.WorkspaceFolders.WorkspaceFolders {
+			workspaceFolders = append(workspaceFolders, ls.WorkspaceFolder{
+				Path: tspath.RootedDirectoryPathFromPath(lsproto.DocumentUri(folder.Uri).Path()),
+				Name: folder.Name,
+			})
+		}
+	} else {
+		for _, root := range workspaceRoots {
+			workspaceFolders = append(workspaceFolders, ls.WorkspaceFolder{
+				Path: root,
+				Name: root.BaseName(),
+			})
+		}
+	}
 
 	cwd := s.cwd
 	if s.clientCapabilities.Workspace.WorkspaceFolders &&
@@ -1770,17 +1821,18 @@ func (s *Server) handleInitialized(ctx context.Context, params *lsproto.Initiali
 	s.session = project.NewSession(&project.SessionInit{
 		BackgroundCtx: lsproto.WithClientCapabilities(s.backgroundCtx, &s.clientCapabilities),
 		Options: &project.SessionOptions{
-			CurrentDirectory:       cwd,
-			DefaultLibraryPath:     s.defaultLibraryPath,
-			TypingsLocation:        s.typingsLocation,
-			PositionEncoding:       s.positionEncoding,
-			WatchEnabled:           s.watchEnabled,
-			LoggingEnabled:         true,
-			TelemetryEnabled:       enableTelemetry,
-			DebounceDelay:          500 * time.Millisecond,
-			PushDiagnosticsEnabled: !disablePushDiagnostics,
-			RunExternalCode:        runExternalCode,
-			InitialWorkspaceRoots:  workspaceRoots,
+			CurrentDirectory:        cwd,
+			DefaultLibraryPath:      s.defaultLibraryPath,
+			TypingsLocation:         s.typingsLocation,
+			PositionEncoding:        s.positionEncoding,
+			WatchEnabled:            s.watchEnabled,
+			LoggingEnabled:          true,
+			TelemetryEnabled:        enableTelemetry,
+			DebounceDelay:           500 * time.Millisecond,
+			PushDiagnosticsEnabled:  !disablePushDiagnostics,
+			RunExternalCode:         runExternalCode,
+			InitialWorkspaceRoots:   workspaceRoots,
+			InitialWorkspaceFolders: workspaceFolders,
 		},
 		FS:                  s.fs,
 		Logger:              s.logger,
@@ -2429,7 +2481,7 @@ func (s *Server) handleInitializeAPISession(ctx context.Context, params *lsproto
 func (s *Server) generateAPIPipeName() string {
 	now := time.Now().UnixNano()
 	rnd := rand.Uint64()
-	return fmt.Sprintf("tsgo-api-%x-%x", now, rnd)
+	return fmt.Sprintf("typescript-api-%x-%x", now, rnd)
 }
 
 func (s *Server) removeAPISession(id string) {
@@ -2559,8 +2611,12 @@ func parseContentMapperContributions(values []*lsproto.ContentMapperContribution
 			return result, errors.New("content mapper contribution requires a contributorId")
 		}
 		identity := fmt.Sprintf("%s[%d]", value.ContributorId, index)
-		validExtensions := make([]string, 0, len(value.Extensions))
-		for _, extension := range value.Extensions {
+		extensions := valueOrZero(value.Extensions)
+		if len(extensions) == 0 && value.InferredProjectContribution != nil && value.InferredProjectContribution.Manifest != nil {
+			extensions = valueOrZero(value.InferredProjectContribution.Manifest.Extensions)
+		}
+		validExtensions := make([]string, 0, len(extensions))
+		for _, extension := range extensions {
 			if !isValidContributedContentMapperExtension(extension) {
 				return result, fmt.Errorf("content mapper contribution %q has invalid extension %q", identity, extension)
 			}
@@ -2607,6 +2663,7 @@ func parseContentMapperContributions(values []*lsproto.ContentMapperContribution
 			DynamicConfig:   valueOrZero(manifest.DynamicConfig),
 			ContributionID:  identity,
 		}
+		mapper.Manifest.DefaultExtensions = slices.Clone(valueOrZero(manifest.Extensions))
 		mapper.Manifest.DefaultOutputExtensions = maps.Clone(valueOrZero(manifest.OutputExtensions))
 		mapper.Definition.OutputExtensions = maps.Clone(mapper.Manifest.DefaultOutputExtensions)
 		if manifest.Cwd != nil {

@@ -1,0 +1,61 @@
+/src/main.ts(4,8): error TS1192: Module '"/src/script"' has no default export.
+/src/main.ts(5,7): error TS2322: Type 'typeof import("/stub")' is not assignable to type 'number'.
+/src/main.ts(6,7): error TS2322: Type 'typeof import("/stub")' is not assignable to type 'number'.
+/src/main.ts(7,7): error TS2322: Type 'typeof import("/generated/component.svelte")' is not assignable to type 'number'.
+
+
+==== /tsconfig.json (0 errors) ====
+    {
+        "compilerOptions": {
+            "paths": { "x.svelte": ["./stub.d.ts"] },
+            "rootDirs": ["./src", "./generated"]
+        },
+        "files": ["ambient.d.ts", "src/main.ts"]
+    }
+    
+==== /ambient.d.ts (0 errors) ====
+    declare module "*.svelte" {
+        const value: number;
+        export default value;
+    }
+    declare module "*.svelte" with { type: "text" } {
+        const value: string;
+        export default value;
+    }
+    declare module "*.js" {
+        const value: number;
+        export default value;
+    }
+    
+==== /src/main.ts (4 errors) ====
+    import fromPaths from "x.svelte";
+    import emptyAttributes from "x.svelte" with {};
+    import fromRootDirs from "./component.svelte";
+    import fromRelative from "./script.js";
+           ~~~~~~~~~~~~
+!!! error TS1192: Module '"/src/script"' has no default export.
+    const fromPathsValue: number = fromPaths;
+          ~~~~~~~~~~~~~~
+!!! error TS2322: Type 'typeof import("/stub")' is not assignable to type 'number'.
+    const emptyAttributesValue: number = emptyAttributes;
+          ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'typeof import("/stub")' is not assignable to type 'number'.
+    const fromRootDirsValue: number = fromRootDirs;
+          ~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'typeof import("/generated/component.svelte")' is not assignable to type 'number'.
+    
+    import text from "x.svelte" with { type: "text" };
+    const textValue: string = text;
+    
+    import missing from "./missing.svelte";
+    const missingValue: number = missing;
+    
+==== /stub.d.ts (0 errors) ====
+    export {};
+    
+==== /generated/component.svelte.d.ts (0 errors) ====
+    export {};
+    
+==== /src/script.ts (0 errors) ====
+    export {};
+    

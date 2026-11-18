@@ -13,7 +13,7 @@ export const b = 10;
     }
 }
 
-tsgo --noEmit
+tsc --noEmit
 ExitStatus:: Success
 Output::
 //// [/home/src/projects/project/tsconfig.tsbuildinfo] *new* 
@@ -115,7 +115,7 @@ Signatures::
 
 Edit [0]:: no change
 
-tsgo --noEmit
+tsc --noEmit
 ExitStatus:: Success
 Output::
 
@@ -128,7 +128,7 @@ Edit [1]:: Fix error
 //// [/home/src/projects/project/a.ts] *modified* 
 export const a = "hello";
 
-tsgo --noEmit
+tsc --noEmit
 ExitStatus:: Success
 Output::
 //// [/home/src/projects/project/tsconfig.tsbuildinfo] *modified* 
@@ -211,7 +211,7 @@ Signatures::
 
 Edit [2]:: no change
 
-tsgo --noEmit
+tsc --noEmit
 ExitStatus:: Success
 Output::
 
@@ -222,7 +222,7 @@ Signatures::
 
 Edit [3]:: Emit after fixing error
 
-tsgo 
+tsc 
 ExitStatus:: Success
 Output::
 //// [/home/src/projects/project/a.js] *new* 
@@ -297,7 +297,7 @@ Signatures::
 
 Edit [4]:: no change
 
-tsgo --noEmit
+tsc --noEmit
 ExitStatus:: Success
 Output::
 
@@ -310,7 +310,7 @@ Edit [5]:: Introduce error
 //// [/home/src/projects/project/a.ts] *modified* 
 const a = class { private p = 10; };
 
-tsgo --noEmit
+tsc --noEmit
 ExitStatus:: Success
 Output::
 //// [/home/src/projects/project/tsconfig.tsbuildinfo] *modified* 
@@ -403,7 +403,7 @@ Signatures::
 
 Edit [6]:: Emit when error
 
-tsgo 
+tsc 
 ExitStatus:: Success
 Output::
 //// [/home/src/projects/project/a.js] *modified* 
@@ -486,7 +486,7 @@ Signatures::
 
 Edit [7]:: no change
 
-tsgo --noEmit
+tsc --noEmit
 ExitStatus:: Success
 Output::
 

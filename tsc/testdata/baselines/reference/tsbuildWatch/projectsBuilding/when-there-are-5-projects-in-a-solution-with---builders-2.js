@@ -48,7 +48,7 @@ export const pkg4 = 4;
     ]
 }
 
-tsgo -b -w -v --builders 2
+tsc -b -w -v --builders 2
 ExitStatus:: Success
 Output::
 [2J[3J[H[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...

@@ -6,7 +6,7 @@ export function* values() { yield 1; }
 //// [/home/src/workspaces/project/tsconfig.json] *new* 
 {"compilerOptions": {"allowJs": true, "noEmit": true, "incremental": true}}
 
-tsgo 
+tsc 
 ExitStatus:: Success
 Output::
 //// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
@@ -92,7 +92,7 @@ Signatures::
 
 Edit [0]:: no change
 
-tsgo 
+tsc 
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *modified* 
@@ -154,7 +154,7 @@ Edit [1]:: enable javascript checking
 //// [/home/src/workspaces/project/tsconfig.json] *modified* 
 {"compilerOptions": {"allowJs": true, "checkJs": true, "noEmit": true, "incremental": true}}
 
-tsgo 
+tsc 
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [91merror[0m[90m TS2318: [0mCannot find global type 'IterableIterator'.
@@ -238,7 +238,7 @@ Signatures::
 
 Edit [2]:: no change
 
-tsgo 
+tsc 
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [91merror[0m[90m TS2318: [0mCannot find global type 'IterableIterator'.

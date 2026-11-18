@@ -35,7 +35,7 @@ import {} from "../compiler/parser.ts";
     }
 }
 
-tsgo --p src/services --pretty false
+tsc --p src/services --pretty false
 ExitStatus:: Success
 Output::
 //// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*

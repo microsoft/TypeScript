@@ -16,7 +16,7 @@ export const x = 10;
     ],
 }
 
-tsgo --composite false --tsBuildInfoFile null
+tsc --composite false --tsBuildInfoFile null
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96mtsconfig.json[0m:[93m3[0m:[93m19[0m - [91merror[0m[90m TS5108: [0mOption 'target=ES5' has been removed. Please remove it from your configuration.

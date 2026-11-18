@@ -7,12 +7,13 @@ import {
     updateUseTsgoSetting,
 } from "./commands";
 import {
-    aiConnectionString,
     getExplicitConfigTarget,
     getUseTsgo,
     getWinningTsgoConfigKey,
     needsExtHostRestartOnChange,
-} from "./util";
+    shouldStartNativeServer,
+} from "./settings";
+import { aiConnectionString } from "./util";
 
 import { TelemetryReporter as VSCodeTelemetryReporter } from "@vscode/extension-telemetry";
 import {
@@ -88,7 +89,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<Extens
                     }
                 }
                 else {
-                    if (await shouldStartTsgo(context)) {
+                    if (shouldStartNativeServer(context)) {
                         await sessionManager.restart(context);
                     }
                     else {
@@ -100,14 +101,14 @@ export async function activate(context: vscode.ExtensionContext): Promise<Extens
     }));
     context.subscriptions.push({ dispose: () => clearTimeout(configChangeTimeout) });
 
-    const hasOnboardedTsgoStateKey = "hasOnboardedTsgo";
-    const shouldOnboardTsgo = !context.globalState.get<boolean>(hasOnboardedTsgoStateKey);
-    if (shouldOnboardTsgo) {
-        await context.globalState.update(hasOnboardedTsgoStateKey, true);
+    const hasOnboardedStateKey = "hasOnboardedTsgo";
+    const shouldOnboard = !context.globalState.get<boolean>(hasOnboardedStateKey);
+    if (shouldOnboard) {
+        await context.globalState.update(hasOnboardedStateKey, true);
     }
 
     const useTsgo = getUseTsgo();
-    if (useTsgo === undefined && shouldOnboardTsgo) {
+    if (useTsgo === undefined && shouldOnboard) {
         updateUseTsgoSetting(true);
         return api;
     }
@@ -141,14 +142,6 @@ export async function activate(context: vscode.ExtensionContext): Promise<Extens
     else if (useTsgo !== true) {
         output.appendLine(vscode.l10n.t("TypeScript 7 is disabled. Select 'TypeScript: Enable TypeScript 7' in the command palette to enable it."));
         return api;
-    }
-
-    async function shouldStartTsgo(context: vscode.ExtensionContext): Promise<boolean> {
-        const useTsgo = getUseTsgo();
-        if (context.extensionMode === vscode.ExtensionMode.Development && !vscode.extensions.getExtension("vscode.typescript-language-features")) {
-            return useTsgo !== false;
-        }
-        return useTsgo === true;
     }
 
     await startNativeServer();
@@ -198,7 +191,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<Extens
             : vscode.l10n.t(`{0} extensions contribute TypeScript server plugins that will not be loaded because TypeScript 7 is enabled globally: {1}`, uniqueExtensionNames.length, extensionNames);
 
         const ok = vscode.l10n.t("OK");
-        const disableInWorkspace = vscode.l10n.t("Disable Native Preview in Workspace");
+        const disableInWorkspace = vscode.l10n.t("Disable TypeScript 7 in Workspace");
         const dontShowAgain = vscode.l10n.t("Don't Show Again");
 
         const options = [ok];

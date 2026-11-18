@@ -6,6 +6,7 @@ import (
 	"slices"
 	"strings"
 	"unicode"
+	"unicode/utf8"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/astnav"
@@ -17,6 +18,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/printer"
 	"github.com/microsoft/TypeScript/tsc/internal/scanner"
 	"github.com/microsoft/TypeScript/tsc/internal/spanmap"
+	"github.com/microsoft/TypeScript/tsc/internal/stringutil"
 )
 
 func (l *LanguageService) ProvideFoldingRange(ctx context.Context, documentURI lsproto.DocumentUri) (lsproto.FoldingRangeResponse, error) {
@@ -104,7 +106,54 @@ func (l *LanguageService) adjustFoldingEnd(ranges []*lsproto.FoldingRange, sourc
 				foldEndChar := sourceText[int(endOffset)-1]
 				if foldEndChar == '}' || foldEndChar == ']' || foldEndChar == ')' || foldEndChar == '`' || foldEndChar == '>' {
 					if r.EndLine > r.StartLine {
-						r.EndLine--
+						var adjustLine bool
+						// Decide whether to adjust the end line based on the original content following the folding range
+						if sourceFile.IsContentMapped() {
+							originalText := sourceFile.OriginalText()
+							end := lsproto.Position{Line: r.EndLine, Character: *r.EndCharacter}
+							offset := l.converters.FromLSPRangeToOriginal(
+								sourceFile,
+								lsproto.Range{Start: end, End: end},
+							).End()
+							nextPos := offset
+							for nextPos < len(originalText) {
+								char, width := utf8.DecodeRuneInString(originalText[nextPos:])
+								if !stringutil.IsWhiteSpaceLike(char) {
+									adjustLine = true
+									break
+								}
+								if char == '\r' || char == '\n' {
+									break
+								}
+								nextPos += width
+							}
+						} else { // Decide based on the TS content
+							tokenAfterFold := astnav.GetTokenAtPosition(sourceFile, int(endOffset))
+							isJSXText := ast.IsJsxText(tokenAfterFold)
+							jsxStart := astnav.GetStartOfNode(tokenAfterFold, sourceFile, false /*includeJSDoc*/)
+							isJSXTextSameLine := isJSXText && jsxStart >= int(endOffset) && !strings.ContainsAny(sourceText[int(endOffset):jsxStart], "\r\n")
+							if isJSXTextSameLine {
+								// Keep JSX text visible on same line
+								adjustLine = true
+							} else {
+								nextPos := int(endOffset)
+								for nextPos < len(sourceText) {
+									char, width := utf8.DecodeRuneInString(sourceText[nextPos:])
+									if !stringutil.IsWhiteSpaceLike(char) {
+										// Non-whitespace after closing bracket on the same line
+										adjustLine = true
+										break
+									}
+									if char == '\r' || char == '\n' {
+										break
+									}
+									nextPos += width
+								}
+							}
+						}
+						if adjustLine {
+							r.EndLine--
+						}
 					}
 				}
 			}
@@ -436,7 +485,7 @@ func getOutliningSpanForNode(ctx context.Context, n *ast.Node, sourceFile *ast.S
 	case ast.KindTupleType:
 		return spanForNode(ctx, n, ast.KindOpenBracketToken, !ast.IsTupleTypeNode(n.Parent) /*useFullStart*/, sourceFile, l)
 	case ast.KindCaseClause, ast.KindDefaultClause:
-		return spanForNodeArray(ctx, n.AsCaseOrDefaultClause().Statements, sourceFile, l)
+		return spanForNodeArray(ctx, n.StatementList(), sourceFile, l)
 	case ast.KindObjectLiteralExpression:
 		return spanForNode(ctx, n, ast.KindOpenBraceToken, !ast.IsArrayLiteralExpression(n.Parent) && !ast.IsCallExpression(n.Parent) /*useFullStart*/, sourceFile, l)
 	case ast.KindArrayLiteralExpression:

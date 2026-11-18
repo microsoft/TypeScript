@@ -4,7 +4,7 @@ Input::
 //// [/home/src/workspaces/project/index.ts] *new* 
 const x: string = 1;
 
-tsgo index.ts --noEmit
+tsc index.ts --noEmit
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96mindex.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'number' is not assignable to type 'string'.

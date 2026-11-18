@@ -529,6 +529,41 @@ func TestSession(t *testing.T) {
 			snapshot = session.Snapshot()
 			assert.Equal(t, snapshot.GetFile("/home/projects/TS/p1/src/index.ts").MatchesDiskText(), true)
 		})
+
+		t.Run("created watch event compares overlay with disk in either order", func(t *testing.T) {
+			t.Parallel()
+			for _, saveFirst := range []bool{true, false} {
+				name := "watch event first"
+				if saveFirst {
+					name = "save event first"
+				}
+				t.Run(name, func(t *testing.T) {
+					t.Parallel()
+					session, utils := projecttestutil.Setup(defaultFiles)
+					const uri = lsproto.DocumentUri("file:///home/projects/TS/p1/src/index.ts")
+					overlayContent := defaultFiles["/home/projects/TS/p1/src/index.ts"].(string)
+					session.DidOpenFile(context.Background(), uri, 1, overlayContent, lsproto.LanguageKindTypeScript)
+					assert.NilError(t, utils.FS().WriteFile(uri.FileName(), "const disk = true;"))
+
+					watch := func() {
+						session.DidChangeWatchedFiles(context.Background(), []*lsproto.FileEvent{{Type: lsproto.FileChangeTypeCreated, Uri: uri}})
+					}
+					if saveFirst {
+						session.DidSaveFile(context.Background(), uri)
+						watch()
+					} else {
+						watch()
+						session.DidSaveFile(context.Background(), uri)
+					}
+
+					session.WaitForBackgroundTasks()
+					session.DidOpenFile(context.Background(), "file:///home/projects/TS/p1/src/x.ts", 1, defaultFiles["/home/projects/TS/p1/src/x.ts"].(string), lsproto.LanguageKindTypeScript)
+					file := session.Snapshot().GetFile(uri.FileName())
+					assert.Equal(t, file.Content(), overlayContent)
+					assert.Assert(t, !file.MatchesDiskText())
+				})
+			}
+		})
 	})
 
 	t.Run("Source file sharing", func(t *testing.T) {
@@ -659,6 +694,74 @@ func TestSession(t *testing.T) {
 			lsAfter, err := session.GetLanguageService(context.Background(), "file:///home/projects/TS/p1/src/index.ts")
 			assert.NilError(t, err)
 			assert.Check(t, lsAfter.GetProgram() != programBefore)
+		})
+
+		t.Run("create closed program file reloads content (atomic save)", func(t *testing.T) {
+			t.Parallel()
+			files := maps.Clone(defaultFiles)
+			session, utils := projecttestutil.Setup(files)
+
+			session.DidOpenFile(context.Background(), "file:///home/projects/TS/p1/src/index.ts", 1, files["/home/projects/TS/p1/src/index.ts"].(string), lsproto.LanguageKindTypeScript)
+
+			lsBefore, err := session.GetLanguageService(context.Background(), "file:///home/projects/TS/p1/src/index.ts")
+			assert.NilError(t, err)
+			programBefore := lsBefore.GetProgram()
+
+			err = utils.FS().WriteFile("/home/projects/TS/p1/src/x.ts", `export const x = 2;`)
+			assert.NilError(t, err)
+
+			// Simulate atomic save / rename where watcher reports Created (type 1)
+			session.DidChangeWatchedFiles(context.Background(), []*lsproto.FileEvent{
+				{
+					Type: lsproto.FileChangeTypeCreated,
+					Uri:  "file:///home/projects/TS/p1/src/x.ts",
+				},
+			})
+
+			lsAfter, err := session.GetLanguageService(context.Background(), "file:///home/projects/TS/p1/src/index.ts")
+			assert.NilError(t, err)
+			assert.Check(t, lsAfter.GetProgram() != programBefore)
+			srcX := lsAfter.GetProgram().GetSourceFile("/home/projects/TS/p1/src/x.ts")
+			assert.Assert(t, srcX != nil)
+			assert.Equal(t, srcX.Text(), "export const x = 2;")
+		})
+
+		t.Run("atomic save sequence with temp file reloads content", func(t *testing.T) {
+			t.Parallel()
+			files := maps.Clone(defaultFiles)
+			session, utils := projecttestutil.Setup(files)
+
+			session.DidOpenFile(context.Background(), "file:///home/projects/TS/p1/src/index.ts", 1, files["/home/projects/TS/p1/src/index.ts"].(string), lsproto.LanguageKindTypeScript)
+
+			lsBefore, err := session.GetLanguageService(context.Background(), "file:///home/projects/TS/p1/src/index.ts")
+			assert.NilError(t, err)
+			programBefore := lsBefore.GetProgram()
+
+			err = utils.FS().WriteFile("/home/projects/TS/p1/src/x.ts", `export const x = 42;`)
+			assert.NilError(t, err)
+
+			// Sequence sent by editors like VS Code on atomic save: tmp create -> target create -> tmp delete
+			session.DidChangeWatchedFiles(context.Background(), []*lsproto.FileEvent{
+				{
+					Type: lsproto.FileChangeTypeCreated,
+					Uri:  "file:///home/projects/TS/p1/src/x.ts.tmp",
+				},
+				{
+					Type: lsproto.FileChangeTypeCreated,
+					Uri:  "file:///home/projects/TS/p1/src/x.ts",
+				},
+				{
+					Type: lsproto.FileChangeTypeDeleted,
+					Uri:  "file:///home/projects/TS/p1/src/x.ts.tmp",
+				},
+			})
+
+			lsAfter, err := session.GetLanguageService(context.Background(), "file:///home/projects/TS/p1/src/index.ts")
+			assert.NilError(t, err)
+			assert.Check(t, lsAfter.GetProgram() != programBefore)
+			srcX := lsAfter.GetProgram().GetSourceFile("/home/projects/TS/p1/src/x.ts")
+			assert.Assert(t, srcX != nil)
+			assert.Equal(t, srcX.Text(), "export const x = 42;")
 		})
 
 		t.Run("change program file not in tsconfig root files", func(t *testing.T) {

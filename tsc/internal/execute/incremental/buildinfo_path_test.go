@@ -45,6 +45,80 @@ func TestBuildInfoPathJSONRoundTrip(t *testing.T) {
 	assert.Equal(t, roundTripped.LatestChangedDtsFile, buildInfo.LatestChangedDtsFile)
 }
 
+func TestBuildInfoCompilerOptionsJSONRoundTrip(t *testing.T) {
+	t.Parallel()
+	const input = `{"options":{"paths":{"second":["b","a"],"first":[]},"rootDirs":["./src","../generated"],"typeRoots":["./types"],"types":[],"customConditions":["custom"],"pathsBasePath":"../configs/first"}}`
+	var info BuildInfo
+	assert.NilError(t, json.Unmarshal([]byte(input), &info))
+	options := info.GetCompilerOptions("/project/dist")
+	assert.DeepEqual(t, slices.Collect(options.Paths.Keys()), []string{"second", "first"})
+	assert.DeepEqual(t, options.Paths.GetOrZero("second"), []string{"b", "a"})
+	assert.DeepEqual(t, options.Paths.GetOrZero("first"), []string{})
+	assert.Assert(t, options.Types != nil)
+	assert.Equal(t, options.RootDirs[0].AsString(), "/project/dist/src")
+	assert.Equal(t, options.RootDirs[1].AsString(), "/project/generated")
+	assert.Equal(t, options.TypeRoots[0].AsString(), "/project/dist/types")
+	assert.Equal(t, options.PathsBasePath.AsString(), "/project/configs/first")
+	assert.Equal(t, info.GetCompilerOptions("").PathsBasePath.AsString(), "")
+	data, err := json.Marshal(&info)
+	assert.NilError(t, err)
+	assert.Equal(t, string(data), input)
+	var restored BuildInfo
+	assert.NilError(t, json.Unmarshal(data, &restored))
+	restoredOptions := restored.GetCompilerOptions("/project/dist")
+	assert.Assert(t, options.Equals(restoredOptions))
+	assert.Assert(t, !tsoptions.CompilerOptionsAffectEmit(options, restoredOptions))
+	assert.Assert(t, !tsoptions.CompilerOptionsAffectSemanticDiagnostics(options, restoredOptions))
+}
+
+func TestBuildInfoCompilerOptionsCachedRoundTrip(t *testing.T) {
+	t.Parallel()
+	for _, empty := range []bool{false, true} {
+		t.Run(strconv.FormatBool(empty), func(t *testing.T) {
+			t.Parallel()
+			paths := &collections.OrderedMap[string, []string]{}
+			paths.Set("second", []string{"./second", "./fallback"})
+			paths.Set("first", []string{})
+			options := &core.CompilerOptions{
+				Incremental:      core.TSTrue,
+				Paths:            paths,
+				PathsBasePath:    "/project",
+				RootDirs:         []tspath.RootedDirectoryPath{"/project/src", "/generated"},
+				TypeRoots:        []tspath.RootedDirectoryPath{"/project/types"},
+				Types:            []string{"custom"},
+				CustomConditions: []string{"custom"},
+				ModuleSuffixes:   []string{".custom", ""},
+				Lib:              []string{"lib.es5.d.ts"},
+			}
+			if empty {
+				options.Paths = &collections.OrderedMap[string, []string]{}
+				options.RootDirs = []tspath.RootedDirectoryPath{}
+				options.TypeRoots = []tspath.RootedDirectoryPath{}
+				options.Types = []string{}
+				options.CustomConditions = []string{}
+				options.ModuleSuffixes = []string{}
+				options.Lib = []string{}
+			}
+			program := newDeletionTestProgram(t, map[string]string{
+				"/lib/lib.d.ts":        deletionTestLib,
+				"/project/consumer.ts": "export {};",
+			}, []string{"consumer.ts"}, options, nil)
+			info, err := snapshotToBuildInfo(program.snapshot, program.program, "/project/dist/state.tsbuildinfo")
+			assert.NilError(t, err)
+			data, err := json.Marshal(info)
+			assert.NilError(t, err)
+			var restored BuildInfo
+			assert.NilError(t, json.Unmarshal(data, &restored))
+			cachedOptions := info.GetCompilerOptions("/project/dist")
+			diskOptions := restored.GetCompilerOptions("/project/dist")
+			assert.Assert(t, cachedOptions.Equals(diskOptions))
+			assert.Assert(t, !tsoptions.CompilerOptionsAffectEmit(options, cachedOptions))
+			assert.Assert(t, !tsoptions.CompilerOptionsAffectSemanticDiagnostics(options, cachedOptions))
+			assert.DeepEqual(t, slices.Collect(cachedOptions.Paths.Keys()), slices.Collect(options.Paths.Keys()))
+		})
+	}
+}
+
 const deletionTestLib = `interface Array<T> {}
 interface Boolean {}
 interface CallableFunction {}
@@ -57,7 +131,8 @@ interface RegExp {}
 interface String {}
 `
 
-func newDeletionTestProgram(files map[string]string, roots []string, options *core.CompilerOptions, old *Program) *Program {
+func newDeletionTestProgram(t *testing.T, files map[string]string, roots []string, options *core.CompilerOptions, old *Program) *Program {
+	t.Helper()
 	files = maps.Clone(files)
 	files["/lib/"+tsoptions.GetDefaultLibFileName(options)] = files["/lib/lib.d.ts"]
 	host := compiler.NewCompilerHost(vfstest.FromMap(files, tspath.CaseSensitive), "/lib", nil, nil, nil)
@@ -65,13 +140,14 @@ func newDeletionTestProgram(files map[string]string, roots []string, options *co
 		return tspath.ToRootedFilePath(name, "/project")
 	})
 	config := tsoptions.NewParsedCommandLine(options, paths, nil, "/project", tspath.CaseSensitive)
-	program := compiler.NewProgram(compiler.ProgramOptions{Config: config, Host: host})
+	program, err := compiler.NewProgram(t.Context(), compiler.ProgramOptions{Config: config, Host: host})
+	assert.NilError(t, err)
 	return NewProgram(program, old, CreateHost(host), nil, false)
 }
 
 func TestDeletedGlobalInvalidatesAllSourceFiles(t *testing.T) {
 	t.Parallel()
-	current := newDeletionTestProgram(map[string]string{
+	current := newDeletionTestProgram(t, map[string]string{
 		"/lib/lib.d.ts":        deletionTestLib,
 		"/project/consumer.ts": "export const unchanged = 1;",
 	}, []string{"consumer.ts"}, &core.CompilerOptions{Incremental: core.TSTrue, NoEmit: core.TSTrue}, nil)
@@ -129,7 +205,7 @@ func TestGlobalDeletionInvalidatesRetainedLibraryDiagnostics(t *testing.T) {
 					"/project/consumer.ts": "export const unchanged = 1;",
 					"/project/module.d.ts": "export interface Unrelated {}",
 				}
-				old := newDeletionTestProgram(files, []string{"global.d.ts", "consumer.ts", "module.d.ts"}, options, nil)
+				old := newDeletionTestProgram(t, files, []string{"global.d.ts", "consumer.ts", "module.d.ts"}, options, nil)
 				old.GetSemanticDiagnostics(t.Context(), nil)
 				old.Emit(t.Context(), compiler.EmitOptions{})
 				roots := []string{"consumer.ts"}
@@ -140,8 +216,8 @@ func TestGlobalDeletionInvalidatesRetainedLibraryDiagnostics(t *testing.T) {
 					delete(files, "/project/global.d.ts")
 				}
 				delete(files, "/project/module.d.ts")
-				current := newDeletionTestProgram(files, roots, options, old)
-				cold := newDeletionTestProgram(files, roots, options, nil)
+				current := newDeletionTestProgram(t, files, roots, options, old)
+				cold := newDeletionTestProgram(t, files, roots, options, nil)
 				actual := current.GetSemanticDiagnostics(t.Context(), nil)
 				expected := cold.GetSemanticDiagnostics(t.Context(), nil)
 				if kind == "cleared error" {
@@ -179,7 +255,7 @@ func TestEmptyProgramDeletionEmitsBuildInfo(t *testing.T) {
 					"/project/global.d.ts": "interface RemovedGlobal {}",
 					"/project/module.d.ts": "export interface Unrelated {}",
 				}
-				old := newDeletionTestProgram(files, roots, options, nil)
+				old := newDeletionTestProgram(t, files, roots, options, nil)
 				old.GetSemanticDiagnostics(t.Context(), nil)
 				old.Emit(t.Context(), compiler.EmitOptions{})
 				if old.snapshot.buildInfoEmitPending.Load() {
@@ -187,7 +263,7 @@ func TestEmptyProgramDeletionEmitsBuildInfo(t *testing.T) {
 				}
 				delete(files, "/project/global.d.ts")
 				delete(files, "/project/module.d.ts")
-				current := newDeletionTestProgram(files, nil, options, old)
+				current := newDeletionTestProgram(t, files, nil, options, old)
 				if len(current.GetSourceFiles()) != 0 {
 					t.Fatal("new program is not empty")
 				}
@@ -230,11 +306,11 @@ func TestUncheckedDeletedFilesDiscardPendingState(t *testing.T) {
 		"/lib/lib.d.ts":      deletionTestLib,
 		"/project/stable.ts": "export const stable = 1;",
 	}
-	old := newDeletionTestProgram(files, []string{"stable.ts"}, options, nil)
+	old := newDeletionTestProgram(t, files, []string{"stable.ts"}, options, nil)
 	old.Emit(t.Context(), compiler.EmitOptions{})
 	files["/project/first.ts"] = "export const first = 1;"
 	files["/project/second.ts"] = "export const second = 1;"
-	added := newDeletionTestProgram(files, []string{"stable.ts", "first.ts", "second.ts"}, options, old)
+	added := newDeletionTestProgram(t, files, []string{"stable.ts", "first.ts", "second.ts"}, options, old)
 	added.Emit(t.Context(), compiler.EmitOptions{})
 	for _, path := range []tspath.PathKey{"/project/first.ts", "/project/second.ts"} {
 		if !added.snapshot.changedFilesSet.Has(path) {
@@ -244,7 +320,7 @@ func TestUncheckedDeletedFilesDiscardPendingState(t *testing.T) {
 	}
 	delete(files, "/project/first.ts")
 	delete(files, "/project/second.ts")
-	current := newDeletionTestProgram(files, []string{"stable.ts"}, options, added)
+	current := newDeletionTestProgram(t, files, []string{"stable.ts"}, options, added)
 	for _, path := range []tspath.PathKey{"/project/first.ts", "/project/second.ts"} {
 		if current.snapshot.changedFilesSet.Has(path) {
 			t.Errorf("removed unchecked file %s still in change set", path)
@@ -276,11 +352,11 @@ func TestModuleDeletionPreservesUnrelatedCachedDiagnostics(t *testing.T) {
 				"/project/consumer.ts": "export const unchanged = 1;",
 				"/project/module.d.ts": "export interface Unrelated {}",
 			}
-			old := newDeletionTestProgram(files, []string{"consumer.ts", "module.d.ts"}, options, nil)
+			old := newDeletionTestProgram(t, files, []string{"consumer.ts", "module.d.ts"}, options, nil)
 			old.GetSemanticDiagnostics(t.Context(), nil)
 			old.Emit(t.Context(), compiler.EmitOptions{})
 			delete(files, "/project/module.d.ts")
-			current := newDeletionTestProgram(files, []string{"consumer.ts"}, options, old)
+			current := newDeletionTestProgram(t, files, []string{"consumer.ts"}, options, old)
 			if current.snapshot.changedFilesSet.Has("/project/consumer.ts") {
 				t.Fatal("unrelated module deletion invalidated consumer")
 			}
@@ -300,7 +376,7 @@ func TestModuleDeletionPreservesUnrelatedCachedDiagnostics(t *testing.T) {
 
 func TestDeletedFilesCleanupAfterGlobalDeletion(t *testing.T) {
 	t.Parallel()
-	current := newDeletionTestProgram(map[string]string{"/lib/lib.d.ts": deletionTestLib}, nil,
+	current := newDeletionTestProgram(t, map[string]string{"/lib/lib.d.ts": deletionTestLib}, nil,
 		&core.CompilerOptions{Incremental: core.TSTrue}, nil)
 	old := &Program{snapshot: &snapshot{}}
 	deleted := []tspath.PathKey{"/project/first.d.ts", "/project/second.d.ts", "/project/third.d.ts"}
@@ -334,11 +410,11 @@ func TestRemovedPendingPathsWithoutFileInfo(t *testing.T) {
 		"/lib/lib.d.ts":      deletionTestLib,
 		"/project/stable.ts": "export const stable = 1;",
 	}
-	old := newDeletionTestProgram(files, []string{"stable.ts"}, options, nil)
+	old := newDeletionTestProgram(t, files, []string{"stable.ts"}, options, nil)
 	old.Emit(t.Context(), compiler.EmitOptions{})
 	old.snapshot.changedFilesSet.Add("/project/missing.ts")
 	old.snapshot.affectedFilesPendingEmit.Store("/project/missing.ts", FileEmitKindJs)
-	current := newDeletionTestProgram(files, []string{"stable.ts"}, options, old)
+	current := newDeletionTestProgram(t, files, []string{"stable.ts"}, options, old)
 	if current.snapshot.changedFilesSet.Has("/project/missing.ts") {
 		t.Error("removed pending path without file info was retained")
 	}
@@ -422,11 +498,11 @@ func TestGlobalDeletionPreservesSkippedLibraryDiagnostics(t *testing.T) {
 				"/project/global.d.ts": "interface RemovedGlobal {}",
 				"/project/consumer.ts": "export const unchanged = 1;",
 			}
-			old := newDeletionTestProgram(files, []string{"consumer.ts", "global.d.ts"}, options, nil)
+			old := newDeletionTestProgram(t, files, []string{"consumer.ts", "global.d.ts"}, options, nil)
 			old.GetSemanticDiagnostics(t.Context(), nil)
 			old.Emit(t.Context(), compiler.EmitOptions{})
 			delete(files, "/project/global.d.ts")
-			current := newDeletionTestProgram(files, []string{"consumer.ts"}, options, old)
+			current := newDeletionTestProgram(t, files, []string{"consumer.ts"}, options, old)
 			for _, file := range current.GetSourceFiles() {
 				if !current.program.IsSourceFileDefaultLibrary(file.PathKey()) {
 					continue

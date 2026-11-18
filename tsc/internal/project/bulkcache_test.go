@@ -116,6 +116,43 @@ func TestBulkCacheInvalidation(t *testing.T) {
 		})
 	})
 
+	t.Run("large all-created batch reloads cached file", func(t *testing.T) {
+		t.Parallel()
+		for _, test := range []struct {
+			name       string
+			eventCount int
+			eventURI   lsproto.DocumentUri
+		}{
+			{name: "single parent directory", eventURI: "file:///project/src"},
+			{name: "excessive exact file", eventCount: 1001, eventURI: "file:///project/src/helper.ts"},
+			{name: "excessive parent directory", eventCount: 1001, eventURI: "file:///project/src"},
+		} {
+			t.Run(test.name, func(t *testing.T) {
+				t.Parallel()
+				session, utils := projecttestutil.Setup(baseFiles)
+
+				session.DidOpenFile(context.Background(), "file:///project/src/index.ts", 1, baseFiles["/project/src/index.ts"].(string), lsproto.LanguageKindTypeScript)
+				ls, err := session.GetLanguageService(context.Background(), "file:///project/src/index.ts")
+				assert.NilError(t, err)
+				assert.Equal(t, ls.GetProgram().GetSourceFile("/project/src/helper.ts").Text(), `export const helper = "test";`)
+
+				err = utils.FS().WriteFile("/project/src/helper.ts", `export const helper = "updated";`)
+				assert.NilError(t, err)
+
+				fileEvents := generateFileEvents(test.eventCount, "file:///project/generated/file%d.ts", lsproto.FileChangeTypeCreated)
+				fileEvents = append(fileEvents, &lsproto.FileEvent{
+					Uri:  test.eventURI,
+					Type: lsproto.FileChangeTypeCreated,
+				})
+				session.DidChangeWatchedFiles(context.Background(), fileEvents)
+
+				ls, err = session.GetLanguageService(context.Background(), "file:///project/src/index.ts")
+				assert.NilError(t, err)
+				assert.Equal(t, ls.GetProgram().GetSourceFile("/project/src/helper.ts").Text(), `export const helper = "updated";`)
+			})
+		}
+	})
+
 	t.Run("large number of changes outside node_modules", func(t *testing.T) {
 		t.Parallel()
 		test := func(t *testing.T, fileEvents []*lsproto.FileEvent, expectConfigReload bool) {

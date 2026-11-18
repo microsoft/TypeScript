@@ -1,0 +1,72 @@
+// === findAllReferences ===
+// === /referenceScanningUnicodeBoundaries.ts ===
+// const padding = 0;
+// function example() {
+//     const /*FIND ALL REFS*/[|obj|] = {};
+//     [|obj|]¬;
+//     ☺[|obj|];
+//     　[|obj|]　;
+//     const éobj = {}, objé = {}, 𐐀obj = {}, obj𐐀 = {}, obj́ = {};
+//     éobj; objé; 𐐀obj; obj𐐀; obj́;
+//     [|obj|];
+// }
+
+
+
+// === findAllReferences ===
+// === /referenceScanningUnicodeBoundaries.ts ===
+// const padding = 0;
+// function example() {
+//     const [|obj|] = {};
+//     /*FIND ALL REFS*/[|obj|]¬;
+//     ☺[|obj|];
+//     　[|obj|]　;
+//     const éobj = {}, objé = {}, 𐐀obj = {}, obj𐐀 = {}, obj́ = {};
+//     éobj; objé; 𐐀obj; obj𐐀; obj́;
+//     [|obj|];
+// }
+
+
+
+// === findAllReferences ===
+// === /referenceScanningUnicodeBoundaries.ts ===
+// const padding = 0;
+// function example() {
+//     const [|obj|] = {};
+//     [|obj|]¬;
+//     ☺/*FIND ALL REFS*/[|obj|];
+//     　[|obj|]　;
+//     const éobj = {}, objé = {}, 𐐀obj = {}, obj𐐀 = {}, obj́ = {};
+//     éobj; objé; 𐐀obj; obj𐐀; obj́;
+//     [|obj|];
+// }
+
+
+
+// === findAllReferences ===
+// === /referenceScanningUnicodeBoundaries.ts ===
+// const padding = 0;
+// function example() {
+//     const [|obj|] = {};
+//     [|obj|]¬;
+//     ☺[|obj|];
+//     　/*FIND ALL REFS*/[|obj|]　;
+//     const éobj = {}, objé = {}, 𐐀obj = {}, obj𐐀 = {}, obj́ = {};
+//     éobj; objé; 𐐀obj; obj𐐀; obj́;
+//     [|obj|];
+// }
+
+
+
+// === findAllReferences ===
+// === /referenceScanningUnicodeBoundaries.ts ===
+// const padding = 0;
+// function example() {
+//     const [|obj|] = {};
+//     [|obj|]¬;
+//     ☺[|obj|];
+//     　[|obj|]　;
+//     const éobj = {}, objé = {}, 𐐀obj = {}, obj𐐀 = {}, obj́ = {};
+//     éobj; objé; 𐐀obj; obj𐐀; obj́;
+//     /*FIND ALL REFS*/[|obj|];
+// }

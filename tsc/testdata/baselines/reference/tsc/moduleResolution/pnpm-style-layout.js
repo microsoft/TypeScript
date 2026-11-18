@@ -109,7 +109,7 @@ const button: Button = createButton();
 export { Button, createButton } from "@component-type-checker/components";
 export const VERSION = "0.0.2";
 
-tsgo --traceResolution --explainFiles
+tsc --traceResolution --explainFiles
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 ======== Resolving module '@component-type-checker/sdk' from '/home/src/projects/component-type-checker/packages/app/src/app.tsx'. ========

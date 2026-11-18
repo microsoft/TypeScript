@@ -704,7 +704,7 @@ func getAdjustedLocationForDeclaration(node *ast.Node, forRename bool, sourceFil
 	case ast.KindClassDeclaration, ast.KindFunctionDeclaration:
 		// for class and function declarations, use the `default` modifier
 		// when the declaration is unnamed.
-		return core.Find(node.ModifierNodes(), func(*ast.Node) bool { return node.Kind == ast.KindDefaultKeyword })
+		return core.Find(node.ModifierNodes(), func(modifier *ast.Node) bool { return modifier.Kind == ast.KindDefaultKeyword })
 	case ast.KindClassExpression:
 		// for class expressions, use the `class` keyword when the class is unnamed
 		return astnav.FindChildOfKind(node, ast.KindClassKeyword, sourceFile)
@@ -1070,7 +1070,7 @@ func (c *caseClauseTrackerState) hasValue(value trackerHasValue) bool {
 	}
 }
 
-func newCaseClauseTracker(typeChecker *checker.Checker, clauses []*ast.CaseOrDefaultClauseNode) caseClauseTracker {
+func newCaseClauseTracker(typeChecker *checker.Checker, clauses []*ast.CaseOrDefaultClause) caseClauseTracker {
 	c := &caseClauseTrackerState{
 		existingStrings: collections.Set[string]{},
 		existingNumbers: collections.Set[jsnum.Number]{},
@@ -1161,12 +1161,13 @@ func findPrecedingMatchingToken(token *ast.Node, matchingTokenKind ast.Kind, sou
 	matchingTokenText := scanner.TokenToString(matchingTokenKind)
 	// Text-scan based fast path - can be bamboozled by comments and other trivia, but often provides
 	// a good, fast approximation without too much extra work in the cases where it fails.
-	bestGuessIndex := strings.LastIndex(sourceFile.Text(), matchingTokenText)
+	precedingText := sourceFile.Text()[:token.Pos()]
+	bestGuessIndex := strings.LastIndex(precedingText, matchingTokenText)
 	if bestGuessIndex == -1 {
 		return nil // if the token text doesn't appear in the file, there can't be a match - super fast bail
 	}
 	// we can only use the textual result directly if we didn't have to count any close tokens within the range
-	if strings.LastIndex(sourceFile.Text(), closeTokenText) < bestGuessIndex {
+	if strings.LastIndex(precedingText, closeTokenText) < bestGuessIndex {
 		nodeAtGuess := astnav.FindPrecedingToken(sourceFile, bestGuessIndex+1)
 		if nodeAtGuess != nil && nodeAtGuess.Kind == matchingTokenKind {
 			return nodeAtGuess
