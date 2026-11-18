@@ -24,4 +24,6 @@ function foo() {
 
 
 //// [b.d.ts]
+declare function foo(): number;
 //// [a.d.ts]
+declare function foo(): number;

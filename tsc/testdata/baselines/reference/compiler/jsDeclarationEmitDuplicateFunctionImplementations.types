@@ -1,0 +1,64 @@
+//// [tests/cases/compiler/jsDeclarationEmitDuplicateFunctionImplementations.ts] ////
+
+=== a.js ===
+/** @param {number} x */
+function func(x) {
+>func : { (x: number): number; (x: number): number; }
+>x : number
+
+    return x + 1;
+>x + 1 : number
+>x : number
+>1 : 1
+}
+
+=== b.js ===
+/** @param {number} x */
+function func(x) {
+>func : { (x: number): number; (x: number): number; }
+>x : number
+
+    return x + 2;
+>x + 2 : number
+>x : number
+>2 : 2
+}
+
+function sameFile() {}
+>sameFile : { (): void; (): number; }
+
+var separator = 0;
+>separator : number
+>0 : 0
+
+function sameFile() {
+>sameFile : { (): void; (): number; }
+
+    return 1;
+>1 : 1
+}
+
+=== c.js ===
+// The implementation of a JSDoc overload set is still left out.
+
+/**
+ * @overload
+ * @param {string} x
+ * @returns {string}
+ */
+/**
+ * @overload
+ * @param {number} x
+ * @returns {number}
+ */
+/**
+ * @param {string | number} x
+ */
+function overloaded(x) {
+>overloaded : { (x: string): string; (x: number): number; }
+>x : string | number
+
+    return x;
+>x : string | number
+}
+
