@@ -1735,6 +1735,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
                 parityCase("Checker", "getExportSpecifierLocalTargetSymbol", checker.getExportSpecifierLocalTargetSymbol, assertOptionalSymbolsEquivalent, exportSpecifier),
                 parityCase("Checker", "getAliasedSymbol", checker.getAliasedSymbol, assertSymbolsEquivalent, importedDerivedSymbol),
                 parityCase("Checker", "getFullyQualifiedName", checker.getFullyQualifiedName, assertDeepEquivalent, combineSymbol),
+                parityCase("Checker", "symbolToString", checker.symbolToString, assertDeepEquivalent, interfaceSymbol, interfaceDeclaration, SymbolFlags.Type),
                 parityCase("Checker", "getImmediateAliasedSymbol", checker.getImmediateAliasedSymbol, assertOptionalSymbolsEquivalent, importedDerivedSymbol),
                 parityCase("Checker", "isUnknownSymbol", checker.isUnknownSymbol, assertDeepEquivalent, unknownSymbol),
                 parityCase("Checker", "isUndefinedSymbol", checker.isUndefinedSymbol, assertDeepEquivalent, undefinedSymbol),

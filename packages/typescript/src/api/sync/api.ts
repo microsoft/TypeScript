@@ -33,6 +33,7 @@ import { ScriptKind } from "../../../enums/scriptKind.js";
 import { SignatureFlags } from "../../../enums/signatureFlags.js";
 import { SignatureKind } from "../../../enums/signatureKind.js";
 import { SymbolFlags } from "../../../enums/symbolFlags.js";
+import { SymbolFormatFlags } from "../../../enums/symbolFormatFlags.js";
 import { SymbolOwnerKind } from "../../../enums/symbolOwnerKind.js";
 import { TypeFlags } from "../../../enums/typeFlags.js";
 import { TypeFormatFlags } from "../../../enums/typeFormatFlags.js";
@@ -212,7 +213,7 @@ import type {
 
 export { formatDiagnostics, formatDiagnosticsWithColorAndContext } from "../diagnosticFormatter.ts";
 export { documentURIToFileName, fileNameToDocumentURI } from "../path.ts";
-export { CheckFlags, CompletionItemKind, DiagnosticCategory, ElementFlags, EmitOnly, IndexKind, JsxEmit, ModifierFlags, ModuleKind, ModuleResolutionKind, NodeBuilderFlags, ObjectFlags, ScriptKind, SignatureFlags, SignatureKind, SymbolFlags, SymbolOwnerKind, TypeFlags, TypeFormatFlags, TypePredicateKind };
+export { CheckFlags, CompletionItemKind, DiagnosticCategory, ElementFlags, EmitOnly, IndexKind, JsxEmit, ModifierFlags, ModuleKind, ModuleResolutionKind, NodeBuilderFlags, ObjectFlags, ScriptKind, SignatureFlags, SignatureKind, SymbolFlags, SymbolFormatFlags, SymbolOwnerKind, TypeFlags, TypeFormatFlags, TypePredicateKind };
 export type {
     APIImportAdderAction as ImportAdderAction,
     APIOptions,
@@ -5731,6 +5732,38 @@ export class Checker {
                 );
                 if (!binaryData) return undefined;
                 return decodeNode(binaryData) as Node;
+            },
+        );
+    }
+
+    /** Formats a symbol, optionally qualifying its name relative to an enclosing declaration. */
+    get symbolToString(): {
+        (symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags): string;
+        gen(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags): Generator<ProtocolRequest, string, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "symbolToString",
+            function (symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags): string {
+                return owner.client.apiRequest("symbolToString", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    symbol: symbol.reference,
+                    location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+                    meaning,
+                    flags,
+                });
+            },
+            function* (symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags): Generator<ProtocolRequest, string, ProtocolResponse["result"]> {
+                return yield* apiRequest("symbolToString", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    symbol: symbol.reference,
+                    location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+                    meaning,
+                    flags,
+                });
             },
         );
     }

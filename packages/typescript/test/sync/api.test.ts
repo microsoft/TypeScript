@@ -127,6 +127,7 @@ import {
     type Snapshot,
     type StringMappingType,
     SymbolFlags,
+    SymbolFormatFlags,
     type SyntheticProjectId,
     type TemplateLiteralType,
     type TextEdit,
@@ -8750,6 +8751,29 @@ export const obj = { m: 1, s: "hi", b: true };
         for (const kind of kinds) {
             assert.ok(isTypeNode({ kind } as any), `isTypeNode should accept ${SyntaxKind[kind]}`);
         }
+    });
+
+    test("symbolToString with enclosing declaration, meaning, and flags", () => {
+        const source = `namespace N { export class Box<T> { value!: T; } } let box: N.Box<string>;`;
+        using api = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/main.ts": source,
+        });
+        const snapshot = api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const symbol = project.checker.getSymbolAtPosition("/main.ts", source.indexOf("Box"));
+        assert.ok(symbol);
+        const file = project.program.getSourceFile("/main.ts");
+        assert.ok(file);
+        assert.equal(project.checker.symbolToString(symbol), "Box");
+        assert.equal(project.checker.symbolToString(symbol, file, SymbolFlags.Type, SymbolFormatFlags.None), "N.Box");
+        const member = project.checker.getSymbolAtPosition("/main.ts", source.indexOf("value"));
+        assert.ok(member);
+        assert.equal(project.checker.symbolToString(member, file, SymbolFlags.Value, SymbolFormatFlags.WriteTypeParametersOrArguments | SymbolFormatFlags.AllowAnyNodeKind), "N.Box<T>.value");
+        assert.equal(
+            project.checker.symbolToString(symbol, file, SymbolFlags.Type, SymbolFormatFlags.DoNotIncludeSymbolChain),
+            "Box",
+        );
     });
 
     test("typeToString", () => {
