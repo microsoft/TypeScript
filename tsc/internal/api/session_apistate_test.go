@@ -571,3 +571,93 @@ func TestGetCurrentLanguageServerSnapshotCloseProjectRetainsProjectForOpenFile(t
 	assert.NilError(t, err)
 	assert.Assert(t, projectSession.Snapshot().ProjectCollection.ConfiguredProject(tspath.PathKeyFromCanonical(configFileName)) != nil)
 }
+
+func openProjectInNewSnapshot(t *testing.T, session *Session, configFileName string) SnapshotID {
+	t.Helper()
+	response, err := session.handleCreateSnapshot(context.Background(), &CreateSnapshotParams{
+		OpenProjects: []DocumentIdentifier{{FileName: configFileName}},
+	})
+	assert.NilError(t, err)
+	return response.Snapshot
+}
+
+func configFileParsingDiagnosticCodes(t *testing.T, session *Session, snapshot SnapshotID, configFileName string) []int32 {
+	t.Helper()
+	configuredProject := session.snapshots[snapshot].snapshot.ProjectCollection.GetProject(configuredProjectID(configFileName))
+	assert.Assert(t, configuredProject != nil)
+	diagnostics, err := session.handleGetConfigFileParsingDiagnostics(context.Background(), &GetProjectDiagnosticsParams{
+		Snapshot: snapshot,
+		Project:  configuredProject.Handle(),
+	})
+	assert.NilError(t, err)
+	codes := make([]int32, 0, len(diagnostics))
+	for _, diagnostic := range diagnostics {
+		codes = append(codes, diagnostic.Code)
+	}
+	return codes
+}
+
+func TestOpenProjectsExtendingIntoCircularExtendsReportCircularity(t *testing.T) {
+	t.Parallel()
+	if !bundled.Embedded {
+		t.Skip("bundled files are not embedded")
+	}
+
+	const cycle = "/home/projects/cycle/tsconfig.json"
+	const outer = "/home/projects/outer/tsconfig.json"
+	projectSession, _ := projecttestutil.Setup(map[string]any{
+		cycle:                          `{ "extends": "./a.json", "compilerOptions": { "strict": true } }`,
+		"/home/projects/cycle/a.json":  `{ "extends": "./tsconfig.json", "compilerOptions": { "noUnusedLocals": true } }`,
+		outer:                          `{ "extends": "../cycle/a.json" }`,
+		"/home/projects/cycle/main.ts": `export const a = 1;`,
+		"/home/projects/outer/main.ts": `export const b = 1;`,
+	})
+	defer projectSession.Close()
+	session := NewLSPSession(projectSession, nil)
+	defer session.Close()
+
+	openProjectInNewSnapshot(t, session, cycle)
+	for range 2 {
+		snapshot := openProjectInNewSnapshot(t, session, outer)
+		assert.DeepEqual(t, configFileParsingDiagnosticCodes(t, session, snapshot, outer), []int32{18000})
+		options := session.snapshots[snapshot].snapshot.ProjectCollection.GetProject(configuredProjectID(outer)).CommandLine.CompilerOptions()
+		assert.Equal(t, options.Strict, core.TSTrue)
+		assert.Equal(t, options.NoUnusedLocals, core.TSTrue)
+	}
+}
+
+func TestReopenProjectAfterExtendsChangeUsesNewExtendedConfig(t *testing.T) {
+	t.Parallel()
+	if !bundled.Embedded {
+		t.Skip("bundled files are not embedded")
+	}
+
+	const first = "/home/projects/p1/tsconfig.json"
+	const second = "/home/projects/p2/tsconfig.json"
+	const shared = "/home/projects/shared/a.json"
+	projectSession, utils := projecttestutil.Setup(map[string]any{
+		first:                          `{ "extends": "../shared/a.json" }`,
+		second:                         `{ "extends": "../shared/a.json" }`,
+		shared:                         `{ "extends": "./b.json" }`,
+		"/home/projects/shared/b.json": `{ "compilerOptions": { "strict": true } }`,
+		"/home/projects/shared/c.json": `{ "compilerOptions": { "strict": false } }`,
+		"/home/projects/p1/a.ts":       `export const a = 1;`,
+		"/home/projects/p2/b.ts":       `export const b = 1;`,
+	})
+	defer projectSession.Close()
+	session := NewLSPSession(projectSession, nil)
+	defer session.Close()
+
+	openProjectInNewSnapshot(t, session, first)
+	assert.NilError(t, utils.FS().WriteFile(shared, `{ "extends": "./c.json" }`))
+	changed, err := session.handleCreateSnapshot(context.Background(), &CreateSnapshotParams{
+		OpenProjects:      []DocumentIdentifier{{FileName: second}},
+		FileNotifications: &FileNotifications{Changed: []DocumentIdentifier{{FileName: shared}}},
+	})
+	assert.NilError(t, err)
+	_, err = session.handleRelease(context.Background(), &ReleaseParams{Snapshot: changed.Snapshot})
+	assert.NilError(t, err)
+	snapshot := openProjectInNewSnapshot(t, session, second)
+	options := session.snapshots[snapshot].snapshot.ProjectCollection.GetProject(configuredProjectID(second)).CommandLine.CompilerOptions()
+	assert.Equal(t, options.Strict, core.TSFalse)
+}

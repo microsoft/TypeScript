@@ -18,14 +18,14 @@ type ownerCacheEntry[V any] struct {
 // be Acquired multiple times during config parsing while only appearing once in
 // the ParsedCommandLine's list of extended files. When updating this code, check
 // if the same changes should be made to RefCountCache as well.
-type OwnerCache[K comparable, V any, LoadArgs any] struct {
+type OwnerCache[K comparable, V comparable, LoadArgs any] struct {
 	entries collections.SyncMap[K, *ownerCacheEntry[V]]
 
 	isExpired func(K, V, LoadArgs) bool
 	parse     func(K, LoadArgs) V
 }
 
-func NewOwnerCache[K comparable, V any, LoadArgs any](
+func NewOwnerCache[K comparable, V comparable, LoadArgs any](
 	parse func(K, LoadArgs) V,
 	isExpired func(K, V, LoadArgs) bool,
 ) *OwnerCache[K, V, LoadArgs] {
@@ -68,6 +68,31 @@ func (c *OwnerCache[K, V, LoadArgs]) AddOwner(identity K, owner uint64) {
 		panic("OwnerCache.AddOwner: entry has no owners")
 	}
 	entry.owners[owner] = struct{}{}
+}
+
+func (c *OwnerCache[K, V, LoadArgs]) TryAddOwner(identity K, owner uint64) bool {
+	entry, ok := c.entries.Load(identity)
+	if !ok {
+		return false
+	}
+	entry.mu.Lock()
+	defer entry.mu.Unlock()
+	if len(entry.owners) == 0 {
+		return false
+	}
+	entry.owners[owner] = struct{}{}
+	return true
+}
+
+func (c *OwnerCache[K, V, LoadArgs]) ParseAndAcquire(identity K, owner uint64, loadArgs LoadArgs, stale V) V {
+	value := c.parse(identity, loadArgs)
+	entry, loaded := c.loadOrStoreLockedEntry(identity)
+	defer entry.mu.Unlock()
+	if !loaded || entry.value == stale || c.isExpired != nil && c.isExpired(identity, entry.value, loadArgs) {
+		entry.value = value
+	}
+	entry.owners[owner] = struct{}{}
+	return entry.value
 }
 
 func (c *OwnerCache[K, V, LoadArgs]) Has(identity K) bool {
