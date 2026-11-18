@@ -89,6 +89,70 @@ import { runBenchmarks } from "./ast.bench.ts";
 
 const concurrency = areTestsFiltered();
 
+test("canHaveModifiers includes the reparsed import kind in its narrowed type", () => {
+    using api = spawnAPI();
+    const source = api.createSourceFile("/imports.js", '/** @import { Foo } from "./foo" */\nlet value;').sourceFile;
+    const node: Node = source.statements[0];
+    assert.ok(astModule.canHaveModifiers(node));
+    if (node.kind === SyntaxKind.JSImportDeclaration) {
+        assert.strictEqual(node.moduleSpecifier.kind, SyntaxKind.StringLiteral);
+        assert.strictEqual(node.importClause?.namedBindings?.kind, SyntaxKind.NamedImports);
+    }
+    else {
+        assert.fail("Expected the reparsed JSDoc import");
+    }
+});
+
+test("canHaveModifiers recognizes declarations without an existing modifier list", () => {
+    using api = spawnAPI();
+    const source = api.createSourceFile(
+        "/modifiers.ts",
+        `
+export class C<T> {
+    property;
+    method(parameter) {}
+    constructor() {}
+    get value() {}
+    set value(v) {}
+    [key: string]: any;
+}
+interface I { property: string; method(): void; }
+const fn = async () => {};
+import x from "x";
+export { x };
+`,
+    ).sourceFile;
+    const supported = new Set([
+        SyntaxKind.ClassDeclaration,
+        SyntaxKind.TypeParameter,
+        SyntaxKind.PropertyDeclaration,
+        SyntaxKind.MethodDeclaration,
+        SyntaxKind.Parameter,
+        SyntaxKind.Constructor,
+        SyntaxKind.GetAccessor,
+        SyntaxKind.SetAccessor,
+        SyntaxKind.IndexSignature,
+        SyntaxKind.InterfaceDeclaration,
+        SyntaxKind.PropertySignature,
+        SyntaxKind.MethodSignature,
+        SyntaxKind.VariableStatement,
+        SyntaxKind.ArrowFunction,
+        SyntaxKind.ImportDeclaration,
+        SyntaxKind.ExportDeclaration,
+    ]);
+    const seen = new Set<SyntaxKind>();
+    function walk(node: Node): void {
+        assert.strictEqual(astModule.canHaveModifiers(node), supported.has(node.kind), formatSyntaxKind(node.kind));
+        if (astModule.canHaveModifiers(node)) {
+            const declaration: astModule.CanHaveModifiers = node;
+            seen.add(declaration.kind);
+        }
+        node.forEachChild(walk);
+    }
+    walk(source);
+    assert.deepStrictEqual(seen, supported);
+});
+
 test("canHaveDecorators narrows all supported declarations, even without decorators", () => {
     using api = spawnAPI();
     const source = api.createSourceFile(

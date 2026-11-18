@@ -8,31 +8,45 @@ import type { NodeFlags } from "../../enums/nodeFlags.js";
 import type { ScriptKind } from "../../enums/scriptKind.js";
 import { SyntaxKind } from "../../enums/syntaxKind.js";
 import type {
+    ArrowFunction,
     AssertionExpression,
     BindingElement,
     CaseClause,
     ClassDeclaration,
     ClassExpression,
     ComputedPropertyName,
+    ConstructorDeclaration,
+    ConstructorTypeNode,
     Decorator,
     DoStatement,
     EndOfFile,
     EntityName,
+    EnumDeclaration,
     EnumMember,
+    ExportAssignment,
+    ExportDeclaration,
     Expression,
     ExpressionStatement,
     ForInStatement,
     ForOfStatement,
     ForStatement,
+    FunctionDeclaration,
+    FunctionExpression,
     GetAccessorDeclaration,
     Identifier,
     IfStatement,
+    ImportDeclaration,
+    ImportEqualsDeclaration,
+    IndexSignatureDeclaration,
+    InterfaceDeclaration,
     JsxAttribute,
     JsxExpression,
     JsxSpreadAttribute,
     KeywordSyntaxKind,
     MethodDeclaration,
+    MethodSignatureDeclaration,
     ModifierSyntaxKind,
+    ModuleDeclaration,
     ParameterDeclaration,
     PropertyAccessExpression,
     PropertyAssignment,
@@ -50,7 +64,10 @@ import type {
     ThisExpression,
     ThrowStatement,
     Token,
+    TypeAliasDeclaration,
+    TypeParameterDeclaration,
     VariableDeclaration,
+    VariableStatement,
     WhileStatement,
     WithStatement,
 } from "./ast.generated.ts";
@@ -70,6 +87,34 @@ export type CanHaveDecorators =
     | SetAccessorDeclaration
     | ClassExpression
     | ClassDeclaration;
+
+export type CanHaveModifiers =
+    | TypeParameterDeclaration
+    | ParameterDeclaration
+    | PropertySignatureDeclaration
+    | PropertyDeclaration
+    | MethodSignatureDeclaration
+    | MethodDeclaration
+    | ConstructorDeclaration
+    | GetAccessorDeclaration
+    | SetAccessorDeclaration
+    | IndexSignatureDeclaration
+    | ConstructorTypeNode
+    | FunctionExpression
+    | ArrowFunction
+    | ClassExpression
+    | VariableStatement
+    | FunctionDeclaration
+    | ClassDeclaration
+    | InterfaceDeclaration
+    | TypeAliasDeclaration
+    | EnumDeclaration
+    | ModuleDeclaration
+    | ImportEqualsDeclaration
+    | ImportDeclaration
+    | (Omit<ImportDeclaration, "kind"> & { readonly kind: SyntaxKind.JSImportDeclaration; })
+    | ExportAssignment
+    | ExportDeclaration;
 
 // ── Core types ──
 

@@ -12,6 +12,7 @@ import type {
     BlockOrExpression,
     BooleanLiteral,
     CanHaveDecorators,
+    CanHaveModifiers,
     ComputedPropertyName,
     ConciseBody,
     ExclamationToken,
@@ -77,6 +78,40 @@ export function canHaveDecorators(node: Node): node is CanHaveDecorators {
         case SyntaxKind.SetAccessor:
         case SyntaxKind.ClassExpression:
         case SyntaxKind.ClassDeclaration:
+            return true;
+        default:
+            return false;
+    }
+}
+
+export function canHaveModifiers(node: Node): node is CanHaveModifiers {
+    switch (node.kind) {
+        case SyntaxKind.TypeParameter:
+        case SyntaxKind.Parameter:
+        case SyntaxKind.PropertySignature:
+        case SyntaxKind.PropertyDeclaration:
+        case SyntaxKind.MethodSignature:
+        case SyntaxKind.MethodDeclaration:
+        case SyntaxKind.Constructor:
+        case SyntaxKind.GetAccessor:
+        case SyntaxKind.SetAccessor:
+        case SyntaxKind.IndexSignature:
+        case SyntaxKind.ConstructorType:
+        case SyntaxKind.FunctionExpression:
+        case SyntaxKind.ArrowFunction:
+        case SyntaxKind.ClassExpression:
+        case SyntaxKind.VariableStatement:
+        case SyntaxKind.FunctionDeclaration:
+        case SyntaxKind.ClassDeclaration:
+        case SyntaxKind.InterfaceDeclaration:
+        case SyntaxKind.TypeAliasDeclaration:
+        case SyntaxKind.EnumDeclaration:
+        case SyntaxKind.ModuleDeclaration:
+        case SyntaxKind.ImportEqualsDeclaration:
+        case SyntaxKind.ImportDeclaration:
+        case SyntaxKind.JSImportDeclaration:
+        case SyntaxKind.ExportAssignment:
+        case SyntaxKind.ExportDeclaration:
             return true;
         default:
             return false;
