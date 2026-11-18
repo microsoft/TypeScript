@@ -17,10 +17,12 @@ import type {
     Expression,
     HasExpression,
     HasInitializer,
+    JSDocSignature,
     ModifierLike,
     ObjectAssignmentInitializer,
     PropertyAccessExpression,
     PropertyAssignment,
+    SignatureDeclaration,
     SourceFile,
     VariableDeclaration,
 } from "./ast.ts";
@@ -28,6 +30,7 @@ import type { Node } from "./ast.ts";
 import {
     isAccessExpression,
     isIdentifier,
+    isJSDocTypeExpression,
     isNumericLiteral,
     isStringLiteralLikeNode,
 } from "./is.generated.ts";
@@ -114,6 +117,18 @@ export function hasObjectAssignmentInitializer(node: Node): node is ObjectAssign
 
 export function isExternalModule(file: SourceFile): boolean {
     return file.externalModuleIndicator !== undefined;
+}
+
+/** Reports whether the final parameter is a rest parameter, including JSDoc variadic types. */
+export function hasRestParameter(node: SignatureDeclaration | JSDocSignature): boolean {
+    const last = node.parameters[node.parameters.length - 1];
+    if (!last) return false;
+    if (last.kind === SyntaxKind.Parameter && last.dotDotDotToken) return true;
+    let type = last.kind === SyntaxKind.Parameter ? last.type
+        : last.kind === SyntaxKind.JSDocParameterTag ? last.typeExpression
+        : undefined;
+    if (type && isJSDocTypeExpression(type)) type = type.type;
+    return type?.kind === SyntaxKind.JSDocVariadicType;
 }
 
 function getRootDeclaration(node: Node): Node {

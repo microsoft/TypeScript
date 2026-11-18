@@ -103,6 +103,40 @@ test("canHaveModifiers includes the reparsed import kind in its narrowed type", 
     }
 });
 
+test("hasRestParameter handles syntax, JSDoc signatures, and empty parameter lists", () => {
+    using api = spawnAPI();
+    const source = api.createSourceFile(
+        "/rest.ts",
+        "function empty() {} function ordinary(value: string) {} function rest(first: number, ...values: string[]) {} type F = (...values: string[]) => void;",
+    ).sourceFile;
+    const functions = source.statements.filter(astModule.isFunctionDeclaration);
+    assert.deepStrictEqual(functions.map(astModule.hasRestParameter), [false, false, true]);
+    const alias = source.statements[3];
+    assert.ok(astModule.isTypeAliasDeclaration(alias));
+    assert.ok(astModule.isFunctionTypeNode(alias.type));
+    assert.strictEqual(astModule.hasRestParameter(alias.type), true);
+
+    const js = api.createSourceFile(
+        "/rest.js",
+        `/**
+ * @callback Callback
+ * @param {...string} values
+ */
+function callback() {}
+`,
+    ).sourceFile;
+    const callback = js.statements.find(astModule.isFunctionDeclaration)?.jsDoc?.[0];
+    assert.ok(callback && astModule.isJSDoc(callback));
+    const tag = callback.tags?.[0];
+    assert.ok(tag && astModule.isJSDocCallbackTag(tag) && astModule.isJSDocSignature(tag.typeExpression));
+    assert.strictEqual(astModule.hasRestParameter(tag.typeExpression), true);
+    const variadic = factory.createJSDocVariadicType(factory.createKeywordTypeNode(SyntaxKind.NumberKeyword));
+    const parameter = factory.createParameterDeclaration(undefined, undefined, factory.createIdentifier("values"), undefined, variadic);
+    const fnType = factory.createFunctionTypeNode(undefined, [parameter], factory.createKeywordTypeNode(SyntaxKind.VoidKeyword));
+    assert.strictEqual(astModule.hasRestParameter(fnType), true);
+    assert.strictEqual(astModule.hasRestParameter(factory.createJSDocSignature(undefined, [], undefined)), false);
+});
+
 test("getCombinedNodeFlags follows binding declarations to their list and statement", () => {
     using api = spawnAPI();
     const source = api.createSourceFile(
