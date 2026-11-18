@@ -210,7 +210,7 @@ import type {
     UnionType,
 } from "./types.ts";
 
-export { formatDiagnostics, formatDiagnosticsWithColorAndContext } from "../diagnosticFormatter.ts";
+export { flattenDiagnosticMessage, formatDiagnostics, formatDiagnosticsWithColorAndContext } from "../diagnosticFormatter.ts";
 export { documentURIToFileName, fileNameToDocumentURI } from "../path.ts";
 export { CheckFlags, CompletionItemKind, DiagnosticCategory, ElementFlags, EmitOnly, IndexKind, JsxEmit, ModifierFlags, ModuleKind, ModuleResolutionKind, NodeBuilderFlags, ObjectFlags, ScriptKind, SignatureFlags, SignatureKind, SymbolFlags, SymbolOwnerKind, TypeFlags, TypeFormatFlags, TypePredicateKind };
 export type {

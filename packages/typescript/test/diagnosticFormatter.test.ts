@@ -1,9 +1,12 @@
 import {
     API,
+    type Diagnostic,
+    flattenDiagnosticMessage,
     formatDiagnostics,
     type FormatDiagnosticsHost,
     formatDiagnosticsWithColorAndContext,
 } from "@typescript/typescript/async";
+import { flattenDiagnosticMessage as flattenDiagnosticMessageSync } from "@typescript/typescript/sync";
 import assert from "node:assert";
 import {
     describe,
@@ -15,6 +18,23 @@ import {
 } from "./testUtils.ts";
 
 describe("diagnosticFormatter", { concurrency: areTestsFiltered() }, () => {
+    test("flattens diagnostic message chains with configurable newlines and indentation", () => {
+        const diagnostic: Diagnostic = {
+            pos: -1,
+            end: -1,
+            code: 1,
+            category: 1,
+            text: "Root",
+        };
+        const child = { ...diagnostic, text: "Child", messageChain: [{ ...diagnostic, text: "Grandchild" }] };
+        const chained = { ...diagnostic, messageChain: [child, { ...diagnostic, text: "Sibling" }] };
+        for (const flatten of [flattenDiagnosticMessage, flattenDiagnosticMessageSync]) {
+            assert.equal(flatten(diagnostic, "\n"), "Root");
+            assert.equal(flatten(chained, "\r\n"), "Root\r\n  Child\r\n    Grandchild\r\n  Sibling");
+            assert.equal(flatten(chained, "\n", 1), "\n  Root\n    Child\n      Grandchild\n    Sibling");
+        }
+    });
+
     test("formats diagnostics with a configured program host", async () => {
         const source = `const x: number = "oops";\n`;
         const api = spawnAPI({
