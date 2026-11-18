@@ -1,0 +1,48 @@
+//// [tests/cases/compiler/decoratorMetadataTypeOnlyUnresolvedImport.ts] ////
+
+=== decoratorMetadataTypeOnlyUnresolvedImport.ts ===
+import type Foo from "./missing-default";
+>Foo : Symbol(Foo, Decl(decoratorMetadataTypeOnlyUnresolvedImport.ts, 0, 6))
+
+import { type Bar } from "./missing-named";
+>Bar : Symbol(Bar, Decl(decoratorMetadataTypeOnlyUnresolvedImport.ts, 1, 8))
+
+import type { default as Baz } from "./missing-default-specifier";
+>Baz : Symbol(Baz, Decl(decoratorMetadataTypeOnlyUnresolvedImport.ts, 2, 13))
+
+function dec(_target: unknown, _key: unknown) {}
+>dec : Symbol(dec, Decl(decoratorMetadataTypeOnlyUnresolvedImport.ts, 2, 66))
+>_target : Symbol(_target, Decl(decoratorMetadataTypeOnlyUnresolvedImport.ts, 4, 13))
+>_key : Symbol(_key, Decl(decoratorMetadataTypeOnlyUnresolvedImport.ts, 4, 30))
+
+class C {
+>C : Symbol(C, Decl(decoratorMetadataTypeOnlyUnresolvedImport.ts, 4, 48))
+
+    @dec a!: Foo;
+>dec : Symbol(dec, Decl(decoratorMetadataTypeOnlyUnresolvedImport.ts, 2, 66))
+>a : Symbol(C.a, Decl(decoratorMetadataTypeOnlyUnresolvedImport.ts, 6, 9))
+>Foo : Symbol(Foo, Decl(decoratorMetadataTypeOnlyUnresolvedImport.ts, 0, 6))
+
+    @dec b!: Bar;
+>dec : Symbol(dec, Decl(decoratorMetadataTypeOnlyUnresolvedImport.ts, 2, 66))
+>b : Symbol(C.b, Decl(decoratorMetadataTypeOnlyUnresolvedImport.ts, 7, 17))
+>Bar : Symbol(Bar, Decl(decoratorMetadataTypeOnlyUnresolvedImport.ts, 1, 8))
+
+    @dec c!: Baz;
+>dec : Symbol(dec, Decl(decoratorMetadataTypeOnlyUnresolvedImport.ts, 2, 66))
+>c : Symbol(C.c, Decl(decoratorMetadataTypeOnlyUnresolvedImport.ts, 8, 17))
+>Baz : Symbol(Baz, Decl(decoratorMetadataTypeOnlyUnresolvedImport.ts, 2, 13))
+}
+
+const x = Foo;
+>x : Symbol(x, Decl(decoratorMetadataTypeOnlyUnresolvedImport.ts, 12, 5))
+>Foo : Symbol(Foo, Decl(decoratorMetadataTypeOnlyUnresolvedImport.ts, 0, 6))
+
+const y = Bar;
+>y : Symbol(y, Decl(decoratorMetadataTypeOnlyUnresolvedImport.ts, 13, 5))
+>Bar : Symbol(Bar, Decl(decoratorMetadataTypeOnlyUnresolvedImport.ts, 1, 8))
+
+const z = Baz;
+>z : Symbol(z, Decl(decoratorMetadataTypeOnlyUnresolvedImport.ts, 14, 5))
+>Baz : Symbol(Baz, Decl(decoratorMetadataTypeOnlyUnresolvedImport.ts, 2, 13))
+
