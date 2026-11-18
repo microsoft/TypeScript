@@ -5,17 +5,86 @@ import {
     formatDiagnostics,
     type FormatDiagnosticsHost,
     formatDiagnosticsWithColorAndContext,
+    sortAndDeduplicateDiagnostics,
 } from "@typescript/typescript/async";
-import { flattenDiagnosticMessage as flattenDiagnosticMessageSync } from "@typescript/typescript/sync";
+import {
+    flattenDiagnosticMessage as flattenDiagnosticMessageSync,
+    sortAndDeduplicateDiagnostics as sortAndDeduplicateDiagnosticsSync,
+} from "@typescript/typescript/sync";
 import assert from "node:assert";
 import {
     describe,
     test,
 } from "node:test";
+import { toRootedFilePath } from "../src/api/path.ts";
 import {
     areTestsFiltered,
     createVirtualFileSystem,
 } from "./testUtils.ts";
+
+describe("sortAndDeduplicateDiagnostics", () => {
+    const diagnostic: Diagnostic = { pos: -1, end: -1, code: 1, category: 1, text: "Error" };
+
+    test("sorts by file, location, code, category, source, and text without mutating input", () => {
+        const firstFile = { ...diagnostic, fileName: toRootedFilePath("/A.ts", undefined), pos: 0, end: 1 };
+        const expected = [
+            diagnostic,
+            firstFile,
+            { ...firstFile, text: "Other error" },
+            { ...firstFile, source: "plugin" },
+            { ...firstFile, category: 2 },
+            { ...firstFile, code: 2 },
+            { ...firstFile, end: 2 },
+            { ...firstFile, pos: 1, end: 2 },
+            { ...firstFile, fileName: toRootedFilePath("/a.ts", undefined) },
+        ].map((item, index) => ({ ...item, index }));
+        const input = Object.freeze([...expected].reverse());
+        for (const sort of [sortAndDeduplicateDiagnostics, sortAndDeduplicateDiagnosticsSync]) {
+            const result = sort(input);
+            assert.deepEqual(result.map(item => item.index), expected.map(item => item.index));
+            assert.ok(result.every((item, index) => item === expected[index]));
+            assert.deepEqual(input, [...expected].reverse());
+            assert.deepEqual(sort([]), []);
+            assert.deepEqual(sort([diagnostic, structuredClone(diagnostic)]), [diagnostic]);
+        }
+    });
+
+    test("orders message chains by shape before content without dropping distinct chains", () => {
+        const child = { ...diagnostic, text: "Child" };
+        const shallow = { ...diagnostic, messageChain: [child] };
+        const deep = { ...diagnostic, messageChain: [{ ...child, text: "Z", messageChain: [child] }] };
+        const wide = { ...diagnostic, messageChain: [child, child] };
+        for (const sort of [sortAndDeduplicateDiagnostics, sortAndDeduplicateDiagnosticsSync]) {
+            assert.deepEqual(sort([diagnostic, shallow, deep]), [deep, shallow, diagnostic]);
+            assert.deepEqual(sort([deep, wide]), [wide, deep]);
+            const earlierText = { ...shallow, messageChain: [{ ...child, text: "A" }] };
+            assert.deepEqual(sort([shallow, earlierText]), [earlierText, shallow]);
+            const deeperSecondChild = {
+                ...wide,
+                messageChain: [child, { ...child, messageChain: [child] }],
+            };
+            assert.deepEqual(sort([wide, deeperSecondChild]), [deeperSecondChild, wide]);
+            assert.deepEqual(sort([deep, structuredClone(deep)]), [deep]);
+            assert.deepEqual(sort([diagnostic, { ...diagnostic, messageChain: [] }]), [diagnostic]);
+            const differentCode = { ...shallow, messageChain: [{ ...child, code: 2 }] };
+            assert.equal(sort([shallow, differentCode]).length, 2);
+        }
+    });
+
+    test("orders related information without dropping distinct details and stably deduplicates", () => {
+        const related = { ...diagnostic, text: "Related" };
+        const detailed = { ...diagnostic, relatedInformation: [related] };
+        const moreDetailed = { ...diagnostic, relatedInformation: [related, related] };
+        const earlierRelated = { ...detailed, relatedInformation: [{ ...related, text: "Earlier" }] };
+        for (const sort of [sortAndDeduplicateDiagnostics, sortAndDeduplicateDiagnosticsSync]) {
+            assert.deepEqual(sort([diagnostic, detailed, moreDetailed]), [moreDetailed, detailed, diagnostic]);
+            assert.deepEqual(sort([detailed, earlierRelated]), [earlierRelated, detailed]);
+            const duplicate = structuredClone(detailed);
+            assert.equal(sort([detailed, duplicate])[0], detailed);
+            assert.equal(sort([duplicate, detailed])[0], duplicate);
+        }
+    });
+});
 
 describe("diagnosticFormatter", { concurrency: areTestsFiltered() }, () => {
     test("flattens diagnostic message chains with configurable newlines and indentation", () => {
