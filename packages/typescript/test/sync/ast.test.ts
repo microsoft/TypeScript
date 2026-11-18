@@ -89,6 +89,35 @@ import { runBenchmarks } from "./ast.bench.ts";
 
 const concurrency = areTestsFiltered();
 
+test("canHaveDecorators narrows all supported declarations, even without decorators", () => {
+    using api = spawnAPI();
+    const source = api.createSourceFile(
+        "/decorators.ts",
+        "class C { property; method(parameter) {} get value() {} set value(v) {} } const expression = class {};",
+    ).sourceFile;
+    const supported = new Set([
+        SyntaxKind.Parameter,
+        SyntaxKind.PropertyDeclaration,
+        SyntaxKind.MethodDeclaration,
+        SyntaxKind.GetAccessor,
+        SyntaxKind.SetAccessor,
+        SyntaxKind.ClassExpression,
+        SyntaxKind.ClassDeclaration,
+    ]);
+    const seen = new Set<SyntaxKind>();
+    function walk(node: Node): void {
+        assert.strictEqual(astModule.canHaveDecorators(node), supported.has(node.kind));
+        if (astModule.canHaveDecorators(node)) {
+            const declaration: astModule.CanHaveDecorators = node;
+            assert.strictEqual(declaration.modifiers, undefined);
+            seen.add(node.kind);
+        }
+        node.forEachChild(walk);
+    }
+    walk(source);
+    assert.deepStrictEqual(seen, supported);
+});
+
 test("findAncestor visits the starting node and supports narrowing and early termination", () => {
     using api = spawnAPI();
     const source = api.createSourceFile("/ancestor.ts", "class C { method() { return 1; } }").sourceFile;

@@ -11,6 +11,8 @@ import type {
     AssertionExpression,
     BindingElement,
     CaseClause,
+    ClassDeclaration,
+    ClassExpression,
     ComputedPropertyName,
     Decorator,
     DoStatement,
@@ -22,12 +24,14 @@ import type {
     ForInStatement,
     ForOfStatement,
     ForStatement,
+    GetAccessorDeclaration,
     Identifier,
     IfStatement,
     JsxAttribute,
     JsxExpression,
     JsxSpreadAttribute,
     KeywordSyntaxKind,
+    MethodDeclaration,
     ModifierSyntaxKind,
     ParameterDeclaration,
     PropertyAccessExpression,
@@ -37,6 +41,7 @@ import type {
     PunctuationSyntaxKind,
     ReturnStatement,
     SatisfiesExpression,
+    SetAccessorDeclaration,
     ShorthandPropertyAssignment,
     SpreadAssignment,
     Statement,
@@ -56,6 +61,15 @@ export { TokenFlags } from "../../enums/tokenFlags.js";
 
 export * from "./ast.generated.ts";
 export * as factory from "./factory.generated.ts";
+
+export type CanHaveDecorators =
+    | ParameterDeclaration
+    | PropertyDeclaration
+    | MethodDeclaration
+    | GetAccessorDeclaration
+    | SetAccessorDeclaration
+    | ClassExpression
+    | ClassDeclaration;
 
 // ── Core types ──
 

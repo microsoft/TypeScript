@@ -11,6 +11,7 @@ import type {
     BindingPattern,
     BlockOrExpression,
     BooleanLiteral,
+    CanHaveDecorators,
     ComputedPropertyName,
     ConciseBody,
     ExclamationToken,
@@ -66,6 +67,21 @@ import {
 } from "./utils.ts";
 
 export * from "./is.generated.ts";
+
+export function canHaveDecorators(node: Node): node is CanHaveDecorators {
+    switch (node.kind) {
+        case SyntaxKind.Parameter:
+        case SyntaxKind.PropertyDeclaration:
+        case SyntaxKind.MethodDeclaration:
+        case SyntaxKind.GetAccessor:
+        case SyntaxKind.SetAccessor:
+        case SyntaxKind.ClassExpression:
+        case SyntaxKind.ClassDeclaration:
+            return true;
+        default:
+            return false;
+    }
+}
 
 type JSDocNamespaceDeclaration = ModuleDeclaration;
 
