@@ -302,6 +302,12 @@ func (c *Checker) SymbolToEntityName(symbol *ast.Symbol, meaning ast.SymbolFlags
 	return nodeBuilder.SymbolToEntityName(symbol, meaning, enclosingDeclaration, flags, nodebuilder.InternalFlagsNone, nil)
 }
 
+func (c *Checker) SymbolToExpression(symbol *ast.Symbol, meaning ast.SymbolFlags, enclosingDeclaration *ast.Node, flags nodebuilder.Flags) *ast.Node {
+	nodeBuilder, release := c.getNodeBuilder()
+	defer release()
+	return nodeBuilder.SymbolToExpression(symbol, meaning, enclosingDeclaration, flags, nodebuilder.InternalFlagsNone, nil)
+}
+
 // ExpandSymbolForHover produces declaration strings for a symbol with verbosity support for expandable hover.
 func (c *Checker) ExpandSymbolForHover(symbol *ast.Symbol, meaning ast.SymbolFlags, vc *VerbosityContext) string {
 	nodeBuilder, release := c.getNodeBuilder()

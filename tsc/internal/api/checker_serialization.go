@@ -34,6 +34,7 @@ func (s *Session) handleSymbolToEntityName(ctx context.Context, params *SymbolTo
 	if err != nil {
 		return nil, err
 	}
+
 	defer setup.done()
 	symbol, err := setup.resolveSymbolHandle(params.Symbol)
 	if err != nil {
@@ -44,4 +45,23 @@ func (s *Session) handleSymbolToEntityName(ctx context.Context, params *SymbolTo
 		return nil, err
 	}
 	return s.encodeCheckerNode(setup.checker.SymbolToEntityName(symbol, ast.SymbolFlags(params.Meaning), location, nodebuilder.Flags(params.Flags)))
+}
+
+// @gen-proto-result: SourceFileResponse
+// @gen-proto-nullable
+func (s *Session) handleSymbolToExpression(ctx context.Context, params *SymbolToNodeParams) (any, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+	symbol, err := setup.resolveSymbolHandle(params.Symbol)
+	if err != nil {
+		return nil, err
+	}
+	location, err := setup.resolveLocation(params.Location, nil, nil)
+	if err != nil {
+		return nil, err
+	}
+	return s.encodeCheckerNode(setup.checker.SymbolToExpression(symbol, ast.SymbolFlags(params.Meaning), location, nodebuilder.Flags(params.Flags)))
 }

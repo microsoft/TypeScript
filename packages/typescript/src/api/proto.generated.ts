@@ -154,6 +154,7 @@ export interface APIMethodInfo {
     typeToString: APIMethod<TypeToTypeNodeParams, unknown>;
     symbolToString: APIMethod<SymbolToStringParams, string>;
     symbolToEntityName: APIMethod<SymbolToNodeParams, SourceFileResponse | null>;
+    symbolToExpression: APIMethod<SymbolToNodeParams, SourceFileResponse | null>;
     signatureToString: APIMethod<SignatureToStringParams, string>;
     isContextSensitive: APIMethod<GetContextualTypeParams, boolean>;
     getReturnTypeOfSignature: APIMethod<GetSignaturePropertyParams, TypeResponse>;
@@ -1428,6 +1429,7 @@ export interface BatchRequest {
         | "startCPUProfile"
         | "stopCPUProfile"
         | "symbolToEntityName"
+        | "symbolToExpression"
         | "symbolToString"
         | "transpileDeclaration"
         | "transpileDeclarationFromFile"
@@ -1626,6 +1628,7 @@ export interface BatchResponse {
         | "startCPUProfile"
         | "stopCPUProfile"
         | "symbolToEntityName"
+        | "symbolToExpression"
         | "symbolToString"
         | "transpileDeclaration"
         | "transpileDeclarationFromFile"

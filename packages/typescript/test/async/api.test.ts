@@ -9059,6 +9059,21 @@ export const obj = { m: 1, s: "hi", b: true };
         assert.equal(await api.printer.printNode(unqualified), "Item");
     });
 
+    test("symbolToExpression returns a property access for a qualified value", async () => {
+        const source = `namespace N { export const value = 1; }`;
+        await using api = spawnAPI({ "/tsconfig.json": "{}", "/main.ts": source });
+        const snapshot = await api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const file = await project.program.getSourceFile("/main.ts");
+        assert.ok(file);
+        const symbol = await project.checker.getSymbolAtPosition("/main.ts", source.indexOf("value"));
+        assert.ok(symbol);
+        const expression = await project.checker.symbolToExpression(symbol, SymbolFlags.Value, file);
+        assert.ok(expression);
+        assert.equal(expression.kind, SyntaxKind.PropertyAccessExpression);
+        assert.equal(await api.printer.printNode(expression), "N.value");
+    });
+
     test("typeToString", async () => {
         await using api = spawnAPI(emitterFiles);
 

@@ -5774,6 +5774,43 @@ export class Checker {
         );
     }
 
+    get symbolToExpression(): {
+        (symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): Expression | undefined;
+        gen(symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): Generator<ProtocolRequest, Expression | undefined, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "symbolToExpression",
+            function (symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): Expression | undefined {
+                const binaryData = owner.client.apiRequestBinary("symbolToExpression", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    symbol: symbol.reference,
+                    meaning,
+                    location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+                    flags,
+                });
+                if (!binaryData) return undefined;
+                return decodeNode(binaryData) as Expression;
+            },
+            function* (symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): Generator<ProtocolRequest, Expression | undefined, ProtocolResponse["result"]> {
+                const binaryData = sourceFileResponseToUint8Array(
+                    yield* apiRequest("symbolToExpression", {
+                        snapshot: owner.snapshotId,
+                        project: owner.project.handle,
+                        symbol: symbol.reference,
+                        meaning,
+                        location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+                        flags,
+                    }),
+                );
+                if (!binaryData) return undefined;
+                return decodeNode(binaryData) as Expression;
+            },
+        );
+    }
+
     /** Formats a call or construct signature, using the signature's own kind. */
     get signatureToString(): {
         (signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string;
