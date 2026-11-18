@@ -45,7 +45,7 @@
 // |       [punctuation] ": "
 // |       [string] "0"
 // |   ClassifiedTextElement
-// |     [text] "Doc"
+// |     [text] "Doc 3\nDoc"
 // | ----------------------------------------------------------------------
 
 
@@ -160,7 +160,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\n(alias) const x: 0\n```\nDoc\n\n*@tag* — Tag text"
+        "value": "```typescript\n(alias) const x: 0\n```\nDoc 3\nDoc\n\n*@tag* — Tag text 3\n\n*@tag* — Tag text"
       },
       "range": {
         "start": {
@@ -233,7 +233,7 @@
             "Runs": [
               {
                 "ClassificationTypeName": "text",
-                "Text": "Doc",
+                "Text": "Doc 3\nDoc",
                 "_vs_type": "ClassifiedTextRun"
               }
             ],
