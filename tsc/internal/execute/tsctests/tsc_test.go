@@ -55,6 +55,28 @@ func TestOutputSanitizerVersionPadding(t *testing.T) {
 	}
 }
 
+// https://github.com/microsoft/TypeScript/issues/65078
+func TestTscJSDiagnosticsForMissingNodes(t *testing.T) {
+	t.Parallel()
+	for _, test := range []struct {
+		name   string
+		source string
+	}{
+		{name: "missing type annotation", source: "var R: ;"},
+		{name: "present type annotation with leading trivia", source: "var R:    number ;"},
+	} {
+		for _, pretty := range []string{"true", "false"} {
+			(&tscInput{
+				subScenario: test.name + " pretty " + pretty,
+				files: FileMap{
+					"/home/src/workspaces/project/a.js": test.source,
+				},
+				commandLineArgs: []string{"a.js", "--allowJs", "--noEmit", "--pretty", pretty},
+			}).run(t, "jsDiagnosticsForMissingNodes")
+		}
+	}
+}
+
 func TestTscCommandline(t *testing.T) {
 	t.Parallel()
 	colorTest := func(subScenario string, env map[string]string, outputIsTTY bool) *tscInput {
