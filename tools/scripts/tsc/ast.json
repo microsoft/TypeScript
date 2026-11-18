@@ -4743,7 +4743,7 @@
                     },
                     {
                         "name": "TypeExpression",
-                        "type": "Node",
+                        "type": "TypeNode",
                         "optional": true
                     },
                     {
