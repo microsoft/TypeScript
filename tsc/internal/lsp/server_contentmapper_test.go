@@ -280,13 +280,11 @@ export const title = "Profile";
 			Files: []*lsproto.FileRename{{OldUri: uri, NewUri: "file:///home/project/Renamed.vue"}},
 		}},
 	} {
-		t.Run(string(request.method), func(t *testing.T) {
-			msg, result, ok := client.SendRequest(t, lsproto.RequestInfo[any, any]{Method: request.method}, request.params)
-			assert.Assert(t, msg != nil)
-			assert.Assert(t, msg.AsResponse().Error == nil, "expected null fallback, got %v", msg.AsResponse().Error)
-			assert.Assert(t, ok)
-			assert.Assert(t, result == nil, "expected null fallback, got %v", result)
-		})
+		response, result, ok := client.SendRequest(t, lsproto.RequestInfo[any, any]{Method: request.method}, request.params)
+		assert.Assert(t, response != nil)
+		assert.Assert(t, response.AsResponse().Error == nil, "%s: expected null fallback, got %v", request.method, response.AsResponse().Error)
+		assert.Assert(t, ok)
+		assert.Assert(t, result == nil, "%s: expected null fallback, got %v", request.method, result)
 	}
 	codeLensMsg, _, _ := client.SendRequest(t, lsproto.CodeLensResolveInfo, &lsproto.CodeLens{
 		Range: range_, Data: &lsproto.CodeLensData{Uri: uri, Kind: "references", Position: 0},
