@@ -16,8 +16,8 @@ declare const options: (Options | string)[];
 >options : (string | Partial<{ verbose: boolean; }>)[]
 
 const r1 = either(options[0], options.map(value => value)[0]);
->r1 : string | Partial<{ verbose: boolean; }> | Partial<{ verbose: boolean; }>
->either(options[0], options.map(value => value)[0]) : string | Partial<{ verbose: boolean; }> | Partial<{ verbose: boolean; }>
+>r1 : string | Partial<{ verbose: boolean; }>
+>either(options[0], options.map(value => value)[0]) : string | Partial<{ verbose: boolean; }>
 >either : <A, B>(a: A, b: B) => A | B
 >options[0] : string | Partial<{ verbose: boolean; }>
 >options : (string | Partial<{ verbose: boolean; }>)[]
@@ -40,8 +40,8 @@ declare const readonlyOptions: (ReadonlyOptions | string)[];
 >readonlyOptions : (string | Readonly<{ verbose: boolean; }>)[]
 
 const r2 = either(readonlyOptions[0], readonlyOptions.map(value => value)[0]);
->r2 : string | Readonly<{ verbose: boolean; }> | Readonly<{ verbose: boolean; }>
->either(readonlyOptions[0], readonlyOptions.map(value => value)[0]) : string | Readonly<{ verbose: boolean; }> | Readonly<{ verbose: boolean; }>
+>r2 : string | Readonly<{ verbose: boolean; }>
+>either(readonlyOptions[0], readonlyOptions.map(value => value)[0]) : string | Readonly<{ verbose: boolean; }>
 >either : <A, B>(a: A, b: B) => A | B
 >readonlyOptions[0] : string | Readonly<{ verbose: boolean; }>
 >readonlyOptions : (string | Readonly<{ verbose: boolean; }>)[]
@@ -67,8 +67,8 @@ declare const nullableOptions: (NullableOptions | string)[];
 >nullableOptions : (string | Nullable<{ verbose: boolean; }>)[]
 
 const r3 = either(nullableOptions[0], nullableOptions.map(value => value)[0]);
->r3 : string | Nullable<{ verbose: boolean; }> | Nullable<{ verbose: boolean; }>
->either(nullableOptions[0], nullableOptions.map(value => value)[0]) : string | Nullable<{ verbose: boolean; }> | Nullable<{ verbose: boolean; }>
+>r3 : string | Nullable<{ verbose: boolean; }>
+>either(nullableOptions[0], nullableOptions.map(value => value)[0]) : string | Nullable<{ verbose: boolean; }>
 >either : <A, B>(a: A, b: B) => A | B
 >nullableOptions[0] : string | Nullable<{ verbose: boolean; }>
 >nullableOptions : (string | Nullable<{ verbose: boolean; }>)[]
@@ -89,8 +89,8 @@ declare const unionOptions: (Partial<{ a: boolean } | { b: string }> | string)[]
 >b : string
 
 const r4 = either(unionOptions[0], unionOptions.map(value => value)[0]);
->r4 : string | Partial<{ a: boolean; } | { b: string; }> | Partial<{ a: boolean; } | { b: string; }>
->either(unionOptions[0], unionOptions.map(value => value)[0]) : string | Partial<{ a: boolean; } | { b: string; }> | Partial<{ a: boolean; } | { b: string; }>
+>r4 : string | Partial<{ a: boolean; } | { b: string; }>
+>either(unionOptions[0], unionOptions.map(value => value)[0]) : string | Partial<{ a: boolean; } | { b: string; }>
 >either : <A, B>(a: A, b: B) => A | B
 >unionOptions[0] : string | Partial<{ a: boolean; } | { b: string; }>
 >unionOptions : (string | Partial<{ a: boolean; } | { b: string; }>)[]
@@ -150,15 +150,15 @@ declare const a3: Partial<Named>;
 >a3 : Partial<Named>
 
 const r6 = either(a1, a2);
->r6 : Partial<Named> | Partial<Named>
->either(a1, a2) : Partial<Named> | Partial<Named>
+>r6 : Partial<Named>
+>either(a1, a2) : Partial<Named>
 >either : <A, B>(a: A, b: B) => A | B
 >a1 : Partial<Named>
 >a2 : Partial<Named>
 
 const r7 = either(a1, a3);
->r7 : Partial<Named> | Partial<Named>
->either(a1, a3) : Partial<Named> | Partial<Named>
+>r7 : Partial<Named>
+>either(a1, a3) : Partial<Named>
 >either : <A, B>(a: A, b: B) => A | B
 >a1 : Partial<Named>
 >a3 : Partial<Named>
