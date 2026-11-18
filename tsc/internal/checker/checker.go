@@ -23346,7 +23346,7 @@ func (c *Checker) instantiateMappedType(t *Type, typeParameters []*Type, m *Type
 				return c.getIntersectionType(core.Map(s.Types(), instantiateConstituent))
 			}
 		}
-		return c.getMappedTypeConstituentInstantiation(t, typeParameters, prependTypeMapping(typeVariable, s, m))
+		return c.getMappedTypeConstituentInstantiation(t, typeParameters, typeVariable, s, m)
 	}
 	if typeVariable != nil {
 		mappedTypeVariable := c.instantiateType(typeVariable, m)
@@ -23365,13 +23365,19 @@ func (c *Checker) instantiateMappedType(t *Type, typeParameters []*Type, m *Type
 // The result is cached under the key getObjectTypeInstantiation computes when the result is itself instantiated,
 // such that instantiating it again yields the same type instead of a structurally identical duplicate. The key
 // is independent of any alias of the enclosing instantiation, since that alias doesn't propagate to constituents.
-func (c *Checker) getMappedTypeConstituentInstantiation(t *Type, typeParameters []*Type, m *TypeMapper) *Type {
-	alias := c.instantiateTypeAlias(t.alias, m)
-	key := getTypeInstantiationKey(core.Map(typeParameters, m.Map), alias, false /*singleSignature*/)
+func (c *Checker) getMappedTypeConstituentInstantiation(t *Type, typeParameters []*Type, typeVariable *Type, s *Type, m *TypeMapper) *Type {
+	mapper := prependTypeMapping(typeVariable, s, m)
+	if mapper.Map(typeVariable) != s {
+		// When s is itself a type parameter mapped by m, the merged mapper maps the type variable to the mapping
+		// of s. The result then differs from the instantiation for its key, so it isn't cached.
+		return c.instantiateAnonymousType(t, mapper, nil)
+	}
+	alias := c.instantiateTypeAlias(t.alias, mapper)
+	key := getTypeInstantiationKey(core.Map(typeParameters, mapper.Map), alias, false /*singleSignature*/)
 	data := t.AsObjectType()
 	result := data.instantiations[key]
 	if result == nil {
-		result = c.instantiateAnonymousType(t, m, alias)
+		result = c.instantiateAnonymousType(t, mapper, alias)
 		data.instantiations[key] = result
 	}
 	return result
