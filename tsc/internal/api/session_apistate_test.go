@@ -285,6 +285,43 @@ func TestGetCurrentLanguageServerSnapshotCreatesAndRemovesPrograms(t *testing.T)
 	assert.Equal(t, len(projectSession.Snapshot().ProjectCollection.SyntheticProjects()), 0)
 }
 
+func TestGetCurrentLanguageServerSnapshotRemovesAndCreatesPrograms(t *testing.T) {
+	t.Parallel()
+
+	const fileName = "/home/projects/p/index.ts"
+	projectSession, _ := projecttestutil.Setup(map[string]any{fileName: `export const value = 1;`})
+	defer projectSession.Close()
+
+	session := NewLSPSession(projectSession, nil)
+	_, err := session.handleGetCurrentLanguageServerSnapshot(context.Background(), &GetCurrentLanguageServerSnapshotParams{
+		Changes: &LanguageServerSnapshotChanges{
+			CreatePrograms: []*CreateSnapshotProgramParams{{
+				RootFiles:       []DocumentIdentifier{{FileName: fileName}},
+				CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue},
+			}},
+		},
+	})
+	assert.NilError(t, err)
+
+	replaced, err := session.handleGetCurrentLanguageServerSnapshot(context.Background(), &GetCurrentLanguageServerSnapshotParams{
+		Changes: &LanguageServerSnapshotChanges{
+			RemovePrograms: []project.SyntheticProjectID{syntheticProjectID(1)},
+			CreatePrograms: []*CreateSnapshotProgramParams{{
+				RootFiles:       []DocumentIdentifier{{FileName: fileName}},
+				CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue},
+			}},
+		},
+	})
+	assert.NilError(t, err)
+	assert.DeepEqual(t, *replaced.Operation.CreatedPrograms, []project.SyntheticProjectID{syntheticProjectID(2)})
+	assert.Equal(t, len(projectSession.Snapshot().ProjectCollection.SyntheticProjects()), 1)
+	assert.Assert(t, !session.createdPrograms.Has(syntheticProjectID(1)))
+	assert.Assert(t, session.createdPrograms.Has(syntheticProjectID(2)))
+
+	session.Close()
+	assert.Equal(t, len(projectSession.Snapshot().ProjectCollection.SyntheticProjects()), 0)
+}
+
 func TestOpenFilePreservesWindowsDriveLetterCase(t *testing.T) {
 	t.Parallel()
 
