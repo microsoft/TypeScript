@@ -1032,6 +1032,10 @@ func (c *Checker) GetPropertySymbolOfDestructuringAssignment(location *ast.Node)
 // [ a ] from
 //
 //	[a] = [ some array ...]
+func (c *Checker) GetTypeOfAssignmentPattern(expr *ast.Node) *Type {
+	return c.getTypeOfAssignmentPattern(expr)
+}
+
 func (c *Checker) getTypeOfAssignmentPattern(expr *ast.Node) *Type {
 	// If this is from "for of"
 	//     for ( { a } of elems) {

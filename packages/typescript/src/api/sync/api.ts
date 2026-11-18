@@ -39,6 +39,7 @@ import { TypeFormatFlags } from "../../../enums/typeFormatFlags.js";
 import { TypePredicateKind } from "../../../enums/typePredicateKind.js";
 import {
     type __String,
+    type ArrayLiteralExpression,
     type CallLikeExpression,
     type Declaration,
     type Expression,
@@ -49,6 +50,7 @@ import {
     ModifierFlags,
     type NamedTupleMember,
     type Node,
+    type ObjectLiteralExpression,
     type ParameterDeclaration,
     type PathKey,
     type PropertyAccessExpression,
@@ -4218,6 +4220,34 @@ function encodeNumberLiteralValue(value: number): number | string {
 }
 
 export class Checker {
+    /** Get the source type of an object/array assignment pattern, including nested patterns and for-of initializers. */
+    get getTypeOfAssignmentPattern(): {
+        (node: ObjectLiteralExpression | ArrayLiteralExpression): Type | undefined;
+        gen(node: ObjectLiteralExpression | ArrayLiteralExpression): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getTypeOfAssignmentPattern",
+            function (node: ObjectLiteralExpression | ArrayLiteralExpression): Type | undefined {
+                const data = owner.client.apiRequest("getTypeOfAssignmentPattern", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    location: getNodeRequestHandle(node),
+                });
+                return data ? owner.objectRegistry.getOrCreateType(data) : undefined;
+            },
+            function* (node: ObjectLiteralExpression | ArrayLiteralExpression): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]> {
+                const data = yield* apiRequest("getTypeOfAssignmentPattern", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    location: getNodeRequestHandle(node),
+                });
+                return data ? owner.objectRegistry.getOrCreateType(data) : undefined;
+            },
+        );
+    }
+
     /** Get the distinct constructor parameter and instance property symbols of a parameter property. */
     get getSymbolsOfParameterPropertyDeclaration(): {
         (node: ParameterDeclaration): { parameter: Symbol; property: Symbol; };

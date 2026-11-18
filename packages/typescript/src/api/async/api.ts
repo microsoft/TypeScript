@@ -20,6 +20,7 @@ import { TypeFormatFlags } from "../../../enums/typeFormatFlags.js";
 import { TypePredicateKind } from "../../../enums/typePredicateKind.js";
 import {
     type __String,
+    type ArrayLiteralExpression,
     type CallLikeExpression,
     type Declaration,
     type Expression,
@@ -30,6 +31,7 @@ import {
     ModifierFlags,
     type NamedTupleMember,
     type Node,
+    type ObjectLiteralExpression,
     type ParameterDeclaration,
     type PathKey,
     type PropertyAccessExpression,
@@ -2334,6 +2336,16 @@ function encodeNumberLiteralValue(value: number): number | string {
 }
 
 export class Checker {
+    /** Get the source type of an object/array assignment pattern, including nested patterns and for-of initializers. */
+    async getTypeOfAssignmentPattern(node: ObjectLiteralExpression | ArrayLiteralExpression): Promise<Type | undefined> {
+        const data = await this.client.apiRequest("getTypeOfAssignmentPattern", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            location: getNodeRequestHandle(node),
+        });
+        return data ? this.objectRegistry.getOrCreateType(data) : undefined;
+    }
+
     /** Get the distinct constructor parameter and instance property symbols of a parameter property. */
     async getSymbolsOfParameterPropertyDeclaration(node: ParameterDeclaration): Promise<{ parameter: Symbol; property: Symbol; }> {
         const data = await this.client.apiRequest("getSymbolsOfParameterPropertyDeclaration", {

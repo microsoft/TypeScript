@@ -168,6 +168,7 @@ const (
 
 	// Checker methods
 	MethodIsOptionalParameter                        Method = "isOptionalParameter"
+	MethodGetTypeOfAssignmentPattern                 Method = "getTypeOfAssignmentPattern"
 	MethodIsValidPropertyAccess                      Method = "isValidPropertyAccess"
 	MethodGetSymbolsOfParameterPropertyDeclaration   Method = "getSymbolsOfParameterPropertyDeclaration"
 	MethodGetContextualType                          Method = "getContextualType"
@@ -709,6 +710,7 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 
 	MethodGetContextualType:                          unmarshallerFor[GetContextualTypeParams],
 	MethodIsOptionalParameter:                        unmarshallerFor[CheckerNodeParams],
+	MethodGetTypeOfAssignmentPattern:                 unmarshallerFor[CheckerNodeParams],
 	MethodIsValidPropertyAccess:                      unmarshallerFor[IsValidPropertyAccessParams],
 	MethodGetSymbolsOfParameterPropertyDeclaration:   unmarshallerFor[CheckerNodeParams],
 	MethodGetContextualTypeForArgument:               unmarshallerFor[GetContextualTypeForArgumentParams],

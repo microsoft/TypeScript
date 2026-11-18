@@ -8,6 +8,7 @@
 //
 import {
     type __String,
+    type ArrayLiteralExpression,
     cast,
     escapeLeadingUnderscores,
     type Expression,
@@ -17,6 +18,7 @@ import {
     getTextOfJSDocComment,
     type Identifier,
     InternalSymbolName,
+    isArrayLiteralExpression,
     isCallExpression,
     isClassDeclaration,
     isConstructorDeclaration,
@@ -49,6 +51,7 @@ import {
     type Node,
     type NodeArray,
     NodeFlags,
+    type ObjectLiteralExpression,
     type ParameterDeclaration,
     type PathKey,
     type PropertyAccessExpression,
@@ -180,6 +183,52 @@ import {
 } from "./api.testUtils.ts";
 
 const concurrency = areTestsFiltered();
+
+describe("Checker - getTypeOfAssignmentPattern", { concurrency }, () => {
+    test("rejects object literals that are not assignment patterns", () => {
+        using api = spawnAPI({ "/tsconfig.json": "{}", "/index.ts": "const value = {};" });
+        const snapshot = api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const file = project.program.getSourceFile("/index.ts");
+        assert.ok(file);
+        const statement = file.statements[0];
+        assert.ok(isVariableStatement(statement));
+        const node = statement.declarationList.declarations[0].initializer;
+        assert.ok(node && isObjectLiteralExpression(node));
+        assert.throws(() => project.checker.getTypeOfAssignmentPattern(node), /expected an object or array assignment pattern/);
+    });
+
+    test("gets source types of object, nested object, array, and for-of patterns", () => {
+        using api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/index.ts": `
+declare const source: { nested: { value: number } };
+declare const tuple: [string, { value: number }];
+declare const items: { value: number }[];
+let value: number, text: string;
+({ nested: { value } } = source);
+[text, { value }] = tuple;
+for ({ value } of items) {}
+`,
+        });
+        const snapshot = api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const file = project.program.getSourceFile("/index.ts");
+        assert.ok(file);
+        const types: string[] = [];
+        const patterns: (ObjectLiteralExpression | ArrayLiteralExpression)[] = [];
+        file.forEachChild(function visit(node) {
+            if (isObjectLiteralExpression(node) || isArrayLiteralExpression(node)) patterns.push(node);
+            node.forEachChild(visit);
+        });
+        for (const pattern of patterns) {
+            const type = project.checker.getTypeOfAssignmentPattern(pattern);
+            assert.ok(type);
+            types.push(project.checker.typeToString(type));
+        }
+        assert.deepEqual(types, ["{ nested: { value: number; }; }", "{ value: number; }", "[string, { value: number; }]", "{ value: number; }", "{ value: number; }"]);
+    });
+});
 
 describe("Checker - getSymbolsOfParameterPropertyDeclaration", { concurrency }, () => {
     test("returns distinct parameter and property symbols with canonical identities", () => {

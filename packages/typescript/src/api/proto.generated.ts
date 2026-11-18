@@ -129,6 +129,7 @@ export interface APIMethodInfo {
     getThisParameterOfSignature: APIMethod<GetSignaturePropertyParams, SymbolResponse | null>;
     getTargetOfSignature: APIMethod<GetSignaturePropertyParams, SignatureResponse | null>;
     isOptionalParameter: APIMethod<CheckerNodeParams, boolean>;
+    getTypeOfAssignmentPattern: APIMethod<CheckerNodeParams, TypeResponse | null>;
     isValidPropertyAccess: APIMethod<IsValidPropertyAccessParams, boolean>;
     getSymbolsOfParameterPropertyDeclaration: APIMethod<CheckerNodeParams, ParameterPropertySymbolsResponse>;
     getContextualType: APIMethod<GetContextualTypeParams, TypeResponse | null>;
@@ -1373,6 +1374,7 @@ export interface BatchRequest {
         | "getTypeAtLocations"
         | "getTypeAtPosition"
         | "getTypeFromTypeNode"
+        | "getTypeOfAssignmentPattern"
         | "getTypeOfPropertyOfType"
         | "getTypeOfSymbol"
         | "getTypeOfSymbolAtLocation"
@@ -1571,6 +1573,7 @@ export interface BatchResponse {
         | "getTypeAtLocations"
         | "getTypeAtPosition"
         | "getTypeFromTypeNode"
+        | "getTypeOfAssignmentPattern"
         | "getTypeOfPropertyOfType"
         | "getTypeOfSymbol"
         | "getTypeOfSymbolAtLocation"

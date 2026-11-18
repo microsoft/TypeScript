@@ -1075,6 +1075,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetContextualType(ctx, parsed.(*GetContextualTypeParams))
 	case string(MethodIsOptionalParameter):
 		return s.handleIsOptionalParameter(ctx, parsed.(*CheckerNodeParams))
+	case string(MethodGetTypeOfAssignmentPattern):
+		return s.handleGetTypeOfAssignmentPattern(ctx, parsed.(*CheckerNodeParams))
 	case string(MethodIsValidPropertyAccess):
 		return s.handleIsValidPropertyAccess(ctx, parsed.(*IsValidPropertyAccessParams))
 	case string(MethodGetSymbolsOfParameterPropertyDeclaration):
@@ -3975,6 +3977,47 @@ func (s *Session) handleIsOptionalParameter(ctx context.Context, params *Checker
 		return false, fmt.Errorf("%w: expected a parameter declaration", ErrInvalidRequest)
 	}
 	return setup.checker.IsOptionalParameter(node), nil
+}
+
+// @gen-proto-nullable
+func (s *Session) handleGetTypeOfAssignmentPattern(ctx context.Context, params *CheckerNodeParams) (*TypeResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	node, err := setup.sd.resolveNodeHandle(setup.program, params.Location)
+	if err != nil {
+		return nil, err
+	}
+	if !isSupportedAssignmentPattern(node) {
+		return nil, fmt.Errorf("%w: expected an object or array assignment pattern in an assignment or for-of initializer", ErrInvalidRequest)
+	}
+	t := setup.checker.GetTypeOfAssignmentPattern(node)
+	if t == nil {
+		return nil, nil
+	}
+	return setup.sd.newTypeResponse(setup.projectID, t, setup.checker), nil
+}
+
+func isSupportedAssignmentPattern(node *ast.Node) bool {
+	if !ast.IsAssignmentPattern(node) {
+		return false
+	}
+	parent := node.Parent
+	switch parent.Kind {
+	case ast.KindBinaryExpression:
+		return parent.AsBinaryExpression().OperatorToken.Kind == ast.KindEqualsToken && parent.AsBinaryExpression().Left == node
+	case ast.KindForOfStatement:
+		return parent.Initializer() == node
+	case ast.KindPropertyAssignment:
+		return parent.Initializer() == node && isSupportedAssignmentPattern(parent.Parent)
+	case ast.KindArrayLiteralExpression:
+		return isSupportedAssignmentPattern(parent)
+	default:
+		return false
+	}
 }
 
 func (s *Session) handleGetSymbolsOfParameterPropertyDeclaration(ctx context.Context, params *CheckerNodeParams) (*ParameterPropertySymbolsResponse, error) {

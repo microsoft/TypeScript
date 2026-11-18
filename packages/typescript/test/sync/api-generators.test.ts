@@ -1,11 +1,13 @@
 import {
     cast,
     type Identifier,
+    isBinaryExpression,
     isCallExpression,
     isClassDeclaration,
     isConstructorDeclaration,
     isEnumDeclaration,
     isExportDeclaration,
+    isExpressionStatement,
     isFunctionDeclaration,
     isIdentifier,
     isImportDeclaration,
@@ -13,6 +15,7 @@ import {
     isNamedExports,
     isNamedImports,
     isObjectLiteralExpression,
+    isParenthesizedExpression,
     isPropertyAccessExpression,
     isShorthandPropertyAssignment,
     isStringLiteral,
@@ -137,6 +140,8 @@ export const badCall = derived();
 export function getArguments() { return arguments; }
 import { absent } from "./absent.js";
 export const missingValue = absent;
+let assigned: Base;
+({ value: assigned } = box);
 `,
     "/node_modules/@types/parity/index.d.ts": `export {};`,
     "/src/syntax.ts": `export const broken: = 1;`,
@@ -1483,6 +1488,9 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
                 isVariableDeclaration,
             );
             const callExpression = cast(calledDeclaration.initializer, isCallExpression);
+            const assignmentStatement = cast(indexFile.statements.find(isExpressionStatement), isExpressionStatement);
+            const assignment = cast(cast(assignmentStatement.expression, isParenthesizedExpression).expression, isBinaryExpression);
+            const assignmentPattern = cast(assignment.left, isObjectLiteralExpression);
             const interfaceDeclaration = cast(modelsFile.statements[0], isInterfaceDeclaration);
             const derivedClassDeclaration = cast(modelsFile.statements[2], isClassDeclaration);
             const boxedAlias = cast(modelsFile.statements[3], isTypeAliasDeclaration);
@@ -1702,6 +1710,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
                 parityCase("Checker", "isValidPropertyAccess", checker.isValidPropertyAccess, assertDeepEquivalent, cast(callExpression.expression, isPropertyAccessExpression), "call"),
                 parityCase("Checker", "isTypeAssignableTo", checker.isTypeAssignableTo, assertDeepEquivalent, derivedType, interfaceType),
                 parityCase("Checker", "getShorthandAssignmentValueSymbol", checker.getShorthandAssignmentValueSymbol, assertOptionalSymbolsEquivalent, shorthand),
+                parityCase("Checker", "getTypeOfAssignmentPattern", checker.getTypeOfAssignmentPattern, assertOptionalTypesEquivalent, assignmentPattern),
                 parityCase("Checker", "getTypeOfSymbolAtLocation", checker.getTypeOfSymbolAtLocation, assertTypesEquivalent, derivedSymbol, shorthand),
                 parityCase("Checker", "getAnyType", checker.getAnyType, assertTypesEquivalent),
                 parityCase("Checker", "getStringType", checker.getStringType, assertTypesEquivalent),
