@@ -5243,7 +5243,6 @@
             ],
             "ForInitializer": [
                 "Expression",
-                "MissingDeclaration",
                 "VariableDeclarationList"
             ],
             "ModuleReference": [

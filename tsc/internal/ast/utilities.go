@@ -450,7 +450,7 @@ func isLeftHandSideExpressionKind(kind Kind) bool {
 		KindPrivateIdentifier, KindRegularExpressionLiteral, KindNumericLiteral, KindBigIntLiteral, KindStringLiteral,
 		KindNoSubstitutionTemplateLiteral, KindTemplateExpression, KindFalseKeyword, KindNullKeyword, KindThisKeyword,
 		KindTrueKeyword, KindSuperKeyword, KindNonNullExpression, KindExpressionWithTypeArguments, KindMetaProperty,
-		KindImportKeyword, KindMissingDeclaration:
+		KindImportKeyword:
 		return true
 	}
 	return false
