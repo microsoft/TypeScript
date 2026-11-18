@@ -2331,6 +2331,15 @@ function encodeNumberLiteralValue(value: number): number | string {
 }
 
 export class Checker {
+    /** Whether a parameter may be omitted, including defaults and untyped IIFE parameters. */
+    async isOptionalParameter(node: ParameterDeclaration): Promise<boolean> {
+        return this.client.apiRequest("isOptionalParameter", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            location: getNodeRequestHandle(node),
+        });
+    }
+
     private snapshotId: number;
     private project: Project;
     private objectRegistry: ProjectObjectRegistry;

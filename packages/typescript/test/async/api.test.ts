@@ -22,6 +22,7 @@ import {
     isModuleDeclaration,
     isNamedImports,
     isObjectLiteralExpression,
+    isParameterDeclaration,
     isPrivateIdentifier,
     isPropertyAccessExpression,
     isPropertyAssignment,
@@ -39,6 +40,7 @@ import {
     type Node,
     type NodeArray,
     NodeFlags,
+    type ParameterDeclaration,
     type PathKey,
     type RootedFilePath,
     type SourceFile,
@@ -168,6 +170,30 @@ import {
 } from "./api.testUtils.ts";
 
 const concurrency = areTestsFiltered();
+
+describe("Checker - isOptionalParameter", { concurrency }, () => {
+    test("distinguishes defaults before required parameters and omitted IIFE arguments", async () => {
+        await using api = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/index.ts": `
+function f(required: number, optional?: string) {}
+function g(before = 1, required: number, after = 2, ...rest: number[]) {}
+(function (provided, omitted, ...rest) {})(1);
+`,
+        });
+        const snapshot = await api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const file = await project.program.getSourceFile("/index.ts");
+        assert.ok(file);
+        const parameters: ParameterDeclaration[] = [];
+        file.forEachChild(function visit(node) {
+            if (isParameterDeclaration(node)) parameters.push(node);
+            node.forEachChild(visit);
+        });
+        const optional = await Promise.all(parameters.map(node => project.checker.isOptionalParameter(node)));
+        assert.deepEqual(optional, [false, true, false, false, true, false, false, true, false]);
+    });
+});
 
 describe("API", { concurrency }, () => {
     test("getCurrentLanguageServerSnapshot is LSP-only", async () => {

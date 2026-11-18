@@ -128,6 +128,7 @@ export interface APIMethodInfo {
     getParametersOfSignature: APIMethod<GetSignaturePropertyParams, SymbolResponse[] | null>;
     getThisParameterOfSignature: APIMethod<GetSignaturePropertyParams, SymbolResponse | null>;
     getTargetOfSignature: APIMethod<GetSignaturePropertyParams, SignatureResponse | null>;
+    isOptionalParameter: APIMethod<CheckerNodeParams, boolean>;
     getContextualType: APIMethod<GetContextualTypeParams, TypeResponse | null>;
     getContextualTypeForArgument: APIMethod<GetContextualTypeForArgumentParams, TypeResponse | null>;
     getAwaitedType: APIMethod<CheckerTypeParams, TypeResponse | null>;
@@ -798,6 +799,13 @@ export interface GetSignaturePropertyParams {
     objectId: number;
 }
 
+/** CheckerNodeParams are parameters for checker methods that operate on a node location. */
+export interface CheckerNodeParams {
+    snapshot: number;
+    project: number;
+    location: string;
+}
+
 /** GetContextualTypeParams returns the contextual type for a node. */
 export interface GetContextualTypeParams {
     snapshot: number;
@@ -862,13 +870,6 @@ export interface GetBigIntLiteralTypeParams {
 export interface GetIntrinsicTypeParams {
     snapshot: number;
     project: number;
-}
-
-/** CheckerNodeParams are parameters for checker methods that operate on a node location. */
-export interface CheckerNodeParams {
-    snapshot: number;
-    project: number;
-    location: string;
 }
 
 export interface GetPrivateIdentifierPropertyOfTypeParams {
@@ -1379,6 +1380,7 @@ export interface BatchRequest {
         | "isArrayType"
         | "isContextSensitive"
         | "isImplementationOfOverload"
+        | "isOptionalParameter"
         | "isReadonlySymbol"
         | "isTypeAssignableTo"
         | "parseCommandLine"
@@ -1574,6 +1576,7 @@ export interface BatchResponse {
         | "isArrayType"
         | "isContextSensitive"
         | "isImplementationOfOverload"
+        | "isOptionalParameter"
         | "isReadonlySymbol"
         | "isTypeAssignableTo"
         | "parseCommandLine"

@@ -4215,6 +4215,32 @@ function encodeNumberLiteralValue(value: number): number | string {
 }
 
 export class Checker {
+    /** Whether a parameter may be omitted, including defaults and untyped IIFE parameters. */
+    get isOptionalParameter(): {
+        (node: ParameterDeclaration): boolean;
+        gen(node: ParameterDeclaration): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "isOptionalParameter",
+            function (node: ParameterDeclaration): boolean {
+                return owner.client.apiRequest("isOptionalParameter", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    location: getNodeRequestHandle(node),
+                });
+            },
+            function* (node: ParameterDeclaration): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]> {
+                return yield* apiRequest("isOptionalParameter", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    location: getNodeRequestHandle(node),
+                });
+            },
+        );
+    }
+
     private snapshotId: number;
     private project: Project;
     private objectRegistry: ProjectObjectRegistry;

@@ -1073,6 +1073,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetTargetOfSignature(ctx, parsed.(*GetSignaturePropertyParams))
 	case string(MethodGetContextualType):
 		return s.handleGetContextualType(ctx, parsed.(*GetContextualTypeParams))
+	case string(MethodIsOptionalParameter):
+		return s.handleIsOptionalParameter(ctx, parsed.(*CheckerNodeParams))
 	case string(MethodGetContextualTypeForArgument):
 		return s.handleGetContextualTypeForArgument(ctx, parsed.(*GetContextualTypeForArgumentParams))
 	case string(MethodGetAwaitedType):
@@ -3952,6 +3954,23 @@ func (s *Session) handleGetTypeParameterAtPosition(ctx context.Context, params *
 		return nil, fmt.Errorf("%w: invalid parameter index", ErrClientError)
 	}
 	return setup.sd.newTypeResponse(setup.projectID, setup.checker.GetTypeParameterAtPosition(sig, int(params.Index)), setup.checker), nil
+}
+
+func (s *Session) handleIsOptionalParameter(ctx context.Context, params *CheckerNodeParams) (bool, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return false, err
+	}
+	defer setup.done()
+
+	node, err := setup.sd.resolveNodeHandle(setup.program, params.Location)
+	if err != nil {
+		return false, err
+	}
+	if !ast.IsParameterDeclaration(node) {
+		return false, fmt.Errorf("%w: expected a parameter declaration", ErrInvalidRequest)
+	}
+	return setup.checker.IsOptionalParameter(node), nil
 }
 
 func (s *Session) handleIsArrayLikeType(ctx context.Context, params *IsArrayLikeTypeParams) (bool, error) {

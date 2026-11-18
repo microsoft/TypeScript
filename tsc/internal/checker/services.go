@@ -158,6 +158,10 @@ func (c *Checker) ForEachExportAndPropertyOfModule(moduleSymbol *ast.Symbol, cb 
 	}
 }
 
+func (c *Checker) IsOptionalParameter(node *ast.Node) bool {
+	return c.isOptionalParameter(node)
+}
+
 func (c *Checker) IsValidPropertyAccess(node *ast.Node, propertyName string) bool {
 	return c.isValidPropertyAccess(node, propertyName)
 }

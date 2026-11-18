@@ -167,6 +167,7 @@ const (
 	MethodGetTargetOfSignature         Method = "getTargetOfSignature"
 
 	// Checker methods
+	MethodIsOptionalParameter                        Method = "isOptionalParameter"
 	MethodGetContextualType                          Method = "getContextualType"
 	MethodGetContextualTypeForArgument               Method = "getContextualTypeForArgument"
 	MethodGetAwaitedType                             Method = "getAwaitedType"
@@ -705,6 +706,7 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodGetTargetOfSignature:         unmarshallerFor[GetSignaturePropertyParams],
 
 	MethodGetContextualType:                          unmarshallerFor[GetContextualTypeParams],
+	MethodIsOptionalParameter:                        unmarshallerFor[CheckerNodeParams],
 	MethodGetContextualTypeForArgument:               unmarshallerFor[GetContextualTypeForArgumentParams],
 	MethodGetAwaitedType:                             unmarshallerFor[CheckerTypeParams],
 	MethodGetBaseTypeOfLiteralType:                   unmarshallerFor[GetBaseTypeOfLiteralTypeParams],
