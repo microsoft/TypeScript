@@ -499,7 +499,7 @@ func findFirstNonWhitespaceCharacterAndColumn(startPos int, endPos int, sourceFi
 
 func childStartsOnTheSameLineWithElseInIfStatement(parent *ast.Node, child *ast.Node, childStartLine int, sourceFile *ast.SourceFile) bool {
 	if parent.Kind == ast.KindIfStatement && parent.AsIfStatement().ElseStatement == child {
-		elseKeyword := astnav.FindPrecedingToken(sourceFile, child.Pos())
+		elseKeyword := astnav.FindPrecedingTokenEx(sourceFile, child.Pos(), parent, false /*excludeJSDoc*/)
 		debug.Assert(elseKeyword != nil)
 		elseKeywordStartLine := getStartLineForNode(elseKeyword, sourceFile)
 		return elseKeywordStartLine == childStartLine

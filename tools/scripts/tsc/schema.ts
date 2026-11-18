@@ -548,7 +548,7 @@ export class ListType extends TypeBase {
     formatTypeScript(): string {
         const elementType = this.elementType.formatTypeScript();
         if (this.listKind === "raw") {
-            return `readonly ${elementType}[]`;
+            return `readonly ${this.elementType.kind === "union" ? `(${elementType})` : elementType}[]`;
         }
         return `NodeArray<${elementType}>`;
     }

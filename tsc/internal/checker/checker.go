@@ -923,7 +923,6 @@ type Checker struct {
 	syncIterationTypesResolver                  *IterationTypesResolver
 	asyncIterationTypesResolver                 *IterationTypesResolver
 	isPrimitiveOrObjectOrEmptyType              func(*Type) bool
-	containsMissingType                         func(*Type) bool
 	couldContainTypeVariables                   func(*Type) bool
 	isStringIndexSignatureOnlyType              func(*Type) bool
 	markNodeAssignments                         func(*ast.Node) bool
@@ -1297,13 +1296,14 @@ func (c *Checker) initializeClosures() {
 	c.isPrimitiveOrObjectOrEmptyType = func(t *Type) bool {
 		return t.flags&(TypeFlagsPrimitive|TypeFlagsNonPrimitive) != 0 || c.IsEmptyAnonymousObjectType(t)
 	}
-	c.containsMissingType = func(t *Type) bool {
-		return t == c.missingType || t.flags&TypeFlagsUnion != 0 && t.Types()[0] == c.missingType
-	}
 	c.couldContainTypeVariables = c.couldContainTypeVariablesWorker
 	c.isStringIndexSignatureOnlyType = c.isStringIndexSignatureOnlyTypeWorker
 	c.markNodeAssignments = c.markNodeAssignmentsWorker
 	c.compareTypesAssignable = c.compareTypesAssignableWorker
+}
+
+func (c *Checker) containsMissingType(t *Type) bool {
+	return t == c.missingType || t.flags&TypeFlagsUnion != 0 && t.Types()[0] == c.missingType
 }
 
 func (c *Checker) initializeIterationResolvers() {
@@ -5133,7 +5133,11 @@ func (c *Checker) checkInterfaceDeclaration(node *ast.Node) {
 		// run subsequent checks only if first set succeeded
 		if c.checkInheritedPropertiesAreIdentical(t, firstInterfaceDeclaration.Name()) {
 			for _, baseType := range c.getBaseTypes(t) {
-				c.checkTypeAssignableTo(typeWithThis, c.getTypeWithThisArgument(baseType, t.AsInterfaceType().thisType, false), firstInterfaceDeclaration.Name(), diagnostics.Interface_0_incorrectly_extends_interface_1)
+				message := diagnostics.Interface_0_incorrectly_extends_interface_1
+				if baseType.flags&TypeFlagsTypeParameter != 0 {
+					message = diagnostics.Interface_0_cannot_extend_type_parameter_1
+				}
+				c.checkTypeAssignableTo(typeWithThis, c.getTypeWithThisArgument(baseType, t.AsInterfaceType().thisType, false), firstInterfaceDeclaration.Name(), message)
 			}
 			c.checkIndexConstraints(t, symbol /*isStaticIndex*/, false)
 		}
@@ -17319,12 +17323,11 @@ func (c *Checker) checkDeclarationInitializer(declaration *ast.Node, checkMode C
 func (c *Checker) padObjectLiteralType(t *Type, pattern *ast.Node) *Type {
 	var missingElements []*ast.Node
 	for _, e := range pattern.Elements() {
-		if hasDotDotDotToken(e) {
-			continue
-		}
-		name := c.getPropertyNameFromBindingElement(e)
-		if name != ast.InternalSymbolNameMissing && c.getPropertyOfType(t, name) == nil {
-			missingElements = append(missingElements, e)
+		if e.Initializer() != nil {
+			name := c.getPropertyNameFromBindingElement(e)
+			if name != ast.InternalSymbolNameMissing && c.getPropertyOfType(t, name) == nil {
+				missingElements = append(missingElements, e)
+			}
 		}
 	}
 	if len(missingElements) == 0 {
@@ -17336,7 +17339,7 @@ func (c *Checker) padObjectLiteralType(t *Type, pattern *ast.Node) *Type {
 	}
 	for _, e := range missingElements {
 		symbol := c.newSymbol(ast.SymbolFlagsProperty|ast.SymbolFlagsOptional, c.getPropertyNameFromBindingElement(e))
-		c.valueSymbolLinks.Get(symbol).resolvedType = c.getTypeFromBindingElement(e, false /*includePatternInType*/, true /*reportErrors*/)
+		c.valueSymbolLinks.Get(symbol).resolvedType = c.getTypeFromBindingElement(e, false /*includePatternInType*/, false /*reportErrors*/)
 		members.Set(symbol.Name(), symbol)
 	}
 	result := c.newAnonymousType(t.symbol, members, nil, nil, c.getIndexInfosOfType(t))
@@ -19399,6 +19402,14 @@ func (c *Checker) getLayoutPropertiesOfType(t *Type) []*ast.Symbol {
 	return layout.layoutProperties
 }
 
+func (c *Checker) getPropertyCountOfType(t *Type) int {
+	t = c.getReducedApparentType(t)
+	if lazy := c.getLazyStateOfType(t); lazy != nil {
+		return lazy.layout.members.Len()
+	}
+	return len(c.getPropertiesOfType(t))
+}
+
 func (c *Checker) getLazyStateOfType(t *Type) *LazyState {
 	if t.flags&TypeFlagsObject != 0 {
 		return c.resolveStructuredTypeMembers(t).getLazyState()
@@ -19411,7 +19422,28 @@ func (c *Checker) getPropertiesOfUnionOrIntersectionType(t *Type) []*ast.Symbol 
 	if d.resolvedProperties == nil {
 		var checked collections.Set[string]
 		props := []*ast.Symbol{}
-		for _, current := range d.types {
+		types := d.types
+		if t.flags&TypeFlagsUnion != 0 {
+			// Find the constituent type of the union with the fewest properties and no index signature. This type will be used
+			// as the representative for checking properties of the union, as all properties must be present in all constituent types.
+			var smallestType *Type
+			var smallestPropertyCount int
+			for _, current := range d.types {
+				if len(c.getIndexInfosOfType(current)) == 0 {
+					if count := c.getPropertyCountOfType(current); smallestType == nil || count < smallestPropertyCount {
+						smallestType = current
+						smallestPropertyCount = count
+						if count == 0 {
+							break
+						}
+					}
+				}
+			}
+			if smallestType != nil {
+				types = []*Type{smallestType}
+			}
+		}
+		for _, current := range types {
 			for _, prop := range c.getPropertiesOfType(current) {
 				if !checked.Has(prop.Name()) {
 					checked.Add(prop.Name())
@@ -19420,11 +19452,6 @@ func (c *Checker) getPropertiesOfUnionOrIntersectionType(t *Type) []*ast.Symbol 
 						props = append(props, combinedProp)
 					}
 				}
-			}
-			// The properties of a union type are those that are present in all constituent types, so
-			// we only need to check the properties of the first type without index signature
-			if t.flags&TypeFlagsUnion != 0 && len(c.getIndexInfosOfType(current)) == 0 {
-				break
 			}
 		}
 		d.resolvedProperties = props
@@ -23810,8 +23837,14 @@ func isSimpleIdentifierTypeReference(node *ast.Node) bool {
 	return ast.IsTypeReferenceNode(node) && ast.IsIdentifier(node.AsTypeReferenceNode().TypeName) && node.TypeArgumentList() == nil
 }
 
+// isHeritageTypeReference reports whether node names the class or interface
+// in a heritage clause or a JSDoc @augments or @implements tag.
+func isHeritageTypeReference(node *ast.Node) bool {
+	return ast.IsHeritageClause(node.Parent) || ast.IsJSDocAugmentsTag(node.Parent) || ast.IsJSDocImplementsTag(node.Parent)
+}
+
 func (c *Checker) getIntendedTypeFromJSDocTypeReference(node *ast.Node) *Type {
-	if node.Flags&ast.NodeFlagsJSDoc != 0 && ast.IsTypeReferenceNode(node) {
+	if node.Flags&ast.NodeFlagsJSDoc != 0 && ast.IsTypeReferenceNode(node) && !isHeritageTypeReference(node) {
 		typeName := node.AsTypeReferenceNode().TypeName
 		if ast.IsIdentifier(typeName) {
 			typeArgs := node.TypeArguments()
@@ -23971,7 +24004,7 @@ func (c *Checker) getTypeFromClassOrInterfaceReference(node *ast.Node, symbol *a
 		if !isJsImplicitAny && (numTypeArguments < minTypeArgumentCount || numTypeArguments > len(typeParameters)) {
 			var message *diagnostics.Message
 
-			missingAugmentsTag := isJs && ast.IsExpressionWithTypeArguments(node) && !ast.IsJSDocAugmentsTag(node.Parent)
+			missingAugmentsTag := isJs && ast.IsExpressionWithTypeArguments(node)
 			if missingAugmentsTag {
 				message = diagnostics.Expected_0_type_arguments_provide_these_with_an_extends_tag
 				if minTypeArgumentCount < len(typeParameters) {
@@ -24170,10 +24203,15 @@ func (n *TupleNormalizer) normalize(c *Checker, elementTypes []*Type, elementInf
 			} else if isTupleType(t) {
 				spreadTypes := c.getElementTypes(t)
 				if len(spreadTypes)+len(n.types) >= 10_000 {
-					message := core.IfElse(ast.IsPartOfTypeNode(c.currentNode),
-						diagnostics.Type_produces_a_tuple_type_that_is_too_large_to_represent,
-						diagnostics.Expression_produces_a_tuple_type_that_is_too_large_to_represent)
-					c.error(c.currentNode, message)
+					// c.currentNode is nil when declaration emit resolves a type through the emit
+					// resolver. There is no location to report against, and a diagnostic raised
+					// during emit would never be shown on the command line or in the editor.
+					if c.currentNode != nil {
+						message := core.IfElse(ast.IsPartOfTypeNode(c.currentNode),
+							diagnostics.Type_produces_a_tuple_type_that_is_too_large_to_represent,
+							diagnostics.Expression_produces_a_tuple_type_that_is_too_large_to_represent)
+						c.error(c.currentNode, message)
+					}
 					return false
 				}
 				// Spread variadic elements with tuple types into the resulting tuple.
@@ -27390,10 +27428,21 @@ func everyContainedType(t *Type, f func(*Type) bool) bool {
 func (c *Checker) filterType(t *Type, f func(*Type) bool) *Type {
 	if t.flags&TypeFlagsUnion != 0 {
 		types := t.Types()
-		filtered := core.Filter(types, f)
-		if core.Same(types, filtered) {
+		firstRemoved := slices.IndexFunc(types, func(u *Type) bool { return !f(u) })
+		if firstRemoved < 0 {
 			return t
 		}
+		// The filtered lists are only needed while constructing the result, which copies them
+		// into a new type if needed, so borrow temporary storage for them.
+		set := c.getTemporaryTypeSet()
+		defer c.releaseTemporaryTypeSet(set)
+		filtered := append(set.values[:0], types[:firstRemoved]...)
+		for _, u := range types[firstRemoved+1:] {
+			if f(u) {
+				filtered = append(filtered, u)
+			}
+		}
+		set.values = filtered
 		origin := t.AsUnionType().origin
 		var newOrigin *Type
 		if origin != nil && origin.flags&TypeFlagsUnion != 0 {
@@ -27403,9 +27452,15 @@ func (c *Checker) filterType(t *Type, f func(*Type) bool) *Type {
 			// Otherwise, if we have exactly one type left in the origin set, return that as the filtered type.
 			// Otherwise, construct a new filtered origin type.
 			originTypes := origin.Types()
-			originFiltered := core.Filter(originTypes, func(u *Type) bool {
-				return u.flags&TypeFlagsUnion != 0 || f(u)
-			})
+			originSet := c.getTemporaryTypeSet()
+			defer c.releaseTemporaryTypeSet(originSet)
+			originFiltered := originSet.values[:0]
+			for _, u := range originTypes {
+				if u.flags&TypeFlagsUnion != 0 || f(u) {
+					originFiltered = append(originFiltered, u)
+				}
+			}
+			originSet.values = originFiltered
 			if len(originTypes)-len(originFiltered) == len(types)-len(filtered) {
 				if len(originFiltered) == 1 {
 					return originFiltered[0]
@@ -27434,10 +27489,16 @@ func (c *Checker) removeType(t *Type, targetType *Type) *Type {
 		return c.filterType(t, func(t *Type) bool { return t != targetType })
 	}
 	types := t.Types()
-	if i, ok := slices.BinarySearchFunc(types, targetType, CompareTypes); ok {
-		if len(types) == 2 {
-			return types[1-i]
+	if len(types) == 2 {
+		switch targetType {
+		case types[0]:
+			return types[1]
+		case types[1]:
+			return types[0]
 		}
+		return t
+	}
+	if i, ok := slices.BinarySearchFunc(types, targetType, CompareTypes); ok {
 		// Remove the target type from the slice.
 		set := c.getTemporaryTypeSet()
 		defer c.releaseTemporaryTypeSet(set)
@@ -28199,7 +28260,7 @@ func (c *Checker) getPropertyNameFromIndex(indexType *Type, accessNode *ast.Node
 }
 
 func (c *Checker) isStringIndexSignatureOnlyTypeWorker(t *Type) bool {
-	return t.flags&TypeFlagsObject != 0 && t.objectFlags&(ObjectFlagsClassOrInterface|ObjectFlagsReference) == 0 && !c.isGenericMappedType(t) && len(c.getLayoutPropertiesOfType(t)) == 0 && len(c.getIndexInfosOfType(t)) == 1 && c.getIndexInfoOfType(t, c.stringType) != nil ||
+	return t.flags&TypeFlagsObject != 0 && t.objectFlags&(ObjectFlagsClassOrInterface|ObjectFlagsReference) == 0 && !c.isGenericMappedType(t) && c.getPropertyCountOfType(t) == 0 && len(c.getIndexInfosOfType(t)) == 1 && c.getIndexInfoOfType(t, c.stringType) != nil ||
 		t.flags&TypeFlagsUnionOrIntersection != 0 && core.Every(t.Types(), c.isStringIndexSignatureOnlyType)
 }
 

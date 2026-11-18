@@ -3,14 +3,14 @@
 === esnextSharedMemory.ts ===
 Atomics.pause();
 >Atomics.pause() : void
->Atomics.pause : (n?: number) => void
+>Atomics.pause : () => void
 >Atomics : Atomics
->pause : (n?: number) => void
+>pause : () => void
 
 Atomics.pause(1);
 >Atomics.pause(1) : void
->Atomics.pause : (n?: number) => void
+>Atomics.pause : () => void
 >Atomics : Atomics
->pause : (n?: number) => void
+>pause : () => void
 >1 : 1
 

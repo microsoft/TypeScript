@@ -117,6 +117,23 @@ func (p *Program) GetProgram() *compiler.Program {
 	return p.program
 }
 
+func (p *Program) ForEachEmittedDeclarationFile(action func(tspath.RootedFilePath, *ast.SourceFile)) {
+	p.panicIfNoProgram("ForEachEmittedDeclarationFile")
+	if p.Options().NoEmit.IsTrue() {
+		return
+	}
+	p.snapshot.emitSignatures.Range(func(path tspath.PathKey, _ *emitSignature) bool {
+		sourceFile := p.program.GetSourceFileByPath(path)
+		if sourceFile != nil && p.program.SourceFileMayBeEmitted(sourceFile, false) {
+			output := outputpaths.GetOutputPathsFor(sourceFile, p.Options(), p.program, outputpaths.ForceEmitPaths{}).DeclarationFilePath()
+			if output != "" {
+				action(output, sourceFile)
+			}
+		}
+		return true
+	})
+}
+
 func (p *Program) HasChangedDtsFile() bool {
 	return p.snapshot.hasChangedDtsFile
 }

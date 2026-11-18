@@ -319,8 +319,7 @@ func GetOperatorPrecedence(nodeKind Kind, operatorKind Kind, flags OperatorPrece
 		KindOmittedExpression,
 		KindJsxElement,
 		KindJsxSelfClosingElement,
-		KindJsxFragment,
-		KindMissingDeclaration:
+		KindJsxFragment:
 		return OperatorPrecedencePrimary
 
 	// !!! By necessity, this differs from the old compiler to support emit. consider backporting
