@@ -144,6 +144,30 @@ function f(first: object, second: string, undocumented: number) {}
         assert.deepStrictEqual(astModule.getJSDocParameterTags(declaration.parameters[2]), []);
     });
 
+    test("getJSDocTypeParameterTags matches names within template tags", () => {
+        using api = spawnAPI();
+        const source = api.createSourceFile(
+            "/templates.ts",
+            `/**
+ * @template U, V shared description
+ * @template T the first description
+ * @template T another description
+ * @template Other an unrelated type parameter
+ */
+function f<T, U, V, Undocumented>() {}
+`,
+        ).sourceFile;
+        const declaration = source.statements[0];
+        assert.ok(astModule.isFunctionDeclaration(declaration));
+        const parameters = declaration.typeParameters;
+        assert.ok(parameters);
+        const tags = astModule.getJSDocTags(declaration).filter(astModule.isJSDocTemplateTag);
+        assert.deepStrictEqual(astModule.getJSDocTypeParameterTags(parameters[0]), [tags[1], tags[2]]);
+        assert.deepStrictEqual(astModule.getJSDocTypeParameterTags(parameters[1]), [tags[0]]);
+        assert.deepStrictEqual(astModule.getJSDocTypeParameterTags(parameters[2]), [tags[0]]);
+        assert.deepStrictEqual(astModule.getJSDocTypeParameterTags(parameters[3]), []);
+    });
+
     test("getJSDocParameterTags matches binding patterns by position", () => {
         using api = spawnAPI();
         const source = api.createSourceFile(

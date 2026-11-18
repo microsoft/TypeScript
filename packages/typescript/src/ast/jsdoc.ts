@@ -153,7 +153,8 @@ export function getJSDocParameterTags(param: ParameterDeclaration): readonly JSD
     return result;
 }
 
-function getJSDocTypeParameterTags(typeParam: TypeParameterDeclaration): JSDocTemplateTag[] {
+/** Gets the JSDoc template tags that declare a type parameter's name. */
+export function getJSDocTypeParameterTags(typeParam: TypeParameterDeclaration): readonly JSDocTemplateTag[] {
     const result: JSDocTemplateTag[] = [];
     const name = typeParam.name.text;
     for (const tag of getJSDocTags(typeParam.parent)) {
