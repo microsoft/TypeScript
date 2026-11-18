@@ -273,9 +273,6 @@ export const title = "Profile";
 		{lsproto.MethodTextDocumentPrepareRename, &lsproto.PrepareRenameParams{TextDocument: textDocument, Position: position}},
 		{lsproto.MethodCallHierarchyIncomingCalls, &lsproto.CallHierarchyIncomingCallsParams{Item: item}},
 		{lsproto.MethodCallHierarchyOutgoingCalls, &lsproto.CallHierarchyOutgoingCallsParams{Item: item}},
-		{lsproto.MethodCompletionItemResolve, &lsproto.CompletionItem{
-			Label: "stale", Data: &lsproto.CompletionItemData{FileName: "/home/project/ProfileCard.vue", Position: 0, Name: "stale"},
-		}},
 		{lsproto.MethodWorkspaceWillRenameFiles, &lsproto.RenameFilesParams{
 			Files: []*lsproto.FileRename{{OldUri: uri, NewUri: "file:///home/project/Renamed.vue"}},
 		}},
@@ -286,6 +283,13 @@ export const title = "Profile";
 		assert.Assert(t, ok)
 		assert.Assert(t, result == nil, "%s: expected null fallback, got %v", request.method, result)
 	}
+	staleCompletionItem := &lsproto.CompletionItem{
+		Label: "stale", Data: &lsproto.CompletionItemData{FileName: "/home/project/ProfileCard.vue", Position: 0, Name: "stale"},
+	}
+	completionResolveMsg, completionItem, ok := client.SendRequest(t, lsproto.CompletionItemResolveInfo, staleCompletionItem)
+	assert.Assert(t, completionResolveMsg != nil && completionResolveMsg.AsResponse().Error == nil)
+	assert.Assert(t, ok)
+	assert.DeepEqual(t, completionItem, staleCompletionItem)
 	codeLensMsg, _, _ := client.SendRequest(t, lsproto.CodeLensResolveInfo, &lsproto.CodeLens{
 		Range: range_, Data: &lsproto.CodeLensData{Uri: uri, Kind: "references", Position: 0},
 	})

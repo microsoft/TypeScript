@@ -1284,8 +1284,7 @@ func contentMapperFallbackResponse(method lsproto.Method, err error) (any, bool)
 		lsproto.MethodTextDocumentPrepareCallHierarchy,
 		lsproto.MethodTextDocumentPrepareRename,
 		lsproto.MethodCallHierarchyIncomingCalls,
-		lsproto.MethodCallHierarchyOutgoingCalls,
-		lsproto.MethodCompletionItemResolve:
+		lsproto.MethodCallHierarchyOutgoingCalls:
 		return lsproto.Null{}, true
 	default:
 		return nil, false
@@ -2245,6 +2244,9 @@ func (s *Server) handleCompletionItemResolve(ctx context.Context, params *lsprot
 	}
 	languageService, err := s.session.GetLanguageService(ctx, uri)
 	if err != nil {
+		if errors.Is(err, project.ErrNoProjectForUnknownScriptKind) {
+			return params, nil
+		}
 		return nil, err
 	}
 	defer s.recover(reqMsg)
