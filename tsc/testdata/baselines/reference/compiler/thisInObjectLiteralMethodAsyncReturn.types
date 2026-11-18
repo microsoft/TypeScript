@@ -1,0 +1,98 @@
+//// [tests/cases/compiler/thisInObjectLiteralMethodAsyncReturn.ts] ////
+
+=== thisInObjectLiteralMethodAsyncReturn.ts ===
+// https://github.com/microsoft/TypeScript/issues/64954
+
+const test1 = async () => {
+>test1 : () => Promise<{ value: number; method(): void; }>
+>async () => {    return {        value: 5,        method() {            this satisfies { value: number, method(): void };        },    };} : () => Promise<{ value: number; method(): void; }>
+
+    return {
+>{        value: 5,        method() {            this satisfies { value: number, method(): void };        },    } : { value: number; method(): void; }
+
+        value: 5,
+>value : number
+>5 : 5
+
+        method() {
+>method : () => void
+
+            this satisfies { value: number, method(): void };
+>this satisfies { value: number, method(): void } : { value: number; method(): void; }
+>this : { value: number; method(): void; }
+>value : number
+>method : () => void
+
+        },
+    };
+};
+
+const test2: () => Promise<{
+>test2 : () => Promise<{ value: number; method(): void; }>
+
+    value: number;
+>value : number
+
+    method(): void;
+>method : () => void
+
+}> = async () => {
+>async () => {    return {        value: 5,        method() {            this satisfies { value: number, method(): void };        },    };} : () => Promise<{ value: number; method(): void; }>
+
+    return {
+>{        value: 5,        method() {            this satisfies { value: number, method(): void };        },    } : { value: number; method(): void; }
+
+        value: 5,
+>value : number
+>5 : 5
+
+        method() {
+>method : () => void
+
+            this satisfies { value: number, method(): void };
+>this satisfies { value: number, method(): void } : { value: number; method(): void; }
+>this : { value: number; method(): void; }
+>value : number
+>method : () => void
+
+        },
+    };
+};
+
+// Ordinary, non-async object literal with thenable contextual type
+type T = {
+>T : T
+
+    then(cb: (n: number) => void): void;
+>then : (cb: (n: number) => void) => void
+>cb : (n: number) => void
+>n : number
+
+    value?: number;
+>value : number | undefined
+
+    method(): void;
+>method : () => void
+
+};
+const x: T = {
+>x : T
+>{    then() {},    method() {        this.value = 1;    },} : { then(): void; method(): void; }
+
+    then() {},
+>then : () => void
+
+    method() {
+>method : () => void
+
+        this.value = 1;
+>this.value = 1 : 1
+>this.value : number | undefined
+>this : T
+>value : number | undefined
+>1 : 1
+
+    },
+};
+
+
