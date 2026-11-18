@@ -290,6 +290,20 @@ func (c *Checker) TypeToTypeNode(t *Type, enclosingDeclaration *ast.Node, flags 
 	return nodeBuilder.TypeToTypeNode(t, enclosingDeclaration, flags, nodebuilder.InternalFlagsNone, nil)
 }
 
+// TypeToTypeNodeWithEmitContext is like TypeToTypeNode, but also returns the emit context holding the emit flags
+// (such as single-line) that the node builder recorded on the resulting nodes.
+func (c *Checker) TypeToTypeNodeWithEmitContext(t *Type, enclosingDeclaration *ast.Node, flags nodebuilder.Flags, idToSymbol map[*ast.IdentifierNode]*ast.Symbol) (*ast.TypeNode, *printer.EmitContext) {
+	nodeBuilder := c.getNodeBuilderEx(idToSymbol)
+	return nodeBuilder.TypeToTypeNode(t, enclosingDeclaration, flags, nodebuilder.InternalFlagsNone, nil), nodeBuilder.EmitContext()
+}
+
+// SignatureToSignatureDeclarationWithEmitContext is like SignatureToSignatureDeclaration, but also returns the emit
+// context holding the emit flags that the node builder recorded on the resulting nodes.
+func (c *Checker) SignatureToSignatureDeclarationWithEmitContext(signature *Signature, kind ast.Kind, enclosingDeclaration *ast.Node, flags nodebuilder.Flags) (*ast.Node, *printer.EmitContext) {
+	nodeBuilder := c.getNodeBuilderEx(nil /*idToSymbol*/)
+	return nodeBuilder.SignatureToSignatureDeclaration(signature, kind, enclosingDeclaration, flags, nodebuilder.InternalFlagsNone, nil), nodeBuilder.EmitContext()
+}
+
 func (c *Checker) SignatureToSignatureDeclaration(signature *Signature, kind ast.Kind, enclosingDeclaration *ast.Node, flags nodebuilder.Flags) *ast.Node {
 	nodeBuilder, release := c.getNodeBuilder()
 	defer release()

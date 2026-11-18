@@ -751,6 +751,8 @@ func main() {
 			"PossiblyContainsDeprecatedTag":      toInt32(ast.NodeFlagsPossiblyContainsDeprecatedTag),
 			"Unreachable":                        toInt32(ast.NodeFlagsUnreachable),
 			"ReparserTransformedLiteral":         toInt32(ast.NodeFlagsReparserTransformedLiteral),
+			"EmitSingleLine":                     toInt32(ast.NodeFlagsEmitSingleLine),
+			"EmitNoAsciiEscaping":                toInt32(ast.NodeFlagsEmitNoAsciiEscaping),
 			"BlockScoped":                        toInt32(ast.NodeFlagsBlockScoped),
 			"Constant":                           toInt32(ast.NodeFlagsConstant),
 			"AwaitUsing":                         toInt32(ast.NodeFlagsAwaitUsing),
