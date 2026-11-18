@@ -1398,11 +1398,14 @@ func getContextualTypeFromParentOrAncestorTypeNode(node *ast.Expression, typeChe
 
 func getAncestorTypeNode(node *ast.Node) *ast.Node {
 	var lastTypeNode *ast.TypeNode
+	// A heritage clause element such as Base<T> is an ExpressionWithTypeArguments,
+	// and its type arguments are written in a type position.
+	isTypeNode := func(n *ast.Node) bool { return ast.IsTypeNode(n) || ast.IsExpressionWithTypeArguments(n) }
 	ast.FindAncestor(node, func(n *ast.Node) bool {
-		if ast.IsTypeNode(n) {
+		if isTypeNode(n) {
 			lastTypeNode = n
 		}
-		return !ast.IsQualifiedName(n.Parent) && !ast.IsTypeNode(n.Parent) && !ast.IsTypeElement(n.Parent)
+		return !ast.IsQualifiedName(n.Parent) && !isTypeNode(n.Parent) && !ast.IsTypeElement(n.Parent)
 	})
 	return lastTypeNode
 }
