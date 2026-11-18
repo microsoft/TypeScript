@@ -19,6 +19,7 @@ import {
     isJSDoc,
     isJSDocParameterTag,
     isJsxSelfClosingElement,
+    isMethodDeclaration,
     isModuleDeclaration,
     isNamedImports,
     isObjectLiteralExpression,
@@ -7171,6 +7172,31 @@ notCallable();
 });
 
 describe("Symbol - escaped names and tables", { concurrency }, () => {
+    test("private member display names do not expose unique symbol table keys", async () => {
+        await using api = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/src/main.ts": "export class A { #value = 1; #method() {} } export class B { #value = 2; }",
+        });
+        const snapshot = await api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const source = await project.program.getSourceFile("/src/main.ts");
+        assert.ok(source);
+        const symbols = [];
+        for (const declaration of source.statements.filter(isClassDeclaration)) {
+            for (const member of declaration.members) {
+                if (!(isPropertyDeclaration(member) || isMethodDeclaration(member)) || !isPrivateIdentifier(member.name)) continue;
+                const symbol = await project.checker.getSymbolAtLocation(member.name);
+                assert.ok(symbol);
+                assert.strictEqual(symbol.name, member.name.text);
+                assert.notStrictEqual(symbol.escapedName, symbol.name);
+                symbols.push(symbol);
+            }
+        }
+        assert.strictEqual(symbols.length, 3);
+        assert.notStrictEqual(symbols[0].escapedName, symbols[2].escapedName);
+        assert.strictEqual(symbols[0].name, symbols[2].name);
+    });
+
     test("getExports/getMembers return a cached Map keyed by escaped name", async () => {
         await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),

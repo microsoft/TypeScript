@@ -1171,6 +1171,7 @@ type GetSymbolsAtLocationsParams struct {
 type SymbolResponse struct {
 	Reference        SymbolReference         `json:"reference"`
 	Name             string                  `json:"name"`
+	DisplayName      string                  `json:"displayName,omitempty"`
 	Flags            uint32                  `json:"flags"`
 	CheckFlags       uint32                  `json:"checkFlags,omitzero"`
 	Declarations     []NodeHandle            `json:"declarations,omitempty"`

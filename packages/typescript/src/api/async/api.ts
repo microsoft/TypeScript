@@ -3444,7 +3444,7 @@ export class Symbol {
     }
     /** The escaped (`__String`) name, used as the key in member/export tables. */
     readonly escapedName: __String;
-    /** The display name (escaped underscores removed). */
+    /** The display name, including the source spelling of private identifiers. */
     readonly name: string;
     readonly flags: SymbolFlags;
     readonly checkFlags: CheckFlags;
@@ -3466,7 +3466,7 @@ export class Symbol {
         this.reference = data.reference;
 
         this.escapedName = data.name as __String;
-        this.name = unescapeLeadingUnderscores(data.name as __String);
+        this.name = data.displayName ?? unescapeLeadingUnderscores(data.name as __String);
         this.flags = data.flags;
         this.checkFlags = data.checkFlags ?? 0;
         this.declarationHandles = data.declarations;
