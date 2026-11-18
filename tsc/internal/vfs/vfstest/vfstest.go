@@ -538,6 +538,7 @@ func (m *MapFS) WriteFile(path string, data string, perm fs.FileMode) error {
 	}
 
 	m.setEntry(path, cp, fstest.MapFile{
+		// SAFETY: File data is never mutated in place; reads and appends copy it.
 		Data:    unsafe.Slice(unsafe.StringData(data), len(data)),
 		ModTime: m.clock.Now(),
 		Mode:    perm &^ umask,

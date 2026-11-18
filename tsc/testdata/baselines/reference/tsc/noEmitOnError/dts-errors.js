@@ -21,7 +21,7 @@ export { }
     },
 }
 
-tsgo 
+tsc 
 ExitStatus:: Success
 Output::
 //// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
@@ -64,7 +64,7 @@ export {};
 
 Edit [0]:: no change
 
-tsgo 
+tsc 
 ExitStatus:: Success
 Output::
 //// [/user/username/projects/noEmitOnError/dev-build/shared/types/db.js] *rewrite with same content*
@@ -78,7 +78,7 @@ Edit [1]:: Fix error
 import { A } from "../shared/types/db";
 export const a = class { p = 10; };
 
-tsgo 
+tsc 
 ExitStatus:: Success
 Output::
 //// [/user/username/projects/noEmitOnError/dev-build/shared/types/db.js] *rewrite with same content*
@@ -89,7 +89,7 @@ Output::
 
 Edit [2]:: no change
 
-tsgo 
+tsc 
 ExitStatus:: Success
 Output::
 //// [/user/username/projects/noEmitOnError/dev-build/shared/types/db.js] *rewrite with same content*

@@ -21,7 +21,7 @@ export const local = 1;
     ]
 }
 
-tsgo --build --verbose --runExternalCode
+tsc --build --verbose --runExternalCode
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -118,7 +118,7 @@ Signatures::
 
 Edit [0]:: no change
 
-tsgo --build --verbose --runExternalCode
+tsc --build --verbose --runExternalCode
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -137,7 +137,7 @@ Edit [1]:: upgrade the content mapper package to a new version
     "typescript": { "contentMapper": { "exec": ["verbatim-mapper"] } }
 }
 
-tsgo --build --verbose --runExternalCode
+tsc --build --verbose --runExternalCode
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -209,7 +209,7 @@ Signatures::
 
 Edit [2]:: no change
 
-tsgo --build --verbose --runExternalCode
+tsc --build --verbose --runExternalCode
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 

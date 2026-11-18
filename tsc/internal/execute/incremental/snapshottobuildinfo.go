@@ -326,11 +326,15 @@ func (t *toBuildInfo) setCompilerOptions() {
 		func(option *tsoptions.CommandLineOption, value any) {
 			// Make it relative to buildInfo directory if file path
 			if t.buildInfo.Options == nil {
-				t.buildInfo.Options = &collections.OrderedMap[string, any]{}
+				t.buildInfo.Options = &BuildInfoCompilerOptions{}
 			}
 			t.buildInfo.Options.Set(option.Name, t.toRelativeToBuildInfoCompilerOptionValue(option, value))
 		},
 	)
+	// The inherited paths base is derived, not a declared compiler option.
+	if pathsBasePath := t.snapshot.options.GetPathsBasePath(""); pathsBasePath != "" {
+		t.buildInfo.Options.Set("pathsBasePath", t.relativeToBuildInfo(tspath.RootedPath(pathsBasePath)))
+	}
 }
 
 func (t *toBuildInfo) setReferencedMap() {

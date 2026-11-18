@@ -43,7 +43,7 @@ type tscInput struct {
 }
 
 func (test *tscInput) executeCommand(ctx context.Context, sys *TestSys, baselineBuilder *strings.Builder, commandLineArgs []string) tsc.CommandLineResult {
-	fmt.Fprint(baselineBuilder, "tsgo ", strings.Join(commandLineArgs, " "), "\n")
+	fmt.Fprint(baselineBuilder, "tsc ", strings.Join(commandLineArgs, " "), "\n")
 	result := execute.CommandLine(ctx, sys, commandLineArgs, sys)
 	switch result.Status {
 	case tsc.ExitStatusSuccess:
@@ -58,6 +58,8 @@ func (test *tscInput) executeCommand(ctx context.Context, sys *TestSys, baseline
 		baselineBuilder.WriteString("ExitStatus:: ProjectReferenceCycle_OutputsSkipped")
 	case tsc.ExitStatusNotImplemented:
 		baselineBuilder.WriteString("ExitStatus:: NotImplemented")
+	case tsc.ExitStatusCancelled:
+		baselineBuilder.WriteString("ExitStatus:: Cancelled")
 	default:
 		panic(fmt.Sprintf("UnknownExitStatus %d", result.Status))
 	}
@@ -92,7 +94,7 @@ func (test *tscInput) run(t *testing.T, scenario string) {
 
 		for index, do := range test.edits {
 			sys.clearOutput()
-			wg := core.NewWorkGroup(false)
+			wg := core.NewWorkGroup(0)
 			var nonIncrementalSys *TestSys
 			commandLineArgs := core.IfElse(do.commandLineArgs == nil, test.commandLineArgs, do.commandLineArgs)
 			wg.Queue(func() {
@@ -107,7 +109,7 @@ func (test *tscInput) run(t *testing.T, scenario string) {
 					test.executeCommand(ctx, sys, baselineBuilder, commandLineArgs)
 				} else {
 					sys.mockWatchBackend.SendChangedPaths(changedPaths)
-					result.Watcher.DoCycle()
+					result.Watcher.DoCycle(ctx)
 				}
 				sys.serializeState(baselineBuilder)
 				if result.Watcher != nil && sys.mockWatchBackend.HasWatches() {

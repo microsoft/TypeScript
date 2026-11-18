@@ -13,7 +13,7 @@ export class D { }
     }
 }
 
-tsgo 
+tsc 
 ExitStatus:: Success
 Output::
 //// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
@@ -134,7 +134,7 @@ Signatures::
 Edit [0]:: delete file with imports
 //// [/home/src/workspaces/project/file2.ts] *deleted*
 
-tsgo 
+tsc 
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/outDir/tsconfig.tsbuildinfo] *modified* 

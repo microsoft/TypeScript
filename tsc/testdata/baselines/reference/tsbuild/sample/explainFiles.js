@@ -60,7 +60,7 @@ export const m = mod;
     },
 }
 
-tsgo --b tests --explainFiles --v
+tsc --b tests --explainFiles --v
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -469,7 +469,7 @@ export function leftPad(s: string, n: number) { return s + n; }
 export function multiply(a: number, b: number) { return a * b; }
 export class someClass { }
 
-tsgo --b tests --explainFiles --v
+tsc --b tests --explainFiles --v
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -821,7 +821,7 @@ export function multiply(a: number, b: number) { return a * b; }
 export class someClass { }
 class someClass2 { }
 
-tsgo --b tests --explainFiles --v
+tsc --b tests --explainFiles --v
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -952,7 +952,7 @@ Signatures::
 
 Edit [2]:: no change
 
-tsgo --b tests --explainFiles --v
+tsc --b tests --explainFiles --v
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 

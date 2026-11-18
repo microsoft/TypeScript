@@ -6,7 +6,7 @@ export {};
 //// [/home/src/workspaces/project/tsconfig.json] *new* 
 {"compilerOptions": {"target": "es2015"}}
 
-tsgo --noEmit
+tsc --noEmit
 ExitStatus:: Success
 Output::
 //// [/home/src/tslibs/TS/Lib/lib.es6.d.ts] *Lib*

@@ -620,3 +620,15 @@ func tsFindPrecedingTokens(t *testing.T, fileText string, positions []int) []*to
 	assert.NilError(t, err)
 	return info
 }
+
+func BenchmarkGetTokenAtPositionNested(b *testing.B) {
+	text := "const value = " + strings.Repeat("call(", 24) + "target" + strings.Repeat(")", 24) + ";"
+	file := parser.ParseSourceFile(ast.SourceFileParseOptions{FileName: "/test.ts", PathKey: "/test.ts"}, text, core.ScriptKindTS)
+	position := strings.Index(text, "target")
+	b.ReportAllocs()
+	for b.Loop() {
+		if token := astnav.GetTokenAtPosition(file, position); token == nil || token.Kind != ast.KindIdentifier {
+			b.Fatal("target token not found")
+		}
+	}
+}

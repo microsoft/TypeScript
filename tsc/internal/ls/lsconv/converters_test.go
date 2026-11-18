@@ -28,9 +28,9 @@ func TestDocumentURIToFileName(t *testing.T) {
 	}{
 		{"file:///path/to/file.ts", "/path/to/file.ts"},
 		{"file://server/share/file.ts", "//server/share/file.ts"},
-		{"file:///d%3A/work/tsgo932/lib/utils.ts", "d:/work/tsgo932/lib/utils.ts"},
-		{"file:///D%3A/work/tsgo932/lib/utils.ts", "D:/work/tsgo932/lib/utils.ts"},
-		{"file:///d%3A/work/tsgo932/app/%28test%29/comp/comp-test.tsx", "d:/work/tsgo932/app/(test)/comp/comp-test.tsx"},
+		{"file:///d%3A/work/ts932/lib/utils.ts", "d:/work/ts932/lib/utils.ts"},
+		{"file:///D%3A/work/ts932/lib/utils.ts", "D:/work/ts932/lib/utils.ts"},
+		{"file:///d%3A/work/ts932/app/%28test%29/comp/comp-test.tsx", "d:/work/ts932/app/(test)/comp/comp-test.tsx"},
 		{"file:///path/to/file.ts#section", "/path/to/file.ts"},
 		{"file:///c:/test/me", "c:/test/me"},
 		{"file://shares/files/c%23/p.cs", "//shares/files/c#/p.cs"},
@@ -67,9 +67,9 @@ func TestFileNameToDocumentURI(t *testing.T) {
 	}{
 		{tspath.RootedFilePath("/path/to/file.ts"), "file:///path/to/file.ts"},
 		{tspath.RootedFilePath("//server/share/file.ts"), "file://server/share/file.ts"},
-		{tspath.RootedFilePath("d:/work/tsgo932/lib/utils.ts"), "file:///d%3A/work/tsgo932/lib/utils.ts"},
-		{tspath.RootedFilePath("D:/work/tsgo932/lib/utils.ts"), "file:///d%3A/work/tsgo932/lib/utils.ts"},
-		{tspath.RootedFilePath("d:/work/tsgo932/app/(test)/comp/comp-test.tsx"), "file:///d%3A/work/tsgo932/app/%28test%29/comp/comp-test.tsx"},
+		{tspath.RootedFilePath("d:/work/ts932/lib/utils.ts"), "file:///d%3A/work/ts932/lib/utils.ts"},
+		{tspath.RootedFilePath("D:/work/ts932/lib/utils.ts"), "file:///d%3A/work/ts932/lib/utils.ts"},
+		{tspath.RootedFilePath("d:/work/ts932/app/(test)/comp/comp-test.tsx"), "file:///d%3A/work/ts932/app/%28test%29/comp/comp-test.tsx"},
 		{tspath.RootedFilePath("/path/to/file.ts"), "file:///path/to/file.ts"},
 		{tspath.RootedFilePath("c:/test/me"), "file:///c%3A/test/me"},
 		{tspath.RootedFilePath("//shares/files/c#/p.cs"), "file://shares/files/c%23/p.cs"},
@@ -269,6 +269,31 @@ func TestConvertersSourceFileProjectionExpansion(t *testing.T) {
 	assert.Equal(t, positions[0].Position, core.TextPos(1))
 	assert.Assert(t, positions[1].Script == supplemental)
 	assert.Equal(t, positions[1].Position, core.TextPos(2))
+}
+
+// A failed mapper leaves an empty virtual file without a span map, while the line map still
+// describes the non-ASCII original text. Its second line starts at byte 3, so converting
+// hover positions and inlay-hint ranges previously tried to scan the empty file from
+// offset 3 and panicked. Both requests must instead clamp to the virtual file's offset 0.
+func TestConvertersFailedContentMapperPosition(t *testing.T) {
+	t.Parallel()
+	original := "é\nhover here\n"
+	file := parser.ParseSourceFile(ast.SourceFileParseOptions{FileName: "/component.box", PathKey: "/component.box"}, "", core.ScriptKindTS)
+	file.SetContentMapperInfo(ast.ContentMapperSourceFileInfo{OriginalText: original, ContentMapper: "mapper"})
+	assert.Assert(t, file.IsContentMapperFailureStub())
+
+	lineMap := lsconv.ComputeLSPLineStarts(original)
+	converters := lsconv.NewConverters(lsproto.PositionEncodingKindUTF16, func(_ tspath.RootedFilePath) *lsconv.LSPLineMap { return lineMap })
+	positions := converters.FromLSPPositionForSourceFile(file, lsproto.Position{Line: 1, Character: 2}, spanmap.FeatureHover)
+	assert.Equal(t, len(positions), 1)
+	assert.Equal(t, positions[0].Position, core.TextPos(0))
+
+	ranges := converters.FromLSPRangeIntersectingForSourceFile(file, lsproto.Range{
+		Start: lsproto.Position{Line: 1},
+		End:   lsproto.Position{Line: 1, Character: 5},
+	}, spanmap.FeatureInlayHints)
+	assert.Equal(t, len(ranges), 1)
+	assert.Equal(t, ranges[0].Span, core.NewTextRange(0, 0))
 }
 
 // TestConvertersInvalidUTF8 verifies behavior on text containing invalid UTF-8

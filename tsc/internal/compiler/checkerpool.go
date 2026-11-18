@@ -367,7 +367,7 @@ func (p *checkerPool) getCheckerNonExclusive() (*checker.Checker, func()) {
 func (p *checkerPool) createCheckers() {
 	p.createCheckersOnce.Do(func() {
 		checkerCount := len(p.checkers)
-		wg := core.NewWorkGroup(p.program.SingleThreaded())
+		wg := core.NewWorkGroup(core.WorkGroupConcurrency(p.program.SingleThreaded()))
 		for i := range checkerCount {
 			wg.Queue(func() {
 				var tracer *checker.Tracer
@@ -450,7 +450,7 @@ func (p *checkerPool) getImportAdjacency() [][]int {
 // making it safe to call `forEachCheckerParallel` from many threads simultaneously.
 func (p *checkerPool) forEachCheckerParallel(cb func(idx int, c *checker.Checker)) {
 	p.createCheckers()
-	wg := core.NewWorkGroup(p.program.SingleThreaded())
+	wg := core.NewWorkGroup(core.WorkGroupConcurrency(p.program.SingleThreaded()))
 	for idx, checker := range p.checkers {
 		wg.Queue(func() {
 			p.locks[idx].Lock()
@@ -474,15 +474,25 @@ func (p *checkerPool) GetGlobalDiagnostics() []*ast.Diagnostic {
 // the provided files, processing only those assigned to its checker. Within each
 // checker's set, files are visited in their original order.
 func (p *checkerPool) forEachCheckerGroupDo(ctx context.Context, files []*ast.SourceFile, singleThreaded bool, cb func(c *checker.Checker, fileIndex int, file *ast.SourceFile)) {
+	if ctx.Err() != nil {
+		return
+	}
+	p.program.bindSourceFiles(ctx)
+	if ctx.Err() != nil {
+		return
+	}
 	p.createCheckers()
 
 	checkerCount := len(p.checkers)
-	wg := core.NewWorkGroup(singleThreaded)
+	wg := core.NewWorkGroup(core.WorkGroupConcurrency(singleThreaded))
 	for checkerIdx := range checkerCount {
 		wg.Queue(func() {
 			p.locks[checkerIdx].Lock()
 			defer p.locks[checkerIdx].Unlock()
 			for i, file := range files {
+				if ctx.Err() != nil {
+					return
+				}
 				if checker := p.checkers[checkerIdx]; checker == p.fileAssociations[file] {
 					cb(checker, i, file)
 				}
@@ -490,6 +500,18 @@ func (p *checkerPool) forEachCheckerGroupDo(ctx context.Context, files []*ast.So
 		})
 	}
 	wg.RunAndWait()
+}
+
+// groupFilesByChecker returns the indices of files grouped by the checker each file is associated with. Files keep
+// their order within each group.
+func (p *checkerPool) groupFilesByChecker(files []*ast.SourceFile) [][]int {
+	p.createCheckers()
+	groups := make([][]int, len(p.checkers))
+	for i, file := range files {
+		idx := slices.Index(p.checkers, p.fileAssociations[file])
+		groups[idx] = append(groups[idx], i)
+	}
+	return groups
 }
 
 func noop() {}

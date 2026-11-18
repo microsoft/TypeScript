@@ -1169,7 +1169,7 @@ func (tx *classFieldsTransformer) visitPreOrPostfixUnaryExpression(node *ast.Nod
 				if initializeExpression != nil {
 					assignReceiver = initializeExpression
 				}
-				expression = tx.createPrivateIdentifierAssignment(info, assignReceiver, expression, ast.KindEqualsToken)
+				expression = tx.createPrivateIdentifierAssignment(info, assignReceiver, expression, ast.KindEqualsToken, false)
 				tx.EmitContext().SetOriginal(expression, node)
 				expression.Loc = node.Loc
 				if temp != nil {
@@ -1512,7 +1512,7 @@ func (tx *classFieldsTransformer) visitBinaryExpression(node *ast.BinaryExpressi
 			// obj.#x = ...
 			info := tx.accessPrivateIdentifier(left.Name())
 			if info != nil {
-				result := tx.createPrivateIdentifierAssignment(info, left.Expression(), node.Right, node.OperatorToken.Kind)
+				result := tx.createPrivateIdentifierAssignment(info, left.Expression(), node.Right, node.OperatorToken.Kind, false)
 				tx.EmitContext().SetOriginal(result, node.AsNode())
 				result.Loc = node.Loc
 				return result
@@ -1624,8 +1624,22 @@ func (tx *classFieldsTransformer) visitParenthesizedExpression(node *ast.Parenth
 	return tx.Factory().UpdateParenthesizedExpression(node, expression)
 }
 
-func (tx *classFieldsTransformer) createPrivateIdentifierAssignment(info *privateIdentifierInfo, receiver *ast.Expression, right *ast.Expression, operator ast.Kind) *ast.Expression {
+func (tx *classFieldsTransformer) createPrivateIdentifierAssignment(info *privateIdentifierInfo, receiver *ast.Expression, right *ast.Expression, operator ast.Kind, suppressReceiverComments bool) *ast.Expression {
 	receiver = tx.Visitor().VisitNode(receiver)
+	if ast.IsLogicalOrCoalescingAssignmentOperator(operator) {
+		readExpression, initializeExpression := tx.createCopiableReceiverExpr(receiver)
+		if initializeExpression == nil {
+			initializeExpression = readExpression
+		}
+		setterReceiver := readExpression.Clone(tx.Factory())
+		return tx.Factory().NewBinaryExpression(
+			nil,
+			tx.createPrivateIdentifierAccessHelper(info, initializeExpression),
+			nil,
+			tx.Factory().NewToken(transformers.GetNonAssignmentOperatorForCompoundAssignment(operator)),
+			tx.createPrivateIdentifierAssignment(info, setterReceiver, right, ast.KindEqualsToken, true),
+		)
+	}
 	right = tx.Visitor().VisitNode(right)
 
 	if ast.IsCompoundAssignment(operator) {
@@ -1645,6 +1659,9 @@ func (tx *classFieldsTransformer) createPrivateIdentifierAssignment(info *privat
 	}
 
 	tx.EmitContext().SetCommentRange(receiver, core.NewTextRange(-1, receiver.End()))
+	if suppressReceiverComments {
+		tx.EmitContext().AddEmitFlags(receiver, printer.EFNoComments)
+	}
 
 	switch info.kind {
 	case printer.PrivateIdentifierKindAccessor:
@@ -3214,7 +3231,7 @@ func (tx *classFieldsTransformer) wrapPrivateIdentifierForDestructuringTarget(no
 			tx.Factory().NewAssignmentExpression(receiver, tx.Visitor().VisitNode(prop.Expression)),
 		)
 	}
-	assignExpr := tx.createPrivateIdentifierAssignment(info, receiver, parameter, ast.KindEqualsToken)
+	assignExpr := tx.createPrivateIdentifierAssignment(info, receiver, parameter, ast.KindEqualsToken, false)
 	return tx.Factory().NewAssignmentTargetWrapper(parameter, assignExpr)
 }
 

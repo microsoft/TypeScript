@@ -9,7 +9,7 @@ export function values() {
 //// [/home/src/workspaces/project/tsconfig.json] *new* 
 {"compilerOptions": {"noEmit": true, "incremental": true}}
 
-tsgo 
+tsc 
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [91merror[0m[90m TS2318: [0mCannot find global type 'IterableIterator'.
@@ -112,7 +112,7 @@ Signatures::
 
 Edit [0]:: no change
 
-tsgo 
+tsc 
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [91merror[0m[90m TS2318: [0mCannot find global type 'IterableIterator'.
@@ -196,7 +196,7 @@ export function values() {
 // comment-only edit
 
 
-tsgo 
+tsc 
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [91merror[0m[90m TS2318: [0mCannot find global type 'IterableIterator'.
@@ -281,7 +281,7 @@ Signatures::
 
 Edit [2]:: no change
 
-tsgo 
+tsc 
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [91merror[0m[90m TS2318: [0mCannot find global type 'IterableIterator'.

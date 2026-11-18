@@ -23,7 +23,7 @@ export const a = 1;
                     ],
                 }
 
-tsgo -p .
+tsc -p .
 ExitStatus:: Success
 Output::
 

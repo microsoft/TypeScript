@@ -798,10 +798,10 @@ func (h *host) transformLocked(mapper *Mapper, request Request, projectHandle st
 // Close shuts down every mapper process. It is safe to call more than once and is invoked automatically
 // when the context passed to New is cancelled.
 func (h *host) Close() error {
+	h.cancel()
 	h.lifecycleMu.Lock()
 	defer h.lifecycleMu.Unlock()
 	h.stop()
-	h.cancel()
 	h.mu.Lock()
 	var closers []io.Closer
 	for _, mc := range h.conns {

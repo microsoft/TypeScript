@@ -13,7 +13,6 @@ See the Apache Version 2.0 License for specific language governing permissions
 and limitations under the License.
 ***************************************************************************** */
 
-
 /// <reference lib="es2026.iterator" />
 
 export {};
@@ -55,7 +54,8 @@ type IteratorInput<T> = (Iterable<T> | Iterator<T>) & object;
 type IteratorYield<T> = T extends IteratorInput<infer U> ? U : never;
 
 type IteratorZipKey<K extends PropertyKey> = K extends number ? K | `${K}` | (number extends K ? "NaN" | "Infinity" | "-Infinity" : never)
-    : K extends `${infer N extends number}` ? `${N}` extends K ? K | N : K : K;
+    : K extends `${infer N extends number}` ? `${N}` extends K ? K | N : K
+    : K;
 
 type IteratorZipDefaultPadding<T> = {
     readonly [K in keyof T]?: IteratorYield<T[K]> | undefined;
@@ -79,8 +79,9 @@ type IteratorZipKeyedInput<T> = {
 };
 
 type IteratorZipKeyedResult<T, TExtra = never, TPadding = {}> = T extends Partial<Record<keyof T, undefined>> ? keyof T extends never ? Record<PropertyKey, unknown> : never
-    : { -readonly [K in keyof T as undefined extends T[K] ? never : K]: IteratorZipValue<T[K], K, TExtra, TPadding>; } &
-    { -readonly [K in keyof T as undefined extends T[K] ? T[K] extends undefined ? never : K : never]?: IteratorZipValue<T[K], K, TExtra, TPadding>; };
+    :
+        & { -readonly [K in keyof T as undefined extends T[K] ? never : K]: IteratorZipValue<T[K], K, TExtra, TPadding>; }
+        & { -readonly [K in keyof T as undefined extends T[K] ? T[K] extends undefined ? never : K : never]?: IteratorZipValue<T[K], K, TExtra, TPadding>; };
 
 declare global {
     interface IteratorObject<T, TReturn, TNext> {

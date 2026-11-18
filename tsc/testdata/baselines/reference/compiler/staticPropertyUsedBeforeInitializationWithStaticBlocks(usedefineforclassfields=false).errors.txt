@@ -1,0 +1,66 @@
+staticPropertyUsedBeforeInitializationWithStaticBlocks.ts(3,18): error TS2729: Property 'b' is used before its initialization.
+staticPropertyUsedBeforeInitializationWithStaticBlocks.ts(7,16): error TS2729: Property 'b' is used before its initialization.
+staticPropertyUsedBeforeInitializationWithStaticBlocks.ts(8,18): error TS2729: Property 'b' is used before its initialization.
+staticPropertyUsedBeforeInitializationWithStaticBlocks.ts(12,35): error TS2729: Property 'b' is used before its initialization.
+staticPropertyUsedBeforeInitializationWithStaticBlocks.ts(13,18): error TS2729: Property 'b' is used before its initialization.
+staticPropertyUsedBeforeInitializationWithStaticBlocks.ts(17,19): error TS2729: Property '#b' is used before its initialization.
+staticPropertyUsedBeforeInitializationWithStaticBlocks.ts(23,21): error TS2729: Property 'b' is used before its initialization.
+staticPropertyUsedBeforeInitializationWithStaticBlocks.ts(27,19): error TS2729: Property 'b' is used before its initialization.
+
+
+==== staticPropertyUsedBeforeInitializationWithStaticBlocks.ts (8 errors) ====
+    class A {
+        static {}
+        static a = A.b;
+                     ~
+!!! error TS2729: Property 'b' is used before its initialization.
+!!! related TS2728 staticPropertyUsedBeforeInitializationWithStaticBlocks.ts:4:12: 'b' is declared here.
+        static b: number = 1;
+    }
+    class B {
+        static { B.b = 2; }
+                   ~
+!!! error TS2729: Property 'b' is used before its initialization.
+!!! related TS2728 staticPropertyUsedBeforeInitializationWithStaticBlocks.ts:9:12: 'b' is declared here.
+        static a = B.b;
+                     ~
+!!! error TS2729: Property 'b' is used before its initialization.
+!!! related TS2728 staticPropertyUsedBeforeInitializationWithStaticBlocks.ts:9:12: 'b' is declared here.
+        static b: number;
+    }
+    class C {
+        static { if (Math.random()) C.b = 2; }
+                                      ~
+!!! error TS2729: Property 'b' is used before its initialization.
+!!! related TS2728 staticPropertyUsedBeforeInitializationWithStaticBlocks.ts:14:12: 'b' is declared here.
+        static a = C.b;
+                     ~
+!!! error TS2729: Property 'b' is used before its initialization.
+!!! related TS2728 staticPropertyUsedBeforeInitializationWithStaticBlocks.ts:14:12: 'b' is declared here.
+        static b: number;
+    }
+    class D {
+        static { this.#b = 2; }
+                      ~~
+!!! error TS2729: Property '#b' is used before its initialization.
+!!! related TS2728 staticPropertyUsedBeforeInitializationWithStaticBlocks.ts:19:12: '#b' is declared here.
+        static a = D.#b;
+        static #b: number;
+    }
+    class E {
+        static { }
+        static a = this.b;
+                        ~
+!!! error TS2729: Property 'b' is used before its initialization.
+!!! related TS2728 staticPropertyUsedBeforeInitializationWithStaticBlocks.ts:24:12: 'b' is declared here.
+        static b = 1;
+    }
+    class F {
+        static { this.b = 1; }
+                      ~
+!!! error TS2729: Property 'b' is used before its initialization.
+!!! related TS2728 staticPropertyUsedBeforeInitializationWithStaticBlocks.ts:29:12: 'b' is declared here.
+        static a = this.b;
+        static b: number;
+    }
+    

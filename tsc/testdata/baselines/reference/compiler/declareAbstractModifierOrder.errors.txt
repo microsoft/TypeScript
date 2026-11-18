@@ -1,0 +1,26 @@
+classes.d.ts(2,10): error TS1029: 'declare' modifier must precede 'abstract' modifier.
+classes.d.ts(4,17): error TS1029: 'declare' modifier must precede 'abstract' modifier.
+classes.ts(2,10): error TS1029: 'declare' modifier must precede 'abstract' modifier.
+classes.ts(4,17): error TS1029: 'declare' modifier must precede 'abstract' modifier.
+
+
+==== classes.ts (2 errors) ====
+    declare abstract class A {}
+    abstract declare class B {}
+             ~~~~~~~
+!!! error TS1029: 'declare' modifier must precede 'abstract' modifier.
+    export declare abstract class C {}
+    export abstract declare class D {}
+                    ~~~~~~~
+!!! error TS1029: 'declare' modifier must precede 'abstract' modifier.
+    
+==== classes.d.ts (2 errors) ====
+    declare abstract class E {}
+    abstract declare class F {}
+             ~~~~~~~
+!!! error TS1029: 'declare' modifier must precede 'abstract' modifier.
+    export declare abstract class G {}
+    export abstract declare class H {}
+                    ~~~~~~~
+!!! error TS1029: 'declare' modifier must precede 'abstract' modifier.
+    

@@ -22,7 +22,7 @@ import * as mod_1 from "../primary/a";
     "references": [ { "path": "../primary" } ]
 }
 
-tsgo --p reference/tsconfig.json
+tsc --p reference/tsconfig.json
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96mreference/tsconfig.json[0m:[93m7[0m:[93m21[0m - [91merror[0m[90m TS6306: [0mReferenced project '/home/src/workspaces/project/primary' must have setting "composite": true.

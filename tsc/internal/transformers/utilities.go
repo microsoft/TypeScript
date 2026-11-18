@@ -9,7 +9,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/scanner"
 )
 
-func IsGeneratedIdentifier(emitContext *printer.EmitContext, name *ast.IdentifierNode) bool {
+func IsGeneratedIdentifier(emitContext *printer.EmitContext, name *ast.Node) bool {
 	return emitContext.HasAutoGenerateInfo(name)
 }
 

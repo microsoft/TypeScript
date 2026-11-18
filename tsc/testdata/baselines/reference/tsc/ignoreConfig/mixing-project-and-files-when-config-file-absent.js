@@ -8,7 +8,7 @@ export const a = 10;
 //// [/home/src/workspaces/project/src/b.ts] *new* 
 export const b = 10;
 
-tsgo -p . src/a.ts c.ts
+tsc -p . src/a.ts c.ts
 ExitStatus:: DiagnosticsPresent_OutputsSkipped
 Output::
 [91merror[0m[90m TS5042: [0mOption 'project' cannot be mixed with source files on a command line.

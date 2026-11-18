@@ -1,0 +1,25 @@
+//// [tests/cases/compiler/decoratorMissingClassExpression.ts] ////
+
+=== assignment.ts ===
+let x;
+>x : Symbol(x, Decl(assignment.ts, 0, 3))
+
+x = @dec 1;
+>x : Symbol(x, Decl(assignment.ts, 0, 3))
+
+x = @@a 1;
+>x : Symbol(x, Decl(assignment.ts, 0, 3))
+
+=== forAwait.ts ===
+async function f(y: any) {
+>f : Symbol(f, Decl(forAwait.ts, 0, 0))
+>y : Symbol(y, Decl(forAwait.ts, 0, 17))
+
+    for await (@d of y) {}
+>y : Symbol(y, Decl(forAwait.ts, 0, 17))
+}
+
+=== destructuring.ts ===
+
+({...@d} = {});
+

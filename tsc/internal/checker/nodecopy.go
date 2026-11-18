@@ -220,7 +220,7 @@ func (b *NodeBuilderImpl) finalizeBoundary(bound *recoveryBoundary) bool {
 	return true
 }
 
-func (b *NodeBuilderImpl) tryReuseExistingNodeHelper(existing *ast.TypeNode) *ast.TypeNode {
+func (b *NodeBuilderImpl) tryReuseExistingNodeHelper(existing *ast.Node) *ast.Node {
 	bound := b.createRecoveryBoundary()
 	var transformed *ast.Node
 	v := getExistingNodeTreeVisitor(b, bound) // !!! TODO: Cache visitor and just reset bound+host builder? We try this for a *lot* of nodes.

@@ -39,7 +39,7 @@ import {
     getExe,
     jsTsLanguageModes,
     languageClientName,
-    readNativePreviewConfig,
+    readConfigWithLegacyFallback,
 } from "./util";
 import { getLanguageForUri } from "./util";
 
@@ -208,8 +208,8 @@ export class Client implements vscode.Disposable {
             version: this.exe.version,
         });
 
-        const pprofDir = readNativePreviewConfig<string | undefined>("server.pprofDir", undefined)
-            ?? readNativePreviewConfig<string | undefined>("pprofDir", undefined);
+        const pprofDir = readConfigWithLegacyFallback<string | undefined>("server.pprofDir", undefined)
+            ?? readConfigWithLegacyFallback<string | undefined>("pprofDir", undefined);
         const pprofArgs = pprofDir ? ["--pprofDir", pprofDir] : [];
 
         const flakesFlag = vscode.workspace
@@ -217,8 +217,8 @@ export class Client implements vscode.Disposable {
             .get<"panic" | "log" | "never" | "auto">("server.trackFlakyDiagnostics", "auto");
         const effectiveflakesFlag = flakesFlag === "auto" ? (isInsiders() ? "log" : "never") : flakesFlag;
 
-        const goMemLimit = readNativePreviewConfig<string | undefined>("server.goMemLimit", undefined)
-            ?? readNativePreviewConfig<string | undefined>("goMemLimit", undefined);
+        const goMemLimit = readConfigWithLegacyFallback<string | undefined>("server.goMemLimit", undefined)
+            ?? readConfigWithLegacyFallback<string | undefined>("goMemLimit", undefined);
         const env = { ...process.env };
         if (goMemLimit) {
             // Keep this regex aligned with the pattern in package.json.
@@ -251,7 +251,7 @@ export class Client implements vscode.Disposable {
         this.clientOptions.initializationOptions.runExternalCode = contentMappersEnabled();
         this.clientOptions.initializationOptions.trackFlakyDiagnostics = effectiveflakesFlag !== "never" ? (effectiveflakesFlag === "panic" ? 2 : 1) : 0;
 
-        this.client = new NativePreviewLanguageClient(
+        this.client = new TypeScriptLanguageClient(
             "js/ts",
             languageClientName,
             serverOptions,
@@ -544,7 +544,7 @@ function isInsiders(): boolean {
 
 // LanguageClient subclass that lets the user control whether a failed request
 // surfaces an error notification, via the `js/ts.server.showFailedResponses` setting.
-class NativePreviewLanguageClient extends LanguageClient {
+class TypeScriptLanguageClient extends LanguageClient {
     override handleFailedRequest<T>(
         type: MessageSignature,
         token: vscode.CancellationToken | undefined,

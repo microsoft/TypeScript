@@ -42,10 +42,11 @@ foo.bar;`
 	parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile("/tsconfig.json", &core.CompilerOptions{}, nil, tsoptions.NewDefaultParseConfigHost(fs), nil)
 	assert.Equal(t, len(errors), 0, "Expected no errors in parsed command line")
 
-	p := compiler.NewProgram(compiler.ProgramOptions{
+	p, err := compiler.NewProgram(t.Context(), compiler.ProgramOptions{
 		Config: parsed,
 		Host:   host,
 	})
+	assert.NilError(t, err)
 	p.BindSourceFiles()
 	c, done := p.GetTypeChecker(t.Context())
 	defer done()
@@ -90,10 +91,11 @@ export type E = D;`,
 	parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile("/tsconfig.json", &core.CompilerOptions{}, nil, tsoptions.NewDefaultParseConfigHost(fs), nil)
 	assert.Equal(t, len(errors), 0, "Expected no errors in parsed command line")
 
-	p := compiler.NewProgram(compiler.ProgramOptions{
+	p, err := compiler.NewProgram(t.Context(), compiler.ProgramOptions{
 		Config: parsed,
 		Host:   host,
 	})
+	assert.NilError(t, err)
 	p.BindSourceFiles()
 	c, done := p.GetTypeChecker(t.Context())
 	defer done()
@@ -123,10 +125,11 @@ func BenchmarkNewChecker(b *testing.B) {
 	host := compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil)
 	parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile(rootPath.ResolveFile("tsconfig.json"), &core.CompilerOptions{}, nil, tsoptions.NewDefaultParseConfigHost(fs), nil)
 	assert.Equal(b, len(errors), 0, "Expected no errors in parsed command line")
-	program := compiler.NewProgram(compiler.ProgramOptions{
+	program, err := compiler.NewProgram(b.Context(), compiler.ProgramOptions{
 		Config: parsed,
 		Host:   host,
 	})
+	assert.NilError(b, err)
 
 	b.ReportAllocs()
 	for b.Loop() {
@@ -140,10 +143,11 @@ func BenchmarkCheck(b *testing.B) {
 	host := compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil)
 	parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile(rootPath.ResolveFile("tsconfig.json"), &core.CompilerOptions{}, nil, tsoptions.NewDefaultParseConfigHost(fs), nil)
 	assert.Equal(b, len(errors), 0, "Expected no errors in parsed command line")
-	program := compiler.NewProgram(compiler.ProgramOptions{
+	program, err := compiler.NewProgram(b.Context(), compiler.ProgramOptions{
 		Config: parsed,
 		Host:   host,
 	})
+	assert.NilError(b, err)
 	program.BindSourceFiles()
 	ctx := b.Context()
 
@@ -167,7 +171,8 @@ func BenchmarkCheckFreshProgram(b *testing.B) {
 
 	b.ReportAllocs()
 	for b.Loop() {
-		program := compiler.NewProgram(compiler.ProgramOptions{Config: parsed, Host: host})
+		program, err := compiler.NewProgram(ctx, compiler.ProgramOptions{Config: parsed, Host: host})
+		assert.NilError(b, err)
 		program.BindSourceFiles()
 		c, _ := checker.NewChecker(program, nil)
 		for _, file := range program.GetSourceFiles() {
@@ -190,10 +195,11 @@ export type Initial = Box<"first">;
 		"/foo.ts": content.String(),
 	}, tspath.CaseSensitive))
 	opts := &core.CompilerOptions{NoLib: core.TSTrue}
-	program := compiler.NewProgram(compiler.ProgramOptions{
+	program, err := compiler.NewProgram(t.Context(), compiler.ProgramOptions{
 		Config: tsoptions.NewParsedCommandLine(opts, []tspath.RootedFilePath{"/foo.ts"}, nil, "/", fs.CaseSensitivity()),
 		Host:   compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil),
 	})
+	assert.NilError(t, err)
 	program.BindSourceFiles()
 	c, done := program.GetTypeChecker(t.Context())
 	defer done()

@@ -366,7 +366,6 @@ import {
     isEqualsToken,
     isExclamationToken,
     isExpression,
-    isExpressionWithTypeArguments,
     isForInitializer,
     isFunctionBody,
     isIdentifier,
@@ -374,6 +373,7 @@ import {
     isImportAttributes,
     isImportClause,
     isJSDocFullName,
+    isJSDocReturnTag,
     isJsxAttributeName,
     isJsxAttributes,
     isJsxAttributeValue,
@@ -404,6 +404,7 @@ import {
     isTypeNode,
     isTypeParameterDeclaration,
     isTypePredicateParameterName,
+    isTypeReferenceNode,
     isVariableDeclaration,
     isVariableDeclarationList,
 } from "./is.ts";
@@ -575,6 +576,15 @@ const visitEachChildTable: Record<number, VisitEachChildFunction> = {
     [SyntaxKind.CaseBlock]: (node: CaseBlock, visitor: Visitor): CaseBlock => {
         const _clauses = visitNodes(node.clauses, visitor);
         return updateCaseBlock(node, _clauses);
+    },
+    [SyntaxKind.CaseClause]: (node: CaseClause, visitor: Visitor): CaseClause => {
+        const _expression = visitNode(node.expression, visitor, isExpression);
+        const _statements = visitNodes(node.statements, visitor);
+        return updateCaseClause(node, _expression, _statements);
+    },
+    [SyntaxKind.DefaultClause]: (node: DefaultClause, visitor: Visitor): DefaultClause => {
+        const _statements = visitNodes(node.statements, visitor);
+        return updateDefaultClause(node, _statements);
     },
     [SyntaxKind.ThrowStatement]: (node: ThrowStatement, visitor: Visitor): ThrowStatement => {
         const _expression = visitNode(node.expression, visitor, isExpression);
@@ -1269,13 +1279,13 @@ const visitEachChildTable: Record<number, VisitEachChildFunction> = {
     },
     [SyntaxKind.JSDocImplementsTag]: (node: JSDocImplementsTag, visitor: Visitor): JSDocImplementsTag => {
         const _tagName = visitNode(node.tagName, visitor, isIdentifier);
-        const _className = visitNode(node.className, visitor, isExpressionWithTypeArguments);
+        const _className = visitNode(node.className, visitor, isTypeReferenceNode);
         const _comment = visitNodes(node.comment, visitor);
         return updateJSDocImplementsTag(node, _tagName, _className, _comment);
     },
     [SyntaxKind.JSDocAugmentsTag]: (node: JSDocAugmentsTag, visitor: Visitor): JSDocAugmentsTag => {
         const _tagName = visitNode(node.tagName, visitor, isIdentifier);
-        const _className = visitNode(node.className, visitor, isExpressionWithTypeArguments);
+        const _className = visitNode(node.className, visitor, isTypeReferenceNode);
         const _comment = visitNodes(node.comment, visitor);
         return updateJSDocAugmentsTag(node, _tagName, _className, _comment);
     },
@@ -1328,7 +1338,7 @@ const visitEachChildTable: Record<number, VisitEachChildFunction> = {
     [SyntaxKind.JSDocSignature]: (node: JSDocSignature, visitor: Visitor): JSDocSignature => {
         const _typeParameters = visitNodes(node.typeParameters, visitor);
         const _parameters = visitNodes(node.parameters, visitor);
-        const _type = visitNode(node.type, visitor, isTypeNode);
+        const _type = visitNode(node.type, visitor, isJSDocReturnTag);
         return updateJSDocSignature(node, _typeParameters, _parameters, _type);
     },
     [SyntaxKind.JSDocNameReference]: (node: JSDocNameReference, visitor: Visitor): JSDocNameReference => {
@@ -1419,16 +1429,6 @@ const visitEachChildTable: Record<number, VisitEachChildFunction> = {
         const _expression = visitNode(node.expression, visitor, isExpression);
         const _statement = visitNode(node.statement, visitor, isStatement);
         return updateForOfStatement(node, _awaitModifier, _initializer, _expression, _statement);
-    },
-    [SyntaxKind.CaseClause]: (node: CaseClause, visitor: Visitor): CaseClause => {
-        const _expression = visitNode(node.expression, visitor, isExpression);
-        const _statements = visitNodes(node.statements, visitor);
-        return updateCaseClause(node, _expression, _statements);
-    },
-    [SyntaxKind.DefaultClause]: (node: DefaultClause, visitor: Visitor): DefaultClause => {
-        const _expression = visitNode(node.expression, visitor, isExpression);
-        const _statements = visitNodes(node.statements, visitor);
-        return updateDefaultClause(node, _expression, _statements);
     },
     [SyntaxKind.ObjectBindingPattern]: (node: ObjectBindingPattern, visitor: Visitor): ObjectBindingPattern => {
         const _elements = visitNodes(node.elements, visitor);

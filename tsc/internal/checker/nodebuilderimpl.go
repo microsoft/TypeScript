@@ -8,6 +8,7 @@ import (
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
+	"github.com/microsoft/TypeScript/tsc/internal/contentmapper"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/debug"
 	"github.com/microsoft/TypeScript/tsc/internal/jsnum"
@@ -271,6 +272,12 @@ func (b *NodeBuilderImpl) checkTypeExpandability(t *Type) {
 }
 
 func (b *NodeBuilderImpl) appendReferenceToType(root *ast.TypeNode, ref *ast.TypeNode) *ast.TypeNode {
+	if !ast.IsImportTypeNode(root) && (ast.IsExpressionWithTypeArguments(root) || ast.IsExpressionWithTypeArguments(ref)) {
+		// Type arguments precede the last name of root or ref, so the
+		// reference is an expression with type arguments rather than a
+		// qualified name.
+		return b.appendReferenceToExpression(b.referenceToExpression(root), b.referenceToExpression(ref))
+	}
 	if ast.IsImportTypeNode(root) {
 		// first shift type arguments
 
@@ -321,6 +328,30 @@ func (b *NodeBuilderImpl) appendReferenceToType(root *ast.TypeNode, ref *ast.Typ
 		expr = b.f.NewPropertyAccessExpression(expr, nil, id, ast.NodeFlagsNone)
 	}
 	return expr
+}
+
+// referenceToExpression returns a type reference, or a reference that is
+// already an expression, as an expression.
+func (b *NodeBuilderImpl) referenceToExpression(ref *ast.Node) *ast.Expression {
+	if ast.IsTypeReferenceNode(ref) {
+		return b.createExpressionWithTypeArguments(b.createAccessExpression(ref.AsTypeReferenceNode().TypeName), ref.TypeArgumentList())
+	}
+	return b.createAccessExpression(ref)
+}
+
+// appendReferenceToExpression returns ref, a reference expression, as a
+// reference to a member of root.
+func (b *NodeBuilderImpl) appendReferenceToExpression(root *ast.Expression, ref *ast.Expression) *ast.Expression {
+	switch {
+	case ast.IsIdentifier(ref):
+		return b.f.NewPropertyAccessExpression(root, nil /*questionDotToken*/, ref, ast.NodeFlagsNone)
+	case ast.IsPropertyAccessExpression(ref):
+		return b.f.NewPropertyAccessExpression(b.appendReferenceToExpression(root, ref.Expression()), nil /*questionDotToken*/, ref.Name(), ast.NodeFlagsNone)
+	case ast.IsExpressionWithTypeArguments(ref):
+		return b.f.NewExpressionWithTypeArguments(b.appendReferenceToExpression(root, ref.Expression()), ref.AsExpressionWithTypeArguments().TypeArguments)
+	default:
+		panic("unexpected reference kind: " + ref.Kind.String())
+	}
 }
 
 func getAccessStack(ref *ast.Node) []*ast.Node {
@@ -773,12 +804,12 @@ func (b *NodeBuilderImpl) createAccessFromSymbolChain(chain []*ast.Symbol, index
 			exports := b.ch.getExportsOfSymbol(parent)
 			if exports != nil {
 				// avoid exhaustive iteration in the common case
-				res, ok := exports[symbol.Name()]
+				res, ok := exports.Lookup(symbol.Name())
 				if symbol.Name() != ast.InternalSymbolNameExportEquals && !isLateBoundName(symbol.Name()) && ok && res != nil && b.ch.getSymbolIfSameReference(res, symbol) != nil {
 					symbolName = symbol.Name()
 				} else {
 					results := make(map[*ast.Symbol]string, 1)
-					for name, ex := range exports {
+					for name, ex := range exports.All() {
 						if b.ch.getSymbolIfSameReference(ex, symbol) != nil && !isLateBoundName(name) && name != ast.InternalSymbolNameExportEquals {
 							results[ex] = name
 							// break // must collect all results and sort them - exports are randomly iterated
@@ -817,8 +848,8 @@ func (b *NodeBuilderImpl) createAccessFromSymbolChain(chain []*ast.Symbol, index
 	b.ctx.approximateLength += len(symbolName) + 1
 
 	if (b.ctx.flags&nodebuilder.FlagsForbidIndexedAccessSymbolReferences == 0) && parent != nil &&
-		b.ch.getMembersOfSymbol(parent) != nil && b.ch.getMembersOfSymbol(parent)[symbol.Name()] != nil &&
-		b.ch.getSymbolIfSameReference(b.ch.getMembersOfSymbol(parent)[symbol.Name()], symbol) != nil {
+		b.ch.getMembersOfSymbol(parent) != nil && b.ch.getMembersOfSymbol(parent).Get(symbol.Name()) != nil &&
+		b.ch.getSymbolIfSameReference(b.ch.getMembersOfSymbol(parent).Get(symbol.Name()), symbol) != nil {
 		// Should use an indexed access
 		lhs := b.createAccessFromSymbolChain(chain, index-1, stopper, overrideTypeArguments)
 		if ast.IsIndexedAccessTypeNode(lhs) {
@@ -1112,7 +1143,7 @@ func (b *NodeBuilderImpl) getSymbolChain(symbol *ast.Symbol, meaning ast.SymbolF
 				parentChain := b.getSymbolChain(parent, getQualifiedLeftMeaning(meaning), false, yieldModuleSymbol)
 				if len(parentChain) > 0 {
 					if parent.Exports() != nil {
-						exported, ok := parent.Exports()[ast.InternalSymbolNameExportEquals]
+						exported, ok := parent.Exports().Lookup(ast.InternalSymbolNameExportEquals)
 						if ok && b.ch.getSymbolIfSameReference(exported, symbol) != nil {
 							// parentChain root _is_ symbol - symbol is a module export=, so it kinda looks like it's own parent
 							// No need to lookup an alias for the symbol in itself
@@ -1350,6 +1381,9 @@ func (b *NodeBuilderImpl) rewriteContentMappedModuleSpecifier(specifier tspath.M
 	if b.ctx.internalFlags&nodebuilder.InternalFlagsRewriteModuleSpecifiers != 0 && b.ch.compilerOptions.RewriteRelativeImportExtensions.IsTrue() {
 		rewrites := b.ctx.host.ContentMapperExtensionRewrites()
 		caseSensitivity := b.ctx.host.CaseSensitivity()
+		if b.ctx.enclosingFile != nil {
+			rewrites = contentmapper.RewritesForImport(rewrites, b.ctx.enclosingFile.FileName(), specifier, b.ctx.host.ContentMapperExtensionForFileName, caseSensitivity)
+		}
 		if specifier.ShouldRewriteExtension(rewrites, caseSensitivity) {
 			rewritten, _ := specifier.RewriteExtension(rewrites, caseSensitivity)
 			return rewritten
@@ -2944,7 +2978,7 @@ func (b *NodeBuilderImpl) createAnonymousTypeNodeEx(t *Type, forceClassExpansion
 				// in turn try to reuse the same node again. Mark the type as visited around the reuse
 				// attempt so the inner recursion bottoms out via the visitedTypes guard below.
 				if b.ctx.visitedTypes.Has(typeId) {
-					return b.createCyclicStructurePlaceholder()
+					return b.createElidedInformationPlaceholder()
 				}
 				b.ctx.visitedTypes.Add(typeId)
 				typeNode := b.tryReuseExistingNonParameterTypeNode(existing, t, nil, nil)
@@ -2954,7 +2988,7 @@ func (b *NodeBuilderImpl) createAnonymousTypeNodeEx(t *Type, forceClassExpansion
 				}
 			}
 			if b.ctx.visitedTypes.Has(typeId) {
-				return b.createCyclicStructurePlaceholder()
+				return b.createElidedInformationPlaceholder()
 			}
 			return b.visitAndTransformType(t, (*NodeBuilderImpl).createTypeNodeFromObjectType)
 		}
@@ -2984,14 +3018,14 @@ func (b *NodeBuilderImpl) createAnonymousTypeNodeEx(t *Type, forceClassExpansion
 				// The specified symbol flags need to be reinterpreted as type flags
 				return b.symbolToTypeNode(typeAlias, ast.SymbolFlagsType, nil)
 			} else {
-				return b.createCyclicStructurePlaceholder()
+				return b.createElidedInformationPlaceholder()
 			}
 		} else {
 			return b.visitAndTransformType(t, (*NodeBuilderImpl).createTypeNodeFromObjectType)
 		}
 	} else if t.objectFlags&ObjectFlagsReverseMapped != 0 && b.ctx.flags&nodebuilder.FlagsAllowAnonymousIdentifier == 0 {
 		if b.ctx.visitedTypes.Has(typeId) {
-			return b.createCyclicStructurePlaceholder()
+			return b.createElidedInformationPlaceholder()
 		}
 		return b.visitAndTransformType(t, (*NodeBuilderImpl).createTypeNodeFromObjectType)
 	} else {
@@ -3020,19 +3054,15 @@ func (b *NodeBuilderImpl) getTypeFromTypeNode(node *ast.TypeNode, noMappedTypes 
 func (b *NodeBuilderImpl) typeToTypeNodeOrCircularityElision(t *Type) *ast.TypeNode {
 	if t.flags&TypeFlagsUnion != 0 {
 		if b.ctx.visitedTypes.Has(t.id) {
-			return b.createCyclicStructurePlaceholder()
+			if b.ctx.flags&nodebuilder.FlagsAllowAnonymousIdentifier == 0 {
+				b.ctx.encounteredError = true
+				b.ctx.tracker.ReportCyclicStructureError()
+			}
+			return b.createElidedInformationPlaceholder()
 		}
 		return b.visitAndTransformType(t, (*NodeBuilderImpl).typeToTypeNode)
 	}
 	return b.typeToTypeNode(t)
-}
-
-func (b *NodeBuilderImpl) createCyclicStructurePlaceholder() *ast.TypeNode {
-	if b.ctx.flags&nodebuilder.FlagsAllowAnonymousIdentifier == 0 {
-		b.ctx.encounteredError = true
-		b.ctx.tracker.ReportCyclicStructureError()
-	}
-	return b.createElidedInformationPlaceholder()
 }
 
 func (b *NodeBuilderImpl) conditionalTypeToTypeNode(_t *Type) *ast.TypeNode {
@@ -3256,19 +3286,21 @@ func (b *NodeBuilderImpl) visitAndTransformType(t *Type, transform func(b *NodeB
 		typeId = b.ch.createTypeReference(t.Target(), b.ch.getTypeArguments(t)).id
 	}
 	if b.ctx.visitedTypes.Has(typeId) {
-		return b.createCyclicStructurePlaceholder()
+		return b.createElidedInformationPlaceholder()
 	}
 
 	isConstructorObject := t.objectFlags&ObjectFlagsAnonymous != 0 && t.symbol != nil && t.symbol.Flags()&ast.SymbolFlagsClass != 0
 	var id *CompositeSymbolIdentity
 	switch {
-	case isArrayOrTuple:
-		// Do not bound finite container nesting by the shared Array symbol or tuple origin.
-		id = nil
 	case t.objectFlags&ObjectFlagsReference != 0 && t.AsTypeReference().node != nil:
+		// A deferred reference, array and tuple ones included, nests through its
+		// node, which is how a recursive type nests without end.
 		id = &CompositeSymbolIdentity{false, 0, ast.GetNodeId(t.AsTypeReference().node)}
 	case t.flags&TypeFlagsConditional != 0:
 		id = &CompositeSymbolIdentity{false, 0, ast.GetNodeId(t.AsConditionalType().root.node.AsNode())}
+	case isArrayOrTuple:
+		// Do not bound finite container nesting by the shared Array symbol or tuple origin.
+		id = nil
 	case t.symbol != nil:
 		id = &CompositeSymbolIdentity{isConstructorObject, ast.GetSymbolId(t.symbol), 0}
 	default:
@@ -3320,7 +3352,6 @@ func (b *NodeBuilderImpl) visitAndTransformType(t *Type, transform func(b *NodeB
 	if id != nil {
 		depth = b.ctx.symbolDepth[*id]
 		if depth > 10 {
-			b.ctx.truncating = true
 			return b.createElidedInformationPlaceholder()
 		}
 		b.ctx.symbolDepth[*id] = depth + 1
