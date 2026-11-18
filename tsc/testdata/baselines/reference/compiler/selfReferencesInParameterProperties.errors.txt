@@ -1,0 +1,33 @@
+selfReferencesInParameterProperties.ts(2,37): error TS2372: Parameter 'a' cannot reference itself.
+selfReferencesInParameterProperties.ts(7,36): error TS2372: Parameter 'b' cannot reference itself.
+selfReferencesInParameterProperties.ts(11,38): error TS2373: Parameter 'c' cannot reference identifier 'd' declared after it.
+
+
+==== selfReferencesInParameterProperties.ts (3 errors) ====
+    class DirectSelfReference {
+        constructor(private a: number = a) {}
+                                        ~
+!!! error TS2372: Parameter 'a' cannot reference itself.
+    }
+    
+    const b = 1;
+    class ShadowedOuterVariable {
+        constructor(public b: number = b) {}
+                                       ~
+!!! error TS2372: Parameter 'b' cannot reference itself.
+    }
+    
+    class ReferenceToLaterParameter {
+        constructor(readonly c: number = d, readonly d: number = 1) {}
+                                         ~
+!!! error TS2373: Parameter 'c' cannot reference identifier 'd' declared after it.
+    }
+    
+    class ReferenceToEarlierParameter {
+        constructor(private e: number, private f: number = e) {}
+    }
+    
+    class DeferredSelfReference {
+        constructor(private g: () => number = () => g()) {}
+    }
+    

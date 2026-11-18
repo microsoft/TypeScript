@@ -1,0 +1,48 @@
+//// [tests/cases/compiler/selfReferencesInParameterProperties.ts] ////
+
+=== selfReferencesInParameterProperties.ts ===
+class DirectSelfReference {
+>DirectSelfReference : Symbol(DirectSelfReference, Decl(selfReferencesInParameterProperties.ts, 0, 0))
+
+    constructor(private a: number = a) {}
+>a : Symbol(DirectSelfReference.a, Decl(selfReferencesInParameterProperties.ts, 1, 16))
+>a : Symbol(a, Decl(selfReferencesInParameterProperties.ts, 1, 16))
+}
+
+const b = 1;
+>b : Symbol(b, Decl(selfReferencesInParameterProperties.ts, 4, 5))
+
+class ShadowedOuterVariable {
+>ShadowedOuterVariable : Symbol(ShadowedOuterVariable, Decl(selfReferencesInParameterProperties.ts, 4, 12))
+
+    constructor(public b: number = b) {}
+>b : Symbol(ShadowedOuterVariable.b, Decl(selfReferencesInParameterProperties.ts, 6, 16))
+>b : Symbol(b, Decl(selfReferencesInParameterProperties.ts, 6, 16))
+}
+
+class ReferenceToLaterParameter {
+>ReferenceToLaterParameter : Symbol(ReferenceToLaterParameter, Decl(selfReferencesInParameterProperties.ts, 7, 1))
+
+    constructor(readonly c: number = d, readonly d: number = 1) {}
+>c : Symbol(ReferenceToLaterParameter.c, Decl(selfReferencesInParameterProperties.ts, 10, 16))
+>d : Symbol(d, Decl(selfReferencesInParameterProperties.ts, 10, 39))
+>d : Symbol(ReferenceToLaterParameter.d, Decl(selfReferencesInParameterProperties.ts, 10, 39))
+}
+
+class ReferenceToEarlierParameter {
+>ReferenceToEarlierParameter : Symbol(ReferenceToEarlierParameter, Decl(selfReferencesInParameterProperties.ts, 11, 1))
+
+    constructor(private e: number, private f: number = e) {}
+>e : Symbol(ReferenceToEarlierParameter.e, Decl(selfReferencesInParameterProperties.ts, 14, 16))
+>f : Symbol(ReferenceToEarlierParameter.f, Decl(selfReferencesInParameterProperties.ts, 14, 34))
+>e : Symbol(e, Decl(selfReferencesInParameterProperties.ts, 14, 16))
+}
+
+class DeferredSelfReference {
+>DeferredSelfReference : Symbol(DeferredSelfReference, Decl(selfReferencesInParameterProperties.ts, 15, 1))
+
+    constructor(private g: () => number = () => g()) {}
+>g : Symbol(DeferredSelfReference.g, Decl(selfReferencesInParameterProperties.ts, 18, 16))
+>g : Symbol(g, Decl(selfReferencesInParameterProperties.ts, 18, 16))
+}
+

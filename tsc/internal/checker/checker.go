@@ -1931,8 +1931,9 @@ func (c *Checker) onSuccessfullyResolvedSymbol(errorLocation *ast.Node, result *
 	if associatedDeclarationForContainingInitializerOrBindingName != nil && !withinDeferredContext && (meaning&ast.SymbolFlagsValue) == ast.SymbolFlagsValue {
 		candidate := c.getMergedSymbol(c.getLateBoundSymbol(result))
 		root := ast.GetRootDeclaration(associatedDeclarationForContainingInitializerOrBindingName)
-		// A parameter initializer or binding pattern initializer within a parameter cannot refer to itself
-		if candidate == c.getSymbolOfDeclaration(associatedDeclarationForContainingInitializerOrBindingName) {
+		// A parameter initializer or binding pattern initializer within a parameter cannot refer to itself.
+		// Compare declarations because the symbol of a parameter property declaration is its class property.
+		if candidate.ValueDeclaration() == associatedDeclarationForContainingInitializerOrBindingName {
 			c.error(errorLocation, diagnostics.Parameter_0_cannot_reference_itself, scanner.DeclarationNameToString(associatedDeclarationForContainingInitializerOrBindingName.Name()))
 		} else if candidate.ValueDeclaration() != nil && candidate.ValueDeclaration().Pos() > associatedDeclarationForContainingInitializerOrBindingName.Pos() && root.Parent.Locals() != nil && c.getSymbol(root.Parent.Locals(), candidate.Name(), meaning) == candidate {
 			c.error(errorLocation, diagnostics.Parameter_0_cannot_reference_identifier_1_declared_after_it, scanner.DeclarationNameToString(associatedDeclarationForContainingInitializerOrBindingName.Name()), scanner.DeclarationNameToString(errorLocation))
