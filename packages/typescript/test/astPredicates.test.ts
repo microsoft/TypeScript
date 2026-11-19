@@ -318,3 +318,14 @@ test("isStringTextContainingNode includes template fragments but not template ex
     assert.ok(ast.isStringTextContainingNode(factory.createStringLiteral("text", ast.TokenFlags.None)));
     assert.equal(ast.isStringTextContainingNode(factory.createTemplateExpression(factory.createTemplateHead("", "", ast.TokenFlags.None), [])), false);
 });
+
+test("isTypeElement includes accessors and synthetic elisions but excludes method declarations", () => {
+    const name = factory.createIdentifier("value");
+    const accessor: ast.Node = factory.createGetAccessorDeclaration(undefined, name, undefined, []);
+    assert.ok(ast.isTypeElement(accessor));
+    const narrowed: ast.TypeElement = accessor;
+    assert.equal(narrowed, accessor);
+    assert.ok(ast.isTypeElement(factory.createNotEmittedTypeElement()));
+    assert.ok(ast.isTypeElement(factory.createCallSignatureDeclaration(undefined, [])));
+    assert.equal(ast.isTypeElement(factory.createMethodDeclaration(undefined, undefined, name, undefined, undefined, [])), false);
+});

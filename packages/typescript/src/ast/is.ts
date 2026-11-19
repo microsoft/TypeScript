@@ -724,3 +724,19 @@ export function isStringLiteralOrJsxExpression(node: Node): node is ast.StringLi
 export function isStringTextContainingNode(node: Node): node is ast.StringLiteral | ast.TemplateLiteralToken {
     return guards.isStringLiteral(node) || guards.isTemplateLiteralToken(node);
 }
+
+export function isTypeElement(node: Node): node is ast.TypeElement {
+    switch (node.kind) {
+        case SyntaxKind.ConstructSignature:
+        case SyntaxKind.CallSignature:
+        case SyntaxKind.PropertySignature:
+        case SyntaxKind.MethodSignature:
+        case SyntaxKind.IndexSignature:
+        case SyntaxKind.GetAccessor:
+        case SyntaxKind.SetAccessor:
+        case SyntaxKind.NotEmittedTypeElement:
+            return true;
+        default:
+            return false;
+    }
+}
