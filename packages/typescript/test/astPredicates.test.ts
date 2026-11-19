@@ -285,3 +285,14 @@ test("isPropertyAccessOrQualifiedName accepts entity names and expressions, not 
     assert.ok(ast.isPropertyAccessOrQualifiedName(factory.createPropertyAccessExpression(name, undefined, name, ast.NodeFlags.None)));
     assert.equal(ast.isPropertyAccessOrQualifiedName(factory.createElementAccessExpression(name, undefined, name, ast.NodeFlags.None)), false);
 });
+
+test("isRestParameter supports syntactic rest parameters and JSDoc variadic types", () => {
+    const name = factory.createIdentifier("values");
+    const type = factory.createJSDocVariadicType(factory.createKeywordTypeNode(ast.SyntaxKind.StringKeyword));
+    assert.ok(ast.isRestParameter(factory.createParameterDeclaration(undefined, factory.createToken(ast.SyntaxKind.DotDotDotToken), name)));
+    assert.ok(ast.isRestParameter(factory.createParameterDeclaration(undefined, undefined, name, undefined, type)));
+    assert.ok(ast.isRestParameter(factory.createJSDocParameterTag(factory.createIdentifier("param"), name, false, type, false, undefined)));
+    assert.ok(ast.isRestParameter(factory.createJSDocParameterTag(factory.createIdentifier("param"), name, false, factory.createJSDocTypeExpression(type), false, undefined)));
+    assert.equal(ast.isRestParameter(factory.createParameterDeclaration(undefined, undefined, name)), false);
+    assert.equal(ast.isRestParameter(factory.createJSDocParameterTag(factory.createIdentifier("param"), name, false, undefined, false, undefined)), false);
+});

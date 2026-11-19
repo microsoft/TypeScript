@@ -707,3 +707,12 @@ export function isPropertyAccessChain(node: Node): node is ast.PropertyAccessCha
 export function isPropertyAccessOrQualifiedName(node: Node): node is ast.PropertyAccessExpression | ast.QualifiedName {
     return guards.isPropertyAccessExpression(node) || guards.isQualifiedName(node);
 }
+
+export function isRestParameter(node: ast.ParameterDeclaration | ast.JSDocParameterTag): boolean {
+    if (guards.isParameterDeclaration(node)) {
+        return node.dotDotDotToken !== undefined || node.type?.kind === SyntaxKind.JSDocVariadicType;
+    }
+    const type = node.typeExpression;
+    return type?.kind === SyntaxKind.JSDocVariadicType ||
+        type?.kind === SyntaxKind.JSDocTypeExpression && (type as JSDocTypeExpression).type.kind === SyntaxKind.JSDocVariadicType;
+}
