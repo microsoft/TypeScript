@@ -4,6 +4,7 @@ import {
     type FormatDiagnosticsHost,
     formatDiagnosticsWithColorAndContext,
 } from "@typescript/typescript/async";
+import { toRootedFilePath } from "@typescript/typescript/path";
 import assert from "node:assert";
 import {
     describe,
@@ -118,6 +119,102 @@ describe("diagnosticFormatter", { concurrency: areTestsFiltered() }, () => {
         }
         finally {
             await api.close();
+        }
+    });
+
+    test("formats related information with or without source locations", () => {
+        const host: FormatDiagnosticsHost = {
+            getCurrentDirectory: () => "/project",
+            getCanonicalFileName: fileName => fileName,
+            getNewLine: () => "\r\n",
+        };
+        const diagnostic = {
+            category: 1,
+            code: 2322,
+            pos: 0,
+            end: 1,
+            text: "Primary error.",
+        };
+        const located = {
+            category: 3,
+            code: 9998,
+            pos: 0,
+            end: 1,
+            fileName: toRootedFilePath("/project/related.ts", undefined),
+            startPosition: { line: 0, character: 0 },
+            endPosition: { line: 0, character: 1 },
+            sourceLines: [{ line: 0, text: "x" }],
+            text: "Located explanation.",
+        };
+        const locationless = {
+            category: 3,
+            code: 9999,
+            pos: 0,
+            end: 0,
+            text: "This related explanation must remain visible.",
+            messageChain: [{
+                category: 3,
+                code: 9999,
+                pos: 0,
+                end: 0,
+                text: "Nested explanation.",
+                messageChain: [{
+                    category: 3,
+                    code: 9999,
+                    pos: 0,
+                    end: 0,
+                    text: "Most specific explanation.",
+                }],
+            }],
+        };
+        const stripColors = (text: string) => text.replace(/\x1b\[[0-9;]*m/g, "");
+
+        const output = stripColors(formatDiagnosticsWithColorAndContext([{
+            ...diagnostic,
+            relatedInformation: [located, locationless],
+        }], host));
+        assert.ok(output.includes(" - Located explanation."), output);
+        assert.ok(output.includes("related.ts:1:1"), output);
+        assert.ok(output.includes("1 x\r\n      ~"), output);
+        assert.ok(output.includes("  This related explanation must remain visible.\r\n    Nested explanation.\r\n      Most specific explanation."), output);
+
+        const locationlessOnly = stripColors(formatDiagnosticsWithColorAndContext([{
+            ...diagnostic,
+            relatedInformation: [locationless],
+        }], host));
+        assert.ok(locationlessOnly.includes("Primary error."), locationlessOnly);
+        assert.ok(locationlessOnly.includes("This related explanation must remain visible."), locationlessOnly);
+        assert.ok(locationlessOnly.includes("\r\n    Nested explanation.\r\n      Most specific explanation."), locationlessOnly);
+        const lfHost = { ...host, getNewLine: () => "\n" };
+        const lfOutput = stripColors(formatDiagnosticsWithColorAndContext([{
+            ...diagnostic,
+            relatedInformation: [locationless],
+        }], lfHost));
+        assert.ok(lfOutput.includes("\n    Nested explanation.\n      Most specific explanation."), lfOutput);
+
+        const partialLocations = stripColors(formatDiagnosticsWithColorAndContext([{
+            ...diagnostic,
+            relatedInformation: [
+                { ...locationless, fileName: toRootedFilePath("/project/related.ts", undefined) },
+                { ...locationless, startPosition: { line: 0, character: 0 } },
+                {
+                    ...locationless,
+                    startPosition: { line: 0, character: 0 },
+                    endPosition: { line: 0, character: 1 },
+                    sourceLines: [{ line: 0, text: "x" }],
+                },
+            ],
+        }], host));
+        assert.equal((partialLocations.match(/This related explanation must remain visible\./g) ?? []).length, 3, partialLocations);
+        assert.ok(!partialLocations.includes("related.ts:1:1"), partialLocations);
+        assert.ok(partialLocations.includes("1 x\r\n      ~"), partialLocations);
+
+        for (const relatedInformation of [undefined, []]) {
+            const withoutRelated = stripColors(formatDiagnosticsWithColorAndContext([{
+                ...diagnostic,
+                relatedInformation,
+            }], host));
+            assert.equal(withoutRelated, "error TS2322: Primary error.");
         }
     });
 
