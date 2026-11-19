@@ -7,17 +7,21 @@ import type { LanguageVariant } from "../../enums/languageVariant.js";
 import type { NodeFlags } from "../../enums/nodeFlags.js";
 import type { ScriptKind } from "../../enums/scriptKind.js";
 import { SyntaxKind } from "../../enums/syntaxKind.js";
-import type * as generated from "./ast.generated.ts";
 import type {
     AssertionExpression,
     BindingElement,
+    BindingPattern,
+    CallExpression,
     CaseClause,
     ComputedPropertyName,
     Decorator,
     DoStatement,
+    ElementAccessExpression,
     EndOfFile,
     EntityName,
     EnumMember,
+    ExportDeclaration,
+    ExportSpecifier,
     Expression,
     ExpressionStatement,
     ForInStatement,
@@ -25,12 +29,20 @@ import type {
     ForStatement,
     Identifier,
     IfStatement,
+    ImportClause,
+    ImportEqualsDeclaration,
+    ImportSpecifier,
     JSDoc,
     JsxAttribute,
     JsxExpression,
     JsxSpreadAttribute,
     KeywordSyntaxKind,
     ModifierSyntaxKind,
+    NamedExports,
+    NamedImports,
+    NamespaceExport,
+    NamespaceImport,
+    NonNullExpression,
     ParameterDeclaration,
     PropertyAccessExpression,
     PropertyAssignment,
@@ -65,18 +77,18 @@ export interface AutoAccessorPropertyDeclaration extends PropertyDeclaration {
 }
 
 declare const optionalChainBrand: unique symbol;
-export interface CallChain extends generated.CallExpression {
+export interface CallChain extends CallExpression {
     readonly [optionalChainBrand]: void;
 }
 
-export interface ElementAccessChain extends generated.ElementAccessExpression {
+export interface ElementAccessChain extends ElementAccessExpression {
     readonly [optionalChainBrand]: void;
 }
 
 declare const emptyBindingPatternBrand: unique symbol;
-export type EmptyBindingPattern = generated.BindingPattern & { readonly [emptyBindingPatternBrand]: void; };
+export type EmptyBindingPattern = BindingPattern & { readonly [emptyBindingPatternBrand]: void; };
 
-export interface NonNullChain extends generated.NonNullExpression {
+export interface NonNullChain extends NonNullExpression {
     readonly [optionalChainBrand]: void;
 }
 
@@ -92,23 +104,23 @@ export interface ParameterPropertyDeclaration extends ParameterDeclaration {
 }
 
 export type TypeOnlyImportDeclaration =
-    | generated.ImportClause & { readonly phaseModifier: SyntaxKind.TypeKeyword; }
-    | generated.ImportEqualsDeclaration & { readonly isTypeOnly: true; }
-    | generated.NamespaceImport & { readonly parent: generated.ImportClause & { readonly phaseModifier: SyntaxKind.TypeKeyword; }; }
-    | generated.ImportSpecifier
+    | ImportClause & { readonly phaseModifier: SyntaxKind.TypeKeyword; }
+    | ImportEqualsDeclaration & { readonly isTypeOnly: true; }
+    | NamespaceImport & { readonly parent: ImportClause & { readonly phaseModifier: SyntaxKind.TypeKeyword; }; }
+    | ImportSpecifier
         & (
             | { readonly isTypeOnly: true; }
-            | { readonly parent: generated.NamedImports & { readonly parent: generated.ImportClause & { readonly phaseModifier: SyntaxKind.TypeKeyword; }; }; }
+            | { readonly parent: NamedImports & { readonly parent: ImportClause & { readonly phaseModifier: SyntaxKind.TypeKeyword; }; }; }
         );
 
 export type TypeOnlyExportDeclaration =
-    | generated.ExportSpecifier
+    | ExportSpecifier
         & (
             | { readonly isTypeOnly: true; }
-            | { readonly parent: generated.NamedExports & { readonly parent: generated.ExportDeclaration & { readonly isTypeOnly: true; }; }; }
+            | { readonly parent: NamedExports & { readonly parent: ExportDeclaration & { readonly isTypeOnly: true; }; }; }
         )
-    | generated.ExportDeclaration & { readonly isTypeOnly: true; readonly moduleSpecifier: generated.Expression; readonly exportClause?: undefined; }
-    | generated.NamespaceExport & { readonly parent: generated.ExportDeclaration & { readonly isTypeOnly: true; }; };
+    | ExportDeclaration & { readonly isTypeOnly: true; readonly moduleSpecifier: Expression; readonly exportClause?: undefined; }
+    | NamespaceExport & { readonly parent: ExportDeclaration & { readonly isTypeOnly: true; }; };
 
 export type TypeOnlyAliasDeclaration = TypeOnlyImportDeclaration | TypeOnlyExportDeclaration;
 

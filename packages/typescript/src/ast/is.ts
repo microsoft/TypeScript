@@ -6,63 +6,139 @@ import { NodeFlags } from "../../enums/nodeFlags.js";
 import { OuterExpressionKinds } from "../../enums/outerExpressionKinds.js";
 import { ScriptKind } from "../../enums/scriptKind.js";
 import { SyntaxKind } from "../../enums/syntaxKind.js";
-import type * as ast from "./ast.ts";
 import type {
+    ArrayBindingElement,
     AsExpression,
+    AutoAccessorPropertyDeclaration,
+    BindingElement,
+    BindingName,
     BindingPattern,
     BlockOrExpression,
     BooleanLiteral,
+    CallChain,
+    CallExpression,
+    ClassElement,
     ComputedPropertyName,
     ConciseBody,
+    ConstructorTypeNode,
+    Declaration,
+    DoStatement,
+    ElementAccessChain,
+    EmptyBindingPattern,
     ExclamationToken,
+    ExportDeclaration,
+    ExportSpecifier,
     Expression,
     ExpressionWithTypeArguments,
     ForInitializer,
     ForInOrOfStatement,
+    ForInStatement,
+    ForOfStatement,
     ForStatement,
+    FunctionTypeNode,
     Identifier,
+    ImportClause,
+    ImportEqualsDeclaration,
+    ImportSpecifier,
     JSDocLink,
     JSDocLinkCode,
     JSDocLinkPlain,
+    JSDocParameterTag,
+    JSDocSignature,
+    JSDocTemplateTag,
     JSDocTypeExpression,
     JSDocTypeLiteral,
+    JsxAttributeLike,
+    JsxExpression,
+    JsxOpeningElement,
+    JsxOpeningFragment,
+    JsxSelfClosingElement,
     JsxTagNameExpression,
+    LabeledStatement,
     LeftHandSideExpression,
     LiteralExpression,
     MetaProperty,
     MinusToken,
     ModuleDeclaration,
+    NewExpression,
     Node,
+    NonNullChain,
     NonNullExpression,
     NullLiteral,
+    ObjectLiteralElementLike,
+    OptionalChain,
+    ParameterDeclaration,
+    ParameterPropertyDeclaration,
     ParenthesizedExpression,
     PartiallyEmittedExpression,
     PlusToken,
     PrefixUnaryExpression,
+    PropertyAccessChain,
+    PropertyAccessExpression,
+    PropertyDeclaration,
+    QualifiedName,
     QuestionToken,
     ReadonlyKeyword,
     SatisfiesExpression,
+    SignatureDeclaration,
     Statement,
+    StringLiteral,
+    TaggedTemplateExpression,
+    TemplateLiteralToken,
     TemplateMiddle,
     TemplateTail,
     ThisTypeNode,
     TypeAssertion,
+    TypeElement,
     TypeNode,
+    TypeOnlyAliasDeclaration,
+    TypeOnlyExportDeclaration,
+    TypeOnlyImportDeclaration,
+    TypeParameterDeclaration,
     UnaryExpressionBase,
+    WhileStatement,
 } from "./ast.ts";
-import * as guards from "./is.generated.ts";
 import {
+    isAccessExpression,
     isBinaryExpression,
+    isCallExpression,
     isClassLikeDeclaration,
     isComputedPropertyName,
+    isConstructorDeclaration,
+    isConstructorTypeNode,
+    isElementAccessExpression,
+    isExportDeclaration,
+    isExportSpecifier,
+    isFunctionTypeNode,
     isHeritageClause,
     isIdentifier,
+    isImportClause,
+    isImportSpecifier,
+    isImportTypeNode,
+    isJSDocAugmentsTag,
+    isJSDocImplementsTag,
     isJSDocLink,
     isJSDocLinkCode,
     isJSDocLinkPlain,
     isJSDocNameReference,
+    isJSDocSignature,
+    isJsxAttributeLike,
+    isJsxExpression,
+    isJsxOpeningElement,
+    isJsxOpeningFragment,
+    isJsxSelfClosingElement,
     isLiteralExpression,
+    isNonNullExpression,
+    isObjectLiteralElementLike,
+    isOmittedExpression,
+    isParameterDeclaration,
+    isPropertyAccessExpression,
+    isQualifiedName,
     isShorthandPropertyAssignment,
+    isSignatureDeclaration,
+    isStringLiteral,
+    isTemplateLiteralToken,
+    isTypeReferenceNode,
 } from "./is.generated.ts";
 import {
     hasExpression,
@@ -72,9 +148,9 @@ import {
 
 export * from "./is.generated.ts";
 
-export function isAutoAccessorPropertyDeclaration(node: Node): node is ast.AutoAccessorPropertyDeclaration {
+export function isAutoAccessorPropertyDeclaration(node: Node): node is AutoAccessorPropertyDeclaration {
     return node.kind === SyntaxKind.PropertyDeclaration &&
-        !!((node as ast.PropertyDeclaration).modifierFlags & ModifierFlags.Accessor);
+        !!((node as PropertyDeclaration).modifierFlags & ModifierFlags.Accessor);
 }
 
 type JSDocNamespaceDeclaration = ModuleDeclaration;
@@ -585,11 +661,11 @@ export function isJsxTagNameExpression(node: Node): node is JsxTagNameExpression
         || kind === SyntaxKind.JsxNamespacedName;
 }
 
-export function isCallChain(node: Node): node is ast.CallChain {
-    return guards.isCallExpression(node) && !!(node.flags & NodeFlags.OptionalChain);
+export function isCallChain(node: Node): node is CallChain {
+    return isCallExpression(node) && !!(node.flags & NodeFlags.OptionalChain);
 }
 
-export function isClassElement(node: Node): node is ast.ClassElement {
+export function isClassElement(node: Node): node is ClassElement {
     switch (node.kind) {
         case SyntaxKind.Constructor:
         case SyntaxKind.PropertyDeclaration:
@@ -606,11 +682,11 @@ export function isClassElement(node: Node): node is ast.ClassElement {
 }
 
 export function isConstTypeReference(node: Node): boolean {
-    return guards.isTypeReferenceNode(node) && isIdentifier(node.typeName) &&
+    return isTypeReferenceNode(node) && isIdentifier(node.typeName) &&
         node.typeName.text === "const" && !node.typeArguments;
 }
 
-export function isDeclarationStatement(node: Node): node is ast.Statement & ast.Declaration {
+export function isDeclarationStatement(node: Node): node is Statement & Declaration {
     switch (node.kind) {
         case SyntaxKind.FunctionDeclaration:
         case SyntaxKind.MissingDeclaration:
@@ -632,33 +708,33 @@ export function isDeclarationStatement(node: Node): node is ast.Statement & ast.
     }
 }
 
-export function isElementAccessChain(node: Node): node is ast.ElementAccessChain {
-    return guards.isElementAccessExpression(node) && !!(node.flags & NodeFlags.OptionalChain);
+export function isElementAccessChain(node: Node): node is ElementAccessChain {
+    return isElementAccessExpression(node) && !!(node.flags & NodeFlags.OptionalChain);
 }
 
-export function isEmptyBindingElement(node: ast.BindingElement | ast.ArrayBindingElement): boolean {
-    return guards.isOmittedExpression(node) || !node.name ||
+export function isEmptyBindingElement(node: BindingElement | ArrayBindingElement): boolean {
+    return isOmittedExpression(node) || !node.name ||
         isBindingPattern(node.name) && node.name.elements.every(isEmptyBindingElement);
 }
 
-export function isEmptyBindingPattern(node: ast.BindingName): node is ast.EmptyBindingPattern {
+export function isEmptyBindingPattern(node: BindingName): node is EmptyBindingPattern {
     return isBindingPattern(node) && node.elements.every(isEmptyBindingElement);
 }
 
-export function isFunctionLike(node: Node | undefined): node is ast.SignatureDeclaration | ast.JSDocSignature {
-    return !!node && (guards.isSignatureDeclaration(node) || guards.isJSDocSignature(node));
+export function isFunctionLike(node: Node | undefined): node is SignatureDeclaration | JSDocSignature {
+    return !!node && (isSignatureDeclaration(node) || isJSDocSignature(node));
 }
 
-export function isFunctionOrConstructorTypeNode(node: Node): node is ast.FunctionTypeNode | ast.ConstructorTypeNode {
-    return guards.isFunctionTypeNode(node) || guards.isConstructorTypeNode(node);
+export function isFunctionOrConstructorTypeNode(node: Node): node is FunctionTypeNode | ConstructorTypeNode {
+    return isFunctionTypeNode(node) || isConstructorTypeNode(node);
 }
 
-export function isImportOrExportSpecifier(node: Node): node is ast.ImportSpecifier | ast.ExportSpecifier {
-    return guards.isImportSpecifier(node) || guards.isExportSpecifier(node);
+export function isImportOrExportSpecifier(node: Node): node is ImportSpecifier | ExportSpecifier {
+    return isImportSpecifier(node) || isExportSpecifier(node);
 }
 
-export function isIterationStatement(node: Node, lookInLabeledStatements: false): node is ast.DoStatement | ast.WhileStatement | ast.ForStatement | ast.ForInStatement | ast.ForOfStatement;
-export function isIterationStatement(node: Node, lookInLabeledStatements: boolean): node is ast.DoStatement | ast.WhileStatement | ast.ForStatement | ast.ForInStatement | ast.ForOfStatement | ast.LabeledStatement;
+export function isIterationStatement(node: Node, lookInLabeledStatements: false): node is DoStatement | WhileStatement | ForStatement | ForInStatement | ForOfStatement;
+export function isIterationStatement(node: Node, lookInLabeledStatements: boolean): node is DoStatement | WhileStatement | ForStatement | ForInStatement | ForOfStatement | LabeledStatement;
 export function isIterationStatement(node: Node, lookInLabeledStatements: boolean): boolean {
     switch (node.kind) {
         case SyntaxKind.ForStatement:
@@ -668,48 +744,48 @@ export function isIterationStatement(node: Node, lookInLabeledStatements: boolea
         case SyntaxKind.WhileStatement:
             return true;
         case SyntaxKind.LabeledStatement:
-            return lookInLabeledStatements && isIterationStatement((node as ast.LabeledStatement).statement, true);
+            return lookInLabeledStatements && isIterationStatement((node as LabeledStatement).statement, true);
         default:
             return false;
     }
 }
 
-export function isJsxCallLike(node: Node): node is ast.JsxOpeningElement | ast.JsxSelfClosingElement | ast.JsxOpeningFragment {
-    return guards.isJsxOpeningElement(node) || guards.isJsxSelfClosingElement(node) || guards.isJsxOpeningFragment(node);
+export function isJsxCallLike(node: Node): node is JsxOpeningElement | JsxSelfClosingElement | JsxOpeningFragment {
+    return isJsxOpeningElement(node) || isJsxSelfClosingElement(node) || isJsxOpeningFragment(node);
 }
 
-export function isNonNullChain(node: Node): node is ast.NonNullChain {
-    return guards.isNonNullExpression(node) && !!(node.flags & NodeFlags.OptionalChain);
+export function isNonNullChain(node: Node): node is NonNullChain {
+    return isNonNullExpression(node) && !!(node.flags & NodeFlags.OptionalChain);
 }
 
 export function isNullishCoalesce(node: Node): boolean {
     return isBinaryExpression(node) && node.operatorToken.kind === SyntaxKind.QuestionQuestionToken;
 }
 
-export function isObjectLiteralElement(node: Node): node is ast.ObjectLiteralElementLike | ast.JsxAttributeLike {
-    return guards.isObjectLiteralElementLike(node) || guards.isJsxAttributeLike(node);
+export function isObjectLiteralElement(node: Node): node is ObjectLiteralElementLike | JsxAttributeLike {
+    return isObjectLiteralElementLike(node) || isJsxAttributeLike(node);
 }
 
-export function isOptionalChain(node: Node): node is ast.OptionalChain {
+export function isOptionalChain(node: Node): node is OptionalChain {
     return !!(node.flags & NodeFlags.OptionalChain) &&
-        (guards.isAccessExpression(node) || guards.isCallExpression(node) || guards.isNonNullExpression(node));
+        (isAccessExpression(node) || isCallExpression(node) || isNonNullExpression(node));
 }
 
-export function isParameterPropertyDeclaration(node: Node, parent: Node): node is ast.ParameterPropertyDeclaration {
-    return guards.isParameterDeclaration(node) && !!(node.modifierFlags & ModifierFlags.ParameterPropertyModifier) &&
-        guards.isConstructorDeclaration(parent);
+export function isParameterPropertyDeclaration(node: Node, parent: Node): node is ParameterPropertyDeclaration {
+    return isParameterDeclaration(node) && !!(node.modifierFlags & ModifierFlags.ParameterPropertyModifier) &&
+        isConstructorDeclaration(parent);
 }
 
-export function isPropertyAccessChain(node: Node): node is ast.PropertyAccessChain {
-    return guards.isPropertyAccessExpression(node) && !!(node.flags & NodeFlags.OptionalChain);
+export function isPropertyAccessChain(node: Node): node is PropertyAccessChain {
+    return isPropertyAccessExpression(node) && !!(node.flags & NodeFlags.OptionalChain);
 }
 
-export function isPropertyAccessOrQualifiedName(node: Node): node is ast.PropertyAccessExpression | ast.QualifiedName {
-    return guards.isPropertyAccessExpression(node) || guards.isQualifiedName(node);
+export function isPropertyAccessOrQualifiedName(node: Node): node is PropertyAccessExpression | QualifiedName {
+    return isPropertyAccessExpression(node) || isQualifiedName(node);
 }
 
-export function isRestParameter(node: ast.ParameterDeclaration | ast.JSDocParameterTag): boolean {
-    if (guards.isParameterDeclaration(node)) {
+export function isRestParameter(node: ParameterDeclaration | JSDocParameterTag): boolean {
+    if (isParameterDeclaration(node)) {
         return node.dotDotDotToken !== undefined || node.type?.kind === SyntaxKind.JSDocVariadicType;
     }
     const type = node.typeExpression;
@@ -717,15 +793,15 @@ export function isRestParameter(node: ast.ParameterDeclaration | ast.JSDocParame
         type?.kind === SyntaxKind.JSDocTypeExpression && (type as JSDocTypeExpression).type.kind === SyntaxKind.JSDocVariadicType;
 }
 
-export function isStringLiteralOrJsxExpression(node: Node): node is ast.StringLiteral | ast.JsxExpression {
-    return guards.isStringLiteral(node) || guards.isJsxExpression(node);
+export function isStringLiteralOrJsxExpression(node: Node): node is StringLiteral | JsxExpression {
+    return isStringLiteral(node) || isJsxExpression(node);
 }
 
-export function isStringTextContainingNode(node: Node): node is ast.StringLiteral | ast.TemplateLiteralToken {
-    return guards.isStringLiteral(node) || guards.isTemplateLiteralToken(node);
+export function isStringTextContainingNode(node: Node): node is StringLiteral | TemplateLiteralToken {
+    return isStringLiteral(node) || isTemplateLiteralToken(node);
 }
 
-export function isTypeElement(node: Node): node is ast.TypeElement {
+export function isTypeElement(node: Node): node is TypeElement {
     switch (node.kind) {
         case SyntaxKind.ConstructSignature:
         case SyntaxKind.CallSignature:
@@ -741,47 +817,47 @@ export function isTypeElement(node: Node): node is ast.TypeElement {
     }
 }
 
-export function isClassOrTypeElement(node: Node): node is ast.ClassElement | ast.TypeElement {
+export function isClassOrTypeElement(node: Node): node is ClassElement | TypeElement {
     return isClassElement(node) || isTypeElement(node);
 }
 
-export function isTypeOnlyImportDeclaration(node: Node): node is ast.TypeOnlyImportDeclaration {
+export function isTypeOnlyImportDeclaration(node: Node): node is TypeOnlyImportDeclaration {
     switch (node.kind) {
         case SyntaxKind.ImportSpecifier: {
-            const specifier = node as ast.ImportSpecifier;
+            const specifier = node as ImportSpecifier;
             const clause = specifier.parent?.parent;
-            return specifier.isTypeOnly || !!clause && guards.isImportClause(clause) && clause.phaseModifier === SyntaxKind.TypeKeyword;
+            return specifier.isTypeOnly || !!clause && isImportClause(clause) && clause.phaseModifier === SyntaxKind.TypeKeyword;
         }
         case SyntaxKind.NamespaceImport:
-            return !!node.parent && guards.isImportClause(node.parent) && node.parent.phaseModifier === SyntaxKind.TypeKeyword;
+            return !!node.parent && isImportClause(node.parent) && node.parent.phaseModifier === SyntaxKind.TypeKeyword;
         case SyntaxKind.ImportClause:
-            return (node as ast.ImportClause).phaseModifier === SyntaxKind.TypeKeyword;
+            return (node as ImportClause).phaseModifier === SyntaxKind.TypeKeyword;
         case SyntaxKind.ImportEqualsDeclaration:
-            return (node as ast.ImportEqualsDeclaration).isTypeOnly;
+            return (node as ImportEqualsDeclaration).isTypeOnly;
         default:
             return false;
     }
 }
 
-export function isTypeOnlyExportDeclaration(node: Node): node is ast.TypeOnlyExportDeclaration {
+export function isTypeOnlyExportDeclaration(node: Node): node is TypeOnlyExportDeclaration {
     switch (node.kind) {
         case SyntaxKind.ExportSpecifier: {
-            const specifier = node as ast.ExportSpecifier;
+            const specifier = node as ExportSpecifier;
             const declaration = specifier.parent?.parent;
-            return specifier.isTypeOnly || !!declaration && guards.isExportDeclaration(declaration) && declaration.isTypeOnly;
+            return specifier.isTypeOnly || !!declaration && isExportDeclaration(declaration) && declaration.isTypeOnly;
         }
         case SyntaxKind.ExportDeclaration: {
-            const declaration = node as ast.ExportDeclaration;
+            const declaration = node as ExportDeclaration;
             return declaration.isTypeOnly && !!declaration.moduleSpecifier && !declaration.exportClause;
         }
         case SyntaxKind.NamespaceExport:
-            return !!node.parent && guards.isExportDeclaration(node.parent) && node.parent.isTypeOnly;
+            return !!node.parent && isExportDeclaration(node.parent) && node.parent.isTypeOnly;
         default:
             return false;
     }
 }
 
-export function isTypeOnlyImportOrExportDeclaration(node: Node): node is ast.TypeOnlyAliasDeclaration {
+export function isTypeOnlyImportOrExportDeclaration(node: Node): node is TypeOnlyAliasDeclaration {
     return isTypeOnlyImportDeclaration(node) || isTypeOnlyExportDeclaration(node);
 }
 
@@ -791,7 +867,7 @@ export function isPartOfTypeOnlyImportOrExportDeclaration(node: Node): boolean {
 
 export function isPartOfTypeNode(node: Node): boolean {
     function isTypeExpression(node: ExpressionWithTypeArguments): boolean {
-        return !!node.parent && (guards.isJSDocImplementsTag(node.parent) || guards.isJSDocAugmentsTag(node.parent) ||
+        return !!node.parent && (isJSDocImplementsTag(node.parent) || isJSDocAugmentsTag(node.parent) ||
             isPartOfTypeExpressionWithTypeArguments(node));
     }
 
@@ -817,8 +893,8 @@ export function isPartOfTypeNode(node: Node): boolean {
             return node.parent?.kind === SyntaxKind.MappedType || node.parent?.kind === SyntaxKind.InferType;
         case SyntaxKind.Identifier:
             if (
-                node.parent && (guards.isQualifiedName(node.parent) && node.parent.right === node ||
-                    guards.isPropertyAccessExpression(node.parent) && node.parent.name === node)
+                node.parent && (isQualifiedName(node.parent) && node.parent.right === node ||
+                    isPropertyAccessExpression(node.parent) && node.parent.name === node)
             ) {
                 node = node.parent;
             }
@@ -828,15 +904,15 @@ export function isPartOfTypeNode(node: Node): boolean {
         case SyntaxKind.ThisKeyword: {
             const parent = node.parent;
             if (!parent || parent.kind === SyntaxKind.TypeQuery) return false;
-            if (guards.isImportTypeNode(parent)) return !parent.isTypeOf;
+            if (isImportTypeNode(parent)) return !parent.isTypeOf;
             if (parent.kind >= SyntaxKind.FirstTypeNode && parent.kind <= SyntaxKind.LastTypeNode) return true;
             switch (parent.kind) {
                 case SyntaxKind.ExpressionWithTypeArguments:
                     return isTypeExpression(parent as ExpressionWithTypeArguments);
                 case SyntaxKind.TypeParameter:
-                    return (parent as ast.TypeParameterDeclaration).constraint === node;
+                    return (parent as TypeParameterDeclaration).constraint === node;
                 case SyntaxKind.JSDocTemplateTag:
-                    return (parent as ast.JSDocTemplateTag).constraint === node;
+                    return (parent as JSDocTemplateTag).constraint === node;
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.PropertySignature:
                 case SyntaxKind.Parameter:
@@ -857,7 +933,7 @@ export function isPartOfTypeNode(node: Node): boolean {
                 case SyntaxKind.CallExpression:
                 case SyntaxKind.NewExpression:
                 case SyntaxKind.TaggedTemplateExpression:
-                    return !!(parent as ast.CallExpression | ast.NewExpression | ast.TaggedTemplateExpression).typeArguments?.includes(node as TypeNode);
+                    return !!(parent as CallExpression | NewExpression | TaggedTemplateExpression).typeArguments?.includes(node as TypeNode);
             }
         }
     }
