@@ -88,7 +88,7 @@ func mappedExtension(content string) string {
 	return ".ts"
 }
 
-func transform(content string, options *collections.OrderedMap[string, json.Value]) (string, json.Value, []contentmapper.Diagnostic, *contentmapper.DiagnosticDirectives, error) {
+func transform(content string, options *collections.OrderedMap[string, json.Value]) (string, []contentmapper.SpanMapSegment, []contentmapper.Diagnostic, *contentmapper.DiagnosticDirectives, error) {
 	var virtual strings.Builder
 	var segments []spanmap.Segment
 	var diagnostics []contentmapper.Diagnostic
@@ -159,11 +159,7 @@ func transform(content string, options *collections.OrderedMap[string, json.Valu
 	}
 
 	spanMap := spanmap.New(segments)
-	mappings, err := spanMap.Marshal()
-	if err != nil {
-		return "", nil, nil, nil, err
-	}
-	return virtual.String(), json.Value(mappings), diagnostics, diagnosticDirectives(content, spanMap), nil
+	return virtual.String(), spanMap.Tuples(), diagnostics, diagnosticDirectives(content, spanMap), nil
 }
 
 func diagnosticDirectives(content string, mappings *spanmap.SpanMap) *contentmapper.DiagnosticDirectives {

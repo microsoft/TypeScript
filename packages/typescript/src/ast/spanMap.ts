@@ -2,20 +2,14 @@ import { SpanMapFeature } from "../../enums/spanMapFeature.js";
 import { SpanMapFidelity } from "../../enums/spanMapFidelity.js";
 import { SpanMapKind } from "../../enums/spanMapKind.js";
 import type { ReadonlyTextRange } from "./ast.ts";
+import type {
+    MappedPosition,
+    MappedRange,
+    SpanMapSegment,
+} from "./spanMapTypes.generated.ts";
 
 export { SpanMapFeature, SpanMapFidelity, SpanMapKind };
-
-// Keep this in sync with spanmap.go
-
-/** Maps one half-open virtual range to one half-open original range. */
-export interface SpanMapSegment {
-    readonly virtualStart: number;
-    readonly virtualEnd: number;
-    readonly originalStart: number;
-    readonly originalEnd: number;
-    readonly kind: SpanMapKind;
-    readonly features?: SpanMapFeature;
-}
+export type { MappedPosition, MappedRange, SpanMapSegment, SpanMapSegmentTuple } from "./spanMapTypes.generated.ts";
 
 /** Internal segment representation after omitted features have been normalized to `All`. */
 type NormalizedSpanMapSegment = SpanMapSegment & { readonly features: SpanMapFeature; };
@@ -25,18 +19,6 @@ interface OriginalIndex {
     readonly segments: readonly NormalizedSpanMapSegment[];
     readonly leafCount: number;
     readonly maxEnds: readonly number[];
-}
-
-/** One virtual projection of an original position and its mapping fidelity. */
-export interface MappedPosition {
-    readonly position: number;
-    readonly fidelity: SpanMapFidelity;
-}
-
-/** One virtual projection of an original range and its mapping fidelity. */
-export interface MappedRange {
-    readonly range: ReadonlyTextRange;
-    readonly fidelity: SpanMapFidelity;
 }
 
 /** Provides bidirectional span-aware mapping between virtual and original text. */
