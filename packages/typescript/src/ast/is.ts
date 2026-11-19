@@ -689,3 +689,8 @@ export function isNullishCoalesce(node: Node): boolean {
 export function isObjectLiteralElement(node: Node): node is ast.ObjectLiteralElementLike | ast.JsxAttributeLike {
     return guards.isObjectLiteralElementLike(node) || guards.isJsxAttributeLike(node);
 }
+
+export function isOptionalChain(node: Node): node is ast.OptionalChain {
+    return !!(node.flags & NodeFlags.OptionalChain) &&
+        (guards.isAccessExpression(node) || guards.isCallExpression(node) || guards.isNonNullExpression(node));
+}

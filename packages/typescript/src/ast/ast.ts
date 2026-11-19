@@ -80,6 +80,12 @@ export interface NonNullChain extends generated.NonNullExpression {
     readonly [optionalChainBrand]: void;
 }
 
+export interface PropertyAccessChain extends PropertyAccessExpression {
+    readonly [optionalChainBrand]: void;
+}
+
+export type OptionalChain = PropertyAccessChain | ElementAccessChain | CallChain | NonNullChain;
+
 // ── Core types ──
 
 declare const rootedPathBrand: unique symbol;

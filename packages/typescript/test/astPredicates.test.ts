@@ -240,3 +240,16 @@ test("isObjectLiteralElement includes JSX attributes as well as object spreads",
     assert.ok(ast.isObjectLiteralElement(factory.createSpreadAssignment(name)));
     assert.equal(ast.isObjectLiteralElement(factory.createPropertyDeclaration(undefined, name)), false);
 });
+
+test("isOptionalChain includes non-null continuations but rejects flagged unrelated nodes", () => {
+    const name = factory.createIdentifier("value");
+    const chain: ast.Node = factory.createNonNullExpression(name, ast.NodeFlags.OptionalChain);
+    assert.ok(ast.isOptionalChain(chain));
+    const narrowed: ast.OptionalChain = chain;
+    assert.equal(narrowed.expression, name);
+    assert.ok(ast.isOptionalChain(factory.createCallExpression(name, undefined, undefined, [], ast.NodeFlags.OptionalChain)));
+    assert.equal(ast.isOptionalChain(factory.createNonNullExpression(name, ast.NodeFlags.None)), false);
+    const unrelated = factory.createParenthesizedExpression(name);
+    Object.defineProperty(unrelated, "flags", { value: ast.NodeFlags.OptionalChain });
+    assert.equal(ast.isOptionalChain(unrelated), false);
+});
