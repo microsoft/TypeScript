@@ -685,3 +685,7 @@ export function isNonNullChain(node: Node): node is ast.NonNullChain {
 export function isNullishCoalesce(node: Node): boolean {
     return isBinaryExpression(node) && node.operatorToken.kind === SyntaxKind.QuestionQuestionToken;
 }
+
+export function isObjectLiteralElement(node: Node): node is ast.ObjectLiteralElementLike | ast.JsxAttributeLike {
+    return guards.isObjectLiteralElementLike(node) || guards.isJsxAttributeLike(node);
+}

@@ -229,3 +229,14 @@ test("isNullishCoalesce distinguishes nullish coalescing from logical OR", () =>
     assert.equal(ast.isNullishCoalesce(factory.createBinaryExpression(undefined, name, undefined, factory.createToken(ast.SyntaxKind.BarBarToken), name)), false);
     assert.equal(ast.isNullishCoalesce(name), false);
 });
+
+test("isObjectLiteralElement includes JSX attributes as well as object spreads", () => {
+    const name = factory.createIdentifier("value");
+    const attribute: ast.Node = factory.createJsxAttribute(name);
+    assert.ok(ast.isObjectLiteralElement(attribute));
+    const narrowed: ast.ObjectLiteralElementLike | ast.JsxAttributeLike = attribute;
+    assert.equal(narrowed, attribute);
+    assert.ok(ast.isObjectLiteralElement(factory.createJsxSpreadAttribute(name)));
+    assert.ok(ast.isObjectLiteralElement(factory.createSpreadAssignment(name)));
+    assert.equal(ast.isObjectLiteralElement(factory.createPropertyDeclaration(undefined, name)), false);
+});
