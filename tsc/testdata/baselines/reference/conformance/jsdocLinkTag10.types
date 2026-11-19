@@ -1,0 +1,19 @@
+//// [tests/cases/conformance/jsdoc/jsdocLinkTag10.ts] ////
+
+=== /a.ts ===
+/**
+ * {@link Foo.member | static}
+ * {@link Foo#member | instance}
+ */
+class Foo {
+>Foo : Foo
+
+    static member = 123;
+>member : number
+>123 : 123
+
+    member = 456;
+>member : number
+>456 : 456
+}
+

@@ -325,6 +325,13 @@ func IsEntityName(node *Node) bool {
 	return node.Kind == KindIdentifier || node.Kind == KindQualifiedName
 }
 
+// IsJSDocMemberName reports whether a QualifiedName was parsed from a JSDoc link
+// name using the '#' separator (Foo#member). Such a name refers to an instance
+// member, unlike a '.' name, which resolves to a static member first.
+func IsJSDocMemberName(node *Node) bool {
+	return node.Kind == KindQualifiedName && node.Flags&NodeFlagsJSDocMemberName != 0
+}
+
 func IsPropertyName(node *Node) bool {
 	switch node.Kind {
 	case KindIdentifier,

@@ -756,6 +756,10 @@ func (p *Parser) parseJSDocLinkName() *ast.Node {
 			p.scanner.ReScanHashToken()
 			p.nextTokenJSDoc()
 			name = p.finishNode(p.factory.NewQualifiedName(name, p.parseIdentifier()), pos)
+			// A '#' separator marks an instance member reference (Foo#member), unlike '.'
+			// which resolves to a static member first. Record the distinction here, since
+			// the checker cannot tell the two apart from a QualifiedName alone.
+			name.Flags |= ast.NodeFlagsJSDocMemberName
 		}
 		return name
 	}

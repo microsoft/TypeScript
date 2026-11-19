@@ -2637,8 +2637,12 @@ func (c *Checker) checkJSDocComment(node *ast.Node) {
 func (c *Checker) resolveJSDocMemberName(name *ast.Node) *ast.Symbol {
 	if name != nil && ast.IsEntityName(name) {
 		meaning := ast.SymbolFlagsType | ast.SymbolFlagsNamespace | ast.SymbolFlagsValue
-		if symbol := c.resolveEntityName(name, meaning, true /*ignoreErrors*/, true /*dontResolveAlias*/, ast.GetHostSignatureFromJSDoc(name)); symbol != nil {
-			return symbol
+		// A '#' link (Foo#member) refers to an instance member, so it must not
+		// resolve through the static members the way a '.' link does.
+		if !ast.IsJSDocMemberName(name) {
+			if symbol := c.resolveEntityName(name, meaning, true /*ignoreErrors*/, true /*dontResolveAlias*/, ast.GetHostSignatureFromJSDoc(name)); symbol != nil {
+				return symbol
+			}
 		}
 		if ast.IsQualifiedName(name) {
 			if symbol := c.resolveJSDocMemberName(name.AsQualifiedName().Left); symbol != nil {
@@ -32831,7 +32835,12 @@ func (c *Checker) getSymbolOfNameOrPropertyAccessExpression(name *ast.Node) *ast
 					)
 				}
 			} else {
-				c.checkQualifiedName(name, CheckModeNormal)
+				// A '#' link (Foo#member) refers to an instance member. checkQualifiedName
+				// would resolve it to the static member, so resolve it as a JSDoc member
+				// name instead.
+				if !(isJSDoc && ast.IsJSDocMemberName(name)) {
+					c.checkQualifiedName(name, CheckModeNormal)
+				}
 			}
 			if links.resolvedSymbol == nil && isJSDoc && ast.IsQualifiedName(name) {
 				return c.resolveJSDocMemberName(name)

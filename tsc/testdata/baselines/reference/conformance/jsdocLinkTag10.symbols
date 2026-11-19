@@ -1,0 +1,17 @@
+//// [tests/cases/conformance/jsdoc/jsdocLinkTag10.ts] ////
+
+=== /a.ts ===
+/**
+ * {@link Foo.member | static}
+ * {@link Foo#member | instance}
+ */
+class Foo {
+>Foo : Symbol(Foo, Decl(a.ts, 0, 0))
+
+    static member = 123;
+>member : Symbol(Foo.member, Decl(a.ts, 4, 11))
+
+    member = 456;
+>member : Symbol(Foo.member, Decl(a.ts, 5, 24))
+}
+
