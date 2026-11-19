@@ -91,6 +91,16 @@ export interface ParameterPropertyDeclaration extends ParameterDeclaration {
     readonly [parameterPropertyBrand]: void;
 }
 
+export type TypeOnlyImportDeclaration =
+    | generated.ImportClause & { readonly phaseModifier: SyntaxKind.TypeKeyword; }
+    | generated.ImportEqualsDeclaration & { readonly isTypeOnly: true; }
+    | generated.NamespaceImport & { readonly parent: generated.ImportClause & { readonly phaseModifier: SyntaxKind.TypeKeyword; }; }
+    | generated.ImportSpecifier
+        & (
+            | { readonly isTypeOnly: true; }
+            | { readonly parent: generated.NamedImports & { readonly parent: generated.ImportClause & { readonly phaseModifier: SyntaxKind.TypeKeyword; }; }; }
+        );
+
 // ── Core types ──
 
 declare const rootedPathBrand: unique symbol;

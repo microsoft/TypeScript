@@ -338,3 +338,30 @@ test("isClassOrTypeElement unifies class-only and type-only members", () => {
     assert.ok(ast.isClassOrTypeElement(factory.createCallSignatureDeclaration(undefined, [])));
     assert.equal(ast.isClassOrTypeElement(factory.createPropertyAssignment(undefined, factory.createIdentifier("value"), undefined, undefined, factory.createNumericLiteral("1", ast.TokenFlags.None))), false);
 });
+
+test("isTypeOnlyImportDeclaration inherits type-only status but not defer status", () => {
+    const name = factory.createIdentifier("value");
+    const specifier = factory.createImportSpecifier(false, undefined, name);
+    const bindings = factory.createNamedImports([specifier]);
+    const clause = factory.createImportClause(ast.SyntaxKind.TypeKeyword, undefined, bindings);
+    Object.defineProperty(specifier, "parent", { value: bindings });
+    Object.defineProperty(bindings, "parent", { value: clause });
+    const node: ast.Node = specifier;
+    assert.ok(ast.isTypeOnlyImportDeclaration(node));
+    const narrowed: ast.TypeOnlyImportDeclaration = node;
+    assert.equal(narrowed, specifier);
+    assert.ok(ast.isTypeOnlyImportDeclaration(clause));
+    assert.ok(ast.isTypeOnlyImportDeclaration(factory.createImportSpecifier(true, undefined, name)));
+    assert.equal(ast.isTypeOnlyImportDeclaration(factory.createImportClause(ast.SyntaxKind.DeferKeyword, name)), false);
+    assert.equal(ast.isTypeOnlyImportDeclaration(factory.createIdentifier("value")), false);
+    const valueSpecifier = factory.createImportSpecifier(false, undefined, name);
+    assert.equal(ast.isTypeOnlyImportDeclaration(valueSpecifier), false);
+    if (!ast.isTypeOnlyImportDeclaration(valueSpecifier)) {
+        assert.equal(valueSpecifier.name, name);
+    }
+    const namespace = factory.createNamespaceImport(name);
+    Object.defineProperty(namespace, "parent", { value: factory.createImportClause(ast.SyntaxKind.TypeKeyword, undefined, namespace) });
+    assert.ok(ast.isTypeOnlyImportDeclaration(namespace));
+    assert.ok(ast.isTypeOnlyImportDeclaration(factory.createImportEqualsDeclaration(undefined, true, name, name)));
+    assert.equal(ast.isTypeOnlyImportDeclaration(factory.createImportEqualsDeclaration(undefined, false, name, name)), false);
+});

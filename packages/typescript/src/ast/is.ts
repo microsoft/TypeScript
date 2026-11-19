@@ -744,3 +744,21 @@ export function isTypeElement(node: Node): node is ast.TypeElement {
 export function isClassOrTypeElement(node: Node): node is ast.ClassElement | ast.TypeElement {
     return isClassElement(node) || isTypeElement(node);
 }
+
+export function isTypeOnlyImportDeclaration(node: Node): node is ast.TypeOnlyImportDeclaration {
+    switch (node.kind) {
+        case SyntaxKind.ImportSpecifier: {
+            const specifier = node as ast.ImportSpecifier;
+            const clause = specifier.parent?.parent;
+            return specifier.isTypeOnly || !!clause && guards.isImportClause(clause) && clause.phaseModifier === SyntaxKind.TypeKeyword;
+        }
+        case SyntaxKind.NamespaceImport:
+            return !!node.parent && guards.isImportClause(node.parent) && node.parent.phaseModifier === SyntaxKind.TypeKeyword;
+        case SyntaxKind.ImportClause:
+            return (node as ast.ImportClause).phaseModifier === SyntaxKind.TypeKeyword;
+        case SyntaxKind.ImportEqualsDeclaration:
+            return (node as ast.ImportEqualsDeclaration).isTypeOnly;
+        default:
+            return false;
+    }
+}
