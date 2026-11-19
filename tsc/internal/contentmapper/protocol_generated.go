@@ -93,7 +93,7 @@ type MappedOutput struct {
 	Text string `json:"text"`
 	// Extension is the extension determining the virtual source file's syntax.
 	Extension string `json:"extension"`
-	// Mappings lists the span map tuples in the selected position encoding. Absent or empty mappings describe fully synthesized output.
+	// Mappings lists the span map tuples in the selected position encoding. Absent, null, or empty mappings describe fully synthesized output.
 	Mappings []SpanMapSegment `json:"mappings,omitempty"`
 	// DiagnosticDirectives contains the shared unused-expect diagnostics and compact diagnostic directive tuples.
 	DiagnosticDirectives *DiagnosticDirectives `json:"diagnosticDirectives,omitempty"`

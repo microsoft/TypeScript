@@ -16,7 +16,7 @@ import {
 
 interface Schema {
     $ref?: string;
-    type?: string;
+    type?: string | string[];
     description?: string;
     properties?: Record<string, Schema>;
     required?: string[];
@@ -194,10 +194,18 @@ function goName(name: string): string {
     return name[0].toUpperCase() + name.slice(1);
 }
 
+function schemaType(schema: Schema): string | undefined {
+    const type = schema.type;
+    if (!Array.isArray(type)) return type;
+    assert(type.length === 2 && type.includes("array") && type.includes("null"), `Unsupported schema type: ${type.join(", ")}`);
+    return "array";
+}
+
 function goType(schema: Schema, definitions: Record<string, Schema>): string {
     if (schema.$ref) return referenceName(schema.$ref, definitions);
-    if (schema.anyOf || (!schema.type && !schema.allOf)) return "json.Value";
-    switch (schema.type) {
+    const type = schemaType(schema);
+    if (schema.anyOf || (!type && !schema.allOf)) return "json.Value";
+    switch (type) {
         case "string":
             return "string";
         case "integer":
@@ -206,7 +214,7 @@ function goType(schema: Schema, definitions: Record<string, Schema>): string {
             assert(schema.items && !Array.isArray(schema.items), "Unsupported array items");
             return `[]${goType(schema.items, definitions)}`;
         default:
-            throw new Error(`Unsupported schema type: ${schema.type}`);
+            throw new Error(`Unsupported schema type: ${type}`);
     }
 }
 
@@ -224,7 +232,8 @@ function fieldDescription(name: string, schema: Schema, definitions: Record<stri
     const text = referencedDescription(schema, definitions);
     if (!text) return [];
     const target = schema.$ref ? definitions[referenceName(schema.$ref, definitions)] : schema;
-    const verb = target.type === "array" ? "lists" : !target.type || target.type === "object" ? "contains" : "is";
+    const type = schemaType(target);
+    const verb = type === "array" ? "lists" : !type || type === "object" ? "contains" : "is";
     return [`// ${name} ${verb} ${nounPhrase(text)}`];
 }
 

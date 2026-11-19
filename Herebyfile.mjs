@@ -2909,7 +2909,7 @@ async function testTypeScriptPackage(platforms) {
             packed[0].files.some(file => file.path === "dist/wasm/index.js"),
             "Main package is missing the WASM host entrypoint",
         );
-        for (const name of ["tsconfig", "jsconfig"]) {
+        for (const name of ["tsconfig", "jsconfig", "contentmapper"]) {
             const schemaPath = `schemas/${name}.schema.json`;
             assert(packed[0].files.some(file => file.path === schemaPath), `Package is missing ${schemaPath}`);
             assert.deepEqual(

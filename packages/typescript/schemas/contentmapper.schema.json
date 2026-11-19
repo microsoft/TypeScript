@@ -192,11 +192,11 @@
                     "description": "Extension determining the virtual source file's syntax."
                 },
                 "mappings": {
-                    "type": "array",
+                    "type": ["array", "null"],
                     "items": {
                         "$ref": "#/definitions/SpanMapSegment"
                     },
-                    "description": "Span map tuples in the selected position encoding. Absent or empty mappings describe fully synthesized output."
+                    "description": "Span map tuples in the selected position encoding. Absent, null, or empty mappings describe fully synthesized output."
                 },
                 "diagnosticDirectives": {
                     "$ref": "#/definitions/DiagnosticDirectives"
