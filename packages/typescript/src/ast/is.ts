@@ -652,3 +652,7 @@ export function isFunctionLike(node: Node | undefined): node is ast.SignatureDec
 export function isFunctionOrConstructorTypeNode(node: Node): node is ast.FunctionTypeNode | ast.ConstructorTypeNode {
     return guards.isFunctionTypeNode(node) || guards.isConstructorTypeNode(node);
 }
+
+export function isImportOrExportSpecifier(node: Node): node is ast.ImportSpecifier | ast.ExportSpecifier {
+    return guards.isImportSpecifier(node) || guards.isExportSpecifier(node);
+}

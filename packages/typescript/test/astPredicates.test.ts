@@ -179,3 +179,13 @@ test("isFunctionOrConstructorTypeNode excludes callable declaration signatures",
     assert.ok(ast.isFunctionOrConstructorTypeNode(factory.createConstructorTypeNode(undefined, undefined, [], result)));
     assert.equal(ast.isFunctionOrConstructorTypeNode(factory.createCallSignatureDeclaration(undefined, [])), false);
 });
+
+test("isImportOrExportSpecifier distinguishes named specifiers from namespace imports", () => {
+    const name = factory.createIdentifier("value");
+    const specifier: ast.Node = factory.createImportSpecifier(true, undefined, name);
+    assert.ok(ast.isImportOrExportSpecifier(specifier));
+    const narrowed: ast.ImportSpecifier | ast.ExportSpecifier = specifier;
+    assert.equal(narrowed.isTypeOnly, true);
+    assert.ok(ast.isImportOrExportSpecifier(factory.createExportSpecifier(false, undefined, name)));
+    assert.equal(ast.isImportOrExportSpecifier(factory.createNamespaceImport(name)), false);
+});
