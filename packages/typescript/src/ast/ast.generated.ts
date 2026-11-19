@@ -1267,7 +1267,7 @@ export interface JSDocOverloadTag extends JSDocTagBase {
 }
 export interface JSDocTypedefTag extends JSDocTagBase {
     readonly kind: SyntaxKind.JSDocTypedefTag;
-    readonly typeExpression?: TypeNode;
+    readonly typeExpression?: JSDocTypeExpression | JSDocTypeLiteral;
     readonly name?: JSDocFullName;
 }
 export interface JSDocSignature extends JSDocTypeBase, DeclarationBase {

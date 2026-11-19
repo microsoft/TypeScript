@@ -4743,7 +4743,11 @@
                     },
                     {
                         "name": "TypeExpression",
-                        "type": "TypeNode",
+                        "type": [
+                            "JSDocTypeExpression",
+                            "JSDocTypeLiteral"
+                        ],
+                        "typeGuard": "isJSDocTypeExpressionOrJSDocTypeLiteral",
                         "optional": true
                     },
                     {

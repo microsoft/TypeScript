@@ -145,15 +145,15 @@ function missing() {}
             const docs: readonly JSDoc[] | undefined = declaration.jsDoc;
             const tag = docs?.[0].tags?.[0];
             assert.ok(tag && astModule.isJSDocTypedefTag(tag));
-            const type: astModule.TypeNode | undefined = tag.typeExpression;
+            const type: astModule.JSDocTypeExpression | astModule.JSDocTypeLiteral | undefined = tag.typeExpression;
             assert.strictEqual(type?.kind, kinds[index]);
             assert.strictEqual(visitEachChild(tag, node => node), tag);
             assert.strictEqual(getSynthesizedDeepClone(tag).typeExpression?.kind, kinds[index]);
         }
 
         const tagName = factory.createIdentifier("typedef");
-        const notAType = factory.createIdentifier("notAType");
-        // @ts-expect-error A typedef type expression must be a type node.
+        const notAType = factory.createTypeReferenceNode(factory.createIdentifier("notAType"));
+        // @ts-expect-error A typedef type expression must be a JSDoc type expression or literal.
         factory.createJSDocTypedefTag(tagName, notAType);
     });
 
