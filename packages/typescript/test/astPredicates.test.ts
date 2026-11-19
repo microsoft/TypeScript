@@ -39,3 +39,13 @@ test("isClassElement includes static blocks and index signatures but not interfa
     assert.ok(ast.isClassElement(factory.createClassStaticBlockDeclaration(undefined, factory.createBlock([]))));
     assert.equal(ast.isClassElement(factory.createPropertySignatureDeclaration(undefined, factory.createIdentifier("x"))), false);
 });
+
+test("isConstTypeReference rejects qualified names and even empty type argument lists", () => {
+    const name = factory.createIdentifier("const");
+    const reference = factory.createTypeReferenceNode(name);
+    assert.ok(ast.isConstTypeReference(reference));
+    assert.equal(reference.typeName, name);
+    assert.equal(ast.isConstTypeReference(factory.createTypeReferenceNode(name, [])), false);
+    assert.equal(ast.isConstTypeReference(factory.createTypeReferenceNode(factory.createQualifiedName(factory.createIdentifier("ns"), name))), false);
+    assert.equal(ast.isConstTypeReference(factory.createIdentifier("const")), false);
+});

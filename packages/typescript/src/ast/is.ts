@@ -604,3 +604,8 @@ export function isClassElement(node: Node): node is ast.ClassElement {
             return false;
     }
 }
+
+export function isConstTypeReference(node: Node): boolean {
+    return guards.isTypeReferenceNode(node) && isIdentifier(node.typeName) &&
+        node.typeName.text === "const" && !node.typeArguments;
+}
