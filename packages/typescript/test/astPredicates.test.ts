@@ -201,3 +201,12 @@ test("isIterationStatement follows labels only when requested", () => {
     assert.equal(ast.isIterationStatement(labeled, true), true);
     assert.equal(ast.isIterationStatement(factory.createLabeledStatement(factory.createIdentifier("label"), empty), true), false);
 });
+
+test("isJsxCallLike includes opening fragments but excludes complete fragments", () => {
+    const opening: ast.Node = factory.createJsxOpeningFragment();
+    assert.ok(ast.isJsxCallLike(opening));
+    const narrowed: ast.JsxOpeningElement | ast.JsxSelfClosingElement | ast.JsxOpeningFragment = opening;
+    assert.equal(narrowed, opening);
+    assert.ok(ast.isJsxCallLike(factory.createJsxSelfClosingElement(factory.createIdentifier("Component"), undefined, factory.createJsxAttributes([]))));
+    assert.equal(ast.isJsxCallLike(factory.createJsxFragment(factory.createJsxOpeningFragment(), [], factory.createJsxClosingFragment())), false);
+});

@@ -673,3 +673,7 @@ export function isIterationStatement(node: Node, lookInLabeledStatements: boolea
             return false;
     }
 }
+
+export function isJsxCallLike(node: Node): node is ast.JsxOpeningElement | ast.JsxSelfClosingElement | ast.JsxOpeningFragment {
+    return guards.isJsxOpeningElement(node) || guards.isJsxSelfClosingElement(node) || guards.isJsxOpeningFragment(node);
+}
