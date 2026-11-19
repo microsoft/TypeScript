@@ -872,6 +872,7 @@ export const buildWatch = task({
                 "tools/gen-proto",
                 "tools/gen-preferences",
                 "tools/userPreferences.schema.json",
+                "packages/typescript/schemas/contentmapper.schema.json",
                 "packages/typescript/src/api/async",
                 "packages/typescript/test/async",
                 "packages/vscode-typescript/src",
