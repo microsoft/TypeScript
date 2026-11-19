@@ -189,3 +189,15 @@ test("isImportOrExportSpecifier distinguishes named specifiers from namespace im
     assert.ok(ast.isImportOrExportSpecifier(factory.createExportSpecifier(false, undefined, name)));
     assert.equal(ast.isImportOrExportSpecifier(factory.createNamespaceImport(name)), false);
 });
+
+test("isIterationStatement follows labels only when requested", () => {
+    const empty = factory.createEmptyStatement();
+    const loop: ast.Node = factory.createWhileStatement(factory.createIdentifier("condition"), empty);
+    assert.ok(ast.isIterationStatement(loop, false));
+    const narrowed: ast.DoStatement | ast.WhileStatement | ast.ForStatement | ast.ForInStatement | ast.ForOfStatement = loop;
+    assert.equal(narrowed.statement, empty);
+    const labeled = factory.createLabeledStatement(factory.createIdentifier("outer"), factory.createLabeledStatement(factory.createIdentifier("inner"), loop));
+    assert.equal(ast.isIterationStatement(labeled, false), false);
+    assert.equal(ast.isIterationStatement(labeled, true), true);
+    assert.equal(ast.isIterationStatement(factory.createLabeledStatement(factory.createIdentifier("label"), empty), true), false);
+});

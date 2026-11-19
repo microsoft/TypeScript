@@ -656,3 +656,20 @@ export function isFunctionOrConstructorTypeNode(node: Node): node is ast.Functio
 export function isImportOrExportSpecifier(node: Node): node is ast.ImportSpecifier | ast.ExportSpecifier {
     return guards.isImportSpecifier(node) || guards.isExportSpecifier(node);
 }
+
+export function isIterationStatement(node: Node, lookInLabeledStatements: false): node is ast.DoStatement | ast.WhileStatement | ast.ForStatement | ast.ForInStatement | ast.ForOfStatement;
+export function isIterationStatement(node: Node, lookInLabeledStatements: boolean): node is ast.DoStatement | ast.WhileStatement | ast.ForStatement | ast.ForInStatement | ast.ForOfStatement | ast.LabeledStatement;
+export function isIterationStatement(node: Node, lookInLabeledStatements: boolean): boolean {
+    switch (node.kind) {
+        case SyntaxKind.ForStatement:
+        case SyntaxKind.ForInStatement:
+        case SyntaxKind.ForOfStatement:
+        case SyntaxKind.DoStatement:
+        case SyntaxKind.WhileStatement:
+            return true;
+        case SyntaxKind.LabeledStatement:
+            return lookInLabeledStatements && isIterationStatement((node as ast.LabeledStatement).statement, true);
+        default:
+            return false;
+    }
+}
