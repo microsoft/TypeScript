@@ -1,13 +1,10 @@
-signatureHelpInNestedCallbackCheckOrder.ts(19,36): error TS2719: Type 'B[]' is not assignable to type 'B[]'. Two different types with this name exist, but they are unrelated.
-  Type 'B' is not assignable to type 'B'. Two different types with this name exist, but they are unrelated.
-    'B' could be instantiated with an arbitrary type which could be unrelated to 'B'.
 signatureHelpInNestedCallbackCheckOrder.ts(19,47): error TS2345: Argument of type '(a: A) => B[]' is not assignable to parameter of type '(this: undefined, value: A, index: number, array: A[]) => B | readonly B[]'.
   Types of parameters 'a' and 'value' are incompatible.
     Type 'A' is not assignable to type 'A'. Two different types with this name exist, but they are unrelated.
       'A' could be instantiated with an arbitrary type which could be unrelated to 'A'.
 
 
-==== signatureHelpInNestedCallbackCheckOrder.ts (2 errors) ====
+==== signatureHelpInNestedCallbackCheckOrder.ts (1 errors) ====
     // Signature help for the inner call resolves the outer call from within
     // it, while the inner call is being resolved. The errors of that
     // resolution are not reported once the call is checked (48135).
@@ -27,12 +24,6 @@ signatureHelpInNestedCallbackCheckOrder.ts(19,47): error TS2345: Argument of typ
         ) => void
     
     setBindGeneric("Array", g => fa => fa.flatMap(g))
-                                       ~~~~~~~~~~~~~
-!!! error TS2719: Type 'B[]' is not assignable to type 'B[]'. Two different types with this name exist, but they are unrelated.
-!!! error TS2719:   Type 'B' is not assignable to type 'B'. Two different types with this name exist, but they are unrelated.
-!!! error TS2719:     'B' could be instantiated with an arbitrary type which could be unrelated to 'B'.
-!!! related TS2208 signatureHelpInNestedCallbackCheckOrder.ts:16:17: This type parameter might need an `extends B` constraint.
-!!! related TS6502 signatureHelpInNestedCallbackCheckOrder.ts:16:49: The expected type comes from the return type of this signature.
                                                   ~
 !!! error TS2345: Argument of type '(a: A) => B[]' is not assignable to parameter of type '(this: undefined, value: A, index: number, array: A[]) => B | readonly B[]'.
 !!! error TS2345:   Types of parameters 'a' and 'value' are incompatible.

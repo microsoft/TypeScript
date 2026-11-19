@@ -47,7 +47,7 @@ function f<T>() {
 
     const r: 1 = g(a);
 >r : 1
->g(a) : 2
+>g(a) : 1
 >g : { (x: keyof M<T>): 1; (x: unknown): 2; }
 >a : A
 }

@@ -16,18 +16,18 @@ const keys: string[] = [];
 >[] : never[]
 
 const result = Object.fromEntries(keys.map(k => [
->result : any
->Object.fromEntries(keys.map(k => [    k,    id({ test() { } }),])) : any
+>result : { [k: string]: { test(): void; }; }
+>Object.fromEntries(keys.map(k => [    k,    id({ test() { } }),])) : { [k: string]: { test(): void; }; }
 >Object.fromEntries : { <T = any>(entries: Iterable<readonly [PropertyKey, T]>): { [k: string]: T; }; (entries: Iterable<readonly any[]>): any; }
 >Object : ObjectConstructor
 >fromEntries : { <T = any>(entries: Iterable<readonly [PropertyKey, T]>): { [k: string]: T; }; (entries: Iterable<readonly any[]>): any; }
->keys.map(k => [    k,    id({ test() { } }),]) : (string | { test(): void; })[][]
+>keys.map(k => [    k,    id({ test() { } }),]) : [string, { test(): void; }][]
 >keys.map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
 >keys : string[]
 >map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
->k => [    k,    id({ test() { } }),] : (k: string) => (string | { test(): void; })[]
+>k => [    k,    id({ test() { } }),] : (k: string) => [string, { test(): void; }]
 >k : string
->[    k,    id({ test() { } }),] : (string | { test(): void; })[]
+>[    k,    id({ test() { } }),] : [string, { test(): void; }]
 
     k,
 >k : string
