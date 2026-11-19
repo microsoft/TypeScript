@@ -10,6 +10,7 @@ import (
 func TestGetEditsForFileRename_dynamicImportTsExtension(t *testing.T) {
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	// The "import" prefix in "./imported.ts" is another match for the text scan and used to collect this node twice.
 	const content = `// @Filename: /tsconfig.json
 {
   "compilerOptions": {
