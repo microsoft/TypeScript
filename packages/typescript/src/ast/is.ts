@@ -780,3 +780,7 @@ export function isTypeOnlyExportDeclaration(node: Node): node is ast.TypeOnlyExp
             return false;
     }
 }
+
+export function isTypeOnlyImportOrExportDeclaration(node: Node): node is ast.TypeOnlyAliasDeclaration {
+    return isTypeOnlyImportDeclaration(node) || isTypeOnlyExportDeclaration(node);
+}

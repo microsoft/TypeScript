@@ -110,6 +110,8 @@ export type TypeOnlyExportDeclaration =
     | generated.ExportDeclaration & { readonly isTypeOnly: true; readonly moduleSpecifier: generated.Expression; readonly exportClause?: undefined; }
     | generated.NamespaceExport & { readonly parent: generated.ExportDeclaration & { readonly isTypeOnly: true; }; };
 
+export type TypeOnlyAliasDeclaration = TypeOnlyImportDeclaration | TypeOnlyExportDeclaration;
+
 // ── Core types ──
 
 declare const rootedPathBrand: unique symbol;

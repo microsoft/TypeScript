@@ -390,3 +390,13 @@ test("isTypeOnlyExportDeclaration distinguishes export-star from named export co
     Object.defineProperty(namespace, "parent", { value: factory.createExportDeclaration(undefined, true, namespace) });
     assert.ok(ast.isTypeOnlyExportDeclaration(namespace));
 });
+
+test("isTypeOnlyImportOrExportDeclaration includes both kinds of explicit type-only aliases", () => {
+    const name = factory.createIdentifier("value");
+    const node: ast.Node = factory.createImportSpecifier(true, undefined, name);
+    assert.ok(ast.isTypeOnlyImportOrExportDeclaration(node));
+    const narrowed: ast.TypeOnlyAliasDeclaration = node;
+    assert.equal(narrowed, node);
+    assert.ok(ast.isTypeOnlyImportOrExportDeclaration(factory.createExportSpecifier(true, undefined, name)));
+    assert.equal(ast.isTypeOnlyImportOrExportDeclaration(factory.createImportClause(undefined, name)), false);
+});
