@@ -101,6 +101,15 @@ export type TypeOnlyImportDeclaration =
             | { readonly parent: generated.NamedImports & { readonly parent: generated.ImportClause & { readonly phaseModifier: SyntaxKind.TypeKeyword; }; }; }
         );
 
+export type TypeOnlyExportDeclaration =
+    | generated.ExportSpecifier
+        & (
+            | { readonly isTypeOnly: true; }
+            | { readonly parent: generated.NamedExports & { readonly parent: generated.ExportDeclaration & { readonly isTypeOnly: true; }; }; }
+        )
+    | generated.ExportDeclaration & { readonly isTypeOnly: true; readonly moduleSpecifier: generated.Expression; readonly exportClause?: undefined; }
+    | generated.NamespaceExport & { readonly parent: generated.ExportDeclaration & { readonly isTypeOnly: true; }; };
+
 // ── Core types ──
 
 declare const rootedPathBrand: unique symbol;

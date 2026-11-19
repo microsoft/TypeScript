@@ -365,3 +365,28 @@ test("isTypeOnlyImportDeclaration inherits type-only status but not defer status
     assert.ok(ast.isTypeOnlyImportDeclaration(factory.createImportEqualsDeclaration(undefined, true, name, name)));
     assert.equal(ast.isTypeOnlyImportDeclaration(factory.createImportEqualsDeclaration(undefined, false, name, name)), false);
 });
+
+test("isTypeOnlyExportDeclaration distinguishes export-star from named export containers", () => {
+    const name = factory.createIdentifier("value");
+    const specifier = factory.createExportSpecifier(false, undefined, name);
+    const bindings = factory.createNamedExports([specifier]);
+    const declaration = factory.createExportDeclaration(undefined, true, bindings);
+    Object.defineProperty(specifier, "parent", { value: bindings });
+    Object.defineProperty(bindings, "parent", { value: declaration });
+    const node: ast.Node = specifier;
+    assert.ok(ast.isTypeOnlyExportDeclaration(node));
+    const narrowed: ast.TypeOnlyExportDeclaration = node;
+    assert.equal(narrowed, specifier);
+    assert.equal(ast.isTypeOnlyExportDeclaration(declaration), false);
+    assert.ok(ast.isTypeOnlyExportDeclaration(factory.createExportDeclaration(undefined, true, undefined, factory.createStringLiteral("module", ast.TokenFlags.None))));
+    assert.equal(ast.isTypeOnlyExportDeclaration(factory.createExportDeclaration(undefined, false, undefined, factory.createStringLiteral("module", ast.TokenFlags.None))), false);
+    assert.ok(ast.isTypeOnlyExportDeclaration(factory.createExportSpecifier(true, undefined, name)));
+    const valueSpecifier = factory.createExportSpecifier(false, undefined, name);
+    assert.equal(ast.isTypeOnlyExportDeclaration(valueSpecifier), false);
+    if (!ast.isTypeOnlyExportDeclaration(valueSpecifier)) {
+        assert.equal(valueSpecifier.name, name);
+    }
+    const namespace = factory.createNamespaceExport(name);
+    Object.defineProperty(namespace, "parent", { value: factory.createExportDeclaration(undefined, true, namespace) });
+    assert.ok(ast.isTypeOnlyExportDeclaration(namespace));
+});

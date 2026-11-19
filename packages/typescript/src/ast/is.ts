@@ -762,3 +762,21 @@ export function isTypeOnlyImportDeclaration(node: Node): node is ast.TypeOnlyImp
             return false;
     }
 }
+
+export function isTypeOnlyExportDeclaration(node: Node): node is ast.TypeOnlyExportDeclaration {
+    switch (node.kind) {
+        case SyntaxKind.ExportSpecifier: {
+            const specifier = node as ast.ExportSpecifier;
+            const declaration = specifier.parent?.parent;
+            return specifier.isTypeOnly || !!declaration && guards.isExportDeclaration(declaration) && declaration.isTypeOnly;
+        }
+        case SyntaxKind.ExportDeclaration: {
+            const declaration = node as ast.ExportDeclaration;
+            return declaration.isTypeOnly && !!declaration.moduleSpecifier && !declaration.exportClause;
+        }
+        case SyntaxKind.NamespaceExport:
+            return !!node.parent && guards.isExportDeclaration(node.parent) && node.parent.isTypeOnly;
+        default:
+            return false;
+    }
+}
