@@ -5,6 +5,8 @@ import {
     getFirstToken,
     getLastToken,
     getTokenPosOfNode,
+    isJSDoc,
+    type JSDoc,
     ModifierFlags,
     type Node,
     type NodeArray,
@@ -305,15 +307,15 @@ export class RemoteNode extends RemoteNodeBase implements Node {
         }
     }
 
-    get jsDoc(): readonly Node[] | undefined {
+    get jsDoc(): readonly JSDoc[] | undefined {
         if (!this.hasChildren()) {
             return undefined;
         }
-        let result: Node[] | undefined;
+        let result: JSDoc[] | undefined;
         let next = this.index + 1;
         do {
             const child = this.getOrCreateChildAtNodeIndex(next);
-            if (!(child instanceof RemoteNodeList) && child.kind === SyntaxKind.JSDoc) {
+            if (!(child instanceof RemoteNodeList) && isJSDoc(child)) {
                 (result ??= []).push(child);
             }
             next = child.next;
