@@ -1,5 +1,6 @@
 // @strict: true
 // @declaration: true
+// @noErrorTruncation: true
 
 // @filename: local.ts
 export function array() {
@@ -34,3 +35,10 @@ export function finiteArray() {
     type Nested = number[][][][][][][][][][][][][];
     return null as unknown as Nested;
 }
+
+// @filename: expanding.ts
+// Each level is a new instantiation, so printing it stops at a bounded depth.
+type G<T> = T extends unknown ? (T | G<[T]>)[] : never;
+declare const g: G<"x">;
+export const h = g;
+export const n: number = g;

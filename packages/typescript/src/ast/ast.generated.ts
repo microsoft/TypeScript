@@ -1267,7 +1267,7 @@ export interface JSDocOverloadTag extends JSDocTagBase {
 }
 export interface JSDocTypedefTag extends JSDocTagBase {
     readonly kind: SyntaxKind.JSDocTypedefTag;
-    readonly typeExpression?: Node;
+    readonly typeExpression?: JSDocTypeExpression | JSDocTypeLiteral;
     readonly name?: JSDocFullName;
 }
 export interface JSDocSignature extends JSDocTypeBase, DeclarationBase {
@@ -1365,7 +1365,7 @@ export type ModuleExportName = Identifier | StringLiteral;
 export type PropertyName = Identifier | StringLiteral | NoSubstitutionTemplateLiteral | NumericLiteral | ComputedPropertyName | PrivateIdentifier | BigIntLiteral;
 export type ModuleBody = ModuleBlock | ModuleDeclaration | Identifier;
 export type JSDocFullName = Identifier | ModuleDeclaration;
-export type ForInitializer = Expression | MissingDeclaration | VariableDeclarationList;
+export type ForInitializer = Expression | VariableDeclarationList;
 export type ModuleReference = Identifier | QualifiedName | ExternalModuleReference;
 export type NamedImportBindings = NamespaceImport | NamedImports;
 export type NamedExportBindings = NamespaceExport | NamedExports;

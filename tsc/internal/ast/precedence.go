@@ -319,8 +319,7 @@ func GetOperatorPrecedence(nodeKind Kind, operatorKind Kind, flags OperatorPrece
 		KindOmittedExpression,
 		KindJsxElement,
 		KindJsxSelfClosingElement,
-		KindJsxFragment,
-		KindMissingDeclaration:
+		KindJsxFragment:
 		return OperatorPrecedencePrimary
 
 	// !!! By necessity, this differs from the old compiler to support emit. consider backporting
@@ -706,10 +705,7 @@ func GetTypeNodePrecedence(n *TypeNode) TypePrecedence {
 		KindMappedType,
 		KindNamedTupleMember,
 		KindTemplateLiteralType,
-		KindImportType,
-		// These occur in pseudo-types like `f<T>.C`, where `f` is a generic function and `C` is a local type
-		KindPropertyAccessExpression,
-		KindExpressionWithTypeArguments:
+		KindImportType:
 		return TypePrecedenceNonArray
 	default:
 		panic(fmt.Sprintf("unhandled TypeNode: %v", n.Kind))

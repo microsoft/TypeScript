@@ -43,18 +43,22 @@ import {
     type RootedFilePath,
     type SourceFile,
     SyntaxKind,
+    TokenFlags,
     tryGetAmbientModuleNameFromSymbolName,
     unescapeLeadingUnderscores,
 } from "@typescript/typescript/ast";
 import {
     cloneNode,
     createArrayTypeNode,
+    createCallExpression,
+    createExpressionStatement,
     createFunctionTypeNode,
     createIdentifier,
     createKeywordTypeNode,
     createNumericLiteral,
     createParameterDeclaration,
     createSourceFile,
+    createStringLiteral,
     createToken,
     createTypeAliasDeclaration,
     createTypeReferenceNode,
@@ -62,6 +66,7 @@ import {
     createVariableDeclaration,
     createVariableDeclarationList,
     createVariableStatement,
+    updateSourceFile,
 } from "@typescript/typescript/ast/factory";
 import { visitEachChild } from "@typescript/typescript/ast/visitor";
 import {
@@ -8820,6 +8825,20 @@ export const obj = { m: 1, s: "hi", b: true };
         assert.strictEqual(text, "string");
     });
 
+    test("synthesized nodes do not acquire source comments", async () => {
+        await using api = spawnAPI();
+        await using lease = await api.createSourceFile("/test.ts", "/** leading comment */\nfoo();\n/* @__PURE__ */ baz();\n");
+        const { sourceFile } = lease;
+        const added = createExpressionStatement(
+            createCallExpression(createIdentifier("bar"), undefined, undefined, [createStringLiteral("x", TokenFlags.None)], NodeFlags.None),
+        );
+        const updated = updateSourceFile(sourceFile, [added, ...sourceFile.statements], sourceFile.endOfFileToken);
+        const expected = 'bar("x");\n/** leading comment */\nfoo();\n/* @__PURE__ */ baz();\n';
+
+        assert.strictEqual(await api.printer.printNode(updated), expected);
+        assert.strictEqual(await api.printer.printFile(updated), expected);
+    });
+
     test("printFile", async () => {
         await using api = spawnAPI(emitterFiles);
 
@@ -8979,7 +8998,6 @@ export const obj = { m: 1, s: "hi", b: true };
             SyntaxKind.ObjectKeyword,
             SyntaxKind.SymbolKeyword,
             SyntaxKind.IntrinsicKeyword,
-            SyntaxKind.ExpressionWithTypeArguments,
             SyntaxKind.JSDocAllType,
             SyntaxKind.JSDocNullableType,
             SyntaxKind.JSDocNonNullableType,
