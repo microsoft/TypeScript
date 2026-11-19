@@ -6,6 +6,7 @@ import { NodeFlags } from "../../enums/nodeFlags.js";
 import { OuterExpressionKinds } from "../../enums/outerExpressionKinds.js";
 import { ScriptKind } from "../../enums/scriptKind.js";
 import { SyntaxKind } from "../../enums/syntaxKind.js";
+import type * as ast from "./ast.ts";
 import type {
     AsExpression,
     BindingPattern,
@@ -69,6 +70,11 @@ import {
 } from "./utils.ts";
 
 export * from "./is.generated.ts";
+
+export function isAutoAccessorPropertyDeclaration(node: Node): node is ast.AutoAccessorPropertyDeclaration {
+    return node.kind === SyntaxKind.PropertyDeclaration &&
+        !!((node as ast.PropertyDeclaration).modifierFlags & ModifierFlags.Accessor);
+}
 
 type JSDocNamespaceDeclaration = ModuleDeclaration;
 

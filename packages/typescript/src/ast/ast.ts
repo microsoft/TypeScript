@@ -58,6 +58,11 @@ export { TokenFlags } from "../../enums/tokenFlags.js";
 export * from "./ast.generated.ts";
 export * as factory from "./factory.generated.ts";
 
+declare const autoAccessorBrand: unique symbol;
+export interface AutoAccessorPropertyDeclaration extends PropertyDeclaration {
+    readonly [autoAccessorBrand]: void;
+}
+
 // ── Core types ──
 
 declare const rootedPathBrand: unique symbol;
