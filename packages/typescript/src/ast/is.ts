@@ -635,3 +635,8 @@ export function isDeclarationStatement(node: Node): node is ast.Statement & ast.
 export function isElementAccessChain(node: Node): node is ast.ElementAccessChain {
     return guards.isElementAccessExpression(node) && !!(node.flags & NodeFlags.OptionalChain);
 }
+
+export function isEmptyBindingElement(node: ast.BindingElement | ast.ArrayBindingElement): boolean {
+    return guards.isOmittedExpression(node) || !node.name ||
+        isBindingPattern(node.name) && node.name.elements.every(isEmptyBindingElement);
+}

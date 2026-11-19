@@ -101,3 +101,28 @@ test("isElementAccessChain uses the chain flag rather than the question-dot toke
     assert.equal(ast.isElementAccessChain(factory.createElementAccessExpression(name, undefined, index, ast.NodeFlags.None)), false);
     assert.equal(ast.isElementAccessChain(factory.createPropertyAccessExpression(name, undefined, name, ast.NodeFlags.OptionalChain)), false);
 });
+
+test("isEmptyBindingElement recursively distinguishes bindings from empty nested patterns", () => {
+    const empty = factory.createBindingElement(undefined, undefined, factory.createObjectBindingPattern([]));
+    assert.ok(ast.isEmptyBindingElement(empty));
+    assert.ok(ast.isEmptyBindingElement(factory.createOmittedExpression()));
+    assert.ok(ast.isEmptyBindingElement(factory.createBindingElement()));
+    const binding = factory.createBindingElement(undefined, undefined, factory.createIdentifier("value"));
+    assert.equal(ast.isEmptyBindingElement(binding), false);
+    assert.equal(ast.isEmptyBindingElement(factory.createBindingElement(undefined, undefined, factory.createArrayBindingPattern([binding]))), false);
+});
+
+test("isEmptyBindingElement recognizes parsed array-binding holes", () => {
+    using api = createAPI();
+    const source = api.createSourceFile("/holes.ts", "const [, , value] = values;").sourceFile;
+    const statement = source.statements[0];
+    assert.ok(ast.isVariableStatement(statement));
+    const pattern = statement.declarationList.declarations[0].name;
+    assert.ok(ast.isArrayBindingPattern(pattern));
+    assert.deepEqual(pattern.elements.map(element => element.kind), [
+        ast.SyntaxKind.BindingElement,
+        ast.SyntaxKind.BindingElement,
+        ast.SyntaxKind.BindingElement,
+    ]);
+    assert.deepEqual(pattern.elements.map(ast.isEmptyBindingElement), [true, true, false]);
+});
