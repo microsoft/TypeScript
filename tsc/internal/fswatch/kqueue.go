@@ -112,6 +112,10 @@ func newKqueueIdentity[D ~int32 | ~uint32 | ~int64 | ~uint64](device D, inode ui
 	return kqueueIdentity{device: uint64(device), inode: inode}
 }
 
+// kqueueVnodeFflags lists the file and directory changes each watch reports.
+const kqueueVnodeFflags = unix.NOTE_DELETE | unix.NOTE_WRITE | unix.NOTE_EXTEND |
+	unix.NOTE_ATTRIB | unix.NOTE_RENAME | unix.NOTE_REVOKE
+
 // kqueueSubscription.
 type kqueueSubscription struct {
 	dirWatch *dirWatch
@@ -392,8 +396,7 @@ func (b *kqueueBackend) openEntryLocked(entry *dirEntry) error {
 	}
 	var ev unix.Kevent_t
 	unix.SetKevent(&ev, fd, unix.EVFILT_VNODE, unix.EV_ADD|unix.EV_CLEAR|unix.EV_ENABLE)
-	ev.Fflags = unix.NOTE_DELETE | unix.NOTE_WRITE | unix.NOTE_EXTEND |
-		unix.NOTE_ATTRIB | unix.NOTE_RENAME | unix.NOTE_REVOKE
+	ev.Fflags = kqueueVnodeFflags
 	if _, err := unix.Kevent(b.kq, []unix.Kevent_t{ev}, nil, nil); err != nil {
 		unix.Close(fd)
 		return err
