@@ -126,3 +126,35 @@ test("isEmptyBindingElement recognizes parsed array-binding holes", () => {
     ]);
     assert.deepEqual(pattern.elements.map(ast.isEmptyBindingElement), [true, true, false]);
 });
+
+test("isEmptyBindingPattern accepts nested empty patterns but not identifiers", () => {
+    const nested: ast.BindingName = factory.createArrayBindingPattern([
+        factory.createBindingElement(undefined, undefined, factory.createObjectBindingPattern([])),
+    ]);
+    assert.ok(ast.isEmptyBindingPattern(nested));
+    const narrowed: ast.EmptyBindingPattern = nested;
+    assert.equal(narrowed.elements.length, 1);
+    assert.equal(ast.isEmptyBindingPattern(factory.createIdentifier("value")), false);
+    assert.equal(
+        ast.isEmptyBindingPattern(factory.createObjectBindingPattern([
+            factory.createBindingElement(undefined, undefined, factory.createIdentifier("value")),
+        ])),
+        false,
+    );
+    const nonempty = factory.createObjectBindingPattern([
+        factory.createBindingElement(undefined, undefined, factory.createIdentifier("value")),
+    ]);
+    if (!ast.isEmptyBindingPattern(nonempty)) {
+        assert.equal(nonempty.elements.length, 1);
+    }
+});
+
+test("isEmptyBindingPattern accepts parsed hole-only and nested empty patterns", () => {
+    using api = createAPI();
+    const source = api.createSourceFile(
+        "/patterns.ts",
+        "const [,] = values; const [, [,], {}] = values; const [, value] = values;",
+    ).sourceFile;
+    const patterns = source.statements.filter(ast.isVariableStatement).map(statement => statement.declarationList.declarations[0].name);
+    assert.deepEqual(patterns.map(ast.isEmptyBindingPattern), [true, true, false]);
+});

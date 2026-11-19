@@ -640,3 +640,7 @@ export function isEmptyBindingElement(node: ast.BindingElement | ast.ArrayBindin
     return guards.isOmittedExpression(node) || !node.name ||
         isBindingPattern(node.name) && node.name.elements.every(isEmptyBindingElement);
 }
+
+export function isEmptyBindingPattern(node: ast.BindingName): node is ast.EmptyBindingPattern {
+    return isBindingPattern(node) && node.elements.every(isEmptyBindingElement);
+}
