@@ -609,3 +609,25 @@ export function isConstTypeReference(node: Node): boolean {
     return guards.isTypeReferenceNode(node) && isIdentifier(node.typeName) &&
         node.typeName.text === "const" && !node.typeArguments;
 }
+
+export function isDeclarationStatement(node: Node): node is ast.Statement & ast.Declaration {
+    switch (node.kind) {
+        case SyntaxKind.FunctionDeclaration:
+        case SyntaxKind.MissingDeclaration:
+        case SyntaxKind.ClassDeclaration:
+        case SyntaxKind.InterfaceDeclaration:
+        case SyntaxKind.TypeAliasDeclaration:
+        case SyntaxKind.JSTypeAliasDeclaration:
+        case SyntaxKind.EnumDeclaration:
+        case SyntaxKind.ModuleDeclaration:
+        case SyntaxKind.ImportDeclaration:
+        case SyntaxKind.JSImportDeclaration:
+        case SyntaxKind.ImportEqualsDeclaration:
+        case SyntaxKind.ExportDeclaration:
+        case SyntaxKind.ExportAssignment:
+        case SyntaxKind.NamespaceExportDeclaration:
+            return true;
+        default:
+            return false;
+    }
+}

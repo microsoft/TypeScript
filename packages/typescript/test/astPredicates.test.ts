@@ -2,6 +2,17 @@ import * as ast from "@typescript/typescript/ast";
 import * as factory from "@typescript/typescript/ast/factory";
 import assert from "node:assert/strict";
 import { test } from "node:test";
+import { fileURLToPath } from "node:url";
+import { API } from "./sync/api.testUtils.ts";
+import { createVirtualFileSystem } from "./testUtils.ts";
+
+function createAPI(): API {
+    return new API({
+        cwd: fileURLToPath(new URL("../../../", import.meta.url)),
+        tsserverPath: fileURLToPath(new URL(`../../../built/local/tsc${process.platform === "win32" ? ".exe" : ""}`, import.meta.url)),
+        fs: createVirtualFileSystem({}),
+    });
+}
 
 test("isAutoAccessorPropertyDeclaration distinguishes accessor modifiers from accessors", () => {
     const name = factory.createIdentifier("value");
@@ -48,4 +59,34 @@ test("isConstTypeReference rejects qualified names and even empty type argument 
     assert.equal(ast.isConstTypeReference(factory.createTypeReferenceNode(name, [])), false);
     assert.equal(ast.isConstTypeReference(factory.createTypeReferenceNode(factory.createQualifiedName(factory.createIdentifier("ns"), name))), false);
     assert.equal(ast.isConstTypeReference(factory.createIdentifier("const")), false);
+});
+
+test("isDeclarationStatement does not classify variable statements as declaration statements", () => {
+    const declaration: ast.Node = factory.createExportDeclaration();
+    assert.ok(ast.isDeclarationStatement(declaration));
+    const narrowed: ast.Statement & ast.Declaration = declaration;
+    assert.equal(narrowed, declaration);
+    assert.ok(ast.isDeclarationStatement(factory.createMissingDeclaration()));
+    assert.equal(ast.isDeclarationStatement(factory.createVariableStatement(undefined, factory.createVariableDeclarationList([], ast.NodeFlags.Const))), false);
+    assert.equal(ast.isDeclarationStatement(factory.createBlock([])), false);
+});
+
+test("isDeclarationStatement includes declarations produced by JavaScript JSDoc", () => {
+    using api = createAPI();
+    const source = api.createSourceFile(
+        "/declarations.js",
+        `/** @typedef {string} Name */
+/** @callback Callback
+ * @returns {void}
+ */
+/** @import { Value } from "./types" */
+`,
+    ).sourceFile;
+    const declarations = source.statements.filter(node => node.kind === ast.SyntaxKind.JSTypeAliasDeclaration || node.kind === ast.SyntaxKind.JSImportDeclaration);
+    assert.deepEqual(declarations.map(node => node.kind), [
+        ast.SyntaxKind.JSTypeAliasDeclaration,
+        ast.SyntaxKind.JSTypeAliasDeclaration,
+        ast.SyntaxKind.JSImportDeclaration,
+    ]);
+    assert.ok(declarations.every(ast.isDeclarationStatement));
 });
