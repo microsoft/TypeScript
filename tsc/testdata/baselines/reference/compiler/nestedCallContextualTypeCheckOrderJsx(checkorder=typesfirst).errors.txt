@@ -1,0 +1,35 @@
+nestedCallContextualTypeCheckOrderJsx.tsx(11,18): error TS2322: Type '(x: never) => never' is not assignable to type '(x: number) => void'.
+  Types of parameters 'x' and 'x' are incompatible.
+    Type 'number' is not assignable to type 'never'.
+nestedCallContextualTypeCheckOrderJsx.tsx(12,12): error TS2322: Type '{ cb: (x: never) => never; v: number; }' is not assignable to type '{ cb: (x: number) => void; v: number; }'.
+  Types of property 'cb' are incompatible.
+    Type '(x: never) => never' is not assignable to type '(x: number) => void'.
+      Types of parameters 'x' and 'x' are incompatible.
+        Type 'number' is not assignable to type 'never'.
+
+
+==== nestedCallContextualTypeCheckOrderJsx.tsx (2 errors) ====
+    // A generic call in a JSX attribute is resolved after the element, whichever
+    // is queried first.
+    
+    declare namespace JSX {
+        interface Element {}
+        interface IntrinsicElements {}
+    }
+    declare function Outer<T>(props: { cb: (x: T) => void; v: T }): JSX.Element;
+    declare function wrap<U>(f: U): U;
+    
+    const a = <Outer cb={wrap((x) => x.toFixed())} v={1} />;
+                     ~~
+!!! error TS2322: Type '(x: never) => never' is not assignable to type '(x: number) => void'.
+!!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2322:     Type 'number' is not assignable to type 'never'.
+!!! related TS6500 nestedCallContextualTypeCheckOrderJsx.tsx:8:36: The expected type comes from property 'cb' which is declared here on type '{ cb: (x: number) => void; v: number; }'
+    const b = <Outer {...{ cb: wrap((x) => x.toFixed()) }} v={1} />;
+               ~~~~~
+!!! error TS2322: Type '{ cb: (x: never) => never; v: number; }' is not assignable to type '{ cb: (x: number) => void; v: number; }'.
+!!! error TS2322:   Types of property 'cb' are incompatible.
+!!! error TS2322:     Type '(x: never) => never' is not assignable to type '(x: number) => void'.
+!!! error TS2322:       Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2322:         Type 'number' is not assignable to type 'never'.
+    

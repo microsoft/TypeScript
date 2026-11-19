@@ -1,0 +1,156 @@
+//// [tests/cases/compiler/classCircularityDiagnostics.ts] ////
+
+=== classCircularityDiagnostics.ts ===
+class Direct extends Direct {
+>Direct : Direct
+>Direct : typeof Direct
+
+	static value = 1;
+>value : number
+>1 : 1
+
+	value = 2;
+>value : number
+>2 : 2
+}
+
+const staticValue = Direct.value;
+>staticValue : number
+>Direct.value : number
+>Direct : typeof Direct
+>value : number
+
+const instanceValue = new Direct().value;
+>instanceValue : number
+>new Direct().value : number
+>new Direct() : Direct
+>Direct : typeof Direct
+>value : number
+
+class First extends Second {}
+>First : First
+>Second : typeof Second
+
+class Second extends First {}
+>Second : Second
+>First : typeof First
+
+const Expression = class Named extends Named {};
+>Expression : typeof Named
+>class Named extends Named {} : typeof Named
+>Named : typeof Named
+>Named : typeof Named
+
+class NestedBase extends (class {
+>NestedBase : NestedBase
+>(class {	static value = 1;	value = 2;}) : (Anonymous class)
+>class {	static value = 1;	value = 2;} : typeof (Anonymous class)
+
+	static value = 1;
+>value : number
+>1 : 1
+
+	value = 2;
+>value : number
+>2 : 2
+
+}) {}
+
+const nestedStaticValue: number = NestedBase.value;
+>nestedStaticValue : number
+>NestedBase.value : number
+>NestedBase : typeof NestedBase
+>value : number
+
+const nestedInstanceValue: number = new NestedBase().value;
+>nestedInstanceValue : number
+>new NestedBase().value : number
+>new NestedBase() : NestedBase
+>NestedBase : typeof NestedBase
+>value : number
+
+const SelfReferencingBase = class extends (class {
+>SelfReferencingBase : typeof SelfReferencingBase
+>class extends (class {	static self = SelfReferencingBase;}) {} : typeof SelfReferencingBase
+>(class {	static self = SelfReferencingBase;}) : (Anonymous class)
+>class {	static self = SelfReferencingBase;} : typeof (Anonymous class)
+
+	static self = SelfReferencingBase;
+>self : typeof SelfReferencingBase
+>SelfReferencingBase : typeof SelfReferencingBase
+
+}) {};
+
+const selfConstructor = SelfReferencingBase.self;
+>selfConstructor : typeof SelfReferencingBase
+>SelfReferencingBase.self : typeof SelfReferencingBase
+>SelfReferencingBase : typeof SelfReferencingBase
+>self : typeof SelfReferencingBase
+
+function mixin<Base extends new (...args: any[]) => {}>(base: Base) {
+>mixin : <Base extends new (...args: any[]) => {}>(base: Base) => { new (...args: any[]): (Anonymous class); value: number; prototype: mixin.(Anonymous class); } & Base
+>args : any[]
+>base : Base
+
+	return class extends base {
+>class extends base {		static value = 1;		value = 2;	} : { new (...args: any[]): (Anonymous class); value: number; prototype: mixin.(Anonymous class); } & Base
+>base : {}
+
+		static value = 1;
+>value : number
+>1 : 1
+
+		value = 2;
+>value : number
+>2 : 2
+
+	};
+}
+
+class Mixed extends mixin(NestedBase) {}
+>Mixed : Mixed
+>mixin(NestedBase) : mixin.(Anonymous class) & NestedBase
+>mixin : <Base extends new (...args: any[]) => {}>(base: Base) => { new (...args: any[]): (Anonymous class); value: number; prototype: mixin.(Anonymous class); } & Base
+>NestedBase : typeof NestedBase
+
+const mixedStaticValue: number = Mixed.value;
+>mixedStaticValue : number
+>Mixed.value : number
+>Mixed : typeof Mixed
+>value : number
+
+const mixedInstanceValue: number = new Mixed().value;
+>mixedInstanceValue : number
+>new Mixed().value : number
+>new Mixed() : Mixed
+>Mixed : typeof Mixed
+>value : number
+
+declare function makeBase(value: number): typeof NestedBase;
+>makeBase : (value: number) => typeof NestedBase
+>value : number
+>NestedBase : typeof NestedBase
+
+class InvalidBaseArgument extends makeBase("invalid") {}
+>InvalidBaseArgument : InvalidBaseArgument
+>makeBase("invalid") : NestedBase
+>makeBase : (value: number) => typeof NestedBase
+>"invalid" : "invalid"
+
+const InvalidExpressionArgument = class extends makeBase("invalid") {};
+>InvalidExpressionArgument : typeof InvalidExpressionArgument
+>class extends makeBase("invalid") {} : typeof InvalidExpressionArgument
+>makeBase("invalid") : NestedBase
+>makeBase : (value: number) => typeof NestedBase
+>"invalid" : "invalid"
+
+declare function makeInvalidBase(value: number): number;
+>makeInvalidBase : (value: number) => number
+>value : number
+
+class InvalidConstructor extends makeInvalidBase("invalid") {}
+>InvalidConstructor : InvalidConstructor
+>makeInvalidBase("invalid") : number
+>makeInvalidBase : (value: number) => number
+>"invalid" : "invalid"
+

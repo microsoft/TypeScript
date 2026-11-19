@@ -1,0 +1,22 @@
+b.ts(4,31): error TS2339: Property 'Core' does not exist on type '{ Template: { commitError: (v: number) => any; }; }'.
+
+
+==== a.ts (0 errors) ====
+    import type { T } from "./b";
+    
+    export const Obj = {
+        Updaters: {
+            Template: {
+                commitError: (v: T) => Obj.Updaters.Core.commitError(v),
+            },
+        },
+    };
+    
+==== b.ts (1 errors) ====
+    import { Obj } from "./a";
+    
+    export type T = number;
+    export const x = Obj.Updaters.Core.simpleModal;
+                                  ~~~~
+!!! error TS2339: Property 'Core' does not exist on type '{ Template: { commitError: (v: number) => any; }; }'.
+    

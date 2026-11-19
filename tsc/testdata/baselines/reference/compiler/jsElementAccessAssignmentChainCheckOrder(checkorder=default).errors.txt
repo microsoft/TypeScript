@@ -1,0 +1,28 @@
+bubble.js(11,11): error TS7022: 'iPixel' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+bubble.js(11,20): error TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{ skip: any; }'.
+bubble.js(11,20): error TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{ skip: boolean; }'.
+
+
+==== bubble.js (3 errors) ====
+    // Each element access on the right of a chained assignment reports its
+    // implicit any once, whichever of the assignments is typed first (64710,
+    // 64849).
+    
+    export class C {
+      /** @param {any} iScale @param {any} vScale @param {boolean} reset */
+      updateElements(iScale, vScale, reset) {
+        const iAxis = iScale.axis;
+        const vAxis = vScale.axis;
+        const properties = {};
+        const iPixel = properties[iAxis] = reset ? iScale.getPixelForDecimal(0.5) : iScale.getPixelForValue(1);
+              ~~~~~~
+!!! error TS7022: 'iPixel' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+                       ~~~~~~~~~~~~~~~~~
+!!! error TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{ skip: any; }'.
+                       ~~~~~~~~~~~~~~~~~
+!!! error TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{ skip: boolean; }'.
+        const vPixel = properties[vAxis] = reset ? vScale.getBasePixel() : vScale.getPixelForValue(2);
+        properties.skip = isNaN(iPixel) || isNaN(vPixel);
+      }
+    }
+    

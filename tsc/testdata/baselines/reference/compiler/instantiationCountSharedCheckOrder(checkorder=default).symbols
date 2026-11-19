@@ -1,0 +1,41 @@
+//// [tests/cases/compiler/instantiationCountSharedCheckOrder.ts] ////
+
+=== instantiationCountSharedCheckOrder.ts ===
+// Instantiating Wide<[], "a"> fresh takes over five million instantiations,
+// which is too many. In program order Rest has already done all but about
+// two million of them. Whether All takes too many must not depend on which
+// comes first.
+
+type D = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
+>D : Symbol(D, Decl(instantiationCountSharedCheckOrder.ts, 0, 0))
+
+type K = `${D}${D}${D}`;
+>K : Symbol(K, Decl(instantiationCountSharedCheckOrder.ts, 5, 47))
+>D : Symbol(D, Decl(instantiationCountSharedCheckOrder.ts, 0, 0))
+>D : Symbol(D, Decl(instantiationCountSharedCheckOrder.ts, 0, 0))
+>D : Symbol(D, Decl(instantiationCountSharedCheckOrder.ts, 0, 0))
+
+type Wide<N extends 0[], I, J = never> = N["length"] extends 6 ? [I, J] : { [J2 in K]: Wide<[...N, 0], I, J2> }[K];
+>Wide : Symbol(Wide, Decl(instantiationCountSharedCheckOrder.ts, 6, 24))
+>N : Symbol(N, Decl(instantiationCountSharedCheckOrder.ts, 7, 10))
+>I : Symbol(I, Decl(instantiationCountSharedCheckOrder.ts, 7, 24))
+>J : Symbol(J, Decl(instantiationCountSharedCheckOrder.ts, 7, 27))
+>N : Symbol(N, Decl(instantiationCountSharedCheckOrder.ts, 7, 10))
+>I : Symbol(I, Decl(instantiationCountSharedCheckOrder.ts, 7, 24))
+>J : Symbol(J, Decl(instantiationCountSharedCheckOrder.ts, 7, 27))
+>J2 : Symbol(J2, Decl(instantiationCountSharedCheckOrder.ts, 7, 77))
+>K : Symbol(K, Decl(instantiationCountSharedCheckOrder.ts, 5, 47))
+>Wide : Symbol(Wide, Decl(instantiationCountSharedCheckOrder.ts, 6, 24))
+>N : Symbol(N, Decl(instantiationCountSharedCheckOrder.ts, 7, 10))
+>I : Symbol(I, Decl(instantiationCountSharedCheckOrder.ts, 7, 24))
+>J2 : Symbol(J2, Decl(instantiationCountSharedCheckOrder.ts, 7, 77))
+>K : Symbol(K, Decl(instantiationCountSharedCheckOrder.ts, 5, 47))
+
+type Rest = Wide<[0, 0], "a">;
+>Rest : Symbol(Rest, Decl(instantiationCountSharedCheckOrder.ts, 7, 115))
+>Wide : Symbol(Wide, Decl(instantiationCountSharedCheckOrder.ts, 6, 24))
+
+type All = Wide<[], "a">;
+>All : Symbol(All, Decl(instantiationCountSharedCheckOrder.ts, 8, 30))
+>Wide : Symbol(Wide, Decl(instantiationCountSharedCheckOrder.ts, 6, 24))
+

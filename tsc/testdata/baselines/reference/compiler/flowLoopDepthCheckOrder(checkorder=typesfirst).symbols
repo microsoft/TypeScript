@@ -1,0 +1,3060 @@
+//// [tests/cases/compiler/flowLoopDepthCheckOrder.ts] ////
+
+=== flowLoopDepthCheckOrder.ts ===
+// A loop is analyzed once for all references to the same name and the
+// result is cached, so its analysis must not depend on the reference that
+// reached it first. 'deep' reaches the loop with little depth left.
+// Analyzing the loop from there must not make 'x' inside it give up when
+// 'deep' is queried first.
+
+declare function cond(): boolean;
+>cond : Symbol(cond, Decl(flowLoopDepthCheckOrder.ts, 0, 0))
+
+declare let b: boolean;
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+let x: string | number = 0;
+>x : Symbol(x, Decl(flowLoopDepthCheckOrder.ts, 9, 3))
+
+while (cond()) {
+>cond : Symbol(cond, Decl(flowLoopDepthCheckOrder.ts, 0, 0))
+
+    if (typeof x === "string") { x = 1; } else { x = "a"; }
+>x : Symbol(x, Decl(flowLoopDepthCheckOrder.ts, 9, 3))
+>x : Symbol(x, Decl(flowLoopDepthCheckOrder.ts, 9, 3))
+>x : Symbol(x, Decl(flowLoopDepthCheckOrder.ts, 9, 3))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+    if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+}
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+if (b) {}
+>b : Symbol(b, Decl(flowLoopDepthCheckOrder.ts, 7, 11))
+
+const deep = x;
+>deep : Symbol(deep, Decl(flowLoopDepthCheckOrder.ts, 1023, 5))
+>x : Symbol(x, Decl(flowLoopDepthCheckOrder.ts, 9, 3))
+
