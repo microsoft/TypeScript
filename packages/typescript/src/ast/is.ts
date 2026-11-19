@@ -588,3 +588,19 @@ export function isJsxTagNameExpression(node: Node): node is JsxTagNameExpression
 export function isCallChain(node: Node): node is ast.CallChain {
     return guards.isCallExpression(node) && !!(node.flags & NodeFlags.OptionalChain);
 }
+
+export function isClassElement(node: Node): node is ast.ClassElement {
+    switch (node.kind) {
+        case SyntaxKind.Constructor:
+        case SyntaxKind.PropertyDeclaration:
+        case SyntaxKind.MethodDeclaration:
+        case SyntaxKind.GetAccessor:
+        case SyntaxKind.SetAccessor:
+        case SyntaxKind.IndexSignature:
+        case SyntaxKind.ClassStaticBlockDeclaration:
+        case SyntaxKind.SemicolonClassElement:
+            return true;
+        default:
+            return false;
+    }
+}

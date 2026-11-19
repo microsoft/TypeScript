@@ -30,3 +30,12 @@ test("isCallChain recognizes continuations without a question-dot token", () => 
     assert.equal(ast.isCallChain(ordinary), false);
     assert.equal(ast.isCallChain(factory.createNonNullExpression(name, ast.NodeFlags.OptionalChain)), false);
 });
+
+test("isClassElement includes static blocks and index signatures but not interface properties", () => {
+    const signature: ast.Node = factory.createIndexSignatureDeclaration(undefined, []);
+    assert.ok(ast.isClassElement(signature));
+    const narrowed: ast.ClassElement = signature;
+    assert.equal(narrowed, signature);
+    assert.ok(ast.isClassElement(factory.createClassStaticBlockDeclaration(undefined, factory.createBlock([]))));
+    assert.equal(ast.isClassElement(factory.createPropertySignatureDeclaration(undefined, factory.createIdentifier("x"))), false);
+});
