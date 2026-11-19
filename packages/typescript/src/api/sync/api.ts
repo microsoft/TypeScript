@@ -641,6 +641,30 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         );
     }
 
+    /** Returns configured type roots or ancestor node_modules/@types candidates, without checking directory existence. */
+    get getEffectiveTypeRoots(): {
+        (compilerOptions: RawCompilerOptions): readonly RootedDirectoryPath[];
+        gen(compilerOptions: RawCompilerOptions): Generator<ProtocolRequest, readonly RootedDirectoryPath[], ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getEffectiveTypeRoots",
+            function (compilerOptions: RawCompilerOptions): readonly RootedDirectoryPath[] {
+                owner.ensureInitialized();
+                return owner.client.apiRequest("getEffectiveTypeRoots", {
+                    compilerOptions: prepareCompilerOptions(compilerOptions, owner.getCurrentDirectory()),
+                });
+            },
+            function* (compilerOptions: RawCompilerOptions): Generator<ProtocolRequest, readonly RootedDirectoryPath[], ProtocolResponse["result"]> {
+                yield* owner.ensureInitialized.gen();
+                return yield* apiRequest("getEffectiveTypeRoots", {
+                    compilerOptions: prepareCompilerOptions(compilerOptions, owner.getCurrentDirectory()),
+                });
+            },
+        );
+    }
+
     get parseConfigFile(): {
         (file: DocumentIdentifier): ParsedCommandLine;
         gen(file: DocumentIdentifier): Generator<ProtocolRequest, ParsedCommandLine, ProtocolResponse["result"]>;

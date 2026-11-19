@@ -1594,6 +1594,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
             exercisedMethods.add("API.createModuleResolver");
 
             const cases: ParityCase[] = [
+                parityCase("API", "getEffectiveTypeRoots", api.getEffectiveTypeRoots, assertDeepEquivalent, { typeRoots: ["types"] }),
                 parityCase("API", "parseConfigFile", api.parseConfigFile, assertDeepEquivalent, "/tsconfig.json"),
                 parityCase("API", "parseCommandLine", api.parseCommandLine, assertDeepEquivalent, ["--strict", "--noEmit"]),
                 parityCase("API", "readConfigFile", api.readConfigFile, assertDeepEquivalent, "/tsconfig.json"),

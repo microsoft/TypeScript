@@ -391,6 +391,29 @@ describe("API", { concurrency }, () => {
         assert.equal(missing.error?.code, 5083);
     });
 
+    test("getEffectiveTypeRoots uses native candidate directories and normalized options", () => {
+        using api = new API({ cwd: "/workspace/project", fs: createVirtualFileSystem({}) });
+
+        assert.deepEqual(api.getEffectiveTypeRoots({}), [
+            "/workspace/project/node_modules/@types",
+            "/workspace/node_modules/@types",
+            "/node_modules/@types",
+        ]);
+        assert.deepEqual(api.getEffectiveTypeRoots({ configFilePath: "/config/tsconfig.json" }), [
+            "/config/node_modules/@types",
+            "/node_modules/@types",
+        ]);
+        assert.deepEqual(api.getEffectiveTypeRoots({ typeRoots: ["types", "../shared"] }), [
+            "/workspace/project/types",
+            "/workspace/shared",
+        ]);
+        assert.deepEqual(api.getEffectiveTypeRoots({ typeRoots: [] }), []);
+        assert.throws(
+            () => api.getEffectiveTypeRoots({ module: "nodenext" } as unknown as RawCompilerOptions),
+            /invalid request.*unmarshal JSON string into Go core\.ModuleKind/,
+        );
+    });
+
     test("parseConfigFileTextToJson", () => {
         using api = spawnAPI();
 

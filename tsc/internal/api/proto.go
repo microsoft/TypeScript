@@ -88,6 +88,7 @@ const (
 	MethodCreateModuleResolver                           Method = "createModuleResolver"
 	MethodReleaseModuleResolver                          Method = "releaseModuleResolver"
 	MethodResolveModuleName                              Method = "resolveModuleName"
+	MethodGetEffectiveTypeRoots                          Method = "getEffectiveTypeRoots"
 	MethodParseCommandLine                               Method = "parseCommandLine"
 	MethodReadConfigFile                                 Method = "readConfigFile"
 	MethodParseConfigFileTextToJson                      Method = "parseConfigFileTextToJson"
@@ -539,6 +540,10 @@ type CreateModuleResolverParams struct {
 	ResolveModuleNameCallback string                `json:"resolveModuleNameCallback,omitempty"`
 }
 
+type CompilerOptionsParams struct {
+	CompilerOptions core.CompilerOptions `json:"compilerOptions"`
+}
+
 type ReleaseModuleResolverParams struct {
 	Resolver ModuleResolverID `json:"resolver"`
 }
@@ -628,6 +633,7 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodCreateModuleResolver:                           unmarshallerFor[CreateModuleResolverParams],
 	MethodReleaseModuleResolver:                          unmarshallerFor[ReleaseModuleResolverParams],
 	MethodResolveModuleName:                              unmarshallerFor[ResolveModuleNameParams],
+	MethodGetEffectiveTypeRoots:                          unmarshallerFor[CompilerOptionsParams],
 	MethodParseCommandLine:                               unmarshallerFor[ParseCommandLineParams],
 	MethodReadConfigFile:                                 unmarshallerFor[ReadConfigFileParams],
 	MethodParseConfigFileTextToJson:                      unmarshallerFor[ParseConfigFileTextToJsonParams],

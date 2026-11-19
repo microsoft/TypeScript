@@ -913,6 +913,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleReleaseModuleResolver(parsed.(*ReleaseModuleResolverParams))
 	case string(MethodResolveModuleName):
 		return s.handleResolveModuleName(ctx, parsed.(*ResolveModuleNameParams))
+	case string(MethodGetEffectiveTypeRoots):
+		return s.handleGetEffectiveTypeRoots(parsed.(*CompilerOptionsParams))
 	case string(MethodParseCommandLine):
 		return s.handleParseCommandLine(ctx, parsed.(*ParseCommandLineParams))
 	case string(MethodReadConfigFile):
@@ -2037,6 +2039,11 @@ func (s *apiBuildSystem) Spawn(command []string, dir string, stderr io.Writer) (
 }
 func (s *apiBuildSystem) Now() time.Time            { return time.Now() }
 func (s *apiBuildSystem) SinceStart() time.Duration { return time.Since(s.start) }
+
+func (s *Session) handleGetEffectiveTypeRoots(params *CompilerOptionsParams) ([]tspath.RootedDirectoryPath, error) {
+	roots, _ := params.CompilerOptions.GetEffectiveTypeRoots(s.GetCurrentDirectory())
+	return roots, nil
+}
 
 // handleParseCommandLine parses command-line arguments.
 func (s *Session) handleParseCommandLine(ctx context.Context, params *ParseCommandLineParams) (*ConfigFileResponse, error) {

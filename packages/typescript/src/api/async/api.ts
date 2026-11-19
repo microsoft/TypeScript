@@ -514,6 +514,14 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         return orchestrator;
     }
 
+    /** Returns configured type roots or ancestor node_modules/@types candidates, without checking directory existence. */
+    async getEffectiveTypeRoots(compilerOptions: RawCompilerOptions): Promise<readonly RootedDirectoryPath[]> {
+        await this.ensureInitialized();
+        return this.client.apiRequest("getEffectiveTypeRoots", {
+            compilerOptions: prepareCompilerOptions(compilerOptions, this.getCurrentDirectory()),
+        });
+    }
+
     async parseConfigFile(file: DocumentIdentifier): Promise<ParsedCommandLine> {
         await this.ensureInitialized();
         return this.client.apiRequest("parseConfigFile", { file });
