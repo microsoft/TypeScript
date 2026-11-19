@@ -213,14 +213,14 @@ declare const baz: (
 ) => Effect<never, FooError | BarError | BazError, never>;
 
 export const program = baz(1).pipe(catchCategory("domain", (_) => log(_._tag)));
->program : never
->baz(1).pipe(catchCategory("domain", (_) => log(_._tag))) : never
+>program : Effect<void, BazError, never>
+>baz(1).pipe(catchCategory("domain", (_) => log(_._tag))) : Effect<void, BazError, never>
 >baz(1).pipe : <A, B = never>(this: A, ab: (_: A) => B) => B
 >baz(1) : Effect<never, BarError | BazError | FooError, never>
 >baz : (x: number) => Effect<never, FooError | BarError | BazError, never>
 >1 : 1
 >pipe : <A, B = never>(this: A, ab: (_: A) => B) => B
->catchCategory("domain", (_) => log(_._tag)) : <A, R>(effect: Effect<A, BarError | FooError, R>) => Effect<void | A, never, R>
+>catchCategory("domain", (_) => log(_._tag)) : <A, R>(effect: Effect<A, BarError | BazError | FooError, R>) => Effect<void | A, BazError, R>
 >catchCategory : <E, const Categories extends Array<AllKeys<E>>, A2, E2, R2>(...args: [...Categories, f: (err: ExtractAll<E, Categories[number]>) => Effect<A2, E2, R2>]) => <A, R>(effect: Effect<A, E, R>) => Effect<A | A2, E2 | Exclude<E, ExtractAll<E, Categories[number]>>, R | R2>
 >"domain" : "domain"
 >(_) => log(_._tag) : (_: BarError | FooError) => Effect<void, never, never>

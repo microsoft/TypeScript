@@ -24,7 +24,7 @@ makeContextualThisParameter<{ assert(v: any): asserts v }>(function () {
 
     this.assert(v);
 >this.assert : Symbol(assert, Decl(contextualThisAssertionCheckOrder.ts, 6, 29))
->this : Symbol(__type, Decl(contextualThisAssertionCheckOrder.ts, 6, 28))
+>this : Symbol(this, Decl(contextualThisAssertionCheckOrder.ts, 4, 53))
 >assert : Symbol(assert, Decl(contextualThisAssertionCheckOrder.ts, 6, 29))
 >v : Symbol(v, Decl(contextualThisAssertionCheckOrder.ts, 7, 9))
 

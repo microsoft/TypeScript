@@ -44,8 +44,8 @@ declare const make: Make<unknown>;
 >make : Make<unknown>
 
 const r = make(succeed(gen(function* () {
->r : [unknown]
->make(succeed(gen(function* () {  yield* req;  return "";}))) : [unknown]
+>r : [Req]
+>make(succeed(gen(function* () {  yield* req;  return "";}))) : [Req]
 >make : Make<unknown>
 >succeed(gen(function* () {  yield* req;  return "";})) : Effect<() => Effect<string, Req>, never>
 >succeed : <A>(value: A) => Effect<A>
@@ -63,7 +63,7 @@ const r = make(succeed(gen(function* () {
 })));
 const check: [1] = r; // error message shows what R was inferred as
 >check : [1]
->r : [unknown]
+>r : [Req]
 
 type Payload = { scalars: object; objects: object };
 >Payload : Payload
@@ -146,9 +146,9 @@ declare function firstMessageInline<M>(thread: { conversations: Array<{ messages
 
 const viaAlias: string = firstMessageViaAlias(thread).body; 
 >viaAlias : string
->firstMessageViaAlias(thread).body : any
->firstMessageViaAlias(thread) : unknown
+>firstMessageViaAlias(thread).body : string
+>firstMessageViaAlias(thread) : { body: string; }
 >firstMessageViaAlias : <M>(thread: ThreadRow<M>) => M
 >thread : { conversations: { messages: { body: string; }[]; }[]; }
->body : any
+>body : string
 

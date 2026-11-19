@@ -79,6 +79,7 @@ thisTypeInFunctionsNegative.ts(169,23): error TS1359: Identifier expected. 'this
 thisTypeInFunctionsNegative.ts(169,23): error TS2680: A 'this' parameter must be the first parameter.
 thisTypeInFunctionsNegative.ts(170,23): error TS1005: ',' expected.
 thisTypeInFunctionsNegative.ts(171,20): error TS1433: Neither decorators nor modifiers may be applied to 'this' parameters.
+thisTypeInFunctionsNegative.ts(171,21): error TS2304: Cannot find name 'deco'.
 thisTypeInFunctionsNegative.ts(172,30): error TS1005: ',' expected.
 thisTypeInFunctionsNegative.ts(172,32): error TS1359: Identifier expected. 'new' is a reserved word that cannot be used here.
 thisTypeInFunctionsNegative.ts(172,37): error TS1005: ',' expected.
@@ -93,7 +94,7 @@ thisTypeInFunctionsNegative.ts(177,19): error TS2730: An arrow function cannot h
 thisTypeInFunctionsNegative.ts(178,22): error TS2730: An arrow function cannot have a 'this' parameter.
 
 
-==== thisTypeInFunctionsNegative.ts (63 errors) ====
+==== thisTypeInFunctionsNegative.ts (64 errors) ====
     class C {
         n: number;
         explicitThis(this: this, m: number): number {
@@ -407,6 +408,8 @@ thisTypeInFunctionsNegative.ts(178,22): error TS2730: An arrow function cannot h
     function decorated(@deco() this: C): number { return this.n; }
                        ~~~~~~~
 !!! error TS1433: Neither decorators nor modifiers may be applied to 'this' parameters.
+                        ~~~~
+!!! error TS2304: Cannot find name 'deco'.
     function initializer(this: C = new C()): number { return this.n; }
                                  ~
 !!! error TS1005: ',' expected.

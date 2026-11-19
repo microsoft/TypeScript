@@ -23,7 +23,7 @@ declare const setBindArray:
 setBindArray(g => fa => fa.flatMap(g))
 >setBindArray(g => fa => fa.flatMap(g)) : void
 >setBindArray : (bind: <A, B>(g: (a: A) => Monad<B>["Array"]) => (fa: Monad<A>["Array"]) => Monad<B>["Array"]) => void
->g => fa => fa.flatMap(g) : (g: (a: A) => Monad<B>["Array"]) => (fa: A[]) => B[]
+>g => fa => fa.flatMap(g) : <A, B>(g: (a: A) => Monad<B>["Array"]) => (fa: A[]) => B[]
 >g : (a: A) => Monad<B>["Array"]
 >fa => fa.flatMap(g) : (fa: A[]) => B[]
 >fa : A[]
@@ -52,7 +52,7 @@ setBindGeneric("Array", g => fa => fa.flatMap(g))
 >setBindGeneric("Array", g => fa => fa.flatMap(g)) : void
 >setBindGeneric : <I extends MonadIdentifier>(idenfier: I, bind: <A, B>(g: (a: A) => Monad<B>[I]) => (fa: Monad<A>[I]) => Monad<B>[I]) => void
 >"Array" : "Array"
->g => fa => fa.flatMap(g) : (g: (a: A) => B[]) => (fa: A[]) => B[]
+>g => fa => fa.flatMap(g) : <A, B>(g: (a: A) => B[]) => (fa: A_1[]) => B[]
 >g : (a: A) => B[]
 >fa => fa.flatMap(g) : (fa: A[]) => B[]
 >fa : A[]

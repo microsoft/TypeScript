@@ -1,0 +1,141 @@
+varianceCircularityHidesInvariance.ts(69,37): error TS2322: Type '(chart: Chart) => void' is not assignable to type '(chart: Chart<"bar", "bar">) => void'.
+  Types of parameters 'chart' and 'chart' are incompatible.
+    Type 'Chart<"bar", "bar">' is not assignable to type 'Chart<keyof ChartTypeRegistry, keyof ChartTypeRegistry>'.
+      The types of 'config.options' are incompatible between these types.
+        Type '_DeepPartialObject<CoreChartOptions<"bar"> & DatasetChartOptions<"bar"> & "bar">' is not assignable to type '_DeepPartialObject<CoreChartOptions<keyof ChartTypeRegistry> & DatasetChartOptions<keyof ChartTypeRegistry> & "bar"> | _DeepPartialObject<CoreChartOptions<keyof ChartTypeRegistry> & DatasetChartOptions<keyof ChartTypeRegistry> & "line">'.
+          Type '_DeepPartialObject<CoreChartOptions<"bar"> & DatasetChartOptions<"bar"> & "bar">' is not assignable to type '_DeepPartialObject<CoreChartOptions<keyof ChartTypeRegistry> & DatasetChartOptions<keyof ChartTypeRegistry> & "line">'.
+            Types of property 'backgroundColor' are incompatible.
+              Type 'Scriptable<number, ScriptableContext<"bar">> | undefined' is not assignable to type 'Scriptable<number, ScriptableContext<keyof ChartTypeRegistry>> | undefined'.
+                Type 'Scriptable<number, ScriptableContext<"bar">>' is not assignable to type 'Scriptable<number, ScriptableContext<keyof ChartTypeRegistry>>'.
+                  Type 'ScriptableContext<keyof ChartTypeRegistry>' is not assignable to type 'ScriptableContext<"bar">'.
+                    Types of property 'dataset' are incompatible.
+                      Type '_DeepPartialObject<{ defaultDataPoint: []; } & PluginDatasetOptionsByType<keyof ChartTypeRegistry>> & ChartDatasetProperties<keyof ChartTypeRegistry, keyof ChartTypeRegistry> & _DeepPartialObject<{ defaultDataPoint: null; } & PluginDatasetOptionsByType<keyof ChartTypeRegistry>>' is not assignable to type '_DeepPartialObject<{ defaultDataPoint: []; } & PluginDatasetOptionsByType<"bar">> & ChartDatasetProperties<"bar", "bar">'.
+                        Type '_DeepPartialObject<{ defaultDataPoint: []; } & PluginDatasetOptionsByType<keyof ChartTypeRegistry>> & ChartDatasetProperties<keyof ChartTypeRegistry, keyof ChartTypeRegistry> & _DeepPartialObject<{ defaultDataPoint: null; } & PluginDatasetOptionsByType<keyof ChartTypeRegistry>>' is not assignable to type '_DeepPartialObject<{ defaultDataPoint: []; } & PluginDatasetOptionsByType<"bar">>'.
+                          Types of property 'tooltip' are incompatible.
+                            Type '_DeepPartialObject<TooltipDatasetOptions<keyof ChartTypeRegistry>> | undefined' is not assignable to type '_DeepPartialObject<TooltipDatasetOptions<"bar">> | undefined'.
+                              Type '_DeepPartialObject<TooltipDatasetOptions<keyof ChartTypeRegistry>>' is not assignable to type '_DeepPartialObject<TooltipDatasetOptions<"bar">>'.
+                                Types of property 'callbacks' are incompatible.
+                                  Type 'TooltipDatasetCallbacks<keyof ChartTypeRegistry, TooltipModel<keyof ChartTypeRegistry>> | undefined' is not assignable to type 'TooltipDatasetCallbacks<"bar", TooltipModel<"bar">> | undefined'.
+                                    Type 'TooltipDatasetCallbacks<keyof ChartTypeRegistry, TooltipModel<keyof ChartTypeRegistry>>' is not assignable to type 'TooltipDatasetCallbacks<"bar", TooltipModel<"bar">>'.
+                                      Type 'TooltipModel<"bar">' is not assignable to type 'TooltipModel<keyof ChartTypeRegistry>'.
+                                        The types of 'chart.config.options' are incompatible between these types.
+                                          Type '_DeepPartialObject<CoreChartOptions<"bar"> & DatasetChartOptions<"bar"> & "bar">' is not assignable to type '_DeepPartialObject<CoreChartOptions<keyof ChartTypeRegistry> & DatasetChartOptions<keyof ChartTypeRegistry> & "bar"> | _DeepPartialObject<CoreChartOptions<keyof ChartTypeRegistry> & DatasetChartOptions<keyof ChartTypeRegistry> & "line">'.
+                                            Type '_DeepPartialObject<CoreChartOptions<"bar"> & DatasetChartOptions<"bar"> & "bar">' is not assignable to type '_DeepPartialObject<CoreChartOptions<keyof ChartTypeRegistry> & DatasetChartOptions<keyof ChartTypeRegistry> & "line">'.
+                                              Types of property 'backgroundColor' are incompatible.
+                                                Type 'Scriptable<number, ScriptableContext<"bar">> | undefined' is not assignable to type 'Scriptable<number, ScriptableContext<keyof ChartTypeRegistry>> | undefined'.
+                                                  Type 'Scriptable<number, ScriptableContext<"bar">>' is not assignable to type 'Scriptable<number, ScriptableContext<keyof ChartTypeRegistry>>'.
+                                                    Type 'ScriptableContext<keyof ChartTypeRegistry>' is not assignable to type 'ScriptableContext<"bar">'.
+                                                      Types of property 'dataset' are incompatible.
+                                                        Type '_DeepPartialObject<{ defaultDataPoint: []; } & PluginDatasetOptionsByType<keyof ChartTypeRegistry>> & ChartDatasetProperties<keyof ChartTypeRegistry, keyof ChartTypeRegistry> & _DeepPartialObject<{ defaultDataPoint: null; } & PluginDatasetOptionsByType<keyof ChartTypeRegistry>>' is not assignable to type '_DeepPartialObject<{ defaultDataPoint: []; } & PluginDatasetOptionsByType<"bar">> & ChartDatasetProperties<"bar", "bar">'.
+                                                          Type '_DeepPartialObject<{ defaultDataPoint: []; } & PluginDatasetOptionsByType<keyof ChartTypeRegistry>> & ChartDatasetProperties<keyof ChartTypeRegistry, keyof ChartTypeRegistry> & _DeepPartialObject<{ defaultDataPoint: null; } & PluginDatasetOptionsByType<keyof ChartTypeRegistry>>' is not assignable to type 'ChartDatasetProperties<"bar", "bar">'.
+                                                            Types of property 'data' are incompatible.
+                                                              Type 'keyof ChartTypeRegistry' is not assignable to type '"bar"'.
+                                                                Type '"line"' is not assignable to type '"bar"'.
+
+
+==== varianceCircularityHidesInvariance.ts (1 errors) ====
+    // Reduced from chart.js typings (PeerTube, Unleash). Chart, TooltipModel and
+    // ScriptableContext form a variance circularity. ScriptableContext<T> is in
+    // fact invariant: ScriptableContext<"bar" | "line"> is not assignable to
+    // ScriptableContext<"bar"> ('dataset.data' differs), so Chart<"bar"> is not
+    // assignable to Chart<ChartType> and the assignment below must be an error.
+    // Measuring variances from the circularity's entry, main recorded
+    // ScriptableContext/TooltipModel as bivariant (measured mid-cycle) and
+    // accepted it; main reports this error too when ScriptableContext's variance
+    // is measured first (e.g. after checking a ScriptableContext assignment).
+    
+    declare class Element<T, O> { options: O }
+    type DeepPartial<T> = T extends Function ? T : T extends object ? _DeepPartialObject<T> : undefined
+    type _DeepPartialObject<T> = { [P in keyof T]?: DeepPartial<T[P]> }
+    type UnionToIntersection<U> = (U extends unknown ? (k: U) => void : never) extends (k: infer I) => void ? I : never
+    type AnyObject = Record<string, any>
+    interface ScriptableContext<TType extends ChartType> {
+        dataset: UnionToIntersection<ChartDataset<TType>>
+    }
+    type Scriptable<T, TContext> = (ctx: TContext) => T
+    declare class Chart<TType extends ChartType = ChartType, TData = TType> {
+        config: ChartConfigurationCustomTypesPerDataset<TType>
+    }
+    interface Plugin<TType extends ChartType> {
+        id: string;
+        beforeDraw(chart: Chart<TType>): void
+    }
+    interface CoreChartOptions<TType extends ChartType> {
+        backgroundColor: Scriptable<number, ScriptableContext<TType>>
+    }
+    interface AnimationSpec<TType extends ChartType> {
+        delay: Scriptable<number, ScriptableContext<TType>>
+    }
+    interface TooltipModel<TType extends ChartType> extends Element<AnyObject, TooltipOptions<TType>> {
+        chart: Chart<TType>
+    }
+    interface TooltipDatasetCallbacks<TType extends ChartType, Model = TooltipModel<TType>> {
+        (this: Model): void
+    }
+    interface TooltipOptions<TType extends ChartType> {
+        animation: AnimationSpec<TType>
+    }
+    interface TooltipDatasetOptions<TType extends ChartType> {
+        callbacks: TooltipDatasetCallbacks<TType>
+    }
+    interface PluginDatasetOptionsByType<TType extends ChartType> {
+        tooltip: TooltipDatasetOptions<TType>
+    }
+    interface ChartTypeRegistry {
+        bar: { defaultDataPoint: [] }
+        line: { defaultDataPoint: null }
+    }
+    type ChartType = keyof ChartTypeRegistry
+    type DatasetChartOptions<TType extends ChartType> = { [key in TType]: {} }
+    type ChartOptions<TType extends ChartType> = Exclude<DeepPartial<CoreChartOptions<TType> & DatasetChartOptions<TType> & TType>, undefined>
+    interface ChartDatasetProperties<TType, TData> {
+        data: TData
+    }
+    type ChartDataset<TType extends ChartType, TData = TType> =
+        DeepPartial<ChartTypeRegistry[TType] & PluginDatasetOptionsByType<TType>> & ChartDatasetProperties<TType, TData>
+    type ChartDatasetCustomTypesPerDataset<TType extends ChartType> = DeepPartial<PluginDatasetOptionsByType<TType>>
+    interface ChartDataCustomTypesPerDataset<TType extends ChartType> {
+        datasets: ChartDatasetCustomTypesPerDataset<TType>
+    }
+    export interface ChartConfigurationCustomTypesPerDataset<TType extends ChartType> {
+        data: ChartDataCustomTypesPerDataset<TType>
+        options: ChartOptions<TType>
+    }
+    
+    const p: Plugin<"bar"> = { id: "x", beforeDraw: (chart: Chart) => {} };
+                                        ~~~~~~~~~~
+!!! error TS2322: Type '(chart: Chart) => void' is not assignable to type '(chart: Chart<"bar", "bar">) => void'.
+!!! error TS2322:   Types of parameters 'chart' and 'chart' are incompatible.
+!!! error TS2322:     Type 'Chart<"bar", "bar">' is not assignable to type 'Chart<keyof ChartTypeRegistry, keyof ChartTypeRegistry>'.
+!!! error TS2322:       The types of 'config.options' are incompatible between these types.
+!!! error TS2322:         Type '_DeepPartialObject<CoreChartOptions<"bar"> & DatasetChartOptions<"bar"> & "bar">' is not assignable to type '_DeepPartialObject<CoreChartOptions<keyof ChartTypeRegistry> & DatasetChartOptions<keyof ChartTypeRegistry> & "bar"> | _DeepPartialObject<CoreChartOptions<keyof ChartTypeRegistry> & DatasetChartOptions<keyof ChartTypeRegistry> & "line">'.
+!!! error TS2322:           Type '_DeepPartialObject<CoreChartOptions<"bar"> & DatasetChartOptions<"bar"> & "bar">' is not assignable to type '_DeepPartialObject<CoreChartOptions<keyof ChartTypeRegistry> & DatasetChartOptions<keyof ChartTypeRegistry> & "line">'.
+!!! error TS2322:             Types of property 'backgroundColor' are incompatible.
+!!! error TS2322:               Type 'Scriptable<number, ScriptableContext<"bar">> | undefined' is not assignable to type 'Scriptable<number, ScriptableContext<keyof ChartTypeRegistry>> | undefined'.
+!!! error TS2322:                 Type 'Scriptable<number, ScriptableContext<"bar">>' is not assignable to type 'Scriptable<number, ScriptableContext<keyof ChartTypeRegistry>>'.
+!!! error TS2322:                   Type 'ScriptableContext<keyof ChartTypeRegistry>' is not assignable to type 'ScriptableContext<"bar">'.
+!!! error TS2322:                     Types of property 'dataset' are incompatible.
+!!! error TS2322:                       Type '_DeepPartialObject<{ defaultDataPoint: []; } & PluginDatasetOptionsByType<keyof ChartTypeRegistry>> & ChartDatasetProperties<keyof ChartTypeRegistry, keyof ChartTypeRegistry> & _DeepPartialObject<{ defaultDataPoint: null; } & PluginDatasetOptionsByType<keyof ChartTypeRegistry>>' is not assignable to type '_DeepPartialObject<{ defaultDataPoint: []; } & PluginDatasetOptionsByType<"bar">> & ChartDatasetProperties<"bar", "bar">'.
+!!! error TS2322:                         Type '_DeepPartialObject<{ defaultDataPoint: []; } & PluginDatasetOptionsByType<keyof ChartTypeRegistry>> & ChartDatasetProperties<keyof ChartTypeRegistry, keyof ChartTypeRegistry> & _DeepPartialObject<{ defaultDataPoint: null; } & PluginDatasetOptionsByType<keyof ChartTypeRegistry>>' is not assignable to type '_DeepPartialObject<{ defaultDataPoint: []; } & PluginDatasetOptionsByType<"bar">>'.
+!!! error TS2322:                           Types of property 'tooltip' are incompatible.
+!!! error TS2322:                             Type '_DeepPartialObject<TooltipDatasetOptions<keyof ChartTypeRegistry>> | undefined' is not assignable to type '_DeepPartialObject<TooltipDatasetOptions<"bar">> | undefined'.
+!!! error TS2322:                               Type '_DeepPartialObject<TooltipDatasetOptions<keyof ChartTypeRegistry>>' is not assignable to type '_DeepPartialObject<TooltipDatasetOptions<"bar">>'.
+!!! error TS2322:                                 Types of property 'callbacks' are incompatible.
+!!! error TS2322:                                   Type 'TooltipDatasetCallbacks<keyof ChartTypeRegistry, TooltipModel<keyof ChartTypeRegistry>> | undefined' is not assignable to type 'TooltipDatasetCallbacks<"bar", TooltipModel<"bar">> | undefined'.
+!!! error TS2322:                                     Type 'TooltipDatasetCallbacks<keyof ChartTypeRegistry, TooltipModel<keyof ChartTypeRegistry>>' is not assignable to type 'TooltipDatasetCallbacks<"bar", TooltipModel<"bar">>'.
+!!! error TS2322:                                       Type 'TooltipModel<"bar">' is not assignable to type 'TooltipModel<keyof ChartTypeRegistry>'.
+!!! error TS2322:                                         The types of 'chart.config.options' are incompatible between these types.
+!!! error TS2322:                                           Type '_DeepPartialObject<CoreChartOptions<"bar"> & DatasetChartOptions<"bar"> & "bar">' is not assignable to type '_DeepPartialObject<CoreChartOptions<keyof ChartTypeRegistry> & DatasetChartOptions<keyof ChartTypeRegistry> & "bar"> | _DeepPartialObject<CoreChartOptions<keyof ChartTypeRegistry> & DatasetChartOptions<keyof ChartTypeRegistry> & "line">'.
+!!! error TS2322:                                             Type '_DeepPartialObject<CoreChartOptions<"bar"> & DatasetChartOptions<"bar"> & "bar">' is not assignable to type '_DeepPartialObject<CoreChartOptions<keyof ChartTypeRegistry> & DatasetChartOptions<keyof ChartTypeRegistry> & "line">'.
+!!! error TS2322:                                               Types of property 'backgroundColor' are incompatible.
+!!! error TS2322:                                                 Type 'Scriptable<number, ScriptableContext<"bar">> | undefined' is not assignable to type 'Scriptable<number, ScriptableContext<keyof ChartTypeRegistry>> | undefined'.
+!!! error TS2322:                                                   Type 'Scriptable<number, ScriptableContext<"bar">>' is not assignable to type 'Scriptable<number, ScriptableContext<keyof ChartTypeRegistry>>'.
+!!! error TS2322:                                                     Type 'ScriptableContext<keyof ChartTypeRegistry>' is not assignable to type 'ScriptableContext<"bar">'.
+!!! error TS2322:                                                       Types of property 'dataset' are incompatible.
+!!! error TS2322:                                                         Type '_DeepPartialObject<{ defaultDataPoint: []; } & PluginDatasetOptionsByType<keyof ChartTypeRegistry>> & ChartDatasetProperties<keyof ChartTypeRegistry, keyof ChartTypeRegistry> & _DeepPartialObject<{ defaultDataPoint: null; } & PluginDatasetOptionsByType<keyof ChartTypeRegistry>>' is not assignable to type '_DeepPartialObject<{ defaultDataPoint: []; } & PluginDatasetOptionsByType<"bar">> & ChartDatasetProperties<"bar", "bar">'.
+!!! error TS2322:                                                           Type '_DeepPartialObject<{ defaultDataPoint: []; } & PluginDatasetOptionsByType<keyof ChartTypeRegistry>> & ChartDatasetProperties<keyof ChartTypeRegistry, keyof ChartTypeRegistry> & _DeepPartialObject<{ defaultDataPoint: null; } & PluginDatasetOptionsByType<keyof ChartTypeRegistry>>' is not assignable to type 'ChartDatasetProperties<"bar", "bar">'.
+!!! error TS2322:                                                             Types of property 'data' are incompatible.
+!!! error TS2322:                                                               Type 'keyof ChartTypeRegistry' is not assignable to type '"bar"'.
+!!! error TS2322:                                                                 Type '"line"' is not assignable to type '"bar"'.
+!!! related TS6500 varianceCircularityHidesInvariance.ts:25:5: The expected type comes from property 'beforeDraw' which is declared here on type 'Plugin<"bar">'
+    
