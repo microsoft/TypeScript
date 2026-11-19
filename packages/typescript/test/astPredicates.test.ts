@@ -458,3 +458,12 @@ f<TypeArgument>();
     const argument = nodes.find(node => ast.isIdentifier(node) && node.text === "TypeArgument");
     assert.ok(argument && ast.isPartOfTypeNode(argument));
 });
+
+test("isExternalModuleNameRelative includes rooted disk paths but excludes URLs and bare names", () => {
+    for (const name of [".", "..", "./module", "../module", ".\\module", "..\\module", "/module", "C:/module", "C:\\module", "\\\\server\\share\\module"]) {
+        assert.ok(ast.isExternalModuleNameRelative(name), name);
+    }
+    for (const name of ["", "module", "@scope/module", ".module", ".../module", "https://example.com/module", "file:///module", "C:module"]) {
+        assert.equal(ast.isExternalModuleNameRelative(name), false, name);
+    }
+});
