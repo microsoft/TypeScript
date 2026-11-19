@@ -1,0 +1,105 @@
+main.ts(17,24): error TS2322: Type '{ [x: string]: (el: any) => any; }' is not assignable to type 'Rule & { [x: string]: undefined; }'.
+  Type '{ [x: string]: (el: any) => any; }' is not assignable to type '{ [x: string]: undefined; }'.
+    'string' index signatures are incompatible.
+      Type '(el: any) => any' is not assignable to type 'undefined'.
+main.ts(17,35): error TS7006: Parameter 'el' implicitly has an 'any' type.
+main.ts(18,30): error TS2322: Type '{ [x: string]: (el: any) => any; }' is not assignable to type 'Rule & { [x: string]: undefined; }'.
+  Type '{ [x: string]: (el: any) => any; }' is not assignable to type '{ [x: string]: undefined; }'.
+    'string' index signatures are incompatible.
+      Type '(el: any) => any' is not assignable to type 'undefined'.
+main.ts(18,41): error TS7006: Parameter 'el' implicitly has an 'any' type.
+main.ts(19,29): error TS2322: Type '{ [x: string]: (el: any) => any; }' is not assignable to type 'Rule & { [x: string]: undefined; [x: number]: undefined; [x: symbol]: undefined; }'.
+  Type '{ [x: string]: (el: any) => any; }' is not assignable to type '{ [x: string]: undefined; [x: number]: undefined; [x: symbol]: undefined; }'.
+    'string' index signatures are incompatible.
+      Type '(el: any) => any' is not assignable to type 'undefined'.
+main.ts(19,40): error TS7006: Parameter 'el' implicitly has an 'any' type.
+main.ts(23,36): error TS2322: Type '{ [x: string]: (el: any) => any; }' is not assignable to type 'Rule & { [x: string]: undefined; }'.
+  Type '{ [x: string]: (el: any) => any; }' is not assignable to type '{ [x: string]: undefined; }'.
+    'string' index signatures are incompatible.
+      Type '(el: any) => any' is not assignable to type 'undefined'.
+main.ts(23,47): error TS7006: Parameter 'el' implicitly has an 'any' type.
+
+
+==== library.d.ts (0 errors) ====
+    type NoStrayRuleKeys<R> = { [K in keyof R]: unknown };
+    type StrictRules<R, T> = ([keyof R] extends [never] ? Required<T> : NoStrayRuleKeys<R>) & {
+        [K in R extends unknown ? Exclude<keyof R, keyof T> : never]?: never;
+    };
+    export declare class Deriver<T> {
+        derive<R extends T & StrictRules<R, T>>(build: () => R): void;
+        plain<R extends T>(build: () => R): void;
+    }
+    
+    export declare class RealIndex<T> {
+        derive<R extends T & { [x: string]: undefined }>(build: () => R): void;
+    }
+    export declare class RealMappedIndex<T> {
+        derive<R extends T & { [K in string]?: never }>(build: () => R): void;
+    }
+    export declare class AnyMappedIndex<T> {
+        derive<R extends T & { [K in any]?: never }>(build: () => R): void;
+    }
+    export declare class UnresolvedMappedIndex<T> {
+        derive<R extends T & { [K in MissingKeys]?: never }>(build: () => R): void;
+    }
+    
+==== main.ts (8 errors) ====
+    import type { Deriver, RealIndex, RealMappedIndex, AnyMappedIndex, UnresolvedMappedIndex } from "./library.js";
+    
+    declare const key: string;
+    type Rule = { [x: string]: (el: number) => unknown };
+    declare const indexed: Deriver<Rule>;
+    declare const literal: Deriver<{ rows?: (el: number) => unknown }>;
+    
+    // Repro from #65530: a failed circular key constraint must not add an index signature.
+    indexed.derive(() => ({ [key]: (el) => el.toFixed() }));
+    literal.derive(() => ({ rows: (el) => el.toFixed() }));
+    indexed.plain(() => ({ [key]: (el) => el.toFixed() }));
+    
+    // Genuine index signatures still contribute to the contextual type, including any keys.
+    declare const realIndex: RealIndex<Rule>;
+    declare const realMappedIndex: RealMappedIndex<Rule>;
+    declare const anyMappedIndex: AnyMappedIndex<Rule>;
+    realIndex.derive(() => ({ [key]: (el) => el }));
+                           ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ [x: string]: (el: any) => any; }' is not assignable to type 'Rule & { [x: string]: undefined; }'.
+!!! error TS2322:   Type '{ [x: string]: (el: any) => any; }' is not assignable to type '{ [x: string]: undefined; }'.
+!!! error TS2322:     'string' index signatures are incompatible.
+!!! error TS2322:       Type '(el: any) => any' is not assignable to type 'undefined'.
+!!! related TS6502 library.d.ts:11:61: The expected type comes from the return type of this signature.
+                                      ~~
+!!! error TS7006: Parameter 'el' implicitly has an 'any' type.
+    realMappedIndex.derive(() => ({ [key]: (el) => el }));
+                                 ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ [x: string]: (el: any) => any; }' is not assignable to type 'Rule & { [x: string]: undefined; }'.
+!!! error TS2322:   Type '{ [x: string]: (el: any) => any; }' is not assignable to type '{ [x: string]: undefined; }'.
+!!! error TS2322:     'string' index signatures are incompatible.
+!!! error TS2322:       Type '(el: any) => any' is not assignable to type 'undefined'.
+!!! related TS6502 library.d.ts:14:60: The expected type comes from the return type of this signature.
+                                            ~~
+!!! error TS7006: Parameter 'el' implicitly has an 'any' type.
+    anyMappedIndex.derive(() => ({ [key]: (el) => el }));
+                                ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ [x: string]: (el: any) => any; }' is not assignable to type 'Rule & { [x: string]: undefined; [x: number]: undefined; [x: symbol]: undefined; }'.
+!!! error TS2322:   Type '{ [x: string]: (el: any) => any; }' is not assignable to type '{ [x: string]: undefined; [x: number]: undefined; [x: symbol]: undefined; }'.
+!!! error TS2322:     'string' index signatures are incompatible.
+!!! error TS2322:       Type '(el: any) => any' is not assignable to type 'undefined'.
+!!! related TS6502 library.d.ts:17:57: The expected type comes from the return type of this signature.
+                                           ~~
+!!! error TS7006: Parameter 'el' implicitly has an 'any' type.
+    
+    // An unresolved name is an error key type, but its constraint is not circular.
+    declare const unresolvedMappedIndex: UnresolvedMappedIndex<Rule>;
+    unresolvedMappedIndex.derive(() => ({ [key]: (el) => el }));
+                                       ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ [x: string]: (el: any) => any; }' is not assignable to type 'Rule & { [x: string]: undefined; }'.
+!!! error TS2322:   Type '{ [x: string]: (el: any) => any; }' is not assignable to type '{ [x: string]: undefined; }'.
+!!! error TS2322:     'string' index signatures are incompatible.
+!!! error TS2322:       Type '(el: any) => any' is not assignable to type 'undefined'.
+!!! related TS6502 library.d.ts:20:65: The expected type comes from the return type of this signature.
+                                                  ~~
+!!! error TS7006: Parameter 'el' implicitly has an 'any' type.
+    
+    const anyKeyedCallbacks: { [K in any]: (el: number) => unknown } = {
+        [key]: (el) => el.toFixed(),
+    };

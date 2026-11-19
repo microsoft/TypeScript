@@ -21607,6 +21607,11 @@ func (c *Checker) resolveMappedTypeMembers(t *Type) {
 	// and T as the template type.
 	typeParameter := c.getTypeParameterFromMappedType(t)
 	constraintType := c.getConstraintTypeFromMappedType(t)
+	if constraintType == c.errorType && !c.hasNonCircularBaseConstraint(typeParameter) {
+		// A circular key constraint falls back to the error type. Don't treat it as
+		// an any key and synthesize an index signature from it.
+		return
+	}
 	mappedType := core.OrElse(t.AsMappedType().target, t)
 	nameType := c.getNameTypeFromMappedType(mappedType)
 	shouldLinkPropDeclarations := c.getMappedTypeNameTypeKind(mappedType) != MappedTypeNameTypeKindRemapping
