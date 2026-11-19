@@ -788,3 +788,78 @@ export function isTypeOnlyImportOrExportDeclaration(node: Node): node is ast.Typ
 export function isPartOfTypeOnlyImportOrExportDeclaration(node: Node): boolean {
     return findAncestor(node, isTypeOnlyImportOrExportDeclaration) !== undefined;
 }
+
+export function isPartOfTypeNode(node: Node): boolean {
+    function isTypeExpression(node: ExpressionWithTypeArguments): boolean {
+        return !!node.parent && (guards.isJSDocImplementsTag(node.parent) || guards.isJSDocAugmentsTag(node.parent) ||
+            isPartOfTypeExpressionWithTypeArguments(node));
+    }
+
+    if (node.kind >= SyntaxKind.FirstTypeNode && node.kind <= SyntaxKind.LastTypeNode) return true;
+    switch (node.kind) {
+        case SyntaxKind.AnyKeyword:
+        case SyntaxKind.UnknownKeyword:
+        case SyntaxKind.NumberKeyword:
+        case SyntaxKind.BigIntKeyword:
+        case SyntaxKind.StringKeyword:
+        case SyntaxKind.BooleanKeyword:
+        case SyntaxKind.SymbolKeyword:
+        case SyntaxKind.ObjectKeyword:
+        case SyntaxKind.UndefinedKeyword:
+        case SyntaxKind.NullKeyword:
+        case SyntaxKind.NeverKeyword:
+            return true;
+        case SyntaxKind.VoidKeyword:
+            return node.parent?.kind !== SyntaxKind.VoidExpression;
+        case SyntaxKind.ExpressionWithTypeArguments:
+            return isTypeExpression(node as ExpressionWithTypeArguments);
+        case SyntaxKind.TypeParameter:
+            return node.parent?.kind === SyntaxKind.MappedType || node.parent?.kind === SyntaxKind.InferType;
+        case SyntaxKind.Identifier:
+            if (
+                node.parent && (guards.isQualifiedName(node.parent) && node.parent.right === node ||
+                    guards.isPropertyAccessExpression(node.parent) && node.parent.name === node)
+            ) {
+                node = node.parent;
+            }
+        // falls through
+        case SyntaxKind.QualifiedName:
+        case SyntaxKind.PropertyAccessExpression:
+        case SyntaxKind.ThisKeyword: {
+            const parent = node.parent;
+            if (!parent || parent.kind === SyntaxKind.TypeQuery) return false;
+            if (guards.isImportTypeNode(parent)) return !parent.isTypeOf;
+            if (parent.kind >= SyntaxKind.FirstTypeNode && parent.kind <= SyntaxKind.LastTypeNode) return true;
+            switch (parent.kind) {
+                case SyntaxKind.ExpressionWithTypeArguments:
+                    return isTypeExpression(parent as ExpressionWithTypeArguments);
+                case SyntaxKind.TypeParameter:
+                    return (parent as ast.TypeParameterDeclaration).constraint === node;
+                case SyntaxKind.JSDocTemplateTag:
+                    return (parent as ast.JSDocTemplateTag).constraint === node;
+                case SyntaxKind.PropertyDeclaration:
+                case SyntaxKind.PropertySignature:
+                case SyntaxKind.Parameter:
+                case SyntaxKind.VariableDeclaration:
+                case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.ArrowFunction:
+                case SyntaxKind.Constructor:
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.MethodSignature:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                case SyntaxKind.CallSignature:
+                case SyntaxKind.ConstructSignature:
+                case SyntaxKind.IndexSignature:
+                case SyntaxKind.TypeAssertionExpression:
+                    return "type" in parent && parent.type === node;
+                case SyntaxKind.CallExpression:
+                case SyntaxKind.NewExpression:
+                case SyntaxKind.TaggedTemplateExpression:
+                    return !!(parent as ast.CallExpression | ast.NewExpression | ast.TaggedTemplateExpression).typeArguments?.includes(node as TypeNode);
+            }
+        }
+    }
+    return false;
+}

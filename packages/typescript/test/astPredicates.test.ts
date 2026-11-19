@@ -409,3 +409,52 @@ test("isPartOfTypeOnlyImportOrExportDeclaration includes the alias itself and it
     assert.ok(ast.isPartOfTypeOnlyImportOrExportDeclaration(specifier));
     assert.equal(ast.isPartOfTypeOnlyImportOrExportDeclaration(factory.createIdentifier("value")), false);
 });
+
+test("isPartOfTypeNode classifies contextual names without recursively classifying every qualifier", async () => {
+    const { API } = await import("./sync/api.testUtils.ts");
+    const { createVirtualFileSystem } = await import("./testUtils.ts");
+    const { fileURLToPath } = await import("node:url");
+    using api = new API({
+        cwd: fileURLToPath(new URL("../../../", import.meta.url)),
+        tsserverPath: fileURLToPath(new URL(`../../../built/local/tsc${process.platform === "win32" ? ".exe" : ""}`, import.meta.url)),
+        fs: createVirtualFileSystem({}),
+    });
+    const source = api.createSourceFile(
+        "/test.ts",
+        `
+let value: A.B.C;
+let query: typeof A.B.C;
+class Derived extends Base implements Interface {}
+interface I extends Base {}
+void value;
+type Result = void;
+type Imported = import("module").ImportedName;
+type ImportQuery = typeof import("module").QueriedName;
+type Mapped<T> = { [K in keyof T]: T[K] };
+type Conditional<T> = T extends infer U ? U : never;
+f<TypeArgument>();
+`,
+    ).sourceFile;
+    const nodes: ast.Node[] = [];
+    function collect(node: ast.Node): void {
+        nodes.push(node);
+        node.forEachChild(child => {
+            collect(child);
+        });
+    }
+    collect(source);
+    const names = nodes.filter(ast.isIdentifier).filter(node => ["A", "B", "C"].includes(node.text));
+    assert.deepEqual(names.map(ast.isPartOfTypeNode), [false, false, true, false, false, false]);
+    const heritage = nodes.filter(ast.isHeritageClause).flatMap(clause => [...clause.types]);
+    assert.deepEqual(heritage.map(ast.isPartOfTypeNode), [false, true, true]);
+    const voids = nodes.filter(node => node.kind === ast.SyntaxKind.VoidKeyword);
+    assert.deepEqual(voids.map(ast.isPartOfTypeNode), [true]);
+    const valueUses = nodes.filter(ast.isIdentifier).filter(node => node.text === "value");
+    assert.deepEqual(valueUses.map(ast.isPartOfTypeNode), [false, false]);
+    const importNames = nodes.filter(ast.isIdentifier).filter(node => node.text === "ImportedName" || node.text === "QueriedName");
+    assert.deepEqual(importNames.map(ast.isPartOfTypeNode), [true, false]);
+    const parameters = nodes.filter(ast.isTypeParameterDeclaration);
+    assert.deepEqual(parameters.map(ast.isPartOfTypeNode), [false, true, false, true]);
+    const argument = nodes.find(node => ast.isIdentifier(node) && node.text === "TypeArgument");
+    assert.ok(argument && ast.isPartOfTypeNode(argument));
+});
