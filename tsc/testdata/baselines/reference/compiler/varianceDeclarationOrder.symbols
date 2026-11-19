@@ -1,0 +1,126 @@
+//// [tests/cases/compiler/varianceDeclarationOrder.ts] ////
+
+=== refFirst.ts ===
+type M = { kind: "m" };
+>M : Symbol(M, Decl(refFirst.ts, 0, 0))
+>kind : Symbol(kind, Decl(refFirst.ts, 0, 10))
+
+type Filtered<T> = { [K in keyof T as T[K] extends M ? K : never]: T[K] };
+>Filtered : Symbol(Filtered, Decl(refFirst.ts, 0, 23))
+>T : Symbol(T, Decl(refFirst.ts, 1, 14))
+>K : Symbol(K, Decl(refFirst.ts, 1, 22))
+>T : Symbol(T, Decl(refFirst.ts, 1, 14))
+>T : Symbol(T, Decl(refFirst.ts, 1, 14))
+>K : Symbol(K, Decl(refFirst.ts, 1, 22))
+>M : Symbol(M, Decl(refFirst.ts, 0, 0))
+>K : Symbol(K, Decl(refFirst.ts, 1, 22))
+>T : Symbol(T, Decl(refFirst.ts, 1, 14))
+>K : Symbol(K, Decl(refFirst.ts, 1, 22))
+
+interface Config<T> { measure: keyof T }
+>Config : Symbol(Config, Decl(refFirst.ts, 1, 74))
+>T : Symbol(T, Decl(refFirst.ts, 2, 17))
+>measure : Symbol(Config.measure, Decl(refFirst.ts, 2, 21))
+>T : Symbol(T, Decl(refFirst.ts, 2, 17))
+
+interface Ref<N> { dataset: DS<Record<string, M>, N> }
+>Ref : Symbol(Ref, Decl(refFirst.ts, 2, 40))
+>N : Symbol(N, Decl(refFirst.ts, 3, 14))
+>dataset : Symbol(Ref.dataset, Decl(refFirst.ts, 3, 18))
+>DS : Symbol(DS, Decl(refFirst.ts, 3, 54))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>M : Symbol(M, Decl(refFirst.ts, 0, 0))
+>N : Symbol(N, Decl(refFirst.ts, 3, 14))
+
+interface DS<T, N> {
+>DS : Symbol(DS, Decl(refFirst.ts, 3, 54))
+>T : Symbol(T, Decl(refFirst.ts, 4, 13))
+>N : Symbol(N, Decl(refFirst.ts, 4, 15))
+
+    a(config: Config<Filtered<T>>): void;
+>a : Symbol(DS.a, Decl(refFirst.ts, 4, 20))
+>config : Symbol(config, Decl(refFirst.ts, 5, 6))
+>Config : Symbol(Config, Decl(refFirst.ts, 1, 74))
+>Filtered : Symbol(Filtered, Decl(refFirst.ts, 0, 23))
+>T : Symbol(T, Decl(refFirst.ts, 4, 13))
+
+    b: Ref<N>;
+>b : Symbol(DS.b, Decl(refFirst.ts, 5, 41))
+>Ref : Symbol(Ref, Decl(refFirst.ts, 2, 40))
+>N : Symbol(N, Decl(refFirst.ts, 4, 15))
+}
+declare const x: DS<{ total: M }, string>;
+>x : Symbol(x, Decl(refFirst.ts, 8, 13))
+>DS : Symbol(DS, Decl(refFirst.ts, 3, 54))
+>total : Symbol(total, Decl(refFirst.ts, 8, 21))
+>M : Symbol(M, Decl(refFirst.ts, 0, 0))
+
+export const y: DS<Record<string, M>, string> = x;
+>y : Symbol(y, Decl(refFirst.ts, 9, 12))
+>DS : Symbol(DS, Decl(refFirst.ts, 3, 54))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>M : Symbol(M, Decl(refFirst.ts, 0, 0))
+>x : Symbol(x, Decl(refFirst.ts, 8, 13))
+
+=== dsFirst.ts ===
+type M = { kind: "m" };
+>M : Symbol(M, Decl(dsFirst.ts, 0, 0))
+>kind : Symbol(kind, Decl(dsFirst.ts, 0, 10))
+
+type Filtered<T> = { [K in keyof T as T[K] extends M ? K : never]: T[K] };
+>Filtered : Symbol(Filtered, Decl(dsFirst.ts, 0, 23))
+>T : Symbol(T, Decl(dsFirst.ts, 1, 14))
+>K : Symbol(K, Decl(dsFirst.ts, 1, 22))
+>T : Symbol(T, Decl(dsFirst.ts, 1, 14))
+>T : Symbol(T, Decl(dsFirst.ts, 1, 14))
+>K : Symbol(K, Decl(dsFirst.ts, 1, 22))
+>M : Symbol(M, Decl(dsFirst.ts, 0, 0))
+>K : Symbol(K, Decl(dsFirst.ts, 1, 22))
+>T : Symbol(T, Decl(dsFirst.ts, 1, 14))
+>K : Symbol(K, Decl(dsFirst.ts, 1, 22))
+
+interface Config<T> { measure: keyof T }
+>Config : Symbol(Config, Decl(dsFirst.ts, 1, 74))
+>T : Symbol(T, Decl(dsFirst.ts, 2, 17))
+>measure : Symbol(Config.measure, Decl(dsFirst.ts, 2, 21))
+>T : Symbol(T, Decl(dsFirst.ts, 2, 17))
+
+interface DS<T, N> {
+>DS : Symbol(DS, Decl(dsFirst.ts, 2, 40))
+>T : Symbol(T, Decl(dsFirst.ts, 3, 13))
+>N : Symbol(N, Decl(dsFirst.ts, 3, 15))
+
+    a(config: Config<Filtered<T>>): void;
+>a : Symbol(DS.a, Decl(dsFirst.ts, 3, 20))
+>config : Symbol(config, Decl(dsFirst.ts, 4, 6))
+>Config : Symbol(Config, Decl(dsFirst.ts, 1, 74))
+>Filtered : Symbol(Filtered, Decl(dsFirst.ts, 0, 23))
+>T : Symbol(T, Decl(dsFirst.ts, 3, 13))
+
+    b: Ref<N>;
+>b : Symbol(DS.b, Decl(dsFirst.ts, 4, 41))
+>Ref : Symbol(Ref, Decl(dsFirst.ts, 6, 1))
+>N : Symbol(N, Decl(dsFirst.ts, 3, 15))
+}
+interface Ref<N> { dataset: DS<Record<string, M>, N> }
+>Ref : Symbol(Ref, Decl(dsFirst.ts, 6, 1))
+>N : Symbol(N, Decl(dsFirst.ts, 7, 14))
+>dataset : Symbol(Ref.dataset, Decl(dsFirst.ts, 7, 18))
+>DS : Symbol(DS, Decl(dsFirst.ts, 2, 40))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>M : Symbol(M, Decl(dsFirst.ts, 0, 0))
+>N : Symbol(N, Decl(dsFirst.ts, 7, 14))
+
+declare const x: DS<{ total: M }, string>;
+>x : Symbol(x, Decl(dsFirst.ts, 8, 13))
+>DS : Symbol(DS, Decl(dsFirst.ts, 2, 40))
+>total : Symbol(total, Decl(dsFirst.ts, 8, 21))
+>M : Symbol(M, Decl(dsFirst.ts, 0, 0))
+
+export const y: DS<Record<string, M>, string> = x;
+>y : Symbol(y, Decl(dsFirst.ts, 9, 12))
+>DS : Symbol(DS, Decl(dsFirst.ts, 2, 40))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>M : Symbol(M, Decl(dsFirst.ts, 0, 0))
+>x : Symbol(x, Decl(dsFirst.ts, 8, 13))
+

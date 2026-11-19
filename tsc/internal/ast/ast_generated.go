@@ -534,7 +534,7 @@ type (
 	PropertyName                   = Node // Identifier | StringLiteral | NoSubstitutionTemplateLiteral | NumericLiteral | ComputedPropertyName | PrivateIdentifier | BigIntLiteral
 	ModuleBody                     = Node // ModuleBlock | ModuleDeclaration | Identifier
 	JSDocFullName                  = Node // Identifier | ModuleDeclaration
-	ForInitializer                 = Node // Expression | MissingDeclaration | VariableDeclarationList
+	ForInitializer                 = Node // Expression | VariableDeclarationList
 	ModuleReference                = Node // Identifier | QualifiedName | ExternalModuleReference
 	NamedImportBindings            = Node // NamespaceImport | NamedImports
 	NamedExportBindings            = Node // NamespaceExport | NamedExports

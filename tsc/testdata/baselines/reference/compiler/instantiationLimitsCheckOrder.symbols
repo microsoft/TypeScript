@@ -1,0 +1,54 @@
+//// [tests/cases/compiler/instantiationLimitsCheckOrder.ts] ////
+
+=== instantiationLimitsCheckOrder.ts ===
+// The depth limit on instantiations must not depend on what was
+// instantiated before. The limit on the number of instantiations does, as
+// it only stops runaway instantiations, so it is only tested for a single
+// statement whose work nothing else shares.
+
+type D = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
+>D : Symbol(D, Decl(instantiationLimitsCheckOrder.ts, 0, 0))
+
+type K = `${D}${D}${D}`;
+>K : Symbol(K, Decl(instantiationLimitsCheckOrder.ts, 5, 47))
+>D : Symbol(D, Decl(instantiationLimitsCheckOrder.ts, 0, 0))
+>D : Symbol(D, Decl(instantiationLimitsCheckOrder.ts, 0, 0))
+>D : Symbol(D, Decl(instantiationLimitsCheckOrder.ts, 0, 0))
+
+// Several million instantiations, well over the limit, for one statement.
+type Wide<N extends 0[], I> = N["length"] extends 8 ? I : { [J in K]: Wide<[...N, 0], [J, I][0]> }[K];
+>Wide : Symbol(Wide, Decl(instantiationLimitsCheckOrder.ts, 6, 24))
+>N : Symbol(N, Decl(instantiationLimitsCheckOrder.ts, 9, 10))
+>I : Symbol(I, Decl(instantiationLimitsCheckOrder.ts, 9, 24))
+>N : Symbol(N, Decl(instantiationLimitsCheckOrder.ts, 9, 10))
+>I : Symbol(I, Decl(instantiationLimitsCheckOrder.ts, 9, 24))
+>J : Symbol(J, Decl(instantiationLimitsCheckOrder.ts, 9, 61))
+>K : Symbol(K, Decl(instantiationLimitsCheckOrder.ts, 5, 47))
+>Wide : Symbol(Wide, Decl(instantiationLimitsCheckOrder.ts, 6, 24))
+>N : Symbol(N, Decl(instantiationLimitsCheckOrder.ts, 9, 10))
+>J : Symbol(J, Decl(instantiationLimitsCheckOrder.ts, 9, 61))
+>I : Symbol(I, Decl(instantiationLimitsCheckOrder.ts, 9, 24))
+>K : Symbol(K, Decl(instantiationLimitsCheckOrder.ts, 5, 47))
+
+type WideAll = Wide<[], "">;
+>WideAll : Symbol(WideAll, Decl(instantiationLimitsCheckOrder.ts, 9, 102))
+>Wide : Symbol(Wide, Decl(instantiationLimitsCheckOrder.ts, 6, 24))
+
+// Over a hundred nested instantiations, half of which already happened for
+// another statement.
+type Deep<N extends 0[]> = N["length"] extends 60 ? never : Deep<[...N, 0]> | N["length"];
+>Deep : Symbol(Deep, Decl(instantiationLimitsCheckOrder.ts, 10, 28))
+>N : Symbol(N, Decl(instantiationLimitsCheckOrder.ts, 14, 10))
+>N : Symbol(N, Decl(instantiationLimitsCheckOrder.ts, 14, 10))
+>Deep : Symbol(Deep, Decl(instantiationLimitsCheckOrder.ts, 10, 28))
+>N : Symbol(N, Decl(instantiationLimitsCheckOrder.ts, 14, 10))
+>N : Symbol(N, Decl(instantiationLimitsCheckOrder.ts, 14, 10))
+
+type DeepTail = Deep<[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]>;
+>DeepTail : Symbol(DeepTail, Decl(instantiationLimitsCheckOrder.ts, 14, 90))
+>Deep : Symbol(Deep, Decl(instantiationLimitsCheckOrder.ts, 10, 28))
+
+type DeepAll = Deep<[]>;
+>DeepAll : Symbol(DeepAll, Decl(instantiationLimitsCheckOrder.ts, 15, 113))
+>Deep : Symbol(Deep, Decl(instantiationLimitsCheckOrder.ts, 10, 28))
+

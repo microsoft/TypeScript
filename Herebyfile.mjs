@@ -29,6 +29,7 @@ import {
     ensureModel as ensureLSPModel,
     outputs as lspModelOutputs,
 } from "./tools/scripts/lsp/fetchModel.mts";
+import { outputs as contentMapperOutputs } from "./tools/scripts/tsc/generate-contentmapper.ts";
 import { outputs as encoderOutputs } from "./tools/scripts/tsc/generate-encoder.ts";
 import { outputs as enumOutputs } from "./tools/scripts/tsc/generate-enums.ts";
 import { outputs as goASTOutputs } from "./tools/scripts/tsc/generate-go-ast.ts";
@@ -319,6 +320,8 @@ export const cleanBuilt = task({
 const goGenerateActions = [];
 
 async function runGenerateGo() {
+    // Some Go generators load packages that depend on the generated content mapper types.
+    await runGenerateContentMapper();
     for (const generate of goGenerateActions) {
         await generate();
     }
@@ -677,6 +680,18 @@ export const generateAST = task({
     run: runGenerateAST,
 });
 
+async function runGenerateContentMapper() {
+    const { default: generate } = await import("./tools/scripts/tsc/generate-contentmapper.ts");
+    generate(!!options.force);
+}
+
+export const generateContentMapper = task({
+    name: "generate:contentmapper",
+    description: "Generates content mapper protocol and Go/TypeScript span map types from the JSON schema.",
+    outputs: contentMapperOutputs,
+    run: runGenerateContentMapper,
+});
+
 async function runGenerateSync() {
     const { generateSync } = await import("./packages/typescript/scripts/generateSync.ts");
     generateSync(!!options.force);
@@ -857,6 +872,7 @@ export const buildWatch = task({
                 "tools/gen-proto",
                 "tools/gen-preferences",
                 "tools/userPreferences.schema.json",
+                "packages/typescript/schemas/contentmapper.schema.json",
                 "packages/typescript/src/api/async",
                 "packages/typescript/test/async",
                 "packages/vscode-typescript/src",
@@ -1164,10 +1180,12 @@ export const testTools = task({
 export const testCodegen = task({
     name: "test:codegen",
     description: "Runs codegen tests without regenerating sources.",
-    run: async () => {
-        await run("node", ["--test", "--test-concurrency=1", "./tools/scripts/gen/*.test.mts", "./tools/scripts/tsc/*.test.ts"]);
-    },
+    run: runTestCodegen,
 });
+
+async function runTestCodegen() {
+    await run("node", ["--test", "--test-concurrency=1", "./tools/scripts/gen/*.test.mts", "./tools/scripts/tsc/*.test.ts"]);
+}
 
 export const buildAPI = task({
     name: "build:api",
@@ -1520,9 +1538,7 @@ export const validate = task({
         if (options.all) {
             await runValidation("check:herebyfile", runCheckHerebyfile);
             await runValidation("test:tools", runTestTools);
-            await runValidation("test:options", async () => {
-                await run("node", ["--test", "./tools/scripts/tsc/options.test.ts"]);
-            });
+            await runValidation("test:codegen", runTestCodegen);
             await runValidation("test:smoke", runSmokeTest); // in CI this is run with `--race`
         }
         await runValidation("lint", runLint);
@@ -2894,7 +2910,7 @@ async function testTypeScriptPackage(platforms) {
             packed[0].files.some(file => file.path === "dist/wasm/index.js"),
             "Main package is missing the WASM host entrypoint",
         );
-        for (const name of ["tsconfig", "jsconfig"]) {
+        for (const name of ["tsconfig", "jsconfig", "contentmapper"]) {
             const schemaPath = `schemas/${name}.schema.json`;
             assert(packed[0].files.some(file => file.path === schemaPath), `Package is missing ${schemaPath}`);
             assert.deepEqual(

@@ -4743,7 +4743,11 @@
                     },
                     {
                         "name": "TypeExpression",
-                        "type": "Node",
+                        "type": [
+                            "JSDocTypeExpression",
+                            "JSDocTypeLiteral"
+                        ],
+                        "typeGuard": "isJSDocTypeExpressionOrJSDocTypeLiteral",
                         "optional": true
                     },
                     {
@@ -5243,7 +5247,6 @@
             ],
             "ForInitializer": [
                 "Expression",
-                "MissingDeclaration",
                 "VariableDeclarationList"
             ],
             "ModuleReference": [

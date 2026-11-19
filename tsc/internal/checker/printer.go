@@ -285,12 +285,18 @@ func (c *Checker) formatUnionTypes(types []*Type, expandingEnum bool) []*Type {
 	return result
 }
 
+// hoverOnlyNodeBuilderFlags affect only printed hover text. These entry points
+// return syntax trees, so they clear the flags.
+const hoverOnlyNodeBuilderFlags = nodebuilder.FlagsWriteTypeArgumentsOfSignature | nodebuilder.FlagsUseInstantiationExpressions
+
 func (c *Checker) TypeToTypeNode(t *Type, enclosingDeclaration *ast.Node, flags nodebuilder.Flags, idToSymbol map[*ast.IdentifierNode]*ast.Symbol) *ast.TypeNode {
+	flags &^= hoverOnlyNodeBuilderFlags
 	nodeBuilder := c.getNodeBuilderEx(idToSymbol)
 	return nodeBuilder.TypeToTypeNode(t, enclosingDeclaration, flags, nodebuilder.InternalFlagsNone, nil)
 }
 
 func (c *Checker) SignatureToSignatureDeclaration(signature *Signature, kind ast.Kind, enclosingDeclaration *ast.Node, flags nodebuilder.Flags) *ast.Node {
+	flags &^= hoverOnlyNodeBuilderFlags
 	nodeBuilder, release := c.getNodeBuilder()
 	defer release()
 	return nodeBuilder.SignatureToSignatureDeclaration(signature, kind, enclosingDeclaration, flags, nodebuilder.InternalFlagsNone, nil)

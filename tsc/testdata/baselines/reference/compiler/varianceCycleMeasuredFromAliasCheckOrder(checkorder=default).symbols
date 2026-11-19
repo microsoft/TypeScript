@@ -1,0 +1,96 @@
+//// [tests/cases/compiler/varianceCycleMeasuredFromAliasCheckOrder.ts] ////
+
+=== varianceCycleMeasuredFromAliasCheckOrder.ts ===
+// Settings, Hover and Renderer refer to each other. Relating two
+// instantiations of Hover measures the variances of the cycle starting
+// from Hover, and whether a Renderer<NodeAttrs> is a Renderer must not
+// depend on whether the types were requested before (64635).
+
+type Attrs = { [name: string]: any };
+>Attrs : Symbol(Attrs, Decl(varianceCycleMeasuredFromAliasCheckOrder.ts, 0, 0))
+>name : Symbol(name, Decl(varianceCycleMeasuredFromAliasCheckOrder.ts, 5, 16))
+
+interface Settings<N extends Attrs = Attrs, E extends Attrs = Attrs> {
+>Settings : Symbol(Settings, Decl(varianceCycleMeasuredFromAliasCheckOrder.ts, 5, 37))
+>N : Symbol(N, Decl(varianceCycleMeasuredFromAliasCheckOrder.ts, 7, 19))
+>Attrs : Symbol(Attrs, Decl(varianceCycleMeasuredFromAliasCheckOrder.ts, 0, 0))
+>Attrs : Symbol(Attrs, Decl(varianceCycleMeasuredFromAliasCheckOrder.ts, 0, 0))
+>E : Symbol(E, Decl(varianceCycleMeasuredFromAliasCheckOrder.ts, 7, 43))
+>Attrs : Symbol(Attrs, Decl(varianceCycleMeasuredFromAliasCheckOrder.ts, 0, 0))
+>Attrs : Symbol(Attrs, Decl(varianceCycleMeasuredFromAliasCheckOrder.ts, 0, 0))
+
+    hover: Hover<N, E>;
+>hover : Symbol(Settings.hover, Decl(varianceCycleMeasuredFromAliasCheckOrder.ts, 7, 70))
+>Hover : Symbol(Hover, Decl(varianceCycleMeasuredFromAliasCheckOrder.ts, 14, 1))
+>N : Symbol(N, Decl(varianceCycleMeasuredFromAliasCheckOrder.ts, 7, 19))
+>E : Symbol(E, Decl(varianceCycleMeasuredFromAliasCheckOrder.ts, 7, 43))
+
+    reducer: (data: N) => void;
+>reducer : Symbol(Settings.reducer, Decl(varianceCycleMeasuredFromAliasCheckOrder.ts, 8, 23))
+>data : Symbol(data, Decl(varianceCycleMeasuredFromAliasCheckOrder.ts, 9, 14))
+>N : Symbol(N, Decl(varianceCycleMeasuredFromAliasCheckOrder.ts, 7, 19))
+
+    program: (renderer: Renderer<N, E>) => void;
+>program : Symbol(Settings.program, Decl(varianceCycleMeasuredFromAliasCheckOrder.ts, 9, 31))
+>renderer : Symbol(renderer, Decl(varianceCycleMeasuredFromAliasCheckOrder.ts, 10, 14))
+>Renderer : Symbol(Renderer, Decl(varianceCycleMeasuredFromAliasCheckOrder.ts, 11, 1))
+>N : Symbol(N, Decl(varianceCycleMeasuredFromAliasCheckOrder.ts, 7, 19))
+>E : Symbol(E, Decl(varianceCycleMeasuredFromAliasCheckOrder.ts, 7, 43))
+}
+interface Renderer<N extends Attrs = Attrs, E extends Attrs = Attrs> {
+>Renderer : Symbol(Renderer, Decl(varianceCycleMeasuredFromAliasCheckOrder.ts, 11, 1))
+>N : Symbol(N, Decl(varianceCycleMeasuredFromAliasCheckOrder.ts, 12, 19))
+>Attrs : Symbol(Attrs, Decl(varianceCycleMeasuredFromAliasCheckOrder.ts, 0, 0))
+>Attrs : Symbol(Attrs, Decl(varianceCycleMeasuredFromAliasCheckOrder.ts, 0, 0))
+>E : Symbol(E, Decl(varianceCycleMeasuredFromAliasCheckOrder.ts, 12, 43))
+>Attrs : Symbol(Attrs, Decl(varianceCycleMeasuredFromAliasCheckOrder.ts, 0, 0))
+>Attrs : Symbol(Attrs, Decl(varianceCycleMeasuredFromAliasCheckOrder.ts, 0, 0))
+
+    getSettings(): Settings<N, E>;
+>getSettings : Symbol(Renderer.getSettings, Decl(varianceCycleMeasuredFromAliasCheckOrder.ts, 12, 70))
+>Settings : Symbol(Settings, Decl(varianceCycleMeasuredFromAliasCheckOrder.ts, 5, 37))
+>N : Symbol(N, Decl(varianceCycleMeasuredFromAliasCheckOrder.ts, 12, 19))
+>E : Symbol(E, Decl(varianceCycleMeasuredFromAliasCheckOrder.ts, 12, 43))
+}
+type Hover<N extends Attrs = Attrs, E extends Attrs = Attrs> = (settings: Settings<N, E>) => void;
+>Hover : Symbol(Hover, Decl(varianceCycleMeasuredFromAliasCheckOrder.ts, 14, 1))
+>N : Symbol(N, Decl(varianceCycleMeasuredFromAliasCheckOrder.ts, 15, 11))
+>Attrs : Symbol(Attrs, Decl(varianceCycleMeasuredFromAliasCheckOrder.ts, 0, 0))
+>Attrs : Symbol(Attrs, Decl(varianceCycleMeasuredFromAliasCheckOrder.ts, 0, 0))
+>E : Symbol(E, Decl(varianceCycleMeasuredFromAliasCheckOrder.ts, 15, 35))
+>Attrs : Symbol(Attrs, Decl(varianceCycleMeasuredFromAliasCheckOrder.ts, 0, 0))
+>Attrs : Symbol(Attrs, Decl(varianceCycleMeasuredFromAliasCheckOrder.ts, 0, 0))
+>settings : Symbol(settings, Decl(varianceCycleMeasuredFromAliasCheckOrder.ts, 15, 64))
+>Settings : Symbol(Settings, Decl(varianceCycleMeasuredFromAliasCheckOrder.ts, 5, 37))
+>N : Symbol(N, Decl(varianceCycleMeasuredFromAliasCheckOrder.ts, 15, 11))
+>E : Symbol(E, Decl(varianceCycleMeasuredFromAliasCheckOrder.ts, 15, 35))
+
+type NodeAttrs = { x: number };
+>NodeAttrs : Symbol(NodeAttrs, Decl(varianceCycleMeasuredFromAliasCheckOrder.ts, 15, 98))
+>x : Symbol(x, Decl(varianceCycleMeasuredFromAliasCheckOrder.ts, 17, 18))
+
+declare const hover: Hover<NodeAttrs>;
+>hover : Symbol(hover, Decl(varianceCycleMeasuredFromAliasCheckOrder.ts, 19, 13))
+>Hover : Symbol(Hover, Decl(varianceCycleMeasuredFromAliasCheckOrder.ts, 14, 1))
+>NodeAttrs : Symbol(NodeAttrs, Decl(varianceCycleMeasuredFromAliasCheckOrder.ts, 15, 98))
+
+const h: Hover<NodeAttrs, {}> = hover;
+>h : Symbol(h, Decl(varianceCycleMeasuredFromAliasCheckOrder.ts, 20, 5))
+>Hover : Symbol(Hover, Decl(varianceCycleMeasuredFromAliasCheckOrder.ts, 14, 1))
+>NodeAttrs : Symbol(NodeAttrs, Decl(varianceCycleMeasuredFromAliasCheckOrder.ts, 15, 98))
+>hover : Symbol(hover, Decl(varianceCycleMeasuredFromAliasCheckOrder.ts, 19, 13))
+
+declare function fit(renderer: Renderer): void;
+>fit : Symbol(fit, Decl(varianceCycleMeasuredFromAliasCheckOrder.ts, 20, 38))
+>renderer : Symbol(renderer, Decl(varianceCycleMeasuredFromAliasCheckOrder.ts, 22, 21))
+>Renderer : Symbol(Renderer, Decl(varianceCycleMeasuredFromAliasCheckOrder.ts, 11, 1))
+
+declare const renderer: Renderer<NodeAttrs>;
+>renderer : Symbol(renderer, Decl(varianceCycleMeasuredFromAliasCheckOrder.ts, 23, 13))
+>Renderer : Symbol(Renderer, Decl(varianceCycleMeasuredFromAliasCheckOrder.ts, 11, 1))
+>NodeAttrs : Symbol(NodeAttrs, Decl(varianceCycleMeasuredFromAliasCheckOrder.ts, 15, 98))
+
+fit(renderer);
+>fit : Symbol(fit, Decl(varianceCycleMeasuredFromAliasCheckOrder.ts, 20, 38))
+>renderer : Symbol(renderer, Decl(varianceCycleMeasuredFromAliasCheckOrder.ts, 23, 13))
+

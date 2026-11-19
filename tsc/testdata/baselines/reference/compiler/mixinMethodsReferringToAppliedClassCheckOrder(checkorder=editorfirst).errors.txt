@@ -1,0 +1,45 @@
+mixinMethodsReferringToAppliedClassCheckOrder.ts(31,7): error TS2417: Class static side 'typeof MixinApplied' incorrectly extends base class static side '{ prototype: (Anonymous function).Mixin2; } & { prototype: (Anonymous function).Mixin; }'.
+  Types of property 'prototype' are incompatible.
+    Type 'MixinApplied' is not assignable to type '(Anonymous function).Mixin2 & (Anonymous function).Mixin'.
+      Property 'bar' is missing in type 'MixinApplied' but required in type '(Anonymous function).Mixin2'.
+
+
+==== mixinMethodsReferringToAppliedClassCheckOrder.ts (1 errors) ====
+    // The mixin classes have methods referring to the class built from them,
+    // so checking the classes and typing their members first reach the same
+    // cycle in different places (55640).
+    
+    type ConstructorType<T> = abstract new (...args: any[]) => T;
+    
+    function makeMixin<TBase extends ConstructorType<any>, FinalConstructor>(
+        mixinFunction: (Base: TBase) => FinalConstructor
+    ): (Base?: TBase) => FinalConstructor {
+        return (Base?: TBase) => {
+            // do other things with Base, this example is simplified
+            return mixinFunction(Base ?? (Object as any));
+        };
+    }
+    
+    const MixinF = makeMixin(<TBase extends ConstructorType<any>>(Base: TBase) => {
+      abstract class Mixin extends Base {
+        foo(foo: MixinApplied, extra: boolean): MixinApplied | boolean { return extra }
+      }
+      return Mixin
+    })
+    
+    
+    const Mixin2F = makeMixin(<TBase extends ConstructorType<any>>(Base: TBase) => {
+      abstract class Mixin2 extends Base {
+        bar(foo: MixinApplied, extra: boolean): MixinApplied | boolean { return extra }
+      }
+      return Mixin2
+    })
+    
+    class MixinApplied extends Mixin2F(MixinF()) {}
+          ~~~~~~~~~~~~
+!!! error TS2417: Class static side 'typeof MixinApplied' incorrectly extends base class static side '{ prototype: (Anonymous function).Mixin2; } & { prototype: (Anonymous function).Mixin; }'.
+!!! error TS2417:   Types of property 'prototype' are incompatible.
+!!! error TS2417:     Type 'MixinApplied' is not assignable to type '(Anonymous function).Mixin2 & (Anonymous function).Mixin'.
+!!! error TS2417:       Property 'bar' is missing in type 'MixinApplied' but required in type '(Anonymous function).Mixin2'.
+!!! related TS2728 mixinMethodsReferringToAppliedClassCheckOrder.ts:26:5: 'bar' is declared here.
+    

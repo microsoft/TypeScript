@@ -1,0 +1,50 @@
+//// [tests/cases/compiler/inferenceThroughNestedReferencesOfSameType.ts] ////
+
+=== inferenceThroughNestedReferencesOfSameType.ts ===
+// Inferring from Promise<C<{ a: 1 }>> to Promise<AsyncIterable<T>> reaches
+// Promise<IteratorResult<T>>, through the next method of AsyncIterator<T>.
+// That Promise is not built from the first one, so inference must not stop
+// there as though it were expanding without end.
+
+interface C<T> {
+    [Symbol.asyncIterator](): C<T>;
+>[Symbol.asyncIterator] : () => C<T>
+>Symbol.asyncIterator : unique symbol
+>Symbol : SymbolConstructor
+>asyncIterator : unique symbol
+
+    next(): Promise<IteratorResult<T>>;
+>next : () => Promise<IteratorResult<T>>
+}
+
+declare function g<T>(x: Promise<AsyncIterable<T>>): T;
+>g : <T>(x: Promise<AsyncIterable<T>>) => T
+>x : Promise<AsyncIterable<T>>
+
+declare const c: Promise<C<{ a: 1 }>>;
+>c : Promise<C<{ a: 1; }>>
+>a : 1
+
+const n = g(c);
+>n : { a: 1; }
+>g(c) : { a: 1; }
+>g : <T>(x: Promise<AsyncIterable<T>>) => T
+>c : Promise<C<{ a: 1; }>>
+
+declare function follow<T>(open: () => Promise<AsyncIterable<T>>, onFrame: (frame: T) => void): void;
+>follow : <T>(open: () => Promise<AsyncIterable<T>>, onFrame: (frame: T) => void) => void
+>open : () => Promise<AsyncIterable<T>>
+>onFrame : (frame: T) => void
+>frame : T
+
+follow(() => c, frame => frame.a);
+>follow(() => c, frame => frame.a) : void
+>follow : <T>(open: () => Promise<AsyncIterable<T>>, onFrame: (frame: T) => void) => void
+>() => c : () => Promise<C<{ a: 1; }>>
+>c : Promise<C<{ a: 1; }>>
+>frame => frame.a : (frame: { a: 1; }) => 1
+>frame : { a: 1; }
+>frame.a : 1
+>frame : { a: 1; }
+>a : 1
+

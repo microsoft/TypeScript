@@ -1,0 +1,18 @@
+tupleTooLargeReportedAtUses.ts(7,10): error TS2799: Type produces a tuple type that is too large to represent.
+
+
+==== tupleTooLargeReportedAtUses.ts (1 errors) ====
+    // The tuple type the alias builds is too large to represent (64384). The
+    // union type and its first constituent start at the same position, so they
+    // report the error at the same location.
+    
+    type BuildTuple<L extends number, T extends any[] = [any]> =
+        T['length'] extends L ? T : BuildTuple<L, [...T, ...T]>;
+    type A = BuildTuple<3>;
+             ~~~~~~~~~~~~~
+!!! error TS2799: Type produces a tuple type that is too large to represent.
+    
+    export class C {
+        p? = null! as A | string;
+    }
+    

@@ -1,0 +1,43 @@
+//// [tests/cases/compiler/circularBaseTypesCheckOrder.ts] ////
+
+=== circularBaseTypesCheckOrder.ts ===
+// The base types of a cycle of interfaces are resolved as if the cycle
+// were entered at the interface declared first, wherever it is entered:
+// 'Base' has none, and the others keep theirs.
+
+declare let z: Derived2;
+>z : Derived2
+
+z.x;
+>z.x : any
+>z : Derived2
+>x : any
+
+z.y;
+>z.y : any
+>z : Derived2
+>y : any
+
+interface Base extends Derived2 {
+    x: string;
+>x : string
+}
+
+interface Derived extends Base {
+    y: string;
+>y : string
+}
+
+interface Derived2 extends Derived {
+    z: string;
+>z : string
+}
+
+declare let d: Derived;
+>d : Derived
+
+d.x;
+>d.x : string
+>d : Derived
+>x : string
+
