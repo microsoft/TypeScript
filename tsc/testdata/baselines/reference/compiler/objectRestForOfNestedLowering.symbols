@@ -1,0 +1,93 @@
+//// [tests/cases/compiler/objectRestForOfNestedLowering.ts] ////
+
+=== objectRestForOfNestedLowering.ts ===
+// https://github.com/microsoft/TypeScript/issues/65513
+
+let sum = 0;
+>sum : Symbol(sum, Decl(objectRestForOfNestedLowering.ts, 2, 3))
+
+for (const {...outer} of [{a: 1}]) {
+>outer : Symbol(outer, Decl(objectRestForOfNestedLowering.ts, 3, 12))
+>a : Symbol(a, Decl(objectRestForOfNestedLowering.ts, 3, 27))
+
+    for (const {...inner} of [{b: 2}]) {
+>inner : Symbol(inner, Decl(objectRestForOfNestedLowering.ts, 4, 16))
+>b : Symbol(b, Decl(objectRestForOfNestedLowering.ts, 4, 31))
+
+        sum += outer.a + inner.b;
+>sum : Symbol(sum, Decl(objectRestForOfNestedLowering.ts, 2, 3))
+>outer.a : Symbol(a, Decl(objectRestForOfNestedLowering.ts, 3, 27))
+>outer : Symbol(outer, Decl(objectRestForOfNestedLowering.ts, 3, 12))
+>a : Symbol(a, Decl(objectRestForOfNestedLowering.ts, 3, 27))
+>inner.b : Symbol(b, Decl(objectRestForOfNestedLowering.ts, 4, 31))
+>inner : Symbol(inner, Decl(objectRestForOfNestedLowering.ts, 4, 16))
+>b : Symbol(b, Decl(objectRestForOfNestedLowering.ts, 4, 31))
+    }
+}
+console.log(sum);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>sum : Symbol(sum, Decl(objectRestForOfNestedLowering.ts, 2, 3))
+
+let sum2 = 0;
+>sum2 : Symbol(sum2, Decl(objectRestForOfNestedLowering.ts, 10, 3))
+
+for (const {...outer} of [{a: 1}])
+>outer : Symbol(outer, Decl(objectRestForOfNestedLowering.ts, 11, 12))
+>a : Symbol(a, Decl(objectRestForOfNestedLowering.ts, 11, 27))
+
+    for (const {...inner} of [{b: 2}])
+>inner : Symbol(inner, Decl(objectRestForOfNestedLowering.ts, 12, 16))
+>b : Symbol(b, Decl(objectRestForOfNestedLowering.ts, 12, 31))
+
+        sum2 += outer.a + inner.b;
+>sum2 : Symbol(sum2, Decl(objectRestForOfNestedLowering.ts, 10, 3))
+>outer.a : Symbol(a, Decl(objectRestForOfNestedLowering.ts, 11, 27))
+>outer : Symbol(outer, Decl(objectRestForOfNestedLowering.ts, 11, 12))
+>a : Symbol(a, Decl(objectRestForOfNestedLowering.ts, 11, 27))
+>inner.b : Symbol(b, Decl(objectRestForOfNestedLowering.ts, 12, 31))
+>inner : Symbol(inner, Decl(objectRestForOfNestedLowering.ts, 12, 16))
+>b : Symbol(b, Decl(objectRestForOfNestedLowering.ts, 12, 31))
+
+console.log(sum2);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>sum2 : Symbol(sum2, Decl(objectRestForOfNestedLowering.ts, 10, 3))
+
+let result = 0;
+>result : Symbol(result, Decl(objectRestForOfNestedLowering.ts, 16, 3))
+
+for (const {...outer} of [{a: 1}]) {
+>outer : Symbol(outer, Decl(objectRestForOfNestedLowering.ts, 17, 12))
+>a : Symbol(a, Decl(objectRestForOfNestedLowering.ts, 17, 27))
+
+    function read({value, ...rest}: {value: number, factor: number}) {
+>read : Symbol(read, Decl(objectRestForOfNestedLowering.ts, 17, 36))
+>value : Symbol(value, Decl(objectRestForOfNestedLowering.ts, 18, 19))
+>rest : Symbol(rest, Decl(objectRestForOfNestedLowering.ts, 18, 25))
+>value : Symbol(value, Decl(objectRestForOfNestedLowering.ts, 18, 37))
+>factor : Symbol(factor, Decl(objectRestForOfNestedLowering.ts, 18, 51))
+
+        return value + rest.factor;
+>value : Symbol(value, Decl(objectRestForOfNestedLowering.ts, 18, 19))
+>rest.factor : Symbol(factor, Decl(objectRestForOfNestedLowering.ts, 18, 51))
+>rest : Symbol(rest, Decl(objectRestForOfNestedLowering.ts, 18, 25))
+>factor : Symbol(factor, Decl(objectRestForOfNestedLowering.ts, 18, 51))
+    }
+    result = outer.a + read({value: 2, factor: 3});
+>result : Symbol(result, Decl(objectRestForOfNestedLowering.ts, 16, 3))
+>outer.a : Symbol(a, Decl(objectRestForOfNestedLowering.ts, 17, 27))
+>outer : Symbol(outer, Decl(objectRestForOfNestedLowering.ts, 17, 12))
+>a : Symbol(a, Decl(objectRestForOfNestedLowering.ts, 17, 27))
+>read : Symbol(read, Decl(objectRestForOfNestedLowering.ts, 17, 36))
+>value : Symbol(value, Decl(objectRestForOfNestedLowering.ts, 21, 29))
+>factor : Symbol(factor, Decl(objectRestForOfNestedLowering.ts, 21, 38))
+}
+console.log(result);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>result : Symbol(result, Decl(objectRestForOfNestedLowering.ts, 16, 3))
+

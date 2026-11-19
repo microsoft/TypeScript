@@ -1,0 +1,125 @@
+//// [tests/cases/compiler/objectRestForOfNestedLowering.ts] ////
+
+=== objectRestForOfNestedLowering.ts ===
+// https://github.com/microsoft/TypeScript/issues/65513
+
+let sum = 0;
+>sum : number
+>0 : 0
+
+for (const {...outer} of [{a: 1}]) {
+>outer : { a: number; }
+>[{a: 1}] : { a: number; }[]
+>{a: 1} : { a: number; }
+>a : number
+>1 : 1
+
+    for (const {...inner} of [{b: 2}]) {
+>inner : { b: number; }
+>[{b: 2}] : { b: number; }[]
+>{b: 2} : { b: number; }
+>b : number
+>2 : 2
+
+        sum += outer.a + inner.b;
+>sum += outer.a + inner.b : number
+>sum : number
+>outer.a + inner.b : number
+>outer.a : number
+>outer : { a: number; }
+>a : number
+>inner.b : number
+>inner : { b: number; }
+>b : number
+    }
+}
+console.log(sum);
+>console.log(sum) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>sum : number
+
+let sum2 = 0;
+>sum2 : number
+>0 : 0
+
+for (const {...outer} of [{a: 1}])
+>outer : { a: number; }
+>[{a: 1}] : { a: number; }[]
+>{a: 1} : { a: number; }
+>a : number
+>1 : 1
+
+    for (const {...inner} of [{b: 2}])
+>inner : { b: number; }
+>[{b: 2}] : { b: number; }[]
+>{b: 2} : { b: number; }
+>b : number
+>2 : 2
+
+        sum2 += outer.a + inner.b;
+>sum2 += outer.a + inner.b : number
+>sum2 : number
+>outer.a + inner.b : number
+>outer.a : number
+>outer : { a: number; }
+>a : number
+>inner.b : number
+>inner : { b: number; }
+>b : number
+
+console.log(sum2);
+>console.log(sum2) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>sum2 : number
+
+let result = 0;
+>result : number
+>0 : 0
+
+for (const {...outer} of [{a: 1}]) {
+>outer : { a: number; }
+>[{a: 1}] : { a: number; }[]
+>{a: 1} : { a: number; }
+>a : number
+>1 : 1
+
+    function read({value, ...rest}: {value: number, factor: number}) {
+>read : ({ value, ...rest }: { value: number; factor: number; }) => number
+>value : number
+>rest : { factor: number; }
+>value : number
+>factor : number
+
+        return value + rest.factor;
+>value + rest.factor : number
+>value : number
+>rest.factor : number
+>rest : { factor: number; }
+>factor : number
+    }
+    result = outer.a + read({value: 2, factor: 3});
+>result = outer.a + read({value: 2, factor: 3}) : number
+>result : number
+>outer.a + read({value: 2, factor: 3}) : number
+>outer.a : number
+>outer : { a: number; }
+>a : number
+>read({value: 2, factor: 3}) : number
+>read : ({ value, ...rest }: { value: number; factor: number; }) => number
+>{value: 2, factor: 3} : { value: number; factor: number; }
+>value : number
+>2 : 2
+>factor : number
+>3 : 3
+}
+console.log(result);
+>console.log(result) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>result : number
+
