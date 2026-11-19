@@ -1,0 +1,39 @@
+declarePropertyRedeclaration.ts(16,14): error TS2729: Property 'b' is used before its initialization.
+declarePropertyRedeclaration.ts(25,14): error TS2729: Property 'b' is used before its initialization.
+
+
+==== declarePropertyRedeclaration.ts (2 errors) ====
+    class Base {
+        b: number = 1;
+    }
+    
+    class Plain extends Base {
+        d = this.b;
+    }
+    
+    class Narrowed extends Base {
+        declare b: 1 | 2;
+        d = this.b;
+    }
+    
+    class Redeclared extends Base {
+        b: number;
+        d = this.b;
+                 ~
+!!! error TS2729: Property 'b' is used before its initialization.
+!!! related TS2728 declarePropertyRedeclaration.ts:15:5: 'b' is declared here.
+    
+        constructor() {
+            super();
+            this.b = 2;
+        }
+    }
+    
+    class Own {
+        d = this.b;
+                 ~
+!!! error TS2729: Property 'b' is used before its initialization.
+!!! related TS2728 declarePropertyRedeclaration.ts:26:5: 'b' is declared here.
+        b = 1;
+    }
+    
