@@ -67,6 +67,12 @@ export function unescapeLeadingUnderscores(identifier: __String): string {
         : id;
 }
 
+/** Gets a symbol's display name from its escaped symbol-table key. */
+export function symbolName(symbol: { readonly escapedName: __String; }): string {
+    const privateName = /^__#\d+@(#.*)$/.exec(symbol.escapedName);
+    return privateName ? privateName[1] : unescapeLeadingUnderscores(symbol.escapedName);
+}
+
 /**
  * Add an extra leading underscore to a display name that already begins with
  * `__`, producing its escaped {@link __String} key.

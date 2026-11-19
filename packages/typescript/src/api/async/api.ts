@@ -35,9 +35,9 @@ import {
     type RootedFilePath,
     type SourceFile,
     type StringLiteralLikeNode,
+    symbolName,
     type SyntaxKind,
     type TypeNode,
-    unescapeLeadingUnderscores,
 } from "../../ast/index.ts";
 import { assertNever } from "../../internal/utils.ts";
 import {
@@ -3474,7 +3474,7 @@ export class Symbol {
         this.reference = data.reference;
 
         this.escapedName = data.name as __String;
-        this.name = data.displayName ?? unescapeLeadingUnderscores(data.name as __String);
+        this.name = symbolName(this);
         this.flags = data.flags;
         this.checkFlags = data.checkFlags ?? 0;
         this.declarationHandles = data.declarations;

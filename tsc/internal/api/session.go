@@ -255,9 +255,6 @@ func buildSymbolResponse(symbol *ast.Symbol, reference SymbolReference, owner *a
 		Parent:       newSymbolReference(symbol.Parent()),
 		ExportSymbol: newSymbolReference(symbol.ExportSymbol()),
 	}
-	if name := ast.SymbolName(symbol); name != symbol.Name() {
-		resp.DisplayName = name
-	}
 	if owner != nil {
 		// A client resolves a file-owned symbol's relationships through its own source file.
 		compilerdebug.Assert(symbol.Parent() == nil || symbolOwnerFile(symbol.Parent()) == owner, "File-owned symbol parent belongs to another owner")

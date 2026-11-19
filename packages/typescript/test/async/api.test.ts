@@ -43,6 +43,7 @@ import {
     type PathKey,
     type RootedFilePath,
     type SourceFile,
+    symbolName,
     SyntaxKind,
     tryGetAmbientModuleNameFromSymbolName,
     unescapeLeadingUnderscores,
@@ -7223,6 +7224,7 @@ describe("Symbol - escaped names and tables", { concurrency }, () => {
                 if (!(isPropertyDeclaration(member) || isMethodDeclaration(member)) || !isPrivateIdentifier(member.name)) continue;
                 const symbol = await project.checker.getSymbolAtLocation(member.name);
                 assert.ok(symbol);
+                assert.strictEqual(symbolName(symbol), member.name.text);
                 assert.strictEqual(symbol.name, member.name.text);
                 assert.notStrictEqual(symbol.escapedName, symbol.name);
                 symbols.push(symbol);
@@ -7328,6 +7330,23 @@ export { x as '${maliciousName}' };
         assert.equal(maliciousExport.name, maliciousName);
         assert.equal(maliciousExport.escapedName, maliciousName);
         assert.equal(tryGetAmbientModuleNameFromSymbolName(maliciousExport.escapedName), undefined);
+    });
+});
+
+describe("ast - symbolName", { concurrency }, () => {
+    test("decodes private keys without changing escaped user names or internal names", () => {
+        for (
+            const [escapedName, expected] of [
+                ["__#1@#value", "#value"],
+                ["__#42@#method", "#method"],
+                [escapeLeadingUnderscores("__#1@#value"), "__#1@#value"],
+                [escapeLeadingUnderscores("__value"), "__value"],
+                [InternalSymbolName.Type, "__type"],
+                ["value", "value"],
+            ]
+        ) {
+            assert.strictEqual(symbolName({ escapedName: escapedName as __String }), expected);
+        }
     });
 });
 

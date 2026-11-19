@@ -287,7 +287,6 @@ export interface GetSymbolOfDeclarationParams {
 export interface SymbolResponse {
     reference: SymbolReference;
     name: string;
-    displayName?: string | undefined;
     flags: number;
     checkFlags?: number | undefined;
     declarations?: string[] | undefined;
