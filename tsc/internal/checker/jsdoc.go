@@ -28,8 +28,19 @@ func (c *Checker) checkUnmatchedJSDocParameters(node *ast.Node) {
 	excludedParameters := collections.Set[int]{}
 
 	functionParameters := node.Parameters()
+	// A @param tag naming this means the tags are written counting the
+	// receiver, so keep the existing matching and do not shift positions.
+	// Without such a tag, a leading this parameter is the synthetic one
+	// from a @this tag and the tags are written without counting it.
+	hasThisParameterTag := false
+	for _, tag := range jsdocParameters {
+		if ast.IsThisIdentifier(tag.AsJSDocParameterOrPropertyTag().Name()) {
+			hasThisParameterTag = true
+			break
+		}
+	}
 	parameterOffset := 0
-	if len(functionParameters) > 0 && (functionParameters[0].Name().Kind == ast.KindThisKeyword || ast.IsThisIdentifier(functionParameters[0].Name())) {
+	if !hasThisParameterTag && len(functionParameters) > 0 && (functionParameters[0].Name().Kind == ast.KindThisKeyword || ast.IsThisIdentifier(functionParameters[0].Name())) {
 		parameterOffset = 1
 	}
 	for i, param := range functionParameters {

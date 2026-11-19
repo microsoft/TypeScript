@@ -42,3 +42,39 @@ export function withThisNamed(name) {
 >name : Symbol(name, Decl(a.js, 19, 30))
 }
 
+=== /b.js ===
+/**
+ * @this {{ x: number }}
+ * @param {{ x: number }} this
+ * @param {{ title: string }} props
+ */
+export function withDocumentedThis({ title }) {
+>withDocumentedThis : Symbol(withDocumentedThis, Decl(b.js, 0, 0))
+>title : Symbol(title, Decl(b.js, 5, 36))
+
+  return this.x + title;
+>this.x : Symbol(x, Decl(b.js, 1, 11))
+>this : Symbol((Missing), Decl(b.js, 1, 4))
+>x : Symbol(x, Decl(b.js, 1, 11))
+>title : Symbol(title, Decl(b.js, 5, 36))
+}
+
+=== /c.ts ===
+/**
+ * @param {{ x: number }} this
+ * @param {{ title: string }} props
+ */
+export function withDocumentedThisReceiver(this: { x: number }, { title }: { title: string }) {
+>withDocumentedThisReceiver : Symbol(withDocumentedThisReceiver, Decl(c.ts, 0, 0))
+>this : Symbol(this, Decl(c.ts, 4, 43))
+>x : Symbol(x, Decl(c.ts, 4, 50))
+>title : Symbol(title, Decl(c.ts, 4, 65))
+>title : Symbol(title, Decl(c.ts, 4, 76))
+
+  return this.x + title;
+>this.x : Symbol(x, Decl(c.ts, 4, 50))
+>this : Symbol(this, Decl(c.ts, 4, 43))
+>x : Symbol(x, Decl(c.ts, 4, 50))
+>title : Symbol(title, Decl(c.ts, 4, 65))
+}
+

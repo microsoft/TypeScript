@@ -652,8 +652,19 @@ func findMatchingParameter(fun *ast.Node, parameterTag *ast.JSDocParameterOrProp
 		}
 	}
 	parameters := fun.Parameters()
+	// A @param tag naming this means the tags are written counting the
+	// receiver, so keep the existing matching and do not shift positions.
+	// Without such a tag, a leading this parameter is the synthetic one
+	// from a @this tag and the tags are written without counting it.
+	hasThisParameterTag := false
+	for _, tag := range jsDoc.AsJSDoc().Tags.Nodes {
+		if tag.Kind == ast.KindJSDocParameterTag && ast.IsThisIdentifier(tag.AsJSDocParameterOrPropertyTag().Name()) {
+			hasThisParameterTag = true
+			break
+		}
+	}
 	parameterOffset := 0
-	if len(parameters) > 0 && (parameters[0].Name().Kind == ast.KindThisKeyword || ast.IsThisIdentifier(parameters[0].Name())) {
+	if !hasThisParameterTag && len(parameters) > 0 && (parameters[0].Name().Kind == ast.KindThisKeyword || ast.IsThisIdentifier(parameters[0].Name())) {
 		parameterOffset = 1
 	}
 	for parameterIndex, parameter := range parameters {
