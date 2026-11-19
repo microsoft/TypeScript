@@ -784,3 +784,7 @@ export function isTypeOnlyExportDeclaration(node: Node): node is ast.TypeOnlyExp
 export function isTypeOnlyImportOrExportDeclaration(node: Node): node is ast.TypeOnlyAliasDeclaration {
     return isTypeOnlyImportDeclaration(node) || isTypeOnlyExportDeclaration(node);
 }
+
+export function isPartOfTypeOnlyImportOrExportDeclaration(node: Node): boolean {
+    return findAncestor(node, isTypeOnlyImportOrExportDeclaration) !== undefined;
+}

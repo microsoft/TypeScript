@@ -400,3 +400,12 @@ test("isTypeOnlyImportOrExportDeclaration includes both kinds of explicit type-o
     assert.ok(ast.isTypeOnlyImportOrExportDeclaration(factory.createExportSpecifier(true, undefined, name)));
     assert.equal(ast.isTypeOnlyImportOrExportDeclaration(factory.createImportClause(undefined, name)), false);
 });
+
+test("isPartOfTypeOnlyImportOrExportDeclaration includes the alias itself and its descendants", () => {
+    const name = factory.createIdentifier("value");
+    const specifier = factory.createImportSpecifier(true, undefined, name);
+    Object.defineProperty(name, "parent", { value: specifier });
+    assert.ok(ast.isPartOfTypeOnlyImportOrExportDeclaration(name));
+    assert.ok(ast.isPartOfTypeOnlyImportOrExportDeclaration(specifier));
+    assert.equal(ast.isPartOfTypeOnlyImportOrExportDeclaration(factory.createIdentifier("value")), false);
+});
