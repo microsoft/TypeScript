@@ -1620,6 +1620,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
                 }),
                 parityCase("Snapshot", "getDefaultProjectForFile", snapshot.getDefaultProjectForFile, assertOptionalProjectsEquivalent, "/src/index.ts"),
                 parityCase("ModuleResolver", "resolveModuleName", moduleResolver.resolveModuleName, assertDeepEquivalent, "models", "/src"),
+                parityCase("ModuleResolver", "resolveTypeReferenceDirective", moduleResolver.resolveTypeReferenceDirective, assertDeepEquivalent, "parity", "/src/index.ts"),
                 parityCase("Snapshot", "update", snapshot.update, assertSnapshotsEquivalent, {}),
 
                 parityCase("LanguageService", "getImportAdderEdits", languageService.getImportAdderEdits, assertDeepEquivalent, "/src/index.ts", [{ kind: "importSymbol", symbol: unimportedSymbol }]),

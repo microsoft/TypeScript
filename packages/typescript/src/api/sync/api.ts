@@ -135,6 +135,7 @@ import type {
     ResolvedModule,
     ResolvedTypeReferenceDirective,
     ResolveModuleNameResult,
+    ResolveTypeReferenceDirectiveResult,
     SignaturePropertyMethod,
     SignatureResponse,
     SourceFileDescriptor,
@@ -278,6 +279,7 @@ export type {
     ResolvedModule,
     ResolvedTypeReferenceDirective,
     ResolveModuleNameResult,
+    ResolveTypeReferenceDirectiveResult,
     SourceFileMetadata,
     StaticModuleResolution,
     StringLiteralType,
@@ -2013,6 +2015,46 @@ export class ModuleResolver {
                     resolver: owner.id,
                     moduleName,
                     containingDirectory,
+                    resolutionMode,
+                });
+            },
+        );
+    }
+
+    /** Resolves a type directive using this resolver's options and the selected snapshot or live filesystem. */
+    get resolveTypeReferenceDirective(): {
+        (typeReferenceDirectiveName: string, containingFile: DocumentIdentifier, resolutionMode?: ResolutionMode, options?: { snapshot?: Snapshot | InProgressSnapshot | undefined; }): ResolveTypeReferenceDirectiveResult;
+        gen(typeReferenceDirectiveName: string, containingFile: DocumentIdentifier, resolutionMode?: ResolutionMode, options?: { snapshot?: Snapshot | InProgressSnapshot | undefined; }): Generator<ProtocolRequest, ResolveTypeReferenceDirectiveResult, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "resolveTypeReferenceDirective",
+            function (typeReferenceDirectiveName: string, containingFile: DocumentIdentifier, resolutionMode?: ResolutionMode, options?: { snapshot?: Snapshot | InProgressSnapshot | undefined; }): ResolveTypeReferenceDirectiveResult {
+                owner.ensureNotDisposed();
+                if (options?.snapshot instanceof Snapshot && options.snapshot.isDisposed()) {
+                    throw new Error("Snapshot is disposed");
+                }
+                return owner.client.apiRequest("resolveTypeReferenceDirective", {
+                    snapshot: options?.snapshot instanceof Snapshot ? options.snapshot.id : undefined,
+                    inProgressSnapshot: typeof options?.snapshot === "number" ? -options.snapshot : undefined,
+                    resolver: owner.id,
+                    typeReferenceDirectiveName,
+                    containingFile,
+                    resolutionMode,
+                });
+            },
+            function* (typeReferenceDirectiveName: string, containingFile: DocumentIdentifier, resolutionMode?: ResolutionMode, options?: { snapshot?: Snapshot | InProgressSnapshot | undefined; }): Generator<ProtocolRequest, ResolveTypeReferenceDirectiveResult, ProtocolResponse["result"]> {
+                owner.ensureNotDisposed();
+                if (options?.snapshot instanceof Snapshot && options.snapshot.isDisposed()) {
+                    throw new Error("Snapshot is disposed");
+                }
+                return yield* apiRequest("resolveTypeReferenceDirective", {
+                    snapshot: options?.snapshot instanceof Snapshot ? options.snapshot.id : undefined,
+                    inProgressSnapshot: typeof options?.snapshot === "number" ? -options.snapshot : undefined,
+                    resolver: owner.id,
+                    typeReferenceDirectiveName,
+                    containingFile,
                     resolutionMode,
                 });
             },

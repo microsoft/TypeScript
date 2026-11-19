@@ -57,6 +57,7 @@ export interface APIMethodInfo {
     createModuleResolver: APIMethod<CreateModuleResolverParams, number>;
     releaseModuleResolver: APIMethod<ReleaseModuleResolverParams, unknown>;
     resolveModuleName: APIMethod<ResolveModuleNameParams, ResolveModuleNameResult>;
+    resolveTypeReferenceDirective: APIMethod<ResolveTypeReferenceDirectiveParams, ResolveTypeReferenceDirectiveResult>;
     getEffectiveTypeRoots: APIMethod<CompilerOptionsParams, RootedDirectoryPath[]>;
     getTsBuildInfoEmitOutputFilePath: APIMethod<CompilerOptionsParams, RootedFilePath | null>;
     parseCommandLine: APIMethod<ParseCommandLineParams, ConfigFileResponse>;
@@ -412,6 +413,21 @@ export interface ResolveModuleNameParams {
 
 export interface ResolveModuleNameResult {
     resolvedModule?: ResolvedModule | undefined;
+    /** Trace is provided when compilerOptions.traceResolution is true. */
+    trace?: string[] | undefined;
+}
+
+export interface ResolveTypeReferenceDirectiveParams {
+    snapshot?: number | undefined;
+    inProgressSnapshot?: number | undefined;
+    resolver: number;
+    typeReferenceDirectiveName: string;
+    containingFile: DocumentIdentifier;
+    resolutionMode?: ResolutionMode | undefined;
+}
+
+export interface ResolveTypeReferenceDirectiveResult {
+    resolvedTypeReferenceDirective?: ResolvedTypeReferenceDirective | undefined;
     /** Trace is provided when compilerOptions.traceResolution is true. */
     trace?: string[] | undefined;
 }
@@ -1401,6 +1417,7 @@ export interface BatchRequest {
         | "releaseSourceFile"
         | "resolveModuleName"
         | "resolveName"
+        | "resolveTypeReferenceDirective"
         | "retainSourceFile"
         | "saveHeapProfile"
         | "signatureToSignatureDeclaration"
@@ -1598,6 +1615,7 @@ export interface BatchResponse {
         | "releaseSourceFile"
         | "resolveModuleName"
         | "resolveName"
+        | "resolveTypeReferenceDirective"
         | "retainSourceFile"
         | "saveHeapProfile"
         | "signatureToSignatureDeclaration"

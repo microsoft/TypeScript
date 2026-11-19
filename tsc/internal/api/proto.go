@@ -88,6 +88,7 @@ const (
 	MethodCreateModuleResolver                           Method = "createModuleResolver"
 	MethodReleaseModuleResolver                          Method = "releaseModuleResolver"
 	MethodResolveModuleName                              Method = "resolveModuleName"
+	MethodResolveTypeReferenceDirective                  Method = "resolveTypeReferenceDirective"
 	MethodGetEffectiveTypeRoots                          Method = "getEffectiveTypeRoots"
 	MethodGetTsBuildInfoEmitOutputFilePath               Method = "getTsBuildInfoEmitOutputFilePath"
 	MethodParseCommandLine                               Method = "parseCommandLine"
@@ -558,6 +559,21 @@ type ResolveModuleNameParams struct {
 	ResolutionMode      *ResolutionMode    `json:"resolutionMode,omitempty"`
 }
 
+type ResolveTypeReferenceDirectiveParams struct {
+	Snapshot                   SnapshotID         `json:"snapshot,omitempty"`
+	InProgressSnapshot         uint64             `json:"inProgressSnapshot,omitempty"`
+	Resolver                   ModuleResolverID   `json:"resolver"`
+	TypeReferenceDirectiveName string             `json:"typeReferenceDirectiveName"`
+	ContainingFile             DocumentIdentifier `json:"containingFile"`
+	ResolutionMode             *ResolutionMode    `json:"resolutionMode,omitempty"`
+}
+
+type ResolveTypeReferenceDirectiveResult struct {
+	ResolvedTypeReferenceDirective *ResolvedTypeReferenceDirective `json:"resolvedTypeReferenceDirective,omitempty"`
+	// Trace is provided when compilerOptions.traceResolution is true.
+	Trace []string `json:"trace,omitempty"`
+}
+
 type ResolveModuleNameCallbackParams struct {
 	ModuleName          string          `json:"moduleName"`
 	ContainingDirectory string          `json:"containingDirectory"`
@@ -634,6 +650,7 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodCreateModuleResolver:                           unmarshallerFor[CreateModuleResolverParams],
 	MethodReleaseModuleResolver:                          unmarshallerFor[ReleaseModuleResolverParams],
 	MethodResolveModuleName:                              unmarshallerFor[ResolveModuleNameParams],
+	MethodResolveTypeReferenceDirective:                  unmarshallerFor[ResolveTypeReferenceDirectiveParams],
 	MethodGetEffectiveTypeRoots:                          unmarshallerFor[CompilerOptionsParams],
 	MethodGetTsBuildInfoEmitOutputFilePath:               unmarshallerFor[CompilerOptionsParams],
 	MethodParseCommandLine:                               unmarshallerFor[ParseCommandLineParams],

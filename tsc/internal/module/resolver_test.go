@@ -76,6 +76,58 @@ func TestExtraExtensionResolution(t *testing.T) {
 	}
 }
 
+func TestExtraExtensionTypeReferenceDirectives(t *testing.T) {
+	t.Parallel()
+	fs := vfstest.FromMap(map[string]string{
+		"/project/file.box":                         "",
+		"/project/shimmed.box":                      "",
+		"/project/shimmed.d.box.ts":                 "",
+		"/project/types/pkg/package.json":           `{"types":"./index.box"}`,
+		"/project/types/pkg/index.box":              "",
+		"/project/types/shimmed-pkg/package.json":   `{"types":"./index.box"}`,
+		"/project/types/shimmed-pkg/index.box":      "",
+		"/project/types/shimmed-pkg/index.d.box.ts": "",
+	}, tspath.CaseSensitive)
+	host := &resolutionTestInputs{fs: fs, cwd: "/project"}
+	for _, test := range []struct {
+		typeRoots []tspath.RootedDirectoryPath
+		name      string
+		expected  tspath.RootedFilePath
+	}{
+		{typeRoots: []tspath.RootedDirectoryPath{}, name: "./file.box"},
+		{typeRoots: []tspath.RootedDirectoryPath{}, name: "./shimmed.box", expected: "/project/shimmed.d.box.ts"},
+		{typeRoots: []tspath.RootedDirectoryPath{"/project/types"}, name: "pkg"},
+		{typeRoots: []tspath.RootedDirectoryPath{"/project/types"}, name: "shimmed-pkg", expected: "/project/types/shimmed-pkg/index.d.box.ts"},
+	} {
+		resolver := NewResolver(ResolverOptions{
+			Host:            host,
+			CompilerOptions: &core.CompilerOptions{TypeRoots: test.typeRoots},
+			ExtraExtensions: []string{".box"},
+		})
+		result, _ := resolver.ResolveTypeReferenceDirective(test.name, "/project/main.ts", core.ModuleKindNone, nil)
+		assert.Equal(t, result.ResolvedFileName, test.expected, test.name)
+	}
+}
+
+func TestExtraExtensionModuleFromTypeRoots(t *testing.T) {
+	t.Parallel()
+	fs := vfstest.FromMap(map[string]string{
+		"/project/types/data.box": "",
+	}, tspath.CaseSensitive)
+	resolver := NewResolver(ResolverOptions{
+		Host: &resolutionTestInputs{fs: fs, cwd: "/project"},
+		CompilerOptions: &core.CompilerOptions{
+			ModuleResolution: core.ModuleResolutionKindBundler,
+			TypeRoots:        []tspath.RootedDirectoryPath{"/project/types"},
+		},
+		ExtraExtensions: []string{".box"},
+	})
+	result, _, err := resolver.ResolveModuleName("data.box", "/project/main.ts", core.ModuleKindESNext, nil)
+	assert.NilError(t, err)
+	assert.Equal(t, result.ResolvedFileName, tspath.RootedFilePath("/project/types/data.box"))
+	assert.Assert(t, result.ResolvedUsingExtraExtensions)
+}
+
 func TestExtraExtensionModuleSuffixes(t *testing.T) {
 	t.Parallel()
 	for _, test := range []struct {

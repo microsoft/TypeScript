@@ -1051,6 +1051,132 @@ describe("API", { concurrency }, () => {
         assert.equal(callbackCalls, 1);
     });
 
+    test("type reference resolver uses configured roots independently of module overrides", () => {
+        using api = new API({
+            cwd: "/workspace/project",
+            fs: createVirtualFileSystem({
+                "/workspace/project/types/pkg/package.json": JSON.stringify({ name: "@types/pkg", version: "1.0.0", types: "index.d.ts" }),
+                "/workspace/project/types/pkg/index.d.ts": "export {};",
+            }),
+        });
+        const resolver = api.createModuleResolver({ typeRoots: ["types"], traceResolution: true }, {
+            moduleResolutions: { fallback: "unresolved", entries: [] },
+            resolveModuleName: () => {
+                assert.fail("Type references must not invoke the module-name callback");
+            },
+        });
+        const result = resolver.resolveTypeReferenceDirective("pkg", "src/index.ts");
+        assert.equal(result.resolvedTypeReferenceDirective?.resolvedFileName, "/workspace/project/types/pkg/index.d.ts");
+        assert.equal(result.resolvedTypeReferenceDirective?.primary, true);
+        assert.ok(result.trace?.some(line => line.includes("successfully resolved")));
+        const missing = resolver.resolveTypeReferenceDirective("missing", "src/index.ts");
+        assert.equal(missing.resolvedTypeReferenceDirective, undefined);
+        assert.ok(missing.trace?.some(line => line.includes("was not resolved")));
+    });
+
+    test("type reference resolver honors conditional exports and resolution modes", () => {
+        using api = spawnAPI({
+            "/node_modules/pkg/package.json": JSON.stringify({
+                name: "pkg",
+                version: "1.0.0",
+                exports: { ".": { import: "./import.d.mts", require: "./require.d.cts" } },
+            }),
+            "/node_modules/pkg/import.d.mts": "export {};",
+            "/node_modules/pkg/require.d.cts": "export {};",
+        });
+        const resolver = api.createModuleResolver({
+            typeRoots: [],
+            module: ModuleKind.NodeNext,
+            moduleResolution: ModuleResolutionKind.NodeNext,
+        });
+        const esm = resolver.resolveTypeReferenceDirective("pkg", "/src/index.ts", ModuleKind.ESNext);
+        assert.equal(esm.resolvedTypeReferenceDirective?.resolvedFileName, "/node_modules/pkg/import.d.mts");
+        assert.equal(esm.resolvedTypeReferenceDirective?.packageId?.name, "pkg");
+        assert.equal(esm.resolvedTypeReferenceDirective?.primary, false);
+        assert.equal(esm.resolvedTypeReferenceDirective?.isExternalLibraryImport, true);
+        assert.equal(
+            (resolver.resolveTypeReferenceDirective("pkg", "/src/index.ts", ModuleKind.CommonJS)).resolvedTypeReferenceDirective?.resolvedFileName,
+            "/node_modules/pkg/require.d.cts",
+        );
+    });
+
+    test("type reference resolver retains snapshot filesystem state and checks disposal", () => {
+        const packageJson = toRootedFilePath("/node_modules/@types/pkg/package.json", undefined);
+        const packageB = toRootedFilePath("/node_modules/@types/pkg/b.d.ts", undefined);
+        const { api: disposableAPI, fs } = spawnAPIWithFS({
+            [packageJson]: JSON.stringify({ name: "@types/pkg", version: "1.0.0", types: "a.d.ts" }),
+            "/node_modules/@types/pkg/a.d.ts": "export {};",
+        });
+        using api = disposableAPI;
+        const resolver = api.createModuleResolver({});
+        const firstSnapshot = api.createSnapshot();
+        assert.equal(
+            (resolver.resolveTypeReferenceDirective("pkg", "/src/index.ts", undefined, { snapshot: firstSnapshot })).resolvedTypeReferenceDirective?.resolvedFileName,
+            "/node_modules/@types/pkg/a.d.ts",
+        );
+        fs.writeFile!(packageJson, JSON.stringify({ name: "@types/pkg", version: "1.0.0", types: "b.d.ts" }));
+        fs.writeFile!(packageB, "export {};");
+        const secondSnapshot = firstSnapshot.update({
+            fileNotifications: { changed: [packageJson], created: [packageB] },
+        });
+        assert.equal(
+            (resolver.resolveTypeReferenceDirective("pkg", "/src/index.ts", undefined, { snapshot: firstSnapshot })).resolvedTypeReferenceDirective?.resolvedFileName,
+            "/node_modules/@types/pkg/a.d.ts",
+        );
+        assert.equal(
+            (resolver.resolveTypeReferenceDirective("pkg", "/src/index.ts", undefined, { snapshot: secondSnapshot })).resolvedTypeReferenceDirective?.resolvedFileName,
+            "/node_modules/@types/pkg/b.d.ts",
+        );
+        assert.equal(
+            (resolver.resolveTypeReferenceDirective("pkg", "/src/index.ts")).resolvedTypeReferenceDirective?.resolvedFileName,
+            "/node_modules/@types/pkg/b.d.ts",
+        );
+        firstSnapshot.dispose();
+        assert.throws(
+            () => resolver.resolveTypeReferenceDirective("pkg", "/src/index.ts", undefined, { snapshot: firstSnapshot }),
+            /Snapshot is disposed/,
+        );
+        resolver.dispose();
+        assert.throws(
+            () => resolver.resolveTypeReferenceDirective("pkg", "/src/index.ts"),
+            /ModuleResolver is disposed/,
+        );
+    });
+
+    test("type reference resolver uses the in-progress snapshot filesystem", () => {
+        using api = spawnAPI({ "/src/index.ts": 'import "layered";' });
+        const compilerOptions = { noLib: true, types: [] };
+        const defaultResolver = api.createModuleResolver(compilerOptions);
+        const customResolver = api.createModuleResolver(compilerOptions, {
+            resolveModuleName: (name, containingDirectory, mode, { snapshot }) => {
+                assert.equal(name, "layered");
+                assert.ok(typeof snapshot === "number");
+                const result = defaultResolver.resolveTypeReferenceDirective(name, `${containingDirectory}/index.ts`, mode, { snapshot });
+                assert.ok(result.resolvedTypeReferenceDirective);
+                return { resolvedFileName: result.resolvedTypeReferenceDirective.resolvedFileName };
+            },
+        });
+        const snapshot = api.createSnapshot({
+            fileSystem: createFileSystemLayer([
+                ["/node_modules/@types/layered/package.json", JSON.stringify({ name: "@types/layered", version: "1.0.0", types: "index.d.ts" })],
+                ["/node_modules/@types/layered/index.d.ts", "export {};"],
+            ]),
+            createPrograms: [{
+                rootFiles: ["/src/index.ts"],
+                compilerOptions,
+                options: { moduleResolver: customResolver },
+            }],
+        });
+        assert.deepEqual(
+            [...snapshot.operation.createdPrograms![0].getSourceFileNames()].sort(),
+            ["/node_modules/@types/layered/index.d.ts", "/src/index.ts"],
+        );
+        assert.equal(
+            (defaultResolver.resolveTypeReferenceDirective("layered", "/src/index.ts")).resolvedTypeReferenceDirective,
+            undefined,
+        );
+    });
+
     test("module resolver normalizes raw compiler option paths", () => {
         using api = spawnAPI();
         const resolver = api.createModuleResolver({

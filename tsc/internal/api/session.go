@@ -914,6 +914,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleReleaseModuleResolver(parsed.(*ReleaseModuleResolverParams))
 	case string(MethodResolveModuleName):
 		return s.handleResolveModuleName(ctx, parsed.(*ResolveModuleNameParams))
+	case string(MethodResolveTypeReferenceDirective):
+		return s.handleResolveTypeReferenceDirective(ctx, parsed.(*ResolveTypeReferenceDirectiveParams))
 	case string(MethodGetEffectiveTypeRoots):
 		return s.handleGetEffectiveTypeRoots(parsed.(*CompilerOptionsParams))
 	case string(MethodGetTsBuildInfoEmitOutputFilePath):
