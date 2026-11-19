@@ -23228,7 +23228,7 @@ func (c *Checker) getObjectTypeInstantiation(t *Type, m *TypeMapper, alias *Type
 		case target.objectFlags&ObjectFlagsReference != 0:
 			result = c.createDeferredTypeReference(t.Target(), t.AsTypeReference().node, newMapper, newAlias)
 		case target.objectFlags&ObjectFlagsMapped != 0:
-			result = c.instantiateMappedType(target, newMapper, newAlias)
+			result = c.instantiateMappedType(target, typeParameters, newMapper, newAlias)
 		default:
 			result = c.instantiateAnonymousType(target, newMapper, newAlias)
 		}
@@ -23383,7 +23383,7 @@ func (c *Checker) getHomomorphicTypeVariable(t *Type) *Type {
 	return nil
 }
 
-func (c *Checker) instantiateMappedType(t *Type, m *TypeMapper, alias *TypeAlias) *Type {
+func (c *Checker) instantiateMappedType(t *Type, typeParameters []*Type, m *TypeMapper, alias *TypeAlias) *Type {
 	// For a homomorphic mapped type { [P in keyof T]: X }, where T is some type variable, the mapping
 	// operation depends on T as follows:
 	// * If T is a primitive type no mapping is performed and the result is simply T.
@@ -23413,7 +23413,7 @@ func (c *Checker) instantiateMappedType(t *Type, m *TypeMapper, alias *TypeAlias
 				return c.getIntersectionType(core.Map(s.Types(), instantiateConstituent))
 			}
 		}
-		return c.instantiateAnonymousType(t, prependTypeMapping(typeVariable, s, m), nil)
+		return c.getMappedTypeConstituentInstantiation(t, typeParameters, typeVariable, s, m)
 	}
 	if typeVariable != nil {
 		mappedTypeVariable := c.instantiateType(typeVariable, m)
@@ -23426,6 +23426,28 @@ func (c *Checker) instantiateMappedType(t *Type, m *TypeMapper, alias *TypeAlias
 		return c.wildcardType
 	}
 	return c.instantiateAnonymousType(t, m, alias)
+}
+
+// Returns the instantiation of the homomorphic mapped type t for a single constituent of its type variable.
+// The result is cached under the key getObjectTypeInstantiation computes when the result is itself instantiated,
+// such that instantiating it again yields the same type instead of a structurally identical duplicate. The key
+// is independent of any alias of the enclosing instantiation, since that alias doesn't propagate to constituents.
+func (c *Checker) getMappedTypeConstituentInstantiation(t *Type, typeParameters []*Type, typeVariable *Type, s *Type, m *TypeMapper) *Type {
+	mapper := prependTypeMapping(typeVariable, s, m)
+	if mapper.Map(typeVariable) != s {
+		// When s is itself a type parameter mapped by m, the merged mapper maps the type variable to the mapping
+		// of s. The result then differs from the instantiation for its key, so it isn't cached.
+		return c.instantiateAnonymousType(t, mapper, nil)
+	}
+	alias := c.instantiateTypeAlias(t.alias, mapper)
+	key := getTypeInstantiationKey(core.Map(typeParameters, mapper.Map), alias, false /*singleSignature*/)
+	data := t.AsObjectType()
+	result := data.instantiations[key]
+	if result == nil {
+		result = c.instantiateAnonymousType(t, mapper, alias)
+		data.instantiations[key] = result
+	}
+	return result
 }
 
 func (c *Checker) hasArrayOrTypeTypeConstraint(typeVariable *Type) bool {
