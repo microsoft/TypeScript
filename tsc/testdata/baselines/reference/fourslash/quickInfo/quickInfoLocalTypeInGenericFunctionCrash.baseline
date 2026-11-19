@@ -20,7 +20,7 @@
 //         ^
 // | ----------------------------------------------------------------------
 // | ```typescript
-// | (method) X.m<B, C>(): (Anonymous function)<Date>.Y
+// | (method) X.m<B, C>(): (Anonymous function)<Date>.Y<string>
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -140,7 +140,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```typescript\n(method) X.m<B, C>(): (Anonymous function)<Date>.Y\n```\n"
+        "value": "```typescript\n(method) X.m<B, C>(): (Anonymous function)<Date>.Y<string>\n```\n"
       },
       "range": {
         "start": {

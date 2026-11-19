@@ -374,6 +374,7 @@ import {
     isImportClause,
     isJSDocFullName,
     isJSDocReturnTag,
+    isJSDocTypeExpressionOrJSDocTypeLiteral,
     isJsxAttributeName,
     isJsxAttributes,
     isJsxAttributeValue,
@@ -1330,7 +1331,7 @@ const visitEachChildTable: Record<number, VisitEachChildFunction> = {
     },
     [SyntaxKind.JSDocTypedefTag]: (node: JSDocTypedefTag, visitor: Visitor): JSDocTypedefTag => {
         const _tagName = visitNode(node.tagName, visitor, isIdentifier);
-        const _typeExpression = visitNode(node.typeExpression, visitor);
+        const _typeExpression = visitNode(node.typeExpression, visitor, isJSDocTypeExpressionOrJSDocTypeLiteral);
         const _name = visitNode(node.name, visitor, isJSDocFullName);
         const _comment = visitNodes(node.comment, visitor);
         return updateJSDocTypedefTag(node, _tagName, _typeExpression, _name, _comment);

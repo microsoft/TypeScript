@@ -86,7 +86,7 @@ func (s *inlayHintState) visit(node *ast.Node) bool {
 		return false
 	}
 
-	if ast.IsTypeNode(node) && !ast.IsExpressionWithTypeArguments(node) {
+	if ast.IsTypeNode(node) {
 		return false
 	}
 

@@ -199,7 +199,7 @@ export function encodeSourceFile(sourceFile: SourceFile): Uint8Array {
  * Encode an arbitrary AST node into the binary format.
  * When encoding a non-SourceFile node, the header hash and parse options fields will be zero.
  */
-export function encodeNode(node: Node): Uint8Array {
+export function encodeNode(node: Node, onNodeEncoded?: (node: Node, index: number) => void): Uint8Array {
     const strs = new StringTable();
     const extendedDataValues: number[] = [];
     const structuredWriter = new MsgpackWriter();
@@ -226,14 +226,14 @@ export function encodeNode(node: Node): Uint8Array {
         const data = getNodeData(node, strs, extendedDataValues, structuredWriter);
         nodeValues.push(
             node.kind,
-            node.pos >= 0 ? node.pos : 0,
-            node.end >= 0 ? node.end : 0,
+            node.pos,
+            node.end,
             0, // next (filled in later)
             parentIndex,
             data,
             node.flags,
         );
-
+        onNodeEncoded?.(node, currentIndex);
         const saveParentIndex = parentIndex;
         const savePrevIndex = prevIndex;
         parentIndex = currentIndex;
@@ -259,8 +259,8 @@ export function encodeNode(node: Node): Uint8Array {
 
         nodeValues.push(
             KIND_NODE_LIST,
-            list.pos >= 0 ? list.pos : 0,
-            list.end >= 0 ? list.end : 0,
+            list.pos,
+            list.end,
             0, // next
             parentIndex,
             list.length, // data for NodeList is its length
@@ -304,8 +304,8 @@ export function encodeNode(node: Node): Uint8Array {
     const rootData = getNodeData(node, strs, extendedDataValues, structuredWriter);
     nodeValues.push(
         node.kind,
-        node.pos >= 0 ? node.pos : 0,
-        node.end >= 0 ? node.end : 0,
+        node.pos,
+        node.end,
         0,
         0,
         rootData,
@@ -315,6 +315,7 @@ export function encodeNode(node: Node): Uint8Array {
     const saveParent = parentIndex;
     prevIndex = 0;
     parentIndex = 1; // root is at index 1
+    onNodeEncoded?.(node, 1);
     visitChildren(node);
     parentIndex = saveParent;
 

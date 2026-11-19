@@ -19,6 +19,7 @@ type EmitContext struct {
 	textSource    map[*ast.StringLiteralNode]*ast.Node
 	original      map[*ast.Node]*ast.Node
 	emitNodes     core.LinkStore[*ast.Node, emitNode]
+	display       map[*ast.Node]*ast.NodeList
 	assignedName  map[*ast.Node]*ast.Expression
 	classThis     map[*ast.Node]*ast.IdentifierNode
 	varScopeStack core.Stack[*varScope]
@@ -445,6 +446,9 @@ func (c *EmitContext) SetOriginalEx(node *ast.Node, original *ast.Node, allowOve
 		if emitNode := c.emitNodes.TryGet(original); emitNode != nil {
 			c.emitNodes.Get(node).copyFrom(emitNode)
 		}
+		if typeArguments, ok := c.display[original]; ok {
+			c.display[node] = typeArguments
+		}
 	} else if !allowOverwrite && existing != original {
 		panic("Original node already set.")
 	} else if allowOverwrite {
@@ -550,6 +554,28 @@ func (e *emitNode) copyFrom(source *emitNode) {
 		snippetElement := *source.snippetElement
 		e.snippetElement = &snippetElement
 	}
+}
+
+// DisplayTypeArguments returns type arguments shown with node: after an
+// identifier in an entity name or property access, as in C<string>.x, or in
+// place of a signature's type parameters, as in <string>(value: string). They
+// may include type parameter declarations, as in
+// C<out T extends string = "a">.prototype.
+func (c *EmitContext) DisplayTypeArguments(node *ast.Node) *ast.NodeList {
+	return c.display[node]
+}
+
+func (c *EmitContext) SetDisplayTypeArguments(node *ast.Node, typeArguments *ast.NodeList) {
+	if c.display == nil {
+		c.display = make(map[*ast.Node]*ast.NodeList)
+	}
+	c.display[node] = typeArguments
+}
+
+// ClearDisplayTypeArguments removes all display type arguments, so they are
+// not retained once their nodes have been printed.
+func (c *EmitContext) ClearDisplayTypeArguments() {
+	clear(c.display)
 }
 
 func (c *EmitContext) EmitFlags(node *ast.Node) EmitFlags {

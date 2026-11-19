@@ -14,9 +14,12 @@ func TestQuickInfoForGenericPrototypeMember(t *testing.T) {
    foo(x: T) { }
 }
 var x = new /*1*/C<any>();
-var y = C.proto/*2*/type;`
+var y = C.proto/*2*/type;
+class D<out T extends string = "a"> {}
+D.proto/*3*/type;`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
 	f.VerifyQuickInfoAt(t, "1", "constructor C<any>(): C<any>", "")
 	f.VerifyQuickInfoAt(t, "2", "(property) C<T>.prototype: C<any>", "")
+	f.VerifyQuickInfoAt(t, "3", `(property) D<out T extends string = "a">.prototype: D<any>`, "")
 }

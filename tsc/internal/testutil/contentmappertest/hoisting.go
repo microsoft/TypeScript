@@ -48,7 +48,7 @@ func (hoistingHandler) HandleRequest(ctx context.Context, method string, params 
 // that are contiguous in the original but disjoint in the virtual text, so the original position at a
 // splice point (importsStart) lies on the boundary of two verbatim segments and projects to two distinct
 // exact virtual positions.
-func transformHoisting(content string) (string, json.Value, error) {
+func transformHoisting(content string) (string, []contentmapper.SpanMapSegment, error) {
 	var virtual strings.Builder
 	var segments []spanmap.Segment
 
@@ -78,11 +78,7 @@ func transformHoisting(content string) (string, json.Value, error) {
 	writeMapped(importsEnd, scriptEnd)
 	virtual.WriteString("\n;\nreturn { props: {} as Record<string, never> }}\n")
 
-	mappings, err := spanmap.New(segments).Marshal()
-	if err != nil {
-		return "", nil, err
-	}
-	return virtual.String(), json.Value(mappings), nil
+	return virtual.String(), spanmap.New(segments).Tuples(), nil
 }
 
 func scriptRange(content string) (start, end int, err error) {

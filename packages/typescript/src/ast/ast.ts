@@ -39,6 +39,7 @@ import type {
     ImportEqualsDeclaration,
     IndexSignatureDeclaration,
     InterfaceDeclaration,
+    JSDoc,
     JsxAttribute,
     JsxExpression,
     JsxSpreadAttribute,
@@ -198,7 +199,7 @@ export interface Node extends ReadonlyTextRange {
     readonly kind: SyntaxKind;
     readonly flags: NodeFlags;
     readonly parent: Node;
-    readonly jsDoc?: readonly Node[] | undefined;
+    readonly jsDoc?: readonly JSDoc[] | undefined;
     childrenIter<TNext = void>(): Generator<Node, TNext | undefined, TNext>;
     forEachChild<T>(visitor: (node: Node) => T, visitArray?: (nodes: NodeArray<Node>) => T): T | undefined;
     getSourceFile(): SourceFile;
