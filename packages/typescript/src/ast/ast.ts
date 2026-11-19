@@ -86,6 +86,11 @@ export interface PropertyAccessChain extends PropertyAccessExpression {
 
 export type OptionalChain = PropertyAccessChain | ElementAccessChain | CallChain | NonNullChain;
 
+declare const parameterPropertyBrand: unique symbol;
+export interface ParameterPropertyDeclaration extends ParameterDeclaration {
+    readonly [parameterPropertyBrand]: void;
+}
+
 // ── Core types ──
 
 declare const rootedPathBrand: unique symbol;

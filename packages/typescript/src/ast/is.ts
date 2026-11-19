@@ -694,3 +694,8 @@ export function isOptionalChain(node: Node): node is ast.OptionalChain {
     return !!(node.flags & NodeFlags.OptionalChain) &&
         (guards.isAccessExpression(node) || guards.isCallExpression(node) || guards.isNonNullExpression(node));
 }
+
+export function isParameterPropertyDeclaration(node: Node, parent: Node): node is ast.ParameterPropertyDeclaration {
+    return guards.isParameterDeclaration(node) && !!(node.modifierFlags & ModifierFlags.ParameterPropertyModifier) &&
+        guards.isConstructorDeclaration(parent);
+}

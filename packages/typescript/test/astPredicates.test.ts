@@ -253,3 +253,15 @@ test("isOptionalChain includes non-null continuations but rejects flagged unrela
     Object.defineProperty(unrelated, "flags", { value: ast.NodeFlags.OptionalChain });
     assert.equal(ast.isOptionalChain(unrelated), false);
 });
+
+test("isParameterPropertyDeclaration requires both a property modifier and a constructor", () => {
+    const name = factory.createIdentifier("value");
+    const constructor = factory.createConstructorDeclaration(undefined, undefined, []);
+    const parameter: ast.Node = factory.createParameterDeclaration([factory.createToken(ast.SyntaxKind.ReadonlyKeyword)], undefined, name);
+    assert.ok(ast.isParameterPropertyDeclaration(parameter, constructor));
+    const narrowed: ast.ParameterPropertyDeclaration = parameter;
+    assert.equal(narrowed.name, name);
+    assert.equal(ast.isParameterPropertyDeclaration(parameter, factory.createFunctionDeclaration(undefined, undefined, undefined, undefined, [])), false);
+    assert.equal(ast.isParameterPropertyDeclaration(factory.createParameterDeclaration(undefined, undefined, name), constructor), false);
+    assert.equal(ast.isParameterPropertyDeclaration(factory.createPropertyDeclaration(undefined, name), constructor), false);
+});
