@@ -16,3 +16,17 @@ test("isAutoAccessorPropertyDeclaration distinguishes accessor modifiers from ac
         assert.equal(ordinary.name, name);
     }
 });
+
+test("isCallChain recognizes continuations without a question-dot token", () => {
+    const name = factory.createIdentifier("f");
+    const call: ast.Node = factory.createCallExpression(name, undefined, undefined, [], ast.NodeFlags.OptionalChain);
+    assert.ok(ast.isCallChain(call));
+    const narrowed: ast.CallChain = call;
+    assert.equal(narrowed.questionDotToken, undefined);
+    const ordinary = factory.createCallExpression(name, undefined, undefined, [], ast.NodeFlags.None);
+    if (!ast.isCallChain(ordinary)) {
+        assert.equal(ordinary.arguments.length, 0);
+    }
+    assert.equal(ast.isCallChain(ordinary), false);
+    assert.equal(ast.isCallChain(factory.createNonNullExpression(name, ast.NodeFlags.OptionalChain)), false);
+});

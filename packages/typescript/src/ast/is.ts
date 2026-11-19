@@ -50,6 +50,7 @@ import type {
     TypeNode,
     UnaryExpressionBase,
 } from "./ast.ts";
+import * as guards from "./is.generated.ts";
 import {
     isBinaryExpression,
     isClassLikeDeclaration,
@@ -582,4 +583,8 @@ export function isJsxTagNameExpression(node: Node): node is JsxTagNameExpression
         || kind === SyntaxKind.Identifier
         || kind === SyntaxKind.PropertyAccessExpression
         || kind === SyntaxKind.JsxNamespacedName;
+}
+
+export function isCallChain(node: Node): node is ast.CallChain {
+    return guards.isCallExpression(node) && !!(node.flags & NodeFlags.OptionalChain);
 }

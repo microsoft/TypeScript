@@ -7,6 +7,7 @@ import type { LanguageVariant } from "../../enums/languageVariant.js";
 import type { NodeFlags } from "../../enums/nodeFlags.js";
 import type { ScriptKind } from "../../enums/scriptKind.js";
 import { SyntaxKind } from "../../enums/syntaxKind.js";
+import type * as generated from "./ast.generated.ts";
 import type {
     AssertionExpression,
     BindingElement,
@@ -61,6 +62,11 @@ export * as factory from "./factory.generated.ts";
 declare const autoAccessorBrand: unique symbol;
 export interface AutoAccessorPropertyDeclaration extends PropertyDeclaration {
     readonly [autoAccessorBrand]: void;
+}
+
+declare const optionalChainBrand: unique symbol;
+export interface CallChain extends generated.CallExpression {
+    readonly [optionalChainBrand]: void;
 }
 
 // ── Core types ──
