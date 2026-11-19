@@ -644,3 +644,7 @@ export function isEmptyBindingElement(node: ast.BindingElement | ast.ArrayBindin
 export function isEmptyBindingPattern(node: ast.BindingName): node is ast.EmptyBindingPattern {
     return isBindingPattern(node) && node.elements.every(isEmptyBindingElement);
 }
+
+export function isFunctionLike(node: Node | undefined): node is ast.SignatureDeclaration | ast.JSDocSignature {
+    return !!node && (guards.isSignatureDeclaration(node) || guards.isJSDocSignature(node));
+}

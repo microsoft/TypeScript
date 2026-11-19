@@ -158,3 +158,14 @@ test("isEmptyBindingPattern accepts parsed hole-only and nested empty patterns",
     const patterns = source.statements.filter(ast.isVariableStatement).map(statement => statement.declarationList.declarations[0].name);
     assert.deepEqual(patterns.map(ast.isEmptyBindingPattern), [true, true, false]);
 });
+
+test("isFunctionLike includes signatures and JSDoc callbacks, not only functions with bodies", () => {
+    const signature: ast.Node | undefined = factory.createCallSignatureDeclaration(undefined, []);
+    assert.ok(ast.isFunctionLike(signature));
+    const narrowed: ast.SignatureDeclaration | ast.JSDocSignature = signature;
+    assert.equal(narrowed.parameters.length, 0);
+    assert.ok(ast.isFunctionLike(factory.createJSDocSignature(undefined, [])));
+    assert.ok(ast.isFunctionLike(factory.createFunctionTypeNode(undefined, [], factory.createKeywordTypeNode(ast.SyntaxKind.VoidKeyword))));
+    assert.equal(ast.isFunctionLike(undefined), false);
+    assert.equal(ast.isFunctionLike(factory.createClassStaticBlockDeclaration(undefined, factory.createBlock([]))), false);
+});
