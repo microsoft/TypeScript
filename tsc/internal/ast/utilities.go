@@ -2835,6 +2835,8 @@ func ForEachDynamicImportOrRequireCall(
 ) bool {
 	isJavaScriptFile := IsInJSFile(file.AsNode())
 	lastIndex, size := findImportOrRequire(file.Text(), 0)
+	// The text search can find "import" or "require" in an argument as well as at the call,
+	// so GetNodeAtPosition may resolve multiple matches to the same AST node.
 	var lastNode *Node
 	for lastIndex >= 0 {
 		node := GetNodeAtPosition(file, lastIndex, isJavaScriptFile && includeTypeSpaceImports)
