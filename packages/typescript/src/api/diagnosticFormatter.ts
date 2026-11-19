@@ -59,14 +59,14 @@ function diagnosticPrefix(diagnostic: Diagnostic): string {
     return diagnostic.source || "TS";
 }
 
-function flattenDiagnosticMessage(diagnostic: Diagnostic, newLine: string, indentLevel = 0): string {
+function flattenDiagnosticMessage(diagnostic: Diagnostic, newLine: string, indentLevel = 0, baseIndent = ""): string {
     let result = "";
     if (indentLevel) {
-        result += newLine + "  ".repeat(indentLevel);
+        result += newLine + baseIndent + "  ".repeat(indentLevel);
     }
     result += diagnostic.text;
     for (const child of diagnostic.messageChain ?? []) {
-        result += flattenDiagnosticMessage(child, newLine, indentLevel + 1);
+        result += flattenDiagnosticMessage(child, newLine, indentLevel + 1, baseIndent);
     }
     return result;
 }
@@ -190,12 +190,16 @@ export function formatDiagnosticsWithColorAndContext(
 
         if (diagnostic.relatedInformation?.length) {
             for (const related of diagnostic.relatedInformation) {
+                output += host.getNewLine();
                 if (related.fileName && related.startPosition) {
-                    output += host.getNewLine();
                     output += halfIndent + formatLocation(related, host);
-                    output += " - " + flattenDiagnosticMessage(related, host.getNewLine());
-                    output += formatCodeSpan(related, indent, foregroundColorEscapeCyan, host);
+                    output += " - ";
                 }
+                else {
+                    output += halfIndent;
+                }
+                output += flattenDiagnosticMessage(related, host.getNewLine(), 0, halfIndent);
+                output += formatCodeSpan(related, indent, foregroundColorEscapeCyan, host);
                 output += host.getNewLine();
             }
         }
