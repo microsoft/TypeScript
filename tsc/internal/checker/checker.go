@@ -24780,9 +24780,6 @@ func (c *Checker) getDeclaredTypeOfEnumMember(symbol *ast.Symbol) *Type {
 }
 
 func (c *Checker) computeEnumMemberValues(node *ast.Node) {
-	if node == nil || node.Kind != ast.KindEnumDeclaration {
-		return
-	}
 	nodeLinks := c.nodeLinks.Get(node)
 	if !(nodeLinks.flags&NodeCheckFlagsEnumValuesComputed != 0) {
 		nodeLinks.flags |= NodeCheckFlagsEnumValuesComputed
@@ -24908,7 +24905,7 @@ func (c *Checker) evaluateEntity(expr *ast.Node, location *ast.Node) evaluator.R
 			if rootSymbol != nil && rootSymbol.Flags()&ast.SymbolFlagsEnum != 0 {
 				name := expr.AsElementAccessExpression().ArgumentExpression.Text()
 				member := rootSymbol.Exports().Get(name)
-				if member != nil {
+				if member != nil && member.Flags()&ast.SymbolFlagsEnumMember != 0 {
 					if location != nil {
 						return c.evaluateEnumMember(expr, member, location)
 					}
