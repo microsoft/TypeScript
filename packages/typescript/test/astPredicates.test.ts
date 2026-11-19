@@ -275,3 +275,13 @@ test("isPropertyAccessChain includes chain continuations without their own quest
     assert.equal(ast.isPropertyAccessChain(factory.createPropertyAccessExpression(name, undefined, name, ast.NodeFlags.None)), false);
     assert.equal(ast.isPropertyAccessChain(factory.createElementAccessExpression(name, undefined, name, ast.NodeFlags.OptionalChain)), false);
 });
+
+test("isPropertyAccessOrQualifiedName accepts entity names and expressions, not element access", () => {
+    const name = factory.createIdentifier("value");
+    const qualified: ast.Node = factory.createQualifiedName(name, name);
+    assert.ok(ast.isPropertyAccessOrQualifiedName(qualified));
+    const narrowed: ast.PropertyAccessExpression | ast.QualifiedName = qualified;
+    assert.equal(narrowed, qualified);
+    assert.ok(ast.isPropertyAccessOrQualifiedName(factory.createPropertyAccessExpression(name, undefined, name, ast.NodeFlags.None)));
+    assert.equal(ast.isPropertyAccessOrQualifiedName(factory.createElementAccessExpression(name, undefined, name, ast.NodeFlags.None)), false);
+});

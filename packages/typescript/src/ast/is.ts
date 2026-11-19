@@ -703,3 +703,7 @@ export function isParameterPropertyDeclaration(node: Node, parent: Node): node i
 export function isPropertyAccessChain(node: Node): node is ast.PropertyAccessChain {
     return guards.isPropertyAccessExpression(node) && !!(node.flags & NodeFlags.OptionalChain);
 }
+
+export function isPropertyAccessOrQualifiedName(node: Node): node is ast.PropertyAccessExpression | ast.QualifiedName {
+    return guards.isPropertyAccessExpression(node) || guards.isQualifiedName(node);
+}
