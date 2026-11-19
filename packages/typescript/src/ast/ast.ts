@@ -76,6 +76,10 @@ export interface ElementAccessChain extends generated.ElementAccessExpression {
 declare const emptyBindingPatternBrand: unique symbol;
 export type EmptyBindingPattern = generated.BindingPattern & { readonly [emptyBindingPatternBrand]: void; };
 
+export interface NonNullChain extends generated.NonNullExpression {
+    readonly [optionalChainBrand]: void;
+}
+
 // ── Core types ──
 
 declare const rootedPathBrand: unique symbol;

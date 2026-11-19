@@ -677,3 +677,7 @@ export function isIterationStatement(node: Node, lookInLabeledStatements: boolea
 export function isJsxCallLike(node: Node): node is ast.JsxOpeningElement | ast.JsxSelfClosingElement | ast.JsxOpeningFragment {
     return guards.isJsxOpeningElement(node) || guards.isJsxSelfClosingElement(node) || guards.isJsxOpeningFragment(node);
 }
+
+export function isNonNullChain(node: Node): node is ast.NonNullChain {
+    return guards.isNonNullExpression(node) && !!(node.flags & NodeFlags.OptionalChain);
+}

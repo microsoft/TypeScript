@@ -210,3 +210,13 @@ test("isJsxCallLike includes opening fragments but excludes complete fragments",
     assert.ok(ast.isJsxCallLike(factory.createJsxSelfClosingElement(factory.createIdentifier("Component"), undefined, factory.createJsxAttributes([]))));
     assert.equal(ast.isJsxCallLike(factory.createJsxFragment(factory.createJsxOpeningFragment(), [], factory.createJsxClosingFragment())), false);
 });
+
+test("isNonNullChain distinguishes optional-chain assertions from ordinary assertions", () => {
+    const name = factory.createIdentifier("value");
+    const assertion: ast.Node = factory.createNonNullExpression(name, ast.NodeFlags.OptionalChain);
+    assert.ok(ast.isNonNullChain(assertion));
+    const narrowed: ast.NonNullChain = assertion;
+    assert.equal(narrowed.expression, name);
+    assert.equal(ast.isNonNullChain(factory.createNonNullExpression(name, ast.NodeFlags.None)), false);
+    assert.equal(ast.isNonNullChain(factory.createCallExpression(name, undefined, undefined, [], ast.NodeFlags.OptionalChain)), false);
+});
