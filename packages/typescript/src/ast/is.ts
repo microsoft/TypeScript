@@ -648,3 +648,7 @@ export function isEmptyBindingPattern(node: ast.BindingName): node is ast.EmptyB
 export function isFunctionLike(node: Node | undefined): node is ast.SignatureDeclaration | ast.JSDocSignature {
     return !!node && (guards.isSignatureDeclaration(node) || guards.isJSDocSignature(node));
 }
+
+export function isFunctionOrConstructorTypeNode(node: Node): node is ast.FunctionTypeNode | ast.ConstructorTypeNode {
+    return guards.isFunctionTypeNode(node) || guards.isConstructorTypeNode(node);
+}

@@ -169,3 +169,13 @@ test("isFunctionLike includes signatures and JSDoc callbacks, not only functions
     assert.equal(ast.isFunctionLike(undefined), false);
     assert.equal(ast.isFunctionLike(factory.createClassStaticBlockDeclaration(undefined, factory.createBlock([]))), false);
 });
+
+test("isFunctionOrConstructorTypeNode excludes callable declaration signatures", () => {
+    const result = factory.createKeywordTypeNode(ast.SyntaxKind.VoidKeyword);
+    const type: ast.Node = factory.createFunctionTypeNode(undefined, [], result);
+    assert.ok(ast.isFunctionOrConstructorTypeNode(type));
+    const narrowed: ast.FunctionTypeNode | ast.ConstructorTypeNode = type;
+    assert.equal(narrowed.type, result);
+    assert.ok(ast.isFunctionOrConstructorTypeNode(factory.createConstructorTypeNode(undefined, undefined, [], result)));
+    assert.equal(ast.isFunctionOrConstructorTypeNode(factory.createCallSignatureDeclaration(undefined, [])), false);
+});
