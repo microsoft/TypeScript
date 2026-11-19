@@ -90,3 +90,14 @@ test("isDeclarationStatement includes declarations produced by JavaScript JSDoc"
     ]);
     assert.ok(declarations.every(ast.isDeclarationStatement));
 });
+
+test("isElementAccessChain uses the chain flag rather than the question-dot token", () => {
+    const name = factory.createIdentifier("obj");
+    const index = factory.createStringLiteral("key", ast.TokenFlags.None);
+    const access: ast.Node = factory.createElementAccessExpression(name, undefined, index, ast.NodeFlags.OptionalChain);
+    assert.ok(ast.isElementAccessChain(access));
+    const narrowed: ast.ElementAccessChain = access;
+    assert.equal(narrowed.argumentExpression, index);
+    assert.equal(ast.isElementAccessChain(factory.createElementAccessExpression(name, undefined, index, ast.NodeFlags.None)), false);
+    assert.equal(ast.isElementAccessChain(factory.createPropertyAccessExpression(name, undefined, name, ast.NodeFlags.OptionalChain)), false);
+});

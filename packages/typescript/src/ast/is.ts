@@ -631,3 +631,7 @@ export function isDeclarationStatement(node: Node): node is ast.Statement & ast.
             return false;
     }
 }
+
+export function isElementAccessChain(node: Node): node is ast.ElementAccessChain {
+    return guards.isElementAccessExpression(node) && !!(node.flags & NodeFlags.OptionalChain);
+}

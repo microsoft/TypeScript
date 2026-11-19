@@ -69,6 +69,10 @@ export interface CallChain extends generated.CallExpression {
     readonly [optionalChainBrand]: void;
 }
 
+export interface ElementAccessChain extends generated.ElementAccessExpression {
+    readonly [optionalChainBrand]: void;
+}
+
 // ── Core types ──
 
 declare const rootedPathBrand: unique symbol;
