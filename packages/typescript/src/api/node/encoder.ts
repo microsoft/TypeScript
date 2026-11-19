@@ -226,8 +226,8 @@ export function encodeNode(node: Node): Uint8Array {
         const data = getNodeData(node, strs, extendedDataValues, structuredWriter);
         nodeValues.push(
             node.kind,
-            node.pos >= 0 ? node.pos : 0,
-            node.end >= 0 ? node.end : 0,
+            node.pos,
+            node.end,
             0, // next (filled in later)
             parentIndex,
             data,
@@ -259,8 +259,8 @@ export function encodeNode(node: Node): Uint8Array {
 
         nodeValues.push(
             KIND_NODE_LIST,
-            list.pos >= 0 ? list.pos : 0,
-            list.end >= 0 ? list.end : 0,
+            list.pos,
+            list.end,
             0, // next
             parentIndex,
             list.length, // data for NodeList is its length
@@ -304,8 +304,8 @@ export function encodeNode(node: Node): Uint8Array {
     const rootData = getNodeData(node, strs, extendedDataValues, structuredWriter);
     nodeValues.push(
         node.kind,
-        node.pos >= 0 ? node.pos : 0,
-        node.end >= 0 ? node.end : 0,
+        node.pos,
+        node.end,
         0,
         0,
         rootData,
