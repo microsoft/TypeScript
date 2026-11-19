@@ -699,3 +699,7 @@ export function isParameterPropertyDeclaration(node: Node, parent: Node): node i
     return guards.isParameterDeclaration(node) && !!(node.modifierFlags & ModifierFlags.ParameterPropertyModifier) &&
         guards.isConstructorDeclaration(parent);
 }
+
+export function isPropertyAccessChain(node: Node): node is ast.PropertyAccessChain {
+    return guards.isPropertyAccessExpression(node) && !!(node.flags & NodeFlags.OptionalChain);
+}

@@ -265,3 +265,13 @@ test("isParameterPropertyDeclaration requires both a property modifier and a con
     assert.equal(ast.isParameterPropertyDeclaration(factory.createParameterDeclaration(undefined, undefined, name), constructor), false);
     assert.equal(ast.isParameterPropertyDeclaration(factory.createPropertyDeclaration(undefined, name), constructor), false);
 });
+
+test("isPropertyAccessChain includes chain continuations without their own question-dot token", () => {
+    const name = factory.createIdentifier("value");
+    const access: ast.Node = factory.createPropertyAccessExpression(name, undefined, name, ast.NodeFlags.OptionalChain);
+    assert.ok(ast.isPropertyAccessChain(access));
+    const narrowed: ast.PropertyAccessChain = access;
+    assert.equal(narrowed.name, name);
+    assert.equal(ast.isPropertyAccessChain(factory.createPropertyAccessExpression(name, undefined, name, ast.NodeFlags.None)), false);
+    assert.equal(ast.isPropertyAccessChain(factory.createElementAccessExpression(name, undefined, name, ast.NodeFlags.OptionalChain)), false);
+});
