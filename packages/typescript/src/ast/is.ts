@@ -740,3 +740,7 @@ export function isTypeElement(node: Node): node is ast.TypeElement {
             return false;
     }
 }
+
+export function isClassOrTypeElement(node: Node): node is ast.ClassElement | ast.TypeElement {
+    return isClassElement(node) || isTypeElement(node);
+}

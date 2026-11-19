@@ -329,3 +329,12 @@ test("isTypeElement includes accessors and synthetic elisions but excludes metho
     assert.ok(ast.isTypeElement(factory.createCallSignatureDeclaration(undefined, [])));
     assert.equal(ast.isTypeElement(factory.createMethodDeclaration(undefined, undefined, name, undefined, undefined, [])), false);
 });
+
+test("isClassOrTypeElement unifies class-only and type-only members", () => {
+    const member: ast.Node = factory.createClassStaticBlockDeclaration(undefined, factory.createBlock([]));
+    assert.ok(ast.isClassOrTypeElement(member));
+    const narrowed: ast.ClassElement | ast.TypeElement = member;
+    assert.equal(narrowed, member);
+    assert.ok(ast.isClassOrTypeElement(factory.createCallSignatureDeclaration(undefined, [])));
+    assert.equal(ast.isClassOrTypeElement(factory.createPropertyAssignment(undefined, factory.createIdentifier("value"), undefined, undefined, factory.createNumericLiteral("1", ast.TokenFlags.None))), false);
+});
