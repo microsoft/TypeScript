@@ -11989,16 +11989,24 @@ func (c *Checker) checkPropertyNotUsedBeforeDeclaration(prop *ast.Symbol, node *
 	}
 	var diagnostic *ast.Diagnostic
 	declarationName := right.Text()
+	// A `declare` instance property redeclaration emits nothing, so unlike a
+	// redeclaration without an initializer it cannot overwrite the base class
+	// field with undefined (see #43194). The base field is initialized in
+	// super(), so the ancestor exemption still applies for such a
+	// redeclaration. The exemption is limited to instance property
+	// declarations: an ambient global variable has no parent class, so
+	// checking it against an ancestor class would panic, and a static
+	// declaration must not be matched against the base class's instance
+	// properties.
+	isAmbientInstanceProperty := ast.IsPropertyDeclaration(valueDeclaration) &&
+		c.getCombinedModifierFlagsCached(valueDeclaration)&ast.ModifierFlagsAmbient != 0 &&
+		c.getCombinedModifierFlagsCached(valueDeclaration)&ast.ModifierFlagsStatic == 0
 	if c.isInPropertyInitializerOrClassStaticBlock(node, false /*ignoreArrowFunctions*/) &&
 		!c.isOptionalPropertyDeclaration(valueDeclaration) &&
 		!(ast.IsAccessExpression(node) && ast.IsAccessExpression(node.Expression())) &&
 		!c.isBlockScopedNameDeclaredBeforeUse(valueDeclaration, right) &&
 		!(ast.IsMethodDeclaration(valueDeclaration) && c.getCombinedModifierFlagsCached(valueDeclaration)&ast.ModifierFlagsStatic != 0) &&
-		// A `declare` redeclaration emits nothing, so unlike a redeclaration
-		// without an initializer it cannot overwrite the base class field with
-		// undefined (see #43194). The base field is initialized in super(), so
-		// the ancestor exemption still applies for a `declare` redeclaration.
-		((c.compilerOptions.GetUseDefineForClassFields() && c.getCombinedModifierFlagsCached(valueDeclaration)&ast.ModifierFlagsAmbient == 0) || !c.isPropertyDeclaredInAncestorClass(prop)) {
+		(c.compilerOptions.GetUseDefineForClassFields() && !isAmbientInstanceProperty || !c.isPropertyDeclaredInAncestorClass(prop)) {
 		diagnostic = c.error(right, diagnostics.Property_0_is_used_before_its_initialization, declarationName)
 	} else if ast.IsClassDeclaration(valueDeclaration) && !ast.IsTypeReferenceNode(node.Parent) && valueDeclaration.Flags&ast.NodeFlagsAmbient == 0 && !c.isBlockScopedNameDeclaredBeforeUse(valueDeclaration, right) {
 		diagnostic = c.error(right, diagnostics.Class_0_used_before_its_declaration, declarationName)

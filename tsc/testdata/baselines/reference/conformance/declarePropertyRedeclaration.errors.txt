@@ -1,8 +1,10 @@
 declarePropertyRedeclaration.ts(16,14): error TS2729: Property 'b' is used before its initialization.
 declarePropertyRedeclaration.ts(25,14): error TS2729: Property 'b' is used before its initialization.
+declarePropertyRedeclaration.ts(33,27): error TS2729: Property 'v' is used before its initialization.
+declarePropertyRedeclaration.ts(50,21): error TS2729: Property 'b' is used before its initialization.
 
 
-==== declarePropertyRedeclaration.ts (2 errors) ====
+==== declarePropertyRedeclaration.ts (4 errors) ====
     class Base {
         b: number = 1;
     }
@@ -35,5 +37,45 @@ declarePropertyRedeclaration.ts(25,14): error TS2729: Property 'b' is used befor
 !!! error TS2729: Property 'b' is used before its initialization.
 !!! related TS2728 declarePropertyRedeclaration.ts:26:5: 'b' is declared here.
         b = 1;
+    }
+    
+    // An ambient global has no parent class, so reading it in a static field
+    // initializer must not crash the compiler. The access is still reported,
+    // because the static initializer runs at class definition time.
+    class AmbientGlobalStatic {
+        static x = globalThis.v;
+                              ~
+!!! error TS2729: Property 'v' is used before its initialization.
+!!! related TS2728 declarePropertyRedeclaration.ts:36:13: 'v' is declared here.
+    }
+    
+    declare var v: number;
+    
+    // The same access from an instance field initializer is fine, because the
+    // initializer runs at construction time, after the module has evaluated.
+    class AmbientGlobalInstance {
+        x = globalThis.w;
+    }
+    
+    declare var w: number;
+    
+    // A static declaration must not be exempted: the ancestor check only looks
+    // at the base class's instance properties, and there is no inherited static
+    // b here, so Derived.d is undefined at runtime.
+    class StaticDeclared extends Base {
+        static d = this.b;
+                        ~
+!!! error TS2729: Property 'b' is used before its initialization.
+!!! related TS2728 declarePropertyRedeclaration.ts:51:20: 'b' is declared here.
+        declare static b: number;
+    }
+    
+    // A static field reading an inherited static property is fine.
+    class StaticBase {
+        static b = 1;
+    }
+    
+    class StaticDerived extends StaticBase {
+        static d = this.b;
     }
     
