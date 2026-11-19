@@ -83,8 +83,8 @@ const Mixin2F = makeMixin(<TBase extends ConstructorType<any>>(Base: TBase) => {
 
 class MixinApplied extends Mixin2F(MixinF()) {}
 >MixinApplied : MixinApplied
->Mixin2F(MixinF()) : never
+>Mixin2F(MixinF()) : ((abstract new (...args: any[]) => (Anonymous function).Mixin2) & { prototype: (Anonymous function).Mixin2; }) & ((abstract new (...args: any[]) => (Anonymous function).Mixin) & { prototype: (Anonymous function).Mixin; }) & ConstructorType<any>
 >Mixin2F : <TBase extends ConstructorType<any>>(Base?: TBase | undefined) => ((abstract new (...args: any[]) => Mixin2) & { prototype: (Anonymous function).Mixin2; }) & TBase
->MixinF() : never
+>MixinF() : ((abstract new (...args: any[]) => (Anonymous function).Mixin) & { prototype: (Anonymous function).Mixin; }) & ConstructorType<any>
 >MixinF : <TBase extends ConstructorType<any>>(Base?: TBase | undefined) => ((abstract new (...args: any[]) => Mixin) & { prototype: (Anonymous function).Mixin; }) & TBase
 

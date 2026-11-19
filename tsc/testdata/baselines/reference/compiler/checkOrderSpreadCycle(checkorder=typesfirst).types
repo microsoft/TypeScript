@@ -57,12 +57,12 @@ const M = /** @type {any} */ (null);
 >(null) : any
 
 module.exports = { v: { ...M } };
->module.exports = { v: { ...M } } : { v: { pa: { pb: {}; mb: 1; }; ma: 1; }; }
+>module.exports = { v: { ...M } } : { v: {}; }
 >module.exports : { v: {}; }
 >module : { exports: { v: {}; }; }
 >exports : { v: {}; }
->{ v: { ...M } } : { v: { pa: { pb: {}; mb: 1; }; ma: 1; }; }
->v : { pa: { pb: {}; mb: 1; }; ma: 1; }
->{ ...M } : { pa: { pb: {}; mb: 1; }; ma: 1; }
+>{ v: { ...M } } : { v: {}; }
+>v : {}
+>{ ...M } : {}
 >M : typeof import("./ma")
 

@@ -23,7 +23,7 @@ enum E {
 }
 
 const member: Extract<E, 1> = E.C;
->member : never
+>member : E.C
 >E.C : E.C
 >E : typeof E
 >C : E.C

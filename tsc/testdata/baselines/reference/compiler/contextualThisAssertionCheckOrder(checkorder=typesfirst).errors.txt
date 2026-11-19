@@ -1,9 +1,7 @@
-contextualThisAssertionCheckOrder.ts(9,5): error TS2775: Assertions require every name in the call target to be declared with an explicit type annotation.
-contextualThisAssertionCheckOrder.ts(10,11): error TS2322: Type 'boolean' is not assignable to type 'true'.
 contextualThisAssertionCheckOrder.ts(15,5): error TS7027: Unreachable code detected.
 
 
-==== contextualThisAssertionCheckOrder.ts (3 errors) ====
+==== contextualThisAssertionCheckOrder.ts (1 errors) ====
     // A function expression's this is typed contextually, and calling an
     // assertion or never-returning method through it narrows the same way
     // whether or not the types in the call were requested first (42175).
@@ -13,11 +11,7 @@ contextualThisAssertionCheckOrder.ts(15,5): error TS7027: Unreachable code detec
     makeContextualThisParameter<{ assert(v: any): asserts v }>(function () {
         const v = Boolean();
         this.assert(v);
-        ~~~~~~~~~~~
-!!! error TS2775: Assertions require every name in the call target to be declared with an explicit type annotation.
         const w: true = v;
-              ~
-!!! error TS2322: Type 'boolean' is not assignable to type 'true'.
     });
     
     makeContextualThisParameter<{ returnNever(): never }>(function () {
