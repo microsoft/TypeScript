@@ -102,7 +102,7 @@ type show<t> = { [k in keyof t]: t[k] } & unknown;
 >show : { [k in keyof t]: t[k]; }
 
 type resolve<$, k extends keyof $> = show<{
->resolve : { [p in keyof $[k]]: $[k][p] extends "ref" ? any extends infer T_1 ? { [k_1 in keyof T_1]: T_1[k_1]; } : never : $[k][p]; } extends infer T ? { [k_1 in keyof T]: T[k_1]; } : never
+>resolve : { [p in keyof $[k]]: $[k][p] extends "ref" ? any : $[k][p]; } extends infer T ? { [k_1 in keyof T]: T[k_1]; } : never
 
     [p in keyof $[k]]: $[k][p] extends "ref" ? resolve<$, k> : $[k][p]
 }>;
