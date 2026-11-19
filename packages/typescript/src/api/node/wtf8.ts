@@ -119,7 +119,7 @@ export function encodeWtf8(text: string): Uint8Array {
 }
 
 export class Wtf8Decoder extends TextDecoder {
-    constructor(label: string | undefined = "utf-8", options?: TextDecoderOptions) {
+    constructor(label: string | undefined = "utf-8", options?: ConstructorParameters<typeof TextDecoder>[1]) {
         // U+FEFF inside a payload is data. TextDecoder otherwise drops it at the
         // start of each decoded segment, including the segment after a lone surrogate.
         super(label, { ignoreBOM: true, ...options });
