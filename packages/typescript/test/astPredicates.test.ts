@@ -220,3 +220,12 @@ test("isNonNullChain distinguishes optional-chain assertions from ordinary asser
     assert.equal(ast.isNonNullChain(factory.createNonNullExpression(name, ast.NodeFlags.None)), false);
     assert.equal(ast.isNonNullChain(factory.createCallExpression(name, undefined, undefined, [], ast.NodeFlags.OptionalChain)), false);
 });
+
+test("isNullishCoalesce distinguishes nullish coalescing from logical OR", () => {
+    const name = factory.createIdentifier("value");
+    const expression = factory.createBinaryExpression(undefined, name, undefined, factory.createToken(ast.SyntaxKind.QuestionQuestionToken), name);
+    assert.ok(ast.isNullishCoalesce(expression));
+    assert.equal(expression.left, name);
+    assert.equal(ast.isNullishCoalesce(factory.createBinaryExpression(undefined, name, undefined, factory.createToken(ast.SyntaxKind.BarBarToken), name)), false);
+    assert.equal(ast.isNullishCoalesce(name), false);
+});

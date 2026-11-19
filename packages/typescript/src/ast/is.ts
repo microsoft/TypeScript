@@ -681,3 +681,7 @@ export function isJsxCallLike(node: Node): node is ast.JsxOpeningElement | ast.J
 export function isNonNullChain(node: Node): node is ast.NonNullChain {
     return guards.isNonNullExpression(node) && !!(node.flags & NodeFlags.OptionalChain);
 }
+
+export function isNullishCoalesce(node: Node): boolean {
+    return isBinaryExpression(node) && node.operatorToken.kind === SyntaxKind.QuestionQuestionToken;
+}
