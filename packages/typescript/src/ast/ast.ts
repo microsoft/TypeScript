@@ -175,6 +175,7 @@ export interface MappedDiagnosticDirective {
     readonly originalRange: ReadonlyTextRange;
     readonly virtualRange: ReadonlyTextRange;
     readonly policy: DiagnosticDirectivePolicy;
+    readonly diagnosticCode: number;
     readonly unusedCode: number;
 }
 

@@ -45,6 +45,15 @@ type InitializeParams struct {
 	Locale string `json:"locale,omitempty"`
 	// PositionEncodings lists the coordinate spaces the host accepts.
 	PositionEncodings []PositionEncoding `json:"positionEncodings"`
+	// Capabilities describes optional protocol extensions the host can decode.
+	Capabilities InitializeCapabilities `json:"capabilities"`
+}
+
+type InitializeCapabilities struct {
+	// DiagnosticDirectiveCodeSelectors allows an ignore tuple's sixth element to
+	// select one TypeScript diagnostic code instead of suppressing every code in
+	// the tuple's virtual range.
+	DiagnosticDirectiveCodeSelectors bool `json:"diagnosticDirectiveCodeSelectors"`
 }
 
 // InitializeResult is the mapper's response to the initialize request.
@@ -141,8 +150,10 @@ type DiagnosticDirectives struct {
 }
 
 // MappedDiagnosticDirective is encoded as
-// [originalStart, originalLength, virtualStart, virtualEnd, policy, unusedExpectDirectiveIndex?].
-// An omitted index selects the only unused-expect diagnostic and is invalid when there is not exactly one.
+// [originalStart, originalLength, virtualStart, virtualEnd, policy, policyValue?].
+// For expect directives policyValue is the unused-expect diagnostic index. An omitted index selects the only
+// unused-expect diagnostic and is invalid when there is not exactly one. For ignore directives policyValue is an
+// optional TypeScript diagnostic-code selector.
 type MappedDiagnosticDirective struct {
 	OriginalStart              int
 	OriginalLength             int
@@ -150,6 +161,7 @@ type MappedDiagnosticDirective struct {
 	VirtualEnd                 int
 	Policy                     DiagnosticDirectivePolicy
 	UnusedExpectDirectiveIndex *int
+	DiagnosticCode             *int32
 }
 
 var (
@@ -159,7 +171,9 @@ var (
 
 func (d MappedDiagnosticDirective) MarshalJSONTo(enc *json.Encoder) error {
 	tuple := []any{d.OriginalStart, d.OriginalLength, d.VirtualStart, d.VirtualEnd, d.Policy}
-	if d.UnusedExpectDirectiveIndex != nil {
+	if d.Policy == DiagnosticDirectivePolicyIgnore && d.DiagnosticCode != nil {
+		tuple = append(tuple, *d.DiagnosticCode)
+	} else if d.Policy == DiagnosticDirectivePolicyExpect && d.UnusedExpectDirectiveIndex != nil {
 		tuple = append(tuple, *d.UnusedExpectDirectiveIndex)
 	}
 	return json.MarshalEncode(enc, tuple)
@@ -181,9 +195,20 @@ func (d *MappedDiagnosticDirective) UnmarshalJSONFrom(dec *json.Decoder) error {
 		}
 	}
 	if len(tuple) == 6 {
-		var index int
-		d.UnusedExpectDirectiveIndex = &index
-		if err := json.Unmarshal(tuple[5], d.UnusedExpectDirectiveIndex); err != nil {
+		var field any
+		switch d.Policy {
+		case DiagnosticDirectivePolicyIgnore:
+			var code int32
+			d.DiagnosticCode = &code
+			field = d.DiagnosticCode
+		case DiagnosticDirectivePolicyExpect:
+			var index int
+			d.UnusedExpectDirectiveIndex = &index
+			field = d.UnusedExpectDirectiveIndex
+		default:
+			return fmt.Errorf("invalid diagnostic directive policy %d with sixth tuple element", d.Policy)
+		}
+		if err := json.Unmarshal(tuple[5], field); err != nil {
 			return fmt.Errorf("invalid diagnostic directive tuple element 5: %w", err)
 		}
 	}
@@ -1094,6 +1119,9 @@ func handshake(ctx context.Context, conn ipc.Conn, diagnosticLocale locale.Local
 	raw, err := conn.Call(ctx, MethodInitialize, InitializeParams{
 		Locale:            diagnosticLocale.String(),
 		PositionEncodings: []PositionEncoding{PositionEncodingUTF8, PositionEncodingUTF16},
+		Capabilities: InitializeCapabilities{
+			DiagnosticDirectiveCodeSelectors: true,
+		},
 	})
 	if err != nil {
 		return "", "", err
@@ -1224,7 +1252,13 @@ func normalizeDiagnosticDirectives(diagnosticDirectives *DiagnosticDirectives, v
 		normalized := ast.MappedDiagnosticDirective{Source: diagnosticSource}
 		switch directive.Policy {
 		case DiagnosticDirectivePolicyIgnore:
+			if directive.DiagnosticCode != nil && *directive.DiagnosticCode <= 0 {
+				return nil, directiveError(DiagnosticDirectiveErrorKindInvalidDiagnosticCode)
+			}
 			normalized.Policy = ast.MappedDiagnosticDirectivePolicyIgnore
+			if directive.DiagnosticCode != nil {
+				normalized.DiagnosticCode = *directive.DiagnosticCode
+			}
 		case DiagnosticDirectivePolicyExpect:
 			unusedDiagnosticIndex := 0
 			if directive.UnusedExpectDirectiveIndex != nil {
