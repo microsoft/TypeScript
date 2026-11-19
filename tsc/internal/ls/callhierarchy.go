@@ -1014,6 +1014,7 @@ func (l *LanguageService) convertCallSiteGroupToOutgoingCall(program *compiler.P
 	}
 
 	slices.SortFunc(fromRanges, lsproto.CompareRanges)
+	fromRanges = slices.Compact(fromRanges)
 
 	return &lsproto.CallHierarchyOutgoingCall{
 		To:         to,
