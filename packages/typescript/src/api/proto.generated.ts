@@ -1193,6 +1193,7 @@ export interface PrintNodeParams {
     preserveSourceNewlines?: boolean | undefined;
     neverAsciiEscape?: boolean | undefined;
     terminateUnterminatedLiterals?: boolean | undefined;
+    emitNodes?: Record<number, PrintEmitNode | null> | undefined;
 }
 
 export interface EmitParams {
@@ -1882,6 +1883,16 @@ export interface DiagnosticSourceLineResponse {
     text: string;
 }
 
+/**
+ * PrintEmitNode carries the EmitFlags and synthetic comments a client attaches to a
+ * specific node (by index) via EmitContext before printing.
+ */
+export interface PrintEmitNode {
+    emitFlags?: number | undefined;
+    leadingComments?: PrintSynthesizedComment[] | undefined;
+    trailingComments?: PrintSynthesizedComment[] | undefined;
+}
+
 export interface EmitOutputFile {
     fileName: RootedFilePath;
     text: string;
@@ -1954,6 +1965,14 @@ export interface ModuleResolutionEntry {
 export interface CompletionEntryLabelDetailsResponse {
     detail?: string | undefined;
     description?: string | undefined;
+}
+
+/** PrintSynthesizedComment is a synthetic comment attached to a node via EmitContext */
+export interface PrintSynthesizedComment {
+    kind: number;
+    text: string;
+    hasTrailingNewLine?: boolean | undefined;
+    hasLeadingNewLine?: boolean | undefined;
 }
 
 export interface CreateProgramOptions {

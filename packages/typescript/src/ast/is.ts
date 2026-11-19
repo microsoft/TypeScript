@@ -98,7 +98,6 @@ function isTypeNodeKind(kind: SyntaxKind): boolean {
         || kind === SyntaxKind.UndefinedKeyword
         || kind === SyntaxKind.NeverKeyword
         || kind === SyntaxKind.IntrinsicKeyword
-        || kind === SyntaxKind.ExpressionWithTypeArguments
         || kind === SyntaxKind.JSDocAllType
         || kind === SyntaxKind.JSDocNullableType
         || kind === SyntaxKind.JSDocNonNullableType

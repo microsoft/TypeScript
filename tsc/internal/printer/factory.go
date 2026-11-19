@@ -281,6 +281,17 @@ func (f *NodeFactory) InlineExpressions(expressions []*ast.Expression) *ast.Expr
 // Utilities
 //
 
+func CreateEntityNameFromExpression(f *ast.NodeFactory, node *ast.Expression) *ast.EntityName {
+	if ast.IsIdentifier(node) {
+		return f.DeepCloneNode(node)
+	}
+	debug.Assert(ast.IsPropertyAccessExpression(node) && ast.IsIdentifier(node.Name()))
+	return f.NewQualifiedName(
+		CreateEntityNameFromExpression(f, node.Expression()),
+		f.DeepCloneNode(node.Name()),
+	)
+}
+
 func (f *NodeFactory) CreateExpressionFromEntityName(node *ast.Node) *ast.Expression {
 	if ast.IsQualifiedName(node) {
 		left := f.CreateExpressionFromEntityName(node.AsQualifiedName().Left)

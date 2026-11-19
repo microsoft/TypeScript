@@ -6,8 +6,6 @@
 // offsets (core.TextPos), matching the compiler's TextRange model.
 package spanmap
 
-// Keep this in sync with spanMap.ts
-
 import (
 	"fmt"
 	"slices"
@@ -18,68 +16,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/json"
 )
 
-// Kind describes how positions inside a segment relate the virtual span to the original span.
-type Kind int32
-
-const (
-	// KindVerbatim segments are length-preserving: the virtual and original spans have the same
-	// length and interior positions map 1:1 (OriginalPos = pos - VirtualStart + OriginalStart). A virtual span
-	// fully within a verbatim segment maps to an exact original span.
-	KindVerbatim Kind = iota
-	// KindAtom segments map a virtual span to an original span as a whole; interior positions are not
-	// interpolatable (the lengths may differ), so positions within clamp to the segment's endpoints.
-	// Used for renamed identifiers or short expressions.
-	KindAtom
-	// KindAlias has atom geometry, but additionally asserts that the virtual and original texts are
-	// names for the same logical entity. Diagnostic presentation may substitute the original name.
-	KindAlias
-)
-
-// Feature selects which language-service operations may use a segment. Diagnostics are intentionally not
-// represented: diagnostics on virtual text may not opt out of reporting. Text edits additionally require exact
-// verbatim geometry regardless of feature participation.
-type Feature int32
-
-const (
-	FeatureHover Feature = 1 << iota
-	FeatureSignatureHelp
-	FeatureCompletion
-	FeatureDefinition
-	FeatureTypeDefinition
-	FeatureImplementation
-	FeatureReferences
-	FeatureDocumentHighlights
-	FeatureRename
-	FeatureCallHierarchy
-	FeatureCodeActions
-	FeatureFormatting
-	FeatureInlayHints
-	FeatureSemanticTokens
-	FeatureFoldingRanges
-	FeatureSelectionRanges
-	FeatureLinkedEditing
-	FeatureAutoInsert
-	FeatureDocumentSymbols
-	FeatureCodeLens
-	FeatureNone Feature = 0
-	FeatureAll  Feature = (FeatureCodeLens << 1) - 1
-)
-
 const featureMask = FeatureAll
-
-// Fidelity describes how faithfully a mapped span reflects the original.
-type Fidelity int32
-
-const (
-	// FidelityExact means the span fell entirely within a single verbatim segment and maps precisely.
-	FidelityExact Fidelity = iota
-	// FidelityAtom means the span fell within a single atom segment and maps to that atom's span.
-	FidelityAtom
-	// FidelityApproximate means the span crossed segment boundaries; its endpoints were mapped and clamped.
-	FidelityApproximate
-	// FidelityNone means the span had no original counterpart (it was entirely synthesized).
-	FidelityNone
-)
 
 // IsExact reports whether the mapping was fully faithful — the input fell within a single verbatim span —
 // so the result maps 1:1 and can host a text edit written back to the original.
@@ -97,30 +34,6 @@ func (f Fidelity) IsSingleSegment() bool {
 // gap that does not correspond to any location in the original text.
 func (f Fidelity) IsNone() bool {
 	return f == FidelityNone
-}
-
-// Segment maps the half-open virtual range [VirtualStart, VirtualEnd) to the half-open original range
-// [OriginalStart, OriginalEnd). Features controls language-service participation; diagnostics and exact edit mapping
-// deliberately bypass it.
-type Segment struct {
-	VirtualStart  core.TextPos
-	VirtualEnd    core.TextPos
-	OriginalStart core.TextPos
-	OriginalEnd   core.TextPos
-	Kind          Kind
-	Features      Feature
-}
-
-// MappedPosition is one virtual projection of an original position and its mapping fidelity.
-type MappedPosition struct {
-	Position core.TextPos
-	Fidelity Fidelity
-}
-
-// MappedSpan is one virtual projection of an original range and its mapping fidelity.
-type MappedSpan struct {
-	Span     core.TextRange
-	Fidelity Fidelity
 }
 
 // SpanMap is a sparse, ordered set of segments over a content mapper's virtual text. Segments do not
@@ -774,10 +687,15 @@ func clamp(v, lo, hi core.TextPos) core.TextPos {
 // Five-element tuples omit features and are normalized to FeatureAll; six-element tuples preserve the
 // explicit feature mask, including FeatureNone.
 func Unmarshal(data []byte) (*SpanMap, error) {
-	var tuples [][]int32
+	var tuples []SegmentTuple
 	if err := json.Unmarshal(data, &tuples); err != nil {
 		return nil, err
 	}
+	return FromTuples(tuples)
+}
+
+// FromTuples decodes span map tuples, defaulting omitted features to FeatureAll.
+func FromTuples(tuples []SegmentTuple) (*SpanMap, error) {
 	segments := make([]Segment, len(tuples))
 	for i, t := range tuples {
 		if len(t) != 5 && len(t) != 6 {
@@ -801,9 +719,14 @@ func Unmarshal(data []byte) (*SpanMap, error) {
 // Marshal encodes a SpanMap into the JSON tuple form. FeatureAll uses the backward-compatible five-element
 // tuple; every other feature mask is emitted as a sixth element.
 func (m *SpanMap) Marshal() ([]byte, error) {
-	tuples := make([][]int32, len(m.segments))
+	return json.Marshal(m.Tuples())
+}
+
+// Tuples encodes segments as wire tuples, omitting the feature mask only for FeatureAll.
+func (m *SpanMap) Tuples() []SegmentTuple {
+	tuples := make([]SegmentTuple, len(m.segments))
 	for i, s := range m.segments {
-		tuples[i] = []int32{
+		tuples[i] = SegmentTuple{
 			int32(s.VirtualStart),
 			int32(s.VirtualEnd - s.VirtualStart),
 			int32(s.OriginalStart),
@@ -814,5 +737,5 @@ func (m *SpanMap) Marshal() ([]byte, error) {
 			tuples[i] = append(tuples[i], int32(s.Features))
 		}
 	}
-	return json.Marshal(tuples)
+	return tuples
 }

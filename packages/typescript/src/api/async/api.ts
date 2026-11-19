@@ -2,6 +2,7 @@ import { CheckFlags } from "../../../enums/checkFlags.js";
 import { CompletionItemKind } from "../../../enums/completionItemKind.js";
 import { DiagnosticCategory } from "../../../enums/diagnosticCategory.js";
 import { ElementFlags } from "../../../enums/elementFlags.js";
+import { EmitFlags } from "../../../enums/emitFlags.js";
 import { EmitOnly } from "../../../enums/emitOnly.js";
 import { IndexKind } from "../../../enums/indexKind.js";
 import { JsxEmit } from "../../../enums/jsxEmit.js";
@@ -72,6 +73,12 @@ import {
     toRootedPath,
 } from "../path.ts";
 import { prepareCompilerOptions } from "../prepareCompilerOptions.generated.ts";
+import {
+    createEmitContext,
+    type EmitContext,
+    encodePrintNode,
+    type PrintNodeOptions,
+} from "../printer.ts";
 import type {
     BuildResponse,
     CleanBuildResponse,
@@ -197,7 +204,8 @@ import type {
 
 export { formatDiagnostics, formatDiagnosticsWithColorAndContext } from "../diagnosticFormatter.ts";
 export { documentURIToFileName, fileNameToDocumentURI } from "../path.ts";
-export { CheckFlags, CompletionItemKind, DiagnosticCategory, ElementFlags, EmitOnly, IndexKind, JsxEmit, ModifierFlags, ModuleKind, ModuleResolutionKind, NodeBuilderFlags, ObjectFlags, ScriptKind, SignatureFlags, SignatureKind, SymbolFlags, SymbolFormatFlags, SymbolOwnerKind, TypeFlags, TypeFormatFlags, TypePredicateKind };
+export type { EmitContext, PrintNodeOptions, SynthesizedComment } from "../printer.ts";
+export { CheckFlags, CompletionItemKind, DiagnosticCategory, ElementFlags, EmitFlags, EmitOnly, IndexKind, JsxEmit, ModifierFlags, ModuleKind, ModuleResolutionKind, NodeBuilderFlags, ObjectFlags, ScriptKind, SignatureFlags, SignatureKind, SymbolFlags, SymbolFormatFlags, SymbolOwnerKind, TypeFlags, TypeFormatFlags, TypePredicateKind };
 export type {
     APIImportAdderAction as ImportAdderAction,
     APIOptions,
@@ -3421,12 +3429,6 @@ export class Checker {
     }
 }
 
-export interface PrintNodeOptions {
-    preserveSourceNewlines?: boolean | undefined;
-    neverAsciiEscape?: boolean | undefined;
-    terminateUnterminatedLiterals?: boolean | undefined;
-}
-
 export class Printer {
     private client: Client;
 
@@ -3435,10 +3437,8 @@ export class Printer {
     }
 
     async printNode(node: Node, options: PrintNodeOptions = {}): Promise<string> {
-        const encoded = encodeNode(node);
-        const base64 = uint8ArrayToBase64(encoded);
         return this.client.apiRequest("printNode", {
-            data: base64,
+            ...encodePrintNode(node, options.emitContext),
             preserveSourceNewlines: options.preserveSourceNewlines,
             neverAsciiEscape: options.neverAsciiEscape,
             terminateUnterminatedLiterals: options.terminateUnterminatedLiterals,
@@ -3446,14 +3446,11 @@ export class Printer {
     }
 
     async printFile(sourceFile: SourceFile, options: PrintNodeOptions = {}): Promise<string> {
-        const encoded = encodeNode(sourceFile);
-        const base64 = uint8ArrayToBase64(encoded);
-        return this.client.apiRequest("printNode", {
-            data: base64,
-            preserveSourceNewlines: options.preserveSourceNewlines,
-            neverAsciiEscape: options.neverAsciiEscape,
-            terminateUnterminatedLiterals: options.terminateUnterminatedLiterals,
-        });
+        return this.printNode(sourceFile, options);
+    }
+
+    createEmitContext(): EmitContext {
+        return createEmitContext();
     }
 }
 
