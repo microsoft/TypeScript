@@ -296,3 +296,13 @@ test("isRestParameter supports syntactic rest parameters and JSDoc variadic type
     assert.equal(ast.isRestParameter(factory.createParameterDeclaration(undefined, undefined, name)), false);
     assert.equal(ast.isRestParameter(factory.createJSDocParameterTag(factory.createIdentifier("param"), name, false, undefined, false, undefined)), false);
 });
+
+test("isStringLiteralOrJsxExpression excludes template literals and full JSX elements", () => {
+    const expression: ast.Node = factory.createJsxExpression();
+    assert.ok(ast.isStringLiteralOrJsxExpression(expression));
+    const narrowed: ast.StringLiteral | ast.JsxExpression = expression;
+    assert.equal(narrowed, expression);
+    assert.ok(ast.isStringLiteralOrJsxExpression(factory.createStringLiteral("text", ast.TokenFlags.None)));
+    assert.equal(ast.isStringLiteralOrJsxExpression(factory.createNoSubstitutionTemplateLiteral("text", ast.TokenFlags.None)), false);
+    assert.equal(ast.isStringLiteralOrJsxExpression(factory.createJsxOpeningFragment()), false);
+});

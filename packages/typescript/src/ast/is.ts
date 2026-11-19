@@ -716,3 +716,7 @@ export function isRestParameter(node: ast.ParameterDeclaration | ast.JSDocParame
     return type?.kind === SyntaxKind.JSDocVariadicType ||
         type?.kind === SyntaxKind.JSDocTypeExpression && (type as JSDocTypeExpression).type.kind === SyntaxKind.JSDocVariadicType;
 }
+
+export function isStringLiteralOrJsxExpression(node: Node): node is ast.StringLiteral | ast.JsxExpression {
+    return guards.isStringLiteral(node) || guards.isJsxExpression(node);
+}
