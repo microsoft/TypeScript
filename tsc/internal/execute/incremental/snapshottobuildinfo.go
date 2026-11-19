@@ -47,6 +47,7 @@ func snapshotToBuildInfo(snapshot *snapshot, program *compiler.Program, buildInf
 		if snapshot.latestChangedDtsFile != "" {
 			buildInfo.LatestChangedDtsFile = to.fileNameRelativeToBuildInfo(snapshot.latestChangedDtsFile)
 		}
+		buildInfo.LinkedPackagesSignature = snapshot.linkedPackagesSignature
 	} else {
 		to.setRootOfNonIncrementalProgram()
 	}
