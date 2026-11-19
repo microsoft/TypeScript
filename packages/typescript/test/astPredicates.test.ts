@@ -306,3 +306,15 @@ test("isStringLiteralOrJsxExpression excludes template literals and full JSX ele
     assert.equal(ast.isStringLiteralOrJsxExpression(factory.createNoSubstitutionTemplateLiteral("text", ast.TokenFlags.None)), false);
     assert.equal(ast.isStringLiteralOrJsxExpression(factory.createJsxOpeningFragment()), false);
 });
+
+test("isStringTextContainingNode includes template fragments but not template expressions", () => {
+    const head: ast.Node = factory.createTemplateHead("text", "text", ast.TokenFlags.None);
+    assert.ok(ast.isStringTextContainingNode(head));
+    const narrowed: ast.StringLiteral | ast.TemplateLiteralToken = head;
+    assert.equal(narrowed.text, "text");
+    assert.ok(ast.isStringTextContainingNode(factory.createTemplateMiddle("middle", "middle", ast.TokenFlags.None)));
+    assert.ok(ast.isStringTextContainingNode(factory.createTemplateTail("tail", "tail", ast.TokenFlags.None)));
+    assert.ok(ast.isStringTextContainingNode(factory.createNoSubstitutionTemplateLiteral("text", ast.TokenFlags.None)));
+    assert.ok(ast.isStringTextContainingNode(factory.createStringLiteral("text", ast.TokenFlags.None)));
+    assert.equal(ast.isStringTextContainingNode(factory.createTemplateExpression(factory.createTemplateHead("", "", ast.TokenFlags.None), [])), false);
+});

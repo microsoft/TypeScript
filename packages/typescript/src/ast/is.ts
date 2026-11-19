@@ -720,3 +720,7 @@ export function isRestParameter(node: ast.ParameterDeclaration | ast.JSDocParame
 export function isStringLiteralOrJsxExpression(node: Node): node is ast.StringLiteral | ast.JsxExpression {
     return guards.isStringLiteral(node) || guards.isJsxExpression(node);
 }
+
+export function isStringTextContainingNode(node: Node): node is ast.StringLiteral | ast.TemplateLiteralToken {
+    return guards.isStringLiteral(node) || guards.isTemplateLiteralToken(node);
+}
