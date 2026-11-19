@@ -1,0 +1,46 @@
+//// [tests/cases/compiler/jsdocThisTagWithDestructuredParameter.ts] ////
+
+=== /a.js ===
+/**
+ * @this {{ x: number }}
+ * @param {{ title: string }} props
+ */
+export function withThis({ title }) {
+>withThis : (this: { x: number; }, { title }: { title: string; }) => string
+>title : string
+
+  return this.x + title;
+>this.x + title : string
+>this.x : number
+>this : { x: number; }
+>x : number
+>title : string
+}
+
+/**
+ * @param {{ title: string }} props
+ */
+export function withoutThis({ title }) {
+>withoutThis : ({ title }: { title: string; }) => string
+>title : string
+
+  return title;
+>title : string
+}
+
+/**
+ * @this {{ x: number }}
+ * @param {string} name
+ */
+export function withThisNamed(name) {
+>withThisNamed : (this: { x: number; }, name: string) => string
+>name : string
+
+  return this.x + name;
+>this.x + name : string
+>this.x : number
+>this : { x: number; }
+>x : number
+>name : string
+}
+
