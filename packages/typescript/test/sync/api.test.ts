@@ -414,6 +414,39 @@ describe("API", { concurrency }, () => {
         );
     });
 
+    test("getTsBuildInfoEmitOutputFilePath uses native incremental output paths", () => {
+        using api = new API({ cwd: "/workspace/project", fs: createVirtualFileSystem({}) });
+
+        assert.equal(api.getTsBuildInfoEmitOutputFilePath({}), undefined);
+        assert.equal(api.getTsBuildInfoEmitOutputFilePath({ tsBuildInfoFile: "cache/build.tsbuildinfo" }), undefined);
+        assert.equal(api.getTsBuildInfoEmitOutputFilePath({ incremental: true }), undefined);
+        assert.equal(
+            api.getTsBuildInfoEmitOutputFilePath({ build: true, configFilePath: "tsconfig.json" }),
+            "/workspace/project/tsconfig.tsbuildinfo",
+        );
+        assert.equal(api.getTsBuildInfoEmitOutputFilePath({ build: false, configFilePath: "tsconfig.json" }), undefined);
+        assert.equal(
+            api.getTsBuildInfoEmitOutputFilePath({ incremental: true, configFilePath: "/config/tsconfig.json", outDir: "dist" }),
+            "/workspace/project/dist/tsconfig.tsbuildinfo",
+        );
+        assert.equal(
+            api.getTsBuildInfoEmitOutputFilePath({ composite: true, tsBuildInfoFile: "cache/build.tsbuildinfo" }),
+            "/workspace/project/cache/build.tsbuildinfo",
+        );
+        assert.equal(
+            api.getTsBuildInfoEmitOutputFilePath({ incremental: true, configFilePath: "tsconfig.app.json", outDir: "dist" }),
+            "/workspace/project/dist/tsconfig.app.tsbuildinfo",
+        );
+        assert.equal(
+            api.getTsBuildInfoEmitOutputFilePath({ incremental: true, configFilePath: "tsconfig.app.json", rootDir: "src", outDir: "dist" }),
+            "/workspace/project/tsconfig.app.tsbuildinfo",
+        );
+        assert.equal(
+            api.getTsBuildInfoEmitOutputFilePath({ composite: true, configFilePath: "tsconfig.json", noEmit: true }),
+            "/workspace/project/tsconfig.tsbuildinfo",
+        );
+    });
+
     test("parseConfigFileTextToJson", () => {
         using api = spawnAPI();
 

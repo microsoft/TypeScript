@@ -522,6 +522,14 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         });
     }
 
+    /** Returns the native build-info output path, or undefined when the options do not produce one. */
+    async getTsBuildInfoEmitOutputFilePath(compilerOptions: RawCompilerOptions): Promise<RootedFilePath | undefined> {
+        await this.ensureInitialized();
+        return (await this.client.apiRequest("getTsBuildInfoEmitOutputFilePath", {
+            compilerOptions: prepareCompilerOptions(compilerOptions, this.getCurrentDirectory()),
+        })) ?? undefined;
+    }
+
     async parseConfigFile(file: DocumentIdentifier): Promise<ParsedCommandLine> {
         await this.ensureInitialized();
         return this.client.apiRequest("parseConfigFile", { file });

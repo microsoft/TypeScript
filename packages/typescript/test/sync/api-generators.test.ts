@@ -1595,6 +1595,8 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
 
             const cases: ParityCase[] = [
                 parityCase("API", "getEffectiveTypeRoots", api.getEffectiveTypeRoots, assertDeepEquivalent, { typeRoots: ["types"] }),
+                parityCase("API", "getTsBuildInfoEmitOutputFilePath", api.getTsBuildInfoEmitOutputFilePath, assertDeepEquivalent, { incremental: true, configFilePath: "/tsconfig.json" }),
+                parityCase("API", "getTsBuildInfoEmitOutputFilePath", api.getTsBuildInfoEmitOutputFilePath, assertDeepEquivalent, {}),
                 parityCase("API", "parseConfigFile", api.parseConfigFile, assertDeepEquivalent, "/tsconfig.json"),
                 parityCase("API", "parseCommandLine", api.parseCommandLine, assertDeepEquivalent, ["--strict", "--noEmit"]),
                 parityCase("API", "readConfigFile", api.readConfigFile, assertDeepEquivalent, "/tsconfig.json"),

@@ -58,6 +58,7 @@ export interface APIMethodInfo {
     releaseModuleResolver: APIMethod<ReleaseModuleResolverParams, unknown>;
     resolveModuleName: APIMethod<ResolveModuleNameParams, ResolveModuleNameResult>;
     getEffectiveTypeRoots: APIMethod<CompilerOptionsParams, RootedDirectoryPath[]>;
+    getTsBuildInfoEmitOutputFilePath: APIMethod<CompilerOptionsParams, RootedFilePath | null>;
     parseCommandLine: APIMethod<ParseCommandLineParams, ConfigFileResponse>;
     readConfigFile: APIMethod<ReadConfigFileParams, ReadConfigFileResponse>;
     parseConfigFileTextToJson: APIMethod<ParseConfigFileTextToJsonParams, ReadConfigFileResponse>;
@@ -1359,6 +1360,7 @@ export interface BatchRequest {
         | "getThisTypeOfType"
         | "getTrueType"
         | "getTrueTypeOfConditionalType"
+        | "getTsBuildInfoEmitOutputFilePath"
         | "getTypeArguments"
         | "getTypeAtLocation"
         | "getTypeAtLocations"
@@ -1555,6 +1557,7 @@ export interface BatchResponse {
         | "getThisTypeOfType"
         | "getTrueType"
         | "getTrueTypeOfConditionalType"
+        | "getTsBuildInfoEmitOutputFilePath"
         | "getTypeArguments"
         | "getTypeAtLocation"
         | "getTypeAtLocations"

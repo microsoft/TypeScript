@@ -89,6 +89,7 @@ const (
 	MethodReleaseModuleResolver                          Method = "releaseModuleResolver"
 	MethodResolveModuleName                              Method = "resolveModuleName"
 	MethodGetEffectiveTypeRoots                          Method = "getEffectiveTypeRoots"
+	MethodGetTsBuildInfoEmitOutputFilePath               Method = "getTsBuildInfoEmitOutputFilePath"
 	MethodParseCommandLine                               Method = "parseCommandLine"
 	MethodReadConfigFile                                 Method = "readConfigFile"
 	MethodParseConfigFileTextToJson                      Method = "parseConfigFileTextToJson"
@@ -634,6 +635,7 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodReleaseModuleResolver:                          unmarshallerFor[ReleaseModuleResolverParams],
 	MethodResolveModuleName:                              unmarshallerFor[ResolveModuleNameParams],
 	MethodGetEffectiveTypeRoots:                          unmarshallerFor[CompilerOptionsParams],
+	MethodGetTsBuildInfoEmitOutputFilePath:               unmarshallerFor[CompilerOptionsParams],
 	MethodParseCommandLine:                               unmarshallerFor[ParseCommandLineParams],
 	MethodReadConfigFile:                                 unmarshallerFor[ReadConfigFileParams],
 	MethodParseConfigFileTextToJson:                      unmarshallerFor[ParseConfigFileTextToJsonParams],

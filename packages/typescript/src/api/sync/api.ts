@@ -665,6 +665,30 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         );
     }
 
+    /** Returns the native build-info output path, or undefined when the options do not produce one. */
+    get getTsBuildInfoEmitOutputFilePath(): {
+        (compilerOptions: RawCompilerOptions): RootedFilePath | undefined;
+        gen(compilerOptions: RawCompilerOptions): Generator<ProtocolRequest, RootedFilePath | undefined, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getTsBuildInfoEmitOutputFilePath",
+            function (compilerOptions: RawCompilerOptions): RootedFilePath | undefined {
+                owner.ensureInitialized();
+                return (owner.client.apiRequest("getTsBuildInfoEmitOutputFilePath", {
+                    compilerOptions: prepareCompilerOptions(compilerOptions, owner.getCurrentDirectory()),
+                })) ?? undefined;
+            },
+            function* (compilerOptions: RawCompilerOptions): Generator<ProtocolRequest, RootedFilePath | undefined, ProtocolResponse["result"]> {
+                yield* owner.ensureInitialized.gen();
+                return (yield* apiRequest("getTsBuildInfoEmitOutputFilePath", {
+                    compilerOptions: prepareCompilerOptions(compilerOptions, owner.getCurrentDirectory()),
+                })) ?? undefined;
+            },
+        );
+    }
+
     get parseConfigFile(): {
         (file: DocumentIdentifier): ParsedCommandLine;
         gen(file: DocumentIdentifier): Generator<ProtocolRequest, ParsedCommandLine, ProtocolResponse["result"]>;
