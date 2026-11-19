@@ -1,0 +1,73 @@
+//// [tests/cases/compiler/arrayLiteralInOperatorInForInitializer.ts] ////
+
+=== arrayLiteralInOperatorInForInitializer.ts ===
+// The `in` operator is allowed in an array literal that appears in the head of
+// a `for` statement: the for head's [~In] parameter does not reach into
+// array literals (ElementList : AssignmentExpression[+In]).
+
+const o = { a: 1 };
+>o : Symbol(o, Decl(arrayLiteralInOperatorInForInitializer.ts, 4, 5))
+>a : Symbol(a, Decl(arrayLiteralInOperatorInForInitializer.ts, 4, 11))
+
+const k = "a";
+>k : Symbol(k, Decl(arrayLiteralInOperatorInForInitializer.ts, 5, 5))
+
+for (let i = 0, has = [k in o]; i < 1; i++) {
+>i : Symbol(i, Decl(arrayLiteralInOperatorInForInitializer.ts, 7, 8))
+>has : Symbol(has, Decl(arrayLiteralInOperatorInForInitializer.ts, 7, 15))
+>k : Symbol(k, Decl(arrayLiteralInOperatorInForInitializer.ts, 5, 5))
+>o : Symbol(o, Decl(arrayLiteralInOperatorInForInitializer.ts, 4, 5))
+>i : Symbol(i, Decl(arrayLiteralInOperatorInForInitializer.ts, 7, 8))
+>i : Symbol(i, Decl(arrayLiteralInOperatorInForInitializer.ts, 7, 8))
+
+    console.log(has);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>has : Symbol(has, Decl(arrayLiteralInOperatorInForInitializer.ts, 7, 15))
+}
+
+for (let i = 0, has = [k in o, "b" in o, !(k in o)]; i < 1; i++) {
+>i : Symbol(i, Decl(arrayLiteralInOperatorInForInitializer.ts, 11, 8))
+>has : Symbol(has, Decl(arrayLiteralInOperatorInForInitializer.ts, 11, 15))
+>k : Symbol(k, Decl(arrayLiteralInOperatorInForInitializer.ts, 5, 5))
+>o : Symbol(o, Decl(arrayLiteralInOperatorInForInitializer.ts, 4, 5))
+>o : Symbol(o, Decl(arrayLiteralInOperatorInForInitializer.ts, 4, 5))
+>k : Symbol(k, Decl(arrayLiteralInOperatorInForInitializer.ts, 5, 5))
+>o : Symbol(o, Decl(arrayLiteralInOperatorInForInitializer.ts, 4, 5))
+>i : Symbol(i, Decl(arrayLiteralInOperatorInForInitializer.ts, 11, 8))
+>i : Symbol(i, Decl(arrayLiteralInOperatorInForInitializer.ts, 11, 8))
+
+    console.log(has);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>has : Symbol(has, Decl(arrayLiteralInOperatorInForInitializer.ts, 11, 15))
+}
+
+let x: any;
+>x : Symbol(x, Decl(arrayLiteralInOperatorInForInitializer.ts, 15, 3))
+
+for ([x = "x" in {}] of [[]]) {
+>x : Symbol(x, Decl(arrayLiteralInOperatorInForInitializer.ts, 15, 3))
+
+    console.log(x);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>x : Symbol(x, Decl(arrayLiteralInOperatorInForInitializer.ts, 15, 3))
+}
+
+// The initializer of a `for` statement still ends at `in`, so that `for-in`
+// statements keep parsing as before.
+for (const key in o) {
+>key : Symbol(key, Decl(arrayLiteralInOperatorInForInitializer.ts, 22, 10))
+>o : Symbol(o, Decl(arrayLiteralInOperatorInForInitializer.ts, 4, 5))
+
+    console.log(key);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>key : Symbol(key, Decl(arrayLiteralInOperatorInForInitializer.ts, 22, 10))
+}
+
