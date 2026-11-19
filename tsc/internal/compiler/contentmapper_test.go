@@ -3,6 +3,7 @@ package compiler_test
 import (
 	"context"
 	"errors"
+	"maps"
 	"slices"
 	"strings"
 	"testing"
@@ -802,6 +803,186 @@ func TestContentMapperDeclarationModuleFormatUsesEmitRoot(t *testing.T) {
 				if expectMismatch {
 					assert.Equal(t, fileDiagnostics[0].Code(), diagnostics.The_content_mapper_0_returned_virtual_extension_1_whose_module_format_does_not_match_declaration_output_2.Code())
 				}
+			})
+		}
+	}
+}
+
+func TestContentMapperVerbatimModuleSyntaxESMInCommonJS(t *testing.T) {
+	t.Parallel()
+	for _, test := range []struct {
+		name string
+		text string
+	}{
+		{"export default", "declare const styles: { foo: string };\nexport default styles;"},
+		{"import", "import { value } from \"./dep\";\nvalue;"},
+		{"dynamic import", "import(\"./dep\");"},
+	} {
+		for _, verbatim := range []bool{true, false} {
+			t.Run(test.name+core.IfElse(verbatim, "/verbatim", "/synthesized"), func(t *testing.T) {
+				t.Parallel()
+				program := newContentMapperProgramWithOptions(t, fakeContentMapperHost{
+					transform: func(fileName string, content string) (contentmapper.Result, error) {
+						var segments []spanmap.Segment
+						if verbatim {
+							segments = []spanmap.Segment{{
+								OriginalEnd: core.TextPos(len(content)),
+								VirtualEnd:  core.TextPos(len(content)),
+								Kind:        spanmap.KindVerbatim,
+								Features:    spanmap.FeatureAll,
+							}}
+						}
+						return contentmapper.Result{Text: content, VirtualExtension: ".ts", Mappings: spanmap.New(segments)}, nil
+					},
+				}, map[string]string{
+					"/src/Component.vue": test.text,
+					"/src/dep.ts":        "const value = 1;\nexport = { value };",
+				}, []string{"/src/Component.vue"}, &core.CompilerOptions{
+					SkipLibCheck:         core.TSTrue,
+					Module:               core.ModuleKindCommonJS,
+					ModuleResolution:     core.ModuleResolutionKindNode10,
+					VerbatimModuleSyntax: core.TSTrue,
+				})
+				file := program.GetSourceFile("/src/Component.vue")
+				assert.Assert(t, file != nil)
+				codes := core.Map(program.GetSemanticDiagnostics(t.Context(), file), func(diagnostic *ast.Diagnostic) int32 {
+					return diagnostic.Code()
+				})
+				expectedCode := diagnostics.ECMAScript_imports_and_exports_cannot_be_written_in_a_CommonJS_file_under_verbatimModuleSyntax_Adjust_the_type_field_in_the_nearest_package_json_to_make_this_file_an_ECMAScript_module_or_adjust_your_verbatimModuleSyntax_module_and_moduleResolution_settings_in_TypeScript.Code()
+				assert.Equal(t, slices.Contains(codes, expectedCode), verbatim, "diagnostics: %v", codes)
+			})
+		}
+	}
+}
+
+func TestContentMapperSuppressesTranspilerDiagnosticsInSynthesizedSpans(t *testing.T) {
+	t.Parallel()
+	tests := []struct {
+		name               string
+		text               string
+		dependency         string
+		extraFiles         map[string]string
+		options            *core.CompilerOptions
+		expectedDiagnostic int32
+	}{
+		{
+			name:               "top-level export in CommonJS",
+			text:               "export const value = 1;",
+			options:            &core.CompilerOptions{Module: core.ModuleKindCommonJS, ModuleResolution: core.ModuleResolutionKindNode10, VerbatimModuleSyntax: core.TSTrue},
+			expectedDiagnostic: diagnostics.A_top_level_export_modifier_cannot_be_used_on_value_declarations_in_a_CommonJS_module_when_verbatimModuleSyntax_is_enabled.Code(),
+		},
+		{
+			name:               "verbatim import of a type",
+			text:               `import { Foo } from "./dep"; let value: Foo;`,
+			dependency:         "export interface Foo {}",
+			options:            &core.CompilerOptions{Module: core.ModuleKindESNext, ModuleResolution: core.ModuleResolutionKindBundler, VerbatimModuleSyntax: core.TSTrue},
+			expectedDiagnostic: diagnostics.X_0_is_a_type_and_must_be_imported_using_a_type_only_import_when_verbatimModuleSyntax_is_enabled.Code(),
+		},
+		{
+			name:               "verbatim re-export of a type",
+			text:               `export { Foo } from "./dep";`,
+			dependency:         "export interface Foo {}",
+			options:            &core.CompilerOptions{Module: core.ModuleKindESNext, ModuleResolution: core.ModuleResolutionKindBundler, VerbatimModuleSyntax: core.TSTrue},
+			expectedDiagnostic: diagnostics.Re_exporting_a_type_when_0_is_enabled_requires_using_export_type.Code(),
+		},
+		{
+			name:               "re-export of a type-only value",
+			text:               `export { Foo } from "./dep";`,
+			dependency:         `export type { Foo } from "./foo";`,
+			extraFiles:         map[string]string{"/src/foo.ts": "export const Foo = 1;"},
+			options:            &core.CompilerOptions{Module: core.ModuleKindESNext, ModuleResolution: core.ModuleResolutionKindBundler, IsolatedModules: core.TSTrue},
+			expectedDiagnostic: diagnostics.X_0_resolves_to_a_type_only_declaration_and_must_be_re_exported_using_a_type_only_re_export_when_1_is_enabled.Code(),
+		},
+		{
+			name:               "verbatim default export of a type",
+			text:               `import { Foo } from "./dep"; export default Foo;`,
+			dependency:         "export interface Foo {}",
+			options:            &core.CompilerOptions{Module: core.ModuleKindESNext, ModuleResolution: core.ModuleResolutionKindBundler, VerbatimModuleSyntax: core.TSTrue},
+			expectedDiagnostic: diagnostics.An_export_default_must_reference_a_value_when_verbatimModuleSyntax_is_enabled_but_0_only_refers_to_a_type.Code(),
+		},
+		{
+			name:               "erasable enum",
+			text:               "enum E { A }",
+			options:            &core.CompilerOptions{ErasableSyntaxOnly: core.TSTrue},
+			expectedDiagnostic: diagnostics.This_syntax_is_not_allowed_when_erasableSyntaxOnly_is_enabled.Code(),
+		},
+		{
+			name:               "erasable parameter property",
+			text:               "class C { constructor(public value: number) {} }",
+			options:            &core.CompilerOptions{ErasableSyntaxOnly: core.TSTrue},
+			expectedDiagnostic: diagnostics.This_syntax_is_not_allowed_when_erasableSyntaxOnly_is_enabled.Code(),
+		},
+		{
+			name:               "erasable namespace",
+			text:               "namespace N { export const value = 1; }",
+			options:            &core.CompilerOptions{ErasableSyntaxOnly: core.TSTrue},
+			expectedDiagnostic: diagnostics.This_syntax_is_not_allowed_when_erasableSyntaxOnly_is_enabled.Code(),
+		},
+		{
+			name:               "erasable import assignment",
+			text:               `import Foo = require("./dep"); Foo;`,
+			dependency:         "export = {}",
+			options:            &core.CompilerOptions{ErasableSyntaxOnly: core.TSTrue, Module: core.ModuleKindCommonJS, ModuleResolution: core.ModuleResolutionKindNode10},
+			expectedDiagnostic: diagnostics.This_syntax_is_not_allowed_when_erasableSyntaxOnly_is_enabled.Code(),
+		},
+		{
+			name:               "erasable type assertion",
+			text:               "const value = <number>1;",
+			options:            &core.CompilerOptions{ErasableSyntaxOnly: core.TSTrue},
+			expectedDiagnostic: diagnostics.This_syntax_is_not_allowed_when_erasableSyntaxOnly_is_enabled.Code(),
+		},
+		{
+			name:               "isolated enum initializer",
+			text:               `import { foo } from "./dep"; enum E { A = foo, B }`,
+			dependency:         "export const foo = 2;",
+			options:            &core.CompilerOptions{IsolatedModules: core.TSTrue},
+			expectedDiagnostic: diagnostics.Enum_member_following_a_non_literal_numeric_member_must_have_an_initializer_when_isolatedModules_is_enabled.Code(),
+		},
+		{
+			name:               "ambient const enum access",
+			text:               `import { E } from "./dep"; E.A;`,
+			dependency:         "export declare const enum E { A }",
+			options:            &core.CompilerOptions{IsolatedModules: core.TSTrue, Module: core.ModuleKindESNext, ModuleResolution: core.ModuleResolutionKindBundler},
+			expectedDiagnostic: diagnostics.Cannot_access_ambient_const_enums_when_0_is_enabled.Code(),
+		},
+		{
+			name:               "decorated signature metadata",
+			text:               `import { Foo } from "./dep"; function dec(...args: any[]): any {} class C { @dec method(value: Foo) {} }`,
+			dependency:         "export interface Foo {}",
+			options:            &core.CompilerOptions{IsolatedModules: core.TSTrue, ExperimentalDecorators: core.TSTrue, EmitDecoratorMetadata: core.TSTrue, Module: core.ModuleKindESNext, ModuleResolution: core.ModuleResolutionKindBundler},
+			expectedDiagnostic: diagnostics.A_type_referenced_in_a_decorated_signature_must_be_imported_with_import_type_or_a_namespace_import_when_isolatedModules_and_emitDecoratorMetadata_are_enabled.Code(),
+		},
+	}
+
+	for _, test := range tests {
+		for _, mapping := range []string{"synthesized", "atom", "verbatim"} {
+			t.Run(test.name+"/"+mapping, func(t *testing.T) {
+				t.Parallel()
+				files := map[string]string{
+					"/src/Component.vue": test.text,
+					"/src/dep.ts":        test.dependency,
+				}
+				maps.Copy(files, test.extraFiles)
+				program := newContentMapperProgramWithOptions(t, fakeContentMapperHost{
+					transform: func(fileName string, content string) (contentmapper.Result, error) {
+						var segments []spanmap.Segment
+						if mapping != "synthesized" {
+							segments = []spanmap.Segment{{
+								OriginalEnd: core.TextPos(len(content)),
+								VirtualEnd:  core.TextPos(len(content)),
+								Kind:        core.IfElse(mapping == "verbatim", spanmap.KindVerbatim, spanmap.KindAtom),
+								Features:    spanmap.FeatureAll,
+							}}
+						}
+						return contentmapper.Result{Text: content, VirtualExtension: ".ts", Mappings: spanmap.New(segments)}, nil
+					},
+				}, files, []string{"/src/Component.vue"}, test.options)
+				file := program.GetSourceFile("/src/Component.vue")
+				assert.Assert(t, file != nil)
+				codes := core.Map(program.GetSemanticDiagnostics(t.Context(), file), func(diagnostic *ast.Diagnostic) int32 {
+					return diagnostic.Code()
+				})
+				assert.Equal(t, slices.Contains(codes, test.expectedDiagnostic), mapping == "verbatim", "diagnostics: %v", codes)
 			})
 		}
 	}
