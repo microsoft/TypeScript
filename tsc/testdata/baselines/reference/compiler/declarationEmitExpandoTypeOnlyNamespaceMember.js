@@ -111,7 +111,7 @@ export declare namespace Popover {
 export declare function Popover2(): null;
 export declare namespace Popover2 {
     export { C as b };
-    export var _b: typeof import("./declarationEmitExpandoTypeOnlyNamespaceMember").Target;
+    var _b: typeof import("./declarationEmitExpandoTypeOnlyNamespaceMember").Target;
     export { _b as Target };
 }
 export declare namespace Popover2 {

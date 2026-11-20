@@ -2922,7 +2922,8 @@ func (tx *DeclarationTransformer) transformExpandoAssignment(node *ast.BinaryExp
 
 	var varModifiers *ast.ModifierList
 
-	if preexistingExpandoHasExport {
+	// A renamed local stays private, since it's exported under the property name by the `export {}` added below
+	if preexistingExpandoHasExport && localName.Text() == exportName.Text() {
 		varModifiers = tx.Factory().NewModifierList(ast.CreateModifiersFromModifierFlags(ast.ModifierFlagsExport, tx.Factory().NewModifier))
 	}
 
