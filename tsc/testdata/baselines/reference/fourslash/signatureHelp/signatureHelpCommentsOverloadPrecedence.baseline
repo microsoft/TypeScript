@@ -1,0 +1,106 @@
+// === SignatureHelp ===
+=== /signatureHelpCommentsOverloadPrecedence.ts ===
+// declare function f(x: string): void;
+// /**
+//  * Numeric overload only
+//  * @param x a number
+//  */
+// declare function f(x: number): void;
+// f("hello");
+//   ^
+// | ----------------------------------------------------------------------
+// | f(**x: string**): void
+// | ----------------------------------------------------------------------
+// f(42);
+//   ^
+// | ----------------------------------------------------------------------
+// | f(**x: number**): void
+// | - `x: number`: a number
+// | Numeric overload only
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 130,
+      "LSPosition": {
+        "line": 6,
+        "character": 2
+      },
+      "Name": "0",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "f(x: string): void",
+          "parameters": [
+            {
+              "label": "x: string"
+            }
+          ],
+          "activeParameter": 0
+        },
+        {
+          "label": "f(x: number): void",
+          "documentation": {
+            "kind": "markdown",
+            "value": "Numeric overload only"
+          },
+          "parameters": [
+            {
+              "label": "x: number",
+              "documentation": {
+                "kind": "markdown",
+                "value": "a number"
+              }
+            }
+          ],
+          "activeParameter": 0
+        }
+      ],
+      "activeSignature": 0
+    }
+  },
+  {
+    "marker": {
+      "Position": 142,
+      "LSPosition": {
+        "line": 7,
+        "character": 2
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "f(x: string): void",
+          "parameters": [
+            {
+              "label": "x: string"
+            }
+          ],
+          "activeParameter": 0
+        },
+        {
+          "label": "f(x: number): void",
+          "documentation": {
+            "kind": "markdown",
+            "value": "Numeric overload only"
+          },
+          "parameters": [
+            {
+              "label": "x: number",
+              "documentation": {
+                "kind": "markdown",
+                "value": "a number"
+              }
+            }
+          ],
+          "activeParameter": 0
+        }
+      ],
+      "activeSignature": 1
+    }
+  }
+]

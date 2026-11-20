@@ -1,0 +1,45 @@
+// === SignatureHelp ===
+=== /main.ts ===
+// import { addOne } from "./math";
+// addOne(1);
+//        ^
+// | ----------------------------------------------------------------------
+// | addOne(**value: number**): number
+// | - `value: number`: The number to add one to.
+// | Adds one to a number.
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 40,
+      "LSPosition": {
+        "line": 1,
+        "character": 7
+      },
+      "Name": "0",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "addOne(value: number): number",
+          "documentation": {
+            "kind": "markdown",
+            "value": "Adds one to a number."
+          },
+          "parameters": [
+            {
+              "label": "value: number",
+              "documentation": {
+                "kind": "markdown",
+                "value": "The number to add one to."
+              }
+            }
+          ],
+          "activeParameter": 0
+        }
+      ],
+      "activeSignature": 0
+    }
+  }
+]
