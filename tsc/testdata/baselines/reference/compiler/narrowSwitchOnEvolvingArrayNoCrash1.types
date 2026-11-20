@@ -1,0 +1,105 @@
+//// [tests/cases/compiler/narrowSwitchOnEvolvingArrayNoCrash1.ts] ////
+
+=== narrowSwitchOnEvolvingArrayNoCrash1.ts ===
+function f1() {
+>f1 : () => void
+
+  const a = [];
+>a : any[]
+>[] : never[]
+
+  while (true) switch (a) { case 0: }
+>true : true
+>a : any[]
+>0 : 0
+}
+
+function f2() {
+>f2 : () => void
+
+  const b = [];
+>b : any[]
+>[] : never[]
+
+  switch (b) {
+>b : any[]
+
+    case 0:
+>0 : 0
+
+      b;
+>b : never
+  }
+}
+
+function f3() {
+>f3 : () => void
+
+  const b = [];
+>b : any[]
+>[] : never[]
+
+  if (b === 0) {
+>b === 0 : boolean
+>b : any[]
+>0 : 0
+
+    b;
+>b : never
+  }
+}
+
+function f4() {
+>f4 : () => void
+
+  let c = [];
+>c : any[]
+>[] : never[]
+
+  switch (typeof c) {
+>typeof c : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>c : any[]
+
+    case "object": {
+>"object" : "object"
+
+      c.push("x");
+>c.push("x") : number
+>c.push : (...items: any[]) => number
+>c : any[]
+>push : (...items: any[]) => number
+>"x" : "x"
+
+      const arr: number[] = c;
+>arr : number[]
+>c : string[]
+    }
+  }
+}
+
+function f5() {
+>f5 : () => void
+
+  let c = [];
+>c : any[]
+>[] : never[]
+
+  if (typeof c === "object") {
+>typeof c === "object" : boolean
+>typeof c : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>c : any[]
+>"object" : "object"
+
+    c.push("x");
+>c.push("x") : number
+>c.push : (...items: any[]) => number
+>c : any[]
+>push : (...items: any[]) => number
+>"x" : "x"
+
+    const arr: number[] = c;
+>arr : number[]
+>c : string[]
+  }
+}
+
