@@ -1,0 +1,125 @@
+//// [tests/cases/compiler/declarationEmitExpandoReservedWordMembers.ts] ////
+
+=== declarationEmitExpandoReservedWordMembers.ts ===
+export function decl() {}
+>decl : { (): void; default: number; class: number; function: string; }
+
+decl.default = 1;
+>decl.default = 1 : 1
+>decl.default : number
+>decl : { (): void; default: number; class: number; function: string; }
+>default : number
+>1 : 1
+
+decl.class = 2;
+>decl.class = 2 : 2
+>decl.class : number
+>decl : { (): void; default: number; class: number; function: string; }
+>class : number
+>2 : 2
+
+decl.function = "s";
+>decl.function = "s" : "s"
+>decl.function : string
+>decl : { (): void; default: number; class: number; function: string; }
+>function : string
+>"s" : "s"
+
+export const arrow = () => {};
+>arrow : { (): void; default: number; class: number; new: string; }
+>() => {} : { (): void; default: number; class: number; new: string; }
+
+arrow.default = 1;
+>arrow.default = 1 : 1
+>arrow.default : number
+>arrow : { (): void; default: number; class: number; new: string; }
+>default : number
+>1 : 1
+
+arrow.class = 2;
+>arrow.class = 2 : 2
+>arrow.class : number
+>arrow : { (): void; default: number; class: number; new: string; }
+>class : number
+>2 : 2
+
+arrow.new = "s";
+>arrow.new = "s" : "s"
+>arrow.new : string
+>arrow : { (): void; default: number; class: number; new: string; }
+>new : string
+>"s" : "s"
+
+export function mixed() {}
+>mixed : { (): void; a: number; default: number; b: number; class: number; c: number; }
+
+mixed.a = 1;
+>mixed.a = 1 : 1
+>mixed.a : number
+>mixed : { (): void; a: number; default: number; b: number; class: number; c: number; }
+>a : number
+>1 : 1
+
+mixed.default = 2;
+>mixed.default = 2 : 2
+>mixed.default : number
+>mixed : { (): void; a: number; default: number; b: number; class: number; c: number; }
+>default : number
+>2 : 2
+
+mixed.b = 3;
+>mixed.b = 3 : 3
+>mixed.b : number
+>mixed : { (): void; a: number; default: number; b: number; class: number; c: number; }
+>b : number
+>3 : 3
+
+mixed.class = 4;
+>mixed.class = 4 : 4
+>mixed.class : number
+>mixed : { (): void; a: number; default: number; b: number; class: number; c: number; }
+>class : number
+>4 : 4
+
+mixed.c = 5;
+>mixed.c = 5 : 5
+>mixed.c : number
+>mixed : { (): void; a: number; default: number; b: number; class: number; c: number; }
+>c : number
+>5 : 5
+
+const alias = 0;
+>alias : 0
+>0 : 0
+
+export function withAlias() {}
+>withAlias : { (): void; x: number; default: number; y: number; class: number; }
+
+withAlias.x = alias;
+>withAlias.x = alias : 0
+>withAlias.x : number
+>withAlias : { (): void; x: number; default: number; y: number; class: number; }
+>x : number
+>alias : 0
+
+withAlias.default = 1;
+>withAlias.default = 1 : 1
+>withAlias.default : number
+>withAlias : { (): void; x: number; default: number; y: number; class: number; }
+>default : number
+>1 : 1
+
+withAlias.y = 2;
+>withAlias.y = 2 : 2
+>withAlias.y : number
+>withAlias : { (): void; x: number; default: number; y: number; class: number; }
+>y : number
+>2 : 2
+
+withAlias.class = 3;
+>withAlias.class = 3 : 3
+>withAlias.class : number
+>withAlias : { (): void; x: number; default: number; y: number; class: number; }
+>class : number
+>3 : 3
+
