@@ -1,0 +1,159 @@
+inferenceDiscriminantOverlap.ts(23,43): error TS2345: Argument of type '{ tag: "a"; value: 1; } | { tag?: "b" | undefined; value: 2; }' is not assignable to parameter of type '{ tag?: "a" | undefined; value: 1 | 2; }'.
+  Type '{ tag?: "b" | undefined; value: 2; }' is not assignable to type '{ tag?: "a" | undefined; value: 1 | 2; }'.
+    Types of property 'tag' are incompatible.
+      Type '"b" | undefined' is not assignable to type '"a" | undefined'.
+        Type '"b"' is not assignable to type '"a"'.
+inferenceDiscriminantOverlap.ts(24,46): error TS2345: Argument of type '{ tag: "a"; value: 1; } | { tag?: "a" | undefined; value: 2; } | { tag: "b"; value: 3; }' is not assignable to parameter of type '{ tag?: "a" | undefined; value: 1 | 2; }'.
+  Type '{ tag: "b"; value: 3; }' is not assignable to type '{ tag?: "a" | undefined; value: 1 | 2; }'.
+    Types of property 'tag' are incompatible.
+      Type '"b"' is not assignable to type '"a"'.
+inferenceDiscriminantOverlap.ts(25,46): error TS2345: Argument of type '{ tag: "a"; value: 1; } | { tag: "b"; value: 2; }' is not assignable to parameter of type '{ tag?: "a" | undefined; value: 1; }'.
+  Type '{ tag: "b"; value: 2; }' is not assignable to type '{ tag?: "a" | undefined; value: 1; }'.
+    Types of property 'tag' are incompatible.
+      Type '"b"' is not assignable to type '"a"'.
+inferenceDiscriminantOverlap.ts(27,47): error TS2345: Argument of type '{ tag: "a"; value: 1; } | { tag: "b" | undefined; value: 2; }' is not assignable to parameter of type '{ tag?: "a" | undefined; value: 1 | 2; }'.
+  Type '{ tag: "b" | undefined; value: 2; }' is not assignable to type '{ tag?: "a" | undefined; value: 1 | 2; }'.
+    Types of property 'tag' are incompatible.
+      Type '"b" | undefined' is not assignable to type '"a" | undefined'.
+        Type '"b"' is not assignable to type '"a"'.
+inferenceDiscriminantOverlap.ts(31,46): error TS2345: Argument of type '{ tag: "a"; value: "a"; } | { [key: string]: "b"; tag: "b"; value: "b"; }' is not assignable to parameter of type '{ tag?: "a" | undefined; value: "a"; }'.
+  Type '{ [key: string]: "b"; tag: "b"; value: "b"; }' is not assignable to type '{ tag?: "a" | undefined; value: "a"; }'.
+    Types of property 'tag' are incompatible.
+      Type '"b"' is not assignable to type '"a"'.
+inferenceDiscriminantOverlap.ts(34,47): error TS2345: Argument of type '{ tag: "a" | "b"; value: 1; } | { tag: "b"; value: 2; }' is not assignable to parameter of type '{ tag: "a"; value: 1; }'.
+  Type '{ tag: "a" | "b"; value: 1; }' is not assignable to type '{ tag: "a"; value: 1; }'.
+    Types of property 'tag' are incompatible.
+      Type '"a" | "b"' is not assignable to type '"a"'.
+        Type '"b"' is not assignable to type '"a"'.
+inferenceDiscriminantOverlap.ts(35,45): error TS2345: Argument of type '{ tag: "a"; value: "a"; } | { tag?: "a" | undefined; value: "a"; } | { [key: string]: "b"; value: "b"; }' is not assignable to parameter of type '{ tag: "a"; value: "a"; }'.
+  Type '{ tag?: "a" | undefined; value: "a"; }' is not assignable to type '{ tag: "a"; value: "a"; }'.
+    Types of property 'tag' are incompatible.
+      Type '"a" | undefined' is not assignable to type '"a"'.
+        Type 'undefined' is not assignable to type '"a"'.
+inferenceDiscriminantOverlap.ts(39,5): error TS2322: Type '{ tag?: "a" | undefined; value: 1 | 2; }' is not assignable to type '{ tag: "a"; value: 1; } | { tag?: "b" | undefined; value: 2; }'.
+  Type '{ tag?: "a" | undefined; value: 1 | 2; }' is not assignable to type '{ tag?: "b" | undefined; value: 2; }'.
+    Types of property 'tag' are incompatible.
+      Type '"a" | undefined' is not assignable to type '"b" | undefined'.
+        Type '"a"' is not assignable to type '"b"'.
+
+
+==== inferenceDiscriminantOverlap.ts (8 errors) ====
+    declare const validOptionalSource: { tag: "a"; value: 1 } | { tag?: "a"; value: 2 };
+    declare const mixedOptionalSource: { tag: "a"; value: 1 } | { tag?: "b"; value: 2 };
+    declare const matchingOptionalSource: { tag: "a"; value: 1 } | { tag?: "a"; value: 2 } | { tag: "b"; value: 3 };
+    declare const requiredMismatchSource: { tag: "a"; value: 1 } | { tag: "b"; value: 2 };
+    declare const partiallyMatchingSource: { tag: "a" | "b"; value: 1 } | { tag: "b"; value: 2 };
+    declare const undefinedRequiredSource: { tag: "a"; value: 1 } | { tag: undefined; value: 2 };
+    declare const explicitUndefinedSource: { tag: "a"; value: 1 } | { tag: "b" | undefined; value: 2 };
+    declare const optionalNeverSource: { tag: "a"; value: 1 } | { tag?: never; value: 2 };
+    
+    declare const indexedSource:
+        | { tag: "a"; value: "a" }
+        | { tag?: "a"; value: "a" }
+        | { [key: string]: "b"; value: "b" };
+    declare const requiredPropertySource:
+        | { tag: "a"; value: "a" }
+        | { [key: string]: "b"; tag: "b"; value: "b" };
+    declare const optionalPropertySource:
+        | { tag: "a"; value: "a" }
+        | { [key: string]: "a" | "b" | undefined; tag?: "a"; value: "b" };
+    
+    declare function inferOptionalSource<T>(value: { tag?: "a"; value: T }): T;
+    const validOptional = inferOptionalSource(validOptionalSource);
+    const mixedOptional = inferOptionalSource(mixedOptionalSource);
+                                              ~~~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '{ tag: "a"; value: 1; } | { tag?: "b" | undefined; value: 2; }' is not assignable to parameter of type '{ tag?: "a" | undefined; value: 1 | 2; }'.
+!!! error TS2345:   Type '{ tag?: "b" | undefined; value: 2; }' is not assignable to type '{ tag?: "a" | undefined; value: 1 | 2; }'.
+!!! error TS2345:     Types of property 'tag' are incompatible.
+!!! error TS2345:       Type '"b" | undefined' is not assignable to type '"a" | undefined'.
+!!! error TS2345:         Type '"b"' is not assignable to type '"a"'.
+    const matchingOptional = inferOptionalSource(matchingOptionalSource);
+                                                 ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '{ tag: "a"; value: 1; } | { tag?: "a" | undefined; value: 2; } | { tag: "b"; value: 3; }' is not assignable to parameter of type '{ tag?: "a" | undefined; value: 1 | 2; }'.
+!!! error TS2345:   Type '{ tag: "b"; value: 3; }' is not assignable to type '{ tag?: "a" | undefined; value: 1 | 2; }'.
+!!! error TS2345:     Types of property 'tag' are incompatible.
+!!! error TS2345:       Type '"b"' is not assignable to type '"a"'.
+    const requiredMismatch = inferOptionalSource(requiredMismatchSource);
+                                                 ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '{ tag: "a"; value: 1; } | { tag: "b"; value: 2; }' is not assignable to parameter of type '{ tag?: "a" | undefined; value: 1; }'.
+!!! error TS2345:   Type '{ tag: "b"; value: 2; }' is not assignable to type '{ tag?: "a" | undefined; value: 1; }'.
+!!! error TS2345:     Types of property 'tag' are incompatible.
+!!! error TS2345:       Type '"b"' is not assignable to type '"a"'.
+    const requiredUndefined = inferOptionalSource(undefinedRequiredSource);
+    const explicitUndefined = inferOptionalSource(explicitUndefinedSource);
+                                                  ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '{ tag: "a"; value: 1; } | { tag: "b" | undefined; value: 2; }' is not assignable to parameter of type '{ tag?: "a" | undefined; value: 1 | 2; }'.
+!!! error TS2345:   Type '{ tag: "b" | undefined; value: 2; }' is not assignable to type '{ tag?: "a" | undefined; value: 1 | 2; }'.
+!!! error TS2345:     Types of property 'tag' are incompatible.
+!!! error TS2345:       Type '"b" | undefined' is not assignable to type '"a" | undefined'.
+!!! error TS2345:         Type '"b"' is not assignable to type '"a"'.
+    const optionalNever = inferOptionalSource(optionalNeverSource);
+    const indexedOptional = inferOptionalSource(indexedSource); // error
+    const declaredOptional = inferOptionalSource(optionalPropertySource); // error
+    const declaredRequired = inferOptionalSource(requiredPropertySource); // error
+                                                 ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '{ tag: "a"; value: "a"; } | { [key: string]: "b"; tag: "b"; value: "b"; }' is not assignable to parameter of type '{ tag?: "a" | undefined; value: "a"; }'.
+!!! error TS2345:   Type '{ [key: string]: "b"; tag: "b"; value: "b"; }' is not assignable to type '{ tag?: "a" | undefined; value: "a"; }'.
+!!! error TS2345:     Types of property 'tag' are incompatible.
+!!! error TS2345:       Type '"b"' is not assignable to type '"a"'.
+    
+    declare function inferRequiredSource<T>(value: { tag: "a"; value: T }): T;
+    const partiallyMatching = inferRequiredSource(partiallyMatchingSource);
+                                                  ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '{ tag: "a" | "b"; value: 1; } | { tag: "b"; value: 2; }' is not assignable to parameter of type '{ tag: "a"; value: 1; }'.
+!!! error TS2345:   Type '{ tag: "a" | "b"; value: 1; }' is not assignable to type '{ tag: "a"; value: 1; }'.
+!!! error TS2345:     Types of property 'tag' are incompatible.
+!!! error TS2345:       Type '"a" | "b"' is not assignable to type '"a"'.
+!!! error TS2345:         Type '"b"' is not assignable to type '"a"'.
+    const indexedRequired = inferRequiredSource(indexedSource); // error
+                                                ~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '{ tag: "a"; value: "a"; } | { tag?: "a" | undefined; value: "a"; } | { [key: string]: "b"; value: "b"; }' is not assignable to parameter of type '{ tag: "a"; value: "a"; }'.
+!!! error TS2345:   Type '{ tag?: "a" | undefined; value: "a"; }' is not assignable to type '{ tag: "a"; value: "a"; }'.
+!!! error TS2345:     Types of property 'tag' are incompatible.
+!!! error TS2345:       Type '"a" | undefined' is not assignable to type '"a"'.
+!!! error TS2345:         Type 'undefined' is not assignable to type '"a"'.
+    
+    declare function makeOptional<const T>(): { tag?: "a"; value: T };
+    export function optionalContext(): { tag: "a"; value: 1 } | { tag?: "b"; value: 2 } {
+        return makeOptional();
+        ~~~~~~
+!!! error TS2322: Type '{ tag?: "a" | undefined; value: 1 | 2; }' is not assignable to type '{ tag: "a"; value: 1; } | { tag?: "b" | undefined; value: 2; }'.
+!!! error TS2322:   Type '{ tag?: "a" | undefined; value: 1 | 2; }' is not assignable to type '{ tag?: "b" | undefined; value: 2; }'.
+!!! error TS2322:     Types of property 'tag' are incompatible.
+!!! error TS2322:       Type '"a" | undefined' is not assignable to type '"b" | undefined'.
+!!! error TS2322:         Type '"a"' is not assignable to type '"b"'.
+    }
+    
+    declare function inferOptionalTargets<A, B>(value: { tag: "a"; value: A } | { tag?: "b"; value: B }): [A, B];
+    declare const optionalInput: { tag?: "a"; value: 42 };
+    declare const optionalNeverInput: { tag?: never; value: 42 };
+    const optionalTargetInference = inferOptionalTargets(optionalInput);
+    const optionalNeverTargetInference = inferOptionalTargets(optionalNeverInput);
+    
+    // Return type inference runs with the contextual type as the source and the declared
+    // return type as the target, so assignability has to hold the other way around.
+    declare function makeTagged<const T>(value: T): { kind: "a"; value: T };
+    declare function makeOptionalTagged<const T>(value: T): { kind?: "a"; value: T };
+    declare function makeUnionTagged<const T>(value: T): { kind: "a" | undefined; value: T };
+    
+    export function broadContext(): { kind: string; value: string[] } | { kind: "a"; value: number } {
+        return makeTagged([]);
+    }
+    export function partialTagContext(): { kind: "a" | "b"; value: string[] } | { kind: "a"; value: number } {
+        return makeTagged([]);
+    }
+    export function unionTagContext(): { kind?: "a"; value: string[] } | { kind: "a"; value: number } {
+        return makeUnionTagged([]);
+    }
+    export function indexedContext():
+        | { [key: string]: string | string[]; value: string[] }
+        | { kind: "a"; value: number }
+        | { kind: "b"; value: boolean } {
+        return makeOptionalTagged([]);
+    }
+    
+    declare function makeEither<const A, const B>(a: A, b: B): { kind: "a"; value: A } | { kind: "b"; value: B };
+    export function eitherContext(): { kind: "a"; value: string[] } | { kind: "b"; value: number[] } {
+        return makeEither([], []);
+    }
+    
