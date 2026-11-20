@@ -169,3 +169,33 @@ x[|./*member*/|];`
 		Items: &fourslash.CompletionsExpectedItems{Includes: items},
 	})
 }
+
+func TestCompletionForQuotedImportExportNames(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @Filename: /lib.ts
+const value = 0;
+export { value as "a'b", value as "1" };
+// @Filename: /main.ts
+import { '[|/*import*/|]' as a } from "./lib";
+export { '[|/*export*/|]' } from "./lib";
+export { /*plain*/ } from "./lib";
+`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyCompletions(t, "plain", &fourslash.CompletionsExpectedList{
+		IsIncomplete: false,
+		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
+		},
+		Items: &fourslash.CompletionsExpectedItems{
+			Includes: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{Label: "1", InsertText: new("1")},
+			},
+		},
+	})
+	for _, marker := range []string{"import", "export"} {
+		f.VerifyCompletions(t, marker, nil)
+	}
+}
