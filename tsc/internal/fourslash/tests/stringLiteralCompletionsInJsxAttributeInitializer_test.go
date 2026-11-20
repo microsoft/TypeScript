@@ -144,3 +144,53 @@ const b = <Foo count=/*count*/ />;
 		})
 	}
 }
+
+func TestJsxAttributeCompletionLoneSurrogate(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @jsx: preserve
+// @filename: /a.tsx
+declare function Foo(args: { value: "\uD800" }): any;
+const a = <Foo value=[|"/*quoted*/"|] />;
+const b = <Foo value=/*initializer*/ />;
+`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	// A lone surrogate cannot be sent over LSP, so raw text containing one
+	// arrives as replacement characters.
+	const replaced = "\uFFFD\uFFFD\uFFFD"
+	cursor := f.MarkerByName(t, "quoted").LSPos()
+	f.VerifyCompletions(t, "quoted", &fourslash.CompletionsExpectedList{
+		IsIncomplete: false,
+		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
+		},
+		Items: &fourslash.CompletionsExpectedItems{
+			Exact: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label: replaced,
+					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
+						TextEdit: &lsproto.TextEdit{NewText: replaced, Range: lsproto.Range{Start: cursor, End: cursor}},
+					},
+				},
+			},
+		},
+	})
+	f.VerifyCompletions(t, "initializer", &fourslash.CompletionsExpectedList{
+		IsIncomplete: false,
+		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
+		},
+		Items: &fourslash.CompletionsExpectedItems{
+			Includes: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label:            `"` + replaced + `"`,
+					InsertText:       new(`"` + replaced + `"`),
+					CommitCharacters: &[]string{},
+				},
+			},
+		},
+	})
+}
