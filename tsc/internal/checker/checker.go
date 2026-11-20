@@ -19697,7 +19697,7 @@ func (c *Checker) isApplicableIndexType(source *Type, target *Type) bool {
 	// signature applies to types assignable to 'number', `${number}` and numeric string literal types.
 	return c.isTypeAssignableTo(source, target) ||
 		target == c.stringType && c.isTypeAssignableTo(source, c.numberType) ||
-		target == c.numberType && (source == c.numericStringType || source.flags&TypeFlagsStringLiteral != 0 && isNumericLiteralName(getStringLiteralValue(source)))
+		target == c.numberType && (source == c.numericStringType || source.flags&TypeFlagsStringLiteral != 0 && jsnum.IsNumericLiteralName(getStringLiteralValue(source)))
 }
 
 func (c *Checker) resolveStructuredTypeMembers(t *Type) *StructuredType {
@@ -20499,7 +20499,7 @@ func (c *Checker) isSymbolWithSymbolName(symbol *ast.Symbol) bool {
 }
 
 func (c *Checker) isSymbolWithNumericName(symbol *ast.Symbol) bool {
-	if isNumericLiteralName(symbol.Name()) {
+	if jsnum.IsNumericLiteralName(symbol.Name()) {
 		return true
 	}
 	if len(symbol.Declarations()) != 0 {
@@ -20522,7 +20522,7 @@ func (c *Checker) isNumericName(name *ast.Node) bool {
 	case ast.KindComputedPropertyName:
 		return c.isNumericComputedName(name)
 	case ast.KindIdentifier, ast.KindNumericLiteral, ast.KindStringLiteral:
-		return isNumericLiteralName(name.Text())
+		return jsnum.IsNumericLiteralName(name.Text())
 	}
 	return false
 }
@@ -24894,7 +24894,7 @@ func (c *Checker) computeEnumMemberValue(member *ast.Node, autoValue *jsnum.Numb
 		c.error(member.Name(), diagnostics.An_enum_member_cannot_have_a_numeric_name)
 	} else {
 		text := ast.GetTextOfPropertyName(member.Name())
-		if isNumericLiteralName(text) && !ast.IsInfinityOrNaNString(text) {
+		if jsnum.IsNumericLiteralName(text) && !ast.IsInfinityOrNaNString(text) {
 			c.error(member.Name(), diagnostics.An_enum_member_cannot_have_a_numeric_name)
 		}
 	}
@@ -28053,7 +28053,7 @@ func (c *Checker) getPropertyTypeForIndexType(originalObjectType *Type, objectTy
 				return propType
 			}
 		}
-		if everyType(objectType, isTupleType) && isNumericLiteralName(propName) {
+		if everyType(objectType, isTupleType) && jsnum.IsNumericLiteralName(propName) {
 			index := jsnum.FromString(propName)
 			if accessNode != nil && everyType(objectType, func(t *Type) bool {
 				return t.TargetTupleType().combinedFlags&ElementFlagsVariable == 0
@@ -28377,7 +28377,7 @@ func indexTypeLessThan(indexType *Type, limit int) bool {
 	return everyType(indexType, func(t *Type) bool {
 		if t.flags&TypeFlagsStringOrNumberLiteral != 0 {
 			propName := getPropertyNameFromType(t)
-			if isNumericLiteralName(propName) {
+			if jsnum.IsNumericLiteralName(propName) {
 				index := jsnum.FromString(propName)
 				return index >= 0 && index < jsnum.Number(limit)
 			}
@@ -31689,7 +31689,7 @@ func (c *Checker) getTypeOfConcretePropertyOfContextualType(t *Type, name string
 }
 
 func (c *Checker) getTypeFromIndexInfosOfContextualType(t *Type, name string, nameType *Type) *Type {
-	if isTupleType(t) && isNumericLiteralName(name) && jsnum.FromString(name) >= 0 {
+	if isTupleType(t) && jsnum.IsNumericLiteralName(name) && jsnum.FromString(name) >= 0 {
 		restType := c.getElementTypeOfSliceOfTupleType(t, t.TargetTupleType().fixedLength, 0 /*endSkipCount*/, false /*writing*/, true /*noReductions*/)
 		if restType != nil {
 			return restType

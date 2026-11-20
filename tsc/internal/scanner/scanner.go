@@ -2555,6 +2555,35 @@ func GetShebang(text string) string {
 	return text[:end]
 }
 
+// GetStringLiteralSourceOffset returns the offset in contents, the source text
+// between the delimiters of a string or no-substitution template literal, at
+// which the first valueOffset bytes of the literal's value end. It returns -1
+// if that point is inside an escape sequence or past the end of the value.
+func GetStringLiteralSourceOffset(contents string, valueOffset int, isTemplate bool) int {
+	s := NewScanner()
+	s.SetText(contents)
+	value := 0
+	for value < valueOffset && s.pos < len(contents) {
+		if contents[s.pos] == '\\' {
+			value += len(s.scanEscapeSequence(EscapeSequenceScanningFlagsString | EscapeSequenceScanningFlagsReportErrors))
+		} else if isTemplate && contents[s.pos] == '\r' {
+			// Template values normalize CR and CRLF to LF.
+			s.pos++
+			if s.char() == '\n' {
+				s.pos++
+			}
+			value++
+		} else {
+			s.pos++
+			value++
+		}
+	}
+	if value != valueOffset {
+		return -1
+	}
+	return s.pos
+}
+
 func GetScannerForSourceFile(sourceFile *ast.SourceFile, pos int) *Scanner {
 	s := NewScanner()
 	s.text = sourceFile.Text()
