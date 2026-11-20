@@ -29,34 +29,34 @@ declare function id<T>(value: T): T;
 >value : T
 
 declare const item: Labeled<"user">;
->item : Labeled<Label>
+>item : Labeled<"user">
 
 declare const maybe: MaybeLabel<"user">;
->maybe : MaybeLabel<Label>
+>maybe : MaybeLabel<"user">
 
 declare const branded: Branded<"user">;
->branded : Branded<Label>
+>branded : number
 
 declare const partly: UsesSecond<"user", 1>;
 >partly : UsesSecond<"user", 1>
 
 export const copy = item;
->copy : Labeled<Label>
->item : Labeled<Label>
+>copy : Labeled<"user">
+>item : Labeled<"user">
 
 export const inferred = id(item);
->inferred : Labeled<Label>
->id(item) : Labeled<Label>
+>inferred : Labeled<"user">
+>id(item) : Labeled<"user">
 >id : <T>(value: T) => T
->item : Labeled<Label>
+>item : Labeled<"user">
 
 export const maybeCopy = maybe;
->maybeCopy : MaybeLabel<Label>
->maybe : MaybeLabel<Label>
+>maybeCopy : MaybeLabel<"user">
+>maybe : MaybeLabel<"user">
 
 export const brandedCopy = branded;
->brandedCopy : Branded<Label>
->branded : Branded<Label>
+>brandedCopy : number
+>branded : number
 
 export const partlyCopy = partly;
 >partlyCopy : UsesSecond<"user", 1>

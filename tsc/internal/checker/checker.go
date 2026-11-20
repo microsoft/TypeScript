@@ -23034,7 +23034,7 @@ func (c *Checker) instantiateTypeWorker(t *Type, m *TypeMapper, alias *TypeAlias
 		}
 		types := source.Types()
 		newTypes := c.instantiateTypes(types, m)
-		if core.Same(newTypes, types) && alias.Symbol() == t.alias.Symbol() {
+		if core.Same(newTypes, types) && alias.Symbol() == t.alias.Symbol() && slices.Equal(alias.TypeArguments(), t.alias.TypeArguments()) {
 			return t
 		}
 		if alias == nil {
