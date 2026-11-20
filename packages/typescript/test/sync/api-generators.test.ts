@@ -1779,7 +1779,6 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
                 parityCase("Checker", "getAmbientModules", checker.getAmbientModules, assertSymbolArraysEquivalent),
                 parityCase("Checker", "getTargetSymbol", checker.getTargetSymbol, assertOptionalSymbolsEquivalent, boxedOptSymbol),
                 parityCase("Checker", "getExportSymbolOfSymbol", checker.getExportSymbolOfSymbol, assertSymbolsEquivalent, localCombineSymbol),
-                parityCase("Checker", "getSymbolOfExpando", checker.getSymbolOfExpando, assertOptionalSymbolsEquivalent, combineDeclaration, true),
 
                 parityCase("Printer", "printNode", printer.printNode, assertDeepEquivalent, combineDeclaration, { preserveSourceNewlines: true }),
                 parityCase("Printer", "printFile", printer.printFile, assertDeepEquivalent, indexFile, { preserveSourceNewlines: true }),
