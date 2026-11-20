@@ -65,7 +65,7 @@ func (l *LanguageService) getStringLiteralCompletions(
 ) *CompletionList {
 	if isInReferenceComment(file, position) {
 		completion := l.getTripleSlashReferenceCompletions(file, position, l.GetProgram(), checker)
-		return l.convertPathCompletions(ctx, completion, file, position)
+		return l.convertPathCompletions(ctx, completion, nil, file, position)
 	}
 	if IsInString(file, position, contextToken) {
 		if contextToken == nil || !ast.IsStringLiteralLike(contextToken) {
@@ -109,7 +109,7 @@ func (l *LanguageService) convertStringLiteralCompletions(
 	optionalReplacementRange := l.createRangeFromStringLiteralLikeContent(file, contextToken, position)
 	switch {
 	case completion.fromPaths != nil:
-		return l.convertPathCompletions(ctx, completion.fromPaths, file, position)
+		return l.convertPathCompletions(ctx, completion.fromPaths, contextToken, file, position)
 	case completion.fromProperties != nil:
 		completion := completion.fromProperties
 		data := &completionDataData{
@@ -209,6 +209,7 @@ func stringCompletionQuoteChar(contextToken *ast.StringLiteralLike) printer.Quot
 func (l *LanguageService) convertPathCompletions(
 	ctx context.Context,
 	completion *pathCompletions,
+	contextToken *ast.StringLiteralLike,
 	file *ast.SourceFile,
 	position int,
 ) *CompletionList {
@@ -222,10 +223,17 @@ func (l *LanguageService) convertPathCompletions(
 		if !strings.HasSuffix(pathCompletion.name, pathCompletion.extension) {
 			detail += pathCompletion.extension
 		}
+		insertText := ""
+		if contextToken != nil {
+			escaped := printer.EscapeString(pathCompletion.name, stringCompletionQuoteChar(contextToken))
+			if escaped != pathCompletion.name {
+				insertText = escaped
+			}
+		}
 		lspItem := l.createLSPCompletionItem(
 			ctx,
 			pathCompletion.name,
-			"", /*insertText*/
+			insertText,
 			"", /*filterText*/
 			SortTextLocationPriority,
 			pathCompletion.kind,
