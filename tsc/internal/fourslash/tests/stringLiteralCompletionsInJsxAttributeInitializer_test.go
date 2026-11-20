@@ -108,3 +108,39 @@ const b = <Foo value=[|"/*container*/"|] />;
 		},
 	)
 }
+
+func TestJsxAttributeInitializerLiteralCompletions(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @jsx: preserve
+// @filename: /a.tsx
+declare function Foo(args: { value: "a'b&c\\z" | "a\"b" | "&amp;"; count: 1 }): any;
+const a = <Foo value=/*value*/ />;
+const b = <Foo count=/*count*/ />;
+`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	for _, test := range []struct {
+		marker     string
+		label      string
+		insertText string
+	}{
+		{"value", `"a'b&c\\z"`, ""},
+		{"value", `"a\"b"`, ""},
+		{"value", `"&amp;"`, ""},
+		{"count", "1", ""},
+	} {
+		item := &lsproto.CompletionItem{Label: test.label, CommitCharacters: &[]string{}}
+		if test.insertText != "" {
+			item.InsertText = &test.insertText
+		}
+		f.VerifyCompletions(t, test.marker, &fourslash.CompletionsExpectedList{
+			IsIncomplete: false,
+			ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
+				CommitCharacters: &DefaultCommitCharacters,
+				EditRange:        Ignored,
+			},
+			Items: &fourslash.CompletionsExpectedItems{Includes: []fourslash.CompletionsExpectedItem{item}},
+		})
+	}
+}
