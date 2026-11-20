@@ -1,7 +1,10 @@
 package lsutil
 
 import (
+	"fmt"
+
 	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/json"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/printer"
 )
@@ -21,6 +24,28 @@ const (
 	SemicolonPreferenceInsert SemicolonPreference = "insert"
 	SemicolonPreferenceRemove SemicolonPreference = "remove"
 )
+
+func (settings *FormatCodeSettings) MarshalJSONTo(enc *json.Encoder) error {
+	var indentStyle string
+	switch settings.IndentStyle {
+	case IndentStyleNone:
+		indentStyle = "none"
+	case IndentStyleBlock:
+		indentStyle = "block"
+	case IndentStyleSmart:
+		indentStyle = "smart"
+	default:
+		return fmt.Errorf("invalid indent style: %d", settings.IndentStyle)
+	}
+	type formatCodeSettings FormatCodeSettings
+	return json.MarshalEncode(enc, struct {
+		*formatCodeSettings
+		IndentStyle string `json:"indentStyle"`
+	}{
+		formatCodeSettings: (*formatCodeSettings)(settings),
+		IndentStyle:        indentStyle,
+	})
+}
 
 func FromLSFormatOptions(f FormatCodeSettings, opt *lsproto.FormattingOptions) FormatCodeSettings {
 	updatedSettings := f

@@ -30,6 +30,7 @@ import {
     isJSDoc,
     isJSDocParameterTag,
     isJsxSelfClosingElement,
+    isMethodDeclaration,
     isModuleDeclaration,
     isNamedImports,
     isObjectLiteralExpression,
@@ -57,6 +58,7 @@ import {
     type PropertyAccessExpression,
     type RootedFilePath,
     type SourceFile,
+    symbolName,
     SyntaxKind,
     TokenFlags,
     tryGetAmbientModuleNameFromSymbolName,
@@ -409,6 +411,20 @@ function g(before = 1, required: number, after = 2, ...rest: number[]) {}
 });
 
 describe("API", { concurrency }, () => {
+    test("getDefaultFormatCodeSettings returns native defaults independently of snapshot preferences", () => {
+        using api = spawnAPI();
+        const defaults = api.getDefaultFormatCodeSettings();
+        const { indentSize, convertTabsToSpaces } = defaults;
+        assert.ok(typeof indentSize === "number");
+        assert.ok(typeof convertTabsToSpaces === "boolean");
+        const snapshot = api.createSnapshot({ userPreferences: { indentSize: indentSize + 1, convertTabsToSpaces: !convertTabsToSpaces } });
+        assert.ok(snapshot);
+        defaults.indentSize = indentSize + 1;
+        const next = api.getDefaultFormatCodeSettings();
+        assert.strictEqual(next.indentSize, indentSize);
+        assert.strictEqual(next.convertTabsToSpaces, convertTabsToSpaces);
+    });
+
     test("getCurrentLanguageServerSnapshot is LSP-only", () => {
         if (!!false) {
             using standalone = new API();
@@ -7160,6 +7176,32 @@ notCallable();
 });
 
 describe("Symbol - escaped names and tables", { concurrency }, () => {
+    test("private member display names do not expose unique symbol table keys", () => {
+        using api = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/src/main.ts": "export class A { #value = 1; #method() {} } export class B { #value = 2; }",
+        });
+        const snapshot = api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const source = project.program.getSourceFile("/src/main.ts");
+        assert.ok(source);
+        const symbols = [];
+        for (const declaration of source.statements.filter(isClassDeclaration)) {
+            for (const member of declaration.members) {
+                if (!(isPropertyDeclaration(member) || isMethodDeclaration(member)) || !isPrivateIdentifier(member.name)) continue;
+                const symbol = project.checker.getSymbolAtLocation(member.name);
+                assert.ok(symbol);
+                assert.strictEqual(symbolName(symbol), member.name.text);
+                assert.strictEqual(symbol.name, member.name.text);
+                assert.notStrictEqual(symbol.escapedName, symbol.name);
+                symbols.push(symbol);
+            }
+        }
+        assert.strictEqual(symbols.length, 3);
+        assert.notStrictEqual(symbols[0].escapedName, symbols[2].escapedName);
+        assert.strictEqual(symbols[0].name, symbols[2].name);
+    });
+
     test("getExports/getMembers return a cached Map keyed by escaped name", () => {
         using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
@@ -7255,6 +7297,23 @@ export { x as '${maliciousName}' };
         assert.equal(maliciousExport.name, maliciousName);
         assert.equal(maliciousExport.escapedName, maliciousName);
         assert.equal(tryGetAmbientModuleNameFromSymbolName(maliciousExport.escapedName), undefined);
+    });
+});
+
+describe("ast - symbolName", { concurrency }, () => {
+    test("decodes private keys without changing escaped user names or internal names", () => {
+        for (
+            const [escapedName, expected] of [
+                ["__#1@#value", "#value"],
+                ["__#42@#method", "#method"],
+                [escapeLeadingUnderscores("__#1@#value"), "__#1@#value"],
+                [escapeLeadingUnderscores("__value"), "__value"],
+                [InternalSymbolName.Type, "__type"],
+                ["value", "value"],
+            ]
+        ) {
+            assert.strictEqual(symbolName({ escapedName: escapedName as __String }), expected);
+        }
     });
 });
 

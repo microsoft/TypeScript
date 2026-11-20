@@ -19,7 +19,10 @@ import type {
     CompilerOptions,
     PluginImport,
 } from "./compilerOptions.generated.ts";
-import type { UserPreferences } from "./userPreferences.generated.ts";
+import type {
+    FormatCodeSettings,
+    UserPreferences,
+} from "./userPreferences.generated.ts";
 
 export { CaseSensitivity } from "../../enums/caseSensitivity.js";
 export { JsxEmit } from "../../enums/jsxEmit.js";
@@ -33,7 +36,7 @@ export { SymbolOwnerKind } from "../../enums/symbolOwnerKind.js";
 export type { PathKey, RootedDirectoryPath, RootedFilePath, RootedPath } from "../ast/index.ts";
 export type { CompilerOptions, PluginImport } from "./compilerOptions.generated.ts";
 export * from "./compilerOptions.generated.ts";
-export type { UserPreferences } from "./userPreferences.generated.ts";
+export type { FormatCodeSettings, UserPreferences } from "./userPreferences.generated.ts";
 
 export type APIMethod<TParams, TResult> = { params: TParams; result: TResult; };
 
@@ -45,6 +48,7 @@ export interface APIMethodInfo {
     getSymbolOfDeclaration: APIMethod<GetSymbolOfDeclarationParams, SymbolResponse>;
     batchRequests: APIMethod<BatchRequestsParams, BatchRequestsResponse>;
     initialize: APIMethod<null, InitializeResponse>;
+    getDefaultFormatCodeSettings: APIMethod<null, FormatCodeSettings>;
     createSnapshot: APIMethod<CreateSnapshotParams, CreateSnapshotResponse>;
     updateSnapshot: APIMethod<UpdateSnapshotParams, CreateSnapshotResponse>;
     getCurrentLanguageServerSnapshot: APIMethod<GetCurrentLanguageServerSnapshotParams, CreateSnapshotResponse>;
@@ -1344,6 +1348,7 @@ export interface BatchRequest {
         | "getDeclarationDiagnostics"
         | "getDeclarationEmit"
         | "getDeclaredTypeOfSymbol"
+        | "getDefaultFormatCodeSettings"
         | "getDefaultFromTypeParameter"
         | "getDefaultProjectForFile"
         | "getDocumentationComment"
@@ -1554,6 +1559,7 @@ export interface BatchResponse {
         | "getDeclarationDiagnostics"
         | "getDeclarationEmit"
         | "getDeclaredTypeOfSymbol"
+        | "getDefaultFormatCodeSettings"
         | "getDefaultFromTypeParameter"
         | "getDefaultProjectForFile"
         | "getDocumentationComment"
