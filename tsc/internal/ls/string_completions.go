@@ -8,6 +8,7 @@ import (
 	"maps"
 	"slices"
 	"strings"
+	"unicode/utf8"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/astnav"
@@ -169,7 +170,7 @@ func (l *LanguageService) convertStringLiteralCompletions(
 					return nil
 				}
 				replacementSpan = &lspRange
-				insertText = "{" + quote(file, l.UserPreferences(), value) + "}"
+				insertText = jsxExpressionContainerText(file, l.UserPreferences(), value)
 				filterText = string(quoteChar) + value
 			}
 			lspItem := l.createLSPCompletionItem(
@@ -218,14 +219,32 @@ func (l *LanguageService) convertStringLiteralCompletions(
 }
 
 // JSX attribute strings have no escape sequences and their character references
-// are decoded only during emit, so values containing the quote character or a
-// possible character reference must be written as an expression instead.
+// are decoded only during emit, so values containing the quote character, a
+// possible character reference, or a lone surrogate must be written as an
+// expression instead.
 func jsxAttributeStringCanContain(value string, quoteChar byte) bool {
 	if strings.IndexByte(value, quoteChar) >= 0 {
 		return false
 	}
-	amp := strings.IndexByte(value, '&')
-	return amp < 0 || strings.IndexByte(value[amp:], ';') < 0
+	if amp := strings.IndexByte(value, '&'); amp >= 0 && strings.IndexByte(value[amp:], ';') >= 0 {
+		return false
+	}
+	for i := 0; i < len(value); {
+		ch, size := stringutil.DecodeJSStringRune(value[i:])
+		if stringutil.IsSurrogate(ch) || ch == utf8.RuneError && size == 1 {
+			return false
+		}
+		i += size
+	}
+	return true
+}
+
+func jsxExpressionContainerText(file *ast.SourceFile, preferences lsutil.UserPreferences, value string) string {
+	quoteChar := printer.QuoteCharDoubleQuote
+	if lsutil.GetQuotePreference(file, preferences) == lsutil.QuotePreferenceSingle {
+		quoteChar = printer.QuoteCharSingleQuote
+	}
+	return "{" + string(quoteChar) + printer.EscapeString(value, quoteChar) + string(quoteChar) + "}"
 }
 
 func jsxAttributeInitializerText(file *ast.SourceFile, preferences lsutil.UserPreferences, value string) string {
@@ -238,7 +257,7 @@ func jsxAttributeInitializerText(file *ast.SourceFile, preferences lsutil.UserPr
 			return string(q) + value + string(q)
 		}
 	}
-	return "{" + quote(file, preferences, value) + "}"
+	return jsxExpressionContainerText(file, preferences, value)
 }
 
 func stringCompletionQuoteChar(contextToken *ast.StringLiteralLike) printer.QuoteChar {

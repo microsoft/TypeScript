@@ -159,7 +159,6 @@ const b = <Foo value=/*initializer*/ />;
 	// A lone surrogate cannot be sent over LSP, so raw text containing one
 	// arrives as replacement characters.
 	const replaced = "\uFFFD\uFFFD\uFFFD"
-	cursor := f.MarkerByName(t, "quoted").LSPos()
 	f.VerifyCompletions(t, "quoted", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
@@ -169,9 +168,11 @@ const b = <Foo value=/*initializer*/ />;
 		Items: &fourslash.CompletionsExpectedItems{
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
-					Label: replaced,
+					Label:      replaced,
+					InsertText: new(`{"\uD800"}`),
+					FilterText: new(`"` + replaced),
 					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
-						TextEdit: &lsproto.TextEdit{NewText: replaced, Range: lsproto.Range{Start: cursor, End: cursor}},
+						TextEdit: &lsproto.TextEdit{NewText: `{"\uD800"}`, Range: f.Ranges()[0].LSRange},
 					},
 				},
 			},
@@ -187,7 +188,7 @@ const b = <Foo value=/*initializer*/ />;
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:            `"` + replaced + `"`,
-					InsertText:       new(`"` + replaced + `"`),
+					InsertText:       new(`{"\uD800"}`),
 					CommitCharacters: &[]string{},
 				},
 			},
