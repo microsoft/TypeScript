@@ -148,8 +148,8 @@ x[|./*member*/|];`
 		label   string
 		newText string
 	}{
-		{"1+sideEffect()", "[1+sideEffect()]"},
-		{"01", "[01]"},
+		{"1+sideEffect()", `["1+sideEffect()"]`},
+		{"01", `["01"]`},
 		{"1", "[1]"},
 	} {
 		items = append(items, &lsproto.CompletionItem{

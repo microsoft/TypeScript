@@ -3715,8 +3715,7 @@ func (l *LanguageService) createRangeFromStringLiteralLikeContent(file *ast.Sour
 }
 
 func quotePropertyName(file *ast.SourceFile, preferences lsutil.UserPreferences, name string) string {
-	r, _ := utf8.DecodeRuneInString(name)
-	if unicode.IsDigit(r) {
+	if len(name) > 0 && name[0] >= '0' && name[0] <= '9' && jsnum.IsNumericLiteralName(name) {
 		return name
 	}
 	return quote(file, preferences, name)
