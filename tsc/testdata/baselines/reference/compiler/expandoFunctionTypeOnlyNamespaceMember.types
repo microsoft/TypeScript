@@ -2,13 +2,13 @@
 
 === variants.ts ===
 function f1() {}
->f1 : () => void
+>f1 : { (): void; a: number; }
 
 f1.a = 0;
 >f1.a = 0 : 0
->f1.a : any
->f1 : () => void
->a : any
+>f1.a : number
+>f1 : { (): void; a: number; }
+>a : number
 >0 : 0
 
 namespace f1 { export type a = 0; }
@@ -16,15 +16,15 @@ namespace f1 { export type a = 0; }
 
 const n1: number = f1.a;
 >n1 : number
->f1.a : any
->f1 : () => void
->a : any
+>f1.a : number
+>f1 : { (): void; a: number; }
+>a : number
 
 const s1: string = f1.a; // error
 >s1 : string
->f1.a : any
->f1 : () => void
->a : any
+>f1.a : number
+>f1 : { (): void; a: number; }
+>a : number
 
 const t1: f1.a = 0;
 >t1 : 0
@@ -32,13 +32,13 @@ const t1: f1.a = 0;
 >0 : 0
 
 function f2() {}
->f2 : () => void
+>f2 : { (): void; a: number; }
 
 f2.a = 0;
 >f2.a = 0 : 0
->f2.a : any
->f2 : () => void
->a : any
+>f2.a : number
+>f2 : { (): void; a: number; }
+>a : number
 >0 : 0
 
 namespace f2 { export interface a { x: string } }
@@ -46,9 +46,9 @@ namespace f2 { export interface a { x: string } }
 
 const n2: number = f2.a;
 >n2 : number
->f2.a : any
->f2 : () => void
->a : any
+>f2.a : number
+>f2 : { (): void; a: number; }
+>a : number
 
 const t2: f2.a = { x: "" };
 >t2 : f2.a
@@ -58,30 +58,30 @@ const t2: f2.a = { x: "" };
 >"" : ""
 
 function f3() {}
->f3 : () => void
+>f3 : { (): void; a: number; }
 
 f3.a = 0;
 >f3.a = 0 : 0
->f3.a : any
->f3 : () => void
->a : any
+>f3.a : number
+>f3 : { (): void; a: number; }
+>a : number
 >0 : 0
 
 namespace f3 { export namespace a {} }
 const n3: number = f3.a;
 >n3 : number
->f3.a : any
->f3 : () => void
->a : any
+>f3.a : number
+>f3 : { (): void; a: number; }
+>a : number
 
 function f4() {}
->f4 : () => void
+>f4 : { (): void; a: number; }
 
 f4.a = 0;
 >f4.a = 0 : 0
->f4.a : any
->f4 : () => void
->a : any
+>f4.a : number
+>f4 : { (): void; a: number; }
+>a : number
 >0 : 0
 
 namespace f4 { export namespace a { export type T = string; } }
@@ -89,9 +89,9 @@ namespace f4 { export namespace a { export type T = string; } }
 
 const n4: number = f4.a;
 >n4 : number
->f4.a : any
->f4 : () => void
->a : any
+>f4.a : number
+>f4 : { (): void; a: number; }
+>a : number
 
 const t4: f4.a.T = "";
 >t4 : string
@@ -103,20 +103,20 @@ namespace f5 { export type a = 0; }
 >a : 0
 
 function f5() {}
->f5 : () => void
+>f5 : { (): void; a: number; }
 
 f5.a = 0;
 >f5.a = 0 : 0
->f5.a : any
->f5 : () => void
->a : any
+>f5.a : number
+>f5 : { (): void; a: number; }
+>a : number
 >0 : 0
 
 const n5: number = f5.a;
 >n5 : number
->f5.a : any
->f5 : () => void
->a : any
+>f5.a : number
+>f5 : { (): void; a: number; }
+>a : number
 
 function f6() {}
 >f6 : typeof f6
@@ -148,6 +148,7 @@ namespace Values { export const v = 1; }
 >v : 1
 >1 : 1
 
+// Aliases might resolve to values, so they take precedence over expandos
 function f7() {}
 >f7 : typeof f7
 
@@ -192,13 +193,13 @@ namespace f8 { export import a = Values; } // error
 
 === popover.ts ===
 export function Popover() { return null; }
->Popover : { (): null; displayName: string; }
+>Popover : { (): null; displayName: string; Target: (x: number) => number; }
 
 Popover.Target = (x: number) => x;
 >Popover.Target = (x: number) => x : (x: number) => number
->Popover.Target : any
->Popover : { (): null; displayName: string; }
->Target : any
+>Popover.Target : (x: number) => number
+>Popover : { (): null; displayName: string; Target: (x: number) => number; }
+>Target : (x: number) => number
 >(x: number) => x : (x: number) => number
 >x : number
 >x : number
@@ -206,7 +207,7 @@ Popover.Target = (x: number) => x;
 Popover.displayName = "Popover";
 >Popover.displayName = "Popover" : "Popover"
 >Popover.displayName : string
->Popover : { (): null; displayName: string; }
+>Popover : { (): null; displayName: string; Target: (x: number) => number; }
 >displayName : string
 >"Popover" : "Popover"
 
@@ -218,15 +219,15 @@ export namespace Popover {
 }
 
 Popover.Target(1);
->Popover.Target(1) : any
->Popover.Target : any
->Popover : { (): null; displayName: string; }
->Target : any
+>Popover.Target(1) : number
+>Popover.Target : (x: number) => number
+>Popover : { (): null; displayName: string; Target: (x: number) => number; }
+>Target : (x: number) => number
 >1 : 1
 
 Popover.displayName;
 >Popover.displayName : string
->Popover : { (): null; displayName: string; }
+>Popover : { (): null; displayName: string; Target: (x: number) => number; }
 >displayName : string
 
 const props: Popover.Target.Props = 1;

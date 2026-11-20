@@ -40,6 +40,7 @@ const n6: number = f6.a; // error
 namespace TypesOnly { export type T = number; }
 namespace Values { export const v = 1; }
 
+// Aliases might resolve to values, so they take precedence over expandos
 function f7() {}
 f7.a = 0;
 namespace f7 { export import a = TypesOnly; }

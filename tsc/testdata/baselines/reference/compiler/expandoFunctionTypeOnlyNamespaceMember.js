@@ -38,6 +38,7 @@ const n6: number = f6.a; // error
 namespace TypesOnly { export type T = number; }
 namespace Values { export const v = 1; }
 
+// Aliases might resolve to values, so they take precedence over expandos
 function f7() {}
 f7.a = 0;
 namespace f7 { export import a = TypesOnly; }
@@ -98,6 +99,7 @@ var Values;
 (function (Values) {
     Values.v = 1;
 })(Values || (Values = {}));
+// Aliases might resolve to values, so they take precedence over expandos
 function f7() { }
 f7.a = 0;
 (function (f7) {
@@ -121,12 +123,18 @@ const props = 1;
 //// [variants.d.ts]
 declare function f1(): void;
 declare namespace f1 {
+    var a: number;
+}
+declare namespace f1 {
     type a = 0;
 }
 declare const n1: number;
 declare const s1: string;
 declare const t1: f1.a;
 declare function f2(): void;
+declare namespace f2 {
+    var a: number;
+}
 declare namespace f2 {
     interface a {
         x: string;
@@ -136,10 +144,16 @@ declare const n2: number;
 declare const t2: f2.a;
 declare function f3(): void;
 declare namespace f3 {
+    var a: number;
+}
+declare namespace f3 {
     namespace a { }
 }
 declare const n3: number;
 declare function f4(): void;
+declare namespace f4 {
+    var a: number;
+}
 declare namespace f4 {
     namespace a {
         type T = string;
@@ -151,6 +165,9 @@ declare namespace f5 {
     type a = 0;
 }
 declare function f5(): void;
+declare namespace f5 {
+    var a: number;
+}
 declare const n5: number;
 declare function f6(): void;
 declare namespace f6 {
@@ -178,6 +195,7 @@ declare namespace f8 {
 //// [popover.d.ts]
 export declare function Popover(): null;
 export declare namespace Popover {
+    var Target: (x: number) => number;
     var displayName: string;
 }
 export declare namespace Popover {
