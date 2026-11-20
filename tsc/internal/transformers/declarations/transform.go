@@ -2908,9 +2908,7 @@ func (tx *DeclarationTransformer) transformExpandoAssignment(node *ast.BinaryExp
 
 	preexistingExpandoHasExport := core.Some(tx.expandoMembers[hostId], ast.IsExportDeclaration)
 
-	// When the expando is merged with a type-only declaration (e.g. a type alias or uninstantiated namespace
-	// of the same name), an alias-like export would conflict with it, so we emit a variable declaration instead.
-	if ast.IsIdentifier(node.Right) && symbol.Flags()&(ast.SymbolFlagsType|ast.SymbolFlagsNamespace) == 0 {
+	if ast.IsIdentifier(node.Right) {
 		if !preexistingExpandoHasExport {
 			tx.addExportModifierToExpandoMembers(hostId)
 		}
@@ -2922,8 +2920,7 @@ func (tx *DeclarationTransformer) transformExpandoAssignment(node *ast.BinaryExp
 
 	var varModifiers *ast.ModifierList
 
-	// A renamed local stays private, since it's exported under the property name by the `export {}` added below
-	if preexistingExpandoHasExport && localName.Text() == exportName.Text() {
+	if preexistingExpandoHasExport {
 		varModifiers = tx.Factory().NewModifierList(ast.CreateModifiersFromModifierFlags(ast.ModifierFlagsExport, tx.Factory().NewModifier))
 	}
 
