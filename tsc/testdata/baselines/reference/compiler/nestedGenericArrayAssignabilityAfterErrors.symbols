@@ -1,0 +1,98 @@
+//// [tests/cases/compiler/nestedGenericArrayAssignabilityAfterErrors.ts] ////
+
+=== nestedGenericArrayAssignabilityAfterErrors.ts ===
+// Assigning DataTypeThree<number> to DataTypeThree<boolean>, and likewise for
+// DataTypeTwo, must be reported whether or not earlier assignments errored.
+
+type TypeA = number;
+>TypeA : Symbol(TypeA, Decl(nestedGenericArrayAssignabilityAfterErrors.ts, 0, 0))
+
+type TypeB = boolean;
+>TypeB : Symbol(TypeB, Decl(nestedGenericArrayAssignabilityAfterErrors.ts, 3, 20))
+
+type DataTypeTwo<T extends TypeA | TypeB> = {
+>DataTypeTwo : Symbol(DataTypeTwo, Decl(nestedGenericArrayAssignabilityAfterErrors.ts, 4, 21))
+>T : Symbol(T, Decl(nestedGenericArrayAssignabilityAfterErrors.ts, 5, 17))
+>TypeA : Symbol(TypeA, Decl(nestedGenericArrayAssignabilityAfterErrors.ts, 0, 0))
+>TypeB : Symbol(TypeB, Decl(nestedGenericArrayAssignabilityAfterErrors.ts, 3, 20))
+
+  one: Array<{ two: Array<T> }>;
+>one : Symbol(one, Decl(nestedGenericArrayAssignabilityAfterErrors.ts, 5, 45))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>two : Symbol(two, Decl(nestedGenericArrayAssignabilityAfterErrors.ts, 6, 14))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>T : Symbol(T, Decl(nestedGenericArrayAssignabilityAfterErrors.ts, 5, 17))
+
+};
+type DataTypeThree<T extends TypeA | TypeB> = {
+>DataTypeThree : Symbol(DataTypeThree, Decl(nestedGenericArrayAssignabilityAfterErrors.ts, 7, 2))
+>T : Symbol(T, Decl(nestedGenericArrayAssignabilityAfterErrors.ts, 8, 19))
+>TypeA : Symbol(TypeA, Decl(nestedGenericArrayAssignabilityAfterErrors.ts, 0, 0))
+>TypeB : Symbol(TypeB, Decl(nestedGenericArrayAssignabilityAfterErrors.ts, 3, 20))
+
+  one: Array<{ two: Array<{ three: Array<T> }> }>;
+>one : Symbol(one, Decl(nestedGenericArrayAssignabilityAfterErrors.ts, 8, 47))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>two : Symbol(two, Decl(nestedGenericArrayAssignabilityAfterErrors.ts, 9, 14))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>three : Symbol(three, Decl(nestedGenericArrayAssignabilityAfterErrors.ts, 9, 27))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>T : Symbol(T, Decl(nestedGenericArrayAssignabilityAfterErrors.ts, 8, 19))
+
+};
+
+let testingThreeErr: DataTypeThree<TypeA> = {
+>testingThreeErr : Symbol(testingThreeErr, Decl(nestedGenericArrayAssignabilityAfterErrors.ts, 12, 3))
+>DataTypeThree : Symbol(DataTypeThree, Decl(nestedGenericArrayAssignabilityAfterErrors.ts, 7, 2))
+>TypeA : Symbol(TypeA, Decl(nestedGenericArrayAssignabilityAfterErrors.ts, 0, 0))
+
+  one: [{ two: [{ three: [true] }] }]
+>one : Symbol(one, Decl(nestedGenericArrayAssignabilityAfterErrors.ts, 12, 45))
+>two : Symbol(two, Decl(nestedGenericArrayAssignabilityAfterErrors.ts, 13, 9))
+>three : Symbol(three, Decl(nestedGenericArrayAssignabilityAfterErrors.ts, 13, 17))
+
+};
+let testingTwoErr: DataTypeTwo<TypeA> = {
+>testingTwoErr : Symbol(testingTwoErr, Decl(nestedGenericArrayAssignabilityAfterErrors.ts, 15, 3))
+>DataTypeTwo : Symbol(DataTypeTwo, Decl(nestedGenericArrayAssignabilityAfterErrors.ts, 4, 21))
+>TypeA : Symbol(TypeA, Decl(nestedGenericArrayAssignabilityAfterErrors.ts, 0, 0))
+
+  one: [{ two: [false] }]
+>one : Symbol(one, Decl(nestedGenericArrayAssignabilityAfterErrors.ts, 15, 41))
+>two : Symbol(two, Decl(nestedGenericArrayAssignabilityAfterErrors.ts, 16, 9))
+
+};
+
+let testingThree: DataTypeThree<TypeA> = {
+>testingThree : Symbol(testingThree, Decl(nestedGenericArrayAssignabilityAfterErrors.ts, 19, 3))
+>DataTypeThree : Symbol(DataTypeThree, Decl(nestedGenericArrayAssignabilityAfterErrors.ts, 7, 2))
+>TypeA : Symbol(TypeA, Decl(nestedGenericArrayAssignabilityAfterErrors.ts, 0, 0))
+
+  one: [{ two: [{ three: [5] }] }]
+>one : Symbol(one, Decl(nestedGenericArrayAssignabilityAfterErrors.ts, 19, 42))
+>two : Symbol(two, Decl(nestedGenericArrayAssignabilityAfterErrors.ts, 20, 9))
+>three : Symbol(three, Decl(nestedGenericArrayAssignabilityAfterErrors.ts, 20, 17))
+
+};
+let t3a: DataTypeThree<TypeB> = testingThree;
+>t3a : Symbol(t3a, Decl(nestedGenericArrayAssignabilityAfterErrors.ts, 22, 3))
+>DataTypeThree : Symbol(DataTypeThree, Decl(nestedGenericArrayAssignabilityAfterErrors.ts, 7, 2))
+>TypeB : Symbol(TypeB, Decl(nestedGenericArrayAssignabilityAfterErrors.ts, 3, 20))
+>testingThree : Symbol(testingThree, Decl(nestedGenericArrayAssignabilityAfterErrors.ts, 19, 3))
+
+let testingTwo: DataTypeTwo<TypeA> = {
+>testingTwo : Symbol(testingTwo, Decl(nestedGenericArrayAssignabilityAfterErrors.ts, 24, 3))
+>DataTypeTwo : Symbol(DataTypeTwo, Decl(nestedGenericArrayAssignabilityAfterErrors.ts, 4, 21))
+>TypeA : Symbol(TypeA, Decl(nestedGenericArrayAssignabilityAfterErrors.ts, 0, 0))
+
+  one: [{ two: [5] }]
+>one : Symbol(one, Decl(nestedGenericArrayAssignabilityAfterErrors.ts, 24, 38))
+>two : Symbol(two, Decl(nestedGenericArrayAssignabilityAfterErrors.ts, 25, 9))
+
+};
+let t2a: DataTypeTwo<TypeB> = testingTwo;
+>t2a : Symbol(t2a, Decl(nestedGenericArrayAssignabilityAfterErrors.ts, 27, 3))
+>DataTypeTwo : Symbol(DataTypeTwo, Decl(nestedGenericArrayAssignabilityAfterErrors.ts, 4, 21))
+>TypeB : Symbol(TypeB, Decl(nestedGenericArrayAssignabilityAfterErrors.ts, 3, 20))
+>testingTwo : Symbol(testingTwo, Decl(nestedGenericArrayAssignabilityAfterErrors.ts, 24, 3))
+

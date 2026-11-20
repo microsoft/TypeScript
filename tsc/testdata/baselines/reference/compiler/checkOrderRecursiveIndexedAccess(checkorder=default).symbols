@@ -1,0 +1,58 @@
+//// [tests/cases/compiler/checkOrderRecursiveIndexedAccess.ts] ////
+
+=== recur.ts ===
+export type Recur<T> =
+>Recur : Symbol(Recur, Decl(recur.ts, 0, 0))
+>T : Symbol(T, Decl(recur.ts, 0, 18))
+
+    (T extends  (unknown[]) ? {} : { [K in keyof T]?: Recur<T[K]>}) |
+>T : Symbol(T, Decl(recur.ts, 0, 18))
+>K : Symbol(K, Decl(recur.ts, 1, 38))
+>T : Symbol(T, Decl(recur.ts, 0, 18))
+>Recur : Symbol(Recur, Decl(recur.ts, 0, 0))
+>T : Symbol(T, Decl(recur.ts, 0, 18))
+>K : Symbol(K, Decl(recur.ts, 1, 38))
+
+    [...Recur<T>[number][]];
+>Recur : Symbol(Recur, Decl(recur.ts, 0, 0))
+>T : Symbol(T, Decl(recur.ts, 0, 18))
+
+=== join.ts ===
+import { Recur } from "./recur";
+>Recur : Symbol(Recur, Decl(join.ts, 0, 8))
+
+export function join<T>(l: Recur<T>[]): Recur<T> {
+>join : Symbol(join, Decl(join.ts, 0, 32))
+>T : Symbol(T, Decl(join.ts, 1, 21))
+>l : Symbol(l, Decl(join.ts, 1, 24))
+>Recur : Symbol(Recur, Decl(join.ts, 0, 8))
+>T : Symbol(T, Decl(join.ts, 1, 21))
+>Recur : Symbol(Recur, Decl(join.ts, 0, 8))
+>T : Symbol(T, Decl(join.ts, 1, 21))
+
+    return ['marker', ...l];
+>l : Symbol(l, Decl(join.ts, 1, 24))
+}
+
+=== a.ts ===
+import { Recur } from "./recur";
+>Recur : Symbol(Recur, Decl(a.ts, 0, 8))
+
+import { join } from "./join";
+>join : Symbol(join, Decl(a.ts, 1, 8))
+
+function a<T>(l: Recur<T>[]): void {
+>a : Symbol(a, Decl(a.ts, 1, 30))
+>T : Symbol(T, Decl(a.ts, 2, 11))
+>l : Symbol(l, Decl(a.ts, 2, 14))
+>Recur : Symbol(Recur, Decl(a.ts, 0, 8))
+>T : Symbol(T, Decl(a.ts, 2, 11))
+
+    const x: Recur<T> | undefined = join(l);
+>x : Symbol(x, Decl(a.ts, 3, 9))
+>Recur : Symbol(Recur, Decl(a.ts, 0, 8))
+>T : Symbol(T, Decl(a.ts, 2, 11))
+>join : Symbol(join, Decl(a.ts, 1, 8))
+>l : Symbol(l, Decl(a.ts, 2, 14))
+}
+

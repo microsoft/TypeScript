@@ -1,3 +1,4 @@
+// @checkOrder: default, typesfirst
 // @target: es2015
 // @strict: true
 // @noemit: true
@@ -27,3 +28,8 @@ const obj: { f: <T>(x: T) => void } = {
         type IsObject = { x: typeof t } extends { x: string } ? true : false;
     }
 };
+
+f(function self(t) {
+    const s = self;
+    type P = Parameters<typeof s>;
+});

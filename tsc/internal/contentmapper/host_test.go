@@ -27,6 +27,42 @@ import (
 // fakeMapper is an in-process mapper that transforms content verbatim and reports one diagnostic.
 type fakeMapper struct{}
 
+func TestMappedOutputMappingsJSON(t *testing.T) {
+	t.Parallel()
+
+	output := contentmapper.MappedOutput{
+		Text:      "abcde",
+		Extension: ".ts",
+		Mappings: []contentmapper.SpanMapSegment{
+			{0, 3, 10, 3, int32(spanmap.KindVerbatim)},
+			{3, 2, 20, 2, int32(spanmap.KindAlias), int32(spanmap.FeatureNone)},
+		},
+	}
+	data, err := json.Marshal(output)
+	assert.NilError(t, err)
+	assert.Equal(t, string(data), `{"text":"abcde","extension":".ts","mappings":[[0,3,10,3,0],[3,2,20,2,2,0]]}`)
+	var decoded contentmapper.MappedOutput
+	assert.NilError(t, json.Unmarshal(data, &decoded))
+	assert.DeepEqual(t, decoded, output)
+
+	for _, data := range []string{
+		`{"text":"","extension":".ts"}`,
+		`{"text":"","extension":".ts","mappings":null}`,
+		`{"text":"","extension":".ts","mappings":[]}`,
+	} {
+		var decoded contentmapper.MappedOutput
+		assert.NilError(t, json.Unmarshal([]byte(data), &decoded))
+		assert.Equal(t, len(decoded.Mappings), 0)
+	}
+	for _, data := range []string{
+		`{"mappings":[[0,1,0,1,"verbatim"]]}`,
+		`{"mappings":[[0,2147483648,0,1,0]]}`,
+	} {
+		var decoded contentmapper.MappedOutput
+		assert.Assert(t, json.Unmarshal([]byte(data), &decoded) != nil)
+	}
+}
+
 func TestEmptyOutputExtensionsOverrideSurvivesSerialization(t *testing.T) {
 	t.Parallel()
 	definition := contentmapper.Definition{Package: "mapper", Extensions: []string{".vue"}, OutputExtensions: map[string]string{}}
@@ -72,16 +108,13 @@ func (fakeMapper) HandleRequest(ctx context.Context, method string, params json.
 		if err := json.Unmarshal(params, &p); err != nil {
 			return nil, err
 		}
-		mappings, err := spanmap.New([]spanmap.Segment{{
+		mappings := spanmap.New([]spanmap.Segment{{
 			VirtualEnd:  core.TextPos(len(p.Content)),
 			OriginalEnd: core.TextPos(len(p.Content)),
 			Kind:        spanmap.KindVerbatim,
-		}}).Marshal()
-		if err != nil {
-			return nil, err
-		}
+		}}).Tuples()
 		return contentmapper.TransformResult{
-			Text: p.Content, Extension: ".ts", Mappings: json.Value(mappings),
+			Text: p.Content, Extension: ".ts", Mappings: mappings,
 			Diagnostics: []contentmapper.Diagnostic{{
 				MessageText: "boom",
 				Start:       0,
@@ -136,12 +169,9 @@ func (m unicodeMapper) HandleRequest(ctx context.Context, method string, params 
 		default:
 			return contentmapper.TransformResult{Text: p.Content, Extension: ".ts"}, nil
 		}
-		mappings, err := json.Marshal([][5]int{
-			{0, emojiLength, 0, emojiLength, int(spanmap.KindVerbatim)},
-			{emojiLength, textLength - emojiLength, emojiLength, textLength - emojiLength, int(spanmap.KindVerbatim)},
-		})
-		if err != nil {
-			return nil, err
+		mappings := []contentmapper.SpanMapSegment{
+			{0, int32(emojiLength), 0, int32(emojiLength), int32(spanmap.KindVerbatim)},
+			{int32(emojiLength), int32(textLength - emojiLength), int32(emojiLength), int32(textLength - emojiLength), int32(spanmap.KindVerbatim)},
 		}
 		return contentmapper.TransformResult{
 			Text:      p.Content,
@@ -744,6 +774,35 @@ func TestRunnerTransformInvalidSupplementalDiagnosticDirective(t *testing.T) {
 	assert.Equal(t, directiveError.SupplementalIndex, 1)
 }
 
+func TestRunnerTransformSpanMapTuples(t *testing.T) {
+	t.Parallel()
+
+	for _, supplemental := range []bool{false, true} {
+		t.Run(fmt.Sprintf("supplemental=%t", supplemental), func(t *testing.T) {
+			t.Parallel()
+			output := contentmapper.MappedOutput{
+				Text:      "abcde",
+				Extension: ".ts",
+				Mappings:  []contentmapper.SpanMapSegment{{0, 1, 0, 1}},
+			}
+			host := contentmapper.NewHost(t.Context(), &fakeSpawner{handler: responseMapper{response: func(p contentmapper.TransformParams) any {
+				canonical := contentmapper.MappedOutput{Text: "abcde", Extension: ".ts"}
+				if supplemental {
+					return contentmapper.TransformResult{
+						MappedOutput: canonical,
+						Supplemental: []contentmapper.SupplementalOutput{{MappedOutput: output}},
+					}
+				}
+				return contentmapper.TransformResult{MappedOutput: output}
+			}}}, locale.Default)
+			defer host.Close()
+			mapper := &contentmapper.Mapper{Name: "mapper", Exec: []string{"mapper"}}
+			_, err := host.Transform(mapper, contentmapper.Request{FileName: "/a.vue", Content: "abcde"})
+			assert.ErrorContains(t, err, "span map segment 0: expected 5 or 6 values, got 4")
+		})
+	}
+}
+
 func TestRunnerRejectsInvalidVirtualExtension(t *testing.T) {
 	t.Parallel()
 	for _, supplemental := range []bool{false, true} {
@@ -952,7 +1011,7 @@ func (m *recordingMapper) HandleRequest(ctx context.Context, method string, para
 		}
 		m.mu.Lock()
 		m.receivedLocale = p.Locale
-		m.receivedCodeSelectors = p.Capabilities.DiagnosticDirectiveCodeSelectors
+		m.receivedCodeSelectors = p.Capabilities != nil && p.Capabilities.DiagnosticDirectiveCodeSelectors
 		m.mu.Unlock()
 		return contentmapper.InitializeResult{PositionEncoding: contentmapper.PositionEncodingUTF8, DiagnosticSource: "mapper"}, nil
 	case contentmapper.MethodOpenProject:

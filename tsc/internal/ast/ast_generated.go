@@ -532,9 +532,9 @@ type (
 	ModuleName                     = Node // Identifier | StringLiteral
 	ModuleExportName               = Node // Identifier | StringLiteral
 	PropertyName                   = Node // Identifier | StringLiteral | NoSubstitutionTemplateLiteral | NumericLiteral | ComputedPropertyName | PrivateIdentifier | BigIntLiteral
-	ModuleBody                     = Node // ModuleBlock | ModuleDeclaration
+	ModuleBody                     = Node // ModuleBlock | ModuleDeclaration | Identifier
 	JSDocFullName                  = Node // Identifier | ModuleDeclaration
-	ForInitializer                 = Node // Expression | MissingDeclaration | VariableDeclarationList
+	ForInitializer                 = Node // Expression | VariableDeclarationList
 	ModuleReference                = Node // Identifier | QualifiedName | ExternalModuleReference
 	NamedImportBindings            = Node // NamespaceImport | NamedImports
 	NamedExportBindings            = Node // NamespaceExport | NamedExports
@@ -7671,10 +7671,10 @@ func IsJSDocSeeTag(node *Node) bool {
 
 type JSDocImplementsTag struct {
 	JSDocTagBase
-	ClassName *ExpressionWithTypeArgumentsNode
+	ClassName *TypeReferenceNodeNode
 }
 
-func (f *NodeFactory) NewJSDocImplementsTag(tagName *IdentifierNode, className *ExpressionWithTypeArgumentsNode, comment *NodeList) *Node {
+func (f *NodeFactory) NewJSDocImplementsTag(tagName *IdentifierNode, className *TypeReferenceNodeNode, comment *NodeList) *Node {
 	data := &JSDocImplementsTag{}
 	data.TagName = tagName
 	data.ClassName = className
@@ -7682,7 +7682,7 @@ func (f *NodeFactory) NewJSDocImplementsTag(tagName *IdentifierNode, className *
 	return f.newNode(KindJSDocImplementsTag, data.AsNode())
 }
 
-func (f *NodeFactory) UpdateJSDocImplementsTag(node *JSDocImplementsTag, tagName *IdentifierNode, className *ExpressionWithTypeArgumentsNode, comment *NodeList) *Node {
+func (f *NodeFactory) UpdateJSDocImplementsTag(node *JSDocImplementsTag, tagName *IdentifierNode, className *TypeReferenceNodeNode, comment *NodeList) *Node {
 	if tagName != node.TagName || className != node.ClassName || comment != node.Comment {
 		return updateNode(f.NewJSDocImplementsTag(tagName, className, comment), node.AsNode(), f.hooks)
 	}
@@ -7711,10 +7711,10 @@ func IsJSDocImplementsTag(node *Node) bool {
 
 type JSDocAugmentsTag struct {
 	JSDocTagBase
-	ClassName *ExpressionWithTypeArgumentsNode
+	ClassName *TypeReferenceNodeNode
 }
 
-func (f *NodeFactory) NewJSDocAugmentsTag(tagName *IdentifierNode, className *ExpressionWithTypeArgumentsNode, comment *NodeList) *Node {
+func (f *NodeFactory) NewJSDocAugmentsTag(tagName *IdentifierNode, className *TypeReferenceNodeNode, comment *NodeList) *Node {
 	data := &JSDocAugmentsTag{}
 	data.TagName = tagName
 	data.ClassName = className
@@ -7722,7 +7722,7 @@ func (f *NodeFactory) NewJSDocAugmentsTag(tagName *IdentifierNode, className *Ex
 	return f.newNode(KindJSDocAugmentsTag, data.AsNode())
 }
 
-func (f *NodeFactory) UpdateJSDocAugmentsTag(node *JSDocAugmentsTag, tagName *IdentifierNode, className *ExpressionWithTypeArgumentsNode, comment *NodeList) *Node {
+func (f *NodeFactory) UpdateJSDocAugmentsTag(node *JSDocAugmentsTag, tagName *IdentifierNode, className *TypeReferenceNodeNode, comment *NodeList) *Node {
 	if tagName != node.TagName || className != node.ClassName || comment != node.Comment {
 		return updateNode(f.NewJSDocAugmentsTag(tagName, className, comment), node.AsNode(), f.hooks)
 	}
@@ -8058,10 +8058,12 @@ func IsJSDocTypedefTag(node *Node) bool {
 type JSDocSignature struct {
 	JSDocTypeBase
 	DeclarationBase
-	FunctionLikeBase
+	TypeParameters *NodeList // Optional
+	Parameters     *NodeList
+	Type           *JSDocReturnTagNode // Optional
 }
 
-func (f *NodeFactory) NewJSDocSignature(typeParameters *TypeParameterList, parameters *ParameterList, typeNode *TypeNode) *Node {
+func (f *NodeFactory) NewJSDocSignature(typeParameters *NodeList, parameters *NodeList, typeNode *JSDocReturnTagNode) *Node {
 	data := &JSDocSignature{}
 	data.TypeParameters = typeParameters
 	data.Parameters = parameters
@@ -8069,7 +8071,7 @@ func (f *NodeFactory) NewJSDocSignature(typeParameters *TypeParameterList, param
 	return f.newNode(KindJSDocSignature, data.AsNode())
 }
 
-func (f *NodeFactory) UpdateJSDocSignature(node *JSDocSignature, typeParameters *TypeParameterList, parameters *ParameterList, typeNode *TypeNode) *Node {
+func (f *NodeFactory) UpdateJSDocSignature(node *JSDocSignature, typeParameters *NodeList, parameters *NodeList, typeNode *JSDocReturnTagNode) *Node {
 	if typeParameters != node.TypeParameters || parameters != node.Parameters || typeNode != node.Type {
 		return updateNode(f.NewJSDocSignature(typeParameters, parameters, typeNode), node.AsNode(), f.hooks)
 	}
@@ -12612,9 +12614,8 @@ var nodeLocalsContainerDataDispatch = [kindFlowReduceLabelData + 1]uint8{
 	KindMappedType:                  22,
 	KindFunctionType:                23,
 	KindConstructorType:             24,
-	KindJSDocSignature:              25,
-	KindSourceFile:                  26,
-	KindModuleDeclaration:           27,
+	KindSourceFile:                  25,
+	KindModuleDeclaration:           26,
 }
 
 func (n *Node) LocalsContainerData() *LocalsContainerBase {
@@ -12692,12 +12693,9 @@ func (n *Node) LocalsContainerData() *LocalsContainerBase {
 		// SAFETY: This case only matches kinds allocated as a ConstructorTypeNode, which embeds its Node header at offset zero.
 		return (*ConstructorTypeNode)(unsafe.Pointer(n)).LocalsContainerData()
 	case 25:
-		// SAFETY: This case only matches kinds allocated as a JSDocSignature, which embeds its Node header at offset zero.
-		return (*JSDocSignature)(unsafe.Pointer(n)).LocalsContainerData()
-	case 26:
 		// SAFETY: This case only matches kinds allocated as a SourceFile, which embeds its Node header at offset zero.
 		return (*SourceFile)(unsafe.Pointer(n)).LocalsContainerData()
-	case 27:
+	case 26:
 		// SAFETY: This case only matches kinds allocated as a ModuleDeclaration, which embeds its Node header at offset zero.
 		return (*ModuleDeclaration)(unsafe.Pointer(n)).LocalsContainerData()
 	default:
@@ -12719,7 +12717,6 @@ var nodeFunctionLikeDataDispatch = [kindFlowReduceLabelData + 1]uint8{
 	KindFunctionExpression:  11,
 	KindFunctionType:        12,
 	KindConstructorType:     13,
-	KindJSDocSignature:      14,
 }
 
 func (n *Node) FunctionLikeData() *FunctionLikeBase {
@@ -12763,9 +12760,6 @@ func (n *Node) FunctionLikeData() *FunctionLikeBase {
 	case 13:
 		// SAFETY: This case only matches kinds allocated as a ConstructorTypeNode, which embeds its Node header at offset zero.
 		return (*ConstructorTypeNode)(unsafe.Pointer(n)).FunctionLikeData()
-	case 14:
-		// SAFETY: This case only matches kinds allocated as a JSDocSignature, which embeds its Node header at offset zero.
-		return (*JSDocSignature)(unsafe.Pointer(n)).FunctionLikeData()
 	default:
 		return nil
 	}

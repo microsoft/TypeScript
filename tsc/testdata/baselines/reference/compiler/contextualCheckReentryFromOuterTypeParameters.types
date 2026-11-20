@@ -1,0 +1,58 @@
+//// [tests/cases/compiler/contextualCheckReentryFromOuterTypeParameters.ts] ////
+
+=== contextualCheckReentryFromOuterTypeParameters.ts ===
+interface Argv<T = {}> {
+    command<U>(builder: (args: Argv<T>) => Argv<U>, handler: (args: Arguments<U>) => void): Argv<T>;
+>command : <U>(builder: (args: Argv<T>) => Argv<U>, handler: (args: Arguments<U>) => void) => Argv<T>
+>builder : (args: Argv<T>) => Argv<U>
+>args : Argv<T>
+>handler : (args: Arguments<U>) => void
+>args : Arguments<U>
+
+    option<K extends string, O>(key: K, options: O): Argv<{ [key in K]: O } & Check<O>>;
+>option : <K extends string, O>(key: K, options: O) => Argv<{ [key in K]: O; } & Check<O>>
+>key : K
+>options : O
+}
+type Arguments<T> = { [key in keyof T]: T[key] } & { [key: string]: unknown };
+>Arguments : Arguments<T>
+>key : string
+
+type Check<O> = O extends {} ? {} : {};
+>Check : Check<O>
+
+declare const yargs: Argv;
+>yargs : Argv<{}>
+
+yargs.command(
+>yargs.command(    (yargs) => yargs.option("a", { type: "string" }),    (argv) => {        const a: { type: string } = argv.a;    },) : Argv<{}>
+>yargs.command : <U>(builder: (args: Argv<{}>) => Argv<U>, handler: (args: Arguments<U>) => void) => Argv<{}>
+>yargs : Argv<{}>
+>command : <U>(builder: (args: Argv<{}>) => Argv<U>, handler: (args: Arguments<U>) => void) => Argv<{}>
+
+    (yargs) => yargs.option("a", { type: "string" }),
+>(yargs) => yargs.option("a", { type: "string" }) : (yargs: Argv<{}>) => Argv<{ a: { type: string; }; }>
+>yargs : Argv<{}>
+>yargs.option("a", { type: "string" }) : Argv<{ a: { type: string; }; }>
+>yargs.option : <K extends string, O>(key: K, options: O) => Argv<{ [key in K]: O; } & Check<O>>
+>yargs : Argv<{}>
+>option : <K extends string, O>(key: K, options: O) => Argv<{ [key in K]: O; } & Check<O>>
+>"a" : "a"
+>{ type: "string" } : { type: string; }
+>type : string
+>"string" : "string"
+
+    (argv) => {
+>(argv) => {        const a: { type: string } = argv.a;    } : (argv: Arguments<{ a: { type: string; }; }>) => void
+>argv : Arguments<{ a: { type: string; }; }>
+
+        const a: { type: string } = argv.a;
+>a : { type: string; }
+>type : string
+>argv.a : { type: string; }
+>argv : Arguments<{ a: { type: string; }; }>
+>a : { type: string; }
+
+    },
+);
+

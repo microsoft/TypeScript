@@ -1,0 +1,49 @@
+//// [tests/cases/compiler/checkOrderEmitBeforeCheck.ts] ////
+
+=== checkOrderEmitBeforeCheck.ts ===
+// The circularity in the mapped type is found by checking the annotation of
+// "each". Emitting first must not instead report it at the use import
+// elision visits, nor cache the result without the error.
+type NonOptionalKeys<T> = { [P in keyof T]: undefined extends T[P] ? never : P }[keyof T];
+>NonOptionalKeys : Symbol(NonOptionalKeys, Decl(checkOrderEmitBeforeCheck.ts, 0, 0))
+>T : Symbol(T, Decl(checkOrderEmitBeforeCheck.ts, 3, 21))
+>P : Symbol(P, Decl(checkOrderEmitBeforeCheck.ts, 3, 29))
+>T : Symbol(T, Decl(checkOrderEmitBeforeCheck.ts, 3, 21))
+>T : Symbol(T, Decl(checkOrderEmitBeforeCheck.ts, 3, 21))
+>P : Symbol(P, Decl(checkOrderEmitBeforeCheck.ts, 3, 29))
+>P : Symbol(P, Decl(checkOrderEmitBeforeCheck.ts, 3, 29))
+>T : Symbol(T, Decl(checkOrderEmitBeforeCheck.ts, 3, 21))
+
+type Child<T> = { [P in NonOptionalKeys<T>]: T[P] }
+>Child : Symbol(Child, Decl(checkOrderEmitBeforeCheck.ts, 3, 90))
+>T : Symbol(T, Decl(checkOrderEmitBeforeCheck.ts, 4, 11))
+>P : Symbol(P, Decl(checkOrderEmitBeforeCheck.ts, 4, 19))
+>NonOptionalKeys : Symbol(NonOptionalKeys, Decl(checkOrderEmitBeforeCheck.ts, 0, 0))
+>T : Symbol(T, Decl(checkOrderEmitBeforeCheck.ts, 4, 11))
+>T : Symbol(T, Decl(checkOrderEmitBeforeCheck.ts, 4, 11))
+>P : Symbol(P, Decl(checkOrderEmitBeforeCheck.ts, 4, 19))
+
+export interface ListWidget {
+>ListWidget : Symbol(ListWidget, Decl(checkOrderEmitBeforeCheck.ts, 4, 51))
+
+    "type": "list",
+>"type" : Symbol(ListWidget["type"], Decl(checkOrderEmitBeforeCheck.ts, 6, 29))
+
+    "each": Child<ListWidget>;
+>"each" : Symbol(ListWidget["each"], Decl(checkOrderEmitBeforeCheck.ts, 7, 19))
+>Child : Symbol(Child, Decl(checkOrderEmitBeforeCheck.ts, 3, 90))
+>ListWidget : Symbol(ListWidget, Decl(checkOrderEmitBeforeCheck.ts, 4, 51))
+}
+
+type ListChild = Child<ListWidget>
+>ListChild : Symbol(ListChild, Decl(checkOrderEmitBeforeCheck.ts, 9, 1))
+>Child : Symbol(Child, Decl(checkOrderEmitBeforeCheck.ts, 3, 90))
+>ListWidget : Symbol(ListWidget, Decl(checkOrderEmitBeforeCheck.ts, 4, 51))
+
+declare let x: ListChild;
+>x : Symbol(x, Decl(checkOrderEmitBeforeCheck.ts, 13, 11))
+>ListChild : Symbol(ListChild, Decl(checkOrderEmitBeforeCheck.ts, 9, 1))
+
+x.type;
+>x : Symbol(x, Decl(checkOrderEmitBeforeCheck.ts, 13, 11))
+

@@ -60,6 +60,9 @@ type ProgramHosts struct {
 type ProgramFactories struct {
 	CreateCheckerPool    func(*Program) CheckerPool
 	CreateModuleResolver func(module.ResolverOptions) module.Resolver
+	// AssignCheckers, for testing, returns the index of the checker for each
+	// file of the program, in place of the usual checker count and assignment.
+	AssignCheckers func(files []*ast.SourceFile) []int
 }
 
 func (p *ProgramConfig) canUseProjectReferenceSource() bool {
@@ -332,7 +335,7 @@ func NewProgram(ctx context.Context, opts ProgramOptions) (*Program, error) {
 	if err := ctx.Err(); err != nil {
 		return nil, err
 	}
-	p.initCheckerPool(opts.CreateCheckerPool)
+	p.initCheckerPool(opts.CreateCheckerPool, opts.AssignCheckers)
 	p.verifyCompilerOptions()
 	p.collectContentMapperOptionDiagnostics()
 	if err := ctx.Err(); err != nil {
@@ -462,11 +465,11 @@ func (p *Program) ReuseProgram(
 		}
 	}
 	result.replaceSyntheticImports(newFile, newSupplementalFiles)
-	result.initCheckerPool(createCheckerPool)
+	result.initCheckerPool(createCheckerPool, nil)
 	return result, newFile, true
 }
 
-func (p *Program) initCheckerPool(create func(*Program) CheckerPool) {
+func (p *Program) initCheckerPool(create func(*Program) CheckerPool, assign func([]*ast.SourceFile) []int) {
 	if !p.finishedProcessing {
 		panic("Program must finish processing files before initializing checker pool")
 	}
@@ -474,7 +477,7 @@ func (p *Program) initCheckerPool(create func(*Program) CheckerPool) {
 	if create != nil {
 		p.checkerPool = create(p)
 	} else {
-		pool := newCheckerPoolWithTracing(p, p.hosts.Tracing)
+		pool := newCheckerPoolWithAssignment(p, p.hosts.Tracing, assign)
 		p.checkerPool = pool
 		p.compilerCheckerPool = pool
 	}

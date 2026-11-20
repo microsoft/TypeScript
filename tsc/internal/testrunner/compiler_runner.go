@@ -13,6 +13,7 @@ import (
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/checker"
+	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/repo"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil"
@@ -166,8 +167,21 @@ func (r *CompilerBaselineRunner) runTest(t *testing.T, filename string) {
 	}
 }
 
+// When a program checks its files on several checkers, these tests can see different results depending on which
+// checker answers a query first.
+var concurrentSkippedTests = map[string]string{
+	"checkOrderCircularDefaults.ts":          "Circular default results depend on which checker resolves the cycle first.",
+	"checkOrderSpreadCycle.ts":               "Spread cycle results depend on which checker resolves the cycle first.",
+	"checkOrderStableInstantiationErrors.ts": "Instantiation limit errors depend on which checker instantiates first.",
+}
+
 func (r *CompilerBaselineRunner) runSingleConfigTest(t *testing.T, testName string, test *compilerFileBasedTest, config *harnessutil.NamedTestConfiguration) {
 	t.Parallel()
+	if !testutil.TestProgramIsSingleThreaded() {
+		if msg, ok := concurrentSkippedTests[tspath.GetBaseFileName(test.filename)]; ok {
+			t.Skipf("Skipping in concurrent mode: %s", msg)
+		}
+	}
 	defer testutil.RecoverAndFail(t, "Panic on compiler test "+test.filename)
 
 	payload := makeUnitsFromTest(test.content, test.filename)
@@ -186,6 +200,14 @@ func (r *CompilerBaselineRunner) runSingleConfigTest(t *testing.T, testName stri
 	compilerTest.verifyParentPointers(t)
 }
 
+// compilerTestVaryBy adds harness options that may vary to the compiler options
+// that may vary.
+var compilerTestVaryBy = func() *collections.Set[string] {
+	s := compilerVaryBy.Clone()
+	s.Add("checkorder")
+	return s
+}()
+
 type compilerFileBasedTest struct {
 	filename       string
 	content        string
@@ -198,7 +220,7 @@ func getCompilerFileBasedTest(t *testing.T, filename string) *compilerFileBasedT
 		panic("Could not read test file: " + filename)
 	}
 	settings := extractCompilerSettings(content)
-	configurations := harnessutil.GetFileBasedTestConfigurations(t, settings, compilerVaryBy)
+	configurations := harnessutil.GetFileBasedTestConfigurations(t, settings, compilerTestVaryBy)
 	return &compilerFileBasedTest{
 		filename:       filename,
 		content:        content,

@@ -1,0 +1,121 @@
+//// [tests/cases/compiler/circularScopeThunkReverseMapped.ts] ////
+
+=== circularScopeThunkReverseMapped.ts ===
+type Resolve<T> = T extends () => infer R ? R : T;
+>Resolve : Symbol(Resolve, Decl(circularScopeThunkReverseMapped.ts, 0, 0))
+>T : Symbol(T, Decl(circularScopeThunkReverseMapped.ts, 0, 13))
+>T : Symbol(T, Decl(circularScopeThunkReverseMapped.ts, 0, 13))
+>R : Symbol(R, Decl(circularScopeThunkReverseMapped.ts, 0, 39))
+>R : Symbol(R, Decl(circularScopeThunkReverseMapped.ts, 0, 39))
+>T : Symbol(T, Decl(circularScopeThunkReverseMapped.ts, 0, 13))
+
+type Validate<def> = { [K in keyof def]: def[K] extends () => infer R ? () => R : def[K] };
+>Validate : Symbol(Validate, Decl(circularScopeThunkReverseMapped.ts, 0, 50))
+>def : Symbol(def, Decl(circularScopeThunkReverseMapped.ts, 1, 14))
+>K : Symbol(K, Decl(circularScopeThunkReverseMapped.ts, 1, 24))
+>def : Symbol(def, Decl(circularScopeThunkReverseMapped.ts, 1, 14))
+>def : Symbol(def, Decl(circularScopeThunkReverseMapped.ts, 1, 14))
+>K : Symbol(K, Decl(circularScopeThunkReverseMapped.ts, 1, 24))
+>R : Symbol(R, Decl(circularScopeThunkReverseMapped.ts, 1, 67))
+>R : Symbol(R, Decl(circularScopeThunkReverseMapped.ts, 1, 67))
+>def : Symbol(def, Decl(circularScopeThunkReverseMapped.ts, 1, 14))
+>K : Symbol(K, Decl(circularScopeThunkReverseMapped.ts, 1, 24))
+
+interface Scope<def> {
+>Scope : Symbol(Scope, Decl(circularScopeThunkReverseMapped.ts, 1, 91))
+>def : Symbol(def, Decl(circularScopeThunkReverseMapped.ts, 2, 16))
+
+    type<k extends keyof def>(k: k): Resolve<def[k]>;
+>type : Symbol(Scope.type, Decl(circularScopeThunkReverseMapped.ts, 2, 22))
+>k : Symbol(k, Decl(circularScopeThunkReverseMapped.ts, 3, 9), Decl(circularScopeThunkReverseMapped.ts, 3, 30))
+>def : Symbol(def, Decl(circularScopeThunkReverseMapped.ts, 2, 16))
+>k : Symbol(k, Decl(circularScopeThunkReverseMapped.ts, 3, 9), Decl(circularScopeThunkReverseMapped.ts, 3, 30))
+>k : Symbol(k, Decl(circularScopeThunkReverseMapped.ts, 3, 9), Decl(circularScopeThunkReverseMapped.ts, 3, 30))
+>Resolve : Symbol(Resolve, Decl(circularScopeThunkReverseMapped.ts, 0, 0))
+>def : Symbol(def, Decl(circularScopeThunkReverseMapped.ts, 2, 16))
+>k : Symbol(k, Decl(circularScopeThunkReverseMapped.ts, 3, 9), Decl(circularScopeThunkReverseMapped.ts, 3, 30))
+}
+interface Type<T> {
+>Type : Symbol(Type, Decl(circularScopeThunkReverseMapped.ts, 4, 1))
+>T : Symbol(T, Decl(circularScopeThunkReverseMapped.ts, 5, 15))
+
+    pipe<U>(f: (x: T) => U): Type<U>;
+>pipe : Symbol(Type.pipe, Decl(circularScopeThunkReverseMapped.ts, 5, 19))
+>U : Symbol(U, Decl(circularScopeThunkReverseMapped.ts, 6, 9))
+>f : Symbol(f, Decl(circularScopeThunkReverseMapped.ts, 6, 12))
+>x : Symbol(x, Decl(circularScopeThunkReverseMapped.ts, 6, 16))
+>T : Symbol(T, Decl(circularScopeThunkReverseMapped.ts, 5, 15))
+>U : Symbol(U, Decl(circularScopeThunkReverseMapped.ts, 6, 9))
+>Type : Symbol(Type, Decl(circularScopeThunkReverseMapped.ts, 4, 1))
+>U : Symbol(U, Decl(circularScopeThunkReverseMapped.ts, 6, 9))
+}
+declare function scope<const def>(def: Validate<def>): Scope<def>;
+>scope : Symbol(scope, Decl(circularScopeThunkReverseMapped.ts, 7, 1))
+>def : Symbol(def, Decl(circularScopeThunkReverseMapped.ts, 8, 23), Decl(circularScopeThunkReverseMapped.ts, 8, 34))
+>def : Symbol(def, Decl(circularScopeThunkReverseMapped.ts, 8, 23), Decl(circularScopeThunkReverseMapped.ts, 8, 34))
+>Validate : Symbol(Validate, Decl(circularScopeThunkReverseMapped.ts, 0, 50))
+>def : Symbol(def, Decl(circularScopeThunkReverseMapped.ts, 8, 23), Decl(circularScopeThunkReverseMapped.ts, 8, 34))
+>Scope : Symbol(Scope, Decl(circularScopeThunkReverseMapped.ts, 1, 91))
+>def : Symbol(def, Decl(circularScopeThunkReverseMapped.ts, 8, 23), Decl(circularScopeThunkReverseMapped.ts, 8, 34))
+
+declare function type<T>(x: T): Type<T>;
+>type : Symbol(type, Decl(circularScopeThunkReverseMapped.ts, 8, 66))
+>T : Symbol(T, Decl(circularScopeThunkReverseMapped.ts, 9, 22))
+>x : Symbol(x, Decl(circularScopeThunkReverseMapped.ts, 9, 25))
+>T : Symbol(T, Decl(circularScopeThunkReverseMapped.ts, 9, 22))
+>Type : Symbol(Type, Decl(circularScopeThunkReverseMapped.ts, 4, 1))
+>T : Symbol(T, Decl(circularScopeThunkReverseMapped.ts, 9, 22))
+
+export const $ = scope({
+>$ : Symbol($, Decl(circularScopeThunkReverseMapped.ts, 11, 12))
+>scope : Symbol(scope, Decl(circularScopeThunkReverseMapped.ts, 7, 1))
+
+    a: type("string").pipe(function (s) { return s.length; }),
+>a : Symbol(a, Decl(circularScopeThunkReverseMapped.ts, 11, 24))
+>type("string").pipe : Symbol(Type.pipe, Decl(circularScopeThunkReverseMapped.ts, 5, 19))
+>type : Symbol(type, Decl(circularScopeThunkReverseMapped.ts, 8, 66))
+>pipe : Symbol(Type.pipe, Decl(circularScopeThunkReverseMapped.ts, 5, 19))
+>s : Symbol(s, Decl(circularScopeThunkReverseMapped.ts, 12, 37))
+>s.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>s : Symbol(s, Decl(circularScopeThunkReverseMapped.ts, 12, 37))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+    b: () => $.type("a").pipe(function (n) { return n === 0; }),
+>b : Symbol(b, Decl(circularScopeThunkReverseMapped.ts, 12, 62))
+>$.type("a").pipe : Symbol(Type.pipe, Decl(circularScopeThunkReverseMapped.ts, 5, 19))
+>$.type : Symbol(Scope.type, Decl(circularScopeThunkReverseMapped.ts, 2, 22))
+>$ : Symbol($, Decl(circularScopeThunkReverseMapped.ts, 11, 12))
+>type : Symbol(Scope.type, Decl(circularScopeThunkReverseMapped.ts, 2, 22))
+>pipe : Symbol(Type.pipe, Decl(circularScopeThunkReverseMapped.ts, 5, 19))
+>n : Symbol(n, Decl(circularScopeThunkReverseMapped.ts, 13, 40))
+>n : Symbol(n, Decl(circularScopeThunkReverseMapped.ts, 13, 40))
+
+});
+
+// Entered from the function in the first property when queried in reverse
+export const $2 = scope({
+>$2 : Symbol($2, Decl(circularScopeThunkReverseMapped.ts, 17, 12))
+>scope : Symbol(scope, Decl(circularScopeThunkReverseMapped.ts, 7, 1))
+
+    a: type("string").pipe(function (s) { return s.length; }),
+>a : Symbol(a, Decl(circularScopeThunkReverseMapped.ts, 17, 25))
+>type("string").pipe : Symbol(Type.pipe, Decl(circularScopeThunkReverseMapped.ts, 5, 19))
+>type : Symbol(type, Decl(circularScopeThunkReverseMapped.ts, 8, 66))
+>pipe : Symbol(Type.pipe, Decl(circularScopeThunkReverseMapped.ts, 5, 19))
+>s : Symbol(s, Decl(circularScopeThunkReverseMapped.ts, 18, 37))
+>s.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>s : Symbol(s, Decl(circularScopeThunkReverseMapped.ts, 18, 37))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+    b: () => $2.type("a").pipe((n: number) => n === 0),
+>b : Symbol(b, Decl(circularScopeThunkReverseMapped.ts, 18, 62))
+>$2.type("a").pipe : Symbol(Type.pipe, Decl(circularScopeThunkReverseMapped.ts, 5, 19))
+>$2.type : Symbol(Scope.type, Decl(circularScopeThunkReverseMapped.ts, 2, 22))
+>$2 : Symbol($2, Decl(circularScopeThunkReverseMapped.ts, 17, 12))
+>type : Symbol(Scope.type, Decl(circularScopeThunkReverseMapped.ts, 2, 22))
+>pipe : Symbol(Type.pipe, Decl(circularScopeThunkReverseMapped.ts, 5, 19))
+>n : Symbol(n, Decl(circularScopeThunkReverseMapped.ts, 19, 32))
+>n : Symbol(n, Decl(circularScopeThunkReverseMapped.ts, 19, 32))
+
+});
+

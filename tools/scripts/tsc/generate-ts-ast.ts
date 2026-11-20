@@ -610,7 +610,7 @@ function generateFactory(): string {
     // ── Collect all types referenced in factory ──
     function addType(t: string) {
         // Extract base type names from complex types
-        const stripped = t.replace(/readonly\s+/g, "").replace(/\[\]/g, "")
+        const stripped = t.replace(/readonly\s+/g, "").replace(/\[\]/g, "").replace(/[()]/g, "")
             .replace(/NodeArray<(.+)>/g, "$1").replace(/\s*\|\s*/g, "|");
         for (const part of stripped.split("|")) {
             const clean = part.trim();

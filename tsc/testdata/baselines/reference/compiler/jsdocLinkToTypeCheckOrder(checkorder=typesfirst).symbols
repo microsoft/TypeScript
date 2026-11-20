@@ -1,0 +1,31 @@
+//// [tests/cases/compiler/jsdocLinkToTypeCheckOrder.ts] ////
+
+=== jsdocLinkToTypeCheckOrder.ts ===
+// Names in JSDoc links resolve to types and namespaces without errors,
+// whether or not the editor asked about the comment first (59401).
+
+interface TextDocument { uri: string; getText(): string }
+>TextDocument : Symbol(TextDocument, Decl(jsdocLinkToTypeCheckOrder.ts, 0, 0))
+>uri : Symbol(TextDocument.uri, Decl(jsdocLinkToTypeCheckOrder.ts, 3, 24))
+>getText : Symbol(TextDocument.getText, Decl(jsdocLinkToTypeCheckOrder.ts, 3, 37))
+
+namespace NS { export interface Inner { a: number } }
+>NS : Symbol(NS, Decl(jsdocLinkToTypeCheckOrder.ts, 3, 57))
+>Inner : Symbol(Inner, Decl(jsdocLinkToTypeCheckOrder.ts, 4, 14))
+>a : Symbol(Inner.a, Decl(jsdocLinkToTypeCheckOrder.ts, 4, 39))
+
+/**
+ * Uses {@link TextDocument} and {@link TextDocument.getText}.
+ * Also {@link NS.Inner}.
+ */
+export function f(doc: TextDocument): string {
+>f : Symbol(f, Decl(jsdocLinkToTypeCheckOrder.ts, 4, 53))
+>doc : Symbol(doc, Decl(jsdocLinkToTypeCheckOrder.ts, 10, 18))
+>TextDocument : Symbol(TextDocument, Decl(jsdocLinkToTypeCheckOrder.ts, 0, 0))
+
+    return doc.getText();
+>doc.getText : Symbol(TextDocument.getText, Decl(jsdocLinkToTypeCheckOrder.ts, 3, 37))
+>doc : Symbol(doc, Decl(jsdocLinkToTypeCheckOrder.ts, 10, 18))
+>getText : Symbol(TextDocument.getText, Decl(jsdocLinkToTypeCheckOrder.ts, 3, 37))
+}
+

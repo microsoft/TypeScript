@@ -1,0 +1,102 @@
+//// [tests/cases/compiler/circularReturnTypeThroughCallArgumentRelation.ts] ////
+
+=== circularReturnTypeThroughCallArgumentRelation.ts ===
+// Inferring a method's return type resolves a call whose argument check
+// relates the method's own class to an interface containing that method, so
+// the relation compares the method while its return type is in progress.
+// TypeScript reads the in-progress return type as `any` there without failing
+// it, and call resolution hides the resolutions below it, so no TS7023 is
+// reported in any check order and the method gets the call's return type.
+// (Reduced from meta/lexical HeadingNode.$config and effect SchemaAST getParser.)
+
+// Through a callback returning an instance (lexical).
+interface Base { m(): unknown }
+>m : () => unknown
+
+declare function config(config: { f?: () => Base }): void;
+>config : (config: { f?: () => Base; }) => void
+>config : { f?: () => Base; }
+>f : (() => Base) | undefined
+
+declare const h: Heading;
+>h : Heading
+
+const b: Base = h;
+>b : Base
+>h : Heading
+
+class Heading {
+>Heading : Heading
+
+    m() {
+>m : () => void
+
+        return config({ f: () => create() });
+>config({ f: () => create() }) : void
+>config : (config: { f?: () => Base; }) => void
+>{ f: () => create() } : { f: () => Heading; }
+>f : () => Heading
+>() => create() : () => Heading
+>create() : Heading
+>create : () => Heading
+    }
+}
+
+declare function create(): Heading;
+>create : () => Heading
+
+const r: void = new Heading().m();
+>r : void
+>new Heading().m() : void
+>new Heading().m : () => void
+>new Heading() : Heading
+>Heading : typeof Heading
+>m : () => void
+
+// Passing `this` directly (effect).
+type Parser = (input: unknown) => unknown;
+>Parser : Parser
+>input : unknown
+
+interface NullNode { readonly _tag: "Null"; getParser(): Parser }
+>_tag : "Null"
+>getParser : () => Parser
+
+interface UndefinedNode { readonly _tag: "Undefined"; getParser(): Parser }
+>_tag : "Undefined"
+>getParser : () => Parser
+
+type AST = NullNode | UndefinedNode;
+>AST : AST
+
+declare function fromConst(ast: AST, value: unknown): Parser;
+>fromConst : (ast: AST, value: unknown) => Parser
+>ast : AST
+>value : unknown
+
+const NullNode: new () => NullNode = class {
+>NullNode : new () => NullNode
+>class {    readonly _tag = "Null";    getParser() {        return fromConst(this, null);    }} : typeof NullNode
+
+    readonly _tag = "Null";
+>_tag : "Null"
+>"Null" : "Null"
+
+    getParser() {
+>getParser : () => Parser
+
+        return fromConst(this, null);
+>fromConst(this, null) : Parser
+>fromConst : (ast: AST, value: unknown) => Parser
+>this : this
+    }
+};
+
+const p: Parser = new NullNode().getParser();
+>p : Parser
+>new NullNode().getParser() : Parser
+>new NullNode().getParser : () => Parser
+>new NullNode() : NullNode
+>NullNode : new () => NullNode
+>getParser : () => Parser
+

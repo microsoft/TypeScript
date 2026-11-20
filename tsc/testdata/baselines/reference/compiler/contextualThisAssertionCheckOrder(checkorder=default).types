@@ -1,0 +1,53 @@
+//// [tests/cases/compiler/contextualThisAssertionCheckOrder.ts] ////
+
+=== contextualThisAssertionCheckOrder.ts ===
+// A function expression's this is typed contextually, and calling an
+// assertion or never-returning method through it narrows the same way
+// whether or not the types in the call were requested first (42175).
+
+declare function makeContextualThisParameter<T>(cb: (this: T) => any): void;
+>makeContextualThisParameter : <T>(cb: (this: T) => any) => void
+>cb : (this: T) => any
+>this : T
+
+makeContextualThisParameter<{ assert(v: any): asserts v }>(function () {
+>makeContextualThisParameter<{ assert(v: any): asserts v }>(function () {    const v = Boolean();    this.assert(v);    const w: true = v;}) : void
+>makeContextualThisParameter : <T>(cb: (this: T) => any) => void
+>assert : (v: any) => asserts v
+>v : any
+>function () {    const v = Boolean();    this.assert(v);    const w: true = v;} : (this: { assert(v: any): asserts v; }) => void
+
+    const v = Boolean();
+>v : boolean
+>Boolean() : boolean
+>Boolean : BooleanConstructor
+
+    this.assert(v);
+>this.assert(v) : void
+>this.assert : (v: any) => asserts v
+>this : { assert(v: any): asserts v; }
+>assert : (v: any) => asserts v
+>v : boolean
+
+    const w: true = v;
+>w : true
+>true : true
+>v : true
+
+});
+
+makeContextualThisParameter<{ returnNever(): never }>(function () {
+>makeContextualThisParameter<{ returnNever(): never }>(function () {    this.returnNever();    debugger;}) : void
+>makeContextualThisParameter : <T>(cb: (this: T) => any) => void
+>returnNever : () => never
+>function () {    this.returnNever();    debugger;} : (this: { returnNever(): never; }) => never
+
+    this.returnNever();
+>this.returnNever() : never
+>this.returnNever : () => never
+>this : { returnNever(): never; }
+>returnNever : () => never
+
+    debugger;
+});
+

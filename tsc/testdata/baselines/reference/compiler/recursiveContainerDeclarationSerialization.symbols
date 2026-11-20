@@ -86,3 +86,25 @@ export function finiteArray() {
 >Nested : Symbol(Nested, Decl(nameable.ts, 10, 31))
 }
 
+=== expanding.ts ===
+// Each level is a new instantiation, so printing it stops at a bounded depth.
+type G<T> = T extends unknown ? (T | G<[T]>)[] : never;
+>G : Symbol(G, Decl(expanding.ts, 0, 0))
+>T : Symbol(T, Decl(expanding.ts, 1, 7))
+>T : Symbol(T, Decl(expanding.ts, 1, 7))
+>T : Symbol(T, Decl(expanding.ts, 1, 7))
+>G : Symbol(G, Decl(expanding.ts, 0, 0))
+>T : Symbol(T, Decl(expanding.ts, 1, 7))
+
+declare const g: G<"x">;
+>g : Symbol(g, Decl(expanding.ts, 2, 13))
+>G : Symbol(G, Decl(expanding.ts, 0, 0))
+
+export const h = g;
+>h : Symbol(h, Decl(expanding.ts, 3, 12))
+>g : Symbol(g, Decl(expanding.ts, 2, 13))
+
+export const n: number = g;
+>n : Symbol(n, Decl(expanding.ts, 4, 12))
+>g : Symbol(g, Decl(expanding.ts, 2, 13))
+

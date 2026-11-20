@@ -591,6 +591,46 @@ func TestMarshalRoundTrip(t *testing.T) {
 	}
 }
 
+func TestSegmentTuples(t *testing.T) {
+	t.Parallel()
+
+	tuples := []spanmap.SegmentTuple{
+		{0, 3, 10, 3, int32(spanmap.KindVerbatim)},
+		{3, 2, 20, 4, int32(spanmap.KindAlias), int32(spanmap.FeatureNone)},
+		{5, 2, 30, 2, int32(spanmap.KindAtom), int32(spanmap.FeatureHover | spanmap.FeatureRename)},
+	}
+	m, err := spanmap.FromTuples(tuples)
+	assert.NilError(t, err)
+	assert.Equal(t, m.Segments()[0].Features, spanmap.FeatureAll)
+	assert.Equal(t, m.Segments()[1].Features, spanmap.FeatureNone)
+	assert.Equal(t, m.Segments()[1].VirtualEnd, core.TextPos(5))
+	assert.Equal(t, m.Segments()[1].OriginalEnd, core.TextPos(24))
+	assert.DeepEqual(t, m.Tuples(), tuples)
+	encoded, err := m.Marshal()
+	assert.NilError(t, err)
+	decoded, err := spanmap.Unmarshal(encoded)
+	assert.NilError(t, err)
+	assert.DeepEqual(t, decoded.Tuples(), tuples)
+}
+
+func TestInvalidSegmentTupleLengths(t *testing.T) {
+	t.Parallel()
+
+	for _, tuple := range []spanmap.SegmentTuple{nil, {}, {0, 1, 0, 1}, {0, 1, 0, 1, 0, 0, 0}} {
+		m, err := spanmap.FromTuples([]spanmap.SegmentTuple{{0, 1, 0, 1, 0}, tuple})
+		assert.Assert(t, m == nil)
+		assert.ErrorContains(t, err, "span map segment 1: expected 5 or 6 values")
+	}
+	for _, tuples := range [][]spanmap.SegmentTuple{nil, {}} {
+		m, err := spanmap.FromTuples(tuples)
+		assert.NilError(t, err)
+		assert.Equal(t, len(m.Segments()), 0)
+		encoded, err := m.Marshal()
+		assert.NilError(t, err)
+		assert.Equal(t, string(encoded), "[]")
+	}
+}
+
 func TestValidate(t *testing.T) {
 	t.Parallel()
 

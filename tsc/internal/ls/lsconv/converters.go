@@ -373,7 +373,7 @@ func (c *Converters) lineAndCharacterToPosition(script Script, lineAndCharacter 
 		return textLen
 	}
 
-	start := lineMap.LineStarts[line]
+	start := min(lineMap.LineStarts[line], textLen)
 
 	// Determine the end of this line (start of next line, or end of text).
 	var lineEnd core.TextPos
@@ -382,6 +382,7 @@ func (c *Converters) lineAndCharacterToPosition(script Script, lineAndCharacter 
 	} else {
 		lineEnd = textLen
 	}
+	lineEnd = min(lineEnd, textLen)
 
 	if lineMap.AsciiOnly || c.positionEncoding == lsproto.PositionEncodingKindUTF8 {
 		return max(start, min(start+char, lineEnd))
