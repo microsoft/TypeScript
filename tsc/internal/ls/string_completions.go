@@ -750,18 +750,7 @@ func getDirectoryFragmentRangeOfLiteral(file *ast.SourceFile, node *ast.LiteralE
 	index := strings.LastIndexFunc(text, isAnyDirectorySeparator)
 	offset := 0
 	if index != -1 {
-		// Find the shortest source prefix whose value ends at the last separator.
-		quote := file.Text()[start : start+1]
-		s := scanner.NewScanner()
-		offset = -1
-		for i := index + 1; i <= len(rawText); i++ {
-			s.SetText(quote + rawText[:i] + quote)
-			s.Scan()
-			if s.TokenValue() == text[:index+1] {
-				offset = i
-				break
-			}
-		}
+		offset = scanner.GetStringLiteralSourceOffset(rawText, index+1, node.Kind == ast.KindNoSubstitutionTemplateLiteral)
 		if offset == -1 {
 			return nil
 		}

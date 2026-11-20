@@ -191,3 +191,38 @@ export {};
 		},
 	})
 }
+
+func TestPathCompletionEscapedTemplate(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = "// @Filename: /src/main.ts\n" +
+		"import(`./\\x61/c/*template*/`);\n" +
+		"// @Filename: /src/a/cd.ts\n" +
+		"export {};\n"
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyCompletions(t, "template", &fourslash.CompletionsExpectedList{
+		IsIncomplete: false,
+		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
+			CommitCharacters: &[]string{},
+			EditRange:        Ignored,
+		},
+		Items: &fourslash.CompletionsExpectedItems{
+			Includes: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label:  "cd",
+					Detail: new("cd.ts"),
+					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
+						TextEdit: &lsproto.TextEdit{
+							NewText: "cd",
+							Range: lsproto.Range{
+								Start: lsproto.Position{Line: 0, Character: 15},
+								End:   lsproto.Position{Line: 0, Character: 16},
+							},
+						},
+					},
+				},
+			},
+		},
+	})
+}
