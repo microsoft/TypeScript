@@ -1258,6 +1258,85 @@ interface I extends Parent<boolean> {}
     });
 });
 
+describe("text ranges of updated and cloned nodes", { concurrency }, () => {
+    const text = `import { foo } from "./foo";\nfunction f(a: number) {\n    return a + foo;\n}\n`;
+
+    function collectRanges(node: Node): [SyntaxKind, number, number][] {
+        const ranges: [SyntaxKind, number, number][] = [[node.kind, node.pos, node.end]];
+        node.forEachChild(child => {
+            ranges.push(...collectRanges(child));
+            return undefined;
+        });
+        return ranges;
+    }
+
+    test("update functions preserve the original node's range", () => {
+        using api = spawnAPI();
+        using lease = api.createSourceFile("/test.ts", text);
+        const fn = lease.sourceFile.statements[1] as FunctionDeclaration;
+        function rename(node: Node): Node {
+            if (node.kind === SyntaxKind.Identifier && (node as Identifier).text === "foo") return createIdentifier("bar");
+            return visitEachChild(node, rename);
+        }
+        const updated = visitEachChild(fn, rename);
+
+        assert.notStrictEqual(updated, fn);
+        assert.strictEqual(updated.pos, fn.pos);
+        assert.strictEqual(updated.end, fn.end);
+        const statement = updated.body!.statements[0];
+        assert.notStrictEqual(statement, fn.body!.statements[0]);
+        assert.strictEqual(statement.pos, fn.body!.statements[0].pos);
+        assert.strictEqual(statement.end, fn.body!.statements[0].end);
+    });
+
+    test("updateSourceFile preserves the original source file's range", () => {
+        using api = spawnAPI();
+        using lease = api.createSourceFile("/test.ts", text);
+        const { sourceFile } = lease;
+        const updated = factory.updateSourceFile(sourceFile, createNodeArray(sourceFile.statements.slice(1)), sourceFile.endOfFileToken);
+
+        assert.notStrictEqual(updated, sourceFile);
+        assert.strictEqual(updated.pos, sourceFile.pos);
+        assert.strictEqual(updated.end, sourceFile.end);
+    });
+
+    test("getSynthesizedDeepClone preserves ranges of every node", () => {
+        using api = spawnAPI();
+        using lease = api.createSourceFile("/test.ts", text);
+        const { sourceFile } = lease;
+        const clone = getSynthesizedDeepClone(sourceFile);
+
+        assert.deepStrictEqual(collectRanges(clone), collectRanges(sourceFile));
+        const statement = clone.statements[1] as FunctionDeclaration;
+        assert.strictEqual(statement.parameters.pos, (sourceFile.statements[1] as FunctionDeclaration).parameters.pos);
+        assert.strictEqual(statement.parameters.end, (sourceFile.statements[1] as FunctionDeclaration).parameters.end);
+    });
+});
+
+describe("JSDoc parameter tag visiting", { concurrency }, () => {
+    for (
+        const [description, tagText, expected] of [
+            ["type first", "@param {string} x comment", [SyntaxKind.Identifier, SyntaxKind.JSDocTypeExpression, SyntaxKind.Identifier, SyntaxKind.JSDocText]],
+            ["name first", "@param x {string} comment", [SyntaxKind.Identifier, SyntaxKind.Identifier, SyntaxKind.JSDocTypeExpression, SyntaxKind.JSDocText]],
+        ] as const
+    ) {
+        test(`visitEachChild visits children in source order (${description})`, () => {
+            using api = spawnAPI();
+            using lease = api.createSourceFile("/test.js", `/** ${tagText} */\nfunction f(x) {}\n`);
+            const declaration = lease.sourceFile.statements[0] as FunctionDeclaration;
+            const tag = astModule.getJSDocTags(declaration).find(astModule.isJSDocParameterTag);
+            assert.ok(tag);
+
+            const visitOrder: SyntaxKind[] = [];
+            visitEachChild(tag, child => {
+                visitOrder.push(child.kind);
+                return child;
+            });
+            assert.deepStrictEqual(visitOrder, expected);
+        });
+    }
+});
+
 describe("RemoteNode + visitEachChild", { concurrency }, () => {
     test("identity visitor returns same remote node", () => {
         const api = spawnAPI();

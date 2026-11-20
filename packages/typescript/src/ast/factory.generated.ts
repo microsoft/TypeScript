@@ -783,6 +783,12 @@ export function createNodeArray<T extends Node>(elements: readonly T[], pos: num
     return arr;
 }
 
+function update<T extends Node>(updated: T, original: T): T {
+    (updated as any).pos = original.pos;
+    (updated as any).end = original.end;
+    return updated;
+}
+
 export function cloneNode<T extends Node>(node: T): T {
     const data = cloneNodeData(node);
     const clone = new NodeObject(node.kind, data);
@@ -5392,683 +5398,683 @@ export function createJSDocPropertyTag(tagName: Identifier, name: EntityName, is
 }
 
 export function updateQualifiedName(node: QualifiedName, left: EntityName, right: MemberName): QualifiedName {
-    return node.left !== left || node.right !== right ? createQualifiedName(left, right) : node;
+    return node.left !== left || node.right !== right ? update(createQualifiedName(left, right), node) : node;
 }
 
 export function updateComputedPropertyName(node: ComputedPropertyName, expression: Expression): ComputedPropertyName {
-    return node.expression !== expression ? createComputedPropertyName(expression) : node;
+    return node.expression !== expression ? update(createComputedPropertyName(expression), node) : node;
 }
 
 export function updateDecorator(node: Decorator, expression: LeftHandSideExpression): Decorator {
-    return node.expression !== expression ? createDecorator(expression) : node;
+    return node.expression !== expression ? update(createDecorator(expression), node) : node;
 }
 
 export function updateIfStatement(node: IfStatement, expression: Expression, thenStatement: Statement, elseStatement?: Statement): IfStatement {
-    return node.expression !== expression || node.thenStatement !== thenStatement || node.elseStatement !== elseStatement ? createIfStatement(expression, thenStatement, elseStatement) : node;
+    return node.expression !== expression || node.thenStatement !== thenStatement || node.elseStatement !== elseStatement ? update(createIfStatement(expression, thenStatement, elseStatement), node) : node;
 }
 
 export function updateDoStatement(node: DoStatement, statement: Statement, expression: Expression): DoStatement {
-    return node.statement !== statement || node.expression !== expression ? createDoStatement(statement, expression) : node;
+    return node.statement !== statement || node.expression !== expression ? update(createDoStatement(statement, expression), node) : node;
 }
 
 export function updateWhileStatement(node: WhileStatement, expression: Expression, statement: Statement): WhileStatement {
-    return node.expression !== expression || node.statement !== statement ? createWhileStatement(expression, statement) : node;
+    return node.expression !== expression || node.statement !== statement ? update(createWhileStatement(expression, statement), node) : node;
 }
 
 export function updateForStatement(node: ForStatement, initializer: ForInitializer | undefined, condition: Expression | undefined, incrementor: Expression | undefined, statement: Statement): ForStatement {
-    return node.initializer !== initializer || node.condition !== condition || node.incrementor !== incrementor || node.statement !== statement ? createForStatement(initializer, condition, incrementor, statement) : node;
+    return node.initializer !== initializer || node.condition !== condition || node.incrementor !== incrementor || node.statement !== statement ? update(createForStatement(initializer, condition, incrementor, statement), node) : node;
 }
 
 export function updateBreakStatement(node: BreakStatement, label?: Identifier): BreakStatement {
-    return node.label !== label ? createBreakStatement(label) : node;
+    return node.label !== label ? update(createBreakStatement(label), node) : node;
 }
 
 export function updateContinueStatement(node: ContinueStatement, label?: Identifier): ContinueStatement {
-    return node.label !== label ? createContinueStatement(label) : node;
+    return node.label !== label ? update(createContinueStatement(label), node) : node;
 }
 
 export function updateReturnStatement(node: ReturnStatement, expression?: Expression): ReturnStatement {
-    return node.expression !== expression ? createReturnStatement(expression) : node;
+    return node.expression !== expression ? update(createReturnStatement(expression), node) : node;
 }
 
 export function updateWithStatement(node: WithStatement, expression: Expression, statement: Statement): WithStatement {
-    return node.expression !== expression || node.statement !== statement ? createWithStatement(expression, statement) : node;
+    return node.expression !== expression || node.statement !== statement ? update(createWithStatement(expression, statement), node) : node;
 }
 
 export function updateSwitchStatement(node: SwitchStatement, expression: Expression, caseBlock: CaseBlock): SwitchStatement {
-    return node.expression !== expression || node.caseBlock !== caseBlock ? createSwitchStatement(expression, caseBlock) : node;
+    return node.expression !== expression || node.caseBlock !== caseBlock ? update(createSwitchStatement(expression, caseBlock), node) : node;
 }
 
 export function updateCaseBlock(node: CaseBlock, clauses: readonly CaseOrDefaultClause[]): CaseBlock {
-    return node.clauses !== clauses ? createCaseBlock(clauses) : node;
+    return node.clauses !== clauses ? update(createCaseBlock(clauses), node) : node;
 }
 
 export function updateCaseClause(node: CaseClause, expression: Expression, statements: readonly Statement[]): CaseClause {
-    return node.expression !== expression || node.statements !== statements ? createCaseClause(expression, statements) : node;
+    return node.expression !== expression || node.statements !== statements ? update(createCaseClause(expression, statements), node) : node;
 }
 
 export function updateDefaultClause(node: DefaultClause, statements: readonly Statement[]): DefaultClause {
-    return node.statements !== statements ? createDefaultClause(statements) : node;
+    return node.statements !== statements ? update(createDefaultClause(statements), node) : node;
 }
 
 export function updateThrowStatement(node: ThrowStatement, expression: Expression): ThrowStatement {
-    return node.expression !== expression ? createThrowStatement(expression) : node;
+    return node.expression !== expression ? update(createThrowStatement(expression), node) : node;
 }
 
 export function updateTryStatement(node: TryStatement, tryBlock: Block, catchClause?: CatchClause, finallyBlock?: Block): TryStatement {
-    return node.tryBlock !== tryBlock || node.catchClause !== catchClause || node.finallyBlock !== finallyBlock ? createTryStatement(tryBlock, catchClause, finallyBlock) : node;
+    return node.tryBlock !== tryBlock || node.catchClause !== catchClause || node.finallyBlock !== finallyBlock ? update(createTryStatement(tryBlock, catchClause, finallyBlock), node) : node;
 }
 
 export function updateCatchClause(node: CatchClause, variableDeclaration: VariableDeclaration | undefined, block: Block): CatchClause {
-    return node.variableDeclaration !== variableDeclaration || node.block !== block ? createCatchClause(variableDeclaration, block) : node;
+    return node.variableDeclaration !== variableDeclaration || node.block !== block ? update(createCatchClause(variableDeclaration, block), node) : node;
 }
 
 export function updateLabeledStatement(node: LabeledStatement, label: Identifier, statement: Statement): LabeledStatement {
-    return node.label !== label || node.statement !== statement ? createLabeledStatement(label, statement) : node;
+    return node.label !== label || node.statement !== statement ? update(createLabeledStatement(label, statement), node) : node;
 }
 
 export function updateExpressionStatement(node: ExpressionStatement, expression: Expression): ExpressionStatement {
-    return node.expression !== expression ? createExpressionStatement(expression) : node;
+    return node.expression !== expression ? update(createExpressionStatement(expression), node) : node;
 }
 
 export function updateBlock(node: Block, statements: readonly Statement[]): Block {
-    return node.statements !== statements ? createBlock(statements, node.multiLine) : node;
+    return node.statements !== statements ? update(createBlock(statements, node.multiLine), node) : node;
 }
 
 export function updateVariableStatement(node: VariableStatement, modifiers: readonly ModifierLike[] | undefined, declarationList: VariableDeclarationList): VariableStatement {
-    return node.modifiers !== modifiers || node.declarationList !== declarationList ? createVariableStatement(modifiers, declarationList) : node;
+    return node.modifiers !== modifiers || node.declarationList !== declarationList ? update(createVariableStatement(modifiers, declarationList), node) : node;
 }
 
 export function updateVariableDeclaration(node: VariableDeclaration, name: BindingName, exclamationToken?: ExclamationToken, type?: TypeNode, initializer?: Expression): VariableDeclaration {
-    return node.name !== name || node.exclamationToken !== exclamationToken || node.type !== type || node.initializer !== initializer ? createVariableDeclaration(name, exclamationToken, type, initializer) : node;
+    return node.name !== name || node.exclamationToken !== exclamationToken || node.type !== type || node.initializer !== initializer ? update(createVariableDeclaration(name, exclamationToken, type, initializer), node) : node;
 }
 
 export function updateVariableDeclarationList(node: VariableDeclarationList, declarations: readonly VariableDeclaration[]): VariableDeclarationList {
-    return node.declarations !== declarations ? createVariableDeclarationList(declarations, node.flags) : node;
+    return node.declarations !== declarations ? update(createVariableDeclarationList(declarations, node.flags), node) : node;
 }
 
 export function updateParameterDeclaration(node: ParameterDeclaration, modifiers: readonly ModifierLike[] | undefined, dotDotDotToken: DotDotDotToken | undefined, name: BindingName, questionToken?: QuestionToken, type?: TypeNode, initializer?: Expression): ParameterDeclaration {
-    return node.modifiers !== modifiers || node.dotDotDotToken !== dotDotDotToken || node.name !== name || node.questionToken !== questionToken || node.type !== type || node.initializer !== initializer ? createParameterDeclaration(modifiers, dotDotDotToken, name, questionToken, type, initializer) : node;
+    return node.modifiers !== modifiers || node.dotDotDotToken !== dotDotDotToken || node.name !== name || node.questionToken !== questionToken || node.type !== type || node.initializer !== initializer ? update(createParameterDeclaration(modifiers, dotDotDotToken, name, questionToken, type, initializer), node) : node;
 }
 
 export function updateBindingElement(node: BindingElement, dotDotDotToken?: DotDotDotToken, propertyName?: PropertyName, name?: BindingName, initializer?: Expression): BindingElement {
-    return node.dotDotDotToken !== dotDotDotToken || node.propertyName !== propertyName || node.name !== name || node.initializer !== initializer ? createBindingElement(dotDotDotToken, propertyName, name, initializer) : node;
+    return node.dotDotDotToken !== dotDotDotToken || node.propertyName !== propertyName || node.name !== name || node.initializer !== initializer ? update(createBindingElement(dotDotDotToken, propertyName, name, initializer), node) : node;
 }
 
 export function updateMissingDeclaration(node: MissingDeclaration, modifiers?: readonly ModifierLike[]): MissingDeclaration {
-    return node.modifiers !== modifiers ? createMissingDeclaration(modifiers) : node;
+    return node.modifiers !== modifiers ? update(createMissingDeclaration(modifiers), node) : node;
 }
 
 export function updateFunctionDeclaration(node: FunctionDeclaration, modifiers: readonly ModifierLike[] | undefined, asteriskToken: AsteriskToken | undefined, name: Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type?: TypeNode, body?: FunctionBody): FunctionDeclaration {
-    return node.modifiers !== modifiers || node.asteriskToken !== asteriskToken || node.name !== name || node.typeParameters !== typeParameters || node.parameters !== parameters || node.type !== type || node.body !== body ? createFunctionDeclaration(modifiers, asteriskToken, name, typeParameters, parameters, type, body) : node;
+    return node.modifiers !== modifiers || node.asteriskToken !== asteriskToken || node.name !== name || node.typeParameters !== typeParameters || node.parameters !== parameters || node.type !== type || node.body !== body ? update(createFunctionDeclaration(modifiers, asteriskToken, name, typeParameters, parameters, type, body), node) : node;
 }
 
 export function updateClassDeclaration(node: ClassDeclaration, modifiers: readonly ModifierLike[] | undefined, name: Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly ClassElement[]): ClassDeclaration {
-    return node.modifiers !== modifiers || node.name !== name || node.typeParameters !== typeParameters || node.heritageClauses !== heritageClauses || node.members !== members ? createClassDeclaration(modifiers, name, typeParameters, heritageClauses, members) : node;
+    return node.modifiers !== modifiers || node.name !== name || node.typeParameters !== typeParameters || node.heritageClauses !== heritageClauses || node.members !== members ? update(createClassDeclaration(modifiers, name, typeParameters, heritageClauses, members), node) : node;
 }
 
 export function updateClassExpression(node: ClassExpression, modifiers: readonly ModifierLike[] | undefined, name: Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly ClassElement[]): ClassExpression {
-    return node.modifiers !== modifiers || node.name !== name || node.typeParameters !== typeParameters || node.heritageClauses !== heritageClauses || node.members !== members ? createClassExpression(modifiers, name, typeParameters, heritageClauses, members) : node;
+    return node.modifiers !== modifiers || node.name !== name || node.typeParameters !== typeParameters || node.heritageClauses !== heritageClauses || node.members !== members ? update(createClassExpression(modifiers, name, typeParameters, heritageClauses, members), node) : node;
 }
 
 export function updateHeritageClause(node: HeritageClause, types: readonly HeritageClauseElement[]): HeritageClause {
-    return node.types !== types ? createHeritageClause(node.token, types) : node;
+    return node.types !== types ? update(createHeritageClause(node.token, types), node) : node;
 }
 
 export function updateInterfaceDeclaration(node: InterfaceDeclaration, modifiers: readonly ModifierLike[] | undefined, name: Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly TypeElement[]): InterfaceDeclaration {
-    return node.modifiers !== modifiers || node.name !== name || node.typeParameters !== typeParameters || node.heritageClauses !== heritageClauses || node.members !== members ? createInterfaceDeclaration(modifiers, name, typeParameters, heritageClauses, members) : node;
+    return node.modifiers !== modifiers || node.name !== name || node.typeParameters !== typeParameters || node.heritageClauses !== heritageClauses || node.members !== members ? update(createInterfaceDeclaration(modifiers, name, typeParameters, heritageClauses, members), node) : node;
 }
 
 export function updateTypeAliasDeclaration(node: TypeAliasDeclaration, modifiers: readonly ModifierLike[] | undefined, name: Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, type: TypeNode): TypeAliasDeclaration {
-    return node.modifiers !== modifiers || node.name !== name || node.typeParameters !== typeParameters || node.type !== type ? createTypeAliasDeclaration(modifiers, name, typeParameters, type) : node;
+    return node.modifiers !== modifiers || node.name !== name || node.typeParameters !== typeParameters || node.type !== type ? update(createTypeAliasDeclaration(modifiers, name, typeParameters, type), node) : node;
 }
 
 export function updateEnumMember(node: EnumMember, name: PropertyName, initializer?: Expression): EnumMember {
-    return node.name !== name || node.initializer !== initializer ? createEnumMember(name, initializer) : node;
+    return node.name !== name || node.initializer !== initializer ? update(createEnumMember(name, initializer), node) : node;
 }
 
 export function updateEnumDeclaration(node: EnumDeclaration, modifiers: readonly ModifierLike[] | undefined, name: Identifier, members: readonly EnumMember[]): EnumDeclaration {
-    return node.modifiers !== modifiers || node.name !== name || node.members !== members ? createEnumDeclaration(modifiers, name, members) : node;
+    return node.modifiers !== modifiers || node.name !== name || node.members !== members ? update(createEnumDeclaration(modifiers, name, members), node) : node;
 }
 
 export function updateModuleBlock(node: ModuleBlock, statements: readonly Statement[]): ModuleBlock {
-    return node.statements !== statements ? createModuleBlock(statements) : node;
+    return node.statements !== statements ? update(createModuleBlock(statements), node) : node;
 }
 
 export function updateImportDeclaration(node: ImportDeclaration, modifiers: readonly ModifierLike[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, attributes?: ImportAttributes): ImportDeclaration {
-    return node.modifiers !== modifiers || node.importClause !== importClause || node.moduleSpecifier !== moduleSpecifier || node.attributes !== attributes ? createImportDeclaration(modifiers, importClause, moduleSpecifier, attributes) : node;
+    return node.modifiers !== modifiers || node.importClause !== importClause || node.moduleSpecifier !== moduleSpecifier || node.attributes !== attributes ? update(createImportDeclaration(modifiers, importClause, moduleSpecifier, attributes), node) : node;
 }
 
 export function updateExternalModuleReference(node: ExternalModuleReference, expression: Expression): ExternalModuleReference {
-    return node.expression !== expression ? createExternalModuleReference(expression) : node;
+    return node.expression !== expression ? update(createExternalModuleReference(expression), node) : node;
 }
 
 export function updateNamespaceImport(node: NamespaceImport, name: Identifier): NamespaceImport {
-    return node.name !== name ? createNamespaceImport(name) : node;
+    return node.name !== name ? update(createNamespaceImport(name), node) : node;
 }
 
 export function updateNamedImports(node: NamedImports, elements: readonly ImportSpecifier[]): NamedImports {
-    return node.elements !== elements ? createNamedImports(elements) : node;
+    return node.elements !== elements ? update(createNamedImports(elements), node) : node;
 }
 
 export function updateExportAssignment(node: ExportAssignment, modifiers: readonly ModifierLike[] | undefined, type: TypeNode | undefined, expression: Expression): ExportAssignment {
-    return node.modifiers !== modifiers || node.type !== type || node.expression !== expression ? createExportAssignment(modifiers, node.isExportEquals, type, expression) : node;
+    return node.modifiers !== modifiers || node.type !== type || node.expression !== expression ? update(createExportAssignment(modifiers, node.isExportEquals, type, expression), node) : node;
 }
 
 export function updateNamespaceExportDeclaration(node: NamespaceExportDeclaration, modifiers: readonly ModifierLike[] | undefined, name: Identifier): NamespaceExportDeclaration {
-    return node.modifiers !== modifiers || node.name !== name ? createNamespaceExportDeclaration(modifiers, name) : node;
+    return node.modifiers !== modifiers || node.name !== name ? update(createNamespaceExportDeclaration(modifiers, name), node) : node;
 }
 
 export function updateNamespaceExport(node: NamespaceExport, name: ModuleExportName): NamespaceExport {
-    return node.name !== name ? createNamespaceExport(name) : node;
+    return node.name !== name ? update(createNamespaceExport(name), node) : node;
 }
 
 export function updateNamedExports(node: NamedExports, elements: readonly ExportSpecifier[]): NamedExports {
-    return node.elements !== elements ? createNamedExports(elements) : node;
+    return node.elements !== elements ? update(createNamedExports(elements), node) : node;
 }
 
 export function updateExportSpecifier(node: ExportSpecifier, propertyName: ModuleExportName | undefined, name: ModuleExportName): ExportSpecifier {
-    return node.propertyName !== propertyName || node.name !== name ? createExportSpecifier(node.isTypeOnly, propertyName, name) : node;
+    return node.propertyName !== propertyName || node.name !== name ? update(createExportSpecifier(node.isTypeOnly, propertyName, name), node) : node;
 }
 
 export function updateCallSignatureDeclaration(node: CallSignatureDeclaration, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type?: TypeNode): CallSignatureDeclaration {
-    return node.typeParameters !== typeParameters || node.parameters !== parameters || node.type !== type ? createCallSignatureDeclaration(typeParameters, parameters, type) : node;
+    return node.typeParameters !== typeParameters || node.parameters !== parameters || node.type !== type ? update(createCallSignatureDeclaration(typeParameters, parameters, type), node) : node;
 }
 
 export function updateConstructSignatureDeclaration(node: ConstructSignatureDeclaration, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type?: TypeNode): ConstructSignatureDeclaration {
-    return node.typeParameters !== typeParameters || node.parameters !== parameters || node.type !== type ? createConstructSignatureDeclaration(typeParameters, parameters, type) : node;
+    return node.typeParameters !== typeParameters || node.parameters !== parameters || node.type !== type ? update(createConstructSignatureDeclaration(typeParameters, parameters, type), node) : node;
 }
 
 export function updateConstructorDeclaration(node: ConstructorDeclaration, modifiers: readonly ModifierLike[] | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type?: TypeNode, body?: FunctionBody): ConstructorDeclaration {
-    return node.modifiers !== modifiers || node.typeParameters !== typeParameters || node.parameters !== parameters || node.type !== type || node.body !== body ? createConstructorDeclaration(modifiers, typeParameters, parameters, type, body) : node;
+    return node.modifiers !== modifiers || node.typeParameters !== typeParameters || node.parameters !== parameters || node.type !== type || node.body !== body ? update(createConstructorDeclaration(modifiers, typeParameters, parameters, type, body), node) : node;
 }
 
 export function updateGetAccessorDeclaration(node: GetAccessorDeclaration, modifiers: readonly ModifierLike[] | undefined, name: PropertyName, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type?: TypeNode, body?: FunctionBody): GetAccessorDeclaration {
-    return node.modifiers !== modifiers || node.name !== name || node.typeParameters !== typeParameters || node.parameters !== parameters || node.type !== type || node.body !== body ? createGetAccessorDeclaration(modifiers, name, typeParameters, parameters, type, body) : node;
+    return node.modifiers !== modifiers || node.name !== name || node.typeParameters !== typeParameters || node.parameters !== parameters || node.type !== type || node.body !== body ? update(createGetAccessorDeclaration(modifiers, name, typeParameters, parameters, type, body), node) : node;
 }
 
 export function updateSetAccessorDeclaration(node: SetAccessorDeclaration, modifiers: readonly ModifierLike[] | undefined, name: PropertyName, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type?: TypeNode, body?: FunctionBody): SetAccessorDeclaration {
-    return node.modifiers !== modifiers || node.name !== name || node.typeParameters !== typeParameters || node.parameters !== parameters || node.type !== type || node.body !== body ? createSetAccessorDeclaration(modifiers, name, typeParameters, parameters, type, body) : node;
+    return node.modifiers !== modifiers || node.name !== name || node.typeParameters !== typeParameters || node.parameters !== parameters || node.type !== type || node.body !== body ? update(createSetAccessorDeclaration(modifiers, name, typeParameters, parameters, type, body), node) : node;
 }
 
 export function updateIndexSignatureDeclaration(node: IndexSignatureDeclaration, modifiers: readonly ModifierLike[] | undefined, parameters: readonly ParameterDeclaration[], type?: TypeNode): IndexSignatureDeclaration {
-    return node.modifiers !== modifiers || node.parameters !== parameters || node.type !== type ? createIndexSignatureDeclaration(modifiers, parameters, type) : node;
+    return node.modifiers !== modifiers || node.parameters !== parameters || node.type !== type ? update(createIndexSignatureDeclaration(modifiers, parameters, type), node) : node;
 }
 
 export function updateMethodSignatureDeclaration(node: MethodSignatureDeclaration, modifiers: readonly ModifierLike[] | undefined, name: PropertyName, postfixToken: QuestionToken | ExclamationToken | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type?: TypeNode): MethodSignatureDeclaration {
-    return node.modifiers !== modifiers || node.name !== name || node.postfixToken !== postfixToken || node.typeParameters !== typeParameters || node.parameters !== parameters || node.type !== type ? createMethodSignatureDeclaration(modifiers, name, postfixToken, typeParameters, parameters, type) : node;
+    return node.modifiers !== modifiers || node.name !== name || node.postfixToken !== postfixToken || node.typeParameters !== typeParameters || node.parameters !== parameters || node.type !== type ? update(createMethodSignatureDeclaration(modifiers, name, postfixToken, typeParameters, parameters, type), node) : node;
 }
 
 export function updateMethodDeclaration(node: MethodDeclaration, modifiers: readonly ModifierLike[] | undefined, asteriskToken: AsteriskToken | undefined, name: PropertyName, postfixToken: QuestionToken | ExclamationToken | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type?: TypeNode, body?: FunctionBody): MethodDeclaration {
-    return node.modifiers !== modifiers || node.asteriskToken !== asteriskToken || node.name !== name || node.postfixToken !== postfixToken || node.typeParameters !== typeParameters || node.parameters !== parameters || node.type !== type || node.body !== body ? createMethodDeclaration(modifiers, asteriskToken, name, postfixToken, typeParameters, parameters, type, body) : node;
+    return node.modifiers !== modifiers || node.asteriskToken !== asteriskToken || node.name !== name || node.postfixToken !== postfixToken || node.typeParameters !== typeParameters || node.parameters !== parameters || node.type !== type || node.body !== body ? update(createMethodDeclaration(modifiers, asteriskToken, name, postfixToken, typeParameters, parameters, type, body), node) : node;
 }
 
 export function updatePropertySignatureDeclaration(node: PropertySignatureDeclaration, modifiers: readonly ModifierLike[] | undefined, name: PropertyName, postfixToken?: QuestionToken | ExclamationToken, type?: TypeNode, initializer?: Expression): PropertySignatureDeclaration {
-    return node.modifiers !== modifiers || node.name !== name || node.postfixToken !== postfixToken || node.type !== type || node.initializer !== initializer ? createPropertySignatureDeclaration(modifiers, name, postfixToken, type, initializer) : node;
+    return node.modifiers !== modifiers || node.name !== name || node.postfixToken !== postfixToken || node.type !== type || node.initializer !== initializer ? update(createPropertySignatureDeclaration(modifiers, name, postfixToken, type, initializer), node) : node;
 }
 
 export function updatePropertyDeclaration(node: PropertyDeclaration, modifiers: readonly ModifierLike[] | undefined, name: PropertyName, postfixToken?: QuestionToken | ExclamationToken, type?: TypeNode, initializer?: Expression): PropertyDeclaration {
-    return node.modifiers !== modifiers || node.name !== name || node.postfixToken !== postfixToken || node.type !== type || node.initializer !== initializer ? createPropertyDeclaration(modifiers, name, postfixToken, type, initializer) : node;
+    return node.modifiers !== modifiers || node.name !== name || node.postfixToken !== postfixToken || node.type !== type || node.initializer !== initializer ? update(createPropertyDeclaration(modifiers, name, postfixToken, type, initializer), node) : node;
 }
 
 export function updateClassStaticBlockDeclaration(node: ClassStaticBlockDeclaration, modifiers: readonly ModifierLike[] | undefined, body: Block): ClassStaticBlockDeclaration {
-    return node.modifiers !== modifiers || node.body !== body ? createClassStaticBlockDeclaration(modifiers, body) : node;
+    return node.modifiers !== modifiers || node.body !== body ? update(createClassStaticBlockDeclaration(modifiers, body), node) : node;
 }
 
 export function updateBinaryExpression(node: BinaryExpression, modifiers: readonly ModifierLike[] | undefined, left: Expression, type: TypeNode | undefined, operatorToken: BinaryOperatorToken, right: Expression): BinaryExpression {
-    return node.modifiers !== modifiers || node.left !== left || node.type !== type || node.operatorToken !== operatorToken || node.right !== right ? createBinaryExpression(modifiers, left, type, operatorToken, right) : node;
+    return node.modifiers !== modifiers || node.left !== left || node.type !== type || node.operatorToken !== operatorToken || node.right !== right ? update(createBinaryExpression(modifiers, left, type, operatorToken, right), node) : node;
 }
 
 export function updatePrefixUnaryExpression(node: PrefixUnaryExpression, operand: Expression): PrefixUnaryExpression {
-    return node.operand !== operand ? createPrefixUnaryExpression(node.operator, operand) : node;
+    return node.operand !== operand ? update(createPrefixUnaryExpression(node.operator, operand), node) : node;
 }
 
 export function updatePostfixUnaryExpression(node: PostfixUnaryExpression, operand: Expression): PostfixUnaryExpression {
-    return node.operand !== operand ? createPostfixUnaryExpression(operand, node.operator) : node;
+    return node.operand !== operand ? update(createPostfixUnaryExpression(operand, node.operator), node) : node;
 }
 
 export function updateYieldExpression(node: YieldExpression, asteriskToken?: AsteriskToken, expression?: Expression): YieldExpression {
-    return node.asteriskToken !== asteriskToken || node.expression !== expression ? createYieldExpression(asteriskToken, expression) : node;
+    return node.asteriskToken !== asteriskToken || node.expression !== expression ? update(createYieldExpression(asteriskToken, expression), node) : node;
 }
 
 export function updateArrowFunction(node: ArrowFunction, modifiers: readonly ModifierLike[] | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, equalsGreaterThanToken: EqualsGreaterThanToken, body: ConciseBody): ArrowFunction {
-    return node.modifiers !== modifiers || node.typeParameters !== typeParameters || node.parameters !== parameters || node.type !== type || node.equalsGreaterThanToken !== equalsGreaterThanToken || node.body !== body ? createArrowFunction(modifiers, typeParameters, parameters, type, equalsGreaterThanToken, body) : node;
+    return node.modifiers !== modifiers || node.typeParameters !== typeParameters || node.parameters !== parameters || node.type !== type || node.equalsGreaterThanToken !== equalsGreaterThanToken || node.body !== body ? update(createArrowFunction(modifiers, typeParameters, parameters, type, equalsGreaterThanToken, body), node) : node;
 }
 
 export function updateFunctionExpression(node: FunctionExpression, modifiers: readonly ModifierLike[] | undefined, asteriskToken: AsteriskToken | undefined, name: Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: FunctionBody): FunctionExpression {
-    return node.modifiers !== modifiers || node.asteriskToken !== asteriskToken || node.name !== name || node.typeParameters !== typeParameters || node.parameters !== parameters || node.type !== type || node.body !== body ? createFunctionExpression(modifiers, asteriskToken, name, typeParameters, parameters, type, body) : node;
+    return node.modifiers !== modifiers || node.asteriskToken !== asteriskToken || node.name !== name || node.typeParameters !== typeParameters || node.parameters !== parameters || node.type !== type || node.body !== body ? update(createFunctionExpression(modifiers, asteriskToken, name, typeParameters, parameters, type, body), node) : node;
 }
 
 export function updateAsExpression(node: AsExpression, expression: Expression, type: TypeNode): AsExpression {
-    return node.expression !== expression || node.type !== type ? createAsExpression(expression, type) : node;
+    return node.expression !== expression || node.type !== type ? update(createAsExpression(expression, type), node) : node;
 }
 
 export function updateSatisfiesExpression(node: SatisfiesExpression, expression: Expression, type: TypeNode): SatisfiesExpression {
-    return node.expression !== expression || node.type !== type ? createSatisfiesExpression(expression, type) : node;
+    return node.expression !== expression || node.type !== type ? update(createSatisfiesExpression(expression, type), node) : node;
 }
 
 export function updateConditionalExpression(node: ConditionalExpression, condition: Expression, questionToken: QuestionToken, whenTrue: Expression, colonToken: ColonToken, whenFalse: Expression): ConditionalExpression {
-    return node.condition !== condition || node.questionToken !== questionToken || node.whenTrue !== whenTrue || node.colonToken !== colonToken || node.whenFalse !== whenFalse ? createConditionalExpression(condition, questionToken, whenTrue, colonToken, whenFalse) : node;
+    return node.condition !== condition || node.questionToken !== questionToken || node.whenTrue !== whenTrue || node.colonToken !== colonToken || node.whenFalse !== whenFalse ? update(createConditionalExpression(condition, questionToken, whenTrue, colonToken, whenFalse), node) : node;
 }
 
 export function updatePropertyAccessExpression(node: PropertyAccessExpression, expression: Expression, questionDotToken: QuestionDotToken | undefined, name: MemberName): PropertyAccessExpression {
-    return node.expression !== expression || node.questionDotToken !== questionDotToken || node.name !== name ? createPropertyAccessExpression(expression, questionDotToken, name, node.flags) : node;
+    return node.expression !== expression || node.questionDotToken !== questionDotToken || node.name !== name ? update(createPropertyAccessExpression(expression, questionDotToken, name, node.flags), node) : node;
 }
 
 export function updateElementAccessExpression(node: ElementAccessExpression, expression: Expression, questionDotToken: QuestionDotToken | undefined, argumentExpression: Expression): ElementAccessExpression {
-    return node.expression !== expression || node.questionDotToken !== questionDotToken || node.argumentExpression !== argumentExpression ? createElementAccessExpression(expression, questionDotToken, argumentExpression, node.flags) : node;
+    return node.expression !== expression || node.questionDotToken !== questionDotToken || node.argumentExpression !== argumentExpression ? update(createElementAccessExpression(expression, questionDotToken, argumentExpression, node.flags), node) : node;
 }
 
 export function updateCallExpression(node: CallExpression, expression: Expression, questionDotToken: QuestionDotToken | undefined, typeArguments: readonly TypeNode[] | undefined, arguments_: readonly Expression[]): CallExpression {
-    return node.expression !== expression || node.questionDotToken !== questionDotToken || node.typeArguments !== typeArguments || node.arguments !== arguments_ ? createCallExpression(expression, questionDotToken, typeArguments, arguments_, node.flags) : node;
+    return node.expression !== expression || node.questionDotToken !== questionDotToken || node.typeArguments !== typeArguments || node.arguments !== arguments_ ? update(createCallExpression(expression, questionDotToken, typeArguments, arguments_, node.flags), node) : node;
 }
 
 export function updateNewExpression(node: NewExpression, expression: Expression, typeArguments?: readonly TypeNode[], arguments_?: readonly Expression[]): NewExpression {
-    return node.expression !== expression || node.typeArguments !== typeArguments || node.arguments !== arguments_ ? createNewExpression(expression, typeArguments, arguments_) : node;
+    return node.expression !== expression || node.typeArguments !== typeArguments || node.arguments !== arguments_ ? update(createNewExpression(expression, typeArguments, arguments_), node) : node;
 }
 
 export function updateMetaProperty(node: MetaProperty, name: Identifier): MetaProperty {
-    return node.name !== name ? createMetaProperty(node.keywordToken, name) : node;
+    return node.name !== name ? update(createMetaProperty(node.keywordToken, name), node) : node;
 }
 
 export function updateNonNullExpression(node: NonNullExpression, expression: Expression): NonNullExpression {
-    return node.expression !== expression ? createNonNullExpression(expression, node.flags) : node;
+    return node.expression !== expression ? update(createNonNullExpression(expression, node.flags), node) : node;
 }
 
 export function updateSpreadElement(node: SpreadElement, expression: Expression): SpreadElement {
-    return node.expression !== expression ? createSpreadElement(expression) : node;
+    return node.expression !== expression ? update(createSpreadElement(expression), node) : node;
 }
 
 export function updateTemplateExpression(node: TemplateExpression, head: TemplateHead, templateSpans: readonly TemplateSpan[]): TemplateExpression {
-    return node.head !== head || node.templateSpans !== templateSpans ? createTemplateExpression(head, templateSpans) : node;
+    return node.head !== head || node.templateSpans !== templateSpans ? update(createTemplateExpression(head, templateSpans), node) : node;
 }
 
 export function updateTemplateSpan(node: TemplateSpan, expression: Expression, literal: TemplateMiddleOrTail): TemplateSpan {
-    return node.expression !== expression || node.literal !== literal ? createTemplateSpan(expression, literal) : node;
+    return node.expression !== expression || node.literal !== literal ? update(createTemplateSpan(expression, literal), node) : node;
 }
 
 export function updateTaggedTemplateExpression(node: TaggedTemplateExpression, tag: Expression, questionDotToken: QuestionDotToken | undefined, typeArguments: readonly TypeNode[] | undefined, template: TemplateLiteral): TaggedTemplateExpression {
-    return node.tag !== tag || node.questionDotToken !== questionDotToken || node.typeArguments !== typeArguments || node.template !== template ? createTaggedTemplateExpression(tag, questionDotToken, typeArguments, template, node.flags) : node;
+    return node.tag !== tag || node.questionDotToken !== questionDotToken || node.typeArguments !== typeArguments || node.template !== template ? update(createTaggedTemplateExpression(tag, questionDotToken, typeArguments, template, node.flags), node) : node;
 }
 
 export function updateParenthesizedExpression(node: ParenthesizedExpression, expression: Expression): ParenthesizedExpression {
-    return node.expression !== expression ? createParenthesizedExpression(expression) : node;
+    return node.expression !== expression ? update(createParenthesizedExpression(expression), node) : node;
 }
 
 export function updateArrayLiteralExpression(node: ArrayLiteralExpression, elements: readonly Expression[]): ArrayLiteralExpression {
-    return node.elements !== elements ? createArrayLiteralExpression(elements, node.multiLine) : node;
+    return node.elements !== elements ? update(createArrayLiteralExpression(elements, node.multiLine), node) : node;
 }
 
 export function updateObjectLiteralExpression(node: ObjectLiteralExpression, properties: readonly ObjectLiteralElementLike[]): ObjectLiteralExpression {
-    return node.properties !== properties ? createObjectLiteralExpression(properties, node.multiLine) : node;
+    return node.properties !== properties ? update(createObjectLiteralExpression(properties, node.multiLine), node) : node;
 }
 
 export function updateSpreadAssignment(node: SpreadAssignment, expression: Expression): SpreadAssignment {
-    return node.expression !== expression ? createSpreadAssignment(expression) : node;
+    return node.expression !== expression ? update(createSpreadAssignment(expression), node) : node;
 }
 
 export function updatePropertyAssignment(node: PropertyAssignment, modifiers: readonly ModifierLike[] | undefined, name: PropertyName, postfixToken: QuestionToken | ExclamationToken | undefined, type: TypeNode | undefined, initializer: Expression): PropertyAssignment {
-    return node.modifiers !== modifiers || node.name !== name || node.postfixToken !== postfixToken || node.type !== type || node.initializer !== initializer ? createPropertyAssignment(modifiers, name, postfixToken, type, initializer) : node;
+    return node.modifiers !== modifiers || node.name !== name || node.postfixToken !== postfixToken || node.type !== type || node.initializer !== initializer ? update(createPropertyAssignment(modifiers, name, postfixToken, type, initializer), node) : node;
 }
 
 export function updateShorthandPropertyAssignment(node: ShorthandPropertyAssignment, modifiers: readonly ModifierLike[] | undefined, name: PropertyName, postfixToken?: QuestionToken | ExclamationToken, type?: TypeNode, equalsToken?: EqualsToken, objectAssignmentInitializer?: Expression): ShorthandPropertyAssignment {
-    return node.modifiers !== modifiers || node.name !== name || node.postfixToken !== postfixToken || node.type !== type || node.equalsToken !== equalsToken || node.objectAssignmentInitializer !== objectAssignmentInitializer ? createShorthandPropertyAssignment(modifiers, name, postfixToken, type, equalsToken, objectAssignmentInitializer) : node;
+    return node.modifiers !== modifiers || node.name !== name || node.postfixToken !== postfixToken || node.type !== type || node.equalsToken !== equalsToken || node.objectAssignmentInitializer !== objectAssignmentInitializer ? update(createShorthandPropertyAssignment(modifiers, name, postfixToken, type, equalsToken, objectAssignmentInitializer), node) : node;
 }
 
 export function updateDeleteExpression(node: DeleteExpression, expression: Expression): DeleteExpression {
-    return node.expression !== expression ? createDeleteExpression(expression) : node;
+    return node.expression !== expression ? update(createDeleteExpression(expression), node) : node;
 }
 
 export function updateTypeOfExpression(node: TypeOfExpression, expression: Expression): TypeOfExpression {
-    return node.expression !== expression ? createTypeOfExpression(expression) : node;
+    return node.expression !== expression ? update(createTypeOfExpression(expression), node) : node;
 }
 
 export function updateVoidExpression(node: VoidExpression, expression: Expression): VoidExpression {
-    return node.expression !== expression ? createVoidExpression(expression) : node;
+    return node.expression !== expression ? update(createVoidExpression(expression), node) : node;
 }
 
 export function updateAwaitExpression(node: AwaitExpression, expression: Expression): AwaitExpression {
-    return node.expression !== expression ? createAwaitExpression(expression) : node;
+    return node.expression !== expression ? update(createAwaitExpression(expression), node) : node;
 }
 
 export function updateTypeAssertion(node: TypeAssertion, type: TypeNode, expression: Expression): TypeAssertion {
-    return node.type !== type || node.expression !== expression ? createTypeAssertion(type, expression) : node;
+    return node.type !== type || node.expression !== expression ? update(createTypeAssertion(type, expression), node) : node;
 }
 
 export function updateUnionTypeNode(node: UnionTypeNode, types: readonly TypeNode[]): UnionTypeNode {
-    return node.types !== types ? createUnionTypeNode(types) : node;
+    return node.types !== types ? update(createUnionTypeNode(types), node) : node;
 }
 
 export function updateIntersectionTypeNode(node: IntersectionTypeNode, types: readonly TypeNode[]): IntersectionTypeNode {
-    return node.types !== types ? createIntersectionTypeNode(types) : node;
+    return node.types !== types ? update(createIntersectionTypeNode(types), node) : node;
 }
 
 export function updateConditionalTypeNode(node: ConditionalTypeNode, checkType: TypeNode, extendsType: TypeNode, trueType: TypeNode, falseType: TypeNode): ConditionalTypeNode {
-    return node.checkType !== checkType || node.extendsType !== extendsType || node.trueType !== trueType || node.falseType !== falseType ? createConditionalTypeNode(checkType, extendsType, trueType, falseType) : node;
+    return node.checkType !== checkType || node.extendsType !== extendsType || node.trueType !== trueType || node.falseType !== falseType ? update(createConditionalTypeNode(checkType, extendsType, trueType, falseType), node) : node;
 }
 
 export function updateTypeOperatorNode(node: TypeOperatorNode, type: TypeNode): TypeOperatorNode {
-    return node.type !== type ? createTypeOperatorNode(node.operator, type) : node;
+    return node.type !== type ? update(createTypeOperatorNode(node.operator, type), node) : node;
 }
 
 export function updateInferTypeNode(node: InferTypeNode, typeParameter: TypeParameterDeclaration): InferTypeNode {
-    return node.typeParameter !== typeParameter ? createInferTypeNode(typeParameter) : node;
+    return node.typeParameter !== typeParameter ? update(createInferTypeNode(typeParameter), node) : node;
 }
 
 export function updateArrayTypeNode(node: ArrayTypeNode, elementType: TypeNode): ArrayTypeNode {
-    return node.elementType !== elementType ? createArrayTypeNode(elementType) : node;
+    return node.elementType !== elementType ? update(createArrayTypeNode(elementType), node) : node;
 }
 
 export function updateIndexedAccessTypeNode(node: IndexedAccessTypeNode, objectType: TypeNode, indexType: TypeNode): IndexedAccessTypeNode {
-    return node.objectType !== objectType || node.indexType !== indexType ? createIndexedAccessTypeNode(objectType, indexType) : node;
+    return node.objectType !== objectType || node.indexType !== indexType ? update(createIndexedAccessTypeNode(objectType, indexType), node) : node;
 }
 
 export function updateTypeReferenceNode(node: TypeReferenceNode, typeName: EntityName, typeArguments?: readonly TypeNode[]): TypeReferenceNode {
-    return node.typeName !== typeName || node.typeArguments !== typeArguments ? createTypeReferenceNode(typeName, typeArguments) : node;
+    return node.typeName !== typeName || node.typeArguments !== typeArguments ? update(createTypeReferenceNode(typeName, typeArguments), node) : node;
 }
 
 export function updateExpressionWithTypeArguments(node: ExpressionWithTypeArguments, expression: Expression, typeArguments?: readonly TypeNode[]): ExpressionWithTypeArguments {
-    return node.expression !== expression || node.typeArguments !== typeArguments ? createExpressionWithTypeArguments(expression, typeArguments) : node;
+    return node.expression !== expression || node.typeArguments !== typeArguments ? update(createExpressionWithTypeArguments(expression, typeArguments), node) : node;
 }
 
 export function updateLiteralTypeNode(node: LiteralTypeNode, literal: Node): LiteralTypeNode {
-    return node.literal !== literal ? createLiteralTypeNode(literal) : node;
+    return node.literal !== literal ? update(createLiteralTypeNode(literal), node) : node;
 }
 
 export function updateTypePredicateNode(node: TypePredicateNode, assertsModifier: AssertsKeyword | undefined, parameterName: TypePredicateParameterName, type?: TypeNode): TypePredicateNode {
-    return node.assertsModifier !== assertsModifier || node.parameterName !== parameterName || node.type !== type ? createTypePredicateNode(assertsModifier, parameterName, type) : node;
+    return node.assertsModifier !== assertsModifier || node.parameterName !== parameterName || node.type !== type ? update(createTypePredicateNode(assertsModifier, parameterName, type), node) : node;
 }
 
 export function updateImportAttribute(node: ImportAttribute, name: ImportAttributeName, value: Expression): ImportAttribute {
-    return node.name !== name || node.value !== value ? createImportAttribute(name, value) : node;
+    return node.name !== name || node.value !== value ? update(createImportAttribute(name, value), node) : node;
 }
 
 export function updateImportAttributes(node: ImportAttributes, attributes: readonly ImportAttribute[]): ImportAttributes {
-    return node.attributes !== attributes ? createImportAttributes(node.token, attributes, node.multiLine) : node;
+    return node.attributes !== attributes ? update(createImportAttributes(node.token, attributes, node.multiLine), node) : node;
 }
 
 export function updateTypeQueryNode(node: TypeQueryNode, exprName: EntityName, typeArguments?: readonly TypeNode[]): TypeQueryNode {
-    return node.exprName !== exprName || node.typeArguments !== typeArguments ? createTypeQueryNode(exprName, typeArguments) : node;
+    return node.exprName !== exprName || node.typeArguments !== typeArguments ? update(createTypeQueryNode(exprName, typeArguments), node) : node;
 }
 
 export function updateMappedTypeNode(node: MappedTypeNode, readonlyToken: ReadonlyKeyword | PlusToken | MinusToken | undefined, typeParameter: TypeParameterDeclaration, nameType?: TypeNode, questionToken?: QuestionToken | PlusToken | MinusToken, type?: TypeNode, members?: readonly TypeElement[]): MappedTypeNode {
-    return node.readonlyToken !== readonlyToken || node.typeParameter !== typeParameter || node.nameType !== nameType || node.questionToken !== questionToken || node.type !== type || node.members !== members ? createMappedTypeNode(readonlyToken, typeParameter, nameType, questionToken, type, members) : node;
+    return node.readonlyToken !== readonlyToken || node.typeParameter !== typeParameter || node.nameType !== nameType || node.questionToken !== questionToken || node.type !== type || node.members !== members ? update(createMappedTypeNode(readonlyToken, typeParameter, nameType, questionToken, type, members), node) : node;
 }
 
 export function updateTypeLiteralNode(node: TypeLiteralNode, members: readonly TypeElement[]): TypeLiteralNode {
-    return node.members !== members ? createTypeLiteralNode(members) : node;
+    return node.members !== members ? update(createTypeLiteralNode(members), node) : node;
 }
 
 export function updateTupleTypeNode(node: TupleTypeNode, elements: readonly TypeNode[]): TupleTypeNode {
-    return node.elements !== elements ? createTupleTypeNode(elements) : node;
+    return node.elements !== elements ? update(createTupleTypeNode(elements), node) : node;
 }
 
 export function updateNamedTupleMember(node: NamedTupleMember, dotDotDotToken: DotDotDotToken | undefined, name: Identifier, questionToken: QuestionToken | undefined, type: TypeNode): NamedTupleMember {
-    return node.dotDotDotToken !== dotDotDotToken || node.name !== name || node.questionToken !== questionToken || node.type !== type ? createNamedTupleMember(dotDotDotToken, name, questionToken, type) : node;
+    return node.dotDotDotToken !== dotDotDotToken || node.name !== name || node.questionToken !== questionToken || node.type !== type ? update(createNamedTupleMember(dotDotDotToken, name, questionToken, type), node) : node;
 }
 
 export function updateOptionalTypeNode(node: OptionalTypeNode, type: TypeNode): OptionalTypeNode {
-    return node.type !== type ? createOptionalTypeNode(type) : node;
+    return node.type !== type ? update(createOptionalTypeNode(type), node) : node;
 }
 
 export function updateRestTypeNode(node: RestTypeNode, type: TypeNode): RestTypeNode {
-    return node.type !== type ? createRestTypeNode(type) : node;
+    return node.type !== type ? update(createRestTypeNode(type), node) : node;
 }
 
 export function updateParenthesizedTypeNode(node: ParenthesizedTypeNode, type: TypeNode): ParenthesizedTypeNode {
-    return node.type !== type ? createParenthesizedTypeNode(type) : node;
+    return node.type !== type ? update(createParenthesizedTypeNode(type), node) : node;
 }
 
 export function updateFunctionTypeNode(node: FunctionTypeNode, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): FunctionTypeNode {
-    return node.typeParameters !== typeParameters || node.parameters !== parameters || node.type !== type ? createFunctionTypeNode(typeParameters, parameters, type) : node;
+    return node.typeParameters !== typeParameters || node.parameters !== parameters || node.type !== type ? update(createFunctionTypeNode(typeParameters, parameters, type), node) : node;
 }
 
 export function updateConstructorTypeNode(node: ConstructorTypeNode, modifiers: readonly ModifierLike[] | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): ConstructorTypeNode {
-    return node.modifiers !== modifiers || node.typeParameters !== typeParameters || node.parameters !== parameters || node.type !== type ? createConstructorTypeNode(modifiers, typeParameters, parameters, type) : node;
+    return node.modifiers !== modifiers || node.typeParameters !== typeParameters || node.parameters !== parameters || node.type !== type ? update(createConstructorTypeNode(modifiers, typeParameters, parameters, type), node) : node;
 }
 
 export function updateTemplateLiteralTypeNode(node: TemplateLiteralTypeNode, head: TemplateHead, templateSpans: readonly TemplateLiteralTypeSpan[]): TemplateLiteralTypeNode {
-    return node.head !== head || node.templateSpans !== templateSpans ? createTemplateLiteralTypeNode(head, templateSpans) : node;
+    return node.head !== head || node.templateSpans !== templateSpans ? update(createTemplateLiteralTypeNode(head, templateSpans), node) : node;
 }
 
 export function updateTemplateLiteralTypeSpan(node: TemplateLiteralTypeSpan, type: TypeNode, literal: TemplateMiddleOrTail): TemplateLiteralTypeSpan {
-    return node.type !== type || node.literal !== literal ? createTemplateLiteralTypeSpan(type, literal) : node;
+    return node.type !== type || node.literal !== literal ? update(createTemplateLiteralTypeSpan(type, literal), node) : node;
 }
 
 export function updateSyntheticExpression(node: SyntheticExpression, tupleNameSource?: Node): SyntheticExpression {
-    return node.tupleNameSource !== tupleNameSource ? createSyntheticExpression(node.type, node.isSpread, tupleNameSource) : node;
+    return node.tupleNameSource !== tupleNameSource ? update(createSyntheticExpression(node.type, node.isSpread, tupleNameSource), node) : node;
 }
 
 export function updatePartiallyEmittedExpression(node: PartiallyEmittedExpression, expression: Expression): PartiallyEmittedExpression {
-    return node.expression !== expression ? createPartiallyEmittedExpression(expression) : node;
+    return node.expression !== expression ? update(createPartiallyEmittedExpression(expression), node) : node;
 }
 
 export function updateJsxElement(node: JsxElement, openingElement: JsxOpeningElement, children: readonly JsxChild[], closingElement: JsxClosingElement): JsxElement {
-    return node.openingElement !== openingElement || node.children !== children || node.closingElement !== closingElement ? createJsxElement(openingElement, children, closingElement) : node;
+    return node.openingElement !== openingElement || node.children !== children || node.closingElement !== closingElement ? update(createJsxElement(openingElement, children, closingElement), node) : node;
 }
 
 export function updateJsxAttributes(node: JsxAttributes, properties: readonly JsxAttributeLike[]): JsxAttributes {
-    return node.properties !== properties ? createJsxAttributes(properties) : node;
+    return node.properties !== properties ? update(createJsxAttributes(properties), node) : node;
 }
 
 export function updateJsxNamespacedName(node: JsxNamespacedName, namespace: Identifier, name: Identifier): JsxNamespacedName {
-    return node.namespace !== namespace || node.name !== name ? createJsxNamespacedName(namespace, name) : node;
+    return node.namespace !== namespace || node.name !== name ? update(createJsxNamespacedName(namespace, name), node) : node;
 }
 
 export function updateJsxOpeningElement(node: JsxOpeningElement, tagName: JsxTagNameExpression, typeArguments: readonly TypeNode[] | undefined, attributes: JsxAttributes): JsxOpeningElement {
-    return node.tagName !== tagName || node.typeArguments !== typeArguments || node.attributes !== attributes ? createJsxOpeningElement(tagName, typeArguments, attributes) : node;
+    return node.tagName !== tagName || node.typeArguments !== typeArguments || node.attributes !== attributes ? update(createJsxOpeningElement(tagName, typeArguments, attributes), node) : node;
 }
 
 export function updateJsxSelfClosingElement(node: JsxSelfClosingElement, tagName: JsxTagNameExpression, typeArguments: readonly TypeNode[] | undefined, attributes: JsxAttributes): JsxSelfClosingElement {
-    return node.tagName !== tagName || node.typeArguments !== typeArguments || node.attributes !== attributes ? createJsxSelfClosingElement(tagName, typeArguments, attributes) : node;
+    return node.tagName !== tagName || node.typeArguments !== typeArguments || node.attributes !== attributes ? update(createJsxSelfClosingElement(tagName, typeArguments, attributes), node) : node;
 }
 
 export function updateJsxFragment(node: JsxFragment, openingFragment: JsxOpeningFragment, children: readonly JsxChild[], closingFragment: JsxClosingFragment): JsxFragment {
-    return node.openingFragment !== openingFragment || node.children !== children || node.closingFragment !== closingFragment ? createJsxFragment(openingFragment, children, closingFragment) : node;
+    return node.openingFragment !== openingFragment || node.children !== children || node.closingFragment !== closingFragment ? update(createJsxFragment(openingFragment, children, closingFragment), node) : node;
 }
 
 export function updateJsxAttribute(node: JsxAttribute, name: JsxAttributeName, initializer?: JsxAttributeValue): JsxAttribute {
-    return node.name !== name || node.initializer !== initializer ? createJsxAttribute(name, initializer) : node;
+    return node.name !== name || node.initializer !== initializer ? update(createJsxAttribute(name, initializer), node) : node;
 }
 
 export function updateJsxSpreadAttribute(node: JsxSpreadAttribute, expression: Expression): JsxSpreadAttribute {
-    return node.expression !== expression ? createJsxSpreadAttribute(expression) : node;
+    return node.expression !== expression ? update(createJsxSpreadAttribute(expression), node) : node;
 }
 
 export function updateJsxClosingElement(node: JsxClosingElement, tagName: JsxTagNameExpression): JsxClosingElement {
-    return node.tagName !== tagName ? createJsxClosingElement(tagName) : node;
+    return node.tagName !== tagName ? update(createJsxClosingElement(tagName), node) : node;
 }
 
 export function updateJsxExpression(node: JsxExpression, dotDotDotToken?: DotDotDotToken, expression?: Expression): JsxExpression {
-    return node.dotDotDotToken !== dotDotDotToken || node.expression !== expression ? createJsxExpression(dotDotDotToken, expression) : node;
+    return node.dotDotDotToken !== dotDotDotToken || node.expression !== expression ? update(createJsxExpression(dotDotDotToken, expression), node) : node;
 }
 
 export function updateSyntaxList(node: SyntaxList, children: readonly Node[]): SyntaxList {
-    return node.children !== children ? createSyntaxList(children) : node;
+    return node.children !== children ? update(createSyntaxList(children), node) : node;
 }
 
 export function updateJSDoc(node: JSDoc, comment: readonly JSDocComment[], tags?: readonly JSDocTag[]): JSDoc {
-    return node.comment !== comment || node.tags !== tags ? createJSDoc(comment, tags) : node;
+    return node.comment !== comment || node.tags !== tags ? update(createJSDoc(comment, tags), node) : node;
 }
 
 export function updateJSDocTypeExpression(node: JSDocTypeExpression, type: TypeNode): JSDocTypeExpression {
-    return node.type !== type ? createJSDocTypeExpression(type) : node;
+    return node.type !== type ? update(createJSDocTypeExpression(type), node) : node;
 }
 
 export function updateJSDocNonNullableType(node: JSDocNonNullableType, type: TypeNode): JSDocNonNullableType {
-    return node.type !== type ? createJSDocNonNullableType(type) : node;
+    return node.type !== type ? update(createJSDocNonNullableType(type), node) : node;
 }
 
 export function updateJSDocNullableType(node: JSDocNullableType, type: TypeNode): JSDocNullableType {
-    return node.type !== type ? createJSDocNullableType(type) : node;
+    return node.type !== type ? update(createJSDocNullableType(type), node) : node;
 }
 
 export function updateJSDocVariadicType(node: JSDocVariadicType, type: TypeNode): JSDocVariadicType {
-    return node.type !== type ? createJSDocVariadicType(type) : node;
+    return node.type !== type ? update(createJSDocVariadicType(type), node) : node;
 }
 
 export function updateJSDocOptionalType(node: JSDocOptionalType, type: TypeNode): JSDocOptionalType {
-    return node.type !== type ? createJSDocOptionalType(type) : node;
+    return node.type !== type ? update(createJSDocOptionalType(type), node) : node;
 }
 
 export function updateJSDocTypeTag(node: JSDocTypeTag, tagName: Identifier, typeExpression: Node, comment?: readonly JSDocComment[]): JSDocTypeTag {
-    return node.tagName !== tagName || node.typeExpression !== typeExpression || node.comment !== comment ? createJSDocTypeTag(tagName, typeExpression, comment) : node;
+    return node.tagName !== tagName || node.typeExpression !== typeExpression || node.comment !== comment ? update(createJSDocTypeTag(tagName, typeExpression, comment), node) : node;
 }
 
 export function updateJSDocUnknownTag(node: JSDocUnknownTag, tagName: Identifier, comment?: readonly JSDocComment[]): JSDocUnknownTag {
-    return node.tagName !== tagName || node.comment !== comment ? createJSDocUnknownTag(tagName, comment) : node;
+    return node.tagName !== tagName || node.comment !== comment ? update(createJSDocUnknownTag(tagName, comment), node) : node;
 }
 
 export function updateJSDocTemplateTag(node: JSDocTemplateTag, tagName: Identifier, constraint: Node | undefined, typeParameters: readonly TypeParameterDeclaration[], comment?: readonly JSDocComment[]): JSDocTemplateTag {
-    return node.tagName !== tagName || node.constraint !== constraint || node.typeParameters !== typeParameters || node.comment !== comment ? createJSDocTemplateTag(tagName, constraint, typeParameters, comment) : node;
+    return node.tagName !== tagName || node.constraint !== constraint || node.typeParameters !== typeParameters || node.comment !== comment ? update(createJSDocTemplateTag(tagName, constraint, typeParameters, comment), node) : node;
 }
 
 export function updateJSDocReturnTag(node: JSDocReturnTag, tagName: Identifier, typeExpression?: TypeNode, comment?: readonly JSDocComment[]): JSDocReturnTag {
-    return node.tagName !== tagName || node.typeExpression !== typeExpression || node.comment !== comment ? createJSDocReturnTag(tagName, typeExpression, comment) : node;
+    return node.tagName !== tagName || node.typeExpression !== typeExpression || node.comment !== comment ? update(createJSDocReturnTag(tagName, typeExpression, comment), node) : node;
 }
 
 export function updateJSDocPublicTag(node: JSDocPublicTag, tagName: Identifier, comment?: readonly JSDocComment[]): JSDocPublicTag {
-    return node.tagName !== tagName || node.comment !== comment ? createJSDocPublicTag(tagName, comment) : node;
+    return node.tagName !== tagName || node.comment !== comment ? update(createJSDocPublicTag(tagName, comment), node) : node;
 }
 
 export function updateJSDocPrivateTag(node: JSDocPrivateTag, tagName: Identifier, comment?: readonly JSDocComment[]): JSDocPrivateTag {
-    return node.tagName !== tagName || node.comment !== comment ? createJSDocPrivateTag(tagName, comment) : node;
+    return node.tagName !== tagName || node.comment !== comment ? update(createJSDocPrivateTag(tagName, comment), node) : node;
 }
 
 export function updateJSDocProtectedTag(node: JSDocProtectedTag, tagName: Identifier, comment?: readonly JSDocComment[]): JSDocProtectedTag {
-    return node.tagName !== tagName || node.comment !== comment ? createJSDocProtectedTag(tagName, comment) : node;
+    return node.tagName !== tagName || node.comment !== comment ? update(createJSDocProtectedTag(tagName, comment), node) : node;
 }
 
 export function updateJSDocReadonlyTag(node: JSDocReadonlyTag, tagName: Identifier, comment?: readonly JSDocComment[]): JSDocReadonlyTag {
-    return node.tagName !== tagName || node.comment !== comment ? createJSDocReadonlyTag(tagName, comment) : node;
+    return node.tagName !== tagName || node.comment !== comment ? update(createJSDocReadonlyTag(tagName, comment), node) : node;
 }
 
 export function updateJSDocOverrideTag(node: JSDocOverrideTag, tagName: Identifier, comment?: readonly JSDocComment[]): JSDocOverrideTag {
-    return node.tagName !== tagName || node.comment !== comment ? createJSDocOverrideTag(tagName, comment) : node;
+    return node.tagName !== tagName || node.comment !== comment ? update(createJSDocOverrideTag(tagName, comment), node) : node;
 }
 
 export function updateJSDocDeprecatedTag(node: JSDocDeprecatedTag, tagName: Identifier, comment?: readonly JSDocComment[]): JSDocDeprecatedTag {
-    return node.tagName !== tagName || node.comment !== comment ? createJSDocDeprecatedTag(tagName, comment) : node;
+    return node.tagName !== tagName || node.comment !== comment ? update(createJSDocDeprecatedTag(tagName, comment), node) : node;
 }
 
 export function updateJSDocSeeTag(node: JSDocSeeTag, tagName: Identifier, nameExpression?: TypeNode, comment?: readonly JSDocComment[]): JSDocSeeTag {
-    return node.tagName !== tagName || node.nameExpression !== nameExpression || node.comment !== comment ? createJSDocSeeTag(tagName, nameExpression, comment) : node;
+    return node.tagName !== tagName || node.nameExpression !== nameExpression || node.comment !== comment ? update(createJSDocSeeTag(tagName, nameExpression, comment), node) : node;
 }
 
 export function updateJSDocImplementsTag(node: JSDocImplementsTag, tagName: Identifier, className: TypeReferenceNode, comment?: readonly JSDocComment[]): JSDocImplementsTag {
-    return node.tagName !== tagName || node.className !== className || node.comment !== comment ? createJSDocImplementsTag(tagName, className, comment) : node;
+    return node.tagName !== tagName || node.className !== className || node.comment !== comment ? update(createJSDocImplementsTag(tagName, className, comment), node) : node;
 }
 
 export function updateJSDocAugmentsTag(node: JSDocAugmentsTag, tagName: Identifier, className: TypeReferenceNode, comment?: readonly JSDocComment[]): JSDocAugmentsTag {
-    return node.tagName !== tagName || node.className !== className || node.comment !== comment ? createJSDocAugmentsTag(tagName, className, comment) : node;
+    return node.tagName !== tagName || node.className !== className || node.comment !== comment ? update(createJSDocAugmentsTag(tagName, className, comment), node) : node;
 }
 
 export function updateJSDocSatisfiesTag(node: JSDocSatisfiesTag, tagName: Identifier, typeExpression: TypeNode, comment?: readonly JSDocComment[]): JSDocSatisfiesTag {
-    return node.tagName !== tagName || node.typeExpression !== typeExpression || node.comment !== comment ? createJSDocSatisfiesTag(tagName, typeExpression, comment) : node;
+    return node.tagName !== tagName || node.typeExpression !== typeExpression || node.comment !== comment ? update(createJSDocSatisfiesTag(tagName, typeExpression, comment), node) : node;
 }
 
 export function updateJSDocThrowsTag(node: JSDocThrowsTag, tagName: Identifier, typeExpression?: TypeNode, comment?: readonly JSDocComment[]): JSDocThrowsTag {
-    return node.tagName !== tagName || node.typeExpression !== typeExpression || node.comment !== comment ? createJSDocThrowsTag(tagName, typeExpression, comment) : node;
+    return node.tagName !== tagName || node.typeExpression !== typeExpression || node.comment !== comment ? update(createJSDocThrowsTag(tagName, typeExpression, comment), node) : node;
 }
 
 export function updateJSDocThisTag(node: JSDocThisTag, tagName: Identifier, typeExpression: TypeNode, comment?: readonly JSDocComment[]): JSDocThisTag {
-    return node.tagName !== tagName || node.typeExpression !== typeExpression || node.comment !== comment ? createJSDocThisTag(tagName, typeExpression, comment) : node;
+    return node.tagName !== tagName || node.typeExpression !== typeExpression || node.comment !== comment ? update(createJSDocThisTag(tagName, typeExpression, comment), node) : node;
 }
 
 export function updateJSDocImportTag(node: JSDocImportTag, tagName: Identifier, importClause: ImportClause | undefined, moduleSpecifier: Expression, attributes?: ImportAttributes, comment?: readonly JSDocComment[]): JSDocImportTag {
-    return node.tagName !== tagName || node.importClause !== importClause || node.moduleSpecifier !== moduleSpecifier || node.attributes !== attributes || node.comment !== comment ? createJSDocImportTag(tagName, importClause, moduleSpecifier, attributes, comment) : node;
+    return node.tagName !== tagName || node.importClause !== importClause || node.moduleSpecifier !== moduleSpecifier || node.attributes !== attributes || node.comment !== comment ? update(createJSDocImportTag(tagName, importClause, moduleSpecifier, attributes, comment), node) : node;
 }
 
 export function updateJSDocCallbackTag(node: JSDocCallbackTag, tagName: Identifier, typeExpression: TypeNode, name?: JSDocFullName, comment?: readonly JSDocComment[]): JSDocCallbackTag {
-    return node.tagName !== tagName || node.typeExpression !== typeExpression || node.name !== name || node.comment !== comment ? createJSDocCallbackTag(tagName, typeExpression, name, comment) : node;
+    return node.tagName !== tagName || node.typeExpression !== typeExpression || node.name !== name || node.comment !== comment ? update(createJSDocCallbackTag(tagName, typeExpression, name, comment), node) : node;
 }
 
 export function updateJSDocOverloadTag(node: JSDocOverloadTag, tagName: Identifier, typeExpression: TypeNode, comment?: readonly JSDocComment[]): JSDocOverloadTag {
-    return node.tagName !== tagName || node.typeExpression !== typeExpression || node.comment !== comment ? createJSDocOverloadTag(tagName, typeExpression, comment) : node;
+    return node.tagName !== tagName || node.typeExpression !== typeExpression || node.comment !== comment ? update(createJSDocOverloadTag(tagName, typeExpression, comment), node) : node;
 }
 
 export function updateJSDocTypedefTag(node: JSDocTypedefTag, tagName: Identifier, typeExpression?: JSDocTypeExpression | JSDocTypeLiteral, name?: JSDocFullName, comment?: readonly JSDocComment[]): JSDocTypedefTag {
-    return node.tagName !== tagName || node.typeExpression !== typeExpression || node.name !== name || node.comment !== comment ? createJSDocTypedefTag(tagName, typeExpression, name, comment) : node;
+    return node.tagName !== tagName || node.typeExpression !== typeExpression || node.name !== name || node.comment !== comment ? update(createJSDocTypedefTag(tagName, typeExpression, name, comment), node) : node;
 }
 
 export function updateJSDocSignature(node: JSDocSignature, typeParameters: readonly JSDocTemplateTag[] | undefined, parameters: readonly (JSDocParameterTag | JSDocThisTag)[], type?: JSDocReturnTag): JSDocSignature {
-    return node.typeParameters !== typeParameters || node.parameters !== parameters || node.type !== type ? createJSDocSignature(typeParameters, parameters, type) : node;
+    return node.typeParameters !== typeParameters || node.parameters !== parameters || node.type !== type ? update(createJSDocSignature(typeParameters, parameters, type), node) : node;
 }
 
 export function updateJSDocNameReference(node: JSDocNameReference, name: EntityName): JSDocNameReference {
-    return node.name !== name ? createJSDocNameReference(name) : node;
+    return node.name !== name ? update(createJSDocNameReference(name), node) : node;
 }
 
 export function updateModuleDeclaration(node: ModuleDeclaration, modifiers: readonly ModifierLike[] | undefined, name: ModuleName, attributes?: TypeLiteralNode, body?: ModuleBody): ModuleDeclaration {
-    return node.modifiers !== modifiers || node.name !== name || node.attributes !== attributes || node.body !== body ? createModuleDeclaration(modifiers, node.keyword, name, attributes, body) : node;
+    return node.modifiers !== modifiers || node.name !== name || node.attributes !== attributes || node.body !== body ? update(createModuleDeclaration(modifiers, node.keyword, name, attributes, body), node) : node;
 }
 
 export function updateImportEqualsDeclaration(node: ImportEqualsDeclaration, modifiers: readonly ModifierLike[] | undefined, name: Identifier, moduleReference: ModuleReference): ImportEqualsDeclaration {
-    return node.modifiers !== modifiers || node.name !== name || node.moduleReference !== moduleReference ? createImportEqualsDeclaration(modifiers, node.isTypeOnly, name, moduleReference) : node;
+    return node.modifiers !== modifiers || node.name !== name || node.moduleReference !== moduleReference ? update(createImportEqualsDeclaration(modifiers, node.isTypeOnly, name, moduleReference), node) : node;
 }
 
 export function updateExportDeclaration(node: ExportDeclaration, modifiers?: readonly ModifierLike[], exportClause?: NamedExportBindings, moduleSpecifier?: Expression, attributes?: ImportAttributes): ExportDeclaration {
-    return node.modifiers !== modifiers || node.exportClause !== exportClause || node.moduleSpecifier !== moduleSpecifier || node.attributes !== attributes ? createExportDeclaration(modifiers, node.isTypeOnly, exportClause, moduleSpecifier, attributes) : node;
+    return node.modifiers !== modifiers || node.exportClause !== exportClause || node.moduleSpecifier !== moduleSpecifier || node.attributes !== attributes ? update(createExportDeclaration(modifiers, node.isTypeOnly, exportClause, moduleSpecifier, attributes), node) : node;
 }
 
 export function updateImportTypeNode(node: ImportTypeNode, argument: TypeNode, attributes?: ImportAttributes, qualifier?: EntityName, typeArguments?: readonly TypeNode[]): ImportTypeNode {
-    return node.argument !== argument || node.attributes !== attributes || node.qualifier !== qualifier || node.typeArguments !== typeArguments ? createImportTypeNode(node.isTypeOf, argument, attributes, qualifier, typeArguments) : node;
+    return node.argument !== argument || node.attributes !== attributes || node.qualifier !== qualifier || node.typeArguments !== typeArguments ? update(createImportTypeNode(node.isTypeOf, argument, attributes, qualifier, typeArguments), node) : node;
 }
 
 export function updateImportClause(node: ImportClause, name?: Identifier, namedBindings?: NamedImportBindings): ImportClause {
-    return node.name !== name || node.namedBindings !== namedBindings ? createImportClause(node.phaseModifier, name, namedBindings) : node;
+    return node.name !== name || node.namedBindings !== namedBindings ? update(createImportClause(node.phaseModifier, name, namedBindings), node) : node;
 }
 
 export function updateImportSpecifier(node: ImportSpecifier, propertyName: ModuleExportName | undefined, name: Identifier): ImportSpecifier {
-    return node.propertyName !== propertyName || node.name !== name ? createImportSpecifier(node.isTypeOnly, propertyName, name) : node;
+    return node.propertyName !== propertyName || node.name !== name ? update(createImportSpecifier(node.isTypeOnly, propertyName, name), node) : node;
 }
 
 export function updateJSDocLink(node: JSDocLink, name?: EntityName): JSDocLink {
-    return node.name !== name ? createJSDocLink(name, node.text) : node;
+    return node.name !== name ? update(createJSDocLink(name, node.text), node) : node;
 }
 
 export function updateJSDocLinkPlain(node: JSDocLinkPlain, name?: EntityName): JSDocLinkPlain {
-    return node.name !== name ? createJSDocLinkPlain(name, node.text) : node;
+    return node.name !== name ? update(createJSDocLinkPlain(name, node.text), node) : node;
 }
 
 export function updateJSDocLinkCode(node: JSDocLinkCode, name?: EntityName): JSDocLinkCode {
-    return node.name !== name ? createJSDocLinkCode(name, node.text) : node;
+    return node.name !== name ? update(createJSDocLinkCode(name, node.text), node) : node;
 }
 
 export function updateTypeParameterDeclaration(node: TypeParameterDeclaration, modifiers: readonly ModifierLike[] | undefined, name: Identifier, constraint?: TypeNode, expression?: Expression, defaultType?: TypeNode): TypeParameterDeclaration {
-    return node.modifiers !== modifiers || node.name !== name || node.constraint !== constraint || node.expression !== expression || node.defaultType !== defaultType ? createTypeParameterDeclaration(modifiers, name, constraint, expression, defaultType) : node;
+    return node.modifiers !== modifiers || node.name !== name || node.constraint !== constraint || node.expression !== expression || node.defaultType !== defaultType ? update(createTypeParameterDeclaration(modifiers, name, constraint, expression, defaultType), node) : node;
 }
 
 export function updateSyntheticReferenceExpression(node: SyntheticReferenceExpression, expression: Expression, thisArg: Expression): SyntheticReferenceExpression {
-    return node.expression !== expression || node.thisArg !== thisArg ? createSyntheticReferenceExpression(expression, thisArg) : node;
+    return node.expression !== expression || node.thisArg !== thisArg ? update(createSyntheticReferenceExpression(expression, thisArg), node) : node;
 }
 
 export function updateJSDocTypeLiteral(node: JSDocTypeLiteral, jsdocPropertyTags?: readonly JSDocTag[]): JSDocTypeLiteral {
-    return node.jsdocPropertyTags !== jsdocPropertyTags ? createJSDocTypeLiteral(jsdocPropertyTags, node.isArrayType) : node;
+    return node.jsdocPropertyTags !== jsdocPropertyTags ? update(createJSDocTypeLiteral(jsdocPropertyTags, node.isArrayType), node) : node;
 }
 
 export function updateForInStatement(node: ForInStatement, awaitModifier: AwaitKeyword | undefined, initializer: ForInitializer, expression: Expression, statement: Statement): ForInStatement {
-    return node.awaitModifier !== awaitModifier || node.initializer !== initializer || node.expression !== expression || node.statement !== statement ? createForInStatement(awaitModifier, initializer, expression, statement) : node;
+    return node.awaitModifier !== awaitModifier || node.initializer !== initializer || node.expression !== expression || node.statement !== statement ? update(createForInStatement(awaitModifier, initializer, expression, statement), node) : node;
 }
 
 export function updateForOfStatement(node: ForOfStatement, awaitModifier: AwaitKeyword | undefined, initializer: ForInitializer, expression: Expression, statement: Statement): ForOfStatement {
-    return node.awaitModifier !== awaitModifier || node.initializer !== initializer || node.expression !== expression || node.statement !== statement ? createForOfStatement(awaitModifier, initializer, expression, statement) : node;
+    return node.awaitModifier !== awaitModifier || node.initializer !== initializer || node.expression !== expression || node.statement !== statement ? update(createForOfStatement(awaitModifier, initializer, expression, statement), node) : node;
 }
 
 export function updateObjectBindingPattern(node: ObjectBindingPattern, elements: readonly BindingElement[]): ObjectBindingPattern {
-    return node.elements !== elements ? createObjectBindingPattern(elements) : node;
+    return node.elements !== elements ? update(createObjectBindingPattern(elements), node) : node;
 }
 
 export function updateArrayBindingPattern(node: ArrayBindingPattern, elements: readonly BindingElement[]): ArrayBindingPattern {
-    return node.elements !== elements ? createArrayBindingPattern(elements) : node;
+    return node.elements !== elements ? update(createArrayBindingPattern(elements), node) : node;
 }
 
 export function updateJSDocParameterTag(node: JSDocParameterTag, tagName: Identifier, name: EntityName, typeExpression: TypeNode | undefined, comment: readonly JSDocComment[] | undefined): JSDocParameterTag {
-    return node.tagName !== tagName || node.name !== name || node.typeExpression !== typeExpression || node.comment !== comment ? createJSDocParameterTag(tagName, name, node.isBracketed, typeExpression, node.isNameFirst, comment) : node;
+    return node.tagName !== tagName || node.name !== name || node.typeExpression !== typeExpression || node.comment !== comment ? update(createJSDocParameterTag(tagName, name, node.isBracketed, typeExpression, node.isNameFirst, comment), node) : node;
 }
 
 export function updateJSDocPropertyTag(node: JSDocPropertyTag, tagName: Identifier, name: EntityName, typeExpression: TypeNode | undefined, comment: readonly JSDocComment[] | undefined): JSDocPropertyTag {
-    return node.tagName !== tagName || node.name !== name || node.typeExpression !== typeExpression || node.comment !== comment ? createJSDocPropertyTag(tagName, name, node.isBracketed, typeExpression, node.isNameFirst, comment) : node;
+    return node.tagName !== tagName || node.name !== name || node.typeExpression !== typeExpression || node.comment !== comment ? update(createJSDocPropertyTag(tagName, name, node.isBracketed, typeExpression, node.isNameFirst, comment), node) : node;
 }
 
 export function createSourceFile(statements: readonly Statement[], endOfFileToken: EndOfFile, text: string, fileName: RootedFilePath, path: PathKey): SourceFile {
@@ -6096,6 +6102,6 @@ function cloneSourceFileWithChanges(source: SourceFile, statements: readonly Sta
 
 export function updateSourceFile(node: SourceFile, statements: readonly Statement[], endOfFileToken: EndOfFile): SourceFile {
     return node.statements !== statements || node.endOfFileToken !== endOfFileToken
-        ? cloneSourceFileWithChanges(node, statements, endOfFileToken)
+        ? update(cloneSourceFileWithChanges(node, statements, endOfFileToken), node)
         : node;
 }

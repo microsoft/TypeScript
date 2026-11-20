@@ -49,6 +49,7 @@ import {
     type PropertyAccessExpression,
     type RootedFilePath,
     type SourceFile,
+    type Statement,
     SyntaxKind,
     TokenFlags,
     tryGetAmbientModuleNameFromSymbolName,
@@ -89,6 +90,7 @@ import {
     type CreateSnapshotParams,
     DiagnosticCategory,
     type DocumentIdentifier,
+    type EmitContext,
     EmitFlags,
     EmitOnly,
     type FormatDiagnosticsHost,
@@ -9063,6 +9065,64 @@ export const obj = { m: 1, s: "hi", b: true };
 
         assert.strictEqual(await api.printer.printNode(updated), expected);
         assert.strictEqual(await api.printer.printFile(updated), expected);
+    });
+
+    test("updateSourceFile preserves the shebang", async () => {
+        await using api = spawnAPI();
+        await using lease = await api.createSourceFile("/test.ts", "#!/usr/bin/env node\nfoo();\nbar();\n");
+        const { sourceFile } = lease;
+        const updated = updateSourceFile(sourceFile, [sourceFile.statements[1]], sourceFile.endOfFileToken);
+        const expected = "#!/usr/bin/env node\nbar();\n";
+
+        assert.strictEqual(await api.printer.printNode(updated), expected);
+        assert.strictEqual(await api.printer.printFile(updated), expected);
+    });
+
+    test("updated nodes keep their source comments exactly once", async () => {
+        await using api = spawnAPI();
+        await using lease = await api.createSourceFile("/test.ts", "// leading\nfoo(1); // trailing\n/** doc */\nbaz();\n");
+        const { sourceFile } = lease;
+        function rename(node: Node): Node {
+            if (node.kind === SyntaxKind.Identifier && (node as Identifier).text === "foo") return createIdentifier("bar");
+            return visitEachChild(node, rename);
+        }
+        const updated = visitEachChild(sourceFile, rename);
+        assert.notStrictEqual(updated.statements[0], sourceFile.statements[0]);
+
+        assert.strictEqual(await api.printer.printFile(updated), "// leading\nbar(1); // trailing\n/** doc */\nbaz();\n");
+
+        const emitContext = api.printer.createEmitContext();
+        emitContext.setEmitFlags(updated.statements[0], EmitFlags.NoComments);
+        assert.strictEqual(await api.printer.printFile(updated, { emitContext }), "bar(1);\n/** doc */\nbaz();\n");
+    });
+
+    test("getSynthesizedDeepClone keeps source comments exactly once", async () => {
+        await using api = spawnAPI();
+        const text = "#!/usr/bin/env node\n// leading\nfoo(/* arg */ 1); // trailing\n/** doc */\nfunction f() {\n    // inner\n    return 1;\n}\n";
+        await using lease = await api.createSourceFile("/test.ts", text);
+        const { sourceFile } = lease;
+
+        assert.strictEqual(await api.printer.printFile(getSynthesizedDeepClone(sourceFile)), await api.printer.printFile(sourceFile));
+    });
+
+    test("getSynthesizedDeepClone without trivia suppresses leading and trailing comments", async () => {
+        await using api = spawnAPI();
+        await using lease = await api.createSourceFile("/test.ts", "// leading\nfoo(/* arg */ 1); // trailing\nbar();\n");
+        const { sourceFile } = lease;
+        const printWithClone = async (clone: Node, emitContext?: EmitContext) => await api.printer.printFile(updateSourceFile(sourceFile, [sourceFile.statements[1], clone as Statement], sourceFile.endOfFileToken), { emitContext });
+
+        assert.strictEqual(await printWithClone(getSynthesizedDeepClone(sourceFile.statements[0])), "bar();\n// leading\nfoo(/* arg */ 1); // trailing\n");
+
+        const emitContext = api.printer.createEmitContext();
+        const clone = getSynthesizedDeepClone(sourceFile.statements[0], /*includeTrivia*/ false, emitContext);
+        assert.strictEqual(clone.pos, sourceFile.statements[0].pos);
+        assert.strictEqual(clone.end, sourceFile.statements[0].end);
+        assert.strictEqual(await printWithClone(clone, emitContext), "bar();\nfoo(/* arg */ 1);\n");
+
+        const synthesized = getSynthesizedDeepClone(sourceFile.statements[0], /*includeTrivia*/ false);
+        assert.strictEqual(synthesized.pos, -1);
+        assert.strictEqual(synthesized.end, -1);
+        assert.strictEqual(await printWithClone(synthesized), "bar();\nfoo(1);\n");
     });
 
     test("printFile", async () => {
