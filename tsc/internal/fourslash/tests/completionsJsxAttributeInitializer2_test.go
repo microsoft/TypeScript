@@ -34,9 +34,16 @@ const foo = 0;
 		Items: &fourslash.CompletionsExpectedItems{
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
-					Label:  "foo",
-					Detail: new("const foo: 0"),
-					Kind:   new(lsproto.CompletionItemKindVariable),
+					Label:      "foo",
+					InsertText: new("{foo}"),
+					Detail:     new("const foo: 0"),
+					Kind:       new(lsproto.CompletionItemKindVariable),
+					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
+						TextEdit: &lsproto.TextEdit{
+							NewText: "{foo}",
+							Range:   f.Ranges()[0].LSRange,
+						},
+					},
 				},
 			},
 		},

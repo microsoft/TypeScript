@@ -769,6 +769,7 @@ func (l *LanguageService) getCompletionData(
 						if parent != previousToken.Parent &&
 							parent.Initializer() == nil &&
 							astnav.FindChildOfKind(parent, ast.KindEqualsToken, file) != nil {
+							jsxInitializer.isInitializer = true
 							jsxInitializer.initializer = previousToken
 						}
 					}
