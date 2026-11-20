@@ -929,7 +929,7 @@ export function isPartOfTypeNode(node: Node): boolean {
                 case SyntaxKind.ConstructSignature:
                 case SyntaxKind.IndexSignature:
                 case SyntaxKind.TypeAssertionExpression:
-                    return (parent as never as { type: unknown }).type === node;
+                    return (parent as never as { type: unknown; }).type === node;
                 case SyntaxKind.CallExpression:
                 case SyntaxKind.NewExpression:
                 case SyntaxKind.TaggedTemplateExpression:
