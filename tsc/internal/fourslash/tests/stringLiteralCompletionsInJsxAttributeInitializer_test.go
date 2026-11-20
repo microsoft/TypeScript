@@ -5,6 +5,7 @@ import (
 
 	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
 	. "github.com/microsoft/TypeScript/tsc/internal/fourslash/tests/util"
+	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil"
 )
 
@@ -60,4 +61,47 @@ const a5 = <Foo b={"somethingelse"} c={0} /*5*/ />`
 			},
 		},
 	})
+}
+
+func TestStringLiteralCompletionsInJsxAttributeEscaping(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @jsx: preserve
+// @filename: /a.tsx
+declare function Foo(args: { value: "a'b&c\\z" | "a\"b" | "&amp;" }): any;
+const a = <Foo value="[|/*raw*/|]" />;
+const b = <Foo value=[|"/*container*/"|] />;
+`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	textEdit := func(lsRange lsproto.Range, text string) *lsproto.TextEditOrInsertReplaceEdit {
+		return &lsproto.TextEditOrInsertReplaceEdit{
+			TextEdit: &lsproto.TextEdit{NewText: text, Range: lsRange},
+		}
+	}
+	verify := func(marker string, items ...fourslash.CompletionsExpectedItem) {
+		f.VerifyCompletions(t, marker, &fourslash.CompletionsExpectedList{
+			IsIncomplete: false,
+			ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
+				CommitCharacters: &DefaultCommitCharacters,
+				EditRange:        Ignored,
+			},
+			Items: &fourslash.CompletionsExpectedItems{Includes: items},
+		})
+	}
+	cursor := f.MarkerByName(t, "container").LSPos()
+	verify("raw", &lsproto.CompletionItem{
+		Label:    `a'b&c\\z`,
+		TextEdit: textEdit(f.Ranges()[0].LSRange, `a'b&c\\z`),
+	})
+	verify("container",
+		&lsproto.CompletionItem{
+			Label:    `a\"b`,
+			TextEdit: textEdit(lsproto.Range{Start: cursor, End: cursor}, `a\"b`),
+		},
+		&lsproto.CompletionItem{
+			Label:    `&amp;`,
+			TextEdit: textEdit(lsproto.Range{Start: cursor, End: cursor}, `&amp;`),
+		},
+	)
 }
