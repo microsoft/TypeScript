@@ -23103,11 +23103,19 @@ func (c *Checker) instantiateTypeWorker(t *Type, m *TypeMapper, alias *TypeAlias
 		if alias == nil {
 			alias = c.instantiateTypeAlias(t.alias, m)
 		}
-		if core.Same(newTypes, types) && alias.Symbol() == t.alias.Symbol() && slices.Equal(alias.TypeArguments(), t.alias.TypeArguments()) {
-			return t
+		intersectionFlags := IntersectionFlagsNone
+		if core.Same(newTypes, types) {
+			if alias.Symbol() == t.alias.Symbol() && slices.Equal(alias.TypeArguments(), t.alias.TypeArguments()) {
+				return t
+			}
+			// Only the alias changed, as in an alias that doesn't reference its type parameters. The constituents
+			// of an intersection are already reduced, so don't reduce again; that would drop the {} in `string & {}`.
+			if t.flags&TypeFlagsIntersection != 0 {
+				intersectionFlags = IntersectionFlagsNoSupertypeReduction
+			}
 		}
 		if source.flags&TypeFlagsIntersection != 0 {
-			return c.getIntersectionTypeEx(newTypes, IntersectionFlagsNone, alias)
+			return c.getIntersectionTypeEx(newTypes, intersectionFlags, alias)
 		}
 		return c.getUnionTypeEx(newTypes, UnionReductionLiteral, alias, nil /*origin*/)
 	case flags&TypeFlagsIndex != 0:
