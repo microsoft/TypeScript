@@ -125,9 +125,14 @@ export interface APIMethodInfo {
     getNameTypeOfMappedType: APIMethod<GetTypePropertyParams, TypeResponse | null>;
     getTemplateTypeOfMappedType: APIMethod<GetTypePropertyParams, TypeResponse>;
     getTypeParametersOfSignature: APIMethod<GetSignaturePropertyParams, TypeResponse[] | null>;
+    getTypeArgumentsForResolvedSignature: APIMethod<GetSignaturePropertyParams, TypeResponse[]>;
     getParametersOfSignature: APIMethod<GetSignaturePropertyParams, SymbolResponse[] | null>;
     getThisParameterOfSignature: APIMethod<GetSignaturePropertyParams, SymbolResponse | null>;
     getTargetOfSignature: APIMethod<GetSignaturePropertyParams, SignatureResponse | null>;
+    isOptionalParameter: APIMethod<CheckerNodeParams, boolean>;
+    getTypeOfAssignmentPattern: APIMethod<CheckerNodeParams, TypeResponse | null>;
+    isValidPropertyAccess: APIMethod<IsValidPropertyAccessParams, boolean>;
+    getSymbolsOfParameterPropertyDeclaration: APIMethod<CheckerNodeParams, ParameterPropertySymbolsResponse>;
     getContextualType: APIMethod<GetContextualTypeParams, TypeResponse | null>;
     getContextualTypeForArgument: APIMethod<GetContextualTypeForArgumentParams, TypeResponse | null>;
     getAwaitedType: APIMethod<CheckerTypeParams, TypeResponse | null>;
@@ -188,6 +193,7 @@ export interface APIMethodInfo {
     getImmediateAliasedSymbol: APIMethod<CheckerSymbolParams, SymbolResponse | null>;
     getTargetSymbol: APIMethod<CheckerSymbolParams, SymbolResponse>;
     getMergedSymbol: APIMethod<CheckerSymbolParams, SymbolResponse>;
+    getRootSymbols: APIMethod<CheckerSymbolParams, SymbolResponse[]>;
     getSymbolOfNode: APIMethod<CheckerNodeParams, SymbolResponse | null>;
     getSymbolOfDeclarationForChecker: APIMethod<CheckerNodeParams, SymbolResponse | null>;
     getParentOfSymbolForChecker: APIMethod<CheckerSymbolParams, SymbolResponse | null>;
@@ -807,6 +813,25 @@ export interface GetSignaturePropertyParams {
     objectId: number;
 }
 
+/** CheckerNodeParams are parameters for checker methods that operate on a node location. */
+export interface CheckerNodeParams {
+    snapshot: number;
+    project: number;
+    location: string;
+}
+
+export interface IsValidPropertyAccessParams {
+    snapshot: number;
+    project: number;
+    location: string;
+    propertyName: string;
+}
+
+export interface ParameterPropertySymbolsResponse {
+    parameter: SymbolResponse;
+    property: SymbolResponse;
+}
+
 /** GetContextualTypeParams returns the contextual type for a node. */
 export interface GetContextualTypeParams {
     snapshot: number;
@@ -871,13 +896,6 @@ export interface GetBigIntLiteralTypeParams {
 export interface GetIntrinsicTypeParams {
     snapshot: number;
     project: number;
-}
-
-/** CheckerNodeParams are parameters for checker methods that operate on a node location. */
-export interface CheckerNodeParams {
-    snapshot: number;
-    project: number;
-    location: string;
 }
 
 export interface GetPrivateIdentifierPropertyOfTypeParams {
@@ -1387,6 +1405,7 @@ export interface BatchRequest {
         | "getResolvedTypeReferenceDirectiveFromTypeReferenceDirective"
         | "getRestTypeOfSignature"
         | "getReturnTypeOfSignature"
+        | "getRootSymbols"
         | "getSemanticDiagnostics"
         | "getShorthandAssignmentValueSymbol"
         | "getSignatureFromDeclaration"
@@ -1408,6 +1427,7 @@ export interface BatchRequest {
         | "getSymbolsAtLocations"
         | "getSymbolsAtPositions"
         | "getSymbolsInScope"
+        | "getSymbolsOfParameterPropertyDeclaration"
         | "getSymbolsOfSourceFiles"
         | "getSyntacticDiagnostics"
         | "getTargetOfSignature"
@@ -1419,10 +1439,12 @@ export interface BatchRequest {
         | "getTrueType"
         | "getTrueTypeOfConditionalType"
         | "getTypeArguments"
+        | "getTypeArgumentsForResolvedSignature"
         | "getTypeAtLocation"
         | "getTypeAtLocations"
         | "getTypeAtPosition"
         | "getTypeFromTypeNode"
+        | "getTypeOfAssignmentPattern"
         | "getTypeOfPropertyOfType"
         | "getTypeOfSymbol"
         | "getTypeOfSymbolAtLocation"
@@ -1446,8 +1468,10 @@ export interface BatchRequest {
         | "isArrayType"
         | "isContextSensitive"
         | "isImplementationOfOverload"
+        | "isOptionalParameter"
         | "isReadonlySymbol"
         | "isTypeAssignableTo"
+        | "isValidPropertyAccess"
         | "parseCommandLine"
         | "parseConfigFile"
         | "parseConfigFileTextToJson"
@@ -1591,6 +1615,7 @@ export interface BatchResponse {
         | "getResolvedTypeReferenceDirectiveFromTypeReferenceDirective"
         | "getRestTypeOfSignature"
         | "getReturnTypeOfSignature"
+        | "getRootSymbols"
         | "getSemanticDiagnostics"
         | "getShorthandAssignmentValueSymbol"
         | "getSignatureFromDeclaration"
@@ -1612,6 +1637,7 @@ export interface BatchResponse {
         | "getSymbolsAtLocations"
         | "getSymbolsAtPositions"
         | "getSymbolsInScope"
+        | "getSymbolsOfParameterPropertyDeclaration"
         | "getSymbolsOfSourceFiles"
         | "getSyntacticDiagnostics"
         | "getTargetOfSignature"
@@ -1623,10 +1649,12 @@ export interface BatchResponse {
         | "getTrueType"
         | "getTrueTypeOfConditionalType"
         | "getTypeArguments"
+        | "getTypeArgumentsForResolvedSignature"
         | "getTypeAtLocation"
         | "getTypeAtLocations"
         | "getTypeAtPosition"
         | "getTypeFromTypeNode"
+        | "getTypeOfAssignmentPattern"
         | "getTypeOfPropertyOfType"
         | "getTypeOfSymbol"
         | "getTypeOfSymbolAtLocation"
@@ -1650,8 +1678,10 @@ export interface BatchResponse {
         | "isArrayType"
         | "isContextSensitive"
         | "isImplementationOfOverload"
+        | "isOptionalParameter"
         | "isReadonlySymbol"
         | "isTypeAssignableTo"
+        | "isValidPropertyAccess"
         | "parseCommandLine"
         | "parseConfigFile"
         | "parseConfigFileTextToJson"

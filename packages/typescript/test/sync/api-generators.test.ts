@@ -1,10 +1,13 @@
 import {
     cast,
     type Identifier,
+    isBinaryExpression,
     isCallExpression,
     isClassDeclaration,
+    isConstructorDeclaration,
     isEnumDeclaration,
     isExportDeclaration,
+    isExpressionStatement,
     isFunctionDeclaration,
     isIdentifier,
     isImportDeclaration,
@@ -12,6 +15,8 @@ import {
     isNamedExports,
     isNamedImports,
     isObjectLiteralExpression,
+    isParenthesizedExpression,
+    isPropertyAccessExpression,
     isShorthandPropertyAssignment,
     isStringLiteral,
     isTypeAliasDeclaration,
@@ -112,6 +117,7 @@ export type Union = Derived | string;
 export enum Choice { First = 1, Second = "second" }
 export class Unimported { value = "extra"; }
 export type Mapped<T> = { [K in keyof T as \`get\${Capitalize<string & K>}\`]: T[K] };
+export class ParameterProperty { constructor(public parameter: string) {} }
 `,
     "/src/index.ts": `
 /// <reference types="parity" />
@@ -134,6 +140,8 @@ export const badCall = derived();
 export function getArguments() { return arguments; }
 import { absent } from "./absent.js";
 export const missingValue = absent;
+let assigned: Base;
+({ value: assigned } = box);
 `,
     "/node_modules/@types/parity/index.d.ts": `export {};`,
     "/src/syntax.ts": `export const broken: = 1;`,
@@ -1486,6 +1494,9 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
                 isVariableDeclaration,
             );
             const callExpression = cast(calledDeclaration.initializer, isCallExpression);
+            const assignmentStatement = cast(indexFile.statements.find(isExpressionStatement), isExpressionStatement);
+            const assignment = cast(cast(assignmentStatement.expression, isParenthesizedExpression).expression, isBinaryExpression);
+            const assignmentPattern = cast(assignment.left, isObjectLiteralExpression);
             const interfaceDeclaration = cast(modelsFile.statements[0], isInterfaceDeclaration);
             const derivedClassDeclaration = cast(modelsFile.statements[2], isClassDeclaration);
             const boxedAlias = cast(modelsFile.statements[3], isTypeAliasDeclaration);
@@ -1497,6 +1508,8 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
             const unionAlias = cast(modelsFile.statements[9], isTypeAliasDeclaration);
             const enumDeclaration = cast(modelsFile.statements[10], isEnumDeclaration);
             const mappedAlias = cast(modelsFile.statements[12], isTypeAliasDeclaration);
+            const parameterPropertyClass = cast(modelsFile.statements[13], isClassDeclaration);
+            const parameterProperty = cast(parameterPropertyClass.members[0], isConstructorDeclaration).parameters[0];
 
             const importedDerivedSymbol = checker.getSymbolAtLocation(importedDerived)!;
             const combineSymbol = checker.getSymbolAtLocation(combineDeclaration.name!)!;
@@ -1665,9 +1678,11 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
                 parityCase("Program", "getDeclarationEmit", program.getDeclarationEmit, assertDeepEquivalent, ["/src/index.ts"]),
 
                 parityCase("Checker", "getMergedSymbol", checker.getMergedSymbol, assertSymbolsEquivalent, interfaceSymbol),
+                parityCase("Checker", "getRootSymbols", checker.getRootSymbols, assertSymbolArraysEquivalent, boxedOptSymbol),
                 parityCase("Checker", "getSymbolOfNode", checker.getSymbolOfNode, assertOptionalSymbolsEquivalent, interfaceDeclaration),
                 parityCase("Checker", "getSymbolOfNode", checker.getSymbolOfNode, assertOptionalSymbolsEquivalent, interfaceDeclaration.name),
                 parityCase("Checker", "getSymbolOfDeclaration", checker.getSymbolOfDeclaration, assertSymbolsEquivalent, interfaceDeclaration),
+                parityCase("Checker", "getSymbolsOfParameterPropertyDeclaration", checker.getSymbolsOfParameterPropertyDeclaration, assertDeepEquivalent, parameterProperty),
                 parityCase("Checker", "getParentOfSymbol", checker.getParentOfSymbol, assertOptionalSymbolsEquivalent, unimportedSymbol),
                 parityCase("Checker", "getSymbolAtLocation", selectGeneratorMethod<[node: Node], Symbol | undefined>(checker.getSymbolAtLocation), assertOptionalSymbolsEquivalent, importedDerived),
                 parityCase("Checker", "getSymbolAtLocation", checker.getSymbolAtLocation, assertOptionalSymbolArraysEquivalent, [importedDerived, combineDeclaration.name!]),
@@ -1699,8 +1714,10 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
                 parityCase("Checker", "getWidenedType", checker.getWidenedType, assertTypesEquivalent, literalType),
                 parityCase("Checker", "getParameterType", checker.getParameterType, assertTypesEquivalent, signature, 0),
                 parityCase("Checker", "isArrayLikeType", checker.isArrayLikeType, assertDeepEquivalent, arrayType),
+                parityCase("Checker", "isValidPropertyAccess", checker.isValidPropertyAccess, assertDeepEquivalent, cast(callExpression.expression, isPropertyAccessExpression), "call"),
                 parityCase("Checker", "isTypeAssignableTo", checker.isTypeAssignableTo, assertDeepEquivalent, derivedType, interfaceType),
                 parityCase("Checker", "getShorthandAssignmentValueSymbol", checker.getShorthandAssignmentValueSymbol, assertOptionalSymbolsEquivalent, shorthand),
+                parityCase("Checker", "getTypeOfAssignmentPattern", checker.getTypeOfAssignmentPattern, assertOptionalTypesEquivalent, assignmentPattern),
                 parityCase("Checker", "getTypeOfSymbolAtLocation", checker.getTypeOfSymbolAtLocation, assertTypesEquivalent, derivedSymbol, shorthand),
                 parityCase("Checker", "getAnyType", checker.getAnyType, assertTypesEquivalent),
                 parityCase("Checker", "getStringType", checker.getStringType, assertTypesEquivalent),
@@ -1726,10 +1743,12 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
                 parityCase("Checker", "signatureToString", checker.signatureToString, assertDeepEquivalent, signature, combineDeclaration),
                 parityCase("Checker", "typeToString", checker.typeToString, assertDeepEquivalent, interfaceType, interfaceDeclaration),
                 parityCase("Checker", "isContextSensitive", checker.isContextSensitive, assertDeepEquivalent, boxDeclaration.initializer!),
+                parityCase("Checker", "isOptionalParameter", checker.isOptionalParameter, assertDeepEquivalent, combineDeclaration.parameters[1]),
                 parityCase("Checker", "isArrayType", checker.isArrayType, assertDeepEquivalent, arrayType),
                 parityCase("Checker", "isTupleType", checker.isTupleType, assertDeepEquivalent, tupleType),
                 parityCase("Checker", "isTupleTypeTarget", checker.isTupleTypeTarget, assertDeepEquivalent, tupleType),
                 parityCase("Checker", "getReturnTypeOfSignature", checker.getReturnTypeOfSignature, assertTypesEquivalent, signature),
+                parityCase("Checker", "getTypeArgumentsForResolvedSignature", checker.getTypeArgumentsForResolvedSignature, assertTypeArraysEquivalent, checker.getResolvedSignature(callExpression)),
                 parityCase("Checker", "getRestTypeOfSignature", checker.getRestTypeOfSignature, assertOptionalTypesEquivalent, signature),
                 parityCase("Checker", "getTypePredicateOfSignature", checker.getTypePredicateOfSignature, assertOptionalTypePredicatesEquivalent, predicateSignature),
                 parityCase("Checker", "getBaseTypes", checker.getBaseTypes, assertTypeArraysEquivalent, derivedType),
@@ -1826,6 +1845,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
                 parityCase("Type", "getBaseTypes", derivedType.getBaseTypes, assertOptionalTypeArrayEquivalent),
 
                 parityCase("Signature", "getTypeParameters", signature.getTypeParameters, assertTypeArraysEquivalent),
+                parityCase("Signature", "getTypeArguments", signature.getTypeArguments, assertTypeArraysEquivalent),
                 parityCase("Signature", "getParameters", signature.getParameters, assertSymbolArraysEquivalent),
                 parityCase("Signature", "getThisParameter", signature.getThisParameter, assertOptionalSymbolsEquivalent),
                 parityCase("Signature", "getTarget", constructSignature.getTarget, assertOptionalSignaturesEquivalent),

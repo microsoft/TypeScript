@@ -1,5 +1,6 @@
 import {
     type __String,
+    type ArrayLiteralExpression,
     cast,
     escapeLeadingUnderscores,
     type Expression,
@@ -9,8 +10,10 @@ import {
     getTextOfJSDocComment,
     type Identifier,
     InternalSymbolName,
+    isArrayLiteralExpression,
     isCallExpression,
     isClassDeclaration,
+    isConstructorDeclaration,
     isExpressionStatement,
     isFunctionDeclaration,
     isIdentifier,
@@ -22,6 +25,7 @@ import {
     isModuleDeclaration,
     isNamedImports,
     isObjectLiteralExpression,
+    isParameterDeclaration,
     isPrivateIdentifier,
     isPropertyAccessExpression,
     isPropertyAssignment,
@@ -39,7 +43,10 @@ import {
     type Node,
     type NodeArray,
     NodeFlags,
+    type ObjectLiteralExpression,
+    type ParameterDeclaration,
     type PathKey,
+    type PropertyAccessExpression,
     type RootedFilePath,
     type SourceFile,
     SyntaxKind,
@@ -180,6 +187,218 @@ import {
 } from "./api.testUtils.ts";
 
 const concurrency = areTestsFiltered();
+
+describe("Checker - getRootSymbols", { concurrency }, () => {
+    test("follows synthetic union and mapped properties to their original declarations", async () => {
+        await using api = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/index.ts": `
+interface A { value: string }
+interface B { value: number }
+declare const union: A | B;
+declare const mapped: { [K in keyof A]: A[K] };
+union.value;
+mapped.value;
+`,
+        });
+        const snapshot = await api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const a = await project.checker.getSymbolAtPosition("/index.ts", "\ninterface ".length);
+        assert.ok(a);
+        const aValue = await (await project.checker.getDeclaredTypeOfSymbol(a)).getProperty("value");
+        assert.ok(aValue);
+        const file = await project.program.getSourceFile("/index.ts");
+        assert.ok(file);
+        const union = await project.checker.getSymbolAtPosition("/index.ts", file.text.indexOf("union.value") + "union.".length);
+        const mapped = await project.checker.getSymbolAtPosition("/index.ts", file.text.indexOf("mapped.value") + "mapped.".length);
+        assert.ok(union && mapped);
+        const roots = await project.checker.getRootSymbols(union);
+        assert.equal(roots.length, 2);
+        assert.strictEqual(roots[0], aValue);
+        assert.equal(roots[1].name, "value");
+        assert.notStrictEqual(roots[1], aValue);
+        assert.deepEqual(await project.checker.getRootSymbols(mapped), [aValue]);
+        assert.deepEqual(await project.checker.getRootSymbols(aValue), [aValue]);
+    });
+
+    test("queries a shared file-owned symbol through each requesting checker", async () => {
+        await using api = spawnAPI({
+            "/a/tsconfig.json": JSON.stringify({ files: ["../shared.ts"] }),
+            "/b/tsconfig.json": JSON.stringify({ files: ["../shared.ts"] }),
+            "/shared.ts": "export interface Shared { value: string }",
+        });
+        const snapshot = await api.createSnapshot({ openProjects: ["/a/tsconfig.json", "/b/tsconfig.json"] });
+        const first = snapshot.getConfiguredProject("/a/tsconfig.json")!;
+        const second = snapshot.getConfiguredProject("/b/tsconfig.json")!;
+        const symbol = await first.checker.getSymbolAtPosition("/shared.ts", "export interface Shared { ".length);
+        assert.ok(symbol);
+        assert.strictEqual(symbol, await second.checker.getSymbolAtPosition("/shared.ts", "export interface Shared { ".length));
+        assert.deepEqual(await first.checker.getRootSymbols(symbol), [symbol]);
+        assert.deepEqual(await second.checker.getRootSymbols(symbol), [symbol]);
+    });
+});
+
+describe("Checker - getTypeArgumentsForResolvedSignature", { concurrency }, () => {
+    test("instantiates inferred, explicit, and defaulted type arguments and handles non-generic calls", async () => {
+        await using api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/index.ts": `
+declare function f<T, U = number>(value?: T): [T, U];
+declare function plain(): void;
+f("inferred");
+f<boolean>(true);
+f();
+plain();
+`,
+        });
+        const snapshot = await api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const file = await project.program.getSourceFile("/index.ts");
+        assert.ok(file);
+        const calls: Node[] = [];
+        file.forEachChild(function visit(node) {
+            if (isCallExpression(node)) calls.push(node);
+            node.forEachChild(visit);
+        });
+        const results: string[][] = [];
+        for (const call of calls) {
+            const signature = await project.checker.getResolvedSignature(call);
+            const types = await project.checker.getTypeArgumentsForResolvedSignature(signature);
+            assert.deepEqual(await signature.getTypeArguments(), types);
+            results.push(await Promise.all(types.map(type => project.checker.typeToString(type))));
+        }
+        assert.deepEqual(results, [["string", "number"], ["boolean", "number"], ["unknown", "number"], []]);
+    });
+});
+
+describe("Checker - getTypeOfAssignmentPattern", { concurrency }, () => {
+    test("rejects object literals that are not assignment patterns", async () => {
+        await using api = spawnAPI({ "/tsconfig.json": "{}", "/index.ts": "const value = {};" });
+        const snapshot = await api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const file = await project.program.getSourceFile("/index.ts");
+        assert.ok(file);
+        const statement = file.statements[0];
+        assert.ok(isVariableStatement(statement));
+        const node = statement.declarationList.declarations[0].initializer;
+        assert.ok(node && isObjectLiteralExpression(node));
+        await assert.rejects(project.checker.getTypeOfAssignmentPattern(node), /expected an object or array assignment pattern/); // @sync: assert.throws(() => project.checker.getTypeOfAssignmentPattern(node), /expected an object or array assignment pattern/);
+    });
+
+    test("gets source types of object, nested object, array, and for-of patterns", async () => {
+        await using api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/index.ts": `
+declare const source: { nested: { value: number } };
+declare const tuple: [string, { value: number }];
+declare const items: { value: number }[];
+let value: number, text: string;
+({ nested: { value } } = source);
+[text, { value }] = tuple;
+for ({ value } of items) {}
+`,
+        });
+        const snapshot = await api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const file = await project.program.getSourceFile("/index.ts");
+        assert.ok(file);
+        const types: string[] = [];
+        const patterns: (ObjectLiteralExpression | ArrayLiteralExpression)[] = [];
+        file.forEachChild(function visit(node) {
+            if (isObjectLiteralExpression(node) || isArrayLiteralExpression(node)) patterns.push(node);
+            node.forEachChild(visit);
+        });
+        for (const pattern of patterns) {
+            const type = await project.checker.getTypeOfAssignmentPattern(pattern);
+            assert.ok(type);
+            types.push(await project.checker.typeToString(type));
+        }
+        assert.deepEqual(types, ["{ nested: { value: number; }; }", "{ value: number; }", "[string, { value: number; }]", "{ value: number; }", "{ value: number; }"]);
+    });
+});
+
+describe("Checker - getSymbolsOfParameterPropertyDeclaration", { concurrency }, () => {
+    test("returns distinct parameter and property symbols with canonical identities", async () => {
+        await using api = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/index.ts": `class C { constructor(public __value: string) { __value; this.__value; } }`,
+        });
+        const snapshot = await api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const file = await project.program.getSourceFile("/index.ts");
+        assert.ok(file);
+        const cls = file.statements[0];
+        assert.ok(isClassDeclaration(cls));
+        const ctor = cls.members[0];
+        assert.ok(isConstructorDeclaration(ctor));
+        const node = ctor.parameters[0];
+        const result = await project.checker.getSymbolsOfParameterPropertyDeclaration(node);
+        assert.notStrictEqual(result.parameter, result.property);
+        assert.equal(result.parameter.name, "__value");
+        assert.equal(result.property.name, "__value");
+        assert.strictEqual(result.parameter, await project.checker.getSymbolAtPosition("/index.ts", file.text.indexOf("__value;")));
+        assert.strictEqual(result.property, await project.checker.getSymbolAtLocation(node.name));
+        const type = await project.checker.getDeclaredTypeOfSymbol(await project.checker.getSymbolOfDeclaration(cls));
+        assert.strictEqual(result.property, await type.getProperty("__value"));
+    });
+});
+
+describe("Checker - isValidPropertyAccess", { concurrency }, () => {
+    test("checks existence and private/protected accessibility without changing the accessed name", async () => {
+        await using api = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/index.ts": `
+class C {
+    public visible = 1;
+    private secret = 2;
+    protected inherited = 3;
+    method() { this.visible; }
+}
+new C().visible;
+declare const anything: any;
+anything.unknown;
+`,
+        });
+        const snapshot = await api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const file = await project.program.getSourceFile("/index.ts");
+        assert.ok(file);
+        const accesses: PropertyAccessExpression[] = [];
+        file.forEachChild(function visit(node) {
+            if (isPropertyAccessExpression(node)) accesses.push(node);
+            node.forEachChild(visit);
+        });
+        assert.equal(accesses.length, 3);
+        for (const name of ["visible", "secret", "inherited", "missing"]) {
+            const results = await Promise.all(accesses.map(node => project.checker.isValidPropertyAccess(node, name)));
+            assert.deepEqual(results, name === "visible" ? [true, true, true] : name === "missing" ? [false, false, true] : [true, false, true]);
+        }
+    });
+});
+
+describe("Checker - isOptionalParameter", { concurrency }, () => {
+    test("distinguishes defaults before required parameters and omitted IIFE arguments", async () => {
+        await using api = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/index.ts": `
+function f(required: number, optional?: string) {}
+function g(before = 1, required: number, after = 2, ...rest: number[]) {}
+(function (provided, omitted, ...rest) {})(1);
+`,
+        });
+        const snapshot = await api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const file = await project.program.getSourceFile("/index.ts");
+        assert.ok(file);
+        const parameters: ParameterDeclaration[] = [];
+        file.forEachChild(function visit(node) {
+            if (isParameterDeclaration(node)) parameters.push(node);
+            node.forEachChild(visit);
+        });
+        const optional = await Promise.all(parameters.map(node => project.checker.isOptionalParameter(node)));
+        assert.deepEqual(optional, [false, true, false, false, true, false, false, true, false]);
+    });
+});
 
 describe("API", { concurrency }, () => {
     test("getCurrentLanguageServerSnapshot is LSP-only", async () => {

@@ -1065,6 +1065,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetFalseTypeOfConditionalType(ctx, parsed.(*GetTypePropertyParams))
 	case string(MethodGetTypeParametersOfSignature):
 		return s.handleGetTypeParametersOfSignature(ctx, parsed.(*GetSignaturePropertyParams))
+	case string(MethodGetTypeArgumentsForResolvedSignature):
+		return s.handleGetTypeArgumentsForResolvedSignature(ctx, parsed.(*GetSignaturePropertyParams))
 	case string(MethodGetParametersOfSignature):
 		return s.handleGetParametersOfSignature(ctx, parsed.(*GetSignaturePropertyParams))
 	case string(MethodGetThisParameterOfSignature):
@@ -1073,6 +1075,14 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetTargetOfSignature(ctx, parsed.(*GetSignaturePropertyParams))
 	case string(MethodGetContextualType):
 		return s.handleGetContextualType(ctx, parsed.(*GetContextualTypeParams))
+	case string(MethodIsOptionalParameter):
+		return s.handleIsOptionalParameter(ctx, parsed.(*CheckerNodeParams))
+	case string(MethodGetTypeOfAssignmentPattern):
+		return s.handleGetTypeOfAssignmentPattern(ctx, parsed.(*CheckerNodeParams))
+	case string(MethodIsValidPropertyAccess):
+		return s.handleIsValidPropertyAccess(ctx, parsed.(*IsValidPropertyAccessParams))
+	case string(MethodGetSymbolsOfParameterPropertyDeclaration):
+		return s.handleGetSymbolsOfParameterPropertyDeclaration(ctx, parsed.(*CheckerNodeParams))
 	case string(MethodGetContextualTypeForArgument):
 		return s.handleGetContextualTypeForArgument(ctx, parsed.(*GetContextualTypeForArgumentParams))
 	case string(MethodGetAwaitedType):
@@ -1193,6 +1203,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleMethodGetTargetSymbol(ctx, parsed.(*CheckerSymbolParams))
 	case string(MethodGetMergedSymbol):
 		return s.handleGetMergedSymbol(ctx, parsed.(*CheckerSymbolParams))
+	case string(MethodGetRootSymbols):
+		return s.handleGetRootSymbols(ctx, parsed.(*CheckerSymbolParams))
 	case string(MethodGetSymbolOfNode):
 		return s.handleGetSymbolOfNode(ctx, parsed.(*CheckerNodeParams))
 	case string(MethodGetSymbolOfDeclarationForChecker):
@@ -3975,6 +3987,142 @@ func (s *Session) handleGetTypeParameterAtPosition(ctx context.Context, params *
 		return nil, fmt.Errorf("%w: invalid parameter index", ErrClientError)
 	}
 	return setup.sd.newTypeResponse(setup.projectID, setup.checker.GetTypeParameterAtPosition(sig, int(params.Index)), setup.checker), nil
+}
+
+func (s *Session) handleIsOptionalParameter(ctx context.Context, params *CheckerNodeParams) (bool, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return false, err
+	}
+	defer setup.done()
+
+	node, err := setup.sd.resolveNodeHandle(setup.program, params.Location)
+	if err != nil {
+		return false, err
+	}
+	if !ast.IsParameterDeclaration(node) {
+		return false, fmt.Errorf("%w: expected a parameter declaration", ErrInvalidRequest)
+	}
+	return setup.checker.IsOptionalParameter(node), nil
+}
+
+func (s *Session) handleGetRootSymbols(ctx context.Context, params *CheckerSymbolParams) ([]*SymbolResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	symbol, err := setup.resolveSymbolHandle(params.Symbol)
+	if err != nil {
+		return nil, err
+	}
+	roots := setup.checker.GetRootSymbols(symbol)
+	result := make([]*SymbolResponse, len(roots))
+	for i, root := range roots {
+		result[i] = setup.newSymbolResponse(root)
+	}
+	return result, nil
+}
+
+func (s *Session) handleGetTypeArgumentsForResolvedSignature(ctx context.Context, params *GetSignaturePropertyParams) ([]*TypeResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	signature, err := setup.resolveSignatureHandle(params.Signature)
+	if err != nil {
+		return nil, err
+	}
+	types := setup.checker.GetTypeArgumentsForResolvedSignature(signature)
+	result := make([]*TypeResponse, len(types))
+	for i, t := range types {
+		result[i] = setup.sd.newTypeResponse(setup.projectID, t, setup.checker)
+	}
+	return result, nil
+}
+
+// @gen-proto-nullable
+func (s *Session) handleGetTypeOfAssignmentPattern(ctx context.Context, params *CheckerNodeParams) (*TypeResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	node, err := setup.sd.resolveNodeHandle(setup.program, params.Location)
+	if err != nil {
+		return nil, err
+	}
+	if !isSupportedAssignmentPattern(node) {
+		return nil, fmt.Errorf("%w: expected an object or array assignment pattern in an assignment or for-of initializer", ErrInvalidRequest)
+	}
+	t := setup.checker.GetTypeOfAssignmentPattern(node)
+	if t == nil {
+		return nil, nil
+	}
+	return setup.sd.newTypeResponse(setup.projectID, t, setup.checker), nil
+}
+
+func isSupportedAssignmentPattern(node *ast.Node) bool {
+	if !ast.IsAssignmentPattern(node) {
+		return false
+	}
+	parent := node.Parent
+	switch parent.Kind {
+	case ast.KindBinaryExpression:
+		return parent.AsBinaryExpression().OperatorToken.Kind == ast.KindEqualsToken && parent.AsBinaryExpression().Left == node
+	case ast.KindForOfStatement:
+		return parent.Initializer() == node
+	case ast.KindPropertyAssignment:
+		return parent.Initializer() == node && isSupportedAssignmentPattern(parent.Parent)
+	case ast.KindArrayLiteralExpression:
+		return isSupportedAssignmentPattern(parent)
+	default:
+		return false
+	}
+}
+
+func (s *Session) handleGetSymbolsOfParameterPropertyDeclaration(ctx context.Context, params *CheckerNodeParams) (*ParameterPropertySymbolsResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	node, err := setup.sd.resolveNodeHandle(setup.program, params.Location)
+	if err != nil {
+		return nil, err
+	}
+	if !ast.IsParameterPropertyDeclaration(node, node.Parent) || !ast.IsIdentifier(node.Name()) {
+		return nil, fmt.Errorf("%w: expected a parameter property with an identifier name", ErrInvalidRequest)
+	}
+	parameter, property := setup.checker.GetSymbolsOfParameterPropertyDeclaration(node, node.Name().Text())
+	return &ParameterPropertySymbolsResponse{
+		Parameter: setup.newSymbolResponse(parameter),
+		Property:  setup.newSymbolResponse(property),
+	}, nil
+}
+
+func (s *Session) handleIsValidPropertyAccess(ctx context.Context, params *IsValidPropertyAccessParams) (bool, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return false, err
+	}
+	defer setup.done()
+
+	node, err := setup.sd.resolveNodeHandle(setup.program, params.Location)
+	if err != nil {
+		return false, err
+	}
+	switch node.Kind {
+	case ast.KindPropertyAccessExpression, ast.KindQualifiedName, ast.KindImportType:
+		return setup.checker.IsValidPropertyAccess(node, params.PropertyName), nil
+	default:
+		return false, fmt.Errorf("%w: expected a property access, qualified name, or import type", ErrInvalidRequest)
+	}
 }
 
 func (s *Session) handleIsArrayLikeType(ctx context.Context, params *IsArrayLikeTypeParams) (bool, error) {

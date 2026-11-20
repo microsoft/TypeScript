@@ -161,12 +161,17 @@ const (
 	MethodGetTemplateTypeOfMappedType   Method = "getTemplateTypeOfMappedType"
 
 	// Signature sub-property methods
-	MethodGetTypeParametersOfSignature Method = "getTypeParametersOfSignature"
-	MethodGetParametersOfSignature     Method = "getParametersOfSignature"
-	MethodGetThisParameterOfSignature  Method = "getThisParameterOfSignature"
-	MethodGetTargetOfSignature         Method = "getTargetOfSignature"
+	MethodGetTypeParametersOfSignature         Method = "getTypeParametersOfSignature"
+	MethodGetTypeArgumentsForResolvedSignature Method = "getTypeArgumentsForResolvedSignature"
+	MethodGetParametersOfSignature             Method = "getParametersOfSignature"
+	MethodGetThisParameterOfSignature          Method = "getThisParameterOfSignature"
+	MethodGetTargetOfSignature                 Method = "getTargetOfSignature"
 
 	// Checker methods
+	MethodIsOptionalParameter                        Method = "isOptionalParameter"
+	MethodGetTypeOfAssignmentPattern                 Method = "getTypeOfAssignmentPattern"
+	MethodIsValidPropertyAccess                      Method = "isValidPropertyAccess"
+	MethodGetSymbolsOfParameterPropertyDeclaration   Method = "getSymbolsOfParameterPropertyDeclaration"
 	MethodGetContextualType                          Method = "getContextualType"
 	MethodGetContextualTypeForArgument               Method = "getContextualTypeForArgument"
 	MethodGetAwaitedType                             Method = "getAwaitedType"
@@ -227,6 +232,7 @@ const (
 	MethodGetImmediateAliasedSymbol                  Method = "getImmediateAliasedSymbol"
 	MethodGetTargetSymbol                            Method = "getTargetSymbol"
 	MethodGetMergedSymbol                            Method = "getMergedSymbol"
+	MethodGetRootSymbols                             Method = "getRootSymbols"
 	MethodGetSymbolOfNode                            Method = "getSymbolOfNode"
 	MethodGetSymbolOfDeclarationForChecker           Method = "getSymbolOfDeclarationForChecker"
 	MethodGetParentOfSymbolForChecker                Method = "getParentOfSymbolForChecker"
@@ -708,12 +714,17 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodGetTrueTypeOfConditionalType:  unmarshallerFor[GetTypePropertyParams],
 	MethodGetFalseTypeOfConditionalType: unmarshallerFor[GetTypePropertyParams],
 
-	MethodGetTypeParametersOfSignature: unmarshallerFor[GetSignaturePropertyParams],
-	MethodGetParametersOfSignature:     unmarshallerFor[GetSignaturePropertyParams],
-	MethodGetThisParameterOfSignature:  unmarshallerFor[GetSignaturePropertyParams],
-	MethodGetTargetOfSignature:         unmarshallerFor[GetSignaturePropertyParams],
+	MethodGetTypeParametersOfSignature:         unmarshallerFor[GetSignaturePropertyParams],
+	MethodGetTypeArgumentsForResolvedSignature: unmarshallerFor[GetSignaturePropertyParams],
+	MethodGetParametersOfSignature:             unmarshallerFor[GetSignaturePropertyParams],
+	MethodGetThisParameterOfSignature:          unmarshallerFor[GetSignaturePropertyParams],
+	MethodGetTargetOfSignature:                 unmarshallerFor[GetSignaturePropertyParams],
 
 	MethodGetContextualType:                          unmarshallerFor[GetContextualTypeParams],
+	MethodIsOptionalParameter:                        unmarshallerFor[CheckerNodeParams],
+	MethodGetTypeOfAssignmentPattern:                 unmarshallerFor[CheckerNodeParams],
+	MethodIsValidPropertyAccess:                      unmarshallerFor[IsValidPropertyAccessParams],
+	MethodGetSymbolsOfParameterPropertyDeclaration:   unmarshallerFor[CheckerNodeParams],
 	MethodGetContextualTypeForArgument:               unmarshallerFor[GetContextualTypeForArgumentParams],
 	MethodGetAwaitedType:                             unmarshallerFor[CheckerTypeParams],
 	MethodGetBaseTypeOfLiteralType:                   unmarshallerFor[GetBaseTypeOfLiteralTypeParams],
@@ -771,6 +782,7 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodGetImmediateAliasedSymbol:                  unmarshallerFor[CheckerSymbolParams],
 	MethodGetTargetSymbol:                            unmarshallerFor[CheckerSymbolParams],
 	MethodGetMergedSymbol:                            unmarshallerFor[CheckerSymbolParams],
+	MethodGetRootSymbols:                             unmarshallerFor[CheckerSymbolParams],
 	MethodGetSymbolOfNode:                            unmarshallerFor[CheckerNodeParams],
 	MethodGetSymbolOfDeclarationForChecker:           unmarshallerFor[CheckerNodeParams],
 	MethodGetParentOfSymbolForChecker:                unmarshallerFor[CheckerSymbolParams],
@@ -2042,6 +2054,18 @@ type CheckerNodeParams struct {
 	Snapshot SnapshotID     `json:"snapshot"`
 	Project  project.Handle `json:"project"`
 	Location NodeHandle     `json:"location"`
+}
+
+type IsValidPropertyAccessParams struct {
+	Snapshot     SnapshotID     `json:"snapshot"`
+	Project      project.Handle `json:"project"`
+	Location     NodeHandle     `json:"location"`
+	PropertyName string         `json:"propertyName"`
+}
+
+type ParameterPropertySymbolsResponse struct {
+	Parameter *SymbolResponse `json:"parameter" nonnil:"true"`
+	Property  *SymbolResponse `json:"property" nonnil:"true"`
 }
 
 // CheckerSymbolParams are parameters for checker methods that operate on a symbol.

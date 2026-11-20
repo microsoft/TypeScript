@@ -22,18 +22,23 @@ import { TypeFormatFlags } from "../../../enums/typeFormatFlags.js";
 import { TypePredicateKind } from "../../../enums/typePredicateKind.js";
 import {
     type __String,
+    type ArrayLiteralExpression,
     type CallLikeExpression,
     type Declaration,
     type EntityName,
     type Expression,
     type FileReference,
     type Identifier,
+    type ImportTypeNode,
     type IndexSignatureDeclaration,
     ModifierFlags,
     type NamedTupleMember,
     type Node,
+    type ObjectLiteralExpression,
     type ParameterDeclaration,
     type PathKey,
+    type PropertyAccessExpression,
+    type QualifiedName,
     type RootedDirectoryPath,
     type RootedFilePath,
     type SourceFile,
@@ -2343,6 +2348,63 @@ function encodeNumberLiteralValue(value: number): number | string {
 }
 
 export class Checker {
+    /** Get the original symbols underlying a synthetic, instantiated, or mapped property. */
+    async getRootSymbols(symbol: Symbol): Promise<readonly Symbol[]> {
+        const data = await this.client.apiRequest("getRootSymbols", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            symbol: symbol.reference,
+        });
+        return data ? data.map(symbol => this.objectRegistry.getOrCreateSymbol(symbol)) : [];
+    }
+
+    /** Get inferred or explicit signature type arguments; empty when the signature has no instantiation. */
+    async getTypeArgumentsForResolvedSignature(signature: Signature): Promise<readonly Type[]> {
+        return signature.getTypeArguments();
+    }
+
+    /** Get the source type of an object/array assignment pattern, including nested patterns and for-of initializers. */
+    async getTypeOfAssignmentPattern(node: ObjectLiteralExpression | ArrayLiteralExpression): Promise<Type | undefined> {
+        const data = await this.client.apiRequest("getTypeOfAssignmentPattern", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            location: getNodeRequestHandle(node),
+        });
+        return data ? this.objectRegistry.getOrCreateType(data) : undefined;
+    }
+
+    /** Get the distinct constructor parameter and instance property symbols of a parameter property. */
+    async getSymbolsOfParameterPropertyDeclaration(node: ParameterDeclaration): Promise<{ parameter: Symbol; property: Symbol; }> {
+        const data = await this.client.apiRequest("getSymbolsOfParameterPropertyDeclaration", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            location: getNodeRequestHandle(node),
+        });
+        return {
+            parameter: this.objectRegistry.getOrCreateSymbol(data.parameter),
+            property: this.objectRegistry.getOrCreateSymbol(data.property),
+        };
+    }
+
+    /** Whether the named property exists and is accessible at this access location. */
+    async isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName | ImportTypeNode, propertyName: string): Promise<boolean> {
+        return this.client.apiRequest("isValidPropertyAccess", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            location: getNodeRequestHandle(node),
+            propertyName,
+        });
+    }
+
+    /** Whether a parameter may be omitted, including defaults and untyped IIFE parameters. */
+    async isOptionalParameter(node: ParameterDeclaration): Promise<boolean> {
+        return this.client.apiRequest("isOptionalParameter", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            location: getNodeRequestHandle(node),
+        });
+    }
+
     private snapshotId: number;
     private project: Project;
     private objectRegistry: ProjectObjectRegistry;
@@ -4228,6 +4290,7 @@ export class Signature {
     readonly thisParameter?: CompactSymbolReference | undefined;
     readonly target?: number | undefined;
     private returnType: number | false;
+    private typeArguments: readonly number[] | false;
 
     constructor(data: SignatureResponse, project: Project, objectRegistry: ProjectObjectRegistry) {
         this.id = data.id;
@@ -4241,6 +4304,7 @@ export class Signature {
         this.thisParameter = data.thisParameter;
         this.target = data.target;
         this.returnType = false;
+        this.typeArguments = false;
     }
 
     get declaration(): NodeHandle<Declaration> | undefined {
@@ -4252,6 +4316,13 @@ export class Signature {
 
     async getTypeParameters(): Promise<readonly TypeParameter[]> {
         return this.objectRegistry.fetchTypes(this, "getTypeParametersOfSignature", this.typeParameters) as Promise<readonly TypeParameter[]>;
+    }
+
+    /** Get inferred or explicit type arguments; empty when this signature has no instantiation. */
+    async getTypeArguments(): Promise<readonly Type[]> {
+        const result = await this.objectRegistry.fetchTypes(this, "getTypeArgumentsForResolvedSignature", this.typeArguments || undefined);
+        this.typeArguments = result.map(type => type.id);
+        return result;
     }
 
     async getParameters(): Promise<readonly Symbol[]> {
