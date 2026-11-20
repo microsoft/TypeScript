@@ -308,6 +308,9 @@ func (ch *PseudoChecker) typeFromExpression(node *ast.Node) *PseudoType {
 		return NewPseudoTypeMaybeConstLocation(node, PseudoTypeTrue, PseudoTypeBoolean)
 	case ast.KindFalseKeyword:
 		return NewPseudoTypeMaybeConstLocation(node, PseudoTypeFalse, PseudoTypeBoolean)
+	case ast.KindRegularExpressionLiteral:
+		// Regular expression literal types don't exist, so the type is the global `RegExp` even in const contexts
+		return PseudoTypeRegExp
 	}
 	return NewPseudoTypeInferred(node, false)
 }
