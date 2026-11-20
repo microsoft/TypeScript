@@ -33,18 +33,18 @@ export declare function decl(): void;
 export declare namespace decl {
     var _a: number;
     export { _a as default };
-    export var _b: number;
+    var _b: number;
     export { _b as class };
-    export var _c: string;
+    var _c: string;
     export { _c as function };
 }
 export declare function arrow(): void;
 export declare namespace arrow {
     var _d: number;
     export { _d as default };
-    export var _e: number;
+    var _e: number;
     export { _e as class };
-    export var _f: string;
+    var _f: string;
     export { _f as new };
 }
 export declare function mixed(): void;
@@ -53,7 +53,7 @@ export declare namespace mixed {
     var _g: number;
     export { _g as default };
     export var b: number;
-    export var _h: number;
+    var _h: number;
     export { _h as class };
     export var c: number;
 }
@@ -61,10 +61,10 @@ declare const alias = 0;
 export declare function withAlias(): void;
 export declare namespace withAlias {
     export { alias as x };
-    export var _j: number;
+    var _j: number;
     export { _j as default };
     export var y: number;
-    export var _k: number;
+    var _k: number;
     export { _k as class };
 }
 export {};
