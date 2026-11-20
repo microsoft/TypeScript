@@ -103,6 +103,7 @@ import {
     ModuleKind,
     ModuleResolutionKind,
     type ModuleResolver,
+    NodeBuilderFlags,
     type NumberLiteralType,
     ObjectFlags,
     type Program,
@@ -115,6 +116,7 @@ import {
     type Snapshot,
     type StringMappingType,
     SymbolFlags,
+    SymbolFormatFlags,
     type SyntheticProjectId,
     type TemplateLiteralType,
     type TextEdit,
@@ -9014,6 +9016,197 @@ export const obj = { m: 1, s: "hi", b: true };
         ];
         for (const kind of kinds) {
             assert.ok(isTypeNode({ kind } as any), `isTypeNode should accept ${SyntaxKind[kind]}`);
+        }
+    });
+
+    test("symbolToString with enclosing declaration, meaning, and flags", async () => {
+        const source = `namespace N { export class Box<T> { value!: T; } } let box: N.Box<string>;`;
+        await using api = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/main.ts": source,
+        });
+        const snapshot = await api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const symbol = await project.checker.getSymbolAtPosition("/main.ts", source.indexOf("Box"));
+        assert.ok(symbol);
+        const file = await project.program.getSourceFile("/main.ts");
+        assert.ok(file);
+        assert.equal(await project.checker.symbolToString(symbol), "Box");
+        assert.equal(await project.checker.symbolToString(symbol, file, SymbolFlags.Type, SymbolFormatFlags.None), "N.Box");
+        const member = await project.checker.getSymbolAtPosition("/main.ts", source.indexOf("value"));
+        assert.ok(member);
+        assert.equal(await project.checker.symbolToString(member, file, SymbolFlags.Value, SymbolFormatFlags.WriteTypeParametersOrArguments | SymbolFormatFlags.AllowAnyNodeKind), "N.Box<T>.value");
+        assert.equal(
+            await project.checker.symbolToString(symbol, file, SymbolFlags.Type, SymbolFormatFlags.DoNotIncludeSymbolChain),
+            "Box",
+        );
+    });
+
+    test("signatureToString formats call and construct signatures", async () => {
+        const source = `declare const fn: (x: string) => string[]; declare const ctor: new (x: number) => object;`;
+        await using api = spawnAPI({ "/tsconfig.json": "{}", "/main.ts": source });
+        const snapshot = await api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const file = await project.program.getSourceFile("/main.ts");
+        assert.ok(file);
+        const type = await project.checker.getTypeAtPosition("/main.ts", source.indexOf("fn:"));
+        assert.ok(type);
+        const [signature] = await type.getCallSignatures();
+        assert.ok(signature);
+        assert.equal(await project.checker.signatureToString(signature), "(x: string): string[]");
+        assert.equal(
+            await project.checker.signatureToString(signature, file, TypeFormatFlags.WriteArrowStyleSignature),
+            "(x: string) => string[]",
+        );
+        const ctor = await project.checker.getTypeAtPosition("/main.ts", source.indexOf("ctor:"));
+        assert.ok(ctor);
+        const [construct] = await ctor.getConstructSignatures();
+        assert.ok(construct);
+        assert.equal(await project.checker.signatureToString(construct), "new (x: number): object");
+    });
+
+    test("symbolToEntityName returns a qualified, printable name", async () => {
+        const source = `namespace N { export interface Item {} } let item: N.Item;`;
+        await using api = spawnAPI({ "/tsconfig.json": "{}", "/main.ts": source });
+        const snapshot = await api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const file = await project.program.getSourceFile("/main.ts");
+        assert.ok(file);
+        const symbol = await project.checker.getSymbolAtPosition("/main.ts", source.indexOf("Item"));
+        assert.ok(symbol);
+        const name = await project.checker.symbolToEntityName(symbol, SymbolFlags.Type, file);
+        assert.ok(name);
+        assert.equal(name.kind, SyntaxKind.QualifiedName);
+        assert.equal(await api.printer.printNode(name), "N.Item");
+        const unqualified = await project.checker.symbolToEntityName(symbol, SymbolFlags.Type);
+        assert.ok(unqualified);
+        assert.equal(await api.printer.printNode(unqualified), "Item");
+    });
+
+    test("symbolToExpression returns a property access for a qualified value", async () => {
+        const source = `namespace N { export const value = 1; }`;
+        await using api = spawnAPI({ "/tsconfig.json": "{}", "/main.ts": source });
+        const snapshot = await api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const file = await project.program.getSourceFile("/main.ts");
+        assert.ok(file);
+        const symbol = await project.checker.getSymbolAtPosition("/main.ts", source.indexOf("value"));
+        assert.ok(symbol);
+        const expression = await project.checker.symbolToExpression(symbol, SymbolFlags.Value, file);
+        assert.ok(expression);
+        assert.equal(expression.kind, SyntaxKind.PropertyAccessExpression);
+        assert.equal(await api.printer.printNode(expression), "N.value");
+    });
+
+    test("symbolToParameterDeclaration preserves optional and rest parameters", async () => {
+        const source = `declare function fn(first?: string, ...rest: number[]): void;`;
+        await using api = spawnAPI({ "/tsconfig.json": "{}", "/main.ts": source });
+        const snapshot = await api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const file = await project.program.getSourceFile("/main.ts");
+        assert.ok(file);
+        for (const [name, expected] of [["first", "first?: string"], ["rest", "...rest: number[]"]]) {
+            const symbol = await project.checker.getSymbolAtPosition("/main.ts", source.indexOf(name));
+            assert.ok(symbol);
+            const parameter = await project.checker.symbolToParameterDeclaration(symbol, file);
+            assert.ok(parameter);
+            assert.equal(parameter.kind, SyntaxKind.Parameter);
+            assert.equal(await api.printer.printNode(parameter), expected);
+        }
+    });
+
+    test("symbolToTypeParameterDeclarations preserves constraints and defaults", async () => {
+        const source = `interface Box<T extends string = "default", U = T> {} interface Plain {}`;
+        await using api = spawnAPI({ "/tsconfig.json": "{}", "/main.ts": source });
+        const snapshot = await api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const symbol = await project.checker.getSymbolAtPosition("/main.ts", source.indexOf("Box"));
+        assert.ok(symbol);
+        const declarations = await project.checker.symbolToTypeParameterDeclarations(symbol);
+        assert.ok(declarations);
+        assert.equal(declarations.length, 2);
+        assert.equal(await api.printer.printNode(declarations[0]), `T extends string = "default"`);
+        assert.equal(await api.printer.printNode(declarations[1]), "U = T");
+        const plain = await project.checker.getSymbolAtPosition("/main.ts", source.indexOf("Plain"));
+        assert.ok(plain);
+        assert.equal(await project.checker.symbolToTypeParameterDeclarations(plain), undefined);
+    });
+
+    test("typeParameterToDeclaration preserves constraints and defaults", async () => {
+        const source = `interface Box<T extends string = "default"> { value: T; }`;
+        await using api = spawnAPI({ "/tsconfig.json": "{}", "/main.ts": source });
+        const snapshot = await api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const type = await project.checker.getTypeAtPosition("/main.ts", source.indexOf("Box"));
+        assert.ok(type?.isClassOrInterface());
+        const [parameter] = await type.getTypeParameters();
+        assert.ok(parameter);
+        const declaration = await project.checker.typeParameterToDeclaration(parameter);
+        assert.ok(declaration);
+        assert.equal(declaration.kind, SyntaxKind.TypeParameter);
+        assert.equal(await api.printer.printNode(declaration), `T extends string = "default"`);
+    });
+
+    test("indexInfoToIndexSignatureDeclaration preserves the parameter name and readonly modifier", async () => {
+        const source = `interface Map { readonly [key: string]: number[]; }`;
+        await using api = spawnAPI({ "/tsconfig.json": "{}", "/main.ts": source });
+        const snapshot = await api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const type = await project.checker.getTypeAtPosition("/main.ts", source.indexOf("Map"));
+        assert.ok(type);
+        const [info] = await type.getIndexInfos();
+        assert.ok(info);
+        const declaration = await project.checker.indexInfoToIndexSignatureDeclaration(info);
+        assert.ok(declaration);
+        assert.equal(declaration.kind, SyntaxKind.IndexSignature);
+        assert.equal(await api.printer.printNode(declaration), "readonly [key: string]: number[];");
+        const synthesized = await project.checker.indexInfoToIndexSignatureDeclaration(
+            {
+                keyType: info.keyType,
+                valueType: info.valueType,
+                isReadonly: false,
+            },
+            undefined,
+            NodeBuilderFlags.WriteArrayAsGenericType,
+        );
+        assert.ok(synthesized);
+        assert.equal(await api.printer.printNode(synthesized), "[x: string]: Array<number>;");
+    });
+
+    test("typePredicateToString formats ordinary and assertion predicates", async () => {
+        const source = `
+            declare function strings(x: unknown): x is string[];
+            declare function assertValue(x: unknown): asserts x;
+            declare function assertStrings(x: unknown): asserts x is string[];
+            interface Guard { check(): this is Guard; assert(): asserts this; }
+        `;
+        await using api = spawnAPI({ "/tsconfig.json": "{}", "/main.ts": source });
+        const snapshot = await api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const file = await project.program.getSourceFile("/main.ts");
+        assert.ok(file);
+        for (
+            const [name, expected] of [
+                ["strings(", "x is string[]"],
+                ["assertValue(", "asserts x"],
+                ["assertStrings(", "asserts x is string[]"],
+                ["check(", "this is Guard"],
+                ["assert(", "asserts this"],
+            ]
+        ) {
+            const type = await project.checker.getTypeAtPosition("/main.ts", source.indexOf(name));
+            assert.ok(type);
+            const [signature] = await type.getCallSignatures();
+            assert.ok(signature);
+            const predicate = await project.checker.getTypePredicateOfSignature(signature);
+            assert.ok(predicate);
+            assert.equal(await project.checker.typePredicateToString(predicate), expected);
+            if (name === "strings(") {
+                assert.equal(
+                    await project.checker.typePredicateToString(predicate, file, TypeFormatFlags.WriteArrayAsGenericType),
+                    "x is Array<string>",
+                );
+            }
         }
     });
 

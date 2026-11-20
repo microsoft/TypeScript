@@ -34,6 +34,7 @@ import { ScriptKind } from "../../../enums/scriptKind.js";
 import { SignatureFlags } from "../../../enums/signatureFlags.js";
 import { SignatureKind } from "../../../enums/signatureKind.js";
 import { SymbolFlags } from "../../../enums/symbolFlags.js";
+import { SymbolFormatFlags } from "../../../enums/symbolFormatFlags.js";
 import { SymbolOwnerKind } from "../../../enums/symbolOwnerKind.js";
 import { TypeFlags } from "../../../enums/typeFlags.js";
 import { TypeFormatFlags } from "../../../enums/typeFormatFlags.js";
@@ -42,6 +43,7 @@ import {
     type __String,
     type CallLikeExpression,
     type Declaration,
+    type EntityName,
     type Expression,
     type FileReference,
     type Identifier,
@@ -57,6 +59,7 @@ import {
     type StringLiteralLikeNode,
     type SyntaxKind,
     type TypeNode,
+    type TypeParameterDeclaration,
     unescapeLeadingUnderscores,
 } from "../../ast/index.ts";
 import { assertNever } from "../../internal/utils.ts";
@@ -220,7 +223,7 @@ import type {
 export { formatDiagnostics, formatDiagnosticsWithColorAndContext } from "../diagnosticFormatter.ts";
 export { documentURIToFileName, fileNameToDocumentURI } from "../path.ts";
 export type { EmitContext, PrintNodeOptions, SynthesizedComment } from "../printer.ts";
-export { CheckFlags, CompletionItemKind, DiagnosticCategory, ElementFlags, EmitFlags, EmitOnly, IndexKind, JsxEmit, ModifierFlags, ModuleKind, ModuleResolutionKind, NodeBuilderFlags, ObjectFlags, ScriptKind, SignatureFlags, SignatureKind, SymbolFlags, SymbolOwnerKind, TypeFlags, TypeFormatFlags, TypePredicateKind };
+export { CheckFlags, CompletionItemKind, DiagnosticCategory, ElementFlags, EmitFlags, EmitOnly, IndexKind, JsxEmit, ModifierFlags, ModuleKind, ModuleResolutionKind, NodeBuilderFlags, ObjectFlags, ScriptKind, SignatureFlags, SignatureKind, SymbolFlags, SymbolFormatFlags, SymbolOwnerKind, TypeFlags, TypeFormatFlags, TypePredicateKind };
 export type {
     APIImportAdderAction as ImportAdderAction,
     APIOptions,
@@ -5739,6 +5742,321 @@ export class Checker {
                 );
                 if (!binaryData) return undefined;
                 return decodeNode(binaryData) as Node;
+            },
+        );
+    }
+
+    get symbolToEntityName(): {
+        (symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): EntityName | undefined;
+        gen(symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): Generator<ProtocolRequest, EntityName | undefined, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "symbolToEntityName",
+            function (symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): EntityName | undefined {
+                const binaryData = owner.client.apiRequestBinary("symbolToEntityName", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    symbol: symbol.reference,
+                    meaning,
+                    location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+                    flags,
+                });
+                if (!binaryData) return undefined;
+                return decodeNode(binaryData) as EntityName;
+            },
+            function* (symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): Generator<ProtocolRequest, EntityName | undefined, ProtocolResponse["result"]> {
+                const binaryData = sourceFileResponseToUint8Array(
+                    yield* apiRequest("symbolToEntityName", {
+                        snapshot: owner.snapshotId,
+                        project: owner.project.handle,
+                        symbol: symbol.reference,
+                        meaning,
+                        location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+                        flags,
+                    }),
+                );
+                if (!binaryData) return undefined;
+                return decodeNode(binaryData) as EntityName;
+            },
+        );
+    }
+
+    get symbolToExpression(): {
+        (symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): Expression | undefined;
+        gen(symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): Generator<ProtocolRequest, Expression | undefined, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "symbolToExpression",
+            function (symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): Expression | undefined {
+                const binaryData = owner.client.apiRequestBinary("symbolToExpression", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    symbol: symbol.reference,
+                    meaning,
+                    location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+                    flags,
+                });
+                if (!binaryData) return undefined;
+                return decodeNode(binaryData) as Expression;
+            },
+            function* (symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): Generator<ProtocolRequest, Expression | undefined, ProtocolResponse["result"]> {
+                const binaryData = sourceFileResponseToUint8Array(
+                    yield* apiRequest("symbolToExpression", {
+                        snapshot: owner.snapshotId,
+                        project: owner.project.handle,
+                        symbol: symbol.reference,
+                        meaning,
+                        location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+                        flags,
+                    }),
+                );
+                if (!binaryData) return undefined;
+                return decodeNode(binaryData) as Expression;
+            },
+        );
+    }
+
+    get symbolToParameterDeclaration(): {
+        (symbol: Symbol, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): ParameterDeclaration | undefined;
+        gen(symbol: Symbol, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): Generator<ProtocolRequest, ParameterDeclaration | undefined, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "symbolToParameterDeclaration",
+            function (symbol: Symbol, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): ParameterDeclaration | undefined {
+                const binaryData = owner.client.apiRequestBinary("symbolToParameterDeclaration", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    symbol: symbol.reference,
+                    location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+                    flags,
+                });
+                if (!binaryData) return undefined;
+                return decodeNode(binaryData) as ParameterDeclaration;
+            },
+            function* (symbol: Symbol, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): Generator<ProtocolRequest, ParameterDeclaration | undefined, ProtocolResponse["result"]> {
+                const binaryData = sourceFileResponseToUint8Array(
+                    yield* apiRequest("symbolToParameterDeclaration", {
+                        snapshot: owner.snapshotId,
+                        project: owner.project.handle,
+                        symbol: symbol.reference,
+                        location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+                        flags,
+                    }),
+                );
+                if (!binaryData) return undefined;
+                return decodeNode(binaryData) as ParameterDeclaration;
+            },
+        );
+    }
+
+    get symbolToTypeParameterDeclarations(): {
+        (symbol: Symbol, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): readonly TypeParameterDeclaration[] | undefined;
+        gen(symbol: Symbol, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): Generator<ProtocolRequest, readonly TypeParameterDeclaration[] | undefined, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "symbolToTypeParameterDeclarations",
+            function (symbol: Symbol, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): readonly TypeParameterDeclaration[] | undefined {
+                const data = owner.client.apiRequest("symbolToTypeParameterDeclarations", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    symbol: symbol.reference,
+                    location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+                    flags,
+                });
+                return data?.length ? data.map(node => decodeNode(sourceFileResponseToUint8Array(node)!) as TypeParameterDeclaration) : undefined;
+            },
+            function* (symbol: Symbol, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): Generator<ProtocolRequest, readonly TypeParameterDeclaration[] | undefined, ProtocolResponse["result"]> {
+                const data = yield* apiRequest("symbolToTypeParameterDeclarations", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    symbol: symbol.reference,
+                    location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+                    flags,
+                });
+                return data?.length ? data.map(node => decodeNode(sourceFileResponseToUint8Array(node)!) as TypeParameterDeclaration) : undefined;
+            },
+        );
+    }
+
+    get typeParameterToDeclaration(): {
+        (parameter: TypeParameter, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): TypeParameterDeclaration | undefined;
+        gen(parameter: TypeParameter, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): Generator<ProtocolRequest, TypeParameterDeclaration | undefined, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "typeParameterToDeclaration",
+            function (parameter: TypeParameter, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): TypeParameterDeclaration | undefined {
+                const binaryData = owner.client.apiRequestBinary("typeParameterToDeclaration", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    type: parameter.id,
+                    location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+                    flags,
+                });
+                if (!binaryData) return undefined;
+                return decodeNode(binaryData) as TypeParameterDeclaration;
+            },
+            function* (parameter: TypeParameter, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): Generator<ProtocolRequest, TypeParameterDeclaration | undefined, ProtocolResponse["result"]> {
+                const binaryData = sourceFileResponseToUint8Array(
+                    yield* apiRequest("typeParameterToDeclaration", {
+                        snapshot: owner.snapshotId,
+                        project: owner.project.handle,
+                        type: parameter.id,
+                        location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+                        flags,
+                    }),
+                );
+                if (!binaryData) return undefined;
+                return decodeNode(binaryData) as TypeParameterDeclaration;
+            },
+        );
+    }
+
+    get indexInfoToIndexSignatureDeclaration(): {
+        (info: IndexInfo, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): IndexSignatureDeclaration | undefined;
+        gen(info: IndexInfo, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): Generator<ProtocolRequest, IndexSignatureDeclaration | undefined, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "indexInfoToIndexSignatureDeclaration",
+            function (info: IndexInfo, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): IndexSignatureDeclaration | undefined {
+                const declaration = info.declaration ? info.declaration.resolve(owner.project) : undefined;
+                const binaryData = owner.client.apiRequestBinary("indexInfoToIndexSignatureDeclaration", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    keyType: info.keyType.id,
+                    valueType: info.valueType.id,
+                    isReadonly: info.isReadonly,
+                    declaration: declaration ? getNodeRequestHandle(declaration) : undefined,
+                    location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+                    flags,
+                });
+                if (!binaryData) return undefined;
+                return decodeNode(binaryData) as IndexSignatureDeclaration;
+            },
+            function* (info: IndexInfo, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): Generator<ProtocolRequest, IndexSignatureDeclaration | undefined, ProtocolResponse["result"]> {
+                const declaration = info.declaration ? (yield* info.declaration.resolve.gen(owner.project)) : undefined;
+                const binaryData = sourceFileResponseToUint8Array(
+                    yield* apiRequest("indexInfoToIndexSignatureDeclaration", {
+                        snapshot: owner.snapshotId,
+                        project: owner.project.handle,
+                        keyType: info.keyType.id,
+                        valueType: info.valueType.id,
+                        isReadonly: info.isReadonly,
+                        declaration: declaration ? getNodeRequestHandle(declaration) : undefined,
+                        location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+                        flags,
+                    }),
+                );
+                if (!binaryData) return undefined;
+                return decodeNode(binaryData) as IndexSignatureDeclaration;
+            },
+        );
+    }
+
+    get typePredicateToString(): {
+        (predicate: TypePredicate, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string;
+        gen(predicate: TypePredicate, enclosingDeclaration?: Node, flags?: TypeFormatFlags): Generator<ProtocolRequest, string, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "typePredicateToString",
+            function (predicate: TypePredicate, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string {
+                return owner.client.apiRequest("typePredicateToString", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    kind: predicate.kind,
+                    parameterName: predicate.parameterName,
+                    parameterIndex: predicate.parameterIndex,
+                    type: predicate.type?.id,
+                    location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+                    flags,
+                });
+            },
+            function* (predicate: TypePredicate, enclosingDeclaration?: Node, flags?: TypeFormatFlags): Generator<ProtocolRequest, string, ProtocolResponse["result"]> {
+                return yield* apiRequest("typePredicateToString", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    kind: predicate.kind,
+                    parameterName: predicate.parameterName,
+                    parameterIndex: predicate.parameterIndex,
+                    type: predicate.type?.id,
+                    location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+                    flags,
+                });
+            },
+        );
+    }
+
+    /** Formats a call or construct signature, using the signature's own kind. */
+    get signatureToString(): {
+        (signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string;
+        gen(signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags): Generator<ProtocolRequest, string, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "signatureToString",
+            function (signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string {
+                return owner.client.apiRequest("signatureToString", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    signature: signature.id,
+                    location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+                    flags,
+                });
+            },
+            function* (signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags): Generator<ProtocolRequest, string, ProtocolResponse["result"]> {
+                return yield* apiRequest("signatureToString", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    signature: signature.id,
+                    location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+                    flags,
+                });
+            },
+        );
+    }
+
+    /** Formats a symbol, optionally qualifying its name relative to an enclosing declaration. */
+    get symbolToString(): {
+        (symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags): string;
+        gen(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags): Generator<ProtocolRequest, string, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "symbolToString",
+            function (symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags): string {
+                return owner.client.apiRequest("symbolToString", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    symbol: symbol.reference,
+                    location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+                    meaning,
+                    flags,
+                });
+            },
+            function* (symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags): Generator<ProtocolRequest, string, ProtocolResponse["result"]> {
+                return yield* apiRequest("symbolToString", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    symbol: symbol.reference,
+                    location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+                    meaning,
+                    flags,
+                });
             },
         );
     }

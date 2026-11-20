@@ -321,6 +321,12 @@ function assertOptionalNodesEquivalent(actual: Node | undefined, expected: Node 
     assertOptionalEquivalent(actual, expected, assertNodesEquivalent, message);
 }
 
+function assertOptionalNodeArraysEquivalent(actual: readonly Node[] | undefined, expected: readonly Node[] | undefined, message?: string): void {
+    assertOptionalEquivalent(actual, expected, (a, b) => {
+        assertArrayElementsEquivalent(a, b, assertNodesEquivalent, message);
+    }, message);
+}
+
 function assertSourceFilesEquivalent(actual: SourceFile, expected: SourceFile, message?: string): void {
     assertNodesEquivalent(actual, expected, message);
     assert.equal(actual.fileName, expected.fileName, message);
@@ -1709,7 +1715,15 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
                 parityCase("Checker", "getESSymbolType", checker.getESSymbolType, assertTypesEquivalent),
                 parityCase("Checker", "getNonPrimitiveType", checker.getNonPrimitiveType, assertTypesEquivalent),
                 parityCase("Checker", "typeToTypeNode", checker.typeToTypeNode, assertOptionalNodesEquivalent, interfaceType, interfaceDeclaration),
+                parityCase("Checker", "symbolToEntityName", checker.symbolToEntityName, assertOptionalNodesEquivalent, interfaceSymbol, SymbolFlags.Type, interfaceDeclaration),
+                parityCase("Checker", "symbolToExpression", checker.symbolToExpression, assertOptionalNodesEquivalent, combineSymbol, SymbolFlags.Value, combineDeclaration),
+                parityCase("Checker", "symbolToParameterDeclaration", checker.symbolToParameterDeclaration, assertOptionalNodesEquivalent, signature.getParameters()[0], combineDeclaration),
+                parityCase("Checker", "symbolToTypeParameterDeclarations", checker.symbolToTypeParameterDeclarations, assertOptionalNodeArraysEquivalent, interfaceSymbol, interfaceDeclaration),
+                parityCase("Checker", "typeParameterToDeclaration", checker.typeParameterToDeclaration, assertOptionalNodesEquivalent, typeParameter, interfaceDeclaration),
+                parityCase("Checker", "indexInfoToIndexSignatureDeclaration", checker.indexInfoToIndexSignatureDeclaration, assertOptionalNodesEquivalent, { keyType: checker.getStringType(), valueType: interfaceType, isReadonly: true }, interfaceDeclaration),
+                parityCase("Checker", "typePredicateToString", checker.typePredicateToString, assertDeepEquivalent, checker.getTypePredicateOfSignature(predicateSignature)!, interfaceDeclaration),
                 parityCase("Checker", "signatureToSignatureDeclaration", checker.signatureToSignatureDeclaration, assertOptionalNodesEquivalent, signature, SyntaxKind.FunctionDeclaration, combineDeclaration),
+                parityCase("Checker", "signatureToString", checker.signatureToString, assertDeepEquivalent, signature, combineDeclaration),
                 parityCase("Checker", "typeToString", checker.typeToString, assertDeepEquivalent, interfaceType, interfaceDeclaration),
                 parityCase("Checker", "isContextSensitive", checker.isContextSensitive, assertDeepEquivalent, boxDeclaration.initializer!),
                 parityCase("Checker", "isArrayType", checker.isArrayType, assertDeepEquivalent, arrayType),
@@ -1735,6 +1749,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
                 parityCase("Checker", "getExportSpecifierLocalTargetSymbol", checker.getExportSpecifierLocalTargetSymbol, assertOptionalSymbolsEquivalent, exportSpecifier),
                 parityCase("Checker", "getAliasedSymbol", checker.getAliasedSymbol, assertSymbolsEquivalent, importedDerivedSymbol),
                 parityCase("Checker", "getFullyQualifiedName", checker.getFullyQualifiedName, assertDeepEquivalent, combineSymbol),
+                parityCase("Checker", "symbolToString", checker.symbolToString, assertDeepEquivalent, interfaceSymbol, interfaceDeclaration, SymbolFlags.Type),
                 parityCase("Checker", "getImmediateAliasedSymbol", checker.getImmediateAliasedSymbol, assertOptionalSymbolsEquivalent, importedDerivedSymbol),
                 parityCase("Checker", "isUnknownSymbol", checker.isUnknownSymbol, assertDeepEquivalent, unknownSymbol),
                 parityCase("Checker", "isUndefinedSymbol", checker.isUndefinedSymbol, assertDeepEquivalent, undefinedSymbol),

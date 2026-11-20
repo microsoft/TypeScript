@@ -15,6 +15,7 @@ import { ScriptKind } from "../../../enums/scriptKind.js";
 import { SignatureFlags } from "../../../enums/signatureFlags.js";
 import { SignatureKind } from "../../../enums/signatureKind.js";
 import { SymbolFlags } from "../../../enums/symbolFlags.js";
+import { SymbolFormatFlags } from "../../../enums/symbolFormatFlags.js";
 import { SymbolOwnerKind } from "../../../enums/symbolOwnerKind.js";
 import { TypeFlags } from "../../../enums/typeFlags.js";
 import { TypeFormatFlags } from "../../../enums/typeFormatFlags.js";
@@ -23,6 +24,7 @@ import {
     type __String,
     type CallLikeExpression,
     type Declaration,
+    type EntityName,
     type Expression,
     type FileReference,
     type Identifier,
@@ -38,6 +40,7 @@ import {
     type StringLiteralLikeNode,
     type SyntaxKind,
     type TypeNode,
+    type TypeParameterDeclaration,
     unescapeLeadingUnderscores,
 } from "../../ast/index.ts";
 import { assertNever } from "../../internal/utils.ts";
@@ -202,7 +205,7 @@ import type {
 export { formatDiagnostics, formatDiagnosticsWithColorAndContext } from "../diagnosticFormatter.ts";
 export { documentURIToFileName, fileNameToDocumentURI } from "../path.ts";
 export type { EmitContext, PrintNodeOptions, SynthesizedComment } from "../printer.ts";
-export { CheckFlags, CompletionItemKind, DiagnosticCategory, ElementFlags, EmitFlags, EmitOnly, IndexKind, JsxEmit, ModifierFlags, ModuleKind, ModuleResolutionKind, NodeBuilderFlags, ObjectFlags, ScriptKind, SignatureFlags, SignatureKind, SymbolFlags, SymbolOwnerKind, TypeFlags, TypeFormatFlags, TypePredicateKind };
+export { CheckFlags, CompletionItemKind, DiagnosticCategory, ElementFlags, EmitFlags, EmitOnly, IndexKind, JsxEmit, ModifierFlags, ModuleKind, ModuleResolutionKind, NodeBuilderFlags, ObjectFlags, ScriptKind, SignatureFlags, SignatureKind, SymbolFlags, SymbolFormatFlags, SymbolOwnerKind, TypeFlags, TypeFormatFlags, TypePredicateKind };
 export type {
     APIImportAdderAction as ImportAdderAction,
     APIOptions,
@@ -2900,6 +2903,119 @@ export class Checker {
         });
         if (!binaryData) return undefined;
         return decodeNode(binaryData) as Node;
+    }
+
+    async symbolToEntityName(symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): Promise<EntityName | undefined> {
+        const binaryData = await this.client.apiRequestBinary("symbolToEntityName", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            symbol: symbol.reference,
+            meaning,
+            location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+            flags,
+        });
+        if (!binaryData) return undefined;
+        return decodeNode(binaryData) as EntityName;
+    }
+
+    async symbolToExpression(symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): Promise<Expression | undefined> {
+        const binaryData = await this.client.apiRequestBinary("symbolToExpression", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            symbol: symbol.reference,
+            meaning,
+            location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+            flags,
+        });
+        if (!binaryData) return undefined;
+        return decodeNode(binaryData) as Expression;
+    }
+
+    async symbolToParameterDeclaration(symbol: Symbol, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): Promise<ParameterDeclaration | undefined> {
+        const binaryData = await this.client.apiRequestBinary("symbolToParameterDeclaration", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            symbol: symbol.reference,
+            location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+            flags,
+        });
+        if (!binaryData) return undefined;
+        return decodeNode(binaryData) as ParameterDeclaration;
+    }
+
+    async symbolToTypeParameterDeclarations(symbol: Symbol, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): Promise<readonly TypeParameterDeclaration[] | undefined> {
+        const data = await this.client.apiRequest("symbolToTypeParameterDeclarations", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            symbol: symbol.reference,
+            location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+            flags,
+        });
+        return data?.length ? data.map(node => decodeNode(sourceFileResponseToUint8Array(node)!) as TypeParameterDeclaration) : undefined;
+    }
+
+    async typeParameterToDeclaration(parameter: TypeParameter, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): Promise<TypeParameterDeclaration | undefined> {
+        const binaryData = await this.client.apiRequestBinary("typeParameterToDeclaration", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            type: parameter.id,
+            location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+            flags,
+        });
+        if (!binaryData) return undefined;
+        return decodeNode(binaryData) as TypeParameterDeclaration;
+    }
+
+    async indexInfoToIndexSignatureDeclaration(info: IndexInfo, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): Promise<IndexSignatureDeclaration | undefined> {
+        const declaration = info.declaration ? await info.declaration.resolve(this.project) : undefined;
+        const binaryData = await this.client.apiRequestBinary("indexInfoToIndexSignatureDeclaration", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            keyType: info.keyType.id,
+            valueType: info.valueType.id,
+            isReadonly: info.isReadonly,
+            declaration: declaration ? getNodeRequestHandle(declaration) : undefined,
+            location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+            flags,
+        });
+        if (!binaryData) return undefined;
+        return decodeNode(binaryData) as IndexSignatureDeclaration;
+    }
+
+    async typePredicateToString(predicate: TypePredicate, enclosingDeclaration?: Node, flags?: TypeFormatFlags): Promise<string> {
+        return this.client.apiRequest("typePredicateToString", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            kind: predicate.kind,
+            parameterName: predicate.parameterName,
+            parameterIndex: predicate.parameterIndex,
+            type: predicate.type?.id,
+            location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+            flags,
+        });
+    }
+
+    /** Formats a call or construct signature, using the signature's own kind. */
+    async signatureToString(signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags): Promise<string> {
+        return this.client.apiRequest("signatureToString", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            signature: signature.id,
+            location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+            flags,
+        });
+    }
+
+    /** Formats a symbol, optionally qualifying its name relative to an enclosing declaration. */
+    async symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags): Promise<string> {
+        return this.client.apiRequest("symbolToString", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            symbol: symbol.reference,
+            location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+            meaning,
+            flags,
+        });
     }
 
     async typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): Promise<string> {
