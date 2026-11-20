@@ -175,6 +175,106 @@ export class MsgpackReader {
         throw new Error(`Expected array header, got 0x${byte.toString(16)}`);
     }
 
+    skipValue(): void {
+        let remaining = 1;
+        while (remaining > 0) {
+            this.skipBytes(1);
+            const byte = this.buf[this.pos - 1];
+            remaining--;
+            if (byte <= 0x7f || byte >= 0xe0 || byte === 0xc0 || byte === 0xc2 || byte === 0xc3) continue;
+            if ((byte & 0xe0) === 0xa0) {
+                this.skipBytes(byte & 0x1f);
+            }
+            else if ((byte & 0xf0) === 0x90) {
+                remaining += byte & 0x0f;
+            }
+            else if ((byte & 0xf0) === 0x80) {
+                remaining += (byte & 0x0f) * 2;
+            }
+            else {
+                switch (byte) {
+                    case 0xcc:
+                    case 0xd0:
+                        this.skipBytes(1);
+                        break;
+                    case 0xcd:
+                    case 0xd1:
+                    case 0xd4:
+                        this.skipBytes(2);
+                        break;
+                    case 0xce:
+                    case 0xd2:
+                    case 0xca:
+                        this.skipBytes(4);
+                        break;
+                    case 0xcf:
+                    case 0xd3:
+                    case 0xcb:
+                        this.skipBytes(8);
+                        break;
+                    case 0xd5:
+                        this.skipBytes(3);
+                        break;
+                    case 0xd6:
+                        this.skipBytes(5);
+                        break;
+                    case 0xd7:
+                        this.skipBytes(9);
+                        break;
+                    case 0xd8:
+                        this.skipBytes(17);
+                        break;
+                    case 0xc4:
+                    case 0xd9:
+                        this.skipBytes(this.readLength(1));
+                        break;
+                    case 0xc5:
+                    case 0xda:
+                        this.skipBytes(this.readLength(2));
+                        break;
+                    case 0xc6:
+                    case 0xdb:
+                        this.skipBytes(this.readLength(4));
+                        break;
+                    case 0xc7:
+                        this.skipBytes(this.readLength(1) + 1);
+                        break;
+                    case 0xc8:
+                        this.skipBytes(this.readLength(2) + 1);
+                        break;
+                    case 0xc9:
+                        this.skipBytes(this.readLength(4) + 1);
+                        break;
+                    case 0xdc:
+                        remaining += this.readLength(2);
+                        break;
+                    case 0xdd:
+                        remaining += this.readLength(4);
+                        break;
+                    case 0xde:
+                        remaining += this.readLength(2) * 2;
+                        break;
+                    case 0xdf:
+                        remaining += this.readLength(4) * 2;
+                        break;
+                    default:
+                        throw new Error(`Invalid MessagePack prefix 0x${byte.toString(16)}`);
+                }
+            }
+        }
+    }
+
+    private skipBytes(length: number): void {
+        if (length > this.buf.length - this.pos) throw new Error("Unexpected end of MessagePack data");
+        this.pos += length;
+    }
+
+    private readLength(bytes: 1 | 2 | 4): number {
+        const offset = this.pos;
+        this.skipBytes(bytes);
+        return bytes === 1 ? this.buf[offset] : bytes === 2 ? this.view.getUint16(offset, false) : this.view.getUint32(offset, false);
+    }
+
     readUint(): number {
         const byte = this.buf[this.pos++];
         if (byte <= 0x7f) return byte;

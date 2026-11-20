@@ -183,7 +183,7 @@ const (
 //
 // Diagnostic directives are msgpack arrays of normalized tuples in UTF-16 coordinates:
 //
-//	[originalStart: uint, originalLength: uint, virtualStart: uint, virtualLength: uint, policy: uint, diagnosticCode: uint, unusedCode: uint]
+//	[originalStart: uint, originalLength: uint, virtualStart: uint, virtualLength: uint, policy: uint, unusedCode: uint, diagnosticCodes: uint[]]
 //
 // An offset of 0xFFFFFFFF indicates no data (empty array).
 //
@@ -860,8 +860,11 @@ func encodeDiagnosticDirectives(directives []ast.MappedDiagnosticDirective, virt
 		*buf = msgpackWriteUint(*buf, uint32(virtualStart))
 		*buf = msgpackWriteUint(*buf, uint32(virtualEnd-virtualStart))
 		*buf = msgpackWriteUint(*buf, uint32(directive.Policy))
-		*buf = msgpackWriteUint(*buf, uint32(directive.DiagnosticCode))
 		*buf = msgpackWriteUint(*buf, uint32(directive.UnusedCode))
+		*buf = msgpackWriteArrayHeader(*buf, len(directive.DiagnosticCodes))
+		for _, code := range directive.DiagnosticCodes {
+			*buf = msgpackWriteUint(*buf, uint32(code))
+		}
 	}
 	return offset
 }

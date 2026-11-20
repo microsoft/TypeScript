@@ -2543,11 +2543,12 @@ const (
 )
 
 type MappedDiagnosticDirective struct {
-	OriginalRange     core.TextRange
-	VirtualRange      core.TextRange
-	Policy            MappedDiagnosticDirectivePolicy
-	DiagnosticCode    int32
-	UnusedCode        int32
+	OriginalRange core.TextRange
+	VirtualRange  core.TextRange
+	Policy        MappedDiagnosticDirectivePolicy
+	UnusedCode    int32
+	// DiagnosticCodes restricts an ignore directive; an empty slice matches all codes.
+	DiagnosticCodes   []int32
 	UnusedMessageText string
 	Source            string
 }

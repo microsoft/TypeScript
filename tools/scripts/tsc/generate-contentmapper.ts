@@ -21,6 +21,7 @@ interface Schema {
     properties?: Record<string, Schema>;
     required?: string[];
     items?: Schema | Schema[];
+    additionalItems?: Schema | boolean;
     anyOf?: Schema[];
     oneOf?: Schema[];
     allOf?: Schema[];
@@ -210,8 +211,6 @@ function goType(schema: Schema, definitions: Record<string, Schema>): string {
             return "string";
         case "integer":
             return schema.minimum === -2147483648 && schema.maximum === 2147483647 ? "int32" : "int";
-        case "boolean":
-            return "bool";
         case "array":
             assert(schema.items && !Array.isArray(schema.items), "Unsupported array items");
             return `[]${goType(schema.items, definitions)}`;
@@ -237,6 +236,53 @@ function fieldDescription(name: string, schema: Schema, definitions: Record<stri
     const type = schemaType(target);
     const verb = type === "array" ? "lists" : !type || type === "object" ? "contains" : "is";
     return [`// ${name} ${verb} ${nounPhrase(text)}`];
+}
+
+function mappedDiagnosticDirectiveVariants(schema: Schema): { ignore: Schema; expect: Schema; expectMaxItems: number; } {
+    assert(schema.oneOf?.length === 2, "MappedDiagnosticDirective must have two policy variants");
+    const variants = new Map<number, Schema>();
+    for (const variant of schema.oneOf) {
+        const items = variant.items;
+        if (!Array.isArray(items)) throw new Error("Unsupported MappedDiagnosticDirective policy variant");
+        assert(
+            variant.type === "array" && items.length >= 5
+                && variant.minItems === 5 && items[4].title === "policy"
+                && (items[4].const === 0 || items[4].const === 1),
+            "Unsupported MappedDiagnosticDirective policy variant",
+        );
+        assert(!variants.has(items[4].const), "Duplicate MappedDiagnosticDirective policy variant");
+        variants.set(items[4].const, variant);
+    }
+    const ignore = variants.get(0);
+    const expect = variants.get(1);
+    assert(ignore && expect, "MappedDiagnosticDirective must define ignore and expect variants");
+    assert(
+        typeof ignore.additionalItems === "object" && ignore.additionalItems.type === "integer"
+            && ignore.additionalItems.minimum === 1 && ignore.additionalItems.maximum === 2147483647
+            && ignore.maxItems === undefined,
+        "Unsupported MappedDiagnosticDirective ignore variant",
+    );
+    const expectItems = expect.items;
+    const expectMaxItems = expect.maxItems;
+    if (!Array.isArray(expectItems)) throw new Error("Unsupported MappedDiagnosticDirective expect variant");
+    assert(
+        expectItems.length === 6 && expectItems[5].title === "unusedExpectDirectiveIndex"
+            && expectItems[5].type === "integer" && expectItems[5].minimum === 0
+            && expectMaxItems === 6,
+        "Unsupported MappedDiagnosticDirective expect variant",
+    );
+    for (const variant of [ignore, expect]) {
+        const items = variant.items;
+        assert(Array.isArray(items), "Unsupported MappedDiagnosticDirective tuple items");
+        assert(
+            items.slice(0, 4).every((item, index) =>
+                item.title === ["originalStart", "originalLength", "virtualStart", "virtualEnd"][index]
+                && item.type === "integer"
+            ),
+            "Unsupported MappedDiagnosticDirective range fields",
+        );
+    }
+    return { ignore, expect, expectMaxItems };
 }
 
 function typeDescription(name: string, text: string | undefined): string[] {
@@ -345,82 +391,101 @@ export function generateContentMapper(document: SchemaDocument): string {
             for (const value of schema.enum) lines.push(`\t${name}${names[String(value)]} ${name} = ${JSON.stringify(value)}`);
             lines.push(")");
         }
-        else if (Array.isArray(schema.items)) {
-            assert(schema.type === "array" && schema.minItems === 5 && schema.maxItems === 6 && schema.items.length === 6, `Unsupported ${name} tuple`);
-            if (name === "SpanMapSegment") {
-                spanMapTuple(document);
-                lines.push(`type ${name} = spanmap.SegmentTuple`);
+        else if (name === "MappedDiagnosticDirective" && schema.oneOf) {
+            const { ignore, expect, expectMaxItems } = mappedDiagnosticDirectiveVariants(schema);
+            assert(schema.title, "Missing MappedDiagnosticDirective title");
+            const ignoreItems = ignore.items as Schema[];
+            const expectItems = expect.items as Schema[];
+            const policyNames = enumNames.DiagnosticDirectivePolicy;
+            const ignorePolicy = `DiagnosticDirectivePolicy${policyNames[String(ignoreItems[4].const)]}`;
+            const expectPolicy = `DiagnosticDirectivePolicy${policyNames[String(expectItems[4].const)]}`;
+            const fields = expectItems.slice(0, 4);
+            assert(
+                fields.every((field, index) => field.title === ["originalStart", "originalLength", "virtualStart", "virtualEnd"][index]),
+                "Unsupported MappedDiagnosticDirective fields",
+            );
+            lines.push("type MappedDiagnosticDirective struct {");
+            for (const field of fields) {
+                const name = goName(field.title!);
+                lines.push(...fieldDescription(name, field, definitions).map(line => `\t${line}`));
+                lines.push(`\t${name} ${goType(field, definitions)}`);
             }
-            else if (schema.items.every(item => item.title)) {
-                const names = schema.items.map(item => goName(item.title!));
-                assert(name === "MappedDiagnosticDirective" && names[4] === "Policy" && names[5] === "UnusedExpectDirectiveIndex", `Unsupported ${name} tuple fields`);
-                assert(schema.title, `Missing ${name} tuple title`);
-                const label = schema.title[0].toLowerCase() + schema.title.slice(1);
-                assert(schema.maxItems - schema.minItems === 1, `Unsupported ${name} tuple optional fields`);
-                assert(schema.items.every((item, index) => index === 4 ? item.$ref === "#/definitions/DiagnosticDirectivePolicy" : item.type === "integer"), `Unsupported ${name} tuple items`);
-                lines.push(`type ${name} struct {`);
-                for (const [index, item] of schema.items.entries()) {
-                    const field = names[index];
-                    lines.push(...fieldDescription(field, item, definitions).map(line => `\t${line}`));
-                    lines.push(`\t${field} ${index >= schema.minItems ? "*" : ""}${goType(item, definitions)}`);
-                }
-                lines.push("\t// DiagnosticCode selects one TypeScript diagnostic code for an ignore directive.", "\tDiagnosticCode *int32");
-                lines.push(
-                    "}",
-                    "",
-                    "var (",
-                    `\t_ json.MarshalerTo     = ${name}{}`,
-                    `\t_ json.UnmarshalerFrom = (*${name})(nil)`,
-                    ")",
-                    "",
-                    `func (d ${name}) MarshalJSONTo(enc *json.Encoder) error {`,
-                    `\ttuple := []any{${names.slice(0, schema.minItems).map(field => `d.${field}`).join(", ")}}`,
-                    "\tif d.Policy == DiagnosticDirectivePolicyIgnore && d.DiagnosticCode != nil {",
-                    "\t\ttuple = append(tuple, *d.DiagnosticCode)",
-                    `\t} else if d.Policy == DiagnosticDirectivePolicyExpect && d.${names[schema.minItems]} != nil {`,
-                    `\t\ttuple = append(tuple, *d.${names[schema.minItems]})`,
-                    "\t}",
-                    "\treturn json.MarshalEncode(enc, tuple)",
-                    "}",
-                    "",
-                    `func (d *${name}) UnmarshalJSONFrom(dec *json.Decoder) error {`,
-                    "\tvar tuple []json.Value",
-                    "\tif err := json.UnmarshalDecode(dec, &tuple); err != nil {",
-                    "\t\treturn err",
-                    "\t}",
-                    `\tif len(tuple) != ${schema.minItems} && len(tuple) != ${schema.maxItems} {`,
-                    `\t\treturn fmt.Errorf(${JSON.stringify(`${label} tuple must contain ${schema.minItems} or ${schema.maxItems} elements, got %d`)}, len(tuple))`,
-                    "\t}",
-                    `\t*d = ${name}{}`,
-                    `\tfields := []any{${names.slice(0, schema.minItems).map(field => `&d.${field}`).join(", ")}}`,
-                    "\tfor i, field := range fields {",
-                    "\t\tif err := json.Unmarshal(tuple[i], field); err != nil {",
-                    `\t\t\treturn fmt.Errorf(${JSON.stringify(`invalid ${label} tuple element %d: %w`)}, i, err)`,
-                    "\t\t}",
-                    "\t}",
-                    `\tif len(tuple) == ${schema.maxItems} {`,
-                    "\t\tvar field any",
-                    "\t\tswitch d.Policy {",
-                    "\t\tcase DiagnosticDirectivePolicyIgnore:",
-                    "\t\t\td.DiagnosticCode = new(int32)",
-                    "\t\t\tfield = d.DiagnosticCode",
-                    "\t\tcase DiagnosticDirectivePolicyExpect:",
-                    `\t\t\td.${names[schema.minItems]} = new(${goType(schema.items[schema.minItems], definitions)})`,
-                    `\t\t\tfield = d.${names[schema.minItems]}`,
-                    "\t\tdefault:",
-                    '\t\t\treturn fmt.Errorf("invalid diagnostic directive policy %d with sixth tuple element", d.Policy)',
-                    "\t\t}",
-                    `\t\tif err := json.Unmarshal(tuple[${schema.minItems}], field); err != nil {`,
-                    `\t\t\treturn fmt.Errorf(${JSON.stringify(`invalid ${label} tuple element ${schema.minItems}: %w`)}, err)`,
-                    "\t\t}",
-                    "\t}",
-                    "\treturn nil",
-                    "}",
-                );
-            }
-            else {
-                throw new Error(`Unsupported ${name} tuple`);
-            }
+            lines.push(
+                "\t// Policy is the diagnostic directive policy: 0 ignores diagnostics; 1 expects a diagnostic.",
+                "\tPolicy DiagnosticDirectivePolicy",
+                "\t// UnusedExpectDirectiveIndex selects the unused diagnostic for an expect directive.",
+                "\tUnusedExpectDirectiveIndex *int",
+                "\t// DiagnosticCodes selects TypeScript diagnostic codes for an ignore directive; empty selects all codes.",
+                "\tDiagnosticCodes []int32",
+                "}",
+                "",
+                "var (",
+                "\t_ json.MarshalerTo     = MappedDiagnosticDirective{}",
+                "\t_ json.UnmarshalerFrom = (*MappedDiagnosticDirective)(nil)",
+                ")",
+                "",
+                "func (d MappedDiagnosticDirective) MarshalJSONTo(enc *json.Encoder) error {",
+                "\ttuple := []any{d.OriginalStart, d.OriginalLength, d.VirtualStart, d.VirtualEnd, d.Policy}",
+                `\tswitch d.Policy {`,
+                `\tcase ${ignorePolicy}:`,
+                "\t\tfor _, code := range d.DiagnosticCodes {",
+                "\t\t\ttuple = append(tuple, code)",
+                "\t\t}",
+                `\tcase ${expectPolicy}:`,
+                "\t\tif d.UnusedExpectDirectiveIndex != nil {",
+                "\t\t\ttuple = append(tuple, *d.UnusedExpectDirectiveIndex)",
+                "\t\t}",
+                "\t}",
+                "\treturn json.MarshalEncode(enc, tuple)",
+                "}",
+                "",
+                "func (d *MappedDiagnosticDirective) UnmarshalJSONFrom(dec *json.Decoder) error {",
+                "\tvar tuple []json.Value",
+                "\tif err := json.UnmarshalDecode(dec, &tuple); err != nil {",
+                "\t\treturn err",
+                "\t}",
+                `\tif len(tuple) < ${ignore.minItems} {`,
+                `\t\treturn fmt.Errorf("diagnostic directive tuple must contain at least ${ignore.minItems} elements, got %d", len(tuple))`,
+                "\t}",
+                "\t*d = MappedDiagnosticDirective{}",
+                "\tfields := []any{&d.OriginalStart, &d.OriginalLength, &d.VirtualStart, &d.VirtualEnd, &d.Policy}",
+                "\tfor i, field := range fields {",
+                "\t\tif err := json.Unmarshal(tuple[i], field); err != nil {",
+                '\t\t\treturn fmt.Errorf("invalid diagnostic directive tuple element %d: %w", i, err)',
+                "\t\t}",
+                "\t}",
+                "\tswitch d.Policy {",
+                `\tcase ${ignorePolicy}:`,
+                `\t\tif len(tuple) > ${ignore.minItems} {`,
+                `\t\t\td.DiagnosticCodes = make([]int32, len(tuple)-${ignore.minItems})`,
+                "\t\t\tfor i := range d.DiagnosticCodes {",
+                `\t\t\t\tif err := json.Unmarshal(tuple[i+${ignore.minItems}], &d.DiagnosticCodes[i]); err != nil {`,
+                `\t\t\t\t\treturn fmt.Errorf("invalid diagnostic directive tuple element %d: %w", i+${ignore.minItems}, err)`,
+                "\t\t\t\t}",
+                "\t\t\t}",
+                "\t\t}",
+                `\tcase ${expectPolicy}:`,
+                `\t\tif len(tuple) > ${expectMaxItems} {`,
+                `\t\t\treturn fmt.Errorf("expect diagnostic directive tuple must contain at most ${expectMaxItems} elements, got %d", len(tuple))`,
+                "\t\t}",
+                `\t\tif len(tuple) == ${expectMaxItems} {`,
+                "\t\t\td.UnusedExpectDirectiveIndex = new(int)",
+                `\t\t\tif err := json.Unmarshal(tuple[${expectMaxItems - 1}], d.UnusedExpectDirectiveIndex); err != nil {`,
+                `\t\t\t\treturn fmt.Errorf("invalid diagnostic directive tuple element ${expectMaxItems - 1}: %w", err)`,
+                "\t\t\t}",
+                "\t\t}",
+                "\tdefault:",
+                "\t\tif len(tuple) > 5 {",
+                '\t\t\treturn fmt.Errorf("invalid diagnostic directive policy %d with additional tuple elements", d.Policy)',
+                "\t\t}",
+                "\t}",
+                "\treturn nil",
+                "}",
+            );
+        }
+        else if (name === "SpanMapSegment") {
+            spanMapTuple(document);
+            lines.push(`type ${name} = spanmap.SegmentTuple`);
         }
         else {
             throw new Error(`Unsupported definition: ${name}`);

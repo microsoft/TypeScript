@@ -89,11 +89,48 @@ describe("Wtf8Decoder", { concurrency }, () => {
     });
 });
 
-describe("Msgpack strings", { concurrency }, () => {
+describe("Msgpack", { concurrency }, () => {
     test("round-trip lone surrogates", () => {
         const text = `high:${String.fromCharCode(0xD800)} low:${String.fromCharCode(0xDFFF)}`;
         const writer = new MsgpackWriter();
         writer.writeString(text);
         assert.equal(new MsgpackReader(writer.finish()).readString(), text);
+    });
+
+    test("skips values without consuming the next value", () => {
+        const values = [
+            [0xc0],
+            [0xff],
+            [0xcd, 0, 1],
+            [0xd3, 0, 0, 0, 0, 0, 0, 0, 1],
+            [0xca, 0, 0, 0, 0],
+            [0xa1, 0x61],
+            [0xd9, 1, 0x61],
+            [0xda, 0, 1, 0x61],
+            [0xdb, 0, 0, 0, 1, 0x61],
+            [0xc4, 1, 0xff],
+            [0xc5, 0, 1, 0xff],
+            [0xc6, 0, 0, 0, 1, 0xff],
+            [0xd4, 0, 0xff],
+            [0xc7, 1, 0, 0xff],
+            [0xc8, 0, 1, 0, 0xff],
+            [0xc9, 0, 0, 0, 1, 0, 0xff],
+            [0x92, 0xc3, 0x81, 0xa1, 0x6b, 0xc0],
+            [0xdc, 0, 1, 0xc0],
+            [0xdd, 0, 0, 0, 1, 0xc0],
+            [0xde, 0, 1, 0, 1],
+            [0xdf, 0, 0, 0, 1, 0, 1],
+        ];
+        for (const value of values) {
+            const reader = new MsgpackReader(Uint8Array.from([...value, 42]));
+            reader.skipValue();
+            assert.strictEqual(reader.readUint(), 42, `after ${value.map(byte => byte.toString(16)).join(" ")}`);
+        }
+    });
+
+    test("rejects invalid or truncated values while skipping", () => {
+        for (const data of [[0xc1], [0xc4, 2, 1], [0x91], [0xd9]]) {
+            assert.throws(() => new MsgpackReader(Uint8Array.from(data)).skipValue());
+        }
     });
 });

@@ -51,23 +51,9 @@
                         "$ref": "#/definitions/PositionEncoding"
                     },
                     "description": "Coordinate spaces accepted by the host."
-                },
-                "capabilities": {
-                    "$ref": "#/definitions/InitializeCapabilities",
-                    "description": "Optional protocol extensions supported by the host. Absent in older hosts."
                 }
             },
             "required": ["positionEncodings"]
-        },
-        "InitializeCapabilities": {
-            "type": "object",
-            "description": "Optional protocol extensions supported by the host.",
-            "properties": {
-                "diagnosticDirectiveCodeSelectors": {
-                    "type": "boolean",
-                    "description": "Ignore directives may select TypeScript diagnostic codes."
-                }
-            }
         },
         "InitializeResult": {
             "type": "object",
@@ -424,54 +410,94 @@
             "required": ["unusedExpectDirectiveDiagnostics", "directives"]
         },
         "MappedDiagnosticDirective": {
-            "type": "array",
-            "description": "[originalStart, originalLength, virtualStart, virtualEnd, policy, policyValue?]. For expect directives, policyValue is an unused-expect diagnostic index; an omitted index selects the only shared diagnostic and requires exactly one. For ignore directives, policyValue is an optional TypeScript diagnostic code. Expect directives require a valid original range.",
             "title": "Diagnostic directive",
-            "items": [
+            "description": "[originalStart, originalLength, virtualStart, virtualEnd, 0, ...diagnosticCodes] or [originalStart, originalLength, virtualStart, virtualEnd, 1, unusedExpectDirectiveIndex?].",
+            "oneOf": [
                 {
-                    "type": "integer",
-                    "title": "originalStart",
-                    "description": "Original start offset. It is ignored for ignore directives if the original range is invalid."
+                    "type": "array",
+                    "description": "Ignore directive suppressing TypeScript diagnostics in the virtual range. When diagnostic codes are given, only matching diagnostics are suppressed.",
+                    "items": [
+                        {
+                            "type": "integer",
+                            "title": "originalStart",
+                            "description": "Original start offset. It is ignored if the original range is invalid."
+                        },
+                        {
+                            "type": "integer",
+                            "title": "originalLength",
+                            "description": "Original span length. It is ignored if the original range is invalid."
+                        },
+                        {
+                            "type": "integer",
+                            "minimum": 0,
+                            "title": "virtualStart",
+                            "description": "Inclusive virtual start offset."
+                        },
+                        {
+                            "type": "integer",
+                            "minimum": 0,
+                            "title": "virtualEnd",
+                            "description": "Exclusive virtual end offset, which must not precede the start."
+                        },
+                        {
+                            "type": "integer",
+                            "const": 0,
+                            "title": "policy",
+                            "description": "Ignore directive policy."
+                        }
+                    ],
+                    "additionalItems": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 2147483647,
+                        "title": "diagnosticCode",
+                        "description": "TypeScript diagnostic code to ignore."
+                    },
+                    "minItems": 5
                 },
                 {
-                    "type": "integer",
-                    "title": "originalLength",
-                    "description": "Original span length. It is ignored for ignore directives if the original range is invalid."
-                },
-                {
-                    "type": "integer",
-                    "minimum": 0,
-                    "title": "virtualStart",
-                    "description": "Inclusive virtual start offset."
-                },
-                {
-                    "type": "integer",
-                    "minimum": 0,
-                    "title": "virtualEnd",
-                    "description": "Exclusive virtual end offset, which must not precede the start."
-                },
-                {
-                    "$ref": "#/definitions/DiagnosticDirectivePolicy",
-                    "title": "policy"
-                },
-                {
-                    "type": "integer",
-                    "minimum": 0,
-                    "title": "unusedExpectDirectiveIndex",
-                    "description": "Index into unusedExpectDirectiveDiagnostics for expect directives, or a positive TypeScript diagnostic code for ignore directives."
+                    "type": "array",
+                    "description": "Expect directive suppressing TypeScript diagnostics in the virtual range. It requires a valid original range and reports an unused-expect diagnostic there when no diagnostic is suppressed.",
+                    "items": [
+                        {
+                            "type": "integer",
+                            "title": "originalStart",
+                            "description": "Original start offset."
+                        },
+                        {
+                            "type": "integer",
+                            "title": "originalLength",
+                            "description": "Original span length."
+                        },
+                        {
+                            "type": "integer",
+                            "minimum": 0,
+                            "title": "virtualStart",
+                            "description": "Inclusive virtual start offset."
+                        },
+                        {
+                            "type": "integer",
+                            "minimum": 0,
+                            "title": "virtualEnd",
+                            "description": "Exclusive virtual end offset, which must not precede the start."
+                        },
+                        {
+                            "type": "integer",
+                            "const": 1,
+                            "title": "policy",
+                            "description": "Expect directive policy."
+                        },
+                        {
+                            "type": "integer",
+                            "minimum": 0,
+                            "title": "unusedExpectDirectiveIndex",
+                            "description": "Index into unusedExpectDirectiveDiagnostics. An omitted index selects the only shared unused-expect diagnostic and requires exactly one such diagnostic."
+                        }
+                    ],
+                    "minItems": 5,
+                    "maxItems": 6
                 }
-            ],
-            "minItems": 5,
-            "maxItems": 6,
-            "if": {
-                "items": [{}, {}, {}, {}, { "const": 1 }]
-            },
-            "then": {
-                "items": [{ "minimum": 0 }, { "minimum": 0 }]
-            },
-            "else": {
-                "items": [{}, {}, {}, {}, {}, { "minimum": 1, "maximum": 2147483647 }]
-            }
+            ]
         },
         "SupplementalOutput": {
             "$ref": "#/definitions/MappedOutput"

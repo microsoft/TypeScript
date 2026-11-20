@@ -23,14 +23,6 @@ type InitializeParams struct {
 	Locale string `json:"locale,omitempty"`
 	// PositionEncodings lists the coordinate spaces accepted by the host.
 	PositionEncodings []PositionEncoding `json:"positionEncodings"`
-	// Capabilities contains the optional protocol extensions supported by the host. Absent in older hosts.
-	Capabilities *InitializeCapabilities `json:"capabilities,omitempty"`
-}
-
-// InitializeCapabilities describes the optional protocol extensions supported by the host.
-type InitializeCapabilities struct {
-	// DiagnosticDirectiveCodeSelectors is the ignore directives may select TypeScript diagnostic codes.
-	DiagnosticDirectiveCodeSelectors bool `json:"diagnosticDirectiveCodeSelectors,omitempty"`
 }
 
 // InitializeResult describes the response to the initialize request.
@@ -132,14 +124,12 @@ type DiagnosticDirectives struct {
 	Directives []MappedDiagnosticDirective `json:"directives"`
 }
 
-// MappedDiagnosticDirective is encoded as [originalStart, originalLength, virtualStart, virtualEnd, policy,
-// policyValue?]. For expect directives, policyValue is an unused-expect diagnostic index; an omitted index selects the
-// only shared diagnostic and requires exactly one. For ignore directives, policyValue is an optional TypeScript
-// diagnostic code. Expect directives require a valid original range.
+// MappedDiagnosticDirective is encoded as [originalStart, originalLength, virtualStart, virtualEnd, 0,
+// ...diagnosticCodes] or [originalStart, originalLength, virtualStart, virtualEnd, 1, unusedExpectDirectiveIndex?].
 type MappedDiagnosticDirective struct {
-	// OriginalStart is the original start offset. It is ignored for ignore directives if the original range is invalid.
+	// OriginalStart is the original start offset.
 	OriginalStart int
-	// OriginalLength is the original span length. It is ignored for ignore directives if the original range is invalid.
+	// OriginalLength is the original span length.
 	OriginalLength int
 	// VirtualStart is the inclusive virtual start offset.
 	VirtualStart int
@@ -147,10 +137,10 @@ type MappedDiagnosticDirective struct {
 	VirtualEnd int
 	// Policy is the diagnostic directive policy: 0 ignores diagnostics; 1 expects a diagnostic.
 	Policy DiagnosticDirectivePolicy
-	// UnusedExpectDirectiveIndex is the index into unusedExpectDirectiveDiagnostics for expect directives, or a positive TypeScript diagnostic code for ignore directives.
+	// UnusedExpectDirectiveIndex selects the unused diagnostic for an expect directive.
 	UnusedExpectDirectiveIndex *int
-	// DiagnosticCode selects one TypeScript diagnostic code for an ignore directive.
-	DiagnosticCode *int32
+	// DiagnosticCodes selects TypeScript diagnostic codes for an ignore directive; empty selects all codes.
+	DiagnosticCodes []int32
 }
 
 var (
@@ -160,10 +150,15 @@ var (
 
 func (d MappedDiagnosticDirective) MarshalJSONTo(enc *json.Encoder) error {
 	tuple := []any{d.OriginalStart, d.OriginalLength, d.VirtualStart, d.VirtualEnd, d.Policy}
-	if d.Policy == DiagnosticDirectivePolicyIgnore && d.DiagnosticCode != nil {
-		tuple = append(tuple, *d.DiagnosticCode)
-	} else if d.Policy == DiagnosticDirectivePolicyExpect && d.UnusedExpectDirectiveIndex != nil {
-		tuple = append(tuple, *d.UnusedExpectDirectiveIndex)
+	switch d.Policy {
+	case DiagnosticDirectivePolicyIgnore:
+		for _, code := range d.DiagnosticCodes {
+			tuple = append(tuple, code)
+		}
+	case DiagnosticDirectivePolicyExpect:
+		if d.UnusedExpectDirectiveIndex != nil {
+			tuple = append(tuple, *d.UnusedExpectDirectiveIndex)
+		}
 	}
 	return json.MarshalEncode(enc, tuple)
 }
@@ -173,8 +168,8 @@ func (d *MappedDiagnosticDirective) UnmarshalJSONFrom(dec *json.Decoder) error {
 	if err := json.UnmarshalDecode(dec, &tuple); err != nil {
 		return err
 	}
-	if len(tuple) != 5 && len(tuple) != 6 {
-		return fmt.Errorf("diagnostic directive tuple must contain 5 or 6 elements, got %d", len(tuple))
+	if len(tuple) < 5 {
+		return fmt.Errorf("diagnostic directive tuple must contain at least 5 elements, got %d", len(tuple))
 	}
 	*d = MappedDiagnosticDirective{}
 	fields := []any{&d.OriginalStart, &d.OriginalLength, &d.VirtualStart, &d.VirtualEnd, &d.Policy}
@@ -183,20 +178,29 @@ func (d *MappedDiagnosticDirective) UnmarshalJSONFrom(dec *json.Decoder) error {
 			return fmt.Errorf("invalid diagnostic directive tuple element %d: %w", i, err)
 		}
 	}
-	if len(tuple) == 6 {
-		var field any
-		switch d.Policy {
-		case DiagnosticDirectivePolicyIgnore:
-			d.DiagnosticCode = new(int32)
-			field = d.DiagnosticCode
-		case DiagnosticDirectivePolicyExpect:
-			d.UnusedExpectDirectiveIndex = new(int)
-			field = d.UnusedExpectDirectiveIndex
-		default:
-			return fmt.Errorf("invalid diagnostic directive policy %d with sixth tuple element", d.Policy)
+	switch d.Policy {
+	case DiagnosticDirectivePolicyIgnore:
+		if len(tuple) > 5 {
+			d.DiagnosticCodes = make([]int32, len(tuple)-5)
+			for i := range d.DiagnosticCodes {
+				if err := json.Unmarshal(tuple[i+5], &d.DiagnosticCodes[i]); err != nil {
+					return fmt.Errorf("invalid diagnostic directive tuple element %d: %w", i+5, err)
+				}
+			}
 		}
-		if err := json.Unmarshal(tuple[5], field); err != nil {
-			return fmt.Errorf("invalid diagnostic directive tuple element 5: %w", err)
+	case DiagnosticDirectivePolicyExpect:
+		if len(tuple) > 6 {
+			return fmt.Errorf("expect diagnostic directive tuple must contain at most 6 elements, got %d", len(tuple))
+		}
+		if len(tuple) == 6 {
+			d.UnusedExpectDirectiveIndex = new(int)
+			if err := json.Unmarshal(tuple[5], d.UnusedExpectDirectiveIndex); err != nil {
+				return fmt.Errorf("invalid diagnostic directive tuple element 5: %w", err)
+			}
+		}
+	default:
+		if len(tuple) > 5 {
+			return fmt.Errorf("invalid diagnostic directive policy %d with additional tuple elements", d.Policy)
 		}
 	}
 	return nil

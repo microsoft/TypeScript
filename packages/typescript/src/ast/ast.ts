@@ -175,8 +175,9 @@ export interface MappedDiagnosticDirective {
     readonly originalRange: ReadonlyTextRange;
     readonly virtualRange: ReadonlyTextRange;
     readonly policy: DiagnosticDirectivePolicy;
-    readonly diagnosticCode: number;
     readonly unusedCode: number;
+    /** For ignore directives, an empty list selects all diagnostic codes. */
+    readonly diagnosticCodes: readonly number[];
 }
 
 export interface SourceFile extends Node {

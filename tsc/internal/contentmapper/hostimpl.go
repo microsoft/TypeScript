@@ -912,9 +912,6 @@ func handshake(ctx context.Context, conn ipc.Conn, diagnosticLocale locale.Local
 	raw, err := conn.Call(ctx, MethodInitialize, InitializeParams{
 		Locale:            diagnosticLocale.String(),
 		PositionEncodings: []PositionEncoding{PositionEncodingUTF8, PositionEncodingUTF16},
-		Capabilities: &InitializeCapabilities{
-			DiagnosticDirectiveCodeSelectors: true,
-		},
 	})
 	if err != nil {
 		return "", "", err
@@ -1045,13 +1042,13 @@ func normalizeDiagnosticDirectives(diagnosticDirectives *DiagnosticDirectives, v
 		normalized := ast.MappedDiagnosticDirective{Source: diagnosticSource}
 		switch directive.Policy {
 		case DiagnosticDirectivePolicyIgnore:
-			if directive.DiagnosticCode != nil && *directive.DiagnosticCode <= 0 {
-				return nil, directiveError(DiagnosticDirectiveErrorKindInvalidDiagnosticCode)
+			for _, code := range directive.DiagnosticCodes {
+				if code <= 0 {
+					return nil, directiveError(DiagnosticDirectiveErrorKindInvalidDiagnosticCode)
+				}
 			}
 			normalized.Policy = ast.MappedDiagnosticDirectivePolicyIgnore
-			if directive.DiagnosticCode != nil {
-				normalized.DiagnosticCode = *directive.DiagnosticCode
-			}
+			normalized.DiagnosticCodes = directive.DiagnosticCodes
 		case DiagnosticDirectivePolicyExpect:
 			unusedDiagnosticIndex := 0
 			if directive.UnusedExpectDirectiveIndex != nil {

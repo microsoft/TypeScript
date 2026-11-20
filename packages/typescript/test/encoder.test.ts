@@ -41,6 +41,7 @@ import {
     encodeSourceFile,
     uint8ArrayToBase64,
 } from "../src/api/node/encoder.ts";
+import { MsgpackWriter } from "../src/api/node/msgpack.ts";
 import {
     RemoteNode,
     RemoteNodeList,
@@ -118,19 +119,28 @@ describe("Encoder", { concurrency }, () => {
         assert.strictEqual(decoded.canonicalSourceFileName, undefined);
     });
 
-    test("decodes content mapper diagnostic-code selectors", () => {
+    test("decodes extensible content mapper diagnostic directives", () => {
         const encoded = encodeSourceFile(makeSF("text", "/component.vue.ts", []));
         const encodedView = new DataView(encoded.buffer, encoded.byteOffset, encoded.byteLength);
         const nodesOffset = encodedView.getUint32(HEADER_OFFSET_NODES, true);
-        const directive = Uint8Array.from([
-            0x91, // one directive
-            0x97, // seven-element tuple
-            0, 1, // original range [0, 1)
-            2, 3, // virtual range [2, 5)
-            0, // ignore policy
-            0xcd, 9, 49, // diagnostic code 2353
-            0, // unused diagnostic code
-        ]);
+        const writer = new MsgpackWriter();
+        writer.writeArrayHeader(3);
+        writer.writeArrayHeader(8);
+        for (const value of [0, 1, 2, 3, 0, 0]) writer.writeUint(value);
+        writer.writeArrayHeader(2);
+        for (const code of [2353, 2322]) writer.writeUint(code);
+        writer.writeArrayHeader(2); // An unknown future field.
+        writer.writeBool(true);
+        writer.writeArrayHeader(1);
+        writer.writeUint(42);
+        writer.writeArrayHeader(7);
+        for (const value of [1, 1, 0, 1, 1, 2578]) writer.writeUint(value);
+        writer.writeArrayHeader(0);
+        writer.writeArrayHeader(7);
+        for (const value of [0, 1, 0, 1, 0, 0]) writer.writeUint(value);
+        writer.writeArrayHeader(16);
+        for (let code = 1; code <= 16; code++) writer.writeUint(code);
+        const directive = writer.finish();
         const withDirective = new Uint8Array(encoded.length + directive.length);
         withDirective.set(encoded.subarray(0, nodesOffset));
         withDirective.set(directive, nodesOffset);
@@ -145,9 +155,23 @@ describe("Encoder", { concurrency }, () => {
             originalRange: { pos: 0, end: 1 },
             virtualRange: { pos: 2, end: 5 },
             policy: 0,
-            diagnosticCode: 2353,
             unusedCode: 0,
+            diagnosticCodes: [2353, 2322],
+        }, {
+            originalRange: { pos: 1, end: 2 },
+            virtualRange: { pos: 0, end: 1 },
+            policy: 1,
+            unusedCode: 2578,
+            diagnosticCodes: [],
+        }, {
+            originalRange: { pos: 0, end: 1 },
+            virtualRange: { pos: 0, end: 1 },
+            policy: 0,
+            unusedCode: 0,
+            diagnosticCodes: Array.from({ length: 16 }, (_, i) => i + 1),
         }]);
+        withDirective[nodesOffset + 1] = 0x96;
+        assert.throws(() => decode(withDirective).diagnosticDirectives, /Invalid diagnostic directive/);
     });
 
     test("keeps adjacent surrogate string-table entries separate", () => {
