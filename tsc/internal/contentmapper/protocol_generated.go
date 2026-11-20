@@ -126,6 +126,12 @@ type DiagnosticDirectives struct {
 
 // MappedDiagnosticDirective is encoded as [originalStart, originalLength, virtualStart, virtualEnd, 0,
 // ...diagnosticCodes] or [originalStart, originalLength, virtualStart, virtualEnd, 1, unusedExpectDirectiveIndex?].
+//
+// DiagnosticDirectivePolicyIgnore encodes an ignore directive suppressing TypeScript diagnostics in the virtual range.
+// An invalid original range is ignored. When diagnostic codes are given, only matching diagnostics are suppressed.
+//
+// DiagnosticDirectivePolicyExpect encodes an expect directive suppressing TypeScript diagnostics in the virtual range.
+// It requires a valid original range and reports an unused-expect diagnostic there when no diagnostic is suppressed.
 type MappedDiagnosticDirective struct {
 	// OriginalStart is the original start offset.
 	OriginalStart int

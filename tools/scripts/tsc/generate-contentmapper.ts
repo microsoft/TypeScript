@@ -278,9 +278,11 @@ function mappedDiagnosticDirectiveVariants(schema: Schema): { ignore: Schema; ex
             items.slice(0, 4).every((item, index) =>
                 item.title === ["originalStart", "originalLength", "virtualStart", "virtualEnd"][index]
                 && item.type === "integer"
+                && JSON.stringify(item) === JSON.stringify(expectItems[index])
             ),
-            "Unsupported MappedDiagnosticDirective range fields",
+            "MappedDiagnosticDirective policy variants must share range fields",
         );
+        assert(variant.description, "Missing MappedDiagnosticDirective policy variant description");
     }
     return { ignore, expect, expectMaxItems };
 }
@@ -288,7 +290,10 @@ function mappedDiagnosticDirectiveVariants(schema: Schema): { ignore: Schema; ex
 function typeDescription(name: string, text: string | undefined): string[] {
     if (!text) return [];
     const normalized = text.trim().replace(/\s+/g, " ");
-    const description = `${name} ${normalized.startsWith("[") ? `is encoded as ${normalized}` : `describes ${nounPhrase(normalized)}`}`;
+    return commentLines(`${name} ${normalized.startsWith("[") ? `is encoded as ${normalized}` : `describes ${nounPhrase(normalized)}`}`);
+}
+
+function commentLines(description: string): string[] {
     const lines: string[] = [];
     let line = "//";
     for (const word of description.split(" ")) {
@@ -404,6 +409,10 @@ export function generateContentMapper(document: SchemaDocument): string {
                 fields.every((field, index) => field.title === ["originalStart", "originalLength", "virtualStart", "virtualEnd"][index]),
                 "Unsupported MappedDiagnosticDirective fields",
             );
+            for (const [policy, variant] of [[ignorePolicy, ignore], [expectPolicy, expect]] as const) {
+                const description = variant.description!.trim().replace(/\s+/g, " ");
+                lines.push("//", ...commentLines(`${policy} encodes ${/^[aeiou]/i.test(description) ? "an" : "a"} ${nounPhrase(description).replace(/^the /, "")}`));
+            }
             lines.push("type MappedDiagnosticDirective struct {");
             for (const field of fields) {
                 const name = goName(field.title!);

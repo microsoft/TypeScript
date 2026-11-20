@@ -415,17 +415,17 @@
             "oneOf": [
                 {
                     "type": "array",
-                    "description": "Ignore directive suppressing TypeScript diagnostics in the virtual range. When diagnostic codes are given, only matching diagnostics are suppressed.",
+                    "description": "Ignore directive suppressing TypeScript diagnostics in the virtual range. An invalid original range is ignored. When diagnostic codes are given, only matching diagnostics are suppressed.",
                     "items": [
                         {
                             "type": "integer",
                             "title": "originalStart",
-                            "description": "Original start offset. It is ignored if the original range is invalid."
+                            "description": "Original start offset."
                         },
                         {
                             "type": "integer",
                             "title": "originalLength",
-                            "description": "Original span length. It is ignored if the original range is invalid."
+                            "description": "Original span length."
                         },
                         {
                             "type": "integer",
