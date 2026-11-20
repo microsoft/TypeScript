@@ -1,0 +1,53 @@
+//// [tests/cases/compiler/deepIndexedAccessChainConstraint.ts] ////
+
+=== deepIndexedAccessChainConstraint.ts ===
+// Resolving the base constraint of a 10-level indexed access chain steps
+// through nested object types that share the type parameter's recursion
+// identity. Checking f resolves typeof victim while T's base constraint is
+// uncached; in both victim and lone, base constraints resolve to Box (65508).
+
+interface Box { a: Box; b: string }
+>a : Box
+>b : string
+
+const f: typeof victim = <U extends Box>(x: U, y: { b: string }) => x.b;
+>f : <T extends Box>(x: T, y: T["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]) => string
+>victim : <T extends Box>(x: T, y: T["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]) => string
+><U extends Box>(x: U, y: { b: string }) => x.b : <U extends Box>(x: U, y: { b: string; }) => string
+>x : U
+>y : { b: string; }
+>b : string
+>x.b : string
+>x : U
+>b : string
+
+function victim<T extends Box>(
+>victim : <T extends Box>(x: T, y: T["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]) => string
+
+    x: T,
+>x : T
+
+    y: T["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]
+>y : T["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]
+
+): string {
+    return x.b + y.b;
+>x.b + y.b : string
+>x.b : string
+>x : T
+>b : string
+>y.b : string
+>y : T["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]
+>b : string
+}
+
+function lone<U extends Box>(y: U["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]): string {
+>lone : <U extends Box>(y: U["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]) => string
+>y : U["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]
+
+    return y.b;
+>y.b : string
+>y : U["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]
+>b : string
+}
+
