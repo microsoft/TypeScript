@@ -865,6 +865,7 @@ type Checker struct {
 	subtypeRelation                             *Relation
 	strictSubtypeRelation                       *Relation
 	assignableRelation                          *Relation
+	varianceRelation                            *Relation
 	comparableRelation                          *Relation
 	identityRelation                            *Relation
 	enumRelation                                map[EnumRelationKey]RelationComparisonResult
@@ -1103,6 +1104,7 @@ func NewChecker(program Program, tracer *Tracer) (*Checker, *sync.Mutex) {
 	c.subtypeRelation = &Relation{}
 	c.strictSubtypeRelation = &Relation{}
 	c.assignableRelation = &Relation{}
+	c.varianceRelation = &Relation{}
 	c.comparableRelation = &Relation{}
 	c.identityRelation = &Relation{}
 	c.enumRelation = make(map[EnumRelationKey]RelationComparisonResult)
