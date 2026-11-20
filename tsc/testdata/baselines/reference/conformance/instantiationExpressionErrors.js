@@ -108,8 +108,7 @@ const a = ver < (MyVer.v1 >= MyVer.v2 ? MyVer.v1 : MyVer.v2)
 
 //// [instantiationExpressionErrors.js]
 "use strict";
-var _a, _b;
-var _c;
+var _a, _b, _c;
 // Type arguments in member expressions
 const a1 = f; // { (): number; g<U>(): U; }
 const a2 = f.g; // () => number

@@ -1,0 +1,109 @@
+//// [tests/cases/compiler/fusedSyntaxTransforms.ts] ////
+
+=== fusedSyntaxTransforms.ts ===
+declare function receiver(): { value?: number, method?(): number };
+>receiver : Symbol(receiver, Decl(fusedSyntaxTransforms.ts, 0, 0))
+>value : Symbol(value, Decl(fusedSyntaxTransforms.ts, 0, 30))
+>method : Symbol(method, Decl(fusedSyntaxTransforms.ts, 0, 46))
+
+declare function key(): "value";
+>key : Symbol(key, Decl(fusedSyntaxTransforms.ts, 0, 67))
+
+declare function fallback(): number;
+>fallback : Symbol(fallback, Decl(fusedSyntaxTransforms.ts, 1, 32))
+
+export function assignments() {
+>assignments : Symbol(assignments, Decl(fusedSyntaxTransforms.ts, 2, 36))
+
+    receiver()[key()] ??= receiver().method?.() ?? fallback();
+>receiver : Symbol(receiver, Decl(fusedSyntaxTransforms.ts, 0, 0))
+>key : Symbol(key, Decl(fusedSyntaxTransforms.ts, 0, 67))
+>receiver().method : Symbol(method, Decl(fusedSyntaxTransforms.ts, 0, 46))
+>receiver : Symbol(receiver, Decl(fusedSyntaxTransforms.ts, 0, 0))
+>method : Symbol(method, Decl(fusedSyntaxTransforms.ts, 0, 46))
+>fallback : Symbol(fallback, Decl(fusedSyntaxTransforms.ts, 1, 32))
+
+    receiver().value ||= receiver()?.value ?? fallback();
+>receiver().value : Symbol(value, Decl(fusedSyntaxTransforms.ts, 0, 30))
+>receiver : Symbol(receiver, Decl(fusedSyntaxTransforms.ts, 0, 0))
+>value : Symbol(value, Decl(fusedSyntaxTransforms.ts, 0, 30))
+>receiver()?.value : Symbol(value, Decl(fusedSyntaxTransforms.ts, 0, 30))
+>receiver : Symbol(receiver, Decl(fusedSyntaxTransforms.ts, 0, 0))
+>value : Symbol(value, Decl(fusedSyntaxTransforms.ts, 0, 30))
+>fallback : Symbol(fallback, Decl(fusedSyntaxTransforms.ts, 1, 32))
+
+    receiver().value &&= receiver()?.method?.();
+>receiver().value : Symbol(value, Decl(fusedSyntaxTransforms.ts, 0, 30))
+>receiver : Symbol(receiver, Decl(fusedSyntaxTransforms.ts, 0, 0))
+>value : Symbol(value, Decl(fusedSyntaxTransforms.ts, 0, 30))
+>receiver()?.method : Symbol(method, Decl(fusedSyntaxTransforms.ts, 0, 46))
+>receiver : Symbol(receiver, Decl(fusedSyntaxTransforms.ts, 0, 0))
+>method : Symbol(method, Decl(fusedSyntaxTransforms.ts, 0, 46))
+}
+
+export function defaults(
+>defaults : Symbol(defaults, Decl(fusedSyntaxTransforms.ts, 8, 1))
+
+    value = receiver()?.value ?? fallback(),
+>value : Symbol(value, Decl(fusedSyntaxTransforms.ts, 10, 25))
+>receiver()?.value : Symbol(value, Decl(fusedSyntaxTransforms.ts, 0, 30))
+>receiver : Symbol(receiver, Decl(fusedSyntaxTransforms.ts, 0, 0))
+>value : Symbol(value, Decl(fusedSyntaxTransforms.ts, 0, 30))
+>fallback : Symbol(fallback, Decl(fusedSyntaxTransforms.ts, 1, 32))
+
+    next = () => receiver().value ??= value,
+>next : Symbol(next, Decl(fusedSyntaxTransforms.ts, 11, 44))
+>receiver().value : Symbol(value, Decl(fusedSyntaxTransforms.ts, 0, 30))
+>receiver : Symbol(receiver, Decl(fusedSyntaxTransforms.ts, 0, 0))
+>value : Symbol(value, Decl(fusedSyntaxTransforms.ts, 0, 30))
+>value : Symbol(value, Decl(fusedSyntaxTransforms.ts, 10, 25))
+
+) {
+    try {
+        return next() ?? value;
+>next : Symbol(next, Decl(fusedSyntaxTransforms.ts, 11, 44))
+>value : Symbol(value, Decl(fusedSyntaxTransforms.ts, 10, 25))
+    }
+    catch {
+        return delete receiver()?.value;
+>receiver()?.value : Symbol(value, Decl(fusedSyntaxTransforms.ts, 0, 30))
+>receiver : Symbol(receiver, Decl(fusedSyntaxTransforms.ts, 0, 0))
+>value : Symbol(value, Decl(fusedSyntaxTransforms.ts, 0, 30))
+    }
+}
+
+export function calls() {
+>calls : Symbol(calls, Decl(fusedSyntaxTransforms.ts, 20, 1))
+
+    return (receiver()?.method)?.() ?? (receiver().method)?.();
+>receiver()?.method : Symbol(method, Decl(fusedSyntaxTransforms.ts, 0, 46))
+>receiver : Symbol(receiver, Decl(fusedSyntaxTransforms.ts, 0, 0))
+>method : Symbol(method, Decl(fusedSyntaxTransforms.ts, 0, 46))
+>receiver().method : Symbol(method, Decl(fusedSyntaxTransforms.ts, 0, 46))
+>receiver : Symbol(receiver, Decl(fusedSyntaxTransforms.ts, 0, 0))
+>method : Symbol(method, Decl(fusedSyntaxTransforms.ts, 0, 46))
+}
+
+export async function asyncBody(values: AsyncIterable<number>) {
+>asyncBody : Symbol(asyncBody, Decl(fusedSyntaxTransforms.ts, 24, 1))
+>values : Symbol(values, Decl(fusedSyntaxTransforms.ts, 26, 32))
+>AsyncIterable : Symbol(AsyncIterable, Decl(lib.es2018.asynciterable.d.ts, --, --))
+
+    for await (const value of values) {
+>value : Symbol(value, Decl(fusedSyntaxTransforms.ts, 27, 20))
+>values : Symbol(values, Decl(fusedSyntaxTransforms.ts, 26, 32))
+
+        const { method, ...rest } = receiver();
+>method : Symbol(method, Decl(fusedSyntaxTransforms.ts, 28, 15))
+>rest : Symbol(rest, Decl(fusedSyntaxTransforms.ts, 28, 23))
+>receiver : Symbol(receiver, Decl(fusedSyntaxTransforms.ts, 0, 0))
+
+        rest.value ??= (await method?.()) ?? value ** 2;
+>rest.value : Symbol(value, Decl(fusedSyntaxTransforms.ts, 0, 30))
+>rest : Symbol(rest, Decl(fusedSyntaxTransforms.ts, 28, 23))
+>value : Symbol(value, Decl(fusedSyntaxTransforms.ts, 0, 30))
+>method : Symbol(method, Decl(fusedSyntaxTransforms.ts, 28, 15))
+>value : Symbol(value, Decl(fusedSyntaxTransforms.ts, 27, 20))
+    }
+}
+

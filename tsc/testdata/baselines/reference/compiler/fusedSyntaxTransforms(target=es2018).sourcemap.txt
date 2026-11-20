@@ -1,0 +1,737 @@
+===================================================================
+JsFile: fusedSyntaxTransforms.js
+mapUrl: fusedSyntaxTransforms.js.map
+sourceRoot: 
+sources: fusedSyntaxTransforms.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:fusedSyntaxTransforms.js
+sourceFile:fusedSyntaxTransforms.ts
+-------------------------------------------------------------------
+>>>export function assignments() {
+1 >
+2 >^^^^^^
+3 >      ^^^^^^^^^^
+4 >                ^^^^^^^^^^^
+5 >                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >declare function receiver(): { value?: number, method?(): number };
+  >declare function key(): "value";
+  >declare function fallback(): number;
+  >
+  >
+2 >export
+3 >       function 
+4 >                assignments
+1 >Emitted(1, 1) Source(5, 1) + SourceIndex(0)
+2 >Emitted(1, 7) Source(5, 7) + SourceIndex(0)
+3 >Emitted(1, 17) Source(5, 17) + SourceIndex(0)
+4 >Emitted(1, 28) Source(5, 28) + SourceIndex(0)
+---
+>>>    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m;
+>>>    (_f = (_d = receiver())[_e = key()]) !== null && _f !== void 0 ? _f : (_d[_e] = (_c = (_b = (_a = receiver()).method) === null || _b === void 0 ? void 0 : _b.call(_a)) !== null && _c !== void 0 ? _c : fallback());
+1->^^^^
+2 >    ^^^^^^^^^^^^
+3 >                ^^^^^^^^
+4 >                        ^^
+5 >                          ^^^^^^^
+6 >                                 ^^^
+7 >                                    ^^
+8 >                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+9 >                                                                                          ^^^^^^
+10>                                                                                                ^^^^^^
+11>                                                                                                      ^^^^^^^^
+12>                                                                                                              ^^
+13>                                                                                                                ^^
+14>                                                                                                                  ^^^^^^
+15>                                                                                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+16>                                                                                                                                                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+17>                                                                                                                                                                                                             ^^^^^^^^
+18>                                                                                                                                                                                                                     ^^
+19>                                                                                                                                                                                                                       ^^
+1->() {
+  >    
+2 >    
+3 >                receiver
+4 >                        ()
+5 >                          [
+6 >                                 key
+7 >                                    ()
+8 >                                      ] ??= 
+9 >                                                                                          
+10>                                                                                                
+11>                                                                                                      receiver
+12>                                                                                                              ()
+13>                                                                                                                .
+14>                                                                                                                  method
+15>                                                                                                                        ?.()
+16>                                                                                                                                                                           ?? 
+17>                                                                                                                                                                                                             fallback
+18>                                                                                                                                                                                                                     ()
+19>                                                                                                                                                                                                                       ;
+1->Emitted(3, 5) Source(6, 5) + SourceIndex(0)
+2 >Emitted(3, 17) Source(6, 5) + SourceIndex(0)
+3 >Emitted(3, 25) Source(6, 13) + SourceIndex(0)
+4 >Emitted(3, 27) Source(6, 15) + SourceIndex(0)
+5 >Emitted(3, 34) Source(6, 16) + SourceIndex(0)
+6 >Emitted(3, 37) Source(6, 19) + SourceIndex(0)
+7 >Emitted(3, 39) Source(6, 21) + SourceIndex(0)
+8 >Emitted(3, 91) Source(6, 27) + SourceIndex(0)
+9 >Emitted(3, 97) Source(6, 27) + SourceIndex(0)
+10>Emitted(3, 103) Source(6, 27) + SourceIndex(0)
+11>Emitted(3, 111) Source(6, 35) + SourceIndex(0)
+12>Emitted(3, 113) Source(6, 37) + SourceIndex(0)
+13>Emitted(3, 115) Source(6, 38) + SourceIndex(0)
+14>Emitted(3, 121) Source(6, 44) + SourceIndex(0)
+15>Emitted(3, 171) Source(6, 48) + SourceIndex(0)
+16>Emitted(3, 206) Source(6, 52) + SourceIndex(0)
+17>Emitted(3, 214) Source(6, 60) + SourceIndex(0)
+18>Emitted(3, 216) Source(6, 62) + SourceIndex(0)
+19>Emitted(3, 218) Source(6, 63) + SourceIndex(0)
+---
+>>>    (_j = receiver()).value || (_j.value = (_h = (_g = receiver()) === null || _g === void 0 ? void 0 : _g.value) !== null && _h !== void 0 ? _h : fallback());
+1 >^^^^
+2 >    ^^^^^^
+3 >          ^^^^^^^^
+4 >                  ^^
+5 >                    ^^
+6 >                      ^^^^^
+7 >                           ^^^^^^^^
+8 >                                   ^^^^^
+9 >                                        ^^^^^^^^^
+10>                                                 ^^^^^^
+11>                                                       ^^^^^^^^
+12>                                                               ^^
+13>                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+14>                                                                                                           ^^^^^
+15>                                                                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+16>                                                                                                                                                   ^^^^^^^^
+17>                                                                                                                                                           ^^
+18>                                                                                                                                                             ^^
+19>                                                                                                                                                               ^^^^^^^->
+1 >
+  >    
+2 >    
+3 >          receiver
+4 >                  ()
+5 >                    .
+6 >                      value
+7 >                           
+8 >                                   value
+9 >                                         ||= 
+10>                                                 
+11>                                                       receiver
+12>                                                               ()
+13>                                                                 ?.
+14>                                                                                                           value
+15>                                                                                                                 ?? 
+16>                                                                                                                                                   fallback
+17>                                                                                                                                                           ()
+18>                                                                                                                                                             ;
+1 >Emitted(4, 5) Source(7, 5) + SourceIndex(0)
+2 >Emitted(4, 11) Source(7, 5) + SourceIndex(0)
+3 >Emitted(4, 19) Source(7, 13) + SourceIndex(0)
+4 >Emitted(4, 21) Source(7, 15) + SourceIndex(0)
+5 >Emitted(4, 23) Source(7, 16) + SourceIndex(0)
+6 >Emitted(4, 28) Source(7, 21) + SourceIndex(0)
+7 >Emitted(4, 36) Source(7, 16) + SourceIndex(0)
+8 >Emitted(4, 41) Source(7, 21) + SourceIndex(0)
+9 >Emitted(4, 50) Source(7, 26) + SourceIndex(0)
+10>Emitted(4, 56) Source(7, 26) + SourceIndex(0)
+11>Emitted(4, 64) Source(7, 34) + SourceIndex(0)
+12>Emitted(4, 66) Source(7, 36) + SourceIndex(0)
+13>Emitted(4, 108) Source(7, 38) + SourceIndex(0)
+14>Emitted(4, 113) Source(7, 43) + SourceIndex(0)
+15>Emitted(4, 148) Source(7, 47) + SourceIndex(0)
+16>Emitted(4, 156) Source(7, 55) + SourceIndex(0)
+17>Emitted(4, 158) Source(7, 57) + SourceIndex(0)
+18>Emitted(4, 160) Source(7, 58) + SourceIndex(0)
+---
+>>>    (_m = receiver()).value && (_m.value = (_l = (_k = receiver()) === null || _k === void 0 ? void 0 : _k.method) === null || _l === void 0 ? void 0 : _l.call(_k));
+1->^^^^
+2 >    ^^^^^^
+3 >          ^^^^^^^^
+4 >                  ^^
+5 >                    ^^
+6 >                      ^^^^^
+7 >                           ^^^^^^^^
+8 >                                   ^^^^^
+9 >                                        ^^^
+10>                                           ^^^^^^
+11>                                                 ^^^^^^
+12>                                                       ^^^^^^^^
+13>                                                               ^^
+14>                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+15>                                                                                                           ^^^^^^
+16>                                                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+17>                                                                                                                                                                   ^^
+1->
+  >    
+2 >    
+3 >          receiver
+4 >                  ()
+5 >                    .
+6 >                      value
+7 >                           
+8 >                                   value
+9 >                                         &&= 
+10>                                           
+11>                                                 
+12>                                                       receiver
+13>                                                               ()
+14>                                                                 ?.
+15>                                                                                                           method
+16>                                                                                                                 ?.()
+17>                                                                                                                                                                   ;
+1->Emitted(5, 5) Source(8, 5) + SourceIndex(0)
+2 >Emitted(5, 11) Source(8, 5) + SourceIndex(0)
+3 >Emitted(5, 19) Source(8, 13) + SourceIndex(0)
+4 >Emitted(5, 21) Source(8, 15) + SourceIndex(0)
+5 >Emitted(5, 23) Source(8, 16) + SourceIndex(0)
+6 >Emitted(5, 28) Source(8, 21) + SourceIndex(0)
+7 >Emitted(5, 36) Source(8, 16) + SourceIndex(0)
+8 >Emitted(5, 41) Source(8, 21) + SourceIndex(0)
+9 >Emitted(5, 44) Source(8, 26) + SourceIndex(0)
+10>Emitted(5, 50) Source(8, 26) + SourceIndex(0)
+11>Emitted(5, 56) Source(8, 26) + SourceIndex(0)
+12>Emitted(5, 64) Source(8, 34) + SourceIndex(0)
+13>Emitted(5, 66) Source(8, 36) + SourceIndex(0)
+14>Emitted(5, 108) Source(8, 38) + SourceIndex(0)
+15>Emitted(5, 114) Source(8, 44) + SourceIndex(0)
+16>Emitted(5, 164) Source(8, 48) + SourceIndex(0)
+17>Emitted(5, 166) Source(8, 49) + SourceIndex(0)
+---
+>>>}
+1 >
+2 >^
+3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >
+2 >}
+1 >Emitted(6, 1) Source(9, 1) + SourceIndex(0)
+2 >Emitted(6, 2) Source(9, 2) + SourceIndex(0)
+---
+>>>export function defaults(value, next) {
+1->
+2 >^^^^^^
+3 >      ^^^^^^^^^^
+4 >                ^^^^^^^^
+5 >                        ^
+6 >                         ^^^^^
+7 >                              ^^
+8 >                                ^^^^
+1->
+  >
+  >
+2 >export
+3 >       function 
+4 >                defaults
+5 >                        (
+  >                            
+6 >                         value = receiver()?.value ?? fallback()
+7 >                              ,
+  >                                  
+8 >                                next = () => receiver().value ??= value
+1->Emitted(7, 1) Source(11, 1) + SourceIndex(0)
+2 >Emitted(7, 7) Source(11, 7) + SourceIndex(0)
+3 >Emitted(7, 17) Source(11, 17) + SourceIndex(0)
+4 >Emitted(7, 25) Source(11, 25) + SourceIndex(0)
+5 >Emitted(7, 26) Source(12, 5) + SourceIndex(0)
+6 >Emitted(7, 31) Source(12, 44) + SourceIndex(0)
+7 >Emitted(7, 33) Source(13, 5) + SourceIndex(0)
+8 >Emitted(7, 37) Source(13, 44) + SourceIndex(0)
+---
+>>>    var _a, _b, _c, _d;
+>>>    if (value === void 0) { value = (_b = (_a = receiver()) === null || _a === void 0 ? void 0 : _a.value) !== null && _b !== void 0 ? _b : fallback(); }
+1 >^^^^^^^^
+2 >        ^^^^^
+3 >             ^^^^^^^^^^^^^
+4 >                          ^^
+5 >                            ^^^^^^^^^^^^^^
+6 >                                          ^^^^^^
+7 >                                                ^^^^^^^^
+8 >                                                        ^^
+9 >                                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+10>                                                                                                    ^^^^^
+11>                                                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+12>                                                                                                                                            ^^^^^^^^
+13>                                                                                                                                                    ^^
+1 >
+2 >        value
+3 >             
+4 >                          
+5 >                            value = 
+6 >                                          
+7 >                                                receiver
+8 >                                                        ()
+9 >                                                          ?.
+10>                                                                                                    value
+11>                                                                                                          ?? 
+12>                                                                                                                                            fallback
+13>                                                                                                                                                    ()
+1 >Emitted(9, 9) Source(12, 5) + SourceIndex(0)
+2 >Emitted(9, 14) Source(12, 10) + SourceIndex(0)
+3 >Emitted(9, 27) Source(12, 5) + SourceIndex(0)
+4 >Emitted(9, 29) Source(12, 5) + SourceIndex(0)
+5 >Emitted(9, 43) Source(12, 13) + SourceIndex(0)
+6 >Emitted(9, 49) Source(12, 13) + SourceIndex(0)
+7 >Emitted(9, 57) Source(12, 21) + SourceIndex(0)
+8 >Emitted(9, 59) Source(12, 23) + SourceIndex(0)
+9 >Emitted(9, 101) Source(12, 25) + SourceIndex(0)
+10>Emitted(9, 106) Source(12, 30) + SourceIndex(0)
+11>Emitted(9, 141) Source(12, 34) + SourceIndex(0)
+12>Emitted(9, 149) Source(12, 42) + SourceIndex(0)
+13>Emitted(9, 151) Source(12, 44) + SourceIndex(0)
+---
+>>>    if (next === void 0) { next = () => { var _a, _b; return (_b = (_a = receiver()).value) !== null && _b !== void 0 ? _b : (_a.value = value); }; }
+1 >^^^^^^^^
+2 >        ^^^^
+3 >            ^^^^^^^^^^^^^
+4 >                         ^^
+5 >                           ^^^^^^^^^^
+6 >                                     ^^
+7 >                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+8 >                                                                         ^^^^^^^^
+9 >                                                                                 ^^
+10>                                                                                   ^^
+11>                                                                                     ^^^^^
+12>                                                                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+13>                                                                                                                                 ^^^^^
+14>                                                                                                                                      ^^^
+15>                                                                                                                                         ^^^^^
+16>                                                                                                                                              ^^^^
+1 >,
+  >    
+2 >        next
+3 >            
+4 >                         
+5 >                           next = () 
+6 >                                     =>
+7 >                                        
+8 >                                                                         receiver
+9 >                                                                                 ()
+10>                                                                                   .
+11>                                                                                     value
+12>                                                                                          
+13>                                                                                                                                 value
+14>                                                                                                                                       ??= 
+15>                                                                                                                                         value
+16>                                                                                                                                              
+1 >Emitted(10, 9) Source(13, 5) + SourceIndex(0)
+2 >Emitted(10, 13) Source(13, 9) + SourceIndex(0)
+3 >Emitted(10, 26) Source(13, 5) + SourceIndex(0)
+4 >Emitted(10, 28) Source(13, 5) + SourceIndex(0)
+5 >Emitted(10, 38) Source(13, 15) + SourceIndex(0)
+6 >Emitted(10, 40) Source(13, 17) + SourceIndex(0)
+7 >Emitted(10, 74) Source(13, 18) + SourceIndex(0)
+8 >Emitted(10, 82) Source(13, 26) + SourceIndex(0)
+9 >Emitted(10, 84) Source(13, 28) + SourceIndex(0)
+10>Emitted(10, 86) Source(13, 29) + SourceIndex(0)
+11>Emitted(10, 91) Source(13, 34) + SourceIndex(0)
+12>Emitted(10, 130) Source(13, 29) + SourceIndex(0)
+13>Emitted(10, 135) Source(13, 34) + SourceIndex(0)
+14>Emitted(10, 138) Source(13, 39) + SourceIndex(0)
+15>Emitted(10, 143) Source(13, 44) + SourceIndex(0)
+16>Emitted(10, 147) Source(13, 44) + SourceIndex(0)
+---
+>>>    try {
+1 >^^^^
+2 >    ^^^^
+3 >        ^
+4 >         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >,
+  >) {
+  >    
+2 >    try 
+3 >        {
+1 >Emitted(11, 5) Source(15, 5) + SourceIndex(0)
+2 >Emitted(11, 9) Source(15, 9) + SourceIndex(0)
+3 >Emitted(11, 10) Source(15, 10) + SourceIndex(0)
+---
+>>>        return (_c = next()) !== null && _c !== void 0 ? _c : value;
+1->^^^^^^^^
+2 >        ^^^^^^^^^^^^^
+3 >                     ^^^^
+4 >                         ^^
+5 >                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+6 >                                                              ^^^^^
+7 >                                                                   ^
+1->
+  >        
+2 >        return 
+3 >                     next
+4 >                         ()
+5 >                            ?? 
+6 >                                                              value
+7 >                                                                   ;
+1->Emitted(12, 9) Source(16, 9) + SourceIndex(0)
+2 >Emitted(12, 22) Source(16, 16) + SourceIndex(0)
+3 >Emitted(12, 26) Source(16, 20) + SourceIndex(0)
+4 >Emitted(12, 28) Source(16, 22) + SourceIndex(0)
+5 >Emitted(12, 63) Source(16, 26) + SourceIndex(0)
+6 >Emitted(12, 68) Source(16, 31) + SourceIndex(0)
+7 >Emitted(12, 69) Source(16, 32) + SourceIndex(0)
+---
+>>>    }
+1 >^^^^
+2 >    ^
+3 >     ^^^^^^^^^^^^->
+1 >
+  >    
+2 >    }
+1 >Emitted(13, 5) Source(17, 5) + SourceIndex(0)
+2 >Emitted(13, 6) Source(17, 6) + SourceIndex(0)
+---
+>>>    catch (_e) {
+1->^^^^^^^^^^^^^^^
+2 >               ^
+3 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->
+  >    catch 
+2 >               {
+1->Emitted(14, 16) Source(18, 11) + SourceIndex(0)
+2 >Emitted(14, 17) Source(18, 12) + SourceIndex(0)
+---
+>>>        return (_d = receiver()) === null || _d === void 0 ? true : delete _d.value;
+1->^^^^^^^^
+2 >        ^^^^^^^
+3 >               ^^^^^^
+4 >                     ^^^^^^^^
+5 >                             ^^
+6 >                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+7 >                                                                              ^^^^^
+8 >                                                                                   ^
+1->
+  >        
+2 >        return delete 
+3 >               
+4 >                     receiver
+5 >                             ()
+6 >                               ?.
+7 >                                                                              value
+8 >                                                                                   ;
+1->Emitted(15, 9) Source(19, 9) + SourceIndex(0)
+2 >Emitted(15, 16) Source(19, 23) + SourceIndex(0)
+3 >Emitted(15, 22) Source(19, 23) + SourceIndex(0)
+4 >Emitted(15, 30) Source(19, 31) + SourceIndex(0)
+5 >Emitted(15, 32) Source(19, 33) + SourceIndex(0)
+6 >Emitted(15, 79) Source(19, 35) + SourceIndex(0)
+7 >Emitted(15, 84) Source(19, 40) + SourceIndex(0)
+8 >Emitted(15, 85) Source(19, 41) + SourceIndex(0)
+---
+>>>    }
+1 >^^^^
+2 >    ^
+1 >
+  >    
+2 >    }
+1 >Emitted(16, 5) Source(20, 5) + SourceIndex(0)
+2 >Emitted(16, 6) Source(20, 6) + SourceIndex(0)
+---
+>>>}
+1 >
+2 >^
+3 > ^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >
+2 >}
+1 >Emitted(17, 1) Source(21, 1) + SourceIndex(0)
+2 >Emitted(17, 2) Source(21, 2) + SourceIndex(0)
+---
+>>>export function calls() {
+1->
+2 >^^^^^^
+3 >      ^^^^^^^^^^
+4 >                ^^^^^
+5 >                     ^^^^^^^->
+1->
+  >
+  >
+2 >export
+3 >       function 
+4 >                calls
+1->Emitted(18, 1) Source(23, 1) + SourceIndex(0)
+2 >Emitted(18, 7) Source(23, 7) + SourceIndex(0)
+3 >Emitted(18, 17) Source(23, 17) + SourceIndex(0)
+4 >Emitted(18, 22) Source(23, 22) + SourceIndex(0)
+---
+>>>    var _a, _b, _c, _d, _e;
+>>>    return (_e = (_b = ((_a = receiver()) === null || _a === void 0 ? void 0 : _a.method)) === null || _b === void 0 ? void 0 : _b.call(_a)) !== null && _e !== void 0 ? _e : (_d = ((_c = receiver()).method)) === null || _d === void 0 ? void 0 : _d.call(_c);
+1->^^^^
+2 >    ^^^^^^^^^^^^^
+3 >                 ^^^^^^
+4 >                       ^
+5 >                        ^^^^^^
+6 >                              ^^^^^^^^
+7 >                                      ^^
+8 >                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+9 >                                                                                  ^^^^^^
+10>                                                                                        ^
+11>                                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+12>                                                                                                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+13>                                                                                                                                                                              ^^^^^^
+14>                                                                                                                                                                                    ^
+15>                                                                                                                                                                                     ^^^^^^
+16>                                                                                                                                                                                           ^^^^^^^^
+17>                                                                                                                                                                                                   ^^
+18>                                                                                                                                                                                                     ^^
+19>                                                                                                                                                                                                       ^^^^^^
+20>                                                                                                                                                                                                             ^
+21>                                                                                                                                                                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+22>                                                                                                                                                                                                                                                                ^
+1->() {
+  >    
+2 >    return 
+3 >                 
+4 >                       (
+5 >                        
+6 >                              receiver
+7 >                                      ()
+8 >                                        ?.
+9 >                                                                                  method
+10>                                                                                        )
+11>                                                                                         ?.()
+12>                                                                                                                                            ?? 
+13>                                                                                                                                                                              
+14>                                                                                                                                                                                    (
+15>                                                                                                                                                                                     
+16>                                                                                                                                                                                           receiver
+17>                                                                                                                                                                                                   ()
+18>                                                                                                                                                                                                     .
+19>                                                                                                                                                                                                       method
+20>                                                                                                                                                                                                             )
+21>                                                                                                                                                                                                              ?.()
+22>                                                                                                                                                                                                                                                                ;
+1->Emitted(20, 5) Source(24, 5) + SourceIndex(0)
+2 >Emitted(20, 18) Source(24, 12) + SourceIndex(0)
+3 >Emitted(20, 24) Source(24, 12) + SourceIndex(0)
+4 >Emitted(20, 25) Source(24, 13) + SourceIndex(0)
+5 >Emitted(20, 31) Source(24, 13) + SourceIndex(0)
+6 >Emitted(20, 39) Source(24, 21) + SourceIndex(0)
+7 >Emitted(20, 41) Source(24, 23) + SourceIndex(0)
+8 >Emitted(20, 83) Source(24, 25) + SourceIndex(0)
+9 >Emitted(20, 89) Source(24, 31) + SourceIndex(0)
+10>Emitted(20, 90) Source(24, 32) + SourceIndex(0)
+11>Emitted(20, 140) Source(24, 36) + SourceIndex(0)
+12>Emitted(20, 175) Source(24, 40) + SourceIndex(0)
+13>Emitted(20, 181) Source(24, 40) + SourceIndex(0)
+14>Emitted(20, 182) Source(24, 41) + SourceIndex(0)
+15>Emitted(20, 188) Source(24, 41) + SourceIndex(0)
+16>Emitted(20, 196) Source(24, 49) + SourceIndex(0)
+17>Emitted(20, 198) Source(24, 51) + SourceIndex(0)
+18>Emitted(20, 200) Source(24, 52) + SourceIndex(0)
+19>Emitted(20, 206) Source(24, 58) + SourceIndex(0)
+20>Emitted(20, 207) Source(24, 59) + SourceIndex(0)
+21>Emitted(20, 257) Source(24, 63) + SourceIndex(0)
+22>Emitted(20, 258) Source(24, 64) + SourceIndex(0)
+---
+>>>}
+1 >
+2 >^
+3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >
+2 >}
+1 >Emitted(21, 1) Source(25, 1) + SourceIndex(0)
+2 >Emitted(21, 2) Source(25, 2) + SourceIndex(0)
+---
+>>>export async function asyncBody(values) {
+1->
+2 >^^^^^^
+3 >      ^
+4 >       ^^^^^
+5 >            ^^^^^^^^^^
+6 >                      ^^^^^^^^^
+7 >                               ^
+8 >                                ^^^^^^
+1->
+  >
+  >
+2 >export
+3 >       
+4 >       async
+5 >             function 
+6 >                      asyncBody
+7 >                               (
+8 >                                values: AsyncIterable<number>
+1->Emitted(22, 1) Source(27, 1) + SourceIndex(0)
+2 >Emitted(22, 7) Source(27, 7) + SourceIndex(0)
+3 >Emitted(22, 8) Source(27, 8) + SourceIndex(0)
+4 >Emitted(22, 13) Source(27, 13) + SourceIndex(0)
+5 >Emitted(22, 23) Source(27, 23) + SourceIndex(0)
+6 >Emitted(22, 32) Source(27, 32) + SourceIndex(0)
+7 >Emitted(22, 33) Source(27, 33) + SourceIndex(0)
+8 >Emitted(22, 39) Source(27, 62) + SourceIndex(0)
+---
+>>>    var _a, _b;
+>>>    for await (const value of values) {
+1 >^^^^
+2 >    ^^^^
+3 >        ^^^^^
+4 >             ^^
+5 >               ^^^^^^
+6 >                     ^^^^^
+7 >                          ^^^^
+8 >                              ^^^^^^
+9 >                                    ^^
+10>                                      ^
+11>                                       ^^^^^^^^^->
+1 >) {
+  >    
+2 >    for 
+3 >        await
+4 >              (
+5 >               const 
+6 >                     value
+7 >                           of 
+8 >                              values
+9 >                                    ) 
+10>                                      {
+1 >Emitted(24, 5) Source(28, 5) + SourceIndex(0)
+2 >Emitted(24, 9) Source(28, 9) + SourceIndex(0)
+3 >Emitted(24, 14) Source(28, 14) + SourceIndex(0)
+4 >Emitted(24, 16) Source(28, 16) + SourceIndex(0)
+5 >Emitted(24, 22) Source(28, 22) + SourceIndex(0)
+6 >Emitted(24, 27) Source(28, 27) + SourceIndex(0)
+7 >Emitted(24, 31) Source(28, 31) + SourceIndex(0)
+8 >Emitted(24, 37) Source(28, 37) + SourceIndex(0)
+9 >Emitted(24, 39) Source(28, 39) + SourceIndex(0)
+10>Emitted(24, 40) Source(28, 40) + SourceIndex(0)
+---
+>>>        const { method, ...rest } = receiver();
+1->^^^^^^^^
+2 >        ^^^^^^
+3 >              ^^
+4 >                ^^^^^^
+5 >                      ^^
+6 >                        ^^^
+7 >                           ^^^^
+8 >                               ^^
+9 >                                 ^^^
+10>                                    ^^^^^^^^
+11>                                            ^^
+12>                                              ^
+13>                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->
+  >        
+2 >        const 
+3 >              { 
+4 >                method
+5 >                      , 
+6 >                        ...
+7 >                           rest
+8 >                                }
+9 >                                  = 
+10>                                    receiver
+11>                                            ()
+12>                                              ;
+1->Emitted(25, 9) Source(29, 9) + SourceIndex(0)
+2 >Emitted(25, 15) Source(29, 15) + SourceIndex(0)
+3 >Emitted(25, 17) Source(29, 17) + SourceIndex(0)
+4 >Emitted(25, 23) Source(29, 23) + SourceIndex(0)
+5 >Emitted(25, 25) Source(29, 25) + SourceIndex(0)
+6 >Emitted(25, 28) Source(29, 28) + SourceIndex(0)
+7 >Emitted(25, 32) Source(29, 32) + SourceIndex(0)
+8 >Emitted(25, 34) Source(29, 34) + SourceIndex(0)
+9 >Emitted(25, 37) Source(29, 37) + SourceIndex(0)
+10>Emitted(25, 45) Source(29, 45) + SourceIndex(0)
+11>Emitted(25, 47) Source(29, 47) + SourceIndex(0)
+12>Emitted(25, 48) Source(29, 48) + SourceIndex(0)
+---
+>>>        (_b = rest.value) !== null && _b !== void 0 ? _b : (rest.value = (_a = (await (method === null || method === void 0 ? void 0 : method()))) !== null && _a !== void 0 ? _a : value ** 2);
+1->^^^^^^^^
+2 >        ^^^^^^
+3 >              ^^^^
+4 >                  ^
+5 >                   ^^^^^
+6 >                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+7 >                                                            ^^^^
+8 >                                                                ^
+9 >                                                                 ^^^^^
+10>                                                                      ^^^^^^^^^
+11>                                                                               ^
+12>                                                                                ^^^^^^^
+13>                                                                                       ^^^^^^
+14>                                                                                             ^^^^^^^^^^^^^
+15>                                                                                                          ^^^^^^
+16>                                                                                                                ^^^^^^^^^^^^^^^^^^^^^^^
+17>                                                                                                                                       ^^^^^^
+18>                                                                                                                                             ^^
+19>                                                                                                                                               ^
+20>                                                                                                                                                ^
+21>                                                                                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+22>                                                                                                                                                                                    ^^^^^
+23>                                                                                                                                                                                         ^^^^
+24>                                                                                                                                                                                             ^
+25>                                                                                                                                                                                              ^^
+1->
+  >        
+2 >        
+3 >              rest
+4 >                  .
+5 >                   value
+6 >                        
+7 >                                                            rest
+8 >                                                                .
+9 >                                                                 value
+10>                                                                       ??= 
+11>                                                                               (
+12>                                                                                await 
+13>                                                                                       method
+14>                                                                                             
+15>                                                                                                          method
+16>                                                                                                                
+17>                                                                                                                                       method
+18>                                                                                                                                             ?.()
+19>                                                                                                                                               
+20>                                                                                                                                                )
+21>                                                                                                                                                  ?? 
+22>                                                                                                                                                                                    value
+23>                                                                                                                                                                                          ** 
+24>                                                                                                                                                                                             2
+25>                                                                                                                                                                                              ;
+1->Emitted(26, 9) Source(30, 9) + SourceIndex(0)
+2 >Emitted(26, 15) Source(30, 9) + SourceIndex(0)
+3 >Emitted(26, 19) Source(30, 13) + SourceIndex(0)
+4 >Emitted(26, 20) Source(30, 14) + SourceIndex(0)
+5 >Emitted(26, 25) Source(30, 19) + SourceIndex(0)
+6 >Emitted(26, 61) Source(30, 9) + SourceIndex(0)
+7 >Emitted(26, 65) Source(30, 13) + SourceIndex(0)
+8 >Emitted(26, 66) Source(30, 14) + SourceIndex(0)
+9 >Emitted(26, 71) Source(30, 19) + SourceIndex(0)
+10>Emitted(26, 80) Source(30, 24) + SourceIndex(0)
+11>Emitted(26, 81) Source(30, 25) + SourceIndex(0)
+12>Emitted(26, 88) Source(30, 31) + SourceIndex(0)
+13>Emitted(26, 94) Source(30, 37) + SourceIndex(0)
+14>Emitted(26, 107) Source(30, 31) + SourceIndex(0)
+15>Emitted(26, 113) Source(30, 37) + SourceIndex(0)
+16>Emitted(26, 136) Source(30, 31) + SourceIndex(0)
+17>Emitted(26, 142) Source(30, 37) + SourceIndex(0)
+18>Emitted(26, 144) Source(30, 41) + SourceIndex(0)
+19>Emitted(26, 145) Source(30, 41) + SourceIndex(0)
+20>Emitted(26, 146) Source(30, 42) + SourceIndex(0)
+21>Emitted(26, 181) Source(30, 46) + SourceIndex(0)
+22>Emitted(26, 186) Source(30, 51) + SourceIndex(0)
+23>Emitted(26, 190) Source(30, 55) + SourceIndex(0)
+24>Emitted(26, 191) Source(30, 56) + SourceIndex(0)
+25>Emitted(26, 193) Source(30, 57) + SourceIndex(0)
+---
+>>>    }
+1 >^^^^
+2 >    ^
+1 >
+  >    
+2 >    }
+1 >Emitted(27, 5) Source(31, 5) + SourceIndex(0)
+2 >Emitted(27, 6) Source(31, 6) + SourceIndex(0)
+---
+>>>}
+1 >
+2 >^
+3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >
+2 >}
+1 >Emitted(28, 1) Source(32, 1) + SourceIndex(0)
+2 >Emitted(28, 2) Source(32, 2) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=fusedSyntaxTransforms.js.map
