@@ -232,7 +232,7 @@ f(/*argument*/);`
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Includes: []fourslash.CompletionsExpectedItem{
-				&lsproto.CompletionItem{Label: "\"\uFFFD\uFFFD\uFFFD\"", CommitCharacters: &[]string{}},
+				&lsproto.CompletionItem{Label: `"\ud800"`, CommitCharacters: &[]string{}},
 			},
 		},
 	})

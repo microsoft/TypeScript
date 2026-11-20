@@ -153,7 +153,7 @@ func (l *LanguageService) convertStringLiteralCompletions(
 		isJsxAttribute := ast.IsJsxAttribute(contextToken.Parent)
 		items := core.MapNonNil(completion.types, func(t *checker.StringLiteralType) *CompletionItem {
 			value := t.AsLiteralType().Value().(string)
-			name := value
+			name := mapLoneSurrogates(value, func(s string) string { return s })
 			insertText := ""
 			filterText := ""
 			replacementSpan := l.getReplacementRangeForContextToken(file, contextToken, position)
@@ -171,7 +171,7 @@ func (l *LanguageService) convertStringLiteralCompletions(
 				}
 				replacementSpan = &lspRange
 				insertText = jsxExpressionContainerText(file, l.UserPreferences(), value)
-				filterText = string(quoteChar) + value
+				filterText = string(quoteChar) + name
 			}
 			lspItem := l.createLSPCompletionItem(
 				ctx,
