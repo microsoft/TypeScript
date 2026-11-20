@@ -166,3 +166,27 @@ export {};
 		})
 	}
 }
+
+func TestTripleSlashReferenceCompletionQuotes(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @Filename: /src/main.ts
+/// <reference path="./a/*reference*/" />
+// @Filename: /src/a"b.ts
+export {};
+// @Filename: /src/a'b.ts
+export {};
+`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyCompletions(t, "reference", &fourslash.CompletionsExpectedList{
+		IsIncomplete: false,
+		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
+			CommitCharacters: &[]string{},
+			EditRange:        Ignored,
+		},
+		Items: &fourslash.CompletionsExpectedItems{
+			Includes: []fourslash.CompletionsExpectedItem{"a'b.ts", `a"b.ts`},
+		},
+	})
+}
