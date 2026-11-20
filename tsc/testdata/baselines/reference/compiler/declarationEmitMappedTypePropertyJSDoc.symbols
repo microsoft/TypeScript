@@ -1,0 +1,56 @@
+//// [tests/cases/compiler/declarationEmitMappedTypePropertyJSDoc.ts] ////
+
+=== declarationEmitMappedTypePropertyJSDoc.ts ===
+type Writeable<T> = { -readonly [P in keyof T]: T[P] } & {};
+>Writeable : Symbol(Writeable, Decl(declarationEmitMappedTypePropertyJSDoc.ts, 0, 0))
+>T : Symbol(T, Decl(declarationEmitMappedTypePropertyJSDoc.ts, 0, 15))
+>P : Symbol(P, Decl(declarationEmitMappedTypePropertyJSDoc.ts, 0, 33))
+>T : Symbol(T, Decl(declarationEmitMappedTypePropertyJSDoc.ts, 0, 15))
+>T : Symbol(T, Decl(declarationEmitMappedTypePropertyJSDoc.ts, 0, 15))
+>P : Symbol(P, Decl(declarationEmitMappedTypePropertyJSDoc.ts, 0, 33))
+
+declare function make<T>(shape: T): { shape: Writeable<T> };
+>make : Symbol(make, Decl(declarationEmitMappedTypePropertyJSDoc.ts, 0, 60))
+>T : Symbol(T, Decl(declarationEmitMappedTypePropertyJSDoc.ts, 1, 22))
+>shape : Symbol(shape, Decl(declarationEmitMappedTypePropertyJSDoc.ts, 1, 25))
+>T : Symbol(T, Decl(declarationEmitMappedTypePropertyJSDoc.ts, 1, 22))
+>shape : Symbol(shape, Decl(declarationEmitMappedTypePropertyJSDoc.ts, 1, 37))
+>Writeable : Symbol(Writeable, Decl(declarationEmitMappedTypePropertyJSDoc.ts, 0, 0))
+>T : Symbol(T, Decl(declarationEmitMappedTypePropertyJSDoc.ts, 1, 22))
+
+export const a = make({
+>a : Symbol(a, Decl(declarationEmitMappedTypePropertyJSDoc.ts, 2, 12))
+>make : Symbol(make, Decl(declarationEmitMappedTypePropertyJSDoc.ts, 0, 60))
+
+  /** doc for x */
+  x: 1,
+>x : Symbol(x, Decl(declarationEmitMappedTypePropertyJSDoc.ts, 2, 23))
+
+});
+declare function pick<T, K extends keyof T>(t: T, k: K): { [P in K]: T[P] };
+>pick : Symbol(pick, Decl(declarationEmitMappedTypePropertyJSDoc.ts, 5, 3))
+>T : Symbol(T, Decl(declarationEmitMappedTypePropertyJSDoc.ts, 6, 22))
+>K : Symbol(K, Decl(declarationEmitMappedTypePropertyJSDoc.ts, 6, 24))
+>T : Symbol(T, Decl(declarationEmitMappedTypePropertyJSDoc.ts, 6, 22))
+>t : Symbol(t, Decl(declarationEmitMappedTypePropertyJSDoc.ts, 6, 44))
+>T : Symbol(T, Decl(declarationEmitMappedTypePropertyJSDoc.ts, 6, 22))
+>k : Symbol(k, Decl(declarationEmitMappedTypePropertyJSDoc.ts, 6, 49))
+>K : Symbol(K, Decl(declarationEmitMappedTypePropertyJSDoc.ts, 6, 24))
+>P : Symbol(P, Decl(declarationEmitMappedTypePropertyJSDoc.ts, 6, 60))
+>K : Symbol(K, Decl(declarationEmitMappedTypePropertyJSDoc.ts, 6, 24))
+>T : Symbol(T, Decl(declarationEmitMappedTypePropertyJSDoc.ts, 6, 22))
+>P : Symbol(P, Decl(declarationEmitMappedTypePropertyJSDoc.ts, 6, 60))
+
+export const b = pick({
+>b : Symbol(b, Decl(declarationEmitMappedTypePropertyJSDoc.ts, 7, 12))
+>pick : Symbol(pick, Decl(declarationEmitMappedTypePropertyJSDoc.ts, 5, 3))
+
+  /** doc for v */
+  v: 1,
+>v : Symbol(v, Decl(declarationEmitMappedTypePropertyJSDoc.ts, 7, 23))
+
+  w: 2,
+>w : Symbol(w, Decl(declarationEmitMappedTypePropertyJSDoc.ts, 9, 7))
+
+}, "v");
+
