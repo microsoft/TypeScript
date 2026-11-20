@@ -54,7 +54,7 @@ export declare class C {
 }
 export declare function f1(): void;
 export declare namespace f1 {
-    export { C as a };
+    export var a: typeof C;
     export { C as b };
 }
 export declare namespace f1 {
@@ -65,7 +65,7 @@ export declare enum E {
 }
 export declare function f2(): void;
 export declare namespace f2 {
-    export { E as a };
+    var a: typeof E;
 }
 export declare namespace f2 {
     interface a {
@@ -75,7 +75,7 @@ export declare namespace f2 {
 export declare function g(): void;
 export declare function f3(): void;
 export declare namespace f3 {
-    export { g as a };
+    var a: typeof g;
 }
 export declare namespace f3 {
     namespace a {
@@ -88,73 +88,11 @@ export declare namespace Target {
 }
 export declare function Popover(): null;
 export declare namespace Popover {
-    export { Target };
+    var _a: typeof import("./declarationEmitExpandoTypeOnlyNamespaceMember").Target;
+    export { _a as Target };
 }
 export declare namespace Popover {
     namespace Target {
         type Extra = string;
     }
 }
-
-
-//// [DtsFileErrors]
-
-
-declarationEmitExpandoTypeOnlyNamespaceMember.d.ts(5,14): error TS2484: Export declaration conflicts with exported declaration of 'a'.
-declarationEmitExpandoTypeOnlyNamespaceMember.d.ts(16,14): error TS2484: Export declaration conflicts with exported declaration of 'a'.
-declarationEmitExpandoTypeOnlyNamespaceMember.d.ts(39,14): error TS2484: Export declaration conflicts with exported declaration of 'Target'.
-
-
-==== declarationEmitExpandoTypeOnlyNamespaceMember.d.ts (3 errors) ====
-    export declare class C {
-    }
-    export declare function f1(): void;
-    export declare namespace f1 {
-        export { C as a };
-                 ~~~~~~
-!!! error TS2484: Export declaration conflicts with exported declaration of 'a'.
-        export { C as b };
-    }
-    export declare namespace f1 {
-        type a = 0;
-    }
-    export declare enum E {
-        A = 0
-    }
-    export declare function f2(): void;
-    export declare namespace f2 {
-        export { E as a };
-                 ~~~~~~
-!!! error TS2484: Export declaration conflicts with exported declaration of 'a'.
-    }
-    export declare namespace f2 {
-        interface a {
-            x: string;
-        }
-    }
-    export declare function g(): void;
-    export declare function f3(): void;
-    export declare namespace f3 {
-        export { g as a };
-    }
-    export declare namespace f3 {
-        namespace a {
-            type T = string;
-        }
-    }
-    export declare function Target(): null;
-    export declare namespace Target {
-        type Props = number;
-    }
-    export declare function Popover(): null;
-    export declare namespace Popover {
-        export { Target };
-                 ~~~~~~
-!!! error TS2484: Export declaration conflicts with exported declaration of 'Target'.
-    }
-    export declare namespace Popover {
-        namespace Target {
-            type Extra = string;
-        }
-    }
-    

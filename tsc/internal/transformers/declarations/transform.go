@@ -2908,7 +2908,9 @@ func (tx *DeclarationTransformer) transformExpandoAssignment(node *ast.BinaryExp
 
 	preexistingExpandoHasExport := core.Some(tx.expandoMembers[hostId], ast.IsExportDeclaration)
 
-	if ast.IsIdentifier(node.Right) {
+	// When the expando is merged with a type-only declaration (e.g. a type alias or uninstantiated namespace
+	// of the same name), an alias-like export would conflict with it, so we emit a variable declaration instead.
+	if ast.IsIdentifier(node.Right) && symbol.Flags()&(ast.SymbolFlagsType|ast.SymbolFlagsNamespace) == 0 {
 		if !preexistingExpandoHasExport {
 			tx.addExportModifierToExpandoMembers(hostId)
 		}
