@@ -395,9 +395,9 @@ func (l *LanguageService) getStringLiteralCompletionEntries(
 		namedImportsOrExports := specifier.Parent
 		var moduleSpecifier *ast.Node
 		if namedImportsOrExports.Kind == ast.KindNamedImports {
-			moduleSpecifier = namedImportsOrExports.Parent.Parent
+			moduleSpecifier = namedImportsOrExports.Parent.Parent.ModuleSpecifier()
 		} else {
-			moduleSpecifier = namedImportsOrExports.Parent
+			moduleSpecifier = namedImportsOrExports.Parent.ModuleSpecifier()
 		}
 		if moduleSpecifier == nil {
 			return nil

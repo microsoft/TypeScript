@@ -2411,7 +2411,7 @@ func (l *LanguageService) createCompletionItem(
 	parentNamedImportOrExport := ast.FindAncestor(data.location, isNamedImportsOrExports)
 	if parentNamedImportOrExport != nil {
 		if !scanner.IsIdentifierText(name, core.LanguageVariantStandard) {
-			insertText = quotePropertyName(file, preferences, name)
+			insertText = quote(file, preferences, name)
 
 			if parentNamedImportOrExport.Kind == ast.KindNamedImports {
 				// Check if it is `import { ^here as name } from '...'``.

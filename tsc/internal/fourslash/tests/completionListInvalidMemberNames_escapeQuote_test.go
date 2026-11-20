@@ -191,11 +191,28 @@ export { /*plain*/ } from "./lib";
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Includes: []fourslash.CompletionsExpectedItem{
-				&lsproto.CompletionItem{Label: "1", InsertText: new("1")},
+				&lsproto.CompletionItem{Label: "1", InsertText: new(`"1"`)},
 			},
 		},
 	})
-	for _, marker := range []string{"import", "export"} {
-		f.VerifyCompletions(t, marker, nil)
+	for i, marker := range []string{"import", "export"} {
+		f.VerifyCompletions(t, marker, &fourslash.CompletionsExpectedList{
+			IsIncomplete: false,
+			ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
+				CommitCharacters: &DefaultCommitCharacters,
+				EditRange:        Ignored,
+			},
+			Items: &fourslash.CompletionsExpectedItems{
+				Includes: []fourslash.CompletionsExpectedItem{
+					&lsproto.CompletionItem{
+						Label:      "a'b",
+						InsertText: new(`a\'b`),
+						TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
+							TextEdit: &lsproto.TextEdit{NewText: `a\'b`, Range: f.Ranges()[i].LSRange},
+						},
+					},
+				},
+			},
+		})
 	}
 }
