@@ -16,7 +16,7 @@ export type Loose<Label> = string & {};
 >Loose : Loose<Label>
 
 export type Relabeled<Label> = Branded<Label>;
->Relabeled : number
+>Relabeled : Relabeled<Label>
 
 export type UsesSecond<Label, Value> = { id: number } & { value: Value };
 >UsesSecond : UsesSecond<Label, Value>
@@ -29,7 +29,7 @@ import type { Labeled, MaybeLabel, Branded, Loose, Relabeled, UsesSecond } from 
 >MaybeLabel : MaybeLabel<Label>
 >Branded : Branded<Label>
 >Loose : Loose<Label>
->Relabeled : number
+>Relabeled : Relabeled<Label>
 >UsesSecond : UsesSecond<Label, Value>
 
 declare function id<T>(value: T): T;
@@ -41,54 +41,54 @@ declare function label<L>(value: L): Labeled<L>;
 >value : L
 
 declare const item: Labeled<"user">;
->item : Labeled<Label>
+>item : Labeled<"user">
 
 declare const maybe: MaybeLabel<"user">;
->maybe : MaybeLabel<Label>
+>maybe : MaybeLabel<"user">
 
 declare const branded: Branded<"user">;
->branded : Branded<Label>
+>branded : Branded<"user">
 
 declare const names: "alice" | "bob" | Loose<"user">;
->names : "alice" | "bob" | Loose<Label>
+>names : "alice" | "bob" | Loose<"user">
 
 declare const relabeled: Relabeled<"user">;
->relabeled : number
+>relabeled : Relabeled<"user">
 
 declare const partly: UsesSecond<"user", 1>;
 >partly : UsesSecond<"user", 1>
 
 export const copy = item;
->copy : Labeled<Label>
->item : Labeled<Label>
+>copy : Labeled<"user">
+>item : Labeled<"user">
 
 export const inferred = id(item);
->inferred : Labeled<Label>
->id(item) : Labeled<Label>
+>inferred : Labeled<"user">
+>id(item) : Labeled<"user">
 >id : <T>(value: T) => T
->item : Labeled<Label>
+>item : Labeled<"user">
 
 export const fromCall = label<"admin">("admin");
->fromCall : Labeled<Label>
->label<"admin">("admin") : Labeled<Label>
+>fromCall : Labeled<"admin">
+>label<"admin">("admin") : Labeled<"admin">
 >label : <L>(value: L) => Labeled<L>
 >"admin" : "admin"
 
 export const maybeCopy = maybe;
->maybeCopy : MaybeLabel<Label>
->maybe : MaybeLabel<Label>
+>maybeCopy : MaybeLabel<"user">
+>maybe : MaybeLabel<"user">
 
 export const brandedCopy = branded;
->brandedCopy : Branded<Label>
->branded : Branded<Label>
+>brandedCopy : Branded<"user">
+>branded : Branded<"user">
 
 export const namesCopy = names;
->namesCopy : "alice" | "bob" | Loose<Label>
->names : "alice" | "bob" | Loose<Label>
+>namesCopy : "alice" | "bob" | Loose<"user">
+>names : "alice" | "bob" | Loose<"user">
 
 export const relabeledCopy = relabeled;
->relabeledCopy : number
->relabeled : number
+>relabeledCopy : Relabeled<"user">
+>relabeled : Relabeled<"user">
 
 export const partlyCopy = partly;
 >partlyCopy : UsesSecond<"user", 1>
@@ -110,20 +110,20 @@ declare const localItem: LocalLabeled<"user">;
 >localItem : LocalLabeled<"user">
 
 declare const localBranded: LocalBranded<"user">;
->localBranded : number
+>localBranded : LocalBranded<"user">
 
 declare const localNames: "alice" | "bob" | LocalLoose<"user">;
->localNames : string
+>localNames : "alice" | "bob" | LocalLoose<"user">
 
 export const localItemCopy = localItem;
 >localItemCopy : LocalLabeled<"user">
 >localItem : LocalLabeled<"user">
 
 export const localBrandedCopy = localBranded;
->localBrandedCopy : number
->localBranded : number
+>localBrandedCopy : LocalBranded<"user">
+>localBranded : LocalBranded<"user">
 
 export const localNamesCopy = localNames;
->localNamesCopy : string
->localNames : string
+>localNamesCopy : "alice" | "bob" | LocalLoose<"user">
+>localNames : "alice" | "bob" | LocalLoose<"user">
 
