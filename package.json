@@ -52,6 +52,6 @@
     "allowScripts": {
         "dprint@0.64.3": true,
         "esbuild@0.28.2": true,
-        "@vscode/vsce-sign@2.1.0": true
+        "@vscode/vsce-sign@2.1.1": true
     }
 }

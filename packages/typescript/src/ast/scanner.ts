@@ -299,7 +299,7 @@ function scanJSDocCommentForTags(text: string, tokenFlags: TokenFlags): TokenFla
         }
         if (
             (tokenFlags & (TokenFlags.PrecedingJSDocWithDeprecated | TokenFlags.PrecedingJSDocWithSeeOrLink)) ===
-                (TokenFlags.PrecedingJSDocWithDeprecated | TokenFlags.PrecedingJSDocWithSeeOrLink)
+            (TokenFlags.PrecedingJSDocWithDeprecated | TokenFlags.PrecedingJSDocWithSeeOrLink)
         ) {
             return tokenFlags;
         }
