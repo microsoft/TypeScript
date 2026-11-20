@@ -1,0 +1,76 @@
+//// [tests/cases/compiler/declarationEmitUnusedAliasTypeParameter.ts] ////
+
+=== types.ts ===
+export type Labeled<Label> = { id: number } & { name: string };
+>Labeled : Symbol(Labeled, Decl(types.ts, 0, 0))
+>Label : Symbol(Label, Decl(types.ts, 0, 20))
+>id : Symbol(id, Decl(types.ts, 0, 30))
+>name : Symbol(name, Decl(types.ts, 0, 47))
+
+export type MaybeLabel<Label> = undefined | "x";
+>MaybeLabel : Symbol(MaybeLabel, Decl(types.ts, 0, 63))
+>Label : Symbol(Label, Decl(types.ts, 1, 23))
+
+export type Branded<Label> = number & {};
+>Branded : Symbol(Branded, Decl(types.ts, 1, 48))
+>Label : Symbol(Label, Decl(types.ts, 2, 20))
+
+export type UsesSecond<Label, Value> = { id: number } & { value: Value };
+>UsesSecond : Symbol(UsesSecond, Decl(types.ts, 2, 41))
+>Label : Symbol(Label, Decl(types.ts, 3, 23))
+>Value : Symbol(Value, Decl(types.ts, 3, 29))
+>id : Symbol(id, Decl(types.ts, 3, 40))
+>value : Symbol(value, Decl(types.ts, 3, 57))
+>Value : Symbol(Value, Decl(types.ts, 3, 29))
+
+=== main.ts ===
+import type { Labeled, MaybeLabel, Branded, UsesSecond } from "./types";
+>Labeled : Symbol(Labeled, Decl(main.ts, 0, 13))
+>MaybeLabel : Symbol(MaybeLabel, Decl(main.ts, 0, 22))
+>Branded : Symbol(Branded, Decl(main.ts, 0, 34))
+>UsesSecond : Symbol(UsesSecond, Decl(main.ts, 0, 43))
+
+declare function id<T>(value: T): T;
+>id : Symbol(id, Decl(main.ts, 0, 72))
+>T : Symbol(T, Decl(main.ts, 2, 20))
+>value : Symbol(value, Decl(main.ts, 2, 23))
+>T : Symbol(T, Decl(main.ts, 2, 20))
+>T : Symbol(T, Decl(main.ts, 2, 20))
+
+declare const item: Labeled<"user">;
+>item : Symbol(item, Decl(main.ts, 3, 13))
+>Labeled : Symbol(Labeled, Decl(main.ts, 0, 13))
+
+declare const maybe: MaybeLabel<"user">;
+>maybe : Symbol(maybe, Decl(main.ts, 4, 13))
+>MaybeLabel : Symbol(MaybeLabel, Decl(main.ts, 0, 22))
+
+declare const branded: Branded<"user">;
+>branded : Symbol(branded, Decl(main.ts, 5, 13))
+>Branded : Symbol(Branded, Decl(main.ts, 0, 34))
+
+declare const partly: UsesSecond<"user", 1>;
+>partly : Symbol(partly, Decl(main.ts, 6, 13))
+>UsesSecond : Symbol(UsesSecond, Decl(main.ts, 0, 43))
+
+export const copy = item;
+>copy : Symbol(copy, Decl(main.ts, 8, 12))
+>item : Symbol(item, Decl(main.ts, 3, 13))
+
+export const inferred = id(item);
+>inferred : Symbol(inferred, Decl(main.ts, 9, 12))
+>id : Symbol(id, Decl(main.ts, 0, 72))
+>item : Symbol(item, Decl(main.ts, 3, 13))
+
+export const maybeCopy = maybe;
+>maybeCopy : Symbol(maybeCopy, Decl(main.ts, 10, 12))
+>maybe : Symbol(maybe, Decl(main.ts, 4, 13))
+
+export const brandedCopy = branded;
+>brandedCopy : Symbol(brandedCopy, Decl(main.ts, 11, 12))
+>branded : Symbol(branded, Decl(main.ts, 5, 13))
+
+export const partlyCopy = partly;
+>partlyCopy : Symbol(partlyCopy, Decl(main.ts, 12, 12))
+>partly : Symbol(partly, Decl(main.ts, 6, 13))
+
