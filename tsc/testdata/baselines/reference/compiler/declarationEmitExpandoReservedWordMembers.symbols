@@ -1,0 +1,94 @@
+//// [tests/cases/compiler/declarationEmitExpandoReservedWordMembers.ts] ////
+
+=== declarationEmitExpandoReservedWordMembers.ts ===
+export function decl() {}
+>decl : Symbol(decl, Decl(declarationEmitExpandoReservedWordMembers.ts, 0, 0))
+
+decl.default = 1;
+>decl.default : Symbol(decl.default, Decl(declarationEmitExpandoReservedWordMembers.ts, 0, 25))
+>decl : Symbol(decl, Decl(declarationEmitExpandoReservedWordMembers.ts, 0, 0))
+>default : Symbol(decl.default, Decl(declarationEmitExpandoReservedWordMembers.ts, 0, 25))
+
+decl.class = 2;
+>decl.class : Symbol(decl.class, Decl(declarationEmitExpandoReservedWordMembers.ts, 1, 17))
+>decl : Symbol(decl, Decl(declarationEmitExpandoReservedWordMembers.ts, 0, 0))
+>class : Symbol(decl.class, Decl(declarationEmitExpandoReservedWordMembers.ts, 1, 17))
+
+decl.function = "s";
+>decl.function : Symbol(decl.function, Decl(declarationEmitExpandoReservedWordMembers.ts, 2, 15))
+>decl : Symbol(decl, Decl(declarationEmitExpandoReservedWordMembers.ts, 0, 0))
+>function : Symbol(decl.function, Decl(declarationEmitExpandoReservedWordMembers.ts, 2, 15))
+
+export const arrow = () => {};
+>arrow : Symbol(arrow, Decl(declarationEmitExpandoReservedWordMembers.ts, 5, 12))
+
+arrow.default = 1;
+>arrow.default : Symbol(arrow.default, Decl(declarationEmitExpandoReservedWordMembers.ts, 5, 30))
+>arrow : Symbol(arrow, Decl(declarationEmitExpandoReservedWordMembers.ts, 5, 12))
+>default : Symbol(arrow.default, Decl(declarationEmitExpandoReservedWordMembers.ts, 5, 30))
+
+arrow.class = 2;
+>arrow.class : Symbol(arrow.class, Decl(declarationEmitExpandoReservedWordMembers.ts, 6, 18))
+>arrow : Symbol(arrow, Decl(declarationEmitExpandoReservedWordMembers.ts, 5, 12))
+>class : Symbol(arrow.class, Decl(declarationEmitExpandoReservedWordMembers.ts, 6, 18))
+
+arrow.new = "s";
+>arrow.new : Symbol(arrow.new, Decl(declarationEmitExpandoReservedWordMembers.ts, 7, 16))
+>arrow : Symbol(arrow, Decl(declarationEmitExpandoReservedWordMembers.ts, 5, 12))
+>new : Symbol(arrow.new, Decl(declarationEmitExpandoReservedWordMembers.ts, 7, 16))
+
+export function mixed() {}
+>mixed : Symbol(mixed, Decl(declarationEmitExpandoReservedWordMembers.ts, 8, 16))
+
+mixed.a = 1;
+>mixed.a : Symbol(mixed.a, Decl(declarationEmitExpandoReservedWordMembers.ts, 10, 26))
+>mixed : Symbol(mixed, Decl(declarationEmitExpandoReservedWordMembers.ts, 8, 16))
+>a : Symbol(mixed.a, Decl(declarationEmitExpandoReservedWordMembers.ts, 10, 26))
+
+mixed.default = 2;
+>mixed.default : Symbol(mixed.default, Decl(declarationEmitExpandoReservedWordMembers.ts, 11, 12))
+>mixed : Symbol(mixed, Decl(declarationEmitExpandoReservedWordMembers.ts, 8, 16))
+>default : Symbol(mixed.default, Decl(declarationEmitExpandoReservedWordMembers.ts, 11, 12))
+
+mixed.b = 3;
+>mixed.b : Symbol(mixed.b, Decl(declarationEmitExpandoReservedWordMembers.ts, 12, 18))
+>mixed : Symbol(mixed, Decl(declarationEmitExpandoReservedWordMembers.ts, 8, 16))
+>b : Symbol(mixed.b, Decl(declarationEmitExpandoReservedWordMembers.ts, 12, 18))
+
+mixed.class = 4;
+>mixed.class : Symbol(mixed.class, Decl(declarationEmitExpandoReservedWordMembers.ts, 13, 12))
+>mixed : Symbol(mixed, Decl(declarationEmitExpandoReservedWordMembers.ts, 8, 16))
+>class : Symbol(mixed.class, Decl(declarationEmitExpandoReservedWordMembers.ts, 13, 12))
+
+mixed.c = 5;
+>mixed.c : Symbol(mixed.c, Decl(declarationEmitExpandoReservedWordMembers.ts, 14, 16))
+>mixed : Symbol(mixed, Decl(declarationEmitExpandoReservedWordMembers.ts, 8, 16))
+>c : Symbol(mixed.c, Decl(declarationEmitExpandoReservedWordMembers.ts, 14, 16))
+
+const alias = 0;
+>alias : Symbol(alias, Decl(declarationEmitExpandoReservedWordMembers.ts, 17, 5))
+
+export function withAlias() {}
+>withAlias : Symbol(withAlias, Decl(declarationEmitExpandoReservedWordMembers.ts, 17, 16))
+
+withAlias.x = alias;
+>withAlias.x : Symbol(withAlias.x, Decl(declarationEmitExpandoReservedWordMembers.ts, 18, 30))
+>withAlias : Symbol(withAlias, Decl(declarationEmitExpandoReservedWordMembers.ts, 17, 16))
+>x : Symbol(withAlias.x, Decl(declarationEmitExpandoReservedWordMembers.ts, 18, 30))
+>alias : Symbol(alias, Decl(declarationEmitExpandoReservedWordMembers.ts, 17, 5))
+
+withAlias.default = 1;
+>withAlias.default : Symbol(withAlias.default, Decl(declarationEmitExpandoReservedWordMembers.ts, 19, 20))
+>withAlias : Symbol(withAlias, Decl(declarationEmitExpandoReservedWordMembers.ts, 17, 16))
+>default : Symbol(withAlias.default, Decl(declarationEmitExpandoReservedWordMembers.ts, 19, 20))
+
+withAlias.y = 2;
+>withAlias.y : Symbol(withAlias.y, Decl(declarationEmitExpandoReservedWordMembers.ts, 20, 22))
+>withAlias : Symbol(withAlias, Decl(declarationEmitExpandoReservedWordMembers.ts, 17, 16))
+>y : Symbol(withAlias.y, Decl(declarationEmitExpandoReservedWordMembers.ts, 20, 22))
+
+withAlias.class = 3;
+>withAlias.class : Symbol(withAlias.class, Decl(declarationEmitExpandoReservedWordMembers.ts, 21, 16))
+>withAlias : Symbol(withAlias, Decl(declarationEmitExpandoReservedWordMembers.ts, 17, 16))
+>class : Symbol(withAlias.class, Decl(declarationEmitExpandoReservedWordMembers.ts, 21, 16))
+

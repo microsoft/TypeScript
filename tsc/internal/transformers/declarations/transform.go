@@ -2918,9 +2918,12 @@ func (tx *DeclarationTransformer) transformExpandoAssignment(node *ast.BinaryExp
 		return
 	}
 
+	isRenamed := localName.Text() != exportName.Text()
+
 	var varModifiers *ast.ModifierList
 
-	if preexistingExpandoHasExport {
+	// A renamed local is only exposed through its `export { local as name }` alias, so it must stay private
+	if preexistingExpandoHasExport && !isRenamed {
 		varModifiers = tx.Factory().NewModifierList(ast.CreateModifiersFromModifierFlags(ast.ModifierFlagsExport, tx.Factory().NewModifier))
 	}
 
@@ -2950,7 +2953,7 @@ func (tx *DeclarationTransformer) transformExpandoAssignment(node *ast.BinaryExp
 		),
 	}
 
-	if localName.Text() != exportName.Text() {
+	if isRenamed {
 		namedExports := tx.Factory().NewNamedExports(tx.Factory().NewNodeList(
 			[]*ast.Node{
 				tx.Factory().NewExportSpecifier(false /*isTypeOnly*/, localName, exportName),
