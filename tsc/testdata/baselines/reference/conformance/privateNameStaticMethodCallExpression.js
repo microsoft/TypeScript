@@ -21,6 +21,15 @@ class AA {
         AA.getClass().#method2(0, ...arr, 3); 
         const b2 = new (AA.getClass().#method2)(0, ...arr, 3); //Error 
         const str2 = AA.getClass().#method2`head${1}middle${2}tail`;
+
+        (AA.#method)();
+        AA.#method!();
+        (AA.#method as () => void)();
+        (AA.#method satisfies () => void)();
+        (AA.#method)?.();
+        AA.#method!?.();
+        (AA.getClass().#method2)(0, ...arr, 3);
+        (AA.#method2)`test${1}and${2}`;
     }
     static getClass() { return AA; }
 }
@@ -38,7 +47,8 @@ class AA {
     ;
     ;
     test() {
-        var _b, _c, _d;
+        var _b, _c;
+        var _d, _e, _f, _g;
         __classPrivateFieldGet(_a, _a, "m", _AA_method).call(_a);
         const func = __classPrivateFieldGet(_a, _a, "m", _AA_method);
         func();
@@ -47,10 +57,18 @@ class AA {
         __classPrivateFieldGet(_a, _a, "m", _AA_method2).call(_a, 0, ...arr, 3);
         const b = new (__classPrivateFieldGet(_a, _a, "m", _AA_method2))(0, ...arr, 3); //Error 
         const str = __classPrivateFieldGet(_a, _a, "m", _AA_method2).bind(_a) `head${1}middle${2}tail`;
-        __classPrivateFieldGet((_b = _a.getClass()), _a, "m", _AA_method2).bind(_b) `test${1}and${2}`;
-        __classPrivateFieldGet((_c = _a.getClass()), _a, "m", _AA_method2).call(_c, 0, ...arr, 3);
+        __classPrivateFieldGet((_d = _a.getClass()), _a, "m", _AA_method2).bind(_d) `test${1}and${2}`;
+        __classPrivateFieldGet((_e = _a.getClass()), _a, "m", _AA_method2).call(_e, 0, ...arr, 3);
         const b2 = new (__classPrivateFieldGet(_a.getClass(), _a, "m", _AA_method2))(0, ...arr, 3); //Error 
-        const str2 = __classPrivateFieldGet((_d = _a.getClass()), _a, "m", _AA_method2).bind(_d) `head${1}middle${2}tail`;
+        const str2 = __classPrivateFieldGet((_f = _a.getClass()), _a, "m", _AA_method2).bind(_f) `head${1}middle${2}tail`;
+        (__classPrivateFieldGet(_a, _a, "m", _AA_method)).call(_a);
+        __classPrivateFieldGet(_a, _a, "m", _AA_method).call(_a);
+        __classPrivateFieldGet(_a, _a, "m", _AA_method).call(_a);
+        __classPrivateFieldGet(_a, _a, "m", _AA_method).call(_a);
+        (_b = (__classPrivateFieldGet(_a, _a, "m", _AA_method))) === null || _b === void 0 ? void 0 : _b.call(_a);
+        (_c = __classPrivateFieldGet(_a, _a, "m", _AA_method)) === null || _c === void 0 ? void 0 : _c.call(_a);
+        (__classPrivateFieldGet((_g = _a.getClass()), _a, "m", _AA_method2)).call(_g, 0, ...arr, 3);
+        (__classPrivateFieldGet(_a, _a, "m", _AA_method2)).bind(_a) `test${1}and${2}`;
     }
     static getClass() { return _a; }
 }
