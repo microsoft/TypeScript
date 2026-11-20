@@ -148,14 +148,7 @@ func (l *LanguageService) convertStringLiteralCompletions(
 		}
 	case completion.fromTypes != nil:
 		completion := completion.fromTypes
-		var quoteChar printer.QuoteChar
-		if contextToken.Kind == ast.KindNoSubstitutionTemplateLiteral {
-			quoteChar = printer.QuoteCharBacktick
-		} else if strings.HasPrefix(contextToken.Text(), "'") {
-			quoteChar = printer.QuoteCharSingleQuote
-		} else {
-			quoteChar = printer.QuoteCharDoubleQuote
-		}
+		quoteChar := stringCompletionQuoteChar(contextToken)
 		items := core.Map(completion.types, func(t *checker.StringLiteralType) *CompletionItem {
 			name := printer.EscapeString(t.AsLiteralType().Value().(string), quoteChar)
 			lspItem := l.createLSPCompletionItem(
@@ -201,6 +194,16 @@ func (l *LanguageService) convertStringLiteralCompletions(
 	default:
 		return nil
 	}
+}
+
+func stringCompletionQuoteChar(contextToken *ast.StringLiteralLike) printer.QuoteChar {
+	if contextToken.Kind == ast.KindNoSubstitutionTemplateLiteral {
+		return printer.QuoteCharBacktick
+	}
+	if contextToken.AsStringLiteral().TokenFlags&ast.TokenFlagsSingleQuote != 0 {
+		return printer.QuoteCharSingleQuote
+	}
+	return printer.QuoteCharDoubleQuote
 }
 
 func (l *LanguageService) convertPathCompletions(

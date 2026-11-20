@@ -2201,6 +2201,12 @@ func (l *LanguageService) createCompletionItem(
 	source := getSourceFromOrigin(origin)
 	var labelDetails *lsproto.CompletionItemLabelDetails
 	preferences := l.UserPreferences()
+	if data.completionKind == CompletionKindString {
+		escaped := printer.EscapeString(name, stringCompletionQuoteChar(contextToken))
+		if escaped != name {
+			insertText = escaped
+		}
+	}
 	insertQuestionDot := originIsNullableMember(origin)
 	useBraces := originIsSymbolMember(origin) || needsConvertPropertyAccess
 	if originIsThisTypeNode(origin) {

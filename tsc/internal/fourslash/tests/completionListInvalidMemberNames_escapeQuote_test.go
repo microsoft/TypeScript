@@ -87,13 +87,13 @@ f(` + "`[|/*typeTemplate*/|]`" + `);
 		insertText string
 		newText    string
 	}{
-		{"double", `a'b"c${x}\z`, "", `a'b"c${x}\z`},
-		{"single", `a'b"c${x}\z`, "", `a'b"c${x}\z`},
-		{"template", `a'b"c${x}\z`, "", `a'b"c${x}\z`},
-		{"indexed", `a'b"c${x}\z`, "", `a'b"c${x}\z`},
-		{"in", `a'b"c${x}\z`, "", `a'b"c${x}\z`},
-		{"object", `a'b"c${x}\z`, "", `a'b"c${x}\z`},
-		{"typeSingle", `a'b\"c${x}\\z`, "", `a'b\"c${x}\\z`},
+		{"double", `a'b"c${x}\z`, `a'b\"c${x}\\z`, `a'b\"c${x}\\z`},
+		{"single", `a'b"c${x}\z`, `a\'b"c${x}\\z`, `a\'b"c${x}\\z`},
+		{"template", `a'b"c${x}\z`, `a'b"c\${x}\\z`, `a'b"c\${x}\\z`},
+		{"indexed", `a'b"c${x}\z`, `a\'b"c${x}\\z`, `a\'b"c${x}\\z`},
+		{"in", `a'b"c${x}\z`, `a'b\"c${x}\\z`, `a'b\"c${x}\\z`},
+		{"object", `a'b"c${x}\z`, `a\'b"c${x}\\z`, `a\'b"c${x}\\z`},
+		{"typeSingle", `a\'b"c${x}\\z`, "", `a\'b"c${x}\\z`},
 		{"typeTemplate", `a'b"c\${x}\\z`, "", `a'b"c\${x}\\z`},
 	} {
 		item := &lsproto.CompletionItem{
@@ -130,7 +130,7 @@ value['/*completion*/`
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Includes: []fourslash.CompletionsExpectedItem{
-				&lsproto.CompletionItem{Label: "a'b"},
+				&lsproto.CompletionItem{Label: "a'b", InsertText: new(`a\'b`)},
 			},
 		},
 	})
