@@ -1,0 +1,246 @@
+recovery.ts(11,5): error TS1110: Type expected.
+recovery.ts(14,4): error TS1110: Type expected.
+recovery.ts(17,6): error TS1125: Hexadecimal digit expected.
+recovery.ts(20,3): error TS1121: Octal literals are not allowed. Use the syntax '0o10'.
+recovery.ts(23,7): error TS1125: Hexadecimal digit expected.
+recovery.ts(26,4): error TS1121: Octal literals are not allowed. Use the syntax '0o10'.
+recovery.ts(29,17): error TS1125: Hexadecimal digit expected.
+recovery.ts(32,17): error TS2880: Import assertions have been replaced by import attributes. Use 'with' instead of 'assert'.
+recovery.ts(35,7): error TS1125: Hexadecimal digit expected.
+recovery.ts(38,15): error TS1005: '?' expected.
+recovery.ts(41,19): error TS1005: ':' expected.
+recovery.ts(44,6): error TS1385: Function type notation must be parenthesized when used in a union type.
+recovery.ts(47,9): error TS1110: Type expected.
+recovery.ts(50,5): error TS1003: Identifier expected.
+recovery.ts(53,28): error TS1005: ')' expected.
+recovery.ts(56,13): error TS1125: Hexadecimal digit expected.
+recovery.ts(56,17): error TS1005: ')' expected.
+recovery.ts(56,19): error TS1434: Unexpected keyword or identifier.
+recovery.ts(56,20): error TS1128: Declaration or statement expected.
+recovery.ts(56,22): error TS1128: Declaration or statement expected.
+recovery.ts(56,28): error TS1109: Expression expected.
+recovery.tsx(11,5): error TS1110: Type expected.
+recovery.tsx(14,4): error TS1110: Type expected.
+recovery.tsx(17,6): error TS1125: Hexadecimal digit expected.
+recovery.tsx(20,3): error TS1121: Octal literals are not allowed. Use the syntax '0o10'.
+recovery.tsx(23,7): error TS1125: Hexadecimal digit expected.
+recovery.tsx(26,4): error TS1121: Octal literals are not allowed. Use the syntax '0o10'.
+recovery.tsx(29,17): error TS1125: Hexadecimal digit expected.
+recovery.tsx(32,17): error TS2880: Import assertions have been replaced by import attributes. Use 'with' instead of 'assert'.
+recovery.tsx(35,7): error TS1125: Hexadecimal digit expected.
+recovery.tsx(38,15): error TS1005: '?' expected.
+recovery.tsx(41,19): error TS1005: ':' expected.
+recovery.tsx(44,6): error TS1385: Function type notation must be parenthesized when used in a union type.
+recovery.tsx(47,9): error TS1110: Type expected.
+recovery.tsx(50,5): error TS1003: Identifier expected.
+recovery.tsx(53,28): error TS1005: ')' expected.
+recovery.tsx(56,13): error TS1125: Hexadecimal digit expected.
+recovery.tsx(56,17): error TS1005: ')' expected.
+recovery.tsx(56,19): error TS1434: Unexpected keyword or identifier.
+recovery.tsx(56,20): error TS1128: Declaration or statement expected.
+recovery.tsx(56,22): error TS1128: Declaration or statement expected.
+recovery.tsx(56,28): error TS1109: Expression expected.
+
+
+==== recovery.ts (21 errors) ====
+    export {};
+    declare const a: any, b: any, c: any, d: any, e: any, B: any, options: any, x: any;
+    type T = any;
+    type U = string;
+    type X = number;
+    type Y = string;
+    declare function f<A = unknown, B = unknown>(...args: any[]): any;
+    declare function g<A>(...args: any[]): any;
+    
+    // Recovery and rollback preserve diagnostics and the following call.
+    f<a,,b>();
+        ~
+!!! error TS1110: Type expected.
+    g<(T)>();
+    
+    f<?>;
+       ~
+!!! error TS1110: Type expected.
+    g<(T)>();
+    
+    f<"\xZ">();
+         
+!!! error TS1125: Hexadecimal digit expected.
+    g<(T)>();
+    
+    f<010>();
+      ~~~
+!!! error TS1121: Octal literals are not allowed. Use the syntax '0o10'.
+    g<(T)>();
+    
+    f<("\xZ")>();
+          
+!!! error TS1125: Hexadecimal digit expected.
+    g<(T)>();
+    
+    f<(010)>();
+       ~~~
+!!! error TS1121: Octal literals are not allowed. Use the syntax '0o10'.
+    g<(T)>();
+    
+    f<((x: T) => "\xZ")>();
+                    
+!!! error TS1125: Hexadecimal digit expected.
+    g<(T)>();
+    
+    f<import("m", { assert: { type: "json" } })>();
+                    ~~~~~~
+!!! error TS2880: Import assertions have been replaced by import attributes. Use 'with' instead of 'assert'.
+    g<(T)>();
+    
+    f<("\xZ" > (x));
+          
+!!! error TS1125: Hexadecimal digit expected.
+    g<(T)>();
+    
+    f<T extends U X : Y>();
+                  ~
+!!! error TS1005: '?' expected.
+    g<(T)>();
+    
+    f<T extends U ? X Y>();
+                      ~
+!!! error TS1005: ':' expected.
+    g<(T)>();
+    
+    f<T | () => U>();
+         ~~~~~~~~
+!!! error TS1385: Function type notation must be parenthesized when used in a union type.
+    g<(T)>();
+    
+    f<() => >();
+            ~
+!!! error TS1110: Type expected.
+    g<(T)>();
+    
+    f<T.>();
+        ~
+!!! error TS1003: Identifier expected.
+    g<(T)>();
+    
+    f<{ [(() => { type Bad = (T; return key; })()]: U }>();
+                               ~
+!!! error TS1005: ')' expected.
+    g<(T)>();
+    
+    f<({ p = "\xZ" }: T) => U>();
+                
+!!! error TS1125: Hexadecimal digit expected.
+                    ~
+!!! error TS1005: ')' expected.
+                      ~
+!!! error TS1434: Unexpected keyword or identifier.
+                       ~
+!!! error TS1128: Declaration or statement expected.
+                         ~~
+!!! error TS1128: Declaration or statement expected.
+                               ~
+!!! error TS1109: Expression expected.
+    g<(T)>();
+    
+==== recovery.tsx (21 errors) ====
+    export {};
+    declare const a: any, b: any, c: any, d: any, e: any, B: any, options: any, x: any;
+    type T = any;
+    type U = string;
+    type X = number;
+    type Y = string;
+    declare function f<A = unknown, B = unknown>(...args: any[]): any;
+    declare function g<A>(...args: any[]): any;
+    
+    // Recovery and rollback preserve diagnostics and the following call.
+    f<a,,b>();
+        ~
+!!! error TS1110: Type expected.
+    g<(T)>();
+    
+    f<?>;
+       ~
+!!! error TS1110: Type expected.
+    g<(T)>();
+    
+    f<"\xZ">();
+         
+!!! error TS1125: Hexadecimal digit expected.
+    g<(T)>();
+    
+    f<010>();
+      ~~~
+!!! error TS1121: Octal literals are not allowed. Use the syntax '0o10'.
+    g<(T)>();
+    
+    f<("\xZ")>();
+          
+!!! error TS1125: Hexadecimal digit expected.
+    g<(T)>();
+    
+    f<(010)>();
+       ~~~
+!!! error TS1121: Octal literals are not allowed. Use the syntax '0o10'.
+    g<(T)>();
+    
+    f<((x: T) => "\xZ")>();
+                    
+!!! error TS1125: Hexadecimal digit expected.
+    g<(T)>();
+    
+    f<import("m", { assert: { type: "json" } })>();
+                    ~~~~~~
+!!! error TS2880: Import assertions have been replaced by import attributes. Use 'with' instead of 'assert'.
+    g<(T)>();
+    
+    f<("\xZ" > (x));
+          
+!!! error TS1125: Hexadecimal digit expected.
+    g<(T)>();
+    
+    f<T extends U X : Y>();
+                  ~
+!!! error TS1005: '?' expected.
+    g<(T)>();
+    
+    f<T extends U ? X Y>();
+                      ~
+!!! error TS1005: ':' expected.
+    g<(T)>();
+    
+    f<T | () => U>();
+         ~~~~~~~~
+!!! error TS1385: Function type notation must be parenthesized when used in a union type.
+    g<(T)>();
+    
+    f<() => >();
+            ~
+!!! error TS1110: Type expected.
+    g<(T)>();
+    
+    f<T.>();
+        ~
+!!! error TS1003: Identifier expected.
+    g<(T)>();
+    
+    f<{ [(() => { type Bad = (T; return key; })()]: U }>();
+                               ~
+!!! error TS1005: ')' expected.
+    g<(T)>();
+    
+    f<({ p = "\xZ" }: T) => U>();
+                
+!!! error TS1125: Hexadecimal digit expected.
+                    ~
+!!! error TS1005: ')' expected.
+                      ~
+!!! error TS1434: Unexpected keyword or identifier.
+                       ~
+!!! error TS1128: Declaration or statement expected.
+                         ~~
+!!! error TS1128: Declaration or statement expected.
+                               ~
+!!! error TS1109: Expression expected.
+    g<(T)>();
+    

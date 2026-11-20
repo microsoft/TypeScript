@@ -343,6 +343,13 @@ func (s *Scanner) Rewind(state ScannerState) {
 	s.ScannerState = state
 }
 
+// RewindPosition restores lexical state while preserving collected comment directives.
+func (s *Scanner) RewindPosition(state ScannerState) {
+	directives := s.commentDirectives
+	s.ScannerState = state
+	s.commentDirectives = directives
+}
+
 func (s *Scanner) ResetPos(pos int) {
 	if pos < 0 {
 		panic("Cannot reset token state to negative position")

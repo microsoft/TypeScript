@@ -1,0 +1,348 @@
+//// [tests/cases/compiler/typeArgumentSpeculationRecovery.ts] ////
+
+=== recovery.ts ===
+export {};
+declare const a: any, b: any, c: any, d: any, e: any, B: any, options: any, x: any;
+>a : Symbol(a, Decl(recovery.ts, 1, 13))
+>b : Symbol(b, Decl(recovery.ts, 1, 21))
+>c : Symbol(c, Decl(recovery.ts, 1, 29))
+>d : Symbol(d, Decl(recovery.ts, 1, 37))
+>e : Symbol(e, Decl(recovery.ts, 1, 45))
+>B : Symbol(B, Decl(recovery.ts, 1, 53))
+>options : Symbol(options, Decl(recovery.ts, 1, 61))
+>x : Symbol(x, Decl(recovery.ts, 1, 75))
+
+type T = any;
+>T : Symbol(T, Decl(recovery.ts, 1, 83))
+
+type U = string;
+>U : Symbol(U, Decl(recovery.ts, 2, 13))
+
+type X = number;
+>X : Symbol(X, Decl(recovery.ts, 3, 16))
+
+type Y = string;
+>Y : Symbol(Y, Decl(recovery.ts, 4, 16))
+
+declare function f<A = unknown, B = unknown>(...args: any[]): any;
+>f : Symbol(f, Decl(recovery.ts, 5, 16))
+>A : Symbol(A, Decl(recovery.ts, 6, 19))
+>B : Symbol(B, Decl(recovery.ts, 6, 31))
+>args : Symbol(args, Decl(recovery.ts, 6, 45))
+
+declare function g<A>(...args: any[]): any;
+>g : Symbol(g, Decl(recovery.ts, 6, 66))
+>A : Symbol(A, Decl(recovery.ts, 7, 19))
+>args : Symbol(args, Decl(recovery.ts, 7, 22))
+
+// Recovery and rollback preserve diagnostics and the following call.
+f<a,,b>();
+>f : Symbol(f, Decl(recovery.ts, 5, 16))
+>a : Symbol(a)
+> : Symbol(unknown)
+>b : Symbol(b)
+
+g<(T)>();
+>g : Symbol(g, Decl(recovery.ts, 6, 66))
+>T : Symbol(T, Decl(recovery.ts, 1, 83))
+
+f<?>;
+>f : Symbol(f, Decl(recovery.ts, 5, 16))
+> : Symbol(unknown)
+
+g<(T)>();
+>g : Symbol(g, Decl(recovery.ts, 6, 66))
+>T : Symbol(T, Decl(recovery.ts, 1, 83))
+
+f<"\xZ">();
+>f : Symbol(f, Decl(recovery.ts, 5, 16))
+
+g<(T)>();
+>g : Symbol(g, Decl(recovery.ts, 6, 66))
+>T : Symbol(T, Decl(recovery.ts, 1, 83))
+
+f<010>();
+>f : Symbol(f, Decl(recovery.ts, 5, 16))
+
+g<(T)>();
+>g : Symbol(g, Decl(recovery.ts, 6, 66))
+>T : Symbol(T, Decl(recovery.ts, 1, 83))
+
+f<("\xZ")>();
+>f : Symbol(f, Decl(recovery.ts, 5, 16))
+
+g<(T)>();
+>g : Symbol(g, Decl(recovery.ts, 6, 66))
+>T : Symbol(T, Decl(recovery.ts, 1, 83))
+
+f<(010)>();
+>f : Symbol(f, Decl(recovery.ts, 5, 16))
+
+g<(T)>();
+>g : Symbol(g, Decl(recovery.ts, 6, 66))
+>T : Symbol(T, Decl(recovery.ts, 1, 83))
+
+f<((x: T) => "\xZ")>();
+>f : Symbol(f, Decl(recovery.ts, 5, 16))
+>x : Symbol(x, Decl(recovery.ts, 28, 4))
+>T : Symbol(T, Decl(recovery.ts, 1, 83))
+
+g<(T)>();
+>g : Symbol(g, Decl(recovery.ts, 6, 66))
+>T : Symbol(T, Decl(recovery.ts, 1, 83))
+
+f<import("m", { assert: { type: "json" } })>();
+>f : Symbol(f, Decl(recovery.ts, 5, 16))
+
+g<(T)>();
+>g : Symbol(g, Decl(recovery.ts, 6, 66))
+>T : Symbol(T, Decl(recovery.ts, 1, 83))
+
+f<("\xZ" > (x));
+>f : Symbol(f, Decl(recovery.ts, 5, 16))
+>x : Symbol(x, Decl(recovery.ts, 1, 75))
+
+g<(T)>();
+>g : Symbol(g, Decl(recovery.ts, 6, 66))
+>T : Symbol(T, Decl(recovery.ts, 1, 83))
+
+f<T extends U X : Y>();
+>f : Symbol(f, Decl(recovery.ts, 5, 16))
+>T : Symbol(T, Decl(recovery.ts, 1, 83))
+>U : Symbol(U, Decl(recovery.ts, 2, 13))
+>X : Symbol(X, Decl(recovery.ts, 3, 16))
+>Y : Symbol(Y, Decl(recovery.ts, 4, 16))
+
+g<(T)>();
+>g : Symbol(g, Decl(recovery.ts, 6, 66))
+>T : Symbol(T, Decl(recovery.ts, 1, 83))
+
+f<T extends U ? X Y>();
+>f : Symbol(f, Decl(recovery.ts, 5, 16))
+>T : Symbol(T, Decl(recovery.ts, 1, 83))
+>U : Symbol(U, Decl(recovery.ts, 2, 13))
+>X : Symbol(X, Decl(recovery.ts, 3, 16))
+>Y : Symbol(Y, Decl(recovery.ts, 4, 16))
+
+g<(T)>();
+>g : Symbol(g, Decl(recovery.ts, 6, 66))
+>T : Symbol(T, Decl(recovery.ts, 1, 83))
+
+f<T | () => U>();
+>f : Symbol(f, Decl(recovery.ts, 5, 16))
+>T : Symbol(T, Decl(recovery.ts, 1, 83))
+>U : Symbol(U, Decl(recovery.ts, 2, 13))
+
+g<(T)>();
+>g : Symbol(g, Decl(recovery.ts, 6, 66))
+>T : Symbol(T, Decl(recovery.ts, 1, 83))
+
+f<() => >();
+>f : Symbol(f, Decl(recovery.ts, 5, 16))
+> : Symbol(unknown)
+
+g<(T)>();
+>g : Symbol(g, Decl(recovery.ts, 6, 66))
+>T : Symbol(T, Decl(recovery.ts, 1, 83))
+
+f<T.>();
+>f : Symbol(f, Decl(recovery.ts, 5, 16))
+>T : Symbol(T)
+> : Symbol(unknown)
+
+g<(T)>();
+>g : Symbol(g, Decl(recovery.ts, 6, 66))
+>T : Symbol(T, Decl(recovery.ts, 1, 83))
+
+f<{ [(() => { type Bad = (T; return key; })()]: U }>();
+>f : Symbol(f, Decl(recovery.ts, 5, 16))
+>[(() => { type Bad = (T; return key; })()] : Symbol([(() => { type Bad = (T; return key; })()], Decl(recovery.ts, 52, 3))
+>Bad : Symbol(Bad, Decl(recovery.ts, 52, 13))
+>T : Symbol(T, Decl(recovery.ts, 1, 83))
+>U : Symbol(U, Decl(recovery.ts, 2, 13))
+
+g<(T)>();
+>g : Symbol(g, Decl(recovery.ts, 6, 66))
+>T : Symbol(T, Decl(recovery.ts, 1, 83))
+
+f<({ p = "\xZ" }: T) => U>();
+>f : Symbol(f, Decl(recovery.ts, 5, 16))
+>p : Symbol(p, Decl(recovery.ts, 55, 4))
+
+g<(T)>();
+>g : Symbol(g, Decl(recovery.ts, 6, 66))
+>T : Symbol(T, Decl(recovery.ts, 1, 83))
+
+=== recovery.tsx ===
+export {};
+declare const a: any, b: any, c: any, d: any, e: any, B: any, options: any, x: any;
+>a : Symbol(a, Decl(recovery.tsx, 1, 13))
+>b : Symbol(b, Decl(recovery.tsx, 1, 21))
+>c : Symbol(c, Decl(recovery.tsx, 1, 29))
+>d : Symbol(d, Decl(recovery.tsx, 1, 37))
+>e : Symbol(e, Decl(recovery.tsx, 1, 45))
+>B : Symbol(B, Decl(recovery.tsx, 1, 53))
+>options : Symbol(options, Decl(recovery.tsx, 1, 61))
+>x : Symbol(x, Decl(recovery.tsx, 1, 75))
+
+type T = any;
+>T : Symbol(T, Decl(recovery.tsx, 1, 83))
+
+type U = string;
+>U : Symbol(U, Decl(recovery.tsx, 2, 13))
+
+type X = number;
+>X : Symbol(X, Decl(recovery.tsx, 3, 16))
+
+type Y = string;
+>Y : Symbol(Y, Decl(recovery.tsx, 4, 16))
+
+declare function f<A = unknown, B = unknown>(...args: any[]): any;
+>f : Symbol(f, Decl(recovery.tsx, 5, 16))
+>A : Symbol(A, Decl(recovery.tsx, 6, 19))
+>B : Symbol(B, Decl(recovery.tsx, 6, 31))
+>args : Symbol(args, Decl(recovery.tsx, 6, 45))
+
+declare function g<A>(...args: any[]): any;
+>g : Symbol(g, Decl(recovery.tsx, 6, 66))
+>A : Symbol(A, Decl(recovery.tsx, 7, 19))
+>args : Symbol(args, Decl(recovery.tsx, 7, 22))
+
+// Recovery and rollback preserve diagnostics and the following call.
+f<a,,b>();
+>f : Symbol(f, Decl(recovery.tsx, 5, 16))
+>a : Symbol(a)
+> : Symbol(unknown)
+>b : Symbol(b)
+
+g<(T)>();
+>g : Symbol(g, Decl(recovery.tsx, 6, 66))
+>T : Symbol(T, Decl(recovery.tsx, 1, 83))
+
+f<?>;
+>f : Symbol(f, Decl(recovery.tsx, 5, 16))
+> : Symbol(unknown)
+
+g<(T)>();
+>g : Symbol(g, Decl(recovery.tsx, 6, 66))
+>T : Symbol(T, Decl(recovery.tsx, 1, 83))
+
+f<"\xZ">();
+>f : Symbol(f, Decl(recovery.tsx, 5, 16))
+
+g<(T)>();
+>g : Symbol(g, Decl(recovery.tsx, 6, 66))
+>T : Symbol(T, Decl(recovery.tsx, 1, 83))
+
+f<010>();
+>f : Symbol(f, Decl(recovery.tsx, 5, 16))
+
+g<(T)>();
+>g : Symbol(g, Decl(recovery.tsx, 6, 66))
+>T : Symbol(T, Decl(recovery.tsx, 1, 83))
+
+f<("\xZ")>();
+>f : Symbol(f, Decl(recovery.tsx, 5, 16))
+
+g<(T)>();
+>g : Symbol(g, Decl(recovery.tsx, 6, 66))
+>T : Symbol(T, Decl(recovery.tsx, 1, 83))
+
+f<(010)>();
+>f : Symbol(f, Decl(recovery.tsx, 5, 16))
+
+g<(T)>();
+>g : Symbol(g, Decl(recovery.tsx, 6, 66))
+>T : Symbol(T, Decl(recovery.tsx, 1, 83))
+
+f<((x: T) => "\xZ")>();
+>f : Symbol(f, Decl(recovery.tsx, 5, 16))
+>x : Symbol(x, Decl(recovery.tsx, 28, 4))
+>T : Symbol(T, Decl(recovery.tsx, 1, 83))
+
+g<(T)>();
+>g : Symbol(g, Decl(recovery.tsx, 6, 66))
+>T : Symbol(T, Decl(recovery.tsx, 1, 83))
+
+f<import("m", { assert: { type: "json" } })>();
+>f : Symbol(f, Decl(recovery.tsx, 5, 16))
+
+g<(T)>();
+>g : Symbol(g, Decl(recovery.tsx, 6, 66))
+>T : Symbol(T, Decl(recovery.tsx, 1, 83))
+
+f<("\xZ" > (x));
+>f : Symbol(f, Decl(recovery.tsx, 5, 16))
+>x : Symbol(x, Decl(recovery.tsx, 1, 75))
+
+g<(T)>();
+>g : Symbol(g, Decl(recovery.tsx, 6, 66))
+>T : Symbol(T, Decl(recovery.tsx, 1, 83))
+
+f<T extends U X : Y>();
+>f : Symbol(f, Decl(recovery.tsx, 5, 16))
+>T : Symbol(T, Decl(recovery.tsx, 1, 83))
+>U : Symbol(U, Decl(recovery.tsx, 2, 13))
+>X : Symbol(X, Decl(recovery.tsx, 3, 16))
+>Y : Symbol(Y, Decl(recovery.tsx, 4, 16))
+
+g<(T)>();
+>g : Symbol(g, Decl(recovery.tsx, 6, 66))
+>T : Symbol(T, Decl(recovery.tsx, 1, 83))
+
+f<T extends U ? X Y>();
+>f : Symbol(f, Decl(recovery.tsx, 5, 16))
+>T : Symbol(T, Decl(recovery.tsx, 1, 83))
+>U : Symbol(U, Decl(recovery.tsx, 2, 13))
+>X : Symbol(X, Decl(recovery.tsx, 3, 16))
+>Y : Symbol(Y, Decl(recovery.tsx, 4, 16))
+
+g<(T)>();
+>g : Symbol(g, Decl(recovery.tsx, 6, 66))
+>T : Symbol(T, Decl(recovery.tsx, 1, 83))
+
+f<T | () => U>();
+>f : Symbol(f, Decl(recovery.tsx, 5, 16))
+>T : Symbol(T, Decl(recovery.tsx, 1, 83))
+>U : Symbol(U, Decl(recovery.tsx, 2, 13))
+
+g<(T)>();
+>g : Symbol(g, Decl(recovery.tsx, 6, 66))
+>T : Symbol(T, Decl(recovery.tsx, 1, 83))
+
+f<() => >();
+>f : Symbol(f, Decl(recovery.tsx, 5, 16))
+> : Symbol(unknown)
+
+g<(T)>();
+>g : Symbol(g, Decl(recovery.tsx, 6, 66))
+>T : Symbol(T, Decl(recovery.tsx, 1, 83))
+
+f<T.>();
+>f : Symbol(f, Decl(recovery.tsx, 5, 16))
+>T : Symbol(T)
+> : Symbol(unknown)
+
+g<(T)>();
+>g : Symbol(g, Decl(recovery.tsx, 6, 66))
+>T : Symbol(T, Decl(recovery.tsx, 1, 83))
+
+f<{ [(() => { type Bad = (T; return key; })()]: U }>();
+>f : Symbol(f, Decl(recovery.tsx, 5, 16))
+>[(() => { type Bad = (T; return key; })()] : Symbol([(() => { type Bad = (T; return key; })()], Decl(recovery.tsx, 52, 3))
+>Bad : Symbol(Bad, Decl(recovery.tsx, 52, 13))
+>T : Symbol(T, Decl(recovery.tsx, 1, 83))
+>U : Symbol(U, Decl(recovery.tsx, 2, 13))
+
+g<(T)>();
+>g : Symbol(g, Decl(recovery.tsx, 6, 66))
+>T : Symbol(T, Decl(recovery.tsx, 1, 83))
+
+f<({ p = "\xZ" }: T) => U>();
+>f : Symbol(f, Decl(recovery.tsx, 5, 16))
+>p : Symbol(p, Decl(recovery.tsx, 55, 4))
+
+g<(T)>();
+>g : Symbol(g, Decl(recovery.tsx, 6, 66))
+>T : Symbol(T, Decl(recovery.tsx, 1, 83))
+
