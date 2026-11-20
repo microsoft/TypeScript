@@ -35,6 +35,19 @@ f6.a = 0;
 namespace f6 { export namespace a { export const kind = 0; } }
 const n6: number = f6.a; // error
 
+namespace TypesOnly { export type T = number; }
+namespace Values { export const v = 1; }
+
+function f7() {}
+f7.a = 0;
+namespace f7 { export import a = TypesOnly; }
+const n7: number = f7.a;
+const t7: f7.a.T = 0;
+
+function f8() {}
+f8.a = 0;
+namespace f8 { export import a = Values; } // error
+
 //// [popover.ts]
 export function Popover() { return null; }
 Popover.Target = (x: number) => x;
@@ -81,6 +94,21 @@ f6.a = 0;
     })(a = f6.a || (f6.a = {}));
 })(f6 || (f6 = {}));
 const n6 = f6.a; // error
+var Values;
+(function (Values) {
+    Values.v = 1;
+})(Values || (Values = {}));
+function f7() { }
+f7.a = 0;
+(function (f7) {
+})(f7 || (f7 = {}));
+const n7 = f7.a;
+const t7 = 0;
+function f8() { }
+f8.a = 0;
+(function (f8) {
+    f8.a = Values;
+})(f8 || (f8 = {})); // error
 //// [popover.js]
 export function Popover() { return null; }
 Popover.Target = (x) => x;
@@ -131,6 +159,22 @@ declare namespace f6 {
     }
 }
 declare const n6: number;
+declare namespace TypesOnly {
+    type T = number;
+}
+declare namespace Values {
+    const v = 1;
+}
+declare function f7(): void;
+declare namespace f7 {
+    export import a = TypesOnly;
+}
+declare const n7: number;
+declare const t7: f7.a.T;
+declare function f8(): void;
+declare namespace f8 {
+    export import a = Values;
+}
 //// [popover.d.ts]
 export declare function Popover(): null;
 export declare namespace Popover {

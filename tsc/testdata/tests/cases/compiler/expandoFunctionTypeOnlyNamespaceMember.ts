@@ -37,6 +37,19 @@ f6.a = 0;
 namespace f6 { export namespace a { export const kind = 0; } }
 const n6: number = f6.a; // error
 
+namespace TypesOnly { export type T = number; }
+namespace Values { export const v = 1; }
+
+function f7() {}
+f7.a = 0;
+namespace f7 { export import a = TypesOnly; }
+const n7: number = f7.a;
+const t7: f7.a.T = 0;
+
+function f8() {}
+f8.a = 0;
+namespace f8 { export import a = Values; } // error
+
 // @filename: popover.ts
 export function Popover() { return null; }
 Popover.Target = (x: number) => x;

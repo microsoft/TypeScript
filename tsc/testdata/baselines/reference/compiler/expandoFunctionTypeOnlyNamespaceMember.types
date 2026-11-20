@@ -140,6 +140,56 @@ const n6: number = f6.a; // error
 >f6 : typeof f6
 >a : typeof f6.a
 
+namespace TypesOnly { export type T = number; }
+>T : number
+
+namespace Values { export const v = 1; }
+>Values : typeof Values
+>v : 1
+>1 : 1
+
+function f7() {}
+>f7 : typeof f7
+
+f7.a = 0;
+>f7.a = 0 : 0
+>f7.a : any
+>f7 : typeof f7
+>a : any
+>0 : 0
+
+namespace f7 { export import a = TypesOnly; }
+>f7 : typeof f7
+>a : any
+>TypesOnly : any
+
+const n7: number = f7.a;
+>n7 : number
+>f7.a : any
+>f7 : typeof f7
+>a : any
+
+const t7: f7.a.T = 0;
+>t7 : number
+>f7 : any
+>a : any
+>0 : 0
+
+function f8() {}
+>f8 : typeof f8
+
+f8.a = 0;
+>f8.a = 0 : 0
+>f8.a : typeof Values
+>f8 : typeof f8
+>a : typeof Values
+>0 : 0
+
+namespace f8 { export import a = Values; } // error
+>f8 : typeof f8
+>a : typeof a
+>Values : typeof a
+
 === popover.ts ===
 export function Popover() { return null; }
 >Popover : { (): null; displayName: string; }

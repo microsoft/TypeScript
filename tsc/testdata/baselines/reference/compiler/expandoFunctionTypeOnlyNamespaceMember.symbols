@@ -113,6 +113,48 @@ const n6: number = f6.a; // error
 >f6 : Symbol(f6, Decl(variants.ts, 27, 24), Decl(variants.ts, 30, 9))
 >a : Symbol(f6.a, Decl(variants.ts, 31, 14))
 
+namespace TypesOnly { export type T = number; }
+>TypesOnly : Symbol(TypesOnly, Decl(variants.ts, 32, 24))
+>T : Symbol(T, Decl(variants.ts, 34, 21))
+
+namespace Values { export const v = 1; }
+>Values : Symbol(Values, Decl(variants.ts, 34, 47))
+>v : Symbol(v, Decl(variants.ts, 35, 31))
+
+function f7() {}
+>f7 : Symbol(f7, Decl(variants.ts, 35, 40), Decl(variants.ts, 38, 9))
+
+f7.a = 0;
+>f7 : Symbol(f7, Decl(variants.ts, 35, 40), Decl(variants.ts, 38, 9))
+
+namespace f7 { export import a = TypesOnly; }
+>f7 : Symbol(f7, Decl(variants.ts, 35, 40), Decl(variants.ts, 38, 9))
+>a : Symbol(a, Decl(variants.ts, 39, 14))
+>TypesOnly : Symbol(a, Decl(variants.ts, 32, 24))
+
+const n7: number = f7.a;
+>n7 : Symbol(n7, Decl(variants.ts, 40, 5))
+>f7 : Symbol(f7, Decl(variants.ts, 35, 40), Decl(variants.ts, 38, 9))
+
+const t7: f7.a.T = 0;
+>t7 : Symbol(t7, Decl(variants.ts, 41, 5))
+>f7 : Symbol(f7, Decl(variants.ts, 35, 40), Decl(variants.ts, 38, 9))
+>a : Symbol(f7.a, Decl(variants.ts, 39, 14))
+>T : Symbol(TypesOnly.T, Decl(variants.ts, 34, 21))
+
+function f8() {}
+>f8 : Symbol(f8, Decl(variants.ts, 41, 21), Decl(variants.ts, 44, 9))
+
+f8.a = 0;
+>f8.a : Symbol(f8.a, Decl(variants.ts, 45, 14))
+>f8 : Symbol(f8, Decl(variants.ts, 41, 21), Decl(variants.ts, 44, 9))
+>a : Symbol(f8.a, Decl(variants.ts, 45, 14))
+
+namespace f8 { export import a = Values; } // error
+>f8 : Symbol(f8, Decl(variants.ts, 41, 21), Decl(variants.ts, 44, 9))
+>a : Symbol(a, Decl(variants.ts, 45, 14))
+>Values : Symbol(a, Decl(variants.ts, 34, 47))
+
 === popover.ts ===
 export function Popover() { return null; }
 >Popover : Symbol(Popover, Decl(popover.ts, 0, 0), Decl(popover.ts, 2, 32))
