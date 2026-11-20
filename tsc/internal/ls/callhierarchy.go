@@ -622,6 +622,7 @@ func (l *LanguageService) convertCallSiteGroupToIncomingCall(program *compiler.P
 	}
 
 	slices.SortFunc(fromRanges, lsproto.CompareRanges)
+	fromRanges = slices.Compact(fromRanges)
 
 	return &lsproto.CallHierarchyIncomingCall{
 		From:       from,
@@ -805,6 +806,25 @@ func (c *callSiteCollector) recordCallSite(node *ast.Node) {
 	}
 }
 
+func isCallSiteTarget(node *ast.Node) bool {
+	parent := node.Parent
+	if parent == nil {
+		return false
+	}
+
+	switch {
+	case ast.IsCallOrNewExpression(parent):
+		return parent.Expression() == node
+	case ast.IsTaggedTemplateExpression(parent):
+		return parent.AsTaggedTemplateExpression().Tag == node
+	case ast.IsDecorator(parent):
+		return parent.Expression() == node
+	case ast.IsJsxOpeningElement(parent), ast.IsJsxSelfClosingElement(parent):
+		return parent.TagName() == node
+	}
+	return false
+}
+
 func (c *callSiteCollector) collect(node *ast.Node) {
 	if node == nil {
 		return
@@ -882,7 +902,9 @@ func (c *callSiteCollector) collect(node *ast.Node) {
 		c.collect(node.Expression())
 		return
 	case ast.KindPropertyAccessExpression, ast.KindElementAccessExpression:
-		c.recordCallSite(node)
+		if !isCallSiteTarget(node) {
+			c.recordCallSite(node)
+		}
 		node.ForEachChild(func(child *ast.Node) bool {
 			c.collect(child)
 			return false
@@ -992,6 +1014,7 @@ func (l *LanguageService) convertCallSiteGroupToOutgoingCall(program *compiler.P
 	}
 
 	slices.SortFunc(fromRanges, lsproto.CompareRanges)
+	fromRanges = slices.Compact(fromRanges)
 
 	return &lsproto.CallHierarchyOutgoingCall{
 		To:         to,
