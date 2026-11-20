@@ -1901,7 +1901,7 @@ func (l *LanguageService) completionInfoFromData(
 	}
 
 	for _, literal := range literals {
-		literalEntry := createCompletionItemForLiteral(file, preferences, literal)
+		literalEntry := createCompletionItemForLiteral(file, preferences, literal, data.jsxInitializer.isInitializer)
 		uniqueNames.Add(literalEntry.Label)
 		sortedEntries = append(sortedEntries, &CompletionItem{CompletionItem: literalEntry})
 	}
@@ -2168,13 +2168,24 @@ func createCompletionItemForLiteral(
 	file *ast.SourceFile,
 	preferences lsutil.UserPreferences,
 	literal literalValue,
+	isJsxInitializer bool,
 ) *lsproto.CompletionItem {
-	return &lsproto.CompletionItem{
+	item := &lsproto.CompletionItem{
 		Label:            completionNameForLiteral(file, preferences, literal),
 		Kind:             new(lsproto.CompletionItemKindConstant),
 		SortText:         new(string(SortTextLocationPriority)),
 		CommitCharacters: new([]string{}),
 	}
+	if isJsxInitializer {
+		insertText := "{" + item.Label + "}"
+		if value, ok := literal.(string); ok {
+			insertText = jsxAttributeInitializerText(file, preferences, value)
+		}
+		if insertText != item.Label {
+			item.InsertText = &insertText
+		}
+	}
+	return item
 }
 
 func (l *LanguageService) createCompletionItem(

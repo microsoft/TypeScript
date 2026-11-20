@@ -125,10 +125,10 @@ const b = <Foo count=/*count*/ />;
 		label      string
 		insertText string
 	}{
-		{"value", `"a'b&c\\z"`, ""},
-		{"value", `"a\"b"`, ""},
-		{"value", `"&amp;"`, ""},
-		{"count", "1", ""},
+		{"value", `"a'b&c\\z"`, `"a'b&c\z"`},
+		{"value", `"a\"b"`, `'a"b'`},
+		{"value", `"&amp;"`, `{"&amp;"}`},
+		{"count", "1", "{1}"},
 	} {
 		item := &lsproto.CompletionItem{Label: test.label, CommitCharacters: &[]string{}}
 		if test.insertText != "" {

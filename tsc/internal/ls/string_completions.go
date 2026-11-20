@@ -228,6 +228,19 @@ func jsxAttributeStringCanContain(value string, quoteChar byte) bool {
 	return amp < 0 || strings.IndexByte(value[amp:], ';') < 0
 }
 
+func jsxAttributeInitializerText(file *ast.SourceFile, preferences lsutil.UserPreferences, value string) string {
+	quoteChar, otherQuoteChar := byte('"'), byte('\'')
+	if lsutil.GetQuotePreference(file, preferences) == lsutil.QuotePreferenceSingle {
+		quoteChar, otherQuoteChar = otherQuoteChar, quoteChar
+	}
+	for _, q := range []byte{quoteChar, otherQuoteChar} {
+		if jsxAttributeStringCanContain(value, q) {
+			return string(q) + value + string(q)
+		}
+	}
+	return "{" + quote(file, preferences, value) + "}"
+}
+
 func stringCompletionQuoteChar(contextToken *ast.StringLiteralLike) printer.QuoteChar {
 	if contextToken.Kind == ast.KindNoSubstitutionTemplateLiteral {
 		return printer.QuoteCharBacktick
