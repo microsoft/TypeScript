@@ -820,12 +820,48 @@ func (p *Program) collectCheckerDiagnostics(ctx context.Context, sourceFile *ast
 func filterAndSortDiagnostics(diags []*ast.Diagnostic) []*ast.Diagnostic {
 	return SortAndDeduplicateDiagnostics(core.Filter(diags, func(diag *ast.Diagnostic) bool {
 		file := diag.File()
-		if !diag.ReportsUnnecessary() || file == nil || file.SpanMap() == nil || diag.Source() != "" {
+		if file == nil || file.SpanMap() == nil || diag.Source() != "" {
 			return true
 		}
 		_, fidelity := file.SpanMap().VirtualToOriginalSpan(diag.Loc())
+		if isExcludedDiagnosticForSynthesizedContentMapperCode(diag.Code()) {
+			return fidelity.IsExact()
+		}
+		if !diag.ReportsUnnecessary() {
+			return true
+		}
 		return fidelity != spanmap.FidelityNone
 	}))
+}
+
+// These diagnostics enforce restrictions needed for JavaScript emit or isolated transpilation, so exclude them from synthesized content-mapper code.
+func isExcludedDiagnosticForSynthesizedContentMapperCode(code int32) bool {
+	switch code {
+	case diagnostics.ECMAScript_imports_and_exports_cannot_be_written_in_a_CommonJS_file_under_verbatimModuleSyntax.Code(),
+		diagnostics.ECMAScript_imports_and_exports_cannot_be_written_in_a_CommonJS_file_under_verbatimModuleSyntax_Adjust_the_type_field_in_the_nearest_package_json_to_make_this_file_an_ECMAScript_module_or_adjust_your_verbatimModuleSyntax_module_and_moduleResolution_settings_in_TypeScript.Code(),
+		diagnostics.A_top_level_export_modifier_cannot_be_used_on_value_declarations_in_a_CommonJS_module_when_verbatimModuleSyntax_is_enabled.Code(),
+		diagnostics.Import_0_conflicts_with_global_value_used_in_this_file_so_must_be_declared_with_a_type_only_import_when_isolatedModules_is_enabled.Code(),
+		diagnostics.Import_0_conflicts_with_local_value_so_must_be_declared_with_a_type_only_import_when_isolatedModules_is_enabled.Code(),
+		diagnostics.X_0_is_a_type_and_must_be_imported_using_a_type_only_import_when_verbatimModuleSyntax_is_enabled.Code(),
+		diagnostics.X_0_resolves_to_a_type_only_declaration_and_must_be_imported_using_a_type_only_import_when_verbatimModuleSyntax_is_enabled.Code(),
+		diagnostics.Cannot_use_export_import_on_a_type_or_type_only_namespace_when_0_is_enabled.Code(),
+		diagnostics.Re_exporting_a_type_when_0_is_enabled_requires_using_export_type.Code(),
+		diagnostics.X_0_resolves_to_a_type_only_declaration_and_must_be_re_exported_using_a_type_only_re_export_when_1_is_enabled.Code(),
+		diagnostics.An_export_declaration_must_reference_a_real_value_when_verbatimModuleSyntax_is_enabled_but_0_resolves_to_a_type_only_declaration.Code(),
+		diagnostics.An_export_default_must_reference_a_real_value_when_verbatimModuleSyntax_is_enabled_but_0_resolves_to_a_type_only_declaration.Code(),
+		diagnostics.An_export_declaration_must_reference_a_value_when_verbatimModuleSyntax_is_enabled_but_0_only_refers_to_a_type.Code(),
+		diagnostics.An_export_default_must_reference_a_value_when_verbatimModuleSyntax_is_enabled_but_0_only_refers_to_a_type.Code(),
+		diagnostics.X_0_resolves_to_a_type_and_must_be_marked_type_only_in_this_file_before_re_exporting_when_1_is_enabled_Consider_using_import_type_where_0_is_imported.Code(),
+		diagnostics.X_0_resolves_to_a_type_and_must_be_marked_type_only_in_this_file_before_re_exporting_when_1_is_enabled_Consider_using_export_type_0_as_default.Code(),
+		diagnostics.X_0_resolves_to_a_type_only_declaration_and_must_be_marked_type_only_in_this_file_before_re_exporting_when_1_is_enabled_Consider_using_import_type_where_0_is_imported.Code(),
+		diagnostics.X_0_resolves_to_a_type_only_declaration_and_must_be_marked_type_only_in_this_file_before_re_exporting_when_1_is_enabled_Consider_using_export_type_0_as_default.Code(),
+		diagnostics.This_syntax_is_not_allowed_when_erasableSyntaxOnly_is_enabled.Code(),
+		diagnostics.Enum_member_following_a_non_literal_numeric_member_must_have_an_initializer_when_isolatedModules_is_enabled.Code(),
+		diagnostics.Cannot_access_ambient_const_enums_when_0_is_enabled.Code(),
+		diagnostics.A_type_referenced_in_a_decorated_signature_must_be_imported_with_import_type_or_a_namespace_import_when_isolatedModules_and_emitDecoratorMetadata_are_enabled.Code():
+		return true
+	}
+	return false
 }
 
 // collectCheckerDiagnosticsFromFiles collects checker diagnostics for a list of files.

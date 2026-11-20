@@ -119,6 +119,7 @@ It is fine to implement more and more of a feature across commits, but be sure t
 - Do not summarize new changes in any markdown files in the repo. Specifically:
   - `tsc/CHANGES.md` is a historical artifact for the 6.0 to 7.0 migration, not a live document.
   - `CONTRIBUTING.md` only documents high-level build tool instructions, not their implementation details.
+- When communicating with humans, never refer to a diagnostic only by its numeric code (e.g. "TS1295"). Use its message text or a short description of it.
 
 # PR Template
 
