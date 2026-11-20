@@ -220,7 +220,8 @@ import type {
     UnionType,
 } from "./types.ts";
 
-export { formatDiagnostics, formatDiagnosticsWithColorAndContext } from "../diagnosticFormatter.ts";
+export { flattenDiagnosticMessage, formatDiagnostics, formatDiagnosticsWithColorAndContext } from "../diagnosticFormatter.ts";
+export { sortAndDeduplicateDiagnostics } from "../diagnosticUtils.ts";
 export { documentURIToFileName, fileNameToDocumentURI } from "../path.ts";
 export type { EmitContext, PrintNodeOptions, SynthesizedComment } from "../printer.ts";
 export { CheckFlags, CompletionItemKind, DiagnosticCategory, ElementFlags, EmitFlags, EmitOnly, IndexKind, JsxEmit, ModifierFlags, ModuleKind, ModuleResolutionKind, NodeBuilderFlags, ObjectFlags, ScriptKind, SignatureFlags, SignatureKind, SymbolFlags, SymbolFormatFlags, SymbolOwnerKind, TypeFlags, TypeFormatFlags, TypePredicateKind };
