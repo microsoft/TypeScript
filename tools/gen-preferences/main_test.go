@@ -29,6 +29,9 @@ func TestGenerate(t *testing.T) {
 		`getPreferenceConfigValue(config, "suggest.jsdoc.enabled", "suggest.completeJSDocs")`,
 		"func (p UserPreferences) withConfig(config map[string]any) UserPreferences",
 		"func (p *UserPreferences) MarshalJSONTo(enc *json.Encoder) error",
+		`MaxConsecutiveBlankLines *int`,
+		`parsePreferenceNonnegativeInteger(value)`,
+		`setNestedValue(config, "format.maxConsecutiveBlankLines", *p.FormatCodeSettings.MaxConsecutiveBlankLines)`,
 	} {
 		if !strings.Contains(strings.Join(strings.Fields(string(goOutput)), " "), expected) {
 			t.Errorf("Go output does not contain %q", expected)
@@ -37,6 +40,8 @@ func TestGenerate(t *testing.T) {
 	for _, expected := range []string{
 		"export interface UserPreferences extends FormatCodeSettings, CompletionPreferences, InlayHintsPreferences, CodeLensUserPreferences",
 		"includeCompletionsForModuleExports?: boolean | undefined;",
+		"maxConsecutiveBlankLines?: number | undefined;",
+		"removeBlankLinesBeforeClosingBrace?: boolean | undefined;",
 		`quotePreference?: "auto" | "double" | "single" | undefined;`,
 		`importModuleSpecifierEnding?: "auto" | "minimal" | "index" | "js" | undefined;`,
 	} {
