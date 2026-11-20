@@ -135,3 +135,37 @@ value['/*completion*/`
 		},
 	})
 }
+
+func TestCompletionListDigitPrefixedMemberNames(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `declare const x: { "1+sideEffect()": 0; "01": 0; 1: 0 };
+x[|./*member*/|];`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	var items []fourslash.CompletionsExpectedItem
+	for _, test := range []struct {
+		label   string
+		newText string
+	}{
+		{"1+sideEffect()", "[1+sideEffect()]"},
+		{"01", "[01]"},
+		{"1", "[1]"},
+	} {
+		items = append(items, &lsproto.CompletionItem{
+			Label:      test.label,
+			InsertText: new(test.newText),
+			TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
+				TextEdit: &lsproto.TextEdit{NewText: test.newText, Range: f.Ranges()[0].LSRange},
+			},
+		})
+	}
+	f.VerifyCompletions(t, "member", &fourslash.CompletionsExpectedList{
+		IsIncomplete: false,
+		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
+		},
+		Items: &fourslash.CompletionsExpectedItems{Includes: items},
+	})
+}
