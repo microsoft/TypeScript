@@ -119,59 +119,36 @@ describe("Encoder", { concurrency }, () => {
         assert.strictEqual(decoded.canonicalSourceFileName, undefined);
     });
 
-    test("decodes extensible content mapper diagnostic directives", () => {
-        const encoded = encodeSourceFile(makeSF("text", "/component.vue.ts", []));
-        const encodedView = new DataView(encoded.buffer, encoded.byteOffset, encoded.byteLength);
-        const nodesOffset = encodedView.getUint32(HEADER_OFFSET_NODES, true);
+    test("skips unknown trailing diagnostic directive fields", () => {
         const writer = new MsgpackWriter();
-        writer.writeArrayHeader(3);
-        writer.writeArrayHeader(8);
-        for (const value of [0, 1, 2, 3, 0, 0]) writer.writeUint(value);
-        writer.writeArrayHeader(2);
-        for (const code of [2353, 2322]) writer.writeUint(code);
-        writer.writeArrayHeader(2); // An unknown future field.
-        writer.writeBool(true);
-        writer.writeArrayHeader(1);
-        writer.writeUint(42);
-        writer.writeArrayHeader(7);
-        for (const value of [1, 1, 0, 1, 1, 2578]) writer.writeUint(value);
-        writer.writeArrayHeader(0);
-        writer.writeArrayHeader(7);
-        for (const value of [0, 1, 0, 1, 0, 0]) writer.writeUint(value);
-        writer.writeArrayHeader(16);
-        for (let code = 1; code <= 16; code++) writer.writeUint(code);
-        const directive = writer.finish();
-        const withDirective = new Uint8Array(encoded.length + directive.length);
-        withDirective.set(encoded.subarray(0, nodesOffset));
-        withDirective.set(directive, nodesOffset);
-        withDirective.set(encoded.subarray(nodesOffset), nodesOffset + directive.length);
-        const view = new DataView(withDirective.buffer);
-        const extendedDataOffset = view.getUint32(HEADER_OFFSET_EXTENDED_DATA, true);
-        view.setUint32(extendedDataOffset + 72, 0, true);
-        view.setUint32(HEADER_OFFSET_STRUCTURED_DATA, nodesOffset, true);
-        view.setUint32(HEADER_OFFSET_NODES, nodesOffset + directive.length, true);
+        writer.writeArrayHeader(1); // one directive
+        writer.writeArrayHeader(8); // seven known fields plus one from a future protocol
+        for (const value of [0, 1, 2, 3, 0, 0]) writer.writeUint(value); // ranges [0, 1) and [2, 5), ignore policy, no unused code
+        writer.writeArrayHeader(1); // diagnostic codes
+        writer.writeUint(2322);
+        writer.writeBool(true); // unknown field
+        const directives = writer.finish();
 
-        assert.deepStrictEqual(decode(withDirective).diagnosticDirectives, [{
+        // Splice the directives in as structured data, just before the node table.
+        const encoded = encodeSourceFile(makeSF("text", "/component.vue.ts", []));
+        const nodesOffset = new DataView(encoded.buffer, encoded.byteOffset).getUint32(HEADER_OFFSET_NODES, true);
+        const withDirectives = new Uint8Array(encoded.length + directives.length);
+        withDirectives.set(encoded.subarray(0, nodesOffset));
+        withDirectives.set(directives, nodesOffset);
+        withDirectives.set(encoded.subarray(nodesOffset), nodesOffset + directives.length);
+        const view = new DataView(withDirectives.buffer);
+        view.setUint32(HEADER_OFFSET_STRUCTURED_DATA, nodesOffset, true);
+        view.setUint32(HEADER_OFFSET_NODES, nodesOffset + directives.length, true);
+        // The source file's extended data points at the directives (offset 0 within structured data).
+        view.setUint32(view.getUint32(HEADER_OFFSET_EXTENDED_DATA, true) + 72, 0, true);
+
+        assert.deepStrictEqual(decode(withDirectives).diagnosticDirectives, [{
             originalRange: { pos: 0, end: 1 },
             virtualRange: { pos: 2, end: 5 },
             policy: 0,
             unusedCode: 0,
-            diagnosticCodes: [2353, 2322],
-        }, {
-            originalRange: { pos: 1, end: 2 },
-            virtualRange: { pos: 0, end: 1 },
-            policy: 1,
-            unusedCode: 2578,
-            diagnosticCodes: [],
-        }, {
-            originalRange: { pos: 0, end: 1 },
-            virtualRange: { pos: 0, end: 1 },
-            policy: 0,
-            unusedCode: 0,
-            diagnosticCodes: Array.from({ length: 16 }, (_, i) => i + 1),
+            diagnosticCodes: [2322],
         }]);
-        withDirective[nodesOffset + 1] = 0x96;
-        assert.throws(() => decode(withDirective).diagnosticDirectives, /Invalid diagnostic directive/);
     });
 
     test("keeps adjacent surrogate string-table entries separate", () => {

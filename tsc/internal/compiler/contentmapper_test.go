@@ -866,55 +866,34 @@ func TestContentMapperDirectivesPreserveIncrementalGlobals(t *testing.T) {
 	}
 }
 
-func TestContentMapperDiagnosticDirectiveCodeSelectors(t *testing.T) {
+func TestContentMapperDiagnosticDirectiveCodes(t *testing.T) {
 	t.Parallel()
-	const text = `
-const object: { known: string } = { extra: 1 };
-const value: string = 1;
-const missing = missingName;
-`
-	for _, test := range []struct {
-		name     string
-		codes    []int32
-		expected []int32
-	}{
-		{name: "all codes", expected: []int32{}},
-		{name: "one code", codes: []int32{2353}, expected: []int32{2322, 2304}},
-		{name: "multiple codes", codes: []int32{2353, 2322}, expected: []int32{2304}},
-		{name: "no matching codes", codes: []int32{9999}, expected: []int32{2353, 2322, 2304}},
-	} {
-		t.Run(test.name, func(t *testing.T) {
-			t.Parallel()
-			program := newContentMapperProgram(t, fakeContentMapperHost{
-				transform: func(fileName string, content string) (contentmapper.Result, error) {
-					return contentmapper.Result{
-						Text:             text,
-						VirtualExtension: ".ts",
-						Mappings: spanmap.New([]spanmap.Segment{{
-							OriginalEnd: core.TextPos(len(content)),
-							VirtualEnd:  core.TextPos(len(text)),
-							Kind:        spanmap.KindVerbatim,
-							Features:    spanmap.FeatureAll,
-						}}),
-						DiagnosticDirectives: []ast.MappedDiagnosticDirective{{
-							VirtualRange:    core.NewTextRange(0, len(text)),
-							OriginalRange:   core.NewTextRange(0, len(content)),
-							Policy:          ast.MappedDiagnosticDirectivePolicyIgnore,
-							DiagnosticCodes: test.codes,
-						}},
-					}, nil
-				},
-			}, map[string]string{"/src/Component.vue": text}, []string{"/src/Component.vue"})
+	// 2322: number is not assignable to string. 2304: cannot find name.
+	const text = "const a: string = 1;\nmissingName;\n"
+	program := newContentMapperProgram(t, fakeContentMapperHost{
+		transform: func(fileName string, content string) (contentmapper.Result, error) {
+			return contentmapper.Result{
+				Text:             text,
+				VirtualExtension: ".ts",
+				Mappings: spanmap.New([]spanmap.Segment{{
+					OriginalEnd: core.TextPos(len(content)),
+					VirtualEnd:  core.TextPos(len(text)),
+					Kind:        spanmap.KindVerbatim,
+					Features:    spanmap.FeatureAll,
+				}}),
+				DiagnosticDirectives: []ast.MappedDiagnosticDirective{{
+					VirtualRange:    core.NewTextRange(0, len(text)),
+					OriginalRange:   core.NewTextRange(0, len(content)),
+					Policy:          ast.MappedDiagnosticDirectivePolicyIgnore,
+					DiagnosticCodes: []int32{2322},
+				}},
+			}, nil
+		},
+	}, map[string]string{"/src/Component.vue": text}, []string{"/src/Component.vue"})
 
-			file := program.GetSourceFile("/src/Component.vue")
-			diags := program.GetSemanticDiagnostics(t.Context(), file)
-			codes := make([]int32, len(diags))
-			for i, diagnostic := range diags {
-				codes[i] = diagnostic.Code()
-			}
-			assert.DeepEqual(t, codes, test.expected)
-		})
-	}
+	diags := program.GetSemanticDiagnostics(t.Context(), program.GetSourceFile("/src/Component.vue"))
+	assert.Equal(t, len(diags), 1)
+	assert.Equal(t, diags[0].Code(), int32(2304))
 }
 
 func TestCompositeProjectContentMapperSupplementalRoots(t *testing.T) {

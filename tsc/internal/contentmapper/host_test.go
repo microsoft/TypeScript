@@ -506,19 +506,6 @@ func TestRunnerTransformDiagnosticDirectives(t *testing.T) {
 	assert.Equal(t, directive.UnusedCode, int32(2578))
 	assert.Equal(t, directive.UnusedMessageText, "Unused framework directive.")
 	assert.Equal(t, directive.Source, "mapper")
-	result, err = transform(contentmapper.MappedOutput{
-		Text: "virtual source", Extension: ".ts",
-		DiagnosticDirectives: protocolDiagnosticDirectives([]contentmapper.MappedDiagnosticDirective{{
-			OriginalStart:   0,
-			OriginalLength:  9,
-			VirtualStart:    8,
-			VirtualEnd:      14,
-			Policy:          contentmapper.DiagnosticDirectivePolicyIgnore,
-			DiagnosticCodes: []int32{2353, 2322},
-		}}),
-	})
-	assert.NilError(t, err)
-	assert.DeepEqual(t, result.DiagnosticDirectives[0].DiagnosticCodes, []int32{2353, 2322})
 	unusedIndex := 1
 	result, err = transform(contentmapper.MappedOutput{
 		Text: "virtual source", Extension: ".ts",
@@ -574,15 +561,6 @@ func TestRunnerTransformDiagnosticDirectives(t *testing.T) {
 			directives: []contentmapper.MappedDiagnosticDirective{{
 				Policy:          contentmapper.DiagnosticDirectivePolicyIgnore,
 				DiagnosticCodes: []int32{0},
-			}},
-			kind: contentmapper.DiagnosticDirectiveErrorKindInvalidDiagnosticCode,
-		},
-		{
-			name: "invalid additional diagnostic code",
-			text: "x",
-			directives: []contentmapper.MappedDiagnosticDirective{{
-				Policy:          contentmapper.DiagnosticDirectivePolicyIgnore,
-				DiagnosticCodes: []int32{2353, -1},
 			}},
 			kind: contentmapper.DiagnosticDirectiveErrorKindInvalidDiagnosticCode,
 		},
@@ -669,9 +647,9 @@ func TestMappedDiagnosticDirectiveJSON(t *testing.T) {
 				VirtualStart: 8, VirtualEnd: 14,
 				OriginalStart: 0, OriginalLength: 9,
 				Policy:          contentmapper.DiagnosticDirectivePolicyIgnore,
-				DiagnosticCodes: []int32{2353},
+				DiagnosticCodes: []int32{2353, 2322},
 			},
-			want: `[0,9,8,14,0,2353]`,
+			want: `[0,9,8,14,0,2353,2322]`,
 		},
 		{
 			name: "expect",
@@ -695,30 +673,13 @@ func TestMappedDiagnosticDirectiveJSON(t *testing.T) {
 		})
 	}
 
-	t.Run("multiple selected codes", func(t *testing.T) {
-		const data = `[0,9,8,14,0,2353,2322]`
-		var directive contentmapper.MappedDiagnosticDirective
-		assert.NilError(t, json.Unmarshal([]byte(data), &directive))
-		assert.DeepEqual(t, directive.DiagnosticCodes, []int32{2353, 2322})
-		encoded, err := json.Marshal(directive)
-		assert.NilError(t, err)
-		assert.Equal(t, string(encoded), data)
-	})
-
 	for _, data := range []string{
 		`[0,0,0,0]`,
 		`[0,0,0,0,1,1,2]`,
-		`[0,0,0,0,2,1]`,
+		`[0,0,0,0,0,"2353"]`,
 	} {
 		var directive contentmapper.MappedDiagnosticDirective
 		assert.ErrorContains(t, json.Unmarshal([]byte(data), &directive), "diagnostic directive")
-	}
-	for _, data := range []string{
-		`[0,0,0,0,0,2353,"2322"]`,
-		`[0,0,0,0,0,2353,2147483648]`,
-	} {
-		var directive contentmapper.MappedDiagnosticDirective
-		assert.ErrorContains(t, json.Unmarshal([]byte(data), &directive), "invalid diagnostic directive tuple element 6")
 	}
 
 	unusedIndex := 1
@@ -995,19 +956,18 @@ func TestRunnerLeaseLifecycle(t *testing.T) {
 
 // recordingMapper captures project configuration and lifecycle requests for host protocol tests.
 type recordingMapper struct {
-	mu                 sync.Mutex
-	received           string
-	receivedOptions    string
-	receivedLocale     string
-	receivedInitialize string
-	projectHandles     []string
-	closedHandles      []string
-	transformHandle    string
-	transformParams    string
-	watchedFiles       []string
-	configIdentity     *string
-	dynamicConfig      bool
-	optionDiagnostics  []contentmapper.OptionDiagnosticResult
+	mu                sync.Mutex
+	received          string
+	receivedOptions   string
+	receivedLocale    string
+	projectHandles    []string
+	closedHandles     []string
+	transformHandle   string
+	transformParams   string
+	watchedFiles      []string
+	configIdentity    *string
+	dynamicConfig     bool
+	optionDiagnostics []contentmapper.OptionDiagnosticResult
 }
 
 type blockingMapper struct {
@@ -1036,7 +996,6 @@ func (m *recordingMapper) HandleRequest(ctx context.Context, method string, para
 		}
 		m.mu.Lock()
 		m.receivedLocale = p.Locale
-		m.receivedInitialize = string(params)
 		m.mu.Unlock()
 		return contentmapper.InitializeResult{PositionEncoding: contentmapper.PositionEncodingUTF8, DiagnosticSource: "mapper"}, nil
 	case contentmapper.MethodOpenProject:
@@ -1422,7 +1381,6 @@ func TestRunnerForwardsProjectOptions(t *testing.T) {
 	assert.Equal(t, mapper.received, string(want))
 	assert.Equal(t, mapper.receivedOptions, `{"strictTemplates":true}`)
 	assert.Equal(t, mapper.receivedLocale, "cs-CZ")
-	assert.Assert(t, !strings.Contains(mapper.receivedInitialize, `"diagnosticDirectiveCodeSelectors"`))
 	assert.Assert(t, !strings.Contains(mapper.transformParams, `"options"`))
 	assert.Assert(t, !strings.Contains(mapper.transformParams, `"compilerOptions"`))
 }

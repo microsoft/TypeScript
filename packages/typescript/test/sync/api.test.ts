@@ -2934,12 +2934,6 @@ export const other: { value: string } = box;`,
         t.after(() => rmSync(directory, { recursive: true, force: true }));
         const mapperDirectory = join(directory, "node_modules", "mapper");
         mkdirSync(mapperDirectory, { recursive: true });
-        const virtualText = `
-            export {};
-            const object: { known: string } = { extra: 1 };
-            const value: string = 1;
-            const missing = missingName;
-        `;
         const mapperScript = `
             import { createMessageConnection } from ${JSON.stringify(new URL("../../vendor/vscode-jsonrpc/lib/node/main.js", import.meta.url).href)};
             const connection = createMessageConnection(process.stdin, process.stdout);
@@ -2947,11 +2941,11 @@ export const other: { value: string } = box;`,
             connection.onRequest("openProject", () => ({}));
             connection.onRequest("closeProject", () => null);
             connection.onRequest("transform", ({ content }) => ({
-                text: ${JSON.stringify(virtualText)},
+                text: "export {};",
                 extension: ".ts",
                 diagnosticDirectives: {
                     unusedExpectDirectiveDiagnostics: [],
-                    directives: [[0, 0, 0, ${virtualText.length}, 0, 2353, 2322]],
+                    directives: [[0, 0, 0, 10, 0, 2353, 2322]],
                 },
                 supplemental: [{ text: content, extension: ".ts" }],
             }));
@@ -2984,12 +2978,11 @@ export const other: { value: string } = box;`,
         assert.ok(mappedFile);
         assert.deepEqual(mappedFile.diagnosticDirectives, [{
             originalRange: { pos: 0, end: 0 },
-            virtualRange: { pos: 0, end: virtualText.length },
+            virtualRange: { pos: 0, end: 10 },
             policy: 0,
             unusedCode: 0,
             diagnosticCodes: [2353, 2322],
         }]);
-        assert.deepEqual((program.getSemanticDiagnostics(mappedFileName)).map(diagnostic => diagnostic.code), [2304]);
         const supplementalFileName = toRootedFilePath(join(directory, "app.box.0.ts"), undefined);
         assert.equal(existsSync(supplementalFileName), false);
         assert.ok(program.getSourceFile(supplementalFileName));

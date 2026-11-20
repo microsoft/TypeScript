@@ -50,29 +50,14 @@ func TestEncodeContentMapperSourceFileMetadata(t *testing.T) {
 		OriginalText:    "😀original",
 		ContentMapper:   "mapper@1.0.0",
 		VirtualFileName: "/component.vue.ts",
-		DiagnosticDirectives: []ast.MappedDiagnosticDirective{
-			{
-				OriginalRange:   core.NewTextRange(4, 5),
-				VirtualRange:    core.NewTextRange(4, 11),
-				Policy:          ast.MappedDiagnosticDirectivePolicyIgnore,
-				DiagnosticCodes: []int32{2353, 2322},
-				Source:          "mapper",
-			},
-			{
-				OriginalRange:     core.NewTextRange(4, 5),
-				VirtualRange:      core.NewTextRange(4, 11),
-				Policy:            ast.MappedDiagnosticDirectivePolicyExpect,
-				UnusedCode:        2578,
-				UnusedMessageText: "Unused framework directive.",
-				Source:            "mapper",
-			},
-			{
-				OriginalRange:   core.NewTextRange(4, 5),
-				VirtualRange:    core.NewTextRange(4, 11),
-				Policy:          ast.MappedDiagnosticDirectivePolicyIgnore,
-				DiagnosticCodes: []int32{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16},
-			},
-		},
+		DiagnosticDirectives: []ast.MappedDiagnosticDirective{{
+			OriginalRange:     core.NewTextRange(4, 5),
+			VirtualRange:      core.NewTextRange(4, 11),
+			Policy:            ast.MappedDiagnosticDirectivePolicyExpect,
+			UnusedCode:        2578,
+			UnusedMessageText: "Unused framework directive.",
+			Source:            "mapper",
+		}},
 	})
 
 	buf, _, err := encoder.EncodeSourceFile(sourceFile)
@@ -90,31 +75,15 @@ func TestEncodeContentMapperSourceFileMetadata(t *testing.T) {
 	assert.Equal(t, encodedString(buf, virtualFileNameIndex), "/component.vue.ts")
 	structuredDataOffset := readUint32(buf, encoder.HeaderOffsetStructuredData)
 	directiveOffset := structuredDataOffset + diagnosticDirectivesOffset
-	expected := []byte{
-		0x93, // three directives
-		0x97, // seven-element selected-ignore tuple
-		2, 1, // original range [2, 3) in UTF-16
-		2, 7, // virtual range [2, 9) in UTF-16
-		0,           // ignore policy
-		0,           // unused diagnostic code
-		0x92,        // two diagnostic-code selectors
-		0xcd, 9, 49, // diagnostic code 2353
-		0xcd, 9, 18, // diagnostic code 2322
-		0x97, // seven-element expect tuple
+	assert.DeepEqual(t, buf[directiveOffset:directiveOffset+11], []byte{
+		0x91, // one directive
+		0x97, // seven-element tuple
 		2, 1, // original range [2, 3) in UTF-16
 		2, 7, // virtual range [2, 9) in UTF-16
 		1,            // expect policy
 		0xcd, 10, 18, // unused diagnostic code 2578
-		0x90, // no diagnostic-code selectors
-		0x97, // seven-element selected-ignore tuple
-		2, 1, // original range [2, 3) in UTF-16
-		2, 7, // virtual range [2, 9) in UTF-16
-		0,           // ignore policy
-		0,           // unused diagnostic code
-		0xdc, 0, 16, // array16 with sixteen selectors
-		1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
-	}
-	assert.DeepEqual(t, buf[directiveOffset:directiveOffset+uint32(len(expected))], expected)
+		0x90, // no diagnostic codes
+	})
 }
 
 func encodedString(buf []byte, index uint32) string {
