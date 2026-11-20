@@ -1,0 +1,47 @@
+//// [tests/cases/compiler/contextualParameterInCircularVariableInitializer.ts] ////
+
+=== contextualParameterInCircularVariableInitializer.ts ===
+// The initializer of `store` refers to `store` from a callback, so resolving
+// the type of `store` re-enters itself. `y` must still get its contextual
+// type `string` from `Store` (zustand `create<T>()(...)` pattern), with no
+// TS7006, as in main and TS 6.0.
+
+declare function create<T>(init: () => T): T;
+>create : <T>(init: () => T) => T
+>init : () => T
+
+interface Store {
+    a: (x: boolean) => void;
+>a : (x: boolean) => void
+>x : boolean
+
+    b: (y: string) => void;
+>b : (y: string) => void
+>y : string
+}
+
+const store = create<Store>(() => ({
+>store : Store
+>create<Store>(() => ({    a: (x) => store.b(""),    b: (y) => {},})) : Store
+>create : <T>(init: () => T) => T
+>() => ({    a: (x) => store.b(""),    b: (y) => {},}) : () => { a: (x: boolean) => void; b: (y: string) => void; }
+>({    a: (x) => store.b(""),    b: (y) => {},}) : { a: (x: boolean) => void; b: (y: string) => void; }
+>{    a: (x) => store.b(""),    b: (y) => {},} : { a: (x: boolean) => void; b: (y: string) => void; }
+
+    a: (x) => store.b(""),
+>a : (x: boolean) => void
+>(x) => store.b("") : (x: boolean) => void
+>x : boolean
+>store.b("") : void
+>store.b : (y: string) => void
+>store : Store
+>b : (y: string) => void
+>"" : ""
+
+    b: (y) => {},
+>b : (y: string) => void
+>(y) => {} : (y: string) => void
+>y : string
+
+}));
+

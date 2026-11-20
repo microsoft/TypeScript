@@ -80,55 +80,43 @@ func (prefixedSupplementalHandler) HandleRequest(ctx context.Context, method str
 				Kind:          spanmap.KindVerbatim,
 				Features:      spanmap.FeatureAll,
 			}}
-			canonicalMappings, err := spanmap.New([]spanmap.Segment{{
+			canonicalMappings := spanmap.New([]spanmap.Segment{{
 				VirtualStart:  0,
 				VirtualEnd:    core.TextPos(thirdStart),
 				OriginalStart: 0,
 				OriginalEnd:   core.TextPos(thirdStart),
 				Kind:          spanmap.KindVerbatim,
 				Features:      spanmap.FeatureAll,
-			}}).Marshal()
-			if err != nil {
-				return nil, err
-			}
-			mappings, err := spanmap.New(segments).Marshal()
-			if err != nil {
-				return nil, err
-			}
+			}}).Tuples()
+			mappings := spanmap.New(segments).Tuples()
 			return contentmapper.TransformResult{
-				Text: p.Content[:thirdStart], Extension: ".ts", Mappings: json.Value(canonicalMappings),
+				Text: p.Content[:thirdStart], Extension: ".ts", Mappings: canonicalMappings,
 				Supplemental: []contentmapper.SupplementalOutput{{
 					Text:      supplementalText,
 					Extension: ".ts",
-					Mappings:  json.Value(mappings),
+					Mappings:  mappings,
 				}},
 			}, nil
 		}
-		mappings, err := spanmap.New(segments).Marshal()
-		if err != nil {
-			return nil, err
-		}
+		mappings := spanmap.New(segments).Tuples()
 		canonical := contentmapper.MappedOutput{Text: "export {};", Extension: ".ts"}
 		if strings.Contains(p.FileName, "folding-duplicate") || strings.Contains(p.FileName, "codelens-disabled") || strings.Contains(p.FileName, "codelens-duplicate") {
-			canonicalMappings, err := spanmap.New([]spanmap.Segment{{
+			canonicalMappings := spanmap.New([]spanmap.Segment{{
 				VirtualStart:  0,
 				VirtualEnd:    core.TextPos(len(p.Content)),
 				OriginalStart: 0,
 				OriginalEnd:   core.TextPos(len(p.Content)),
 				Kind:          spanmap.KindVerbatim,
 				Features:      spanmap.FeatureAll,
-			}}).Marshal()
-			if err != nil {
-				return nil, err
-			}
-			canonical = contentmapper.MappedOutput{Text: p.Content, Extension: ".ts", Mappings: json.Value(canonicalMappings)}
+			}}).Tuples()
+			canonical = contentmapper.MappedOutput{Text: p.Content, Extension: ".ts", Mappings: canonicalMappings}
 		}
 		return contentmapper.TransformResult{
 			MappedOutput: canonical,
 			Supplemental: []contentmapper.SupplementalOutput{{
 				Text:      supplementalText,
 				Extension: ".ts",
-				Mappings:  json.Value(mappings),
+				Mappings:  mappings,
 			}},
 		}, nil
 	default:
@@ -143,10 +131,7 @@ func (unmappedFoldingHandler) HandleRequest(ctx context.Context, method string, 
 	case contentmapper.MethodInitialize:
 		return initializeResult("mapper"), nil
 	case contentmapper.MethodTransform:
-		mappings, err := spanmap.New(nil).Marshal()
-		if err != nil {
-			return nil, err
-		}
+		mappings := spanmap.New(nil).Tuples()
 		return contentmapper.TransformResult{
 			Text: `import "a";
 import "b";
@@ -155,7 +140,7 @@ import "b";
  */
 export {};`,
 			Extension: ".ts",
-			Mappings:  json.Value(mappings),
+			Mappings:  mappings,
 		}, nil
 	default:
 		return nil, fmt.Errorf("contentmappertest: unexpected method %q", method)

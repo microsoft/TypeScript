@@ -1,0 +1,51 @@
+//// [tests/cases/compiler/sharedMemberLayoutThisIntersectionBase.ts] ////
+
+=== sharedMemberLayoutThisIntersectionBase.ts ===
+interface A { kind: string; m: this["kind"] }
+>A : Symbol(A, Decl(sharedMemberLayoutThisIntersectionBase.ts, 0, 0))
+>kind : Symbol(A.kind, Decl(sharedMemberLayoutThisIntersectionBase.ts, 0, 13))
+>m : Symbol(A.m, Decl(sharedMemberLayoutThisIntersectionBase.ts, 0, 27))
+
+interface B { m: "a" }
+>B : Symbol(B, Decl(sharedMemberLayoutThisIntersectionBase.ts, 0, 45))
+>m : Symbol(B.m, Decl(sharedMemberLayoutThisIntersectionBase.ts, 1, 13))
+
+type AB = A & B;
+>AB : Symbol(AB, Decl(sharedMemberLayoutThisIntersectionBase.ts, 1, 22))
+>A : Symbol(A, Decl(sharedMemberLayoutThisIntersectionBase.ts, 0, 0))
+>B : Symbol(B, Decl(sharedMemberLayoutThisIntersectionBase.ts, 0, 45))
+
+interface D<T extends string> extends AB { kind: T }
+>D : Symbol(D, Decl(sharedMemberLayoutThisIntersectionBase.ts, 2, 16))
+>T : Symbol(T, Decl(sharedMemberLayoutThisIntersectionBase.ts, 4, 12))
+>AB : Symbol(AB, Decl(sharedMemberLayoutThisIntersectionBase.ts, 1, 22))
+>kind : Symbol(D.kind, Decl(sharedMemberLayoutThisIntersectionBase.ts, 4, 42))
+>T : Symbol(T, Decl(sharedMemberLayoutThisIntersectionBase.ts, 4, 12))
+
+declare let d: D<"b">;
+>d : Symbol(d, Decl(sharedMemberLayoutThisIntersectionBase.ts, 5, 11))
+>D : Symbol(D, Decl(sharedMemberLayoutThisIntersectionBase.ts, 2, 16))
+
+d.m;
+>d : Symbol(d, Decl(sharedMemberLayoutThisIntersectionBase.ts, 5, 11))
+
+declare const ABCtor: new () => AB;
+>ABCtor : Symbol(ABCtor, Decl(sharedMemberLayoutThisIntersectionBase.ts, 8, 13))
+>AB : Symbol(AB, Decl(sharedMemberLayoutThisIntersectionBase.ts, 1, 22))
+
+class C<T extends string> extends ABCtor { declare kind: T }
+>C : Symbol(C, Decl(sharedMemberLayoutThisIntersectionBase.ts, 8, 35))
+>T : Symbol(T, Decl(sharedMemberLayoutThisIntersectionBase.ts, 9, 8))
+>ABCtor : Symbol(ABCtor, Decl(sharedMemberLayoutThisIntersectionBase.ts, 8, 13))
+>kind : Symbol(C.kind, Decl(sharedMemberLayoutThisIntersectionBase.ts, 9, 42))
+>T : Symbol(T, Decl(sharedMemberLayoutThisIntersectionBase.ts, 9, 8))
+
+declare let c: C<"b">;
+>c : Symbol(c, Decl(sharedMemberLayoutThisIntersectionBase.ts, 10, 11))
+>C : Symbol(C, Decl(sharedMemberLayoutThisIntersectionBase.ts, 8, 35))
+
+c.m;
+>c : Symbol(c, Decl(sharedMemberLayoutThisIntersectionBase.ts, 10, 11))
+
+export {};
+

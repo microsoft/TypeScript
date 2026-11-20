@@ -1,0 +1,37 @@
+checkOrderCircularConstraint.ts(4,19): error TS2313: Type parameter 'T' has a circular constraint.
+checkOrderCircularConstraint.ts(7,19): error TS2339: Property 'foo' does not exist on type 'T'.
+checkOrderCircularConstraint.ts(8,21): error TS2351: This expression is not constructable.
+  Type 'unknown' has no construct signatures.
+checkOrderCircularConstraint.ts(9,17): error TS7053: Element implicitly has an 'any' type because expression of type '1' can't be used to index type 'unknown'.
+  Property '1' does not exist on type 'unknown'.
+checkOrderCircularConstraint.ts(10,17): error TS2349: This expression is not callable.
+  Type 'unknown' has no call signatures.
+
+
+==== checkOrderCircularConstraint.ts (5 errors) ====
+    // A circular constraint of a declared type parameter is reported at its
+    // declaration, regardless of which use resolves the constraint first.
+    
+    class A<T extends T> {
+                      ~
+!!! error TS2313: Type parameter 'T' has a circular constraint.
+        foo() {
+            var x!: T;
+            var a = x.foo();
+                      ~~~
+!!! error TS2339: Property 'foo' does not exist on type 'T'.
+            var b = new x(123);
+                        ~
+!!! error TS2351: This expression is not constructable.
+!!! error TS2351:   Type 'unknown' has no construct signatures.
+            var c = x[1];
+                    ~~~~
+!!! error TS7053: Element implicitly has an 'any' type because expression of type '1' can't be used to index type 'unknown'.
+!!! error TS7053:   Property '1' does not exist on type 'unknown'.
+            var d = x();
+                    ~
+!!! error TS2349: This expression is not callable.
+!!! error TS2349:   Type 'unknown' has no call signatures.
+        }
+    }
+    

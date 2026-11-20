@@ -1,0 +1,165 @@
+//// [tests/cases/compiler/homomorphicMappedTypeReinstantiation.ts] ////
+
+=== homomorphicMappedTypeReinstantiation.ts ===
+// https://github.com/microsoft/TypeScript/issues/65560
+
+declare function either<A, B>(a: A, b: B): A | B;
+>either : <A, B>(a: A, b: B) => A | B
+>a : A
+>b : B
+
+type Options = Partial<{ verbose: boolean }>;
+>Options : Partial<{ verbose: boolean; }>
+>verbose : boolean
+
+declare const options: (Options | string)[];
+>options : (string | Partial<{ verbose: boolean; }>)[]
+
+const r1 = either(options[0], options.map(value => value)[0]);
+>r1 : string | Partial<{ verbose: boolean; }>
+>either(options[0], options.map(value => value)[0]) : string | Partial<{ verbose: boolean; }>
+>either : <A, B>(a: A, b: B) => A | B
+>options[0] : string | Partial<{ verbose: boolean; }>
+>options : (string | Partial<{ verbose: boolean; }>)[]
+>0 : 0
+>options.map(value => value)[0] : string | Partial<{ verbose: boolean; }>
+>options.map(value => value) : (string | Partial<{ verbose: boolean; }>)[]
+>options.map : <U>(callbackfn: (value: string | Partial<{ verbose: boolean; }>, index: number, array: (string | Partial<{ verbose: boolean; }>)[]) => U, thisArg?: any) => U[]
+>options : (string | Partial<{ verbose: boolean; }>)[]
+>map : <U>(callbackfn: (value: string | Partial<{ verbose: boolean; }>, index: number, array: (string | Partial<{ verbose: boolean; }>)[]) => U, thisArg?: any) => U[]
+>value => value : (value: string | Partial<{ verbose: boolean; }>) => string | Partial<{ verbose: boolean; }>
+>value : string | Partial<{ verbose: boolean; }>
+>value : string | Partial<{ verbose: boolean; }>
+>0 : 0
+
+type ReadonlyOptions = Readonly<{ verbose: boolean }>;
+>ReadonlyOptions : Readonly<{ verbose: boolean; }>
+>verbose : boolean
+
+declare const readonlyOptions: (ReadonlyOptions | string)[];
+>readonlyOptions : (string | Readonly<{ verbose: boolean; }>)[]
+
+const r2 = either(readonlyOptions[0], readonlyOptions.map(value => value)[0]);
+>r2 : string | Readonly<{ verbose: boolean; }>
+>either(readonlyOptions[0], readonlyOptions.map(value => value)[0]) : string | Readonly<{ verbose: boolean; }>
+>either : <A, B>(a: A, b: B) => A | B
+>readonlyOptions[0] : string | Readonly<{ verbose: boolean; }>
+>readonlyOptions : (string | Readonly<{ verbose: boolean; }>)[]
+>0 : 0
+>readonlyOptions.map(value => value)[0] : string | Readonly<{ verbose: boolean; }>
+>readonlyOptions.map(value => value) : (string | Readonly<{ verbose: boolean; }>)[]
+>readonlyOptions.map : <U>(callbackfn: (value: string | Readonly<{ verbose: boolean; }>, index: number, array: (string | Readonly<{ verbose: boolean; }>)[]) => U, thisArg?: any) => U[]
+>readonlyOptions : (string | Readonly<{ verbose: boolean; }>)[]
+>map : <U>(callbackfn: (value: string | Readonly<{ verbose: boolean; }>, index: number, array: (string | Readonly<{ verbose: boolean; }>)[]) => U, thisArg?: any) => U[]
+>value => value : (value: string | Readonly<{ verbose: boolean; }>) => string | Readonly<{ verbose: boolean; }>
+>value : string | Readonly<{ verbose: boolean; }>
+>value : string | Readonly<{ verbose: boolean; }>
+>0 : 0
+
+type Nullable<T> = { [K in keyof T]: T[K] | null };
+>Nullable : Nullable<T>
+
+type NullableOptions = Nullable<{ verbose: boolean }>;
+>NullableOptions : Nullable<{ verbose: boolean; }>
+>verbose : boolean
+
+declare const nullableOptions: (NullableOptions | string)[];
+>nullableOptions : (string | Nullable<{ verbose: boolean; }>)[]
+
+const r3 = either(nullableOptions[0], nullableOptions.map(value => value)[0]);
+>r3 : string | Nullable<{ verbose: boolean; }>
+>either(nullableOptions[0], nullableOptions.map(value => value)[0]) : string | Nullable<{ verbose: boolean; }>
+>either : <A, B>(a: A, b: B) => A | B
+>nullableOptions[0] : string | Nullable<{ verbose: boolean; }>
+>nullableOptions : (string | Nullable<{ verbose: boolean; }>)[]
+>0 : 0
+>nullableOptions.map(value => value)[0] : string | Nullable<{ verbose: boolean; }>
+>nullableOptions.map(value => value) : (string | Nullable<{ verbose: boolean; }>)[]
+>nullableOptions.map : <U>(callbackfn: (value: string | Nullable<{ verbose: boolean; }>, index: number, array: (string | Nullable<{ verbose: boolean; }>)[]) => U, thisArg?: any) => U[]
+>nullableOptions : (string | Nullable<{ verbose: boolean; }>)[]
+>map : <U>(callbackfn: (value: string | Nullable<{ verbose: boolean; }>, index: number, array: (string | Nullable<{ verbose: boolean; }>)[]) => U, thisArg?: any) => U[]
+>value => value : (value: string | Nullable<{ verbose: boolean; }>) => string | Nullable<{ verbose: boolean; }>
+>value : string | Nullable<{ verbose: boolean; }>
+>value : string | Nullable<{ verbose: boolean; }>
+>0 : 0
+
+declare const unionOptions: (Partial<{ a: boolean } | { b: string }> | string)[];
+>unionOptions : (string | Partial<{ a: boolean; } | { b: string; }>)[]
+>a : boolean
+>b : string
+
+const r4 = either(unionOptions[0], unionOptions.map(value => value)[0]);
+>r4 : string | Partial<{ a: boolean; } | { b: string; }>
+>either(unionOptions[0], unionOptions.map(value => value)[0]) : string | Partial<{ a: boolean; } | { b: string; }>
+>either : <A, B>(a: A, b: B) => A | B
+>unionOptions[0] : string | Partial<{ a: boolean; } | { b: string; }>
+>unionOptions : (string | Partial<{ a: boolean; } | { b: string; }>)[]
+>0 : 0
+>unionOptions.map(value => value)[0] : string | Partial<{ a: boolean; } | { b: string; }>
+>unionOptions.map(value => value) : (string | Partial<{ a: boolean; } | { b: string; }>)[]
+>unionOptions.map : <U>(callbackfn: (value: string | Partial<{ a: boolean; } | { b: string; }>, index: number, array: (string | Partial<{ a: boolean; } | { b: string; }>)[]) => U, thisArg?: any) => U[]
+>unionOptions : (string | Partial<{ a: boolean; } | { b: string; }>)[]
+>map : <U>(callbackfn: (value: string | Partial<{ a: boolean; } | { b: string; }>, index: number, array: (string | Partial<{ a: boolean; } | { b: string; }>)[]) => U, thisArg?: any) => U[]
+>value => value : (value: string | Partial<{ a: boolean; } | { b: string; }>) => string | Partial<{ a: boolean; } | { b: string; }>
+>value : string | Partial<{ a: boolean; } | { b: string; }>
+>value : string | Partial<{ a: boolean; } | { b: string; }>
+>0 : 0
+
+type AliasedUnionOptions = Partial<{ a: boolean } | { b: string }>;
+>AliasedUnionOptions : AliasedUnionOptions
+>a : boolean
+>b : string
+
+declare const aliasedUnionOptions: (AliasedUnionOptions | string)[];
+>aliasedUnionOptions : (string | AliasedUnionOptions)[]
+
+const r5 = either(aliasedUnionOptions[0], aliasedUnionOptions.map(value => value)[0]);
+>r5 : string | AliasedUnionOptions
+>either(aliasedUnionOptions[0], aliasedUnionOptions.map(value => value)[0]) : string | AliasedUnionOptions
+>either : <A, B>(a: A, b: B) => A | B
+>aliasedUnionOptions[0] : string | AliasedUnionOptions
+>aliasedUnionOptions : (string | AliasedUnionOptions)[]
+>0 : 0
+>aliasedUnionOptions.map(value => value)[0] : string | AliasedUnionOptions
+>aliasedUnionOptions.map(value => value) : (string | AliasedUnionOptions)[]
+>aliasedUnionOptions.map : <U>(callbackfn: (value: string | AliasedUnionOptions, index: number, array: (string | AliasedUnionOptions)[]) => U, thisArg?: any) => U[]
+>aliasedUnionOptions : (string | AliasedUnionOptions)[]
+>map : <U>(callbackfn: (value: string | AliasedUnionOptions, index: number, array: (string | AliasedUnionOptions)[]) => U, thisArg?: any) => U[]
+>value => value : (value: string | AliasedUnionOptions) => string | AliasedUnionOptions
+>value : string | AliasedUnionOptions
+>value : string | AliasedUnionOptions
+>0 : 0
+
+type Named = { verbose: boolean };
+>Named : Named
+>verbose : boolean
+
+type A1 = Partial<Named>;
+>A1 : Partial<Named>
+
+type A2 = Partial<Named>;
+>A2 : Partial<Named>
+
+declare const a1: A1;
+>a1 : Partial<Named>
+
+declare const a2: A2;
+>a2 : Partial<Named>
+
+declare const a3: Partial<Named>;
+>a3 : Partial<Named>
+
+const r6 = either(a1, a2);
+>r6 : Partial<Named>
+>either(a1, a2) : Partial<Named>
+>either : <A, B>(a: A, b: B) => A | B
+>a1 : Partial<Named>
+>a2 : Partial<Named>
+
+const r7 = either(a1, a3);
+>r7 : Partial<Named>
+>either(a1, a3) : Partial<Named>
+>either : <A, B>(a: A, b: B) => A | B
+>a1 : Partial<Named>
+>a3 : Partial<Named>
+

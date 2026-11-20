@@ -1,0 +1,45 @@
+//// [tests/cases/compiler/distributiveConstraintOfCircularCheckType.ts] ////
+
+=== distributiveConstraintOfCircularCheckType.ts ===
+// The base constraint of Collect<F, unknown> is circular, since its
+// constraint includes Collect<F, F>, whose constraint includes itself.
+// Distributing Parameters over that constraint leads back into the
+// circularity, so Parameters<Collect<F, unknown>> must instead have the
+// constraint of its branches, unknown[], and be spreadable.
+
+type Collect<F, Result> =
+>Collect : Symbol(Collect, Decl(distributiveConstraintOfCircularCheckType.ts, 0, 0))
+>F : Symbol(F, Decl(distributiveConstraintOfCircularCheckType.ts, 6, 13))
+>Result : Symbol(Result, Decl(distributiveConstraintOfCircularCheckType.ts, 6, 15))
+
+    Result & F extends (arg: infer A) => infer R
+>Result : Symbol(Result, Decl(distributiveConstraintOfCircularCheckType.ts, 6, 15))
+>F : Symbol(F, Decl(distributiveConstraintOfCircularCheckType.ts, 6, 13))
+>arg : Symbol(arg, Decl(distributiveConstraintOfCircularCheckType.ts, 7, 24))
+>A : Symbol(A, Decl(distributiveConstraintOfCircularCheckType.ts, 7, 34))
+>R : Symbol(R, Decl(distributiveConstraintOfCircularCheckType.ts, 7, 46))
+
+        ? Collect<F, F> | (() => R)
+>Collect : Symbol(Collect, Decl(distributiveConstraintOfCircularCheckType.ts, 0, 0))
+>F : Symbol(F, Decl(distributiveConstraintOfCircularCheckType.ts, 6, 13))
+>F : Symbol(F, Decl(distributiveConstraintOfCircularCheckType.ts, 6, 13))
+>R : Symbol(R, Decl(distributiveConstraintOfCircularCheckType.ts, 7, 46))
+
+        : never;
+
+function pipe<F extends (...args: any) => unknown>(args: Parameters<Collect<F, unknown>>, f: F) {
+>pipe : Symbol(pipe, Decl(distributiveConstraintOfCircularCheckType.ts, 9, 16))
+>F : Symbol(F, Decl(distributiveConstraintOfCircularCheckType.ts, 11, 14))
+>args : Symbol(args, Decl(distributiveConstraintOfCircularCheckType.ts, 11, 25))
+>args : Symbol(args, Decl(distributiveConstraintOfCircularCheckType.ts, 11, 51))
+>Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>Collect : Symbol(Collect, Decl(distributiveConstraintOfCircularCheckType.ts, 0, 0))
+>F : Symbol(F, Decl(distributiveConstraintOfCircularCheckType.ts, 11, 14))
+>f : Symbol(f, Decl(distributiveConstraintOfCircularCheckType.ts, 11, 89))
+>F : Symbol(F, Decl(distributiveConstraintOfCircularCheckType.ts, 11, 14))
+
+    f(...args);
+>f : Symbol(f, Decl(distributiveConstraintOfCircularCheckType.ts, 11, 89))
+>args : Symbol(args, Decl(distributiveConstraintOfCircularCheckType.ts, 11, 51))
+}
+

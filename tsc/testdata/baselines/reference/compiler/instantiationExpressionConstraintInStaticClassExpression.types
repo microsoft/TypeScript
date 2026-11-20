@@ -1,0 +1,29 @@
+//// [tests/cases/compiler/instantiationExpressionConstraintInStaticClassExpression.ts] ////
+
+=== instantiationExpressionConstraintInStaticClassExpression.ts ===
+// A<T> does not satisfy the constraint A of B, as T is not assignable to
+// number, which must be reported.
+
+class A<T = number> {
+>A : A<T>
+
+  value!: T;
+>value : T
+
+  child!: InstanceType<typeof A.B<A<T>>>; // this should error
+>child : B<A<T>>
+>A.B : typeof B
+>A : typeof A
+>B : typeof B
+
+  static B = class B<T extends A = A> {
+>B : typeof B
+>class B<T extends A = A> {    parent!: T;  } : typeof B
+>B : typeof B
+
+    parent!: T;
+>parent : T
+
+  };
+}
+
