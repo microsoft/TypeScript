@@ -80,3 +80,27 @@ export namespace Popover {
   }
 }
 
+export function Popover2() { return null; }
+>Popover2 : { (): null; b: typeof C; Target: () => null; }
+
+Popover2.b = C;
+>Popover2.b = C : typeof C
+>Popover2.b : typeof C
+>Popover2 : { (): null; b: typeof C; Target: () => null; }
+>b : typeof C
+>C : typeof C
+
+Popover2.Target = Target;
+>Popover2.Target = Target : () => null
+>Popover2.Target : () => null
+>Popover2 : { (): null; b: typeof C; Target: () => null; }
+>Target : () => null
+>Target : () => null
+
+export namespace Popover2 {
+  export namespace Target {
+    export type Extra = string;
+>Extra : string
+  }
+}
+

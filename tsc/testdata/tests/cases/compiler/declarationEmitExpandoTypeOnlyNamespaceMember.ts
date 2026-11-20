@@ -28,3 +28,12 @@ export namespace Popover {
     export type Extra = string;
   }
 }
+
+export function Popover2() { return null; }
+Popover2.b = C;
+Popover2.Target = Target;
+export namespace Popover2 {
+  export namespace Target {
+    export type Extra = string;
+  }
+}

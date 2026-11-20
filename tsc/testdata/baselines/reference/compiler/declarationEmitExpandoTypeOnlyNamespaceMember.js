@@ -28,6 +28,15 @@ export namespace Popover {
   }
 }
 
+export function Popover2() { return null; }
+Popover2.b = C;
+Popover2.Target = Target;
+export namespace Popover2 {
+  export namespace Target {
+    export type Extra = string;
+  }
+}
+
 
 //// [declarationEmitExpandoTypeOnlyNamespaceMember.js]
 export class C {
@@ -47,6 +56,9 @@ f3.a = g;
 export function Target() { return null; }
 export function Popover() { return null; }
 Popover.Target = Target;
+export function Popover2() { return null; }
+Popover2.b = C;
+Popover2.Target = Target;
 
 
 //// [declarationEmitExpandoTypeOnlyNamespaceMember.d.ts]
@@ -92,6 +104,17 @@ export declare namespace Popover {
     export { _a as Target };
 }
 export declare namespace Popover {
+    namespace Target {
+        type Extra = string;
+    }
+}
+export declare function Popover2(): null;
+export declare namespace Popover2 {
+    export { C as b };
+    export var _b: typeof import("./declarationEmitExpandoTypeOnlyNamespaceMember").Target;
+    export { _b as Target };
+}
+export declare namespace Popover2 {
     namespace Target {
         type Extra = string;
     }
