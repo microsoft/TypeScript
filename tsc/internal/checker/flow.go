@@ -43,6 +43,8 @@ type FlowState struct {
 	initialType     *Type
 	flowContainer   *ast.Node
 	refKey          CacheHashKey
+	refNameHash     uint32 // FlowIdentifierHash of the identifier a reference is rooted at, else 0
+	refIsAccess     bool   // Whether the reference is an access chain rooted at that identifier
 	depth           int
 	sharedFlowStart int
 	reduceLabels    []*ast.FlowReduceLabelData
@@ -94,6 +96,7 @@ func (c *Checker) getFlowTypeOfReferenceEx(reference *ast.Node, declaredType *Ty
 	f.initialType = core.Coalesce(initialType, declaredType)
 	f.flowContainer = flowContainer
 	f.sharedFlowStart = len(c.sharedFlows)
+	f.refNameHash, f.refIsAccess = getFlowReferenceRootHash(reference)
 	c.flowInvocationCount++
 	evolvedType := c.getTypeAtFlowNode(f, flowNode).t
 	c.sharedFlows = c.sharedFlows[:f.sharedFlowStart]
@@ -112,6 +115,45 @@ func (c *Checker) getFlowTypeOfReferenceEx(reference *ast.Node, declaredType *Ty
 		return declaredType
 	}
 	return resultType
+}
+
+// getFlowReferenceRootHash returns the FlowIdentifierHash of the identifier a reference
+// is rooted at, and whether the reference is an access chain on it. For example:
+//
+//	x        // hash("x"), false
+//	x.y.z    // hash("x"), true
+//	(x!)[0]  // hash("x"), true
+//	this.x   // 0, false
+//	f().x    // 0, false
+//
+// The flow walk compares this against each assignment's ast.FlowNode.AssignmentTarget
+// and skips the assignments that cannot affect the reference:
+//
+//	                 reference x    reference x.y.z
+//	x = 1            checked        checked (resets x.y.z to its declared type)
+//	x.w = 1          skipped        checked
+//	other = 1        skipped        skipped
+//	other.y.z = 1    skipped        skipped
+//
+// A zero hash means the root is not an identifier, so every assignment is checked.
+func getFlowReferenceRootHash(reference *ast.Node) (uint32, bool) {
+	isAccess := false
+	for {
+		switch reference.Kind {
+		case ast.KindIdentifier:
+			if ast.IsThisInTypeQuery(reference) {
+				return 0, false
+			}
+			return ast.FlowIdentifierHash(reference.Text()), isAccess
+		case ast.KindPropertyAccessExpression, ast.KindElementAccessExpression:
+			isAccess = true
+			reference = reference.Expression()
+		case ast.KindParenthesizedExpression, ast.KindNonNullExpression, ast.KindSatisfiesExpression:
+			reference = reference.Expression()
+		default:
+			return 0, false
+		}
+	}
 }
 
 func (c *Checker) getTypeAtFlowNode(f *FlowState, flow *ast.FlowNode) FlowType {
@@ -144,6 +186,12 @@ func (c *Checker) getTypeAtFlowNode(f *FlowState, flow *ast.FlowNode) FlowType {
 		var t FlowType
 		switch {
 		case flags&ast.FlowFlagsAssignment != 0:
+			if f.refNameHash != 0 && flow.AssignmentTarget != ast.FlowAssignmentTargetUnknown &&
+				(flow.AssignmentTarget != f.refNameHash && (!f.refIsAccess || flow.AssignmentTarget != f.refNameHash|ast.FlowAssignmentTargetAccess)) {
+				// The assignment is rooted at a different name, so it cannot affect this reference.
+				flow = flow.Antecedent
+				continue
+			}
 			t = c.getTypeAtFlowAssignment(f, flow)
 			if t.isNil() {
 				flow = flow.Antecedent
