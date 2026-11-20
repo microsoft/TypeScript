@@ -1,16 +1,4 @@
-popover.ts(2,9): error TS2339: Property 'Target' does not exist on type '{ (): null; displayName: string; }'.
-popover.ts(11,9): error TS2339: Property 'Target' does not exist on type '{ (): null; displayName: string; }'.
-variants.ts(2,4): error TS2339: Property 'a' does not exist on type '() => void'.
-variants.ts(4,23): error TS2339: Property 'a' does not exist on type '() => void'.
-variants.ts(5,23): error TS2339: Property 'a' does not exist on type '() => void'.
-variants.ts(9,4): error TS2339: Property 'a' does not exist on type '() => void'.
-variants.ts(11,23): error TS2339: Property 'a' does not exist on type '() => void'.
-variants.ts(15,4): error TS2339: Property 'a' does not exist on type '() => void'.
-variants.ts(17,23): error TS2339: Property 'a' does not exist on type '() => void'.
-variants.ts(20,4): error TS2339: Property 'a' does not exist on type '() => void'.
-variants.ts(22,23): error TS2339: Property 'a' does not exist on type '() => void'.
-variants.ts(27,4): error TS2339: Property 'a' does not exist on type '() => void'.
-variants.ts(28,23): error TS2339: Property 'a' does not exist on type '() => void'.
+variants.ts(5,7): error TS2322: Type 'number' is not assignable to type 'string'.
 variants.ts(31,1): error TS2322: Type 'number' is not assignable to type 'typeof a'.
 variants.ts(33,7): error TS2322: Type 'typeof a' is not assignable to type 'number'.
 variants.ts(40,4): error TS2339: Property 'a' does not exist on type 'typeof f7'.
@@ -18,57 +6,37 @@ variants.ts(42,23): error TS2339: Property 'a' does not exist on type 'typeof f7
 variants.ts(46,1): error TS2322: Type 'number' is not assignable to type 'typeof Values'.
 
 
-==== variants.ts (16 errors) ====
+==== variants.ts (6 errors) ====
     function f1() {}
     f1.a = 0;
-       ~
-!!! error TS2339: Property 'a' does not exist on type '() => void'.
     namespace f1 { export type a = 0; }
     const n1: number = f1.a;
-                          ~
-!!! error TS2339: Property 'a' does not exist on type '() => void'.
     const s1: string = f1.a; // error
-                          ~
-!!! error TS2339: Property 'a' does not exist on type '() => void'.
+          ~~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
     const t1: f1.a = 0;
     
     function f2() {}
     f2.a = 0;
-       ~
-!!! error TS2339: Property 'a' does not exist on type '() => void'.
     namespace f2 { export interface a { x: string } }
     const n2: number = f2.a;
-                          ~
-!!! error TS2339: Property 'a' does not exist on type '() => void'.
     const t2: f2.a = { x: "" };
     
     function f3() {}
     f3.a = 0;
-       ~
-!!! error TS2339: Property 'a' does not exist on type '() => void'.
     namespace f3 { export namespace a {} }
     const n3: number = f3.a;
-                          ~
-!!! error TS2339: Property 'a' does not exist on type '() => void'.
     
     function f4() {}
     f4.a = 0;
-       ~
-!!! error TS2339: Property 'a' does not exist on type '() => void'.
     namespace f4 { export namespace a { export type T = string; } }
     const n4: number = f4.a;
-                          ~
-!!! error TS2339: Property 'a' does not exist on type '() => void'.
     const t4: f4.a.T = "";
     
     namespace f5 { export type a = 0; }
     function f5() {}
     f5.a = 0;
-       ~
-!!! error TS2339: Property 'a' does not exist on type '() => void'.
     const n5: number = f5.a;
-                          ~
-!!! error TS2339: Property 'a' does not exist on type '() => void'.
     
     function f6() {}
     f6.a = 0;
@@ -99,11 +67,9 @@ variants.ts(46,1): error TS2322: Type 'number' is not assignable to type 'typeof
 !!! error TS2322: Type 'number' is not assignable to type 'typeof Values'.
     namespace f8 { export import a = Values; } // error
     
-==== popover.ts (2 errors) ====
+==== popover.ts (0 errors) ====
     export function Popover() { return null; }
     Popover.Target = (x: number) => x;
-            ~~~~~~
-!!! error TS2339: Property 'Target' does not exist on type '{ (): null; displayName: string; }'.
     Popover.displayName = "Popover";
     
     export namespace Popover {
@@ -113,8 +79,6 @@ variants.ts(46,1): error TS2322: Type 'number' is not assignable to type 'typeof
     }
     
     Popover.Target(1);
-            ~~~~~~
-!!! error TS2339: Property 'Target' does not exist on type '{ (): null; displayName: string; }'.
     Popover.displayName;
     const props: Popover.Target.Props = 1;
     

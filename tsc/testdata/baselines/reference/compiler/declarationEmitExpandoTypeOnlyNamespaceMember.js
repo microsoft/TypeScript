@@ -66,6 +66,7 @@ export declare class C {
 }
 export declare function f1(): void;
 export declare namespace f1 {
+    export var a: typeof C;
     export { C as b };
 }
 export declare namespace f1 {
@@ -76,12 +77,18 @@ export declare enum E {
 }
 export declare function f2(): void;
 export declare namespace f2 {
+    var a: typeof E;
+}
+export declare namespace f2 {
     interface a {
         x: string;
     }
 }
 export declare function g(): void;
 export declare function f3(): void;
+export declare namespace f3 {
+    var a: typeof g;
+}
 export declare namespace f3 {
     namespace a {
         type T = string;
@@ -93,6 +100,10 @@ export declare namespace Target {
 }
 export declare function Popover(): null;
 export declare namespace Popover {
+    var _a: typeof import("./declarationEmitExpandoTypeOnlyNamespaceMember").Target;
+    export { _a as Target };
+}
+export declare namespace Popover {
     namespace Target {
         type Extra = string;
     }
@@ -100,6 +111,8 @@ export declare namespace Popover {
 export declare function Popover2(): null;
 export declare namespace Popover2 {
     export { C as b };
+    var _b: typeof import("./declarationEmitExpandoTypeOnlyNamespaceMember").Target;
+    export { _b as Target };
 }
 export declare namespace Popover2 {
     namespace Target {

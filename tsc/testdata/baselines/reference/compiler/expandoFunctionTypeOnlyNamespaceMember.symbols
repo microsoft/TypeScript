@@ -5,94 +5,116 @@ function f1() {}
 >f1 : Symbol(f1, Decl(variants.ts, 0, 0), Decl(variants.ts, 1, 9))
 
 f1.a = 0;
+>f1.a : Symbol(f1.a, Decl(variants.ts, 2, 14), Decl(variants.ts, 0, 16))
 >f1 : Symbol(f1, Decl(variants.ts, 0, 0), Decl(variants.ts, 1, 9))
+>a : Symbol(f1.a, Decl(variants.ts, 2, 14), Decl(variants.ts, 0, 16))
 
 namespace f1 { export type a = 0; }
 >f1 : Symbol(f1, Decl(variants.ts, 0, 0), Decl(variants.ts, 1, 9))
->a : Symbol(a, Decl(variants.ts, 2, 14))
+>a : Symbol(a, Decl(variants.ts, 2, 14), Decl(variants.ts, 0, 16))
 
 const n1: number = f1.a;
 >n1 : Symbol(n1, Decl(variants.ts, 3, 5))
+>f1.a : Symbol(f1.a, Decl(variants.ts, 2, 14), Decl(variants.ts, 0, 16))
 >f1 : Symbol(f1, Decl(variants.ts, 0, 0), Decl(variants.ts, 1, 9))
+>a : Symbol(f1.a, Decl(variants.ts, 2, 14), Decl(variants.ts, 0, 16))
 
 const s1: string = f1.a; // error
 >s1 : Symbol(s1, Decl(variants.ts, 4, 5))
+>f1.a : Symbol(f1.a, Decl(variants.ts, 2, 14), Decl(variants.ts, 0, 16))
 >f1 : Symbol(f1, Decl(variants.ts, 0, 0), Decl(variants.ts, 1, 9))
+>a : Symbol(f1.a, Decl(variants.ts, 2, 14), Decl(variants.ts, 0, 16))
 
 const t1: f1.a = 0;
 >t1 : Symbol(t1, Decl(variants.ts, 5, 5))
 >f1 : Symbol(f1, Decl(variants.ts, 0, 0), Decl(variants.ts, 1, 9))
->a : Symbol(f1.a, Decl(variants.ts, 2, 14))
+>a : Symbol(f1.a, Decl(variants.ts, 2, 14), Decl(variants.ts, 0, 16))
 
 function f2() {}
 >f2 : Symbol(f2, Decl(variants.ts, 5, 19), Decl(variants.ts, 8, 9))
 
 f2.a = 0;
+>f2.a : Symbol(f2.a, Decl(variants.ts, 9, 14), Decl(variants.ts, 7, 16))
 >f2 : Symbol(f2, Decl(variants.ts, 5, 19), Decl(variants.ts, 8, 9))
+>a : Symbol(f2.a, Decl(variants.ts, 9, 14), Decl(variants.ts, 7, 16))
 
 namespace f2 { export interface a { x: string } }
 >f2 : Symbol(f2, Decl(variants.ts, 5, 19), Decl(variants.ts, 8, 9))
->a : Symbol(a, Decl(variants.ts, 9, 14))
+>a : Symbol(a, Decl(variants.ts, 9, 14), Decl(variants.ts, 7, 16))
 >x : Symbol(a.x, Decl(variants.ts, 9, 35))
 
 const n2: number = f2.a;
 >n2 : Symbol(n2, Decl(variants.ts, 10, 5))
+>f2.a : Symbol(f2.a, Decl(variants.ts, 9, 14), Decl(variants.ts, 7, 16))
 >f2 : Symbol(f2, Decl(variants.ts, 5, 19), Decl(variants.ts, 8, 9))
+>a : Symbol(f2.a, Decl(variants.ts, 9, 14), Decl(variants.ts, 7, 16))
 
 const t2: f2.a = { x: "" };
 >t2 : Symbol(t2, Decl(variants.ts, 11, 5))
 >f2 : Symbol(f2, Decl(variants.ts, 5, 19), Decl(variants.ts, 8, 9))
->a : Symbol(f2.a, Decl(variants.ts, 9, 14))
+>a : Symbol(f2.a, Decl(variants.ts, 9, 14), Decl(variants.ts, 7, 16))
 >x : Symbol(x, Decl(variants.ts, 11, 18))
 
 function f3() {}
 >f3 : Symbol(f3, Decl(variants.ts, 11, 27), Decl(variants.ts, 14, 9))
 
 f3.a = 0;
+>f3.a : Symbol(f3.a, Decl(variants.ts, 15, 14), Decl(variants.ts, 13, 16))
 >f3 : Symbol(f3, Decl(variants.ts, 11, 27), Decl(variants.ts, 14, 9))
+>a : Symbol(f3.a, Decl(variants.ts, 15, 14), Decl(variants.ts, 13, 16))
 
 namespace f3 { export namespace a {} }
 >f3 : Symbol(f3, Decl(variants.ts, 11, 27), Decl(variants.ts, 14, 9))
->a : Symbol(a, Decl(variants.ts, 15, 14))
+>a : Symbol(a, Decl(variants.ts, 15, 14), Decl(variants.ts, 13, 16))
 
 const n3: number = f3.a;
 >n3 : Symbol(n3, Decl(variants.ts, 16, 5))
+>f3.a : Symbol(f3.a, Decl(variants.ts, 15, 14), Decl(variants.ts, 13, 16))
 >f3 : Symbol(f3, Decl(variants.ts, 11, 27), Decl(variants.ts, 14, 9))
+>a : Symbol(f3.a, Decl(variants.ts, 15, 14), Decl(variants.ts, 13, 16))
 
 function f4() {}
 >f4 : Symbol(f4, Decl(variants.ts, 16, 24), Decl(variants.ts, 19, 9))
 
 f4.a = 0;
+>f4.a : Symbol(f4.a, Decl(variants.ts, 20, 14), Decl(variants.ts, 18, 16))
 >f4 : Symbol(f4, Decl(variants.ts, 16, 24), Decl(variants.ts, 19, 9))
+>a : Symbol(f4.a, Decl(variants.ts, 20, 14), Decl(variants.ts, 18, 16))
 
 namespace f4 { export namespace a { export type T = string; } }
 >f4 : Symbol(f4, Decl(variants.ts, 16, 24), Decl(variants.ts, 19, 9))
->a : Symbol(a, Decl(variants.ts, 20, 14))
+>a : Symbol(a, Decl(variants.ts, 20, 14), Decl(variants.ts, 18, 16))
 >T : Symbol(T, Decl(variants.ts, 20, 35))
 
 const n4: number = f4.a;
 >n4 : Symbol(n4, Decl(variants.ts, 21, 5))
+>f4.a : Symbol(f4.a, Decl(variants.ts, 20, 14), Decl(variants.ts, 18, 16))
 >f4 : Symbol(f4, Decl(variants.ts, 16, 24), Decl(variants.ts, 19, 9))
+>a : Symbol(f4.a, Decl(variants.ts, 20, 14), Decl(variants.ts, 18, 16))
 
 const t4: f4.a.T = "";
 >t4 : Symbol(t4, Decl(variants.ts, 22, 5))
 >f4 : Symbol(f4, Decl(variants.ts, 16, 24), Decl(variants.ts, 19, 9))
->a : Symbol(f4.a, Decl(variants.ts, 20, 14))
+>a : Symbol(f4.a, Decl(variants.ts, 20, 14), Decl(variants.ts, 18, 16))
 >T : Symbol(f4.a.T, Decl(variants.ts, 20, 35))
 
 namespace f5 { export type a = 0; }
 >f5 : Symbol(f5, Decl(variants.ts, 24, 35), Decl(variants.ts, 22, 22))
->a : Symbol(a, Decl(variants.ts, 24, 14))
+>a : Symbol(a, Decl(variants.ts, 24, 14), Decl(variants.ts, 25, 16))
 
 function f5() {}
 >f5 : Symbol(f5, Decl(variants.ts, 24, 35), Decl(variants.ts, 22, 22))
 
 f5.a = 0;
+>f5.a : Symbol(f5.a, Decl(variants.ts, 24, 14), Decl(variants.ts, 25, 16))
 >f5 : Symbol(f5, Decl(variants.ts, 24, 35), Decl(variants.ts, 22, 22))
+>a : Symbol(f5.a, Decl(variants.ts, 24, 14), Decl(variants.ts, 25, 16))
 
 const n5: number = f5.a;
 >n5 : Symbol(n5, Decl(variants.ts, 27, 5))
+>f5.a : Symbol(f5.a, Decl(variants.ts, 24, 14), Decl(variants.ts, 25, 16))
 >f5 : Symbol(f5, Decl(variants.ts, 24, 35), Decl(variants.ts, 22, 22))
+>a : Symbol(f5.a, Decl(variants.ts, 24, 14), Decl(variants.ts, 25, 16))
 
 function f6() {}
 >f6 : Symbol(f6, Decl(variants.ts, 27, 24), Decl(variants.ts, 30, 9))
@@ -161,7 +183,9 @@ export function Popover() { return null; }
 >Popover : Symbol(Popover, Decl(popover.ts, 0, 0), Decl(popover.ts, 2, 32))
 
 Popover.Target = (x: number) => x;
+>Popover.Target : Symbol(Popover.Target, Decl(popover.ts, 4, 26), Decl(popover.ts, 0, 42))
 >Popover : Symbol(Popover, Decl(popover.ts, 0, 0), Decl(popover.ts, 2, 32))
+>Target : Symbol(Popover.Target, Decl(popover.ts, 4, 26), Decl(popover.ts, 0, 42))
 >x : Symbol(x, Decl(popover.ts, 1, 18))
 >x : Symbol(x, Decl(popover.ts, 1, 18))
 
@@ -174,7 +198,7 @@ export namespace Popover {
 >Popover : Symbol(Popover, Decl(popover.ts, 0, 0), Decl(popover.ts, 2, 32))
 
   export namespace Target {
->Target : Symbol(Target, Decl(popover.ts, 4, 26))
+>Target : Symbol(Target, Decl(popover.ts, 4, 26), Decl(popover.ts, 0, 42))
 
     export type Props = number;
 >Props : Symbol(Props, Decl(popover.ts, 5, 27))
@@ -182,7 +206,9 @@ export namespace Popover {
 }
 
 Popover.Target(1);
+>Popover.Target : Symbol(Popover.Target, Decl(popover.ts, 4, 26), Decl(popover.ts, 0, 42))
 >Popover : Symbol(Popover, Decl(popover.ts, 0, 0), Decl(popover.ts, 2, 32))
+>Target : Symbol(Popover.Target, Decl(popover.ts, 4, 26), Decl(popover.ts, 0, 42))
 
 Popover.displayName;
 >Popover.displayName : Symbol(Popover.displayName, Decl(popover.ts, 1, 34))
@@ -192,6 +218,6 @@ Popover.displayName;
 const props: Popover.Target.Props = 1;
 >props : Symbol(props, Decl(popover.ts, 12, 5))
 >Popover : Symbol(Popover, Decl(popover.ts, 0, 0), Decl(popover.ts, 2, 32))
->Target : Symbol(Popover.Target, Decl(popover.ts, 4, 26))
+>Target : Symbol(Popover.Target, Decl(popover.ts, 4, 26), Decl(popover.ts, 0, 42))
 >Props : Symbol(Popover.Target.Props, Decl(popover.ts, 5, 27))
 
