@@ -31,7 +31,7 @@ let x2 = 1;
 >1 : 1
 
 let { a = "foo" } = { a: "foo" };
->a : string
+>a : string (origin: string | "foo")
 >"foo" : "foo"
 >{ a: "foo" } : { a?: string; }
 >a : string
@@ -46,7 +46,7 @@ let { b = "foo" as "foo" } = { b: "bar" };
 >"bar" : "bar"
 
 let { c = "foo" } = { c: "bar" as "bar" };
->c : string
+>c : string (origin: string | "bar")
 >"foo" : "foo"
 >{ c: "bar" as "bar" } : { c?: "bar"; }
 >c : "bar"

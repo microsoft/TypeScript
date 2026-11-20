@@ -25,13 +25,13 @@ function Greet(x: {name: string}) {
 }
 function Meet({name = 'world'}) {
 >Meet : ({ name }: { name?: string | undefined; }) => JSX.Element
->name : string
+>name : string (origin: string | "world")
 >'world' : "world"
 
 	return <div>Hello, {name}</div>;
 ><div>Hello, {name}</div> : JSX.Element
 >div : any
->name : string
+>name : string (origin: string | "world")
 >div : any
 }
 function MeetAndGreet(k: {"prop-name": string}) {

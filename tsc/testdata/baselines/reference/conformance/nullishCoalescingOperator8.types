@@ -12,16 +12,16 @@ declare const b: { p: string | undefined, m(): string | undefined };
 >m : () => string | undefined
 
 const n1 = a.p ?? "default";
->n1 : string
->a.p ?? "default" : string
+>n1 : string (origin: string | "default")
+>a.p ?? "default" : string (origin: string | "default")
 >a.p : string | undefined
 >a : { p: string | undefined; m(): string | undefined; }
 >p : string | undefined
 >"default" : "default"
 
 const n2 = a.m() ?? "default";
->n2 : string
->a.m() ?? "default" : string
+>n2 : string (origin: string | "default")
+>a.m() ?? "default" : string (origin: string | "default")
 >a.m() : string | undefined
 >a.m : () => string | undefined
 >a : { p: string | undefined; m(): string | undefined; }
@@ -29,8 +29,8 @@ const n2 = a.m() ?? "default";
 >"default" : "default"
 
 const n3 = a.m() ?? b.p ?? b.m() ?? "default";;
->n3 : string
->a.m() ?? b.p ?? b.m() ?? "default" : string
+>n3 : string (origin: string | "default")
+>a.m() ?? b.p ?? b.m() ?? "default" : string (origin: string | "default")
 >a.m() ?? b.p ?? b.m() : string | undefined
 >a.m() ?? b.p : string | undefined
 >a.m() : string | undefined

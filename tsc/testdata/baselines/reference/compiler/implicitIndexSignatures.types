@@ -233,7 +233,7 @@ function f5() {
 >E2 : typeof E2
 
     const v3 = getStringIndexValue(E3);
->v3 : string | E3.A
+>v3 : string | E3.A (origin: string | E3)
 >getStringIndexValue(E3) : string | E3.A
 >getStringIndexValue : <T>(map: { [x: string]: T; }) => T
 >E3 : typeof E3

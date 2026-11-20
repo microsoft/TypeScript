@@ -23,6 +23,6 @@
 
             x *= x;
 >x *= x : number
->x : number
->x : number
+>x : number (origin: number | 3)
+>x : number (origin: number | 3)
     }

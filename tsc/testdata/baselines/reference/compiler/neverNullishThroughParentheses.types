@@ -11,9 +11,9 @@ const x: { y: string | undefined } | undefined = undefined as any;
 
 // Both should error - both expressions are guaranteed to be "oops"
 const foo = x?.y ?? `oops` ?? "";
->foo : string
->x?.y ?? `oops` ?? "" : string
->x?.y ?? `oops` : string
+>foo : string (origin: string | "oops")
+>x?.y ?? `oops` ?? "" : string (origin: string | "oops")
+>x?.y ?? `oops` : string (origin: string | "oops")
 >x?.y : string | undefined
 >x : { y: string | undefined; } | undefined
 >y : string | undefined
@@ -21,10 +21,10 @@ const foo = x?.y ?? `oops` ?? "";
 >"" : ""
 
 const bar = (x?.y ?? `oops`) ?? "";
->bar : string
->(x?.y ?? `oops`) ?? "" : string
->(x?.y ?? `oops`) : string
->x?.y ?? `oops` : string
+>bar : string (origin: string | "oops")
+>(x?.y ?? `oops`) ?? "" : string (origin: string | "oops")
+>(x?.y ?? `oops`) : string (origin: string | "oops")
+>x?.y ?? `oops` : string (origin: string | "oops")
 >x?.y : string | undefined
 >x : { y: string | undefined; } | undefined
 >y : string | undefined
@@ -33,11 +33,11 @@ const bar = (x?.y ?? `oops`) ?? "";
 
 // Additional test cases with various levels of nesting
 const baz = ((x?.y ?? `oops`)) ?? "";
->baz : string
->((x?.y ?? `oops`)) ?? "" : string
->((x?.y ?? `oops`)) : string
->(x?.y ?? `oops`) : string
->x?.y ?? `oops` : string
+>baz : string (origin: string | "oops")
+>((x?.y ?? `oops`)) ?? "" : string (origin: string | "oops")
+>((x?.y ?? `oops`)) : string (origin: string | "oops")
+>(x?.y ?? `oops`) : string (origin: string | "oops")
+>x?.y ?? `oops` : string (origin: string | "oops")
 >x?.y : string | undefined
 >x : { y: string | undefined; } | undefined
 >y : string | undefined
@@ -45,12 +45,12 @@ const baz = ((x?.y ?? `oops`)) ?? "";
 >"" : ""
 
 const qux = (((x?.y ?? `oops`))) ?? "";
->qux : string
->(((x?.y ?? `oops`))) ?? "" : string
->(((x?.y ?? `oops`))) : string
->((x?.y ?? `oops`)) : string
->(x?.y ?? `oops`) : string
->x?.y ?? `oops` : string
+>qux : string (origin: string | "oops")
+>(((x?.y ?? `oops`))) ?? "" : string (origin: string | "oops")
+>(((x?.y ?? `oops`))) : string (origin: string | "oops")
+>((x?.y ?? `oops`)) : string (origin: string | "oops")
+>(x?.y ?? `oops`) : string (origin: string | "oops")
+>x?.y ?? `oops` : string (origin: string | "oops")
 >x?.y : string | undefined
 >x : { y: string | undefined; } | undefined
 >y : string | undefined

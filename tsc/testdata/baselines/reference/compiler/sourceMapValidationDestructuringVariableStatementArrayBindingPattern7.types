@@ -2,7 +2,7 @@
 
 === sourceMapValidationDestructuringVariableStatementArrayBindingPattern7.ts ===
 var [x = 20, j] = [1, 2];
->x : number
+>x : number (origin: number | 20)
 >20 : 20
 >j : number
 >[1, 2] : [number, number]

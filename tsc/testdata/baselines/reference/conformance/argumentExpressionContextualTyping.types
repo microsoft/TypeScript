@@ -16,7 +16,7 @@ function bar({x: [a, b = 10], y: {c, d, e = { f:1 }}}) { }
 >bar : ({ x: [a, b], y: { c, d, e } }: { x: [any, (number | undefined)?]; y: { c: any; d: any; e?: { f: number; } | undefined; }; }) => void
 >x : any
 >a : any
->b : number
+>b : number (origin: number | 10)
 >10 : 10
 >y : any
 >c : any

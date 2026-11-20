@@ -5,8 +5,8 @@ declare function f(): string | undefined;
 >f : () => string | undefined
 
 let gg = f() ?? 'foo'
->gg : string
->f() ?? 'foo' : string
+>gg : string (origin: string | "foo")
+>f() ?? 'foo' : string (origin: string | "foo")
 >f() : string | undefined
 >f : () => string | undefined
 >'foo' : "foo"

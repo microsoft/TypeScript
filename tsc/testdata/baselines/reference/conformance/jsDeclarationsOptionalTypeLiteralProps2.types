@@ -21,12 +21,12 @@ function foo({ a, b, c }) {
 >a + (b ?? 0) + (c ?? 0) : number
 >a + (b ?? 0) : number
 >a : number
->(b ?? 0) : number
->b ?? 0 : number
+>(b ?? 0) : number (origin: number | 0)
+>b ?? 0 : number (origin: number | 0)
 >b : number | undefined
 >0 : 0
->(c ?? 0) : number
->c ?? 0 : number
+>(c ?? 0) : number (origin: number | 0)
+>c ?? 0 : number (origin: number | 0)
 >c : number | undefined
 >0 : 0
 }

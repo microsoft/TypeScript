@@ -1,0 +1,46 @@
+//// [tests/cases/compiler/controlFlowLiteralOriginNormalization.ts] ////
+
+=== controlFlowLiteralOriginNormalization.ts ===
+declare const gridMap: { startRow: number; startColumn: number }[][];
+>gridMap : Symbol(gridMap, Decl(controlFlowLiteralOriginNormalization.ts, 0, 13))
+>startRow : Symbol(startRow, Decl(controlFlowLiteralOriginNormalization.ts, 0, 24))
+>startColumn : Symbol(startColumn, Decl(controlFlowLiteralOriginNormalization.ts, 0, 42))
+
+for (let i = 0; i < gridMap.length; i++) {
+>i : Symbol(i, Decl(controlFlowLiteralOriginNormalization.ts, 1, 8))
+>i : Symbol(i, Decl(controlFlowLiteralOriginNormalization.ts, 1, 8))
+>gridMap.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>gridMap : Symbol(gridMap, Decl(controlFlowLiteralOriginNormalization.ts, 0, 13))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>i : Symbol(i, Decl(controlFlowLiteralOriginNormalization.ts, 1, 8))
+
+    if (i !== 0) {
+>i : Symbol(i, Decl(controlFlowLiteralOriginNormalization.ts, 1, 8))
+    }
+    for (let j = 0; j < gridMap[0].length; j++) {
+>j : Symbol(j, Decl(controlFlowLiteralOriginNormalization.ts, 4, 12))
+>j : Symbol(j, Decl(controlFlowLiteralOriginNormalization.ts, 4, 12))
+>gridMap[0].length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>gridMap : Symbol(gridMap, Decl(controlFlowLiteralOriginNormalization.ts, 0, 13))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>j : Symbol(j, Decl(controlFlowLiteralOriginNormalization.ts, 4, 12))
+
+        const cellMap = gridMap[i][j];
+>cellMap : Symbol(cellMap, Decl(controlFlowLiteralOriginNormalization.ts, 5, 13))
+>gridMap : Symbol(gridMap, Decl(controlFlowLiteralOriginNormalization.ts, 0, 13))
+>i : Symbol(i, Decl(controlFlowLiteralOriginNormalization.ts, 1, 8))
+>j : Symbol(j, Decl(controlFlowLiteralOriginNormalization.ts, 4, 12))
+
+        if (cellMap.startRow === i && cellMap.startColumn === j) {
+>cellMap.startRow : Symbol(startRow, Decl(controlFlowLiteralOriginNormalization.ts, 0, 24))
+>cellMap : Symbol(cellMap, Decl(controlFlowLiteralOriginNormalization.ts, 5, 13))
+>startRow : Symbol(startRow, Decl(controlFlowLiteralOriginNormalization.ts, 0, 24))
+>i : Symbol(i, Decl(controlFlowLiteralOriginNormalization.ts, 1, 8))
+>cellMap.startColumn : Symbol(startColumn, Decl(controlFlowLiteralOriginNormalization.ts, 0, 42))
+>cellMap : Symbol(cellMap, Decl(controlFlowLiteralOriginNormalization.ts, 5, 13))
+>startColumn : Symbol(startColumn, Decl(controlFlowLiteralOriginNormalization.ts, 0, 42))
+>j : Symbol(j, Decl(controlFlowLiteralOriginNormalization.ts, 4, 12))
+        }
+    }
+}
+

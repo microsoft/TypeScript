@@ -9,7 +9,7 @@ class NumberOrUndefined {
 
     get x(): number { return this._x ?? 0; }
 >x : number
->this._x ?? 0 : number
+>this._x ?? 0 : number (origin: number | 0)
 >this._x : number | undefined
 >this : this
 >_x : number | undefined

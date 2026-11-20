@@ -7,7 +7,7 @@ function stringify1(anything: { toString(): string } | undefined): string {
 >toString : () => string
 
     return typeof anything === "string" ? anything.toUpperCase() : "";
->typeof anything === "string" ? anything.toUpperCase() : "" : string
+>typeof anything === "string" ? anything.toUpperCase() : "" : string (origin: string | "")
 >typeof anything === "string" : boolean
 >typeof anything : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >anything : { toString(): string; } | undefined
@@ -24,7 +24,7 @@ function stringify2(anything: {} | undefined): string {
 >anything : {} | undefined
 
     return typeof anything === "string" ? anything.toUpperCase() : "";
->typeof anything === "string" ? anything.toUpperCase() : "" : string
+>typeof anything === "string" ? anything.toUpperCase() : "" : string (origin: string | "")
 >typeof anything === "string" : boolean
 >typeof anything : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >anything : {} | undefined
@@ -41,7 +41,7 @@ function stringify3(anything: unknown | undefined): string { // should simplify 
 >anything : unknown
 
     return typeof anything === "string" ? anything.toUpperCase() : "";
->typeof anything === "string" ? anything.toUpperCase() : "" : string
+>typeof anything === "string" ? anything.toUpperCase() : "" : string (origin: string | "")
 >typeof anything === "string" : boolean
 >typeof anything : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >anything : unknown
@@ -59,7 +59,7 @@ function stringify4(anything: { toString?(): string } | undefined): string {
 >toString : (() => string) | undefined
 
     return typeof anything === "string" ? anything.toUpperCase() : "";
->typeof anything === "string" ? anything.toUpperCase() : "" : string
+>typeof anything === "string" ? anything.toUpperCase() : "" : string (origin: string | "")
 >typeof anything === "string" : boolean
 >typeof anything : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >anything : { toString?(): string; } | undefined

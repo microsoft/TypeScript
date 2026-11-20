@@ -295,7 +295,7 @@ export function g(pair: [number, string?]): string {
 >pair : [number, (string | undefined)?]
 
     return pair[1] ? pair[1] : 'nope';
->pair[1] ? pair[1] : 'nope' : string
+>pair[1] ? pair[1] : 'nope' : string (origin: string | "nope")
 >pair[1] : string | undefined
 >pair : [number, (string | undefined)?]
 >1 : 1

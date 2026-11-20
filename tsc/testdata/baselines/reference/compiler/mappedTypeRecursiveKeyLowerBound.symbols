@@ -1,0 +1,36 @@
+//// [tests/cases/compiler/mappedTypeRecursiveKeyLowerBound.ts] ////
+
+=== mappedTypeRecursiveKeyLowerBound.ts ===
+type Merge<A, B> = Omit<A, keyof B> & B;
+>Merge : Symbol(Merge, Decl(mappedTypeRecursiveKeyLowerBound.ts, 0, 0))
+>A : Symbol(A, Decl(mappedTypeRecursiveKeyLowerBound.ts, 0, 11))
+>B : Symbol(B, Decl(mappedTypeRecursiveKeyLowerBound.ts, 0, 13))
+>Omit : Symbol(Omit, Decl(lib.es5.d.ts, --, --))
+>A : Symbol(A, Decl(mappedTypeRecursiveKeyLowerBound.ts, 0, 11))
+>B : Symbol(B, Decl(mappedTypeRecursiveKeyLowerBound.ts, 0, 13))
+>B : Symbol(B, Decl(mappedTypeRecursiveKeyLowerBound.ts, 0, 13))
+
+type Options<T> = Omit<Merge<{ a: number }, T>, "unused">;
+>Options : Symbol(Options, Decl(mappedTypeRecursiveKeyLowerBound.ts, 0, 40))
+>T : Symbol(T, Decl(mappedTypeRecursiveKeyLowerBound.ts, 1, 13))
+>Omit : Symbol(Omit, Decl(lib.es5.d.ts, --, --))
+>Merge : Symbol(Merge, Decl(mappedTypeRecursiveKeyLowerBound.ts, 0, 0))
+>a : Symbol(a, Decl(mappedTypeRecursiveKeyLowerBound.ts, 1, 30))
+>T : Symbol(T, Decl(mappedTypeRecursiveKeyLowerBound.ts, 1, 13))
+
+type Constrained<T extends Options<T>> = T;
+>Constrained : Symbol(Constrained, Decl(mappedTypeRecursiveKeyLowerBound.ts, 1, 58))
+>T : Symbol(T, Decl(mappedTypeRecursiveKeyLowerBound.ts, 3, 17))
+>Options : Symbol(Options, Decl(mappedTypeRecursiveKeyLowerBound.ts, 0, 40))
+>T : Symbol(T, Decl(mappedTypeRecursiveKeyLowerBound.ts, 3, 17))
+>T : Symbol(T, Decl(mappedTypeRecursiveKeyLowerBound.ts, 3, 17))
+
+type Resolved<T extends Options<T>> = Constrained<Options<T>>;
+>Resolved : Symbol(Resolved, Decl(mappedTypeRecursiveKeyLowerBound.ts, 3, 43))
+>T : Symbol(T, Decl(mappedTypeRecursiveKeyLowerBound.ts, 4, 14))
+>Options : Symbol(Options, Decl(mappedTypeRecursiveKeyLowerBound.ts, 0, 40))
+>T : Symbol(T, Decl(mappedTypeRecursiveKeyLowerBound.ts, 4, 14))
+>Constrained : Symbol(Constrained, Decl(mappedTypeRecursiveKeyLowerBound.ts, 1, 58))
+>Options : Symbol(Options, Decl(mappedTypeRecursiveKeyLowerBound.ts, 0, 40))
+>T : Symbol(T, Decl(mappedTypeRecursiveKeyLowerBound.ts, 4, 14))
+

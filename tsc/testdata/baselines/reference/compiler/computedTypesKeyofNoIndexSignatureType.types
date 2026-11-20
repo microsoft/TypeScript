@@ -38,7 +38,7 @@ type FooBarKey = keyof FooBar;             // "foo" | "bar"   <-- OK
 >FooBarKey : keyof FooBar
 
 type WithIndexKey = keyof WithIndex;       // string | number <-- Expected: string 
->WithIndexKey : string | number
+>WithIndexKey : string | number (origin: string | number | "bar" | "foo")
 
 type WithoutIndexKey = keyof WithoutIndex; // number          <-- Expected: "foo" | "bar"
 >WithoutIndexKey : "bar" | "foo"

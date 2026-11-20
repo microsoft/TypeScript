@@ -125,7 +125,7 @@ let p1: Point = {
 >dy : number
 
         if (this.z && dz) {
->this.z && dz : number | undefined
+>this.z && dz : number | undefined (origin: number | 0 | undefined)
 >this.z : number | undefined
 >this : Point
 >z : number | undefined
@@ -174,7 +174,7 @@ let p2: Point | null = {
 >dy : number
 
         if (this.z && dz) {
->this.z && dz : number | undefined
+>this.z && dz : number | undefined (origin: number | 0 | undefined)
 >this.z : number | undefined
 >this : Point
 >z : number | undefined
@@ -223,7 +223,7 @@ let p3: Point | undefined = {
 >dy : number
 
         if (this.z && dz) {
->this.z && dz : number | undefined
+>this.z && dz : number | undefined (origin: number | 0 | undefined)
 >this.z : number | undefined
 >this : Point
 >z : number | undefined
@@ -272,7 +272,7 @@ let p4: Point | null | undefined = {
 >dy : number
 
         if (this.z && dz) {
->this.z && dz : number | undefined
+>this.z && dz : number | undefined (origin: number | 0 | undefined)
 >this.z : number | undefined
 >this : Point
 >z : number | undefined
@@ -326,7 +326,7 @@ f1({
 >dy : number
 
         if (this.z && dz) {
->this.z && dz : number | undefined
+>this.z && dz : number | undefined (origin: number | 0 | undefined)
 >this.z : number | undefined
 >this : Point
 >z : number | undefined
@@ -380,7 +380,7 @@ f2({
 >dy : number
 
         if (this.z && dz) {
->this.z && dz : number | undefined
+>this.z && dz : number | undefined (origin: number | 0 | undefined)
 >this.z : number | undefined
 >this : Point
 >z : number | undefined

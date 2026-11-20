@@ -207,7 +207,7 @@ function c1({z} = { z: 10 }) { }
 
 function c2({z = 10}) { }
 >c2 : ({ z }: { z?: number | undefined; }) => void
->z : number
+>z : number (origin: number | 10)
 >10 : 10
 
 function c3({b}: { b: number|string} = { b: "hello" }) { }
@@ -228,7 +228,7 @@ function c6([a, b, [[c=1]]]) { }
 >c6 : ([a, b, [[c]]]: [any, any, [[(number | undefined)?]]]) => void
 >a : any
 >b : any
->c : number
+>c : number (origin: number | 1)
 >1 : 1
 
 c0({z : { x: 1, y: { j: "world" } }});      // Implied type is { z: {x: any, y: {j: any}} }

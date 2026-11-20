@@ -148,8 +148,8 @@ function f6(x: string | undefined) {
 >x : string | undefined
 
     const y = x || "";
->y : string
->x || "" : string
+>y : string (origin: string | "")
+>x || "" : string (origin: string | "")
 >x : string | undefined
 >"" : ""
 
@@ -161,7 +161,7 @@ function f6(x: string | undefined) {
 >doSomething : (cb: () => void) => void
 >() => y.length : () => number
 >y.length : number
->y : string
+>y : string (origin: string | "")
 >length : number
     }
 }

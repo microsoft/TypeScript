@@ -232,8 +232,8 @@ function f1(x: Partial<Foo>) {
     (x["other"] || 0).toFixed();
 >(x["other"] || 0).toFixed() : string
 >(x["other"] || 0).toFixed : (fractionDigits?: number) => string
->(x["other"] || 0) : number
->x["other"] || 0 : number
+>(x["other"] || 0) : number (origin: number | 0)
+>x["other"] || 0 : number (origin: number | 0)
 >x["other"] : number | undefined
 >x : Partial<Foo>
 >"other" : "other"

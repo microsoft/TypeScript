@@ -53,50 +53,50 @@ declare const d4: I | undefined | null
 >d4 : I | null | undefined
 
 const aa1 = a1 ?? 'whatever';
->aa1 : string
->a1 ?? 'whatever' : string
+>aa1 : string (origin: string | "whatever")
+>a1 ?? 'whatever' : string (origin: string | "whatever")
 >a1 : string | null | undefined
 >'whatever' : "whatever"
 
 const aa2 = a2 ?? 'whatever';
->aa2 : string
->a2 ?? 'whatever' : string
+>aa2 : string (origin: string | "whatever")
+>a2 ?? 'whatever' : string (origin: string | "whatever")
 >a2 : string | null | undefined
 >'whatever' : "whatever"
 
 const aa3 = a3 ?? 'whatever';
->aa3 : string
->a3 ?? 'whatever' : string
+>aa3 : string (origin: string | "whatever")
+>a3 ?? 'whatever' : string (origin: string | "whatever")
 >a3 : string | null | undefined
 >'whatever' : "whatever"
 
 const aa4 = a4 ?? 'whatever';
->aa4 : string
->a4 ?? 'whatever' : string
+>aa4 : string (origin: string | "whatever")
+>a4 ?? 'whatever' : string (origin: string | "whatever")
 >a4 : string | null | undefined
 >'whatever' : "whatever"
 
 const bb1 = b1 ?? 1;
->bb1 : number
->b1 ?? 1 : number
+>bb1 : number (origin: number | 1)
+>b1 ?? 1 : number (origin: number | 1)
 >b1 : number | null | undefined
 >1 : 1
 
 const bb2 = b2 ?? 1;
->bb2 : number
->b2 ?? 1 : number
+>bb2 : number (origin: number | 1)
+>b2 ?? 1 : number (origin: number | 1)
 >b2 : number | null | undefined
 >1 : 1
 
 const bb3 = b3 ?? 1;
->bb3 : number
->b3 ?? 1 : number
+>bb3 : number (origin: number | 1)
+>b3 ?? 1 : number (origin: number | 1)
 >b3 : number | null | undefined
 >1 : 1
 
 const bb4 = b4 ?? 1;
->bb4 : number
->b4 ?? 1 : number
+>bb4 : number (origin: number | 1)
+>b4 ?? 1 : number (origin: number | 1)
 >b4 : number | null | undefined
 >1 : 1
 

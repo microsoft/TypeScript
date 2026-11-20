@@ -1313,10 +1313,13 @@ func (c *Checker) getTypeAtFlowBranchLabel(f *FlowState, flow *ast.FlowNode, ant
 // finalize all evolving array types.
 func (c *Checker) getUnionOrEvolvingArrayType(f *FlowState, types []*Type, subtypeReduction UnionReduction) *Type {
 	if isEvolvingArrayTypeList(types) {
-		return c.getEvolvingArrayType(c.getUnionType(core.Map(types, c.getElementTypeOfEvolvingArrayType)))
+		return c.getEvolvingArrayType(c.getUnionTypeWithLiteralOrigins(core.Map(types, c.getElementTypeOfEvolvingArrayType), UnionReductionLiteral))
 	}
 	result := c.recombineUnknownType(c.getUnionTypeEx(core.SameMap(types, c.finalizeEvolvingArrayType), subtypeReduction, nil, nil))
-	if result != f.declaredType && result.flags&f.declaredType.flags&TypeFlagsUnion != 0 && slices.Equal(result.AsUnionType().types, f.declaredType.AsUnionType().types) {
+	// Literal-origin metadata can change type identity without narrowing the semantic target.
+	if result != f.declaredType &&
+		(c.getOriginTarget(result) == c.getOriginTarget(f.declaredType) ||
+			result.flags&f.declaredType.flags&TypeFlagsUnion != 0 && slices.Equal(result.AsUnionType().types, f.declaredType.AsUnionType().types)) {
 		return f.declaredType
 	}
 	return result
@@ -1557,10 +1560,14 @@ func (c *Checker) isEvolvingArrayOperationTarget(node *ast.Node) bool {
 func (c *Checker) addEvolvingArrayElementType(evolvingArrayType *Type, node *ast.Node) *Type {
 	newElementType := c.getRegularTypeOfObjectLiteral(c.getBaseTypeOfLiteralType(c.getContextFreeTypeOfExpression(node)))
 	elementType := evolvingArrayType.AsEvolvingArrayType().elementType
-	if c.isTypeSubsetOf(newElementType, elementType) {
+	newOrigin := c.GetLiteralTypeOrigin(newElementType)
+	elementOrigin := c.GetLiteralTypeOrigin(elementType)
+	// Semantic coverage does not imply that the existing completion origins cover the new ones.
+	if c.isTypeSubsetOf(newElementType, elementType) &&
+		(newOrigin == nil || elementOrigin != nil && c.isTypeSubsetOf(newOrigin, elementOrigin)) {
 		return evolvingArrayType
 	}
-	return c.getEvolvingArrayType(c.getUnionType([]*Type{elementType, newElementType}))
+	return c.getEvolvingArrayType(c.getUnionTypeWithLiteralOrigins([]*Type{elementType, newElementType}, UnionReductionLiteral))
 }
 
 func (c *Checker) finalizeEvolvingArrayType(t *Type) *Type {
@@ -1582,7 +1589,7 @@ func (c *Checker) createFinalArrayType(elementType *Type) *Type {
 	case elementType.flags&TypeFlagsNever != 0:
 		return c.autoArrayType
 	case elementType.flags&TypeFlagsUnion != 0:
-		return c.createArrayType(c.getUnionTypeEx(elementType.Types(), UnionReductionSubtype, nil, nil))
+		return c.createArrayType(c.getUnionTypeWithLiteralOrigins([]*Type{elementType}, UnionReductionSubtype))
 	}
 	return c.createArrayType(elementType)
 }

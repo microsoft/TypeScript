@@ -256,7 +256,7 @@ xx = (xx ? x++ : 4, 10);
 >xx : any
 >(xx ? x++ : 4, 10) : 10
 >xx ? x++ : 4, 10 : 10
->xx ? x++ : 4 : number
+>xx ? x++ : 4 : number (origin: number | 4)
 >xx : any
 >x++ : number
 >x : number
