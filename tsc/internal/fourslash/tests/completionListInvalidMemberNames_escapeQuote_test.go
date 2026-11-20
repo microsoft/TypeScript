@@ -216,3 +216,24 @@ export { /*plain*/ } from "./lib";
 		})
 	}
 }
+
+func TestLiteralCompletionLoneSurrogate(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `declare function f(x: "\uD800"): void;
+f(/*argument*/);`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyCompletions(t, "argument", &fourslash.CompletionsExpectedList{
+		IsIncomplete: false,
+		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
+		},
+		Items: &fourslash.CompletionsExpectedItems{
+			Includes: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{Label: "\"\uFFFD\uFFFD\uFFFD\"", CommitCharacters: &[]string{}},
+			},
+		},
+	})
+}
