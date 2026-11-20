@@ -1,0 +1,89 @@
+//// [tests/cases/compiler/varianceMeasuredWithinCircularity.ts] ////
+
+=== varianceMeasuredWithinCircularity.ts ===
+// The variances of Selection and TransitionLike depend on each other.
+// The callback of `data` requires Selection to be covariant in P, while
+// `join` passes Selection<G, P> to a callback, which then requires it to
+// be contravariant in P, so Selection is invariant in P. TransitionLike
+// reaches P of a Selection through `selection().children()`, so it is
+// invariant in G. Both must hold whichever variance is measured first.
+
+export {};
+
+interface Base { base: string }
+>Base : Symbol(Base, Decl(varianceMeasuredWithinCircularity.ts, 7, 10))
+>base : Symbol(Base.base, Decl(varianceMeasuredWithinCircularity.ts, 9, 16))
+
+interface Derived extends Base { derived: string }
+>Derived : Symbol(Derived, Decl(varianceMeasuredWithinCircularity.ts, 9, 31))
+>Base : Symbol(Base, Decl(varianceMeasuredWithinCircularity.ts, 7, 10))
+>derived : Symbol(Derived.derived, Decl(varianceMeasuredWithinCircularity.ts, 10, 32))
+
+interface Selection<G, P> {
+>Selection : Symbol(Selection, Decl(varianceMeasuredWithinCircularity.ts, 10, 50))
+>G : Symbol(G, Decl(varianceMeasuredWithinCircularity.ts, 12, 20))
+>P : Symbol(P, Decl(varianceMeasuredWithinCircularity.ts, 12, 22))
+
+    data(key: (parent: P) => string): Selection<G, P>;
+>data : Symbol(Selection.data, Decl(varianceMeasuredWithinCircularity.ts, 12, 27))
+>key : Symbol(key, Decl(varianceMeasuredWithinCircularity.ts, 13, 9))
+>parent : Symbol(parent, Decl(varianceMeasuredWithinCircularity.ts, 13, 15))
+>P : Symbol(P, Decl(varianceMeasuredWithinCircularity.ts, 12, 22))
+>Selection : Symbol(Selection, Decl(varianceMeasuredWithinCircularity.ts, 10, 50))
+>G : Symbol(G, Decl(varianceMeasuredWithinCircularity.ts, 12, 20))
+>P : Symbol(P, Decl(varianceMeasuredWithinCircularity.ts, 12, 22))
+
+    join(enter: string | ((elem: Selection<G, P>) => Selection<G, P> | TransitionLike<G>)): Selection<G, P>;
+>join : Symbol(Selection.join, Decl(varianceMeasuredWithinCircularity.ts, 13, 54))
+>enter : Symbol(enter, Decl(varianceMeasuredWithinCircularity.ts, 14, 9))
+>elem : Symbol(elem, Decl(varianceMeasuredWithinCircularity.ts, 14, 27))
+>Selection : Symbol(Selection, Decl(varianceMeasuredWithinCircularity.ts, 10, 50))
+>G : Symbol(G, Decl(varianceMeasuredWithinCircularity.ts, 12, 20))
+>P : Symbol(P, Decl(varianceMeasuredWithinCircularity.ts, 12, 22))
+>Selection : Symbol(Selection, Decl(varianceMeasuredWithinCircularity.ts, 10, 50))
+>G : Symbol(G, Decl(varianceMeasuredWithinCircularity.ts, 12, 20))
+>P : Symbol(P, Decl(varianceMeasuredWithinCircularity.ts, 12, 22))
+>TransitionLike : Symbol(TransitionLike, Decl(varianceMeasuredWithinCircularity.ts, 16, 1))
+>G : Symbol(G, Decl(varianceMeasuredWithinCircularity.ts, 12, 20))
+>Selection : Symbol(Selection, Decl(varianceMeasuredWithinCircularity.ts, 10, 50))
+>G : Symbol(G, Decl(varianceMeasuredWithinCircularity.ts, 12, 20))
+>P : Symbol(P, Decl(varianceMeasuredWithinCircularity.ts, 12, 22))
+
+    children(): Selection<unknown, G>;
+>children : Symbol(Selection.children, Decl(varianceMeasuredWithinCircularity.ts, 14, 108))
+>Selection : Symbol(Selection, Decl(varianceMeasuredWithinCircularity.ts, 10, 50))
+>G : Symbol(G, Decl(varianceMeasuredWithinCircularity.ts, 12, 20))
+}
+
+interface TransitionLike<G> {
+>TransitionLike : Symbol(TransitionLike, Decl(varianceMeasuredWithinCircularity.ts, 16, 1))
+>G : Symbol(G, Decl(varianceMeasuredWithinCircularity.ts, 18, 25))
+
+    selection(): Selection<G, unknown>;
+>selection : Symbol(TransitionLike.selection, Decl(varianceMeasuredWithinCircularity.ts, 18, 29))
+>Selection : Symbol(Selection, Decl(varianceMeasuredWithinCircularity.ts, 10, 50))
+>G : Symbol(G, Decl(varianceMeasuredWithinCircularity.ts, 18, 25))
+}
+
+declare let s1: Selection<unknown, Derived>;
+>s1 : Symbol(s1, Decl(varianceMeasuredWithinCircularity.ts, 22, 11))
+>Selection : Symbol(Selection, Decl(varianceMeasuredWithinCircularity.ts, 10, 50))
+>Derived : Symbol(Derived, Decl(varianceMeasuredWithinCircularity.ts, 9, 31))
+
+let s2: Selection<unknown, Base> = s1;
+>s2 : Symbol(s2, Decl(varianceMeasuredWithinCircularity.ts, 23, 3))
+>Selection : Symbol(Selection, Decl(varianceMeasuredWithinCircularity.ts, 10, 50))
+>Base : Symbol(Base, Decl(varianceMeasuredWithinCircularity.ts, 7, 10))
+>s1 : Symbol(s1, Decl(varianceMeasuredWithinCircularity.ts, 22, 11))
+
+declare let t1: TransitionLike<Derived>;
+>t1 : Symbol(t1, Decl(varianceMeasuredWithinCircularity.ts, 25, 11))
+>TransitionLike : Symbol(TransitionLike, Decl(varianceMeasuredWithinCircularity.ts, 16, 1))
+>Derived : Symbol(Derived, Decl(varianceMeasuredWithinCircularity.ts, 9, 31))
+
+let t2: TransitionLike<Base> = t1;
+>t2 : Symbol(t2, Decl(varianceMeasuredWithinCircularity.ts, 26, 3))
+>TransitionLike : Symbol(TransitionLike, Decl(varianceMeasuredWithinCircularity.ts, 16, 1))
+>Base : Symbol(Base, Decl(varianceMeasuredWithinCircularity.ts, 7, 10))
+>t1 : Symbol(t1, Decl(varianceMeasuredWithinCircularity.ts, 25, 11))
+

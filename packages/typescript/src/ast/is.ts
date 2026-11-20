@@ -22,6 +22,9 @@ import type {
     ForInOrOfStatement,
     ForStatement,
     Identifier,
+    JSDocLink,
+    JSDocLinkCode,
+    JSDocLinkPlain,
     JSDocTypeExpression,
     JSDocTypeLiteral,
     JsxTagNameExpression,
@@ -362,7 +365,7 @@ function isImportCall(node: Node): node is Node & { readonly expression: MetaPro
         && (node.expression as MetaProperty).keywordToken === SyntaxKind.ImportKeyword;
 }
 
-function isJSDocLinkLike(node: Node): boolean {
+export function isJSDocLinkLike(node: Node): node is JSDocLink | JSDocLinkCode | JSDocLinkPlain {
     return isJSDocLink(node) || isJSDocLinkCode(node) || isJSDocLinkPlain(node);
 }
 

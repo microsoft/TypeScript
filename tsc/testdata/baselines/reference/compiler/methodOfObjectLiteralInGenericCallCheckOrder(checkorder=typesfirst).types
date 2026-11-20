@@ -1,0 +1,42 @@
+//// [tests/cases/compiler/methodOfObjectLiteralInGenericCallCheckOrder.ts] ////
+
+=== methodOfObjectLiteralInGenericCallCheckOrder.ts ===
+// Inference for Object.fromEntries goes through a generic call with an
+// object literal method, and gives the same result whether or not the
+// editor asked about the call first (43948).
+
+const id = <T,>(x: T): T => x;
+>id : <T>(x: T) => T
+><T,>(x: T): T => x : <T>(x: T) => T
+>x : T
+>x : T
+
+const keys: string[] = [];
+>keys : string[]
+>[] : never[]
+
+const result = Object.fromEntries(keys.map(k => [
+>result : { [k: string]: { test(): void; }; }
+>Object.fromEntries(keys.map(k => [    k,    id({ test() { } }),])) : { [k: string]: { test(): void; }; }
+>Object.fromEntries : { <T = any>(entries: Iterable<readonly [PropertyKey, T]>): { [k: string]: T; }; (entries: Iterable<readonly any[]>): any; }
+>Object : ObjectConstructor
+>fromEntries : { <T = any>(entries: Iterable<readonly [PropertyKey, T]>): { [k: string]: T; }; (entries: Iterable<readonly any[]>): any; }
+>keys.map(k => [    k,    id({ test() { } }),]) : [string, { test(): void; }][]
+>keys.map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
+>keys : string[]
+>map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
+>k => [    k,    id({ test() { } }),] : (k: string) => [string, { test(): void; }]
+>k : string
+>[    k,    id({ test() { } }),] : [string, { test(): void; }]
+
+    k,
+>k : string
+
+    id({ test() { } }),
+>id({ test() { } }) : { test(): void; }
+>id : <T>(x: T) => T
+>{ test() { } } : { test(): void; }
+>test : () => void
+
+]));
+

@@ -1,0 +1,134 @@
+//// [tests/cases/compiler/nestedCallContextualTypeCheckOrder.ts] ////
+
+=== nestedCallContextualTypeCheckOrder.ts ===
+// A generic call whose contextual type comes from an enclosing call is
+// resolved after it, whichever is queried first, through every expression
+// that passes the contextual type on.
+
+declare function outer<T>(cb: (x: T) => void, v: T): void;
+>outer : <T>(cb: (x: T) => void, v: T) => void
+>cb : (x: T) => void
+>x : T
+>v : T
+
+declare function outerObj<T>(o: { cb: (x: T) => void; v: T }): void;
+>outerObj : <T>(o: { cb: (x: T) => void; v: T; }) => void
+>o : { cb: (x: T) => void; v: T; }
+>cb : (x: T) => void
+>x : T
+>v : T
+
+declare function outerGen<T>(g: () => Generator<(x: T) => void>, v: T): void;
+>outerGen : <T>(g: () => Generator<(x: T) => void>, v: T) => void
+>g : () => Generator<(x: T) => void>
+>x : T
+>v : T
+
+declare function wrap<U>(f: U): U;
+>wrap : <U>(f: U) => U
+>f : U
+
+declare function tag<T>(s: TemplateStringsArray, cb: (x: T) => void, v: T): void;
+>tag : <T>(s: TemplateStringsArray, cb: (x: T) => void, v: T) => void
+>s : TemplateStringsArray
+>cb : (x: T) => void
+>x : T
+>v : T
+
+declare function tagWrap<U>(s: TemplateStringsArray, f: U): U;
+>tagWrap : <U>(s: TemplateStringsArray, f: U) => U
+>s : TemplateStringsArray
+>f : U
+
+outer(wrap((x) => x.toFixed())!, 1);
+>outer(wrap((x) => x.toFixed())!, 1) : void
+>outer : <T>(cb: (x: T) => void, v: T) => void
+>wrap((x) => x.toFixed())! : (x: never) => never
+>wrap((x) => x.toFixed()) : (x: never) => never
+>wrap : <U>(f: U) => U
+>(x) => x.toFixed() : (x: never) => never
+>x : never
+>x.toFixed() : never
+>x.toFixed : never
+>x : never
+>toFixed : never
+>1 : 1
+
+outerObj({ ...{ cb: wrap((x) => x.toFixed()) }, v: 1 });
+>outerObj({ ...{ cb: wrap((x) => x.toFixed()) }, v: 1 }) : void
+>outerObj : <T>(o: { cb: (x: T) => void; v: T; }) => void
+>{ ...{ cb: wrap((x) => x.toFixed()) }, v: 1 } : { cb: (x: never) => never; v: number; }
+>{ cb: wrap((x) => x.toFixed()) } : { cb: (x: never) => never; }
+>cb : (x: never) => never
+>wrap((x) => x.toFixed()) : (x: never) => never
+>wrap : <U>(f: U) => U
+>(x) => x.toFixed() : (x: never) => never
+>x : never
+>x.toFixed() : never
+>x.toFixed : never
+>x : never
+>toFixed : never
+>v : number
+>1 : 1
+
+outer(([wrap((x) => x.toFixed())] as const)[0], 1);
+>outer(([wrap((x) => x.toFixed())] as const)[0], 1) : void
+>outer : <T>(cb: (x: T) => void, v: T) => void
+>([wrap((x) => x.toFixed())] as const)[0] : (x: any) => any
+>([wrap((x) => x.toFixed())] as const) : readonly [(x: any) => any]
+>[wrap((x) => x.toFixed())] as const : readonly [(x: any) => any]
+>[wrap((x) => x.toFixed())] : readonly [(x: any) => any]
+>wrap((x) => x.toFixed()) : (x: any) => any
+>wrap : <U>(f: U) => U
+>(x) => x.toFixed() : (x: any) => any
+>x : any
+>x.toFixed() : any
+>x.toFixed : any
+>x : any
+>toFixed : any
+>0 : 0
+>1 : 1
+
+tag`${wrap((x) => x.toFixed())}${1}`;
+>tag`${wrap((x) => x.toFixed())}${1}` : void
+>tag : <T>(s: TemplateStringsArray, cb: (x: T) => void, v: T) => void
+>`${wrap((x) => x.toFixed())}${1}` : string
+>wrap((x) => x.toFixed()) : (x: never) => never
+>wrap : <U>(f: U) => U
+>(x) => x.toFixed() : (x: never) => never
+>x : never
+>x.toFixed() : never
+>x.toFixed : never
+>x : never
+>toFixed : never
+>1 : 1
+
+outer(tagWrap`${(x) => x.toFixed()}`, 1);
+>outer(tagWrap`${(x) => x.toFixed()}`, 1) : void
+>outer : <T>(cb: (x: T) => void, v: T) => void
+>tagWrap`${(x) => x.toFixed()}` : (x: never) => never
+>tagWrap : <U>(s: TemplateStringsArray, f: U) => U
+>`${(x) => x.toFixed()}` : string
+>(x) => x.toFixed() : (x: never) => never
+>x : never
+>x.toFixed() : never
+>x.toFixed : never
+>x : never
+>toFixed : never
+>1 : 1
+
+outerGen(function* () { yield wrap((x) => x.toFixed()); }, 1);
+>outerGen(function* () { yield wrap((x) => x.toFixed()); }, 1) : void
+>outerGen : <T>(g: () => Generator<(x: T) => void>, v: T) => void
+>function* () { yield wrap((x) => x.toFixed()); } : () => Generator<(x: never) => never, void, any>
+>yield wrap((x) => x.toFixed()) : any
+>wrap((x) => x.toFixed()) : (x: never) => never
+>wrap : <U>(f: U) => U
+>(x) => x.toFixed() : (x: never) => never
+>x : never
+>x.toFixed() : never
+>x.toFixed : never
+>x : never
+>toFixed : never
+>1 : 1
+

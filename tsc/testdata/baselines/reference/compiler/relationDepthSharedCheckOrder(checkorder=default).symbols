@@ -1,0 +1,1217 @@
+//// [tests/cases/compiler/relationDepthSharedCheckOrder.ts] ////
+
+=== relationDepthSharedCheckOrder.ts ===
+// Relating I0 to J0 fresh nests a comparison 100 levels deep, where it is
+// cut short and so succeeds. In program order Mid has already found that
+// I60 is not related to J60. Whether I0 is related to J0 must not depend
+// on which comes first. Conditional types relate without reporting errors,
+// which would compute the comparison again.
+
+interface I0 { next: I1 }
+>I0 : Symbol(I0, Decl(relationDepthSharedCheckOrder.ts, 0, 0))
+>next : Symbol(I0.next, Decl(relationDepthSharedCheckOrder.ts, 6, 14))
+>I1 : Symbol(I1, Decl(relationDepthSharedCheckOrder.ts, 7, 25))
+
+interface J0 { next: J1 }
+>J0 : Symbol(J0, Decl(relationDepthSharedCheckOrder.ts, 6, 25))
+>next : Symbol(J0.next, Decl(relationDepthSharedCheckOrder.ts, 7, 14))
+>J1 : Symbol(J1, Decl(relationDepthSharedCheckOrder.ts, 8, 25))
+
+interface I1 { next: I2 }
+>I1 : Symbol(I1, Decl(relationDepthSharedCheckOrder.ts, 7, 25))
+>next : Symbol(I1.next, Decl(relationDepthSharedCheckOrder.ts, 8, 14))
+>I2 : Symbol(I2, Decl(relationDepthSharedCheckOrder.ts, 9, 25))
+
+interface J1 { next: J2 }
+>J1 : Symbol(J1, Decl(relationDepthSharedCheckOrder.ts, 8, 25))
+>next : Symbol(J1.next, Decl(relationDepthSharedCheckOrder.ts, 9, 14))
+>J2 : Symbol(J2, Decl(relationDepthSharedCheckOrder.ts, 10, 25))
+
+interface I2 { next: I3 }
+>I2 : Symbol(I2, Decl(relationDepthSharedCheckOrder.ts, 9, 25))
+>next : Symbol(I2.next, Decl(relationDepthSharedCheckOrder.ts, 10, 14))
+>I3 : Symbol(I3, Decl(relationDepthSharedCheckOrder.ts, 11, 25))
+
+interface J2 { next: J3 }
+>J2 : Symbol(J2, Decl(relationDepthSharedCheckOrder.ts, 10, 25))
+>next : Symbol(J2.next, Decl(relationDepthSharedCheckOrder.ts, 11, 14))
+>J3 : Symbol(J3, Decl(relationDepthSharedCheckOrder.ts, 12, 25))
+
+interface I3 { next: I4 }
+>I3 : Symbol(I3, Decl(relationDepthSharedCheckOrder.ts, 11, 25))
+>next : Symbol(I3.next, Decl(relationDepthSharedCheckOrder.ts, 12, 14))
+>I4 : Symbol(I4, Decl(relationDepthSharedCheckOrder.ts, 13, 25))
+
+interface J3 { next: J4 }
+>J3 : Symbol(J3, Decl(relationDepthSharedCheckOrder.ts, 12, 25))
+>next : Symbol(J3.next, Decl(relationDepthSharedCheckOrder.ts, 13, 14))
+>J4 : Symbol(J4, Decl(relationDepthSharedCheckOrder.ts, 14, 25))
+
+interface I4 { next: I5 }
+>I4 : Symbol(I4, Decl(relationDepthSharedCheckOrder.ts, 13, 25))
+>next : Symbol(I4.next, Decl(relationDepthSharedCheckOrder.ts, 14, 14))
+>I5 : Symbol(I5, Decl(relationDepthSharedCheckOrder.ts, 15, 25))
+
+interface J4 { next: J5 }
+>J4 : Symbol(J4, Decl(relationDepthSharedCheckOrder.ts, 14, 25))
+>next : Symbol(J4.next, Decl(relationDepthSharedCheckOrder.ts, 15, 14))
+>J5 : Symbol(J5, Decl(relationDepthSharedCheckOrder.ts, 16, 25))
+
+interface I5 { next: I6 }
+>I5 : Symbol(I5, Decl(relationDepthSharedCheckOrder.ts, 15, 25))
+>next : Symbol(I5.next, Decl(relationDepthSharedCheckOrder.ts, 16, 14))
+>I6 : Symbol(I6, Decl(relationDepthSharedCheckOrder.ts, 17, 25))
+
+interface J5 { next: J6 }
+>J5 : Symbol(J5, Decl(relationDepthSharedCheckOrder.ts, 16, 25))
+>next : Symbol(J5.next, Decl(relationDepthSharedCheckOrder.ts, 17, 14))
+>J6 : Symbol(J6, Decl(relationDepthSharedCheckOrder.ts, 18, 25))
+
+interface I6 { next: I7 }
+>I6 : Symbol(I6, Decl(relationDepthSharedCheckOrder.ts, 17, 25))
+>next : Symbol(I6.next, Decl(relationDepthSharedCheckOrder.ts, 18, 14))
+>I7 : Symbol(I7, Decl(relationDepthSharedCheckOrder.ts, 19, 25))
+
+interface J6 { next: J7 }
+>J6 : Symbol(J6, Decl(relationDepthSharedCheckOrder.ts, 18, 25))
+>next : Symbol(J6.next, Decl(relationDepthSharedCheckOrder.ts, 19, 14))
+>J7 : Symbol(J7, Decl(relationDepthSharedCheckOrder.ts, 20, 25))
+
+interface I7 { next: I8 }
+>I7 : Symbol(I7, Decl(relationDepthSharedCheckOrder.ts, 19, 25))
+>next : Symbol(I7.next, Decl(relationDepthSharedCheckOrder.ts, 20, 14))
+>I8 : Symbol(I8, Decl(relationDepthSharedCheckOrder.ts, 21, 25))
+
+interface J7 { next: J8 }
+>J7 : Symbol(J7, Decl(relationDepthSharedCheckOrder.ts, 20, 25))
+>next : Symbol(J7.next, Decl(relationDepthSharedCheckOrder.ts, 21, 14))
+>J8 : Symbol(J8, Decl(relationDepthSharedCheckOrder.ts, 22, 25))
+
+interface I8 { next: I9 }
+>I8 : Symbol(I8, Decl(relationDepthSharedCheckOrder.ts, 21, 25))
+>next : Symbol(I8.next, Decl(relationDepthSharedCheckOrder.ts, 22, 14))
+>I9 : Symbol(I9, Decl(relationDepthSharedCheckOrder.ts, 23, 25))
+
+interface J8 { next: J9 }
+>J8 : Symbol(J8, Decl(relationDepthSharedCheckOrder.ts, 22, 25))
+>next : Symbol(J8.next, Decl(relationDepthSharedCheckOrder.ts, 23, 14))
+>J9 : Symbol(J9, Decl(relationDepthSharedCheckOrder.ts, 24, 26))
+
+interface I9 { next: I10 }
+>I9 : Symbol(I9, Decl(relationDepthSharedCheckOrder.ts, 23, 25))
+>next : Symbol(I9.next, Decl(relationDepthSharedCheckOrder.ts, 24, 14))
+>I10 : Symbol(I10, Decl(relationDepthSharedCheckOrder.ts, 25, 26))
+
+interface J9 { next: J10 }
+>J9 : Symbol(J9, Decl(relationDepthSharedCheckOrder.ts, 24, 26))
+>next : Symbol(J9.next, Decl(relationDepthSharedCheckOrder.ts, 25, 14))
+>J10 : Symbol(J10, Decl(relationDepthSharedCheckOrder.ts, 26, 27))
+
+interface I10 { next: I11 }
+>I10 : Symbol(I10, Decl(relationDepthSharedCheckOrder.ts, 25, 26))
+>next : Symbol(I10.next, Decl(relationDepthSharedCheckOrder.ts, 26, 15))
+>I11 : Symbol(I11, Decl(relationDepthSharedCheckOrder.ts, 27, 27))
+
+interface J10 { next: J11 }
+>J10 : Symbol(J10, Decl(relationDepthSharedCheckOrder.ts, 26, 27))
+>next : Symbol(J10.next, Decl(relationDepthSharedCheckOrder.ts, 27, 15))
+>J11 : Symbol(J11, Decl(relationDepthSharedCheckOrder.ts, 28, 27))
+
+interface I11 { next: I12 }
+>I11 : Symbol(I11, Decl(relationDepthSharedCheckOrder.ts, 27, 27))
+>next : Symbol(I11.next, Decl(relationDepthSharedCheckOrder.ts, 28, 15))
+>I12 : Symbol(I12, Decl(relationDepthSharedCheckOrder.ts, 29, 27))
+
+interface J11 { next: J12 }
+>J11 : Symbol(J11, Decl(relationDepthSharedCheckOrder.ts, 28, 27))
+>next : Symbol(J11.next, Decl(relationDepthSharedCheckOrder.ts, 29, 15))
+>J12 : Symbol(J12, Decl(relationDepthSharedCheckOrder.ts, 30, 27))
+
+interface I12 { next: I13 }
+>I12 : Symbol(I12, Decl(relationDepthSharedCheckOrder.ts, 29, 27))
+>next : Symbol(I12.next, Decl(relationDepthSharedCheckOrder.ts, 30, 15))
+>I13 : Symbol(I13, Decl(relationDepthSharedCheckOrder.ts, 31, 27))
+
+interface J12 { next: J13 }
+>J12 : Symbol(J12, Decl(relationDepthSharedCheckOrder.ts, 30, 27))
+>next : Symbol(J12.next, Decl(relationDepthSharedCheckOrder.ts, 31, 15))
+>J13 : Symbol(J13, Decl(relationDepthSharedCheckOrder.ts, 32, 27))
+
+interface I13 { next: I14 }
+>I13 : Symbol(I13, Decl(relationDepthSharedCheckOrder.ts, 31, 27))
+>next : Symbol(I13.next, Decl(relationDepthSharedCheckOrder.ts, 32, 15))
+>I14 : Symbol(I14, Decl(relationDepthSharedCheckOrder.ts, 33, 27))
+
+interface J13 { next: J14 }
+>J13 : Symbol(J13, Decl(relationDepthSharedCheckOrder.ts, 32, 27))
+>next : Symbol(J13.next, Decl(relationDepthSharedCheckOrder.ts, 33, 15))
+>J14 : Symbol(J14, Decl(relationDepthSharedCheckOrder.ts, 34, 27))
+
+interface I14 { next: I15 }
+>I14 : Symbol(I14, Decl(relationDepthSharedCheckOrder.ts, 33, 27))
+>next : Symbol(I14.next, Decl(relationDepthSharedCheckOrder.ts, 34, 15))
+>I15 : Symbol(I15, Decl(relationDepthSharedCheckOrder.ts, 35, 27))
+
+interface J14 { next: J15 }
+>J14 : Symbol(J14, Decl(relationDepthSharedCheckOrder.ts, 34, 27))
+>next : Symbol(J14.next, Decl(relationDepthSharedCheckOrder.ts, 35, 15))
+>J15 : Symbol(J15, Decl(relationDepthSharedCheckOrder.ts, 36, 27))
+
+interface I15 { next: I16 }
+>I15 : Symbol(I15, Decl(relationDepthSharedCheckOrder.ts, 35, 27))
+>next : Symbol(I15.next, Decl(relationDepthSharedCheckOrder.ts, 36, 15))
+>I16 : Symbol(I16, Decl(relationDepthSharedCheckOrder.ts, 37, 27))
+
+interface J15 { next: J16 }
+>J15 : Symbol(J15, Decl(relationDepthSharedCheckOrder.ts, 36, 27))
+>next : Symbol(J15.next, Decl(relationDepthSharedCheckOrder.ts, 37, 15))
+>J16 : Symbol(J16, Decl(relationDepthSharedCheckOrder.ts, 38, 27))
+
+interface I16 { next: I17 }
+>I16 : Symbol(I16, Decl(relationDepthSharedCheckOrder.ts, 37, 27))
+>next : Symbol(I16.next, Decl(relationDepthSharedCheckOrder.ts, 38, 15))
+>I17 : Symbol(I17, Decl(relationDepthSharedCheckOrder.ts, 39, 27))
+
+interface J16 { next: J17 }
+>J16 : Symbol(J16, Decl(relationDepthSharedCheckOrder.ts, 38, 27))
+>next : Symbol(J16.next, Decl(relationDepthSharedCheckOrder.ts, 39, 15))
+>J17 : Symbol(J17, Decl(relationDepthSharedCheckOrder.ts, 40, 27))
+
+interface I17 { next: I18 }
+>I17 : Symbol(I17, Decl(relationDepthSharedCheckOrder.ts, 39, 27))
+>next : Symbol(I17.next, Decl(relationDepthSharedCheckOrder.ts, 40, 15))
+>I18 : Symbol(I18, Decl(relationDepthSharedCheckOrder.ts, 41, 27))
+
+interface J17 { next: J18 }
+>J17 : Symbol(J17, Decl(relationDepthSharedCheckOrder.ts, 40, 27))
+>next : Symbol(J17.next, Decl(relationDepthSharedCheckOrder.ts, 41, 15))
+>J18 : Symbol(J18, Decl(relationDepthSharedCheckOrder.ts, 42, 27))
+
+interface I18 { next: I19 }
+>I18 : Symbol(I18, Decl(relationDepthSharedCheckOrder.ts, 41, 27))
+>next : Symbol(I18.next, Decl(relationDepthSharedCheckOrder.ts, 42, 15))
+>I19 : Symbol(I19, Decl(relationDepthSharedCheckOrder.ts, 43, 27))
+
+interface J18 { next: J19 }
+>J18 : Symbol(J18, Decl(relationDepthSharedCheckOrder.ts, 42, 27))
+>next : Symbol(J18.next, Decl(relationDepthSharedCheckOrder.ts, 43, 15))
+>J19 : Symbol(J19, Decl(relationDepthSharedCheckOrder.ts, 44, 27))
+
+interface I19 { next: I20 }
+>I19 : Symbol(I19, Decl(relationDepthSharedCheckOrder.ts, 43, 27))
+>next : Symbol(I19.next, Decl(relationDepthSharedCheckOrder.ts, 44, 15))
+>I20 : Symbol(I20, Decl(relationDepthSharedCheckOrder.ts, 45, 27))
+
+interface J19 { next: J20 }
+>J19 : Symbol(J19, Decl(relationDepthSharedCheckOrder.ts, 44, 27))
+>next : Symbol(J19.next, Decl(relationDepthSharedCheckOrder.ts, 45, 15))
+>J20 : Symbol(J20, Decl(relationDepthSharedCheckOrder.ts, 46, 27))
+
+interface I20 { next: I21 }
+>I20 : Symbol(I20, Decl(relationDepthSharedCheckOrder.ts, 45, 27))
+>next : Symbol(I20.next, Decl(relationDepthSharedCheckOrder.ts, 46, 15))
+>I21 : Symbol(I21, Decl(relationDepthSharedCheckOrder.ts, 47, 27))
+
+interface J20 { next: J21 }
+>J20 : Symbol(J20, Decl(relationDepthSharedCheckOrder.ts, 46, 27))
+>next : Symbol(J20.next, Decl(relationDepthSharedCheckOrder.ts, 47, 15))
+>J21 : Symbol(J21, Decl(relationDepthSharedCheckOrder.ts, 48, 27))
+
+interface I21 { next: I22 }
+>I21 : Symbol(I21, Decl(relationDepthSharedCheckOrder.ts, 47, 27))
+>next : Symbol(I21.next, Decl(relationDepthSharedCheckOrder.ts, 48, 15))
+>I22 : Symbol(I22, Decl(relationDepthSharedCheckOrder.ts, 49, 27))
+
+interface J21 { next: J22 }
+>J21 : Symbol(J21, Decl(relationDepthSharedCheckOrder.ts, 48, 27))
+>next : Symbol(J21.next, Decl(relationDepthSharedCheckOrder.ts, 49, 15))
+>J22 : Symbol(J22, Decl(relationDepthSharedCheckOrder.ts, 50, 27))
+
+interface I22 { next: I23 }
+>I22 : Symbol(I22, Decl(relationDepthSharedCheckOrder.ts, 49, 27))
+>next : Symbol(I22.next, Decl(relationDepthSharedCheckOrder.ts, 50, 15))
+>I23 : Symbol(I23, Decl(relationDepthSharedCheckOrder.ts, 51, 27))
+
+interface J22 { next: J23 }
+>J22 : Symbol(J22, Decl(relationDepthSharedCheckOrder.ts, 50, 27))
+>next : Symbol(J22.next, Decl(relationDepthSharedCheckOrder.ts, 51, 15))
+>J23 : Symbol(J23, Decl(relationDepthSharedCheckOrder.ts, 52, 27))
+
+interface I23 { next: I24 }
+>I23 : Symbol(I23, Decl(relationDepthSharedCheckOrder.ts, 51, 27))
+>next : Symbol(I23.next, Decl(relationDepthSharedCheckOrder.ts, 52, 15))
+>I24 : Symbol(I24, Decl(relationDepthSharedCheckOrder.ts, 53, 27))
+
+interface J23 { next: J24 }
+>J23 : Symbol(J23, Decl(relationDepthSharedCheckOrder.ts, 52, 27))
+>next : Symbol(J23.next, Decl(relationDepthSharedCheckOrder.ts, 53, 15))
+>J24 : Symbol(J24, Decl(relationDepthSharedCheckOrder.ts, 54, 27))
+
+interface I24 { next: I25 }
+>I24 : Symbol(I24, Decl(relationDepthSharedCheckOrder.ts, 53, 27))
+>next : Symbol(I24.next, Decl(relationDepthSharedCheckOrder.ts, 54, 15))
+>I25 : Symbol(I25, Decl(relationDepthSharedCheckOrder.ts, 55, 27))
+
+interface J24 { next: J25 }
+>J24 : Symbol(J24, Decl(relationDepthSharedCheckOrder.ts, 54, 27))
+>next : Symbol(J24.next, Decl(relationDepthSharedCheckOrder.ts, 55, 15))
+>J25 : Symbol(J25, Decl(relationDepthSharedCheckOrder.ts, 56, 27))
+
+interface I25 { next: I26 }
+>I25 : Symbol(I25, Decl(relationDepthSharedCheckOrder.ts, 55, 27))
+>next : Symbol(I25.next, Decl(relationDepthSharedCheckOrder.ts, 56, 15))
+>I26 : Symbol(I26, Decl(relationDepthSharedCheckOrder.ts, 57, 27))
+
+interface J25 { next: J26 }
+>J25 : Symbol(J25, Decl(relationDepthSharedCheckOrder.ts, 56, 27))
+>next : Symbol(J25.next, Decl(relationDepthSharedCheckOrder.ts, 57, 15))
+>J26 : Symbol(J26, Decl(relationDepthSharedCheckOrder.ts, 58, 27))
+
+interface I26 { next: I27 }
+>I26 : Symbol(I26, Decl(relationDepthSharedCheckOrder.ts, 57, 27))
+>next : Symbol(I26.next, Decl(relationDepthSharedCheckOrder.ts, 58, 15))
+>I27 : Symbol(I27, Decl(relationDepthSharedCheckOrder.ts, 59, 27))
+
+interface J26 { next: J27 }
+>J26 : Symbol(J26, Decl(relationDepthSharedCheckOrder.ts, 58, 27))
+>next : Symbol(J26.next, Decl(relationDepthSharedCheckOrder.ts, 59, 15))
+>J27 : Symbol(J27, Decl(relationDepthSharedCheckOrder.ts, 60, 27))
+
+interface I27 { next: I28 }
+>I27 : Symbol(I27, Decl(relationDepthSharedCheckOrder.ts, 59, 27))
+>next : Symbol(I27.next, Decl(relationDepthSharedCheckOrder.ts, 60, 15))
+>I28 : Symbol(I28, Decl(relationDepthSharedCheckOrder.ts, 61, 27))
+
+interface J27 { next: J28 }
+>J27 : Symbol(J27, Decl(relationDepthSharedCheckOrder.ts, 60, 27))
+>next : Symbol(J27.next, Decl(relationDepthSharedCheckOrder.ts, 61, 15))
+>J28 : Symbol(J28, Decl(relationDepthSharedCheckOrder.ts, 62, 27))
+
+interface I28 { next: I29 }
+>I28 : Symbol(I28, Decl(relationDepthSharedCheckOrder.ts, 61, 27))
+>next : Symbol(I28.next, Decl(relationDepthSharedCheckOrder.ts, 62, 15))
+>I29 : Symbol(I29, Decl(relationDepthSharedCheckOrder.ts, 63, 27))
+
+interface J28 { next: J29 }
+>J28 : Symbol(J28, Decl(relationDepthSharedCheckOrder.ts, 62, 27))
+>next : Symbol(J28.next, Decl(relationDepthSharedCheckOrder.ts, 63, 15))
+>J29 : Symbol(J29, Decl(relationDepthSharedCheckOrder.ts, 64, 27))
+
+interface I29 { next: I30 }
+>I29 : Symbol(I29, Decl(relationDepthSharedCheckOrder.ts, 63, 27))
+>next : Symbol(I29.next, Decl(relationDepthSharedCheckOrder.ts, 64, 15))
+>I30 : Symbol(I30, Decl(relationDepthSharedCheckOrder.ts, 65, 27))
+
+interface J29 { next: J30 }
+>J29 : Symbol(J29, Decl(relationDepthSharedCheckOrder.ts, 64, 27))
+>next : Symbol(J29.next, Decl(relationDepthSharedCheckOrder.ts, 65, 15))
+>J30 : Symbol(J30, Decl(relationDepthSharedCheckOrder.ts, 66, 27))
+
+interface I30 { next: I31 }
+>I30 : Symbol(I30, Decl(relationDepthSharedCheckOrder.ts, 65, 27))
+>next : Symbol(I30.next, Decl(relationDepthSharedCheckOrder.ts, 66, 15))
+>I31 : Symbol(I31, Decl(relationDepthSharedCheckOrder.ts, 67, 27))
+
+interface J30 { next: J31 }
+>J30 : Symbol(J30, Decl(relationDepthSharedCheckOrder.ts, 66, 27))
+>next : Symbol(J30.next, Decl(relationDepthSharedCheckOrder.ts, 67, 15))
+>J31 : Symbol(J31, Decl(relationDepthSharedCheckOrder.ts, 68, 27))
+
+interface I31 { next: I32 }
+>I31 : Symbol(I31, Decl(relationDepthSharedCheckOrder.ts, 67, 27))
+>next : Symbol(I31.next, Decl(relationDepthSharedCheckOrder.ts, 68, 15))
+>I32 : Symbol(I32, Decl(relationDepthSharedCheckOrder.ts, 69, 27))
+
+interface J31 { next: J32 }
+>J31 : Symbol(J31, Decl(relationDepthSharedCheckOrder.ts, 68, 27))
+>next : Symbol(J31.next, Decl(relationDepthSharedCheckOrder.ts, 69, 15))
+>J32 : Symbol(J32, Decl(relationDepthSharedCheckOrder.ts, 70, 27))
+
+interface I32 { next: I33 }
+>I32 : Symbol(I32, Decl(relationDepthSharedCheckOrder.ts, 69, 27))
+>next : Symbol(I32.next, Decl(relationDepthSharedCheckOrder.ts, 70, 15))
+>I33 : Symbol(I33, Decl(relationDepthSharedCheckOrder.ts, 71, 27))
+
+interface J32 { next: J33 }
+>J32 : Symbol(J32, Decl(relationDepthSharedCheckOrder.ts, 70, 27))
+>next : Symbol(J32.next, Decl(relationDepthSharedCheckOrder.ts, 71, 15))
+>J33 : Symbol(J33, Decl(relationDepthSharedCheckOrder.ts, 72, 27))
+
+interface I33 { next: I34 }
+>I33 : Symbol(I33, Decl(relationDepthSharedCheckOrder.ts, 71, 27))
+>next : Symbol(I33.next, Decl(relationDepthSharedCheckOrder.ts, 72, 15))
+>I34 : Symbol(I34, Decl(relationDepthSharedCheckOrder.ts, 73, 27))
+
+interface J33 { next: J34 }
+>J33 : Symbol(J33, Decl(relationDepthSharedCheckOrder.ts, 72, 27))
+>next : Symbol(J33.next, Decl(relationDepthSharedCheckOrder.ts, 73, 15))
+>J34 : Symbol(J34, Decl(relationDepthSharedCheckOrder.ts, 74, 27))
+
+interface I34 { next: I35 }
+>I34 : Symbol(I34, Decl(relationDepthSharedCheckOrder.ts, 73, 27))
+>next : Symbol(I34.next, Decl(relationDepthSharedCheckOrder.ts, 74, 15))
+>I35 : Symbol(I35, Decl(relationDepthSharedCheckOrder.ts, 75, 27))
+
+interface J34 { next: J35 }
+>J34 : Symbol(J34, Decl(relationDepthSharedCheckOrder.ts, 74, 27))
+>next : Symbol(J34.next, Decl(relationDepthSharedCheckOrder.ts, 75, 15))
+>J35 : Symbol(J35, Decl(relationDepthSharedCheckOrder.ts, 76, 27))
+
+interface I35 { next: I36 }
+>I35 : Symbol(I35, Decl(relationDepthSharedCheckOrder.ts, 75, 27))
+>next : Symbol(I35.next, Decl(relationDepthSharedCheckOrder.ts, 76, 15))
+>I36 : Symbol(I36, Decl(relationDepthSharedCheckOrder.ts, 77, 27))
+
+interface J35 { next: J36 }
+>J35 : Symbol(J35, Decl(relationDepthSharedCheckOrder.ts, 76, 27))
+>next : Symbol(J35.next, Decl(relationDepthSharedCheckOrder.ts, 77, 15))
+>J36 : Symbol(J36, Decl(relationDepthSharedCheckOrder.ts, 78, 27))
+
+interface I36 { next: I37 }
+>I36 : Symbol(I36, Decl(relationDepthSharedCheckOrder.ts, 77, 27))
+>next : Symbol(I36.next, Decl(relationDepthSharedCheckOrder.ts, 78, 15))
+>I37 : Symbol(I37, Decl(relationDepthSharedCheckOrder.ts, 79, 27))
+
+interface J36 { next: J37 }
+>J36 : Symbol(J36, Decl(relationDepthSharedCheckOrder.ts, 78, 27))
+>next : Symbol(J36.next, Decl(relationDepthSharedCheckOrder.ts, 79, 15))
+>J37 : Symbol(J37, Decl(relationDepthSharedCheckOrder.ts, 80, 27))
+
+interface I37 { next: I38 }
+>I37 : Symbol(I37, Decl(relationDepthSharedCheckOrder.ts, 79, 27))
+>next : Symbol(I37.next, Decl(relationDepthSharedCheckOrder.ts, 80, 15))
+>I38 : Symbol(I38, Decl(relationDepthSharedCheckOrder.ts, 81, 27))
+
+interface J37 { next: J38 }
+>J37 : Symbol(J37, Decl(relationDepthSharedCheckOrder.ts, 80, 27))
+>next : Symbol(J37.next, Decl(relationDepthSharedCheckOrder.ts, 81, 15))
+>J38 : Symbol(J38, Decl(relationDepthSharedCheckOrder.ts, 82, 27))
+
+interface I38 { next: I39 }
+>I38 : Symbol(I38, Decl(relationDepthSharedCheckOrder.ts, 81, 27))
+>next : Symbol(I38.next, Decl(relationDepthSharedCheckOrder.ts, 82, 15))
+>I39 : Symbol(I39, Decl(relationDepthSharedCheckOrder.ts, 83, 27))
+
+interface J38 { next: J39 }
+>J38 : Symbol(J38, Decl(relationDepthSharedCheckOrder.ts, 82, 27))
+>next : Symbol(J38.next, Decl(relationDepthSharedCheckOrder.ts, 83, 15))
+>J39 : Symbol(J39, Decl(relationDepthSharedCheckOrder.ts, 84, 27))
+
+interface I39 { next: I40 }
+>I39 : Symbol(I39, Decl(relationDepthSharedCheckOrder.ts, 83, 27))
+>next : Symbol(I39.next, Decl(relationDepthSharedCheckOrder.ts, 84, 15))
+>I40 : Symbol(I40, Decl(relationDepthSharedCheckOrder.ts, 85, 27))
+
+interface J39 { next: J40 }
+>J39 : Symbol(J39, Decl(relationDepthSharedCheckOrder.ts, 84, 27))
+>next : Symbol(J39.next, Decl(relationDepthSharedCheckOrder.ts, 85, 15))
+>J40 : Symbol(J40, Decl(relationDepthSharedCheckOrder.ts, 86, 27))
+
+interface I40 { next: I41 }
+>I40 : Symbol(I40, Decl(relationDepthSharedCheckOrder.ts, 85, 27))
+>next : Symbol(I40.next, Decl(relationDepthSharedCheckOrder.ts, 86, 15))
+>I41 : Symbol(I41, Decl(relationDepthSharedCheckOrder.ts, 87, 27))
+
+interface J40 { next: J41 }
+>J40 : Symbol(J40, Decl(relationDepthSharedCheckOrder.ts, 86, 27))
+>next : Symbol(J40.next, Decl(relationDepthSharedCheckOrder.ts, 87, 15))
+>J41 : Symbol(J41, Decl(relationDepthSharedCheckOrder.ts, 88, 27))
+
+interface I41 { next: I42 }
+>I41 : Symbol(I41, Decl(relationDepthSharedCheckOrder.ts, 87, 27))
+>next : Symbol(I41.next, Decl(relationDepthSharedCheckOrder.ts, 88, 15))
+>I42 : Symbol(I42, Decl(relationDepthSharedCheckOrder.ts, 89, 27))
+
+interface J41 { next: J42 }
+>J41 : Symbol(J41, Decl(relationDepthSharedCheckOrder.ts, 88, 27))
+>next : Symbol(J41.next, Decl(relationDepthSharedCheckOrder.ts, 89, 15))
+>J42 : Symbol(J42, Decl(relationDepthSharedCheckOrder.ts, 90, 27))
+
+interface I42 { next: I43 }
+>I42 : Symbol(I42, Decl(relationDepthSharedCheckOrder.ts, 89, 27))
+>next : Symbol(I42.next, Decl(relationDepthSharedCheckOrder.ts, 90, 15))
+>I43 : Symbol(I43, Decl(relationDepthSharedCheckOrder.ts, 91, 27))
+
+interface J42 { next: J43 }
+>J42 : Symbol(J42, Decl(relationDepthSharedCheckOrder.ts, 90, 27))
+>next : Symbol(J42.next, Decl(relationDepthSharedCheckOrder.ts, 91, 15))
+>J43 : Symbol(J43, Decl(relationDepthSharedCheckOrder.ts, 92, 27))
+
+interface I43 { next: I44 }
+>I43 : Symbol(I43, Decl(relationDepthSharedCheckOrder.ts, 91, 27))
+>next : Symbol(I43.next, Decl(relationDepthSharedCheckOrder.ts, 92, 15))
+>I44 : Symbol(I44, Decl(relationDepthSharedCheckOrder.ts, 93, 27))
+
+interface J43 { next: J44 }
+>J43 : Symbol(J43, Decl(relationDepthSharedCheckOrder.ts, 92, 27))
+>next : Symbol(J43.next, Decl(relationDepthSharedCheckOrder.ts, 93, 15))
+>J44 : Symbol(J44, Decl(relationDepthSharedCheckOrder.ts, 94, 27))
+
+interface I44 { next: I45 }
+>I44 : Symbol(I44, Decl(relationDepthSharedCheckOrder.ts, 93, 27))
+>next : Symbol(I44.next, Decl(relationDepthSharedCheckOrder.ts, 94, 15))
+>I45 : Symbol(I45, Decl(relationDepthSharedCheckOrder.ts, 95, 27))
+
+interface J44 { next: J45 }
+>J44 : Symbol(J44, Decl(relationDepthSharedCheckOrder.ts, 94, 27))
+>next : Symbol(J44.next, Decl(relationDepthSharedCheckOrder.ts, 95, 15))
+>J45 : Symbol(J45, Decl(relationDepthSharedCheckOrder.ts, 96, 27))
+
+interface I45 { next: I46 }
+>I45 : Symbol(I45, Decl(relationDepthSharedCheckOrder.ts, 95, 27))
+>next : Symbol(I45.next, Decl(relationDepthSharedCheckOrder.ts, 96, 15))
+>I46 : Symbol(I46, Decl(relationDepthSharedCheckOrder.ts, 97, 27))
+
+interface J45 { next: J46 }
+>J45 : Symbol(J45, Decl(relationDepthSharedCheckOrder.ts, 96, 27))
+>next : Symbol(J45.next, Decl(relationDepthSharedCheckOrder.ts, 97, 15))
+>J46 : Symbol(J46, Decl(relationDepthSharedCheckOrder.ts, 98, 27))
+
+interface I46 { next: I47 }
+>I46 : Symbol(I46, Decl(relationDepthSharedCheckOrder.ts, 97, 27))
+>next : Symbol(I46.next, Decl(relationDepthSharedCheckOrder.ts, 98, 15))
+>I47 : Symbol(I47, Decl(relationDepthSharedCheckOrder.ts, 99, 27))
+
+interface J46 { next: J47 }
+>J46 : Symbol(J46, Decl(relationDepthSharedCheckOrder.ts, 98, 27))
+>next : Symbol(J46.next, Decl(relationDepthSharedCheckOrder.ts, 99, 15))
+>J47 : Symbol(J47, Decl(relationDepthSharedCheckOrder.ts, 100, 27))
+
+interface I47 { next: I48 }
+>I47 : Symbol(I47, Decl(relationDepthSharedCheckOrder.ts, 99, 27))
+>next : Symbol(I47.next, Decl(relationDepthSharedCheckOrder.ts, 100, 15))
+>I48 : Symbol(I48, Decl(relationDepthSharedCheckOrder.ts, 101, 27))
+
+interface J47 { next: J48 }
+>J47 : Symbol(J47, Decl(relationDepthSharedCheckOrder.ts, 100, 27))
+>next : Symbol(J47.next, Decl(relationDepthSharedCheckOrder.ts, 101, 15))
+>J48 : Symbol(J48, Decl(relationDepthSharedCheckOrder.ts, 102, 27))
+
+interface I48 { next: I49 }
+>I48 : Symbol(I48, Decl(relationDepthSharedCheckOrder.ts, 101, 27))
+>next : Symbol(I48.next, Decl(relationDepthSharedCheckOrder.ts, 102, 15))
+>I49 : Symbol(I49, Decl(relationDepthSharedCheckOrder.ts, 103, 27))
+
+interface J48 { next: J49 }
+>J48 : Symbol(J48, Decl(relationDepthSharedCheckOrder.ts, 102, 27))
+>next : Symbol(J48.next, Decl(relationDepthSharedCheckOrder.ts, 103, 15))
+>J49 : Symbol(J49, Decl(relationDepthSharedCheckOrder.ts, 104, 27))
+
+interface I49 { next: I50 }
+>I49 : Symbol(I49, Decl(relationDepthSharedCheckOrder.ts, 103, 27))
+>next : Symbol(I49.next, Decl(relationDepthSharedCheckOrder.ts, 104, 15))
+>I50 : Symbol(I50, Decl(relationDepthSharedCheckOrder.ts, 105, 27))
+
+interface J49 { next: J50 }
+>J49 : Symbol(J49, Decl(relationDepthSharedCheckOrder.ts, 104, 27))
+>next : Symbol(J49.next, Decl(relationDepthSharedCheckOrder.ts, 105, 15))
+>J50 : Symbol(J50, Decl(relationDepthSharedCheckOrder.ts, 106, 27))
+
+interface I50 { next: I51 }
+>I50 : Symbol(I50, Decl(relationDepthSharedCheckOrder.ts, 105, 27))
+>next : Symbol(I50.next, Decl(relationDepthSharedCheckOrder.ts, 106, 15))
+>I51 : Symbol(I51, Decl(relationDepthSharedCheckOrder.ts, 107, 27))
+
+interface J50 { next: J51 }
+>J50 : Symbol(J50, Decl(relationDepthSharedCheckOrder.ts, 106, 27))
+>next : Symbol(J50.next, Decl(relationDepthSharedCheckOrder.ts, 107, 15))
+>J51 : Symbol(J51, Decl(relationDepthSharedCheckOrder.ts, 108, 27))
+
+interface I51 { next: I52 }
+>I51 : Symbol(I51, Decl(relationDepthSharedCheckOrder.ts, 107, 27))
+>next : Symbol(I51.next, Decl(relationDepthSharedCheckOrder.ts, 108, 15))
+>I52 : Symbol(I52, Decl(relationDepthSharedCheckOrder.ts, 109, 27))
+
+interface J51 { next: J52 }
+>J51 : Symbol(J51, Decl(relationDepthSharedCheckOrder.ts, 108, 27))
+>next : Symbol(J51.next, Decl(relationDepthSharedCheckOrder.ts, 109, 15))
+>J52 : Symbol(J52, Decl(relationDepthSharedCheckOrder.ts, 110, 27))
+
+interface I52 { next: I53 }
+>I52 : Symbol(I52, Decl(relationDepthSharedCheckOrder.ts, 109, 27))
+>next : Symbol(I52.next, Decl(relationDepthSharedCheckOrder.ts, 110, 15))
+>I53 : Symbol(I53, Decl(relationDepthSharedCheckOrder.ts, 111, 27))
+
+interface J52 { next: J53 }
+>J52 : Symbol(J52, Decl(relationDepthSharedCheckOrder.ts, 110, 27))
+>next : Symbol(J52.next, Decl(relationDepthSharedCheckOrder.ts, 111, 15))
+>J53 : Symbol(J53, Decl(relationDepthSharedCheckOrder.ts, 112, 27))
+
+interface I53 { next: I54 }
+>I53 : Symbol(I53, Decl(relationDepthSharedCheckOrder.ts, 111, 27))
+>next : Symbol(I53.next, Decl(relationDepthSharedCheckOrder.ts, 112, 15))
+>I54 : Symbol(I54, Decl(relationDepthSharedCheckOrder.ts, 113, 27))
+
+interface J53 { next: J54 }
+>J53 : Symbol(J53, Decl(relationDepthSharedCheckOrder.ts, 112, 27))
+>next : Symbol(J53.next, Decl(relationDepthSharedCheckOrder.ts, 113, 15))
+>J54 : Symbol(J54, Decl(relationDepthSharedCheckOrder.ts, 114, 27))
+
+interface I54 { next: I55 }
+>I54 : Symbol(I54, Decl(relationDepthSharedCheckOrder.ts, 113, 27))
+>next : Symbol(I54.next, Decl(relationDepthSharedCheckOrder.ts, 114, 15))
+>I55 : Symbol(I55, Decl(relationDepthSharedCheckOrder.ts, 115, 27))
+
+interface J54 { next: J55 }
+>J54 : Symbol(J54, Decl(relationDepthSharedCheckOrder.ts, 114, 27))
+>next : Symbol(J54.next, Decl(relationDepthSharedCheckOrder.ts, 115, 15))
+>J55 : Symbol(J55, Decl(relationDepthSharedCheckOrder.ts, 116, 27))
+
+interface I55 { next: I56 }
+>I55 : Symbol(I55, Decl(relationDepthSharedCheckOrder.ts, 115, 27))
+>next : Symbol(I55.next, Decl(relationDepthSharedCheckOrder.ts, 116, 15))
+>I56 : Symbol(I56, Decl(relationDepthSharedCheckOrder.ts, 117, 27))
+
+interface J55 { next: J56 }
+>J55 : Symbol(J55, Decl(relationDepthSharedCheckOrder.ts, 116, 27))
+>next : Symbol(J55.next, Decl(relationDepthSharedCheckOrder.ts, 117, 15))
+>J56 : Symbol(J56, Decl(relationDepthSharedCheckOrder.ts, 118, 27))
+
+interface I56 { next: I57 }
+>I56 : Symbol(I56, Decl(relationDepthSharedCheckOrder.ts, 117, 27))
+>next : Symbol(I56.next, Decl(relationDepthSharedCheckOrder.ts, 118, 15))
+>I57 : Symbol(I57, Decl(relationDepthSharedCheckOrder.ts, 119, 27))
+
+interface J56 { next: J57 }
+>J56 : Symbol(J56, Decl(relationDepthSharedCheckOrder.ts, 118, 27))
+>next : Symbol(J56.next, Decl(relationDepthSharedCheckOrder.ts, 119, 15))
+>J57 : Symbol(J57, Decl(relationDepthSharedCheckOrder.ts, 120, 27))
+
+interface I57 { next: I58 }
+>I57 : Symbol(I57, Decl(relationDepthSharedCheckOrder.ts, 119, 27))
+>next : Symbol(I57.next, Decl(relationDepthSharedCheckOrder.ts, 120, 15))
+>I58 : Symbol(I58, Decl(relationDepthSharedCheckOrder.ts, 121, 27))
+
+interface J57 { next: J58 }
+>J57 : Symbol(J57, Decl(relationDepthSharedCheckOrder.ts, 120, 27))
+>next : Symbol(J57.next, Decl(relationDepthSharedCheckOrder.ts, 121, 15))
+>J58 : Symbol(J58, Decl(relationDepthSharedCheckOrder.ts, 122, 27))
+
+interface I58 { next: I59 }
+>I58 : Symbol(I58, Decl(relationDepthSharedCheckOrder.ts, 121, 27))
+>next : Symbol(I58.next, Decl(relationDepthSharedCheckOrder.ts, 122, 15))
+>I59 : Symbol(I59, Decl(relationDepthSharedCheckOrder.ts, 123, 27))
+
+interface J58 { next: J59 }
+>J58 : Symbol(J58, Decl(relationDepthSharedCheckOrder.ts, 122, 27))
+>next : Symbol(J58.next, Decl(relationDepthSharedCheckOrder.ts, 123, 15))
+>J59 : Symbol(J59, Decl(relationDepthSharedCheckOrder.ts, 124, 27))
+
+interface I59 { next: I60 }
+>I59 : Symbol(I59, Decl(relationDepthSharedCheckOrder.ts, 123, 27))
+>next : Symbol(I59.next, Decl(relationDepthSharedCheckOrder.ts, 124, 15))
+>I60 : Symbol(I60, Decl(relationDepthSharedCheckOrder.ts, 125, 27))
+
+interface J59 { next: J60 }
+>J59 : Symbol(J59, Decl(relationDepthSharedCheckOrder.ts, 124, 27))
+>next : Symbol(J59.next, Decl(relationDepthSharedCheckOrder.ts, 125, 15))
+>J60 : Symbol(J60, Decl(relationDepthSharedCheckOrder.ts, 126, 27))
+
+interface I60 { next: I61 }
+>I60 : Symbol(I60, Decl(relationDepthSharedCheckOrder.ts, 125, 27))
+>next : Symbol(I60.next, Decl(relationDepthSharedCheckOrder.ts, 126, 15))
+>I61 : Symbol(I61, Decl(relationDepthSharedCheckOrder.ts, 127, 27))
+
+interface J60 { next: J61 }
+>J60 : Symbol(J60, Decl(relationDepthSharedCheckOrder.ts, 126, 27))
+>next : Symbol(J60.next, Decl(relationDepthSharedCheckOrder.ts, 127, 15))
+>J61 : Symbol(J61, Decl(relationDepthSharedCheckOrder.ts, 128, 27))
+
+interface I61 { next: I62 }
+>I61 : Symbol(I61, Decl(relationDepthSharedCheckOrder.ts, 127, 27))
+>next : Symbol(I61.next, Decl(relationDepthSharedCheckOrder.ts, 128, 15))
+>I62 : Symbol(I62, Decl(relationDepthSharedCheckOrder.ts, 129, 27))
+
+interface J61 { next: J62 }
+>J61 : Symbol(J61, Decl(relationDepthSharedCheckOrder.ts, 128, 27))
+>next : Symbol(J61.next, Decl(relationDepthSharedCheckOrder.ts, 129, 15))
+>J62 : Symbol(J62, Decl(relationDepthSharedCheckOrder.ts, 130, 27))
+
+interface I62 { next: I63 }
+>I62 : Symbol(I62, Decl(relationDepthSharedCheckOrder.ts, 129, 27))
+>next : Symbol(I62.next, Decl(relationDepthSharedCheckOrder.ts, 130, 15))
+>I63 : Symbol(I63, Decl(relationDepthSharedCheckOrder.ts, 131, 27))
+
+interface J62 { next: J63 }
+>J62 : Symbol(J62, Decl(relationDepthSharedCheckOrder.ts, 130, 27))
+>next : Symbol(J62.next, Decl(relationDepthSharedCheckOrder.ts, 131, 15))
+>J63 : Symbol(J63, Decl(relationDepthSharedCheckOrder.ts, 132, 27))
+
+interface I63 { next: I64 }
+>I63 : Symbol(I63, Decl(relationDepthSharedCheckOrder.ts, 131, 27))
+>next : Symbol(I63.next, Decl(relationDepthSharedCheckOrder.ts, 132, 15))
+>I64 : Symbol(I64, Decl(relationDepthSharedCheckOrder.ts, 133, 27))
+
+interface J63 { next: J64 }
+>J63 : Symbol(J63, Decl(relationDepthSharedCheckOrder.ts, 132, 27))
+>next : Symbol(J63.next, Decl(relationDepthSharedCheckOrder.ts, 133, 15))
+>J64 : Symbol(J64, Decl(relationDepthSharedCheckOrder.ts, 134, 27))
+
+interface I64 { next: I65 }
+>I64 : Symbol(I64, Decl(relationDepthSharedCheckOrder.ts, 133, 27))
+>next : Symbol(I64.next, Decl(relationDepthSharedCheckOrder.ts, 134, 15))
+>I65 : Symbol(I65, Decl(relationDepthSharedCheckOrder.ts, 135, 27))
+
+interface J64 { next: J65 }
+>J64 : Symbol(J64, Decl(relationDepthSharedCheckOrder.ts, 134, 27))
+>next : Symbol(J64.next, Decl(relationDepthSharedCheckOrder.ts, 135, 15))
+>J65 : Symbol(J65, Decl(relationDepthSharedCheckOrder.ts, 136, 27))
+
+interface I65 { next: I66 }
+>I65 : Symbol(I65, Decl(relationDepthSharedCheckOrder.ts, 135, 27))
+>next : Symbol(I65.next, Decl(relationDepthSharedCheckOrder.ts, 136, 15))
+>I66 : Symbol(I66, Decl(relationDepthSharedCheckOrder.ts, 137, 27))
+
+interface J65 { next: J66 }
+>J65 : Symbol(J65, Decl(relationDepthSharedCheckOrder.ts, 136, 27))
+>next : Symbol(J65.next, Decl(relationDepthSharedCheckOrder.ts, 137, 15))
+>J66 : Symbol(J66, Decl(relationDepthSharedCheckOrder.ts, 138, 27))
+
+interface I66 { next: I67 }
+>I66 : Symbol(I66, Decl(relationDepthSharedCheckOrder.ts, 137, 27))
+>next : Symbol(I66.next, Decl(relationDepthSharedCheckOrder.ts, 138, 15))
+>I67 : Symbol(I67, Decl(relationDepthSharedCheckOrder.ts, 139, 27))
+
+interface J66 { next: J67 }
+>J66 : Symbol(J66, Decl(relationDepthSharedCheckOrder.ts, 138, 27))
+>next : Symbol(J66.next, Decl(relationDepthSharedCheckOrder.ts, 139, 15))
+>J67 : Symbol(J67, Decl(relationDepthSharedCheckOrder.ts, 140, 27))
+
+interface I67 { next: I68 }
+>I67 : Symbol(I67, Decl(relationDepthSharedCheckOrder.ts, 139, 27))
+>next : Symbol(I67.next, Decl(relationDepthSharedCheckOrder.ts, 140, 15))
+>I68 : Symbol(I68, Decl(relationDepthSharedCheckOrder.ts, 141, 27))
+
+interface J67 { next: J68 }
+>J67 : Symbol(J67, Decl(relationDepthSharedCheckOrder.ts, 140, 27))
+>next : Symbol(J67.next, Decl(relationDepthSharedCheckOrder.ts, 141, 15))
+>J68 : Symbol(J68, Decl(relationDepthSharedCheckOrder.ts, 142, 27))
+
+interface I68 { next: I69 }
+>I68 : Symbol(I68, Decl(relationDepthSharedCheckOrder.ts, 141, 27))
+>next : Symbol(I68.next, Decl(relationDepthSharedCheckOrder.ts, 142, 15))
+>I69 : Symbol(I69, Decl(relationDepthSharedCheckOrder.ts, 143, 27))
+
+interface J68 { next: J69 }
+>J68 : Symbol(J68, Decl(relationDepthSharedCheckOrder.ts, 142, 27))
+>next : Symbol(J68.next, Decl(relationDepthSharedCheckOrder.ts, 143, 15))
+>J69 : Symbol(J69, Decl(relationDepthSharedCheckOrder.ts, 144, 27))
+
+interface I69 { next: I70 }
+>I69 : Symbol(I69, Decl(relationDepthSharedCheckOrder.ts, 143, 27))
+>next : Symbol(I69.next, Decl(relationDepthSharedCheckOrder.ts, 144, 15))
+>I70 : Symbol(I70, Decl(relationDepthSharedCheckOrder.ts, 145, 27))
+
+interface J69 { next: J70 }
+>J69 : Symbol(J69, Decl(relationDepthSharedCheckOrder.ts, 144, 27))
+>next : Symbol(J69.next, Decl(relationDepthSharedCheckOrder.ts, 145, 15))
+>J70 : Symbol(J70, Decl(relationDepthSharedCheckOrder.ts, 146, 27))
+
+interface I70 { next: I71 }
+>I70 : Symbol(I70, Decl(relationDepthSharedCheckOrder.ts, 145, 27))
+>next : Symbol(I70.next, Decl(relationDepthSharedCheckOrder.ts, 146, 15))
+>I71 : Symbol(I71, Decl(relationDepthSharedCheckOrder.ts, 147, 27))
+
+interface J70 { next: J71 }
+>J70 : Symbol(J70, Decl(relationDepthSharedCheckOrder.ts, 146, 27))
+>next : Symbol(J70.next, Decl(relationDepthSharedCheckOrder.ts, 147, 15))
+>J71 : Symbol(J71, Decl(relationDepthSharedCheckOrder.ts, 148, 27))
+
+interface I71 { next: I72 }
+>I71 : Symbol(I71, Decl(relationDepthSharedCheckOrder.ts, 147, 27))
+>next : Symbol(I71.next, Decl(relationDepthSharedCheckOrder.ts, 148, 15))
+>I72 : Symbol(I72, Decl(relationDepthSharedCheckOrder.ts, 149, 27))
+
+interface J71 { next: J72 }
+>J71 : Symbol(J71, Decl(relationDepthSharedCheckOrder.ts, 148, 27))
+>next : Symbol(J71.next, Decl(relationDepthSharedCheckOrder.ts, 149, 15))
+>J72 : Symbol(J72, Decl(relationDepthSharedCheckOrder.ts, 150, 27))
+
+interface I72 { next: I73 }
+>I72 : Symbol(I72, Decl(relationDepthSharedCheckOrder.ts, 149, 27))
+>next : Symbol(I72.next, Decl(relationDepthSharedCheckOrder.ts, 150, 15))
+>I73 : Symbol(I73, Decl(relationDepthSharedCheckOrder.ts, 151, 27))
+
+interface J72 { next: J73 }
+>J72 : Symbol(J72, Decl(relationDepthSharedCheckOrder.ts, 150, 27))
+>next : Symbol(J72.next, Decl(relationDepthSharedCheckOrder.ts, 151, 15))
+>J73 : Symbol(J73, Decl(relationDepthSharedCheckOrder.ts, 152, 27))
+
+interface I73 { next: I74 }
+>I73 : Symbol(I73, Decl(relationDepthSharedCheckOrder.ts, 151, 27))
+>next : Symbol(I73.next, Decl(relationDepthSharedCheckOrder.ts, 152, 15))
+>I74 : Symbol(I74, Decl(relationDepthSharedCheckOrder.ts, 153, 27))
+
+interface J73 { next: J74 }
+>J73 : Symbol(J73, Decl(relationDepthSharedCheckOrder.ts, 152, 27))
+>next : Symbol(J73.next, Decl(relationDepthSharedCheckOrder.ts, 153, 15))
+>J74 : Symbol(J74, Decl(relationDepthSharedCheckOrder.ts, 154, 27))
+
+interface I74 { next: I75 }
+>I74 : Symbol(I74, Decl(relationDepthSharedCheckOrder.ts, 153, 27))
+>next : Symbol(I74.next, Decl(relationDepthSharedCheckOrder.ts, 154, 15))
+>I75 : Symbol(I75, Decl(relationDepthSharedCheckOrder.ts, 155, 27))
+
+interface J74 { next: J75 }
+>J74 : Symbol(J74, Decl(relationDepthSharedCheckOrder.ts, 154, 27))
+>next : Symbol(J74.next, Decl(relationDepthSharedCheckOrder.ts, 155, 15))
+>J75 : Symbol(J75, Decl(relationDepthSharedCheckOrder.ts, 156, 27))
+
+interface I75 { next: I76 }
+>I75 : Symbol(I75, Decl(relationDepthSharedCheckOrder.ts, 155, 27))
+>next : Symbol(I75.next, Decl(relationDepthSharedCheckOrder.ts, 156, 15))
+>I76 : Symbol(I76, Decl(relationDepthSharedCheckOrder.ts, 157, 27))
+
+interface J75 { next: J76 }
+>J75 : Symbol(J75, Decl(relationDepthSharedCheckOrder.ts, 156, 27))
+>next : Symbol(J75.next, Decl(relationDepthSharedCheckOrder.ts, 157, 15))
+>J76 : Symbol(J76, Decl(relationDepthSharedCheckOrder.ts, 158, 27))
+
+interface I76 { next: I77 }
+>I76 : Symbol(I76, Decl(relationDepthSharedCheckOrder.ts, 157, 27))
+>next : Symbol(I76.next, Decl(relationDepthSharedCheckOrder.ts, 158, 15))
+>I77 : Symbol(I77, Decl(relationDepthSharedCheckOrder.ts, 159, 27))
+
+interface J76 { next: J77 }
+>J76 : Symbol(J76, Decl(relationDepthSharedCheckOrder.ts, 158, 27))
+>next : Symbol(J76.next, Decl(relationDepthSharedCheckOrder.ts, 159, 15))
+>J77 : Symbol(J77, Decl(relationDepthSharedCheckOrder.ts, 160, 27))
+
+interface I77 { next: I78 }
+>I77 : Symbol(I77, Decl(relationDepthSharedCheckOrder.ts, 159, 27))
+>next : Symbol(I77.next, Decl(relationDepthSharedCheckOrder.ts, 160, 15))
+>I78 : Symbol(I78, Decl(relationDepthSharedCheckOrder.ts, 161, 27))
+
+interface J77 { next: J78 }
+>J77 : Symbol(J77, Decl(relationDepthSharedCheckOrder.ts, 160, 27))
+>next : Symbol(J77.next, Decl(relationDepthSharedCheckOrder.ts, 161, 15))
+>J78 : Symbol(J78, Decl(relationDepthSharedCheckOrder.ts, 162, 27))
+
+interface I78 { next: I79 }
+>I78 : Symbol(I78, Decl(relationDepthSharedCheckOrder.ts, 161, 27))
+>next : Symbol(I78.next, Decl(relationDepthSharedCheckOrder.ts, 162, 15))
+>I79 : Symbol(I79, Decl(relationDepthSharedCheckOrder.ts, 163, 27))
+
+interface J78 { next: J79 }
+>J78 : Symbol(J78, Decl(relationDepthSharedCheckOrder.ts, 162, 27))
+>next : Symbol(J78.next, Decl(relationDepthSharedCheckOrder.ts, 163, 15))
+>J79 : Symbol(J79, Decl(relationDepthSharedCheckOrder.ts, 164, 27))
+
+interface I79 { next: I80 }
+>I79 : Symbol(I79, Decl(relationDepthSharedCheckOrder.ts, 163, 27))
+>next : Symbol(I79.next, Decl(relationDepthSharedCheckOrder.ts, 164, 15))
+>I80 : Symbol(I80, Decl(relationDepthSharedCheckOrder.ts, 165, 27))
+
+interface J79 { next: J80 }
+>J79 : Symbol(J79, Decl(relationDepthSharedCheckOrder.ts, 164, 27))
+>next : Symbol(J79.next, Decl(relationDepthSharedCheckOrder.ts, 165, 15))
+>J80 : Symbol(J80, Decl(relationDepthSharedCheckOrder.ts, 166, 27))
+
+interface I80 { next: I81 }
+>I80 : Symbol(I80, Decl(relationDepthSharedCheckOrder.ts, 165, 27))
+>next : Symbol(I80.next, Decl(relationDepthSharedCheckOrder.ts, 166, 15))
+>I81 : Symbol(I81, Decl(relationDepthSharedCheckOrder.ts, 167, 27))
+
+interface J80 { next: J81 }
+>J80 : Symbol(J80, Decl(relationDepthSharedCheckOrder.ts, 166, 27))
+>next : Symbol(J80.next, Decl(relationDepthSharedCheckOrder.ts, 167, 15))
+>J81 : Symbol(J81, Decl(relationDepthSharedCheckOrder.ts, 168, 27))
+
+interface I81 { next: I82 }
+>I81 : Symbol(I81, Decl(relationDepthSharedCheckOrder.ts, 167, 27))
+>next : Symbol(I81.next, Decl(relationDepthSharedCheckOrder.ts, 168, 15))
+>I82 : Symbol(I82, Decl(relationDepthSharedCheckOrder.ts, 169, 27))
+
+interface J81 { next: J82 }
+>J81 : Symbol(J81, Decl(relationDepthSharedCheckOrder.ts, 168, 27))
+>next : Symbol(J81.next, Decl(relationDepthSharedCheckOrder.ts, 169, 15))
+>J82 : Symbol(J82, Decl(relationDepthSharedCheckOrder.ts, 170, 27))
+
+interface I82 { next: I83 }
+>I82 : Symbol(I82, Decl(relationDepthSharedCheckOrder.ts, 169, 27))
+>next : Symbol(I82.next, Decl(relationDepthSharedCheckOrder.ts, 170, 15))
+>I83 : Symbol(I83, Decl(relationDepthSharedCheckOrder.ts, 171, 27))
+
+interface J82 { next: J83 }
+>J82 : Symbol(J82, Decl(relationDepthSharedCheckOrder.ts, 170, 27))
+>next : Symbol(J82.next, Decl(relationDepthSharedCheckOrder.ts, 171, 15))
+>J83 : Symbol(J83, Decl(relationDepthSharedCheckOrder.ts, 172, 27))
+
+interface I83 { next: I84 }
+>I83 : Symbol(I83, Decl(relationDepthSharedCheckOrder.ts, 171, 27))
+>next : Symbol(I83.next, Decl(relationDepthSharedCheckOrder.ts, 172, 15))
+>I84 : Symbol(I84, Decl(relationDepthSharedCheckOrder.ts, 173, 27))
+
+interface J83 { next: J84 }
+>J83 : Symbol(J83, Decl(relationDepthSharedCheckOrder.ts, 172, 27))
+>next : Symbol(J83.next, Decl(relationDepthSharedCheckOrder.ts, 173, 15))
+>J84 : Symbol(J84, Decl(relationDepthSharedCheckOrder.ts, 174, 27))
+
+interface I84 { next: I85 }
+>I84 : Symbol(I84, Decl(relationDepthSharedCheckOrder.ts, 173, 27))
+>next : Symbol(I84.next, Decl(relationDepthSharedCheckOrder.ts, 174, 15))
+>I85 : Symbol(I85, Decl(relationDepthSharedCheckOrder.ts, 175, 27))
+
+interface J84 { next: J85 }
+>J84 : Symbol(J84, Decl(relationDepthSharedCheckOrder.ts, 174, 27))
+>next : Symbol(J84.next, Decl(relationDepthSharedCheckOrder.ts, 175, 15))
+>J85 : Symbol(J85, Decl(relationDepthSharedCheckOrder.ts, 176, 27))
+
+interface I85 { next: I86 }
+>I85 : Symbol(I85, Decl(relationDepthSharedCheckOrder.ts, 175, 27))
+>next : Symbol(I85.next, Decl(relationDepthSharedCheckOrder.ts, 176, 15))
+>I86 : Symbol(I86, Decl(relationDepthSharedCheckOrder.ts, 177, 27))
+
+interface J85 { next: J86 }
+>J85 : Symbol(J85, Decl(relationDepthSharedCheckOrder.ts, 176, 27))
+>next : Symbol(J85.next, Decl(relationDepthSharedCheckOrder.ts, 177, 15))
+>J86 : Symbol(J86, Decl(relationDepthSharedCheckOrder.ts, 178, 27))
+
+interface I86 { next: I87 }
+>I86 : Symbol(I86, Decl(relationDepthSharedCheckOrder.ts, 177, 27))
+>next : Symbol(I86.next, Decl(relationDepthSharedCheckOrder.ts, 178, 15))
+>I87 : Symbol(I87, Decl(relationDepthSharedCheckOrder.ts, 179, 27))
+
+interface J86 { next: J87 }
+>J86 : Symbol(J86, Decl(relationDepthSharedCheckOrder.ts, 178, 27))
+>next : Symbol(J86.next, Decl(relationDepthSharedCheckOrder.ts, 179, 15))
+>J87 : Symbol(J87, Decl(relationDepthSharedCheckOrder.ts, 180, 27))
+
+interface I87 { next: I88 }
+>I87 : Symbol(I87, Decl(relationDepthSharedCheckOrder.ts, 179, 27))
+>next : Symbol(I87.next, Decl(relationDepthSharedCheckOrder.ts, 180, 15))
+>I88 : Symbol(I88, Decl(relationDepthSharedCheckOrder.ts, 181, 27))
+
+interface J87 { next: J88 }
+>J87 : Symbol(J87, Decl(relationDepthSharedCheckOrder.ts, 180, 27))
+>next : Symbol(J87.next, Decl(relationDepthSharedCheckOrder.ts, 181, 15))
+>J88 : Symbol(J88, Decl(relationDepthSharedCheckOrder.ts, 182, 27))
+
+interface I88 { next: I89 }
+>I88 : Symbol(I88, Decl(relationDepthSharedCheckOrder.ts, 181, 27))
+>next : Symbol(I88.next, Decl(relationDepthSharedCheckOrder.ts, 182, 15))
+>I89 : Symbol(I89, Decl(relationDepthSharedCheckOrder.ts, 183, 27))
+
+interface J88 { next: J89 }
+>J88 : Symbol(J88, Decl(relationDepthSharedCheckOrder.ts, 182, 27))
+>next : Symbol(J88.next, Decl(relationDepthSharedCheckOrder.ts, 183, 15))
+>J89 : Symbol(J89, Decl(relationDepthSharedCheckOrder.ts, 184, 27))
+
+interface I89 { next: I90 }
+>I89 : Symbol(I89, Decl(relationDepthSharedCheckOrder.ts, 183, 27))
+>next : Symbol(I89.next, Decl(relationDepthSharedCheckOrder.ts, 184, 15))
+>I90 : Symbol(I90, Decl(relationDepthSharedCheckOrder.ts, 185, 27))
+
+interface J89 { next: J90 }
+>J89 : Symbol(J89, Decl(relationDepthSharedCheckOrder.ts, 184, 27))
+>next : Symbol(J89.next, Decl(relationDepthSharedCheckOrder.ts, 185, 15))
+>J90 : Symbol(J90, Decl(relationDepthSharedCheckOrder.ts, 186, 27))
+
+interface I90 { next: I91 }
+>I90 : Symbol(I90, Decl(relationDepthSharedCheckOrder.ts, 185, 27))
+>next : Symbol(I90.next, Decl(relationDepthSharedCheckOrder.ts, 186, 15))
+>I91 : Symbol(I91, Decl(relationDepthSharedCheckOrder.ts, 187, 27))
+
+interface J90 { next: J91 }
+>J90 : Symbol(J90, Decl(relationDepthSharedCheckOrder.ts, 186, 27))
+>next : Symbol(J90.next, Decl(relationDepthSharedCheckOrder.ts, 187, 15))
+>J91 : Symbol(J91, Decl(relationDepthSharedCheckOrder.ts, 188, 27))
+
+interface I91 { next: I92 }
+>I91 : Symbol(I91, Decl(relationDepthSharedCheckOrder.ts, 187, 27))
+>next : Symbol(I91.next, Decl(relationDepthSharedCheckOrder.ts, 188, 15))
+>I92 : Symbol(I92, Decl(relationDepthSharedCheckOrder.ts, 189, 27))
+
+interface J91 { next: J92 }
+>J91 : Symbol(J91, Decl(relationDepthSharedCheckOrder.ts, 188, 27))
+>next : Symbol(J91.next, Decl(relationDepthSharedCheckOrder.ts, 189, 15))
+>J92 : Symbol(J92, Decl(relationDepthSharedCheckOrder.ts, 190, 27))
+
+interface I92 { next: I93 }
+>I92 : Symbol(I92, Decl(relationDepthSharedCheckOrder.ts, 189, 27))
+>next : Symbol(I92.next, Decl(relationDepthSharedCheckOrder.ts, 190, 15))
+>I93 : Symbol(I93, Decl(relationDepthSharedCheckOrder.ts, 191, 27))
+
+interface J92 { next: J93 }
+>J92 : Symbol(J92, Decl(relationDepthSharedCheckOrder.ts, 190, 27))
+>next : Symbol(J92.next, Decl(relationDepthSharedCheckOrder.ts, 191, 15))
+>J93 : Symbol(J93, Decl(relationDepthSharedCheckOrder.ts, 192, 27))
+
+interface I93 { next: I94 }
+>I93 : Symbol(I93, Decl(relationDepthSharedCheckOrder.ts, 191, 27))
+>next : Symbol(I93.next, Decl(relationDepthSharedCheckOrder.ts, 192, 15))
+>I94 : Symbol(I94, Decl(relationDepthSharedCheckOrder.ts, 193, 27))
+
+interface J93 { next: J94 }
+>J93 : Symbol(J93, Decl(relationDepthSharedCheckOrder.ts, 192, 27))
+>next : Symbol(J93.next, Decl(relationDepthSharedCheckOrder.ts, 193, 15))
+>J94 : Symbol(J94, Decl(relationDepthSharedCheckOrder.ts, 194, 27))
+
+interface I94 { next: I95 }
+>I94 : Symbol(I94, Decl(relationDepthSharedCheckOrder.ts, 193, 27))
+>next : Symbol(I94.next, Decl(relationDepthSharedCheckOrder.ts, 194, 15))
+>I95 : Symbol(I95, Decl(relationDepthSharedCheckOrder.ts, 195, 27))
+
+interface J94 { next: J95 }
+>J94 : Symbol(J94, Decl(relationDepthSharedCheckOrder.ts, 194, 27))
+>next : Symbol(J94.next, Decl(relationDepthSharedCheckOrder.ts, 195, 15))
+>J95 : Symbol(J95, Decl(relationDepthSharedCheckOrder.ts, 196, 27))
+
+interface I95 { next: I96 }
+>I95 : Symbol(I95, Decl(relationDepthSharedCheckOrder.ts, 195, 27))
+>next : Symbol(I95.next, Decl(relationDepthSharedCheckOrder.ts, 196, 15))
+>I96 : Symbol(I96, Decl(relationDepthSharedCheckOrder.ts, 197, 27))
+
+interface J95 { next: J96 }
+>J95 : Symbol(J95, Decl(relationDepthSharedCheckOrder.ts, 196, 27))
+>next : Symbol(J95.next, Decl(relationDepthSharedCheckOrder.ts, 197, 15))
+>J96 : Symbol(J96, Decl(relationDepthSharedCheckOrder.ts, 198, 27))
+
+interface I96 { next: I97 }
+>I96 : Symbol(I96, Decl(relationDepthSharedCheckOrder.ts, 197, 27))
+>next : Symbol(I96.next, Decl(relationDepthSharedCheckOrder.ts, 198, 15))
+>I97 : Symbol(I97, Decl(relationDepthSharedCheckOrder.ts, 199, 27))
+
+interface J96 { next: J97 }
+>J96 : Symbol(J96, Decl(relationDepthSharedCheckOrder.ts, 198, 27))
+>next : Symbol(J96.next, Decl(relationDepthSharedCheckOrder.ts, 199, 15))
+>J97 : Symbol(J97, Decl(relationDepthSharedCheckOrder.ts, 200, 27))
+
+interface I97 { next: I98 }
+>I97 : Symbol(I97, Decl(relationDepthSharedCheckOrder.ts, 199, 27))
+>next : Symbol(I97.next, Decl(relationDepthSharedCheckOrder.ts, 200, 15))
+>I98 : Symbol(I98, Decl(relationDepthSharedCheckOrder.ts, 201, 27))
+
+interface J97 { next: J98 }
+>J97 : Symbol(J97, Decl(relationDepthSharedCheckOrder.ts, 200, 27))
+>next : Symbol(J97.next, Decl(relationDepthSharedCheckOrder.ts, 201, 15))
+>J98 : Symbol(J98, Decl(relationDepthSharedCheckOrder.ts, 202, 27))
+
+interface I98 { next: I99 }
+>I98 : Symbol(I98, Decl(relationDepthSharedCheckOrder.ts, 201, 27))
+>next : Symbol(I98.next, Decl(relationDepthSharedCheckOrder.ts, 202, 15))
+>I99 : Symbol(I99, Decl(relationDepthSharedCheckOrder.ts, 203, 27))
+
+interface J98 { next: J99 }
+>J98 : Symbol(J98, Decl(relationDepthSharedCheckOrder.ts, 202, 27))
+>next : Symbol(J98.next, Decl(relationDepthSharedCheckOrder.ts, 203, 15))
+>J99 : Symbol(J99, Decl(relationDepthSharedCheckOrder.ts, 204, 28))
+
+interface I99 { next: I100 }
+>I99 : Symbol(I99, Decl(relationDepthSharedCheckOrder.ts, 203, 27))
+>next : Symbol(I99.next, Decl(relationDepthSharedCheckOrder.ts, 204, 15))
+>I100 : Symbol(I100, Decl(relationDepthSharedCheckOrder.ts, 205, 28))
+
+interface J99 { next: J100 }
+>J99 : Symbol(J99, Decl(relationDepthSharedCheckOrder.ts, 204, 28))
+>next : Symbol(J99.next, Decl(relationDepthSharedCheckOrder.ts, 205, 15))
+>J100 : Symbol(J100, Decl(relationDepthSharedCheckOrder.ts, 206, 29))
+
+interface I100 { next: I101 }
+>I100 : Symbol(I100, Decl(relationDepthSharedCheckOrder.ts, 205, 28))
+>next : Symbol(I100.next, Decl(relationDepthSharedCheckOrder.ts, 206, 16))
+>I101 : Symbol(I101, Decl(relationDepthSharedCheckOrder.ts, 207, 29))
+
+interface J100 { next: J101 }
+>J100 : Symbol(J100, Decl(relationDepthSharedCheckOrder.ts, 206, 29))
+>next : Symbol(J100.next, Decl(relationDepthSharedCheckOrder.ts, 207, 16))
+>J101 : Symbol(J101, Decl(relationDepthSharedCheckOrder.ts, 208, 29))
+
+interface I101 { next: I102 }
+>I101 : Symbol(I101, Decl(relationDepthSharedCheckOrder.ts, 207, 29))
+>next : Symbol(I101.next, Decl(relationDepthSharedCheckOrder.ts, 208, 16))
+>I102 : Symbol(I102, Decl(relationDepthSharedCheckOrder.ts, 209, 29))
+
+interface J101 { next: J102 }
+>J101 : Symbol(J101, Decl(relationDepthSharedCheckOrder.ts, 208, 29))
+>next : Symbol(J101.next, Decl(relationDepthSharedCheckOrder.ts, 209, 16))
+>J102 : Symbol(J102, Decl(relationDepthSharedCheckOrder.ts, 210, 29))
+
+interface I102 { next: I103 }
+>I102 : Symbol(I102, Decl(relationDepthSharedCheckOrder.ts, 209, 29))
+>next : Symbol(I102.next, Decl(relationDepthSharedCheckOrder.ts, 210, 16))
+>I103 : Symbol(I103, Decl(relationDepthSharedCheckOrder.ts, 211, 29))
+
+interface J102 { next: J103 }
+>J102 : Symbol(J102, Decl(relationDepthSharedCheckOrder.ts, 210, 29))
+>next : Symbol(J102.next, Decl(relationDepthSharedCheckOrder.ts, 211, 16))
+>J103 : Symbol(J103, Decl(relationDepthSharedCheckOrder.ts, 212, 29))
+
+interface I103 { next: I104 }
+>I103 : Symbol(I103, Decl(relationDepthSharedCheckOrder.ts, 211, 29))
+>next : Symbol(I103.next, Decl(relationDepthSharedCheckOrder.ts, 212, 16))
+>I104 : Symbol(I104, Decl(relationDepthSharedCheckOrder.ts, 213, 29))
+
+interface J103 { next: J104 }
+>J103 : Symbol(J103, Decl(relationDepthSharedCheckOrder.ts, 212, 29))
+>next : Symbol(J103.next, Decl(relationDepthSharedCheckOrder.ts, 213, 16))
+>J104 : Symbol(J104, Decl(relationDepthSharedCheckOrder.ts, 214, 29))
+
+interface I104 { next: I105 }
+>I104 : Symbol(I104, Decl(relationDepthSharedCheckOrder.ts, 213, 29))
+>next : Symbol(I104.next, Decl(relationDepthSharedCheckOrder.ts, 214, 16))
+>I105 : Symbol(I105, Decl(relationDepthSharedCheckOrder.ts, 215, 29))
+
+interface J104 { next: J105 }
+>J104 : Symbol(J104, Decl(relationDepthSharedCheckOrder.ts, 214, 29))
+>next : Symbol(J104.next, Decl(relationDepthSharedCheckOrder.ts, 215, 16))
+>J105 : Symbol(J105, Decl(relationDepthSharedCheckOrder.ts, 216, 29))
+
+interface I105 { next: I106 }
+>I105 : Symbol(I105, Decl(relationDepthSharedCheckOrder.ts, 215, 29))
+>next : Symbol(I105.next, Decl(relationDepthSharedCheckOrder.ts, 216, 16))
+>I106 : Symbol(I106, Decl(relationDepthSharedCheckOrder.ts, 217, 29))
+
+interface J105 { next: J106 }
+>J105 : Symbol(J105, Decl(relationDepthSharedCheckOrder.ts, 216, 29))
+>next : Symbol(J105.next, Decl(relationDepthSharedCheckOrder.ts, 217, 16))
+>J106 : Symbol(J106, Decl(relationDepthSharedCheckOrder.ts, 218, 29))
+
+interface I106 { next: I107 }
+>I106 : Symbol(I106, Decl(relationDepthSharedCheckOrder.ts, 217, 29))
+>next : Symbol(I106.next, Decl(relationDepthSharedCheckOrder.ts, 218, 16))
+>I107 : Symbol(I107, Decl(relationDepthSharedCheckOrder.ts, 219, 29))
+
+interface J106 { next: J107 }
+>J106 : Symbol(J106, Decl(relationDepthSharedCheckOrder.ts, 218, 29))
+>next : Symbol(J106.next, Decl(relationDepthSharedCheckOrder.ts, 219, 16))
+>J107 : Symbol(J107, Decl(relationDepthSharedCheckOrder.ts, 220, 29))
+
+interface I107 { next: I108 }
+>I107 : Symbol(I107, Decl(relationDepthSharedCheckOrder.ts, 219, 29))
+>next : Symbol(I107.next, Decl(relationDepthSharedCheckOrder.ts, 220, 16))
+>I108 : Symbol(I108, Decl(relationDepthSharedCheckOrder.ts, 221, 29))
+
+interface J107 { next: J108 }
+>J107 : Symbol(J107, Decl(relationDepthSharedCheckOrder.ts, 220, 29))
+>next : Symbol(J107.next, Decl(relationDepthSharedCheckOrder.ts, 221, 16))
+>J108 : Symbol(J108, Decl(relationDepthSharedCheckOrder.ts, 222, 29))
+
+interface I108 { next: I109 }
+>I108 : Symbol(I108, Decl(relationDepthSharedCheckOrder.ts, 221, 29))
+>next : Symbol(I108.next, Decl(relationDepthSharedCheckOrder.ts, 222, 16))
+>I109 : Symbol(I109, Decl(relationDepthSharedCheckOrder.ts, 223, 29))
+
+interface J108 { next: J109 }
+>J108 : Symbol(J108, Decl(relationDepthSharedCheckOrder.ts, 222, 29))
+>next : Symbol(J108.next, Decl(relationDepthSharedCheckOrder.ts, 223, 16))
+>J109 : Symbol(J109, Decl(relationDepthSharedCheckOrder.ts, 224, 29))
+
+interface I109 { next: I110 }
+>I109 : Symbol(I109, Decl(relationDepthSharedCheckOrder.ts, 223, 29))
+>next : Symbol(I109.next, Decl(relationDepthSharedCheckOrder.ts, 224, 16))
+>I110 : Symbol(I110, Decl(relationDepthSharedCheckOrder.ts, 225, 29))
+
+interface J109 { next: J110 }
+>J109 : Symbol(J109, Decl(relationDepthSharedCheckOrder.ts, 224, 29))
+>next : Symbol(J109.next, Decl(relationDepthSharedCheckOrder.ts, 225, 16))
+>J110 : Symbol(J110, Decl(relationDepthSharedCheckOrder.ts, 226, 29))
+
+interface I110 { next: I111 }
+>I110 : Symbol(I110, Decl(relationDepthSharedCheckOrder.ts, 225, 29))
+>next : Symbol(I110.next, Decl(relationDepthSharedCheckOrder.ts, 226, 16))
+>I111 : Symbol(I111, Decl(relationDepthSharedCheckOrder.ts, 227, 29))
+
+interface J110 { next: J111 }
+>J110 : Symbol(J110, Decl(relationDepthSharedCheckOrder.ts, 226, 29))
+>next : Symbol(J110.next, Decl(relationDepthSharedCheckOrder.ts, 227, 16))
+>J111 : Symbol(J111, Decl(relationDepthSharedCheckOrder.ts, 228, 29))
+
+interface I111 { next: I112 }
+>I111 : Symbol(I111, Decl(relationDepthSharedCheckOrder.ts, 227, 29))
+>next : Symbol(I111.next, Decl(relationDepthSharedCheckOrder.ts, 228, 16))
+>I112 : Symbol(I112, Decl(relationDepthSharedCheckOrder.ts, 229, 29))
+
+interface J111 { next: J112 }
+>J111 : Symbol(J111, Decl(relationDepthSharedCheckOrder.ts, 228, 29))
+>next : Symbol(J111.next, Decl(relationDepthSharedCheckOrder.ts, 229, 16))
+>J112 : Symbol(J112, Decl(relationDepthSharedCheckOrder.ts, 230, 29))
+
+interface I112 { next: I113 }
+>I112 : Symbol(I112, Decl(relationDepthSharedCheckOrder.ts, 229, 29))
+>next : Symbol(I112.next, Decl(relationDepthSharedCheckOrder.ts, 230, 16))
+>I113 : Symbol(I113, Decl(relationDepthSharedCheckOrder.ts, 231, 29))
+
+interface J112 { next: J113 }
+>J112 : Symbol(J112, Decl(relationDepthSharedCheckOrder.ts, 230, 29))
+>next : Symbol(J112.next, Decl(relationDepthSharedCheckOrder.ts, 231, 16))
+>J113 : Symbol(J113, Decl(relationDepthSharedCheckOrder.ts, 232, 29))
+
+interface I113 { next: I114 }
+>I113 : Symbol(I113, Decl(relationDepthSharedCheckOrder.ts, 231, 29))
+>next : Symbol(I113.next, Decl(relationDepthSharedCheckOrder.ts, 232, 16))
+>I114 : Symbol(I114, Decl(relationDepthSharedCheckOrder.ts, 233, 29))
+
+interface J113 { next: J114 }
+>J113 : Symbol(J113, Decl(relationDepthSharedCheckOrder.ts, 232, 29))
+>next : Symbol(J113.next, Decl(relationDepthSharedCheckOrder.ts, 233, 16))
+>J114 : Symbol(J114, Decl(relationDepthSharedCheckOrder.ts, 234, 29))
+
+interface I114 { next: I115 }
+>I114 : Symbol(I114, Decl(relationDepthSharedCheckOrder.ts, 233, 29))
+>next : Symbol(I114.next, Decl(relationDepthSharedCheckOrder.ts, 234, 16))
+>I115 : Symbol(I115, Decl(relationDepthSharedCheckOrder.ts, 235, 29))
+
+interface J114 { next: J115 }
+>J114 : Symbol(J114, Decl(relationDepthSharedCheckOrder.ts, 234, 29))
+>next : Symbol(J114.next, Decl(relationDepthSharedCheckOrder.ts, 235, 16))
+>J115 : Symbol(J115, Decl(relationDepthSharedCheckOrder.ts, 236, 29))
+
+interface I115 { next: I116 }
+>I115 : Symbol(I115, Decl(relationDepthSharedCheckOrder.ts, 235, 29))
+>next : Symbol(I115.next, Decl(relationDepthSharedCheckOrder.ts, 236, 16))
+>I116 : Symbol(I116, Decl(relationDepthSharedCheckOrder.ts, 237, 29))
+
+interface J115 { next: J116 }
+>J115 : Symbol(J115, Decl(relationDepthSharedCheckOrder.ts, 236, 29))
+>next : Symbol(J115.next, Decl(relationDepthSharedCheckOrder.ts, 237, 16))
+>J116 : Symbol(J116, Decl(relationDepthSharedCheckOrder.ts, 238, 29))
+
+interface I116 { next: I117 }
+>I116 : Symbol(I116, Decl(relationDepthSharedCheckOrder.ts, 237, 29))
+>next : Symbol(I116.next, Decl(relationDepthSharedCheckOrder.ts, 238, 16))
+>I117 : Symbol(I117, Decl(relationDepthSharedCheckOrder.ts, 239, 29))
+
+interface J116 { next: J117 }
+>J116 : Symbol(J116, Decl(relationDepthSharedCheckOrder.ts, 238, 29))
+>next : Symbol(J116.next, Decl(relationDepthSharedCheckOrder.ts, 239, 16))
+>J117 : Symbol(J117, Decl(relationDepthSharedCheckOrder.ts, 240, 29))
+
+interface I117 { next: I118 }
+>I117 : Symbol(I117, Decl(relationDepthSharedCheckOrder.ts, 239, 29))
+>next : Symbol(I117.next, Decl(relationDepthSharedCheckOrder.ts, 240, 16))
+>I118 : Symbol(I118, Decl(relationDepthSharedCheckOrder.ts, 241, 29))
+
+interface J117 { next: J118 }
+>J117 : Symbol(J117, Decl(relationDepthSharedCheckOrder.ts, 240, 29))
+>next : Symbol(J117.next, Decl(relationDepthSharedCheckOrder.ts, 241, 16))
+>J118 : Symbol(J118, Decl(relationDepthSharedCheckOrder.ts, 242, 29))
+
+interface I118 { next: I119 }
+>I118 : Symbol(I118, Decl(relationDepthSharedCheckOrder.ts, 241, 29))
+>next : Symbol(I118.next, Decl(relationDepthSharedCheckOrder.ts, 242, 16))
+>I119 : Symbol(I119, Decl(relationDepthSharedCheckOrder.ts, 243, 29))
+
+interface J118 { next: J119 }
+>J118 : Symbol(J118, Decl(relationDepthSharedCheckOrder.ts, 242, 29))
+>next : Symbol(J118.next, Decl(relationDepthSharedCheckOrder.ts, 243, 16))
+>J119 : Symbol(J119, Decl(relationDepthSharedCheckOrder.ts, 244, 31))
+
+interface I119 { leaf: string }
+>I119 : Symbol(I119, Decl(relationDepthSharedCheckOrder.ts, 243, 29))
+>leaf : Symbol(I119.leaf, Decl(relationDepthSharedCheckOrder.ts, 244, 16))
+
+interface J119 { leaf: number }
+>J119 : Symbol(J119, Decl(relationDepthSharedCheckOrder.ts, 244, 31))
+>leaf : Symbol(J119.leaf, Decl(relationDepthSharedCheckOrder.ts, 245, 16))
+
+type Mid = I60 extends J60 ? true : false;
+>Mid : Symbol(Mid, Decl(relationDepthSharedCheckOrder.ts, 245, 31))
+>I60 : Symbol(I60, Decl(relationDepthSharedCheckOrder.ts, 125, 27))
+>J60 : Symbol(J60, Decl(relationDepthSharedCheckOrder.ts, 126, 27))
+
+type All = I0 extends J0 ? true : false;
+>All : Symbol(All, Decl(relationDepthSharedCheckOrder.ts, 247, 42))
+>I0 : Symbol(I0, Decl(relationDepthSharedCheckOrder.ts, 0, 0))
+>J0 : Symbol(J0, Decl(relationDepthSharedCheckOrder.ts, 6, 25))
+
