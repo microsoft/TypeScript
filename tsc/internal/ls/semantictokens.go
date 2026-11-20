@@ -126,6 +126,7 @@ func SemanticTokensLegend(clientCapabilities lsproto.ResolvedSemanticTokensClien
 }
 
 func (l *LanguageService) ProvideSemanticTokens(ctx context.Context, documentURI lsproto.DocumentUri) (lsproto.SemanticTokensResponse, error) {
+	ctx = core.WithCheckerLifetime(ctx, core.CheckerLifetimeCheckedFileQuery)
 	program, file := l.getProgramAndFile(documentURI)
 
 	supplemental := file.SupplementalSourceFiles()
@@ -158,6 +159,7 @@ func (l *LanguageService) ProvideSemanticTokens(ctx context.Context, documentURI
 }
 
 func (l *LanguageService) ProvideSemanticTokensRange(ctx context.Context, documentURI lsproto.DocumentUri, rng lsproto.Range) (lsproto.SemanticTokensRangeResponse, error) {
+	ctx = core.WithCheckerLifetime(ctx, core.CheckerLifetimeCheckedFileQuery)
 	program, file := l.getProgramAndFile(documentURI)
 
 	mappedRanges := l.converters.FromLSPRangeIntersectingForSourceFile(file, rng, spanmap.FeatureSemanticTokens)
