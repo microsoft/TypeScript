@@ -117,3 +117,52 @@ export {};
 		})
 	}
 }
+
+func TestPathCompletionEscapedDirectory(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @Filename: /src/main.ts
+import "./a\"b/c/*escaped*/";
+import "./\u0061\x2fc/*escapedSeparator*/";
+// @Filename: /src/a"b/cd.ts
+export {};
+// @Filename: /src/a/cd.ts
+export {};
+`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	for _, test := range []struct {
+		marker string
+		// Character offset of the replaced text; the "c" is at 15 and 20 respectively.
+		character uint32
+	}{
+		{"escaped", 14},
+		{"escapedSeparator", 12},
+	} {
+		line := f.MarkerByName(t, test.marker).LSPos().Line
+		f.VerifyCompletions(t, test.marker, &fourslash.CompletionsExpectedList{
+			IsIncomplete: false,
+			ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
+				CommitCharacters: &[]string{},
+				EditRange:        Ignored,
+			},
+			Items: &fourslash.CompletionsExpectedItems{
+				Includes: []fourslash.CompletionsExpectedItem{
+					&lsproto.CompletionItem{
+						Label:  "cd",
+						Detail: new("cd.ts"),
+						TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
+							TextEdit: &lsproto.TextEdit{
+								NewText: "cd",
+								Range: lsproto.Range{
+									Start: lsproto.Position{Line: line, Character: test.character},
+									End:   lsproto.Position{Line: line, Character: test.character + 1},
+								},
+							},
+						},
+					},
+				},
+			},
+		})
+	}
+}
