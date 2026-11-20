@@ -89,19 +89,22 @@ const b = <Foo value=[|"/*container*/"|] />;
 			Items: &fourslash.CompletionsExpectedItems{Includes: items},
 		})
 	}
-	cursor := f.MarkerByName(t, "container").LSPos()
 	verify("raw", &lsproto.CompletionItem{
-		Label:    `a'b&c\\z`,
-		TextEdit: textEdit(f.Ranges()[0].LSRange, `a'b&c\\z`),
+		Label:    `a'b&c\z`,
+		TextEdit: textEdit(f.Ranges()[0].LSRange, `a'b&c\z`),
 	})
 	verify("container",
 		&lsproto.CompletionItem{
-			Label:    `a\"b`,
-			TextEdit: textEdit(lsproto.Range{Start: cursor, End: cursor}, `a\"b`),
+			Label:      `a"b`,
+			InsertText: new(`{"a\"b"}`),
+			FilterText: new(`"a"b`),
+			TextEdit:   textEdit(f.Ranges()[1].LSRange, `{"a\"b"}`),
 		},
 		&lsproto.CompletionItem{
-			Label:    `&amp;`,
-			TextEdit: textEdit(lsproto.Range{Start: cursor, End: cursor}, `&amp;`),
+			Label:      `&amp;`,
+			InsertText: new(`{"&amp;"}`),
+			FilterText: new(`"&amp;`),
+			TextEdit:   textEdit(f.Ranges()[1].LSRange, `{"&amp;"}`),
 		},
 	)
 }

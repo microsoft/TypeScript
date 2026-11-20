@@ -149,17 +149,38 @@ func (l *LanguageService) convertStringLiteralCompletions(
 	case completion.fromTypes != nil:
 		completion := completion.fromTypes
 		quoteChar := stringCompletionQuoteChar(contextToken)
-		items := core.Map(completion.types, func(t *checker.StringLiteralType) *CompletionItem {
-			name := printer.EscapeString(t.AsLiteralType().Value().(string), quoteChar)
+		isJsxAttribute := ast.IsJsxAttribute(contextToken.Parent)
+		items := core.MapNonNil(completion.types, func(t *checker.StringLiteralType) *CompletionItem {
+			value := t.AsLiteralType().Value().(string)
+			name := value
+			insertText := ""
+			filterText := ""
+			replacementSpan := l.getReplacementRangeForContextToken(file, contextToken, position)
+			if !isJsxAttribute {
+				name = printer.EscapeString(value, quoteChar)
+			} else if !jsxAttributeStringCanContain(value, byte(quoteChar)) {
+				// JSX attribute strings have no escape sequences, so replace the
+				// string with an expression container holding the value.
+				if ast.IsUnterminatedLiteral(contextToken) {
+					return nil
+				}
+				lspRange, fidelity := l.createLspRangeFromNode(contextToken, file)
+				if !fidelity.IsExact() {
+					return nil
+				}
+				replacementSpan = &lspRange
+				insertText = "{" + quote(file, l.UserPreferences(), value) + "}"
+				filterText = string(quoteChar) + value
+			}
 			lspItem := l.createLSPCompletionItem(
 				ctx,
 				name,
-				"", /*insertText*/
-				"", /*filterText*/
+				insertText,
+				filterText,
 				SortTextLocationPriority,
 				lsutil.ScriptElementKindString,
 				lsutil.ScriptElementKindModifierNone,
-				l.getReplacementRangeForContextToken(file, contextToken, position),
+				replacementSpan,
 				nil, /*commitCharacters*/
 				nil, /*labelDetails*/
 				file,
@@ -194,6 +215,17 @@ func (l *LanguageService) convertStringLiteralCompletions(
 	default:
 		return nil
 	}
+}
+
+// JSX attribute strings have no escape sequences and their character references
+// are decoded only during emit, so values containing the quote character or a
+// possible character reference must be written as an expression instead.
+func jsxAttributeStringCanContain(value string, quoteChar byte) bool {
+	if strings.IndexByte(value, quoteChar) >= 0 {
+		return false
+	}
+	amp := strings.IndexByte(value, '&')
+	return amp < 0 || strings.IndexByte(value[amp:], ';') < 0
 }
 
 func stringCompletionQuoteChar(contextToken *ast.StringLiteralLike) printer.QuoteChar {
