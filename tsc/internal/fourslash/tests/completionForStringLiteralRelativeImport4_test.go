@@ -5,6 +5,7 @@ import (
 
 	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
 	. "github.com/microsoft/TypeScript/tsc/internal/fourslash/tests/util"
+	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil"
 )
 
@@ -72,4 +73,47 @@ export const x = 0;
 			},
 		},
 	})
+}
+
+func TestPathCompletionEscaping(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @Filename: /src/main.ts
+import "./[|a/*double*/|]";
+import './[|a/*single*/|]';
+// @Filename: /src/a"b.ts
+export {};
+// @Filename: /src/a'b.ts
+export {};
+`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	for i, test := range []struct {
+		marker     string
+		label      string
+		insertText string
+		newText    string
+	}{
+		{"double", `a"b`, "", `a"b`},
+		{"single", `a'b`, "", `a'b`},
+	} {
+		item := &lsproto.CompletionItem{
+			Label:  test.label,
+			Detail: new(test.label + ".ts"),
+			TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
+				TextEdit: &lsproto.TextEdit{NewText: test.newText, Range: f.Ranges()[i].LSRange},
+			},
+		}
+		if test.insertText != "" {
+			item.InsertText = &test.insertText
+		}
+		f.VerifyCompletions(t, test.marker, &fourslash.CompletionsExpectedList{
+			IsIncomplete: false,
+			ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
+				CommitCharacters: &[]string{},
+				EditRange:        Ignored,
+			},
+			Items: &fourslash.CompletionsExpectedItems{Includes: []fourslash.CompletionsExpectedItem{item}},
+		})
+	}
 }
