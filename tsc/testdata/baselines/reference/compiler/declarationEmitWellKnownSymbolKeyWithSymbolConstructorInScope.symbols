@@ -1,0 +1,79 @@
+//// [tests/cases/compiler/declarationEmitWellKnownSymbolKeyWithSymbolConstructorInScope.ts] ////
+
+=== variable.ts ===
+const S = Symbol;
+>S : Symbol(S, Decl(variable.ts, 0, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+
+export const range = { *[Symbol.iterator]() { yield 1; } };
+>range : Symbol(range, Decl(variable.ts, 1, 12))
+>[Symbol.iterator] : Symbol([Symbol.iterator], Decl(variable.ts, 1, 22))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+
+=== parameter.ts ===
+export function make(s: SymbolConstructor) {
+>make : Symbol(make, Decl(parameter.ts, 0, 0))
+>s : Symbol(s, Decl(parameter.ts, 0, 21))
+>SymbolConstructor : Symbol(SymbolConstructor, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.asynciterable.d.ts, --, --), Decl(lib.es2020.symbol.wellknown.d.ts, --, --) ... and 2 more)
+
+    return { *[Symbol.iterator]() { yield 1; } };
+>[Symbol.iterator] : Symbol([Symbol.iterator], Decl(parameter.ts, 1, 12))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+}
+
+=== others.ts ===
+const S = Symbol;
+>S : Symbol(S, Decl(others.ts, 0, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+
+export const tagged = { [Symbol.toStringTag]: "x", async *[Symbol.asyncIterator]() { yield 1; } };
+>tagged : Symbol(tagged, Decl(others.ts, 1, 12))
+>[Symbol.toStringTag] : Symbol([Symbol.toStringTag], Decl(others.ts, 1, 23))
+>Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>[Symbol.asyncIterator] : Symbol([Symbol.asyncIterator], Decl(others.ts, 1, 50))
+>Symbol.asyncIterator : Symbol(SymbolConstructor.asyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>asyncIterator : Symbol(SymbolConstructor.asyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+
+=== nested.ts ===
+export function inner() {
+>inner : Symbol(inner, Decl(nested.ts, 0, 0))
+
+    const T = Symbol;
+>T : Symbol(T, Decl(nested.ts, 1, 9))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+
+    return { *[Symbol.iterator]() { yield 1; } };
+>[Symbol.iterator] : Symbol([Symbol.iterator], Decl(nested.ts, 2, 12))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+}
+
+=== written.ts ===
+const S = Symbol;
+>S : Symbol(S, Decl(written.ts, 0, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+
+export const written = { *[S.iterator]() { yield 1; } };
+>written : Symbol(written, Decl(written.ts, 1, 12))
+>[S.iterator] : Symbol([S.iterator], Decl(written.ts, 1, 24))
+>S.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>S : Symbol(S, Decl(written.ts, 0, 5))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+
+=== reexport.ts ===
+import { range } from "./variable";
+>range : Symbol(range, Decl(reexport.ts, 0, 8))
+
+export const again = range;
+>again : Symbol(again, Decl(reexport.ts, 1, 12))
+>range : Symbol(range, Decl(reexport.ts, 0, 8))
+
+

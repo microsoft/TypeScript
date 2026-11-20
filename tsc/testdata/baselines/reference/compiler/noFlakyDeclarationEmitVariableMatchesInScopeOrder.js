@@ -47,7 +47,7 @@ export const obsB = expand<typeof oxb>();
 
 //// [main.d.ts]
 export declare const obj: {
-    [Keys.key]: 1;
+    [keys.key]: 1;
 };
 export declare const obsA: {
     pb: 0;
@@ -55,5 +55,7 @@ export declare const obsA: {
     v: 0;
 };
 export declare const obsB: {
+    pa: 0;
+    readonly ma: 1;
     v: 0;
 };
