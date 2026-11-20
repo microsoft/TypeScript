@@ -1,0 +1,103 @@
+//// [tests/cases/compiler/declarationEmitExpandoTypeOnlyNamespaceMember.ts] ////
+
+=== declarationEmitExpandoTypeOnlyNamespaceMember.ts ===
+export class C {}
+>C : Symbol(C, Decl(declarationEmitExpandoTypeOnlyNamespaceMember.ts, 0, 0))
+
+export function f1() {}
+>f1 : Symbol(f1, Decl(declarationEmitExpandoTypeOnlyNamespaceMember.ts, 0, 17), Decl(declarationEmitExpandoTypeOnlyNamespaceMember.ts, 3, 9))
+
+f1.a = C;
+>f1 : Symbol(f1, Decl(declarationEmitExpandoTypeOnlyNamespaceMember.ts, 0, 17), Decl(declarationEmitExpandoTypeOnlyNamespaceMember.ts, 3, 9))
+>C : Symbol(C, Decl(declarationEmitExpandoTypeOnlyNamespaceMember.ts, 0, 0))
+
+f1.b = C;
+>f1.b : Symbol(f1.b, Decl(declarationEmitExpandoTypeOnlyNamespaceMember.ts, 2, 9))
+>f1 : Symbol(f1, Decl(declarationEmitExpandoTypeOnlyNamespaceMember.ts, 0, 17), Decl(declarationEmitExpandoTypeOnlyNamespaceMember.ts, 3, 9))
+>b : Symbol(f1.b, Decl(declarationEmitExpandoTypeOnlyNamespaceMember.ts, 2, 9))
+>C : Symbol(C, Decl(declarationEmitExpandoTypeOnlyNamespaceMember.ts, 0, 0))
+
+export namespace f1 { export type a = 0; }
+>f1 : Symbol(f1, Decl(declarationEmitExpandoTypeOnlyNamespaceMember.ts, 0, 17), Decl(declarationEmitExpandoTypeOnlyNamespaceMember.ts, 3, 9))
+>a : Symbol(a, Decl(declarationEmitExpandoTypeOnlyNamespaceMember.ts, 4, 21))
+
+export enum E { A }
+>E : Symbol(E, Decl(declarationEmitExpandoTypeOnlyNamespaceMember.ts, 4, 42))
+>A : Symbol(E.A, Decl(declarationEmitExpandoTypeOnlyNamespaceMember.ts, 6, 15))
+
+export function f2() {}
+>f2 : Symbol(f2, Decl(declarationEmitExpandoTypeOnlyNamespaceMember.ts, 6, 19), Decl(declarationEmitExpandoTypeOnlyNamespaceMember.ts, 8, 9))
+
+f2.a = E;
+>f2 : Symbol(f2, Decl(declarationEmitExpandoTypeOnlyNamespaceMember.ts, 6, 19), Decl(declarationEmitExpandoTypeOnlyNamespaceMember.ts, 8, 9))
+>E : Symbol(E, Decl(declarationEmitExpandoTypeOnlyNamespaceMember.ts, 4, 42))
+
+export namespace f2 { export interface a { x: string } }
+>f2 : Symbol(f2, Decl(declarationEmitExpandoTypeOnlyNamespaceMember.ts, 6, 19), Decl(declarationEmitExpandoTypeOnlyNamespaceMember.ts, 8, 9))
+>a : Symbol(a, Decl(declarationEmitExpandoTypeOnlyNamespaceMember.ts, 9, 21))
+>x : Symbol(a.x, Decl(declarationEmitExpandoTypeOnlyNamespaceMember.ts, 9, 42))
+
+export function g() {}
+>g : Symbol(g, Decl(declarationEmitExpandoTypeOnlyNamespaceMember.ts, 9, 56))
+
+export function f3() {}
+>f3 : Symbol(f3, Decl(declarationEmitExpandoTypeOnlyNamespaceMember.ts, 11, 22), Decl(declarationEmitExpandoTypeOnlyNamespaceMember.ts, 13, 9))
+
+f3.a = g;
+>f3 : Symbol(f3, Decl(declarationEmitExpandoTypeOnlyNamespaceMember.ts, 11, 22), Decl(declarationEmitExpandoTypeOnlyNamespaceMember.ts, 13, 9))
+>g : Symbol(g, Decl(declarationEmitExpandoTypeOnlyNamespaceMember.ts, 9, 56))
+
+export namespace f3 { export namespace a { export type T = string; } }
+>f3 : Symbol(f3, Decl(declarationEmitExpandoTypeOnlyNamespaceMember.ts, 11, 22), Decl(declarationEmitExpandoTypeOnlyNamespaceMember.ts, 13, 9))
+>a : Symbol(a, Decl(declarationEmitExpandoTypeOnlyNamespaceMember.ts, 14, 21))
+>T : Symbol(T, Decl(declarationEmitExpandoTypeOnlyNamespaceMember.ts, 14, 42))
+
+export function Target() { return null; }
+>Target : Symbol(Target, Decl(declarationEmitExpandoTypeOnlyNamespaceMember.ts, 14, 70), Decl(declarationEmitExpandoTypeOnlyNamespaceMember.ts, 16, 41))
+
+export namespace Target { export type Props = number; }
+>Target : Symbol(Target, Decl(declarationEmitExpandoTypeOnlyNamespaceMember.ts, 14, 70), Decl(declarationEmitExpandoTypeOnlyNamespaceMember.ts, 16, 41))
+>Props : Symbol(Props, Decl(declarationEmitExpandoTypeOnlyNamespaceMember.ts, 17, 25))
+
+export function Popover() { return null; }
+>Popover : Symbol(Popover, Decl(declarationEmitExpandoTypeOnlyNamespaceMember.ts, 17, 55), Decl(declarationEmitExpandoTypeOnlyNamespaceMember.ts, 20, 24))
+
+Popover.Target = Target;
+>Popover : Symbol(Popover, Decl(declarationEmitExpandoTypeOnlyNamespaceMember.ts, 17, 55), Decl(declarationEmitExpandoTypeOnlyNamespaceMember.ts, 20, 24))
+>Target : Symbol(Target, Decl(declarationEmitExpandoTypeOnlyNamespaceMember.ts, 14, 70), Decl(declarationEmitExpandoTypeOnlyNamespaceMember.ts, 16, 41))
+
+export namespace Popover {
+>Popover : Symbol(Popover, Decl(declarationEmitExpandoTypeOnlyNamespaceMember.ts, 17, 55), Decl(declarationEmitExpandoTypeOnlyNamespaceMember.ts, 20, 24))
+
+  export namespace Target {
+>Target : Symbol(Target, Decl(declarationEmitExpandoTypeOnlyNamespaceMember.ts, 21, 26))
+
+    export type Extra = string;
+>Extra : Symbol(Extra, Decl(declarationEmitExpandoTypeOnlyNamespaceMember.ts, 22, 27))
+  }
+}
+
+export function Popover2() { return null; }
+>Popover2 : Symbol(Popover2, Decl(declarationEmitExpandoTypeOnlyNamespaceMember.ts, 25, 1), Decl(declarationEmitExpandoTypeOnlyNamespaceMember.ts, 29, 25))
+
+Popover2.b = C;
+>Popover2.b : Symbol(Popover2.b, Decl(declarationEmitExpandoTypeOnlyNamespaceMember.ts, 27, 43))
+>Popover2 : Symbol(Popover2, Decl(declarationEmitExpandoTypeOnlyNamespaceMember.ts, 25, 1), Decl(declarationEmitExpandoTypeOnlyNamespaceMember.ts, 29, 25))
+>b : Symbol(Popover2.b, Decl(declarationEmitExpandoTypeOnlyNamespaceMember.ts, 27, 43))
+>C : Symbol(C, Decl(declarationEmitExpandoTypeOnlyNamespaceMember.ts, 0, 0))
+
+Popover2.Target = Target;
+>Popover2 : Symbol(Popover2, Decl(declarationEmitExpandoTypeOnlyNamespaceMember.ts, 25, 1), Decl(declarationEmitExpandoTypeOnlyNamespaceMember.ts, 29, 25))
+>Target : Symbol(Target, Decl(declarationEmitExpandoTypeOnlyNamespaceMember.ts, 14, 70), Decl(declarationEmitExpandoTypeOnlyNamespaceMember.ts, 16, 41))
+
+export namespace Popover2 {
+>Popover2 : Symbol(Popover2, Decl(declarationEmitExpandoTypeOnlyNamespaceMember.ts, 25, 1), Decl(declarationEmitExpandoTypeOnlyNamespaceMember.ts, 29, 25))
+
+  export namespace Target {
+>Target : Symbol(Target, Decl(declarationEmitExpandoTypeOnlyNamespaceMember.ts, 30, 27))
+
+    export type Extra = string;
+>Extra : Symbol(Extra, Decl(declarationEmitExpandoTypeOnlyNamespaceMember.ts, 31, 27))
+  }
+}
+

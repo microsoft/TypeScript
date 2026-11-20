@@ -1,0 +1,197 @@
+//// [tests/cases/compiler/expandoFunctionTypeOnlyNamespaceMember.ts] ////
+
+=== variants.ts ===
+function f1() {}
+>f1 : Symbol(f1, Decl(variants.ts, 0, 0), Decl(variants.ts, 1, 9))
+
+f1.a = 0;
+>f1 : Symbol(f1, Decl(variants.ts, 0, 0), Decl(variants.ts, 1, 9))
+
+namespace f1 { export type a = 0; }
+>f1 : Symbol(f1, Decl(variants.ts, 0, 0), Decl(variants.ts, 1, 9))
+>a : Symbol(a, Decl(variants.ts, 2, 14))
+
+const n1: number = f1.a;
+>n1 : Symbol(n1, Decl(variants.ts, 3, 5))
+>f1 : Symbol(f1, Decl(variants.ts, 0, 0), Decl(variants.ts, 1, 9))
+
+const s1: string = f1.a; // error
+>s1 : Symbol(s1, Decl(variants.ts, 4, 5))
+>f1 : Symbol(f1, Decl(variants.ts, 0, 0), Decl(variants.ts, 1, 9))
+
+const t1: f1.a = 0;
+>t1 : Symbol(t1, Decl(variants.ts, 5, 5))
+>f1 : Symbol(f1, Decl(variants.ts, 0, 0), Decl(variants.ts, 1, 9))
+>a : Symbol(f1.a, Decl(variants.ts, 2, 14))
+
+function f2() {}
+>f2 : Symbol(f2, Decl(variants.ts, 5, 19), Decl(variants.ts, 8, 9))
+
+f2.a = 0;
+>f2 : Symbol(f2, Decl(variants.ts, 5, 19), Decl(variants.ts, 8, 9))
+
+namespace f2 { export interface a { x: string } }
+>f2 : Symbol(f2, Decl(variants.ts, 5, 19), Decl(variants.ts, 8, 9))
+>a : Symbol(a, Decl(variants.ts, 9, 14))
+>x : Symbol(a.x, Decl(variants.ts, 9, 35))
+
+const n2: number = f2.a;
+>n2 : Symbol(n2, Decl(variants.ts, 10, 5))
+>f2 : Symbol(f2, Decl(variants.ts, 5, 19), Decl(variants.ts, 8, 9))
+
+const t2: f2.a = { x: "" };
+>t2 : Symbol(t2, Decl(variants.ts, 11, 5))
+>f2 : Symbol(f2, Decl(variants.ts, 5, 19), Decl(variants.ts, 8, 9))
+>a : Symbol(f2.a, Decl(variants.ts, 9, 14))
+>x : Symbol(x, Decl(variants.ts, 11, 18))
+
+function f3() {}
+>f3 : Symbol(f3, Decl(variants.ts, 11, 27), Decl(variants.ts, 14, 9))
+
+f3.a = 0;
+>f3 : Symbol(f3, Decl(variants.ts, 11, 27), Decl(variants.ts, 14, 9))
+
+namespace f3 { export namespace a {} }
+>f3 : Symbol(f3, Decl(variants.ts, 11, 27), Decl(variants.ts, 14, 9))
+>a : Symbol(a, Decl(variants.ts, 15, 14))
+
+const n3: number = f3.a;
+>n3 : Symbol(n3, Decl(variants.ts, 16, 5))
+>f3 : Symbol(f3, Decl(variants.ts, 11, 27), Decl(variants.ts, 14, 9))
+
+function f4() {}
+>f4 : Symbol(f4, Decl(variants.ts, 16, 24), Decl(variants.ts, 19, 9))
+
+f4.a = 0;
+>f4 : Symbol(f4, Decl(variants.ts, 16, 24), Decl(variants.ts, 19, 9))
+
+namespace f4 { export namespace a { export type T = string; } }
+>f4 : Symbol(f4, Decl(variants.ts, 16, 24), Decl(variants.ts, 19, 9))
+>a : Symbol(a, Decl(variants.ts, 20, 14))
+>T : Symbol(T, Decl(variants.ts, 20, 35))
+
+const n4: number = f4.a;
+>n4 : Symbol(n4, Decl(variants.ts, 21, 5))
+>f4 : Symbol(f4, Decl(variants.ts, 16, 24), Decl(variants.ts, 19, 9))
+
+const t4: f4.a.T = "";
+>t4 : Symbol(t4, Decl(variants.ts, 22, 5))
+>f4 : Symbol(f4, Decl(variants.ts, 16, 24), Decl(variants.ts, 19, 9))
+>a : Symbol(f4.a, Decl(variants.ts, 20, 14))
+>T : Symbol(f4.a.T, Decl(variants.ts, 20, 35))
+
+namespace f5 { export type a = 0; }
+>f5 : Symbol(f5, Decl(variants.ts, 24, 35), Decl(variants.ts, 22, 22))
+>a : Symbol(a, Decl(variants.ts, 24, 14))
+
+function f5() {}
+>f5 : Symbol(f5, Decl(variants.ts, 24, 35), Decl(variants.ts, 22, 22))
+
+f5.a = 0;
+>f5 : Symbol(f5, Decl(variants.ts, 24, 35), Decl(variants.ts, 22, 22))
+
+const n5: number = f5.a;
+>n5 : Symbol(n5, Decl(variants.ts, 27, 5))
+>f5 : Symbol(f5, Decl(variants.ts, 24, 35), Decl(variants.ts, 22, 22))
+
+function f6() {}
+>f6 : Symbol(f6, Decl(variants.ts, 27, 24), Decl(variants.ts, 30, 9))
+
+f6.a = 0;
+>f6.a : Symbol(f6.a, Decl(variants.ts, 31, 14))
+>f6 : Symbol(f6, Decl(variants.ts, 27, 24), Decl(variants.ts, 30, 9))
+>a : Symbol(f6.a, Decl(variants.ts, 31, 14))
+
+namespace f6 { export namespace a { export const kind = 0; } }
+>f6 : Symbol(f6, Decl(variants.ts, 27, 24), Decl(variants.ts, 30, 9))
+>a : Symbol(a, Decl(variants.ts, 31, 14))
+>kind : Symbol(kind, Decl(variants.ts, 31, 48))
+
+const n6: number = f6.a; // error
+>n6 : Symbol(n6, Decl(variants.ts, 32, 5))
+>f6.a : Symbol(f6.a, Decl(variants.ts, 31, 14))
+>f6 : Symbol(f6, Decl(variants.ts, 27, 24), Decl(variants.ts, 30, 9))
+>a : Symbol(f6.a, Decl(variants.ts, 31, 14))
+
+namespace TypesOnly { export type T = number; }
+>TypesOnly : Symbol(TypesOnly, Decl(variants.ts, 32, 24))
+>T : Symbol(T, Decl(variants.ts, 34, 21))
+
+namespace Values { export const v = 1; }
+>Values : Symbol(Values, Decl(variants.ts, 34, 47))
+>v : Symbol(v, Decl(variants.ts, 35, 31))
+
+// Aliases might resolve to values, so they take precedence over expandos
+function f7() {}
+>f7 : Symbol(f7, Decl(variants.ts, 35, 40), Decl(variants.ts, 39, 9))
+
+f7.a = 0;
+>f7 : Symbol(f7, Decl(variants.ts, 35, 40), Decl(variants.ts, 39, 9))
+
+namespace f7 { export import a = TypesOnly; }
+>f7 : Symbol(f7, Decl(variants.ts, 35, 40), Decl(variants.ts, 39, 9))
+>a : Symbol(a, Decl(variants.ts, 40, 14))
+>TypesOnly : Symbol(a, Decl(variants.ts, 32, 24))
+
+const n7: number = f7.a;
+>n7 : Symbol(n7, Decl(variants.ts, 41, 5))
+>f7 : Symbol(f7, Decl(variants.ts, 35, 40), Decl(variants.ts, 39, 9))
+
+const t7: f7.a.T = 0;
+>t7 : Symbol(t7, Decl(variants.ts, 42, 5))
+>f7 : Symbol(f7, Decl(variants.ts, 35, 40), Decl(variants.ts, 39, 9))
+>a : Symbol(f7.a, Decl(variants.ts, 40, 14))
+>T : Symbol(TypesOnly.T, Decl(variants.ts, 34, 21))
+
+function f8() {}
+>f8 : Symbol(f8, Decl(variants.ts, 42, 21), Decl(variants.ts, 45, 9))
+
+f8.a = 0;
+>f8.a : Symbol(f8.a, Decl(variants.ts, 46, 14))
+>f8 : Symbol(f8, Decl(variants.ts, 42, 21), Decl(variants.ts, 45, 9))
+>a : Symbol(f8.a, Decl(variants.ts, 46, 14))
+
+namespace f8 { export import a = Values; } // error
+>f8 : Symbol(f8, Decl(variants.ts, 42, 21), Decl(variants.ts, 45, 9))
+>a : Symbol(a, Decl(variants.ts, 46, 14))
+>Values : Symbol(a, Decl(variants.ts, 34, 47))
+
+=== popover.ts ===
+export function Popover() { return null; }
+>Popover : Symbol(Popover, Decl(popover.ts, 0, 0), Decl(popover.ts, 2, 32))
+
+Popover.Target = (x: number) => x;
+>Popover : Symbol(Popover, Decl(popover.ts, 0, 0), Decl(popover.ts, 2, 32))
+>x : Symbol(x, Decl(popover.ts, 1, 18))
+>x : Symbol(x, Decl(popover.ts, 1, 18))
+
+Popover.displayName = "Popover";
+>Popover.displayName : Symbol(Popover.displayName, Decl(popover.ts, 1, 34))
+>Popover : Symbol(Popover, Decl(popover.ts, 0, 0), Decl(popover.ts, 2, 32))
+>displayName : Symbol(Popover.displayName, Decl(popover.ts, 1, 34))
+
+export namespace Popover {
+>Popover : Symbol(Popover, Decl(popover.ts, 0, 0), Decl(popover.ts, 2, 32))
+
+  export namespace Target {
+>Target : Symbol(Target, Decl(popover.ts, 4, 26))
+
+    export type Props = number;
+>Props : Symbol(Props, Decl(popover.ts, 5, 27))
+  }
+}
+
+Popover.Target(1);
+>Popover : Symbol(Popover, Decl(popover.ts, 0, 0), Decl(popover.ts, 2, 32))
+
+Popover.displayName;
+>Popover.displayName : Symbol(Popover.displayName, Decl(popover.ts, 1, 34))
+>Popover : Symbol(Popover, Decl(popover.ts, 0, 0), Decl(popover.ts, 2, 32))
+>displayName : Symbol(Popover.displayName, Decl(popover.ts, 1, 34))
+
+const props: Popover.Target.Props = 1;
+>props : Symbol(props, Decl(popover.ts, 12, 5))
+>Popover : Symbol(Popover, Decl(popover.ts, 0, 0), Decl(popover.ts, 2, 32))
+>Target : Symbol(Popover.Target, Decl(popover.ts, 4, 26))
+>Props : Symbol(Popover.Target.Props, Decl(popover.ts, 5, 27))
+

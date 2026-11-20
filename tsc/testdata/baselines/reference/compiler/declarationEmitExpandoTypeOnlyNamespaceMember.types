@@ -1,0 +1,106 @@
+//// [tests/cases/compiler/declarationEmitExpandoTypeOnlyNamespaceMember.ts] ////
+
+=== declarationEmitExpandoTypeOnlyNamespaceMember.ts ===
+export class C {}
+>C : C
+
+export function f1() {}
+>f1 : { (): void; b: typeof C; }
+
+f1.a = C;
+>f1.a = C : typeof C
+>f1.a : any
+>f1 : { (): void; b: typeof C; }
+>a : any
+>C : typeof C
+
+f1.b = C;
+>f1.b = C : typeof C
+>f1.b : typeof C
+>f1 : { (): void; b: typeof C; }
+>b : typeof C
+>C : typeof C
+
+export namespace f1 { export type a = 0; }
+>a : 0
+
+export enum E { A }
+>E : E
+>A : E.A
+
+export function f2() {}
+>f2 : () => void
+
+f2.a = E;
+>f2.a = E : typeof E
+>f2.a : any
+>f2 : () => void
+>a : any
+>E : typeof E
+
+export namespace f2 { export interface a { x: string } }
+>x : string
+
+export function g() {}
+>g : () => void
+
+export function f3() {}
+>f3 : () => void
+
+f3.a = g;
+>f3.a = g : () => void
+>f3.a : any
+>f3 : () => void
+>a : any
+>g : () => void
+
+export namespace f3 { export namespace a { export type T = string; } }
+>T : string
+
+export function Target() { return null; }
+>Target : () => null
+
+export namespace Target { export type Props = number; }
+>Props : number
+
+export function Popover() { return null; }
+>Popover : () => null
+
+Popover.Target = Target;
+>Popover.Target = Target : () => null
+>Popover.Target : any
+>Popover : () => null
+>Target : any
+>Target : () => null
+
+export namespace Popover {
+  export namespace Target {
+    export type Extra = string;
+>Extra : string
+  }
+}
+
+export function Popover2() { return null; }
+>Popover2 : { (): null; b: typeof C; }
+
+Popover2.b = C;
+>Popover2.b = C : typeof C
+>Popover2.b : typeof C
+>Popover2 : { (): null; b: typeof C; }
+>b : typeof C
+>C : typeof C
+
+Popover2.Target = Target;
+>Popover2.Target = Target : () => null
+>Popover2.Target : any
+>Popover2 : { (): null; b: typeof C; }
+>Target : any
+>Target : () => null
+
+export namespace Popover2 {
+  export namespace Target {
+    export type Extra = string;
+>Extra : string
+  }
+}
+
