@@ -4,6 +4,7 @@ import { ModifierFlags } from "../../enums/modifierFlags.js";
 import { NodeFlags } from "../../enums/nodeFlags.js";
 import { OuterExpressionKinds } from "../../enums/outerExpressionKinds.js";
 import { SyntaxKind } from "../../enums/syntaxKind.js";
+import { isRootedDiskPath } from "../api/path.ts";
 import type {
     __String,
     AccessExpression,
@@ -135,6 +136,10 @@ export function hasRestParameter(node: SignatureDeclaration | JSDocSignature): b
         : undefined;
     if (type && isJSDocTypeExpression(type)) type = type.type;
     return type?.kind === SyntaxKind.JSDocVariadicType;
+}
+
+export function isExternalModuleNameRelative(moduleName: string): boolean {
+    return /^\.\.?(?:$|[\\/])/.test(moduleName) || isRootedDiskPath(moduleName);
 }
 
 function getRootDeclaration(node: Node): Node {

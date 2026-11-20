@@ -8,6 +8,7 @@ import (
 	"maps"
 	"slices"
 	"strings"
+	"unicode/utf8"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/astnav"
@@ -65,7 +66,7 @@ func (l *LanguageService) getStringLiteralCompletions(
 ) *CompletionList {
 	if isInReferenceComment(file, position) {
 		completion := l.getTripleSlashReferenceCompletions(file, position, l.GetProgram(), checker)
-		return l.convertPathCompletions(ctx, completion, file, position)
+		return l.convertPathCompletions(ctx, completion, nil, file, position)
 	}
 	if IsInString(file, position, contextToken) {
 		if contextToken == nil || !ast.IsStringLiteralLike(contextToken) {
@@ -109,7 +110,7 @@ func (l *LanguageService) convertStringLiteralCompletions(
 	optionalReplacementRange := l.createRangeFromStringLiteralLikeContent(file, contextToken, position)
 	switch {
 	case completion.fromPaths != nil:
-		return l.convertPathCompletions(ctx, completion.fromPaths, file, position)
+		return l.convertPathCompletions(ctx, completion.fromPaths, contextToken, file, position)
 	case completion.fromProperties != nil:
 		completion := completion.fromProperties
 		data := &completionDataData{
@@ -148,25 +149,39 @@ func (l *LanguageService) convertStringLiteralCompletions(
 		}
 	case completion.fromTypes != nil:
 		completion := completion.fromTypes
-		var quoteChar printer.QuoteChar
-		if contextToken.Kind == ast.KindNoSubstitutionTemplateLiteral {
-			quoteChar = printer.QuoteCharBacktick
-		} else if strings.HasPrefix(contextToken.Text(), "'") {
-			quoteChar = printer.QuoteCharSingleQuote
-		} else {
-			quoteChar = printer.QuoteCharDoubleQuote
-		}
-		items := core.Map(completion.types, func(t *checker.StringLiteralType) *CompletionItem {
-			name := printer.EscapeString(t.AsLiteralType().Value().(string), quoteChar)
+		quoteChar := stringCompletionQuoteChar(contextToken)
+		isJsxAttribute := ast.IsJsxAttribute(contextToken.Parent)
+		items := core.MapNonNil(completion.types, func(t *checker.StringLiteralType) *CompletionItem {
+			value := t.AsLiteralType().Value().(string)
+			name := mapLoneSurrogates(value, func(s string) string { return s })
+			insertText := ""
+			filterText := ""
+			replacementSpan := l.getReplacementRangeForContextToken(file, contextToken, position)
+			if !isJsxAttribute {
+				name = printer.EscapeString(value, quoteChar)
+			} else if !jsxAttributeStringCanContain(value, byte(quoteChar)) {
+				// JSX attribute strings have no escape sequences, so replace the
+				// string with an expression container holding the value.
+				if ast.IsUnterminatedLiteral(contextToken) {
+					return nil
+				}
+				lspRange, fidelity := l.createLspRangeFromNode(contextToken, file)
+				if !fidelity.IsExact() {
+					return nil
+				}
+				replacementSpan = &lspRange
+				insertText = jsxExpressionContainerText(file, l.UserPreferences(), value)
+				filterText = string(quoteChar) + name
+			}
 			lspItem := l.createLSPCompletionItem(
 				ctx,
 				name,
-				"", /*insertText*/
-				"", /*filterText*/
+				insertText,
+				filterText,
 				SortTextLocationPriority,
 				lsutil.ScriptElementKindString,
 				lsutil.ScriptElementKindModifierNone,
-				l.getReplacementRangeForContextToken(file, contextToken, position),
+				replacementSpan,
 				nil, /*commitCharacters*/
 				nil, /*labelDetails*/
 				file,
@@ -203,9 +218,62 @@ func (l *LanguageService) convertStringLiteralCompletions(
 	}
 }
 
+// JSX attribute strings have no escape sequences and their character references
+// are decoded only during emit, so values containing the quote character, a
+// possible character reference, or a lone surrogate must be written as an
+// expression instead.
+func jsxAttributeStringCanContain(value string, quoteChar byte) bool {
+	if strings.IndexByte(value, quoteChar) >= 0 {
+		return false
+	}
+	if amp := strings.IndexByte(value, '&'); amp >= 0 && strings.IndexByte(value[amp:], ';') >= 0 {
+		return false
+	}
+	for i := 0; i < len(value); {
+		ch, size := stringutil.DecodeJSStringRune(value[i:])
+		if stringutil.IsSurrogate(ch) || ch == utf8.RuneError && size == 1 {
+			return false
+		}
+		i += size
+	}
+	return true
+}
+
+func jsxExpressionContainerText(file *ast.SourceFile, preferences lsutil.UserPreferences, value string) string {
+	quoteChar := printer.QuoteCharDoubleQuote
+	if lsutil.GetQuotePreference(file, preferences) == lsutil.QuotePreferenceSingle {
+		quoteChar = printer.QuoteCharSingleQuote
+	}
+	return "{" + string(quoteChar) + printer.EscapeString(value, quoteChar) + string(quoteChar) + "}"
+}
+
+func jsxAttributeInitializerText(file *ast.SourceFile, preferences lsutil.UserPreferences, value string) string {
+	quoteChar, otherQuoteChar := byte('"'), byte('\'')
+	if lsutil.GetQuotePreference(file, preferences) == lsutil.QuotePreferenceSingle {
+		quoteChar, otherQuoteChar = otherQuoteChar, quoteChar
+	}
+	for _, q := range []byte{quoteChar, otherQuoteChar} {
+		if jsxAttributeStringCanContain(value, q) {
+			return string(q) + value + string(q)
+		}
+	}
+	return jsxExpressionContainerText(file, preferences, value)
+}
+
+func stringCompletionQuoteChar(contextToken *ast.StringLiteralLike) printer.QuoteChar {
+	if contextToken.Kind == ast.KindNoSubstitutionTemplateLiteral {
+		return printer.QuoteCharBacktick
+	}
+	if contextToken.AsStringLiteral().TokenFlags&ast.TokenFlagsSingleQuote != 0 {
+		return printer.QuoteCharSingleQuote
+	}
+	return printer.QuoteCharDoubleQuote
+}
+
 func (l *LanguageService) convertPathCompletions(
 	ctx context.Context,
 	completion *pathCompletions,
+	contextToken *ast.StringLiteralLike,
 	file *ast.SourceFile,
 	position int,
 ) *CompletionList {
@@ -219,10 +287,17 @@ func (l *LanguageService) convertPathCompletions(
 		if !strings.HasSuffix(pathCompletion.name, pathCompletion.extension) {
 			detail += pathCompletion.extension
 		}
+		insertText := ""
+		if contextToken != nil {
+			escaped := printer.EscapeString(pathCompletion.name, stringCompletionQuoteChar(contextToken))
+			if escaped != pathCompletion.name {
+				insertText = escaped
+			}
+		}
 		lspItem := l.createLSPCompletionItem(
 			ctx,
 			pathCompletion.name,
-			"", /*insertText*/
+			insertText,
 			"", /*filterText*/
 			SortTextLocationPriority,
 			pathCompletion.kind,
@@ -384,9 +459,9 @@ func (l *LanguageService) getStringLiteralCompletionEntries(
 		namedImportsOrExports := specifier.Parent
 		var moduleSpecifier *ast.Node
 		if namedImportsOrExports.Kind == ast.KindNamedImports {
-			moduleSpecifier = namedImportsOrExports.Parent.Parent
+			moduleSpecifier = namedImportsOrExports.Parent.Parent.ModuleSpecifier()
 		} else {
-			moduleSpecifier = namedImportsOrExports.Parent
+			moduleSpecifier = namedImportsOrExports.Parent.ModuleSpecifier()
 		}
 		if moduleSpecifier == nil {
 			return nil
@@ -590,8 +665,7 @@ func (l *LanguageService) getStringLiteralCompletionsFromModuleNames(
 	program *compiler.Program,
 	checker *checker.Checker,
 ) *stringLiteralCompletions {
-	textStart := astnav.GetStartOfNode(node, file, false /*includeJSDoc*/) + 1
-	replacementSpan, ok := l.pathCompletionReplacementSpan(file, getDirectoryFragmentRange(node.Text(), textStart))
+	replacementSpan, ok := l.pathCompletionReplacementSpan(file, getDirectoryFragmentRangeOfLiteral(file, node))
 	if !ok {
 		return nil
 	}
@@ -658,6 +732,33 @@ func getDirectoryFragmentRange(text string, textStart int) *core.TextRange {
 		return nil
 	}
 	return new(core.NewTextRange(textStart+offset, textStart+offset+length))
+}
+
+// Like getDirectoryFragmentRange, but measures the fragment in the source text
+// of a string literal, whose escape sequences may differ in length from their values.
+func getDirectoryFragmentRangeOfLiteral(file *ast.SourceFile, node *ast.LiteralExpression) *core.TextRange {
+	start := astnav.GetStartOfNode(node, file, false /*includeJSDoc*/)
+	end := node.End()
+	if !ast.IsUnterminatedLiteral(node) {
+		end--
+	}
+	rawText := file.Text()[start+1 : max(start+1, end)]
+	text := node.Text()
+	if rawText == text {
+		return getDirectoryFragmentRange(text, start+1)
+	}
+	index := strings.LastIndexFunc(text, isAnyDirectorySeparator)
+	offset := 0
+	if index != -1 {
+		offset = scanner.GetStringLiteralSourceOffset(rawText, index+1, node.Kind == ast.KindNoSubstitutionTemplateLiteral)
+		if offset == -1 {
+			return nil
+		}
+	}
+	if offset == len(rawText) {
+		return nil
+	}
+	return new(core.NewTextRange(start+1+offset, start+1+len(rawText)))
 }
 
 func (l *LanguageService) getStringLiteralCompletionsFromModuleNamesWorker(
@@ -2261,6 +2362,11 @@ func (l *LanguageService) getTripleSlashReferenceCompletions(
 		l.getCompletionEntriesFromTypings(program, scriptDirectory, getFragmentDirectory(toComplete), extensionOptions, result)
 		names = slices.Collect(maps.Values(result.names))
 	}
+	// Triple-slash directive values cannot contain their own quote character.
+	quoteChar := prefix[len(prefix)-1]
+	names = slices.DeleteFunc(names, func(name moduleCompletionNameAndKind) bool {
+		return strings.IndexByte(name.name, quoteChar) >= 0
+	})
 
 	return &pathCompletions{
 		entries:         toPathCompletions(names),

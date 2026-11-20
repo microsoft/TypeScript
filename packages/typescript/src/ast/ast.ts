@@ -11,6 +11,8 @@ import type {
     ArrowFunction,
     AssertionExpression,
     BindingElement,
+    BindingPattern,
+    CallExpression,
     CaseClause,
     ClassDeclaration,
     ClassExpression,
@@ -19,12 +21,14 @@ import type {
     ConstructorTypeNode,
     Decorator,
     DoStatement,
+    ElementAccessExpression,
     EndOfFile,
     EntityName,
     EnumDeclaration,
     EnumMember,
     ExportAssignment,
     ExportDeclaration,
+    ExportSpecifier,
     Expression,
     ExpressionStatement,
     ForInStatement,
@@ -35,8 +39,10 @@ import type {
     GetAccessorDeclaration,
     Identifier,
     IfStatement,
+    ImportClause,
     ImportDeclaration,
     ImportEqualsDeclaration,
+    ImportSpecifier,
     IndexSignatureDeclaration,
     InterfaceDeclaration,
     JSDoc,
@@ -49,6 +55,11 @@ import type {
     Modifier,
     ModifierSyntaxKind,
     ModuleDeclaration,
+    NamedExports,
+    NamedImports,
+    NamespaceExport,
+    NamespaceImport,
+    NonNullExpression,
     ParameterDeclaration,
     PropertyAccessExpression,
     PropertyAssignment,
@@ -117,6 +128,59 @@ export type CanHaveModifiers =
     | (Omit<ImportDeclaration, "kind"> & { readonly kind: SyntaxKind.JSImportDeclaration; })
     | ExportAssignment
     | ExportDeclaration;
+
+declare const autoAccessorBrand: unique symbol;
+export interface AutoAccessorPropertyDeclaration extends PropertyDeclaration {
+    readonly [autoAccessorBrand]: void;
+}
+
+declare const optionalChainBrand: unique symbol;
+export interface CallChain extends CallExpression {
+    readonly [optionalChainBrand]: void;
+}
+
+export interface ElementAccessChain extends ElementAccessExpression {
+    readonly [optionalChainBrand]: void;
+}
+
+declare const emptyBindingPatternBrand: unique symbol;
+export type EmptyBindingPattern = BindingPattern & { readonly [emptyBindingPatternBrand]: void; };
+
+export interface NonNullChain extends NonNullExpression {
+    readonly [optionalChainBrand]: void;
+}
+
+export interface PropertyAccessChain extends PropertyAccessExpression {
+    readonly [optionalChainBrand]: void;
+}
+
+export type OptionalChain = PropertyAccessChain | ElementAccessChain | CallChain | NonNullChain;
+
+declare const parameterPropertyBrand: unique symbol;
+export interface ParameterPropertyDeclaration extends ParameterDeclaration {
+    readonly [parameterPropertyBrand]: void;
+}
+
+export type TypeOnlyImportDeclaration =
+    | ImportClause & { readonly phaseModifier: SyntaxKind.TypeKeyword; }
+    | ImportEqualsDeclaration & { readonly isTypeOnly: true; }
+    | NamespaceImport & { readonly parent: ImportClause & { readonly phaseModifier: SyntaxKind.TypeKeyword; }; }
+    | ImportSpecifier
+        & (
+            | { readonly isTypeOnly: true; }
+            | { readonly parent: NamedImports & { readonly parent: ImportClause & { readonly phaseModifier: SyntaxKind.TypeKeyword; }; }; }
+        );
+
+export type TypeOnlyExportDeclaration =
+    | ExportSpecifier
+        & (
+            | { readonly isTypeOnly: true; }
+            | { readonly parent: NamedExports & { readonly parent: ExportDeclaration & { readonly isTypeOnly: true; }; }; }
+        )
+    | ExportDeclaration & { readonly isTypeOnly: true; readonly moduleSpecifier: Expression; readonly exportClause?: undefined; }
+    | NamespaceExport & { readonly parent: ExportDeclaration & { readonly isTypeOnly: true; }; };
+
+export type TypeOnlyAliasDeclaration = TypeOnlyImportDeclaration | TypeOnlyExportDeclaration;
 
 // ── Core types ──
 
