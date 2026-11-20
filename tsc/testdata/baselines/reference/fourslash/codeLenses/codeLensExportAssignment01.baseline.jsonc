@@ -1,0 +1,67 @@
+// === Code Lenses ===
+// === /arrow.ts ===
+// const arrowFn = () => {};
+// export default /*CODELENS: 2 references*/[|arrowFn|];
+// 
+
+// === /importer.ts ===
+// import arrowFn from "./arrow";
+// import Klass from "./klass";
+// import equalsValue = require("./equals.cjs");
+// 
+// [|arrowFn|]();
+// new Klass();
+// console.log(equalsValue);
+// 
+
+
+
+// === Code Lenses ===
+// === /equals.cts ===
+// const equalsValue = 1;
+// export = /*CODELENS: 2 references*/[|equalsValue|];
+// 
+
+// === /importer.ts ===
+// --- (line: 3) skipped ---
+// 
+// arrowFn();
+// new Klass();
+// console.log([|equalsValue|]);
+// 
+
+
+
+// === Code Lenses ===
+// === /importer.ts ===
+// import arrowFn from "./arrow";
+// import Klass from "./klass";
+// import equalsValue = require("./equals.cjs");
+// 
+// arrowFn();
+// new [|Klass|]();
+// console.log(equalsValue);
+// 
+
+// === /klass.ts ===
+// class /*CODELENS: 2 references*/Klass {}
+// export default [|Klass|];
+// 
+
+
+
+// === Code Lenses ===
+// === /importer.ts ===
+// import arrowFn from "./arrow";
+// import Klass from "./klass";
+// import equalsValue = require("./equals.cjs");
+// 
+// arrowFn();
+// new [|Klass|]();
+// console.log(equalsValue);
+// 
+
+// === /klass.ts ===
+// class Klass {}
+// export default /*CODELENS: 2 references*/[|Klass|];
+// 
