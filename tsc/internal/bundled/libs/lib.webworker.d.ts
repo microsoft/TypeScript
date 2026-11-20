@@ -14833,26 +14833,27 @@ declare namespace WebAssembly {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/WebAssembly/Reference/JavaScript_interface/Memory)
      */
-    interface Memory {
+    interface Memory<TBuffer extends ArrayBufferLike = ArrayBufferLike> {
         /**
          * The read-only **`buffer`** prototype property of the WebAssembly.Memory object returns the buffer contained in the memory. Depending on whether or not the memory was constructed with shared: true, the buffer is either an ArrayBuffer or a SharedArrayBuffer.
          *
          * [MDN Reference](https://developer.mozilla.org/docs/WebAssembly/Reference/JavaScript_interface/Memory/buffer)
          */
-        readonly buffer: ArrayBuffer;
+        readonly buffer: TBuffer;
         /**
          * The **`grow()`** prototype method of the WebAssembly.Memory object increases the size of the memory instance by a specified number of WebAssembly pages.
          *
          * [MDN Reference](https://developer.mozilla.org/docs/WebAssembly/Reference/JavaScript_interface/Memory/grow)
          */
         grow(delta: AddressValue): AddressValue;
-        toFixedLengthBuffer(): ArrayBuffer;
-        toResizableBuffer(): ArrayBuffer;
+        toFixedLengthBuffer(): TBuffer;
+        toResizableBuffer(): TBuffer;
     }
 
     var Memory: {
         prototype: Memory;
-        new(descriptor: MemoryDescriptor): Memory;
+        new(descriptor: MemoryDescriptor & { shared?: false }): Memory<ArrayBuffer>;
+        new(descriptor: MemoryDescriptor): Memory<ArrayBufferLike>;
     };
 
     /**
