@@ -77,3 +77,22 @@ export const again = range;
 >range : Symbol(range, Decl(reexport.ts, 0, 8))
 
 
+=== narrowed.ts ===
+declare const k: typeof Symbol.iterator | undefined;
+>k : Symbol(k, Decl(narrowed.ts, 0, 13))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+
+export function make() {
+>make : Symbol(make, Decl(narrowed.ts, 0, 52))
+
+    if (k === undefined) throw 0;
+>k : Symbol(k, Decl(narrowed.ts, 0, 13))
+>undefined : Symbol(undefined)
+
+    return { [k]: 1 };
+>[k] : Symbol([k], Decl(narrowed.ts, 3, 12))
+>k : Symbol(k, Decl(narrowed.ts, 0, 13))
+}
+

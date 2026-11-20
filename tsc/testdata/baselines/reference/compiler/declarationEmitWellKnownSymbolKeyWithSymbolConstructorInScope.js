@@ -28,6 +28,13 @@ import { range } from "./variable";
 export const again = range;
 
 
+//// [narrowed.ts]
+declare const k: typeof Symbol.iterator | undefined;
+export function make() {
+    if (k === undefined) throw 0;
+    return { [k]: 1 };
+}
+
 
 
 
@@ -58,3 +65,9 @@ export {};
 export declare const again: {
     [Symbol.iterator](): Generator<number, void, unknown>;
 };
+//// [narrowed.d.ts]
+declare const k: typeof Symbol.iterator | undefined;
+export declare function make(): {
+    [Symbol.iterator]: number;
+};
+export {};

@@ -92,3 +92,26 @@ export const again = range;
 >range : { [Symbol.iterator](): Generator<number, void, unknown>; }
 
 
+=== narrowed.ts ===
+declare const k: typeof Symbol.iterator | undefined;
+>k : unique symbol | undefined
+>Symbol.iterator : unique symbol
+>Symbol : SymbolConstructor
+>iterator : unique symbol
+
+export function make() {
+>make : () => { [Symbol.iterator]: number; }
+
+    if (k === undefined) throw 0;
+>k === undefined : boolean
+>k : unique symbol | undefined
+>undefined : undefined
+>0 : 0
+
+    return { [k]: 1 };
+>{ [k]: 1 } : { [Symbol.iterator]: number; }
+>[k] : number
+>k : unique symbol
+>1 : 1
+}
+

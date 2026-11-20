@@ -33,3 +33,10 @@ export const written = { *[S.iterator]() { yield 1; } };
 import { range } from "./variable";
 export const again = range;
 
+
+// @filename: narrowed.ts
+declare const k: typeof Symbol.iterator | undefined;
+export function make() {
+    if (k === undefined) throw 0;
+    return { [k]: 1 };
+}
