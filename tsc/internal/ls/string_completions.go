@@ -2354,6 +2354,11 @@ func (l *LanguageService) getTripleSlashReferenceCompletions(
 		l.getCompletionEntriesFromTypings(program, scriptDirectory, getFragmentDirectory(toComplete), extensionOptions, result)
 		names = slices.Collect(maps.Values(result.names))
 	}
+	// Triple-slash directive values cannot contain their own quote character.
+	quoteChar := prefix[len(prefix)-1]
+	names = slices.DeleteFunc(names, func(name moduleCompletionNameAndKind) bool {
+		return strings.IndexByte(name.name, quoteChar) >= 0
+	})
 
 	return &pathCompletions{
 		entries:         toPathCompletions(names),

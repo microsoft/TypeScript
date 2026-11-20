@@ -186,7 +186,8 @@ export {};
 			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Includes: []fourslash.CompletionsExpectedItem{"a'b.ts", `a"b.ts`},
+			Includes: []fourslash.CompletionsExpectedItem{"a'b.ts"},
+			Excludes: []string{`a"b.ts`},
 		},
 	})
 }
