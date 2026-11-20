@@ -418,7 +418,7 @@
         "@typescript/typescript": "0.0.0",
         "@types/vscode": "~1.125.0",
         "@typescript/bundled-typescript": "npm:typescript@7.0.2",
-        "@vscode/vsce": "4.1.0",
+        "@vscode/vsce": "4.1.1",
         "@vscode/wasm-wasi": "^1.0.2",
         "esbuild": "^0.28.2"
     }
