@@ -1,0 +1,38 @@
+circularVariance4.ts(6,14): error TS2322: Type 'Params<string, string>' is not assignable to type 'Params<number, string>'.
+  Type 'number' is not assignable to type 'string'.
+circularVariance4.ts(9,14): error TS2322: Type 'Handler<string, string>' is not assignable to type 'Handler<number, string>'.
+  Types of parameters 'params' and 'params' are incompatible.
+    Type 'Params<number, string>' is not assignable to type 'Params<string, string>'.
+      Type 'string' is not assignable to type 'number'.
+circularVariance4.ts(10,14): error TS2322: Type 'Handler<string, string>' is not assignable to type 'Handler<boolean, { x: 1; }>'.
+  Types of parameters 'params' and 'params' are incompatible.
+    Type 'Params<boolean, { x: 1; }>' is not assignable to type 'Params<string, string>'.
+      Type 'string' is not assignable to type 'boolean'.
+
+
+==== circularVariance4.ts (3 errors) ====
+    type Params<T, K> = { config: Config<T, K> };
+    type Handler<T, K> = (params: Params<T, K>) => void;
+    type Config<T, K> = { read: (item: T) => void; handler: Handler<T, K> };
+    
+    declare const p: Params<string, string>;
+    export const q: Params<number, string> = p;  // Error
+                 ~
+!!! error TS2322: Type 'Params<string, string>' is not assignable to type 'Params<number, string>'.
+!!! error TS2322:   Type 'number' is not assignable to type 'string'.
+    
+    declare const a: Handler<string, string>;
+    export const b: Handler<number, string> = a;  // Error
+                 ~
+!!! error TS2322: Type 'Handler<string, string>' is not assignable to type 'Handler<number, string>'.
+!!! error TS2322:   Types of parameters 'params' and 'params' are incompatible.
+!!! error TS2322:     Type 'Params<number, string>' is not assignable to type 'Params<string, string>'.
+!!! error TS2322:       Type 'string' is not assignable to type 'number'.
+    export const c: Handler<boolean, { x: 1 }> = a;  // Error
+                 ~
+!!! error TS2322: Type 'Handler<string, string>' is not assignable to type 'Handler<boolean, { x: 1; }>'.
+!!! error TS2322:   Types of parameters 'params' and 'params' are incompatible.
+!!! error TS2322:     Type 'Params<boolean, { x: 1; }>' is not assignable to type 'Params<string, string>'.
+!!! error TS2322:       Type 'string' is not assignable to type 'boolean'.
+    export const d: Handler<string, number> = a;
+    
