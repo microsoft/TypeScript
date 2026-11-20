@@ -33,12 +33,6 @@ export class C {
 
 //// [a.d.ts]
 export declare class C {
-    /**
-     * Non Async function
-     */
     private a;
-    /**
-     * Async function
-     */
     private b;
 }
