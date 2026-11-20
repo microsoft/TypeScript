@@ -646,8 +646,7 @@ func (l *LanguageService) getStringLiteralCompletionsFromModuleNames(
 	program *compiler.Program,
 	checker *checker.Checker,
 ) *stringLiteralCompletions {
-	textStart := astnav.GetStartOfNode(node, file, false /*includeJSDoc*/) + 1
-	replacementSpan, ok := l.pathCompletionReplacementSpan(file, getDirectoryFragmentRange(node.Text(), textStart))
+	replacementSpan, ok := l.pathCompletionReplacementSpan(file, getDirectoryFragmentRangeOfLiteral(file, node))
 	if !ok {
 		return nil
 	}
@@ -714,6 +713,44 @@ func getDirectoryFragmentRange(text string, textStart int) *core.TextRange {
 		return nil
 	}
 	return new(core.NewTextRange(textStart+offset, textStart+offset+length))
+}
+
+// Like getDirectoryFragmentRange, but measures the fragment in the source text
+// of a string literal, whose escape sequences may differ in length from their values.
+func getDirectoryFragmentRangeOfLiteral(file *ast.SourceFile, node *ast.LiteralExpression) *core.TextRange {
+	start := astnav.GetStartOfNode(node, file, false /*includeJSDoc*/)
+	end := node.End()
+	if !ast.IsUnterminatedLiteral(node) {
+		end--
+	}
+	rawText := file.Text()[start+1 : max(start+1, end)]
+	text := node.Text()
+	if rawText == text {
+		return getDirectoryFragmentRange(text, start+1)
+	}
+	index := strings.LastIndexFunc(text, isAnyDirectorySeparator)
+	offset := 0
+	if index != -1 {
+		// Find the shortest source prefix whose value ends at the last separator.
+		quote := file.Text()[start : start+1]
+		s := scanner.NewScanner()
+		offset = -1
+		for i := index + 1; i <= len(rawText); i++ {
+			s.SetText(quote + rawText[:i] + quote)
+			s.Scan()
+			if s.TokenValue() == text[:index+1] {
+				offset = i
+				break
+			}
+		}
+		if offset == -1 {
+			return nil
+		}
+	}
+	if offset == len(rawText) {
+		return nil
+	}
+	return new(core.NewTextRange(start+1+offset, start+1+len(rawText)))
 }
 
 func (l *LanguageService) getStringLiteralCompletionsFromModuleNamesWorker(

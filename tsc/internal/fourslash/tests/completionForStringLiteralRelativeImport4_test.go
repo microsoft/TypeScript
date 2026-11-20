@@ -136,8 +136,8 @@ export {};
 		// Character offset of the replaced text; the "c" is at 15 and 20 respectively.
 		character uint32
 	}{
-		{"escaped", 14},
-		{"escapedSeparator", 12},
+		{"escaped", 15},
+		{"escapedSeparator", 20},
 	} {
 		line := f.MarkerByName(t, test.marker).LSPos().Line
 		f.VerifyCompletions(t, test.marker, &fourslash.CompletionsExpectedList{
