@@ -1,0 +1,187 @@
+//// [tests/cases/compiler/expandoFunctionTypeOnlyNamespaceMember.ts] ////
+
+=== variants.ts ===
+function f1() {}
+>f1 : () => void
+
+f1.a = 0;
+>f1.a = 0 : 0
+>f1.a : any
+>f1 : () => void
+>a : any
+>0 : 0
+
+namespace f1 { export type a = 0; }
+>a : 0
+
+const n1: number = f1.a;
+>n1 : number
+>f1.a : any
+>f1 : () => void
+>a : any
+
+const s1: string = f1.a; // error
+>s1 : string
+>f1.a : any
+>f1 : () => void
+>a : any
+
+const t1: f1.a = 0;
+>t1 : 0
+>f1 : any
+>0 : 0
+
+function f2() {}
+>f2 : () => void
+
+f2.a = 0;
+>f2.a = 0 : 0
+>f2.a : any
+>f2 : () => void
+>a : any
+>0 : 0
+
+namespace f2 { export interface a { x: string } }
+>x : string
+
+const n2: number = f2.a;
+>n2 : number
+>f2.a : any
+>f2 : () => void
+>a : any
+
+const t2: f2.a = { x: "" };
+>t2 : f2.a
+>f2 : any
+>{ x: "" } : { x: string; }
+>x : string
+>"" : ""
+
+function f3() {}
+>f3 : () => void
+
+f3.a = 0;
+>f3.a = 0 : 0
+>f3.a : any
+>f3 : () => void
+>a : any
+>0 : 0
+
+namespace f3 { export namespace a {} }
+const n3: number = f3.a;
+>n3 : number
+>f3.a : any
+>f3 : () => void
+>a : any
+
+function f4() {}
+>f4 : () => void
+
+f4.a = 0;
+>f4.a = 0 : 0
+>f4.a : any
+>f4 : () => void
+>a : any
+>0 : 0
+
+namespace f4 { export namespace a { export type T = string; } }
+>T : string
+
+const n4: number = f4.a;
+>n4 : number
+>f4.a : any
+>f4 : () => void
+>a : any
+
+const t4: f4.a.T = "";
+>t4 : string
+>f4 : any
+>a : any
+>"" : ""
+
+namespace f5 { export type a = 0; }
+>a : 0
+
+function f5() {}
+>f5 : () => void
+
+f5.a = 0;
+>f5.a = 0 : 0
+>f5.a : any
+>f5 : () => void
+>a : any
+>0 : 0
+
+const n5: number = f5.a;
+>n5 : number
+>f5.a : any
+>f5 : () => void
+>a : any
+
+function f6() {}
+>f6 : typeof f6
+
+f6.a = 0;
+>f6.a = 0 : 0
+>f6.a : typeof f6.a
+>f6 : typeof f6
+>a : typeof f6.a
+>0 : 0
+
+namespace f6 { export namespace a { export const kind = 0; } }
+>f6 : typeof f6
+>a : typeof a
+>kind : 0
+>0 : 0
+
+const n6: number = f6.a; // error
+>n6 : number
+>f6.a : typeof f6.a
+>f6 : typeof f6
+>a : typeof f6.a
+
+=== popover.ts ===
+export function Popover() { return null; }
+>Popover : { (): null; displayName: string; }
+
+Popover.Target = (x: number) => x;
+>Popover.Target = (x: number) => x : (x: number) => number
+>Popover.Target : any
+>Popover : { (): null; displayName: string; }
+>Target : any
+>(x: number) => x : (x: number) => number
+>x : number
+>x : number
+
+Popover.displayName = "Popover";
+>Popover.displayName = "Popover" : "Popover"
+>Popover.displayName : string
+>Popover : { (): null; displayName: string; }
+>displayName : string
+>"Popover" : "Popover"
+
+export namespace Popover {
+  export namespace Target {
+    export type Props = number;
+>Props : number
+  }
+}
+
+Popover.Target(1);
+>Popover.Target(1) : any
+>Popover.Target : any
+>Popover : { (): null; displayName: string; }
+>Target : any
+>1 : 1
+
+Popover.displayName;
+>Popover.displayName : string
+>Popover : { (): null; displayName: string; }
+>displayName : string
+
+const props: Popover.Target.Props = 1;
+>props : number
+>Popover : any
+>Target : any
+>1 : 1
+
