@@ -1,0 +1,60 @@
+erasableEnumBasics.ts(14,1): error TS2322: Type 'E.Flag' is not assignable to type 'E.Int'.
+erasableEnumBasics.ts(18,1): error TS2322: Type '4' is not assignable to type 'E'.
+erasableEnumBasics.ts(21,1): error TS2322: Type '"exists"' is not assignable to type 'E'.
+erasableEnumBasics.ts(22,1): error TS2322: Type '"string"' is not assignable to type 'E'.
+erasableEnumBasics.ts(24,1): error TS2322: Type 'Other.String' is not assignable to type 'E'.
+erasableEnumBasics.ts(26,1): error TS2322: Type '"string"' is not assignable to type 'Other.String'.
+erasableEnumBasics.ts(27,1): error TS2322: Type 'E.String' is not assignable to type 'Other.String'.
+erasableEnumBasics.ts(28,1): error TS2322: Type 'undefined' is not assignable to type 'E'.
+
+
+==== erasableEnumBasics.ts (8 errors) ====
+    const existingValue = "exists";
+    const E: enum = {
+        Existing: existingValue,
+        Int: 1,
+        String: "string",
+        Flag: 8,
+    };
+    
+    // Members are assignable to their enum type and their own member type.
+    let value: E = E.Existing;
+    value = E.Int;
+    value = E.String;
+    let intMember: E.Int = E.Int;
+    intMember = E.Flag; // error: a different known member.
+    ~~~~~~~~~
+!!! error TS2322: Type 'E.Flag' is not assignable to type 'E.Int'.
+    
+    // Matching numeric literals are accepted, but other known literals are rejected.
+    value = 1;
+    value = 4; // error
+    ~~~~~
+!!! error TS2322: Type '4' is not assignable to type 'E'.
+    
+    // String members retain nominal types, including values from constant references.
+    value = "exists"; // error
+    ~~~~~
+!!! error TS2322: Type '"exists"' is not assignable to type 'E'.
+    value = "string"; // error
+    ~~~~~
+!!! error TS2322: Type '"string"' is not assignable to type 'E'.
+    const Other: enum = { String: "string" };
+    value = Other.String; // error: members from different enums are incompatible.
+    ~~~~~
+!!! error TS2322: Type 'Other.String' is not assignable to type 'E'.
+    let other: Other = Other.String;
+    other = "string"; // error: a single-member enum is also nominal.
+    ~~~~~
+!!! error TS2322: Type '"string"' is not assignable to type 'Other.String'.
+    other = E.String; // error
+    ~~~~~
+!!! error TS2322: Type 'E.String' is not assignable to type 'Other.String'.
+    value = undefined; // error
+    ~~~~~
+!!! error TS2322: Type 'undefined' is not assignable to type 'E'.
+    
+    // Number expressions retain TypeScript's numeric enum compatibility.
+    value = E.Int | E.Flag;
+    intMember = E.Int | E.Flag;
+    

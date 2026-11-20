@@ -1,0 +1,82 @@
+//// [tests/cases/compiler/erasableEnumConstants.ts] ////
+
+=== values.ts ===
+export const text = "hello";
+>text : Symbol(text, Decl(values.ts, 0, 12))
+
+export const count = 2;
+>count : Symbol(count, Decl(values.ts, 1, 12))
+
+// Numeric strings are string keys; indexing follows ordinary object rules.
+export const Source: enum = { A: "source", B: 1, "1": "numeric" };
+>Source : Symbol(Source, Decl(values.ts, 3, 12))
+>A : Symbol(Source.A, Decl(values.ts, 3, 29))
+>B : Symbol(Source.B, Decl(values.ts, 3, 42))
+>"1" : Symbol(Source["1"], Decl(values.ts, 3, 48))
+
+=== consumer.ts ===
+import { text, count, Source } from "./values";
+>text : Symbol(text, Decl(consumer.ts, 0, 8))
+>count : Symbol(count, Decl(consumer.ts, 0, 14))
+>Source : Symbol(Source, Decl(consumer.ts, 0, 21))
+
+const Local: enum = { Value: "local" };
+>Local : Symbol(Local, Decl(consumer.ts, 1, 5))
+>Value : Symbol(Local.Value, Decl(consumer.ts, 1, 21))
+
+// Parentheses are transparent for constant values and member references.
+export const E: enum = {
+>E : Symbol(E, Decl(consumer.ts, 3, 12))
+
+    __proto__: null,
+>__proto__ : Symbol(__proto__, Decl(consumer.ts, 3, 24))
+
+    Text: ((text)),
+>Text : Symbol(E.Text, Decl(consumer.ts, 4, 20))
+>text : Symbol(text, Decl(consumer.ts, 0, 8))
+
+    Count: (count) + 1,
+>Count : Symbol(E.Count, Decl(consumer.ts, 5, 19))
+>count : Symbol(count, Decl(consumer.ts, 0, 14))
+
+    ImportedMember: (Source.A),
+>ImportedMember : Symbol(E.ImportedMember, Decl(consumer.ts, 6, 23))
+>Source.A : Symbol(Source.A, Decl(values.ts, 3, 29))
+>Source : Symbol(Source, Decl(consumer.ts, 0, 21))
+>A : Symbol(Source.A, Decl(values.ts, 3, 29))
+
+    ImportedIndex: Source[("B")],
+>ImportedIndex : Symbol(E.ImportedIndex, Decl(consumer.ts, 7, 31))
+>Source : Symbol(Source, Decl(consumer.ts, 0, 21))
+
+    NumericIndex: Source[(1)],
+>NumericIndex : Symbol(E.NumericIndex, Decl(consumer.ts, 8, 33))
+>Source : Symbol(Source, Decl(consumer.ts, 0, 21))
+
+    LocalMember: Local.Value,
+>LocalMember : Symbol(E.LocalMember, Decl(consumer.ts, 9, 30))
+>Local.Value : Symbol(Local.Value, Decl(consumer.ts, 1, 21))
+>Local : Symbol(Local, Decl(consumer.ts, 1, 5))
+>Value : Symbol(Local.Value, Decl(consumer.ts, 1, 21))
+
+    LocalIndex: Local["Value"],
+>LocalIndex : Symbol(E.LocalIndex, Decl(consumer.ts, 10, 29))
+>Local : Symbol(Local, Decl(consumer.ts, 1, 5))
+>"Value" : Symbol(Local.Value, Decl(consumer.ts, 1, 21))
+
+};
+export let value: E = E.Text;
+>value : Symbol(value, Decl(consumer.ts, 13, 10))
+>E : Symbol(E, Decl(consumer.ts, 3, 12))
+>E.Text : Symbol(E.Text, Decl(consumer.ts, 4, 20))
+>E : Symbol(E, Decl(consumer.ts, 3, 12))
+>Text : Symbol(E.Text, Decl(consumer.ts, 4, 20))
+
+export let member: E.ImportedMember = E.ImportedMember;
+>member : Symbol(member, Decl(consumer.ts, 14, 10))
+>E : Symbol(E, Decl(consumer.ts, 3, 12))
+>ImportedMember : Symbol(E.ImportedMember, Decl(consumer.ts, 6, 23))
+>E.ImportedMember : Symbol(E.ImportedMember, Decl(consumer.ts, 6, 23))
+>E : Symbol(E, Decl(consumer.ts, 3, 12))
+>ImportedMember : Symbol(E.ImportedMember, Decl(consumer.ts, 6, 23))
+

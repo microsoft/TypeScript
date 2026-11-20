@@ -9023,5 +9023,29 @@
     "File '{0}' has a registered content mapper extension but does not match any content mapper's 'include'.": {
         "category": "Error",
         "code": 18140
+    },
+    "An erasable enum prototype setter must have the value 'null'.": {
+        "category": "Error",
+        "code": 18142
+    },
+    "Erasable enum member initializers must be constant expressions.": {
+        "category": "Error",
+        "code": 18143
+    },
+    "Spread assignments are not allowed in erasable enums.": {
+        "category": "Error",
+        "code": 18144
+    },
+    "Erasable enums only allow property assignments.": {
+        "category": "Error",
+        "code": 18145
+    },
+    "An 'enum' annotation requires a named variable in a variable statement with an object literal initializer.": {
+        "category": "Error",
+        "code": 18146
+    },
+    "Erasable enum member names must be identifiers or string literals.": {
+        "category": "Error",
+        "code": 18147
     }
 }

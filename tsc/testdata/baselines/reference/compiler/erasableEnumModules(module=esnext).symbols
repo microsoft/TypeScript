@@ -1,0 +1,134 @@
+//// [tests/cases/compiler/erasableEnumModules.ts] ////
+
+=== enums.ts ===
+/** Public values. */
+export const Before = 0, Color: enum = {
+>Before : Symbol(Before, Decl(enums.ts, 1, 12))
+>Color : Symbol(Color, Decl(enums.ts, 1, 24))
+
+    Red: "red",
+>Red : Symbol(Color.Red, Decl(enums.ts, 1, 40))
+
+    Blue: "blue",
+>Blue : Symbol(Color.Blue, Decl(enums.ts, 2, 15))
+
+}, After = 1;
+>After : Symbol(After, Decl(enums.ts, 4, 2))
+
+export const Numeric: enum = { One: 1, Shifted: 1 << 2 };
+>Numeric : Symbol(Numeric, Decl(enums.ts, 5, 12))
+>One : Symbol(Numeric.One, Decl(enums.ts, 5, 30))
+>Shifted : Symbol(Numeric.Shifted, Decl(enums.ts, 5, 38))
+
+export { Color as Shade };
+>Color : Symbol(Color, Decl(enums.ts, 1, 24))
+>Shade : Symbol(Shade, Decl(enums.ts, 6, 8))
+
+export enum Legacy { One = 1 }
+>Legacy : Symbol(Legacy, Decl(enums.ts, 6, 26))
+>One : Symbol(Legacy.One, Decl(enums.ts, 7, 20))
+
+// Declaration emit retains reachable local types and prototype configuration.
+const Local: enum = { "__proto__": (null), A: 1, B: "b" };
+>Local : Symbol(Local, Decl(enums.ts, 10, 5))
+>"__proto__" : Symbol("__proto__", Decl(enums.ts, 10, 21))
+>A : Symbol(Local.A, Decl(enums.ts, 10, 42))
+>B : Symbol(Local.B, Decl(enums.ts, 10, 48))
+
+export const alias = Local;
+>alias : Symbol(alias, Decl(enums.ts, 11, 12))
+>Local : Symbol(Local, Decl(enums.ts, 10, 5))
+
+export function member() {
+>member : Symbol(member, Decl(enums.ts, 11, 27))
+
+    return Local.A;
+>Local.A : Symbol(Local.A, Decl(enums.ts, 10, 42))
+>Local : Symbol(Local, Decl(enums.ts, 10, 5))
+>A : Symbol(Local.A, Decl(enums.ts, 10, 42))
+}
+export namespace Values {
+>Values : Symbol(Values, Decl(enums.ts, 14, 1))
+
+    export const E: enum = { A: 1, B: "b" };
+>E : Symbol(E, Decl(enums.ts, 16, 16))
+>A : Symbol(E.A, Decl(enums.ts, 16, 28))
+>B : Symbol(E.B, Decl(enums.ts, 16, 34))
+
+    export const alias = E;
+>alias : Symbol(alias, Decl(enums.ts, 17, 16))
+>E : Symbol(E, Decl(enums.ts, 16, 16))
+
+    export const member: E.A = E.A;
+>member : Symbol(member, Decl(enums.ts, 18, 16))
+>E : Symbol(E, Decl(enums.ts, 16, 16))
+>A : Symbol(E.A, Decl(enums.ts, 16, 28))
+>E.A : Symbol(E.A, Decl(enums.ts, 16, 28))
+>E : Symbol(E, Decl(enums.ts, 16, 16))
+>A : Symbol(E.A, Decl(enums.ts, 16, 28))
+}
+=== consumer.ts ===
+import { Color, Numeric, Shade } from "./enums";
+>Color : Symbol(Color, Decl(consumer.ts, 0, 8))
+>Numeric : Symbol(Numeric, Decl(consumer.ts, 0, 15))
+>Shade : Symbol(Shade, Decl(consumer.ts, 0, 24))
+
+export const red: Color.Red = Color.Red as const;
+>red : Symbol(red, Decl(consumer.ts, 1, 12))
+>Color : Symbol(Color, Decl(consumer.ts, 0, 8))
+>Red : Symbol(Color.Red, Decl(enums.ts, 1, 40))
+>Color.Red : Symbol(Color.Red, Decl(enums.ts, 1, 40))
+>Color : Symbol(Color, Decl(consumer.ts, 0, 8))
+>Red : Symbol(Color.Red, Decl(enums.ts, 1, 40))
+>const : Symbol(const)
+
+export const shade: Shade = Color["Blue"] as const;
+>shade : Symbol(shade, Decl(consumer.ts, 2, 12))
+>Shade : Symbol(Shade, Decl(consumer.ts, 0, 24))
+>Color : Symbol(Color, Decl(consumer.ts, 0, 8))
+>"Blue" : Symbol(Color.Blue, Decl(enums.ts, 2, 15))
+>const : Symbol(const)
+
+export const numeric: Numeric = Numeric.Shifted;
+>numeric : Symbol(numeric, Decl(consumer.ts, 3, 12))
+>Numeric : Symbol(Numeric, Decl(consumer.ts, 0, 15))
+>Numeric.Shifted : Symbol(Numeric.Shifted, Decl(enums.ts, 5, 38))
+>Numeric : Symbol(Numeric, Decl(consumer.ts, 0, 15))
+>Shifted : Symbol(Numeric.Shifted, Decl(enums.ts, 5, 38))
+
+export function choose(color: Color): Color {
+>choose : Symbol(choose, Decl(consumer.ts, 3, 48))
+>color : Symbol(color, Decl(consumer.ts, 4, 23))
+>Color : Symbol(Color, Decl(consumer.ts, 0, 8))
+>Color : Symbol(Color, Decl(consumer.ts, 0, 8))
+
+    return color;
+>color : Symbol(color, Decl(consumer.ts, 4, 23))
+}
+=== references.ts ===
+import { Legacy } from "./enums";
+>Legacy : Symbol(Legacy, Decl(references.ts, 0, 8))
+
+// Erased annotations preserve the import and runtime member accesses.
+export const FromLegacy: enum = { Property: Legacy.One, Index: Legacy["One"] };
+>FromLegacy : Symbol(FromLegacy, Decl(references.ts, 2, 12))
+>Property : Symbol(FromLegacy.Property, Decl(references.ts, 2, 33))
+>Legacy.One : Symbol(Legacy.One, Decl(enums.ts, 7, 20))
+>Legacy : Symbol(Legacy, Decl(references.ts, 0, 8))
+>One : Symbol(Legacy.One, Decl(enums.ts, 7, 20))
+>Index : Symbol(FromLegacy.Index, Decl(references.ts, 2, 55))
+>Legacy : Symbol(Legacy, Decl(references.ts, 0, 8))
+>"One" : Symbol(Legacy.One, Decl(enums.ts, 7, 20))
+
+=== folded.ts ===
+import { Legacy } from "./enums";
+>Legacy : Symbol(Legacy, Decl(folded.ts, 0, 8))
+
+// Traditional enum constant folding can still remove its otherwise unused import.
+export enum Folded { One = Legacy.One }
+>Folded : Symbol(Folded, Decl(folded.ts, 0, 33))
+>One : Symbol(Folded.One, Decl(folded.ts, 2, 20))
+>Legacy.One : Symbol(Legacy.One, Decl(enums.ts, 7, 20))
+>Legacy : Symbol(Legacy, Decl(folded.ts, 0, 8))
+>One : Symbol(Legacy.One, Decl(enums.ts, 7, 20))
+

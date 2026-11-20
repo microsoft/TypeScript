@@ -1,0 +1,149 @@
+//// [tests/cases/compiler/erasableEnumModules.ts] ////
+
+=== enums.ts ===
+/** Public values. */
+export const Before = 0, Color: enum = {
+>Before : 0
+>0 : 0
+>Color : typeof Color
+>{    Red: "red",    Blue: "blue",} : typeof Color
+
+    Red: "red",
+>Red : Color.Red
+>"red" : "red"
+
+    Blue: "blue",
+>Blue : Color.Blue
+>"blue" : "blue"
+
+}, After = 1;
+>After : 1
+>1 : 1
+
+export const Numeric: enum = { One: 1, Shifted: 1 << 2 };
+>Numeric : typeof Numeric
+>{ One: 1, Shifted: 1 << 2 } : typeof Numeric
+>One : Numeric.One
+>1 : 1
+>Shifted : Numeric.Shifted
+>1 << 2 : number
+>1 : 1
+>2 : 2
+
+export { Color as Shade };
+>Color : typeof Color
+>Shade : typeof Color
+
+export enum Legacy { One = 1 }
+>Legacy : Legacy
+>One : Legacy.One
+>1 : 1
+
+// Declaration emit retains reachable local types and prototype configuration.
+const Local: enum = { "__proto__": (null), A: 1, B: "b" };
+>Local : typeof Local
+>{ "__proto__": (null), A: 1, B: "b" } : typeof Local
+>"__proto__" : null
+>(null) : null
+>A : Local.A
+>1 : 1
+>B : Local.B
+>"b" : "b"
+
+export const alias = Local;
+>alias : typeof Local
+>Local : typeof Local
+
+export function member() {
+>member : () => Local
+
+    return Local.A;
+>Local.A : Local.A
+>Local : typeof Local
+>A : Local.A
+}
+export namespace Values {
+>Values : typeof Values
+
+    export const E: enum = { A: 1, B: "b" };
+>E : typeof E
+>{ A: 1, B: "b" } : typeof E
+>A : E.A
+>1 : 1
+>B : E.B
+>"b" : "b"
+
+    export const alias = E;
+>alias : typeof E
+>E : typeof E
+
+    export const member: E.A = E.A;
+>member : E.A
+>E : any
+>E.A : E.A
+>E : typeof E
+>A : E.A
+}
+=== consumer.ts ===
+import { Color, Numeric, Shade } from "./enums";
+>Color : typeof Color
+>Numeric : typeof Numeric
+>Shade : typeof Color
+
+export const red: Color.Red = Color.Red as const;
+>red : Color.Red
+>Color : any
+>Color.Red as const : Color.Red
+>Color.Red : Color.Red
+>Color : typeof Color
+>Red : Color.Red
+
+export const shade: Shade = Color["Blue"] as const;
+>shade : Color
+>Color["Blue"] as const : Color.Blue
+>Color["Blue"] : Color.Blue
+>Color : typeof Color
+>"Blue" : "Blue"
+
+export const numeric: Numeric = Numeric.Shifted;
+>numeric : Numeric
+>Numeric.Shifted : Numeric.Shifted
+>Numeric : typeof Numeric
+>Shifted : Numeric.Shifted
+
+export function choose(color: Color): Color {
+>choose : (color: Color) => Color
+>color : Color
+
+    return color;
+>color : Color
+}
+=== references.ts ===
+import { Legacy } from "./enums";
+>Legacy : typeof Legacy
+
+// Erased annotations preserve the import and runtime member accesses.
+export const FromLegacy: enum = { Property: Legacy.One, Index: Legacy["One"] };
+>FromLegacy : typeof FromLegacy
+>{ Property: Legacy.One, Index: Legacy["One"] } : typeof FromLegacy
+>Property : FromLegacy
+>Legacy.One : Legacy
+>Legacy : typeof Legacy
+>One : Legacy
+>Index : FromLegacy
+>Legacy["One"] : Legacy
+>Legacy : typeof Legacy
+>"One" : "One"
+
+=== folded.ts ===
+import { Legacy } from "./enums";
+>Legacy : typeof Legacy
+
+// Traditional enum constant folding can still remove its otherwise unused import.
+export enum Folded { One = Legacy.One }
+>Folded : Folded
+>One : Folded.One
+>Legacy.One : Legacy
+>Legacy : typeof Legacy
+>One : Legacy
+

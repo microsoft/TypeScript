@@ -1,0 +1,193 @@
+//// [tests/cases/compiler/erasableEnumErasure.ts] ////
+
+=== erasableEnumErasure.ts ===
+const outer = 4;
+>outer : 4
+>4 : 4
+
+const Numeric: enum = (({
+>Numeric : typeof Numeric
+>(({    // Preserve member comments and ordinary JavaScript expressions.    First: /* Preserve initializer comments. */ (1),    Second: (outer + 1),    Shifted: outer << 1,})) : typeof Numeric
+>({    // Preserve member comments and ordinary JavaScript expressions.    First: /* Preserve initializer comments. */ (1),    Second: (outer + 1),    Shifted: outer << 1,}) : typeof Numeric
+>{    // Preserve member comments and ordinary JavaScript expressions.    First: /* Preserve initializer comments. */ (1),    Second: (outer + 1),    Shifted: outer << 1,} : typeof Numeric
+
+    // Preserve member comments and ordinary JavaScript expressions.
+    First: /* Preserve initializer comments. */ (1),
+>First : Numeric.First
+>(1) : 1
+>1 : 1
+
+    Second: (outer + 1),
+>Second : Numeric.Second
+>(outer + 1) : number
+>outer + 1 : number
+>outer : 4
+>1 : 1
+
+    Shifted: outer << 1,
+>Shifted : Numeric.Shifted
+>outer << 1 : number
+>outer : 4
+>1 : 1
+
+}));
+const StringValues: enum = {
+>StringValues : typeof StringValues
+>{    /** An enum member. */    First: "first",    Second: "second",} : typeof StringValues
+
+    /** An enum member. */
+    First: "first",
+>First : StringValues.First
+>"first" : "first"
+
+    Second: "second",
+>Second : StringValues.Second
+>"second" : "second"
+
+};
+let numeric: Numeric = Numeric.First;
+>numeric : Numeric
+>Numeric.First : Numeric.First
+>Numeric : typeof Numeric
+>First : Numeric.First
+
+let member: Numeric.First = Numeric.First;
+>member : Numeric.First
+>Numeric : any
+>Numeric.First : Numeric.First
+>Numeric : typeof Numeric
+>First : Numeric.First
+
+let text: StringValues = StringValues.Second;
+>text : StringValues
+>StringValues.Second : StringValues.Second
+>StringValues : typeof StringValues
+>Second : StringValues.Second
+
+const constMember = StringValues.First as const;
+>constMember : StringValues.First
+>StringValues.First as const : StringValues.First
+>StringValues.First : StringValues.First
+>StringValues : typeof StringValues
+>First : StringValues.First
+
+const constIndexed = StringValues["First"] as const;
+>constIndexed : StringValues.First
+>StringValues["First"] as const : StringValues.First
+>StringValues["First"] : StringValues.First
+>StringValues : typeof StringValues
+>"First" : "First"
+
+const keys: keyof typeof StringValues = "First";
+>keys : "First" | "Second"
+>StringValues : typeof StringValues
+>"First" : "First"
+
+const object: typeof StringValues = StringValues;
+>object : typeof StringValues
+>StringValues : typeof StringValues
+>StringValues : typeof StringValues
+
+function narrow(value: StringValues) {
+>narrow : (value: StringValues) => StringValues
+>value : StringValues
+
+    if (value === StringValues.First) {
+>value === StringValues.First : boolean
+>value : StringValues
+>StringValues.First : StringValues.First
+>StringValues : typeof StringValues
+>First : StringValues.First
+
+        const first: StringValues.First = value;
+>first : StringValues.First
+>StringValues : any
+>value : StringValues.First
+
+        return first;
+>first : StringValues.First
+    }
+    const second: StringValues.Second = value;
+>second : StringValues.Second
+>StringValues : any
+>value : StringValues.Second
+
+    return second;
+>second : StringValues.Second
+}
+function scoped() {
+>scoped : () => string
+
+    const Local: enum = { Value: "local" };
+>Local : typeof Local
+>{ Value: "local" } : typeof Local
+>Value : Local
+>"local" : "local"
+
+    const value: Local.Value = Local.Value;
+>value : Local.Value
+>Local : any
+>Local.Value : Local.Value
+>Local : typeof Local
+>Value : Local.Value
+
+    return value as string;
+>value as string : string
+>value : Local.Value
+}
+namespace Types {
+    export type Value = StringValues;
+>Value : StringValues
+}
+
+var Variable: enum = { Value: 1 };
+>Variable : typeof Variable
+>{ Value: 1 } : typeof Variable
+>Value : Variable
+>1 : 1
+
+const variable: Variable = Variable.Value;
+>variable : Variable.Value
+>Variable.Value : Variable.Value
+>Variable : typeof Variable
+>Value : Variable.Value
+
+declare const Ambient: enum = { A: 1, B: (0) };
+>Ambient : typeof Ambient
+>{ A: 1, B: (0) } : typeof Ambient
+>A : Ambient.A
+>1 : 1
+>B : Ambient.B
+>(0) : 0
+>0 : 0
+
+const ambient: Ambient = Ambient.B;
+>ambient : Ambient
+>Ambient.B : Ambient.B
+>Ambient : typeof Ambient
+>B : Ambient.B
+
+// Enums without members have the never type, including prototype-only objects.
+const Empty: enum = {};
+>Empty : typeof Empty
+>{} : typeof Empty
+
+declare const empty: Empty;
+>empty : never
+
+const emptyValue: never = empty;
+>emptyValue : never
+>empty : never
+
+const PrototypeOnly: enum = { __proto__: null };
+>PrototypeOnly : typeof PrototypeOnly
+>{ __proto__: null } : typeof PrototypeOnly
+>__proto__ : null
+
+declare const prototypeOnly: PrototypeOnly;
+>prototypeOnly : never
+
+const prototypeOnlyValue: never = prototypeOnly;
+>prototypeOnlyValue : never
+>prototypeOnly : never
+
