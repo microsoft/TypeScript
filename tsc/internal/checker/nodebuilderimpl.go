@@ -926,7 +926,7 @@ func (b *NodeBuilderImpl) createExpressionFromSymbolChain(chain []*ast.Symbol, i
 		literalText := stringutil.UnquoteString(symbolName)
 		b.ctx.approximateLength += len(literalText) + 2
 		expression = b.newStringLiteralEx(literalText, symbolName[0] == '\'')
-	} else if jsnum.FromString(symbolName).String() == symbolName {
+	} else if jsnum.IsNumericLiteralName(symbolName) {
 		// TODO: the follwing in strada would assert if the number is negative, but no such assertion exists here
 		// Moreover, what's even guaranteeing the name *isn't* -1 here anyway? Needs double-checking.
 		b.ctx.approximateLength += len(symbolName)
@@ -979,10 +979,10 @@ func (b *NodeBuilderImpl) getNameOfSymbolFromNameType(symbol *ast.Symbol) string
 			case jsnum.Number:
 				name = v.String()
 			}
-			if !scanner.IsIdentifierText(name, core.LanguageVariantStandard) && !isNumericLiteralName(name) {
+			if !scanner.IsIdentifierText(name, core.LanguageVariantStandard) && !jsnum.IsNumericLiteralName(name) {
 				return b.ch.valueToString(nameType.AsLiteralType().value)
 			}
-			if isNumericLiteralName(name) && strings.HasPrefix(name, "-") {
+			if jsnum.IsNumericLiteralName(name) && strings.HasPrefix(name, "-") {
 				return fmt.Sprintf("[%s]", name)
 			}
 			return name
@@ -2510,7 +2510,7 @@ func classifyPropertyName(name string, stringNamed bool, isMethod bool) property
 	if scanner.IsIdentifierText(name, core.LanguageVariantStandard) {
 		return propertyNameNodeKindIdentifier
 	}
-	return core.IfElse(!stringNamed && isNumericLiteralName(name) && jsnum.FromString(name) >= 0, propertyNameNodeKindNumericLiteral, propertyNameNodeKindStringLiteral)
+	return core.IfElse(!stringNamed && jsnum.IsNumericLiteralName(name) && jsnum.FromString(name) >= 0, propertyNameNodeKindNumericLiteral, propertyNameNodeKindStringLiteral)
 }
 
 func (b *NodeBuilderImpl) createPropertyNameNodeForIdentifierOrLiteral(name string, singleQuote bool, stringNamed bool, isMethod bool, symbol *ast.Symbol) *ast.Node {
@@ -2608,11 +2608,11 @@ func (b *NodeBuilderImpl) getPropertyNameNodeForSymbolFromNameType(symbol *ast.S
 		case string:
 			name = nameType.AsLiteralType().value.(string)
 		}
-		if !scanner.IsIdentifierText(name, core.LanguageVariantStandard) && (stringNamed || !isNumericLiteralName(name)) {
+		if !scanner.IsIdentifierText(name, core.LanguageVariantStandard) && (stringNamed || !jsnum.IsNumericLiteralName(name)) {
 			node := b.f.NewStringLiteral(name, core.IfElse(singleQuote, ast.TokenFlagsSingleQuote, ast.TokenFlagsNone))
 			return node
 		}
-		if isNumericLiteralName(name) && name[0] == '-' {
+		if jsnum.IsNumericLiteralName(name) && name[0] == '-' {
 			return b.f.NewComputedPropertyName(b.f.NewPrefixUnaryExpression(ast.KindMinusToken, b.f.NewNumericLiteral(name[1:], ast.TokenFlagsNone)))
 		}
 		return b.createPropertyNameNodeForIdentifierOrLiteral(name, singleQuote, stringNamed, isMethod, symbol)
