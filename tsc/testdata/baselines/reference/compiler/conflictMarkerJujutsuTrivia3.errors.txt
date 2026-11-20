@@ -1,0 +1,64 @@
+conflictMarkerJujutsuTrivia3.ts(3,1): error TS1185: Merge conflict marker encountered.
+conflictMarkerJujutsuTrivia3.ts(4,1): error TS1185: Merge conflict marker encountered.
+conflictMarkerJujutsuTrivia3.ts(5,1): error TS1185: Merge conflict marker encountered.
+conflictMarkerJujutsuTrivia3.ts(8,1): error TS1185: Merge conflict marker encountered.
+conflictMarkerJujutsuTrivia3.ts(9,6): error TS2304: Cannot find name 'b'.
+conflictMarkerJujutsuTrivia3.ts(10,1): error TS1185: Merge conflict marker encountered.
+conflictMarkerJujutsuTrivia3.ts(13,1): error TS1185: Merge conflict marker encountered.
+conflictMarkerJujutsuTrivia3.ts(14,1): error TS1185: Merge conflict marker encountered.
+conflictMarkerJujutsuTrivia3.ts(15,1): error TS1185: Merge conflict marker encountered.
+conflictMarkerJujutsuTrivia3.ts(20,1): error TS1185: Merge conflict marker encountered.
+conflictMarkerJujutsuTrivia3.ts(25,1): error TS1185: Merge conflict marker encountered.
+
+
+==== conflictMarkerJujutsuTrivia3.ts (11 errors) ====
+    class C {
+      foo() {
+    <<<<<<<<<<< conflict 1 of 2
+    ~~~~~~~~~~~
+!!! error TS1185: Merge conflict marker encountered.
+    %%%%%%%%%%% diff from: puqzxvrm 9be6077e "call c()"
+    ~~~~~~~~~~~
+!!! error TS1185: Merge conflict marker encountered.
+    \\\\\\\\\\\        to: lnqukurm 84b1da1d "call a()"
+    ~~~~~~~~~~~
+!!! error TS1185: Merge conflict marker encountered.
+    -     c();
+    +     a();
+    +++++++++++ uxvuvmmx 71bb7e49 "call b()"
+    ~~~~~~~~~~~
+!!! error TS1185: Merge conflict marker encountered.
+         b();
+         ~
+!!! error TS2304: Cannot find name 'b'.
+    >>>>>>>>>>> conflict 1 of 2 ends
+    ~~~~~~~~~~~
+!!! error TS1185: Merge conflict marker encountered.
+      }
+    
+    <<<<<<<<<<< conflict 2 of 2
+    ~~~~~~~~~~~
+!!! error TS1185: Merge conflict marker encountered.
+    %%%%%%%%%%% diff from: puqzxvrm 9be6077e "call c()"
+    ~~~~~~~~~~~
+!!! error TS1185: Merge conflict marker encountered.
+    \\\\\\\\\\\        to: lnqukurm 84b1da1d "call a()"
+    ~~~~~~~~~~~
+!!! error TS1185: Merge conflict marker encountered.
+    +/*
+    +=======
+    +*/
+    +
+    +++++++++++ uxvuvmmx 71bb7e49 "call b()"
+    ~~~~~~~~~~~
+!!! error TS1185: Merge conflict marker encountered.
+    /*
+    %%%%%%%
+    */
+    
+    >>>>>>>>>>> conflict 2 of 2 ends
+    ~~~~~~~~~~~
+!!! error TS1185: Merge conflict marker encountered.
+      public bar() { }
+    }
+    
