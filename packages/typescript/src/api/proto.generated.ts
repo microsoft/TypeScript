@@ -57,6 +57,9 @@ export interface APIMethodInfo {
     createModuleResolver: APIMethod<CreateModuleResolverParams, number>;
     releaseModuleResolver: APIMethod<ReleaseModuleResolverParams, unknown>;
     resolveModuleName: APIMethod<ResolveModuleNameParams, ResolveModuleNameResult>;
+    resolveTypeReferenceDirective: APIMethod<ResolveTypeReferenceDirectiveParams, ResolveTypeReferenceDirectiveResult>;
+    getEffectiveTypeRoots: APIMethod<CompilerOptionsParams, RootedDirectoryPath[]>;
+    getTsBuildInfoEmitOutputFilePath: APIMethod<CompilerOptionsParams, RootedFilePath | null>;
     parseCommandLine: APIMethod<ParseCommandLineParams, ConfigFileResponse>;
     readConfigFile: APIMethod<ReadConfigFileParams, ReadConfigFileResponse>;
     parseConfigFileTextToJson: APIMethod<ParseConfigFileTextToJsonParams, ReadConfigFileResponse>;
@@ -427,6 +430,25 @@ export interface ResolveModuleNameResult {
     resolvedModule?: ResolvedModule | undefined;
     /** Trace is provided when compilerOptions.traceResolution is true. */
     trace?: string[] | undefined;
+}
+
+export interface ResolveTypeReferenceDirectiveParams {
+    snapshot?: number | undefined;
+    inProgressSnapshot?: number | undefined;
+    resolver: number;
+    typeReferenceDirectiveName: string;
+    containingFile: DocumentIdentifier;
+    resolutionMode?: ResolutionMode | undefined;
+}
+
+export interface ResolveTypeReferenceDirectiveResult {
+    resolvedTypeReferenceDirective?: ResolvedTypeReferenceDirective | undefined;
+    /** Trace is provided when compilerOptions.traceResolution is true. */
+    trace?: string[] | undefined;
+}
+
+export interface CompilerOptionsParams {
+    compilerOptions: CompilerOptions;
 }
 
 export interface ParseCommandLineParams {
@@ -1348,6 +1370,7 @@ export interface BatchRequest {
         | "getDefaultProjectForFile"
         | "getDocumentationComment"
         | "getESSymbolType"
+        | "getEffectiveTypeRoots"
         | "getExportSpecifierLocalTargetSymbol"
         | "getExportSymbolOfSymbol"
         | "getExportSymbolOfSymbolForChecker"
@@ -1438,6 +1461,7 @@ export interface BatchRequest {
         | "getThisTypeOfType"
         | "getTrueType"
         | "getTrueTypeOfConditionalType"
+        | "getTsBuildInfoEmitOutputFilePath"
         | "getTypeArguments"
         | "getTypeArgumentsForResolvedSignature"
         | "getTypeAtLocation"
@@ -1483,6 +1507,7 @@ export interface BatchRequest {
         | "releaseSourceFile"
         | "resolveModuleName"
         | "resolveName"
+        | "resolveTypeReferenceDirective"
         | "retainSourceFile"
         | "saveHeapProfile"
         | "signatureToSignatureDeclaration"
@@ -1558,6 +1583,7 @@ export interface BatchResponse {
         | "getDefaultProjectForFile"
         | "getDocumentationComment"
         | "getESSymbolType"
+        | "getEffectiveTypeRoots"
         | "getExportSpecifierLocalTargetSymbol"
         | "getExportSymbolOfSymbol"
         | "getExportSymbolOfSymbolForChecker"
@@ -1648,6 +1674,7 @@ export interface BatchResponse {
         | "getThisTypeOfType"
         | "getTrueType"
         | "getTrueTypeOfConditionalType"
+        | "getTsBuildInfoEmitOutputFilePath"
         | "getTypeArguments"
         | "getTypeArgumentsForResolvedSignature"
         | "getTypeAtLocation"
@@ -1693,6 +1720,7 @@ export interface BatchResponse {
         | "releaseSourceFile"
         | "resolveModuleName"
         | "resolveName"
+        | "resolveTypeReferenceDirective"
         | "retainSourceFile"
         | "saveHeapProfile"
         | "signatureToSignatureDeclaration"
