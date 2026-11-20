@@ -199,6 +199,9 @@ func (p *regExpParser) scanDisjunction(isInGroup bool) {
 //	| '(?!' Disjunction ')'
 //	| '(?<=' Disjunction ')'
 //	| '(?<!' Disjunction ')'
+//	| '\A'
+//	| '\z'
+//	| '\Z'
 //
 // Quantifier ::= QuantifierPrefix '?'?
 // QuantifierPrefix ::=
@@ -236,6 +239,16 @@ func (p *regExpParser) scanAlternative(isInGroup bool) {
 			case 'b', 'B':
 				p.incPos(1)
 				isPreviousTermQuantifiable = false
+			case 'A', 'z', 'Z':
+				if p.anyUnicodeMode {
+					p.incPos(1)
+					if p.scanner.languageVersion() < core.ScriptTargetESNext {
+						p.error(diagnostics.Regular_expression_buffer_boundary_assertions_are_only_available_when_targeting_esnext, start, p.pos()-start)
+					}
+					isPreviousTermQuantifiable = false
+					break
+				}
+				fallthrough
 			default:
 				p.scanAtomEscape()
 				isPreviousTermQuantifiable = true
