@@ -1,0 +1,36 @@
+//// [tests/cases/compiler/jsdocTypeTagOnContextuallyTypedFunction.ts] ////
+
+=== a.js ===
+/** @type {{ f: (a: string | number, ...rest: unknown[]) => string }} */
+const context = { f: (a) => "" };
+>context : Symbol(context, Decl(a.js, 1, 5))
+>f : Symbol(f, Decl(a.js, 1, 17))
+>a : Symbol(a, Decl(a.js, 1, 22))
+
+context.f =
+>context.f : Symbol(f, Decl(a.js, 0, 12))
+>context : Symbol(context, Decl(a.js, 1, 5))
+>f : Symbol(f, Decl(a.js, 0, 12))
+
+    /** @type {(content: string, ...rest: [boolean?]) => string} */
+    (content, ...rest) => content.toUpperCase() + rest.length;
+>content : Symbol(content, Decl(a.js, 5, 5))
+>rest : Symbol(rest, Decl(a.js, 5, 13))
+>content.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>content : Symbol(content, Decl(a.js, 5, 5))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>rest.length : Symbol(length)
+>rest : Symbol(rest, Decl(a.js, 5, 13))
+>length : Symbol(length)
+
+/** @type {(content: string | number) => string} */
+const g =
+>g : Symbol(g, Decl(a.js, 8, 5))
+
+    /** @type {(content: string) => string} */
+    (content) => content.toUpperCase();
+>content : Symbol(content, Decl(a.js, 10, 5))
+>content.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>content : Symbol(content, Decl(a.js, 10, 5))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+

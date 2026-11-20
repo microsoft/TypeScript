@@ -1,0 +1,103 @@
+//// [tests/cases/compiler/nestedCallContextualTypeCheckOrder.ts] ////
+
+=== nestedCallContextualTypeCheckOrder.ts ===
+// A generic call whose contextual type comes from an enclosing call is
+// resolved after it, whichever is queried first, through every expression
+// that passes the contextual type on.
+
+declare function outer<T>(cb: (x: T) => void, v: T): void;
+>outer : Symbol(outer, Decl(nestedCallContextualTypeCheckOrder.ts, 0, 0))
+>T : Symbol(T, Decl(nestedCallContextualTypeCheckOrder.ts, 4, 23))
+>cb : Symbol(cb, Decl(nestedCallContextualTypeCheckOrder.ts, 4, 26))
+>x : Symbol(x, Decl(nestedCallContextualTypeCheckOrder.ts, 4, 31))
+>T : Symbol(T, Decl(nestedCallContextualTypeCheckOrder.ts, 4, 23))
+>v : Symbol(v, Decl(nestedCallContextualTypeCheckOrder.ts, 4, 45))
+>T : Symbol(T, Decl(nestedCallContextualTypeCheckOrder.ts, 4, 23))
+
+declare function outerObj<T>(o: { cb: (x: T) => void; v: T }): void;
+>outerObj : Symbol(outerObj, Decl(nestedCallContextualTypeCheckOrder.ts, 4, 58))
+>T : Symbol(T, Decl(nestedCallContextualTypeCheckOrder.ts, 5, 26))
+>o : Symbol(o, Decl(nestedCallContextualTypeCheckOrder.ts, 5, 29))
+>cb : Symbol(cb, Decl(nestedCallContextualTypeCheckOrder.ts, 5, 33))
+>x : Symbol(x, Decl(nestedCallContextualTypeCheckOrder.ts, 5, 39))
+>T : Symbol(T, Decl(nestedCallContextualTypeCheckOrder.ts, 5, 26))
+>v : Symbol(v, Decl(nestedCallContextualTypeCheckOrder.ts, 5, 53))
+>T : Symbol(T, Decl(nestedCallContextualTypeCheckOrder.ts, 5, 26))
+
+declare function outerGen<T>(g: () => Generator<(x: T) => void>, v: T): void;
+>outerGen : Symbol(outerGen, Decl(nestedCallContextualTypeCheckOrder.ts, 5, 68))
+>T : Symbol(T, Decl(nestedCallContextualTypeCheckOrder.ts, 6, 26))
+>g : Symbol(g, Decl(nestedCallContextualTypeCheckOrder.ts, 6, 29))
+>Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
+>x : Symbol(x, Decl(nestedCallContextualTypeCheckOrder.ts, 6, 49))
+>T : Symbol(T, Decl(nestedCallContextualTypeCheckOrder.ts, 6, 26))
+>v : Symbol(v, Decl(nestedCallContextualTypeCheckOrder.ts, 6, 64))
+>T : Symbol(T, Decl(nestedCallContextualTypeCheckOrder.ts, 6, 26))
+
+declare function wrap<U>(f: U): U;
+>wrap : Symbol(wrap, Decl(nestedCallContextualTypeCheckOrder.ts, 6, 77))
+>U : Symbol(U, Decl(nestedCallContextualTypeCheckOrder.ts, 7, 22))
+>f : Symbol(f, Decl(nestedCallContextualTypeCheckOrder.ts, 7, 25))
+>U : Symbol(U, Decl(nestedCallContextualTypeCheckOrder.ts, 7, 22))
+>U : Symbol(U, Decl(nestedCallContextualTypeCheckOrder.ts, 7, 22))
+
+declare function tag<T>(s: TemplateStringsArray, cb: (x: T) => void, v: T): void;
+>tag : Symbol(tag, Decl(nestedCallContextualTypeCheckOrder.ts, 7, 34))
+>T : Symbol(T, Decl(nestedCallContextualTypeCheckOrder.ts, 8, 21))
+>s : Symbol(s, Decl(nestedCallContextualTypeCheckOrder.ts, 8, 24))
+>TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es5.d.ts, --, --))
+>cb : Symbol(cb, Decl(nestedCallContextualTypeCheckOrder.ts, 8, 48))
+>x : Symbol(x, Decl(nestedCallContextualTypeCheckOrder.ts, 8, 54))
+>T : Symbol(T, Decl(nestedCallContextualTypeCheckOrder.ts, 8, 21))
+>v : Symbol(v, Decl(nestedCallContextualTypeCheckOrder.ts, 8, 68))
+>T : Symbol(T, Decl(nestedCallContextualTypeCheckOrder.ts, 8, 21))
+
+declare function tagWrap<U>(s: TemplateStringsArray, f: U): U;
+>tagWrap : Symbol(tagWrap, Decl(nestedCallContextualTypeCheckOrder.ts, 8, 81))
+>U : Symbol(U, Decl(nestedCallContextualTypeCheckOrder.ts, 9, 25))
+>s : Symbol(s, Decl(nestedCallContextualTypeCheckOrder.ts, 9, 28))
+>TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es5.d.ts, --, --))
+>f : Symbol(f, Decl(nestedCallContextualTypeCheckOrder.ts, 9, 52))
+>U : Symbol(U, Decl(nestedCallContextualTypeCheckOrder.ts, 9, 25))
+>U : Symbol(U, Decl(nestedCallContextualTypeCheckOrder.ts, 9, 25))
+
+outer(wrap((x) => x.toFixed())!, 1);
+>outer : Symbol(outer, Decl(nestedCallContextualTypeCheckOrder.ts, 0, 0))
+>wrap : Symbol(wrap, Decl(nestedCallContextualTypeCheckOrder.ts, 6, 77))
+>x : Symbol(x, Decl(nestedCallContextualTypeCheckOrder.ts, 11, 12))
+>x : Symbol(x, Decl(nestedCallContextualTypeCheckOrder.ts, 11, 12))
+
+outerObj({ ...{ cb: wrap((x) => x.toFixed()) }, v: 1 });
+>outerObj : Symbol(outerObj, Decl(nestedCallContextualTypeCheckOrder.ts, 4, 58))
+>cb : Symbol(cb, Decl(nestedCallContextualTypeCheckOrder.ts, 12, 15))
+>wrap : Symbol(wrap, Decl(nestedCallContextualTypeCheckOrder.ts, 6, 77))
+>x : Symbol(x, Decl(nestedCallContextualTypeCheckOrder.ts, 12, 26))
+>x : Symbol(x, Decl(nestedCallContextualTypeCheckOrder.ts, 12, 26))
+>v : Symbol(v, Decl(nestedCallContextualTypeCheckOrder.ts, 12, 47))
+
+outer(([wrap((x) => x.toFixed())] as const)[0], 1);
+>outer : Symbol(outer, Decl(nestedCallContextualTypeCheckOrder.ts, 0, 0))
+>wrap : Symbol(wrap, Decl(nestedCallContextualTypeCheckOrder.ts, 6, 77))
+>x : Symbol(x, Decl(nestedCallContextualTypeCheckOrder.ts, 13, 14))
+>x : Symbol(x, Decl(nestedCallContextualTypeCheckOrder.ts, 13, 14))
+>const : Symbol(const)
+>0 : Symbol(0)
+
+tag`${wrap((x) => x.toFixed())}${1}`;
+>tag : Symbol(tag, Decl(nestedCallContextualTypeCheckOrder.ts, 7, 34))
+>wrap : Symbol(wrap, Decl(nestedCallContextualTypeCheckOrder.ts, 6, 77))
+>x : Symbol(x, Decl(nestedCallContextualTypeCheckOrder.ts, 14, 12))
+>x : Symbol(x, Decl(nestedCallContextualTypeCheckOrder.ts, 14, 12))
+
+outer(tagWrap`${(x) => x.toFixed()}`, 1);
+>outer : Symbol(outer, Decl(nestedCallContextualTypeCheckOrder.ts, 0, 0))
+>tagWrap : Symbol(tagWrap, Decl(nestedCallContextualTypeCheckOrder.ts, 8, 81))
+>x : Symbol(x, Decl(nestedCallContextualTypeCheckOrder.ts, 15, 17))
+>x : Symbol(x, Decl(nestedCallContextualTypeCheckOrder.ts, 15, 17))
+
+outerGen(function* () { yield wrap((x) => x.toFixed()); }, 1);
+>outerGen : Symbol(outerGen, Decl(nestedCallContextualTypeCheckOrder.ts, 5, 68))
+>wrap : Symbol(wrap, Decl(nestedCallContextualTypeCheckOrder.ts, 6, 77))
+>x : Symbol(x, Decl(nestedCallContextualTypeCheckOrder.ts, 16, 36))
+>x : Symbol(x, Decl(nestedCallContextualTypeCheckOrder.ts, 16, 36))
+

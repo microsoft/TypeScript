@@ -1,0 +1,41 @@
+//// [tests/cases/compiler/selfReferencingObjectLiteralErrorSharedChecker.ts] ////
+
+=== a.ts ===
+import type { T } from "./b";
+>T : Symbol(T, Decl(a.ts, 0, 13))
+
+export const Obj = {
+>Obj : Symbol(Obj, Decl(a.ts, 2, 12))
+
+    Updaters: {
+>Updaters : Symbol(Updaters, Decl(a.ts, 2, 20))
+
+        Template: {
+>Template : Symbol(Template, Decl(a.ts, 3, 15))
+
+            commitError: (v: T) => Obj.Updaters.Core.commitError(v),
+>commitError : Symbol(commitError, Decl(a.ts, 4, 19))
+>v : Symbol(v, Decl(a.ts, 5, 26))
+>T : Symbol(T, Decl(a.ts, 0, 13))
+>Obj.Updaters : Symbol(Updaters, Decl(a.ts, 2, 20))
+>Obj : Symbol(Obj, Decl(a.ts, 2, 12))
+>Updaters : Symbol(Updaters, Decl(a.ts, 2, 20))
+>v : Symbol(v, Decl(a.ts, 5, 26))
+
+        },
+    },
+};
+
+=== b.ts ===
+import { Obj } from "./a";
+>Obj : Symbol(Obj, Decl(b.ts, 0, 8))
+
+export type T = number;
+>T : Symbol(T, Decl(b.ts, 0, 26))
+
+export const x = Obj.Updaters.Core.simpleModal;
+>x : Symbol(x, Decl(b.ts, 3, 12))
+>Obj.Updaters : Symbol(Updaters, Decl(a.ts, 2, 20))
+>Obj : Symbol(Obj, Decl(b.ts, 0, 8))
+>Updaters : Symbol(Updaters, Decl(a.ts, 2, 20))
+

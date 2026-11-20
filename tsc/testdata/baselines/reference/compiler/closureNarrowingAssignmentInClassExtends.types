@@ -1,0 +1,37 @@
+//// [tests/cases/compiler/closureNarrowingAssignmentInClassExtends.ts] ////
+
+=== closureNarrowingAssignmentInClassExtends.ts ===
+declare class Base {}
+>Base : Base
+
+function f(x: string | number) {
+>f : (x: string | number) => (() => any) | undefined
+>x : string | number
+
+    if (typeof x === "string") {
+>typeof x === "string" : boolean
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>x : string | number
+>"string" : "string"
+
+        const g = () => x.length;
+>g : () => any
+>() => x.length : () => any
+>x.length : any
+>x : string | number
+>length : any
+
+        class C extends (x = 1, Base) {}
+>C : C
+>(x = 1, Base) : Base
+>x = 1, Base : typeof Base
+>x = 1 : 1
+>x : string | number
+>1 : 1
+>Base : typeof Base
+
+        return g;
+>g : () => any
+    }
+}
+

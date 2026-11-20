@@ -1,0 +1,61 @@
+circularInitializerInference.ts(6,5): error TS7022: 'comma' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+circularInitializerInference.ts(6,14): error TS2695: Left side of comma operator is unused and has no side effects.
+circularInitializerInference.ts(9,5): error TS7022: 'nestedComma' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+circularInitializerInference.ts(9,20): error TS2695: Left side of comma operator is unused and has no side effects.
+circularInitializerInference.ts(9,20): error TS2695: Left side of comma operator is unused and has no side effects.
+circularInitializerInference.ts(12,5): error TS7022: 'assignment' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+circularInitializerInference.ts(15,5): error TS7022: 'nestedAssignment' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+circularInitializerInference.ts(18,5): error TS7022: 'conditional' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+circularInitializerInference.ts(21,5): error TS7022: 'logicalAnd' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+circularInitializerInference.ts(24,5): error TS7022: 'propertyAccess' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+
+
+==== circularInitializerInference.ts (10 errors) ====
+    export {};
+    
+    type IsAny<Type> = 0 extends (1 & Type) ? true : false;
+    type Assert<Condition extends true> = Condition;
+    
+    var comma = (comma, 3);
+        ~~~~~
+!!! error TS7022: 'comma' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+                 ~~~~~
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
+    type CommaInference = Assert<IsAny<typeof comma>>;
+    
+    var nestedComma = (comma, nestedComma, comma);
+        ~~~~~~~~~~~
+!!! error TS7022: 'nestedComma' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+                       ~~~~~
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
+                       ~~~~~~~~~~~~~~~~~~
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
+    type NestedCommaInference = Assert<IsAny<typeof nestedComma>>;
+    
+    var assignment = (assignment = 2);
+        ~~~~~~~~~~
+!!! error TS7022: 'assignment' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+    type AssignmentInference = Assert<IsAny<typeof assignment>>;
+    
+    var nestedAssignment = (nestedAssignment = nestedAssignment = 2);
+        ~~~~~~~~~~~~~~~~
+!!! error TS7022: 'nestedAssignment' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+    type NestedAssignmentInference = Assert<IsAny<typeof nestedAssignment>>;
+    
+    var conditional = conditional ? 0 : 1;
+        ~~~~~~~~~~~
+!!! error TS7022: 'conditional' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+    type ConditionalInference = Assert<IsAny<typeof conditional>>;
+    
+    var logicalAnd = logicalAnd && "";
+        ~~~~~~~~~~
+!!! error TS7022: 'logicalAnd' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+    type LogicalAndInference = Assert<IsAny<typeof logicalAnd>>;
+    
+    var propertyAccess = { member: propertyAccess.member };
+        ~~~~~~~~~~~~~~
+!!! error TS7022: 'propertyAccess' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+    type PropertyAccessInference = Assert<IsAny<typeof propertyAccess>>;
+    
+    const nonCircular: number = 3;
+    type NonCircularInference = Assert<IsAny<typeof nonCircular> extends false ? true : false>;

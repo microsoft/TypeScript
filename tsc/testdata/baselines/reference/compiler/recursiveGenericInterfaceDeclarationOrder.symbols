@@ -1,0 +1,67 @@
+//// [tests/cases/compiler/recursiveGenericInterfaceDeclarationOrder.ts] ////
+
+=== recursiveGenericInterfaceDeclarationOrder.ts ===
+// The assignment is valid, as method parameters are compared bivariantly, and
+// must be accepted whichever of the interfaces is declared first.
+
+type M = { kind: "m" };
+>M : Symbol(M, Decl(recursiveGenericInterfaceDeclarationOrder.ts, 0, 0))
+>kind : Symbol(kind, Decl(recursiveGenericInterfaceDeclarationOrder.ts, 3, 10))
+
+type Filtered<T> = { [K in keyof T as T[K] extends M ? K : never]: T[K] };
+>Filtered : Symbol(Filtered, Decl(recursiveGenericInterfaceDeclarationOrder.ts, 3, 23))
+>T : Symbol(T, Decl(recursiveGenericInterfaceDeclarationOrder.ts, 4, 14))
+>K : Symbol(K, Decl(recursiveGenericInterfaceDeclarationOrder.ts, 4, 22))
+>T : Symbol(T, Decl(recursiveGenericInterfaceDeclarationOrder.ts, 4, 14))
+>T : Symbol(T, Decl(recursiveGenericInterfaceDeclarationOrder.ts, 4, 14))
+>K : Symbol(K, Decl(recursiveGenericInterfaceDeclarationOrder.ts, 4, 22))
+>M : Symbol(M, Decl(recursiveGenericInterfaceDeclarationOrder.ts, 0, 0))
+>K : Symbol(K, Decl(recursiveGenericInterfaceDeclarationOrder.ts, 4, 22))
+>T : Symbol(T, Decl(recursiveGenericInterfaceDeclarationOrder.ts, 4, 14))
+>K : Symbol(K, Decl(recursiveGenericInterfaceDeclarationOrder.ts, 4, 22))
+
+interface Config<T> { measure: keyof T }
+>Config : Symbol(Config, Decl(recursiveGenericInterfaceDeclarationOrder.ts, 4, 74))
+>T : Symbol(T, Decl(recursiveGenericInterfaceDeclarationOrder.ts, 5, 17))
+>measure : Symbol(Config.measure, Decl(recursiveGenericInterfaceDeclarationOrder.ts, 5, 21))
+>T : Symbol(T, Decl(recursiveGenericInterfaceDeclarationOrder.ts, 5, 17))
+
+interface Ref<N> { dataset: DS<Record<string, M>, N> }
+>Ref : Symbol(Ref, Decl(recursiveGenericInterfaceDeclarationOrder.ts, 5, 40))
+>N : Symbol(N, Decl(recursiveGenericInterfaceDeclarationOrder.ts, 6, 14))
+>dataset : Symbol(Ref.dataset, Decl(recursiveGenericInterfaceDeclarationOrder.ts, 6, 18))
+>DS : Symbol(DS, Decl(recursiveGenericInterfaceDeclarationOrder.ts, 6, 54))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>M : Symbol(M, Decl(recursiveGenericInterfaceDeclarationOrder.ts, 0, 0))
+>N : Symbol(N, Decl(recursiveGenericInterfaceDeclarationOrder.ts, 6, 14))
+
+interface DS<T, N> {
+>DS : Symbol(DS, Decl(recursiveGenericInterfaceDeclarationOrder.ts, 6, 54))
+>T : Symbol(T, Decl(recursiveGenericInterfaceDeclarationOrder.ts, 7, 13))
+>N : Symbol(N, Decl(recursiveGenericInterfaceDeclarationOrder.ts, 7, 15))
+
+  a(config: Config<Filtered<T>>): void;
+>a : Symbol(DS.a, Decl(recursiveGenericInterfaceDeclarationOrder.ts, 7, 20))
+>config : Symbol(config, Decl(recursiveGenericInterfaceDeclarationOrder.ts, 8, 4))
+>Config : Symbol(Config, Decl(recursiveGenericInterfaceDeclarationOrder.ts, 4, 74))
+>Filtered : Symbol(Filtered, Decl(recursiveGenericInterfaceDeclarationOrder.ts, 3, 23))
+>T : Symbol(T, Decl(recursiveGenericInterfaceDeclarationOrder.ts, 7, 13))
+
+  b: Ref<N>;
+>b : Symbol(DS.b, Decl(recursiveGenericInterfaceDeclarationOrder.ts, 8, 39))
+>Ref : Symbol(Ref, Decl(recursiveGenericInterfaceDeclarationOrder.ts, 5, 40))
+>N : Symbol(N, Decl(recursiveGenericInterfaceDeclarationOrder.ts, 7, 15))
+}
+declare const x: DS<{ total: M }, string>;
+>x : Symbol(x, Decl(recursiveGenericInterfaceDeclarationOrder.ts, 11, 13))
+>DS : Symbol(DS, Decl(recursiveGenericInterfaceDeclarationOrder.ts, 6, 54))
+>total : Symbol(total, Decl(recursiveGenericInterfaceDeclarationOrder.ts, 11, 21))
+>M : Symbol(M, Decl(recursiveGenericInterfaceDeclarationOrder.ts, 0, 0))
+
+export const y: DS<Record<string, M>, string> = x;
+>y : Symbol(y, Decl(recursiveGenericInterfaceDeclarationOrder.ts, 12, 12))
+>DS : Symbol(DS, Decl(recursiveGenericInterfaceDeclarationOrder.ts, 6, 54))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>M : Symbol(M, Decl(recursiveGenericInterfaceDeclarationOrder.ts, 0, 0))
+>x : Symbol(x, Decl(recursiveGenericInterfaceDeclarationOrder.ts, 11, 13))
+

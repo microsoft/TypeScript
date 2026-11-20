@@ -27,6 +27,7 @@ func (s *requestFileSystem) ExpandFileChanges(summary project.FileChangeSummary)
 	expand(&summary.Changed)
 	expand(&summary.Created)
 	expand(&summary.Deleted)
+	expand(&summary.DiskChanged)
 	return summary
 }
 

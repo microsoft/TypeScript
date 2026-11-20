@@ -52,3 +52,58 @@ interface D extends AB { kind: "a" }
 
 interface E extends D {}
 
+// Declared members are available while the base types are instantiated, which
+// can need one of them through a type argument referring back to the type.
+
+namespace BaseTypeArguments {
+    interface Internals<I = unknown> { input: I; optin?: "optional" | "defaulted" | undefined }
+>input : I
+>optin : "defaulted" | "optional" | undefined
+
+    interface Schema { _zod: Internals }
+>_zod : Internals<unknown>
+
+    type OptionalIn = { _zod: { optin: "optional" | "defaulted" } };
+>OptionalIn : OptionalIn
+>_zod : { optin: "optional" | "defaulted"; }
+>optin : "defaulted" | "optional"
+
+    type IsOptionalIn<T extends Schema> = T extends OptionalIn ? true : false;
+>IsOptionalIn : IsOptionalIn<T>
+>true : true
+>false : false
+
+    type RecordInput<V extends Schema> = [V] extends [OptionalIn] ? Partial<Record<string, V["_zod"]["input"]>> : Record<string, V["_zod"]["input"]>;
+>RecordInput : RecordInput<V>
+
+    interface RecordInternals<V extends Schema> extends Internals<RecordInput<V>> { optin?: "optional" | undefined }
+>optin : "optional" | undefined
+
+    interface RecordSchema<V extends Schema> extends Schema { _zod: RecordInternals<V> }
+>_zod : RecordInternals<V>
+
+    interface UnionInternals<T extends readonly Schema[]> extends Internals<T[number]["_zod"]["input"]> {
+        optin: IsOptionalIn<T[number]> extends false ? "optional" | "defaulted" | undefined : "optional" | "defaulted";
+>optin : IsOptionalIn<T[number]> extends false ? "defaulted" | "optional" | undefined : "defaulted" | "optional"
+>false : false
+    }
+    interface UnionSchema<T extends readonly Schema[]> extends Schema { _zod: UnionInternals<T> }
+>_zod : UnionInternals<T>
+
+    type JsonValue = { [k: string]: JsonValue };
+>JsonValue : JsonValue
+>k : string
+
+    type _Json = UnionSchema<[RecordSchema<Json>]>;
+>_Json : _Json
+
+    type _JsonInternals = _Json["_zod"];
+>_JsonInternals : UnionInternals<[RecordSchema<Json>]>
+
+    interface JsonInternals extends _JsonInternals { input: JsonValue }
+>input : JsonValue
+
+    interface Json extends _Json { _zod: JsonInternals }
+>_zod : JsonInternals
+}
+

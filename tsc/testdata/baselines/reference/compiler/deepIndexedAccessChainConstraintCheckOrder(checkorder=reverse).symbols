@@ -1,0 +1,59 @@
+//// [tests/cases/compiler/deepIndexedAccessChainConstraintCheckOrder.ts] ////
+
+=== deepIndexedAccessChainConstraintCheckOrder.ts ===
+// The base constraint of a chain of indexed accesses is found through the
+// object type of each, all of which share the recursion identity of the
+// type parameter. The chain is finite, so the property access is valid
+// however deep the chain, and whichever declaration is checked first (65508).
+
+interface Box { a: Box; b: string }
+>Box : Symbol(Box, Decl(deepIndexedAccessChainConstraintCheckOrder.ts, 0, 0))
+>a : Symbol(Box.a, Decl(deepIndexedAccessChainConstraintCheckOrder.ts, 5, 15))
+>Box : Symbol(Box, Decl(deepIndexedAccessChainConstraintCheckOrder.ts, 0, 0))
+>b : Symbol(Box.b, Decl(deepIndexedAccessChainConstraintCheckOrder.ts, 5, 23))
+
+const f: typeof victim = <U extends Box>(x: U, y: { b: string }) => x.b;
+>f : Symbol(f, Decl(deepIndexedAccessChainConstraintCheckOrder.ts, 7, 5))
+>victim : Symbol(victim, Decl(deepIndexedAccessChainConstraintCheckOrder.ts, 7, 72))
+>U : Symbol(U, Decl(deepIndexedAccessChainConstraintCheckOrder.ts, 7, 26))
+>Box : Symbol(Box, Decl(deepIndexedAccessChainConstraintCheckOrder.ts, 0, 0))
+>x : Symbol(x, Decl(deepIndexedAccessChainConstraintCheckOrder.ts, 7, 41))
+>U : Symbol(U, Decl(deepIndexedAccessChainConstraintCheckOrder.ts, 7, 26))
+>y : Symbol(y, Decl(deepIndexedAccessChainConstraintCheckOrder.ts, 7, 46))
+>b : Symbol(b, Decl(deepIndexedAccessChainConstraintCheckOrder.ts, 7, 51))
+>x.b : Symbol(Box.b, Decl(deepIndexedAccessChainConstraintCheckOrder.ts, 5, 23))
+>x : Symbol(x, Decl(deepIndexedAccessChainConstraintCheckOrder.ts, 7, 41))
+>b : Symbol(Box.b, Decl(deepIndexedAccessChainConstraintCheckOrder.ts, 5, 23))
+
+function victim<T extends Box>(
+>victim : Symbol(victim, Decl(deepIndexedAccessChainConstraintCheckOrder.ts, 7, 72))
+>T : Symbol(T, Decl(deepIndexedAccessChainConstraintCheckOrder.ts, 9, 16))
+>Box : Symbol(Box, Decl(deepIndexedAccessChainConstraintCheckOrder.ts, 0, 0))
+
+    x: T,
+>x : Symbol(x, Decl(deepIndexedAccessChainConstraintCheckOrder.ts, 9, 31))
+>T : Symbol(T, Decl(deepIndexedAccessChainConstraintCheckOrder.ts, 9, 16))
+
+    y: T["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]
+>y : Symbol(y, Decl(deepIndexedAccessChainConstraintCheckOrder.ts, 10, 9))
+>T : Symbol(T, Decl(deepIndexedAccessChainConstraintCheckOrder.ts, 9, 16))
+
+): string {
+    return x.b + y.b;
+>x : Symbol(x, Decl(deepIndexedAccessChainConstraintCheckOrder.ts, 9, 31))
+>y : Symbol(y, Decl(deepIndexedAccessChainConstraintCheckOrder.ts, 10, 9))
+}
+
+function lone<U extends Box>(y: U["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]["a"]): string {
+>lone : Symbol(lone, Decl(deepIndexedAccessChainConstraintCheckOrder.ts, 14, 1))
+>U : Symbol(U, Decl(deepIndexedAccessChainConstraintCheckOrder.ts, 16, 14))
+>Box : Symbol(Box, Decl(deepIndexedAccessChainConstraintCheckOrder.ts, 0, 0))
+>y : Symbol(y, Decl(deepIndexedAccessChainConstraintCheckOrder.ts, 16, 29))
+>U : Symbol(U, Decl(deepIndexedAccessChainConstraintCheckOrder.ts, 16, 14))
+
+    return y.b;
+>y.b : Symbol(Box.b, Decl(deepIndexedAccessChainConstraintCheckOrder.ts, 5, 23))
+>y : Symbol(y, Decl(deepIndexedAccessChainConstraintCheckOrder.ts, 16, 29))
+>b : Symbol(Box.b, Decl(deepIndexedAccessChainConstraintCheckOrder.ts, 5, 23))
+}
+

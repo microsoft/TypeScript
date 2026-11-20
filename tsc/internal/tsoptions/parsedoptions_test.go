@@ -32,13 +32,14 @@ func TestParsedOptionsEquality(t *testing.T) {
 				{Path: "/project", OriginalPath: "../project", Circular: true}, nil,
 			},
 			ContentMappers: []*contentmapper.Mapper{{
-				Package: "mapper", Extensions: []string{".vue"}, Options: []byte(`{"setting":true}`),
+				Package: "mapper", Extensions: []string{".vue"}, Include: []string{"src"}, Options: []byte(`{"setting":true}`),
 				Name: "mapper", Version: "1", Exec: []string{"node", "mapper.js"}, CompilerOptions: []string{"target"}, DynamicConfig: true,
 				PackageDirectory: "/node_modules/mapper", ContributionID: "extension",
 			}, nil},
 		}
 		result.ContentMappers[0].Definition.OutputExtensions = map[string]string{".vue": ".mjs"}
 		result.ContentMappers[0].Manifest.DefaultOutputExtensions = map[string]string{".vue": ".js"}
+		result.ContentMappers[0].Manifest.DefaultExtensions = []string{".vue"}
 		return result
 	}
 	check(t, makeOptions(), makeOptions())
@@ -88,6 +89,8 @@ func TestParsedOptionsEquality(t *testing.T) {
 		}},
 		{"mapper package", func(p *ParsedOptions) { p.ContentMappers[0].Package = "other" }},
 		{"mapper extension", func(p *ParsedOptions) { p.ContentMappers[0].Extensions[0] = ".other" }},
+		{"mapper include", func(p *ParsedOptions) { p.ContentMappers[0].Include[0] = "other" }},
+		{"manifest extension", func(p *ParsedOptions) { p.ContentMappers[0].DefaultExtensions[0] = ".other" }},
 		{"mapper output extension", func(p *ParsedOptions) { p.ContentMappers[0].Definition.OutputExtensions[".vue"] = ".js" }},
 		{"mapper options", func(p *ParsedOptions) { p.ContentMappers[0].Options = []byte(`{}`) }},
 		{"mapper name", func(p *ParsedOptions) { p.ContentMappers[0].Name = "other" }},

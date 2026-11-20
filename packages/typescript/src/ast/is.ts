@@ -20,6 +20,9 @@ import type {
     ForInOrOfStatement,
     ForStatement,
     Identifier,
+    JSDocLink,
+    JSDocLinkCode,
+    JSDocLinkPlain,
     JSDocTypeExpression,
     JSDocTypeLiteral,
     JsxTagNameExpression,
@@ -52,8 +55,6 @@ import {
     isComputedPropertyName,
     isHeritageClause,
     isIdentifier,
-    isJSDocAugmentsTag,
-    isJSDocImplementsTag,
     isJSDocLink,
     isJSDocLinkCode,
     isJSDocLinkPlain,
@@ -100,7 +101,6 @@ function isTypeNodeKind(kind: SyntaxKind): boolean {
         || kind === SyntaxKind.UndefinedKeyword
         || kind === SyntaxKind.NeverKeyword
         || kind === SyntaxKind.IntrinsicKeyword
-        || kind === SyntaxKind.ExpressionWithTypeArguments
         || kind === SyntaxKind.JSDocAllType
         || kind === SyntaxKind.JSDocNullableType
         || kind === SyntaxKind.JSDocNonNullableType
@@ -311,7 +311,7 @@ function isImportCall(node: Node): node is Node & { readonly expression: MetaPro
         && (node.expression as MetaProperty).keywordToken === SyntaxKind.ImportKeyword;
 }
 
-function isJSDocLinkLike(node: Node): boolean {
+export function isJSDocLinkLike(node: Node): node is JSDocLink | JSDocLinkCode | JSDocLinkPlain {
     return isJSDocLink(node) || isJSDocLinkCode(node) || isJSDocLinkPlain(node);
 }
 
@@ -371,9 +371,7 @@ function isInExpressionContext(node: Node): boolean {
 
 function isPartOfTypeExpressionWithTypeArguments(node: ExpressionWithTypeArguments): boolean {
     const parent = node.parent;
-    return isHeritageClause(parent) && (!isClassLikeDeclaration(parent.parent) || parent.token === SyntaxKind.ImplementsKeyword) ||
-        isJSDocImplementsTag(parent) ||
-        isJSDocAugmentsTag(parent);
+    return isHeritageClause(parent) && (!isClassLikeDeclaration(parent.parent) || parent.token === SyntaxKind.ImplementsKeyword);
 }
 
 function isForStatementExpression(node: Node, parent: ForStatement): boolean {
@@ -449,7 +447,6 @@ function isLeftHandSideExpressionKind(kind: SyntaxKind): boolean {
         case SyntaxKind.ExpressionWithTypeArguments:
         case SyntaxKind.MetaProperty:
         case SyntaxKind.ImportKeyword: // technically this is only an Expression if it's in a CallExpression
-        case SyntaxKind.MissingDeclaration:
             return true;
         default:
             return false;

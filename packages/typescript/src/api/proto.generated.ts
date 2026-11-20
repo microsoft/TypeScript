@@ -125,9 +125,14 @@ export interface APIMethodInfo {
     getNameTypeOfMappedType: APIMethod<GetTypePropertyParams, TypeResponse | null>;
     getTemplateTypeOfMappedType: APIMethod<GetTypePropertyParams, TypeResponse>;
     getTypeParametersOfSignature: APIMethod<GetSignaturePropertyParams, TypeResponse[] | null>;
+    getTypeArgumentsForResolvedSignature: APIMethod<GetSignaturePropertyParams, TypeResponse[]>;
     getParametersOfSignature: APIMethod<GetSignaturePropertyParams, SymbolResponse[] | null>;
     getThisParameterOfSignature: APIMethod<GetSignaturePropertyParams, SymbolResponse | null>;
     getTargetOfSignature: APIMethod<GetSignaturePropertyParams, SignatureResponse | null>;
+    isOptionalParameter: APIMethod<CheckerNodeParams, boolean>;
+    getTypeOfAssignmentPattern: APIMethod<CheckerNodeParams, TypeResponse | null>;
+    isValidPropertyAccess: APIMethod<IsValidPropertyAccessParams, boolean>;
+    getSymbolsOfParameterPropertyDeclaration: APIMethod<CheckerNodeParams, ParameterPropertySymbolsResponse>;
     getContextualType: APIMethod<GetContextualTypeParams, TypeResponse | null>;
     getContextualTypeForArgument: APIMethod<GetContextualTypeForArgumentParams, TypeResponse | null>;
     getAwaitedType: APIMethod<CheckerTypeParams, TypeResponse | null>;
@@ -152,6 +157,15 @@ export interface APIMethodInfo {
     typeToTypeNode: APIMethod<TypeToTypeNodeParams, SourceFileResponse | null>;
     signatureToSignatureDeclaration: APIMethod<SignatureToSignatureDeclarationParams, SourceFileResponse | null>;
     typeToString: APIMethod<TypeToTypeNodeParams, unknown>;
+    symbolToString: APIMethod<SymbolToStringParams, string>;
+    symbolToEntityName: APIMethod<SymbolToNodeParams, SourceFileResponse | null>;
+    symbolToExpression: APIMethod<SymbolToNodeParams, SourceFileResponse | null>;
+    symbolToParameterDeclaration: APIMethod<SymbolToDeclarationParams, SourceFileResponse | null>;
+    symbolToTypeParameterDeclarations: APIMethod<SymbolToDeclarationParams, SourceFileResponse[] | null>;
+    typeParameterToDeclaration: APIMethod<TypeToTypeNodeParams, SourceFileResponse | null>;
+    indexInfoToIndexSignatureDeclaration: APIMethod<IndexInfoToIndexSignatureDeclarationParams, SourceFileResponse | null>;
+    typePredicateToString: APIMethod<TypePredicateToStringParams, string>;
+    signatureToString: APIMethod<SignatureToStringParams, string>;
     isContextSensitive: APIMethod<GetContextualTypeParams, boolean>;
     getReturnTypeOfSignature: APIMethod<GetSignaturePropertyParams, TypeResponse>;
     getRestTypeOfSignature: APIMethod<CheckerSignatureParams, TypeResponse>;
@@ -179,6 +193,7 @@ export interface APIMethodInfo {
     getImmediateAliasedSymbol: APIMethod<CheckerSymbolParams, SymbolResponse | null>;
     getTargetSymbol: APIMethod<CheckerSymbolParams, SymbolResponse>;
     getMergedSymbol: APIMethod<CheckerSymbolParams, SymbolResponse>;
+    getRootSymbols: APIMethod<CheckerSymbolParams, SymbolResponse[]>;
     getSymbolOfNode: APIMethod<CheckerNodeParams, SymbolResponse | null>;
     getSymbolOfDeclarationForChecker: APIMethod<CheckerNodeParams, SymbolResponse | null>;
     getParentOfSymbolForChecker: APIMethod<CheckerSymbolParams, SymbolResponse | null>;
@@ -798,6 +813,25 @@ export interface GetSignaturePropertyParams {
     objectId: number;
 }
 
+/** CheckerNodeParams are parameters for checker methods that operate on a node location. */
+export interface CheckerNodeParams {
+    snapshot: number;
+    project: number;
+    location: string;
+}
+
+export interface IsValidPropertyAccessParams {
+    snapshot: number;
+    project: number;
+    location: string;
+    propertyName: string;
+}
+
+export interface ParameterPropertySymbolsResponse {
+    parameter: SymbolResponse;
+    property: SymbolResponse;
+}
+
 /** GetContextualTypeParams returns the contextual type for a node. */
 export interface GetContextualTypeParams {
     snapshot: number;
@@ -864,13 +898,6 @@ export interface GetIntrinsicTypeParams {
     project: number;
 }
 
-/** CheckerNodeParams are parameters for checker methods that operate on a node location. */
-export interface CheckerNodeParams {
-    snapshot: number;
-    project: number;
-    location: string;
-}
-
 export interface GetPrivateIdentifierPropertyOfTypeParams {
     snapshot: number;
     project: number;
@@ -934,6 +961,62 @@ export interface SignatureToSignatureDeclarationParams {
     project: number;
     signature: number;
     kind: number;
+    location?: string | undefined;
+    flags?: number | undefined;
+}
+
+export interface SymbolToStringParams {
+    snapshot: number;
+    project: number;
+    symbol: SymbolReference;
+    location?: string | undefined;
+    meaning?: number | undefined;
+    flags?: number | undefined;
+}
+
+export interface SymbolToNodeParams {
+    snapshot: number;
+    project: number;
+    symbol: SymbolReference;
+    meaning: number;
+    location?: string | undefined;
+    flags?: number | undefined;
+}
+
+export interface SymbolToDeclarationParams {
+    snapshot: number;
+    project: number;
+    symbol: SymbolReference;
+    location?: string | undefined;
+    flags?: number | undefined;
+}
+
+export interface IndexInfoToIndexSignatureDeclarationParams {
+    snapshot: number;
+    project: number;
+    keyType: number;
+    valueType: number;
+    isReadonly?: boolean | undefined;
+    declaration?: string | undefined;
+    location?: string | undefined;
+    flags?: number | undefined;
+}
+
+export interface TypePredicateToStringParams {
+    snapshot: number;
+    project: number;
+    kind: number;
+    parameterName?: string | undefined;
+    parameterIndex?: number | undefined;
+    type?: number | undefined;
+    location?: string | undefined;
+    flags?: number | undefined;
+}
+
+export interface SignatureToStringParams {
+    snapshot: number;
+    project: number;
+    signature: number;
     location?: string | undefined;
     flags?: number | undefined;
 }
@@ -1128,6 +1211,7 @@ export interface PrintNodeParams {
     preserveSourceNewlines?: boolean | undefined;
     neverAsciiEscape?: boolean | undefined;
     terminateUnterminatedLiterals?: boolean | undefined;
+    emitNodes?: Record<number, PrintEmitNode | null> | undefined;
 }
 
 export interface EmitParams {
@@ -1321,6 +1405,7 @@ export interface BatchRequest {
         | "getResolvedTypeReferenceDirectiveFromTypeReferenceDirective"
         | "getRestTypeOfSignature"
         | "getReturnTypeOfSignature"
+        | "getRootSymbols"
         | "getSemanticDiagnostics"
         | "getShorthandAssignmentValueSymbol"
         | "getSignatureFromDeclaration"
@@ -1342,6 +1427,7 @@ export interface BatchRequest {
         | "getSymbolsAtLocations"
         | "getSymbolsAtPositions"
         | "getSymbolsInScope"
+        | "getSymbolsOfParameterPropertyDeclaration"
         | "getSymbolsOfSourceFiles"
         | "getSyntacticDiagnostics"
         | "getTargetOfSignature"
@@ -1353,10 +1439,12 @@ export interface BatchRequest {
         | "getTrueType"
         | "getTrueTypeOfConditionalType"
         | "getTypeArguments"
+        | "getTypeArgumentsForResolvedSignature"
         | "getTypeAtLocation"
         | "getTypeAtLocations"
         | "getTypeAtPosition"
         | "getTypeFromTypeNode"
+        | "getTypeOfAssignmentPattern"
         | "getTypeOfPropertyOfType"
         | "getTypeOfSymbol"
         | "getTypeOfSymbolAtLocation"
@@ -1374,13 +1462,16 @@ export interface BatchRequest {
         | "getWellKnownSignatures"
         | "getWellKnownSymbols"
         | "getWidenedType"
+        | "indexInfoToIndexSignatureDeclaration"
         | "initialize"
         | "isArrayLikeType"
         | "isArrayType"
         | "isContextSensitive"
         | "isImplementationOfOverload"
+        | "isOptionalParameter"
         | "isReadonlySymbol"
         | "isTypeAssignableTo"
+        | "isValidPropertyAccess"
         | "parseCommandLine"
         | "parseConfigFile"
         | "parseConfigFileTextToJson"
@@ -1395,12 +1486,20 @@ export interface BatchRequest {
         | "retainSourceFile"
         | "saveHeapProfile"
         | "signatureToSignatureDeclaration"
+        | "signatureToString"
         | "startCPUProfile"
         | "stopCPUProfile"
+        | "symbolToEntityName"
+        | "symbolToExpression"
+        | "symbolToParameterDeclaration"
+        | "symbolToString"
+        | "symbolToTypeParameterDeclarations"
         | "transpileDeclaration"
         | "transpileDeclarationFromFile"
         | "transpileModule"
         | "transpileModuleFromFile"
+        | "typeParameterToDeclaration"
+        | "typePredicateToString"
         | "typeToString"
         | "typeToTypeNode"
         | "updateSnapshot";
@@ -1516,6 +1615,7 @@ export interface BatchResponse {
         | "getResolvedTypeReferenceDirectiveFromTypeReferenceDirective"
         | "getRestTypeOfSignature"
         | "getReturnTypeOfSignature"
+        | "getRootSymbols"
         | "getSemanticDiagnostics"
         | "getShorthandAssignmentValueSymbol"
         | "getSignatureFromDeclaration"
@@ -1537,6 +1637,7 @@ export interface BatchResponse {
         | "getSymbolsAtLocations"
         | "getSymbolsAtPositions"
         | "getSymbolsInScope"
+        | "getSymbolsOfParameterPropertyDeclaration"
         | "getSymbolsOfSourceFiles"
         | "getSyntacticDiagnostics"
         | "getTargetOfSignature"
@@ -1548,10 +1649,12 @@ export interface BatchResponse {
         | "getTrueType"
         | "getTrueTypeOfConditionalType"
         | "getTypeArguments"
+        | "getTypeArgumentsForResolvedSignature"
         | "getTypeAtLocation"
         | "getTypeAtLocations"
         | "getTypeAtPosition"
         | "getTypeFromTypeNode"
+        | "getTypeOfAssignmentPattern"
         | "getTypeOfPropertyOfType"
         | "getTypeOfSymbol"
         | "getTypeOfSymbolAtLocation"
@@ -1569,13 +1672,16 @@ export interface BatchResponse {
         | "getWellKnownSignatures"
         | "getWellKnownSymbols"
         | "getWidenedType"
+        | "indexInfoToIndexSignatureDeclaration"
         | "initialize"
         | "isArrayLikeType"
         | "isArrayType"
         | "isContextSensitive"
         | "isImplementationOfOverload"
+        | "isOptionalParameter"
         | "isReadonlySymbol"
         | "isTypeAssignableTo"
+        | "isValidPropertyAccess"
         | "parseCommandLine"
         | "parseConfigFile"
         | "parseConfigFileTextToJson"
@@ -1590,12 +1696,20 @@ export interface BatchResponse {
         | "retainSourceFile"
         | "saveHeapProfile"
         | "signatureToSignatureDeclaration"
+        | "signatureToString"
         | "startCPUProfile"
         | "stopCPUProfile"
+        | "symbolToEntityName"
+        | "symbolToExpression"
+        | "symbolToParameterDeclaration"
+        | "symbolToString"
+        | "symbolToTypeParameterDeclarations"
         | "transpileDeclaration"
         | "transpileDeclarationFromFile"
         | "transpileModule"
         | "transpileModuleFromFile"
+        | "typeParameterToDeclaration"
+        | "typePredicateToString"
         | "typeToString"
         | "typeToTypeNode"
         | "updateSnapshot";
@@ -1799,6 +1913,16 @@ export interface DiagnosticSourceLineResponse {
     text: string;
 }
 
+/**
+ * PrintEmitNode carries the EmitFlags and synthetic comments a client attaches to a
+ * specific node (by index) via EmitContext before printing.
+ */
+export interface PrintEmitNode {
+    emitFlags?: number | undefined;
+    leadingComments?: PrintSynthesizedComment[] | undefined;
+    trailingComments?: PrintSynthesizedComment[] | undefined;
+}
+
 export interface EmitOutputFile {
     fileName: RootedFilePath;
     text: string;
@@ -1871,6 +1995,14 @@ export interface ModuleResolutionEntry {
 export interface CompletionEntryLabelDetailsResponse {
     detail?: string | undefined;
     description?: string | undefined;
+}
+
+/** PrintSynthesizedComment is a synthetic comment attached to a node via EmitContext */
+export interface PrintSynthesizedComment {
+    kind: number;
+    text: string;
+    hasTrailingNewLine?: boolean | undefined;
+    hasLeadingNewLine?: boolean | undefined;
 }
 
 export interface CreateProgramOptions {

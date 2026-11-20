@@ -42,9 +42,7 @@
 
 // === findAllReferences ===
 // === /findAllRefsParameterPropertyDeclaration_inheritance.ts ===
-// class C {
-// 	constructor(public [|x|]: string) {
-// 		[|x|];
+// --- (line: 3) skipped ---
 // 	}
 // }
 // class D extends C {

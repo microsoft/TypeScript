@@ -1,0 +1,27 @@
+//// [tests/cases/compiler/closureNarrowingAssignmentInClassExtends.ts] ////
+
+=== closureNarrowingAssignmentInClassExtends.ts ===
+declare class Base {}
+>Base : Symbol(Base, Decl(closureNarrowingAssignmentInClassExtends.ts, 0, 0))
+
+function f(x: string | number) {
+>f : Symbol(f, Decl(closureNarrowingAssignmentInClassExtends.ts, 0, 21))
+>x : Symbol(x, Decl(closureNarrowingAssignmentInClassExtends.ts, 2, 11))
+
+    if (typeof x === "string") {
+>x : Symbol(x, Decl(closureNarrowingAssignmentInClassExtends.ts, 2, 11))
+
+        const g = () => x.length;
+>g : Symbol(g, Decl(closureNarrowingAssignmentInClassExtends.ts, 4, 13))
+>x : Symbol(x, Decl(closureNarrowingAssignmentInClassExtends.ts, 2, 11))
+
+        class C extends (x = 1, Base) {}
+>C : Symbol(C, Decl(closureNarrowingAssignmentInClassExtends.ts, 4, 33))
+>x : Symbol(x, Decl(closureNarrowingAssignmentInClassExtends.ts, 2, 11))
+>Base : Symbol(Base, Decl(closureNarrowingAssignmentInClassExtends.ts, 0, 0))
+
+        return g;
+>g : Symbol(g, Decl(closureNarrowingAssignmentInClassExtends.ts, 4, 13))
+    }
+}
+

@@ -1,0 +1,338 @@
+//// [tests/cases/compiler/restrictiveInstantiationOfRestrictiveConditional.ts] ////
+
+=== arraySlice.d.ts ===
+export type {ArraySlice};
+>ArraySlice : ArraySlice<Array_, Start, End>
+
+declare const tag: unique symbol;
+>tag : unique symbol
+
+type IsNever<T> = [T] extends [never] ? true : false;
+>IsNever : IsNever<T>
+>true : true
+>false : false
+
+type IsEqual<A, B> =
+>IsEqual : IsEqual<A, B>
+
+	[A] extends [B]
+		? [B] extends [A]
+			? _IsEqual<A, B>
+			: false
+>false : false
+
+		: false;
+>false : false
+
+type _IsEqual<A, B> = never;
+>_IsEqual : never
+
+type Primitive =
+>Primitive : Primitive
+
+	| null
+	| undefined
+	| string
+	| number
+	| boolean
+	| symbol
+	| bigint;
+type UnknownArray = any;
+>UnknownArray : any
+
+type IfNotAnyOrNever<T, Cases extends {ifNot: unknown; ifAny?: unknown; ifNever?: unknown}> =
+>IfNotAnyOrNever : IfNotAnyOrNever<T, Cases>
+>ifNot : unknown
+>ifAny : unknown
+>ifNever : unknown
+
+	IsNever<T> extends true
+>true : true
+
+			? 'ifNever' extends keyof Cases
+				? Cases['ifNever']
+				: never
+			: Cases['ifNot'];
+type And<A extends boolean, B extends boolean> = B;
+>And : B
+
+type Not<A extends boolean> = any;
+>Not : any
+
+type MaxLength<Array_ extends UnknownArray> = never;
+>MaxLength : never
+
+type HasNoStaticElements<Array_ extends UnknownArray> = unknown;
+>HasNoStaticElements : unknown
+
+type CollapseLiterals<Union> = Union extends Primitive
+>CollapseLiterals : CollapseLiterals<Union>
+
+	? Union extends infer Collapsed & {}
+		? Collapsed
+		: Union
+	: Union;
+type PositiveNumericStringGt<A extends string, B extends string> = A;
+>PositiveNumericStringGt : A
+
+type Absolute<N extends number | bigint> = _Absolute<N extends object ? UnwrapBrand<N> : N>;
+>Absolute : Absolute<N>
+
+type _Absolute<N extends number | bigint> = N extends bigint
+>_Absolute : _Absolute<N>
+
+	? `${N}` extends `-${infer Magnitude extends bigint}`
+		? Magnitude
+		: N
+	: `${N}` extends `-${infer Magnitude extends number}`
+		? Magnitude
+		: `${N}` extends '-Infinity'
+			? PositiveInfinity
+			: `${number}` extends `${N}` ? number : N;
+type GreaterThan<A extends _Numeric, B extends _Numeric> =
+>GreaterThan : GreaterThan<A, B>
+
+	_GreaterThan<A extends object ? UnwrapBrand<A> : A, B extends object ? UnwrapBrand<B> : B>;
+type _GreaterThan<A extends _Numeric, B extends _Numeric> =
+>_GreaterThan : _GreaterThan<A, B>
+
+	A extends _Numeric
+		? B extends _Numeric
+			? `${number}` extends `${A | B}`
+				? boolean
+				: bigint extends A | B
+					? boolean
+					: A extends PositiveInfinity
+							? B extends PositiveInfinity ? false : true
+>false : false
+>true : true
+
+							: B extends NegativeInfinity
+								? A extends NegativeInfinity ? false : true
+>false : false
+>true : true
+
+								: A extends NegativeInfinity
+									? false
+>false : false
+
+									: B extends PositiveInfinity
+										? false
+>false : false
+
+										: [IsNegative<A>, IsNegative<B>] extends infer Signs extends [boolean, boolean]
+											? [true, false] extends Signs
+>true : true
+>false : false
+
+												? false
+>false : false
+
+												: [false, true] extends Signs
+>false : false
+>true : true
+
+													? true
+>true : true
+
+													: [false, false] extends Signs
+>false : false
+>false : false
+
+														? PositiveNumericStringGt<`${A}`, `${B}`>
+														: PositiveNumericStringGt<`${Absolute<B>}`, `${Absolute<A>}`>
+											: never
+			: never
+		: never;
+type IsReadonlyArray<Array_ extends UnknownArray> = never;
+>IsReadonlyArray : never
+
+type UnionMember<T> =
+>UnionMember : UnionMember<T>
+
+	IsNever<T> extends true
+>true : true
+
+		? never
+		: (T extends any ? () => T : never) extends () => (infer R)
+			? R
+			: never;
+type TagContainer<Token> = {
+>TagContainer : TagContainer<Token>
+
+	readonly [tag]: Token;
+>[tag] : Token
+>tag : unique symbol
+
+};
+type Tag<TagName extends PropertyKey, TagMetadata> = unknown;
+>Tag : unknown
+
+type RemoveAllTags<T> = T extends TagContainer<any>
+>RemoveAllTags : RemoveAllTags<T>
+
+	? RemoveAllTags<UnionMember<RemoveTag<T>>>
+	: T;
+type RemoveTag<T extends TagContainer<unknown>> =
+>RemoveTag : RemoveTag<T>
+
+	| {
+		[ThisTag in keyof T[typeof tag]]: T extends infer Underlying & Tag<ThisTag, T[typeof tag][ThisTag]>
+>tag : unique symbol
+>tag : unique symbol
+
+			? [Underlying] extends [T] ? never : Underlying
+			: never
+	}[keyof T[typeof tag]]
+>tag : unique symbol
+
+	| (T extends infer Underlying & TagContainer<T[typeof tag]>
+>tag : unique symbol
+
+		? [Underlying] extends [T] ? never : Underlying
+		: never);
+type UnwrapBrand<T> = IfNotAnyOrNever<T, {ifNot: _UnwrapBrand<T, Primitive>}>;
+>UnwrapBrand : UnwrapBrand<T>
+>ifNot : _UnwrapBrand<T, Primitive>
+
+type _UnwrapBrand<T, Base> = T extends Primitive
+>_UnwrapBrand : _UnwrapBrand<T, Base>
+
+	? CollapseLiterals<T extends TagContainer<unknown> ? RemoveAllTags<T> : T>
+	: T;
+type _Numeric = number | bigint;
+>_Numeric : _Numeric
+
+type PositiveInfinity = unknown;
+>PositiveInfinity : unknown
+
+type NegativeInfinity = never;
+>NegativeInfinity : never
+
+type IsNegative<T extends _Numeric> = never;
+>IsNegative : never
+
+type Sum<A extends number, B extends number> = any;
+>Sum : any
+
+type LessThanOrEqual<A extends _Numeric, B extends _Numeric> = unknown;
+>LessThanOrEqual : unknown
+
+type ArraySlice<
+>ArraySlice : ArraySlice<Array_, Start, End>
+
+	Array_ extends readonly unknown[],
+	Start extends number = never,
+	End extends number = never,
+> = ArraySliceImplementation<Array_, Start extends object ? UnwrapBrand<Start> : Start, End>;
+type ArraySliceImplementation<
+>ArraySliceImplementation : ArraySliceImplementation<Array_, Start, End>
+
+	Array_ extends readonly unknown[],
+	Start extends number,
+	End extends number,
+> = Array_ extends unknown ? _ArraySlice<Array_, Start, End> : never;
+type _ArraySlice<
+>_ArraySlice : _ArraySlice<Array_, Start, End>
+
+	Array_ extends readonly unknown[],
+	Start extends number = 0,
+	End extends number = Array_['length'],
+> = And<IsEqual<Start, never>, IsEqual<End, never>> extends true
+>true : true
+
+	? Array_
+	: number extends Array_['length']
+		? VariableLengthArraySliceHelper<Array_, IsNever<Start> extends true ? 0 : Start, End extends PositiveInfinity ? never : End>
+>true : true
+
+		: `${number}` extends `${Start | End}`
+			? UnknownLengthArraySlice<Array_>
+			: ArraySliceResult<Array_, ArraySliceHelper<Array_, IsEqual<Start, never> extends true ? 0 : Start, IsEqual<End, never> extends true ? MaxLength<Array_> : End>>;
+>true : true
+>true : true
+
+type ArraySliceResult<Array_ extends readonly unknown[], Sliced> =
+>ArraySliceResult : Readonly<Sliced>
+
+	IsReadonlyArray<Array_> extends true ? Readonly<Sliced> : Sliced;
+>true : true
+
+type VariableLengthArraySliceHelper<
+>VariableLengthArraySliceHelper : IsEqual<_GreaterThan<End extends object ? IfNotAnyOrNever<End, { ifNot: _UnwrapBrand<End, Primitive>; }> : End, Start extends object ? IfNotAnyOrNever<Start, { ifNot: _UnwrapBrand<Start, Primitive>; }> : Start>, true> extends true ? Readonly<ArraySliceByPositiveIndex<Array_, Start, End, []>> : any
+
+	Array_ extends readonly unknown[],
+	Start extends number,
+	End extends number,
+> = And<
+	And<Not<IsNegative<Start>>, Not<IsNegative<End>>>,
+	IsEqual<LessThanOrEqual<End, Start>, true>
+>true : true
+
+> extends true
+>true : true
+
+	? []
+	: And<
+			And<Not<IsNegative<Start>>, Not<IsNegative<End>>>,
+			IsEqual<GreaterThan<End, Start>, true>
+>true : true
+
+		> extends true
+>true : true
+
+			? HasNoStaticElements<Array_> extends true
+>true : true
+
+				? UnknownLengthArraySlice<Array_>
+				: ArraySliceResult<Array_, ArraySliceByPositiveIndex<Array_, Start, End>>
+			: UnknownLengthArraySlice<Array_>;
+type UnknownLengthArraySlice<Array_ extends readonly unknown[]> = any;
+>UnknownLengthArraySlice : any
+
+type ArraySliceHelper<
+>ArraySliceHelper : never
+
+	Array_ extends readonly unknown[],
+	Start extends number = 0,
+	End extends number = MaxLength<Array_>,
+	ArrayLength extends number = MaxLength<Array_>,
+> = never;
+type ArraySliceByPositiveIndex<
+>ArraySliceByPositiveIndex : ArraySliceByPositiveIndex<Array_, Start, End, Result>
+
+	Array_ extends readonly unknown[],
+	Start extends number,
+	End extends number,
+	Result extends Array<Array_[number]> = [],
+> = Start extends End
+	? Result
+	: ArraySliceByPositiveIndex<Array_, Sum<Start, 1>, End, [...Result, Array_[Start]]>;
+
+=== main.ts ===
+// Reduced from type-fest's ArraySlice. Inferring Value from the argument
+// measures the variances of ArraySlice, which takes the restrictive
+// instantiations of conditional types whose type parameters are already
+// restrictive, many times over through the brand-unwrapping types. Such an
+// instantiation must be the conditional type itself: making and evaluating
+// a separate copy roughly triples the work, enough to exceed the
+// instantiation count limit (TS2589) here. Smaller cases do not get near
+// the limit either way, so the case is as large as the limit requires.
+import type {ArraySlice} from './arraySlice.d.ts';
+>ArraySlice : ArraySlice<Array_, Start, End>
+
+declare function f<Value>(values: ArraySlice<readonly [0, Value] | readonly [0, Value, Value], 1>): void;
+>f : <Value>(values: ArraySlice<readonly [0, Value] | readonly [0, Value, Value], 1>) => void
+>values : ArraySlice<readonly [0, Value] | readonly [0, Value, Value], 1>
+
+declare const x: ArraySlice<readonly [0, {id: 'row'}] | readonly [0, {id: 'row'}, {id: 'row'}], 1>;
+>x : ArraySlice<readonly [0, { id: 'row'; }] | readonly [0, { id: 'row'; }, { id: 'row'; }], 1>
+>id : "row"
+>id : "row"
+>id : "row"
+
+f(x);
+>f(x) : void
+>f : <Value>(values: ArraySlice<readonly [0, Value] | readonly [0, Value, Value], 1>) => void
+>x : ArraySlice<readonly [0, { id: 'row'; }] | readonly [0, { id: 'row'; }, { id: 'row'; }], 1>
+

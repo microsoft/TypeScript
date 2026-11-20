@@ -1,0 +1,15 @@
+a.ts(2,24): error TS2716: Type parameter 'T' has a circular default.
+
+
+==== a.ts (1 errors) ====
+    import type { B } from "./b";
+    export interface A<T = B> { a: T }
+                           ~
+!!! error TS2716: Type parameter 'T' has a circular default.
+    export declare const a: A;
+    
+==== b.ts (0 errors) ====
+    import type { A } from "./a";
+    export interface B<U = A> { b: U }
+    export declare const b: B;
+    

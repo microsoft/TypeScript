@@ -1,0 +1,97 @@
+//// [tests/cases/compiler/nestedGenericArrayAssignabilityAfterErrors.ts] ////
+
+=== nestedGenericArrayAssignabilityAfterErrors.ts ===
+// Assigning DataTypeThree<number> to DataTypeThree<boolean>, and likewise for
+// DataTypeTwo, must be reported whether or not earlier assignments errored.
+
+type TypeA = number;
+>TypeA : number
+
+type TypeB = boolean;
+>TypeB : boolean
+
+type DataTypeTwo<T extends TypeA | TypeB> = {
+>DataTypeTwo : DataTypeTwo<T>
+
+  one: Array<{ two: Array<T> }>;
+>one : { two: Array<T>; }[]
+>two : T[]
+
+};
+type DataTypeThree<T extends TypeA | TypeB> = {
+>DataTypeThree : DataTypeThree<T>
+
+  one: Array<{ two: Array<{ three: Array<T> }> }>;
+>one : { two: Array<{ three: Array<T>; }>; }[]
+>two : { three: Array<T>; }[]
+>three : T[]
+
+};
+
+let testingThreeErr: DataTypeThree<TypeA> = {
+>testingThreeErr : DataTypeThree<number>
+>{  one: [{ two: [{ three: [true] }] }]} : { one: { two: { three: boolean[]; }[]; }[]; }
+
+  one: [{ two: [{ three: [true] }] }]
+>one : { two: { three: boolean[]; }[]; }[]
+>[{ two: [{ three: [true] }] }] : { two: { three: boolean[]; }[]; }[]
+>{ two: [{ three: [true] }] } : { two: { three: boolean[]; }[]; }
+>two : { three: boolean[]; }[]
+>[{ three: [true] }] : { three: boolean[]; }[]
+>{ three: [true] } : { three: boolean[]; }
+>three : boolean[]
+>[true] : boolean[]
+>true : true
+
+};
+let testingTwoErr: DataTypeTwo<TypeA> = {
+>testingTwoErr : DataTypeTwo<number>
+>{  one: [{ two: [false] }]} : { one: { two: boolean[]; }[]; }
+
+  one: [{ two: [false] }]
+>one : { two: boolean[]; }[]
+>[{ two: [false] }] : { two: boolean[]; }[]
+>{ two: [false] } : { two: boolean[]; }
+>two : boolean[]
+>[false] : boolean[]
+>false : false
+
+};
+
+let testingThree: DataTypeThree<TypeA> = {
+>testingThree : DataTypeThree<number>
+>{  one: [{ two: [{ three: [5] }] }]} : { one: { two: { three: number[]; }[]; }[]; }
+
+  one: [{ two: [{ three: [5] }] }]
+>one : { two: { three: number[]; }[]; }[]
+>[{ two: [{ three: [5] }] }] : { two: { three: number[]; }[]; }[]
+>{ two: [{ three: [5] }] } : { two: { three: number[]; }[]; }
+>two : { three: number[]; }[]
+>[{ three: [5] }] : { three: number[]; }[]
+>{ three: [5] } : { three: number[]; }
+>three : number[]
+>[5] : number[]
+>5 : 5
+
+};
+let t3a: DataTypeThree<TypeB> = testingThree;
+>t3a : DataTypeThree<boolean>
+>testingThree : DataTypeThree<number>
+
+let testingTwo: DataTypeTwo<TypeA> = {
+>testingTwo : DataTypeTwo<number>
+>{  one: [{ two: [5] }]} : { one: { two: number[]; }[]; }
+
+  one: [{ two: [5] }]
+>one : { two: number[]; }[]
+>[{ two: [5] }] : { two: number[]; }[]
+>{ two: [5] } : { two: number[]; }
+>two : number[]
+>[5] : number[]
+>5 : 5
+
+};
+let t2a: DataTypeTwo<TypeB> = testingTwo;
+>t2a : DataTypeTwo<boolean>
+>testingTwo : DataTypeTwo<number>
+

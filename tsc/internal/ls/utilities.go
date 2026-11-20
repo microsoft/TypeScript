@@ -704,7 +704,7 @@ func getAdjustedLocationForDeclaration(node *ast.Node, forRename bool, sourceFil
 	case ast.KindClassDeclaration, ast.KindFunctionDeclaration:
 		// for class and function declarations, use the `default` modifier
 		// when the declaration is unnamed.
-		return core.Find(node.ModifierNodes(), func(*ast.Node) bool { return node.Kind == ast.KindDefaultKeyword })
+		return core.Find(node.ModifierNodes(), func(modifier *ast.Node) bool { return modifier.Kind == ast.KindDefaultKeyword })
 	case ast.KindClassExpression:
 		// for class expressions, use the `class` keyword when the class is unnamed
 		return astnav.FindChildOfKind(node, ast.KindClassKeyword, sourceFile)
@@ -1398,11 +1398,14 @@ func getContextualTypeFromParentOrAncestorTypeNode(node *ast.Expression, typeChe
 
 func getAncestorTypeNode(node *ast.Node) *ast.Node {
 	var lastTypeNode *ast.TypeNode
+	// A heritage clause element such as Base<T> is an ExpressionWithTypeArguments,
+	// and its type arguments are written in a type position.
+	isTypeNode := func(n *ast.Node) bool { return ast.IsTypeNode(n) || ast.IsExpressionWithTypeArguments(n) }
 	ast.FindAncestor(node, func(n *ast.Node) bool {
-		if ast.IsTypeNode(n) {
+		if isTypeNode(n) {
 			lastTypeNode = n
 		}
-		return !ast.IsQualifiedName(n.Parent) && !ast.IsTypeNode(n.Parent) && !ast.IsTypeElement(n.Parent)
+		return !ast.IsQualifiedName(n.Parent) && !isTypeNode(n.Parent) && !ast.IsTypeElement(n.Parent)
 	})
 	return lastTypeNode
 }

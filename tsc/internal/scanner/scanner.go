@@ -1370,7 +1370,8 @@ func (s *Scanner) ScanJsxTokenEx(allowMultilineJsxText bool) ast.Kind {
 
 // Scans a JSX identifier; these differ from normal identifiers in that they allow dashes
 func (s *Scanner) ScanJsxIdentifier() ast.Kind {
-	if tokenIsIdentifierOrKeyword(s.token) {
+	// '#' is not a valid JSX identifier character, so a private identifier is left for the parser to report.
+	if s.token != ast.KindPrivateIdentifier && tokenIsIdentifierOrKeyword(s.token) {
 		// An identifier or keyword has already been parsed - check for a `-` or a single instance of `:` and then append it and
 		// everything after it to the token
 		// Do note that this means that `scanJsxIdentifier` effectively _mutates_ the visible token without advancing to a new token
@@ -2471,8 +2472,8 @@ func isConflictMarkerTrivia(text string, pos int) bool {
 
 	// Conflict markers must be at the start of a line.
 	atLineStart := pos == 0 || stringutil.IsLineBreak(rune(text[pos-1]))
-	if !atLineStart && pos >= 2 {
-		prev, _ := utf8.DecodeLastRuneInString(text[:pos-2])
+	if !atLineStart && text[pos-1] > maxAsciiCharacter {
+		prev, _ := utf8.DecodeLastRuneInString(text[:pos])
 		atLineStart = stringutil.IsLineBreak(prev)
 	}
 	if atLineStart {
