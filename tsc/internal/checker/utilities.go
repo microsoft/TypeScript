@@ -678,6 +678,13 @@ func CompareTypes(t1, t2 *Type) int {
 					return c
 				}
 			}
+			// Distinct anonymous types can share a symbol, such as the object
+			// literal types a spread of a union makes, and be instantiated with
+			// mappers of the same content, so instantiations are ordered by the
+			// types they instantiate first.
+			if c := CompareTypes(t1.AsObjectType().target, t2.AsObjectType().target); c != 0 {
+				return c
+			}
 			m1 := t1.AsObjectType().mapper
 			m2 := t2.AsObjectType().mapper
 			if t1.objectFlags&ObjectFlagsMapped != 0 {

@@ -84,8 +84,8 @@ export const withNumberX = x.withNumber;
 >withNumber : { a: string; b: number; projection: readonly "x"[]; } | undefined
 
 const y = readParts(["y"]);
->y : { all: { a: string; b: number; projection: readonly "y"[]; } | { a: string; b: undefined; projection: readonly "y"[]; }; withNumber: { a: string; b: number; projection: readonly "y"[]; } | undefined; }
->readParts(["y"]) : { all: { a: string; b: number; projection: readonly "y"[]; } | { a: string; b: undefined; projection: readonly "y"[]; }; withNumber: { a: string; b: number; projection: readonly "y"[]; } | undefined; }
+>y : { all: { a: string; b: undefined; projection: readonly "y"[]; } | { a: string; b: number; projection: readonly "y"[]; }; withNumber: { a: string; b: number; projection: readonly "y"[]; } | undefined; }
+>readParts(["y"]) : { all: { a: string; b: undefined; projection: readonly "y"[]; } | { a: string; b: number; projection: readonly "y"[]; }; withNumber: { a: string; b: number; projection: readonly "y"[]; } | undefined; }
 >readParts : <K extends string>(fields: readonly K[]) => { all: { a: string; b: undefined; projection: readonly K[]; } | { a: string; b: number; projection: readonly K[]; }; withNumber: { a: string; b: number; projection: readonly K[]; } | undefined; }
 >["y"] : "y"[]
 >"y" : "y"
@@ -93,12 +93,12 @@ const y = readParts(["y"]);
 export const withNumberY = y.withNumber;
 >withNumberY : { a: string; b: number; projection: readonly "y"[]; } | undefined
 >y.withNumber : { a: string; b: number; projection: readonly "y"[]; } | undefined
->y : { all: { a: string; b: number; projection: readonly "y"[]; } | { a: string; b: undefined; projection: readonly "y"[]; }; withNumber: { a: string; b: number; projection: readonly "y"[]; } | undefined; }
+>y : { all: { a: string; b: undefined; projection: readonly "y"[]; } | { a: string; b: number; projection: readonly "y"[]; }; withNumber: { a: string; b: number; projection: readonly "y"[]; } | undefined; }
 >withNumber : { a: string; b: number; projection: readonly "y"[]; } | undefined
 
 export const allY = y.all;
->allY : { a: string; b: number; projection: readonly "y"[]; } | { a: string; b: undefined; projection: readonly "y"[]; }
->y.all : { a: string; b: number; projection: readonly "y"[]; } | { a: string; b: undefined; projection: readonly "y"[]; }
->y : { all: { a: string; b: number; projection: readonly "y"[]; } | { a: string; b: undefined; projection: readonly "y"[]; }; withNumber: { a: string; b: number; projection: readonly "y"[]; } | undefined; }
->all : { a: string; b: number; projection: readonly "y"[]; } | { a: string; b: undefined; projection: readonly "y"[]; }
+>allY : { a: string; b: undefined; projection: readonly "y"[]; } | { a: string; b: number; projection: readonly "y"[]; }
+>y.all : { a: string; b: undefined; projection: readonly "y"[]; } | { a: string; b: number; projection: readonly "y"[]; }
+>y : { all: { a: string; b: undefined; projection: readonly "y"[]; } | { a: string; b: number; projection: readonly "y"[]; }; withNumber: { a: string; b: number; projection: readonly "y"[]; } | undefined; }
+>all : { a: string; b: undefined; projection: readonly "y"[]; } | { a: string; b: number; projection: readonly "y"[]; }
 
