@@ -1,22 +1,16 @@
-circularBaseTypesCheckOrder.ts(6,3): error TS2339: Property 'x' does not exist on type 'Derived2'.
-circularBaseTypesCheckOrder.ts(7,3): error TS2339: Property 'y' does not exist on type 'Derived2'.
 circularBaseTypesCheckOrder.ts(9,11): error TS2310: Type 'Base' recursively references itself as a base type.
 circularBaseTypesCheckOrder.ts(13,11): error TS2310: Type 'Derived' recursively references itself as a base type.
 circularBaseTypesCheckOrder.ts(17,11): error TS2310: Type 'Derived2' recursively references itself as a base type.
 
 
-==== circularBaseTypesCheckOrder.ts (5 errors) ====
+==== circularBaseTypesCheckOrder.ts (3 errors) ====
     // The base types of a cycle of interfaces are resolved as if the cycle
     // were entered at the interface declared first, wherever it is entered:
     // 'Base' has none, and the others keep theirs.
     
     declare let z: Derived2;
     z.x;
-      ~
-!!! error TS2339: Property 'x' does not exist on type 'Derived2'.
     z.y;
-      ~
-!!! error TS2339: Property 'y' does not exist on type 'Derived2'.
     
     interface Base extends Derived2 {
               ~~~~

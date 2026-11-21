@@ -394,6 +394,7 @@ func fuzzRun(t *testing.T, ctx context.Context, host compiler.CompilerHost, conf
 		lang = fuzzLanguageService(program.Program())
 	}
 	for _, q := range queries {
+		assertCheckersAtRest(program.Program())
 		file := program.GetSourceFile(q.file.FileName())
 		switch q.kind {
 		case fuzzQueryDiagnostics:
@@ -416,6 +417,7 @@ func fuzzRun(t *testing.T, ctx context.Context, host compiler.CompilerHost, conf
 		done()
 	}
 
+	assertCheckersAtRest(program.Program())
 	var diags []*ast.Diagnostic
 	diags = append(diags, program.GetSyntacticDiagnostics(ctx, nil)...)
 	diags = append(diags, program.GetSemanticDiagnostics(ctx, nil)...)
@@ -512,4 +514,12 @@ func fuzzDiff(expected, actual fuzzResult) string {
 		}
 	}
 	return b.String()
+}
+
+// assertCheckersAtRest asserts that the checkers of program hold nothing of a
+// request between requests; see Checker.AssertAtRest.
+func assertCheckersAtRest(program *compiler.Program) {
+	program.ForEachCheckerParallel(func(_ int, c *checker.Checker) {
+		c.AssertAtRest()
+	})
 }

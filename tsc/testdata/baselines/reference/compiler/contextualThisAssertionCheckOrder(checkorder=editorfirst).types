@@ -15,7 +15,7 @@ makeContextualThisParameter<{ assert(v: any): asserts v }>(function () {
 >makeContextualThisParameter : <T>(cb: (this: T) => any) => void
 >assert : (v: any) => asserts v
 >v : any
->function () {    const v = Boolean();    this.assert(v);    const w: true = v;} : () => void
+>function () {    const v = Boolean();    this.assert(v);    const w: true = v;} : (this: { assert(v: any): asserts v; }) => void
 
     const v = Boolean();
 >v : boolean

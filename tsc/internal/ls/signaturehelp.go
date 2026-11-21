@@ -143,6 +143,32 @@ func (l *LanguageService) GetSignatureHelpItems(
 		return nil
 	}
 
+	if call := argumentInfo.invocation.callInvocation; call != nil {
+		if onlyUseSyntacticOwners && !isSyntacticOwner(startingToken, call.node, sourceFile) {
+			return nil
+		}
+		// The candidates are resolved from the arguments typed so far, in a
+		// state of the checker that lasts only while the request runs, so the
+		// items are created from them within it.
+		type result struct {
+			help  *lsproto.SignatureHelp
+			found bool
+		}
+		r := checker.RunSignatureHelp(typeChecker, call.node, argumentInfo.argumentCount, func(resolvedSignature *checker.Signature, candidates []*checker.Signature) result {
+			if len(candidates) == 0 || ctx.Err() != nil {
+				return result{}
+			}
+			return result{l.createSignatureHelpItems(ctx, candidates, resolvedSignature, argumentInfo, sourceFile, typeChecker, onlyUseSyntacticOwners), true}
+		})
+		if r.found || ctx.Err() != nil {
+			return r.help
+		}
+		if ast.IsSourceFileJS(sourceFile) {
+			return l.createJSSignatureHelpItems(ctx, argumentInfo, program, typeChecker)
+		}
+		return nil
+	}
+
 	// Extra syntactic and semantic filtering of signature help
 	candidateInfo := getCandidateOrTypeInfo(argumentInfo, typeChecker, sourceFile, startingToken, onlyUseSyntacticOwners)
 
@@ -772,23 +798,6 @@ type CandidateOrTypeInfo struct {
 }
 
 func getCandidateOrTypeInfo(info *argumentListInfo, c *checker.Checker, sourceFile *ast.SourceFile, startingToken *ast.Node, onlyUseSyntacticOwners bool) *CandidateOrTypeInfo {
-	if info.invocation.callInvocation != nil {
-		if onlyUseSyntacticOwners && !isSyntacticOwner(startingToken, info.invocation.callInvocation.node, sourceFile) {
-			return nil
-		}
-
-		resolvedSignature, candidates := checker.GetResolvedSignatureForSignatureHelp(info.invocation.callInvocation.node, info.argumentCount, c)
-		if len(candidates) == 0 {
-			return nil
-		}
-
-		return &CandidateOrTypeInfo{
-			candidateInfo: &candidateInfo{
-				candidates:        candidates,
-				resolvedSignature: resolvedSignature,
-			},
-		}
-	}
 	if info.invocation.typeArgsInvocation != nil {
 		called := info.invocation.typeArgsInvocation.called.AsNode()
 		container := called

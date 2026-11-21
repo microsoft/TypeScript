@@ -9,14 +9,14 @@ declare let z: Derived2;
 >z : Derived2
 
 z.x;
->z.x : any
+>z.x : string
 >z : Derived2
->x : any
+>x : string
 
 z.y;
->z.y : any
+>z.y : string
 >z : Derived2
->y : any
+>y : string
 
 interface Base extends Derived2 {
     x: string;

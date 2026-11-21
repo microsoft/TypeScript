@@ -223,6 +223,11 @@ func (m *SymbolMap) SymbolAt(i int) *Symbol {
 	return symbol
 }
 
+// At returns the name and symbol of the i-th entry, in insertion order.
+func (m *SymbolMap) At(i int) (string, *Symbol) {
+	return m.KeyAt(i), m.SymbolAt(i)
+}
+
 func (m *SymbolMap) Find(key string) int {
 	if m == nil {
 		return -1

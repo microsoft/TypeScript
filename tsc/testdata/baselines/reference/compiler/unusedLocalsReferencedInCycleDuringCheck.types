@@ -1,0 +1,92 @@
+//// [tests/cases/compiler/unusedLocalsReferencedInCycleDuringCheck.ts] ////
+
+=== unusedLocalsReferencedInCycleDuringCheck.ts ===
+// Checking the call resolves it within a cycle of flow analysis, during which
+// what checking computes is recorded, yet its references are still uses.
+
+declare const assert: { deepStrictEqual<T>(actual: unknown, expected: T): asserts actual is T };
+>assert : { deepStrictEqual<T>(actual: unknown, expected: T): asserts actual is T; }
+>deepStrictEqual : <T>(actual: unknown, expected: T) => asserts actual is T
+>actual : unknown
+>expected : T
+
+declare function make(): { width: number };
+>make : () => { width: number; }
+>width : number
+
+export function test() {
+>test : () => void
+
+	const first = make();
+>first : { width: number; }
+>make() : { width: number; }
+>make : () => { width: number; }
+
+	let baseline: number[][] | undefined;
+>baseline : number[][] | undefined
+
+	const geometry = () => [first].map(e => [e.width]);
+>geometry : () => number[][]
+>() => [first].map(e => [e.width]) : () => number[][]
+>[first].map(e => [e.width]) : number[][]
+>[first].map : <U>(callbackfn: (value: { width: number; }, index: number, array: { width: number; }[]) => U, thisArg?: any) => U[]
+>[first] : { width: number; }[]
+>first : { width: number; }
+>map : <U>(callbackfn: (value: { width: number; }, index: number, array: { width: number; }[]) => U, thisArg?: any) => U[]
+>e => [e.width] : (e: { width: number; }) => number[]
+>e : { width: number; }
+>[e.width] : number[]
+>e.width : number
+>e : { width: number; }
+>width : number
+
+	for (const themeType of ['a', 'b']) {
+>themeType : string
+>['a', 'b'] : string[]
+>'a' : "a"
+>'b' : "b"
+
+		baseline ??= geometry();
+>baseline ??= geometry() : number[][]
+>baseline : number[][] | undefined
+>geometry() : number[][]
+>geometry : () => number[][]
+
+		for (const active of [true, false]) {
+>active : boolean
+>[true, false] : boolean[]
+>true : true
+>false : false
+
+			const border = active ? themeType : 'x';
+>border : string
+>active ? themeType : 'x' : string
+>active : boolean
+>themeType : string
+>'x' : "x"
+
+			assert.deepStrictEqual({ geometry: geometry(), w: first.width, border }, { geometry: baseline, w: 0, border: '' });
+>assert.deepStrictEqual({ geometry: geometry(), w: first.width, border }, { geometry: baseline, w: 0, border: '' }) : void
+>assert.deepStrictEqual : <T>(actual: unknown, expected: T) => asserts actual is T
+>assert : { deepStrictEqual<T>(actual: unknown, expected: T): asserts actual is T; }
+>deepStrictEqual : <T>(actual: unknown, expected: T) => asserts actual is T
+>{ geometry: geometry(), w: first.width, border } : { geometry: number[][]; w: number; border: string; }
+>geometry : number[][]
+>geometry() : number[][]
+>geometry : () => number[][]
+>w : number
+>first.width : number
+>first : { width: number; }
+>width : number
+>border : string
+>{ geometry: baseline, w: 0, border: '' } : { geometry: number[][]; w: number; border: string; }
+>geometry : number[][]
+>baseline : number[][]
+>w : number
+>0 : 0
+>border : string
+>'' : ""
+		}
+	}
+}
+
