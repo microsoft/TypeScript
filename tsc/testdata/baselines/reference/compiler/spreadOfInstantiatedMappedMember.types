@@ -72,6 +72,6 @@ declare const cd: ReturnType<typeof boxed<"c">> | ReturnType<typeof boxed<"d">>;
 >boxed : <T>(b: Box<T>) => { p: T; }
 
 export const { ...restCD } = cd;
->restCD : { p: "c"; } | { p: "d"; }
+>restCD : { p: "d"; } | { p: "c"; }
 >cd : { p: "c"; } | { p: "d"; }
 
