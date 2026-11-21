@@ -701,6 +701,12 @@ func CompareTypes(t1, t2 *Type) int {
 					}
 				}
 			}
+			// Other types sharing a symbol, such as a module's synthetic default
+			// wrapper and the spread of the module with it, differ in how they were
+			// created.
+			if c := int(t1.objectFlags&objectLiteralCreationFlags) - int(t2.objectFlags&objectLiteralCreationFlags); c != 0 {
+				return c
+			}
 		}
 	case t1.flags&TypeFlagsUnion != 0:
 		// Unions are ordered by origin and then constituent type lists.
