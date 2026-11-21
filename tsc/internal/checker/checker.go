@@ -680,6 +680,7 @@ type Checker struct {
 	spreadTypes                                 map[CacheHashKey]*Type
 	objectContentTypes                          map[CacheHashKey]*Type
 	deferredConditionalTypes                    map[deferredConditionalTypeKey]*Type
+	emptyObjectTypesFromStringLiterals          map[CacheHashKey]*Type
 	spreadSymbols                               map[spreadSymbolKey]*ast.Symbol
 	symbolsWithType                             map[symbolWithTypeKey]*ast.Symbol
 	paddedProperties                            map[symbolWithTypeKey]*ast.Symbol
@@ -1028,6 +1029,7 @@ func NewChecker(program Program, tracer *Tracer) (*Checker, *sync.Mutex) {
 	c.spreadTypes = make(map[CacheHashKey]*Type)
 	c.objectContentTypes = make(map[CacheHashKey]*Type)
 	c.deferredConditionalTypes = make(map[deferredConditionalTypeKey]*Type)
+	c.emptyObjectTypesFromStringLiterals = make(map[CacheHashKey]*Type)
 	c.spreadSymbols = make(map[spreadSymbolKey]*ast.Symbol)
 	c.symbolsWithType = make(map[symbolWithTypeKey]*ast.Symbol)
 	c.paddedProperties = make(map[symbolWithTypeKey]*ast.Symbol)

@@ -33,8 +33,8 @@ const y = f("a", 2);
 >2 : 2
 
 const z = cond ? x : y;
->z : Pair<{ a: any; }, 2> | Pair<{ a: any; }, 1>
->cond ? x : y : Pair<{ a: any; }, 2> | Pair<{ a: any; }, 1>
+>z : Pair<{ a: any; }, 1> | Pair<{ a: any; }, 2>
+>cond ? x : y : Pair<{ a: any; }, 1> | Pair<{ a: any; }, 2>
 >cond : boolean
 >x : Pair<{ a: any; }, 1>
 >y : Pair<{ a: any; }, 2>
@@ -56,8 +56,8 @@ const v = f("" as string, 2);
 >2 : 2
 
 const w = cond ? u : v;
->w : Pair<{ [x: string]: {}; }, 2> | Pair<{ [x: string]: {}; }, 1>
->cond ? u : v : Pair<{ [x: string]: {}; }, 2> | Pair<{ [x: string]: {}; }, 1>
+>w : Pair<{ [x: string]: {}; }, 1> | Pair<{ [x: string]: {}; }, 2>
+>cond ? u : v : Pair<{ [x: string]: {}; }, 1> | Pair<{ [x: string]: {}; }, 2>
 >cond : boolean
 >u : Pair<{ [x: string]: {}; }, 1>
 >v : Pair<{ [x: string]: {}; }, 2>

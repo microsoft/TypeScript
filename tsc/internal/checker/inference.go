@@ -1244,6 +1244,28 @@ func (c *Checker) isTypeCloselyMatchedBy(s *Type, t *Type) bool {
 
 // Create an object with properties named in the string literal type. Every property has type `any`.
 func (c *Checker) createEmptyObjectTypeFromStringLiteral(t *Type) *Type {
+	// The result is determined by the string literals in t and whether t
+	// includes string, so it is interned by those.
+	var b keyBuilder
+	for _, u := range t.Distributed() {
+		if u.flags&TypeFlagsStringLiteral != 0 {
+			b.writeString(getStringLiteralValue(u))
+			b.writeByte(0)
+			if u.symbol != nil {
+				b.writeByte(1)
+				b.writeSymbol(u.symbol)
+			} else {
+				b.writeByte(0)
+			}
+		}
+	}
+	if t.flags&TypeFlagsString != 0 {
+		b.writeByte(2)
+	}
+	key := b.hash()
+	if cached := c.emptyObjectTypesFromStringLiterals[key]; cached != nil {
+		return cached
+	}
 	members := ast.NewSymbolTable()
 	for _, t := range t.Distributed() {
 		if t.flags&TypeFlagsStringLiteral == 0 {
@@ -1262,7 +1284,9 @@ func (c *Checker) createEmptyObjectTypeFromStringLiteral(t *Type) *Type {
 	if t.flags&TypeFlagsString != 0 {
 		indexInfos = []*IndexInfo{c.newIndexInfo(c.stringType, c.emptyObjectType, false /*isReadonly*/, nil, nil)}
 	}
-	return c.newAnonymousType(nil, members, nil, nil, indexInfos)
+	result := c.newAnonymousType(nil, members, nil, nil, indexInfos)
+	c.emptyObjectTypesFromStringLiterals[key] = result
+	return result
 }
 
 func (c *Checker) newInferenceContext(typeParameters []*Type, signature *Signature, flags InferenceFlags, compareTypes TypeComparer) *InferenceContext {
