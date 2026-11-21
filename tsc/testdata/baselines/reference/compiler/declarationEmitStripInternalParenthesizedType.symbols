@@ -1,0 +1,33 @@
+//// [tests/cases/compiler/declarationEmitStripInternalParenthesizedType.ts] ////
+
+=== declarationEmitStripInternalParenthesizedType.ts ===
+interface Foo {}
+>Foo : Symbol(Foo, Decl(declarationEmitStripInternalParenthesizedType.ts, 0, 0))
+
+export type T = (
+>T : Symbol(T, Decl(declarationEmitStripInternalParenthesizedType.ts, 0, 16))
+
+    /** @internal */
+    Foo
+>Foo : Symbol(Foo, Decl(declarationEmitStripInternalParenthesizedType.ts, 0, 0))
+
+);
+
+export const x: (
+>x : Symbol(x, Decl(declarationEmitStripInternalParenthesizedType.ts, 7, 12))
+
+    /** @internal */
+    Foo
+>Foo : Symbol(Foo, Decl(declarationEmitStripInternalParenthesizedType.ts, 0, 0))
+
+) = {} as any;
+
+export type T2 = readonly (
+>T2 : Symbol(T2, Decl(declarationEmitStripInternalParenthesizedType.ts, 10, 14))
+
+    /** @internal */
+    Foo
+>Foo : Symbol(Foo, Decl(declarationEmitStripInternalParenthesizedType.ts, 0, 0))
+
+)[];
+

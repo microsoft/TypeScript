@@ -672,6 +672,12 @@ func (tx *DeclarationTransformer) visitDeclarationSubtree(input *ast.Node) *ast.
 				tx.EmitContext().AddEmitFlags(result, printer.EFSingleLine)
 			}
 		}
+	case ast.KindParenthesizedType:
+		result = tx.transformParenthesizedType(input.AsParenthesizedTypeNode())
+	case ast.KindTypeOperator:
+		result = tx.transformTypeOperator(input.AsTypeOperatorNode())
+	case ast.KindArrayType:
+		result = tx.transformArrayType(input.AsArrayTypeNode())
 	case ast.KindJSDocTypeExpression:
 		result = tx.transformJSDocTypeExpression(input.AsJSDocTypeExpression())
 	case ast.KindJSDocTypeLiteral:
@@ -805,6 +811,30 @@ func (tx *DeclarationTransformer) transformConditionalTypeNode(input *ast.Condit
 		trueType,
 		falseType,
 	)
+}
+
+func (tx *DeclarationTransformer) transformParenthesizedType(input *ast.ParenthesizedTypeNode) *ast.Node {
+	t := tx.Visitor().Visit(input.Type)
+	if t == nil {
+		return nil
+	}
+	return tx.Factory().UpdateParenthesizedTypeNode(input, t)
+}
+
+func (tx *DeclarationTransformer) transformTypeOperator(input *ast.TypeOperatorNode) *ast.Node {
+	t := tx.Visitor().Visit(input.Type)
+	if t == nil {
+		return nil
+	}
+	return tx.Factory().UpdateTypeOperatorNode(input, input.Operator, t)
+}
+
+func (tx *DeclarationTransformer) transformArrayType(input *ast.ArrayTypeNode) *ast.Node {
+	elem := tx.Visitor().Visit(input.ElementType)
+	if elem == nil {
+		return nil
+	}
+	return tx.Factory().UpdateArrayTypeNode(input, elem)
 }
 
 func (tx *DeclarationTransformer) transformTypeReference(input *ast.TypeReferenceNode) *ast.Node {
