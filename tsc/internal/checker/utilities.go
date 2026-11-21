@@ -611,7 +611,7 @@ func CompareTypes(t1, t2 *Type) int {
 			// Here we know we have references to instantiations of the same type because we have matching targets.
 			if r1.node == nil && r2.node == nil {
 				// Non-deferred type references with the same target are sorted by their type argument lists.
-				if c := compareTypeLists(t1.AsTypeReference().resolvedTypeArguments, t2.AsTypeReference().resolvedTypeArguments); c != 0 {
+				if c := compareTypeLists(r1.typeArgumentsOfCreation(), r2.typeArgumentsOfCreation()); c != 0 {
 					return c
 				}
 			} else {
@@ -810,8 +810,8 @@ func CompareTypes(t1, t2 *Type) int {
 	}
 	// Types implied by binding patterns are ordered by their patterns.
 	if t1.flags&TypeFlagsObject != 0 {
-		p1 := t1.checker.patternForType[t1]
-		p2 := t2.checker.patternForType[t2]
+		p1, _ := t1.checker.patternForType.get(t1)
+		p2, _ := t2.checker.patternForType.get(t2)
 		if c := t1.checker.compareNodes(p1, p2); c != 0 {
 			return c
 		}
@@ -1002,7 +1002,7 @@ func membersInTableOrder(t *Type) (int, iter.Seq[*ast.Symbol]) {
 	if d.members != nil {
 		return d.members.Len(), d.members.Values()
 	}
-	properties := d.getProperties()
+	properties := d.getProperties(t.checker)
 	return len(properties), slices.Values(properties)
 }
 
@@ -1040,7 +1040,7 @@ func (c *Checker) compareIndexInfos(infos1, infos2 []*IndexInfo) int {
 // created.
 func (c *Checker) peekTypeOfObjectLiteralMember(s *ast.Symbol) *Type {
 	if links := c.valueSymbolLinks.TryGet(s); links != nil {
-		return links.resolvedType
+		return links.typeOfCreation()
 	}
 	return nil
 }
@@ -1096,7 +1096,7 @@ func compareTypeParameterOrigins(t1, t2 *Type) int {
 		// Tuple this types have no symbol; their constraint is the tuple target,
 		// initialized at creation.
 		if t1.symbol == nil {
-			return CompareTypes(p1.constraint, p2.constraint)
+			return CompareTypes(p1.constraintOfCreation(), p2.constraintOfCreation())
 		}
 	case typeParameterOriginDistributed:
 		return CompareTypes(p1.distributedType, p2.distributedType)

@@ -469,3 +469,19 @@ func (c *Checker) CompareSymbols(s1, s2 *ast.Symbol) int {
 func IsDistributedTypeParameter(t *Type) bool {
 	return t.flags&TypeFlagsTypeParameter != 0 && t.AsTypeParameter().isDistributed
 }
+
+func (c *Checker) GetTypeParameterOfMappedType(t *Type) *Type {
+	return c.getTypeParameterFromMappedType(t)
+}
+
+func (c *Checker) GetConstraintTypeOfMappedType(t *Type) *Type {
+	return c.getConstraintTypeFromMappedType(t)
+}
+
+func (c *Checker) GetNameTypeOfMappedType(t *Type) *Type {
+	return c.getNameTypeFromMappedType(t)
+}
+
+func (c *Checker) GetTemplateTypeOfMappedType(t *Type) *Type {
+	return c.getTemplateTypeFromMappedType(t)
+}

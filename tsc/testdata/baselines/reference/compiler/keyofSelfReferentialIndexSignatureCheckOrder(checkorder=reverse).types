@@ -31,7 +31,7 @@ interface Q0 { a?: string; [key: string]: Q0[keyof Q0]; }
 >key : string
 
 const j0: keyof Q0 = 0;
->j0 : "a"
+>j0 : keyof Q0
 >0 : 0
 
 const k1: keyof P1 = 0;
@@ -45,7 +45,7 @@ interface Q1 extends A { [key: string]: Q1[keyof Q1]; }
 >key : string
 
 const j1: keyof Q1 = 0;
->j1 : "a"
+>j1 : keyof Q1
 >0 : 0
 
 const k2: keyof P2 = 0;
