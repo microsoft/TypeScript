@@ -785,6 +785,82 @@ func TestResolvedEntrypointCarriesPath(t *testing.T) {
 	}
 }
 
+func TestWildcardExportTargetContainment(t *testing.T) {
+	t.Parallel()
+
+	for _, test := range []struct {
+		name      string
+		target    string
+		wantExtra bool
+	}{
+		{name: "parent traversal", target: "./../../private/*.d.ts"},
+		{name: "nested parent traversal", target: "./lib/../*.d.ts"},
+		{name: "dot segment", target: "./lib/./*.d.ts"},
+		{name: "nested node_modules", target: "./node_modules/*.d.ts"},
+		{name: "valid pattern", target: "./lib/*.d.ts", wantExtra: true},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+
+			files := map[string]string{
+				"/repo/src/main.ts": "",
+			}
+			files["/repo/node_modules/pkg/package.json"] = `{"name":"pkg","exports":{".":"./index.d.ts","./*":"` + test.target + `"}}`
+			files["/repo/node_modules/pkg/index.d.ts"] = "export const index: number;"
+			files["/repo/node_modules/pkg/lib/allowed.d.ts"] = "export const allowed: number;"
+			files["/repo/node_modules/pkg/node_modules/inner.d.ts"] = "export const inner: number;"
+			files["/repo/private/secret.d.ts"] = "export const secret: number;"
+			fs := vfstest.FromMap(files, tspath.CaseSensitive)
+			host := &resolutionTestInputs{fs: fs, cwd: "/repo"}
+			options := &core.CompilerOptions{
+				ModuleResolution: core.ModuleResolutionKindBundler,
+				Module:           core.ModuleKindESNext,
+				Target:           core.ScriptTargetESNext,
+			}
+			resolver := NewResolver(ResolverOptions{Host: host, CompilerOptions: options})
+			resolved, _, _ := resolver.ResolveModuleName("pkg", "/repo/src/main.ts", core.ModuleKindESNext, nil)
+			if !resolved.IsResolved() {
+				t.Fatal("expected package root to resolve")
+			}
+
+			var info *packagejson.InfoCacheEntry
+			resolver.PackageJsonCacheEntries(func(_ tspath.PathKey, entry *packagejson.InfoCacheEntry) bool {
+				if entry.Exists() {
+					info = entry
+					return false
+				}
+				return true
+			})
+			if info == nil {
+				t.Fatal("expected package JSON cache entry")
+			}
+
+			entrypoints := resolver.GetEntrypointsFromPackageJsonInfo(info, "pkg", false)
+			wantCount := 1
+			if test.wantExtra {
+				wantCount++
+			}
+			if len(entrypoints) != wantCount {
+				t.Fatalf("got %d entrypoints for target %q, want %d: %v", len(entrypoints), test.target, wantCount, entrypoints)
+			}
+			foundRoot, foundAllowed := false, false
+			for _, entrypoint := range entrypoints {
+				switch entrypoint.ModuleSpecifier.AsString() {
+				case "pkg":
+					foundRoot = true
+				case "pkg/allowed":
+					foundAllowed = true
+				default:
+					t.Errorf("unexpected entrypoint %q", entrypoint.ModuleSpecifier)
+				}
+			}
+			if !foundRoot || foundAllowed != test.wantExtra {
+				t.Errorf("entrypoints for target %q: root=%v, allowed=%v", test.target, foundRoot, foundAllowed)
+			}
+		})
+	}
+}
+
 func TestDynamicExportPatternEntrypointUsesLogicalName(t *testing.T) {
 	t.Parallel()
 
