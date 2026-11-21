@@ -388,9 +388,9 @@ func (c *Checker) compareSymbolsWorker(s1, s2 *ast.Symbol) int {
 	if r := c.compareSymbolOrigins(s1, s2); r != 0 {
 		return r
 	}
-	// Fall back to symbol IDs. This is a last resort that should happen only when symbols have
-	// no declaration and duplicate names.
-	return cmp.Compare(ast.GetSymbolId(s1), ast.GetSymbolId(s2))
+	// Symbol IDs are assigned in the order symbols are first used, so they cannot order symbols.
+	debug.Fail("Cannot order distinct symbols that compare as equal")
+	return 0
 }
 
 // compareSymbolOrigins orders transient symbols by the symbols, types, and
@@ -863,7 +863,11 @@ func CompareTypes(t1, t2 *Type) int {
 			return core.IfElse(f1, 1, -1)
 		}
 	}
-	// Fall back to type IDs. This results in type creation order for built-in types.
+	// Types created with the checker, such as the intrinsic types and the variance markers, have
+	// IDs up to builtinTypeCount and a fixed creation order, so a comparison involving one of them
+	// can fall back to IDs. Other types are created in the order code is checked, so their IDs
+	// cannot order them.
+	debug.Assert(min(t1.id, t2.id) <= t1.checker.builtinTypeCount, "Cannot order distinct types that compare as equal")
 	return int(t1.id) - int(t2.id)
 }
 
