@@ -14,9 +14,9 @@ class ReadonlyState {
 >(this.value as unknown) = null : null
 >(this.value as unknown) : unknown
 >this.value as unknown : unknown
->this.value : object
+>this.value : any
 >this : this
->value : object
+>value : any
     }
 }
 

@@ -1,0 +1,96 @@
+usedBeforeAssignedTypeAssertion.ts(28,12): error TS2454: Variable 'value' is used before being assigned.
+usedBeforeAssignedTypeAssertion.ts(33,6): error TS2454: Variable 'value' is used before being assigned.
+usedBeforeAssignedTypeAssertion.ts(38,16): error TS2454: Variable 'value' is used before being assigned.
+usedBeforeAssignedTypeAssertion.ts(43,6): error TS2454: Variable 'value' is used before being assigned.
+usedBeforeAssignedTypeAssertion.ts(55,6): error TS2588: Cannot assign to 'value' because it is a constant.
+usedBeforeAssignedTypeAssertion.ts(56,11): error TS2588: Cannot assign to 'value' because it is a constant.
+usedBeforeAssignedTypeAssertion.ts(61,13): error TS2540: Cannot assign to 'value' because it is a read-only property.
+usedBeforeAssignedTypeAssertion.ts(62,21): error TS2540: Cannot assign to 'value' because it is a read-only property.
+
+
+==== usedBeforeAssignedTypeAssertion.ts (8 errors) ====
+    function directAssignment() {
+        let value: number;
+        value = 1;
+    }
+    
+    function parenthesizedAssignment() {
+        let value: number;
+        (value) = 1;
+    }
+    
+    function asAssignment() {
+        let value: number;
+        (value as number) = 1;
+    }
+    
+    function typeAssertionAssignment() {
+        let value: number;
+        (<number>value) = 1;
+    }
+    
+    function nestedAssertionAssignment() {
+        let value: number;
+        ((<number>value) as number) = 1;
+    }
+    
+    function readBeforeAssignment() {
+        let value: number;
+        return value as number;
+               ~~~~~
+!!! error TS2454: Variable 'value' is used before being assigned.
+    }
+    
+    function compoundAssignmentBeforeInitialization() {
+        let value: number;
+        (value as number) += 1;
+         ~~~~~
+!!! error TS2454: Variable 'value' is used before being assigned.
+    }
+    
+    function incrementBeforeInitialization() {
+        let value: number;
+        ++(<number>value);
+                   ~~~~~
+!!! error TS2454: Variable 'value' is used before being assigned.
+    }
+    
+    function decrementBeforeInitialization() {
+        let value: number;
+        (value as number)--;
+         ~~~~~
+!!! error TS2454: Variable 'value' is used before being assigned.
+    }
+    
+    function initializedCompoundAssignments() {
+        let value = 1;
+        (value as number) += 1;
+        ++(<number>value);
+        (value as number)--;
+    }
+    
+    function constAssignment() {
+        const value = 1;
+        (value as any) = 2;
+         ~~~~~
+!!! error TS2588: Cannot assign to 'value' because it is a constant.
+        (<any>value) = 3;
+              ~~~~~
+!!! error TS2588: Cannot assign to 'value' because it is a constant.
+    }
+    
+    function readonlyPropertyAssignment() {
+        const object: { readonly value: number } = { value: 1 };
+        (object.value as number) = 2;
+                ~~~~~
+!!! error TS2540: Cannot assign to 'value' because it is a read-only property.
+        (<number>object["value"]) = 3;
+                        ~~~~~~~
+!!! error TS2540: Cannot assign to 'value' because it is a read-only property.
+    }
+    
+    function mutableObjectAssertion() {
+        const object: { readonly value: number } = { value: 1 };
+        (object as { value: number }).value = 2;
+    }
+    

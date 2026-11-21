@@ -254,7 +254,8 @@ func GetAssignmentTarget(node *Node) *Node {
 				return parent
 			}
 			return nil
-		case KindParenthesizedExpression, KindArrayLiteralExpression, KindSpreadElement, KindNonNullExpression:
+		case KindParenthesizedExpression, KindArrayLiteralExpression, KindSpreadElement, KindNonNullExpression,
+			KindTypeAssertionExpression, KindAsExpression:
 			node = parent
 		case KindSpreadAssignment:
 			node = parent.Parent
