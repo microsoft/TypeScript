@@ -1,0 +1,72 @@
+//// [tests/cases/compiler/templateLiteralComplexityLimit.ts] ////
+
+=== templateLiteralComplexityLimit.ts ===
+// Once the cross product limit is reported, later expansions for the same node must bail out quickly.
+type A = "a0" | "a1" | "a2" | "a3" | "a4" | "a5" | "a6" | "a7" | "a8" | "a9" | "a10" | "a11" | "a12" | "a13" | "a14" | "a15" | "a16" | "a17" | "a18" | "a19" | "a20" | "a21" | "a22" | "a23" | "a24" | "a25" | "a26" | "a27" | "a28" | "a29" | "a30" | "a31" | "a32" | "a33" | "a34" | "a35" | "a36" | "a37" | "a38" | "a39" | "a40" | "a41" | "a42" | "a43" | "a44" | "a45" | "a46" | "a47" | "a48" | "a49";
+>A : Symbol(A, Decl(templateLiteralComplexityLimit.ts, 0, 0))
+
+type B = "b0" | "b1" | "b2" | "b3" | "b4" | "b5" | "b6" | "b7" | "b8" | "b9" | "b10" | "b11" | "b12" | "b13" | "b14" | "b15" | "b16" | "b17" | "b18" | "b19" | "b20" | "b21" | "b22" | "b23" | "b24" | "b25" | "b26" | "b27" | "b28" | "b29" | "b30" | "b31" | "b32" | "b33" | "b34" | "b35" | "b36" | "b37" | "b38" | "b39" | "b40" | "b41" | "b42" | "b43" | "b44" | "b45" | "b46" | "b47" | "b48" | "b49";
+>B : Symbol(B, Decl(templateLiteralComplexityLimit.ts, 1, 397))
+
+type C = "c0" | "c1" | "c2" | "c3" | "c4" | "c5" | "c6" | "c7" | "c8" | "c9" | "c10" | "c11" | "c12" | "c13" | "c14" | "c15" | "c16" | "c17" | "c18" | "c19" | "c20" | "c21" | "c22" | "c23" | "c24" | "c25" | "c26" | "c27" | "c28" | "c29" | "c30" | "c31" | "c32" | "c33" | "c34" | "c35" | "c36" | "c37" | "c38" | "c39" | "c40" | "c41" | "c42" | "c43" | "c44" | "c45" | "c46" | "c47" | "c48" | "c49";
+>C : Symbol(C, Decl(templateLiteralComplexityLimit.ts, 2, 397))
+
+type TooBig = `${A}.${B}.${C}`;
+>TooBig : Symbol(TooBig, Decl(templateLiteralComplexityLimit.ts, 3, 397))
+>A : Symbol(A, Decl(templateLiteralComplexityLimit.ts, 0, 0))
+>B : Symbol(B, Decl(templateLiteralComplexityLimit.ts, 1, 397))
+>C : Symbol(C, Decl(templateLiteralComplexityLimit.ts, 2, 397))
+
+declare function f<T extends string>(x: T): T;
+>f : Symbol(f, Decl(templateLiteralComplexityLimit.ts, 4, 31))
+>T : Symbol(T, Decl(templateLiteralComplexityLimit.ts, 5, 19))
+>x : Symbol(x, Decl(templateLiteralComplexityLimit.ts, 5, 37))
+>T : Symbol(T, Decl(templateLiteralComplexityLimit.ts, 5, 19))
+>T : Symbol(T, Decl(templateLiteralComplexityLimit.ts, 5, 19))
+
+f<TooBig>("a0.b0.c0");
+>f : Symbol(f, Decl(templateLiteralComplexityLimit.ts, 4, 31))
+>TooBig : Symbol(TooBig, Decl(templateLiteralComplexityLimit.ts, 3, 397))
+
+type Nested = `${TooBig}.${A}`;
+>Nested : Symbol(Nested, Decl(templateLiteralComplexityLimit.ts, 6, 22))
+>TooBig : Symbol(TooBig, Decl(templateLiteralComplexityLimit.ts, 3, 397))
+>A : Symbol(A, Decl(templateLiteralComplexityLimit.ts, 0, 0))
+
+declare const n: Nested;
+>n : Symbol(n, Decl(templateLiteralComplexityLimit.ts, 8, 13))
+>Nested : Symbol(Nested, Decl(templateLiteralComplexityLimit.ts, 6, 22))
+
+export const len = n.length;
+>len : Symbol(len, Decl(templateLiteralComplexityLimit.ts, 9, 12))
+>n.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>n : Symbol(n, Decl(templateLiteralComplexityLimit.ts, 8, 13))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+// A limit error for one alias must not leak into unrelated aliases resolved in the same context.
+type Force = Combined;
+>Force : Symbol(Force, Decl(templateLiteralComplexityLimit.ts, 9, 28))
+>Combined : Symbol(Combined, Decl(templateLiteralComplexityLimit.ts, 12, 22))
+
+type Combined = TooBig2 | Small;
+>Combined : Symbol(Combined, Decl(templateLiteralComplexityLimit.ts, 12, 22))
+>TooBig2 : Symbol(TooBig2, Decl(templateLiteralComplexityLimit.ts, 13, 32))
+>Small : Symbol(Small, Decl(templateLiteralComplexityLimit.ts, 14, 32))
+
+type TooBig2 = `${A}.${B}.${C}`;
+>TooBig2 : Symbol(TooBig2, Decl(templateLiteralComplexityLimit.ts, 13, 32))
+>A : Symbol(A, Decl(templateLiteralComplexityLimit.ts, 0, 0))
+>B : Symbol(B, Decl(templateLiteralComplexityLimit.ts, 1, 397))
+>C : Symbol(C, Decl(templateLiteralComplexityLimit.ts, 2, 397))
+
+type Small = `${"x" | "y"}`;
+>Small : Symbol(Small, Decl(templateLiteralComplexityLimit.ts, 14, 32))
+
+declare const force: Force;
+>force : Symbol(force, Decl(templateLiteralComplexityLimit.ts, 16, 13))
+>Force : Symbol(Force, Decl(templateLiteralComplexityLimit.ts, 9, 28))
+
+let small: Small = 123;
+>small : Symbol(small, Decl(templateLiteralComplexityLimit.ts, 17, 3))
+>Small : Symbol(Small, Decl(templateLiteralComplexityLimit.ts, 14, 32))
+
