@@ -161,12 +161,17 @@ const (
 	MethodGetTemplateTypeOfMappedType   Method = "getTemplateTypeOfMappedType"
 
 	// Signature sub-property methods
-	MethodGetTypeParametersOfSignature Method = "getTypeParametersOfSignature"
-	MethodGetParametersOfSignature     Method = "getParametersOfSignature"
-	MethodGetThisParameterOfSignature  Method = "getThisParameterOfSignature"
-	MethodGetTargetOfSignature         Method = "getTargetOfSignature"
+	MethodGetTypeParametersOfSignature         Method = "getTypeParametersOfSignature"
+	MethodGetTypeArgumentsForResolvedSignature Method = "getTypeArgumentsForResolvedSignature"
+	MethodGetParametersOfSignature             Method = "getParametersOfSignature"
+	MethodGetThisParameterOfSignature          Method = "getThisParameterOfSignature"
+	MethodGetTargetOfSignature                 Method = "getTargetOfSignature"
 
 	// Checker methods
+	MethodIsOptionalParameter                        Method = "isOptionalParameter"
+	MethodGetTypeOfAssignmentPattern                 Method = "getTypeOfAssignmentPattern"
+	MethodIsValidPropertyAccess                      Method = "isValidPropertyAccess"
+	MethodGetSymbolsOfParameterPropertyDeclaration   Method = "getSymbolsOfParameterPropertyDeclaration"
 	MethodGetContextualType                          Method = "getContextualType"
 	MethodGetContextualTypeForArgument               Method = "getContextualTypeForArgument"
 	MethodGetAwaitedType                             Method = "getAwaitedType"
@@ -191,6 +196,15 @@ const (
 	MethodTypeToTypeNode                             Method = "typeToTypeNode"
 	MethodSignatureToSignatureDeclaration            Method = "signatureToSignatureDeclaration"
 	MethodTypeToString                               Method = "typeToString"
+	MethodSymbolToString                             Method = "symbolToString"
+	MethodSymbolToEntityName                         Method = "symbolToEntityName"
+	MethodSymbolToExpression                         Method = "symbolToExpression"
+	MethodSymbolToParameterDeclaration               Method = "symbolToParameterDeclaration"
+	MethodSymbolToTypeParameterDeclarations          Method = "symbolToTypeParameterDeclarations"
+	MethodTypeParameterToDeclaration                 Method = "typeParameterToDeclaration"
+	MethodIndexInfoToIndexSignatureDeclaration       Method = "indexInfoToIndexSignatureDeclaration"
+	MethodTypePredicateToString                      Method = "typePredicateToString"
+	MethodSignatureToString                          Method = "signatureToString"
 	MethodIsContextSensitive                         Method = "isContextSensitive"
 	MethodGetReturnTypeOfSignature                   Method = "getReturnTypeOfSignature"
 	MethodGetRestTypeOfSignature                     Method = "getRestTypeOfSignature"
@@ -218,6 +232,7 @@ const (
 	MethodGetImmediateAliasedSymbol                  Method = "getImmediateAliasedSymbol"
 	MethodGetTargetSymbol                            Method = "getTargetSymbol"
 	MethodGetMergedSymbol                            Method = "getMergedSymbol"
+	MethodGetRootSymbols                             Method = "getRootSymbols"
 	MethodGetSymbolOfNode                            Method = "getSymbolOfNode"
 	MethodGetSymbolOfDeclarationForChecker           Method = "getSymbolOfDeclarationForChecker"
 	MethodGetParentOfSymbolForChecker                Method = "getParentOfSymbolForChecker"
@@ -699,12 +714,17 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodGetTrueTypeOfConditionalType:  unmarshallerFor[GetTypePropertyParams],
 	MethodGetFalseTypeOfConditionalType: unmarshallerFor[GetTypePropertyParams],
 
-	MethodGetTypeParametersOfSignature: unmarshallerFor[GetSignaturePropertyParams],
-	MethodGetParametersOfSignature:     unmarshallerFor[GetSignaturePropertyParams],
-	MethodGetThisParameterOfSignature:  unmarshallerFor[GetSignaturePropertyParams],
-	MethodGetTargetOfSignature:         unmarshallerFor[GetSignaturePropertyParams],
+	MethodGetTypeParametersOfSignature:         unmarshallerFor[GetSignaturePropertyParams],
+	MethodGetTypeArgumentsForResolvedSignature: unmarshallerFor[GetSignaturePropertyParams],
+	MethodGetParametersOfSignature:             unmarshallerFor[GetSignaturePropertyParams],
+	MethodGetThisParameterOfSignature:          unmarshallerFor[GetSignaturePropertyParams],
+	MethodGetTargetOfSignature:                 unmarshallerFor[GetSignaturePropertyParams],
 
 	MethodGetContextualType:                          unmarshallerFor[GetContextualTypeParams],
+	MethodIsOptionalParameter:                        unmarshallerFor[CheckerNodeParams],
+	MethodGetTypeOfAssignmentPattern:                 unmarshallerFor[CheckerNodeParams],
+	MethodIsValidPropertyAccess:                      unmarshallerFor[IsValidPropertyAccessParams],
+	MethodGetSymbolsOfParameterPropertyDeclaration:   unmarshallerFor[CheckerNodeParams],
 	MethodGetContextualTypeForArgument:               unmarshallerFor[GetContextualTypeForArgumentParams],
 	MethodGetAwaitedType:                             unmarshallerFor[CheckerTypeParams],
 	MethodGetBaseTypeOfLiteralType:                   unmarshallerFor[GetBaseTypeOfLiteralTypeParams],
@@ -728,6 +748,15 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodTypeToTypeNode:                             unmarshallerFor[TypeToTypeNodeParams],
 	MethodSignatureToSignatureDeclaration:            unmarshallerFor[SignatureToSignatureDeclarationParams],
 	MethodTypeToString:                               unmarshallerFor[TypeToTypeNodeParams],
+	MethodSymbolToString:                             unmarshallerFor[SymbolToStringParams],
+	MethodSymbolToEntityName:                         unmarshallerFor[SymbolToNodeParams],
+	MethodSymbolToExpression:                         unmarshallerFor[SymbolToNodeParams],
+	MethodSymbolToParameterDeclaration:               unmarshallerFor[SymbolToDeclarationParams],
+	MethodSymbolToTypeParameterDeclarations:          unmarshallerFor[SymbolToDeclarationParams],
+	MethodTypeParameterToDeclaration:                 unmarshallerFor[TypeToTypeNodeParams],
+	MethodIndexInfoToIndexSignatureDeclaration:       unmarshallerFor[IndexInfoToIndexSignatureDeclarationParams],
+	MethodTypePredicateToString:                      unmarshallerFor[TypePredicateToStringParams],
+	MethodSignatureToString:                          unmarshallerFor[SignatureToStringParams],
 	MethodIsContextSensitive:                         unmarshallerFor[GetContextualTypeParams],
 	MethodGetReturnTypeOfSignature:                   unmarshallerFor[GetSignaturePropertyParams],
 	MethodGetRestTypeOfSignature:                     unmarshallerFor[CheckerSignatureParams],
@@ -753,6 +782,7 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodGetImmediateAliasedSymbol:                  unmarshallerFor[CheckerSymbolParams],
 	MethodGetTargetSymbol:                            unmarshallerFor[CheckerSymbolParams],
 	MethodGetMergedSymbol:                            unmarshallerFor[CheckerSymbolParams],
+	MethodGetRootSymbols:                             unmarshallerFor[CheckerSymbolParams],
 	MethodGetSymbolOfNode:                            unmarshallerFor[CheckerNodeParams],
 	MethodGetSymbolOfDeclarationForChecker:           unmarshallerFor[CheckerNodeParams],
 	MethodGetParentOfSymbolForChecker:                unmarshallerFor[CheckerSymbolParams],
@@ -1865,6 +1895,62 @@ type TypeToTypeNodeParams struct {
 	Flags    int32          `json:"flags,omitempty"`
 }
 
+type SymbolToStringParams struct {
+	Snapshot SnapshotID      `json:"snapshot"`
+	Project  project.Handle  `json:"project"`
+	Symbol   SymbolReference `json:"symbol"`
+	Location NodeHandle      `json:"location,omitempty"`
+	Meaning  *uint32         `json:"meaning,omitempty"`
+	Flags    *uint32         `json:"flags,omitempty"`
+}
+
+type SymbolToNodeParams struct {
+	Snapshot SnapshotID      `json:"snapshot"`
+	Project  project.Handle  `json:"project"`
+	Symbol   SymbolReference `json:"symbol"`
+	Meaning  uint32          `json:"meaning"`
+	Location NodeHandle      `json:"location,omitempty"`
+	Flags    uint32          `json:"flags,omitempty"`
+}
+
+type SignatureToStringParams struct {
+	Snapshot  SnapshotID     `json:"snapshot"`
+	Project   project.Handle `json:"project"`
+	Signature SignatureID    `json:"signature"`
+	Location  NodeHandle     `json:"location,omitempty"`
+	Flags     uint32         `json:"flags,omitempty"`
+}
+
+type SymbolToDeclarationParams struct {
+	Snapshot SnapshotID      `json:"snapshot"`
+	Project  project.Handle  `json:"project"`
+	Symbol   SymbolReference `json:"symbol"`
+	Location NodeHandle      `json:"location,omitempty"`
+	Flags    uint32          `json:"flags,omitempty"`
+}
+
+type IndexInfoToIndexSignatureDeclarationParams struct {
+	Snapshot    SnapshotID     `json:"snapshot"`
+	Project     project.Handle `json:"project"`
+	KeyType     TypeID         `json:"keyType"`
+	ValueType   TypeID         `json:"valueType"`
+	IsReadonly  bool           `json:"isReadonly,omitempty"`
+	Declaration NodeHandle     `json:"declaration,omitempty"`
+	Location    NodeHandle     `json:"location,omitempty"`
+	Flags       uint32         `json:"flags,omitempty"`
+}
+
+type TypePredicateToStringParams struct {
+	Snapshot       SnapshotID     `json:"snapshot"`
+	Project        project.Handle `json:"project"`
+	Kind           int32          `json:"kind"`
+	ParameterName  string         `json:"parameterName,omitempty"`
+	ParameterIndex int32          `json:"parameterIndex,omitempty"`
+	Type           TypeID         `json:"type,omitempty"`
+	Location       NodeHandle     `json:"location,omitempty"`
+	Flags          *uint32        `json:"flags,omitempty"`
+}
+
 // SignatureToSignatureDeclarationParams are the parameters for the signatureToSignatureDeclaration method.
 type SignatureToSignatureDeclarationParams struct {
 	Snapshot  SnapshotID     `json:"snapshot"`
@@ -1968,6 +2054,18 @@ type CheckerNodeParams struct {
 	Snapshot SnapshotID     `json:"snapshot"`
 	Project  project.Handle `json:"project"`
 	Location NodeHandle     `json:"location"`
+}
+
+type IsValidPropertyAccessParams struct {
+	Snapshot     SnapshotID     `json:"snapshot"`
+	Project      project.Handle `json:"project"`
+	Location     NodeHandle     `json:"location"`
+	PropertyName string         `json:"propertyName"`
+}
+
+type ParameterPropertySymbolsResponse struct {
+	Parameter *SymbolResponse `json:"parameter" nonnil:"true"`
+	Property  *SymbolResponse `json:"property" nonnil:"true"`
 }
 
 // CheckerSymbolParams are parameters for checker methods that operate on a symbol.

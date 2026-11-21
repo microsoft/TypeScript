@@ -127,7 +127,8 @@ function filterOwnedJSDocTags(hostNode: Node, comments: JSDoc[]): (JSDoc | JSDoc
     return result;
 }
 
-function getJSDocParameterTags(param: ParameterDeclaration): JSDocParameterTag[] {
+/** Gets the JSDoc parameter tags that match a parameter declaration. */
+export function getJSDocParameterTags(param: ParameterDeclaration): readonly JSDocParameterTag[] {
     const result: JSDocParameterTag[] = [];
     const name = param.name;
     const parentTags = getJSDocTags(param.parent);
@@ -152,7 +153,8 @@ function getJSDocParameterTags(param: ParameterDeclaration): JSDocParameterTag[]
     return result;
 }
 
-function getJSDocTypeParameterTags(typeParam: TypeParameterDeclaration): JSDocTemplateTag[] {
+/** Gets the JSDoc template tags that declare a type parameter's name. */
+export function getJSDocTypeParameterTags(typeParam: TypeParameterDeclaration): readonly JSDocTemplateTag[] {
     const result: JSDocTemplateTag[] = [];
     const name = typeParam.name.text;
     for (const tag of getJSDocTags(typeParam.parent)) {

@@ -1,0 +1,92 @@
+//// [tests/cases/compiler/homomorphicMappedTypeReinstantiationOverlappingParameters.ts] ////
+
+=== homomorphicMappedTypeReinstantiationOverlappingParameters.ts ===
+// Self-referential homomorphic mapped types whose type variable is instantiated to another of their own type parameters.
+
+type F<T, U> = { [K in keyof T]: F<U, string> };
+>F : F<T, U>
+
+declare const f: F<{ a: 1 }, number>;
+>f : F<{ a: 1; }, number>
+>a : 1
+
+const f1 = f.a;
+>f1 : string
+>f.a : string
+>f : F<{ a: 1; }, number>
+>a : string
+
+const f2: F<string, string> = "x";
+>f2 : string
+>"x" : "x"
+
+type X = { x: 1 };
+>X : X
+>x : 1
+
+type R<T, U> = {
+>R : R<T, U>
+
+    [K in keyof T]: {
+        rec: R<U, U | X>;
+>rec : R<U | X, U | X>
+
+        direct: R<U | X, U | X>;
+>direct : R<U | X, U | X>
+    }
+};
+declare const r: R<{ a: 1 }, { b: 2 }>;
+>r : R<{ a: 1; }, { b: 2; }>
+>a : 1
+>b : 2
+
+const r1 = r.a.rec;
+>r1 : R<X | { b: 2; }, X | { b: 2; }>
+>r.a.rec : R<X | { b: 2; }, X | { b: 2; }>
+>r.a : { rec: R<X | { b: 2; }, X | { b: 2; }>; direct: R<X | { b: 2; }, X | { b: 2; }>; }
+>r : R<{ a: 1; }, { b: 2; }>
+>a : { rec: R<X | { b: 2; }, X | { b: 2; }>; direct: R<X | { b: 2; }, X | { b: 2; }>; }
+>rec : R<X | { b: 2; }, X | { b: 2; }>
+
+const r2 = r.a.direct;
+>r2 : R<X | { b: 2; }, X | { b: 2; }>
+>r.a.direct : R<X | { b: 2; }, X | { b: 2; }>
+>r.a : { rec: R<X | { b: 2; }, X | { b: 2; }>; direct: R<X | { b: 2; }, X | { b: 2; }>; }
+>r : R<{ a: 1; }, { b: 2; }>
+>a : { rec: R<X | { b: 2; }, X | { b: 2; }>; direct: R<X | { b: 2; }, X | { b: 2; }>; }
+>direct : R<X | { b: 2; }, X | { b: 2; }>
+
+type G<T, U> = { [K in keyof T]: { next: G<U, string[]>; value: T[K] } };
+>G : G<T, U>
+>next : G<string[], string[]>
+>value : T[K]
+
+declare const g: G<{ a: 1 }, number>;
+>g : G<{ a: 1; }, number>
+>a : 1
+
+const g1 = g.a.next;
+>g1 : { next: any; value: string; }[]
+>g.a.next : { next: any; value: string; }[]
+>g.a : { next: { next: any; value: string; }[]; value: 1; }
+>g : G<{ a: 1; }, number>
+>a : { next: { next: any; value: string; }[]; value: 1; }
+>next : { next: any; value: string; }[]
+
+declare const g2: G<string[], string[]>;
+>g2 : { next: any; value: string; }[]
+
+const g3 = g2[0].value;
+>g3 : string
+>g2[0].value : string
+>g2[0] : { next: any[]; value: string; }
+>g2 : { next: any; value: string; }[]
+>0 : 0
+>value : string
+
+const g4 = g2.length;
+>g4 : number
+>g2.length : number
+>g2 : { next: any; value: string; }[]
+>length : number
+

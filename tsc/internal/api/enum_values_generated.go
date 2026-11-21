@@ -326,6 +326,15 @@ func main() {
 			"InTypeAlias":                         toInt32(checker.TypeFormatFlagsInTypeAlias),
 			"NodeBuilderFlagsMask":                toInt32(checker.TypeFormatFlagsNodeBuilderFlagsMask),
 		},
+		"SymbolFormatFlags": {
+			"None":                               toInt32(checker.SymbolFormatFlagsNone),
+			"WriteTypeParametersOrArguments":     toInt32(checker.SymbolFormatFlagsWriteTypeParametersOrArguments),
+			"UseOnlyExternalAliasing":            toInt32(checker.SymbolFormatFlagsUseOnlyExternalAliasing),
+			"AllowAnyNodeKind":                   toInt32(checker.SymbolFormatFlagsAllowAnyNodeKind),
+			"UseAliasDefinedOutsideCurrentScope": toInt32(checker.SymbolFormatFlagsUseAliasDefinedOutsideCurrentScope),
+			"WriteComputedProps":                 toInt32(checker.SymbolFormatFlagsWriteComputedProps),
+			"DoNotIncludeSymbolChain":            toInt32(checker.SymbolFormatFlagsDoNotIncludeSymbolChain),
+		},
 		"DiagnosticCategory": {
 			"Warning":    toInt32(diagnostics.CategoryWarning),
 			"Error":      toInt32(diagnostics.CategoryError),
@@ -472,7 +481,6 @@ func main() {
 			"ConstructorKeyword":                           toInt32(ast.KindConstructorKeyword),
 			"DeclareKeyword":                               toInt32(ast.KindDeclareKeyword),
 			"GetKeyword":                                   toInt32(ast.KindGetKeyword),
-			"ImmediateKeyword":                             toInt32(ast.KindImmediateKeyword),
 			"InferKeyword":                                 toInt32(ast.KindInferKeyword),
 			"IntrinsicKeyword":                             toInt32(ast.KindIntrinsicKeyword),
 			"IsKeyword":                                    toInt32(ast.KindIsKeyword),

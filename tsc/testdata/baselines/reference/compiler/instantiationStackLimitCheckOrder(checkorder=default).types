@@ -1,0 +1,31 @@
+//// [tests/cases/compiler/instantiationStackLimitCheckOrder.ts] ////
+
+=== instantiationStackLimitCheckOrder.ts ===
+// F<[]> recurses forever, so instantiating it reaches the limit on the
+// instantiation stack, wherever it is first instantiated. The instantiations
+// in progress then fail as a whole, and none of them may be cached partly
+// built for the other declaration to reuse.
+
+type F<T> = T extends [unknown?, ...infer R] ? [0, ...F<R>] : [];
+>F : F<T>
+
+type X = F<[]>;
+>X : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ...any[]]
+
+// The element type of A[] is resolved whenever first needed, inside the
+// instantiation of the return type of flat or not. Reaching the limit while
+// flattening it must fail the same instantiations either way.
+
+type A = A[];
+>A : A
+
+const r = ([] as A).flat(Infinity);
+>r : any[]
+>([] as A).flat(Infinity) : any[]
+>([] as A).flat : <A, D extends number = 1>(this: A, depth?: D | undefined) => FlatArray<A, D>[]
+>([] as A) : A
+>[] as A : A
+>[] : never[]
+>flat : <A, D extends number = 1>(this: A, depth?: D | undefined) => FlatArray<A, D>[]
+>Infinity : number
+
