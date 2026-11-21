@@ -23,7 +23,7 @@ async function f() {
 
     const labelled = flag ? [widened, "variable"] as const : [await import("./mod"), "import"] as const;
 >labelled : readonly [{ a: number; default: { a: number; }; }, "import"] | readonly [{ a: number; default: { a: number; }; }, "variable"]
->flag ? [widened, "variable"] as const : [await import("./mod"), "import"] as const : readonly [{ a: number; default: { a: number; }; }, "import"] | readonly [{ a: number; default: { a: number; }; }, "variable"]
+>flag ? [widened, "variable"] as const : [await import("./mod"), "import"] as const : readonly [{ a: number; default: { a: number; }; }, "variable"] | readonly [{ a: number; default: { a: number; }; }, "import"]
 >flag : boolean
 >[widened, "variable"] as const : readonly [{ a: number; default: { a: number; }; }, "variable"]
 >[widened, "variable"] : readonly [{ a: number; default: { a: number; }; }, "variable"]
