@@ -13,7 +13,7 @@ func TestGlobalFileDeletionAfterNonGlobalFile(t *testing.T) {
 	for _, globalFirst := range []bool{false, true} {
 		t.Run(core.IfElse(globalFirst, "global first", "non-global first"), func(t *testing.T) {
 			t.Parallel()
-			program := newDeletionTestProgram(map[string]string{
+			program := newDeletionTestProgram(t, map[string]string{
 				"/lib/lib.d.ts":        deletionTestLib,
 				"/project/consumer.ts": "export {};",
 			}, []string{"consumer.ts"}, &core.CompilerOptions{Incremental: core.TSTrue, NoEmit: core.TSTrue}, nil)

@@ -1,0 +1,31 @@
+genericCallReturnedFunctionParameterDefault.ts(24,5): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+
+
+==== genericCallReturnedFunctionParameterDefault.ts (1 errors) ====
+    // The function returned from the callback of a generic call has a parameter
+    // with a default and no annotation. Once T is inferred, the contextual
+    // signature of the returned function is its own signature, but the parameter
+    // already has its type (boolean) from the initializer, computed while T was
+    // being inferred, so there is no circularity: no TS7022, and 'r()(1)' is an
+    // error. (Reduced from open-design ProjectView.tsx, useCallback returning
+    // '{ release: (recoverable = false) => ... }'.)
+    
+    declare function id<T>(callback: T): T;
+    
+    id(() => {
+        return (x = false) => {};
+    });
+    
+    id(() => (y = false) => y);
+    
+    id(() => {
+        return { m(z = false) {} };
+    });
+    
+    const r = id(() => {
+        return (w = 0) => {};
+    });
+    r()("");
+        ~~
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+    

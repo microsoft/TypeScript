@@ -1,0 +1,45 @@
+//// [tests/cases/compiler/missingSymbolLibraryDiagnostic.ts] ////
+
+=== missingSymbolLibraryDiagnostic.ts ===
+interface Array<T> {}
+>Array : Symbol(Array, Decl(missingSymbolLibraryDiagnostic.ts, 0, 0))
+>T : Symbol(T, Decl(missingSymbolLibraryDiagnostic.ts, 0, 16))
+
+interface Boolean {}
+>Boolean : Symbol(Boolean, Decl(missingSymbolLibraryDiagnostic.ts, 0, 21))
+
+interface Function {}
+>Function : Symbol(Function, Decl(missingSymbolLibraryDiagnostic.ts, 1, 20))
+
+interface CallableFunction extends Function {}
+>CallableFunction : Symbol(CallableFunction, Decl(missingSymbolLibraryDiagnostic.ts, 2, 21))
+>Function : Symbol(Function, Decl(missingSymbolLibraryDiagnostic.ts, 1, 20))
+
+interface NewableFunction extends Function {}
+>NewableFunction : Symbol(NewableFunction, Decl(missingSymbolLibraryDiagnostic.ts, 3, 46))
+>Function : Symbol(Function, Decl(missingSymbolLibraryDiagnostic.ts, 1, 20))
+
+interface IArguments {}
+>IArguments : Symbol(IArguments, Decl(missingSymbolLibraryDiagnostic.ts, 4, 45))
+
+interface Number {}
+>Number : Symbol(Number, Decl(missingSymbolLibraryDiagnostic.ts, 5, 23))
+
+interface Object {}
+>Object : Symbol(Object, Decl(missingSymbolLibraryDiagnostic.ts, 6, 19))
+
+interface RegExp {}
+>RegExp : Symbol(RegExp, Decl(missingSymbolLibraryDiagnostic.ts, 7, 19))
+
+interface String {}
+>String : Symbol(String, Decl(missingSymbolLibraryDiagnostic.ts, 8, 19))
+
+Symbol("value");
+const shorthand = { Symbol };
+>shorthand : Symbol(shorthand, Decl(missingSymbolLibraryDiagnostic.ts, 12, 5))
+>Symbol : Symbol(Symbol, Decl(missingSymbolLibraryDiagnostic.ts, 12, 19))
+
+type MissingSymbol = Symbol;
+>MissingSymbol : Symbol(MissingSymbol, Decl(missingSymbolLibraryDiagnostic.ts, 12, 29))
+>Symbol : Symbol(Symbol)
+

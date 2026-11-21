@@ -21,6 +21,20 @@ class AA {
         this.getInstance().#method2(0, ...arr, 3); 
         const b2 = new (this.getInstance().#method2)(0, ...arr, 3); //Error 
         const str2 = this.getInstance().#method2`head${1}middle${2}tail`;
+
+        (this.#method)();
+        this.#method!();
+        (this.#method as () => void)();
+        (this.#method satisfies () => void)();
+        (((this.#method as () => void)!))();
+        (this.#method)?.();
+        this.#method!?.();
+        (this.getInstance().#method2)(0, ...arr, 3);
+        (this.#method2)`test${1}and${2}`;
+        this.#method2!`test${1}and${2}`;
+        (this.#method2 as any)`test${1}and${2}`;
+        (this.#method2 satisfies Function)`test${1}and${2}`;
+        (0, this.#method)();
     }
     getInstance() { return new AA(); }
 }

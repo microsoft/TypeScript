@@ -1,0 +1,50 @@
+//// [tests/cases/compiler/circularBaseTypesCheckOrder.ts] ////
+
+=== circularBaseTypesCheckOrder.ts ===
+// The base types of a cycle of interfaces are resolved as if the cycle
+// were entered at the interface declared first, wherever it is entered:
+// 'Base' has none, and the others keep theirs.
+
+declare let z: Derived2;
+>z : Symbol(z, Decl(circularBaseTypesCheckOrder.ts, 4, 11))
+>Derived2 : Symbol(Derived2, Decl(circularBaseTypesCheckOrder.ts, 14, 1))
+
+z.x;
+>z : Symbol(z, Decl(circularBaseTypesCheckOrder.ts, 4, 11))
+
+z.y;
+>z : Symbol(z, Decl(circularBaseTypesCheckOrder.ts, 4, 11))
+
+interface Base extends Derived2 {
+>Base : Symbol(Base, Decl(circularBaseTypesCheckOrder.ts, 6, 4))
+>Derived2 : Symbol(Derived2, Decl(circularBaseTypesCheckOrder.ts, 14, 1))
+
+    x: string;
+>x : Symbol(Base.x, Decl(circularBaseTypesCheckOrder.ts, 8, 33))
+}
+
+interface Derived extends Base {
+>Derived : Symbol(Derived, Decl(circularBaseTypesCheckOrder.ts, 10, 1))
+>Base : Symbol(Base, Decl(circularBaseTypesCheckOrder.ts, 6, 4))
+
+    y: string;
+>y : Symbol(Derived.y, Decl(circularBaseTypesCheckOrder.ts, 12, 32))
+}
+
+interface Derived2 extends Derived {
+>Derived2 : Symbol(Derived2, Decl(circularBaseTypesCheckOrder.ts, 14, 1))
+>Derived : Symbol(Derived, Decl(circularBaseTypesCheckOrder.ts, 10, 1))
+
+    z: string;
+>z : Symbol(Derived2.z, Decl(circularBaseTypesCheckOrder.ts, 16, 36))
+}
+
+declare let d: Derived;
+>d : Symbol(d, Decl(circularBaseTypesCheckOrder.ts, 20, 11))
+>Derived : Symbol(Derived, Decl(circularBaseTypesCheckOrder.ts, 10, 1))
+
+d.x;
+>d.x : Symbol(Base.x, Decl(circularBaseTypesCheckOrder.ts, 8, 33))
+>d : Symbol(d, Decl(circularBaseTypesCheckOrder.ts, 20, 11))
+>x : Symbol(Base.x, Decl(circularBaseTypesCheckOrder.ts, 8, 33))
+

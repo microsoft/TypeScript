@@ -1,0 +1,56 @@
+/main.ts(11,51): error TS2307: Cannot find module './card' or its corresponding type declarations.
+
+
+==== /tsconfig.json (0 errors) ====
+    {
+        "compilerOptions": {
+            "module": "esnext",
+            "moduleResolution": "bundler",
+            "moduleSuffixes": [".web", ""],
+            "allowImportingTsExtensions": true,
+            "strict": true,
+            "traceResolution": true
+        },
+        "files": ["main.ts"],
+        "contentMappers": [
+            { "package": "mapper", "extensions": [".box", ".long.box"] }
+        ]
+    }
+    
+==== /main.ts (1 errors) ====
+    import { platform } from "./card.box";
+    import { platform as longPlatform } from "./card.long.box";
+    import { platform as fallbackPlatform } from "./fallback.box";
+    import { platform as standardPlatform } from "./target.ts";
+    
+    const check: "web" = platform;
+    const longCheck: "web" = longPlatform;
+    const fallbackCheck: "default" = fallbackPlatform;
+    const standardCheck: "web" = standardPlatform;
+    
+    export { platform as extensionlessPlatform } from "./card";
+                                                      ~~~~~~~~
+!!! error TS2307: Cannot find module './card' or its corresponding type declarations.
+    
+==== /node_modules/mapper/package.json (0 errors) ====
+    {
+        "name": "mapper",
+        "version": "1.0.0",
+        "typescript": { "contentMapper": { "exec": ["compiler-test-mapper"] } }
+    }
+    
+==== /card.box (0 errors) ====
+    export const platform = "default";
+    
+==== /card.long.box (0 errors) ====
+    export const platform = "default";
+    
+==== /card.long.web.box (0 errors) ====
+    export const platform = "wrong";
+    
+==== /target.ts (0 errors) ====
+    export const platform = "default";
+    
+==== /target.web.ts (0 errors) ====
+    export const platform = "web";
+    

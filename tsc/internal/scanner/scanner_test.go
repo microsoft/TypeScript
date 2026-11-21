@@ -110,6 +110,45 @@ func TestScanSourceKeyword(t *testing.T) {
 	assert.Equal(t, s.TokenValue(), "sourceValue")
 }
 
+func TestConflictMarkerLineStart(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name     string
+		prefix   string
+		expected bool
+	}{
+		{name: "start of file", expected: true},
+		{name: "line feed", prefix: "\n", expected: true},
+		{name: "carriage return", prefix: "\r", expected: true},
+		{name: "CRLF", prefix: "\r\n", expected: true},
+		{name: "line separator", prefix: "\u2028", expected: true},
+		{name: "paragraph separator", prefix: "\u2029", expected: true},
+		{name: "text then line separator", prefix: "a\u2028", expected: true},
+		{name: "one ASCII byte", prefix: "a"},
+		{name: "two ASCII bytes", prefix: "ab"},
+		{name: "ASCII after line feed", prefix: "\nab"},
+		{name: "spaces after line feed", prefix: "\n  "},
+		{name: "two byte rune after line feed", prefix: "\né"},
+		{name: "three byte rune after line feed", prefix: "\n€"},
+		{name: "four byte rune after line feed", prefix: "\n🦀"},
+		{name: "ASCII after line separator", prefix: "\u2028ab"},
+		{name: "ASCII after paragraph separator", prefix: "\u2029ab"},
+		{name: "invalid UTF-8 byte", prefix: "\xff"},
+		{name: "invalid UTF-8 after line feed", prefix: "\n\xff\xfe"},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+			for _, marker := range []string{"<<<<<<< x", "======= x", ">>>>>>> x", "||||||| x"} {
+				text := test.prefix + marker
+				assert.Equal(t, isConflictMarkerTrivia(text, len(test.prefix)), test.expected, "%q", text)
+			}
+		})
+	}
+}
+
 func TestLookupKeywordMatchesKeywordMap(t *testing.T) {
 	t.Parallel()
 	for text, kind := range textToKeyword {

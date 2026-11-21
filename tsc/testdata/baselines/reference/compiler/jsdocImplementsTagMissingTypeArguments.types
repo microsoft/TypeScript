@@ -1,0 +1,21 @@
+//// [tests/cases/compiler/jsdocImplementsTagMissingTypeArguments.ts] ////
+
+=== a.js ===
+/** @template T */
+class Base {
+>Base : Base<T>
+
+    /** @type {T | undefined} */
+    value;
+>value : T | undefined
+}
+
+/** @implements {Base} */
+class C {
+>C : C
+
+    value = 1;
+>value : number
+>1 : 1
+}
+

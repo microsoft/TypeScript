@@ -1,0 +1,682 @@
+//// [tests/cases/compiler/restrictiveInstantiationOfRestrictiveConditional.ts] ////
+
+=== arraySlice.d.ts ===
+export type {ArraySlice};
+>ArraySlice : Symbol(ArraySlice, Decl(arraySlice.d.ts, 0, 13))
+
+declare const tag: unique symbol;
+>tag : Symbol(tag, Decl(arraySlice.d.ts, 1, 13))
+
+type IsNever<T> = [T] extends [never] ? true : false;
+>IsNever : Symbol(IsNever, Decl(arraySlice.d.ts, 1, 33))
+>T : Symbol(T, Decl(arraySlice.d.ts, 2, 13))
+>T : Symbol(T, Decl(arraySlice.d.ts, 2, 13))
+
+type IsEqual<A, B> =
+>IsEqual : Symbol(IsEqual, Decl(arraySlice.d.ts, 2, 53))
+>A : Symbol(A, Decl(arraySlice.d.ts, 3, 13))
+>B : Symbol(B, Decl(arraySlice.d.ts, 3, 15))
+
+	[A] extends [B]
+>A : Symbol(A, Decl(arraySlice.d.ts, 3, 13))
+>B : Symbol(B, Decl(arraySlice.d.ts, 3, 15))
+
+		? [B] extends [A]
+>B : Symbol(B, Decl(arraySlice.d.ts, 3, 15))
+>A : Symbol(A, Decl(arraySlice.d.ts, 3, 13))
+
+			? _IsEqual<A, B>
+>_IsEqual : Symbol(_IsEqual, Decl(arraySlice.d.ts, 8, 10))
+>A : Symbol(A, Decl(arraySlice.d.ts, 3, 13))
+>B : Symbol(B, Decl(arraySlice.d.ts, 3, 15))
+
+			: false
+		: false;
+type _IsEqual<A, B> = never;
+>_IsEqual : Symbol(_IsEqual, Decl(arraySlice.d.ts, 8, 10))
+>A : Symbol(A, Decl(arraySlice.d.ts, 9, 14))
+>B : Symbol(B, Decl(arraySlice.d.ts, 9, 16))
+
+type Primitive =
+>Primitive : Symbol(Primitive, Decl(arraySlice.d.ts, 9, 28))
+
+	| null
+	| undefined
+	| string
+	| number
+	| boolean
+	| symbol
+	| bigint;
+type UnknownArray = any;
+>UnknownArray : Symbol(UnknownArray, Decl(arraySlice.d.ts, 17, 10))
+
+type IfNotAnyOrNever<T, Cases extends {ifNot: unknown; ifAny?: unknown; ifNever?: unknown}> =
+>IfNotAnyOrNever : Symbol(IfNotAnyOrNever, Decl(arraySlice.d.ts, 18, 24))
+>T : Symbol(T, Decl(arraySlice.d.ts, 19, 21))
+>Cases : Symbol(Cases, Decl(arraySlice.d.ts, 19, 23))
+>ifNot : Symbol(ifNot, Decl(arraySlice.d.ts, 19, 39))
+>ifAny : Symbol(ifAny, Decl(arraySlice.d.ts, 19, 54))
+>ifNever : Symbol(ifNever, Decl(arraySlice.d.ts, 19, 71))
+
+	IsNever<T> extends true
+>IsNever : Symbol(IsNever, Decl(arraySlice.d.ts, 1, 33))
+>T : Symbol(T, Decl(arraySlice.d.ts, 19, 21))
+
+			? 'ifNever' extends keyof Cases
+>Cases : Symbol(Cases, Decl(arraySlice.d.ts, 19, 23))
+
+				? Cases['ifNever']
+>Cases : Symbol(Cases, Decl(arraySlice.d.ts, 19, 23))
+
+				: never
+			: Cases['ifNot'];
+>Cases : Symbol(Cases, Decl(arraySlice.d.ts, 19, 23))
+
+type And<A extends boolean, B extends boolean> = B;
+>And : Symbol(And, Decl(arraySlice.d.ts, 24, 20))
+>A : Symbol(A, Decl(arraySlice.d.ts, 25, 9))
+>B : Symbol(B, Decl(arraySlice.d.ts, 25, 27))
+>B : Symbol(B, Decl(arraySlice.d.ts, 25, 27))
+
+type Not<A extends boolean> = any;
+>Not : Symbol(Not, Decl(arraySlice.d.ts, 25, 51))
+>A : Symbol(A, Decl(arraySlice.d.ts, 26, 9))
+
+type MaxLength<Array_ extends UnknownArray> = never;
+>MaxLength : Symbol(MaxLength, Decl(arraySlice.d.ts, 26, 34))
+>Array_ : Symbol(Array_, Decl(arraySlice.d.ts, 27, 15))
+>UnknownArray : Symbol(UnknownArray, Decl(arraySlice.d.ts, 17, 10))
+
+type HasNoStaticElements<Array_ extends UnknownArray> = unknown;
+>HasNoStaticElements : Symbol(HasNoStaticElements, Decl(arraySlice.d.ts, 27, 52))
+>Array_ : Symbol(Array_, Decl(arraySlice.d.ts, 28, 25))
+>UnknownArray : Symbol(UnknownArray, Decl(arraySlice.d.ts, 17, 10))
+
+type CollapseLiterals<Union> = Union extends Primitive
+>CollapseLiterals : Symbol(CollapseLiterals, Decl(arraySlice.d.ts, 28, 64))
+>Union : Symbol(Union, Decl(arraySlice.d.ts, 29, 22))
+>Union : Symbol(Union, Decl(arraySlice.d.ts, 29, 22))
+>Primitive : Symbol(Primitive, Decl(arraySlice.d.ts, 9, 28))
+
+	? Union extends infer Collapsed & {}
+>Union : Symbol(Union, Decl(arraySlice.d.ts, 29, 22))
+>Collapsed : Symbol(Collapsed, Decl(arraySlice.d.ts, 30, 22))
+
+		? Collapsed
+>Collapsed : Symbol(Collapsed, Decl(arraySlice.d.ts, 30, 22))
+
+		: Union
+>Union : Symbol(Union, Decl(arraySlice.d.ts, 29, 22))
+
+	: Union;
+>Union : Symbol(Union, Decl(arraySlice.d.ts, 29, 22))
+
+type PositiveNumericStringGt<A extends string, B extends string> = A;
+>PositiveNumericStringGt : Symbol(PositiveNumericStringGt, Decl(arraySlice.d.ts, 33, 9))
+>A : Symbol(A, Decl(arraySlice.d.ts, 34, 29))
+>B : Symbol(B, Decl(arraySlice.d.ts, 34, 46))
+>A : Symbol(A, Decl(arraySlice.d.ts, 34, 29))
+
+type Absolute<N extends number | bigint> = _Absolute<N extends object ? UnwrapBrand<N> : N>;
+>Absolute : Symbol(Absolute, Decl(arraySlice.d.ts, 34, 69))
+>N : Symbol(N, Decl(arraySlice.d.ts, 35, 14))
+>_Absolute : Symbol(_Absolute, Decl(arraySlice.d.ts, 35, 92))
+>N : Symbol(N, Decl(arraySlice.d.ts, 35, 14))
+>UnwrapBrand : Symbol(UnwrapBrand, Decl(arraySlice.d.ts, 95, 11))
+>N : Symbol(N, Decl(arraySlice.d.ts, 35, 14))
+>N : Symbol(N, Decl(arraySlice.d.ts, 35, 14))
+
+type _Absolute<N extends number | bigint> = N extends bigint
+>_Absolute : Symbol(_Absolute, Decl(arraySlice.d.ts, 35, 92))
+>N : Symbol(N, Decl(arraySlice.d.ts, 36, 15))
+>N : Symbol(N, Decl(arraySlice.d.ts, 36, 15))
+
+	? `${N}` extends `-${infer Magnitude extends bigint}`
+>N : Symbol(N, Decl(arraySlice.d.ts, 36, 15))
+>Magnitude : Symbol(Magnitude, Decl(arraySlice.d.ts, 37, 27))
+
+		? Magnitude
+>Magnitude : Symbol(Magnitude, Decl(arraySlice.d.ts, 37, 27))
+
+		: N
+>N : Symbol(N, Decl(arraySlice.d.ts, 36, 15))
+
+	: `${N}` extends `-${infer Magnitude extends number}`
+>N : Symbol(N, Decl(arraySlice.d.ts, 36, 15))
+>Magnitude : Symbol(Magnitude, Decl(arraySlice.d.ts, 40, 27))
+
+		? Magnitude
+>Magnitude : Symbol(Magnitude, Decl(arraySlice.d.ts, 40, 27))
+
+		: `${N}` extends '-Infinity'
+>N : Symbol(N, Decl(arraySlice.d.ts, 36, 15))
+
+			? PositiveInfinity
+>PositiveInfinity : Symbol(PositiveInfinity, Decl(arraySlice.d.ts, 100, 32))
+
+			: `${number}` extends `${N}` ? number : N;
+>N : Symbol(N, Decl(arraySlice.d.ts, 36, 15))
+>N : Symbol(N, Decl(arraySlice.d.ts, 36, 15))
+
+type GreaterThan<A extends _Numeric, B extends _Numeric> =
+>GreaterThan : Symbol(GreaterThan, Decl(arraySlice.d.ts, 44, 45))
+>A : Symbol(A, Decl(arraySlice.d.ts, 45, 17))
+>_Numeric : Symbol(_Numeric, Decl(arraySlice.d.ts, 99, 5))
+>B : Symbol(B, Decl(arraySlice.d.ts, 45, 36))
+>_Numeric : Symbol(_Numeric, Decl(arraySlice.d.ts, 99, 5))
+
+	_GreaterThan<A extends object ? UnwrapBrand<A> : A, B extends object ? UnwrapBrand<B> : B>;
+>_GreaterThan : Symbol(_GreaterThan, Decl(arraySlice.d.ts, 46, 92))
+>A : Symbol(A, Decl(arraySlice.d.ts, 45, 17))
+>UnwrapBrand : Symbol(UnwrapBrand, Decl(arraySlice.d.ts, 95, 11))
+>A : Symbol(A, Decl(arraySlice.d.ts, 45, 17))
+>A : Symbol(A, Decl(arraySlice.d.ts, 45, 17))
+>B : Symbol(B, Decl(arraySlice.d.ts, 45, 36))
+>UnwrapBrand : Symbol(UnwrapBrand, Decl(arraySlice.d.ts, 95, 11))
+>B : Symbol(B, Decl(arraySlice.d.ts, 45, 36))
+>B : Symbol(B, Decl(arraySlice.d.ts, 45, 36))
+
+type _GreaterThan<A extends _Numeric, B extends _Numeric> =
+>_GreaterThan : Symbol(_GreaterThan, Decl(arraySlice.d.ts, 46, 92))
+>A : Symbol(A, Decl(arraySlice.d.ts, 47, 18))
+>_Numeric : Symbol(_Numeric, Decl(arraySlice.d.ts, 99, 5))
+>B : Symbol(B, Decl(arraySlice.d.ts, 47, 37))
+>_Numeric : Symbol(_Numeric, Decl(arraySlice.d.ts, 99, 5))
+
+	A extends _Numeric
+>A : Symbol(A, Decl(arraySlice.d.ts, 47, 18))
+>_Numeric : Symbol(_Numeric, Decl(arraySlice.d.ts, 99, 5))
+
+		? B extends _Numeric
+>B : Symbol(B, Decl(arraySlice.d.ts, 47, 37))
+>_Numeric : Symbol(_Numeric, Decl(arraySlice.d.ts, 99, 5))
+
+			? `${number}` extends `${A | B}`
+>A : Symbol(A, Decl(arraySlice.d.ts, 47, 18))
+>B : Symbol(B, Decl(arraySlice.d.ts, 47, 37))
+
+				? boolean
+				: bigint extends A | B
+>A : Symbol(A, Decl(arraySlice.d.ts, 47, 18))
+>B : Symbol(B, Decl(arraySlice.d.ts, 47, 37))
+
+					? boolean
+					: A extends PositiveInfinity
+>A : Symbol(A, Decl(arraySlice.d.ts, 47, 18))
+>PositiveInfinity : Symbol(PositiveInfinity, Decl(arraySlice.d.ts, 100, 32))
+
+							? B extends PositiveInfinity ? false : true
+>B : Symbol(B, Decl(arraySlice.d.ts, 47, 37))
+>PositiveInfinity : Symbol(PositiveInfinity, Decl(arraySlice.d.ts, 100, 32))
+
+							: B extends NegativeInfinity
+>B : Symbol(B, Decl(arraySlice.d.ts, 47, 37))
+>NegativeInfinity : Symbol(NegativeInfinity, Decl(arraySlice.d.ts, 101, 32))
+
+								? A extends NegativeInfinity ? false : true
+>A : Symbol(A, Decl(arraySlice.d.ts, 47, 18))
+>NegativeInfinity : Symbol(NegativeInfinity, Decl(arraySlice.d.ts, 101, 32))
+
+								: A extends NegativeInfinity
+>A : Symbol(A, Decl(arraySlice.d.ts, 47, 18))
+>NegativeInfinity : Symbol(NegativeInfinity, Decl(arraySlice.d.ts, 101, 32))
+
+									? false
+									: B extends PositiveInfinity
+>B : Symbol(B, Decl(arraySlice.d.ts, 47, 37))
+>PositiveInfinity : Symbol(PositiveInfinity, Decl(arraySlice.d.ts, 100, 32))
+
+										? false
+										: [IsNegative<A>, IsNegative<B>] extends infer Signs extends [boolean, boolean]
+>IsNegative : Symbol(IsNegative, Decl(arraySlice.d.ts, 102, 30))
+>A : Symbol(A, Decl(arraySlice.d.ts, 47, 18))
+>IsNegative : Symbol(IsNegative, Decl(arraySlice.d.ts, 102, 30))
+>B : Symbol(B, Decl(arraySlice.d.ts, 47, 37))
+>Signs : Symbol(Signs, Decl(arraySlice.d.ts, 62, 56))
+
+											? [true, false] extends Signs
+>Signs : Symbol(Signs, Decl(arraySlice.d.ts, 62, 56))
+
+												? false
+												: [false, true] extends Signs
+>Signs : Symbol(Signs, Decl(arraySlice.d.ts, 62, 56))
+
+													? true
+													: [false, false] extends Signs
+>Signs : Symbol(Signs, Decl(arraySlice.d.ts, 62, 56))
+
+														? PositiveNumericStringGt<`${A}`, `${B}`>
+>PositiveNumericStringGt : Symbol(PositiveNumericStringGt, Decl(arraySlice.d.ts, 33, 9))
+>A : Symbol(A, Decl(arraySlice.d.ts, 47, 18))
+>B : Symbol(B, Decl(arraySlice.d.ts, 47, 37))
+
+														: PositiveNumericStringGt<`${Absolute<B>}`, `${Absolute<A>}`>
+>PositiveNumericStringGt : Symbol(PositiveNumericStringGt, Decl(arraySlice.d.ts, 33, 9))
+>Absolute : Symbol(Absolute, Decl(arraySlice.d.ts, 34, 69))
+>B : Symbol(B, Decl(arraySlice.d.ts, 47, 37))
+>Absolute : Symbol(Absolute, Decl(arraySlice.d.ts, 34, 69))
+>A : Symbol(A, Decl(arraySlice.d.ts, 47, 18))
+
+											: never
+			: never
+		: never;
+type IsReadonlyArray<Array_ extends UnknownArray> = never;
+>IsReadonlyArray : Symbol(IsReadonlyArray, Decl(arraySlice.d.ts, 72, 10))
+>Array_ : Symbol(Array_, Decl(arraySlice.d.ts, 73, 21))
+>UnknownArray : Symbol(UnknownArray, Decl(arraySlice.d.ts, 17, 10))
+
+type UnionMember<T> =
+>UnionMember : Symbol(UnionMember, Decl(arraySlice.d.ts, 73, 58))
+>T : Symbol(T, Decl(arraySlice.d.ts, 74, 17))
+
+	IsNever<T> extends true
+>IsNever : Symbol(IsNever, Decl(arraySlice.d.ts, 1, 33))
+>T : Symbol(T, Decl(arraySlice.d.ts, 74, 17))
+
+		? never
+		: (T extends any ? () => T : never) extends () => (infer R)
+>T : Symbol(T, Decl(arraySlice.d.ts, 74, 17))
+>T : Symbol(T, Decl(arraySlice.d.ts, 74, 17))
+>R : Symbol(R, Decl(arraySlice.d.ts, 77, 58))
+
+			? R
+>R : Symbol(R, Decl(arraySlice.d.ts, 77, 58))
+
+			: never;
+type TagContainer<Token> = {
+>TagContainer : Symbol(TagContainer, Decl(arraySlice.d.ts, 79, 11))
+>Token : Symbol(Token, Decl(arraySlice.d.ts, 80, 18))
+
+	readonly [tag]: Token;
+>[tag] : Symbol([tag], Decl(arraySlice.d.ts, 80, 28))
+>tag : Symbol(tag, Decl(arraySlice.d.ts, 1, 13))
+>Token : Symbol(Token, Decl(arraySlice.d.ts, 80, 18))
+
+};
+type Tag<TagName extends PropertyKey, TagMetadata> = unknown;
+>Tag : Symbol(Tag, Decl(arraySlice.d.ts, 82, 2))
+>TagName : Symbol(TagName, Decl(arraySlice.d.ts, 83, 9))
+>PropertyKey : Symbol(PropertyKey, Decl(lib.es5.d.ts, --, --))
+>TagMetadata : Symbol(TagMetadata, Decl(arraySlice.d.ts, 83, 37))
+
+type RemoveAllTags<T> = T extends TagContainer<any>
+>RemoveAllTags : Symbol(RemoveAllTags, Decl(arraySlice.d.ts, 83, 61))
+>T : Symbol(T, Decl(arraySlice.d.ts, 84, 19))
+>T : Symbol(T, Decl(arraySlice.d.ts, 84, 19))
+>TagContainer : Symbol(TagContainer, Decl(arraySlice.d.ts, 79, 11))
+
+	? RemoveAllTags<UnionMember<RemoveTag<T>>>
+>RemoveAllTags : Symbol(RemoveAllTags, Decl(arraySlice.d.ts, 83, 61))
+>UnionMember : Symbol(UnionMember, Decl(arraySlice.d.ts, 73, 58))
+>RemoveTag : Symbol(RemoveTag, Decl(arraySlice.d.ts, 86, 5))
+>T : Symbol(T, Decl(arraySlice.d.ts, 84, 19))
+
+	: T;
+>T : Symbol(T, Decl(arraySlice.d.ts, 84, 19))
+
+type RemoveTag<T extends TagContainer<unknown>> =
+>RemoveTag : Symbol(RemoveTag, Decl(arraySlice.d.ts, 86, 5))
+>T : Symbol(T, Decl(arraySlice.d.ts, 87, 15))
+>TagContainer : Symbol(TagContainer, Decl(arraySlice.d.ts, 79, 11))
+
+	| {
+		[ThisTag in keyof T[typeof tag]]: T extends infer Underlying & Tag<ThisTag, T[typeof tag][ThisTag]>
+>ThisTag : Symbol(ThisTag, Decl(arraySlice.d.ts, 89, 3))
+>T : Symbol(T, Decl(arraySlice.d.ts, 87, 15))
+>tag : Symbol(tag, Decl(arraySlice.d.ts, 1, 13))
+>T : Symbol(T, Decl(arraySlice.d.ts, 87, 15))
+>Underlying : Symbol(Underlying, Decl(arraySlice.d.ts, 89, 51))
+>Tag : Symbol(Tag, Decl(arraySlice.d.ts, 82, 2))
+>ThisTag : Symbol(ThisTag, Decl(arraySlice.d.ts, 89, 3))
+>T : Symbol(T, Decl(arraySlice.d.ts, 87, 15))
+>tag : Symbol(tag, Decl(arraySlice.d.ts, 1, 13))
+>ThisTag : Symbol(ThisTag, Decl(arraySlice.d.ts, 89, 3))
+
+			? [Underlying] extends [T] ? never : Underlying
+>Underlying : Symbol(Underlying, Decl(arraySlice.d.ts, 89, 51))
+>T : Symbol(T, Decl(arraySlice.d.ts, 87, 15))
+>Underlying : Symbol(Underlying, Decl(arraySlice.d.ts, 89, 51))
+
+			: never
+	}[keyof T[typeof tag]]
+>T : Symbol(T, Decl(arraySlice.d.ts, 87, 15))
+>tag : Symbol(tag, Decl(arraySlice.d.ts, 1, 13))
+
+	| (T extends infer Underlying & TagContainer<T[typeof tag]>
+>T : Symbol(T, Decl(arraySlice.d.ts, 87, 15))
+>Underlying : Symbol(Underlying, Decl(arraySlice.d.ts, 93, 19))
+>TagContainer : Symbol(TagContainer, Decl(arraySlice.d.ts, 79, 11))
+>T : Symbol(T, Decl(arraySlice.d.ts, 87, 15))
+>tag : Symbol(tag, Decl(arraySlice.d.ts, 1, 13))
+
+		? [Underlying] extends [T] ? never : Underlying
+>Underlying : Symbol(Underlying, Decl(arraySlice.d.ts, 93, 19))
+>T : Symbol(T, Decl(arraySlice.d.ts, 87, 15))
+>Underlying : Symbol(Underlying, Decl(arraySlice.d.ts, 93, 19))
+
+		: never);
+type UnwrapBrand<T> = IfNotAnyOrNever<T, {ifNot: _UnwrapBrand<T, Primitive>}>;
+>UnwrapBrand : Symbol(UnwrapBrand, Decl(arraySlice.d.ts, 95, 11))
+>T : Symbol(T, Decl(arraySlice.d.ts, 96, 17))
+>IfNotAnyOrNever : Symbol(IfNotAnyOrNever, Decl(arraySlice.d.ts, 18, 24))
+>T : Symbol(T, Decl(arraySlice.d.ts, 96, 17))
+>ifNot : Symbol(ifNot, Decl(arraySlice.d.ts, 96, 42))
+>_UnwrapBrand : Symbol(_UnwrapBrand, Decl(arraySlice.d.ts, 96, 78))
+>T : Symbol(T, Decl(arraySlice.d.ts, 96, 17))
+>Primitive : Symbol(Primitive, Decl(arraySlice.d.ts, 9, 28))
+
+type _UnwrapBrand<T, Base> = T extends Primitive
+>_UnwrapBrand : Symbol(_UnwrapBrand, Decl(arraySlice.d.ts, 96, 78))
+>T : Symbol(T, Decl(arraySlice.d.ts, 97, 18))
+>Base : Symbol(Base, Decl(arraySlice.d.ts, 97, 20))
+>T : Symbol(T, Decl(arraySlice.d.ts, 97, 18))
+>Primitive : Symbol(Primitive, Decl(arraySlice.d.ts, 9, 28))
+
+	? CollapseLiterals<T extends TagContainer<unknown> ? RemoveAllTags<T> : T>
+>CollapseLiterals : Symbol(CollapseLiterals, Decl(arraySlice.d.ts, 28, 64))
+>T : Symbol(T, Decl(arraySlice.d.ts, 97, 18))
+>TagContainer : Symbol(TagContainer, Decl(arraySlice.d.ts, 79, 11))
+>RemoveAllTags : Symbol(RemoveAllTags, Decl(arraySlice.d.ts, 83, 61))
+>T : Symbol(T, Decl(arraySlice.d.ts, 97, 18))
+>T : Symbol(T, Decl(arraySlice.d.ts, 97, 18))
+
+	: T;
+>T : Symbol(T, Decl(arraySlice.d.ts, 97, 18))
+
+type _Numeric = number | bigint;
+>_Numeric : Symbol(_Numeric, Decl(arraySlice.d.ts, 99, 5))
+
+type PositiveInfinity = unknown;
+>PositiveInfinity : Symbol(PositiveInfinity, Decl(arraySlice.d.ts, 100, 32))
+
+type NegativeInfinity = never;
+>NegativeInfinity : Symbol(NegativeInfinity, Decl(arraySlice.d.ts, 101, 32))
+
+type IsNegative<T extends _Numeric> = never;
+>IsNegative : Symbol(IsNegative, Decl(arraySlice.d.ts, 102, 30))
+>T : Symbol(T, Decl(arraySlice.d.ts, 103, 16))
+>_Numeric : Symbol(_Numeric, Decl(arraySlice.d.ts, 99, 5))
+
+type Sum<A extends number, B extends number> = any;
+>Sum : Symbol(Sum, Decl(arraySlice.d.ts, 103, 44))
+>A : Symbol(A, Decl(arraySlice.d.ts, 104, 9))
+>B : Symbol(B, Decl(arraySlice.d.ts, 104, 26))
+
+type LessThanOrEqual<A extends _Numeric, B extends _Numeric> = unknown;
+>LessThanOrEqual : Symbol(LessThanOrEqual, Decl(arraySlice.d.ts, 104, 51))
+>A : Symbol(A, Decl(arraySlice.d.ts, 105, 21))
+>_Numeric : Symbol(_Numeric, Decl(arraySlice.d.ts, 99, 5))
+>B : Symbol(B, Decl(arraySlice.d.ts, 105, 40))
+>_Numeric : Symbol(_Numeric, Decl(arraySlice.d.ts, 99, 5))
+
+type ArraySlice<
+>ArraySlice : Symbol(ArraySlice, Decl(arraySlice.d.ts, 105, 71))
+
+	Array_ extends readonly unknown[],
+>Array_ : Symbol(Array_, Decl(arraySlice.d.ts, 106, 16))
+
+	Start extends number = never,
+>Start : Symbol(Start, Decl(arraySlice.d.ts, 107, 35))
+
+	End extends number = never,
+>End : Symbol(End, Decl(arraySlice.d.ts, 108, 30))
+
+> = ArraySliceImplementation<Array_, Start extends object ? UnwrapBrand<Start> : Start, End>;
+>ArraySliceImplementation : Symbol(ArraySliceImplementation, Decl(arraySlice.d.ts, 110, 93))
+>Array_ : Symbol(Array_, Decl(arraySlice.d.ts, 106, 16))
+>Start : Symbol(Start, Decl(arraySlice.d.ts, 107, 35))
+>UnwrapBrand : Symbol(UnwrapBrand, Decl(arraySlice.d.ts, 95, 11))
+>Start : Symbol(Start, Decl(arraySlice.d.ts, 107, 35))
+>Start : Symbol(Start, Decl(arraySlice.d.ts, 107, 35))
+>End : Symbol(End, Decl(arraySlice.d.ts, 108, 30))
+
+type ArraySliceImplementation<
+>ArraySliceImplementation : Symbol(ArraySliceImplementation, Decl(arraySlice.d.ts, 110, 93))
+
+	Array_ extends readonly unknown[],
+>Array_ : Symbol(Array_, Decl(arraySlice.d.ts, 111, 30))
+
+	Start extends number,
+>Start : Symbol(Start, Decl(arraySlice.d.ts, 112, 35))
+
+	End extends number,
+>End : Symbol(End, Decl(arraySlice.d.ts, 113, 22))
+
+> = Array_ extends unknown ? _ArraySlice<Array_, Start, End> : never;
+>Array_ : Symbol(Array_, Decl(arraySlice.d.ts, 111, 30))
+>_ArraySlice : Symbol(_ArraySlice, Decl(arraySlice.d.ts, 115, 69))
+>Array_ : Symbol(Array_, Decl(arraySlice.d.ts, 111, 30))
+>Start : Symbol(Start, Decl(arraySlice.d.ts, 112, 35))
+>End : Symbol(End, Decl(arraySlice.d.ts, 113, 22))
+
+type _ArraySlice<
+>_ArraySlice : Symbol(_ArraySlice, Decl(arraySlice.d.ts, 115, 69))
+
+	Array_ extends readonly unknown[],
+>Array_ : Symbol(Array_, Decl(arraySlice.d.ts, 116, 17))
+
+	Start extends number = 0,
+>Start : Symbol(Start, Decl(arraySlice.d.ts, 117, 35))
+
+	End extends number = Array_['length'],
+>End : Symbol(End, Decl(arraySlice.d.ts, 118, 26))
+>Array_ : Symbol(Array_, Decl(arraySlice.d.ts, 116, 17))
+
+> = And<IsEqual<Start, never>, IsEqual<End, never>> extends true
+>And : Symbol(And, Decl(arraySlice.d.ts, 24, 20))
+>IsEqual : Symbol(IsEqual, Decl(arraySlice.d.ts, 2, 53))
+>Start : Symbol(Start, Decl(arraySlice.d.ts, 117, 35))
+>IsEqual : Symbol(IsEqual, Decl(arraySlice.d.ts, 2, 53))
+>End : Symbol(End, Decl(arraySlice.d.ts, 118, 26))
+
+	? Array_
+>Array_ : Symbol(Array_, Decl(arraySlice.d.ts, 116, 17))
+
+	: number extends Array_['length']
+>Array_ : Symbol(Array_, Decl(arraySlice.d.ts, 116, 17))
+
+		? VariableLengthArraySliceHelper<Array_, IsNever<Start> extends true ? 0 : Start, End extends PositiveInfinity ? never : End>
+>VariableLengthArraySliceHelper : Symbol(VariableLengthArraySliceHelper, Decl(arraySlice.d.ts, 128, 66))
+>Array_ : Symbol(Array_, Decl(arraySlice.d.ts, 116, 17))
+>IsNever : Symbol(IsNever, Decl(arraySlice.d.ts, 1, 33))
+>Start : Symbol(Start, Decl(arraySlice.d.ts, 117, 35))
+>Start : Symbol(Start, Decl(arraySlice.d.ts, 117, 35))
+>End : Symbol(End, Decl(arraySlice.d.ts, 118, 26))
+>PositiveInfinity : Symbol(PositiveInfinity, Decl(arraySlice.d.ts, 100, 32))
+>End : Symbol(End, Decl(arraySlice.d.ts, 118, 26))
+
+		: `${number}` extends `${Start | End}`
+>Start : Symbol(Start, Decl(arraySlice.d.ts, 117, 35))
+>End : Symbol(End, Decl(arraySlice.d.ts, 118, 26))
+
+			? UnknownLengthArraySlice<Array_>
+>UnknownLengthArraySlice : Symbol(UnknownLengthArraySlice, Decl(arraySlice.d.ts, 145, 37))
+>Array_ : Symbol(Array_, Decl(arraySlice.d.ts, 116, 17))
+
+			: ArraySliceResult<Array_, ArraySliceHelper<Array_, IsEqual<Start, never> extends true ? 0 : Start, IsEqual<End, never> extends true ? MaxLength<Array_> : End>>;
+>ArraySliceResult : Symbol(ArraySliceResult, Decl(arraySlice.d.ts, 126, 164))
+>Array_ : Symbol(Array_, Decl(arraySlice.d.ts, 116, 17))
+>ArraySliceHelper : Symbol(ArraySliceHelper, Decl(arraySlice.d.ts, 146, 70))
+>Array_ : Symbol(Array_, Decl(arraySlice.d.ts, 116, 17))
+>IsEqual : Symbol(IsEqual, Decl(arraySlice.d.ts, 2, 53))
+>Start : Symbol(Start, Decl(arraySlice.d.ts, 117, 35))
+>Start : Symbol(Start, Decl(arraySlice.d.ts, 117, 35))
+>IsEqual : Symbol(IsEqual, Decl(arraySlice.d.ts, 2, 53))
+>End : Symbol(End, Decl(arraySlice.d.ts, 118, 26))
+>MaxLength : Symbol(MaxLength, Decl(arraySlice.d.ts, 26, 34))
+>Array_ : Symbol(Array_, Decl(arraySlice.d.ts, 116, 17))
+>End : Symbol(End, Decl(arraySlice.d.ts, 118, 26))
+
+type ArraySliceResult<Array_ extends readonly unknown[], Sliced> =
+>ArraySliceResult : Symbol(ArraySliceResult, Decl(arraySlice.d.ts, 126, 164))
+>Array_ : Symbol(Array_, Decl(arraySlice.d.ts, 127, 22))
+>Sliced : Symbol(Sliced, Decl(arraySlice.d.ts, 127, 56))
+
+	IsReadonlyArray<Array_> extends true ? Readonly<Sliced> : Sliced;
+>IsReadonlyArray : Symbol(IsReadonlyArray, Decl(arraySlice.d.ts, 72, 10))
+>Array_ : Symbol(Array_, Decl(arraySlice.d.ts, 127, 22))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>Sliced : Symbol(Sliced, Decl(arraySlice.d.ts, 127, 56))
+>Sliced : Symbol(Sliced, Decl(arraySlice.d.ts, 127, 56))
+
+type VariableLengthArraySliceHelper<
+>VariableLengthArraySliceHelper : Symbol(VariableLengthArraySliceHelper, Decl(arraySlice.d.ts, 128, 66))
+
+	Array_ extends readonly unknown[],
+>Array_ : Symbol(Array_, Decl(arraySlice.d.ts, 129, 36))
+
+	Start extends number,
+>Start : Symbol(Start, Decl(arraySlice.d.ts, 130, 35))
+
+	End extends number,
+>End : Symbol(End, Decl(arraySlice.d.ts, 131, 22))
+
+> = And<
+>And : Symbol(And, Decl(arraySlice.d.ts, 24, 20))
+
+	And<Not<IsNegative<Start>>, Not<IsNegative<End>>>,
+>And : Symbol(And, Decl(arraySlice.d.ts, 24, 20))
+>Not : Symbol(Not, Decl(arraySlice.d.ts, 25, 51))
+>IsNegative : Symbol(IsNegative, Decl(arraySlice.d.ts, 102, 30))
+>Start : Symbol(Start, Decl(arraySlice.d.ts, 130, 35))
+>Not : Symbol(Not, Decl(arraySlice.d.ts, 25, 51))
+>IsNegative : Symbol(IsNegative, Decl(arraySlice.d.ts, 102, 30))
+>End : Symbol(End, Decl(arraySlice.d.ts, 131, 22))
+
+	IsEqual<LessThanOrEqual<End, Start>, true>
+>IsEqual : Symbol(IsEqual, Decl(arraySlice.d.ts, 2, 53))
+>LessThanOrEqual : Symbol(LessThanOrEqual, Decl(arraySlice.d.ts, 104, 51))
+>End : Symbol(End, Decl(arraySlice.d.ts, 131, 22))
+>Start : Symbol(Start, Decl(arraySlice.d.ts, 130, 35))
+
+> extends true
+	? []
+	: And<
+>And : Symbol(And, Decl(arraySlice.d.ts, 24, 20))
+
+			And<Not<IsNegative<Start>>, Not<IsNegative<End>>>,
+>And : Symbol(And, Decl(arraySlice.d.ts, 24, 20))
+>Not : Symbol(Not, Decl(arraySlice.d.ts, 25, 51))
+>IsNegative : Symbol(IsNegative, Decl(arraySlice.d.ts, 102, 30))
+>Start : Symbol(Start, Decl(arraySlice.d.ts, 130, 35))
+>Not : Symbol(Not, Decl(arraySlice.d.ts, 25, 51))
+>IsNegative : Symbol(IsNegative, Decl(arraySlice.d.ts, 102, 30))
+>End : Symbol(End, Decl(arraySlice.d.ts, 131, 22))
+
+			IsEqual<GreaterThan<End, Start>, true>
+>IsEqual : Symbol(IsEqual, Decl(arraySlice.d.ts, 2, 53))
+>GreaterThan : Symbol(GreaterThan, Decl(arraySlice.d.ts, 44, 45))
+>End : Symbol(End, Decl(arraySlice.d.ts, 131, 22))
+>Start : Symbol(Start, Decl(arraySlice.d.ts, 130, 35))
+
+		> extends true
+			? HasNoStaticElements<Array_> extends true
+>HasNoStaticElements : Symbol(HasNoStaticElements, Decl(arraySlice.d.ts, 27, 52))
+>Array_ : Symbol(Array_, Decl(arraySlice.d.ts, 129, 36))
+
+				? UnknownLengthArraySlice<Array_>
+>UnknownLengthArraySlice : Symbol(UnknownLengthArraySlice, Decl(arraySlice.d.ts, 145, 37))
+>Array_ : Symbol(Array_, Decl(arraySlice.d.ts, 129, 36))
+
+				: ArraySliceResult<Array_, ArraySliceByPositiveIndex<Array_, Start, End>>
+>ArraySliceResult : Symbol(ArraySliceResult, Decl(arraySlice.d.ts, 126, 164))
+>Array_ : Symbol(Array_, Decl(arraySlice.d.ts, 129, 36))
+>ArraySliceByPositiveIndex : Symbol(ArraySliceByPositiveIndex, Decl(arraySlice.d.ts, 152, 10))
+>Array_ : Symbol(Array_, Decl(arraySlice.d.ts, 129, 36))
+>Start : Symbol(Start, Decl(arraySlice.d.ts, 130, 35))
+>End : Symbol(End, Decl(arraySlice.d.ts, 131, 22))
+
+			: UnknownLengthArraySlice<Array_>;
+>UnknownLengthArraySlice : Symbol(UnknownLengthArraySlice, Decl(arraySlice.d.ts, 145, 37))
+>Array_ : Symbol(Array_, Decl(arraySlice.d.ts, 129, 36))
+
+type UnknownLengthArraySlice<Array_ extends readonly unknown[]> = any;
+>UnknownLengthArraySlice : Symbol(UnknownLengthArraySlice, Decl(arraySlice.d.ts, 145, 37))
+>Array_ : Symbol(Array_, Decl(arraySlice.d.ts, 146, 29))
+
+type ArraySliceHelper<
+>ArraySliceHelper : Symbol(ArraySliceHelper, Decl(arraySlice.d.ts, 146, 70))
+
+	Array_ extends readonly unknown[],
+>Array_ : Symbol(Array_, Decl(arraySlice.d.ts, 147, 22))
+
+	Start extends number = 0,
+>Start : Symbol(Start, Decl(arraySlice.d.ts, 148, 35))
+
+	End extends number = MaxLength<Array_>,
+>End : Symbol(End, Decl(arraySlice.d.ts, 149, 26))
+>MaxLength : Symbol(MaxLength, Decl(arraySlice.d.ts, 26, 34))
+>Array_ : Symbol(Array_, Decl(arraySlice.d.ts, 147, 22))
+
+	ArrayLength extends number = MaxLength<Array_>,
+>ArrayLength : Symbol(ArrayLength, Decl(arraySlice.d.ts, 150, 40))
+>MaxLength : Symbol(MaxLength, Decl(arraySlice.d.ts, 26, 34))
+>Array_ : Symbol(Array_, Decl(arraySlice.d.ts, 147, 22))
+
+> = never;
+type ArraySliceByPositiveIndex<
+>ArraySliceByPositiveIndex : Symbol(ArraySliceByPositiveIndex, Decl(arraySlice.d.ts, 152, 10))
+
+	Array_ extends readonly unknown[],
+>Array_ : Symbol(Array_, Decl(arraySlice.d.ts, 153, 31))
+
+	Start extends number,
+>Start : Symbol(Start, Decl(arraySlice.d.ts, 154, 35))
+
+	End extends number,
+>End : Symbol(End, Decl(arraySlice.d.ts, 155, 22))
+
+	Result extends Array<Array_[number]> = [],
+>Result : Symbol(Result, Decl(arraySlice.d.ts, 156, 20))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>Array_ : Symbol(Array_, Decl(arraySlice.d.ts, 153, 31))
+
+> = Start extends End
+>Start : Symbol(Start, Decl(arraySlice.d.ts, 154, 35))
+>End : Symbol(End, Decl(arraySlice.d.ts, 155, 22))
+
+	? Result
+>Result : Symbol(Result, Decl(arraySlice.d.ts, 156, 20))
+
+	: ArraySliceByPositiveIndex<Array_, Sum<Start, 1>, End, [...Result, Array_[Start]]>;
+>ArraySliceByPositiveIndex : Symbol(ArraySliceByPositiveIndex, Decl(arraySlice.d.ts, 152, 10))
+>Array_ : Symbol(Array_, Decl(arraySlice.d.ts, 153, 31))
+>Sum : Symbol(Sum, Decl(arraySlice.d.ts, 103, 44))
+>Start : Symbol(Start, Decl(arraySlice.d.ts, 154, 35))
+>End : Symbol(End, Decl(arraySlice.d.ts, 155, 22))
+>Result : Symbol(Result, Decl(arraySlice.d.ts, 156, 20))
+>Array_ : Symbol(Array_, Decl(arraySlice.d.ts, 153, 31))
+>Start : Symbol(Start, Decl(arraySlice.d.ts, 154, 35))
+
+=== main.ts ===
+// Reduced from type-fest's ArraySlice. Inferring Value from the argument
+// measures the variances of ArraySlice, which takes the restrictive
+// instantiations of conditional types whose type parameters are already
+// restrictive, many times over through the brand-unwrapping types. Such an
+// instantiation must be the conditional type itself: making and evaluating
+// a separate copy roughly triples the work, enough to exceed the
+// instantiation count limit (TS2589) here. Smaller cases do not get near
+// the limit either way, so the case is as large as the limit requires.
+import type {ArraySlice} from './arraySlice.d.ts';
+>ArraySlice : Symbol(ArraySlice, Decl(main.ts, 8, 13))
+
+declare function f<Value>(values: ArraySlice<readonly [0, Value] | readonly [0, Value, Value], 1>): void;
+>f : Symbol(f, Decl(main.ts, 8, 50))
+>Value : Symbol(Value, Decl(main.ts, 9, 19))
+>values : Symbol(values, Decl(main.ts, 9, 26))
+>ArraySlice : Symbol(ArraySlice, Decl(main.ts, 8, 13))
+>Value : Symbol(Value, Decl(main.ts, 9, 19))
+>Value : Symbol(Value, Decl(main.ts, 9, 19))
+>Value : Symbol(Value, Decl(main.ts, 9, 19))
+
+declare const x: ArraySlice<readonly [0, {id: 'row'}] | readonly [0, {id: 'row'}, {id: 'row'}], 1>;
+>x : Symbol(x, Decl(main.ts, 10, 13))
+>ArraySlice : Symbol(ArraySlice, Decl(main.ts, 8, 13))
+>id : Symbol(id, Decl(main.ts, 10, 42))
+>id : Symbol(id, Decl(main.ts, 10, 70))
+>id : Symbol(id, Decl(main.ts, 10, 83))
+
+f(x);
+>f : Symbol(f, Decl(main.ts, 8, 50))
+>x : Symbol(x, Decl(main.ts, 10, 13))
+

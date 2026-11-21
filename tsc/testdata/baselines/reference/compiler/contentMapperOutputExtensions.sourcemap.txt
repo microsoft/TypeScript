@@ -115,7 +115,8 @@ sourceFile:../Widget.y.z
 9 >                             ^^^^^^
 10>                                   ^^^^^^
 11>                                         ^
-1 >
+1 >// @box-extension: .mts
+  >
 2 >export
 3 >       
 4 >       declare
@@ -126,17 +127,17 @@ sourceFile:../Widget.y.z
 9 >                             () => 
 10>                                   string
 11>                                         ;
-1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
-2 >Emitted(1, 7) Source(1, 7) + SourceIndex(0)
-3 >Emitted(1, 8) Source(1, 8) + SourceIndex(0)
-4 >Emitted(1, 15) Source(1, 15) + SourceIndex(0)
-5 >Emitted(1, 16) Source(1, 16) + SourceIndex(0)
-6 >Emitted(1, 22) Source(1, 22) + SourceIndex(0)
-7 >Emitted(1, 28) Source(1, 28) + SourceIndex(0)
-8 >Emitted(1, 30) Source(1, 30) + SourceIndex(0)
-9 >Emitted(1, 36) Source(1, 36) + SourceIndex(0)
-10>Emitted(1, 42) Source(1, 42) + SourceIndex(0)
-11>Emitted(1, 43) Source(1, 43) + SourceIndex(0)
+1 >Emitted(1, 1) Source(2, 1) + SourceIndex(0)
+2 >Emitted(1, 7) Source(2, 7) + SourceIndex(0)
+3 >Emitted(1, 8) Source(2, 8) + SourceIndex(0)
+4 >Emitted(1, 15) Source(2, 15) + SourceIndex(0)
+5 >Emitted(1, 16) Source(2, 16) + SourceIndex(0)
+6 >Emitted(1, 22) Source(2, 22) + SourceIndex(0)
+7 >Emitted(1, 28) Source(2, 28) + SourceIndex(0)
+8 >Emitted(1, 30) Source(2, 30) + SourceIndex(0)
+9 >Emitted(1, 36) Source(2, 36) + SourceIndex(0)
+10>Emitted(1, 42) Source(2, 42) + SourceIndex(0)
+11>Emitted(1, 43) Source(2, 43) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=Widget.d.mts.map===================================================================
 JsFile: typed.d.ts

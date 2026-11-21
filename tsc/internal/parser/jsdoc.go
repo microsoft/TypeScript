@@ -917,12 +917,12 @@ func (p *Parser) parseSeeTag(start int, tagName *ast.IdentifierNode, indent int,
 }
 
 func (p *Parser) parseImplementsTag(start int, tagName *ast.IdentifierNode, margin int, indentText string) *ast.Node {
-	className := p.parseExpressionWithTypeArgumentsForAugments()
+	className := p.parseJSDocHeritageTypeReference()
 	return p.finishNode(p.factory.NewJSDocImplementsTag(tagName, className, p.parseTrailingTagComments(start, p.nodePos(), margin, indentText)), start)
 }
 
 func (p *Parser) parseAugmentsTag(start int, tagName *ast.IdentifierNode, margin int, indentText string) *ast.Node {
-	className := p.parseExpressionWithTypeArgumentsForAugments()
+	className := p.parseJSDocHeritageTypeReference()
 	return p.finishNode(p.factory.NewJSDocAugmentsTag(tagName, className, p.parseTrailingTagComments(start, p.nodePos(), margin, indentText)), start)
 }
 
@@ -954,27 +954,21 @@ func (p *Parser) parseImportTag(start int, tagName *ast.IdentifierNode, margin i
 	return p.finishNode(p.factory.NewJSDocImportTag(tagName, importClause, moduleSpecifier, attributes, comments), start)
 }
 
-func (p *Parser) parseExpressionWithTypeArgumentsForAugments() *ast.Node {
+func (p *Parser) parseJSDocHeritageTypeReference() *ast.Node {
 	usedBrace := p.parseOptional(ast.KindOpenBraceToken)
 	pos := p.nodePos()
-	expression := p.parsePropertyAccessEntityNameExpression()
+	var typeName *ast.EntityName = p.parseJSDocIdentifierName(diagnostics.Identifier_expected)
+	for p.parseOptional(ast.KindDotToken) {
+		name := p.parseJSDocIdentifierName(diagnostics.Identifier_expected)
+		typeName = p.finishNode(p.factory.NewQualifiedName(typeName, name), pos)
+	}
 	p.scanner.SetSkipJSDocLeadingAsterisks(true)
 	typeArguments := p.parseTypeArguments()
 	p.scanner.SetSkipJSDocLeadingAsterisks(false)
-	node := p.finishNode(p.factory.NewExpressionWithTypeArguments(expression, typeArguments), pos)
+	node := p.finishNode(p.factory.NewTypeReferenceNode(typeName, typeArguments), pos)
 	if usedBrace {
 		p.skipWhitespace()
 		p.parseExpected(ast.KindCloseBraceToken)
-	}
-	return node
-}
-
-func (p *Parser) parsePropertyAccessEntityNameExpression() *ast.Node {
-	pos := p.nodePos()
-	node := p.parseJSDocIdentifierName(diagnostics.Identifier_expected)
-	for p.parseOptional(ast.KindDotToken) {
-		name := p.parseJSDocIdentifierName(diagnostics.Identifier_expected)
-		node = p.finishNode(p.factory.NewPropertyAccessExpression(node, nil, name, ast.NodeFlagsNone), pos)
 	}
 	return node
 }
@@ -1198,6 +1192,7 @@ func (p *Parser) parseChildParameterOrPropertyTag(target propertyLikeParse, inde
 				child := p.tryParseChildTag(target, indent)
 				if child != nil && name != nil &&
 					(child.Kind == ast.KindJSDocParameterTag || child.Kind == ast.KindJSDocPropertyTag) &&
+					!ast.NodeIsMissing(child.Name()) &&
 					(ast.IsIdentifier(child.Name()) || !textsEqual(name, child.Name().AsQualifiedName().Left)) {
 					return nil
 				}

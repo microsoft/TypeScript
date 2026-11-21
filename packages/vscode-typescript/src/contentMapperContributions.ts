@@ -3,7 +3,7 @@ export type { ContentMapperContribution, ContentMapperManifest } from "@typescri
 
 export interface SerializedContentMapperContribution {
     readonly contributorId: string;
-    readonly extensions: readonly string[];
+    readonly extensions?: readonly string[];
     readonly inferredProjectContribution?: {
         readonly options?: Readonly<Record<string, unknown>>;
         readonly manifest: {
@@ -14,6 +14,7 @@ export interface SerializedContentMapperContribution {
             readonly compilerOptions?: readonly string[];
             readonly dynamicConfig?: boolean;
             readonly outputExtensions?: Readonly<Record<string, string>>;
+            readonly extensions?: readonly string[];
         };
     };
 }
@@ -26,7 +27,7 @@ export function serializeContentMapperContributions(
         contributions.forEach(contribution => {
             result.push({
                 contributorId,
-                extensions: [...contribution.extensions],
+                ...(contribution.extensions && { extensions: [...contribution.extensions] }),
                 inferredProjectContribution: contribution.inferredProjectContribution && {
                     options: contribution.inferredProjectContribution.options,
                     manifest: {
@@ -36,6 +37,9 @@ export function serializeContentMapperContributions(
                         compilerOptions: contribution.inferredProjectContribution.manifest.compilerOptions && [...contribution.inferredProjectContribution.manifest.compilerOptions],
                         ...(contribution.inferredProjectContribution.manifest.outputExtensions && {
                             outputExtensions: { ...contribution.inferredProjectContribution.manifest.outputExtensions },
+                        }),
+                        ...(contribution.inferredProjectContribution.manifest.extensions && {
+                            extensions: [...contribution.inferredProjectContribution.manifest.extensions],
                         }),
                     },
                 },
@@ -50,10 +54,11 @@ export function validateContentMapperRegistration(contributorId: string, contrib
         throw new TypeError("Content mapper contributor ID must not be empty.");
     }
     for (const contribution of contributions) {
-        if (contribution.extensions.length === 0 || contribution.extensions.some(extension => !isExtension(extension))) {
+        const extensions = contribution.extensions ?? contribution.inferredProjectContribution?.manifest.extensions;
+        if (!extensions || extensions.length === 0 || extensions.some(extension => !isExtension(extension))) {
             throw new TypeError("Content mapper contributions require non-empty extensions beginning with '.' and containing no path separators.");
         }
-        if (contribution.extensions.some(extension => /\.(?:[cm]?[jt]s|[jt]sx|json)$/i.test(extension))) {
+        if (extensions.some(extension => /\.(?:[cm]?[jt]s|[jt]sx|json)$/i.test(extension))) {
             throw new TypeError("Content mapper extensions must not end in a built-in extension.");
         }
         const inferredProjectContribution = contribution.inferredProjectContribution;
@@ -69,6 +74,9 @@ export function validateContentMapperRegistration(contributorId: string, contrib
         if (inferredProjectContribution?.manifest.outputExtensions && Object.entries(inferredProjectContribution.manifest.outputExtensions).some(([source, output]) => !isExtension(source) || !isExtension(output))) {
             throw new TypeError("Content mapper output extensions must be non-empty, begin with '.', and contain no path separators.");
         }
+        if (inferredProjectContribution?.manifest.extensions?.some(extension => !isExtension(extension))) {
+            throw new TypeError("Content mapper manifest extensions must be non-empty, begin with '.', and contain no path separators.");
+        }
     }
 }
 
@@ -83,7 +91,8 @@ export function documentMatchesContentMapperContributions(
     const documentPath = document.uri.path.toLowerCase();
     for (const contributions of registrations.values()) {
         for (const contribution of contributions) {
-            if (contribution.extensions.some(extension => documentPath.endsWith(extension.toLowerCase()))) {
+            const extensions = contribution.extensions ?? contribution.inferredProjectContribution?.manifest.extensions ?? [];
+            if (extensions.some(extension => documentPath.endsWith(extension.toLowerCase()))) {
                 return true;
             }
         }

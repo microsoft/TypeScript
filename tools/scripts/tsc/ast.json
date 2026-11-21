@@ -168,7 +168,6 @@
             "ConstructorKeyword",
             "DeclareKeyword",
             "GetKeyword",
-            "ImmediateKeyword",
             "InferKeyword",
             "IntrinsicKeyword",
             "IsKeyword",
@@ -4574,7 +4573,7 @@
                     },
                     {
                         "name": "ClassName",
-                        "type": "ExpressionWithTypeArguments"
+                        "type": "TypeReferenceNode"
                     },
                     {
                         "name": "Comment",
@@ -4593,7 +4592,7 @@
                     },
                     {
                         "name": "ClassName",
-                        "type": "ExpressionWithTypeArguments"
+                        "type": "TypeReferenceNode"
                     },
                     {
                         "name": "Comment",
@@ -4743,7 +4742,11 @@
                     },
                     {
                         "name": "TypeExpression",
-                        "type": "Node",
+                        "type": [
+                            "JSDocTypeExpression",
+                            "JSDocTypeLiteral"
+                        ],
+                        "typeGuard": "isJSDocTypeExpressionOrJSDocTypeLiteral",
                         "optional": true
                     },
                     {
@@ -4761,21 +4764,27 @@
             "JSDocSignature": {
                 "extends": [
                     "JSDocTypeBase",
-                    "DeclarationBase",
-                    "FunctionLikeBase"
+                    "DeclarationBase"
                 ],
                 "members": [
                     {
                         "name": "TypeParameters",
-                        "inherited": true
+                        "type": "JSDocTemplateTag",
+                        "list": "NodeList",
+                        "optional": true
                     },
                     {
                         "name": "Parameters",
-                        "inherited": true
+                        "type": [
+                            "JSDocParameterTag",
+                            "JSDocThisTag"
+                        ],
+                        "list": "NodeList"
                     },
                     {
                         "name": "Type",
-                        "inherited": true
+                        "type": "JSDocReturnTag",
+                        "optional": true
                     }
                 ]
             },
@@ -5228,7 +5237,8 @@
             ],
             "ModuleBody": [
                 "ModuleBlock",
-                "ModuleDeclaration"
+                "ModuleDeclaration",
+                "Identifier"
             ],
             "JSDocFullName": [
                 "Identifier",
@@ -5236,7 +5246,6 @@
             ],
             "ForInitializer": [
                 "Expression",
-                "MissingDeclaration",
                 "VariableDeclarationList"
             ],
             "ModuleReference": [

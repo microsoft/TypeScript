@@ -17,6 +17,34 @@ func TestJSONValue(t *testing.T) {
 	})
 }
 
+func TestJSONValueIsFalsy(t *testing.T) {
+	t.Parallel()
+
+	for _, test := range []struct {
+		text  string
+		falsy bool
+	}{
+		{"0", true},
+		{"-0", true},
+		{"0.0", true},
+		{"1", false},
+		{"-0.5", false},
+		{"null", true},
+		{"false", true},
+		{`""`, true},
+		{`"0"`, false},
+		{"[]", false},
+		{"{}", false},
+	} {
+		t.Run(test.text, func(t *testing.T) {
+			t.Parallel()
+			var value packagejson.JSONValue
+			assert.NilError(t, json.Unmarshal([]byte(test.text), &value))
+			assert.Equal(t, value.IsFalsy(), test.falsy)
+		})
+	}
+}
+
 func testJSONValue(t *testing.T, unmarshal func([]byte, any) error) {
 	type packageJson struct {
 		Private    packagejson.JSONValue `json:"private"`

@@ -1171,7 +1171,7 @@ func (tx *classFieldsTransformer) visitPreOrPostfixUnaryExpression(node *ast.Nod
 				if initializeExpression != nil {
 					assignReceiver = initializeExpression
 				}
-				expression = tx.createPrivateIdentifierAssignment(info, assignReceiver, expression, ast.KindEqualsToken)
+				expression = tx.createPrivateIdentifierAssignment(info, assignReceiver, expression, ast.KindEqualsToken, false)
 				tx.EmitContext().SetOriginal(expression, node)
 				expression.Loc = node.Loc
 				if temp != nil {
@@ -1354,13 +1354,14 @@ func (tx *classFieldsTransformer) createCopiableReceiverExpr(receiver *ast.Expre
 }
 
 func (tx *classFieldsTransformer) visitCallExpression(node *ast.CallExpression) *ast.Node {
-	if ast.IsPropertyAccessExpression(node.Expression) && ast.IsPrivateIdentifier(node.Expression.AsPropertyAccessExpression().Name()) &&
-		tx.accessPrivateIdentifier(node.Expression.AsPropertyAccessExpression().Name()) != nil {
+	expression := ast.SkipOuterExpressions(node.Expression, ast.OEKAll)
+	if ast.IsPropertyAccessExpression(expression) && ast.IsPrivateIdentifier(expression.AsPropertyAccessExpression().Name()) &&
+		tx.accessPrivateIdentifier(expression.AsPropertyAccessExpression().Name()) != nil {
 		// obj.#x()
 
 		// Transform call expressions of private names to properly bind the `this` parameter.
-		thisArg, target := tx.createCallBinding(node.Expression)
-		visitedTarget := tx.Visitor().VisitNode(target)
+		thisArg, target := tx.createCallBinding(expression)
+		visitedTarget := tx.Factory().RestoreOuterExpressions(node.Expression, tx.Visitor().VisitNode(target), ast.OEKAll)
 		visitedThisArg := tx.Visitor().VisitNode(thisArg)
 		visitedArgs := tx.Visitor().VisitNodes(node.Arguments)
 		allArgs := make([]*ast.Node, 0, 1+len(visitedArgs.Nodes))
@@ -1409,12 +1410,14 @@ func (tx *classFieldsTransformer) visitCallExpression(node *ast.CallExpression) 
 }
 
 func (tx *classFieldsTransformer) visitTaggedTemplateExpression(node *ast.TaggedTemplateExpression) *ast.Node {
-	if ast.IsPropertyAccessExpression(node.Tag) && ast.IsPrivateIdentifier(node.Tag.AsPropertyAccessExpression().Name()) &&
-		tx.accessPrivateIdentifier(node.Tag.AsPropertyAccessExpression().Name()) != nil {
+	tag := ast.SkipOuterExpressions(node.Tag, ast.OEKAll)
+	if ast.IsPropertyAccessExpression(tag) && ast.IsPrivateIdentifier(tag.AsPropertyAccessExpression().Name()) &&
+		tx.accessPrivateIdentifier(tag.AsPropertyAccessExpression().Name()) != nil {
 		// Bind the `this` correctly for tagged template literals when the tag is a private identifier property access.
-		thisArg, target := tx.createCallBinding(node.Tag)
+		thisArg, target := tx.createCallBinding(tag)
+		visitedTarget := tx.Factory().RestoreOuterExpressions(node.Tag, tx.Visitor().VisitNode(target), ast.OEKAll)
 		bindExpr := tx.Factory().NewCallExpression(
-			tx.Factory().NewPropertyAccessExpression(tx.Visitor().VisitNode(target), nil, tx.Factory().NewIdentifier("bind"), ast.NodeFlagsNone),
+			tx.Factory().NewPropertyAccessExpression(visitedTarget, nil, tx.Factory().NewIdentifier("bind"), ast.NodeFlagsNone),
 			nil, /*questionDotToken*/
 			nil, /*typeArguments*/
 			tx.Factory().NewNodeList([]*ast.Node{tx.Visitor().VisitNode(thisArg)}),
@@ -1585,7 +1588,7 @@ func (tx *classFieldsTransformer) visitBinaryExpression(node *ast.BinaryExpressi
 			// obj.#x = ...
 			info := tx.accessPrivateIdentifier(left.Name())
 			if info != nil {
-				result := tx.createPrivateIdentifierAssignment(info, left.Expression(), node.Right, node.OperatorToken.Kind)
+				result := tx.createPrivateIdentifierAssignment(info, left.Expression(), node.Right, node.OperatorToken.Kind, false)
 				tx.EmitContext().SetOriginal(result, node.AsNode())
 				result.Loc = node.Loc
 				return result
@@ -1697,8 +1700,22 @@ func (tx *classFieldsTransformer) visitParenthesizedExpression(node *ast.Parenth
 	return tx.Factory().UpdateParenthesizedExpression(node, expression)
 }
 
-func (tx *classFieldsTransformer) createPrivateIdentifierAssignment(info *privateIdentifierInfo, receiver *ast.Expression, right *ast.Expression, operator ast.Kind) *ast.Expression {
+func (tx *classFieldsTransformer) createPrivateIdentifierAssignment(info *privateIdentifierInfo, receiver *ast.Expression, right *ast.Expression, operator ast.Kind, suppressReceiverComments bool) *ast.Expression {
 	receiver = tx.Visitor().VisitNode(receiver)
+	if ast.IsLogicalOrCoalescingAssignmentOperator(operator) {
+		readExpression, initializeExpression := tx.createCopiableReceiverExpr(receiver)
+		if initializeExpression == nil {
+			initializeExpression = readExpression
+		}
+		setterReceiver := readExpression.Clone(tx.Factory())
+		return tx.Factory().NewBinaryExpression(
+			nil,
+			tx.createPrivateIdentifierAccessHelper(info, initializeExpression),
+			nil,
+			tx.Factory().NewToken(transformers.GetNonAssignmentOperatorForCompoundAssignment(operator)),
+			tx.createPrivateIdentifierAssignment(info, setterReceiver, right, ast.KindEqualsToken, true),
+		)
+	}
 	right = tx.Visitor().VisitNode(right)
 
 	if ast.IsCompoundAssignment(operator) {
@@ -1718,6 +1735,9 @@ func (tx *classFieldsTransformer) createPrivateIdentifierAssignment(info *privat
 	}
 
 	tx.EmitContext().SetCommentRange(receiver, core.NewTextRange(-1, receiver.End()))
+	if suppressReceiverComments {
+		tx.EmitContext().AddEmitFlags(receiver, printer.EFNoComments)
+	}
 
 	switch info.kind {
 	case printer.PrivateIdentifierKindAccessor:
@@ -3285,7 +3305,7 @@ func (tx *classFieldsTransformer) wrapPrivateIdentifierForDestructuringTarget(no
 		tx.EmitContext().AddVariableDeclaration(receiver)
 		receiverAssignment = tx.Factory().NewAssignmentExpression(receiver, tx.Visitor().VisitNode(prop.Expression))
 	}
-	assignExpr := tx.createPrivateIdentifierAssignment(info, receiver, parameter, ast.KindEqualsToken)
+	assignExpr := tx.createPrivateIdentifierAssignment(info, receiver, parameter, ast.KindEqualsToken, false)
 	wrapper := tx.Factory().NewAssignmentTargetWrapper(parameter, assignExpr).AsPropertyAccessExpression()
 	if receiverAssignment != nil {
 		return tx.Factory().UpdatePropertyAccessExpression(
