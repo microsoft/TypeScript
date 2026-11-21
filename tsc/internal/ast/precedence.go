@@ -657,6 +657,8 @@ func GetTypeNodePrecedence(n *TypeNode) TypePrecedence {
 		return TypePrecedenceConditional
 	case KindJSDocOptionalType, KindJSDocVariadicType:
 		return TypePrecedenceJSDoc
+	case KindJSDocTypeExpression, KindJSDocNameReference, KindJSDocTypeLiteral, KindJSDocSignature:
+		return TypePrecedenceNonArray
 	case KindFunctionType, KindConstructorType:
 		return TypePrecedenceFunction
 	case KindUnionType:
