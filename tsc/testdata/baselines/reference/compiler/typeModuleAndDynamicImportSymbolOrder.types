@@ -9,8 +9,8 @@ import type * as packageTypes from "./pkg.mjs";
 >packageTypes : typeof packageTypes
 
 const packageModule = true ? packageTypes : await import("./pkg.mjs");
->packageModule : typeof packageTypes
->true ? packageTypes : await import("./pkg.mjs") : typeof packageTypes
+>packageModule : typeof import("./pkg.mjs")
+>true ? packageTypes : await import("./pkg.mjs") : typeof import("./pkg.mjs")
 >true : true
 >packageTypes : typeof packageTypes
 >await import("./pkg.mjs") : typeof import("./pkg.mjs")
