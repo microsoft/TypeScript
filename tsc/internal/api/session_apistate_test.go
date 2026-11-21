@@ -571,3 +571,37 @@ func TestGetCurrentLanguageServerSnapshotCloseProjectRetainsProjectForOpenFile(t
 	assert.NilError(t, err)
 	assert.Assert(t, projectSession.Snapshot().ProjectCollection.ConfiguredProject(tspath.PathKeyFromCanonical(configFileName)) != nil)
 }
+
+func TestOpenProjectsExtendingIntoCircularExtendsKeepExtendedOptions(t *testing.T) {
+	t.Parallel()
+	if !bundled.Embedded {
+		t.Skip("bundled files are not embedded")
+	}
+
+	const first = "/home/projects/p1/tsconfig.json"
+	const second = "/home/projects/p2/tsconfig.json"
+	projectSession, _ := projecttestutil.Setup(map[string]any{
+		first:                               `{ "extends": "../shared/base.json" }`,
+		second:                              `{ "extends": "../shared/a.json" }`,
+		"/home/projects/shared/base.json":   `{ "extends": ["./a.json", "./strict.json"] }`,
+		"/home/projects/shared/a.json":      `{ "extends": "./base.json" }`,
+		"/home/projects/shared/strict.json": `{ "compilerOptions": { "strict": true } }`,
+		"/home/projects/p1/a.ts":            `export const a = 1;`,
+		"/home/projects/p2/b.ts":            `export const b = 1;`,
+	})
+	defer projectSession.Close()
+	session := NewLSPSession(projectSession, nil)
+	defer session.Close()
+
+	_, err := session.handleCreateSnapshot(context.Background(), &CreateSnapshotParams{
+		OpenProjects: []DocumentIdentifier{{FileName: first}},
+	})
+	assert.NilError(t, err)
+	response, err := session.handleCreateSnapshot(context.Background(), &CreateSnapshotParams{
+		OpenProjects: []DocumentIdentifier{{FileName: second}},
+	})
+	assert.NilError(t, err)
+	secondProject := session.snapshots[response.Snapshot].snapshot.ProjectCollection.GetProject(configuredProjectID(second))
+	assert.Assert(t, secondProject != nil)
+	assert.Equal(t, secondProject.CommandLine.CompilerOptions().Strict, core.TSTrue)
+}
