@@ -38,8 +38,7 @@ func (t *stringTable) add(text string, kind ast.Kind, pos int, end int) uint32 {
 		}
 		end = end - endOffset
 		start := end - length
-		fileSlice := t.fileText[start:end]
-		if fileSlice == text {
+		if start >= 0 && t.fileText[start:end] == text {
 			t.offsets = append(t.offsets, uint32(start), uint32(end))
 			return index
 		}
