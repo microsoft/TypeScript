@@ -681,6 +681,7 @@ type Checker struct {
 	objectContentTypes                          map[CacheHashKey]*Type
 	deferredConditionalTypes                    map[deferredConditionalTypeKey]*Type
 	emptyObjectTypesFromStringLiterals          map[CacheHashKey]*Type
+	bindingElementOfMember                      map[*ast.Symbol]*ast.Node // The binding element declaring a member of a type implied by a binding pattern
 	spreadSymbols                               map[spreadSymbolKey]*ast.Symbol
 	symbolsWithType                             map[symbolWithTypeKey]*ast.Symbol
 	paddedProperties                            map[symbolWithTypeKey]*ast.Symbol
@@ -1030,6 +1031,7 @@ func NewChecker(program Program, tracer *Tracer) (*Checker, *sync.Mutex) {
 	c.objectContentTypes = make(map[CacheHashKey]*Type)
 	c.deferredConditionalTypes = make(map[deferredConditionalTypeKey]*Type)
 	c.emptyObjectTypesFromStringLiterals = make(map[CacheHashKey]*Type)
+	c.bindingElementOfMember = make(map[*ast.Symbol]*ast.Node)
 	c.spreadSymbols = make(map[spreadSymbolKey]*ast.Symbol)
 	c.symbolsWithType = make(map[symbolWithTypeKey]*ast.Symbol)
 	c.paddedProperties = make(map[symbolWithTypeKey]*ast.Symbol)
@@ -18680,6 +18682,7 @@ func (c *Checker) getTypeFromObjectBindingPattern(pattern *ast.Node, includePatt
 		flags := ast.SymbolFlagsProperty | core.IfElse(e.Initializer() != nil, ast.SymbolFlagsOptional, 0)
 		symbol := c.newSymbol(flags, text)
 		c.valueSymbolLinks.Get(symbol).resolvedType = c.getTypeFromBindingElement(e, includePatternInType, reportErrors)
+		c.bindingElementOfMember[symbol] = e
 		members.Set(symbol.Name(), symbol)
 	}
 	var indexInfos []*IndexInfo

@@ -84,7 +84,7 @@ namespace Second {
 >p2 : { a: any; }
 
     declare const u: typeof arr[number] | typeof p1;
->u : { a: any; } | { a: any; }
+>u : { a: any; }
 >arr : { a: any; }[]
 >p1 : { a: any; }
 }
