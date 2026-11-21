@@ -36,7 +36,7 @@ class A3 {
         __classPrivateFieldSet(this, _A3_instances, () => { }, "m"); // Error, not writable 
         __classPrivateFieldSet(a, _A3_instances, () => { }, "m"); // Error, not writable 
         __classPrivateFieldSet(b, _A3_instances, () => { }, "m"); //Error, not writable 
-        (_a = this, { x: ({ set value(_b) { __classPrivateFieldSet(_a, _A3_instances, _b, "m"); } }).value } = { x: () => { } }); //Error, not writable 
+        ({ x: (_a = this, ({ set value(_b) { __classPrivateFieldSet(_a, _A3_instances, _b, "m"); } })).value } = { x: () => { } }); //Error, not writable 
         let x = __classPrivateFieldGet(this, _A3_instances, "m", _A3_method);
         __classPrivateFieldSet(_b = b, _A3_instances, (_c = __classPrivateFieldGet(_b, _A3_instances, "m", _A3_method), _c++, _c), "m"); //Error, not writable 
     }

@@ -52,7 +52,7 @@ class A {
         [({ set value(_d) { __classPrivateFieldSet(_b, _b, _d, "f", _A_field); } }).value, [({ set value(_d) { __classPrivateFieldSet(_b, _b, _d, "f", _A_field); } }).value]] = [1, [2]];
         ({ a: ({ set value(_d) { __classPrivateFieldSet(_b, _b, _d, "f", _A_field); } }).value = 1, b: [({ set value(_d) { __classPrivateFieldSet(_b, _b, _d, "f", _A_field); } }).value = 1] } = { b: [] });
         [({ set value(_d) { __classPrivateFieldSet(_b, _b, _d, "f", _A_field); } }).value = 2] = [];
-        _c = this.otherClass, [({ set value(_d) { __classPrivateFieldSet(_c, _b, _d, "f", _A_field); } }).value = 2] = [];
+        [(_c = this.otherClass, ({ set value(_d) { __classPrivateFieldSet(_c, _b, _d, "f", _A_field); } })).value = 2] = [];
     }
     static test(_a) {
         [({ set value(_c) { __classPrivateFieldSet(_a, _b, _c, "f", _A_field); } }).value] = [2];

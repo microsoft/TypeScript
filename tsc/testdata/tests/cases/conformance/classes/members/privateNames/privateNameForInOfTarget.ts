@@ -1,4 +1,4 @@
-// @target: es2017
+// @target: es2017, es2021, es2022
 
 class A {
     #x: any = 0;
@@ -31,6 +31,13 @@ class A {
         return [this.#x, this.#y];
     }
 
+    async asyncTargets() {
+        for await (this.#x of [1, 2]) {}
+        for await ([this.#x, this.#y] of [[3, 4]]) {}
+        for await ({ x: this.#x } of [{ x: 5 }]) {}
+        return [this.#x, this.#y];
+    }
+
     shadow(o: A) {
         for (o.#x of [5]) {
             let o: A;
@@ -50,3 +57,58 @@ class B {
         return B.#x;
     }
 }
+
+class Ordering {
+    #x = 0;
+
+    static assignment() {
+        const a = new Ordering();
+        const b = new Ordering();
+        let o = a;
+        const get = () => o;
+        [o, get().#x] = [b, 7];
+        return [a.#x, b.#x];
+    }
+
+    static loop() {
+        const a = new Ordering();
+        const b = new Ordering();
+        let o = a;
+        const get = () => o;
+        for ([o, get().#x] of [[b, 7] as [Ordering, number]]) {}
+        return [a.#x, b.#x];
+    }
+
+    static objectLoop() {
+        const a = new Ordering();
+        const b = new Ordering();
+        let o = a;
+        const get = () => o;
+        for ({ o, x: get().#x } of [{ o: b, x: 7 }]) {}
+        return [a.#x, b.#x];
+    }
+
+    static async asyncLoop() {
+        const a = new Ordering();
+        const b = new Ordering();
+        let o = a;
+        const get = () => o;
+        for await ([o, get().#x] of [[b, 7] as [Ordering, number]]) {}
+        return [a.#x, b.#x];
+    }
+}
+
+function assertResult(actual: unknown, expected: unknown) {
+    if (JSON.stringify(actual) !== JSON.stringify(expected)) {
+        throw new Error(`Expected ${JSON.stringify(expected)}, got ${JSON.stringify(actual)}`);
+    }
+}
+
+assertResult(Ordering.assignment(), [0, 7]);
+assertResult(Ordering.loop(), [0, 7]);
+assertResult(Ordering.objectLoop(), [0, 7]);
+Promise.all([new A().asyncTargets(), Ordering.asyncLoop()]).then(([targets, ordering]) => {
+    assertResult(targets, [5, 4]);
+    assertResult(ordering, [0, 7]);
+    console.log("private loop targets: direct/destructured async and receiver ordering passed");
+});

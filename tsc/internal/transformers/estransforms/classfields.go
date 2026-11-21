@@ -3274,6 +3274,7 @@ func (tx *classFieldsTransformer) wrapPrivateIdentifierForDestructuringTarget(no
 		return tx.Visitor().VisitEachChild(node)
 	}
 	receiver := prop.Expression
+	var receiverAssignment *ast.Expression
 	// We cannot copy `this` or `super` into the function because they will be bound
 	// differently inside the function.
 	isThisOrSuperProperty := prop.Expression.Kind == ast.KindThisKeyword || prop.Expression.Kind == ast.KindSuperKeyword
@@ -3282,13 +3283,20 @@ func (tx *classFieldsTransformer) wrapPrivateIdentifierForDestructuringTarget(no
 			Flags: printer.GeneratedIdentifierFlagsReservedInNestedScopes,
 		})
 		tx.EmitContext().AddVariableDeclaration(receiver)
-		tx.pendingExpressions = append(
-			tx.pendingExpressions,
-			tx.Factory().NewAssignmentExpression(receiver, tx.Visitor().VisitNode(prop.Expression)),
-		)
+		receiverAssignment = tx.Factory().NewAssignmentExpression(receiver, tx.Visitor().VisitNode(prop.Expression))
 	}
 	assignExpr := tx.createPrivateIdentifierAssignment(info, receiver, parameter, ast.KindEqualsToken)
-	return tx.Factory().NewAssignmentTargetWrapper(parameter, assignExpr)
+	wrapper := tx.Factory().NewAssignmentTargetWrapper(parameter, assignExpr).AsPropertyAccessExpression()
+	if receiverAssignment != nil {
+		return tx.Factory().UpdatePropertyAccessExpression(
+			wrapper,
+			tx.Factory().NewParenthesizedExpression(tx.Factory().NewCommaExpression(receiverAssignment, wrapper.Expression)),
+			wrapper.QuestionDotToken,
+			wrapper.Name(),
+			wrapper.Flags,
+		)
+	}
+	return wrapper.AsNode()
 }
 
 func (tx *classFieldsTransformer) visitAssignmentElement(node *ast.Node) *ast.Node {
