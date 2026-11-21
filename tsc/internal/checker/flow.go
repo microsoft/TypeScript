@@ -365,7 +365,13 @@ func (c *Checker) getTypeAtFlowCondition(f *FlowState, flow *ast.FlowNode) FlowT
 	// *only* place a silent never type is ever generated.
 	assumeTrue := flow.Flags&ast.FlowFlagsTrueCondition != 0
 	nonEvolvingType := c.finalizeEvolvingArrayType(flowType.t)
-	narrowedType := c.narrowType(f, nonEvolvingType, flow.Node, assumeTrue)
+	var narrowedType *Type
+	if flow.Flags&ast.FlowFlagsNonNullish != 0 {
+		node := ast.SkipOuterExpressions(flow.Node, ast.OEKAll)
+		narrowedType = c.narrowTypeByTruthiness(f, c.narrowTypeByOptionality(f, nonEvolvingType, node, true /*assumePresent*/), node, false /*assumeTrue*/)
+	} else {
+		narrowedType = c.narrowType(f, nonEvolvingType, flow.Node, assumeTrue)
+	}
 	if narrowedType == nonEvolvingType {
 		return flowType
 	}
