@@ -16,8 +16,8 @@ declare const p1: Pair<typeof y1, "y1">;
 >y1 : typeof y1
 
 export const y = flag ? p2 : p1;
->y : Pair<typeof y2, "y2"> | Pair<typeof y1, "y1">
->flag ? p2 : p1 : Pair<typeof y2, "y2"> | Pair<typeof y1, "y1">
+>y : Pair<typeof y1, "y1"> | Pair<typeof y2, "y2">
+>flag ? p2 : p1 : Pair<typeof y1, "y1"> | Pair<typeof y2, "y2">
 >flag : boolean
 >p2 : Pair<typeof y2, "y2">
 >p1 : Pair<typeof y1, "y1">

@@ -385,9 +385,88 @@ func (c *Checker) compareSymbolsWorker(s1, s2 *ast.Symbol) int {
 	if r := cmp.Compare(s1.CheckFlags(), s2.CheckFlags()); r != 0 {
 		return r
 	}
+	if r := c.compareSymbolOrigins(s1, s2); r != 0 {
+		return r
+	}
 	// Fall back to symbol IDs. This is a last resort that should happen only when symbols have
 	// no declaration and duplicate names.
 	return cmp.Compare(ast.GetSymbolId(s1), ast.GetSymbolId(s2))
+}
+
+// compareSymbolOrigins orders transient symbols by the symbols, types, and
+// nodes they are made from, which are recorded when they are created: the
+// names qualifying an unresolved name, the properties a spread merges or
+// copies, the mapped, union, or intersection type containing a synthesized
+// property and its key type, the symbol an instantiated or copied symbol is
+// made from along with its mapper, and the module and import a module symbol
+// is copied for.
+func (c *Checker) compareSymbolOrigins(s1, s2 *ast.Symbol) int {
+	if s1.Flags()&s2.Flags()&ast.SymbolFlagsTransient == 0 {
+		return 0
+	}
+	// Unresolved names are interned by their qualified path, so those sharing a
+	// name differ in the unresolved names that qualify them.
+	if s1.CheckFlags()&s2.CheckFlags()&ast.CheckFlagsUnresolved != 0 {
+		return c.compareSymbols(s1.Parent(), s2.Parent())
+	}
+	spread1 := c.spreadLinks.TryGet(s1)
+	spread2 := c.spreadLinks.TryGet(s2)
+	if (spread1 != nil) != (spread2 != nil) {
+		return core.IfElse(spread1 != nil, 1, -1)
+	}
+	if spread1 != nil {
+		if r := c.compareSymbols(spread1.leftSpread, spread2.leftSpread); r != 0 {
+			return r
+		}
+		if r := c.compareSymbols(spread1.rightSpread, spread2.rightSpread); r != 0 {
+			return r
+		}
+	}
+	var origin1, origin2 *ast.Symbol
+	var key1, key2 *Type
+	if links := c.mappedSymbolLinks.TryGet(s1); links != nil {
+		origin1, key1 = links.syntheticOrigin, links.keyType
+	}
+	if links := c.mappedSymbolLinks.TryGet(s2); links != nil {
+		origin2, key2 = links.syntheticOrigin, links.keyType
+	}
+	if r := c.compareSymbols(origin1, origin2); r != 0 {
+		return r
+	}
+	var target1, target2 *ast.Symbol
+	var mapper1, mapper2 *TypeMapper
+	var containing1, containing2 *Type
+	if links := c.valueSymbolLinks.TryGet(s1); links != nil {
+		target1, mapper1, containing1 = links.target, links.mapper, links.getContainingType()
+	}
+	if links := c.valueSymbolLinks.TryGet(s2); links != nil {
+		target2, mapper2, containing2 = links.target, links.mapper, links.getContainingType()
+	}
+	if r := CompareTypes(containing1, containing2); r != 0 {
+		return r
+	}
+	if r := CompareTypes(key1, key2); r != 0 {
+		return r
+	}
+	if r := c.compareSymbols(target1, target2); r != 0 {
+		return r
+	}
+	if r := compareTypeMappers(mapper1, mapper2); r != 0 {
+		return r
+	}
+	// A module symbol cloned to give an import its type is made per import.
+	var module1, module2 *ast.Symbol
+	var import1, import2 *ast.Node
+	if links := c.exportTypeLinks.TryGet(s1); links != nil {
+		module1, import1 = links.target, links.originatingImport
+	}
+	if links := c.exportTypeLinks.TryGet(s2); links != nil {
+		module2, import2 = links.target, links.originatingImport
+	}
+	if r := c.compareSymbols(module1, module2); r != 0 {
+		return r
+	}
+	return c.compareNodes(import1, import2)
 }
 
 func (c *Checker) compareSymbolDeclarationsAndNames(s1, s2 *ast.Symbol) int {

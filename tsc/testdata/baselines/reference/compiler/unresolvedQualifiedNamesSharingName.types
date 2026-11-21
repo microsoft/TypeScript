@@ -18,7 +18,7 @@ type CdpEvent = Protocol.Cdp.Event;
 
 export function f(event: [Bidi.Event] | [CdpEvent], other: [Bidi.Other] | [Protocol.Cdp.Other]) {}
 >f : (event: [Bidi.Event] | [CdpEvent], other: [Bidi.Other] | [Protocol.Cdp.Other]) => void
->event : [Protocol.Cdp.Event] | [Bidi.Event]
+>event : [Bidi.Event] | [Protocol.Cdp.Event]
 >Bidi : any
 >other : [Bidi.Other] | [Protocol.Cdp.Other]
 >Bidi : any
