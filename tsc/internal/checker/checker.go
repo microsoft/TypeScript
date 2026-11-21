@@ -26666,9 +26666,16 @@ func (c *Checker) getUnionTypeWorker(types []*Type, unionReduction UnionReductio
 	}
 	if origin == nil && includes&TypeFlagsUnion != 0 {
 		namedUnions := c.addNamedUnions(nil, types)
+		// CompareTypes only returns 0 for identical types, so membership is a pointer lookup.
+		var namedTypes collections.Set[*Type]
+		for _, u := range namedUnions {
+			for _, t := range u.Types() {
+				namedTypes.Add(t)
+			}
+		}
 		var reducedTypes []*Type
 		for _, t := range typeSet {
-			if !core.Some(namedUnions, func(u *Type) bool { return containsType(u.Types(), t) }) {
+			if !namedTypes.Has(t) {
 				reducedTypes = append(reducedTypes, t)
 			}
 		}
