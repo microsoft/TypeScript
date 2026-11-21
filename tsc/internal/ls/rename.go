@@ -203,7 +203,18 @@ func (l *LanguageService) getRenameInfoForNode(ctx context.Context, newName stri
 		return RenameInfo{}, false
 	}
 
-	return getRenameInfoSuccess(node, sourceFile, ch.SymbolToString(symbol), l.converters), true
+	// Use the name at the rename location rather than the symbol's formatted
+	// declaration, which may include quotes or computed property brackets.
+	switch node.Kind {
+	case ast.KindIdentifier,
+		ast.KindPrivateIdentifier,
+		ast.KindStringLiteral,
+		ast.KindNumericLiteral,
+		ast.KindNoSubstitutionTemplateLiteral:
+		return getRenameInfoSuccess(node, sourceFile, node.Text(), l.converters), true
+	default:
+		return getRenameInfoSuccess(node, sourceFile, ch.SymbolToString(symbol), l.converters), true
+	}
 }
 
 func nodeIsEligibleForRename(node *ast.Node) bool {
