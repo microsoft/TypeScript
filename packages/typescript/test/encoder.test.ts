@@ -41,13 +41,16 @@ import {
     encodeSourceFile,
     uint8ArrayToBase64,
 } from "../src/api/node/encoder.ts";
+import { MsgpackWriter } from "../src/api/node/msgpack.ts";
 import {
     RemoteNode,
     RemoteNodeList,
     RemoteSourceFile,
 } from "../src/api/node/node.ts";
 import {
+    HEADER_OFFSET_EXTENDED_DATA,
     HEADER_OFFSET_NODES,
+    HEADER_OFFSET_STRUCTURED_DATA,
     HEADER_SIZE,
     NODE_LEN,
     NODE_OFFSET_DATA,
@@ -114,6 +117,38 @@ describe("Encoder", { concurrency }, () => {
         assert.strictEqual(decoded.diagnosticDirectives, undefined);
         assert.strictEqual(decoded.supplementalSourceFileNames, undefined);
         assert.strictEqual(decoded.canonicalSourceFileName, undefined);
+    });
+
+    test("skips unknown trailing diagnostic directive fields", () => {
+        const writer = new MsgpackWriter();
+        writer.writeArrayHeader(1); // one directive
+        writer.writeArrayHeader(8); // seven known fields plus one from a future protocol
+        for (const value of [0, 1, 2, 3, 0, 0]) writer.writeUint(value); // ranges [0, 1) and [2, 5), ignore policy, no unused code
+        writer.writeArrayHeader(1); // diagnostic codes
+        writer.writeUint(2322);
+        writer.writeBool(true); // unknown field
+        const directives = writer.finish();
+
+        // Splice the directives in as structured data, just before the node table.
+        const encoded = encodeSourceFile(makeSF("text", "/component.vue.ts", []));
+        const nodesOffset = new DataView(encoded.buffer, encoded.byteOffset).getUint32(HEADER_OFFSET_NODES, true);
+        const withDirectives = new Uint8Array(encoded.length + directives.length);
+        withDirectives.set(encoded.subarray(0, nodesOffset));
+        withDirectives.set(directives, nodesOffset);
+        withDirectives.set(encoded.subarray(nodesOffset), nodesOffset + directives.length);
+        const view = new DataView(withDirectives.buffer);
+        view.setUint32(HEADER_OFFSET_STRUCTURED_DATA, nodesOffset, true);
+        view.setUint32(HEADER_OFFSET_NODES, nodesOffset + directives.length, true);
+        // The source file's extended data points at the directives (offset 0 within structured data).
+        view.setUint32(view.getUint32(HEADER_OFFSET_EXTENDED_DATA, true) + 72, 0, true);
+
+        assert.deepStrictEqual(decode(withDirectives).diagnosticDirectives, [{
+            originalRange: { pos: 0, end: 1 },
+            virtualRange: { pos: 2, end: 5 },
+            policy: 0,
+            unusedCode: 0,
+            diagnosticCodes: [2322],
+        }]);
     });
 
     test("keeps adjacent surrogate string-table entries separate", () => {

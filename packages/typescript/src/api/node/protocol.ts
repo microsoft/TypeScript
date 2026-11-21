@@ -1,4 +1,4 @@
-export const PROTOCOL_VERSION = 9;
+export const PROTOCOL_VERSION = 10;
 
 export const HEADER_OFFSET_METADATA = 0;
 export const HEADER_OFFSET_HASH_LO0 = 4;

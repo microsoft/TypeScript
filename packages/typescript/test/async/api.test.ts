@@ -3111,7 +3111,7 @@ export const other: { value: string } = box;`,
         }
     });
 
-    test("getSourceFile includes supplemental files without physical files", {
+    test("getSourceFile exposes mapped directives and supplemental files", {
         skip: process.env.TS_API_TEST_WASM ? "WASM cannot spawn external content mapper processes" : false,
     }, async t => {
         const directory = mkdtempSync(join(tmpdir(), "ts-project-membership-"));
@@ -3127,6 +3127,10 @@ export const other: { value: string } = box;`,
             connection.onRequest("transform", ({ content }) => ({
                 text: "export {};",
                 extension: ".ts",
+                diagnosticDirectives: {
+                    unusedExpectDirectiveDiagnostics: [],
+                    directives: [[0, 0, 0, 10, 0, 2353, 2322]],
+                },
                 supplemental: [{ text: content, extension: ".ts" }],
             }));
             connection.listen();
@@ -3153,6 +3157,16 @@ export const other: { value: string } = box;`,
         await using api = new API({ cwd: directory, runExternalCode: true });
         const snapshot = await api.createSnapshot({ openProjects: [configFileName] });
         const program = snapshot.getConfiguredProject(configFileName)!.program;
+        const mappedFileName = toRootedFilePath(join(directory, "app.box"), undefined);
+        const mappedFile = await program.getSourceFile(mappedFileName);
+        assert.ok(mappedFile);
+        assert.deepEqual(mappedFile.diagnosticDirectives, [{
+            originalRange: { pos: 0, end: 0 },
+            virtualRange: { pos: 0, end: 10 },
+            policy: 0,
+            unusedCode: 0,
+            diagnosticCodes: [2353, 2322],
+        }]);
         const supplementalFileName = toRootedFilePath(join(directory, "app.box.0.ts"), undefined);
         assert.equal(existsSync(supplementalFileName), false);
         assert.ok(await program.getSourceFile(supplementalFileName));

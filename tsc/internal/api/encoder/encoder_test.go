@@ -39,8 +39,8 @@ func TestEncodeSourceFile(t *testing.T) {
 
 func TestEncodeContentMapperSourceFileMetadata(t *testing.T) {
 	t.Parallel()
-	if encoder.ProtocolVersion != 9 {
-		t.Fatalf("protocol version = %d, want 9", encoder.ProtocolVersion)
+	if encoder.ProtocolVersion != 10 {
+		t.Fatalf("protocol version = %d, want 10", encoder.ProtocolVersion)
 	}
 	sourceFile := parser.ParseSourceFile(ast.SourceFileParseOptions{
 		FileName: "/component.vue",
@@ -75,13 +75,14 @@ func TestEncodeContentMapperSourceFileMetadata(t *testing.T) {
 	assert.Equal(t, encodedString(buf, virtualFileNameIndex), "/component.vue.ts")
 	structuredDataOffset := readUint32(buf, encoder.HeaderOffsetStructuredData)
 	directiveOffset := structuredDataOffset + diagnosticDirectivesOffset
-	assert.DeepEqual(t, buf[directiveOffset:directiveOffset+10], []byte{
+	assert.DeepEqual(t, buf[directiveOffset:directiveOffset+11], []byte{
 		0x91, // one directive
-		0x96, // six-element tuple
+		0x97, // seven-element tuple
 		2, 1, // original range [2, 3) in UTF-16
 		2, 7, // virtual range [2, 9) in UTF-16
 		1,            // expect policy
 		0xcd, 10, 18, // unused diagnostic code 2578
+		0x90, // no diagnostic codes
 	})
 }
 

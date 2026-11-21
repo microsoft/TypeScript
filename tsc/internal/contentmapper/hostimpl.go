@@ -1042,7 +1042,13 @@ func normalizeDiagnosticDirectives(diagnosticDirectives *DiagnosticDirectives, v
 		normalized := ast.MappedDiagnosticDirective{Source: diagnosticSource}
 		switch directive.Policy {
 		case DiagnosticDirectivePolicyIgnore:
+			for _, code := range directive.DiagnosticCodes {
+				if code <= 0 {
+					return nil, directiveError(DiagnosticDirectiveErrorKindInvalidDiagnosticCode)
+				}
+			}
 			normalized.Policy = ast.MappedDiagnosticDirectivePolicyIgnore
+			normalized.DiagnosticCodes = directive.DiagnosticCodes
 		case DiagnosticDirectivePolicyExpect:
 			unusedDiagnosticIndex := 0
 			if directive.UnusedExpectDirectiveIndex != nil {

@@ -23,10 +23,21 @@
 // @box-invalid-directive: overlap
 --- Transformed ---
 
+//// [/invalidDiagnosticCode.invalidcode] (ScriptKind: ScriptKindTS, ContentMapper: [.invalidcode])
+--- Original ---
+// @box-invalid-directive: invalid-diagnostic-code
+--- Transformed ---
+
 === Diagnostics ===
 
 /expectWithoutUnusedDiagnostic.expectmissing:1:1 - error TS18069: The content mapper 'mapper' failed to transform this file.
   Diagnostic directive 0 returned by the content mapper must specify 'unusedExpectDirectiveIndex' when there is not exactly one 'unusedExpectDirectiveDiagnostics' entry.
+
+1 
+  ~
+
+/invalidDiagnosticCode.invalidcode:1:1 - error TS18069: The content mapper 'mapper' failed to transform this file.
+  Diagnostic directive 0 returned by the content mapper has a diagnostic code selector that must be positive.
 
 1 
   ~

@@ -68,7 +68,7 @@ const (
 )
 
 const (
-	ProtocolVersion uint8 = 9
+	ProtocolVersion uint8 = 10
 )
 
 // Source File Binary Format
@@ -183,7 +183,7 @@ const (
 //
 // Diagnostic directives are msgpack arrays of normalized tuples in UTF-16 coordinates:
 //
-//	[originalStart: uint, originalLength: uint, virtualStart: uint, virtualLength: uint, policy: uint, unusedCode: uint]
+//	[originalStart: uint, originalLength: uint, virtualStart: uint, virtualLength: uint, policy: uint, unusedCode: uint, diagnosticCodes: uint[]]
 //
 // An offset of 0xFFFFFFFF indicates no data (empty array).
 //
@@ -850,7 +850,7 @@ func encodeDiagnosticDirectives(directives []ast.MappedDiagnosticDirective, virt
 	offset := uint32(len(*buf))
 	*buf = msgpackWriteArrayHeader(*buf, len(directives))
 	for _, directive := range directives {
-		*buf = msgpackWriteArrayHeader(*buf, 6)
+		*buf = msgpackWriteArrayHeader(*buf, 7)
 		originalStart := originalPositions.UTF8ToUTF16(directive.OriginalRange.Pos())
 		originalEnd := originalPositions.UTF8ToUTF16(directive.OriginalRange.End())
 		virtualStart := virtualPositions.UTF8ToUTF16(directive.VirtualRange.Pos())
@@ -861,6 +861,10 @@ func encodeDiagnosticDirectives(directives []ast.MappedDiagnosticDirective, virt
 		*buf = msgpackWriteUint(*buf, uint32(virtualEnd-virtualStart))
 		*buf = msgpackWriteUint(*buf, uint32(directive.Policy))
 		*buf = msgpackWriteUint(*buf, uint32(directive.UnusedCode))
+		*buf = msgpackWriteArrayHeader(*buf, len(directive.DiagnosticCodes))
+		for _, code := range directive.DiagnosticCodes {
+			*buf = msgpackWriteUint(*buf, uint32(code))
+		}
 	}
 	return offset
 }

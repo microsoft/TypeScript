@@ -656,7 +656,7 @@ func TestMappedDiagnosticDirectiveJSON(t *testing.T) {
 
 	for _, data := range []string{
 		`[0,0,0,0]`,
-		`[0,0,0,0,0,1,2]`,
+		`[0,0,0,0,1,1,2]`,
 	} {
 		var directive contentmapper.MappedDiagnosticDirective
 		assert.ErrorContains(t, json.Unmarshal([]byte(data), &directive), "diagnostic directive tuple")

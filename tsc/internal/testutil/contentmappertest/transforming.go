@@ -3,6 +3,7 @@ package contentmappertest
 import (
 	"context"
 	"fmt"
+	"strconv"
 	"strings"
 	"sync"
 
@@ -187,6 +188,8 @@ func diagnosticDirectives(content string, mappings *spanmap.SpanMap) *contentmap
 				[]contentmapper.MappedDiagnosticDirective{{Policy: contentmapper.DiagnosticDirectivePolicyExpect, UnusedExpectDirectiveIndex: &index}},
 				contentmapper.UnusedExpectDirectiveDiagnostic{},
 			)
+		case "invalid-diagnostic-code":
+			return wrap([]contentmapper.MappedDiagnosticDirective{{Policy: contentmapper.DiagnosticDirectivePolicyIgnore, DiagnosticCodes: []int32{0}}})
 		case "overlap":
 			return wrap([]contentmapper.MappedDiagnosticDirective{
 				{VirtualEnd: 2, Policy: contentmapper.DiagnosticDirectivePolicyIgnore},
@@ -210,10 +213,18 @@ func diagnosticDirectives(content string, mappings *spanmap.SpanMap) *contentmap
 		var policy contentmapper.DiagnosticDirectivePolicy
 		hasPolicy := false
 		unusedDiagnosticIndex := -1
+		var diagnosticCodes []int32
 		switch {
-		case trimmed == ignorePrefix:
+		case trimmed == ignorePrefix || strings.HasPrefix(trimmed, ignorePrefix+" "):
 			policy = contentmapper.DiagnosticDirectivePolicyIgnore
 			hasPolicy = true
+			for field := range strings.FieldsSeq(strings.TrimPrefix(trimmed, ignorePrefix)) {
+				code, err := strconv.ParseInt(field, 10, 32)
+				if err != nil {
+					panic(err)
+				}
+				diagnosticCodes = append(diagnosticCodes, int32(code))
+			}
 		case strings.HasPrefix(trimmed, expectPrefix+":"):
 			policy = contentmapper.DiagnosticDirectivePolicyExpect
 			hasPolicy = true
@@ -232,11 +243,12 @@ func diagnosticDirectives(content string, mappings *spanmap.SpanMap) *contentmap
 			virtualSpans := mappings.OriginalToVirtualSpans(core.NewTextRange(affectedStart, affectedStart+affectedLength), spanmap.FeatureAll)
 			if len(virtualSpans) == 1 {
 				directive := contentmapper.MappedDiagnosticDirective{
-					OriginalStart:  lineStart,
-					OriginalLength: lineEnd - lineStart,
-					VirtualStart:   virtualSpans[0].Span.Pos(),
-					VirtualEnd:     virtualSpans[0].Span.End(),
-					Policy:         policy,
+					OriginalStart:   lineStart,
+					OriginalLength:  lineEnd - lineStart,
+					VirtualStart:    virtualSpans[0].Span.Pos(),
+					VirtualEnd:      virtualSpans[0].Span.End(),
+					Policy:          policy,
+					DiagnosticCodes: diagnosticCodes,
 				}
 				if unusedDiagnosticIndex >= 0 {
 					directive.UnusedExpectDirectiveIndex = &unusedDiagnosticIndex
