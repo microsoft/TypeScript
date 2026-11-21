@@ -1217,15 +1217,22 @@ func compareTypeMappers(m1, m2 *TypeMapper) int {
 			return c
 		}
 		return compareTypeMappers(m1.m2, m2.m2)
+	case TypeMapperKindComposite:
+		m1 := castTypeMapper[CompositeTypeMapper](m1, TypeMapperKindComposite)
+		m2 := castTypeMapper[CompositeTypeMapper](m2, TypeMapperKindComposite)
+		if c := compareTypeMappers(m1.m1, m2.m1); c != 0 {
+			return c
+		}
+		return compareTypeMappers(m1.m2, m2.m2)
 	}
 	return 0
 }
 
-// Only simple, array, and merged mappers have a structural ordering; all other
-// kinds compare as equal.
+// Only simple, array, merged, and composite mappers have a structural
+// ordering; all other kinds compare as equal.
 func comparableMapperKind(kind TypeMapperKind) TypeMapperKind {
 	switch kind {
-	case TypeMapperKindSimple, TypeMapperKindArray, TypeMapperKindMerged:
+	case TypeMapperKindSimple, TypeMapperKindArray, TypeMapperKindMerged, TypeMapperKindComposite:
 		return kind
 	}
 	return TypeMapperKindUnknown

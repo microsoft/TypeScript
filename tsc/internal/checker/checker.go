@@ -18127,6 +18127,10 @@ func (b *keyBuilder) writeMapperContent(m *TypeMapper) bool {
 		m := castTypeMapper[MergedTypeMapper](m, TypeMapperKindMerged)
 		b.writeByte(3)
 		return b.writeMapperContent(m.m1) && b.writeMapperContent(m.m2)
+	case TypeMapperKindComposite:
+		m := castTypeMapper[CompositeTypeMapper](m, TypeMapperKindComposite)
+		b.writeByte(4)
+		return b.writeMapperContent(m.m1) && b.writeMapperContent(m.m2)
 	}
 	return false
 }
