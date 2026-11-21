@@ -9713,7 +9713,7 @@ func (c *Checker) inferTypeArguments(node *ast.Node, signature *Signature, args 
 					outerReturnMapper = c.createOuterReturnMapper(outerContext)
 				}
 				returnSourceType := c.instantiateType(contextualType, outerReturnMapper)
-				c.inferTypes(returnContext.inferences, returnSourceType, inferenceTargetType, InferencePriorityNone, false)
+				c.inferTypes(returnContext.inferences, returnSourceType, inferenceTargetType, InferencePriorityReturnType, false)
 				if core.Some(returnContext.inferences, hasInferenceCandidates) {
 					context.returnMapper = c.getMapperFromContext(c.cloneInferredPartOfContext(returnContext))
 				} else {
@@ -31781,7 +31781,7 @@ func (c *Checker) instantiateContextualType(contextualType *Type, node *ast.Node
 				// the 'boolean' type from the contextual type such that contextually typed boolean
 				// literals actually end up widening to 'boolean' (see #48363).
 				t := c.instantiateInstantiableTypes(contextualType, inferenceContext.returnMapper)
-				if t.flags&TypeFlagsAnyOrUnknown == 0 {
+				if t.flags&(TypeFlagsAnyOrUnknown|TypeFlagsNever) == 0 {
 					if t.flags&TypeFlagsUnion != 0 && containsType(t.Types(), c.regularFalseType) && containsType(t.Types(), c.regularTrueType) {
 						return c.filterType(t, func(t *Type) bool {
 							return t != c.regularFalseType && t != c.regularTrueType
