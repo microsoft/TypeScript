@@ -375,6 +375,15 @@ func (c *Checker) compareSymbolsWorker(s1, s2 *ast.Symbol) int {
 	if r := c.compareSymbolDeclarationsAndNames(s1, s2); r != 0 {
 		return r
 	}
+	// Symbols the checker derives from a declared one, such as the members of
+	// mapped types, share its declaration and name. Symbol IDs are assigned in
+	// the order symbols are first used, so order those by how they were made.
+	if r := cmp.Compare(s1.Flags()&ast.SymbolFlagsTransient, s2.Flags()&ast.SymbolFlagsTransient); r != 0 {
+		return r
+	}
+	if r := cmp.Compare(s1.CheckFlags(), s2.CheckFlags()); r != 0 {
+		return r
+	}
 	// Fall back to symbol IDs. This is a last resort that should happen only when symbols have
 	// no declaration and duplicate names.
 	return cmp.Compare(ast.GetSymbolId(s1), ast.GetSymbolId(s2))
