@@ -404,7 +404,10 @@ func (c *Checker) compareNodes(n1, n2 *ast.Node) int {
 		return -1
 	}
 	if n1.Parent != nil && n1.Parent == n2.Parent {
-		return n1.Pos() - n2.Pos()
+		if r := n1.Pos() - n2.Pos(); r != 0 {
+			return r
+		}
+		return compareSiblings(n1.Parent, n1, n2)
 	}
 	s1 := ast.GetSourceFileOfNode(n1)
 	s2 := ast.GetSourceFileOfNode(n2)
@@ -415,7 +418,70 @@ func (c *Checker) compareNodes(n1, n2 *ast.Node) int {
 		return f1 - f2
 	}
 	// In the same file, order by source position
-	return n1.Pos() - n2.Pos()
+	if r := n1.Pos() - n2.Pos(); r != 0 {
+		return r
+	}
+	return compareTreePositions(s1, n1, n2)
+}
+
+// compareTreePositions orders distinct nodes of a file that start at the same
+// position, such as a node and its first child or adjacent missing nodes, by
+// their positions in the tree: an ancestor before its descendants, and other
+// nodes by the children of their nearest common ancestor that contain them.
+func compareTreePositions(file *ast.SourceFile, n1, n2 *ast.Node) int {
+	d1 := nodeDepth(n1)
+	d2 := nodeDepth(n2)
+	a1, a2 := n1, n2
+	for ; d1 > d2; d1-- {
+		a1 = a1.Parent
+	}
+	for ; d2 > d1; d2-- {
+		a2 = a2.Parent
+	}
+	if a1 == a2 {
+		// One node contains the other.
+		return core.IfElse(n1 == a1, -1, 1)
+	}
+	for a1.Parent != a2.Parent {
+		a1 = a1.Parent
+		a2 = a2.Parent
+	}
+	debug.Assert(a1.Parent != nil, "Cannot order nodes of different trees")
+	if r := a1.Pos() - a2.Pos(); r != 0 {
+		return r
+	}
+	return compareSiblings(a1.Parent, a1, a2)
+}
+
+func nodeDepth(node *ast.Node) int {
+	depth := 0
+	for n := node.Parent; n != nil; n = n.Parent {
+		depth++
+	}
+	return depth
+}
+
+// compareSiblings orders distinct children of parent that start at the same
+// position by the order in which they are visited, JSDoc first.
+func compareSiblings(parent *ast.Node, n1, n2 *ast.Node) int {
+	for _, child := range parent.EagerJSDoc(nil) {
+		if child == n1 {
+			return -1
+		}
+		if child == n2 {
+			return 1
+		}
+	}
+	for child := range parent.IterChildren() {
+		if child == n1 {
+			return -1
+		}
+		if child == n2 {
+			return 1
+		}
+	}
+	debug.Fail("Cannot order nodes that are not children of their parent")
+	return 0
 }
 
 func CompareTypes(t1, t2 *Type) int {

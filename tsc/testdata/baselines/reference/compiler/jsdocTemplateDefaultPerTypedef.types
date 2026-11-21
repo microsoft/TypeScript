@@ -24,7 +24,7 @@ const r1 = [a1, b1];
 
 /** @type {typeof r1[number] | A1} */
 let u1;
->u1 : { x: number; } | { x: number; }
+>u1 : { x: number; }
 
 /** @type {B2} */
 let b2;
