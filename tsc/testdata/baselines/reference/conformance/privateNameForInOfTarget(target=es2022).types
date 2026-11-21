@@ -1,0 +1,524 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameForInOfTarget.ts] ////
+
+=== privateNameForInOfTarget.ts ===
+class A {
+>A : A
+
+    #x: any = 0;
+>#x : any
+>0 : 0
+
+    #y: any = 0;
+>#y : any
+>0 : 0
+
+    set #accessor(value: any) { this.#y = value; }
+>#accessor : any
+>value : any
+>this.#y = value : any
+>this.#y : any
+>this : this
+>value : any
+
+    get #accessor() { return this.#y; }
+>#accessor : any
+>this.#y : any
+>this : this
+
+    run(o: object) {
+>run : (o: object) => any
+>o : object
+
+        for (this.#x of [11]) {}
+>this.#x : any
+>this : this
+>[11] : number[]
+>11 : 11
+
+        for (this.#x in o) {}
+>this.#x : any
+>this : this
+>o : object
+
+        return this.#x;
+>this.#x : any
+>this : this
+    }
+
+    receiver(o: A) {
+>receiver : (o: A) => { calls: number; value: any; }
+>o : A
+
+        let calls = 0;
+>calls : number
+>0 : 0
+
+        const get = () => { calls++; return o; };
+>get : () => A
+>() => { calls++; return o; } : () => A
+>calls++ : number
+>calls : number
+>o : A
+
+        for (get().#x of [10, 20]) {}
+>get().#x : any
+>get() : A
+>get : () => A
+>[10, 20] : number[]
+>10 : 10
+>20 : 20
+
+        for (o.#x in { k: 1 }) {}
+>o.#x : any
+>o : A
+>{ k: 1 } : { k: number; }
+>k : number
+>1 : 1
+
+        return { calls, value: o.#x };
+>{ calls, value: o.#x } : { calls: number; value: any; }
+>calls : number
+>value : any
+>o.#x : any
+>o : A
+    }
+
+    accessor() {
+>accessor : () => any
+
+        for (this.#accessor of [1, 2, 3]) {}
+>this.#accessor : any
+>this : this
+>[1, 2, 3] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+
+        return this.#accessor;
+>this.#accessor : any
+>this : this
+    }
+
+    pattern() {
+>pattern : () => any[]
+
+        for ([this.#x, this.#y] of [[1, 2]]) {}
+>[this.#x, this.#y] : [any, any]
+>this.#x : any
+>this : this
+>this.#y : any
+>this : this
+>[[1, 2]] : number[][]
+>[1, 2] : number[]
+>1 : 1
+>2 : 2
+
+        for ({ x: this.#x, y: this.#y } of [{ x: 3, y: 4 }]) {}
+>{ x: this.#x, y: this.#y } : { x: any; y: any; }
+>x : any
+>this.#x : any
+>this : this
+>y : any
+>this.#y : any
+>this : this
+>[{ x: 3, y: 4 }] : { x: number; y: number; }[]
+>{ x: 3, y: 4 } : { x: number; y: number; }
+>x : number
+>3 : 3
+>y : number
+>4 : 4
+
+        return [this.#x, this.#y];
+>[this.#x, this.#y] : any[]
+>this.#x : any
+>this : this
+>this.#y : any
+>this : this
+    }
+
+    async asyncTargets() {
+>asyncTargets : () => Promise<any[]>
+
+        for await (this.#x of [1, 2]) {}
+>this.#x : any
+>this : this
+>[1, 2] : number[]
+>1 : 1
+>2 : 2
+
+        for await ([this.#x, this.#y] of [[3, 4]]) {}
+>[this.#x, this.#y] : [any, any]
+>this.#x : any
+>this : this
+>this.#y : any
+>this : this
+>[[3, 4]] : number[][]
+>[3, 4] : number[]
+>3 : 3
+>4 : 4
+
+        for await ({ x: this.#x } of [{ x: 5 }]) {}
+>{ x: this.#x } : { x: any; }
+>x : any
+>this.#x : any
+>this : this
+>[{ x: 5 }] : { x: number; }[]
+>{ x: 5 } : { x: number; }
+>x : number
+>5 : 5
+
+        return [this.#x, this.#y];
+>[this.#x, this.#y] : any[]
+>this.#x : any
+>this : this
+>this.#y : any
+>this : this
+    }
+
+    shadow(o: A) {
+>shadow : (o: A) => any[]
+>o : A
+
+        for (o.#x of [5]) {
+>o.#x : any
+>o : A
+>[5] : number[]
+>5 : 5
+
+            let o: A;
+>o : A
+        }
+        for (o.#y in { k: 1 }) {
+>o.#y : any
+>o : A
+>{ k: 1 } : { k: number; }
+>k : number
+>1 : 1
+
+            let o: A;
+>o : A
+        }
+        return [o.#x, o.#y];
+>[o.#x, o.#y] : any[]
+>o.#x : any
+>o : A
+>o.#y : any
+>o : A
+    }
+}
+
+class B {
+>B : B
+
+    static #x: any = 0;
+>#x : any
+>0 : 0
+
+    static run() {
+>run : () => any
+
+        for (B.#x of [1, 2]) {}
+>B.#x : any
+>B : typeof B
+>[1, 2] : number[]
+>1 : 1
+>2 : 2
+
+        return B.#x;
+>B.#x : any
+>B : typeof B
+    }
+}
+
+class Ordering {
+>Ordering : Ordering
+
+    #x = 0;
+>#x : number
+>0 : 0
+
+    static assignment() {
+>assignment : () => number[]
+
+        const a = new Ordering();
+>a : Ordering
+>new Ordering() : Ordering
+>Ordering : typeof Ordering
+
+        const b = new Ordering();
+>b : Ordering
+>new Ordering() : Ordering
+>Ordering : typeof Ordering
+
+        let o = a;
+>o : Ordering
+>a : Ordering
+
+        const get = () => o;
+>get : () => Ordering
+>() => o : () => Ordering
+>o : Ordering
+
+        [o, get().#x] = [b, 7];
+>[o, get().#x] = [b, 7] : [Ordering, number]
+>[o, get().#x] : [Ordering, number]
+>o : Ordering
+>get().#x : number
+>get() : Ordering
+>get : () => Ordering
+>[b, 7] : [Ordering, number]
+>b : Ordering
+>7 : 7
+
+        return [a.#x, b.#x];
+>[a.#x, b.#x] : number[]
+>a.#x : number
+>a : Ordering
+>b.#x : number
+>b : Ordering
+    }
+
+    static loop() {
+>loop : () => number[]
+
+        const a = new Ordering();
+>a : Ordering
+>new Ordering() : Ordering
+>Ordering : typeof Ordering
+
+        const b = new Ordering();
+>b : Ordering
+>new Ordering() : Ordering
+>Ordering : typeof Ordering
+
+        let o = a;
+>o : Ordering
+>a : Ordering
+
+        const get = () => o;
+>get : () => Ordering
+>() => o : () => Ordering
+>o : Ordering
+
+        for ([o, get().#x] of [[b, 7] as [Ordering, number]]) {}
+>[o, get().#x] : [Ordering, number]
+>o : Ordering
+>get().#x : number
+>get() : Ordering
+>get : () => Ordering
+>[[b, 7] as [Ordering, number]] : [Ordering, number][]
+>[b, 7] as [Ordering, number] : [Ordering, number]
+>[b, 7] : [Ordering, number]
+>b : Ordering
+>7 : 7
+
+        return [a.#x, b.#x];
+>[a.#x, b.#x] : number[]
+>a.#x : number
+>a : Ordering
+>b.#x : number
+>b : Ordering
+    }
+
+    static objectLoop() {
+>objectLoop : () => number[]
+
+        const a = new Ordering();
+>a : Ordering
+>new Ordering() : Ordering
+>Ordering : typeof Ordering
+
+        const b = new Ordering();
+>b : Ordering
+>new Ordering() : Ordering
+>Ordering : typeof Ordering
+
+        let o = a;
+>o : Ordering
+>a : Ordering
+
+        const get = () => o;
+>get : () => Ordering
+>() => o : () => Ordering
+>o : Ordering
+
+        for ({ o, x: get().#x } of [{ o: b, x: 7 }]) {}
+>{ o, x: get().#x } : { o: Ordering; x: number; }
+>o : Ordering
+>x : number
+>get().#x : number
+>get() : Ordering
+>get : () => Ordering
+>[{ o: b, x: 7 }] : { o: Ordering; x: number; }[]
+>{ o: b, x: 7 } : { o: Ordering; x: number; }
+>o : Ordering
+>b : Ordering
+>x : number
+>7 : 7
+
+        return [a.#x, b.#x];
+>[a.#x, b.#x] : number[]
+>a.#x : number
+>a : Ordering
+>b.#x : number
+>b : Ordering
+    }
+
+    static async asyncLoop() {
+>asyncLoop : () => Promise<number[]>
+
+        const a = new Ordering();
+>a : Ordering
+>new Ordering() : Ordering
+>Ordering : typeof Ordering
+
+        const b = new Ordering();
+>b : Ordering
+>new Ordering() : Ordering
+>Ordering : typeof Ordering
+
+        let o = a;
+>o : Ordering
+>a : Ordering
+
+        const get = () => o;
+>get : () => Ordering
+>() => o : () => Ordering
+>o : Ordering
+
+        for await ([o, get().#x] of [[b, 7] as [Ordering, number]]) {}
+>[o, get().#x] : [Ordering, number]
+>o : Ordering
+>get().#x : number
+>get() : Ordering
+>get : () => Ordering
+>[[b, 7] as [Ordering, number]] : [Ordering, number][]
+>[b, 7] as [Ordering, number] : [Ordering, number]
+>[b, 7] : [Ordering, number]
+>b : Ordering
+>7 : 7
+
+        return [a.#x, b.#x];
+>[a.#x, b.#x] : number[]
+>a.#x : number
+>a : Ordering
+>b.#x : number
+>b : Ordering
+    }
+}
+
+function assertResult(actual: unknown, expected: unknown) {
+>assertResult : (actual: unknown, expected: unknown) => void
+>actual : unknown
+>expected : unknown
+
+    if (JSON.stringify(actual) !== JSON.stringify(expected)) {
+>JSON.stringify(actual) !== JSON.stringify(expected) : boolean
+>JSON.stringify(actual) : string
+>JSON.stringify : { (value: any, replacer?: (this: any, key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (number | string)[] | null, space?: string | number): string; }
+>JSON : JSON
+>stringify : { (value: any, replacer?: (this: any, key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (number | string)[] | null, space?: string | number): string; }
+>actual : unknown
+>JSON.stringify(expected) : string
+>JSON.stringify : { (value: any, replacer?: (this: any, key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (number | string)[] | null, space?: string | number): string; }
+>JSON : JSON
+>stringify : { (value: any, replacer?: (this: any, key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (number | string)[] | null, space?: string | number): string; }
+>expected : unknown
+
+        throw new Error(`Expected ${JSON.stringify(expected)}, got ${JSON.stringify(actual)}`);
+>new Error(`Expected ${JSON.stringify(expected)}, got ${JSON.stringify(actual)}`) : Error
+>Error : ErrorConstructor
+>`Expected ${JSON.stringify(expected)}, got ${JSON.stringify(actual)}` : string
+>JSON.stringify(expected) : string
+>JSON.stringify : { (value: any, replacer?: (this: any, key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (number | string)[] | null, space?: string | number): string; }
+>JSON : JSON
+>stringify : { (value: any, replacer?: (this: any, key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (number | string)[] | null, space?: string | number): string; }
+>expected : unknown
+>JSON.stringify(actual) : string
+>JSON.stringify : { (value: any, replacer?: (this: any, key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (number | string)[] | null, space?: string | number): string; }
+>JSON : JSON
+>stringify : { (value: any, replacer?: (this: any, key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (number | string)[] | null, space?: string | number): string; }
+>actual : unknown
+    }
+}
+
+assertResult(Ordering.assignment(), [0, 7]);
+>assertResult(Ordering.assignment(), [0, 7]) : void
+>assertResult : (actual: unknown, expected: unknown) => void
+>Ordering.assignment() : number[]
+>Ordering.assignment : () => number[]
+>Ordering : typeof Ordering
+>assignment : () => number[]
+>[0, 7] : number[]
+>0 : 0
+>7 : 7
+
+assertResult(Ordering.loop(), [0, 7]);
+>assertResult(Ordering.loop(), [0, 7]) : void
+>assertResult : (actual: unknown, expected: unknown) => void
+>Ordering.loop() : number[]
+>Ordering.loop : () => number[]
+>Ordering : typeof Ordering
+>loop : () => number[]
+>[0, 7] : number[]
+>0 : 0
+>7 : 7
+
+assertResult(Ordering.objectLoop(), [0, 7]);
+>assertResult(Ordering.objectLoop(), [0, 7]) : void
+>assertResult : (actual: unknown, expected: unknown) => void
+>Ordering.objectLoop() : number[]
+>Ordering.objectLoop : () => number[]
+>Ordering : typeof Ordering
+>objectLoop : () => number[]
+>[0, 7] : number[]
+>0 : 0
+>7 : 7
+
+Promise.all([new A().asyncTargets(), Ordering.asyncLoop()]).then(([targets, ordering]) => {
+>Promise.all([new A().asyncTargets(), Ordering.asyncLoop()]).then(([targets, ordering]) => {    assertResult(targets, [5, 4]);    assertResult(ordering, [0, 7]);    console.log("private loop targets: direct/destructured async and receiver ordering passed");}) : Promise<void>
+>Promise.all([new A().asyncTargets(), Ordering.asyncLoop()]).then : <TResult1 = [any[], number[]], TResult2 = never>(onfulfilled?: ((value: [any[], number[]]) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
+>Promise.all([new A().asyncTargets(), Ordering.asyncLoop()]) : Promise<[any[], number[]]>
+>Promise.all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
+>Promise : PromiseConstructor
+>all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
+>[new A().asyncTargets(), Ordering.asyncLoop()] : [Promise<any[]>, Promise<number[]>]
+>new A().asyncTargets() : Promise<any[]>
+>new A().asyncTargets : () => Promise<any[]>
+>new A() : A
+>A : typeof A
+>asyncTargets : () => Promise<any[]>
+>Ordering.asyncLoop() : Promise<number[]>
+>Ordering.asyncLoop : () => Promise<number[]>
+>Ordering : typeof Ordering
+>asyncLoop : () => Promise<number[]>
+>then : <TResult1 = [any[], number[]], TResult2 = never>(onfulfilled?: ((value: [any[], number[]]) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
+>([targets, ordering]) => {    assertResult(targets, [5, 4]);    assertResult(ordering, [0, 7]);    console.log("private loop targets: direct/destructured async and receiver ordering passed");} : ([targets, ordering]: [any[], number[]]) => void
+>targets : any[]
+>ordering : number[]
+
+    assertResult(targets, [5, 4]);
+>assertResult(targets, [5, 4]) : void
+>assertResult : (actual: unknown, expected: unknown) => void
+>targets : any[]
+>[5, 4] : number[]
+>5 : 5
+>4 : 4
+
+    assertResult(ordering, [0, 7]);
+>assertResult(ordering, [0, 7]) : void
+>assertResult : (actual: unknown, expected: unknown) => void
+>ordering : number[]
+>[0, 7] : number[]
+>0 : 0
+>7 : 7
+
+    console.log("private loop targets: direct/destructured async and receiver ordering passed");
+>console.log("private loop targets: direct/destructured async and receiver ordering passed") : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>"private loop targets: direct/destructured async and receiver ordering passed" : "private loop targets: direct/destructured async and receiver ordering passed"
+
+});
+

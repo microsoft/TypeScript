@@ -52,16 +52,16 @@ _C_x = { value: void 0 };
 (() => {
     var _b, _c, _d, _e, _f, _g, _h, _j, _k;
     // Invalid array targets must still visit private and super accesses.
-    _b = _a, [(void 0).x, 0, ({ set value(_l) { __classPrivateFieldSet(_b, _a, _l, "f", _C_x); } }).value] = value;
-    _c = _a, [(void 0).x, 1 + 2, ({ set value(_l) { __classPrivateFieldSet(_c, _a, _l, "f", _C_x); } }).value] = value;
-    _d = _a, [(void 0).x, (() => { }), ({ set value(_l) { __classPrivateFieldSet(_d, _a, _l, "f", _C_x); } }).value] = value;
-    _e = _a, [(void 0).x, value(), ({ set value(_l) { __classPrivateFieldSet(_e, _a, _l, "f", _C_x); } }).value] = value;
-    _f = _a, [(void 0).x, , ...({ set value(_l) { __classPrivateFieldSet(_f, _a, _l, "f", _C_x); } }).value] = value;
+    [(void 0).x, 0, (_b = _a, ({ set value(_l) { __classPrivateFieldSet(_b, _a, _l, "f", _C_x); } })).value] = value;
+    [(void 0).x, 1 + 2, (_c = _a, ({ set value(_l) { __classPrivateFieldSet(_c, _a, _l, "f", _C_x); } })).value] = value;
+    [(void 0).x, (() => { }), (_d = _a, ({ set value(_l) { __classPrivateFieldSet(_d, _a, _l, "f", _C_x); } })).value] = value;
+    [(void 0).x, value(), (_e = _a, ({ set value(_l) { __classPrivateFieldSet(_e, _a, _l, "f", _C_x); } })).value] = value;
+    [(void 0).x, , ...(_f = _a, ({ set value(_l) { __classPrivateFieldSet(_f, _a, _l, "f", _C_x); } })).value] = value;
     // Object methods/accessors are not destructuring assignment elements.
-    (_g = _a, { x: (void 0).x, m() { }, private: ({ set value(_l) { __classPrivateFieldSet(_g, _a, _l, "f", _C_x); } }).value } = value);
-    (_h = _a, { x: (void 0).x, get g() { return 1; }, private: ({ set value(_l) { __classPrivateFieldSet(_h, _a, _l, "f", _C_x); } }).value } = value);
-    (_j = _a, { x: (void 0).x, set s(v) { }, private: ({ set value(_l) { __classPrivateFieldSet(_j, _a, _l, "f", _C_x); } }).value } = value);
-    (_k = _a, { x: [(void 0).x, 0, ({ set value(_l) { __classPrivateFieldSet(_k, _a, _l, "f", _C_x); } }).value], m() { } } = value);
+    ({ x: (void 0).x, m() { }, private: (_g = _a, ({ set value(_l) { __classPrivateFieldSet(_g, _a, _l, "f", _C_x); } })).value } = value);
+    ({ x: (void 0).x, get g() { return 1; }, private: (_h = _a, ({ set value(_l) { __classPrivateFieldSet(_h, _a, _l, "f", _C_x); } })).value } = value);
+    ({ x: (void 0).x, set s(v) { }, private: (_j = _a, ({ set value(_l) { __classPrivateFieldSet(_j, _a, _l, "f", _C_x); } })).value } = value);
+    ({ x: [(void 0).x, 0, (_k = _a, ({ set value(_l) { __classPrivateFieldSet(_k, _a, _l, "f", _C_x); } })).value], m() { } } = value);
 })();
 C = __decorate([
     dec
