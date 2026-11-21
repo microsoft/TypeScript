@@ -94,6 +94,24 @@ func TestWatch(t *testing.T) {
 			},
 		},
 		{
+			subScenario: "watch deletes outputs of deleted source file in outDir",
+			files: FileMap{
+				"/home/src/workspaces/project/index.ts":      `import { a } from "./a"; import { b } from "./b"; export const main = a + b;`,
+				"/home/src/workspaces/project/a.ts":          `export const a = 1;`,
+				"/home/src/workspaces/project/b.ts":          `export const b = 2;`,
+				"/home/src/workspaces/project/tsconfig.json": `{"compilerOptions":{"outDir":"out","declaration":true,"declarationMap":true,"sourceMap":true,"incremental":true},"include":["*.ts"]}`,
+			},
+			commandLineArgs: []string{"--watch"},
+			edits: []*tscEdit{
+				newTscEdit("delete a.ts", func(sys *TestSys) {
+					sys.removeNoError("/home/src/workspaces/project/a.ts")
+				}),
+				newTscEdit("recreate a.ts", func(sys *TestSys) {
+					sys.writeFileNoError("/home/src/workspaces/project/a.ts", `export const a = 3;`)
+				}),
+			},
+		},
+		{
 			subScenario: "watch detects new file resolving failed import",
 			files: FileMap{
 				"/home/src/workspaces/project/a.ts":          `import { b } from "./b";`,

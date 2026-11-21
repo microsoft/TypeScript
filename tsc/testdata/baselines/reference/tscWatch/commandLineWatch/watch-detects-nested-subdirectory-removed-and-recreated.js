@@ -64,6 +64,7 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
+//// [/home/src/workspaces/project/src/lib/helper.js] *deleted*
 
 Watch Registrations::
 Directory watches::
@@ -93,7 +94,7 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
-//// [/home/src/workspaces/project/src/lib/helper.js] *modified* 
+//// [/home/src/workspaces/project/src/lib/helper.js] *new* 
 export const helper = "v2";
 
 

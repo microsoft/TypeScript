@@ -76,6 +76,7 @@ Found 1 error in index.ts[90m:1[0m
 
 [[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
+//// [/home/src/workspaces/project/helper.js] *deleted*
 //// [/home/src/workspaces/project/helper2.js] *new* 
 export const helper = 1;
 
@@ -115,7 +116,10 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
-//// [/home/src/workspaces/project/helper.js] *rewrite with same content*
+//// [/home/src/workspaces/project/helper.js] *new* 
+export const helper = 1;
+
+//// [/home/src/workspaces/project/helper2.js] *deleted*
 //// [/home/src/workspaces/project/index.js] *rewrite with same content*
 
 Watch Registrations::

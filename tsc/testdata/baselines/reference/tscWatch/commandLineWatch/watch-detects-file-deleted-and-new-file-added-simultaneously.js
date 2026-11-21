@@ -71,6 +71,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 //// [/home/src/workspaces/project/a.js] *rewrite with same content*
+//// [/home/src/workspaces/project/b.js] *deleted*
 //// [/home/src/workspaces/project/c.js] *new* 
 export const c = 2;
 

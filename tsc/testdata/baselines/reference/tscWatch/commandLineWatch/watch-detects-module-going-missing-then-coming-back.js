@@ -75,6 +75,7 @@ Found 1 error in index.ts[90m:1[0m
 [[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 //// [/home/src/workspaces/project/index.js] *rewrite with same content*
+//// [/home/src/workspaces/project/util.js] *deleted*
 
 Watch Registrations::
 Directory watches::
@@ -108,7 +109,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 //// [/home/src/workspaces/project/index.js] *rewrite with same content*
-//// [/home/src/workspaces/project/util.js] *modified* 
+//// [/home/src/workspaces/project/util.js] *new* 
 export const util = "v2";
 
 
