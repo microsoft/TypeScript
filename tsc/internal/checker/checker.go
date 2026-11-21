@@ -602,6 +602,7 @@ type Checker struct {
 	compareSymbols                              func(*ast.Symbol, *ast.Symbol) int
 	compareSymbolChains                         func([]*ast.Symbol, []*ast.Symbol) int
 	TypeCount                                   uint32
+	builtinTypeCount                            TypeId // Types created with the checker have IDs up to this
 	SymbolCount                                 uint32
 	SignatureCount                              uint32
 	TotalInstantiationCount                     uint32
@@ -1179,6 +1180,7 @@ func NewChecker(program Program, tracer *Tracer) (*Checker, *sync.Mutex) {
 	c.initializeClosures()
 	c.initializeIterationResolvers()
 	c.initializeChecker()
+	c.builtinTypeCount = TypeId(c.TypeCount)
 	return c, &c.mu
 }
 

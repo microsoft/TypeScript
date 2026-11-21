@@ -2,6 +2,7 @@ package checker
 
 import (
 	"encoding/binary"
+	"math"
 	"runtime"
 	"slices"
 	"strconv"
@@ -183,6 +184,9 @@ func newCompositeTestChecker() (*Checker, []*Type) {
 		intersectionTypes:        make(map[CacheHashKey]*Type),
 		intersectionContentTypes: make(map[CacheHashKey]*Type),
 		subtypeReductionCache:    make(map[CacheHashKey][]*Type),
+		// The synthetic types of these tests are distinguished only by the
+		// order they are created in, as types created with a checker are.
+		builtinTypeCount: math.MaxUint32,
 	}
 	c.compareSymbols = c.compareSymbolsWorker
 	c.neverType = c.newIntrinsicType(TypeFlagsNever, "never")
