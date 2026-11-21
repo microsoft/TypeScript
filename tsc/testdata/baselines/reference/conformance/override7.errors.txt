@@ -1,4 +1,4 @@
-override7.ts(11,14): error TS1040: 'override' modifier cannot be used in an ambient context.
+override7.ts(11,14): error TS1243: 'declare' modifier cannot be used with 'override' modifier.
 override7.ts(13,14): error TS1029: 'override' modifier must precede 'readonly' modifier.
 override7.ts(13,23): error TS2564: Property 'p3' has no initializer and is not definitely assigned in the constructor.
 override7.ts(15,23): error TS2564: Property 'p4' has no initializer and is not definitely assigned in the constructor.
@@ -31,7 +31,7 @@ override7.ts(42,23): error TS4112: This member cannot have an 'override' modifie
     
         override declare p2: number;
                  ~~~~~~~
-!!! error TS1040: 'override' modifier cannot be used in an ambient context.
+!!! error TS1243: 'declare' modifier cannot be used with 'override' modifier.
     
         readonly override p3: number;
                  ~~~~~~~~
