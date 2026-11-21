@@ -2,6 +2,7 @@ package checker
 
 import (
 	"cmp"
+	"iter"
 	"slices"
 	"strings"
 	"sync"
@@ -622,6 +623,9 @@ func CompareTypes(t1, t2 *Type) int {
 				if c := int(t1.objectFlags&objectLiteralCreationFlags) - int(t2.objectFlags&objectLiteralCreationFlags); c != 0 {
 					return c
 				}
+				if c := compareObjectMemberSymbols(t1, t2); c != 0 {
+					return c
+				}
 			} else if t1.objectFlags&t2.objectFlags&ObjectFlagsObjectRestType != 0 {
 				// Rest types share the symbol of their declaration, so a rest from a union
 				// yields one type per constituent, distinguished by the members they keep.
@@ -631,8 +635,13 @@ func CompareTypes(t1, t2 *Type) int {
 					if c := CompareTypes(d1, d2); c != 0 {
 						return c
 					}
-				} else if c := compareObjectMembers(t1, t2, false /*withTypes*/); c != 0 {
-					return c
+				} else {
+					if c := compareObjectMembers(t1, t2, false /*withTypes*/); c != 0 {
+						return c
+					}
+					if c := compareObjectMemberSymbols(t1, t2); c != 0 {
+						return c
+					}
 				}
 			}
 		}
@@ -858,8 +867,8 @@ func hasObjectLiteralMembers(t *Type) bool {
 		return false
 	}
 	if t.symbol == nil {
-		// Types implied by binding patterns have no symbol.
-		return t.objectFlags&ObjectFlagsObjectLiteral != 0
+		// Types implied by binding patterns and their widened copies have no symbol.
+		return t.objectFlags&ObjectFlagsAnonymous != 0
 	}
 	return t.symbol.Flags()&ast.SymbolFlagsObjectLiteral != 0
 }
@@ -867,9 +876,10 @@ func hasObjectLiteralMembers(t *Type) bool {
 // compareObjectMembers orders resolved object types by what their members
 // declare, and with withTypes, by the types of members of object literal
 // types, which are set when the members are created. Members are created per
-// type, so they are compared by what they declare rather than by identity,
-// pairwise since getNamedMembers sorts the properties.
+// type, so they are compared by what they declare, pairwise since
+// getNamedMembers sorts the properties.
 func compareObjectMembers(t1, t2 *Type, withTypes bool) int {
+	debug.Assert(t1.objectFlags&t2.objectFlags&ObjectFlagsMembersResolved != 0, "Members compared for order must be set when the type is created")
 	c := t1.checker
 	p1 := t1.AsStructuredType().properties
 	p2 := t2.AsStructuredType().properties
@@ -881,11 +891,78 @@ func compareObjectMembers(t1, t2 *Type, withTypes bool) int {
 		if r := c.compareSymbolDeclarationsAndNames(s1, s2); r != 0 {
 			return r
 		}
-		if r := int(s1.Flags()&ast.SymbolFlagsOptional) - int(s2.Flags()&ast.SymbolFlagsOptional); r != 0 {
+		if r := cmp.Compare(s1.Flags(), s2.Flags()); r != 0 {
+			return r
+		}
+		if r := cmp.Compare(s1.CheckFlags(), s2.CheckFlags()); r != 0 {
 			return r
 		}
 		if withTypes {
 			if r := CompareTypes(c.peekTypeOfObjectLiteralMember(s1), c.peekTypeOfObjectLiteralMember(s2)); r != 0 {
+				return r
+			}
+			if r := CompareTypes(c.nameTypeOfObjectLiteralMember(s1), c.nameTypeOfObjectLiteralMember(s2)); r != 0 {
+				return r
+			}
+		}
+	}
+	return c.compareIndexInfos(t1.AsStructuredType().getIndexInfos(), t2.AsStructuredType().getIndexInfos())
+}
+
+// compareObjectMemberSymbols orders object types with members that declare the
+// same by the members themselves, in member table order. Types derived from
+// others, such as spreads, are interned by their member symbols and the order
+// of their member tables.
+func compareObjectMemberSymbols(t1, t2 *Type) int {
+	c := t1.checker
+	n1, members1 := membersInTableOrder(t1)
+	n2, members2 := membersInTableOrder(t2)
+	if n := n1 - n2; n != 0 {
+		return n
+	}
+	next2, stop := iter.Pull(members2)
+	defer stop()
+	for s1 := range members1 {
+		s2, _ := next2()
+		if r := c.compareSymbols(s1, s2); r != 0 {
+			return r
+		}
+	}
+	return 0
+}
+
+func membersInTableOrder(t *Type) (int, iter.Seq[*ast.Symbol]) {
+	d := t.AsStructuredType()
+	if d.members != nil {
+		return d.members.Len(), d.members.Values()
+	}
+	properties := d.getProperties()
+	return len(properties), slices.Values(properties)
+}
+
+func (c *Checker) compareIndexInfos(infos1, infos2 []*IndexInfo) int {
+	if n := len(infos1) - len(infos2); n != 0 {
+		return n
+	}
+	for i, info1 := range infos1 {
+		info2 := infos2[i]
+		if r := CompareTypes(info1.keyType, info2.keyType); r != 0 {
+			return r
+		}
+		if r := CompareTypes(info1.valueType, info2.valueType); r != 0 {
+			return r
+		}
+		if info1.isReadonly != info2.isReadonly {
+			return core.IfElse(info1.isReadonly, 1, -1)
+		}
+		if r := c.compareNodes(info1.declaration, info2.declaration); r != 0 {
+			return r
+		}
+		if n := len(info1.components) - len(info2.components); n != 0 {
+			return n
+		}
+		for j, n1 := range info1.components {
+			if r := c.compareNodes(n1, info2.components[j]); r != 0 {
 				return r
 			}
 		}
@@ -898,6 +975,15 @@ func compareObjectMembers(t1, t2 *Type, withTypes bool) int {
 func (c *Checker) peekTypeOfObjectLiteralMember(s *ast.Symbol) *Type {
 	if links := c.valueSymbolLinks.TryGet(s); links != nil {
 		return links.resolvedType
+	}
+	return nil
+}
+
+// The name type of a member of an object literal type is set when the member
+// is created.
+func (c *Checker) nameTypeOfObjectLiteralMember(s *ast.Symbol) *Type {
+	if links := c.valueSymbolLinks.TryGet(s); links != nil {
+		return links.getNameType()
 	}
 	return nil
 }
