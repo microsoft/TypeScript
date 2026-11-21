@@ -462,11 +462,13 @@
                         {
                             "type": "integer",
                             "title": "originalStart",
+                            "minimum": 0,
                             "description": "Original start offset."
                         },
                         {
                             "type": "integer",
                             "title": "originalLength",
+                            "minimum": 0,
                             "description": "Original span length."
                         },
                         {

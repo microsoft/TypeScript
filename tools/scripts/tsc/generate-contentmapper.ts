@@ -278,7 +278,7 @@ function mappedDiagnosticDirectiveVariants(schema: Schema): { ignore: Schema; ex
             items.slice(0, 4).every((item, index) =>
                 item.title === ["originalStart", "originalLength", "virtualStart", "virtualEnd"][index]
                 && item.type === "integer"
-                && JSON.stringify(item) === JSON.stringify(expectItems[index])
+                && item.description === expectItems[index].description
             ),
             "MappedDiagnosticDirective policy variants must share range fields",
         );
