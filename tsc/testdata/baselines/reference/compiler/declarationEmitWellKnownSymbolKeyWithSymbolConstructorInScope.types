@@ -1,0 +1,117 @@
+//// [tests/cases/compiler/declarationEmitWellKnownSymbolKeyWithSymbolConstructorInScope.ts] ////
+
+=== variable.ts ===
+const S = Symbol;
+>S : SymbolConstructor
+>Symbol : SymbolConstructor
+
+export const range = { *[Symbol.iterator]() { yield 1; } };
+>range : { [Symbol.iterator](): Generator<number, void, unknown>; }
+>{ *[Symbol.iterator]() { yield 1; } } : { [Symbol.iterator](): Generator<number, void, unknown>; }
+>[Symbol.iterator] : () => Generator<number, void, unknown>
+>Symbol.iterator : unique symbol
+>Symbol : SymbolConstructor
+>iterator : unique symbol
+>yield 1 : any
+>1 : 1
+
+=== parameter.ts ===
+export function make(s: SymbolConstructor) {
+>make : (s: SymbolConstructor) => { [Symbol.iterator](): Generator<number, void, unknown>; }
+>s : SymbolConstructor
+
+    return { *[Symbol.iterator]() { yield 1; } };
+>{ *[Symbol.iterator]() { yield 1; } } : { [Symbol.iterator](): Generator<number, void, unknown>; }
+>[Symbol.iterator] : () => Generator<number, void, unknown>
+>Symbol.iterator : unique symbol
+>Symbol : SymbolConstructor
+>iterator : unique symbol
+>yield 1 : any
+>1 : 1
+}
+
+=== others.ts ===
+const S = Symbol;
+>S : SymbolConstructor
+>Symbol : SymbolConstructor
+
+export const tagged = { [Symbol.toStringTag]: "x", async *[Symbol.asyncIterator]() { yield 1; } };
+>tagged : { [Symbol.toStringTag]: string; [Symbol.asyncIterator](): AsyncGenerator<number, void, unknown>; }
+>{ [Symbol.toStringTag]: "x", async *[Symbol.asyncIterator]() { yield 1; } } : { [Symbol.toStringTag]: string; [Symbol.asyncIterator](): AsyncGenerator<number, void, unknown>; }
+>[Symbol.toStringTag] : string
+>Symbol.toStringTag : unique symbol
+>Symbol : SymbolConstructor
+>toStringTag : unique symbol
+>"x" : "x"
+>[Symbol.asyncIterator] : () => AsyncGenerator<number, void, unknown>
+>Symbol.asyncIterator : unique symbol
+>Symbol : SymbolConstructor
+>asyncIterator : unique symbol
+>yield 1 : any
+>1 : 1
+
+=== nested.ts ===
+export function inner() {
+>inner : () => { [Symbol.iterator](): Generator<number, void, unknown>; }
+
+    const T = Symbol;
+>T : SymbolConstructor
+>Symbol : SymbolConstructor
+
+    return { *[Symbol.iterator]() { yield 1; } };
+>{ *[Symbol.iterator]() { yield 1; } } : { [Symbol.iterator](): Generator<number, void, unknown>; }
+>[Symbol.iterator] : () => Generator<number, void, unknown>
+>Symbol.iterator : unique symbol
+>Symbol : SymbolConstructor
+>iterator : unique symbol
+>yield 1 : any
+>1 : 1
+}
+
+=== written.ts ===
+const S = Symbol;
+>S : SymbolConstructor
+>Symbol : SymbolConstructor
+
+export const written = { *[S.iterator]() { yield 1; } };
+>written : { [S.iterator](): Generator<number, void, unknown>; }
+>{ *[S.iterator]() { yield 1; } } : { [S.iterator](): Generator<number, void, unknown>; }
+>[S.iterator] : () => Generator<number, void, unknown>
+>S.iterator : unique symbol
+>S : SymbolConstructor
+>iterator : unique symbol
+>yield 1 : any
+>1 : 1
+
+=== reexport.ts ===
+import { range } from "./variable";
+>range : { [Symbol.iterator](): Generator<number, void, unknown>; }
+
+export const again = range;
+>again : { [Symbol.iterator](): Generator<number, void, unknown>; }
+>range : { [Symbol.iterator](): Generator<number, void, unknown>; }
+
+
+=== narrowed.ts ===
+declare const k: typeof Symbol.iterator | undefined;
+>k : unique symbol | undefined
+>Symbol.iterator : unique symbol
+>Symbol : SymbolConstructor
+>iterator : unique symbol
+
+export function make() {
+>make : () => { [Symbol.iterator]: number; }
+
+    if (k === undefined) throw 0;
+>k === undefined : boolean
+>k : unique symbol | undefined
+>undefined : undefined
+>0 : 0
+
+    return { [k]: 1 };
+>{ [k]: 1 } : { [Symbol.iterator]: number; }
+>[k] : number
+>k : unique symbol
+>1 : 1
+}
+

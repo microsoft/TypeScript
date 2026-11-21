@@ -2587,11 +2587,72 @@ func (b *NodeBuilderImpl) getPropertyNameNodeForSymbolFromNameType(symbol *ast.S
 		return b.createPropertyNameNodeForIdentifierOrLiteral(name, singleQuote, stringNamed, isMethod, symbol)
 	}
 	if nameType.flags&TypeFlagsUniqueESSymbol != 0 {
+		if name := b.getReusableComputedName(symbol, nameType, enclosingDeclaration); name != nil {
+			return b.f.NewComputedPropertyName(name)
+		}
 		// The reference was tracked in the destination scope by trackComputedName.
 		// Reconstructing its spelling in the source scope must not paint that scope's declarations visible.
 		return b.f.NewComputedPropertyName(b.symbolToExpressionWorker(nameType.AsUniqueESSymbolType().symbol, ast.SymbolFlagsValue))
 	}
 	return nil
+}
+
+// getReusableComputedName rebuilds the name a late-bound property was written with, when its first identifier
+// resolves to the same symbol in the destination scope. That identifier is the one trackComputedName tracked
+// there, so the printed key agrees with what was made visible. Reconstructing the name in the source scope
+// instead can pick a different spelling, such as a local `const S = Symbol` that is not emitted.
+func (b *NodeBuilderImpl) getReusableComputedName(symbol *ast.Symbol, nameType *Type, enclosingDeclaration *ast.Node) *ast.Node {
+	if enclosingDeclaration == nil || len(symbol.Declarations()) == 0 {
+		return nil
+	}
+	decl := symbol.Declarations()[0]
+	if !b.ch.hasLateBindableName(decl) {
+		return nil
+	}
+	var expression *ast.Node
+	if ast.IsBinaryExpression(decl) {
+		if name := ast.GetNameOfDeclaration(decl); name != nil && ast.IsElementAccessExpression(name) && ast.IsPropertyAccessEntityNameExpression(name.AsElementAccessExpression().ArgumentExpression, false /*allowJs*/) {
+			expression = name.AsElementAccessExpression().ArgumentExpression
+		}
+	} else if ast.IsEntityNameExpression(decl.Name().Expression()) {
+		expression = decl.Name().Expression()
+	}
+	if expression == nil {
+		return nil
+	}
+	firstIdentifier := ast.GetFirstIdentifier(expression)
+	meaning := ast.SymbolFlagsValue | ast.SymbolFlagsExportValue
+	target := b.ch.resolveName(enclosingDeclaration, firstIdentifier.Text(), meaning, nil /*nameNotFoundMessage*/, false /*isUse*/, false)
+	if target == nil || target != b.ch.resolveName(firstIdentifier, firstIdentifier.Text(), meaning, nil /*nameNotFoundMessage*/, false /*isUse*/, false) {
+		return nil
+	}
+	name, nameDeclaredType := b.rebuildEntityNameExpression(expression, target)
+	// Declared types, not flow-narrowed ones: the declaration file only has the declared type of each name.
+	if name == nil || nameDeclaredType != nameType {
+		return nil
+	}
+	return name
+}
+
+// rebuildEntityNameExpression creates a copy of an entity name expression whose identifiers keep their symbols,
+// and returns the declared type the copy denotes, following property declarations from the root symbol.
+func (b *NodeBuilderImpl) rebuildEntityNameExpression(node *ast.Node, root *ast.Symbol) (*ast.Node, *Type) {
+	if ast.IsIdentifier(node) {
+		// An exported variable resolves to its local export-value symbol, which does not carry the type.
+		root = b.ch.getExportSymbolOfValueSymbolIfExported(root)
+		return b.newIdentifier(node.Text(), root), b.ch.getTypeOfSymbol(root)
+	}
+	access := node.AsPropertyAccessExpression()
+	left, leftType := b.rebuildEntityNameExpression(access.Expression, root)
+	if left == nil {
+		return nil, nil
+	}
+	memberName := access.Name().Text()
+	member := b.ch.getPropertyOfType(b.ch.getApparentType(leftType), memberName)
+	if member == nil {
+		return nil, nil
+	}
+	return b.f.NewPropertyAccessExpression(left, nil, b.newIdentifier(memberName, member), ast.NodeFlagsNone), b.ch.getTypeOfSymbol(member)
 }
 
 func (b *NodeBuilderImpl) addPropertyToElementList(propertySymbol *ast.Symbol, typeElements []*ast.TypeElement) []*ast.TypeElement {
