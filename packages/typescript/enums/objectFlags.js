@@ -49,4 +49,5 @@ export var ObjectFlags;
     ObjectFlags[ObjectFlags["IsNeverIntersectionComputed"] = 33554432] = "IsNeverIntersectionComputed";
     ObjectFlags[ObjectFlags["IsNeverIntersection"] = 67108864] = "IsNeverIntersection";
     ObjectFlags[ObjectFlags["IsConstrainedTypeVariable"] = 134217728] = "IsConstrainedTypeVariable";
+    ObjectFlags[ObjectFlags["ConditionalForConstraint"] = 1073741824] = "ConditionalForConstraint";
 })(ObjectFlags || (ObjectFlags = {}));

@@ -737,6 +737,8 @@ const (
 	ObjectFlagsIsNeverIntersectionComputed = 1 << 25 // IsNeverLike flag has been computed
 	ObjectFlagsIsNeverIntersection         = 1 << 26 // Intersection reduces to never
 	ObjectFlagsIsConstrainedTypeVariable   = 1 << 27 // T & C, where T's constraint and C are primitives, object, or {}
+	// Flags that require TypeFlags.Conditional
+	ObjectFlagsConditionalForConstraint = 1 << 30 // Deferred conditional type made for a constraint
 )
 
 // TypeAlias

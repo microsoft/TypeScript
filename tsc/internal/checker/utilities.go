@@ -726,6 +726,9 @@ func CompareTypes(t1, t2 *Type) int {
 		if c := compareTypeMappers(t1.AsConditionalType().mapper, t2.AsConditionalType().mapper); c != 0 {
 			return c
 		}
+		if a, b := t1.objectFlags&ObjectFlagsConditionalForConstraint, t2.objectFlags&ObjectFlagsConditionalForConstraint; a != b {
+			return cmp.Compare(a, b)
+		}
 	case t1.flags&TypeFlagsSubstitution != 0:
 		if c := CompareTypes(t1.AsSubstitutionType().baseType, t2.AsSubstitutionType().baseType); c != 0 {
 			return c

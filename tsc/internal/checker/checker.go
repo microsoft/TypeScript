@@ -679,6 +679,7 @@ type Checker struct {
 	objectLiteralTypes                          map[CacheHashKey]*Type
 	spreadTypes                                 map[CacheHashKey]*Type
 	objectContentTypes                          map[CacheHashKey]*Type
+	deferredConditionalTypes                    map[deferredConditionalTypeKey]*Type
 	spreadSymbols                               map[spreadSymbolKey]*ast.Symbol
 	symbolsWithType                             map[symbolWithTypeKey]*ast.Symbol
 	paddedProperties                            map[symbolWithTypeKey]*ast.Symbol
@@ -1026,6 +1027,7 @@ func NewChecker(program Program, tracer *Tracer) (*Checker, *sync.Mutex) {
 	c.objectLiteralTypes = make(map[CacheHashKey]*Type)
 	c.spreadTypes = make(map[CacheHashKey]*Type)
 	c.objectContentTypes = make(map[CacheHashKey]*Type)
+	c.deferredConditionalTypes = make(map[deferredConditionalTypeKey]*Type)
 	c.spreadSymbols = make(map[spreadSymbolKey]*ast.Symbol)
 	c.symbolsWithType = make(map[symbolWithTypeKey]*ast.Symbol)
 	c.paddedProperties = make(map[symbolWithTypeKey]*ast.Symbol)
@@ -18097,6 +18099,34 @@ func (b *keyBuilder) writeTypes(types []*Type) {
 	}
 }
 
+// writeMapperContent writes the mappings of a mapper as compareTypeMappers
+// compares them, and reports false for mappers it cannot compare by content.
+func (b *keyBuilder) writeMapperContent(m *TypeMapper) bool {
+	if m == nil {
+		b.writeByte(0)
+		return true
+	}
+	switch m.Kind() {
+	case TypeMapperKindSimple:
+		m := castTypeMapper[SimpleTypeMapper](m, TypeMapperKindSimple)
+		b.writeByte(1)
+		b.writeType(m.source)
+		b.writeType(m.target)
+		return true
+	case TypeMapperKindArray:
+		m := castTypeMapper[ArrayTypeMapper](m, TypeMapperKindArray)
+		b.writeByte(2)
+		b.writeTypes(m.sources)
+		b.writeTypes(m.targets)
+		return true
+	case TypeMapperKindMerged:
+		m := castTypeMapper[MergedTypeMapper](m, TypeMapperKindMerged)
+		b.writeByte(3)
+		return b.writeMapperContent(m.m1) && b.writeMapperContent(m.m2)
+	}
+	return false
+}
+
 func (b *keyBuilder) writeAlias(alias *TypeAlias) {
 	if alias != nil {
 		b.writeByte(1)
@@ -25655,17 +25685,53 @@ func (c *Checker) getConditionalType(root *ConditionalRoot, mapper *TypeMapper, 
 			}
 		}
 		// Return a deferred type for a check that is neither definitely true nor definitely false
-		result = c.newConditionalType(root, mapper, combinedMapper)
-		if alias != nil {
-			result.alias = alias
-		} else {
-			result.alias = c.instantiateTypeAlias(root.alias, mapper)
+		if alias == nil {
+			alias = c.instantiateTypeAlias(root.alias, mapper)
 		}
+		result = c.getDeferredConditionalType(root, mapper, combinedMapper, alias, forConstraint)
 		break
 	}
 	if extraTypes != nil {
 		return c.getUnionType(append(extraTypes, result))
 	}
+	return result
+}
+
+type deferredConditionalTypeKey struct {
+	root *ConditionalRoot
+	key  CacheHashKey
+}
+
+// getDeferredConditionalType interns deferred conditional types by their root,
+// the content of their mapper, and their alias, which determine everything
+// about them. Those made for a constraint are kept apart from the others, as
+// getConditionalTypeInstantiation keeps them: evaluating a conditional type for
+// a constraint can include its true branch where evaluating it otherwise would
+// not.
+func (c *Checker) getDeferredConditionalType(root *ConditionalRoot, mapper *TypeMapper, combinedMapper *TypeMapper, alias *TypeAlias, forConstraint bool) *Type {
+	var b keyBuilder
+	if !b.writeMapperContent(mapper) {
+		result := c.newConditionalType(root, mapper, combinedMapper)
+		result.alias = alias
+		if forConstraint {
+			result.objectFlags |= ObjectFlagsConditionalForConstraint
+		}
+		return result
+	}
+	b.writeAlias(alias)
+	if forConstraint {
+		b.writeByte(1)
+	}
+	key := deferredConditionalTypeKey{root: root, key: b.hash()}
+	if existing := c.deferredConditionalTypes[key]; existing != nil {
+		return existing
+	}
+	result := c.newConditionalType(root, mapper, combinedMapper)
+	result.alias = alias
+	if forConstraint {
+		result.objectFlags |= ObjectFlagsConditionalForConstraint
+	}
+	c.deferredConditionalTypes[key] = result
 	return result
 }
 

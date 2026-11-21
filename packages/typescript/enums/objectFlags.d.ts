@@ -49,4 +49,5 @@ export declare enum ObjectFlags {
     IsNeverIntersectionComputed = 1 << 25,
     IsNeverIntersection = 1 << 26,
     IsConstrainedTypeVariable = 1 << 27,
+    ConditionalForConstraint = 1 << 30,
 }
