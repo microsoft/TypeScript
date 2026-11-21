@@ -26,3 +26,22 @@ export type T2 = readonly (
     Foo
 )[];
 
+interface Bar {
+    x: string;
+>x : string
+}
+
+export type T3 = (
+>T3 : string
+
+    /** @internal */
+    Bar
+)["x"];
+
+export type T4 = Bar[(
+>T4 : string
+
+    /** @internal */
+    "x"
+)];
+

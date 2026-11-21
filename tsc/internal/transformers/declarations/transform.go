@@ -678,6 +678,8 @@ func (tx *DeclarationTransformer) visitDeclarationSubtree(input *ast.Node) *ast.
 		result = tx.transformTypeOperator(input.AsTypeOperatorNode())
 	case ast.KindArrayType:
 		result = tx.transformArrayType(input.AsArrayTypeNode())
+	case ast.KindIndexedAccessType:
+		result = tx.transformIndexedAccessType(input.AsIndexedAccessTypeNode())
 	case ast.KindJSDocTypeExpression:
 		result = tx.transformJSDocTypeExpression(input.AsJSDocTypeExpression())
 	case ast.KindJSDocTypeLiteral:
@@ -835,6 +837,15 @@ func (tx *DeclarationTransformer) transformArrayType(input *ast.ArrayTypeNode) *
 		return nil
 	}
 	return tx.Factory().UpdateArrayTypeNode(input, elem)
+}
+
+func (tx *DeclarationTransformer) transformIndexedAccessType(input *ast.IndexedAccessTypeNode) *ast.Node {
+	objectType := tx.Visitor().Visit(input.ObjectType)
+	indexType := tx.Visitor().Visit(input.IndexType)
+	if objectType == nil || indexType == nil {
+		return nil
+	}
+	return tx.Factory().UpdateIndexedAccessTypeNode(input, objectType, indexType)
 }
 
 func (tx *DeclarationTransformer) transformTypeReference(input *ast.TypeReferenceNode) *ast.Node {

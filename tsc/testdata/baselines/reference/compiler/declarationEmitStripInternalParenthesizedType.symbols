@@ -31,3 +31,27 @@ export type T2 = readonly (
 
 )[];
 
+interface Bar {
+>Bar : Symbol(Bar, Decl(declarationEmitStripInternalParenthesizedType.ts, 15, 4))
+
+    x: string;
+>x : Symbol(Bar.x, Decl(declarationEmitStripInternalParenthesizedType.ts, 17, 15))
+}
+
+export type T3 = (
+>T3 : Symbol(T3, Decl(declarationEmitStripInternalParenthesizedType.ts, 19, 1))
+
+    /** @internal */
+    Bar
+>Bar : Symbol(Bar, Decl(declarationEmitStripInternalParenthesizedType.ts, 15, 4))
+
+)["x"];
+
+export type T4 = Bar[(
+>T4 : Symbol(T4, Decl(declarationEmitStripInternalParenthesizedType.ts, 24, 7))
+>Bar : Symbol(Bar, Decl(declarationEmitStripInternalParenthesizedType.ts, 15, 4))
+
+    /** @internal */
+    "x"
+)];
+
