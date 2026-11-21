@@ -13,7 +13,7 @@ declare const input: Promise<Map<number, Promise<string>>>;
 
 const out: Promise<Map<number, string>> = props(input);
 >out : Promise<Map<number, string>>
->props(input) : Promise<Map<number, Promise<string>>>
+>props(input) : Promise<Map<number, string>>
 >props : <K, V>(x: PromiseLike<Map<K, PromiseLike<V> | V>>) => Promise<Map<K, V>>
 >input : Promise<Map<number, Promise<string>>>
 

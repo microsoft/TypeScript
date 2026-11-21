@@ -2,6 +2,7 @@ package checker
 
 import (
 	"cmp"
+	"iter"
 	"slices"
 	"strings"
 	"sync"
@@ -372,6 +373,81 @@ func (c *Checker) compareSymbolsWorker(s1, s2 *ast.Symbol) int {
 	if s2 == nil {
 		return -1
 	}
+	if r := c.compareSymbolDeclarationsAndNames(s1, s2); r != 0 {
+		return r
+	}
+	// Symbols the checker derives from a declared one, such as the members of
+	// mapped types, share its declaration and name. Symbol IDs are assigned in
+	// the order symbols are first used, so order those by how they were made.
+	if r := cmp.Compare(s1.Flags()&ast.SymbolFlagsTransient, s2.Flags()&ast.SymbolFlagsTransient); r != 0 {
+		return r
+	}
+	if r := cmp.Compare(s1.CheckFlags(), s2.CheckFlags()); r != 0 {
+		return r
+	}
+	if r := c.compareSymbolOrigins(s1, s2); r != 0 {
+		return r
+	}
+	// Symbol IDs are assigned in the order symbols are first used, so they cannot order symbols.
+	debug.Fail("Cannot order distinct symbols that compare as equal")
+	return 0
+}
+
+// compareSymbolOrigins orders transient symbols by the symbols and types they
+// are made from, which are recorded when they are created: the properties a
+// spread merges or copies, the mapped, union, or intersection type containing
+// a synthesized property and its key type, and the symbol an instantiated or
+// copied symbol is made from along with its mapper.
+func (c *Checker) compareSymbolOrigins(s1, s2 *ast.Symbol) int {
+	if s1.Flags()&s2.Flags()&ast.SymbolFlagsTransient == 0 {
+		return 0
+	}
+	spread1 := c.spreadLinks.TryGet(s1)
+	spread2 := c.spreadLinks.TryGet(s2)
+	if (spread1 != nil) != (spread2 != nil) {
+		return core.IfElse(spread1 != nil, 1, -1)
+	}
+	if spread1 != nil {
+		if r := c.compareSymbols(spread1.leftSpread, spread2.leftSpread); r != 0 {
+			return r
+		}
+		if r := c.compareSymbols(spread1.rightSpread, spread2.rightSpread); r != 0 {
+			return r
+		}
+	}
+	var origin1, origin2 *ast.Symbol
+	var key1, key2 *Type
+	if links := c.mappedSymbolLinks.TryGet(s1); links != nil {
+		origin1, key1 = links.syntheticOrigin, links.keyType
+	}
+	if links := c.mappedSymbolLinks.TryGet(s2); links != nil {
+		origin2, key2 = links.syntheticOrigin, links.keyType
+	}
+	if r := c.compareSymbols(origin1, origin2); r != 0 {
+		return r
+	}
+	var target1, target2 *ast.Symbol
+	var mapper1, mapper2 *TypeMapper
+	var containing1, containing2 *Type
+	if links := c.valueSymbolLinks.TryGet(s1); links != nil {
+		target1, mapper1, containing1 = links.target, links.mapper, links.getContainingType()
+	}
+	if links := c.valueSymbolLinks.TryGet(s2); links != nil {
+		target2, mapper2, containing2 = links.target, links.mapper, links.getContainingType()
+	}
+	if r := CompareTypes(containing1, containing2); r != 0 {
+		return r
+	}
+	if r := CompareTypes(key1, key2); r != 0 {
+		return r
+	}
+	if r := c.compareSymbols(target1, target2); r != 0 {
+		return r
+	}
+	return compareTypeMappers(mapper1, mapper2)
+}
+
+func (c *Checker) compareSymbolDeclarationsAndNames(s1, s2 *ast.Symbol) int {
 	if len(s1.Declarations()) != 0 && len(s2.Declarations()) != 0 {
 		if r := c.compareNodes(s1.Declarations()[0], s2.Declarations()[0]); r != 0 {
 			return r
@@ -381,12 +457,7 @@ func (c *Checker) compareSymbolsWorker(s1, s2 *ast.Symbol) int {
 	} else if len(s2.Declarations()) != 0 {
 		return 1
 	}
-	if r := strings.Compare(s1.Name(), s2.Name()); r != 0 {
-		return r
-	}
-	// Fall back to symbol IDs. This is a last resort that should happen only when symbols have
-	// no declaration and duplicate names.
-	return cmp.Compare(ast.GetSymbolId(s1), ast.GetSymbolId(s2))
+	return strings.Compare(s1.Name(), s2.Name())
 }
 
 func (c *Checker) compareNodes(n1, n2 *ast.Node) int {
@@ -400,7 +471,10 @@ func (c *Checker) compareNodes(n1, n2 *ast.Node) int {
 		return -1
 	}
 	if n1.Parent != nil && n1.Parent == n2.Parent {
-		return n1.Pos() - n2.Pos()
+		if r := n1.Pos() - n2.Pos(); r != 0 {
+			return r
+		}
+		return compareSiblings(n1.Parent, n1, n2)
 	}
 	s1 := ast.GetSourceFileOfNode(n1)
 	s2 := ast.GetSourceFileOfNode(n2)
@@ -411,7 +485,70 @@ func (c *Checker) compareNodes(n1, n2 *ast.Node) int {
 		return f1 - f2
 	}
 	// In the same file, order by source position
-	return n1.Pos() - n2.Pos()
+	if r := n1.Pos() - n2.Pos(); r != 0 {
+		return r
+	}
+	return compareTreePositions(s1, n1, n2)
+}
+
+// compareTreePositions orders distinct nodes of a file that start at the same
+// position, such as a node and its first child or adjacent missing nodes, by
+// their positions in the tree: an ancestor before its descendants, and other
+// nodes by the children of their nearest common ancestor that contain them.
+func compareTreePositions(file *ast.SourceFile, n1, n2 *ast.Node) int {
+	d1 := nodeDepth(n1)
+	d2 := nodeDepth(n2)
+	a1, a2 := n1, n2
+	for ; d1 > d2; d1-- {
+		a1 = a1.Parent
+	}
+	for ; d2 > d1; d2-- {
+		a2 = a2.Parent
+	}
+	if a1 == a2 {
+		// One node contains the other.
+		return core.IfElse(n1 == a1, -1, 1)
+	}
+	for a1.Parent != a2.Parent {
+		a1 = a1.Parent
+		a2 = a2.Parent
+	}
+	debug.Assert(a1.Parent != nil, "Cannot order nodes of different trees")
+	if r := a1.Pos() - a2.Pos(); r != 0 {
+		return r
+	}
+	return compareSiblings(a1.Parent, a1, a2)
+}
+
+func nodeDepth(node *ast.Node) int {
+	depth := 0
+	for n := node.Parent; n != nil; n = n.Parent {
+		depth++
+	}
+	return depth
+}
+
+// compareSiblings orders distinct children of parent that start at the same
+// position by the order in which they are visited, JSDoc first.
+func compareSiblings(parent *ast.Node, n1, n2 *ast.Node) int {
+	for _, child := range parent.EagerJSDoc(nil) {
+		if child == n1 {
+			return -1
+		}
+		if child == n2 {
+			return 1
+		}
+	}
+	for child := range parent.IterChildren() {
+		if child == n1 {
+			return -1
+		}
+		if child == n2 {
+			return 1
+		}
+	}
+	debug.Fail("Cannot order nodes that are not children of their parent")
+	return 0
 }
 
 func CompareTypes(t1, t2 *Type) int {
@@ -488,6 +625,15 @@ func CompareTypes(t1, t2 *Type) int {
 					return c
 				}
 			}
+			if r1.target != r2.target && r1.target.objectFlags&r2.target.objectFlags&ObjectFlagsTuple != 0 {
+				if c := t1.checker.compareTupleLabelDeclarations(r1.target.AsTupleType(), r2.target.AsTupleType()); c != 0 {
+					return c
+				}
+			}
+			// Array literal types follow the references they were cloned from.
+			if l1, l2 := t1.objectFlags&ObjectFlagsArrayLiteral != 0, t2.objectFlags&ObjectFlagsArrayLiteral != 0; l1 != l2 {
+				return core.IfElse(l1, 1, -1)
+			}
 		} else if t1.objectFlags&ObjectFlagsReference != 0 {
 			return -1
 		} else if t2.objectFlags&ObjectFlagsReference != 0 {
@@ -523,6 +669,42 @@ func CompareTypes(t1, t2 *Type) int {
 				}
 			}
 			if c := compareTypeMappers(m1, m2); c != 0 {
+				return c
+			}
+			if hasObjectLiteralMembers(t1) && hasObjectLiteralMembers(t2) {
+				if c := compareObjectMembers(t1, t2, true /*withTypes*/); c != 0 {
+					return c
+				}
+				// Fresh, regular, and widened copies of the same literal differ only in
+				// the flags set when they were created.
+				if c := int(t1.objectFlags&objectLiteralCreationFlags) - int(t2.objectFlags&objectLiteralCreationFlags); c != 0 {
+					return c
+				}
+				if c := compareObjectMemberSymbols(t1, t2); c != 0 {
+					return c
+				}
+			} else if t1.objectFlags&t2.objectFlags&ObjectFlagsObjectRestType != 0 {
+				// Rest types share the symbol of their declaration, so a rest from a union
+				// yields one type per constituent, distinguished by the members they keep.
+				// Instantiations of rest types, whose members may not be resolved yet, are
+				// ordered by the rest types they instantiate, which are created resolved.
+				if d1, d2 := t1.AsObjectType().target, t2.AsObjectType().target; d1 != nil && d2 != nil {
+					if c := CompareTypes(d1, d2); c != 0 {
+						return c
+					}
+				} else {
+					if c := compareObjectMembers(t1, t2, false /*withTypes*/); c != 0 {
+						return c
+					}
+					if c := compareObjectMemberSymbols(t1, t2); c != 0 {
+						return c
+					}
+				}
+			}
+			// Other types sharing a symbol, such as a module's synthetic default
+			// wrapper and the spread of the module with it, differ in how they were
+			// created.
+			if c := int(t1.objectFlags&objectLiteralCreationFlags) - int(t2.objectFlags&objectLiteralCreationFlags); c != 0 {
 				return c
 			}
 		}
@@ -580,6 +762,9 @@ func CompareTypes(t1, t2 *Type) int {
 		if c := t1.checker.compareSymbols(t1.symbol, t2.symbol); c != 0 {
 			return c
 		}
+		if c := compareTypeParameterOrigins(t1, t2); c != 0 {
+			return c
+		}
 	case t1.flags&TypeFlagsIndex != 0:
 		if c := CompareTypes(t1.AsIndexType().target, t2.AsIndexType().target); c != 0 {
 			return c
@@ -592,6 +777,9 @@ func CompareTypes(t1, t2 *Type) int {
 			return c
 		}
 		if c := CompareTypes(t1.AsIndexedAccessType().indexType, t2.AsIndexedAccessType().indexType); c != 0 {
+			return c
+		}
+		if c := int(t1.AsIndexedAccessType().accessFlags) - int(t2.AsIndexedAccessType().accessFlags); c != 0 {
 			return c
 		}
 	case t1.flags&TypeFlagsConditional != 0:
@@ -620,7 +808,24 @@ func CompareTypes(t1, t2 *Type) int {
 			return c
 		}
 	}
-	// Fall back to type IDs. This results in type creation order for built-in types.
+	// Types implied by binding patterns are ordered by their patterns.
+	if t1.flags&TypeFlagsObject != 0 {
+		p1 := t1.checker.patternForType[t1]
+		p2 := t2.checker.patternForType[t2]
+		if c := t1.checker.compareNodes(p1, p2); c != 0 {
+			return c
+		}
+	}
+	// Fresh literal types follow their regular counterparts.
+	if t1.flags&TypeFlagsFreshable != 0 {
+		if f1, f2 := isFreshLiteralType(t1), isFreshLiteralType(t2); f1 != f2 {
+			return core.IfElse(f1, 1, -1)
+		}
+	}
+	// Types created with the checker, such as the intrinsic types and the variance markers, are
+	// distinguished only by their creation order, which is fixed. Other types are created in the
+	// order code is checked, so their IDs cannot order them.
+	debug.Assert(min(t1.id, t2.id) <= t1.checker.builtinTypeCount, "Cannot order distinct types that compare as equal")
 	return int(t1.id) - int(t2.id)
 }
 
@@ -691,6 +896,18 @@ func compareTupleTypes(t1, t2 *TupleType) int {
 	return 0
 }
 
+// compareTupleLabelDeclarations orders tuple targets that differ only in where
+// their identically named labels are declared. The tuples must have the same
+// arity, which callers establish by comparing with compareTupleTypes first.
+func (c *Checker) compareTupleLabelDeclarations(t1, t2 *TupleType) int {
+	for i := range t1.elementInfos {
+		if r := c.compareNodes(t1.elementInfos[i].labeledDeclaration, t2.elementInfos[i].labeledDeclaration); r != 0 {
+			return r
+		}
+	}
+	return 0
+}
+
 func compareElementLabels(n1, n2 *ast.Node) int {
 	if n1 == n2 {
 		return 0
@@ -702,6 +919,231 @@ func compareElementLabels(n1, n2 *ast.Node) int {
 		return 1
 	}
 	return strings.Compare(n1.Name().Text(), n2.Name().Text())
+}
+
+// Object literal types, and types derived from them, are given their members
+// at creation rather than resolving them from their symbol.
+const objectLiteralCreationFlags = ObjectFlagsObjectLiteral | ObjectFlagsFreshLiteral | ObjectFlagsJSLiteral | ObjectFlagsArrayLiteral |
+	ObjectFlagsContainsSpread | ObjectFlagsObjectLiteralPatternWithComputedProperties | ObjectFlagsNonInferrableType |
+	ObjectFlagsContainsWideningType | ObjectFlagsContainsObjectOrArrayLiteral
+
+func hasObjectLiteralMembers(t *Type) bool {
+	d := t.AsObjectType()
+	if d.target != nil || d.mapper != nil {
+		return false
+	}
+	if t.symbol == nil {
+		// Types implied by binding patterns and their widened copies have no symbol.
+		return t.objectFlags&ObjectFlagsAnonymous != 0
+	}
+	return t.symbol.Flags()&ast.SymbolFlagsObjectLiteral != 0
+}
+
+// compareObjectMembers orders resolved object types by what their members
+// declare, and with withTypes, by the types of members of object literal
+// types, which are set when the members are created. Members are created per
+// type, so they are compared by what they declare, pairwise since
+// getNamedMembers sorts the properties.
+func compareObjectMembers(t1, t2 *Type, withTypes bool) int {
+	debug.Assert(t1.objectFlags&t2.objectFlags&ObjectFlagsMembersResolved != 0, "Members compared for order must be set when the type is created")
+	c := t1.checker
+	p1 := t1.AsStructuredType().properties
+	p2 := t2.AsStructuredType().properties
+	if n := len(p1) - len(p2); n != 0 {
+		return n
+	}
+	for i, s1 := range p1 {
+		s2 := p2[i]
+		if r := c.compareSymbolDeclarationsAndNames(s1, s2); r != 0 {
+			return r
+		}
+		if r := cmp.Compare(s1.Flags(), s2.Flags()); r != 0 {
+			return r
+		}
+		if r := cmp.Compare(s1.CheckFlags(), s2.CheckFlags()); r != 0 {
+			return r
+		}
+		if withTypes {
+			if r := CompareTypes(c.peekTypeOfObjectLiteralMember(s1), c.peekTypeOfObjectLiteralMember(s2)); r != 0 {
+				return r
+			}
+			if r := CompareTypes(c.nameTypeOfObjectLiteralMember(s1), c.nameTypeOfObjectLiteralMember(s2)); r != 0 {
+				return r
+			}
+		}
+	}
+	return c.compareIndexInfos(t1.AsStructuredType().getIndexInfos(), t2.AsStructuredType().getIndexInfos())
+}
+
+// compareObjectMemberSymbols orders object types with members that declare the
+// same by the members themselves, in member table order. Types derived from
+// others, such as spreads, are interned by their member symbols and the order
+// of their member tables.
+func compareObjectMemberSymbols(t1, t2 *Type) int {
+	c := t1.checker
+	n1, members1 := membersInTableOrder(t1)
+	n2, members2 := membersInTableOrder(t2)
+	if n := n1 - n2; n != 0 {
+		return n
+	}
+	next2, stop := iter.Pull(members2)
+	defer stop()
+	for s1 := range members1 {
+		s2, _ := next2()
+		if r := c.compareSymbols(s1, s2); r != 0 {
+			return r
+		}
+	}
+	return 0
+}
+
+func membersInTableOrder(t *Type) (int, iter.Seq[*ast.Symbol]) {
+	d := t.AsStructuredType()
+	if d.members != nil {
+		return d.members.Len(), d.members.Values()
+	}
+	properties := d.getProperties()
+	return len(properties), slices.Values(properties)
+}
+
+func (c *Checker) compareIndexInfos(infos1, infos2 []*IndexInfo) int {
+	if n := len(infos1) - len(infos2); n != 0 {
+		return n
+	}
+	for i, info1 := range infos1 {
+		info2 := infos2[i]
+		if r := CompareTypes(info1.keyType, info2.keyType); r != 0 {
+			return r
+		}
+		if r := CompareTypes(info1.valueType, info2.valueType); r != 0 {
+			return r
+		}
+		if info1.isReadonly != info2.isReadonly {
+			return core.IfElse(info1.isReadonly, 1, -1)
+		}
+		if r := c.compareNodes(info1.declaration, info2.declaration); r != 0 {
+			return r
+		}
+		if n := len(info1.components) - len(info2.components); n != 0 {
+			return n
+		}
+		for j, n1 := range info1.components {
+			if r := c.compareNodes(n1, info2.components[j]); r != 0 {
+				return r
+			}
+		}
+	}
+	return 0
+}
+
+// The type of a member of an object literal type is set when the member is
+// created.
+func (c *Checker) peekTypeOfObjectLiteralMember(s *ast.Symbol) *Type {
+	if links := c.valueSymbolLinks.TryGet(s); links != nil {
+		return links.resolvedType
+	}
+	return nil
+}
+
+// The name type of a member of an object literal type is set when the member
+// is created.
+func (c *Checker) nameTypeOfObjectLiteralMember(s *ast.Symbol) *Type {
+	if links := c.valueSymbolLinks.TryGet(s); links != nil {
+		return links.getNameType()
+	}
+	return nil
+}
+
+type typeParameterOrigin int
+
+const (
+	typeParameterOriginDeclared typeParameterOrigin = iota
+	typeParameterOriginThis
+	typeParameterOriginDistributed
+	typeParameterOriginRestrictive
+	typeParameterOriginTupleElement
+	typeParameterOriginClone
+)
+
+func getTypeParameterOrigin(tp *TypeParameter) typeParameterOrigin {
+	switch {
+	case tp.isThisType:
+		return typeParameterOriginThis
+	case tp.isDistributed:
+		return typeParameterOriginDistributed
+	case tp.origin != nil && tp.origin.flags&TypeFlagsTypeParameter != 0:
+		return typeParameterOriginRestrictive
+	case tp.origin != nil:
+		return typeParameterOriginTupleElement
+	case tp.target != nil:
+		return typeParameterOriginClone
+	}
+	return typeParameterOriginDeclared
+}
+
+// Type parameters that share a symbol are copies derived from a common original.
+// Order them by how they were derived rather than by creation order.
+func compareTypeParameterOrigins(t1, t2 *Type) int {
+	p1 := t1.AsTypeParameter()
+	p2 := t2.AsTypeParameter()
+	o1 := getTypeParameterOrigin(p1)
+	o2 := getTypeParameterOrigin(p2)
+	if o1 != o2 {
+		return int(o1) - int(o2)
+	}
+	switch o1 {
+	case typeParameterOriginThis:
+		// Tuple this types have no symbol; their constraint is the tuple target,
+		// initialized at creation.
+		if t1.symbol == nil {
+			return CompareTypes(p1.constraint, p2.constraint)
+		}
+	case typeParameterOriginDistributed:
+		return CompareTypes(p1.distributedType, p2.distributedType)
+	case typeParameterOriginRestrictive:
+		return CompareTypes(p1.origin, p2.origin)
+	case typeParameterOriginTupleElement:
+		if c := CompareTypes(p1.origin, p2.origin); c != 0 {
+			return c
+		}
+		return slices.Index(p1.origin.AsTupleType().allTypeParameters, t1) - slices.Index(p2.origin.AsTupleType().allTypeParameters, t2)
+	case typeParameterOriginClone:
+		if c := CompareTypes(p1.target, p2.target); c != 0 {
+			return c
+		}
+		return compareTypeMappers(getCloneOuterMapper(t1), getCloneOuterMapper(t2))
+	}
+	return 0
+}
+
+// A cloned type parameter's mapper maps its target to the clone itself,
+// optionally followed by the instantiation the clone was made for. Return only
+// the latter so comparisons don't recurse into the clone.
+func getCloneOuterMapper(t *Type) *TypeMapper {
+	m := t.AsTypeParameter().mapper
+	if m == nil {
+		return nil
+	}
+	if m.Kind() == TypeMapperKindComposite {
+		cm := castTypeMapper[CompositeTypeMapper](m, TypeMapperKindComposite)
+		if mapperTargetsType(cm.m1, t) {
+			return cm.m2
+		}
+	}
+	if mapperTargetsType(m, t) {
+		return nil
+	}
+	return m
+}
+
+func mapperTargetsType(m *TypeMapper, t *Type) bool {
+	switch m.Kind() {
+	case TypeMapperKindSimple:
+		return castTypeMapper[SimpleTypeMapper](m, TypeMapperKindSimple).target == t
+	case TypeMapperKindArray:
+		return slices.Contains(castTypeMapper[ArrayTypeMapper](m, TypeMapperKindArray).targets, t)
+	}
+	return false
 }
 
 func compareTypeLists(s1, s2 []*Type) int {
