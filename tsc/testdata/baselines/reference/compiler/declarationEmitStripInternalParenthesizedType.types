@@ -1,0 +1,47 @@
+//// [tests/cases/compiler/declarationEmitStripInternalParenthesizedType.ts] ////
+
+=== declarationEmitStripInternalParenthesizedType.ts ===
+interface Foo {}
+
+export type T = (
+>T : Foo
+
+    /** @internal */
+    Foo
+);
+
+export const x: (
+>x : Foo
+
+    /** @internal */
+    Foo
+) = {} as any;
+>{} as any : any
+>{} : {}
+
+export type T2 = readonly (
+>T2 : T2
+
+    /** @internal */
+    Foo
+)[];
+
+interface Bar {
+    x: string;
+>x : string
+}
+
+export type T3 = (
+>T3 : string
+
+    /** @internal */
+    Bar
+)["x"];
+
+export type T4 = Bar[(
+>T4 : string
+
+    /** @internal */
+    "x"
+)];
+
