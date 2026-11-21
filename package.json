@@ -25,7 +25,7 @@
     },
     "devDependencies": {
         "@dprint/json": "^0.26.0",
-        "@dprint/typescript": "^0.100.0",
+        "@dprint/typescript": "^0.101.0",
         "@jakebailey/dprint-plugin-gofumpt": "^0.0.20",
         "@types/node": "^22.20.5",
         "@unicode/unicode-15.1.0": "^2.1.0",
