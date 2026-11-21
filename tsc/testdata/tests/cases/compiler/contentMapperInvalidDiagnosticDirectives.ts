@@ -14,7 +14,8 @@
         { "package": "mapper", "extensions": [".invalidpolicy"] },
         { "package": "mapper", "extensions": [".expectmissing"] },
         { "package": "mapper", "extensions": [".invalidunusedindex"] },
-        { "package": "mapper", "extensions": [".overlap"] }
+        { "package": "mapper", "extensions": [".overlap"] },
+        { "package": "mapper", "extensions": [".invalidcode"] }
     ]
 }
 
@@ -42,3 +43,6 @@
 
 // @Filename: /overlap.overlap
 // @box-invalid-directive: overlap
+
+// @Filename: /invalidDiagnosticCode.invalidcode
+// @box-invalid-directive: invalid-diagnostic-code

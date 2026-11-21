@@ -556,15 +556,6 @@ func TestRunnerTransformDiagnosticDirectives(t *testing.T) {
 			kind: contentmapper.DiagnosticDirectiveErrorKindInvalidPolicy,
 		},
 		{
-			name: "invalid diagnostic code",
-			text: "x",
-			directives: []contentmapper.MappedDiagnosticDirective{{
-				Policy:          contentmapper.DiagnosticDirectivePolicyIgnore,
-				DiagnosticCodes: []int32{0},
-			}},
-			kind: contentmapper.DiagnosticDirectiveErrorKindInvalidDiagnosticCode,
-		},
-		{
 			name: "expect requires unused diagnostic",
 			text: "x",
 			directives: []contentmapper.MappedDiagnosticDirective{{
@@ -642,16 +633,6 @@ func TestMappedDiagnosticDirectiveJSON(t *testing.T) {
 			want: `[0,9,8,14,0]`,
 		},
 		{
-			name: "selected ignore",
-			directive: contentmapper.MappedDiagnosticDirective{
-				VirtualStart: 8, VirtualEnd: 14,
-				OriginalStart: 0, OriginalLength: 9,
-				Policy:          contentmapper.DiagnosticDirectivePolicyIgnore,
-				DiagnosticCodes: []int32{2353, 2322},
-			},
-			want: `[0,9,8,14,0,2353,2322]`,
-		},
-		{
 			name: "expect",
 			directive: contentmapper.MappedDiagnosticDirective{
 				VirtualStart: 8, VirtualEnd: 14,
@@ -676,10 +657,9 @@ func TestMappedDiagnosticDirectiveJSON(t *testing.T) {
 	for _, data := range []string{
 		`[0,0,0,0]`,
 		`[0,0,0,0,1,1,2]`,
-		`[0,0,0,0,0,"2353"]`,
 	} {
 		var directive contentmapper.MappedDiagnosticDirective
-		assert.ErrorContains(t, json.Unmarshal([]byte(data), &directive), "diagnostic directive")
+		assert.ErrorContains(t, json.Unmarshal([]byte(data), &directive), "diagnostic directive tuple")
 	}
 
 	unusedIndex := 1

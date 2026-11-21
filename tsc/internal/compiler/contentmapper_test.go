@@ -866,36 +866,6 @@ func TestContentMapperDirectivesPreserveIncrementalGlobals(t *testing.T) {
 	}
 }
 
-func TestContentMapperDiagnosticDirectiveCodes(t *testing.T) {
-	t.Parallel()
-	// 2322: number is not assignable to string. 2304: cannot find name.
-	const text = "const a: string = 1;\nmissingName;\n"
-	program := newContentMapperProgram(t, fakeContentMapperHost{
-		transform: func(fileName string, content string) (contentmapper.Result, error) {
-			return contentmapper.Result{
-				Text:             text,
-				VirtualExtension: ".ts",
-				Mappings: spanmap.New([]spanmap.Segment{{
-					OriginalEnd: core.TextPos(len(content)),
-					VirtualEnd:  core.TextPos(len(text)),
-					Kind:        spanmap.KindVerbatim,
-					Features:    spanmap.FeatureAll,
-				}}),
-				DiagnosticDirectives: []ast.MappedDiagnosticDirective{{
-					VirtualRange:    core.NewTextRange(0, len(text)),
-					OriginalRange:   core.NewTextRange(0, len(content)),
-					Policy:          ast.MappedDiagnosticDirectivePolicyIgnore,
-					DiagnosticCodes: []int32{2322},
-				}},
-			}, nil
-		},
-	}, map[string]string{"/src/Component.vue": text}, []string{"/src/Component.vue"})
-
-	diags := program.GetSemanticDiagnostics(t.Context(), program.GetSourceFile("/src/Component.vue"))
-	assert.Equal(t, len(diags), 1)
-	assert.Equal(t, diags[0].Code(), int32(2304))
-}
-
 func TestCompositeProjectContentMapperSupplementalRoots(t *testing.T) {
 	t.Parallel()
 	contentMapperHost := fakeContentMapperHost{transform: func(fileName string, content string) (contentmapper.Result, error) {
@@ -1042,30 +1012,6 @@ func TestContentMapperSourceFileState(t *testing.T) {
 			})
 		})
 		assert.Assert(t, found, "expected a localized project response diagnostic, got: %v", programDiagnostics)
-	})
-
-	t.Run("invalid diagnostic code is localized", func(t *testing.T) {
-		t.Parallel()
-		program := newContentMapperProgram(t, fakeContentMapperHost{
-			transform: func(fileName string, content string) (contentmapper.Result, error) {
-				return contentmapper.Result{}, contentmapper.NewTransformError(
-					contentmapper.TransformErrorKindResponse,
-					&contentmapper.DiagnosticDirectiveError{
-						Kind:              contentmapper.DiagnosticDirectiveErrorKindInvalidDiagnosticCode,
-						Index:             2,
-						SupplementalIndex: -1,
-					},
-				)
-			},
-		}, map[string]string{"/src/fail.vue": "original"}, []string{"/src/fail.vue"})
-		programDiagnostics := collectContentMapperDiagnostics(program)
-		found := slices.ContainsFunc(programDiagnostics, func(diagnostic *ast.Diagnostic) bool {
-			return slices.ContainsFunc(diagnostic.MessageChain(), func(message *ast.Diagnostic) bool {
-				return message.Code() == diagnostics.Diagnostic_directive_0_returned_by_the_content_mapper_has_a_diagnostic_code_selector_that_must_be_positive.Code() &&
-					message.String() == "Diagnostic directive 2 returned by the content mapper has a diagnostic code selector that must be positive."
-			})
-		})
-		assert.Assert(t, found, "expected an invalid diagnostic-code selector diagnostic, got: %v", programDiagnostics)
 	})
 }
 

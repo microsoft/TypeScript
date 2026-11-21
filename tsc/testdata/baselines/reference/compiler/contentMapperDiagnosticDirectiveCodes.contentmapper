@@ -1,0 +1,21 @@
+//// [/widget.box] (ScriptKind: ScriptKindTS, ContentMapper: [.box])
+--- Original ---
+// @box-ignore 2304
+const one: number = [missingName];
+
+// @box-ignore 2304 2322
+const both: number = [missingName];
+--- Transformed ---
+const __VERSION = "1.0.0";
+// @box-ignore 2304
+const one: number = [missingName];
+
+// @box-ignore 2304 2322
+const both: number = [missingName];
+
+=== Diagnostics ===
+
+/widget.box:2:7 - error TS2322: Type 'any[]' is not assignable to type 'number'.
+
+2 const one: number = [missingName];
+        ~~~
