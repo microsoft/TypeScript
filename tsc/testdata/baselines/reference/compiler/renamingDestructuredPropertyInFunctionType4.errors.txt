@@ -1,0 +1,30 @@
+renamingDestructuredPropertyInFunctionType4.ts(1,19): error TS2842: 'A' is an unused renaming of 'a'. Did you intend to use it as a type annotation?
+renamingDestructuredPropertyInFunctionType4.ts(2,16): error TS2842: 'A' is an unused renaming of 'a'. Did you intend to use it as a type annotation?
+renamingDestructuredPropertyInFunctionType4.ts(4,20): error TS2842: 'A' is an unused renaming of 'a'. Did you intend to use it as a type annotation?
+renamingDestructuredPropertyInFunctionType4.ts(6,20): error TS2842: 'A' is an unused renaming of 'a'. Did you intend to use it as a type annotation?
+renamingDestructuredPropertyInFunctionType4.ts(8,24): error TS2842: 'A' is an unused renaming of 'a'. Did you intend to use it as a type annotation?
+
+
+==== renamingDestructuredPropertyInFunctionType4.ts (5 errors) ====
+    const f0: <A>({a: A}: {a: A}) => void = () => {};
+                      ~
+!!! error TS2842: 'A' is an unused renaming of 'a'. Did you intend to use it as a type annotation?
+    const f1: ({a: A}: {a: number}) => void = () => {};
+                   ~
+!!! error TS2842: 'A' is an unused renaming of 'a'. Did you intend to use it as a type annotation?
+    
+    type F1 = <A>({ a: A }: { a: A }) => A;
+                       ~
+!!! error TS2842: 'A' is an unused renaming of 'a'. Did you intend to use it as a type annotation?
+    type F2 = <A>({ a: A }: { a: A }) => typeof A;
+    type F3 = <A>({ a: A }: { a: A }) => <A>(value: A) => A;
+                       ~
+!!! error TS2842: 'A' is an unused renaming of 'a'. Did you intend to use it as a type annotation?
+    type F4 = <A>({ a: A }: { a: A }) => <A>(value: A) => typeof A;
+    type F5 = new <A>({ a: A }: { a: A }) => A;
+                           ~
+!!! error TS2842: 'A' is an unused renaming of 'a'. Did you intend to use it as a type annotation?
+    
+    function f2<A>({ a: A }: { a: A }) { return A; }
+    function f3<A>({ a: A }: { a: A }): A { return null!; }
+    
