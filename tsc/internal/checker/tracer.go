@@ -323,7 +323,7 @@ func (a *tracedTypeAdapter) Pattern() *ast.Node {
 }
 
 func (a *tracedTypeAdapter) RecursionIdentity() any {
-	return getRecursionIdentity(a.t).value
+	return a.checker.getRecursionIdentity(a.t).value
 }
 
 func (a *tracedTypeAdapter) Display() string {
