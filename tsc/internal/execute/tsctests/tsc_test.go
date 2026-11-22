@@ -4581,6 +4581,26 @@ func TestTscProjectReferences(t *testing.T) {
 	t.Parallel()
 	cases := []tscInput{
 		{
+			subScenario: "noEmit checks source files when the project references itself",
+			files: FileMap{
+				"/home/src/workspaces/solution/project/index.ts":      `export const value: number = "error";`,
+				"/home/src/workspaces/solution/project/tsconfig.json": `{"compilerOptions":{"composite":true},"references":[{"path":"."}]}`,
+			},
+			cwd:             "/home/src/workspaces/solution",
+			commandLineArgs: []string{"-p", "project", "--noEmit", "--pretty", "false"},
+		},
+		{
+			subScenario: "noEmit checks source files when a referenced project references the root project",
+			files: FileMap{
+				"/home/src/workspaces/solution/project/index.ts":      `export const value: number = "error";`,
+				"/home/src/workspaces/solution/project/tsconfig.json": `{"compilerOptions":{"composite":true},"references":[{"path":"../other"}]}`,
+				"/home/src/workspaces/solution/other/index.ts":        `export const value = 1;`,
+				"/home/src/workspaces/solution/other/tsconfig.json":   `{"compilerOptions":{"composite":true},"references":[{"path":"../project"}]}`,
+			},
+			cwd:             "/home/src/workspaces/solution",
+			commandLineArgs: []string{"-p", "project", "--noEmit", "--pretty", "false"},
+		},
+		{
 			subScenario: "when project references composite project with noEmit",
 			files: FileMap{
 				"/home/src/workspaces/solution/utils/index.ts": "export const x = 10;",

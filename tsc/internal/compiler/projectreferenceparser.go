@@ -102,7 +102,8 @@ func (p *projectReferenceParser) initMapperWorker(ctx context.Context, tasks []*
 			continue
 		}
 		p.loader.projectReferences.configToProjectReference[path] = task.resolved
-		if task.resolved != nil && p.loader.projectReferences.config.ConfigFile != task.resolved.ConfigFile {
+		// A cycle can resolve the root config to a different parsed object.
+		if task.resolved != nil && path != p.loader.projectReferences.rootConfigPath() {
 			// Map current task's files first, before recursing into subtasks.
 			// This matches TypeScript's behavior where child project references
 			// overwrite parent entries when a file belongs to multiple projects.
