@@ -41,6 +41,10 @@ type EmitInput struct {
 	Testing            CommandLineTesting
 	TestingMTimesCache *collections.SyncMap[tspath.PathKey, time.Time]
 	Tracing            *tracing.Tracing
+	// ExtraDiagnostics are additional diagnostics (e.g. stale-output cleanup
+	// failures in watch mode) that are reported together with the program's
+	// own diagnostics and counted by the error summary.
+	ExtraDiagnostics []*ast.Diagnostic
 }
 
 func EmitAndReportStatistics(ctx context.Context, input EmitInput) (CompileAndEmitResult, *Statistics) {
@@ -148,6 +152,7 @@ func EmitFilesAndReportErrors(ctx context.Context, input EmitInput) (result Comp
 	if emitResult != nil {
 		allDiagnostics = append(allDiagnostics, emitResult.Diagnostics...)
 	}
+	allDiagnostics = append(allDiagnostics, input.ExtraDiagnostics...)
 	if input.Testing != nil {
 		input.Testing.OnEmittedFiles(emitResult, input.TestingMTimesCache)
 	}

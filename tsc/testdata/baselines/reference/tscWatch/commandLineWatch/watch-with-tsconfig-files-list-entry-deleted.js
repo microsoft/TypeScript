@@ -79,6 +79,7 @@ Found 1 error.
 
 [[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
+//// [/home/src/workspaces/project/b.js] *deleted*
 
 Watch Registrations::
 Directory watches::
