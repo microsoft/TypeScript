@@ -907,6 +907,40 @@ func TestContentMapperLocaleChange(t *testing.T) {
 	assert.Equal(t, spawner.spawns.Load(), int32(2))
 }
 
+func TestContentMappedExternalModuleDiagnostics(t *testing.T) {
+	t.Parallel()
+	const mainURI = lsproto.DocumentUri("file:///home/project/main.ts")
+	const mainText = `import { value } from "lib/x"; export const result: string = value;`
+	files := map[string]any{
+		"/home/project/tsconfig.json": `{
+			"compilerOptions": { "module": "preserve", "moduleResolution": "bundler", "strict": true },
+			"contentMappers": [{ "package": "mapper", "extensions": [".box"] }]
+		}`,
+		"/home/project/main.ts":                          mainText,
+		"/home/project/node_modules/mapper/package.json": contentmappertest.PackageJSON(contentmappertest.DynamicVerbatimMapper),
+		"/home/project/node_modules/lib/package.json":    `{ "name": "lib", "exports": { "./x": { "types": "./x.box" } } }`,
+		"/home/project/node_modules/lib/x.box":           "export const value: number = 1;",
+	}
+	init, _ := projecttestutil.GetSessionInitOptions(files, &project.SessionOptions{
+		CurrentDirectory:   "/home/project",
+		DefaultLibraryPath: bundled.LibPath(),
+		PositionEncoding:   lsproto.PositionEncodingKindUTF8,
+		RunExternalCode:    true,
+	}, nil)
+	init.Spawner = contentmappertest.NewSpawner()
+	session := project.NewSession(init)
+	defer session.Close()
+
+	ctx := core.WithCheckerLifetime(projecttestutil.WithRequestID(context.Background()), core.CheckerLifetimeDiagnostics)
+	session.DidOpenFile(ctx, mainURI, 1, mainText, lsproto.LanguageKindTypeScript)
+	service, err := session.GetLanguageService(ctx, mainURI)
+	assert.NilError(t, err)
+	report, err := service.ProvideDiagnostics(ctx, mainURI)
+	assert.NilError(t, err)
+	codes := core.Map(report.FullDocumentDiagnosticReport.Items, (*lsproto.Diagnostic).CodeAsString)
+	assert.DeepEqual(t, codes, []string{"Code(2322)"})
+}
+
 func TestDynamicContentMapperInProject(t *testing.T) {
 	t.Parallel()
 	files := map[string]any{

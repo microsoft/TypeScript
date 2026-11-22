@@ -15739,7 +15739,7 @@ func (c *Checker) resolveExternalModule(
 
 		if sourceFile.Symbol != nil {
 			if errorNode != nil {
-				if resolvedModule.IsExternalLibraryImport && !resolutionExtensionIsTSOrJson(resolvedModule.Extension) {
+				if resolvedModule.IsExternalLibraryImport && !resolvedModule.ResolvedUsingExtraExtensions && !resolutionExtensionIsTSOrJson(resolvedModule.Extension) {
 					c.errorOnImplicitAnyModule(false /*isError*/, errorNode, mode, resolvedModule, moduleReference)
 				}
 				if c.moduleKind == core.ModuleKindNode16 || c.moduleKind == core.ModuleKindNode18 {
