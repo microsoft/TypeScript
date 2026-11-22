@@ -1,0 +1,82 @@
+//// [tests/cases/compiler/stringIndexSignatureIndexedAccess.ts] ////
+
+=== stringIndexSignatureIndexedAccess.ts ===
+type AsNumber<T> = T extends number ? T : never;
+>AsNumber : Symbol(AsNumber, Decl(stringIndexSignatureIndexedAccess.ts, 0, 0))
+>T : Symbol(T, Decl(stringIndexSignatureIndexedAccess.ts, 0, 14))
+>T : Symbol(T, Decl(stringIndexSignatureIndexedAccess.ts, 0, 14))
+>T : Symbol(T, Decl(stringIndexSignatureIndexedAccess.ts, 0, 14))
+
+interface Dict {
+>Dict : Symbol(Dict, Decl(stringIndexSignatureIndexedAccess.ts, 0, 48))
+
+    [key: string]: number;
+>key : Symbol(key, Decl(stringIndexSignatureIndexedAccess.ts, 3, 5))
+}
+
+class ClassDict {
+>ClassDict : Symbol(ClassDict, Decl(stringIndexSignatureIndexedAccess.ts, 4, 1))
+
+    [key: string]: number;
+>key : Symbol(key, Decl(stringIndexSignatureIndexedAccess.ts, 7, 5))
+}
+
+interface GenericDict<T> {
+>GenericDict : Symbol(GenericDict, Decl(stringIndexSignatureIndexedAccess.ts, 8, 1))
+>T : Symbol(T, Decl(stringIndexSignatureIndexedAccess.ts, 10, 22))
+
+    [key: string]: T;
+>key : Symbol(key, Decl(stringIndexSignatureIndexedAccess.ts, 11, 5))
+>T : Symbol(T, Decl(stringIndexSignatureIndexedAccess.ts, 10, 22))
+}
+
+declare function takesDict<K extends string>(x: AsNumber<Dict[K]>): void;
+>takesDict : Symbol(takesDict, Decl(stringIndexSignatureIndexedAccess.ts, 12, 1))
+>K : Symbol(K, Decl(stringIndexSignatureIndexedAccess.ts, 14, 27))
+>x : Symbol(x, Decl(stringIndexSignatureIndexedAccess.ts, 14, 45))
+>AsNumber : Symbol(AsNumber, Decl(stringIndexSignatureIndexedAccess.ts, 0, 0))
+>Dict : Symbol(Dict, Decl(stringIndexSignatureIndexedAccess.ts, 0, 48))
+>K : Symbol(K, Decl(stringIndexSignatureIndexedAccess.ts, 14, 27))
+
+declare function takesClass<K extends string>(x: AsNumber<ClassDict[K]>): void;
+>takesClass : Symbol(takesClass, Decl(stringIndexSignatureIndexedAccess.ts, 14, 73))
+>K : Symbol(K, Decl(stringIndexSignatureIndexedAccess.ts, 15, 28))
+>x : Symbol(x, Decl(stringIndexSignatureIndexedAccess.ts, 15, 46))
+>AsNumber : Symbol(AsNumber, Decl(stringIndexSignatureIndexedAccess.ts, 0, 0))
+>ClassDict : Symbol(ClassDict, Decl(stringIndexSignatureIndexedAccess.ts, 4, 1))
+>K : Symbol(K, Decl(stringIndexSignatureIndexedAccess.ts, 15, 28))
+
+declare function takesGeneric<K extends string>(x: AsNumber<GenericDict<number>[K]>): void;
+>takesGeneric : Symbol(takesGeneric, Decl(stringIndexSignatureIndexedAccess.ts, 15, 79))
+>K : Symbol(K, Decl(stringIndexSignatureIndexedAccess.ts, 16, 30))
+>x : Symbol(x, Decl(stringIndexSignatureIndexedAccess.ts, 16, 48))
+>AsNumber : Symbol(AsNumber, Decl(stringIndexSignatureIndexedAccess.ts, 0, 0))
+>GenericDict : Symbol(GenericDict, Decl(stringIndexSignatureIndexedAccess.ts, 8, 1))
+>K : Symbol(K, Decl(stringIndexSignatureIndexedAccess.ts, 16, 30))
+
+function test<K extends string>(dict: Dict[K], cls: ClassDict[K], generic: GenericDict<number>[K]) {
+>test : Symbol(test, Decl(stringIndexSignatureIndexedAccess.ts, 16, 91))
+>K : Symbol(K, Decl(stringIndexSignatureIndexedAccess.ts, 18, 14))
+>dict : Symbol(dict, Decl(stringIndexSignatureIndexedAccess.ts, 18, 32))
+>Dict : Symbol(Dict, Decl(stringIndexSignatureIndexedAccess.ts, 0, 48))
+>K : Symbol(K, Decl(stringIndexSignatureIndexedAccess.ts, 18, 14))
+>cls : Symbol(cls, Decl(stringIndexSignatureIndexedAccess.ts, 18, 46))
+>ClassDict : Symbol(ClassDict, Decl(stringIndexSignatureIndexedAccess.ts, 4, 1))
+>K : Symbol(K, Decl(stringIndexSignatureIndexedAccess.ts, 18, 14))
+>generic : Symbol(generic, Decl(stringIndexSignatureIndexedAccess.ts, 18, 65))
+>GenericDict : Symbol(GenericDict, Decl(stringIndexSignatureIndexedAccess.ts, 8, 1))
+>K : Symbol(K, Decl(stringIndexSignatureIndexedAccess.ts, 18, 14))
+
+    takesDict(dict);
+>takesDict : Symbol(takesDict, Decl(stringIndexSignatureIndexedAccess.ts, 12, 1))
+>dict : Symbol(dict, Decl(stringIndexSignatureIndexedAccess.ts, 18, 32))
+
+    takesClass(cls);
+>takesClass : Symbol(takesClass, Decl(stringIndexSignatureIndexedAccess.ts, 14, 73))
+>cls : Symbol(cls, Decl(stringIndexSignatureIndexedAccess.ts, 18, 46))
+
+    takesGeneric(generic);
+>takesGeneric : Symbol(takesGeneric, Decl(stringIndexSignatureIndexedAccess.ts, 15, 79))
+>generic : Symbol(generic, Decl(stringIndexSignatureIndexedAccess.ts, 18, 65))
+}
+
