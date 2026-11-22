@@ -682,6 +682,7 @@ type Checker struct {
 	deferredConditionalTypes                    map[deferredConditionalTypeKey]*Type
 	emptyObjectTypesFromStringLiterals          map[CacheHashKey]*Type
 	bindingElementOfMember                      map[*ast.Symbol]*ast.Node // The binding element declaring a member of a type implied by a binding pattern
+	mergedEmptyObjectTypes                      map[mergedEmptyObjectKey]*Type
 	spreadSymbols                               map[spreadSymbolKey]*ast.Symbol
 	symbolsWithType                             map[symbolWithTypeKey]*ast.Symbol
 	paddedProperties                            map[symbolWithTypeKey]*ast.Symbol
@@ -1032,6 +1033,7 @@ func NewChecker(program Program, tracer *Tracer) (*Checker, *sync.Mutex) {
 	c.deferredConditionalTypes = make(map[deferredConditionalTypeKey]*Type)
 	c.emptyObjectTypesFromStringLiterals = make(map[CacheHashKey]*Type)
 	c.bindingElementOfMember = make(map[*ast.Symbol]*ast.Node)
+	c.mergedEmptyObjectTypes = make(map[mergedEmptyObjectKey]*Type)
 	c.spreadSymbols = make(map[spreadSymbolKey]*ast.Symbol)
 	c.symbolsWithType = make(map[symbolWithTypeKey]*ast.Symbol)
 	c.paddedProperties = make(map[symbolWithTypeKey]*ast.Symbol)
@@ -13906,6 +13908,13 @@ func (c *Checker) tryMergeUnionOfObjectTypeAndEmptyObject(t *Type, readonly bool
 	if secondType != nil {
 		return t
 	}
+	// The empty constituents only make the properties of firstType optional,
+	// so the result is determined by firstType and readonly, and is interned
+	// by them.
+	key := mergedEmptyObjectKey{t: firstType, readonly: readonly}
+	if existing := c.mergedEmptyObjectTypes[key]; existing != nil {
+		return existing
+	}
 	// gets the type as if it had been spread, but where everything in the spread is made optional
 	members := ast.NewSymbolTable()
 	for _, prop := range c.getPropertiesOfType(firstType) {
@@ -13929,7 +13938,13 @@ func (c *Checker) tryMergeUnionOfObjectTypeAndEmptyObject(t *Type, readonly bool
 	}
 	spread := c.newAnonymousType(firstType.symbol, members, nil, nil, c.getIndexInfosOfType(firstType))
 	spread.objectFlags |= ObjectFlagsObjectLiteral | ObjectFlagsContainsObjectOrArrayLiteral
+	c.mergedEmptyObjectTypes[key] = spread
 	return spread
+}
+
+type mergedEmptyObjectKey struct {
+	t        *Type
+	readonly bool
 }
 
 // We approximate own properties as non-methods plus methods that are inside the object literal

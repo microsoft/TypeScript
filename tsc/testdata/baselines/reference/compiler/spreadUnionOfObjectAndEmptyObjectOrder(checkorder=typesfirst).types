@@ -43,8 +43,8 @@ declare const b: Pair<typeof x, 2>;
 >x : { a?: number | undefined; }
 
 const z = cond ? a : b;
->z : Pair<{ a?: number | undefined; }, 2> | Pair<{ a?: number | undefined; }, 1>
->cond ? a : b : Pair<{ a?: number | undefined; }, 2> | Pair<{ a?: number | undefined; }, 1>
+>z : Pair<{ a?: number | undefined; }, 1> | Pair<{ a?: number | undefined; }, 2>
+>cond ? a : b : Pair<{ a?: number | undefined; }, 1> | Pair<{ a?: number | undefined; }, 2>
 >cond : boolean
 >a : Pair<{ a?: number | undefined; }, 1>
 >b : Pair<{ a?: number | undefined; }, 2>
