@@ -1,0 +1,36 @@
+//// [tests/cases/compiler/thisTypeOfObjectLiteralWithSpread.ts] ////
+
+=== thisTypeOfObjectLiteralWithSpread.ts ===
+// The 'this' of a getter in an object literal with a spread is the type
+// inferred for the whole literal, including the spread's properties (52207).
+
+declare function f<D>(def: D & ThisType<D>): D;
+>f : <D>(def: D & ThisType<D>) => D
+>def : D & ThisType<D>
+
+declare const named: { name: string };
+>named : { name: string; }
+>name : string
+
+f({
+>f({    ...named,    get upper() {        return this.name.toUpperCase();    },}) : unknown
+>f : <D>(def: D & ThisType<D>) => D
+>{    ...named,    get upper() {        return this.name.toUpperCase();    },} : { name: string; upper: any; }
+
+    ...named,
+>named : { name: string; }
+
+    get upper() {
+>upper : any
+
+        return this.name.toUpperCase();
+>this.name.toUpperCase() : any
+>this.name.toUpperCase : any
+>this.name : any
+>this : unknown
+>name : any
+>toUpperCase : any
+
+    },
+});
+

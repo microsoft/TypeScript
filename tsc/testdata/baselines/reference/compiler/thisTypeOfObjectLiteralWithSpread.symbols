@@ -1,0 +1,32 @@
+//// [tests/cases/compiler/thisTypeOfObjectLiteralWithSpread.ts] ////
+
+=== thisTypeOfObjectLiteralWithSpread.ts ===
+// The 'this' of a getter in an object literal with a spread is the type
+// inferred for the whole literal, including the spread's properties (52207).
+
+declare function f<D>(def: D & ThisType<D>): D;
+>f : Symbol(f, Decl(thisTypeOfObjectLiteralWithSpread.ts, 0, 0))
+>D : Symbol(D, Decl(thisTypeOfObjectLiteralWithSpread.ts, 3, 19))
+>def : Symbol(def, Decl(thisTypeOfObjectLiteralWithSpread.ts, 3, 22))
+>D : Symbol(D, Decl(thisTypeOfObjectLiteralWithSpread.ts, 3, 19))
+>ThisType : Symbol(ThisType, Decl(lib.es5.d.ts, --, --))
+>D : Symbol(D, Decl(thisTypeOfObjectLiteralWithSpread.ts, 3, 19))
+>D : Symbol(D, Decl(thisTypeOfObjectLiteralWithSpread.ts, 3, 19))
+
+declare const named: { name: string };
+>named : Symbol(named, Decl(thisTypeOfObjectLiteralWithSpread.ts, 4, 13))
+>name : Symbol(name, Decl(thisTypeOfObjectLiteralWithSpread.ts, 4, 22))
+
+f({
+>f : Symbol(f, Decl(thisTypeOfObjectLiteralWithSpread.ts, 0, 0))
+
+    ...named,
+>named : Symbol(named, Decl(thisTypeOfObjectLiteralWithSpread.ts, 4, 13))
+
+    get upper() {
+>upper : Symbol(upper, Decl(thisTypeOfObjectLiteralWithSpread.ts, 7, 13))
+
+        return this.name.toUpperCase();
+    },
+});
+
