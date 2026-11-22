@@ -558,16 +558,33 @@ func (w *Watcher) doBuild(ctx context.Context) error {
 		return err
 	}
 	w.program = incremental.NewProgram(program, w.program, nil, w.sys.Now, w.testing != nil)
-	if !w.programReady {
+	if !w.programReady && !program.Options().NoEmit.IsTrue() {
 		inputs := w.currentInputs(program)
-		w.program.ForEachEmittedDeclarationFile(func(output tspath.RootedFilePath, sourceFile *ast.SourceFile) {
-			// Restored emit signatures confirm prior emission. Do not track these
-			// output probes as input dependencies.
-			if w.sys.FS().FileExists(output) {
+		// After an incremental restart of a previously built project, unchanged
+		// outputs skip emission, so restore ownership tracking here for ALL
+		// outputs confirmed on disk (not only .d.ts): .js, .js.map, .d.ts and
+		// .d.ts.map alike, otherwise deleting a source would leave those
+		// stale outputs behind. An existing file confirms prior emission. Do
+		// not track these output probes as input dependencies.
+		for _, sourceFile := range program.GetSourceFiles() {
+			if !program.SourceFileMayBeEmitted(sourceFile, false) {
+				continue
+			}
+			paths := outputpaths.GetOutputPathsFor(sourceFile, program.Options(), program, outputpaths.ForceEmitPaths{})
+			for _, output := range []tspath.RootedFilePath{
+				paths.JsFilePath(),
+				paths.SourceMapFilePath(),
+				paths.DeclarationFilePath(),
+				paths.DeclarationMapPath(),
+				paths.ExternalOutputFilePath(),
+			} {
+				if output == "" || !w.sys.FS().FileExists(output) {
+					continue
+				}
 				key := w.caseSensitivity().PathKey(output.AsPath())
 				w.emittedFiles.Store(key, emittedFile{output: output, source: sourceFile.PathKey(), alsoInput: inputs.Has(key)})
 			}
-		})
+		}
 	}
 	w.programReady = true
 	w.fullBuilds++
@@ -743,17 +760,29 @@ func (w *Watcher) currentInputs(program *compiler.Program) *collections.Set[tspa
 // whose source still exists are only untracked (e.g. when noEmit is switched
 // on or the output location changed) but never deleted, since the user may
 // still want them.
-func (w *Watcher) pruneEmittedFiles(program *compiler.Program) {
+func (w *Watcher) pruneEmittedFiles(program *compiler.Program) []*ast.Diagnostic {
 	caseSensitivity := w.caseSensitivity()
 	buildInfoPath := caseSensitivity.PathKey(w.config.GetBuildInfoFileName().AsPath())
 	fs := program.Host().FS()
+	// Inputs that were explicitly selected by the user: files listed verbatim
+	// in the config's "files" array plus the config files themselves. Merely
+	// being part of the program (e.g. an emitted .d.ts swept in by an "include"
+	// wildcard) does NOT protect an output from cleanup.
+	explicitInputs := collections.NewSetWithSizeHint[tspath.PathKey](len(w.config.LiteralFileNames()) + len(w.configFilePaths))
+	for _, fileName := range w.config.LiteralFileNames() {
+		explicitInputs.Add(caseSensitivity.PathKey(fileName.AsPath()))
+	}
+	for _, cfgPath := range w.configFilePaths {
+		explicitInputs.Add(caseSensitivity.PathKey(cfgPath.AsPath()))
+	}
+	var cleanupDiagnostics []*ast.Diagnostic
 	w.emittedFiles.Range(func(outputPath tspath.PathKey, emitted emittedFile) bool {
 		if emitted.source == "" {
 			// Build info output: keep tracking the current build info file, but
 			// delete any other source-less output (a stale build info recorded
 			// at a previous location).
 			if outputPath != buildInfoPath {
-				w.deleteEmittedOutput(fs, outputPath, emitted)
+				cleanupDiagnostics = append(cleanupDiagnostics, w.deleteEmittedOutput(fs, outputPath, emitted, explicitInputs)...)
 			}
 			return true
 		}
@@ -761,7 +790,7 @@ func (w *Watcher) pruneEmittedFiles(program *compiler.Program) {
 		if sourceFile == nil {
 			// The source is gone from the program (deleted, moved, or excluded):
 			// the output is stale and must be removed from disk as well.
-			w.deleteEmittedOutput(fs, outputPath, emitted)
+			cleanupDiagnostics = append(cleanupDiagnostics, w.deleteEmittedOutput(fs, outputPath, emitted, explicitInputs)...)
 			return true
 		}
 		if program.Options().NoEmit.IsTrue() || !program.SourceFileMayBeEmitted(sourceFile, false) {
@@ -784,40 +813,55 @@ func (w *Watcher) pruneEmittedFiles(program *compiler.Program) {
 		}
 		return true
 	})
+	return cleanupDiagnostics
 }
 
 // deleteEmittedOutput stops tracking an output and removes the file from
-// disk. Files that are (or were) inputs of the project are never deleted, so
-// an emitted .js that is also an allowJs input, or an externally supplied
-// .d.ts inside the include set, survives source deletion. An already missing
-// file is ignored; any other removal failure is reported as a diagnostic
-// instead of crashing the watch cycle.
-func (w *Watcher) deleteEmittedOutput(fs vfs.FS, outputPath tspath.PathKey, emitted emittedFile) {
+// disk. Files that are (or were) explicitly selected inputs of the project
+// (verbatim "files" entries, config files, or files that were already inputs
+// when emitted) are never deleted, so an emitted .js listed in "files" with
+// allowJs survives source deletion. Input ownership is rechecked against the
+// current config on every cycle (not only the cycle that emitted the file),
+// because an output can be adopted as an explicit input by a later config
+// change; while it remains one, the output keeps being tracked but is
+// protected from removal. An already missing file is ignored; any other
+// removal failure is
+// returned as a diagnostic so it flows through the normal compilation
+// reporting pipeline (including the error summary) instead of crashing the
+// watch cycle.
+func (w *Watcher) deleteEmittedOutput(fs vfs.FS, outputPath tspath.PathKey, emitted emittedFile, explicitInputs *collections.Set[tspath.PathKey]) []*ast.Diagnostic {
+	// Never delete a file that is (or was) an explicitly selected input of
+	// the project, and keep tracking it while it remains one. Input ownership
+	// is rechecked against the current config on every cycle because an output
+	// emitted earlier can be adopted as an explicit input by a later config
+	// change (e.g. added to "files" with allowJs). Config files are part of
+	// explicitInputs and are therefore always protected.
+	if emitted.alsoInput || explicitInputs.Has(outputPath) {
+		return nil
+	}
 	w.emittedFiles.Delete(outputPath)
-	// Never delete a file that is (or was) an input of the project. Config
-	// files are always protected as well.
-	if emitted.alsoInput {
-		return
-	}
-	for _, cfgPath := range w.configFilePaths {
-		if outputPath == w.caseSensitivity().PathKey(cfgPath.AsPath()) {
-			return
-		}
-	}
 	output := emitted.output
-	if !fs.FileExists(output) {
-		return
+	// Guard against directories instead of pre-checking FileExists (which is
+	// also false on stat failures such as permission errors): let Remove
+	// distinguish a missing file (ignored via ErrNotExist) from other
+	// failures (reported).
+	if fs.DirectoryExists(tspath.RootedDirectoryPathFromPath(output.AsPath())) {
+		return nil
 	}
 	if err := fs.Remove(output.AsPath()); err != nil && !errors.Is(err, vfs.ErrNotExist) {
-		w.reportDiagnostic(ast.NewCompilerDiagnostic(diagnostics.Failed_to_delete_file_0, output))
+		return []*ast.Diagnostic{ast.NewCompilerDiagnostic(diagnostics.Failed_to_delete_file_0, output)}
 	}
+	return nil
 }
 
 func (w *Watcher) compileAndEmit(ctx context.Context) tsc.CompileAndEmitResult {
 	program := w.program.GetProgram()
-	w.pruneEmittedFiles(program)
 	caseSensitivity := w.caseSensitivity()
 	inputs := w.currentInputs(program)
+	// Prune stale outputs before emitting; cleanup failures are returned as
+	// diagnostics and reported through the normal pipeline below so both the
+	// per-diagnostic output and the "Found N errors" summary count them.
+	cleanupDiagnostics := w.pruneEmittedFiles(program)
 	return tsc.EmitFilesAndReportErrors(ctx, tsc.EmitInput{
 		Sys:                w.sys,
 		ProgramLike:        w.program,
@@ -828,6 +872,7 @@ func (w *Watcher) compileAndEmit(ctx context.Context) tsc.CompileAndEmitResult {
 		Writer:             w.sys.Writer(),
 		CompileTimes:       &tsc.CompileTimes{},
 		Testing:            w.testing,
+		ExtraDiagnostics:   cleanupDiagnostics,
 		WriteFile: func(fileName tspath.RootedFilePath, text string, data *compiler.WriteFileData) error {
 			if err := program.Host().FS().WriteFile(fileName, text); err != nil {
 				return err

@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/microsoft/TypeScript/tsc/internal/execute"
+	"github.com/microsoft/TypeScript/tsc/internal/execute/tsc"
 	"github.com/microsoft/TypeScript/tsc/internal/fswatch"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"gotest.tools/v3/assert"
@@ -247,4 +248,90 @@ func TestWatchDeleteMovedSourceCleansOldOutputs(t *testing.T) {
 	assert.Assert(t, !fileExists(sys, "/app/out/old.js"), "out/old.js must be deleted after the move")
 	assert.Assert(t, fileExists(sys, "/app/out/new.js"), "out/new.js must be emitted")
 	assert.Assert(t, strings.Contains(sys.readFileNoError("/app/out/main.js"), `"./new"`), "main.js must be rebuilt:\n%s", sys.readFileNoError("/app/out/main.js"))
+}
+
+// TestWatchKeepsOutputAdoptedAsInputLater covers the transition where an
+// emitted output is adopted as an explicit project input by a later config
+// change: with files=["out/a.js","keep.ts"], allowJs and noEmit, a.ts drops
+// out of the program while out/a.js becomes an input. Input ownership must be
+// rechecked against the current program when pruning, so out/a.js survives
+// even though its source is gone.
+func TestWatchKeepsOutputAdoptedAsInputLater(t *testing.T) {
+	t.Parallel()
+	sys := newTestSys(&tscInput{
+		cwd: "/app",
+		files: FileMap{
+			"/app/tsconfig.json": `{"compilerOptions":{"outDir":"out","noLib":true},"include":["**/*"]}`,
+			"/app/a.ts":          `export const a = 1;`,
+			"/app/keep.ts":       `export const keep = 1;`,
+		},
+	}, false)
+	result := execute.CommandLine(t.Context(), sys, []string{"--watch"}, sys)
+	w := result.Watcher.(*execute.Watcher)
+	assert.Assert(t, fileExists(sys, "/app/out/a.js"))
+	assert.Assert(t, fileExists(sys, "/app/out/keep.js"))
+
+	// Adopt the previously emitted out/a.js as an explicit input and drop
+	// a.ts from the project at the same time.
+	sys.writeFileNoError("/app/tsconfig.json",
+		`{"compilerOptions":{"allowJs":true,"noEmit":true,"noLib":true},"files":["out/a.js","keep.ts"]}`)
+	sys.removeNoError("/app/a.ts")
+	sys.mockWatchBackend.SendEvents([]fswatch.Event{
+		{Kind: fswatch.EventUpdate, Path: "/app/tsconfig.json"},
+		{Kind: fswatch.EventDelete, Path: "/app/a.ts"},
+	})
+	w.DoCycle(t.Context())
+
+	assert.Assert(t, fileExists(sys, "/app/out/a.js"),
+		"out/a.js is now an explicit input of the project and must not be deleted even though a.ts is gone")
+	assert.Assert(t, strings.Contains(sys.readFileNoError("/app/out/a.js"), "a = 1"),
+		"out/a.js content must be untouched:\n%s", sys.readFileNoError("/app/out/a.js"))
+	assert.Assert(t, fileExists(sys, "/app/out/keep.js"), "out/keep.js must be kept")
+}
+
+// TestWatchAfterPrebuildDeletesAllOutputsOfDeletedSource covers an incremental
+// restart: after a plain prebuild, starting `tsc --watch` skips re-emitting
+// unchanged outputs, so ownership of ALL outputs (.js, .js.map, .d.ts,
+// .d.ts.map) must be restored from the incremental state. Deleting a source
+// then must remove every one of its outputs, not only the .d.ts.
+func TestWatchAfterPrebuildDeletesAllOutputsOfDeletedSource(t *testing.T) {
+	t.Parallel()
+	sys := newTestSys(&tscInput{
+		cwd: "/app",
+		files: FileMap{
+			"/app/tsconfig.json": `{
+				"compilerOptions": {
+					"outDir": "out",
+					"declaration": true,
+					"declarationMap": true,
+					"sourceMap": true,
+					"incremental": true,
+					"tsBuildInfoFile": "./tsconfig.tsbuildinfo"
+				},
+				"include": ["**/*"]
+			}`,
+			"/app/main.ts": `export const main = 1;`,
+			"/app/gone.ts": `export const gone = 2;`,
+		},
+	}, false)
+	// Prebuild (non-watch) so outputs and tsbuildinfo exist before the watch starts.
+	pre := execute.CommandLine(t.Context(), sys, []string{"-p", "tsconfig.json", "--pretty", "false"}, sys)
+	assert.Equal(t, pre.Status, tsc.ExitStatusSuccess)
+	stale := []string{"/app/out/gone.js", "/app/out/gone.js.map", "/app/out/gone.d.ts", "/app/out/gone.d.ts.map"}
+	for _, path := range stale {
+		assert.Assert(t, fileExists(sys, path), "prebuild output %s", path)
+	}
+
+	sys.clearOutput()
+	result := execute.CommandLine(t.Context(), sys, []string{"--watch", "--pretty", "false"}, sys)
+	w := result.Watcher.(*execute.Watcher)
+
+	sendDelete(t, sys, w, "/app/gone.ts")
+
+	for _, path := range stale {
+		assert.Assert(t, !fileExists(sys, path), "stale output %s must be deleted after prebuild + watch", path)
+	}
+	assert.Assert(t, fileExists(sys, "/app/out/main.js"), "out/main.js must be kept")
+	assert.Assert(t, fileExists(sys, "/app/out/main.d.ts"), "out/main.d.ts must be kept")
+	assert.Assert(t, fileExists(sys, "/app/tsconfig.tsbuildinfo"), "build info must be kept")
 }
