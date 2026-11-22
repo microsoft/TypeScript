@@ -26,8 +26,10 @@ func (l *LanguageService) ProvideDocumentHighlights(ctx context.Context, documen
 	// Extract highlights for the current file only.
 	var documentHighlights []*lsproto.DocumentHighlight
 	if result.MultiDocumentHighlights != nil {
+		caseSensitivity := l.CaseSensitivity()
+		documentPath := documentUri.PathKey(caseSensitivity)
 		for _, mh := range *result.MultiDocumentHighlights {
-			if mh.Uri == documentUri {
+			if mh.Uri.PathKey(caseSensitivity) == documentPath {
 				documentHighlights = append(documentHighlights, mh.Highlights...)
 			}
 		}
