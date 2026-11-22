@@ -23,35 +23,35 @@ interface GenericDict<T> {
 
 declare function takesDict<K extends string>(x: AsNumber<Dict[K]>): void;
 >takesDict : <K extends string>(x: AsNumber<Dict[K]>) => void
->x : AsNumber<Dict[K]>
+>x : number
 
 declare function takesClass<K extends string>(x: AsNumber<ClassDict[K]>): void;
 >takesClass : <K extends string>(x: AsNumber<ClassDict[K]>) => void
->x : AsNumber<ClassDict[K]>
+>x : number
 
 declare function takesGeneric<K extends string>(x: AsNumber<GenericDict<number>[K]>): void;
 >takesGeneric : <K extends string>(x: AsNumber<GenericDict<number>[K]>) => void
->x : AsNumber<GenericDict<number>[K]>
+>x : number
 
 function test<K extends string>(dict: Dict[K], cls: ClassDict[K], generic: GenericDict<number>[K]) {
 >test : <K extends string>(dict: Dict[K], cls: ClassDict[K], generic: GenericDict<number>[K]) => void
->dict : Dict[K]
->cls : ClassDict[K]
->generic : GenericDict<number>[K]
+>dict : number
+>cls : number
+>generic : number
 
     takesDict(dict);
 >takesDict(dict) : void
 >takesDict : <K_1 extends string>(x: AsNumber<Dict[K_1]>) => void
->dict : Dict[K]
+>dict : number
 
     takesClass(cls);
 >takesClass(cls) : void
 >takesClass : <K_1 extends string>(x: AsNumber<ClassDict[K_1]>) => void
->cls : ClassDict[K]
+>cls : number
 
     takesGeneric(generic);
 >takesGeneric(generic) : void
 >takesGeneric : <K_1 extends string>(x: AsNumber<GenericDict<number>[K_1]>) => void
->generic : GenericDict<number>[K]
+>generic : number
 }
 
