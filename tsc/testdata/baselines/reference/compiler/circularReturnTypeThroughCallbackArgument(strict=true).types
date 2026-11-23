@@ -80,7 +80,7 @@ export async function c(n: number) {
 >c(n - 1) : any
 >c : (n: number) => any
 >n - 1 : number
->n : number
+>n : 0
 >1 : 1
 }
 
