@@ -1136,6 +1136,13 @@ type UniqueESSymbolType struct {
 
 // ConstrainedType (type with computed base constraint)
 
+// A typeNesting caches the nesting of a type's recursion identity in its
+// instantiation, and the most for any recursion identity; see getTypeNesting.
+type typeNesting struct {
+	own  uint8
+	most uint8
+}
+
 type ConstrainedType struct {
 	TypeBase
 	resolvedBaseConstraint *Type

@@ -622,6 +622,8 @@ type Checker struct {
 	baseConstraintWalk                          baseConstraintWalk
 	baseConstraintRepeats                       map[*Type][]baseConstraintRepeat // Repeats of the walks of kept base constraints; see "Base constraint walks"
 	baseConstraintRepeatBuffer                  []baseConstraintRepeat           // Repeats of the walks in progress
+	typeNestings                                map[*Type]typeNesting
+	typeNestingVisited                          collections.Set[*Type]
 	inlineLevel                                 int
 	serializationLevel                          int
 	currentNode                                 *ast.Node
@@ -1022,6 +1024,7 @@ func NewChecker(program Program, tracer *Tracer) (*Checker, *sync.Mutex) {
 	c.instantiationExpressionTypes = make(map[InstantiationExpressionKey]*Type)
 	c.substitutionTypes = make(map[SubstitutionTypeKey]*Type)
 	c.baseConstraintRepeats = make(map[*Type][]baseConstraintRepeat)
+	c.typeNestings = make(map[*Type]typeNesting)
 	c.reverseMappedCache = make(map[ReverseMappedTypeKey]*Type)
 	c.reverseHomomorphicMappedCache = make(map[ReverseMappedTypeKey]*Type)
 	c.iterationTypesCache = make(map[IterationTypesKey]IterationTypes)
@@ -29145,10 +29148,24 @@ func (c *Checker) getBaseConstraintOfType(t *Type) *Type {
 // each repeated, is kept with it for this. Elsewhere it is computed again
 // inside the walk, as a distinct resolution so that re-entering it is still a
 // cycle.
+//
+// A conditional type whose instantiation nests some recursion identity 5
+// times has no base constraint. Walks through types that expand without end
+// as their conditional types are resolved, such as one whose recursive
+// argument wraps the previous one in other conditional types, would otherwise
+// go deep enough to exceed the instantiation depth limit before giving up,
+// and restarting such a walk from a type it reached can always go further.
+// Unlike the walk's own limits, this depends only on the type. Only nesting
+// that such an expansion produces counts: each level is a generic type
+// instantiated from the level below, directly or through the conditional
+// types resolved in between. Structure written or inferred in the program,
+// such as type references nested through tuples or object literal types,
+// can be nested deeply without expanding.
 
 const (
-	baseConstraintFreeDepth = 10
-	baseConstraintMaxDepth  = 50
+	baseConstraintFreeDepth  = 10
+	baseConstraintMaxDepth   = 50
+	baseConstraintMaxNesting = 5
 )
 
 // countBaseConstraintRepeats returns how many of the recursion identities on a
@@ -29352,6 +29369,81 @@ func (c *Checker) walkBaseConstraint(t *Type, stack []RecursionId, keep bool) (*
 	return constraint, height, kept, walk.gaveUp
 }
 
+// getTypeNesting returns, of the recursion identities in the instantiation of
+// t, the most times one is nested in itself: t's own as nested in the types t
+// was instantiated from, or one in those types.
+func (c *Checker) getTypeNesting(t *Type) int {
+	if c.typeGeneration(t)+1 < baseConstraintMaxNesting {
+		// Each level of nesting is a type instantiated from the one below.
+		return 0
+	}
+	_, nesting := c.computeTypeNesting(t)
+	return nesting
+}
+
+// computeTypeNesting returns how many times the recursion identity of t is
+// nested in itself in its instantiation, and the most for any recursion
+// identity in it.
+func (c *Checker) computeTypeNesting(t *Type) (int, int) {
+	if n, ok := c.typeNestings[t]; ok {
+		return int(n.own), int(n.most)
+	}
+	if !c.couldContainTypeVariables(t) {
+		// Instantiating a type without type variables returns it unchanged,
+		// so it does not expand however deeply it is nested.
+		return c.setTypeNesting(t, 0, 0)
+	}
+	most := 0
+	c.visitTypeSources(t, func(s *Type) {
+		_, m := c.computeTypeNesting(s)
+		most = max(most, m)
+	})
+	if t.flags&TypeFlagsIndexedAccess != 0 {
+		// An indexed access shares the recursion identity of its object type
+		// and is a part of it, so it is nested as deeply as its object type.
+		own, _ := c.computeTypeNesting(t.AsIndexedAccessType().objectType)
+		return c.setTypeNesting(t, own, most)
+	}
+	// Find the nearest types t was instantiated from with its recursion
+	// identity, skipping those that cannot hold one nested more than found.
+	identity := getRecursionIdentity(t)
+	below := 0
+	// The nestings of all the types t was instantiated from are computed by
+	// now, so this does not recur and the set of visited types can be shared.
+	visited := &c.typeNestingVisited
+	var visit func(t *Type)
+	visit = func(t *Type) {
+		c.visitTypeSources(t, func(s *Type) {
+			if visited.Has(s) {
+				return
+			}
+			visited.Add(s)
+			own, m := c.computeTypeNesting(s)
+			if m <= below {
+				return
+			}
+			if getRecursionIdentity(s) == identity {
+				below = max(below, own)
+			} else if s.flags&(TypeFlagsConditional|TypeFlagsUnion) != 0 {
+				// A level reached through other types, such as a reference or
+				// an object literal type holding it, is written structure.
+				visit(s)
+			}
+		})
+	}
+	visit(t)
+	visited.Clear()
+	own := min(below+1, math.MaxUint8)
+	most = max(most, own)
+	return c.setTypeNesting(t, own, most)
+}
+
+// setTypeNesting caches the nestings computeTypeNesting returns for t.
+func (c *Checker) setTypeNesting(t *Type, own int, most int) (int, int) {
+	c.typeNestings[t] = typeNesting{own: uint8(own), most: uint8(most)}
+	return own, most
+}
+
 func (c *Checker) computeBaseConstraint(t *Type, stack []RecursionId) *Type {
 	switch {
 	case t.flags&TypeFlagsTypeParameter != 0:
@@ -29425,7 +29517,7 @@ func (c *Checker) computeBaseConstraint(t *Type, stack []RecursionId) *Type {
 		}
 		return c.getNextBaseConstraint(c.getIndexedAccessTypeOrUndefined(baseObjectType, baseIndexType, t.AsIndexedAccessType().accessFlags, nil, nil), stack)
 	case t.flags&TypeFlagsConditional != 0:
-		if c.conditionalConstraintDepth >= 100 {
+		if c.conditionalConstraintDepth >= 100 || c.getTypeNesting(t) >= baseConstraintMaxNesting {
 			return nil
 		}
 		c.conditionalConstraintDepth++
