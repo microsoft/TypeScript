@@ -1,0 +1,44 @@
+//// [tests/cases/compiler/mappedTypeConstraintErrorsCheckOrder.ts] ////
+
+=== mappedTypeConstraintErrorsCheckOrder.ts ===
+// A mapped type reports the errors of its constraint, here an instantiation
+// that is too deep, at the mapped type, whichever node first requests it.
+
+type Dec<N extends number> =
+>Dec : Symbol(Dec, Decl(mappedTypeConstraintErrorsCheckOrder.ts, 0, 0))
+>N : Symbol(N, Decl(mappedTypeConstraintErrorsCheckOrder.ts, 3, 9))
+
+    N extends 5 ? 4 : N extends 4 ? 3 : N extends 3 ? 2 :
+>N : Symbol(N, Decl(mappedTypeConstraintErrorsCheckOrder.ts, 3, 9))
+>N : Symbol(N, Decl(mappedTypeConstraintErrorsCheckOrder.ts, 3, 9))
+>N : Symbol(N, Decl(mappedTypeConstraintErrorsCheckOrder.ts, 3, 9))
+
+    N extends 2 ? any :
+>N : Symbol(N, Decl(mappedTypeConstraintErrorsCheckOrder.ts, 3, 9))
+
+    N extends 1 ? 0 : 0;
+>N : Symbol(N, Decl(mappedTypeConstraintErrorsCheckOrder.ts, 3, 9))
+
+type Recur<N extends number, S> =
+>Recur : Symbol(Recur, Decl(mappedTypeConstraintErrorsCheckOrder.ts, 6, 24))
+>N : Symbol(N, Decl(mappedTypeConstraintErrorsCheckOrder.ts, 7, 11))
+>S : Symbol(S, Decl(mappedTypeConstraintErrorsCheckOrder.ts, 7, 28))
+
+    N extends 0 ? S : Recur<Dec<N>, [S]>;
+>N : Symbol(N, Decl(mappedTypeConstraintErrorsCheckOrder.ts, 7, 11))
+>S : Symbol(S, Decl(mappedTypeConstraintErrorsCheckOrder.ts, 7, 28))
+>Recur : Symbol(Recur, Decl(mappedTypeConstraintErrorsCheckOrder.ts, 6, 24))
+>Dec : Symbol(Dec, Decl(mappedTypeConstraintErrorsCheckOrder.ts, 0, 0))
+>N : Symbol(N, Decl(mappedTypeConstraintErrorsCheckOrder.ts, 7, 11))
+>S : Symbol(S, Decl(mappedTypeConstraintErrorsCheckOrder.ts, 7, 28))
+
+type Explode = {
+>Explode : Symbol(Explode, Decl(mappedTypeConstraintErrorsCheckOrder.ts, 8, 41))
+
+    [P in Recur<5, "a"> & string as `${P}_key`]: any;
+>P : Symbol(P, Decl(mappedTypeConstraintErrorsCheckOrder.ts, 11, 5))
+>Recur : Symbol(Recur, Decl(mappedTypeConstraintErrorsCheckOrder.ts, 6, 24))
+>P : Symbol(P, Decl(mappedTypeConstraintErrorsCheckOrder.ts, 11, 5))
+
+};
+

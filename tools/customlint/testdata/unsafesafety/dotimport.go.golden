@@ -1,0 +1,21 @@
+	package unsafesafety
+	
+	import . "unsafe"
+	
+	func badDotImport(h *header, s string) {
+		_ = (*derived)(Pointer(h))
+		               ~~~~~~~~~~
+!!! unsafesafety: conversion to unsafe.Pointer must be preceded by a `// SAFETY:` comment explaining why it is sound
+		_ = Slice(StringData(s), len(s))
+		    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! unsafesafety: use of unsafe.Slice must be preceded by a `// SAFETY:` comment explaining why it is sound
+		          ~~~~~~~~~~~~~
+!!! unsafesafety: use of unsafe.StringData must be preceded by a `// SAFETY:` comment explaining why it is sound
+	}
+	
+	func goodDotImport(h *header) {
+		// SAFETY: Dot imports are checked the same way.
+		_ = (*derived)(Pointer(h))
+		_ = Sizeof(*h)
+	}
+	

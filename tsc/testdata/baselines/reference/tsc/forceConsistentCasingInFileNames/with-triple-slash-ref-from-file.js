@@ -8,7 +8,7 @@ declare class c { }
 //// [/home/src/workspaces/project/tsconfig.json] *new* 
 { }
 
-tsgo 
+tsc 
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96msrc/c.ts[0m:[93m1[0m:[93m22[0m - [91merror[0m[90m TS1261: [0mAlready included file name '/home/src/workspaces/project/src/D.ts' differs from file name '/home/src/workspaces/project/src/d.ts' only in casing.

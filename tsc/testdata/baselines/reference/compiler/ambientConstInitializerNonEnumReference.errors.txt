@@ -1,0 +1,30 @@
+a.d.ts(7,20): error TS1254: A 'const' initializer in an ambient context must be a string or numeric literal or literal enum reference.
+a.d.ts(8,20): error TS1254: A 'const' initializer in an ambient context must be a string or numeric literal or literal enum reference.
+a.d.ts(9,20): error TS1254: A 'const' initializer in an ambient context must be a string or numeric literal or literal enum reference.
+a.d.ts(13,26): error TS1254: A 'const' initializer in an ambient context must be a string or numeric literal or literal enum reference.
+
+
+==== a.d.ts (4 errors) ====
+    declare enum E { A = 1, B = "b" }
+    declare namespace NS { const v: 1; }
+    declare const obj: { readonly x: 1 };
+    
+    declare const e1 = E.A;
+    declare const e2 = E["B"];
+    declare const n1 = NS.v;
+                       ~~~~
+!!! error TS1254: A 'const' initializer in an ambient context must be a string or numeric literal or literal enum reference.
+    declare const n2 = NS["v"];
+                       ~~~~~~~
+!!! error TS1254: A 'const' initializer in an ambient context must be a string or numeric literal or literal enum reference.
+    declare const o1 = obj.x;
+                       ~~~~~
+!!! error TS1254: A 'const' initializer in an ambient context must be a string or numeric literal or literal enum reference.
+    
+    declare class C {
+        static readonly r1 = E.A;
+        static readonly r2 = NS.v;
+                             ~~~~
+!!! error TS1254: A 'const' initializer in an ambient context must be a string or numeric literal or literal enum reference.
+    }
+    

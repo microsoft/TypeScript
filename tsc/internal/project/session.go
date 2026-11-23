@@ -49,6 +49,7 @@ const (
 	UpdateReasonRequestedLanguageServiceProjectDirty
 	UpdateReasonRequestedLoadProjectTree
 	UpdateReasonRequestedLanguageServiceWithAutoImports
+	// Unloads unused configured projects and cleans the file cache.
 	UpdateReasonIdleCleanDiskCache
 	UpdateReasonDidChangeConfigFile
 	UpdateReasonDidChangeContentMapperContributions
@@ -76,10 +77,11 @@ type SessionOptions struct {
 	PushDiagnosticsEnabled bool
 	// RunExternalCode allows configured content mappers to run their (external) processes,
 	// gated on workspace trust by the client. It corresponds to the --runExternalCode CLI flag.
-	RunExternalCode       bool
-	InitialWorkspaceRoots []tspath.RootedDirectoryPath
-	DebounceDelay         time.Duration
-	CheckerPoolOptions    CheckerPoolOptions
+	RunExternalCode         bool
+	InitialWorkspaceRoots   []tspath.RootedDirectoryPath
+	InitialWorkspaceFolders []ls.WorkspaceFolder
+	DebounceDelay           time.Duration
+	CheckerPoolOptions      CheckerPoolOptions
 }
 
 type SessionInit struct {
@@ -121,7 +123,7 @@ type Session struct {
 	// applied. Registration runs from background tasks that may finish out of order, so
 	// contentMapperRegistrationMu serializes updates and the snapshot ID keeps a stale task from
 	// overwriting a newer snapshot's registration.
-	registeredContentMapperExtensions []string
+	registeredContentMapperSelectors  []ContentMapperSelector
 	registeredContentMapperSnapshotID uint64
 	contentMapperRegistrationMu       sync.Mutex
 
@@ -173,9 +175,9 @@ type Session struct {
 	warmAutoImportCancel context.CancelFunc
 	warmAutoImportMu     sync.Mutex
 
-	// idleCacheCleanTimer is a resettable timer for scheduling idle disk
-	// cache cleans. The timer resets on any file event (open, close,
-	// change, save, watch) and fires after 30 seconds of inactivity.
+	// idleCacheCleanTimer is a resettable timer for unloading unused projects
+	// and cleaning the file cache. The timer resets on any file event (open,
+	// close, change, save, watch) and fires after 30 seconds of inactivity.
 	idleCacheCleanTimer  *time.Timer
 	idleCacheCleanMu     sync.Mutex
 	idleCacheCleanWG     sync.WaitGroup
@@ -448,7 +450,8 @@ func (s *Session) DidChangeWatchedFiles(ctx context.Context, changes []*lsproto.
 		if !hasRelevantChange {
 			filePath := change.Uri.Path()
 			path := s.caseSensitivity.PathKey(filePath).RemoveTrailingDirectorySeparator()
-			if contentMapperWatchedFiles.Has(path) {
+			if contentMapperWatchedFiles.Has(path) ||
+				tspath.RootedFilePathFromPath(filePath).LongestExtension(contentMapperExtensions, s.caseSensitivity) != "" {
 				hasRelevantChange = true
 				continue
 			}
@@ -468,8 +471,7 @@ func (s *Session) DidChangeWatchedFiles(ctx context.Context, changes []*lsproto.
 					}
 				}
 			} else {
-				if isRelevantExtension(extension) ||
-					path.ExtensionIsOneOf(contentMapperExtensions) {
+				if isRelevantExtension(extension) {
 					hasRelevantChange = true
 				}
 			}
@@ -1586,18 +1588,19 @@ func (s *Session) updateWatch[T any](ctx context.Context, oldWatcher, newWatcher
 	return errors
 }
 
-// updateContentMapperRegistrations computes the union of content mapper extensions across all loaded
-// configs in the new snapshot and, when the set changes, asks the client to synchronize text documents
-// with those extensions. This is how an otherwise unsupported file (e.g. a `.vue`) begins flowing to the server once a
-// config that maps it is discovered.
+// updateContentMapperRegistrations synchronizes selectors from loaded configs and inferred projects.
 func (s *Session) updateContentMapperRegistrations(ctx context.Context, snapshot *Snapshot) error {
 	if s.client == nil {
 		return nil
 	}
 	contentMappers := snapshot.ConfigFileRegistry.contentMappers()
-	extensions := append(slices.Clone(contentMappers.extensions), snapshot.inferredProjectContentMapperExtensions...)
-	slices.Sort(extensions)
-	extensions = slices.Compact(extensions)
+	selectors := make([]ContentMapperSelector, 0, len(snapshot.inferredProjectContentMapperExtensions)+len(contentMappers.selectors))
+	for _, extension := range snapshot.inferredProjectContentMapperExtensions {
+		selectors = append(selectors, ContentMapperSelector{Pattern: ContentMapperExtensionPattern(extension), Extension: extension})
+	}
+	selectors = append(selectors, contentMappers.selectors...)
+	slices.SortFunc(selectors, compareContentMapperSelectors)
+	selectors = slices.Compact(selectors)
 
 	s.contentMapperRegistrationMu.Lock()
 	defer s.contentMapperRegistrationMu.Unlock()
@@ -1606,21 +1609,18 @@ func (s *Session) updateContentMapperRegistrations(ctx context.Context, snapshot
 	if snapshot.ID() <= s.registeredContentMapperSnapshotID {
 		return nil
 	}
-	if slices.Equal(extensions, s.registeredContentMapperExtensions) {
+	if slices.Equal(selectors, s.registeredContentMapperSelectors) {
 		s.registeredContentMapperSnapshotID = snapshot.ID()
 		return nil
 	}
-	// RegisterContentMapperExtensions replaces the prior registration wholesale (unregistering extensions
-	// that are no longer mapped and registering the current set), so an empty set removes the registration
-	// once the last mapping config unloads. On failure we leave the state unadvanced so the next snapshot
-	// update retries.
-	if err := s.client.RegisterContentMapperExtensions(ctx, extensions); err != nil {
+	// Registration replaces the previous set; leave state unchanged on failure so the next update retries.
+	if err := s.client.RegisterContentMapperSelectors(ctx, selectors); err != nil {
 		if s.options.LoggingEnabled {
 			s.logger.Log(err)
 		}
 		return err
 	}
-	s.registeredContentMapperExtensions = extensions
+	s.registeredContentMapperSelectors = selectors
 	s.registeredContentMapperSnapshotID = snapshot.ID()
 	return nil
 }

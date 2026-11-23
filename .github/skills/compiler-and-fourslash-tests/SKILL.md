@@ -63,6 +63,8 @@ import { greet } from "./utils";
 const msg: number = greet("world"); // type error
 ```
 
+For readability, make sure to add an extra line between the contents of a file and the next `// @filename` directive (as we did above).
+
 #### Generating test variations
 
 Options can specify multiple comma-separated values to generate separate sub-test configurations:

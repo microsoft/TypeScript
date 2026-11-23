@@ -24,7 +24,7 @@ import * as mod_1 from "../primary/a";
     }]
 }
 
-tsgo --p reference/tsconfig.json
+tsc --p reference/tsconfig.json
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/reference/bin/tsconfig.tsbuildinfo] *new* 

@@ -391,11 +391,16 @@ function generateKindCheck(w: CodeWriter, node: NodeType, expression: string, me
     }
 }
 
+function writeNodeCastSafety(w: CodeWriter, node: NodeType) {
+    w.write(`// SAFETY: This case only matches kinds allocated as a ${node.name}, which embeds its Node header at offset zero.`);
+}
+
 function generateAsCast(w: CodeWriter, node: NodeType) {
     const structName = node.name;
     w.write(`func (n *Node) As${structName}() *${structName} {`);
     w.push();
     generateKindCheck(w, node, "n.Kind", `Invalid node cast to ${structName}`);
+    w.write(`// SAFETY: The kind check guarantees n was allocated as a ${structName}, which embeds its Node header at offset zero.`);
     w.write(`return (*${structName})(unsafe.Pointer(n))`);
     w.pop();
     w.write("}");
@@ -447,6 +452,14 @@ function emitNewFactory(
 
     if (kindMember) {
         generateKindCheck(w, node, kindMember.goParamName(), `Invalid node kind for ${structName}`);
+    }
+
+    if (node.name === "ArrowFunction") {
+        w.write("if equalsGreaterThanToken == nil {");
+        w.push();
+        w.write("equalsGreaterThanToken = f.NewToken(KindEqualsGreaterThanToken)");
+        w.pop();
+        w.write("}");
     }
 
     if (node.arena) {
@@ -701,6 +714,7 @@ function generateForEachChildDispatch(w: CodeWriter) {
         if (kinds.length === 0) continue;
         w.write(`case ${kinds.join(", ")}:`);
         w.push();
+        writeNodeCastSafety(w, node);
         w.write(`return (*${node.name})(unsafe.Pointer(n)).ForEachChild(v)`);
         w.pop();
     }
@@ -724,6 +738,7 @@ function generateVisitEachChildDispatch(w: CodeWriter) {
         if (kinds.length === 0) continue;
         w.write(`case ${kinds.join(", ")}:`);
         w.push();
+        writeNodeCastSafety(w, node);
         w.write(`return (*${node.name})(unsafe.Pointer(n)).VisitEachChild(v)`);
         w.pop();
     }
@@ -748,6 +763,7 @@ function generateCloneDispatch(w: CodeWriter) {
     for (const [node, kinds] of canonicalNodesByKind()) {
         w.write(`case ${kinds.join(", ")}:`);
         w.push();
+        writeNodeCastSafety(w, node);
         w.write(`return (*${node.name})(unsafe.Pointer(n)).Clone(f)`);
         w.pop();
     }
@@ -773,6 +789,7 @@ function generateSubtreeFactsDispatch(w: CodeWriter) {
         w.write(`case ${kinds.join(", ")}:`);
         w.push();
         if (transitiveBaseKeys(node).has("CompositeBase")) {
+            writeNodeCastSafety(w, node);
             w.write(`return (*${node.name})(unsafe.Pointer(n)).subtreeFactsWorker(n)`);
         }
         else {
@@ -797,6 +814,7 @@ function generateComputeSubtreeFactsDispatch(w: CodeWriter) {
     for (const [node, kinds] of canonicalNodesByKind()) {
         w.write(`case ${kinds.join(", ")}:`);
         w.push();
+        writeNodeCastSafety(w, node);
         w.write(`return (*${node.name})(unsafe.Pointer(n)).computeSubtreeFacts()`);
         w.pop();
     }
@@ -817,6 +835,7 @@ function generatePropagateSubtreeFactsDispatch(w: CodeWriter) {
     for (const [node, kinds] of canonicalNodesByKind()) {
         w.write(`case ${kinds.join(", ")}:`);
         w.push();
+        writeNodeCastSafety(w, node);
         w.write(`return (*${node.name})(unsafe.Pointer(n)).propagateSubtreeFacts()`);
         w.pop();
     }
@@ -831,6 +850,7 @@ function generatePropagateSubtreeFactsDispatch(w: CodeWriter) {
 }
 
 const NODE_ACCESSORS: { method: string; ret: string; base: string; }[] = [
+    { method: "CaseOrDefaultClauseData", ret: "*CaseOrDefaultClauseBase", base: "CaseOrDefaultClauseBase" },
     { method: "FlowNodeData", ret: "*FlowNodeBase", base: "FlowNodeBase" },
     { method: "DeclarationData", ret: "*DeclarationBase", base: "DeclarationBase" },
     { method: "ExportableData", ret: "*ExportableBase", base: "ExportableBase" },
@@ -895,6 +915,7 @@ function generateNodeAccessorDispatch(w: CodeWriter, method: string, ret: string
     for (const [index, { node, kinds }] of cases.entries()) {
         w.write(`case ${useDispatchTable ? index + 1 : kinds.join(", ")}:`);
         w.push();
+        writeNodeCastSafety(w, node);
         w.write(`return (*${node.name})(unsafe.Pointer(n)).${method}()`);
         w.pop();
     }
@@ -936,6 +957,7 @@ function generateSetModifiersDispatch(w: CodeWriter) {
         if (kinds.length === 0) continue;
         w.write(`case ${kinds.join(", ")}:`);
         w.push();
+        writeNodeCastSafety(w, node);
         w.write(`(*${node.name})(unsafe.Pointer(n)).setModifiers(modifiers)`);
         w.pop();
     }
@@ -974,7 +996,7 @@ function generateVisitEachChild(w: CodeWriter, node: NodeType) {
         if (m.isChild() && type.kind === "list" && type.listKind === "raw") {
             const localName = m.goParamName();
             rawListLocals.set(m.name, localName);
-            w.write(`${localName} := core.SameMap(node.${m.name}, func(n *Node) *Node { return v.visitNode(n) })`);
+            w.write(`${localName} := core.SameMap(node.${m.name}, func(n *Node) *Node { return requiredChild(n, v.visitNode(n)) })`);
         }
     }
 
@@ -992,17 +1014,13 @@ function generateVisitEachChild(w: CodeWriter, node: NodeType) {
         const type = m.type;
         const listKind = m.listKind;
 
-        if (m.visit) {
-            return `v.visit${api.capitalize(m.visit)}(${access})`;
-        }
-        if (listKind === "ModifierList") {
-            return `v.visitModifiers(${access})`;
-        }
-        if (listKind === "NodeList") {
-            return `v.visitNodes(${access})`;
-        }
-        if (type.kind === "primitive" && type.name === "Token") return `v.visitToken(${access})`;
-        return `v.visitNode(${access})`;
+        const visit = m.visit ? `visit${api.capitalize(m.visit)}`
+            : listKind === "ModifierList" ? "visitModifiers"
+            : listKind === "NodeList" ? "visitNodes"
+            : type.kind === "primitive" && type.name === "Token" ? "visitToken"
+            : "visitNode";
+        const result = `v.${visit}(${access})`;
+        return m.optional ? result : `requiredChild(${access}, ${result})`;
     }).join(", ");
 
     w.write(`return v.Factory.Update${node.name}(node, ${args})`);

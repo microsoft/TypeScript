@@ -10,6 +10,11 @@ import {
     repoRoot as ROOT,
     run,
 } from "../gen/utils.mts";
+import generateContentMapper, {
+    readSchema,
+    schemaFile,
+    spanMapEnumMembers,
+} from "./generate-contentmapper.ts";
 import generateOptions from "./generate-options.ts";
 import { options } from "./options.ts";
 import { api } from "./schema.ts";
@@ -42,6 +47,7 @@ export const enumDefs = [
     { name: "ElementFlags", goPrefix: "ElementFlags", goFile: "tsc/internal/checker/types.go", outDir: "packages/typescript/enums" },
     { name: "TypePredicateKind", goPrefix: "TypePredicateKind", goFile: "tsc/internal/checker/types.go", outDir: "packages/typescript/enums" },
     { name: "TypeFormatFlags", goPrefix: "TypeFormatFlags", goFile: "tsc/internal/checker/types.go", outDir: "packages/typescript/enums" },
+    { name: "SymbolFormatFlags", goPrefix: "SymbolFormatFlags", goFile: "tsc/internal/checker/types.go", outDir: "packages/typescript/enums" },
     { name: "DiagnosticCategory", goPrefix: "Category", goFile: "tsc/internal/diagnostics/diagnostics.go", outDir: "packages/typescript/enums" },
     {
         name: "SyntaxKind",
@@ -68,12 +74,22 @@ export const enumDefs = [
     { name: "CaseSensitivity", goPrefix: "Case", goFile: "tsc/internal/tspath/path.go", outDir: "packages/typescript/enums" },
     { name: "TokenFlags", goPrefix: "TokenFlags", goFile: "tsc/internal/ast/tokenflags.go", outDir: "packages/typescript/enums" },
     { name: "DiagnosticDirectivePolicy", goPrefix: "MappedDiagnosticDirectivePolicy", goFile: "tsc/internal/ast/ast.go", outDir: "packages/typescript/enums" },
-    { name: "SpanMapKind", goPrefix: "Kind", goFile: "tsc/internal/spanmap/spanmap.go", outDir: "packages/typescript/enums" },
-    { name: "SpanMapFidelity", goPrefix: "Fidelity", goFile: "tsc/internal/spanmap/spanmap.go", outDir: "packages/typescript/enums" },
-    { name: "SpanMapFeature", goPrefix: "Feature", goFile: "tsc/internal/spanmap/spanmap.go", outDir: "packages/typescript/enums" },
+    ...(["SpanMapKind", "SpanMapFidelity", "SpanMapFeature"] as const).map<EnumDef>(name => ({
+        name,
+        goPrefix: name.slice("SpanMap".length),
+        goFile: "tsc/internal/spanmap/types_generated.go",
+        outDir: "packages/typescript/enums",
+        metadata: {
+            file: schemaFile,
+            get members() {
+                return spanMapEnumMembers(readSchema(), name);
+            },
+        },
+    })),
     { name: "NodeBuilderFlags", goPrefix: "Flags", goFile: "tsc/internal/nodebuilder/types.go", outDir: "packages/typescript/enums" },
     { name: "CompletionItemKind", goPrefix: "CompletionItemKind", goFile: "tsc/internal/lsp/lsproto/lsp_generated.go", outDir: "packages/typescript/enums" },
     { name: "EmitOnly", goPrefix: "Emit", goFile: "tsc/internal/compiler/emitter.go", outDir: "packages/typescript/enums", excludeMembers: ["OnlyBuilderSignature"] },
+    { name: "EmitFlags", goPrefix: "EF", goFile: "tsc/internal/printer/emitflags.go", outDir: "packages/typescript/enums" },
     // String enum: Go stores internal names with a "\xFE" sentinel prefix, but the escaped
     // form sent over the wire uses "__" (see EscapeSymbolName), so map the sentinel accordingly.
     { name: "InternalSymbolName", goPrefix: "InternalSymbolName", goFile: "tsc/internal/ast/symbol.go", outDir: "packages/typescript/enums", stringEnum: true, valueReplacements: { InternalSymbolNamePrefix: "__" } },
@@ -459,7 +475,7 @@ ${entries.join("\n")}
 }
 
 // A generic function call (unlike a constant conversion) forces Go to evaluate the conversion at
-// runtime, truncating uint-backed flags with a leading bitwise-not the same way JS's 32-bit
+// runtime, truncating unsigned flags with a leading bitwise-not the same way JS's 32-bit
 // bitwise operators would, instead of rejecting "constant overflows int32" at compile time.
 func toInt32[T ~int8 | ~int16 | ~int32 | ~int | ~uint8 | ~uint16 | ~uint32 | ~uint64](v T) int32 {
 \treturn int32(v)
@@ -486,6 +502,7 @@ async function evaluateEnumMembers(enumSource: string, enumName: string): Promis
 }
 
 export default async function generateEnums(force = false) {
+    generateContentMapper();
     await generateOptions(force);
     const inputs = [
         import.meta.filename,

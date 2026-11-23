@@ -1,11 +1,15 @@
 indexSignatureTypeCheck2.ts(5,5): error TS2322: Type 'null' is not assignable to type 'IPropertySet'.
+indexSignatureTypeCheck2.ts(10,5): error TS7062: Index signature, which lacks type annotation, implicitly has an 'any' type.
 indexSignatureTypeCheck2.ts(10,8): error TS1019: An index signature parameter cannot have a question mark.
+indexSignatureTypeCheck2.ts(11,5): error TS7062: Index signature, which lacks type annotation, implicitly has an 'any' type.
 indexSignatureTypeCheck2.ts(11,6): error TS1017: An index signature cannot have a rest parameter.
+indexSignatureTypeCheck2.ts(12,5): error TS7062: Index signature, which lacks type annotation, implicitly has an 'any' type.
 indexSignatureTypeCheck2.ts(12,6): error TS1096: An index signature must have exactly one parameter.
+indexSignatureTypeCheck2.ts(13,5): error TS7062: Index signature, which lacks type annotation, implicitly has an 'any' type.
 indexSignatureTypeCheck2.ts(13,6): error TS1096: An index signature must have exactly one parameter.
 
 
-==== indexSignatureTypeCheck2.ts (5 errors) ====
+==== indexSignatureTypeCheck2.ts (9 errors) ====
     class IPropertySet {
         [index: string]: any
     }
@@ -18,15 +22,23 @@ indexSignatureTypeCheck2.ts(13,6): error TS1096: An index signature must have ex
     
     interface indexErrors {
         [p2?: string];
+        ~~~~~~~~~~~~~~
+!!! error TS7062: Index signature, which lacks type annotation, implicitly has an 'any' type.
            ~
 !!! error TS1019: An index signature parameter cannot have a question mark.
         [...p3: any[]];
+        ~~~~~~~~~~~~~~~
+!!! error TS7062: Index signature, which lacks type annotation, implicitly has an 'any' type.
          ~~~
 !!! error TS1017: An index signature cannot have a rest parameter.
         [p4: string, p5?: string];
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS7062: Index signature, which lacks type annotation, implicitly has an 'any' type.
          ~~
 !!! error TS1096: An index signature must have exactly one parameter.
         [p6: string, ...p7: any[]];
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS7062: Index signature, which lacks type annotation, implicitly has an 'any' type.
          ~~
 !!! error TS1096: An index signature must have exactly one parameter.
     }

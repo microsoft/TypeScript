@@ -10,14 +10,18 @@ import { SyntaxKind } from "../../enums/syntaxKind.js";
 import type {
     AssertionExpression,
     BindingElement,
+    BindingPattern,
+    CallExpression,
     CaseClause,
     ComputedPropertyName,
     Decorator,
-    DefaultClause,
     DoStatement,
+    ElementAccessExpression,
     EndOfFile,
     EntityName,
     EnumMember,
+    ExportDeclaration,
+    ExportSpecifier,
     Expression,
     ExpressionStatement,
     ForInStatement,
@@ -25,11 +29,20 @@ import type {
     ForStatement,
     Identifier,
     IfStatement,
+    ImportClause,
+    ImportEqualsDeclaration,
+    ImportSpecifier,
+    JSDoc,
     JsxAttribute,
     JsxExpression,
     JsxSpreadAttribute,
     KeywordSyntaxKind,
     ModifierSyntaxKind,
+    NamedExports,
+    NamedImports,
+    NamespaceExport,
+    NamespaceImport,
+    NonNullExpression,
     ParameterDeclaration,
     PropertyAccessExpression,
     PropertyAssignment,
@@ -57,6 +70,59 @@ export { TokenFlags } from "../../enums/tokenFlags.js";
 
 export * from "./ast.generated.ts";
 export * as factory from "./factory.generated.ts";
+
+declare const autoAccessorBrand: unique symbol;
+export interface AutoAccessorPropertyDeclaration extends PropertyDeclaration {
+    readonly [autoAccessorBrand]: void;
+}
+
+declare const optionalChainBrand: unique symbol;
+export interface CallChain extends CallExpression {
+    readonly [optionalChainBrand]: void;
+}
+
+export interface ElementAccessChain extends ElementAccessExpression {
+    readonly [optionalChainBrand]: void;
+}
+
+declare const emptyBindingPatternBrand: unique symbol;
+export type EmptyBindingPattern = BindingPattern & { readonly [emptyBindingPatternBrand]: void; };
+
+export interface NonNullChain extends NonNullExpression {
+    readonly [optionalChainBrand]: void;
+}
+
+export interface PropertyAccessChain extends PropertyAccessExpression {
+    readonly [optionalChainBrand]: void;
+}
+
+export type OptionalChain = PropertyAccessChain | ElementAccessChain | CallChain | NonNullChain;
+
+declare const parameterPropertyBrand: unique symbol;
+export interface ParameterPropertyDeclaration extends ParameterDeclaration {
+    readonly [parameterPropertyBrand]: void;
+}
+
+export type TypeOnlyImportDeclaration =
+    | ImportClause & { readonly phaseModifier: SyntaxKind.TypeKeyword; }
+    | ImportEqualsDeclaration & { readonly isTypeOnly: true; }
+    | NamespaceImport & { readonly parent: ImportClause & { readonly phaseModifier: SyntaxKind.TypeKeyword; }; }
+    | ImportSpecifier
+        & (
+            | { readonly isTypeOnly: true; }
+            | { readonly parent: NamedImports & { readonly parent: ImportClause & { readonly phaseModifier: SyntaxKind.TypeKeyword; }; }; }
+        );
+
+export type TypeOnlyExportDeclaration =
+    | ExportSpecifier
+        & (
+            | { readonly isTypeOnly: true; }
+            | { readonly parent: NamedExports & { readonly parent: ExportDeclaration & { readonly isTypeOnly: true; }; }; }
+        )
+    | ExportDeclaration & { readonly isTypeOnly: true; readonly moduleSpecifier: Expression; readonly exportClause?: undefined; }
+    | NamespaceExport & { readonly parent: ExportDeclaration & { readonly isTypeOnly: true; }; };
+
+export type TypeOnlyAliasDeclaration = TypeOnlyImportDeclaration | TypeOnlyExportDeclaration;
 
 // ── Core types ──
 
@@ -139,7 +205,7 @@ export interface Node extends ReadonlyTextRange {
     readonly kind: SyntaxKind;
     readonly flags: NodeFlags;
     readonly parent: Node;
-    readonly jsDoc?: readonly Node[] | undefined;
+    readonly jsDoc?: readonly JSDoc[] | undefined;
     childrenIter<TNext = void>(): Generator<Node, TNext | undefined, TNext>;
     forEachChild<T>(visitor: (node: Node) => T, visitArray?: (nodes: NodeArray<Node>) => T): T | undefined;
     getSourceFile(): SourceFile;
@@ -265,7 +331,6 @@ export type HasExpression =
     | WithStatement
     | SwitchStatement
     | CaseClause
-    | DefaultClause
     | ThrowStatement
     | AssertionExpression
     | TemplateSpan

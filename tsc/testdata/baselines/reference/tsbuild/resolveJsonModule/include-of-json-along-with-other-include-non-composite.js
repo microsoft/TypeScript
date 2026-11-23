@@ -23,7 +23,7 @@ export default hello.hello
     "include": [ "src/**/*", "src/**/*.json" ],
 }
 
-tsgo --b project --v --explainFiles --listEmittedFiles
+tsc --b project --v --explainFiles --listEmittedFiles
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 

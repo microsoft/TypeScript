@@ -1,0 +1,35 @@
+//// [tests/cases/compiler/inferenceFromUnionOfTypeParameterAndPromiseLike.ts] ////
+
+=== inferenceFromUnionOfTypeParameterAndPromiseLike.ts ===
+// Inferring from Promise<string> to PromiseLike<V> | V must infer V as string,
+// whichever order the union's members are in.
+
+declare function props<K, V>(x: PromiseLike<Map<K, PromiseLike<V> | V>>): Promise<Map<K, V>>;
+>props : Symbol(props, Decl(inferenceFromUnionOfTypeParameterAndPromiseLike.ts, 0, 0))
+>K : Symbol(K, Decl(inferenceFromUnionOfTypeParameterAndPromiseLike.ts, 3, 23))
+>V : Symbol(V, Decl(inferenceFromUnionOfTypeParameterAndPromiseLike.ts, 3, 25))
+>x : Symbol(x, Decl(inferenceFromUnionOfTypeParameterAndPromiseLike.ts, 3, 29))
+>PromiseLike : Symbol(PromiseLike, Decl(lib.es5.d.ts, --, --))
+>Map : Symbol(Map, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2026.collection.d.ts, --, --))
+>K : Symbol(K, Decl(inferenceFromUnionOfTypeParameterAndPromiseLike.ts, 3, 23))
+>PromiseLike : Symbol(PromiseLike, Decl(lib.es5.d.ts, --, --))
+>V : Symbol(V, Decl(inferenceFromUnionOfTypeParameterAndPromiseLike.ts, 3, 25))
+>V : Symbol(V, Decl(inferenceFromUnionOfTypeParameterAndPromiseLike.ts, 3, 25))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Map : Symbol(Map, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2026.collection.d.ts, --, --))
+>K : Symbol(K, Decl(inferenceFromUnionOfTypeParameterAndPromiseLike.ts, 3, 23))
+>V : Symbol(V, Decl(inferenceFromUnionOfTypeParameterAndPromiseLike.ts, 3, 25))
+
+declare const input: Promise<Map<number, Promise<string>>>;
+>input : Symbol(input, Decl(inferenceFromUnionOfTypeParameterAndPromiseLike.ts, 4, 13))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Map : Symbol(Map, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2026.collection.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+
+const out: Promise<Map<number, string>> = props(input);
+>out : Symbol(out, Decl(inferenceFromUnionOfTypeParameterAndPromiseLike.ts, 5, 5))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Map : Symbol(Map, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2026.collection.d.ts, --, --))
+>props : Symbol(props, Decl(inferenceFromUnionOfTypeParameterAndPromiseLike.ts, 0, 0))
+>input : Symbol(input, Decl(inferenceFromUnionOfTypeParameterAndPromiseLike.ts, 4, 13))
+

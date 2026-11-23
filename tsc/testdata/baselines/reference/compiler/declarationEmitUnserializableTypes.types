@@ -96,3 +96,223 @@ export function local(): Recursive {
 >inner : () => any
 }
 
+=== recursiveMappedResolve.ts ===
+// https://github.com/microsoft/TypeScript/issues/64656
+type show<t> = { [k in keyof t]: t[k] } & unknown;
+>show : { [k in keyof t]: t[k]; }
+
+type resolve<$, k extends keyof $> = show<{
+>resolve : { [p in keyof $[k]]: $[k][p] extends "ref" ? any : $[k][p]; } extends infer T ? { [k_1 in keyof T]: T[k_1]; } : never
+
+    [p in keyof $[k]]: $[k][p] extends "ref" ? resolve<$, k> : $[k][p]
+}>;
+declare const mod: <$>() => { [k in keyof $]: resolve<$, k> };
+>mod : <$>() => { [k in keyof $]: resolve<$, k>; }
+
+export const n = mod<{ Node: { value: number; next: "ref" } }>();
+>n : { Node: { value: number; next: any; }; }
+>mod<{ Node: { value: number; next: "ref" } }>() : { Node: { value: number; next: any; }; }
+>mod : <$>() => { [k in keyof $]: resolve<$, k>; }
+>Node : { value: number; next: "ref"; }
+>value : number
+>next : "ref"
+
+=== yieldableErrors.ts ===
+// https://github.com/microsoft/TypeScript/issues/64656
+export interface Effect<A, E> {
+    readonly variance: (_: never) => E;
+>variance : (_: never) => E
+>_ : never
+}
+export declare function YieldableError<Self>(): new () => Effect<never, Self> & { readonly _tag: string };
+>YieldableError : <Self>() => new () => Effect<never, Self> & { readonly _tag: string; }
+>_tag : string
+
+class NotFound extends YieldableError<NotFound>() {}
+>NotFound : NotFound
+>YieldableError<NotFound>() : Effect<never, NotFound> & { readonly _tag: string; }
+>YieldableError : <Self>() => new () => Effect<never, Self> & { readonly _tag: string; }
+
+export const endpoint = { error: NotFound };
+>endpoint : { error: typeof NotFound; }
+>{ error: NotFound } : { error: typeof NotFound; }
+>error : typeof NotFound
+>NotFound : typeof NotFound
+
+=== yieldableClient.ts ===
+import { endpoint } from "./yieldableErrors";
+>endpoint : { error: typeof NotFound; }
+
+declare function client<T>(t: T): { readonly call: () => T };
+>client : <T>(t: T) => { readonly call: () => T; }
+>t : T
+>call : () => T
+
+export const api = client(endpoint);
+>api : { readonly call: () => { error: typeof NotFound; }; }
+>client(endpoint) : { readonly call: () => { error: typeof NotFound; }; }
+>client : <T>(t: T) => { readonly call: () => T; }
+>endpoint : { error: typeof NotFound; }
+
+=== selfGetter.ts ===
+// https://github.com/microsoft/TypeScript/issues/65331
+export const x = {
+>x : { data: number; readonly self: any; }
+>{    data: 1,    get self() {        return x;    },} : { data: number; readonly self: { data: number; readonly self: any; }; }
+
+    data: 1,
+>data : number
+>1 : 1
+
+    get self() {
+>self : { data: number; readonly self: any; }
+
+        return x;
+>x : { data: number; readonly self: any; }
+
+    },
+};
+
+=== deepMapped.ts ===
+// https://github.com/kestra-io/kestra/pull/22375
+type Deep<T> = T extends object ? { [K in keyof T]: Deep<T[K]> } : T;
+>Deep : Deep<T>
+
+declare function wrap<T>(value: T): { value: Deep<T> };
+>wrap : <T>(value: T) => { value: Deep<T>; }
+>value : T
+>value : Deep<T>
+
+export type Node = { child?: Node };
+>Node : Node
+>child : Node | undefined
+
+export function make() {
+>make : () => { value: { child?: any | undefined; }; }
+
+    return wrap<Node>({});
+>wrap<Node>({}) : { value: { child?: any | undefined; }; }
+>wrap : <T>(value: T) => { value: Deep<T>; }
+>{} : {}
+}
+
+=== mappable.ts ===
+// https://github.com/ddd-ts/monorepo/pull/98
+declare function map<T, U>(iterable: AsyncIterable<T>, fn: (value: T) => U): AsyncGenerator<Awaited<U>, void, unknown>;
+>map : <T, U>(iterable: AsyncIterable<T>, fn: (value: T) => U) => AsyncGenerator<Awaited<U>, void, unknown>
+>iterable : AsyncIterable<T>
+>fn : (value: T) => U
+>value : T
+
+export function mappable<T extends AsyncIterable<any>, U>(iterable: T) {
+>mappable : <T extends AsyncIterable<any>, U>(iterable: T) => T & { map(fn: (value: T extends AsyncIterable<infer V> ? V : never) => U): AsyncGenerator<Awaited<U>, void, unknown> & { map(fn: (value: unknown) => unknown): AsyncGenerator<Awaited<U>, void, unknown> & any; }; }
+>iterable : T
+
+    return Object.assign(iterable, {
+>Object.assign(iterable, {        map(fn: (value: T extends AsyncIterable<infer V> ? V : never) => U) {            return mappable(map(iterable, fn));        },    }) : T & { map(fn: (value: T extends AsyncIterable<infer V> ? V : never) => U): AsyncGenerator<Awaited<U>, void, unknown> & { map(fn: (value: unknown) => unknown): AsyncGenerator<Awaited<U>, void, unknown> & any; }; }
+>Object.assign : { <T_1 extends {}, U_1>(target: T_1, source: U_1): T_1 & U_1; <T_1 extends {}, U_1, V>(target: T_1, source1: U_1, source2: V): T_1 & U_1 & V; <T_1 extends {}, U_1, V, W>(target: T_1, source1: U_1, source2: V, source3: W): T_1 & U_1 & V & W; (target: object, ...sources: any[]): any; }
+>Object : ObjectConstructor
+>assign : { <T_1 extends {}, U_1>(target: T_1, source: U_1): T_1 & U_1; <T_1 extends {}, U_1, V>(target: T_1, source1: U_1, source2: V): T_1 & U_1 & V; <T_1 extends {}, U_1, V, W>(target: T_1, source1: U_1, source2: V, source3: W): T_1 & U_1 & V & W; (target: object, ...sources: any[]): any; }
+>iterable : T
+>{        map(fn: (value: T extends AsyncIterable<infer V> ? V : never) => U) {            return mappable(map(iterable, fn));        },    } : { map(fn: (value: T extends AsyncIterable<infer V> ? V : never) => U): AsyncGenerator<Awaited<U>, void, unknown> & { map(fn: (value: unknown) => unknown): AsyncGenerator<Awaited<U>, void, unknown> & any; }; }
+
+        map(fn: (value: T extends AsyncIterable<infer V> ? V : never) => U) {
+>map : (fn: (value: T extends AsyncIterable<infer V> ? V : never) => U) => AsyncGenerator<Awaited<U>, void, unknown> & { map(fn: (value: unknown) => unknown): AsyncGenerator<Awaited<U>, void, unknown> & any; }
+>fn : (value: T extends AsyncIterable<infer V> ? V : never) => U
+>value : T extends AsyncIterable<infer V> ? V : never
+
+            return mappable(map(iterable, fn));
+>mappable(map(iterable, fn)) : AsyncGenerator<Awaited<U>, void, unknown> & { map(fn: (value: unknown) => unknown): AsyncGenerator<unknown, void, unknown> & { map(fn: (value: unknown) => unknown): AsyncGenerator<unknown, void, unknown> & any; }; }
+>mappable : <T extends AsyncIterable<any>, U>(iterable: T) => T & { map(fn: (value: T extends AsyncIterable<infer V> ? V : never) => U): AsyncGenerator<Awaited<U>, void, unknown> & { map(fn: (value: unknown) => unknown): AsyncGenerator<Awaited<U>, void, unknown> & any; }; }
+>map(iterable, fn) : AsyncGenerator<Awaited<U>, void, unknown>
+>map : <T_1, U_1>(iterable: AsyncIterable<T_1>, fn: (value: T_1) => U_1) => AsyncGenerator<Awaited<U_1>, void, unknown>
+>iterable : T
+>fn : (value: T extends AsyncIterable<infer V> ? V : never) => U
+
+        },
+    });
+}
+
+=== either.ts ===
+// https://github.com/ddd-ts/monorepo/pull/98
+export const Either = <Inline>() => {
+>Either : <Inline>() => typeof $Either
+><Inline>() => {    class $Either {        constructor(public value: Inline) {}        static deserialize<T extends typeof $Either>(this: T, value: Inline): InstanceType<T> {            return new this(this.$deserialize(value)) as InstanceType<T>;        }        static $deserialize<T extends typeof $Either>(this: T, value: Inline): Inline {            return value;        }    }    return $Either;} : <Inline>() => typeof $Either
+
+    class $Either {
+>$Either : $Either
+
+        constructor(public value: Inline) {}
+>value : Inline
+
+        static deserialize<T extends typeof $Either>(this: T, value: Inline): InstanceType<T> {
+>deserialize : <T extends typeof $Either>(this: T, value: Inline) => InstanceType<T>
+>$Either : typeof $Either
+>this : T
+>value : Inline
+
+            return new this(this.$deserialize(value)) as InstanceType<T>;
+>new this(this.$deserialize(value)) as InstanceType<T> : InstanceType<T>
+>new this(this.$deserialize(value)) : $Either
+>this : T
+>this.$deserialize(value) : Inline
+>this.$deserialize : <T_1 extends typeof $Either>(this: T_1, value: Inline) => Inline
+>this : T
+>$deserialize : <T_1 extends typeof $Either>(this: T_1, value: Inline) => Inline
+>value : Inline
+        }
+        static $deserialize<T extends typeof $Either>(this: T, value: Inline): Inline {
+>$deserialize : <T extends typeof $Either>(this: T, value: Inline) => Inline
+>$Either : typeof $Either
+>this : T
+>value : Inline
+
+            return value;
+>value : Inline
+        }
+    }
+    return $Either;
+>$Either : typeof $Either
+
+};
+export class StringOrNumber extends Either<string | number>() {}
+>StringOrNumber : StringOrNumber
+>Either<string | number>() : Either.$Either
+>Either : <Inline>() => typeof $Either
+
+=== expand.ts ===
+// https://github.com/ddd-ts/monorepo/pull/98
+type Expand<T> = T extends { serialize(): any }
+>Expand : Expand<T>
+>serialize : () => any
+
+    ? T
+    : T extends Date
+        ? T
+        : T extends Record<string, any>
+            ? { [key in keyof T]: Expand<T[key]> }
+            : T;
+interface TreeNode {
+    name: string;
+>name : string
+
+    children?: TreeNode[];
+>children : TreeNode[] | undefined
+}
+declare function Dict<S>(): {
+>Dict : <S>() => { new (value: S): { serialize(): Expand<S>; }; deserialize(value: Expand<S>): S; }
+
+    new (value: S): { serialize(): Expand<S> };
+>value : S
+>serialize : () => Expand<S>
+
+    deserialize(value: Expand<S>): S;
+>deserialize : (value: Expand<S>) => S
+>value : Expand<S>
+
+};
+export class Tree extends Dict<TreeNode>() {}
+>Tree : Tree
+>Dict<TreeNode>() : { serialize(): { name: string; children?: any[] | undefined; }; }
+>Dict : <S>() => { new (value: S): { serialize(): Expand<S>; }; deserialize(value: Expand<S>): S; }
+

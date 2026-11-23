@@ -107,7 +107,7 @@ export function goInputs(): string[] {
     return [import.meta.filename, ...globInputs(["go.work", "go.work.sum", "{tsc,tools}/go.{mod,sum}"])];
 }
 
-export function resolveForce(force?: boolean, environment = process.env.TSGO_HEREBY_FORCE): boolean {
+export function resolveForce(force?: boolean, environment = process.env.TS_HEREBY_FORCE): boolean {
     return force ?? /^(1|true|yes|on)$/i.test(environment ?? "");
 }
 

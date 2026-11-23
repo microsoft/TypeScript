@@ -16,7 +16,7 @@ export const main = 23;
     "references": [{ "path": "../include" }],
 }
 
-tsgo --b src --verbose
+tsc --b src --verbose
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 

@@ -103,7 +103,7 @@ export type MyNominal = Nominal<string, 'MyNominal'>;
     "include": [],
 }
 
-tsgo -b --verbose
+tsc -b --verbose
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 

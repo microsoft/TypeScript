@@ -38,7 +38,7 @@ export type TheStr = string;
     },
 }
 
-tsgo -b packages/pkg1 --verbose -w --traceResolution
+tsc -b packages/pkg1 --verbose -w --traceResolution
 ExitStatus:: Success
 Output::
 [2J[3J[H[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...

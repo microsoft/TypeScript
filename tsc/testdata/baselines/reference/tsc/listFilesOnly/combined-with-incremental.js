@@ -6,7 +6,7 @@ export const x = 1;
 //// [/home/src/workspaces/project/tsconfig.json] *new* 
 {}
 
-tsgo --incremental --listFilesOnly
+tsc --incremental --listFilesOnly
 ExitStatus:: Success
 Output::
 /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
@@ -44,7 +44,7 @@ Signatures::
 
 Edit [0]:: incremental actual build
 
-tsgo --incremental
+tsc --incremental
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/test.js] *new* 
@@ -99,7 +99,7 @@ Signatures::
 
 Edit [1]:: no change
 
-tsgo --incremental --listFilesOnly
+tsc --incremental --listFilesOnly
 ExitStatus:: Success
 Output::
 /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
@@ -112,7 +112,7 @@ Signatures::
 
 Edit [2]:: incremental should not build
 
-tsgo --incremental
+tsc --incremental
 ExitStatus:: Success
 Output::
 

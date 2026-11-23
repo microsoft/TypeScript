@@ -16,7 +16,7 @@ export const d = class { private p = 10; };
     }
 }
 
-tsgo -b -v --noEmit
+tsc -b -v --noEmit
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -150,7 +150,7 @@ Signatures::
 
 Edit [0]:: no change
 
-tsgo -b -v --noEmit
+tsc -b -v --noEmit
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -163,7 +163,7 @@ Output::
 
 Edit [1]:: With declaration enabled noEmit - Should report errors
 
-tsgo -b -v --noEmit --declaration
+tsc -b -v --noEmit --declaration
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -402,7 +402,7 @@ Signatures::
 
 Edit [2]:: With declaration and declarationMap noEmit - Should report errors
 
-tsgo -b -v --noEmit --declaration --declarationMap
+tsc -b -v --noEmit --declaration --declarationMap
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -642,7 +642,7 @@ Signatures::
 
 Edit [3]:: no change
 
-tsgo -b -v --noEmit
+tsc -b -v --noEmit
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -655,7 +655,7 @@ Output::
 
 Edit [4]:: Dts Emit with error
 
-tsgo -b -v --declaration
+tsc -b -v --declaration
 ExitStatus:: DiagnosticsPresent_OutputsSkipped
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -889,7 +889,7 @@ Edit [5]:: Fix the error
 //// [/home/src/projects/project/a.ts] *modified* 
 export const a = class { public p = 10; };
 
-tsgo -b -v --noEmit
+tsc -b -v --noEmit
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -1048,7 +1048,7 @@ Signatures::
 
 Edit [6]:: With declaration enabled noEmit
 
-tsgo -b -v --noEmit --declaration
+tsc -b -v --noEmit --declaration
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -1260,7 +1260,7 @@ Signatures::
 
 Edit [7]:: With declaration and declarationMap noEmit
 
-tsgo -b -v --noEmit --declaration --declarationMap
+tsc -b -v --noEmit --declaration --declarationMap
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -1475,7 +1475,7 @@ Edit [8]:: Fix the another
 //// [/home/src/projects/project/c.ts] *modified* 
 export const c = class { public p = 10; };
 
-tsgo -b -v --noEmit --declaration --declarationMap
+tsc -b -v --noEmit --declaration --declarationMap
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 

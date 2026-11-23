@@ -8,6 +8,7 @@ import (
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
+	"github.com/microsoft/TypeScript/tsc/internal/contentmapper"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/debug"
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
@@ -286,7 +287,7 @@ func (tx *DeclarationTransformer) visitSourceFile(node *ast.SourceFile) *ast.Nod
 	tx.needsScopeFixMarker = false
 	tx.resultHasScopeMarker = false
 	tx.enclosingDeclaration = node.AsNode()
-	tx.state.getSymbolAccessibilityDiagnostic = throwDiagnostic
+	tx.state.diagnosticContext = symbolAccessibilityDiagnosticContext{}
 	tx.resultHasExternalModuleIndicator = false
 	tx.suppressNewDiagnosticContexts = false
 	tx.state.lateMarkedStatements = make([]*ast.Node, 0)
@@ -543,26 +544,36 @@ func (tx *DeclarationTransformer) getTypeReferences() (result []*ast.FileReferen
 	return result
 }
 
-func (tx *DeclarationTransformer) setupDiagnosticContext(input *ast.Node) (bool, func()) {
+type savedDiagnosticContext struct {
+	diagnosticContext             symbolAccessibilityDiagnosticContext
+	errorNameNode                 *ast.Node
+	suppressNewDiagnosticContexts bool
+}
+
+func (tx *DeclarationTransformer) setupDiagnosticContext(input *ast.Node) (bool, savedDiagnosticContext) {
 	canProduceDiagnostic := canProduceDiagnostics(input)
-	oldWithinObjectLiteralType := tx.suppressNewDiagnosticContexts
+	saved := savedDiagnosticContext{
+		diagnosticContext:             tx.state.diagnosticContext,
+		errorNameNode:                 tx.state.errorNameNode,
+		suppressNewDiagnosticContexts: tx.suppressNewDiagnosticContexts,
+	}
 	shouldEnterSuppressNewDiagnosticsContextContext := (input.Kind == ast.KindTypeLiteral || input.Kind == ast.KindMappedType) && !(input.Parent.Kind == ast.KindTypeAliasDeclaration || input.Parent.Kind == ast.KindJSTypeAliasDeclaration)
 
-	oldDiag := tx.state.getSymbolAccessibilityDiagnostic
 	if canProduceDiagnostic && !tx.suppressNewDiagnosticContexts {
-		tx.state.getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(input)
+		tx.state.diagnosticContext = diagnosticContextForNode(input)
 	}
-	oldName := tx.state.errorNameNode
 
 	if shouldEnterSuppressNewDiagnosticsContextContext {
 		tx.suppressNewDiagnosticContexts = true
 	}
 
-	return canProduceDiagnostic, func() {
-		tx.state.getSymbolAccessibilityDiagnostic = oldDiag
-		tx.state.errorNameNode = oldName
-		tx.suppressNewDiagnosticContexts = oldWithinObjectLiteralType
-	}
+	return canProduceDiagnostic, saved
+}
+
+func (tx *DeclarationTransformer) restoreDiagnosticContext(saved savedDiagnosticContext) {
+	tx.state.diagnosticContext = saved.diagnosticContext
+	tx.state.errorNameNode = saved.errorNameNode
+	tx.suppressNewDiagnosticContexts = saved.suppressNewDiagnosticContexts
 }
 
 func (tx *DeclarationTransformer) visitDeclarationSubtree(input *ast.Node) *ast.Node {
@@ -611,8 +622,8 @@ func (tx *DeclarationTransformer) visitDeclarationSubtree(input *ast.Node) *ast.
 		tx.enclosingDeclaration = input
 	}
 
-	canProduceDiagnostic, cleanupDiagnosticContext := tx.setupDiagnosticContext(input)
-	defer cleanupDiagnosticContext()
+	canProduceDiagnostic, savedDiag := tx.setupDiagnosticContext(input)
+	defer tx.restoreDiagnosticContext(savedDiag)
 
 	var result *ast.Node
 
@@ -701,16 +712,16 @@ func (tx *DeclarationTransformer) visitDeclarationSubtree(input *ast.Node) *ast.
 }
 
 func (tx *DeclarationTransformer) checkName(node *ast.Node) {
-	oldDiag := tx.state.getSymbolAccessibilityDiagnostic
+	oldDiag := tx.state.diagnosticContext
 	if !tx.suppressNewDiagnosticContexts {
-		tx.state.getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNodeName(node)
+		tx.state.diagnosticContext = diagnosticContextForNodeName(node)
 	}
 	tx.state.errorNameNode = node.Name()
 	debug.Assert(ast.HasDynamicName(node)) // Should only be called with dynamic names
 	entityName := node.Name().Expression()
 	tx.checkEntityNameVisibility(entityName, tx.enclosingDeclaration)
 	if !tx.suppressNewDiagnosticContexts {
-		tx.state.getSymbolAccessibilityDiagnostic = oldDiag
+		tx.state.diagnosticContext = oldDiag
 	}
 	tx.state.errorNameNode = nil
 }
@@ -835,7 +846,14 @@ func (tx *DeclarationTransformer) transformTypeParameterDeclaration(input *ast.T
 
 func (tx *DeclarationTransformer) transformVariableDeclaration(input *ast.VariableDeclaration) *ast.Node {
 	if tx.state.currentSourceFile.CommonJSModuleIndicator != nil && ast.IsVariableDeclarationInitializedToRequire(input.AsNode()) {
-		return tx.transformCjsRequireVariableDeclaration(input)
+		if canTransformCjsRequireToImport(input.AsNode()) {
+			return tx.transformCjsRequireVariableDeclaration(input)
+		}
+		// bindings with dynamic property names can't be named imports, so declare those and any nested or rest
+		// bindings with their types; the remaining bindings are imported by transformVariableStatement
+		return tx.recreateBindingElements(core.Filter(input.Name().AsBindingPattern().Elements.Nodes, func(elem *ast.Node) bool {
+			return !isCjsRequireImportableBinding(elem)
+		}))
 	}
 	if ast.IsBindingPattern(input.Name()) && hasAnyBindingInitializers(input.Name().AsBindingPattern()) {
 		return tx.recreateBindingPattern(input.Name().AsBindingPattern())
@@ -867,6 +885,24 @@ func hasAnyBindingInitializers(bindingPattern *ast.BindingPattern) bool {
 	return false
 }
 
+func canTransformCjsRequireToImport(decl *ast.Node) bool {
+	name := decl.Name()
+	if !ast.IsObjectBindingPattern(name) {
+		return true
+	}
+	for _, elem := range name.AsBindingPattern().Elements.Nodes {
+		if propertyName := elem.PropertyName(); propertyName != nil && ast.IsDynamicName(propertyName) {
+			return false
+		}
+	}
+	return true
+}
+
+func isCjsRequireImportableBinding(elem *ast.Node) bool {
+	propertyName := elem.PropertyName()
+	return ast.IsIdentifier(elem.Name()) && elem.AsBindingElement().DotDotDotToken == nil && (propertyName == nil || !ast.IsDynamicName(propertyName))
+}
+
 func (tx *DeclarationTransformer) transformCjsRequireVariableDeclaration(input *ast.VariableDeclaration) *ast.Node {
 	specifier := tx.rewriteModuleSpecifier(input.AsNode(), input.Initializer.AsCallExpression().Arguments.Nodes[0])
 	if ast.IsIdentifier(input.Name()) {
@@ -879,12 +915,33 @@ func (tx *DeclarationTransformer) transformCjsRequireVariableDeclaration(input *
 
 		// `const {x, y: z} = require("something")` -> `import {x, y as z} from "something"`
 		b := input.Name().AsBindingPattern()
+		importsAllBindings := canTransformCjsRequireToImport(input.AsNode())
 		var importSpecifiers []*ast.Node
 		for _, elem := range b.Elements.Nodes {
 			if !ast.IsIdentifier(elem.Name()) {
 				continue // nested destructuring, bail
 			}
-			importSpecifiers = append(importSpecifiers, tx.Factory().NewImportSpecifier(false, elem.PropertyName(), elem.Name()))
+			if !importsAllBindings && !isCjsRequireImportableBinding(elem) {
+				continue // declared as a variable by transformVariableDeclaration
+			}
+			propertyName := elem.PropertyName()
+			if propertyName != nil && !ast.IsIdentifier(propertyName) && !ast.IsStringLiteral(propertyName) {
+				// numeric and literal computed keys aren't valid import names, so normalize them to an identifier or string
+				text := ast.GetPropertyNameForPropertyNameNode(propertyName)
+				if ast.IsComputedPropertyName(propertyName) && ast.IsSignedNumericLiteral(propertyName.Expression()) {
+					// the property key is the string form of the number, so `[-0]` names property "0"
+					text = jsnum.FromString(text).String()
+				}
+				if scanner.IsIdentifierText(text, core.LanguageVariantStandard) {
+					propertyName = tx.Factory().NewIdentifier(text)
+				} else {
+					propertyName = tx.Factory().NewStringLiteral(text, ast.TokenFlagsNone)
+				}
+			}
+			importSpecifiers = append(importSpecifiers, tx.Factory().NewImportSpecifier(false, propertyName, elem.Name()))
+		}
+		if !importsAllBindings && len(importSpecifiers) == 0 {
+			return nil
 		}
 		return tx.Factory().NewImportDeclaration(
 			nil,
@@ -900,8 +957,12 @@ func (tx *DeclarationTransformer) transformCjsRequireVariableDeclaration(input *
 }
 
 func (tx *DeclarationTransformer) recreateBindingPattern(input *ast.BindingPattern) *ast.Node {
+	return tx.recreateBindingElements(input.Elements.Nodes)
+}
+
+func (tx *DeclarationTransformer) recreateBindingElements(elements []*ast.Node) *ast.Node {
 	var results []*ast.Node
-	for _, elem := range input.Elements.Nodes {
+	for _, elem := range elements {
 		result := tx.recreateBindingElement(elem.AsBindingElement())
 		if result == nil {
 			continue
@@ -1231,12 +1292,12 @@ func (tx *DeclarationTransformer) transformExportAssignment(input *ast.Node, ass
 		return exportAssignment
 	}
 
-	tx.state.getSymbolAccessibilityDiagnostic = func(_ printer.SymbolAccessibilityResult) *SymbolAccessibilityDiagnostic {
+	tx.state.diagnosticContext = customDiagnosticContext(func(_ printer.SymbolAccessibilityResult) *SymbolAccessibilityDiagnostic {
 		return &SymbolAccessibilityDiagnostic{
 			diagnosticMessage: diagnostics.Default_export_of_the_module_has_or_is_using_private_name_0,
 			errorNode:         input,
 		}
-	}
+	})
 	tx.tracker.PushErrorFallbackNode(assignment)
 
 	// Check if the expression is a class expression - emit as a class declaration + export assignment
@@ -1469,12 +1530,12 @@ func (tx *DeclarationTransformer) transformCommonJSExportWorker(input *ast.Node,
 		if name.Text() == "default" {
 			// const _default: Type; export default _default;
 			newId := tx.Factory().NewUniqueNameEx("_default", printer.AutoGenerateOptions{Flags: printer.GeneratedIdentifierFlagsOptimistic})
-			tx.state.getSymbolAccessibilityDiagnostic = func(_ printer.SymbolAccessibilityResult) *SymbolAccessibilityDiagnostic {
+			tx.state.diagnosticContext = customDiagnosticContext(func(_ printer.SymbolAccessibilityResult) *SymbolAccessibilityDiagnostic {
 				return &SymbolAccessibilityDiagnostic{
 					diagnosticMessage: diagnostics.Default_export_of_the_module_has_or_is_using_private_name_0,
 					errorNode:         input,
 				}
-			}
+			})
 			tx.tracker.PushErrorFallbackNode(input)
 			type_ := tx.ensureType(input, false)
 			varDecl := tx.Factory().NewVariableDeclaration(newId, nil, type_, nil)
@@ -1510,12 +1571,12 @@ func (tx *DeclarationTransformer) transformCommonJSExportWorker(input *ast.Node,
 	}
 	// const _exported: Type; export {_exported as "name"};
 	newId := tx.Factory().NewUniqueNameEx("_exported", printer.AutoGenerateOptions{Flags: printer.GeneratedIdentifierFlagsOptimistic})
-	tx.state.getSymbolAccessibilityDiagnostic = func(_ printer.SymbolAccessibilityResult) *SymbolAccessibilityDiagnostic {
+	tx.state.diagnosticContext = customDiagnosticContext(func(_ printer.SymbolAccessibilityResult) *SymbolAccessibilityDiagnostic {
 		return &SymbolAccessibilityDiagnostic{
 			diagnosticMessage: diagnostics.Default_export_of_the_module_has_or_is_using_private_name_0,
 			errorNode:         input,
 		}
-	}
+	})
 	tx.tracker.PushErrorFallbackNode(input)
 	type_ := tx.ensureType(input, false)
 	varDecl := tx.Factory().NewVariableDeclaration(newId, nil, type_, nil)
@@ -1609,6 +1670,7 @@ func (tx *DeclarationTransformer) rewriteModuleSpecifier(parent *ast.Node, input
 		specifier := tspath.ToModuleSpecifier(input.Text())
 		rewrites := tx.host.ContentMapperExtensionRewrites()
 		caseSensitivity := tx.host.CaseSensitivity()
+		rewrites = contentmapper.RewritesForImport(rewrites, tx.state.currentSourceFile.FileName(), specifier, tx.host.ContentMapperExtensionForFileName, caseSensitivity)
 		if !specifier.ShouldRewriteExtension(rewrites, caseSensitivity) {
 			return input
 		}
@@ -1683,11 +1745,11 @@ func (tx *DeclarationTransformer) ensureType(node *ast.Node, ignorePrivate bool)
 
 	oldErrorNameNode := tx.state.errorNameNode
 	tx.state.errorNameNode = node.Name()
-	var oldDiag GetSymbolAccessibilityDiagnostic
+	var oldDiag symbolAccessibilityDiagnosticContext
 	if !tx.suppressNewDiagnosticContexts {
-		oldDiag = tx.state.getSymbolAccessibilityDiagnostic
+		oldDiag = tx.state.diagnosticContext
 		if canProduceDiagnostics(node) {
-			tx.state.getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(node)
+			tx.state.diagnosticContext = diagnosticContextForNode(node)
 		}
 	}
 	var typeNode *ast.Node
@@ -1706,7 +1768,7 @@ func (tx *DeclarationTransformer) ensureType(node *ast.Node, ignorePrivate bool)
 
 	tx.state.errorNameNode = oldErrorNameNode
 	if !tx.suppressNewDiagnosticContexts {
-		tx.state.getSymbolAccessibilityDiagnostic = oldDiag
+		tx.state.diagnosticContext = oldDiag
 	}
 	if typeNode == nil {
 		return tx.Factory().NewKeywordTypeNode(ast.KindAnyKeyword)
@@ -1738,9 +1800,12 @@ func (tx *DeclarationTransformer) transformTopLevelDeclaration(input *ast.Node) 
 	if input.Kind == ast.KindImportDeclaration || input.Kind == ast.KindJSImportDeclaration {
 		res := tx.transformImportDeclaration(input.AsImportDeclaration())
 		if res != nil && res.Kind != ast.KindImportDeclaration {
-			res := res.Clone(tx.Factory())
-			res.Kind = ast.KindImportDeclaration
-			return res
+			decl := res.AsImportDeclaration()
+			replacement := tx.Factory().NewImportDeclaration(decl.Modifiers(), decl.ImportClause, decl.ModuleSpecifier, decl.Attributes)
+			replacement.Flags = res.Flags
+			replacement.Loc = res.Loc
+			tx.EmitContext().SetOriginal(replacement, res)
+			return replacement
 		}
 		return res
 	}
@@ -1769,10 +1834,10 @@ func (tx *DeclarationTransformer) transformTopLevelDeclaration(input *ast.Node) 
 	}
 
 	canProduceDiagnostic := canProduceDiagnostics(input)
-	oldDiag := tx.state.getSymbolAccessibilityDiagnostic
+	oldDiag := tx.state.diagnosticContext
 	oldName := tx.state.errorNameNode
 	if canProduceDiagnostic {
-		tx.state.getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(input)
+		tx.state.diagnosticContext = diagnosticContextForNode(input)
 	}
 	saveNeedsDeclare := tx.needsDeclare
 
@@ -1798,7 +1863,7 @@ func (tx *DeclarationTransformer) transformTopLevelDeclaration(input *ast.Node) 
 	}
 
 	tx.enclosingDeclaration = previousEnclosingDeclaration
-	tx.state.getSymbolAccessibilityDiagnostic = oldDiag
+	tx.state.diagnosticContext = oldDiag
 	tx.needsDeclare = saveNeedsDeclare
 	tx.state.errorNameNode = oldName
 	return result
@@ -1952,12 +2017,12 @@ func (tx *DeclarationTransformer) buildClassMembers(classNode *ast.Node, extraMe
 	ctor := ast.GetFirstConstructorWithBody(classNode)
 	var parameterProperties []*ast.Node
 	if ctor != nil {
-		oldDiag := tx.state.getSymbolAccessibilityDiagnostic
+		oldDiag := tx.state.diagnosticContext
 		for _, param := range ctor.AsConstructorDeclaration().Parameters.Nodes {
 			if !ast.HasSyntacticModifier(param, ast.ModifierFlagsParameterPropertyModifier) || tx.shouldStripInternal(param) {
 				continue
 			}
-			tx.state.getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(param)
+			tx.state.diagnosticContext = diagnosticContextForNode(param)
 			if param.Name().Kind == ast.KindIdentifier {
 				updated := tx.Factory().NewPropertyDeclaration(
 					tx.ensureModifiers(param),
@@ -1973,7 +2038,7 @@ func (tx *DeclarationTransformer) buildClassMembers(classNode *ast.Node, extraMe
 				parameterProperties = append(parameterProperties, tx.walkBindingPattern(param.Name().AsBindingPattern(), param)...)
 			}
 		}
-		tx.state.getSymbolAccessibilityDiagnostic = oldDiag
+		tx.state.diagnosticContext = oldDiag
 	}
 
 	// When the class has at least one private identifier, create a unique constant identifier to retain the nominal typing behavior
@@ -2036,13 +2101,13 @@ func (tx *DeclarationTransformer) transformClassDeclaration(input *ast.ClassDecl
 			oldId = input.Name().Text()
 		}
 		newId := tx.Factory().NewUniqueNameEx(oldId+"_base", printer.AutoGenerateOptions{Flags: printer.GeneratedIdentifierFlagsOptimistic})
-		tx.state.getSymbolAccessibilityDiagnostic = func(_ printer.SymbolAccessibilityResult) *SymbolAccessibilityDiagnostic {
+		tx.state.diagnosticContext = customDiagnosticContext(func(_ printer.SymbolAccessibilityResult) *SymbolAccessibilityDiagnostic {
 			return &SymbolAccessibilityDiagnostic{
 				diagnosticMessage: diagnostics.X_extends_clause_of_exported_class_0_has_or_is_using_private_name_1,
 				errorNode:         extendsClause,
 				typeName:          input.Name(),
 			}
-		}
+		})
 
 		varDecl := tx.Factory().NewVariableDeclaration(
 			newId,
@@ -2107,13 +2172,13 @@ func (tx *DeclarationTransformer) visitThisPropertyAssignments(node *ast.Node) *
 	thisContainer := ast.GetThisContainer(node, false, false)
 	thisTarget = thisContainer.Parent
 	if thisTarget == nil {
-		return nil // thisContainer was source file, can't have expando-this
+		return node // thisContainer was source file, can't have expando-this
 	}
 	if ast.HasStaticModifier(thisContainer) || ast.IsClassStaticBlockDeclaration(thisContainer) {
 		isStatic = true
 	}
 	if thisTarget != tx.enclosingDeclaration {
-		return nil // stop searching within new `this` contexts
+		return node // stop searching within new `this` contexts
 	}
 caseBlock:
 	switch ast.GetAssignmentDeclarationKind(node) {
@@ -2253,15 +2318,29 @@ func (tx *DeclarationTransformer) transformVariableStatement(input *ast.Variable
 	if tx.state.currentSourceFile.CommonJSModuleIndicator != nil {
 		var normalDeclarations []*ast.Node
 		var imports []*ast.Node
+		var partialImports []*ast.Node
 		for _, n := range inputNodes {
-			if ast.IsVariableDeclarationInitializedToRequire(n) {
+			if !ast.IsVariableDeclarationInitializedToRequire(n) {
+				normalDeclarations = append(normalDeclarations, n)
+			} else if canTransformCjsRequireToImport(n) {
 				imports = append(imports, n)
 			} else {
+				// dynamic, nested and rest bindings are declared as variables, and static identifier bindings are imported
 				normalDeclarations = append(normalDeclarations, n)
+				partialImports = append(partialImports, n)
 			}
 		}
 		inputNodes = normalDeclarations
 		extraImports, _ = tx.Visitor().VisitSlice(imports)
+		for _, n := range partialImports {
+			// match visitDeclarationSubtree's @internal and visibility checks
+			if tx.shouldStripInternal(n) || isDeclarationAndNotVisible(tx.EmitContext(), tx.resolver, n) {
+				continue
+			}
+			if imp := tx.transformCjsRequireVariableDeclaration(n.AsVariableDeclaration()); imp != nil {
+				extraImports = append(extraImports, imp)
+			}
+		}
 	}
 
 	nodes, _ := tx.Visitor().VisitSlice(inputNodes)
@@ -2389,11 +2468,11 @@ func (tx *DeclarationTransformer) ensureTypeParams(node *ast.Node, params *ast.T
 	}
 	oldErrorNameNode := tx.state.errorNameNode
 	tx.state.errorNameNode = node.Name()
-	var oldDiag GetSymbolAccessibilityDiagnostic
+	var oldDiag symbolAccessibilityDiagnosticContext
 	if !tx.suppressNewDiagnosticContexts {
-		oldDiag = tx.state.getSymbolAccessibilityDiagnostic
+		oldDiag = tx.state.diagnosticContext
 		if canProduceDiagnostics(node) {
-			tx.state.getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(node)
+			tx.state.diagnosticContext = diagnosticContextForNode(node)
 		}
 	}
 
@@ -2408,7 +2487,7 @@ func (tx *DeclarationTransformer) ensureTypeParams(node *ast.Node, params *ast.T
 
 	tx.state.errorNameNode = oldErrorNameNode
 	if !tx.suppressNewDiagnosticContexts {
-		tx.state.getSymbolAccessibilityDiagnostic = oldDiag
+		tx.state.diagnosticContext = oldDiag
 	}
 	return typeParameters
 }
@@ -2425,9 +2504,9 @@ func (tx *DeclarationTransformer) updateParamList(node *ast.Node, params *ast.Pa
 }
 
 func (tx *DeclarationTransformer) ensureParameter(p *ast.ParameterDeclaration) *ast.Node {
-	oldDiag := tx.state.getSymbolAccessibilityDiagnostic
+	oldDiag := tx.state.diagnosticContext
 	if !tx.suppressNewDiagnosticContexts {
-		tx.state.getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(p.AsNode())
+		tx.state.diagnosticContext = diagnosticContextForNode(p.AsNode())
 	}
 	var questionToken *ast.TokenNode
 	if tx.resolver.IsOptionalParameter(p.AsNode()) {
@@ -2446,7 +2525,7 @@ func (tx *DeclarationTransformer) ensureParameter(p *ast.ParameterDeclaration) *
 		tx.ensureType(p.AsNode(), true),
 		tx.ensureNoInitializer(p.AsNode()),
 	)
-	tx.state.getSymbolAccessibilityDiagnostic = oldDiag
+	tx.state.diagnosticContext = oldDiag
 	return result
 }
 
@@ -2492,10 +2571,10 @@ func (tx *DeclarationTransformer) transformImportEqualsDeclaration(decl *ast.Imp
 			tx.Factory().UpdateExternalModuleReference(decl.ModuleReference.AsExternalModuleReference(), tx.rewriteModuleSpecifier(decl.AsNode(), specifier)),
 		)
 	} else {
-		oldDiag := tx.state.getSymbolAccessibilityDiagnostic
-		tx.state.getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(decl.AsNode())
+		oldDiag := tx.state.diagnosticContext
+		tx.state.diagnosticContext = diagnosticContextForNode(decl.AsNode())
 		tx.checkEntityNameVisibility(decl.ModuleReference, tx.enclosingDeclaration)
-		tx.state.getSymbolAccessibilityDiagnostic = oldDiag
+		tx.state.diagnosticContext = oldDiag
 		return decl.AsNode()
 	}
 }
@@ -2679,6 +2758,10 @@ func (tx *DeclarationTransformer) getNameExpressionPreferringIdentifier(nameExpr
 			return result
 		}
 	}
+	if ast.IsNoSubstitutionTemplateLiteral(nameExpr) {
+		// template literals aren't valid module export names
+		return tx.Factory().NewStringLiteral(nameExpr.Text(), ast.TokenFlagsNone)
+	}
 	return nameExpr
 }
 
@@ -2703,8 +2786,8 @@ func (tx *DeclarationTransformer) stripDeclareModifiers(node *ast.Node) *ast.Nod
 
 func (tx *DeclarationTransformer) visitCJSExportAssignments(expression *ast.Node) *ast.Node {
 	if expression != nil {
-		_, cleanupDiagnosticContext := tx.setupDiagnosticContext(expression)
-		defer cleanupDiagnosticContext()
+		_, savedDiag := tx.setupDiagnosticContext(expression)
+		defer tx.restoreDiagnosticContext(savedDiag)
 		switch ast.GetAssignmentDeclarationKind(expression) {
 		case ast.JSDeclarationKindModuleExports:
 			if tx.state.currentSourceFile.CommonJSModuleIndicator != nil {
@@ -2723,8 +2806,8 @@ func (tx *DeclarationTransformer) visitCJSExportAssignments(expression *ast.Node
 
 func (tx *DeclarationTransformer) visitNestedExpression(expression *ast.Node) *ast.Node {
 	if expression != nil {
-		_, cleanupDiagnosticContext := tx.setupDiagnosticContext(expression)
-		defer cleanupDiagnosticContext()
+		_, savedDiag := tx.setupDiagnosticContext(expression)
+		defer tx.restoreDiagnosticContext(savedDiag)
 		switch ast.GetAssignmentDeclarationKind(expression) {
 		case ast.JSDeclarationKindProperty:
 			tx.transformExpandoAssignment(expression.AsBinaryExpression())
@@ -2820,8 +2903,8 @@ func (tx *DeclarationTransformer) transformExpandoAssignment(node *ast.BinaryExp
 		localName = tx.Factory().NewGeneratedNameForNode(node.AsNode())
 	}
 
-	_, cleanupDiagnosticContext := tx.setupDiagnosticContext(node.AsNode())
-	defer cleanupDiagnosticContext()
+	_, savedDiag := tx.setupDiagnosticContext(node.AsNode())
+	defer tx.restoreDiagnosticContext(savedDiag)
 
 	preexistingExpandoHasExport := core.Some(tx.expandoMembers[hostId], ast.IsExportDeclaration)
 
@@ -2920,8 +3003,8 @@ func (tx *DeclarationTransformer) transformExpandoHost(name *ast.Node, declarati
 		modifierFlags ^= ast.ModifierFlagsExport
 	}
 
-	_, cleanupDiagnosticContext := tx.setupDiagnosticContext(declaration)
-	defer cleanupDiagnosticContext()
+	_, savedDiag := tx.setupDiagnosticContext(declaration)
+	defer tx.restoreDiagnosticContext(savedDiag)
 
 	modifiers := tx.Factory().NewModifierList(ast.CreateModifiersFromModifierFlags(modifierFlags, tx.Factory().NewModifier))
 	replacement := make([]*ast.Node, 0)

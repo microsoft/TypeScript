@@ -11,7 +11,9 @@ import type {
     APIResponse as ProtocolResponse,
 } from "../proto.ts";
 import {
+    all,
     apiRequest,
+    type APIRequestGenerator,
     cacheGeneratorMethod,
 } from "./generatorSupport.ts";
 
@@ -19,6 +21,7 @@ import { CheckFlags } from "../../../enums/checkFlags.js";
 import { CompletionItemKind } from "../../../enums/completionItemKind.js";
 import { DiagnosticCategory } from "../../../enums/diagnosticCategory.js";
 import { ElementFlags } from "../../../enums/elementFlags.js";
+import { EmitFlags } from "../../../enums/emitFlags.js";
 import { EmitOnly } from "../../../enums/emitOnly.js";
 import { IndexKind } from "../../../enums/indexKind.js";
 import { JsxEmit } from "../../../enums/jsxEmit.js";
@@ -31,34 +34,43 @@ import { ScriptKind } from "../../../enums/scriptKind.js";
 import { SignatureFlags } from "../../../enums/signatureFlags.js";
 import { SignatureKind } from "../../../enums/signatureKind.js";
 import { SymbolFlags } from "../../../enums/symbolFlags.js";
+import { SymbolFormatFlags } from "../../../enums/symbolFormatFlags.js";
 import { SymbolOwnerKind } from "../../../enums/symbolOwnerKind.js";
 import { TypeFlags } from "../../../enums/typeFlags.js";
 import { TypeFormatFlags } from "../../../enums/typeFormatFlags.js";
 import { TypePredicateKind } from "../../../enums/typePredicateKind.js";
 import {
     type __String,
+    type ArrayLiteralExpression,
     type CallLikeExpression,
     type Declaration,
+    type EntityName,
     type Expression,
     type FileReference,
     type Identifier,
+    type ImportTypeNode,
     type IndexSignatureDeclaration,
     ModifierFlags,
     type NamedTupleMember,
     type Node,
+    type ObjectLiteralExpression,
     type ParameterDeclaration,
     type PathKey,
+    type PropertyAccessExpression,
+    type QualifiedName,
     type RootedDirectoryPath,
     type RootedFilePath,
     type SourceFile,
     type StringLiteralLikeNode,
     type SyntaxKind,
     type TypeNode,
+    type TypeParameterDeclaration,
     unescapeLeadingUnderscores,
 } from "../../ast/index.ts";
 import { assertNever } from "../../internal/utils.ts";
 import {
     encodeNode,
+    sourceFileResponseToUint8Array,
     uint8ArrayToBase64,
 } from "../node/encoder.ts";
 import {
@@ -74,8 +86,8 @@ import {
 } from "../node/node.ts";
 import { Wtf8Decoder } from "../node/wtf8.ts";
 import type {
-    APIOptions,
     LSPConnectionOptions,
+    SyncAPIOptions as APIOptions,
 } from "../options.ts";
 import {
     canonicalize,
@@ -85,6 +97,12 @@ import {
     toRootedPath,
 } from "../path.ts";
 import { prepareCompilerOptions } from "../prepareCompilerOptions.generated.ts";
+import {
+    createEmitContext,
+    type EmitContext,
+    encodePrintNode,
+    type PrintNodeOptions,
+} from "../printer.ts";
 import type {
     BuildResponse,
     CleanBuildResponse,
@@ -112,6 +130,7 @@ import type {
     ModuleResolutionSpec,
     PackageId,
     ParsedCommandLine,
+    ProgramStatisticsResponse,
     ProjectId,
     ProjectReference,
     ProjectResponse,
@@ -119,6 +138,7 @@ import type {
     RawCompilerOptions,
     ReadConfigFileResponse,
     ReconfigureSnapshotProgramParams as ProtocolReconfigureSnapshotProgramParams,
+    RelationCacheSizes,
     ResolutionMode,
     ResolvedModule,
     ResolvedTypeReferenceDirective,
@@ -205,9 +225,11 @@ import type {
     UnionType,
 } from "./types.ts";
 
-export { formatDiagnostics, formatDiagnosticsWithColorAndContext } from "../diagnosticFormatter.ts";
+export { flattenDiagnosticMessage, formatDiagnostics, formatDiagnosticsWithColorAndContext } from "../diagnosticFormatter.ts";
+export { sortAndDeduplicateDiagnostics } from "../diagnosticUtils.ts";
 export { documentURIToFileName, fileNameToDocumentURI } from "../path.ts";
-export { CheckFlags, CompletionItemKind, DiagnosticCategory, ElementFlags, EmitOnly, IndexKind, JsxEmit, ModifierFlags, ModuleKind, ModuleResolutionKind, NodeBuilderFlags, ObjectFlags, ScriptKind, SignatureFlags, SignatureKind, SymbolFlags, SymbolOwnerKind, TypeFlags, TypeFormatFlags, TypePredicateKind };
+export type { EmitContext, PrintNodeOptions, SynthesizedComment } from "../printer.ts";
+export { CheckFlags, CompletionItemKind, DiagnosticCategory, ElementFlags, EmitFlags, EmitOnly, IndexKind, JsxEmit, ModifierFlags, ModuleKind, ModuleResolutionKind, NodeBuilderFlags, ObjectFlags, ScriptKind, SignatureFlags, SignatureKind, SymbolFlags, SymbolFormatFlags, SymbolOwnerKind, TypeFlags, TypeFormatFlags, TypePredicateKind };
 export type {
     APIImportAdderAction as ImportAdderAction,
     APIOptions,
@@ -254,10 +276,12 @@ export type {
     ObjectType,
     PackageId,
     ParsedCommandLine,
+    ProgramStatisticsResponse,
     ProjectId,
     ProjectReference,
     RawCompilerOptions,
     ReadConfigFileResponse,
+    RelationCacheSizes,
     RequestTiming,
     ResolutionMode,
     ResolvedModule,
@@ -358,7 +382,6 @@ export interface TranspileOutput {
 }
 
 export { all, type AllAPIRequestGenerator, type AnyAPIRequestGenerator, type APIRequestGenerator, defer, type DeferredAPIRequestGenerator, type ExecutedGeneratorsResults } from "./generatorSupport.ts";
-import { sourceFileResponseToUint8Array } from "../node/encoder.ts";
 import {
     type AnyAPIRequestGenerator,
     type ExecutedGeneratorsResults,
@@ -680,6 +703,25 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
             function* (file: DocumentIdentifier): Generator<ProtocolRequest, ReadConfigFileResponse, ProtocolResponse["result"]> {
                 yield* owner.ensureInitialized.gen();
                 return yield* apiRequest("readConfigFile", { file });
+            },
+        );
+    }
+
+    get parseConfigFileTextToJson(): {
+        (fileName: string, jsonText: string): ReadConfigFileResponse;
+        gen(fileName: string, jsonText: string): Generator<ProtocolRequest, ReadConfigFileResponse, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "parseConfigFileTextToJson",
+            function (fileName: string, jsonText: string): ReadConfigFileResponse {
+                owner.ensureInitialized();
+                return owner.client.apiRequest("parseConfigFileTextToJson", { fileName, jsonText });
+            },
+            function* (fileName: string, jsonText: string): Generator<ProtocolRequest, ReadConfigFileResponse, ProtocolResponse["result"]> {
+                yield* owner.ensureInitialized.gen();
+                return yield* apiRequest("parseConfigFileTextToJson", { fileName, jsonText });
             },
         );
     }
@@ -3001,6 +3043,37 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
         return this.project.parsedCommandLine.options;
     }
 
+    getRootFileNames(): readonly RootedFilePath[] {
+        return this.project.parsedCommandLine.fileNames;
+    }
+
+    getProjectReferences(): readonly ProjectReference[] | undefined {
+        return this.project.parsedCommandLine.projectReferences;
+    }
+
+    get getStatistics(): {
+        (): ProgramStatisticsResponse;
+        gen(): Generator<ProtocolRequest, ProgramStatisticsResponse, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getStatistics",
+            function (): ProgramStatisticsResponse {
+                return owner.client.apiRequest("getProgramStatistics", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                });
+            },
+            function* (): Generator<ProtocolRequest, ProgramStatisticsResponse, ProtocolResponse["result"]> {
+                return yield* apiRequest("getProgramStatistics", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                });
+            },
+        );
+    }
+
     get getSourceFile(): {
         (file: DocumentIdentifier): SourceFile | undefined;
         gen(file: DocumentIdentifier): Generator<ProtocolRequest, SourceFile | undefined, ProtocolResponse["result"]>;
@@ -4148,7 +4221,179 @@ function toEmitOutput(response: ProtocolEmitOutputResponse): EmitOutput {
     };
 }
 
+// JSON cannot represent NaN/Infinity/-Infinity (they serialize as null), so encode
+// them as sentinel strings here; the server decodes them back via
+// numberLiteralValueFromJSON, mirroring literalValueToJSON's response-direction encoding.
+function encodeNumberLiteralValue(value: number): number | string {
+    if (value === Infinity) return "+Infinity";
+    if (value === -Infinity) return "-Infinity";
+    if (Number.isNaN(value)) return "NaN";
+    return value;
+}
+
 export class Checker {
+    /** Get the original symbols underlying a synthetic, instantiated, or mapped property. */
+    get getRootSymbols(): {
+        (symbol: Symbol): readonly Symbol[];
+        gen(symbol: Symbol): Generator<ProtocolRequest, readonly Symbol[], ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getRootSymbols",
+            function (symbol: Symbol): readonly Symbol[] {
+                const data = owner.client.apiRequest("getRootSymbols", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    symbol: symbol.reference,
+                });
+                return data ? data.map(symbol => owner.objectRegistry.getOrCreateSymbol(symbol)) : [];
+            },
+            function* (symbol: Symbol): Generator<ProtocolRequest, readonly Symbol[], ProtocolResponse["result"]> {
+                const data = yield* apiRequest("getRootSymbols", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    symbol: symbol.reference,
+                });
+                return data ? data.map(symbol => owner.objectRegistry.getOrCreateSymbol(symbol)) : [];
+            },
+        );
+    }
+
+    /** Get inferred or explicit signature type arguments; empty when the signature has no instantiation. */
+    get getTypeArgumentsForResolvedSignature(): {
+        (signature: Signature): readonly Type[];
+        gen(signature: Signature): Generator<ProtocolRequest, readonly Type[], ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getTypeArgumentsForResolvedSignature",
+            function (signature: Signature): readonly Type[] {
+                return signature.getTypeArguments();
+            },
+            function* (signature: Signature): Generator<ProtocolRequest, readonly Type[], ProtocolResponse["result"]> {
+                return yield* signature.getTypeArguments.gen();
+            },
+        );
+    }
+
+    /** Get the source type of an object/array assignment pattern, including nested patterns and for-of initializers. */
+    get getTypeOfAssignmentPattern(): {
+        (node: ObjectLiteralExpression | ArrayLiteralExpression): Type | undefined;
+        gen(node: ObjectLiteralExpression | ArrayLiteralExpression): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getTypeOfAssignmentPattern",
+            function (node: ObjectLiteralExpression | ArrayLiteralExpression): Type | undefined {
+                const data = owner.client.apiRequest("getTypeOfAssignmentPattern", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    location: getNodeRequestHandle(node),
+                });
+                return data ? owner.objectRegistry.getOrCreateType(data) : undefined;
+            },
+            function* (node: ObjectLiteralExpression | ArrayLiteralExpression): Generator<ProtocolRequest, Type | undefined, ProtocolResponse["result"]> {
+                const data = yield* apiRequest("getTypeOfAssignmentPattern", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    location: getNodeRequestHandle(node),
+                });
+                return data ? owner.objectRegistry.getOrCreateType(data) : undefined;
+            },
+        );
+    }
+
+    /** Get the distinct constructor parameter and instance property symbols of a parameter property. */
+    get getSymbolsOfParameterPropertyDeclaration(): {
+        (node: ParameterDeclaration): { parameter: Symbol; property: Symbol; };
+        gen(node: ParameterDeclaration): Generator<ProtocolRequest, { parameter: Symbol; property: Symbol; }, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getSymbolsOfParameterPropertyDeclaration",
+            function (node: ParameterDeclaration): { parameter: Symbol; property: Symbol; } {
+                const data = owner.client.apiRequest("getSymbolsOfParameterPropertyDeclaration", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    location: getNodeRequestHandle(node),
+                });
+                return {
+                    parameter: owner.objectRegistry.getOrCreateSymbol(data.parameter),
+                    property: owner.objectRegistry.getOrCreateSymbol(data.property),
+                };
+            },
+            function* (node: ParameterDeclaration): Generator<ProtocolRequest, { parameter: Symbol; property: Symbol; }, ProtocolResponse["result"]> {
+                const data = yield* apiRequest("getSymbolsOfParameterPropertyDeclaration", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    location: getNodeRequestHandle(node),
+                });
+                return {
+                    parameter: owner.objectRegistry.getOrCreateSymbol(data.parameter),
+                    property: owner.objectRegistry.getOrCreateSymbol(data.property),
+                };
+            },
+        );
+    }
+
+    /** Whether the named property exists and is accessible at this access location. */
+    get isValidPropertyAccess(): {
+        (node: PropertyAccessExpression | QualifiedName | ImportTypeNode, propertyName: string): boolean;
+        gen(node: PropertyAccessExpression | QualifiedName | ImportTypeNode, propertyName: string): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "isValidPropertyAccess",
+            function (node: PropertyAccessExpression | QualifiedName | ImportTypeNode, propertyName: string): boolean {
+                return owner.client.apiRequest("isValidPropertyAccess", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    location: getNodeRequestHandle(node),
+                    propertyName,
+                });
+            },
+            function* (node: PropertyAccessExpression | QualifiedName | ImportTypeNode, propertyName: string): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]> {
+                return yield* apiRequest("isValidPropertyAccess", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    location: getNodeRequestHandle(node),
+                    propertyName,
+                });
+            },
+        );
+    }
+
+    /** Whether a parameter may be omitted, including defaults and untyped IIFE parameters. */
+    get isOptionalParameter(): {
+        (node: ParameterDeclaration): boolean;
+        gen(node: ParameterDeclaration): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "isOptionalParameter",
+            function (node: ParameterDeclaration): boolean {
+                return owner.client.apiRequest("isOptionalParameter", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    location: getNodeRequestHandle(node),
+                });
+            },
+            function* (node: ParameterDeclaration): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]> {
+                return yield* apiRequest("isOptionalParameter", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    location: getNodeRequestHandle(node),
+                });
+            },
+        );
+    }
+
     private snapshotId: number;
     private project: Project;
     private objectRegistry: ProjectObjectRegistry;
@@ -4973,6 +5218,39 @@ export class Checker {
     }
 
     /**
+     * Add `undefined` and/or `null` to a type, as indicated by `flags` (a combination of
+     * {@link TypeFlags.Undefined} and {@link TypeFlags.Null}). Always returns a type.
+     */
+    get getNullableType(): {
+        (type: Type, flags: TypeFlags): Type;
+        gen(type: Type, flags: TypeFlags): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getNullableType",
+            function (type: Type, flags: TypeFlags): Type {
+                const data = owner.client.apiRequest("getNullableType", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    type: type.id,
+                    flags,
+                });
+                return owner.objectRegistry.getOrCreateType(data);
+            },
+            function* (type: Type, flags: TypeFlags): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
+                const data = yield* apiRequest("getNullableType", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    type: type.id,
+                    flags,
+                });
+                return owner.objectRegistry.getOrCreateType(data);
+            },
+        );
+    }
+
+    /**
      * Get the type for a type node. Always returns a type; for type nodes whose
      * type cannot be determined the checker yields the error type (use
      * {@link Type.isErrorType} to detect it).
@@ -5395,6 +5673,192 @@ export class Checker {
             },
         );
     }
+    get getFalseType(): {
+        (): Type;
+        gen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getFalseType",
+            function (): Type {
+                return owner.getIntrinsicType("getFalseType");
+            },
+            function* (): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
+                return yield* owner.getIntrinsicType.gen("getFalseType");
+            },
+        );
+    }
+    get getTrueType(): {
+        (): Type;
+        gen(): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getTrueType",
+            function (): Type {
+                return owner.getIntrinsicType("getTrueType");
+            },
+            function* (): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
+                return yield* owner.getIntrinsicType.gen("getTrueType");
+            },
+        );
+    }
+
+    /** Get (or create) the singleton type for a string literal value. Always returns a type. */
+    get getStringLiteralType(): {
+        (value: string): Type;
+        gen(value: string): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getStringLiteralType",
+            function (value: string): Type {
+                const data = owner.client.apiRequest("getStringLiteralType", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    value,
+                });
+                return owner.objectRegistry.getOrCreateType(data);
+            },
+            function* (value: string): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
+                const data = yield* apiRequest("getStringLiteralType", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    value,
+                });
+                return owner.objectRegistry.getOrCreateType(data);
+            },
+        );
+    }
+
+    /** Get (or create) the singleton type for a numeric literal value. Always returns a type. */
+    get getNumberLiteralType(): {
+        (value: number): Type;
+        gen(value: number): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getNumberLiteralType",
+            function (value: number): Type {
+                const data = owner.client.apiRequest("getNumberLiteralType", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    value: encodeNumberLiteralValue(value),
+                });
+                return owner.objectRegistry.getOrCreateType(data);
+            },
+            function* (value: number): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
+                const data = yield* apiRequest("getNumberLiteralType", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    value: encodeNumberLiteralValue(value),
+                });
+                return owner.objectRegistry.getOrCreateType(data);
+            },
+        );
+    }
+
+    /** Get (or create) the singleton type for a bigint literal value. Always returns a type. */
+    get getBigIntLiteralType(): {
+        (value: bigint): Type;
+        gen(value: bigint): Generator<ProtocolRequest, Type, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getBigIntLiteralType",
+            function (value: bigint): Type {
+                const negative = value < 0n;
+                const absValue = negative ? -value : value;
+                const base10Value = absValue === 0n ? "" : absValue.toString();
+                const data = owner.client.apiRequest("getBigIntLiteralType", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    negative,
+                    base10Value,
+                });
+                return owner.objectRegistry.getOrCreateType(data);
+            },
+            function* (value: bigint): Generator<ProtocolRequest, Type, ProtocolResponse["result"]> {
+                const negative = value < 0n;
+                const absValue = negative ? -value : value;
+                const base10Value = absValue === 0n ? "" : absValue.toString();
+                const data = yield* apiRequest("getBigIntLiteralType", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    negative,
+                    base10Value,
+                });
+                return owner.objectRegistry.getOrCreateType(data);
+            },
+        );
+    }
+
+    get getJsxIntrinsicTagNamesAt(): {
+        (location: Node): readonly Symbol[];
+        gen(location: Node): Generator<ProtocolRequest, readonly Symbol[], ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getJsxIntrinsicTagNamesAt",
+            function (location: Node): readonly Symbol[] {
+                const data = owner.client.apiRequest("getJsxIntrinsicTagNamesAt", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    location: getNodeRequestHandle(location),
+                });
+                return data ? data.map(d => owner.objectRegistry.getOrCreateSymbol(d)) : [];
+            },
+            function* (location: Node): Generator<ProtocolRequest, readonly Symbol[], ProtocolResponse["result"]> {
+                const data = yield* apiRequest("getJsxIntrinsicTagNamesAt", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    location: getNodeRequestHandle(location),
+                });
+                return data ? data.map(d => owner.objectRegistry.getOrCreateSymbol(d)) : [];
+            },
+        );
+    }
+
+    /**
+     * Look up a private identifier (e.g. `"#foo"`, including the leading `#`) lexically in scope
+     * at `location`, and if found, return the corresponding property of `type`.
+     */
+    get getPrivateIdentifierPropertyOfType(): {
+        (type: Type, name: string, location: Node): Symbol | undefined;
+        gen(type: Type, name: string, location: Node): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getPrivateIdentifierPropertyOfType",
+            function (type: Type, name: string, location: Node): Symbol | undefined {
+                const data = owner.client.apiRequest("getPrivateIdentifierPropertyOfType", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    type: type.id,
+                    name,
+                    location: getNodeRequestHandle(location),
+                });
+                return data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined;
+            },
+            function* (type: Type, name: string, location: Node): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]> {
+                const data = yield* apiRequest("getPrivateIdentifierPropertyOfType", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    type: type.id,
+                    name,
+                    location: getNodeRequestHandle(location),
+                });
+                return data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined;
+            },
+        );
+    }
 
     get typeToTypeNode(): {
         (type: Type, enclosingDeclaration?: Node, flags?: number): TypeNode | undefined;
@@ -5464,6 +5928,321 @@ export class Checker {
                 );
                 if (!binaryData) return undefined;
                 return decodeNode(binaryData) as Node;
+            },
+        );
+    }
+
+    get symbolToEntityName(): {
+        (symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): EntityName | undefined;
+        gen(symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): Generator<ProtocolRequest, EntityName | undefined, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "symbolToEntityName",
+            function (symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): EntityName | undefined {
+                const binaryData = owner.client.apiRequestBinary("symbolToEntityName", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    symbol: symbol.reference,
+                    meaning,
+                    location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+                    flags,
+                });
+                if (!binaryData) return undefined;
+                return decodeNode(binaryData) as EntityName;
+            },
+            function* (symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): Generator<ProtocolRequest, EntityName | undefined, ProtocolResponse["result"]> {
+                const binaryData = sourceFileResponseToUint8Array(
+                    yield* apiRequest("symbolToEntityName", {
+                        snapshot: owner.snapshotId,
+                        project: owner.project.handle,
+                        symbol: symbol.reference,
+                        meaning,
+                        location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+                        flags,
+                    }),
+                );
+                if (!binaryData) return undefined;
+                return decodeNode(binaryData) as EntityName;
+            },
+        );
+    }
+
+    get symbolToExpression(): {
+        (symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): Expression | undefined;
+        gen(symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): Generator<ProtocolRequest, Expression | undefined, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "symbolToExpression",
+            function (symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): Expression | undefined {
+                const binaryData = owner.client.apiRequestBinary("symbolToExpression", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    symbol: symbol.reference,
+                    meaning,
+                    location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+                    flags,
+                });
+                if (!binaryData) return undefined;
+                return decodeNode(binaryData) as Expression;
+            },
+            function* (symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): Generator<ProtocolRequest, Expression | undefined, ProtocolResponse["result"]> {
+                const binaryData = sourceFileResponseToUint8Array(
+                    yield* apiRequest("symbolToExpression", {
+                        snapshot: owner.snapshotId,
+                        project: owner.project.handle,
+                        symbol: symbol.reference,
+                        meaning,
+                        location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+                        flags,
+                    }),
+                );
+                if (!binaryData) return undefined;
+                return decodeNode(binaryData) as Expression;
+            },
+        );
+    }
+
+    get symbolToParameterDeclaration(): {
+        (symbol: Symbol, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): ParameterDeclaration | undefined;
+        gen(symbol: Symbol, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): Generator<ProtocolRequest, ParameterDeclaration | undefined, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "symbolToParameterDeclaration",
+            function (symbol: Symbol, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): ParameterDeclaration | undefined {
+                const binaryData = owner.client.apiRequestBinary("symbolToParameterDeclaration", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    symbol: symbol.reference,
+                    location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+                    flags,
+                });
+                if (!binaryData) return undefined;
+                return decodeNode(binaryData) as ParameterDeclaration;
+            },
+            function* (symbol: Symbol, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): Generator<ProtocolRequest, ParameterDeclaration | undefined, ProtocolResponse["result"]> {
+                const binaryData = sourceFileResponseToUint8Array(
+                    yield* apiRequest("symbolToParameterDeclaration", {
+                        snapshot: owner.snapshotId,
+                        project: owner.project.handle,
+                        symbol: symbol.reference,
+                        location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+                        flags,
+                    }),
+                );
+                if (!binaryData) return undefined;
+                return decodeNode(binaryData) as ParameterDeclaration;
+            },
+        );
+    }
+
+    get symbolToTypeParameterDeclarations(): {
+        (symbol: Symbol, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): readonly TypeParameterDeclaration[] | undefined;
+        gen(symbol: Symbol, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): Generator<ProtocolRequest, readonly TypeParameterDeclaration[] | undefined, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "symbolToTypeParameterDeclarations",
+            function (symbol: Symbol, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): readonly TypeParameterDeclaration[] | undefined {
+                const data = owner.client.apiRequest("symbolToTypeParameterDeclarations", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    symbol: symbol.reference,
+                    location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+                    flags,
+                });
+                return data?.length ? data.map(node => decodeNode(sourceFileResponseToUint8Array(node)!) as TypeParameterDeclaration) : undefined;
+            },
+            function* (symbol: Symbol, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): Generator<ProtocolRequest, readonly TypeParameterDeclaration[] | undefined, ProtocolResponse["result"]> {
+                const data = yield* apiRequest("symbolToTypeParameterDeclarations", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    symbol: symbol.reference,
+                    location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+                    flags,
+                });
+                return data?.length ? data.map(node => decodeNode(sourceFileResponseToUint8Array(node)!) as TypeParameterDeclaration) : undefined;
+            },
+        );
+    }
+
+    get typeParameterToDeclaration(): {
+        (parameter: TypeParameter, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): TypeParameterDeclaration | undefined;
+        gen(parameter: TypeParameter, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): Generator<ProtocolRequest, TypeParameterDeclaration | undefined, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "typeParameterToDeclaration",
+            function (parameter: TypeParameter, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): TypeParameterDeclaration | undefined {
+                const binaryData = owner.client.apiRequestBinary("typeParameterToDeclaration", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    type: parameter.id,
+                    location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+                    flags,
+                });
+                if (!binaryData) return undefined;
+                return decodeNode(binaryData) as TypeParameterDeclaration;
+            },
+            function* (parameter: TypeParameter, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): Generator<ProtocolRequest, TypeParameterDeclaration | undefined, ProtocolResponse["result"]> {
+                const binaryData = sourceFileResponseToUint8Array(
+                    yield* apiRequest("typeParameterToDeclaration", {
+                        snapshot: owner.snapshotId,
+                        project: owner.project.handle,
+                        type: parameter.id,
+                        location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+                        flags,
+                    }),
+                );
+                if (!binaryData) return undefined;
+                return decodeNode(binaryData) as TypeParameterDeclaration;
+            },
+        );
+    }
+
+    get indexInfoToIndexSignatureDeclaration(): {
+        (info: IndexInfo, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): IndexSignatureDeclaration | undefined;
+        gen(info: IndexInfo, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): Generator<ProtocolRequest, IndexSignatureDeclaration | undefined, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "indexInfoToIndexSignatureDeclaration",
+            function (info: IndexInfo, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): IndexSignatureDeclaration | undefined {
+                const declaration = info.declaration ? info.declaration.resolve(owner.project) : undefined;
+                const binaryData = owner.client.apiRequestBinary("indexInfoToIndexSignatureDeclaration", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    keyType: info.keyType.id,
+                    valueType: info.valueType.id,
+                    isReadonly: info.isReadonly,
+                    declaration: declaration ? getNodeRequestHandle(declaration) : undefined,
+                    location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+                    flags,
+                });
+                if (!binaryData) return undefined;
+                return decodeNode(binaryData) as IndexSignatureDeclaration;
+            },
+            function* (info: IndexInfo, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): Generator<ProtocolRequest, IndexSignatureDeclaration | undefined, ProtocolResponse["result"]> {
+                const declaration = info.declaration ? (yield* info.declaration.resolve.gen(owner.project)) : undefined;
+                const binaryData = sourceFileResponseToUint8Array(
+                    yield* apiRequest("indexInfoToIndexSignatureDeclaration", {
+                        snapshot: owner.snapshotId,
+                        project: owner.project.handle,
+                        keyType: info.keyType.id,
+                        valueType: info.valueType.id,
+                        isReadonly: info.isReadonly,
+                        declaration: declaration ? getNodeRequestHandle(declaration) : undefined,
+                        location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+                        flags,
+                    }),
+                );
+                if (!binaryData) return undefined;
+                return decodeNode(binaryData) as IndexSignatureDeclaration;
+            },
+        );
+    }
+
+    get typePredicateToString(): {
+        (predicate: TypePredicate, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string;
+        gen(predicate: TypePredicate, enclosingDeclaration?: Node, flags?: TypeFormatFlags): Generator<ProtocolRequest, string, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "typePredicateToString",
+            function (predicate: TypePredicate, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string {
+                return owner.client.apiRequest("typePredicateToString", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    kind: predicate.kind,
+                    parameterName: predicate.parameterName,
+                    parameterIndex: predicate.parameterIndex,
+                    type: predicate.type?.id,
+                    location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+                    flags,
+                });
+            },
+            function* (predicate: TypePredicate, enclosingDeclaration?: Node, flags?: TypeFormatFlags): Generator<ProtocolRequest, string, ProtocolResponse["result"]> {
+                return yield* apiRequest("typePredicateToString", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    kind: predicate.kind,
+                    parameterName: predicate.parameterName,
+                    parameterIndex: predicate.parameterIndex,
+                    type: predicate.type?.id,
+                    location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+                    flags,
+                });
+            },
+        );
+    }
+
+    /** Formats a call or construct signature, using the signature's own kind. */
+    get signatureToString(): {
+        (signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string;
+        gen(signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags): Generator<ProtocolRequest, string, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "signatureToString",
+            function (signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string {
+                return owner.client.apiRequest("signatureToString", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    signature: signature.id,
+                    location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+                    flags,
+                });
+            },
+            function* (signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags): Generator<ProtocolRequest, string, ProtocolResponse["result"]> {
+                return yield* apiRequest("signatureToString", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    signature: signature.id,
+                    location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+                    flags,
+                });
+            },
+        );
+    }
+
+    /** Formats a symbol, optionally qualifying its name relative to an enclosing declaration. */
+    get symbolToString(): {
+        (symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags): string;
+        gen(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags): Generator<ProtocolRequest, string, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "symbolToString",
+            function (symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags): string {
+                return owner.client.apiRequest("symbolToString", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    symbol: symbol.reference,
+                    location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+                    meaning,
+                    flags,
+                });
+            },
+            function* (symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags): Generator<ProtocolRequest, string, ProtocolResponse["result"]> {
+                return yield* apiRequest("symbolToString", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    symbol: symbol.reference,
+                    location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+                    meaning,
+                    flags,
+                });
             },
         );
     }
@@ -5615,6 +6394,93 @@ export class Checker {
                     project: owner.project.handle,
                     symbol: symbol.reference,
                 });
+            },
+        );
+    }
+
+    /**
+     * Returns `true` if the function-like declaration is the implementation
+     * signature of a set of overloads (i.e. it has a body and is not a
+     * get/set accessor).
+     */
+    get isImplementationOfOverload(): {
+        (node: Node): boolean;
+        gen(node: Node): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "isImplementationOfOverload",
+            function (node: Node): boolean {
+                return owner.client.apiRequest("isImplementationOfOverload", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    location: getNodeRequestHandle(node),
+                });
+            },
+            function* (node: Node): Generator<ProtocolRequest, boolean, ProtocolResponse["result"]> {
+                return yield* apiRequest("isImplementationOfOverload", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    location: getNodeRequestHandle(node),
+                });
+            },
+        );
+    }
+
+    /**
+     * Get the property symbol corresponding to an identifier in a destructuring
+     * assignment or `for..of` statement, e.g. `a` in `({ property1: a } = obj)`.
+     */
+    get getPropertySymbolOfDestructuringAssignment(): {
+        (location: Identifier): Symbol | undefined;
+        gen(location: Identifier): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getPropertySymbolOfDestructuringAssignment",
+            function (location: Identifier): Symbol | undefined {
+                const data = owner.client.apiRequest("getPropertySymbolOfDestructuringAssignment", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    location: getNodeRequestHandle(location),
+                });
+                return data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined;
+            },
+            function* (location: Identifier): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]> {
+                const data = yield* apiRequest("getPropertySymbolOfDestructuringAssignment", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                    location: getNodeRequestHandle(location),
+                });
+                return data ? owner.objectRegistry.getOrCreateSymbol(data) : undefined;
+            },
+        );
+    }
+
+    /** Get all ambient modules declared in the program (e.g. `declare module "foo" { ... }`). */
+    get getAmbientModules(): {
+        (): readonly Symbol[];
+        gen(): Generator<ProtocolRequest, readonly Symbol[], ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getAmbientModules",
+            function (): readonly Symbol[] {
+                const data = owner.client.apiRequest("getAmbientModules", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                });
+                return data ? data.map(d => owner.objectRegistry.getOrCreateSymbol(d)) : [];
+            },
+            function* (): Generator<ProtocolRequest, readonly Symbol[], ProtocolResponse["result"]> {
+                const data = yield* apiRequest("getAmbientModules", {
+                    snapshot: owner.snapshotId,
+                    project: owner.project.handle,
+                });
+                return data ? data.map(d => owner.objectRegistry.getOrCreateSymbol(d)) : [];
             },
         );
     }
@@ -6513,12 +7379,6 @@ export class Checker {
     }
 }
 
-export interface PrintNodeOptions {
-    preserveSourceNewlines?: boolean | undefined;
-    neverAsciiEscape?: boolean | undefined;
-    terminateUnterminatedLiterals?: boolean | undefined;
-}
-
 export class Printer {
     private client: Client;
 
@@ -6535,20 +7395,16 @@ export class Printer {
             owner,
             "printNode",
             function (node: Node, options: PrintNodeOptions = {}): string {
-                const encoded = encodeNode(node);
-                const base64 = uint8ArrayToBase64(encoded);
                 return owner.client.apiRequest("printNode", {
-                    data: base64,
+                    ...encodePrintNode(node, options.emitContext),
                     preserveSourceNewlines: options.preserveSourceNewlines,
                     neverAsciiEscape: options.neverAsciiEscape,
                     terminateUnterminatedLiterals: options.terminateUnterminatedLiterals,
                 });
             },
             function* (node: Node, options: PrintNodeOptions = {}): Generator<ProtocolRequest, string, ProtocolResponse["result"]> {
-                const encoded = encodeNode(node);
-                const base64 = uint8ArrayToBase64(encoded);
                 return yield* apiRequest("printNode", {
-                    data: base64,
+                    ...encodePrintNode(node, options.emitContext),
                     preserveSourceNewlines: options.preserveSourceNewlines,
                     neverAsciiEscape: options.neverAsciiEscape,
                     terminateUnterminatedLiterals: options.terminateUnterminatedLiterals,
@@ -6566,26 +7422,16 @@ export class Printer {
             owner,
             "printFile",
             function (sourceFile: SourceFile, options: PrintNodeOptions = {}): string {
-                const encoded = encodeNode(sourceFile);
-                const base64 = uint8ArrayToBase64(encoded);
-                return owner.client.apiRequest("printNode", {
-                    data: base64,
-                    preserveSourceNewlines: options.preserveSourceNewlines,
-                    neverAsciiEscape: options.neverAsciiEscape,
-                    terminateUnterminatedLiterals: options.terminateUnterminatedLiterals,
-                });
+                return owner.printNode(sourceFile, options);
             },
             function* (sourceFile: SourceFile, options: PrintNodeOptions = {}): Generator<ProtocolRequest, string, ProtocolResponse["result"]> {
-                const encoded = encodeNode(sourceFile);
-                const base64 = uint8ArrayToBase64(encoded);
-                return yield* apiRequest("printNode", {
-                    data: base64,
-                    preserveSourceNewlines: options.preserveSourceNewlines,
-                    neverAsciiEscape: options.neverAsciiEscape,
-                    terminateUnterminatedLiterals: options.terminateUnterminatedLiterals,
-                });
+                return yield* owner.printNode.gen(sourceFile, options);
             },
         );
+    }
+
+    createEmitContext(): EmitContext {
+        return createEmitContext();
     }
 }
 
@@ -8114,6 +8960,7 @@ export class Signature {
     readonly thisParameter?: CompactSymbolReference | undefined;
     readonly target?: number | undefined;
     private returnType: number | false;
+    private typeArguments: readonly number[] | false;
 
     constructor(data: SignatureResponse, project: Project, objectRegistry: ProjectObjectRegistry) {
         this.id = data.id;
@@ -8127,6 +8974,7 @@ export class Signature {
         this.thisParameter = data.thisParameter;
         this.target = data.target;
         this.returnType = false;
+        this.typeArguments = false;
     }
 
     get declaration(): NodeHandle<Declaration> | undefined {
@@ -8149,6 +8997,28 @@ export class Signature {
             },
             function* (): Generator<ProtocolRequest, readonly TypeParameter[], ProtocolResponse["result"]> {
                 return (yield* owner.objectRegistry.fetchTypes.gen(owner, "getTypeParametersOfSignature", owner.typeParameters)) as readonly TypeParameter[];
+            },
+        );
+    }
+
+    /** Get inferred or explicit type arguments; empty when this signature has no instantiation. */
+    get getTypeArguments(): {
+        (): readonly Type[];
+        gen(): Generator<ProtocolRequest, readonly Type[], ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getTypeArguments",
+            function (): readonly Type[] {
+                const result = owner.objectRegistry.fetchTypes(owner, "getTypeArgumentsForResolvedSignature", owner.typeArguments || undefined);
+                owner.typeArguments = result.map(type => type.id);
+                return result;
+            },
+            function* (): Generator<ProtocolRequest, readonly Type[], ProtocolResponse["result"]> {
+                const result = yield* owner.objectRegistry.fetchTypes.gen(owner, "getTypeArgumentsForResolvedSignature", owner.typeArguments || undefined);
+                owner.typeArguments = result.map(type => type.id);
+                return result;
             },
         );
     }

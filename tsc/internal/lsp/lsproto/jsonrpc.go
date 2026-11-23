@@ -73,8 +73,10 @@ func (m *Message) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (m *Message) MarshalJSON() ([]byte, error) {
-	return json.Marshal(m.msg)
+var _ json.MarshalerTo = (*Message)(nil)
+
+func (m *Message) MarshalJSONTo(enc *json.Encoder) error {
+	return json.MarshalEncode(enc, m.msg)
 }
 
 type RequestMessage struct {

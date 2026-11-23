@@ -1,5 +1,6 @@
 // @strict: true
 // @noEmit: true
+// @checkOrder: default, typesfirst
 
 type U =
     | { kind: "a"; payload: number; extra?: unknown }

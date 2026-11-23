@@ -5,9 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
-	"os/signal"
 	"strings"
-	"syscall"
 
 	"github.com/microsoft/TypeScript/tsc/internal/api"
 	"github.com/microsoft/TypeScript/tsc/internal/bundled"
@@ -29,7 +27,7 @@ type apiFlags struct {
 func parseAPIFlags(args []string) (apiFlags, error) {
 	flags := flag.NewFlagSet("api", flag.ContinueOnError)
 	result := apiFlags{}
-	flags.StringVar(&result.cwd, "cwd", core.Must(os.Getwd()), "current working directory")
+	flags.StringVar(&result.cwd, "cwd", core.Must(getCurrentDirectory()), "current working directory")
 	flags.StringVar(&result.pipePath, "pipe", "", "use a named pipe (Windows) or create a private Unix socket at <path>/socket, where <path> must not exist")
 	flags.StringVar(&result.callbacks, "callbacks", "", "comma-separated list of FS callbacks and defaults to enable")
 	flags.BoolVar(&result.caseSensitive, "useCaseSensitiveFileNames", osvfs.FS().CaseSensitivity().IsCaseSensitive(), "treat filesystem paths as case-sensitive")
@@ -42,7 +40,7 @@ func parseAPIFlags(args []string) (apiFlags, error) {
 	return result, nil
 }
 
-func runAPI(args []string) int {
+func runAPI(ctx context.Context, args []string) int {
 	flags, err := parseAPIFlags(args)
 	if err != nil {
 		return 2
@@ -71,14 +69,11 @@ func runAPI(args []string) int {
 	if flags.pipePath != "" {
 		options.PipePath = flags.pipePath
 	} else {
-		options.In = os.Stdin
+		options.In = stdioStdin
 		options.Out = os.Stdout
 	}
 
 	s := api.NewStdioServer(options)
-
-	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
-	defer stop()
 
 	if err := s.Run(ctx); err != nil {
 		fmt.Fprintln(os.Stderr, err)

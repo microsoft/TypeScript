@@ -84,6 +84,9 @@ export function validateOptions(model: OptionsModel): void {
         if (option.declaration?.affectsSemanticDiagnostics) {
             assert(option.declaration.affectsBuildInfo, `Semantic diagnostics must affect build info: ${option.name}`);
         }
+        if (option.declaration?.affectsEmit || option.declaration?.affectsDeclarationPath) {
+            assert(option.declaration.affectsBuildInfo, `Emit options must affect build info: ${option.name}`);
+        }
         if (option.transpile) {
             const { value, declarationValue, unless } = option.transpile;
             assert(value === "clear" || option.type === "Tristate", `Non-boolean transpile value: ${option.name}`);
@@ -294,6 +297,23 @@ export function prepareCompilerOptions(options: RawCompilerOptions, currentDirec
 `;
 }
 
+function optionValuesDiffer(type: GoCompilerOptionType, a: string, b: string): string {
+    switch (type) {
+        case "*int":
+            return `${a} != ${b} && (${a} == nil || ${b} == nil || *${a} != *${b})`;
+        case "[]string":
+        case "[]PluginImport":
+        case "[]tspath.RootedDirectoryPath":
+            return `(${a} == nil) != (${b} == nil) || !slices.Equal(${a}, ${b})`;
+        case "*collections.OrderedMap[string, []string]":
+            return `!${a}.EqualFunc(${b}, func(a, b []string) bool {
+    return (a == nil) == (b == nil) && slices.Equal(a, b)
+})`;
+        default:
+            return `${a} != ${b}`;
+    }
+}
+
 function optionsEquality(name: string, fields: { name: string; type: GoCompilerOptionType; }[]): string {
     return `func (options *${name}) Equals(other *${name}) bool {
     if options == other { return true }
@@ -302,24 +322,7 @@ function optionsEquality(name: string, fields: { name: string; type: GoCompilerO
         fields.map(field => {
             const a = `options.${field.name}`;
             const b = `other.${field.name}`;
-            let differs: string;
-            switch (field.type) {
-                case "*int":
-                    differs = `${a} != ${b} && (${a} == nil || ${b} == nil || *${a} != *${b})`;
-                    break;
-                case "[]string":
-                case "[]PluginImport":
-                case "[]tspath.RootedDirectoryPath":
-                    differs = `(${a} == nil) != (${b} == nil) || !slices.Equal(${a}, ${b})`;
-                    break;
-                case "*collections.OrderedMap[string, []string]":
-                    differs = `!${a}.EqualFunc(${b}, func(a, b []string) bool {
-    return (a == nil) == (b == nil) && slices.Equal(a, b)
-})`;
-                    break;
-                default:
-                    differs = `${a} != ${b}`;
-            }
+            const differs = optionValuesDiffer(field.type, a, b);
             return `if ${differs} { return false }`;
         }).join("\n")
     }
@@ -538,19 +541,22 @@ export function generateOptionComparisons(model = options): string {
             const expressions = model.compilerOptions.flatMap(option => {
                 const declaration = option.declaration;
                 if (!declaration?.[flag]) return [];
-                const kind = optionKind(option);
-                assert(kind === "Boolean" || kind === "String" || kind === "Enum", `Unsupported comparison type for ${option.name}: ${option.type}`);
                 const value = (receiver: string) => {
                     const field = `${receiver}.${fieldName(option)}`;
                     if (declaration.strictFlag) return `${receiver}.GetStrictOptionValue(${field})`;
                     return field;
                 };
-                return [`${value("oldOptions")} != ${value("newOptions")}`];
+                const expressions = [optionValuesDiffer(goType(option), value("oldOptions"), value("newOptions"))];
+                if (option.name === "paths") {
+                    expressions.push('oldOptions.GetPathsBasePath("") != newOptions.GetPathsBasePath("")');
+                }
+                return expressions;
             });
             return `func CompilerOptionsAffect${name}(oldOptions *core.CompilerOptions, newOptions *core.CompilerOptions) bool {
     if oldOptions == newOptions { return false }
     if oldOptions == nil || newOptions == nil { return true }
-    return ${expressions.join(" ||\n") || "false"}
+    ${expressions.map(expression => `if ${expression} { return true }`).join("\n")}
+    return false
 }
 `;
         }).join("\n")
@@ -796,6 +802,7 @@ function storedParser(name: string, declarations: StoredDeclaration[]): string {
 
 export function generateOptions(): Map<string, string> {
     validateOptions(options);
+    const comparisons = generateOptionComparisons();
     const buildOptions = options.buildOptions.filter((option): option is StoredDeclaration => option.field !== undefined);
     return new Map([
         ["packages/typescript/src/api/compilerOptions.generated.ts", generateCompilerOptionsAPI()],
@@ -846,6 +853,7 @@ ${enumMaps()}
 package tsoptions
 
 import (
+    ${comparisons.includes("slices.") ? '"slices"\n' : ""}
     "github.com/microsoft/TypeScript/tsc/internal/collections"
     "github.com/microsoft/TypeScript/tsc/internal/core"
     "github.com/microsoft/TypeScript/tsc/internal/tspath"
@@ -854,7 +862,7 @@ import (
 ${parser()}
 ${storedParser("TypeAcquisition", options.typeAcquisition)}
 ${storedParser("BuildOptions", buildOptions)}
-${generateOptionComparisons()}
+${comparisons}
 ${generateBuildInfoOptions()}
 ${mergeCompilerOptions()}
 ${configDirSubstitution()}

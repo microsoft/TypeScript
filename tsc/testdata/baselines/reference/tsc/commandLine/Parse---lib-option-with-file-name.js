@@ -4,7 +4,7 @@ Input::
 //// [/home/src/workspaces/project/first.ts] *new* 
 export const Key = Symbol()
 
-tsgo --lib es6  first.ts
+tsc --lib es6  first.ts
 ExitStatus:: Success
 Output::
 //// [/home/src/tslibs/TS/Lib/lib.es2015.d.ts] *Lib*

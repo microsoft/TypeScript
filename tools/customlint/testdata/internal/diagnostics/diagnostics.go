@@ -1,0 +1,14 @@
+package diagnostics
+
+type Message struct {
+	text string
+}
+
+var Circularity = &Message{text: "Circularity detected while resolving configuration: {0}"}
+var Plain = &Message{text: "No placeholders"}
+var Multiple = &Message{text: "{0} and {1} and {0}"}
+var Sparse = &Message{text: "{2}"}
+
+func (m *Message) Localize(args ...any) string {
+	return m.text
+}

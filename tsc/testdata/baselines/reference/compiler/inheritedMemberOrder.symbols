@@ -1,0 +1,60 @@
+//// [tests/cases/compiler/inheritedMemberOrder.ts] ////
+
+=== inheritedMemberOrder.ts ===
+// https://github.com/microsoft/TypeScript/issues/65052
+
+export const empty: C<string> = {};
+>empty : Symbol(empty, Decl(inheritedMemberOrder.ts, 2, 12))
+>C : Symbol(C, Decl(inheritedMemberOrder.ts, 13, 1))
+
+declare const narrowB: B<{ a: string }>;
+>narrowB : Symbol(narrowB, Decl(inheritedMemberOrder.ts, 3, 13))
+>B : Symbol(B, Decl(inheritedMemberOrder.ts, 10, 1))
+>a : Symbol(a, Decl(inheritedMemberOrder.ts, 3, 26))
+
+export const wideB: B<{ a: string; b?: number }> = narrowB;
+>wideB : Symbol(wideB, Decl(inheritedMemberOrder.ts, 4, 12))
+>B : Symbol(B, Decl(inheritedMemberOrder.ts, 10, 1))
+>a : Symbol(a, Decl(inheritedMemberOrder.ts, 4, 23))
+>b : Symbol(b, Decl(inheritedMemberOrder.ts, 4, 34))
+>narrowB : Symbol(narrowB, Decl(inheritedMemberOrder.ts, 3, 13))
+
+declare const narrowC: C<{ a: string }>;
+>narrowC : Symbol(narrowC, Decl(inheritedMemberOrder.ts, 5, 13))
+>C : Symbol(C, Decl(inheritedMemberOrder.ts, 13, 1))
+>a : Symbol(a, Decl(inheritedMemberOrder.ts, 5, 26))
+
+export const wideC: C<{ a: string; b?: number }> = narrowC;
+>wideC : Symbol(wideC, Decl(inheritedMemberOrder.ts, 6, 12))
+>C : Symbol(C, Decl(inheritedMemberOrder.ts, 13, 1))
+>a : Symbol(a, Decl(inheritedMemberOrder.ts, 6, 23))
+>b : Symbol(b, Decl(inheritedMemberOrder.ts, 6, 34))
+>narrowC : Symbol(narrowC, Decl(inheritedMemberOrder.ts, 5, 13))
+
+interface A<T> {
+>A : Symbol(A, Decl(inheritedMemberOrder.ts, 6, 59))
+>T : Symbol(T, Decl(inheritedMemberOrder.ts, 8, 12))
+
+  inherited: () => T;
+>inherited : Symbol(A.inherited, Decl(inheritedMemberOrder.ts, 8, 16))
+>T : Symbol(T, Decl(inheritedMemberOrder.ts, 8, 12))
+}
+interface B<T> extends A<T> {
+>B : Symbol(B, Decl(inheritedMemberOrder.ts, 10, 1))
+>T : Symbol(T, Decl(inheritedMemberOrder.ts, 11, 12))
+>A : Symbol(A, Decl(inheritedMemberOrder.ts, 6, 59))
+>T : Symbol(T, Decl(inheritedMemberOrder.ts, 11, 12))
+
+  own: (x: T) => Required<T>;
+>own : Symbol(B.own, Decl(inheritedMemberOrder.ts, 11, 29))
+>x : Symbol(x, Decl(inheritedMemberOrder.ts, 12, 8))
+>T : Symbol(T, Decl(inheritedMemberOrder.ts, 11, 12))
+>Required : Symbol(Required, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(inheritedMemberOrder.ts, 11, 12))
+}
+interface C<T> extends B<T> {}
+>C : Symbol(C, Decl(inheritedMemberOrder.ts, 13, 1))
+>T : Symbol(T, Decl(inheritedMemberOrder.ts, 14, 12))
+>B : Symbol(B, Decl(inheritedMemberOrder.ts, 10, 1))
+>T : Symbol(T, Decl(inheritedMemberOrder.ts, 14, 12))
+

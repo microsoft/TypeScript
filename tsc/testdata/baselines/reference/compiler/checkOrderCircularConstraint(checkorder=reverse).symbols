@@ -1,0 +1,36 @@
+//// [tests/cases/compiler/checkOrderCircularConstraint.ts] ////
+
+=== checkOrderCircularConstraint.ts ===
+// A circular constraint of a declared type parameter is reported at its
+// declaration, regardless of which use resolves the constraint first.
+
+class A<T extends T> {
+>A : Symbol(A, Decl(checkOrderCircularConstraint.ts, 0, 0))
+>T : Symbol(T, Decl(checkOrderCircularConstraint.ts, 3, 8))
+>T : Symbol(T, Decl(checkOrderCircularConstraint.ts, 3, 8))
+
+    foo() {
+>foo : Symbol(A.foo, Decl(checkOrderCircularConstraint.ts, 3, 22))
+
+        var x!: T;
+>x : Symbol(x, Decl(checkOrderCircularConstraint.ts, 5, 11))
+>T : Symbol(T, Decl(checkOrderCircularConstraint.ts, 3, 8))
+
+        var a = x.foo();
+>a : Symbol(a, Decl(checkOrderCircularConstraint.ts, 6, 11))
+>x : Symbol(x, Decl(checkOrderCircularConstraint.ts, 5, 11))
+
+        var b = new x(123);
+>b : Symbol(b, Decl(checkOrderCircularConstraint.ts, 7, 11))
+>x : Symbol(x, Decl(checkOrderCircularConstraint.ts, 5, 11))
+
+        var c = x[1];
+>c : Symbol(c, Decl(checkOrderCircularConstraint.ts, 8, 11))
+>x : Symbol(x, Decl(checkOrderCircularConstraint.ts, 5, 11))
+
+        var d = x();
+>d : Symbol(d, Decl(checkOrderCircularConstraint.ts, 9, 11))
+>x : Symbol(x, Decl(checkOrderCircularConstraint.ts, 5, 11))
+    }
+}
+

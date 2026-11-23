@@ -27,7 +27,7 @@ function someFunc(arguments: boolean, ...rest: any[]) {
     "compilerOptions":  { "incremental": true, "declaration": true }
 }
 
-tsgo -b -v
+tsc -b -v
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -293,7 +293,7 @@ Signatures::
 
 Edit [0]:: No Change run with noEmit
 
-tsgo -b -v --noEmit
+tsc -b -v --noEmit
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -319,7 +319,7 @@ Signatures::
 
 Edit [1]:: No Change run with noEmit
 
-tsgo -b -v --noEmit
+tsc -b -v --noEmit
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -349,7 +349,7 @@ export class classC {
     prop1 = 1;
 }
 
-tsgo -b -v --noEmit
+tsc -b -v --noEmit
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -639,7 +639,7 @@ export class classC {
     prop = 1;
 }
 
-tsgo -b -v
+tsc -b -v
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -832,7 +832,7 @@ Signatures::
 
 Edit [4]:: No Change run with emit
 
-tsgo -b -v
+tsc -b -v
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -858,7 +858,7 @@ Signatures::
 
 Edit [5]:: No Change run with noEmit
 
-tsgo -b -v --noEmit
+tsc -b -v --noEmit
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -884,7 +884,7 @@ Signatures::
 
 Edit [6]:: No Change run with noEmit
 
-tsgo -b -v --noEmit
+tsc -b -v --noEmit
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -910,7 +910,7 @@ Signatures::
 
 Edit [7]:: No Change run with emit
 
-tsgo -b -v
+tsc -b -v
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -940,7 +940,7 @@ export class classC {
     prop1 = 1;
 }
 
-tsgo -b -v
+tsc -b -v
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -1224,7 +1224,7 @@ Signatures::
 
 Edit [9]:: No Change run with emit
 
-tsgo -b -v
+tsc -b -v
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -1273,7 +1273,7 @@ Signatures::
 
 Edit [10]:: No Change run with noEmit
 
-tsgo -b -v --noEmit
+tsc -b -v --noEmit
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -1322,7 +1322,7 @@ Signatures::
 
 Edit [11]:: No Change run with noEmit
 
-tsgo -b -v --noEmit
+tsc -b -v --noEmit
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -1371,7 +1371,7 @@ Signatures::
 
 Edit [12]:: No Change run with emit
 
-tsgo -b -v
+tsc -b -v
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -1424,7 +1424,7 @@ export class classC {
     prop = 1;
 }
 
-tsgo -b -v --noEmit
+tsc -b -v --noEmit
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -1627,7 +1627,7 @@ Signatures::
 
 Edit [14]:: No Change run with emit
 
-tsgo -b -v
+tsc -b -v
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -1822,7 +1822,7 @@ Signatures::
 
 Edit [15]:: No Change run with noEmit
 
-tsgo -b -v --noEmit
+tsc -b -v --noEmit
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -1848,7 +1848,7 @@ Signatures::
 
 Edit [16]:: No Change run with noEmit
 
-tsgo -b -v --noEmit
+tsc -b -v --noEmit
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -1874,7 +1874,7 @@ Signatures::
 
 Edit [17]:: No Change run with emit
 
-tsgo -b -v
+tsc -b -v
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 

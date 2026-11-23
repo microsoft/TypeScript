@@ -22,7 +22,7 @@ import { m } from '../alpha/a'
     "references": [ { "path": "../alpha" } ]
 }
 
-tsgo --p beta/tsconfig.json
+tsc --p beta/tsconfig.json
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96mbeta/b.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS6305: [0mOutput file '/home/src/workspaces/project/alpha/bin/a.d.ts' has not been built from source file '/home/src/workspaces/project/alpha/a.ts'.

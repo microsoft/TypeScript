@@ -26,7 +26,7 @@ Input::
     }
 }
 
-tsgo --b
+tsc --b
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [91merror[0m[90m TS5083: [0mCannot read file '/home/src/workspaces/project/foobar.json'.
