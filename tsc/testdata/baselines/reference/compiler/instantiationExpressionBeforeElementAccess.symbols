@@ -1,0 +1,54 @@
+//// [tests/cases/compiler/instantiationExpressionBeforeElementAccess.ts] ////
+
+=== instantiationExpressionBeforeElementAccess.ts ===
+declare const f: { <T>(): T; label: string };
+>f : Symbol(f, Decl(instantiationExpressionBeforeElementAccess.ts, 0, 13))
+>T : Symbol(T, Decl(instantiationExpressionBeforeElementAccess.ts, 0, 20))
+>T : Symbol(T, Decl(instantiationExpressionBeforeElementAccess.ts, 0, 20))
+>label : Symbol(label, Decl(instantiationExpressionBeforeElementAccess.ts, 0, 28))
+
+declare const a: { f: typeof f };
+>a : Symbol(a, Decl(instantiationExpressionBeforeElementAccess.ts, 1, 13))
+>f : Symbol(f, Decl(instantiationExpressionBeforeElementAccess.ts, 1, 18))
+>f : Symbol(f, Decl(instantiationExpressionBeforeElementAccess.ts, 0, 13))
+
+f<number>
+>f : Symbol(f, Decl(instantiationExpressionBeforeElementAccess.ts, 0, 13))
+
+["label"];
+>"label" : Symbol(label, Decl(instantiationExpressionBeforeElementAccess.ts, 0, 28))
+
+a?.f<number>
+>a?.f : Symbol(f, Decl(instantiationExpressionBeforeElementAccess.ts, 1, 18))
+>a : Symbol(a, Decl(instantiationExpressionBeforeElementAccess.ts, 1, 13))
+>f : Symbol(f, Decl(instantiationExpressionBeforeElementAccess.ts, 1, 18))
+
+["label"];
+>"label" : Symbol(label, Decl(instantiationExpressionBeforeElementAccess.ts, 0, 28))
+
+a?.f<number> /*
+>a?.f : Symbol(f, Decl(instantiationExpressionBeforeElementAccess.ts, 1, 18))
+>a : Symbol(a, Decl(instantiationExpressionBeforeElementAccess.ts, 1, 13))
+>f : Symbol(f, Decl(instantiationExpressionBeforeElementAccess.ts, 1, 18))
+
+*/ ["label"];
+>"label" : Symbol(label, Decl(instantiationExpressionBeforeElementAccess.ts, 0, 28))
+
+(f<number>)
+>f : Symbol(f, Decl(instantiationExpressionBeforeElementAccess.ts, 0, 13))
+
+["label"];
+>"label" : Symbol(label, Decl(instantiationExpressionBeforeElementAccess.ts, 0, 28))
+
+(a?.f<number>)["label"];
+>a?.f : Symbol(f, Decl(instantiationExpressionBeforeElementAccess.ts, 1, 18))
+>a : Symbol(a, Decl(instantiationExpressionBeforeElementAccess.ts, 1, 13))
+>f : Symbol(f, Decl(instantiationExpressionBeforeElementAccess.ts, 1, 18))
+>"label" : Symbol(label, Decl(instantiationExpressionBeforeElementAccess.ts, 0, 28))
+
+a?.f<number>?.["label"];
+>a?.f : Symbol(f, Decl(instantiationExpressionBeforeElementAccess.ts, 1, 18))
+>a : Symbol(a, Decl(instantiationExpressionBeforeElementAccess.ts, 1, 13))
+>f : Symbol(f, Decl(instantiationExpressionBeforeElementAccess.ts, 1, 18))
+>"label" : Symbol(label, Decl(instantiationExpressionBeforeElementAccess.ts, 0, 28))
+

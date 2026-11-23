@@ -1,0 +1,66 @@
+//// [tests/cases/compiler/instantiationExpressionBeforeElementAccess.ts] ////
+
+=== instantiationExpressionBeforeElementAccess.ts ===
+declare const f: { <T>(): T; label: string };
+>f : { <T>(): T; label: string; }
+>label : string
+
+declare const a: { f: typeof f };
+>a : { f: typeof f; }
+>f : { <T>(): T; label: string; }
+>f : { <T>(): T; label: string; }
+
+f<number>
+>f<number>["label"] : string
+>f<number> : { (): number; label: string; }
+>f : { <T>(): T; label: string; }
+
+["label"];
+>"label" : "label"
+
+a?.f<number>
+>a?.f<number>["label"] : string
+>a?.f<number> : { (): number; label: string; }
+>a?.f : { <T>(): T; label: string; }
+>a : { f: typeof f; }
+>f : { <T>(): T; label: string; }
+
+["label"];
+>"label" : "label"
+
+a?.f<number> /*
+>a?.f<number> /**/ ["label"] : string
+>a?.f<number> : { (): number; label: string; }
+>a?.f : { <T>(): T; label: string; }
+>a : { f: typeof f; }
+>f : { <T>(): T; label: string; }
+
+*/ ["label"];
+>"label" : "label"
+
+(f<number>)
+>(f<number>)["label"] : string
+>(f<number>) : { (): number; label: string; }
+>f<number> : { (): number; label: string; }
+>f : { <T>(): T; label: string; }
+
+["label"];
+>"label" : "label"
+
+(a?.f<number>)["label"];
+>(a?.f<number>)["label"] : string
+>(a?.f<number>) : { (): number; label: string; }
+>a?.f<number> : { (): number; label: string; }
+>a?.f : { <T>(): T; label: string; }
+>a : { f: typeof f; }
+>f : { <T>(): T; label: string; }
+>"label" : "label"
+
+a?.f<number>?.["label"];
+>a?.f<number>?.["label"] : string
+>a?.f<number> : { (): number; label: string; }
+>a?.f : { <T>(): T; label: string; }
+>a : { f: typeof f; }
+>f : { <T>(): T; label: string; }
+>"label" : "label"
+
