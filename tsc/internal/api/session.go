@@ -37,6 +37,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/module"
 	"github.com/microsoft/TypeScript/tsc/internal/nodebuilder"
+	"github.com/microsoft/TypeScript/tsc/internal/outputpaths"
 	"github.com/microsoft/TypeScript/tsc/internal/pprof"
 	"github.com/microsoft/TypeScript/tsc/internal/printer"
 	"github.com/microsoft/TypeScript/tsc/internal/project"
@@ -913,6 +914,12 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleReleaseModuleResolver(parsed.(*ReleaseModuleResolverParams))
 	case string(MethodResolveModuleName):
 		return s.handleResolveModuleName(ctx, parsed.(*ResolveModuleNameParams))
+	case string(MethodResolveTypeReferenceDirective):
+		return s.handleResolveTypeReferenceDirective(ctx, parsed.(*ResolveTypeReferenceDirectiveParams))
+	case string(MethodGetEffectiveTypeRoots):
+		return s.handleGetEffectiveTypeRoots(parsed.(*CompilerOptionsParams))
+	case string(MethodGetTsBuildInfoEmitOutputFilePath):
+		return s.handleGetTsBuildInfoEmitOutputFilePath(parsed.(*CompilerOptionsParams))
 	case string(MethodParseCommandLine):
 		return s.handleParseCommandLine(ctx, parsed.(*ParseCommandLineParams))
 	case string(MethodReadConfigFile):
@@ -2072,6 +2079,20 @@ func (s *apiBuildSystem) Spawn(command []string, dir string, stderr io.Writer) (
 }
 func (s *apiBuildSystem) Now() time.Time            { return time.Now() }
 func (s *apiBuildSystem) SinceStart() time.Duration { return time.Since(s.start) }
+
+func (s *Session) handleGetEffectiveTypeRoots(params *CompilerOptionsParams) ([]tspath.RootedDirectoryPath, error) {
+	roots, _ := params.CompilerOptions.GetEffectiveTypeRoots(s.GetCurrentDirectory())
+	return roots, nil
+}
+
+// @gen-proto-nullable
+func (s *Session) handleGetTsBuildInfoEmitOutputFilePath(params *CompilerOptionsParams) (*tspath.RootedFilePath, error) {
+	path := outputpaths.GetBuildInfoFileName(&params.CompilerOptions, s.caseSensitivity())
+	if path == "" {
+		return nil, nil
+	}
+	return &path, nil
+}
 
 // handleParseCommandLine parses command-line arguments.
 func (s *Session) handleParseCommandLine(ctx context.Context, params *ParseCommandLineParams) (*ConfigFileResponse, error) {
