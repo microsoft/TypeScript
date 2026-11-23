@@ -46,6 +46,7 @@ import {
     getSynthesizedDeepClone,
     getSynthesizedDeepClones,
 } from "@typescript/typescript/ast/clone";
+import * as factory from "@typescript/typescript/ast/factory";
 import {
     cloneNode,
     createBinaryExpression,
@@ -62,7 +63,6 @@ import {
     createStringLiteral,
     createToken,
 } from "@typescript/typescript/ast/factory";
-import * as factory from "@typescript/typescript/ast/factory";
 import {
     visitEachChild,
     visitNode,

@@ -787,9 +787,7 @@ describe("API", { concurrency }, () => {
         });
         assert.equal(isolatedDeclarationModuleOutput.diagnostics?.length ?? 0, 0);
 
-        const moduleFileOutput = api.transpileModuleFromFile({ uri: "file:///input.ts" }, {
-            compilerOptions: { module: ModuleKind.CommonJS },
-        });
+        const moduleFileOutput = api.transpileModuleFromFile({ uri: "file:///input.ts" }, { compilerOptions: { module: ModuleKind.CommonJS } });
         assert.match(moduleFileOutput.outputText, /exports\.x = 1/);
 
         const declarationOutput = api.transpileDeclaration("export const x: number = 1;");
@@ -1280,12 +1278,15 @@ describe("API", { concurrency }, () => {
                 "/workspace/project/types/pkg/index.d.ts": "export {};",
             }),
         });
-        const resolver = api.createModuleResolver({ typeRoots: ["types"], traceResolution: true }, {
-            moduleResolutions: { fallback: "unresolved", entries: [] },
-            resolveModuleName: () => {
-                assert.fail("Type references must not invoke the module-name callback");
+        const resolver = api.createModuleResolver(
+            { typeRoots: ["types"], traceResolution: true },
+            {
+                moduleResolutions: { fallback: "unresolved", entries: [] },
+                resolveModuleName: () => {
+                    assert.fail("Type references must not invoke the module-name callback");
+                },
             },
-        });
+        );
         const result = resolver.resolveTypeReferenceDirective("pkg", "src/index.ts");
         assert.equal(result.resolvedTypeReferenceDirective?.resolvedFileName, "/workspace/project/types/pkg/index.d.ts");
         assert.equal(result.resolvedTypeReferenceDirective?.primary, true);
@@ -3024,11 +3025,14 @@ describe("SourceFile", { concurrency }, () => {
     });
 
     test("Program statistics reflect checker work without forcing diagnostics", () => {
-        using api = spawnAPI({
-            "/src/main.ts": `type Box<T> = { value: T };
+        using api = spawnAPI(
+            {
+                "/src/main.ts": `type Box<T> = { value: T };
 export const box: Box<string> = { value: "hello" };
 export const other: { value: string } = box;`,
-        }, { collectTiming: true });
+            },
+            { collectTiming: true },
+        );
         const snapshot = api.createSnapshot({
             createPrograms: [{ rootFiles: ["/src/main.ts"], compilerOptions: { noLib: true } }],
         });
@@ -3094,9 +3098,7 @@ export const other: { value: string } = box;`,
         const references = program.getProjectReferences();
         assert.equal(references?.length, 4);
 
-        using synthetic = api.createProgram([], { noLib: true }, {
-            projectReferences: [{ path: "/a/tsconfig.json" }, { path: "/missing/tsconfig.json" }],
-        });
+        using synthetic = api.createProgram([], { noLib: true }, { projectReferences: [{ path: "/a/tsconfig.json" }, { path: "/missing/tsconfig.json" }] });
         assert.equal((synthetic.getProjectReferences())!.length, 2);
     });
 
@@ -4610,10 +4612,7 @@ export const value = 1;
 
     test("snapshot-owned symbols resolve cached file-owned parents", () => {
         const source = `interface Box<T> { value: T; }\ndeclare const box: Box<string>;\nbox;`;
-        using api = spawnAPI({
-            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true }, files: ["/src/box.ts"] }),
-            "/src/box.ts": source,
-        }, { collectTiming: true });
+        using api = spawnAPI({ "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true }, files: ["/src/box.ts"] }), "/src/box.ts": source }, { collectTiming: true });
         const snapshot = api.createSnapshot({ openProjects: ["/tsconfig.json"] });
         const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const box = project.checker.getSymbolAtPosition("/src/box.ts", source.indexOf("Box"));
@@ -9696,12 +9695,7 @@ describe("Program - selected file emit", { concurrency }, () => {
         const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const result = project.program.getJavaScriptEmit(["/src/a.ts", "/src/b.ts"]);
         assert.equal(result.emitSkipped, false);
-        assert.deepEqual([...result.outputFiles.keys()], [
-            "/src/a.js",
-            "/src/a.js.map",
-            "/src/b.js",
-            "/src/b.js.map",
-        ]);
+        assert.deepEqual([...result.outputFiles.keys()], ["/src/a.js", "/src/a.js.map", "/src/b.js", "/src/b.js.map"]);
         const outputFileName = toRootedFilePath("/src/a.js", undefined);
         assert.equal(result.outputFiles.get(outputFileName)?.sourceFileName, "/src/a.ts");
         assert.match(result.outputFiles.get(outputFileName)!.text, /export const a = 1/);
@@ -9716,12 +9710,7 @@ describe("Program - selected file emit", { concurrency }, () => {
         const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const result = project.program.getDeclarationEmit(["/src/a.ts", "/src/b.ts"]);
         assert.equal(result.emitSkipped, false);
-        assert.deepEqual([...result.outputFiles.keys()], [
-            "/src/a.d.ts",
-            "/src/a.d.ts.map",
-            "/src/b.d.ts",
-            "/src/b.d.ts.map",
-        ]);
+        assert.deepEqual([...result.outputFiles.keys()], ["/src/a.d.ts", "/src/a.d.ts.map", "/src/b.d.ts", "/src/b.d.ts.map"]);
         assert.equal(result.outputFiles.get(toRootedFilePath("/src/a.d.ts", undefined))?.sourceFileName, "/src/a.ts");
         assert.equal(fs.readFile(toRootedFilePath("/src/a.d.ts", undefined)), serverFS.useOS);
     });
@@ -10726,10 +10715,7 @@ describe("Program - emit", { concurrency }, () => {
         const snapshot = api.createSnapshot({ openProjects: ["/tsconfig.json"] });
         const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const result = project.program.emitToString(EmitOnly.OnlyDts);
-        assert.deepEqual([...result.outputFiles.keys()], [
-            "/dist/src/index.d.ts",
-            "/dist/src/testing.d.ts",
-        ]);
+        assert.deepEqual([...result.outputFiles.keys()], ["/dist/src/index.d.ts", "/dist/src/testing.d.ts"]);
         assert.equal(fs.readFile(toRootedFilePath("/dist/src/index.js", undefined)), serverFS.useOS);
     });
 
@@ -10764,16 +10750,10 @@ describe("Program - emit", { concurrency }, () => {
         assert.ok(fs.fileExists?.(toRootedFilePath("/dist/src/index.d.ts.map", undefined)));
 
         const js = project.program.emitToString(EmitOnly.OnlyJs);
-        assert.deepEqual([...js.outputFiles.keys()], [
-            "/dist/src/index.js",
-            "/dist/src/index.js.map",
-        ]);
+        assert.deepEqual([...js.outputFiles.keys()], ["/dist/src/index.js", "/dist/src/index.js.map"]);
 
         const dts = project.program.emitToString(EmitOnly.OnlyDts);
-        assert.deepEqual([...dts.outputFiles.keys()], [
-            "/dist/src/index.d.ts",
-            "/dist/src/index.d.ts.map",
-        ]);
+        assert.deepEqual([...dts.outputFiles.keys()], ["/dist/src/index.d.ts", "/dist/src/index.d.ts.map"]);
     });
 
     test("noEmitOnError reports diagnostics without writing output", () => {

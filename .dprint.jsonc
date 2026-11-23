@@ -6,7 +6,7 @@
     "useTabs": false,
     "typescript": {
         "newLineKind": "lf",
-        "semiColons": "always",
+        "semicolons": "always",
         "quoteStyle": "preferDouble",
         "quoteProps": "consistent",
         "useBraces": "whenNotSingleLine",

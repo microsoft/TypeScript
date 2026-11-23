@@ -2,16 +2,16 @@ import { API } from "@typescript/typescript/async"; // @sync-skip
 // @sync-only-start
 // import { API } from "@typescript/typescript/sync";
 // @sync-only-end
+import type {
+    Node,
+    SourceFile,
+} from "@typescript/typescript/ast";
 import {
     findNextToken,
     findPrecedingToken,
     formatSyntaxKind,
     getTokenAtPosition,
     getTouchingPropertyName,
-} from "@typescript/typescript/ast";
-import type {
-    Node,
-    SourceFile,
 } from "@typescript/typescript/ast";
 import assert from "node:assert";
 import { readFileSync } from "node:fs";

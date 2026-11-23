@@ -6,16 +6,16 @@
 // Source: test/async/astnav.test.ts
 // Regenerate: npm run generate (from packages/typescript)
 //
+import type {
+    Node,
+    SourceFile,
+} from "@typescript/typescript/ast";
 import {
     findNextToken,
     findPrecedingToken,
     formatSyntaxKind,
     getTokenAtPosition,
     getTouchingPropertyName,
-} from "@typescript/typescript/ast";
-import type {
-    Node,
-    SourceFile,
 } from "@typescript/typescript/ast";
 import { API } from "@typescript/typescript/sync";
 import assert from "node:assert";
