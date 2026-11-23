@@ -154,6 +154,6 @@ if (isType<N.A | N.B>(n2)) {
 >n2 : N
 
     n2;
->n2 : N.B
+>n2 : N.A | N.B
 }
 

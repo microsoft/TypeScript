@@ -11,6 +11,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/internal/evaluator"
+	"github.com/microsoft/TypeScript/tsc/internal/jsnum"
 	"github.com/microsoft/TypeScript/tsc/internal/scanner"
 	"github.com/microsoft/TypeScript/tsc/internal/tracing"
 	"github.com/zeebo/xxh3"
@@ -1028,10 +1029,10 @@ func (index *literalKeyIndex) mapRelated(c *Checker, key *Type, f func(*Type) *T
 
 // getLiteralKeyOfType returns the string, number, or bigint literal type of t if t is such a literal type or an
 // irreducible intersection of exactly one such literal type and object types (e.g. a branded literal type). In the
-// subtype and strict subtype relations, types with literal keys of different values are never related.
+// subtype and strict subtype relations, types with literal keys of different values are never related. NaN is equal
+// to no value, itself included, so a NaN literal type has no literal key.
 func (c *Checker) getLiteralKeyOfType(t *Type) *Type {
-	const literalWithValue = TypeFlagsStringLiteral | TypeFlagsNumberLiteral | TypeFlagsBigIntLiteral
-	if t.flags&literalWithValue != 0 {
+	if isLiteralWithKey(t) {
 		return t
 	}
 	if t.flags&TypeFlagsIntersection == 0 || c.getReducedType(t) != t {
@@ -1040,13 +1041,23 @@ func (c *Checker) getLiteralKeyOfType(t *Type) *Type {
 	var key *Type
 	for _, constituent := range t.Types() {
 		switch {
-		case constituent.flags&literalWithValue != 0 && key == nil:
+		case isLiteralWithKey(constituent) && key == nil:
 			key = constituent
 		case constituent.flags&TypeFlagsObject == 0:
 			return nil
 		}
 	}
 	return key
+}
+
+func isLiteralWithKey(t *Type) bool {
+	switch {
+	case t.flags&(TypeFlagsStringLiteral|TypeFlagsBigIntLiteral) != 0:
+		return true
+	case t.flags&TypeFlagsNumberLiteral != 0:
+		return !t.AsLiteralType().value.(jsnum.Number).IsNaN()
+	}
+	return false
 }
 
 func (c *Checker) getInstanceType(constructorType *Type) *Type {
