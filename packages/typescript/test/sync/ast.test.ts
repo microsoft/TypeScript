@@ -89,6 +89,212 @@ import { runBenchmarks } from "./ast.bench.ts";
 
 const concurrency = areTestsFiltered();
 
+test("canHaveModifiers includes the reparsed import kind in its narrowed type", () => {
+    using api = spawnAPI();
+    const source = api.createSourceFile("/imports.js", '/** @import { Foo } from "./foo" */\nlet value;').sourceFile;
+    const node: Node = source.statements[0];
+    assert.ok(astModule.canHaveModifiers(node));
+    if (node.kind === SyntaxKind.JSImportDeclaration) {
+        assert.strictEqual(node.moduleSpecifier.kind, SyntaxKind.StringLiteral);
+        assert.strictEqual(node.importClause?.namedBindings?.kind, SyntaxKind.NamedImports);
+    }
+    else {
+        assert.fail("Expected the reparsed JSDoc import");
+    }
+});
+
+test("Node.getModifiers excludes decorators on parsed, synthesized, and cloned nodes", () => {
+    using api = spawnAPI();
+    const source = api.createSourceFile(
+        "/nodeModifiers.ts",
+        "@dec export class C { @dec public static method() {} } @dec class Decorated {} class Plain {}",
+    ).sourceFile;
+    const declaration = source.statements[0];
+    assert.ok(astModule.isClassDeclaration(declaration));
+    const node: Node = declaration;
+    const modifiers: readonly astModule.Modifier[] | undefined = node.getModifiers();
+    assert.deepStrictEqual(modifiers?.map(modifier => modifier.kind), [SyntaxKind.ExportKeyword]);
+    assert.deepStrictEqual(
+        declaration.members[0].getModifiers()?.map(modifier => modifier.kind),
+        [SyntaxKind.PublicKeyword, SyntaxKind.StaticKeyword],
+    );
+    assert.strictEqual(source.statements[1].getModifiers(), undefined);
+    assert.strictEqual(source.statements[2].getModifiers(), undefined);
+    assert.strictEqual(source.getModifiers(), undefined);
+    const synthesized = factory.createClassDeclaration(declaration.modifiers, declaration.name, undefined, undefined, []);
+    assert.deepStrictEqual(synthesized.getModifiers()?.map(modifier => modifier.kind), [SyntaxKind.ExportKeyword]);
+    assert.deepStrictEqual(cloneNode(synthesized).getModifiers()?.map(modifier => modifier.kind), [SyntaxKind.ExportKeyword]);
+    assert.strictEqual(factory.createClassDeclaration([], undefined, undefined, undefined, []).getModifiers(), undefined);
+    const recovery = factory.createMissingDeclaration([
+        factory.createDecorator(factory.createIdentifier("dec")),
+        factory.createToken(SyntaxKind.ExportKeyword),
+    ]);
+    assert.strictEqual(astModule.canHaveModifiers(recovery), false);
+    assert.deepStrictEqual(recovery.getModifiers()?.map(modifier => modifier.kind), [SyntaxKind.ExportKeyword]);
+});
+
+test("hasRestParameter handles syntax, JSDoc signatures, and empty parameter lists", () => {
+    using api = spawnAPI();
+    const source = api.createSourceFile(
+        "/rest.ts",
+        "function empty() {} function ordinary(value: string) {} function rest(first: number, ...values: string[]) {} type F = (...values: string[]) => void;",
+    ).sourceFile;
+    const functions = source.statements.filter(astModule.isFunctionDeclaration);
+    assert.deepStrictEqual(functions.map(astModule.hasRestParameter), [false, false, true]);
+    const alias = source.statements[3];
+    assert.ok(astModule.isTypeAliasDeclaration(alias));
+    assert.ok(astModule.isFunctionTypeNode(alias.type));
+    assert.strictEqual(astModule.hasRestParameter(alias.type), true);
+
+    const js = api.createSourceFile(
+        "/rest.js",
+        `/**
+ * @callback Callback
+ * @param {...string} values
+ */
+function callback() {}
+`,
+    ).sourceFile;
+    const callback = js.statements.find(astModule.isFunctionDeclaration)?.jsDoc?.[0];
+    assert.ok(callback && astModule.isJSDoc(callback));
+    const tag = callback.tags?.[0];
+    assert.ok(tag && astModule.isJSDocCallbackTag(tag) && astModule.isJSDocSignature(tag.typeExpression));
+    assert.strictEqual(astModule.hasRestParameter(tag.typeExpression), true);
+    const variadic = factory.createJSDocVariadicType(factory.createKeywordTypeNode(SyntaxKind.NumberKeyword));
+    const parameter = factory.createParameterDeclaration(undefined, undefined, factory.createIdentifier("values"), undefined, variadic);
+    const fnType = factory.createFunctionTypeNode(undefined, [parameter], factory.createKeywordTypeNode(SyntaxKind.VoidKeyword));
+    assert.strictEqual(astModule.hasRestParameter(fnType), true);
+    assert.strictEqual(astModule.hasRestParameter(factory.createJSDocSignature(undefined, [], undefined)), false);
+});
+
+test("getCombinedNodeFlags follows binding declarations to their list and statement", () => {
+    using api = spawnAPI();
+    const source = api.createSourceFile(
+        "/flags.ts",
+        "/** @deprecated */ export const [{ value }] = input; let other = 1; var plain = 2;",
+    ).sourceFile;
+    for (const statement of source.statements) {
+        assert.ok(astModule.isVariableStatement(statement));
+        const list = statement.declarationList;
+        const declaration = list.declarations[0];
+        const expected = declaration.flags | list.flags | statement.flags;
+        assert.strictEqual(astModule.getCombinedNodeFlags(declaration), expected);
+        assert.strictEqual(astModule.getCombinedNodeFlags(list), list.flags | statement.flags);
+        assert.strictEqual(astModule.getCombinedNodeFlags(statement), statement.flags);
+        declaration.forEachChild(function walk(node) {
+            if (astModule.isBindingElement(node)) {
+                assert.strictEqual(astModule.getCombinedNodeFlags(node), expected);
+            }
+            node.forEachChild(walk);
+        });
+    }
+    assert.strictEqual(astModule.getCombinedNodeFlags(source), source.flags);
+    const detached = factory.createVariableDeclaration(factory.createIdentifier("detached"));
+    assert.strictEqual(astModule.getCombinedNodeFlags(detached), detached.flags);
+});
+
+test("canHaveModifiers recognizes declarations without an existing modifier list", () => {
+    using api = spawnAPI();
+    const source = api.createSourceFile(
+        "/modifiers.ts",
+        `
+export class C<T> {
+    property;
+    method(parameter) {}
+    constructor() {}
+    get value() {}
+    set value(v) {}
+    [key: string]: any;
+}
+interface I { property: string; method(): void; }
+const fn = async () => {};
+import x from "x";
+export { x };
+`,
+    ).sourceFile;
+    const supported = new Set([
+        SyntaxKind.ClassDeclaration,
+        SyntaxKind.TypeParameter,
+        SyntaxKind.PropertyDeclaration,
+        SyntaxKind.MethodDeclaration,
+        SyntaxKind.Parameter,
+        SyntaxKind.Constructor,
+        SyntaxKind.GetAccessor,
+        SyntaxKind.SetAccessor,
+        SyntaxKind.IndexSignature,
+        SyntaxKind.InterfaceDeclaration,
+        SyntaxKind.PropertySignature,
+        SyntaxKind.MethodSignature,
+        SyntaxKind.VariableStatement,
+        SyntaxKind.ArrowFunction,
+        SyntaxKind.ImportDeclaration,
+        SyntaxKind.ExportDeclaration,
+    ]);
+    const seen = new Set<SyntaxKind>();
+    function walk(node: Node): void {
+        assert.strictEqual(astModule.canHaveModifiers(node), supported.has(node.kind), formatSyntaxKind(node.kind));
+        if (astModule.canHaveModifiers(node)) {
+            const declaration: astModule.CanHaveModifiers = node;
+            seen.add(declaration.kind);
+        }
+        node.forEachChild(walk);
+    }
+    walk(source);
+    assert.deepStrictEqual(seen, supported);
+});
+
+test("canHaveDecorators narrows all supported declarations, even without decorators", () => {
+    using api = spawnAPI();
+    const source = api.createSourceFile(
+        "/decorators.ts",
+        "class C { property; method(parameter) {} get value() {} set value(v) {} } const expression = class {};",
+    ).sourceFile;
+    const supported = new Set([
+        SyntaxKind.Parameter,
+        SyntaxKind.PropertyDeclaration,
+        SyntaxKind.MethodDeclaration,
+        SyntaxKind.GetAccessor,
+        SyntaxKind.SetAccessor,
+        SyntaxKind.ClassExpression,
+        SyntaxKind.ClassDeclaration,
+    ]);
+    const seen = new Set<SyntaxKind>();
+    function walk(node: Node): void {
+        assert.strictEqual(astModule.canHaveDecorators(node), supported.has(node.kind));
+        if (astModule.canHaveDecorators(node)) {
+            const declaration: astModule.CanHaveDecorators = node;
+            assert.strictEqual(declaration.modifiers, undefined);
+            seen.add(node.kind);
+        }
+        node.forEachChild(walk);
+    }
+    walk(source);
+    assert.deepStrictEqual(seen, supported);
+});
+
+test("findAncestor visits the starting node and supports narrowing and early termination", () => {
+    using api = spawnAPI();
+    const source = api.createSourceFile("/ancestor.ts", "class C { method() { return 1; } }").sourceFile;
+    const declaration = source.statements[0];
+    assert.ok(astModule.isClassDeclaration(declaration));
+    const member = declaration.members[0];
+    assert.ok(astModule.isMethodDeclaration(member));
+    const ancestor: ClassDeclaration | undefined = astModule.findAncestor(member, astModule.isClassDeclaration);
+    assert.strictEqual(ancestor, declaration);
+    assert.strictEqual(astModule.findAncestor(member, node => node === member), member);
+    const visited: Node[] = [];
+    assert.strictEqual(
+        astModule.findAncestor(member, node => {
+            visited.push(node);
+            return node === declaration ? "quit" : false;
+        }),
+        undefined,
+    );
+    assert.deepStrictEqual(visited, [member, declaration]);
+    assert.strictEqual(astModule.findAncestor(source, () => false), undefined);
+    assert.strictEqual(astModule.findAncestor(undefined, () => true), undefined);
+});
+
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------

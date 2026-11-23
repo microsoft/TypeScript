@@ -76,6 +76,7 @@ const (
 
 	MethodBatchRequests                                  Method = "batchRequests"
 	MethodInitialize                                     Method = "initialize"
+	MethodGetDefaultFormatCodeSettings                   Method = "getDefaultFormatCodeSettings"
 	MethodCreateSnapshot                                 Method = "createSnapshot"
 	MethodUpdateSnapshot                                 Method = "updateSnapshot"
 	MethodGetCurrentLanguageServerSnapshot               Method = "getCurrentLanguageServerSnapshot"
@@ -653,6 +654,7 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodGetCachedSourceFile:                            unmarshallerFor[GetCachedSourceFileParams],
 	MethodGetSymbolOfDeclaration:                         unmarshallerFor[GetSymbolOfDeclarationParams],
 	MethodInitialize:                                     noParams,
+	MethodGetDefaultFormatCodeSettings:                   noParams,
 	MethodCreateSnapshot:                                 unmarshallerFor[CreateSnapshotParams],
 	MethodUpdateSnapshot:                                 unmarshallerFor[UpdateSnapshotParams],
 	MethodGetCurrentLanguageServerSnapshot:               unmarshallerFor[GetCurrentLanguageServerSnapshotParams],

@@ -160,6 +160,7 @@ import type {
     MethodSignatureDeclaration,
     MinusToken,
     MissingDeclaration,
+    Modifier,
     ModifierLike,
     ModuleBlock,
     ModuleBody,
@@ -266,7 +267,10 @@ import {
     getLastToken,
     getTokenPosOfNode,
 } from "./astnav.ts";
-import { modifierToFlag } from "./modifiers.ts";
+import {
+    getModifiers,
+    modifierToFlag,
+} from "./modifiers.ts";
 import { cloneSourceFileData } from "./utils.ts";
 import {
     forEachChildOfJSDocParameterTag,
@@ -698,6 +702,10 @@ export class NodeObject {
             flags |= modifierToFlag(modifier.kind);
         }
         return flags;
+    }
+
+    getModifiers(): readonly Modifier[] | undefined {
+        return getModifiers(this as unknown as Node);
     }
 
     forEachChild<T>(visitor: (node: Node) => T, visitArray?: (nodes: NodeArray<Node>) => T): T | undefined {

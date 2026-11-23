@@ -62,10 +62,10 @@ import {
     type RootedFilePath,
     type SourceFile,
     type StringLiteralLikeNode,
+    symbolName,
     type SyntaxKind,
     type TypeNode,
     type TypeParameterDeclaration,
-    unescapeLeadingUnderscores,
 } from "../../ast/index.ts";
 import { assertNever } from "../../internal/utils.ts";
 import {
@@ -122,6 +122,7 @@ import type {
     DocumentPosition,
     EmitOutputResponse as ProtocolEmitOutputResponse,
     FileNotifications,
+    FormatCodeSettings,
     ImportAdderAction,
     InferredProjectId,
     IntrinsicTypeMethod,
@@ -255,6 +256,7 @@ export type {
     EmitOutputFile,
     EmitResult,
     FileNotifications,
+    FormatCodeSettings,
     FormatDiagnosticsHost,
     FreshableType,
     GenericType,
@@ -648,6 +650,26 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                 });
                 owner.activeBuildOrchestrators.add(orchestrator);
                 return orchestrator;
+            },
+        );
+    }
+
+    /** Gets the compiler's default formatting settings, independent of snapshot preferences. */
+    get getDefaultFormatCodeSettings(): {
+        (): FormatCodeSettings;
+        gen(): Generator<ProtocolRequest, FormatCodeSettings, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getDefaultFormatCodeSettings",
+            function (): FormatCodeSettings {
+                owner.ensureInitialized();
+                return owner.client.apiRequest("getDefaultFormatCodeSettings", null);
+            },
+            function* (): Generator<ProtocolRequest, FormatCodeSettings, ProtocolResponse["result"]> {
+                yield* owner.ensureInitialized.gen();
+                return yield* apiRequest("getDefaultFormatCodeSettings", null);
             },
         );
     }
@@ -7650,7 +7672,7 @@ export class Symbol {
     }
     /** The escaped (`__String`) name, used as the key in member/export tables. */
     readonly escapedName: __String;
-    /** The display name (escaped underscores removed). */
+    /** The display name, including the source spelling of private identifiers. */
     readonly name: string;
     readonly flags: SymbolFlags;
     readonly checkFlags: CheckFlags;
@@ -7672,7 +7694,7 @@ export class Symbol {
         this.reference = data.reference;
 
         this.escapedName = data.name as __String;
-        this.name = unescapeLeadingUnderscores(data.name as __String);
+        this.name = symbolName(this);
         this.flags = data.flags;
         this.checkFlags = data.checkFlags ?? 0;
         this.declarationHandles = data.declarations;

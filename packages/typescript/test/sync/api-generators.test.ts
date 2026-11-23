@@ -1613,6 +1613,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
             exercisedMethods.add("API.createModuleResolver");
 
             const cases: ParityCase[] = [
+                parityCase("API", "getDefaultFormatCodeSettings", api.getDefaultFormatCodeSettings, assertDeepEquivalent),
                 parityCase("API", "getEffectiveTypeRoots", api.getEffectiveTypeRoots, assertDeepEquivalent, { typeRoots: ["types"] }),
                 parityCase("API", "getTsBuildInfoEmitOutputFilePath", api.getTsBuildInfoEmitOutputFilePath, assertDeepEquivalent, { incremental: true, configFilePath: "/tsconfig.json" }),
                 parityCase("API", "getTsBuildInfoEmitOutputFilePath", api.getTsBuildInfoEmitOutputFilePath, assertDeepEquivalent, {}),
