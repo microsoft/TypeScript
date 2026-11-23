@@ -1,0 +1,34 @@
+//// [tests/cases/compiler/objectFromEntriesSpreadPossibleDuplicates.ts] ////
+
+=== objectFromEntriesSpreadPossibleDuplicates.ts ===
+declare const icons: { iconName: "bicycle" | "book" }[];
+>icons : { iconName: "bicycle" | "book"; }[]
+>iconName : "bicycle" | "book"
+
+export const mapping = {
+>mapping : { bicycle: number; }
+>{    bicycle: 0,    ...Object.fromEntries(icons.map(icon => [icon.iconName, 1])),} : { bicycle: number; }
+
+    bicycle: 0,
+>bicycle : number
+>0 : 0
+
+    ...Object.fromEntries(icons.map(icon => [icon.iconName, 1])),
+>Object.fromEntries(icons.map(icon => [icon.iconName, 1])) : { [k: string]: number; }
+>Object.fromEntries : { <T = any>(entries: Iterable<readonly [PropertyKey, T]>): { [k: string]: T; }; (entries: Iterable<readonly any[]>): any; }
+>Object : ObjectConstructor
+>fromEntries : { <T = any>(entries: Iterable<readonly [PropertyKey, T]>): { [k: string]: T; }; (entries: Iterable<readonly any[]>): any; }
+>icons.map(icon => [icon.iconName, 1]) : ["bicycle" | "book", number][]
+>icons.map : <U>(callbackfn: (value: { iconName: "bicycle" | "book"; }, index: number, array: { iconName: "bicycle" | "book"; }[]) => U, thisArg?: any) => U[]
+>icons : { iconName: "bicycle" | "book"; }[]
+>map : <U>(callbackfn: (value: { iconName: "bicycle" | "book"; }, index: number, array: { iconName: "bicycle" | "book"; }[]) => U, thisArg?: any) => U[]
+>icon => [icon.iconName, 1] : (icon: { iconName: "bicycle" | "book"; }) => ["bicycle" | "book", number]
+>icon : { iconName: "bicycle" | "book"; }
+>[icon.iconName, 1] : ["bicycle" | "book", number]
+>icon.iconName : "bicycle" | "book"
+>icon : { iconName: "bicycle" | "book"; }
+>iconName : "bicycle" | "book"
+>1 : 1
+
+};
+

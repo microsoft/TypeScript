@@ -115,9 +115,11 @@ type Fields struct {
 }
 
 type ContentMapperFields struct {
-	Exec            Expected[[]string] `json:"exec"`
-	CompilerOptions Expected[[]string] `json:"compilerOptions"`
-	DynamicConfig   Expected[bool]     `json:"dynamicConfig"`
+	Extensions       Expected[[]string]          `json:"extensions"`
+	Exec             Expected[[]string]          `json:"exec"`
+	CompilerOptions  Expected[[]string]          `json:"compilerOptions"`
+	DynamicConfig    Expected[bool]              `json:"dynamicConfig"`
+	OutputExtensions Expected[map[string]string] `json:"outputExtensions"`
 }
 
 type typeScriptFields struct {

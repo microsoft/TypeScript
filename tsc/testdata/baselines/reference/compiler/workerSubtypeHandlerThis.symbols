@@ -1,0 +1,24 @@
+//// [tests/cases/compiler/workerSubtypeHandlerThis.ts] ////
+
+=== workerSubtypeHandlerThis.ts ===
+interface MockWorker extends Worker {
+>MockWorker : Symbol(MockWorker, Decl(workerSubtypeHandlerThis.ts, 0, 0))
+>Worker : Symbol(Worker, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+    messages: unknown[];
+>messages : Symbol(MockWorker.messages, Decl(workerSubtypeHandlerThis.ts, 0, 37))
+}
+
+declare function forward(worker: Worker): void;
+>forward : Symbol(forward, Decl(workerSubtypeHandlerThis.ts, 2, 1))
+>worker : Symbol(worker, Decl(workerSubtypeHandlerThis.ts, 4, 25))
+>Worker : Symbol(Worker, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+declare const worker: MockWorker;
+>worker : Symbol(worker, Decl(workerSubtypeHandlerThis.ts, 5, 13))
+>MockWorker : Symbol(MockWorker, Decl(workerSubtypeHandlerThis.ts, 0, 0))
+
+forward(worker);
+>forward : Symbol(forward, Decl(workerSubtypeHandlerThis.ts, 2, 1))
+>worker : Symbol(worker, Decl(workerSubtypeHandlerThis.ts, 5, 13))
+

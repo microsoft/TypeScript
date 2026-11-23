@@ -117,6 +117,8 @@ func readDirEntries(fd int, buf []byte) ([]unixDirent, error) {
 		}
 		data := buf[:n]
 		for len(data) > 0 {
+			// SAFETY: getdents/getdirentries only return whole, suitably aligned dirent records,
+			// and data always starts at a record boundary.
 			dirent := (*unix.Dirent)(unsafe.Pointer(&data[0]))
 			reclen := reclenOf(dirent)
 			if reclen == 0 || int(reclen) > len(data) {

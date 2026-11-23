@@ -31,7 +31,7 @@ export const Other = 0;
     ],
 }
 
-tsgo --b src/other --verbose
+tsc --b src/other --verbose
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -130,7 +130,7 @@ Signatures::
 
 Edit [0]:: Running tsc on main
 
-tsgo -p src/main
+tsc -p src/main
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/solution/dist/a.js] *new* 

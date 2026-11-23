@@ -1,0 +1,22 @@
+//// [tests/cases/compiler/excludedNumericLiteralAfterDecrement.ts] ////
+
+=== excludedNumericLiteralAfterDecrement.ts ===
+function decrement(count: number) {
+>decrement : (count: number) => void
+>count : number
+
+    if (count === 0) return;
+>count === 0 : boolean
+>count : number
+>0 : 0
+
+    count--;
+>count-- : number
+>count : number
+
+    if (count === 0) return;
+>count === 0 : boolean
+>count : number
+>0 : 0
+}
+

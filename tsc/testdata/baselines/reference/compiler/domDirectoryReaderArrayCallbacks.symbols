@@ -1,0 +1,32 @@
+//// [tests/cases/compiler/domDirectoryReaderArrayCallbacks.ts] ////
+
+=== domDirectoryReaderArrayCallbacks.ts ===
+declare const reader: FileSystemDirectoryReader;
+>reader : Symbol(reader, Decl(domDirectoryReaderArrayCallbacks.ts, 0, 13))
+>FileSystemDirectoryReader : Symbol(FileSystemDirectoryReader, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+reader.readEntries(entries => entries.length);
+>reader.readEntries : Symbol(FileSystemDirectoryReader.readEntries, Decl(lib.dom.d.ts, --, --))
+>reader : Symbol(reader, Decl(domDirectoryReaderArrayCallbacks.ts, 0, 13))
+>readEntries : Symbol(FileSystemDirectoryReader.readEntries, Decl(lib.dom.d.ts, --, --))
+>entries : Symbol(entries, Decl(domDirectoryReaderArrayCallbacks.ts, 1, 19))
+>entries.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>entries : Symbol(entries, Decl(domDirectoryReaderArrayCallbacks.ts, 1, 19))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+
+reader.readEntries(async (entries: FileSystemEntry[]) => {});
+>reader.readEntries : Symbol(FileSystemDirectoryReader.readEntries, Decl(lib.dom.d.ts, --, --))
+>reader : Symbol(reader, Decl(domDirectoryReaderArrayCallbacks.ts, 0, 13))
+>readEntries : Symbol(FileSystemDirectoryReader.readEntries, Decl(lib.dom.d.ts, --, --))
+>entries : Symbol(entries, Decl(domDirectoryReaderArrayCallbacks.ts, 2, 26))
+>FileSystemEntry : Symbol(FileSystemEntry, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+new Promise<readonly FileSystemEntry[]>(resolve => reader.readEntries(resolve));
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>FileSystemEntry : Symbol(FileSystemEntry, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>resolve : Symbol(resolve, Decl(domDirectoryReaderArrayCallbacks.ts, 3, 40))
+>reader.readEntries : Symbol(FileSystemDirectoryReader.readEntries, Decl(lib.dom.d.ts, --, --))
+>reader : Symbol(reader, Decl(domDirectoryReaderArrayCallbacks.ts, 0, 13))
+>readEntries : Symbol(FileSystemDirectoryReader.readEntries, Decl(lib.dom.d.ts, --, --))
+>resolve : Symbol(resolve, Decl(domDirectoryReaderArrayCallbacks.ts, 3, 40))
+

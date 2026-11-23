@@ -1,0 +1,47 @@
+//// [tests/cases/compiler/decoratorMetadataObjectLiteralMethodNoCrash.ts] ////
+
+=== decoratorMetadataObjectLiteralMethodNoCrash.ts ===
+declare function dec(...args: any[]): any;
+>dec : (...args: any[]) => any
+>args : any[]
+
+const o = {
+>o : { m(x: string): void; }
+>{    m(@dec x: string) {}} : { m(x: string): void; }
+
+    m(@dec x: string) {}
+>m : (x: string) => void
+>dec : (...args: any[]) => any
+>x : string
+
+};
+
+class C {
+>C : C
+
+    @dec
+>dec : (...args: any[]) => any
+
+    prop!: number;
+>prop : number
+
+    method() {
+>method : () => { m(x: string): void; s: number; }
+
+        return {
+>{            m(@dec x: string) {},            set s(@dec v: number) {}        } : { m(x: string): void; s: number; }
+
+            m(@dec x: string) {},
+>m : (x: string) => void
+>dec : (...args: any[]) => any
+>x : string
+
+            set s(@dec v: number) {}
+>s : number
+>dec : (...args: any[]) => any
+>v : number
+
+        };
+    }
+}
+

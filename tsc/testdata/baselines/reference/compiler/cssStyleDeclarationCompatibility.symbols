@@ -1,0 +1,19 @@
+//// [tests/cases/compiler/cssStyleDeclarationCompatibility.ts] ////
+
+=== cssStyleDeclarationCompatibility.ts ===
+declare const element: HTMLElement;
+>element : Symbol(element, Decl(cssStyleDeclarationCompatibility.ts, 0, 13))
+>HTMLElement : Symbol(HTMLElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+const style: CSSStyleDeclaration = element.style;
+>style : Symbol(style, Decl(cssStyleDeclarationCompatibility.ts, 1, 5))
+>CSSStyleDeclaration : Symbol(CSSStyleDeclaration, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>element.style : Symbol(ElementCSSInlineStyle.style, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>element : Symbol(element, Decl(cssStyleDeclarationCompatibility.ts, 0, 13))
+>style : Symbol(ElementCSSInlineStyle.style, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+[...element.style];
+>element.style : Symbol(ElementCSSInlineStyle.style, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>element : Symbol(element, Decl(cssStyleDeclarationCompatibility.ts, 0, 13))
+>style : Symbol(ElementCSSInlineStyle.style, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+

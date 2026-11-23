@@ -88,7 +88,7 @@ type PnpManifestData struct {
 func parseManifestFromPath(fs vfs.FS, manifestDir string) (*PnpManifestData, error) {
 	pnpDataString := ""
 
-	data, ok := fs.ReadFile(tspath.CombinePaths(manifestDir, ".pnp.data.json"))
+	data, ok := fs.ReadFile(tspath.RootedFilePathFromAbsolute(tspath.CombinePaths(manifestDir, ".pnp.data.json")))
 	if ok {
 		pnpDataString = data
 	} else {
@@ -103,7 +103,7 @@ func parseManifestFromPath(fs vfs.FS, manifestDir string) (*PnpManifestData, err
 }
 
 func extractPnpDataStringFromPath(fs vfs.FS, path string) (string, error) {
-	pnpScriptString, ok := fs.ReadFile(path)
+	pnpScriptString, ok := fs.ReadFile(tspath.RootedFilePathFromAbsolute(path))
 	if !ok {
 		return "", errors.New("failed to read file: " + path)
 	}

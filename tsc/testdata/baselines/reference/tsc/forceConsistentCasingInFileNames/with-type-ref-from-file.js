@@ -9,7 +9,7 @@ declare class c { }
 //// [/user/username/projects/myproject/tsconfig.json] *new* 
 { }
 
-tsgo -p /user/username/projects/myproject --explainFiles --traceResolution
+tsc -p /user/username/projects/myproject --explainFiles --traceResolution
 ExitStatus:: Success
 Output::
 ======== Resolving type reference directive './fileOne.d.ts', containing file '/user/username/projects/myproject/src/file2.d.ts', root directory '/user/username/projects/myproject/node_modules/@types,/user/username/projects/node_modules/@types,/user/username/node_modules/@types,/user/node_modules/@types,/node_modules/@types'. ========

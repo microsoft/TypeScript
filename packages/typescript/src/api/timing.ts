@@ -182,7 +182,7 @@ export function disabledServerTimingInfo(): ServerTimingInfo {
  * requests used to fetch timing) do not misalign the two ring buffers.
  */
 export function combineTimingInfo(client: TimingInfo, server: ServerTimingInfo): TimingInfo {
-    if (!client.enabled) {
+    if (!client.enabled || !server.enabled) {
         return client;
     }
 

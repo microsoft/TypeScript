@@ -1,0 +1,19 @@
+//// [tests/cases/compiler/cssStyleDeclarationCompatibility.ts] ////
+
+=== cssStyleDeclarationCompatibility.ts ===
+declare const element: HTMLElement;
+>element : HTMLElement
+
+const style: CSSStyleDeclaration = element.style;
+>style : CSSStyleDeclaration
+>element.style : CSSStyleDeclaration
+>element : HTMLElement
+>style : CSSStyleDeclaration
+
+[...element.style];
+>[...element.style] : string[]
+>...element.style : string
+>element.style : CSSStyleDeclaration
+>element : HTMLElement
+>style : CSSStyleDeclaration
+

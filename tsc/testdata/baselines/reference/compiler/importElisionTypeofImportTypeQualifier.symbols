@@ -1,0 +1,22 @@
+//// [tests/cases/compiler/importElisionTypeofImportTypeQualifier.ts] ////
+
+=== /b.ts ===
+export namespace ns { export const y = 1; }
+>ns : Symbol(ns, Decl(b.ts, 0, 0))
+>y : Symbol(y, Decl(b.ts, 0, 34))
+
+=== /c.ts ===
+export namespace ns { export const y = 2; }
+>ns : Symbol(ns, Decl(c.ts, 0, 0))
+>y : Symbol(y, Decl(c.ts, 0, 34))
+
+=== /a.ts ===
+import { ns } from "./c";
+>ns : Symbol(ns, Decl(a.ts, 0, 8))
+
+export function f(x: typeof import("./b").ns.y) {}
+>f : Symbol(f, Decl(a.ts, 0, 25))
+>x : Symbol(x, Decl(a.ts, 1, 18))
+>ns : Symbol(ns, Decl(b.ts, 0, 0))
+>y : Symbol(ns.y, Decl(b.ts, 0, 34))
+

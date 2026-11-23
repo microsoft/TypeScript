@@ -9,19 +9,25 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/json"
 	"github.com/microsoft/TypeScript/tsc/internal/module"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/projecttestutil"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"gotest.tools/v3/assert"
 )
 
 type failingModuleResolutionConn struct {
-	calls int
+	calls    int
+	contexts []context.Context
 }
 
 func (c *failingModuleResolutionConn) Run(context.Context) error {
 	return nil
 }
 
-func (c *failingModuleResolutionConn) Call(context.Context, string, any) (json.Value, error) {
+func (c *failingModuleResolutionConn) Call(ctx context.Context, _ string, _ any) (json.Value, error) {
 	c.calls++
+	c.contexts = append(c.contexts, ctx)
+	if err := ctx.Err(); err != nil {
+		return nil, err
+	}
 	return nil, errors.New("callback error")
 }
 
@@ -61,6 +67,56 @@ func TestModuleResolverUsesSnapshotFileSystem(t *testing.T) {
 	assert.Equal(t, result.ResolvedModule.ResolvedFileName, "/home/projects/p/node_modules/pkg/index.d.ts")
 	assert.Equal(t, result.ResolvedModule.PackageId.Name, "pkg")
 	assert.Assert(t, len(result.Trace) > 0)
+}
+
+func TestContentMapperModuleResolverProjectContext(t *testing.T) {
+	t.Parallel()
+	init, _ := projecttestutil.GetSessionInitOptions(map[string]any{
+		"/a/tsconfig.json": `{
+			"files": ["a.ts"], "compilerOptions": {"noLib": true},
+			"contentMappers": [{"package": "mapper", "extensions": [".blob.toml"], "include": ["../b"]}]
+		}`,
+		"/b/tsconfig.json": `{
+			"files": ["b.ts"], "compilerOptions": {"noLib": true},
+			"contentMappers": [{"package": "mapper", "extensions": [".toml"]}]
+		}`,
+		"/a/a.ts":        "export {};",
+		"/b/b.ts":        "export {};",
+		"/b/x.blob.toml": "",
+		"/c/x.blob.toml": "",
+		"/node_modules/mapper/package.json": `{
+			"name": "mapper", "typescript": {"contentMapper": {"exec": ["run"]}}
+		}`,
+	}, nil, nil)
+	init.Options.RunExternalCode = true
+	session := NewStandaloneSession(init, nil)
+	defer session.Close()
+	snapshot, err := session.handleCreateSnapshot(t.Context(), &CreateSnapshotParams{
+		OpenProjects: []DocumentIdentifier{{FileName: "/a/tsconfig.json"}, {FileName: "/b/tsconfig.json"}},
+	})
+	assert.NilError(t, err)
+	for _, test := range []struct {
+		configPath tspath.RootedFilePath
+		extension  string
+		directory  string
+	}{
+		{configPath: "/b/tsconfig.json", directory: "/b", extension: ".toml"},
+		{directory: "/c", extension: ".blob.toml"},
+	} {
+		resolver, err := session.handleCreateModuleResolver(&CreateModuleResolverParams{
+			CompilerOptions: core.CompilerOptions{
+				ConfigFilePath: test.configPath, Module: core.ModuleKindPreserve, ModuleResolution: core.ModuleResolutionKindBundler,
+			},
+		})
+		assert.NilError(t, err)
+		result, err := session.handleResolveModuleName(t.Context(), &ResolveModuleNameParams{
+			Snapshot: snapshot.Snapshot, Resolver: resolver, ModuleName: "./x.blob.toml",
+			ContainingDirectory: DocumentIdentifier{FileName: test.directory},
+		})
+		assert.NilError(t, err)
+		assert.Assert(t, result.ResolvedModule != nil)
+		assert.Equal(t, result.ResolvedModule.Extension, test.extension)
+	}
 }
 
 func TestStaticModuleResolutionSpecificityAndLifetime(t *testing.T) {
@@ -169,13 +225,72 @@ func TestCreateProgramUsesStaticModuleResolutions(t *testing.T) {
 		},
 	})
 	assert.NilError(t, err)
-	projectID := (*response.Operation.CreatedPrograms)[0].AsID()
+	projectID := session.snapshots[response.Snapshot].snapshot.ProjectCollection.GetProject((*response.Operation.CreatedPrograms)[0].AsID()).Handle()
 	fileNames, err := session.handleGetSourceFileNames(context.Background(), &GetSourceFileNamesParams{
 		Snapshot: response.Snapshot,
 		Project:  projectID,
 	})
 	assert.NilError(t, err)
-	assert.DeepEqual(t, fileNames, []string{provided, root})
+	assert.DeepEqual(t, fileNames, []tspath.RootedFilePath{provided, root})
+}
+
+func TestCustomModuleResolutionsSkipUnsafeRewriteDiagnostic(t *testing.T) {
+	t.Parallel()
+
+	const root = "/home/projects/p/src/a.ts"
+	const staticTarget = "/home/projects/p/src/b.ts"
+	const callbackTarget = "/home/projects/p/src/c.ts"
+	projectSession, _ := projecttestutil.Setup(map[string]any{
+		root:           `import { b } from "./b.ts"; import { c } from "./c.ts"; export const a = b + c;`,
+		staticTarget:   `export const b = 1;`,
+		callbackTarget: `export const c = 2;`,
+	})
+	defer projectSession.Close()
+	session := NewLSPSession(projectSession, nil)
+	defer session.Close()
+	session.conn = &callbackTestConn{responses: map[string]json.Value{
+		"resolveModuleName/1": json.Value(`{"resolvedFileName":"` + callbackTarget + `"}`),
+	}}
+	compilerOptions := func() core.CompilerOptions {
+		return core.CompilerOptions{
+			NoLib:                           core.TSTrue,
+			Module:                          core.ModuleKindNodeNext,
+			ModuleResolution:                core.ModuleResolutionKindNodeNext,
+			RewriteRelativeImportExtensions: core.TSTrue,
+			OutDir:                          "/home/projects/p/out",
+		}
+	}
+	resolver, err := session.handleCreateModuleResolver(&CreateModuleResolverParams{
+		CompilerOptions: compilerOptions(),
+		ModuleResolutions: &ModuleResolutionSpec{
+			Fallback: ModuleResolutionFallbackResolve,
+			Entries: []*ModuleResolutionEntry{
+				staticResolutionEntry("./b.ts", "", nil, staticTarget),
+			},
+		},
+		ResolveModuleNameCallback: "resolveModuleName/1",
+	})
+	assert.NilError(t, err)
+
+	response, err := session.handleCreateSnapshot(t.Context(), &CreateSnapshotParams{
+		SnapshotRequestChangesParams: SnapshotRequestChangesParams{ //nolint:modernize
+			CreatePrograms: []*CreateSnapshotProgramParams{{
+				RootFiles:       []DocumentIdentifier{{FileName: root}, {FileName: staticTarget}, {FileName: callbackTarget}},
+				CompilerOptions: compilerOptions(),
+				Options:         &CreateProgramOptions{ModuleResolver: resolver},
+			}},
+		},
+	})
+	assert.NilError(t, err)
+	diagnostics, err := session.handleGetSemanticDiagnostics(t.Context(), &GetDiagnosticsParams{
+		Snapshot: response.Snapshot,
+		Project:  session.snapshots[response.Snapshot].snapshot.ProjectCollection.GetProject((*response.Operation.CreatedPrograms)[0].AsID()).Handle(),
+		Files:    []DocumentIdentifier{{FileName: root}},
+	})
+	assert.NilError(t, err)
+	for _, diagnostic := range diagnostics {
+		t.Errorf("handleGetSemanticDiagnostics(%s) reported TS%d at %d: %s", root, diagnostic.Code, diagnostic.Pos, diagnostic.Text)
+	}
 }
 
 func TestStaticModuleResolutionPreservesStaticIdentity(t *testing.T) {
@@ -238,10 +353,9 @@ func TestModuleResolutionCallbackErrorsAreReturned(t *testing.T) {
 		registration:     registration,
 		session:          session,
 		conn:             conn,
-		ctx:              context.Background(),
 		currentDirectory: "/",
 	}
-	provider, cleanup := factory.NewResolver(module.ResolverOptions{
+	provider, cleanup := factory.NewResolver(context.Background(), module.ResolverOptions{
 		Host:            session,
 		CompilerOptions: core.EmptyCompilerOptions,
 	})
@@ -255,43 +369,88 @@ func TestModuleResolutionCallbackErrorsAreReturned(t *testing.T) {
 	assert.Equal(t, len(session.programResolutionContexts), 0)
 }
 
-func TestModuleResolutionCallbackErrorRejectsLanguageServerUpdate(t *testing.T) {
+func TestModuleResolutionFactoryUsesCurrentContext(t *testing.T) {
 	t.Parallel()
-
-	projectSession, _ := projecttestutil.Setup(map[string]any{
-		"/src/index.ts": `import "pkg";`,
-	})
+	projectSession, _ := projecttestutil.Setup(map[string]any{})
 	defer projectSession.Close()
 	session := NewLSPSession(projectSession, nil)
 	defer session.Close()
-	session.conn = &failingModuleResolutionConn{}
-	resolver, err := session.handleCreateModuleResolver(&CreateModuleResolverParams{
-		CompilerOptions: core.CompilerOptions{
-			NoLib:            core.TSTrue,
-			Module:           core.ModuleKindNodeNext,
-			ModuleResolution: core.ModuleResolutionKindNodeNext,
-		},
-		ResolveModuleNameCallback: "resolveModuleName/1",
-	})
-	assert.NilError(t, err)
-	baseSnapshot := projectSession.Snapshot()
+	conn := &failingModuleResolutionConn{}
+	factory := &moduleResolverFactory{
+		registration:     &moduleResolverRegistration{id: 1, resolveModuleNameCallback: "resolveModuleName/1"},
+		session:          session,
+		conn:             conn,
+		currentDirectory: "/",
+	}
+	oldContext, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	for _, ctx := range []context.Context{oldContext, t.Context()} {
+		resolver, cleanup := factory.NewResolver(ctx, module.ResolverOptions{
+			Host:            session,
+			CompilerOptions: core.EmptyCompilerOptions,
+		})
+		_, _, err := resolver.ResolveModuleNameFromDirectory("pkg", "/src", core.ResolutionModeESM)
+		assert.ErrorContains(t, err, "callback error")
+		assert.Equal(t, conn.contexts[len(conn.contexts)-1], ctx)
+		cleanup()
+		cancel()
+	}
+	assert.Equal(t, len(session.programResolutionContexts), 0)
+}
 
-	_, err = session.handleGetCurrentLanguageServerSnapshot(context.Background(), &GetCurrentLanguageServerSnapshotParams{
-		Changes: &LanguageServerSnapshotChanges{SnapshotRequestChangesParams{
-			CreatePrograms: []*CreateSnapshotProgramParams{{
-				RootFiles: []DocumentIdentifier{{FileName: "/src/index.ts"}},
+func TestModuleResolutionCallbackErrorRejectsLanguageServerUpdate(t *testing.T) {
+	t.Parallel()
+	for _, name := range []string{"callback error", "cancelled context"} {
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+			projectSession, _ := projecttestutil.Setup(map[string]any{
+				"/src/index.ts": `import "pkg";`,
+			})
+			defer projectSession.Close()
+			session := NewLSPSession(projectSession, nil)
+			defer session.Close()
+			conn := &failingModuleResolutionConn{}
+			session.conn = conn
+			resolver, err := session.handleCreateModuleResolver(&CreateModuleResolverParams{
 				CompilerOptions: core.CompilerOptions{
 					NoLib:            core.TSTrue,
 					Module:           core.ModuleKindNodeNext,
 					ModuleResolution: core.ModuleResolutionKindNodeNext,
 				},
-				Options: &CreateProgramOptions{ModuleResolver: resolver},
-			}},
-		}},
-	})
-	assert.ErrorContains(t, err, "callback error")
-	assert.Assert(t, projectSession.Snapshot() == baseSnapshot)
-	assert.Equal(t, len(projectSession.Snapshot().ProjectCollection.SyntheticProjects()), 0)
+				ResolveModuleNameCallback: "resolveModuleName/1",
+			})
+			assert.NilError(t, err)
+			baseSnapshot := projectSession.Snapshot()
+			ctx, cancel := context.WithCancel(t.Context())
+			defer cancel()
+			if name == "cancelled context" {
+				cancel()
+			}
+
+			_, err = session.handleGetCurrentLanguageServerSnapshot(ctx, &GetCurrentLanguageServerSnapshotParams{
+				Changes: &LanguageServerSnapshotChanges{SnapshotRequestChangesParams{
+					CreatePrograms: []*CreateSnapshotProgramParams{{
+						RootFiles: []DocumentIdentifier{{FileName: "/src/index.ts"}},
+						CompilerOptions: core.CompilerOptions{
+							NoLib:            core.TSTrue,
+							Module:           core.ModuleKindNodeNext,
+							ModuleResolution: core.ModuleResolutionKindNodeNext,
+						},
+						Options: &CreateProgramOptions{ModuleResolver: resolver},
+					}},
+				}},
+			})
+			if name == "cancelled context" {
+				assert.Assert(t, errors.Is(err, context.Canceled))
+			} else {
+				assert.ErrorContains(t, err, "callback error")
+			}
+			assert.Equal(t, conn.calls, 1)
+			assert.Equal(t, len(session.programResolutionContexts), 0)
+			assert.Assert(t, projectSession.Snapshot() == baseSnapshot)
+			assert.Equal(t, len(projectSession.Snapshot().ProjectCollection.SyntheticProjects()), 0)
+		})
+	}
 }
 
 func staticResolutionEntry(moduleName string, directory string, mode *core.ModuleKind, fileName string) *ModuleResolutionEntry {

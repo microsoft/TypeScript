@@ -1,0 +1,42 @@
+//// [tests/cases/compiler/contextualRuleMessageInference.ts] ////
+
+=== contextualRuleMessageInference.ts ===
+type DeferredInference<T> = [T][T extends unknown ? 0 : never];
+>DeferredInference : Symbol(DeferredInference, Decl(contextualRuleMessageInference.ts, 0, 0))
+>T : Symbol(T, Decl(contextualRuleMessageInference.ts, 0, 23))
+>T : Symbol(T, Decl(contextualRuleMessageInference.ts, 0, 23))
+>T : Symbol(T, Decl(contextualRuleMessageInference.ts, 0, 23))
+
+declare function runRule<Message extends string>(
+>runRule : Symbol(runRule, Decl(contextualRuleMessageInference.ts, 0, 63))
+>Message : Symbol(Message, Decl(contextualRuleMessageInference.ts, 2, 25))
+
+    rule: Message,
+>rule : Symbol(rule, Decl(contextualRuleMessageInference.ts, 2, 49))
+>Message : Symbol(Message, Decl(contextualRuleMessageInference.ts, 2, 25))
+
+    tests: { invalid: readonly { errors: readonly { messageId: DeferredInference<Message> }[] }[] },
+>tests : Symbol(tests, Decl(contextualRuleMessageInference.ts, 3, 18))
+>invalid : Symbol(invalid, Decl(contextualRuleMessageInference.ts, 4, 12))
+>errors : Symbol(errors, Decl(contextualRuleMessageInference.ts, 4, 32))
+>messageId : Symbol(messageId, Decl(contextualRuleMessageInference.ts, 4, 51))
+>DeferredInference : Symbol(DeferredInference, Decl(contextualRuleMessageInference.ts, 0, 0))
+>Message : Symbol(Message, Decl(contextualRuleMessageInference.ts, 2, 25))
+
+): void;
+
+runRule("forbiddenAct", {
+>runRule : Symbol(runRule, Decl(contextualRuleMessageInference.ts, 0, 63))
+
+    invalid: ["act()"].map(() => ({
+>invalid : Symbol(invalid, Decl(contextualRuleMessageInference.ts, 7, 25))
+>["act()"].map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+
+        errors: [{ messageId: "forbiddenAct" }],
+>errors : Symbol(errors, Decl(contextualRuleMessageInference.ts, 8, 35))
+>messageId : Symbol(messageId, Decl(contextualRuleMessageInference.ts, 9, 18))
+
+    })),
+});
+

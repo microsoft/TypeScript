@@ -1,0 +1,15 @@
+deprecatedReferenceInEnumComputedNameNoFlake.ts(5,5): error TS1164: Computed property names are not allowed in enums.
+deprecatedReferenceInEnumComputedNameNoFlake.ts(5,6): suggestion TS6385: 'oldValue' is deprecated.
+
+
+==== deprecatedReferenceInEnumComputedNameNoFlake.ts (2 errors) ====
+    // TS6385: 'oldValue' is deprecated.
+    /** @deprecated */
+    declare const oldValue: { value: number };
+    export enum Values {
+        [oldValue.value] = 1,
+        ~~~~~~~~~~~~~~~~
+!!! error TS1164: Computed property names are not allowed in enums.
+         ~~~~~~~~
+!!! suggestion TS6385: 'oldValue' is deprecated.
+    }

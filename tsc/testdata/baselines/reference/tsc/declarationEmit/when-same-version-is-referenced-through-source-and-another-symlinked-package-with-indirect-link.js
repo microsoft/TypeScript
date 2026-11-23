@@ -84,7 +84,7 @@ export default actionCreatorFactory;
     "main": "dist/commonjs/index.js"
 }
 
-tsgo -p plugin-one --explainFiles
+tsc -p plugin-one --explainFiles
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 ======== Resolving module 'plugin-two' from '/user/username/projects/myproject/plugin-one/index.ts'. ========

@@ -1,0 +1,18 @@
+//// [tests/cases/compiler/emptyMappedParserMetadata.ts] ////
+
+=== emptyMappedParserMetadata.ts ===
+type ParserName = "babel" | (Pick<string, never> & { marker?: never });
+>ParserName : ParserName
+>marker : undefined
+
+declare const customParser: string;
+>customParser : string
+
+const parser: ParserName = customParser;
+>parser : ParserName
+>customParser : string
+
+const svelteParser: ParserName = "svelte";
+>svelteParser : ParserName
+>"svelte" : "svelte"
+

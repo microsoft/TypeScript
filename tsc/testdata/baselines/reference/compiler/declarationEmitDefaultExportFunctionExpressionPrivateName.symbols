@@ -1,0 +1,31 @@
+//// [tests/cases/compiler/declarationEmitDefaultExportFunctionExpressionPrivateName.ts] ////
+
+=== helper.ts ===
+declare const brand: unique symbol;
+>brand : Symbol(brand, Decl(helper.ts, 0, 13))
+
+class Foo {
+>Foo : Symbol(Foo, Decl(helper.ts, 0, 35))
+
+  [brand]: number = 1;
+>[brand] : Symbol(Foo[brand], Decl(helper.ts, 2, 11))
+>brand : Symbol(brand, Decl(helper.ts, 0, 13))
+}
+
+export function makeFoo() {
+>makeFoo : Symbol(makeFoo, Decl(helper.ts, 4, 1))
+
+  return new Foo();
+>Foo : Symbol(Foo, Decl(helper.ts, 0, 35))
+}
+
+=== repro.ts ===
+import { makeFoo } from './helper';
+>makeFoo : Symbol(makeFoo, Decl(repro.ts, 0, 8))
+
+export default (function () {
+  return makeFoo();
+>makeFoo : Symbol(makeFoo, Decl(repro.ts, 0, 8))
+
+});
+

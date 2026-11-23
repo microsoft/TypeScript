@@ -1,0 +1,75 @@
+/main.ts(1,28): error TS2876: This relative import path is unsafe to rewrite because it looks like a file name, but actually resolves to "./components.astro/index.ts".
+/main.ts(3,33): error TS2876: This relative import path is unsafe to rewrite because it looks like a file name, but actually resolves to "./components.astro/index.ts".
+/main.ts(4,43): error TS2876: This relative import path is unsafe to rewrite because it looks like a file name, but actually resolves to "./components.astro/index.ts".
+/main.ts(5,45): error TS2876: This relative import path is unsafe to rewrite because it looks like a file name, but actually resolves to "./components.astro/index.ts".
+/main.ts(7,51): error TS2876: This relative import path is unsafe to rewrite because it looks like a file name, but actually resolves to "./components.astro/index.ts".
+/main.ts(11,35): error TS2876: This relative import path is unsafe to rewrite because it looks like a file name, but actually resolves to "./ambient.d.astro.ts".
+
+
+==== /tsconfig.json (0 errors) ====
+    {
+        "compilerOptions": {
+            "target": "esnext",
+            "module": "preserve",
+            "rewriteRelativeImportExtensions": true,
+            "allowArbitraryExtensions": true,
+            "rootDir": "/",
+            "outDir": "/dist"
+        },
+        "contentMappers": [{
+            "package": "mapper",
+            "extensions": [".astro"],
+            "outputExtensions": { ".astro": ".js" }
+        }]
+    }
+    
+==== /components.astro/index.ts (0 errors) ====
+    export interface Props { title: string }
+    
+==== /native.ts/index.ts (0 errors) ====
+    export interface NativeProps { title: string }
+    
+==== /ambient.d.astro.ts (0 errors) ====
+    export interface AmbientProps { title: string }
+    
+==== /existing.d.ts (0 errors) ====
+    export declare const existing: import("./components.astro").Props;
+    
+==== /main.ts (6 errors) ====
+    export type { Props } from "./components.astro";
+                               ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2876: This relative import path is unsafe to rewrite because it looks like a file name, but actually resolves to "./components.astro/index.ts".
+    export type * from "./components.astro";
+    export type * as Namespace from "./components.astro";
+                                    ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2876: This relative import path is unsafe to rewrite because it looks like a file name, but actually resolves to "./components.astro/index.ts".
+    export { type Props as InlineProps } from "./components.astro";
+                                              ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2876: This relative import path is unsafe to rewrite because it looks like a file name, but actually resolves to "./components.astro/index.ts".
+    import type { Props as ImportedProps } from "./components.astro";
+                                                ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2876: This relative import path is unsafe to rewrite because it looks like a file name, but actually resolves to "./components.astro/index.ts".
+    export type Alias = ImportedProps;
+    import { type Props as InlineImportedProps } from "./components.astro";
+                                                      ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2876: This relative import path is unsafe to rewrite because it looks like a file name, but actually resolves to "./components.astro/index.ts".
+    export type InlineAlias = InlineImportedProps;
+    export type ImportType = import("./components.astro").Props;
+    export declare const props: import("./components.astro").Props;
+    export type { AmbientProps } from "./ambient.astro";
+                                      ~~~~~~~~~~~~~~~~~
+!!! error TS2876: This relative import path is unsafe to rewrite because it looks like a file name, but actually resolves to "./ambient.d.astro.ts".
+    export type NativeImportType = import("./native.ts").NativeProps;
+    export type { ActualProps } from "./actual.astro";
+    import type { ActualProps } from "./actual.astro";
+    export type ActualAlias = ActualProps;
+    export type ActualImportType = import("./actual.astro").ActualProps;
+    export declare const actualProps: import("./actual.astro").ActualProps;
+    
+==== /node_modules/mapper/package.json (0 errors) ====
+    {
+        "name": "mapper",
+        "version": "1.0.0",
+        "typescript": { "contentMapper": { "exec": ["compiler-test-mapper"] } }
+    }
+    

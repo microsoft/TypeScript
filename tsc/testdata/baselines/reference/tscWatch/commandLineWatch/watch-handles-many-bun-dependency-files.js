@@ -45,7 +45,7 @@ export const value9 = 9;
 	"files": ["index.ts", "node_modules/.bun/pkg0/index.ts", "node_modules/.bun/pkg1/index.ts", "node_modules/.bun/pkg2/index.ts", "node_modules/.bun/pkg3/index.ts", "node_modules/.bun/pkg4/index.ts", "node_modules/.bun/pkg5/index.ts", "node_modules/.bun/pkg6/index.ts", "node_modules/.bun/pkg7/index.ts", "node_modules/.bun/pkg8/index.ts", "node_modules/.bun/pkg9/index.ts", "node_modules/.bun/pkg10/index.ts", "node_modules/.bun/pkg11/index.ts"]
 }
 
-tsgo --watch
+tsc --watch
 ExitStatus:: Success
 Output::
 [2J[3J[H[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...

@@ -21,7 +21,7 @@ export { }
     },
 }
 
-tsgo 
+tsc 
 ExitStatus:: DiagnosticsPresent_OutputsSkipped
 Output::
 [96msrc/main.ts[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
@@ -199,7 +199,7 @@ Signatures::
 
 Edit [0]:: no change
 
-tsgo 
+tsc 
 ExitStatus:: DiagnosticsPresent_OutputsSkipped
 Output::
 [96msrc/main.ts[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
@@ -225,7 +225,7 @@ Edit [1]:: Fix error
 import { A } from "../shared/types/db";
 export const a = class { p = 10; };
 
-tsgo 
+tsc 
 ExitStatus:: Success
 Output::
 //// [/user/username/projects/noEmitOnError/dev-build/shared/types/db.d.ts] *new* 
@@ -355,7 +355,7 @@ Signatures::
 
 Edit [2]:: no change
 
-tsgo 
+tsc 
 ExitStatus:: Success
 Output::
 

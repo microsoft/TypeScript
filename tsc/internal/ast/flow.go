@@ -1,5 +1,7 @@
 package ast
 
+import "unsafe"
+
 // FlowFlags
 
 type FlowFlags uint32
@@ -38,6 +40,11 @@ type FlowList struct {
 
 type FlowLabel = FlowNode
 
+const (
+	kindFlowSwitchClauseData Kind = KindCount + 1 + iota
+	kindFlowReduceLabelData
+)
+
 // FlowSwitchClauseData (synthetic AST node for FlowFlagsSwitchClause)
 
 type FlowSwitchClauseData struct {
@@ -47,12 +54,14 @@ type FlowSwitchClauseData struct {
 	ClauseEnd       int32 // End index of case/default clause range
 }
 
+var _ [0 - unsafe.Offsetof(FlowSwitchClauseData{}.Node)]byte
+
 func NewFlowSwitchClauseData(switchStatement *Node, clauseStart int, clauseEnd int) *Node {
 	node := &FlowSwitchClauseData{}
 	node.SwitchStatement = switchStatement
 	node.ClauseStart = int32(clauseStart)
 	node.ClauseEnd = int32(clauseEnd)
-	return newNode(KindUnknown, node, NodeFactoryHooks{})
+	return newNode(kindFlowSwitchClauseData, node.AsNode(), NodeFactoryHooks{})
 }
 
 func (node *FlowSwitchClauseData) IsEmpty() bool {
@@ -67,9 +76,11 @@ type FlowReduceLabelData struct {
 	Antecedents *FlowList  // Temporary antecedent list
 }
 
+var _ [0 - unsafe.Offsetof(FlowReduceLabelData{}.Node)]byte
+
 func NewFlowReduceLabelData(target *FlowLabel, antecedents *FlowList) *Node {
 	node := &FlowReduceLabelData{}
 	node.Target = target
 	node.Antecedents = antecedents
-	return newNode(KindUnknown, node, NodeFactoryHooks{})
+	return newNode(kindFlowReduceLabelData, node.AsNode(), NodeFactoryHooks{})
 }

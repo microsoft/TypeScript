@@ -18,6 +18,8 @@ func (p *Parser) finishReparsedNode(node *ast.Node, locationNode *ast.Node) {
 
 func (p *Parser) finishMutatedNode(node *ast.Node) {
 	p.overrideParentInImmediateChildren(node)
+	// Wrapping an assignment's right side can make it a CommonJS export assignment.
+	p.checkCommonJSModuleIndicator(node)
 }
 
 // Deep-clone the given node and add the clone to the reparsed clone list. The list is used by ast.GetReparsedNodeForNode
@@ -597,19 +599,21 @@ func (p *Parser) reparseHosted(tag *ast.Node, parent *ast.Node, jsDoc *ast.Node)
 			}); extendsClause != nil && len(extendsClause.AsHeritageClause().Types.Nodes) == 1 {
 				target := extendsClause.AsHeritageClause().Types.Nodes[0].AsExpressionWithTypeArguments()
 				source := tag.ClassName().AsExpressionWithTypeArguments()
-				if ast.HasSamePropertyAccessName(target.Expression, source.Expression) {
-					if target.TypeArguments == nil && source.TypeArguments != nil {
-						newArguments := p.nodeSliceArena.NewSlice(len(source.TypeArguments.Nodes))
-						for i, arg := range source.TypeArguments.Nodes {
-							newArguments[i] = p.addDeepCloneReparse(arg)
-						}
-						target.TypeArguments = p.newNodeList(source.TypeArguments.Loc, newArguments)
-						p.finishMutatedNode(target.AsNode())
-					}
+				if target.TypeArguments == nil && source.TypeArguments != nil && target.Expression.Kind != ast.KindNullKeyword && (!ast.IsEntityNameExpression(target.Expression) || ast.HasSamePropertyAccessName(target.Expression, source.Expression)) {
+					p.setReparsedTypeArguments(target, source.TypeArguments)
 				}
 			}
 		}
 	}
+}
+
+func (p *Parser) setReparsedTypeArguments(target *ast.ExpressionWithTypeArguments, source *ast.NodeList) {
+	typeArguments := p.nodeSliceArena.NewSlice(len(source.Nodes))
+	for i, typeArgument := range source.Nodes {
+		typeArguments[i] = p.addDeepCloneReparse(typeArgument)
+	}
+	target.TypeArguments = p.newNodeList(source.Loc, typeArguments)
+	p.finishMutatedNode(target.AsNode())
 }
 
 func (p *Parser) makeQuestionIfOptional(parameter *ast.JSDocParameterOrPropertyTag) *ast.Node {

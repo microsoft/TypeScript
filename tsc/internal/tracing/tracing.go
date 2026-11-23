@@ -112,8 +112,8 @@ const flushThreshold = 256 * 1024
 // Tracing manages the overall tracing session including all checkers
 type Tracing struct {
 	fs               vfs.FS
-	traceDir         string
-	tracePath        string
+	traceDir         tspath.RootedDirectoryPath
+	tracePath        tspath.RootedFilePath
 	configFilePath   string
 	legend           []TraceRecord
 	tracers          []*typeTracer
@@ -149,11 +149,11 @@ const (
 // StartTracing creates a new tracing session.
 // When deterministic is true, timestamps use a monotonic counter instead of
 // real wall-clock time, producing stable output for test baselines.
-func StartTracing(fs vfs.FS, traceDir string, configFilePath string, deterministic bool) (*Tracing, error) {
+func StartTracing(fs vfs.FS, traceDir tspath.RootedDirectoryPath, configFilePath string, deterministic bool) (*Tracing, error) {
 	tr := &Tracing{
 		fs:             fs,
 		traceDir:       traceDir,
-		tracePath:      tspath.CombinePaths(traceDir, traceFileName),
+		tracePath:      traceDir.ResolveFile(traceFileName),
 		configFilePath: configFilePath,
 		legend:         []TraceRecord{},
 		tracers:        []*typeTracer{},
@@ -170,7 +170,7 @@ func StartTracing(fs vfs.FS, traceDir string, configFilePath string, determinist
 	// Write metadata events (matching TypeScript's format)
 	metaTs := tr.timestamp()
 	tr.metadataTS = metaTs
-	tr.writeEvent(traceEvent{PID: 1, TID: mainThreadID, PH: "M", Cat: "__metadata", TS: metaTs, Name: "process_name", Args: map[string]any{"name": "tsgo"}})
+	tr.writeEvent(traceEvent{PID: 1, TID: mainThreadID, PH: "M", Cat: "__metadata", TS: metaTs, Name: "process_name", Args: map[string]any{"name": "tsc"}})
 	tr.traceContent.WriteString(",\n")
 	tr.writeEvent(traceEvent{PID: 1, TID: mainThreadID, PH: "M", Cat: "__metadata", TS: metaTs, Name: "thread_name", Args: map[string]any{"name": "Main"}})
 	tr.traceContent.WriteString(",\n")
@@ -374,10 +374,15 @@ func traceThreadKeyFromArgs(args map[string]any) (traceThreadKey, bool) {
 	}
 
 	for _, key := range traceThreadArgKeys {
-		if value, ok := args[key]; ok {
-			if path, ok := value.(string); ok && path != "" {
-				return traceThreadKey{kind: traceThreadKindFile, text: path}, true
-			}
+		var path string
+		switch value := args[key].(type) {
+		case string:
+			path = value
+		case tspath.RootedFilePath:
+			path = value.AsString()
+		}
+		if path != "" {
+			return traceThreadKey{kind: traceThreadKindFile, text: path}, true
 		}
 	}
 
@@ -416,7 +421,7 @@ func (tr *Tracing) NewTypeTracer(checkerIndex int) Tracer {
 	tr.mu.Lock()
 	defer tr.mu.Unlock()
 
-	typesPath := tspath.CombinePaths(tr.traceDir, fmt.Sprintf("types_%d.json", checkerIndex))
+	typesPath := tr.traceDir.ResolveFile(fmt.Sprintf("types_%d.json", checkerIndex))
 	tracer := &typeTracer{
 		fs:           tr.fs,
 		checkerIndex: checkerIndex,
@@ -426,8 +431,8 @@ func (tr *Tracing) NewTypeTracer(checkerIndex int) Tracer {
 	tr.tracers = append(tr.tracers, tracer)
 	tr.legend = append(tr.legend, TraceRecord{
 		ConfigFilePath: tr.configFilePath,
-		TracePath:      tr.tracePath,
-		TypesPath:      typesPath,
+		TracePath:      tr.tracePath.AsString(),
+		TypesPath:      typesPath.AsString(),
 		CheckerID:      checkerIndex,
 	})
 	return tracer
@@ -469,7 +474,7 @@ func (tr *Tracing) StopTracing() error {
 	})
 
 	// Write the legend file
-	legendPath := tspath.CombinePaths(tr.traceDir, "legend.json")
+	legendPath := tr.traceDir.ResolveFile("legend.json")
 	legendData, err := json.MarshalIndent(tr.legend, "", "  ")
 	if err != nil {
 		return fmt.Errorf("failed to marshal legend file: %w", err)
@@ -485,7 +490,7 @@ func (tr *Tracing) StopTracing() error {
 type typeTracer struct {
 	fs           vfs.FS
 	checkerIndex int
-	typesPath    string
+	typesPath    tspath.RootedFilePath
 	types        []TracedType
 	mu           sync.Mutex
 }
@@ -605,9 +610,9 @@ func (t *typeTracer) buildTypeDescriptor(typ TracedType, recursionIdentityMap ma
 
 	// Symbol name - escape the internal symbol name prefix for valid JSON
 	if sym := aliasSymbol; sym != nil {
-		desc.SymbolName = ast.EscapeAllInternalSymbolNames(sym.Name)
+		desc.SymbolName = ast.EscapeAllInternalSymbolNames(sym.Name())
 	} else if symbol != nil {
-		desc.SymbolName = ast.EscapeAllInternalSymbolNames(symbol.Name)
+		desc.SymbolName = ast.EscapeAllInternalSymbolNames(symbol.Name())
 	}
 
 	// Tuple flag
@@ -711,8 +716,8 @@ func (t *typeTracer) buildTypeDescriptor(typ TracedType, recursionIdentityMap ma
 	if firstDeclSymbol == nil {
 		firstDeclSymbol = symbol
 	}
-	if firstDeclSymbol != nil && len(firstDeclSymbol.Declarations) > 0 {
-		desc.FirstDeclaration = getLocation(firstDeclSymbol.Declarations[0])
+	if firstDeclSymbol != nil && len(firstDeclSymbol.Declarations()) > 0 {
+		desc.FirstDeclaration = getLocation(firstDeclSymbol.Declarations()[0])
 	}
 
 	// Display text
@@ -750,7 +755,7 @@ func getLocation(node *ast.Node) *Location {
 	endLine, endChar := scanner.GetECMALineAndUTF16CharacterOfPosition(file, node.End())
 
 	return &Location{
-		Path: string(tspath.ToPath(file.FileName(), "", false)),
+		Path: tspath.CaseInsensitive.PathKey(tspath.RootedPath(file.FileName())).AsString(),
 		Start: &LineAndChar{
 			Line:      startLine + 1,
 			Character: int(startChar) + 1,

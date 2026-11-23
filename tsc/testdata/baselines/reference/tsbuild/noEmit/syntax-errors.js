@@ -11,7 +11,7 @@ const a = "hello
     }
 }
 
-tsgo -b -v --noEmit
+tsc -b -v --noEmit
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -78,7 +78,7 @@ Signatures::
 
 Edit [0]:: no change
 
-tsgo -b -v --noEmit
+tsc -b -v --noEmit
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -110,7 +110,7 @@ Edit [1]:: Fix error
 //// [/home/src/projects/project/a.ts] *modified* 
 const a = "hello";
 
-tsgo -b -v --noEmit
+tsc -b -v --noEmit
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -145,7 +145,7 @@ Signatures::
 
 Edit [2]:: no change
 
-tsgo -b -v --noEmit
+tsc -b -v --noEmit
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -167,7 +167,7 @@ Signatures::
 
 Edit [3]:: Emit after fixing error
 
-tsgo -b -v
+tsc -b -v
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -193,7 +193,7 @@ Signatures::
 
 Edit [4]:: no change
 
-tsgo -b -v --noEmit
+tsc -b -v --noEmit
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -208,7 +208,7 @@ Edit [5]:: Introduce error
 //// [/home/src/projects/project/a.ts] *modified* 
 const a = "hello
 
-tsgo -b -v --noEmit
+tsc -b -v --noEmit
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -252,7 +252,7 @@ Signatures::
 
 Edit [6]:: Emit when error
 
-tsgo -b -v
+tsc -b -v
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -286,7 +286,7 @@ Signatures::
 
 Edit [7]:: no change
 
-tsgo -b -v --noEmit
+tsc -b -v --noEmit
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 

@@ -1,0 +1,29 @@
+//// [tests/cases/compiler/objectEntriesGenericMappedValues.ts] ////
+
+=== objectEntriesGenericMappedValues.ts ===
+function read<T extends { tabIndex: number }>(attributes: Partial<T>) {
+>read : Symbol(read, Decl(objectEntriesGenericMappedValues.ts, 0, 0))
+>T : Symbol(T, Decl(objectEntriesGenericMappedValues.ts, 0, 14))
+>tabIndex : Symbol(tabIndex, Decl(objectEntriesGenericMappedValues.ts, 0, 25))
+>attributes : Symbol(attributes, Decl(objectEntriesGenericMappedValues.ts, 0, 46))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(objectEntriesGenericMappedValues.ts, 0, 14))
+
+    const [, value] = Object.entries(attributes)[0];
+>value : Symbol(value, Decl(objectEntriesGenericMappedValues.ts, 1, 12))
+>Object.entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+>attributes : Symbol(attributes, Decl(objectEntriesGenericMappedValues.ts, 0, 46))
+
+    Object.entries(value);
+>Object.entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+>value : Symbol(value, Decl(objectEntriesGenericMappedValues.ts, 1, 12))
+
+    const tabIndex: number = value;
+>tabIndex : Symbol(tabIndex, Decl(objectEntriesGenericMappedValues.ts, 3, 9))
+>value : Symbol(value, Decl(objectEntriesGenericMappedValues.ts, 1, 12))
+}
+

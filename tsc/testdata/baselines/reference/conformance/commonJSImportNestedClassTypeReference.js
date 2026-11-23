@@ -35,11 +35,5 @@ function f(k) {
 }
 
 
-//// [mod1.d.ts]
-export declare var K: {
-    new (): {
-        values(): /*elided*/ any;
-    };
-};
 //// [main.d.ts]
 export {};

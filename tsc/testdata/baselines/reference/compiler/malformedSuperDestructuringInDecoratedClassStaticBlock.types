@@ -1,0 +1,19 @@
+//// [tests/cases/compiler/malformedSuperDestructuringInDecoratedClassStaticBlock.ts] ////
+
+=== malformedSuperDestructuringInDecoratedClassStaticBlock.ts ===
+(@c
+>(@cclass extends B{static{[super.x 0]=[1];}}) : typeof (Anonymous class)
+>@cclass extends B{static{[super.x 0]=[1];}} : typeof (Anonymous class)
+>c : any
+
+class extends B{static{[super.x 0]=[1];}});
+>B : any
+>[super.x 0]=[1] : [number]
+>[super.x 0] : [any, number]
+>super.x : any
+>super : any
+>x : any
+>0 : 0
+>[1] : [number]
+>1 : 1
+

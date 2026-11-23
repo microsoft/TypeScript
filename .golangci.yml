@@ -68,6 +68,8 @@ linters:
     depguard:
       rules:
         main:
+          files:
+            - '**/tsc/**/*.go'
           deny:
             - pkg: 'encoding/json$'
               desc: 'Use "github.com/microsoft/TypeScript/tsc/internal/json" instead.'

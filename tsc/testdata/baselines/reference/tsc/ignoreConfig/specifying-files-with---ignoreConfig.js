@@ -12,7 +12,7 @@ export const b = 10;
     "include": ["src"],
 }
 
-tsgo src/a.ts --ignoreConfig
+tsc src/a.ts --ignoreConfig
 ExitStatus:: Success
 Output::
 //// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*

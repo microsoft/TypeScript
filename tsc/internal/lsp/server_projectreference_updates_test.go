@@ -11,6 +11,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/lsp"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/lsptestutil"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/iovfs"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
 	"gotest.tools/v3/assert"
@@ -19,7 +20,7 @@ import (
 func initMutableLSPClient(t *testing.T, files map[string]string, prefs *lsutil.UserPreferences) (*lsptestutil.LSPClient, *vfstest.MapFS) {
 	t.Helper()
 
-	base := vfstest.FromMap(files, false)
+	base := vfstest.FromMap(files, tspath.CaseInsensitive)
 	baseFS := base.(iovfs.FsWithSys).FSys().(*vfstest.MapFS)
 	fs := bundled.WrapFS(base)
 

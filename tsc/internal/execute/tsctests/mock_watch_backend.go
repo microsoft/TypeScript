@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"io"
 	"path"
-	"sort"
+	"slices"
 	"strings"
 	"sync"
 
@@ -20,10 +20,10 @@ import (
 // SendEvents, which routes them only through watches whose paths
 // match, enforcing that tests fail if the wrong watches are set up.
 type MockWatchBackend struct {
-	mu                        sync.Mutex
-	Dirs                      map[string]*MockWatch
-	DirectoryExists           func(string) bool // if set, WatchDirectory fails for non-existent dirs
-	UseCaseSensitiveFileNames bool
+	mu              sync.Mutex
+	Dirs            map[tspath.RootedDirectoryPath]*MockWatch
+	DirectoryExists func(tspath.RootedDirectoryPath) bool // if set, WatchDirectory fails for non-existent dirs
+	CaseSensitivity tspath.CaseSensitivity
 }
 
 var _ watchmanager.WatchBackend = (*MockWatchBackend)(nil)
@@ -31,7 +31,7 @@ var _ watchmanager.WatchBackend = (*MockWatchBackend)(nil)
 // NewMockWatchBackend creates a ready-to-use mock backend.
 func NewMockWatchBackend() *MockWatchBackend {
 	return &MockWatchBackend{
-		Dirs: make(map[string]*MockWatch),
+		Dirs: make(map[tspath.RootedDirectoryPath]*MockWatch),
 	}
 }
 
@@ -44,29 +44,16 @@ func (m *MockWatchBackend) HasWatches() bool {
 
 // MockWatch records a single registered watch.
 type MockWatch struct {
-	Path      string
-	Callback  fswatch.WatchCallback
+	Path      tspath.RootedDirectoryPath
+	Callback  watchmanager.WatchCallback
 	Recursive bool
-	Ignore    func(string) bool
+	Ignore    func(tspath.RootedPath) bool
 	Closed    bool
 }
 
 func (w *MockWatch) Close() error {
 	w.Closed = true
 	return nil
-}
-
-func (m *MockWatchBackend) WatchDirectory(dir string, fn fswatch.WatchCallback, recursive bool, ignore func(string) bool) (io.Closer, error) {
-	closers, err := m.WatchDirectories([]watchmanager.WatchDirectoryRequest{{
-		Dir:       dir,
-		Callback:  fn,
-		Recursive: recursive,
-		Ignore:    ignore,
-	}})
-	if err != nil {
-		return nil, err
-	}
-	return closers[0], nil
 }
 
 func (m *MockWatchBackend) WatchDirectories(requests []watchmanager.WatchDirectoryRequest) ([]io.Closer, error) {
@@ -97,8 +84,8 @@ func (m *MockWatchBackend) SendEvents(events []fswatch.Event) {
 	// to avoid deadlock if the callback re-enters the mock.
 	m.mu.Lock()
 	type target struct {
-		cb     fswatch.WatchCallback
-		events []fswatch.Event
+		cb     watchmanager.WatchCallback
+		events []watchmanager.WatchEvent
 	}
 	targets := make(map[*MockWatch]*target)
 
@@ -108,16 +95,17 @@ func (m *MockWatchBackend) SendEvents(events []fswatch.Event) {
 			if w.Closed {
 				continue
 			}
-			if w.Ignore != nil && w.Ignore(e.Path) {
+			eventPath := tspath.ToRootedPath(e.Path, w.Path)
+			if w.Ignore != nil && w.Ignore(eventPath) {
 				continue
 			}
-			if !pathIsUnder(e.Path, w.Path, w.Recursive, m.UseCaseSensitiveFileNames) {
+			if !pathIsUnder(eventPath, w.Path, w.Recursive, m.CaseSensitivity) {
 				continue
 			}
 			if t, ok := targets[w]; ok {
-				t.events = append(t.events, e)
+				t.events = append(t.events, watchmanager.WatchEvent{Path: eventPath, Kind: e.Kind})
 			} else {
-				targets[w] = &target{cb: w.Callback, events: []fswatch.Event{e}}
+				targets[w] = &target{cb: w.Callback, events: []watchmanager.WatchEvent{{Path: eventPath, Kind: e.Kind}}}
 			}
 		}
 	}
@@ -133,7 +121,7 @@ func (m *MockWatchBackend) SendEvents(events []fswatch.Event) {
 // this as a signal that events were dropped and a full rebuild is required.
 func (m *MockWatchBackend) SendOverflow() {
 	m.mu.Lock()
-	var cbs []fswatch.WatchCallback
+	var cbs []watchmanager.WatchCallback
 	for _, w := range m.Dirs {
 		if !w.Closed {
 			cbs = append(cbs, w.Callback)
@@ -181,26 +169,16 @@ func (m *MockWatchBackend) SendChangedPaths(changes []fsbaselineutil.FileChange)
 
 // pathIsUnder reports whether eventPath is inside dir. If recursive is
 // false, only direct children match.
-func pathIsUnder(eventPath, dir string, recursive, useCaseSensitiveFileNames bool) bool {
-	if !useCaseSensitiveFileNames {
-		eventPath = tspath.GetCanonicalFileName(eventPath, false)
-		dir = tspath.GetCanonicalFileName(dir, false)
-	}
-	if !strings.HasPrefix(eventPath, dir) {
+func pathIsUnder(eventPath tspath.RootedPath, dir tspath.RootedDirectoryPath, recursive bool, caseSensitivity tspath.CaseSensitivity) bool {
+	dirKey := caseSensitivity.PathKey(dir.AsPath())
+	eventKey := caseSensitivity.PathKey(eventPath)
+	if dirKey == eventKey || !dirKey.ContainsPath(eventKey) {
 		return false
 	}
-	rest := eventPath[len(dir):]
-	if len(rest) == 0 {
-		return false // exact match = the dir itself, not a child
+	if recursive {
+		return true
 	}
-	if rest[0] != '/' {
-		return false // e.g. dir="/foo", path="/foobar"
-	}
-	if !recursive {
-		// Direct child only: no further '/' after the separator.
-		return !strings.Contains(rest[1:], "/")
-	}
-	return true
+	return caseSensitivity.PathKey(eventPath.Directory().AsPath()) == dirKey
 }
 
 // WatchState returns a deterministic, human-readable summary of all
@@ -214,13 +192,15 @@ func (m *MockWatchBackend) WatchState() string {
 	b.WriteString("Watch Registrations::\n")
 
 	// Directory watches, sorted by path.
-	var dirs []string
+	var dirs []tspath.RootedDirectoryPath
 	for dir, w := range m.Dirs {
 		if !w.Closed {
 			dirs = append(dirs, dir)
 		}
 	}
-	sort.Strings(dirs)
+	slices.SortFunc(dirs, func(a, b tspath.RootedDirectoryPath) int {
+		return a.Compare(b)
+	})
 
 	b.WriteString("Directory watches::\n")
 	if len(dirs) == 0 {

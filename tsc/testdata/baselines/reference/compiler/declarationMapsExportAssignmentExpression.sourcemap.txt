@@ -1,0 +1,117 @@
+===================================================================
+JsFile: exportDefault.d.ts
+mapUrl: exportDefault.d.ts.map
+sourceRoot: 
+sources: exportDefault.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:exportDefault.d.ts
+sourceFile:exportDefault.ts
+-------------------------------------------------------------------
+>>>declare const _default: {
+>>>    b: number;
+>>>    d: number;
+>>>};
+>>>export default _default;
+1 >
+2 >^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                        ^^^^^^^^^^^^^^^^^^->
+1 >const b = 1;
+  >const d = 2;
+  >
+2 >export default { b, d };
+1 >Emitted(5, 1) Source(3, 1) + SourceIndex(0)
+2 >Emitted(5, 25) Source(3, 25) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=exportDefault.d.ts.map===================================================================
+JsFile: exportEquals.d.ts
+mapUrl: exportEquals.d.ts.map
+sourceRoot: 
+sources: exportEquals.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:exportEquals.d.ts
+sourceFile:exportEquals.ts
+-------------------------------------------------------------------
+>>>declare const _default: {
+>>>    a: number;
+>>>};
+>>>export = _default;
+1 >
+2 >^^^^^^^^^^^^^^^^^^
+3 >                  ^^^^^^^^^^^^^^^^^^^^^^^->
+1 >const a = 1;
+  >
+2 >export = { a };
+1 >Emitted(4, 1) Source(2, 1) + SourceIndex(0)
+2 >Emitted(4, 19) Source(2, 16) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=exportEquals.d.ts.map===================================================================
+JsFile: exportEqualsClass.d.ts
+mapUrl: exportEqualsClass.d.ts.map
+sourceRoot: 
+sources: exportEqualsClass.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:exportEqualsClass.d.ts
+sourceFile:exportEqualsClass.ts
+-------------------------------------------------------------------
+>>>export = _default;
+1 >
+2 >^^^^^^^^^^^^^^^^^^
+3 >                  ^^^^^^^->
+1 >
+2 >export = class {
+  >    x = 1;
+  >};
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 19) Source(3, 3) + SourceIndex(0)
+---
+>>>declare class _default {
+>>>    x: number;
+1->^^^^
+2 >    ^
+3 >     ^^^^^^^^^
+1->
+2 >    x
+3 >      = 1;
+1->Emitted(3, 5) Source(2, 5) + SourceIndex(0)
+2 >Emitted(3, 6) Source(2, 6) + SourceIndex(0)
+3 >Emitted(3, 15) Source(2, 11) + SourceIndex(0)
+---
+>>>}
+>>>//# sourceMappingURL=exportEqualsClass.d.ts.map===================================================================
+JsFile: exportDefaultArrow.d.ts
+mapUrl: exportDefaultArrow.d.ts.map
+sourceRoot: 
+sources: exportDefaultArrow.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:exportDefaultArrow.d.ts
+sourceFile:exportDefaultArrow.ts
+-------------------------------------------------------------------
+>>>export default _default;
+1 >
+2 >^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                        ^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+2 >export default (x: number) => x;
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 25) Source(1, 33) + SourceIndex(0)
+---
+>>>declare function _default(x: number): number;
+1->^^^^^^^^^^^^^^^^^^^^^^^^^^
+2 >                          ^
+3 >                           ^^
+4 >                             ^^^^^^
+5 >                                   ^^^^^^^^^^^^->
+1->
+2 >                          x
+3 >                           : 
+4 >                             number
+1->Emitted(2, 27) Source(1, 17) + SourceIndex(0)
+2 >Emitted(2, 28) Source(1, 18) + SourceIndex(0)
+3 >Emitted(2, 30) Source(1, 20) + SourceIndex(0)
+4 >Emitted(2, 36) Source(1, 26) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=exportDefaultArrow.d.ts.map

@@ -8,6 +8,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/locale"
 	"github.com/microsoft/TypeScript/tsc/internal/spanmap"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
 // TransformErrorKind identifies the stage at which a content mapper transform failed.
@@ -132,7 +133,7 @@ type InitializeError struct {
 
 // SupplementalFileCollisionError reports a compiler-assigned supplemental filename that already exists.
 type SupplementalFileCollisionError struct {
-	FileName string
+	FileName tspath.RootedFilePath
 }
 
 func (e *SupplementalFileCollisionError) Error() string {
@@ -166,7 +167,8 @@ func (e *InitializeError) Error() string {
 type Result struct {
 	// Text is the virtual TypeScript source text that is parsed into the program.
 	Text string
-	// VirtualExtension determines how Text is parsed.
+	// VirtualExtension determines how Text is parsed. Its module format must match the declaration
+	// output determined by OutputExtensions and the declaration's package.json scope.
 	VirtualExtension string
 	// Diagnostics are syntax errors in the original content.
 	Diagnostics []*ast.Diagnostic
@@ -191,7 +193,7 @@ type MappedResult struct {
 // Request carries the inputs for transforming one content-mapped source file.
 type Request struct {
 	// FileName is the content-mapped source file being transformed.
-	FileName string
+	FileName tspath.RootedFilePath
 	// Content is the content-mapped source file's text.
 	Content string
 }
@@ -199,7 +201,7 @@ type Request struct {
 // ProjectSpec describes the project configuration visible to its content mappers.
 type ProjectSpec struct {
 	// ConfigFileName is the absolute project configuration file name, or empty for a project without one.
-	ConfigFileName string
+	ConfigFileName tspath.RootedFilePath
 	// Mappers are the resolved content mapper entries configured for the project.
 	Mappers []*Mapper
 	// CompilerOptions are the project's effective compiler options.
@@ -281,7 +283,7 @@ type Project interface {
 	Identity(mapper *Mapper) (string, error)
 	// WatchedFiles returns the absolute files reported by mappers whose package.json declares dynamicConfig.
 	// It returns an error if project configuration cannot be opened or validated.
-	WatchedFiles() ([]string, error)
+	WatchedFiles() ([]tspath.RootedFilePath, error)
 	// Diagnostics returns option diagnostics cached by mapper projects that have already been opened.
 	Diagnostics() []OptionDiagnostic
 	// Transform transforms one content-mapped source file using mapper in this project's configuration.

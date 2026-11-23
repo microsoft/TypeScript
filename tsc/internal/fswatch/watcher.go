@@ -24,6 +24,11 @@ var errRootPath = errors.New("fswatch: cannot watch a root path")
 // [Watcher.WatchFile] when the supplied path is not absolute.
 var errNotAbsolute = errors.New("fswatch: path must be absolute")
 
+// errNetworkPath is returned by [Watcher.WatchDirectory] and
+// [Watcher.WatchFile] when the supplied path may refer to a network
+// location. See [nativepath.IsNetworkPath].
+var errNetworkPath = errors.New("fswatch: network paths are not supported")
+
 // ErrOverflow indicates that the kernel event queue overflowed and
 // some filesystem changes were missed. The watch remains
 // active; further events will continue to be delivered. Callers
@@ -523,6 +528,10 @@ func (w *watcher) WatchDirectories(requests []WatchDirectoryRequest) ([]Watch, e
 			rollback()
 			return nil, errNilCallback
 		}
+		if nativepath.IsNetworkPath(dir) {
+			rollback()
+			return nil, errNetworkPath
+		}
 		dir = filepath.Clean(dir)
 		if !filepath.IsAbs(dir) {
 			rollback()
@@ -594,6 +603,9 @@ func (w *watcher) WatchFile(path string, fn WatchCallback) (Watch, error) {
 	}
 	if !w.Available() {
 		return nil, ErrUnavailable
+	}
+	if nativepath.IsNetworkPath(path) {
+		return nil, errNetworkPath
 	}
 	path = filepath.Clean(path)
 	if !filepath.IsAbs(path) {
@@ -856,7 +868,9 @@ func physicalDirFor(dir string) string {
 	if err != nil {
 		return dir
 	}
-	if realpath == dir {
+	// A mapped drive resolves to the network share behind it; keep watching
+	// it through the drive letter rather than opening the share directly.
+	if realpath == dir || nativepath.IsNetworkPath(realpath) {
 		return dir
 	}
 	return canonicalizePath(filepath.Clean(realpath))

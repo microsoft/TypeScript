@@ -10,7 +10,10 @@ import (
 
 func (d *astDecoder) createStringNode(kind ast.Kind, data uint32, commonData uint8) (*ast.Node, error) {
 	strIdx := data & NodeDataStringIndexMask
-	text := d.getString(strIdx)
+	text, err := d.getString(strIdx)
+	if err != nil {
+		return nil, err
+	}
 
 	switch kind {
 	case ast.KindIdentifier:
@@ -210,7 +213,8 @@ func (d *astDecoder) createChildrenNode(kind ast.Kind, data uint32, childIndices
 		ast.KindGlobalKeyword,
 		ast.KindOverrideKeyword,
 		ast.KindOfKeyword,
-		ast.KindDeferKeyword:
+		ast.KindDeferKeyword,
+		ast.KindSourceKeyword:
 		return d.factory.NewToken(kind), nil
 	case ast.KindQualifiedName:
 		it := newChildIter(childIndices)
@@ -271,11 +275,13 @@ func (d *astDecoder) createChildrenNode(kind ast.Kind, data uint32, childIndices
 		return d.factory.NewSwitchStatement(expression, caseBlock), nil
 	case ast.KindCaseBlock:
 		return d.factory.NewCaseBlock(d.singleNodeListChild(childIndices)), nil
-	case ast.KindCaseClause, ast.KindDefaultClause:
+	case ast.KindCaseClause:
 		it := newChildIter(childIndices)
 		expression := d.nodeAt(it.nextIf(mask, 0))
 		statements := d.nodeListAt(it.nextIf(mask, 1))
-		return d.factory.NewCaseOrDefaultClause(kind, expression, statements), nil
+		return d.factory.NewCaseClause(expression, statements), nil
+	case ast.KindDefaultClause:
+		return d.factory.NewDefaultClause(d.singleNodeListChild(childIndices)), nil
 	case ast.KindThrowStatement:
 		return d.factory.NewThrowStatement(d.singleChild(childIndices)), nil
 	case ast.KindTryStatement:
@@ -1095,6 +1101,8 @@ func (d *astDecoder) createChildrenNode(kind ast.Kind, data uint32, childIndices
 			phaseModifier = ast.KindTypeKeyword
 		case 2:
 			phaseModifier = ast.KindDeferKeyword
+		case 3:
+			phaseModifier = ast.KindSourceKeyword
 		}
 		it := newChildIter(childIndices)
 		name := d.nodeAt(it.nextIf(mask, 0))

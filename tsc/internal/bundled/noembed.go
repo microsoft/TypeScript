@@ -19,14 +19,13 @@ func wrapFS(fs vfs.FS) vfs.FS {
 	return fs
 }
 
-var executableDir = sync.OnceValue(func() string {
+var executableDir = sync.OnceValue(func() tspath.RootedDirectoryPath {
 	exe, err := osutil.Executable()
 	if err != nil {
 		panic(fmt.Sprintf("bundled: failed to get executable path: %v", err))
 	}
-	exe = tspath.NormalizeSlashes(exe)
-	exe = osvfs.FS().Realpath(exe)
-	return tspath.GetDirectoryPath(exe)
+	realExe := osvfs.FS().Realpath(tspath.RootedFilePathFromAbsolute(exe).AsPath())
+	return realExe.Directory()
 })
 
 var libPath = sync.OnceValue(func() string {
@@ -35,12 +34,12 @@ var libPath = sync.OnceValue(func() string {
 	}
 	dir := executableDir()
 
-	libdts := tspath.CombinePaths(dir, "lib.d.ts")
-	if info := osvfs.FS().Stat(libdts); info == nil {
+	libdts := dir.ResolveFile("lib.d.ts")
+	if info := osvfs.FS().Stat(libdts.AsPath()); info == nil {
 		panic(fmt.Sprintf("bundled: %v does not exist; this executable may be misplaced", libdts))
 	}
 
-	return dir
+	return dir.AsString()
 })
 
 func IsBundled(path string) bool {

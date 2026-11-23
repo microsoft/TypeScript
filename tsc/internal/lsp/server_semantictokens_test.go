@@ -10,6 +10,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/lsp"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/lsptestutil"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
 	"gotest.tools/v3/assert"
 )
@@ -36,7 +37,7 @@ func TestSemanticTokensCRLF(t *testing.T) {
 		"/home/projects/test.ts":       fileOnDisk,
 		"/home/projects/other.ts":      "export {}",
 	}
-	fs := bundled.WrapFS(vfstest.FromMap(files, false))
+	fs := bundled.WrapFS(vfstest.FromMap(files, tspath.CaseInsensitive))
 
 	onServerRequest := func(_ context.Context, req *lsproto.RequestMessage) *lsproto.ResponseMessage {
 		if req.Method == lsproto.MethodClientRegisterCapability || req.Method == lsproto.MethodClientUnregisterCapability {
@@ -95,7 +96,7 @@ func TestSemanticTokensCRLF(t *testing.T) {
 // TestSemanticTokensDefaultLibraryCaseInsensitive reproduces #4635: on
 // case-insensitive file systems, tokens for default-library symbols never
 // carried the defaultLibrary modifier. The lib files map in the program is
-// keyed by canonical (lowercased) tspath.Path, but semantic tokens looked up
+// keyed by canonical (lowercased) tspath.PathKey, but semantic tokens looked up
 // declarations by their raw case-preserving file name. With the default
 // library under a mixed-case directory (/TSLib), the lookup always missed.
 func TestSemanticTokensDefaultLibraryCaseInsensitive(t *testing.T) {
@@ -123,7 +124,7 @@ declare const console: { log(msg: any): void; };
 	}
 	// Case-insensitive VFS: canonical paths are lowercased, so the lib's
 	// canonical path (/tslib/lib.es5.d.ts) differs from its file name.
-	fs := vfstest.FromMap(files, false)
+	fs := vfstest.FromMap(files, tspath.CaseInsensitive)
 
 	onServerRequest := func(_ context.Context, req *lsproto.RequestMessage) *lsproto.ResponseMessage {
 		if req.Method == lsproto.MethodClientRegisterCapability || req.Method == lsproto.MethodClientUnregisterCapability {

@@ -1,0 +1,16 @@
+strictSupertypeSchema.ts(9,8): error TS2339: Property '$ref' does not exist on type '{}'.
+
+
+==== strictSupertypeSchema.ts (1 errors) ====
+    interface Schema {
+        [name: string]: any;
+    }
+    
+    declare function choose<Result>(...callbacks: (() => Result)[]): Result;
+    declare const schema: Schema;
+    
+    const result = choose(() => ({}), () => schema);
+    result.$ref;
+           ~~~~
+!!! error TS2339: Property '$ref' does not exist on type '{}'.
+    

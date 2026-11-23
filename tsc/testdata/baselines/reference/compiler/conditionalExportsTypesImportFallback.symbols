@@ -1,0 +1,16 @@
+//// [tests/cases/compiler/conditionalExportsTypesImportFallback.ts] ////
+
+=== /index.mts ===
+import color from "theme/tokens";
+>color : Symbol(color, Decl(index.mts, 0, 6))
+
+color;
+>color : Symbol(color, Decl(index.mts, 0, 6))
+
+=== /node_modules/theme/tokens.d.mts ===
+declare const color: string;
+>color : Symbol(color, Decl(tokens.d.mts, 0, 13))
+
+export default color;
+>color : Symbol(color, Decl(tokens.d.mts, 0, 13))
+

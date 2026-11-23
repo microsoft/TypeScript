@@ -11,16 +11,17 @@ import type {
     APIResponse as ProtocolResponse,
 } from "../proto.ts";
 
-import type { CompletionItemKind } from "#enums/completionItemKind";
-import type { ElementFlags } from "#enums/elementFlags";
-import type { ObjectFlags } from "#enums/objectFlags";
-import type { TypeFlags } from "#enums/typeFlags";
-import type { TypePredicateKind } from "#enums/typePredicateKind";
+import type { CompletionItemKind } from "../../../enums/completionItemKind.js";
+import type { ElementFlags } from "../../../enums/elementFlags.js";
+import type { ObjectFlags } from "../../../enums/objectFlags.js";
+import type { TypeFlags } from "../../../enums/typeFlags.js";
+import type { TypePredicateKind } from "../../../enums/typePredicateKind.js";
 import type {
     IndexSignatureDeclaration,
     NamedTupleMember,
     ParameterDeclaration,
 } from "../../ast/ast.ts";
+import type { RootedFilePath } from "../../ast/index.ts";
 import type {
     Diagnostic,
     RequestFileSystem,
@@ -556,13 +557,13 @@ export interface FormatDiagnosticsHost {
 
 export interface EmitOutputFile {
     readonly text: string;
-    readonly sourceFileName?: string | undefined;
+    readonly sourceFileName?: RootedFilePath | undefined;
 }
 
 export interface EmitResult {
     readonly emitSkipped: boolean;
     readonly diagnostics: readonly Diagnostic[];
-    readonly emittedFiles: readonly string[];
+    readonly emittedFiles: readonly RootedFilePath[];
     /** Emitted files captured as a filesystem layer suitable for {@link Snapshot.update}. */
     readonly fileSystem?: RequestFileSystem | undefined;
 }
@@ -570,7 +571,7 @@ export interface EmitResult {
 export interface EmitOutput {
     readonly emitSkipped: boolean;
     readonly diagnostics: readonly Diagnostic[];
-    readonly outputFiles: ReadonlyMap<string, EmitOutputFile>;
+    readonly outputFiles: ReadonlyMap<RootedFilePath, EmitOutputFile>;
 }
 
 export interface ImportSymbolAction {

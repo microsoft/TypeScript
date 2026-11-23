@@ -22,5 +22,5 @@ function foo([|{ a, ...[|{| "contextRangeIndex": 0 |}rest|] }: I|]) {
 }`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
-	f.VerifyBaselineRename(t, &lsutil.UserPreferences{UseAliasesForRename: core.TSTrue}, f.Ranges()[1])
+	f.VerifyBaselineRename(t, &lsutil.UserPreferences{ProvidePrefixAndSuffixTextForRename: core.TSTrue}, f.Ranges()[1])
 }

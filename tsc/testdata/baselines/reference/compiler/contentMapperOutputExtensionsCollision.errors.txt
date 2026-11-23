@@ -1,0 +1,31 @@
+error TS5056: Cannot write file '/dist/component.js' because it would be overwritten by multiple input files.
+
+
+!!! error TS5056: Cannot write file '/dist/component.js' because it would be overwritten by multiple input files.
+==== /tsconfig.json (0 errors) ====
+    {
+        "compilerOptions": {
+            "module": "preserve",
+            "rewriteRelativeImportExtensions": true,
+            "outDir": "/dist"
+        },
+        "contentMappers": [
+            { "package": "mapper", "extensions": [".astro"] }
+        ]
+    }
+    
+==== /component.ts (0 errors) ====
+    export const fromTs = true;
+    
+==== /node_modules/mapper/package.json (0 errors) ====
+    {
+        "name": "mapper",
+        "version": "1.0.0",
+        "typescript": {
+            "contentMapper": {
+                "exec": ["compiler-test-mapper"],
+                "outputExtensions": { ".astro": ".js" }
+            }
+        }
+    }
+    

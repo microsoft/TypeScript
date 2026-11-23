@@ -22,7 +22,7 @@ export default 42;
     },
 }
 
-tsgo 
+tsc 
 ExitStatus:: Success
 Output::
 //// [/home/src/projects/project/src/main.d.ts] *new* 

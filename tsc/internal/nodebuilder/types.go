@@ -75,4 +75,5 @@ const (
 	InternalFlagsNoSyntacticPrinter      InternalFlags = 1 << 1
 	InternalFlagsDoNotIncludeSymbolChain InternalFlags = 1 << 2
 	InternalFlagsAllowUnresolvedNames    InternalFlags = 1 << 3
+	InternalFlagsRewriteModuleSpecifiers InternalFlags = 1 << 4
 )

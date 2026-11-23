@@ -4,7 +4,7 @@ Input::
 //// [/home/src/workspaces/project/index.ts] *new* 
 x = 5;
 
-tsgo --noEmit index.ts
+tsc --noEmit index.ts
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96mindex.ts[0m:[93m1[0m:[93m1[0m - [91merror[0m[90m TS2304: [0mCannot find name 'x'.

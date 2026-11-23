@@ -3,7 +3,6 @@ package printer
 import (
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
-	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
@@ -11,13 +10,13 @@ import (
 type EmitHost interface {
 	Options() *core.CompilerOptions
 	SourceFiles() []*ast.SourceFile
-	UseCaseSensitiveFileNames() bool
-	GetCurrentDirectory() string
-	CommonSourceDirectory() string
-	IsEmitBlocked(file string) bool
-	WriteFile(fileName string, text string) error
+	ContentMapperExtensionRewrites() []tspath.ExtensionRewrite
+	ContentMapperExtensionForFileName(fileName tspath.RootedFilePath) string
+	CaseSensitivity() tspath.CaseSensitivity
+	CommonSourceDirectory() tspath.RootedDirectoryPath
+	IsEmitBlocked(file tspath.RootedFilePath) bool
+	WriteFile(fileName tspath.RootedFilePath, text string) error
 	GetEmitModuleFormatOfFile(file ast.HasFileName) core.ModuleKind
-	GetEmitResolver() EmitResolver
-	GetProjectReferenceFromSource(path tspath.Path) *tsoptions.SourceOutputAndProjectReference
+	NewEmitResolver(emitContext *EmitContext) EmitResolver
 	IsSourceFileFromExternalLibrary(file *ast.SourceFile) bool
 }

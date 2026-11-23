@@ -5,6 +5,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/trackingvfs"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
@@ -17,7 +18,7 @@ func TestRequestPathTreeChildOverridesInheritedMissing(t *testing.T) {
 	base.ensure("/dir").fallback = requestFallbackMissing
 	layer := &requestPathNode{}
 	layer.ensure("/dir/pkg").entry = &requestSymlink{linkName: "/dir/pkg", target: "/target"}
-	compacted := composeRequestPaths(base, layer, requestFallbackAllowed, true)
+	compacted := composeRequestPaths(base, layer, requestFallbackAllowed, tspath.CaseSensitive)
 	_, fallback := compacted.lookup("/dir/pkg/file.ts")
 	assert.Equal(t, fallback, requestFallbackAllowed)
 	_, fallback = compacted.lookup("/dir/other.ts")
@@ -31,7 +32,7 @@ func TestRequestPathTreeSameLayerMissingBlocksSymlink(t *testing.T) {
 	layer := &requestPathNode{}
 	layer.ensure("/dir").fallback = requestFallbackMissing
 	layer.ensure("/dir/pkg").entry = &requestSymlink{linkName: "/dir/pkg", target: "/target"}
-	compacted := composeRequestPaths(&requestPathNode{}, layer, requestFallbackAllowed, true)
+	compacted := composeRequestPaths(&requestPathNode{}, layer, requestFallbackAllowed, tspath.CaseSensitive)
 	_, fallback := compacted.lookup("/dir/pkg/file.ts")
 	assert.Equal(t, fallback, requestFallbackMissing)
 }
@@ -42,11 +43,11 @@ func TestRequestPathTreeDirectoryPreservesInheritedMissing(t *testing.T) {
 	base.ensure("/dir").fallback = requestFallbackMissing
 	layer := &requestPathNode{}
 	layer.ensure("/dir/new").entry = &requestDirectory{directoryName: "/dir/new"}
-	compacted := composeRequestPaths(base, layer, requestFallbackAllowed, true)
+	compacted := composeRequestPaths(base, layer, requestFallbackAllowed, tspath.CaseSensitive)
 	node, fallback := compacted.lookup("/dir/new")
 	directory, ok := node.entry.(*requestDirectory)
 	assert.Assert(t, ok)
-	assert.Equal(t, directory.directoryName, "/dir/new")
+	assert.Equal(t, directory.directoryName.AsString(), "/dir/new")
 	assert.Equal(t, fallback, requestFallbackMissing)
 	_, fallback = compacted.lookup("/dir/new/old.ts")
 	assert.Equal(t, fallback, requestFallbackMissing)
@@ -59,7 +60,7 @@ func TestRequestPathTreeFileReplacesSubtree(t *testing.T) {
 	base.ensure("/dir/old.ts").entry = &requestFile{fileName: "/dir/old.ts", content: "old"}
 	layer := &requestPathNode{}
 	layer.ensure("/dir").entry = &requestFile{fileName: "/dir", content: "new"}
-	compacted := composeRequestPaths(base, layer, requestFallbackAllowed, true)
+	compacted := composeRequestPaths(base, layer, requestFallbackAllowed, tspath.CaseSensitive)
 	node, _ := compacted.lookup("/dir")
 	file, ok := node.entry.(*requestFile)
 	assert.Assert(t, ok)
@@ -74,7 +75,7 @@ func TestRequestPathTreeFileReplacesSubtree(t *testing.T) {
 
 func TestRequestPathTreeListingReplacementDoesNotRemoveFiles(t *testing.T) {
 	t.Parallel()
-	host := &trackingvfs.FS{Inner: vfstest.FromMap(map[string]string{}, true)}
+	host := &trackingvfs.FS{Inner: vfstest.FromMap(map[string]string{}, tspath.CaseSensitive)}
 	base, err := newRequestFileSystem(&RequestFileSystem{
 		Kind:  KindLayer,
 		Files: map[string]string{"/dir/retained.ts": "retained"},
@@ -106,7 +107,7 @@ func TestRequestPathTreeCompositionPreservesListingSnapshots(t *testing.T) {
 	layer := &requestPathNode{}
 	layer.ensure("/dir/old.ts").fallback = requestFallbackMissing
 	layer.ensure("/dir/new.ts").entry = &requestFile{fileName: "/dir/new.ts"}
-	compacted := composeRequestPaths(base, layer, requestFallbackAllowed, false)
+	compacted := composeRequestPaths(base, layer, requestFallbackAllowed, tspath.CaseInsensitive)
 	node, _ := compacted.lookup("/dir")
 	directory, ok := node.entry.(*requestDirectory)
 	assert.Assert(t, ok)
@@ -115,7 +116,7 @@ func TestRequestPathTreeCompositionPreservesListingSnapshots(t *testing.T) {
 	previousDirectory, ok := previous.entry.(*requestDirectory)
 	assert.Assert(t, ok)
 	assert.DeepEqual(t, previousDirectory.listing.Files, []string{"OLD.ts"})
-	next := composeRequestPaths(compacted, &requestPathNode{}, requestFallbackAllowed, false)
+	next := composeRequestPaths(compacted, &requestPathNode{}, requestFallbackAllowed, tspath.CaseInsensitive)
 	nextNode, _ := next.lookup("/dir")
 	assert.Assert(t, nextNode == node)
 }
@@ -129,13 +130,13 @@ func TestRequestPathTreeFileTakesPrecedenceOverSameLayerSymlink(t *testing.T) {
 			"/target/file.ts": "target",
 		},
 		Symlinks: map[string]RequestSymlink{"/item": {Target: "/target"}},
-	}, vfstest.FromMap(map[string]string{}, true), "/")
+	}, vfstest.FromMap(map[string]string{}, tspath.CaseSensitive), "/")
 	assert.NilError(t, err)
 	content, ok := fileSystem.ReadFile("/item")
 	assert.Assert(t, ok)
 	assert.Equal(t, content, "file")
 	assert.Assert(t, !fileSystem.DirectoryExists("/item"))
-	assert.Equal(t, fileSystem.Realpath("/item"), "/item")
+	assert.Equal(t, fileSystem.Realpath("/item").AsString(), "/item")
 	node, _ := fileSystem.paths.lookup("/item")
 	_, isFile := node.entry.(*requestFile)
 	assert.Assert(t, isFile)
@@ -153,11 +154,11 @@ func TestRequestPathTreeDirectoryTakesPrecedenceOverSameLayerSymlink(t *testing.
 		},
 		Directories: map[string]RequestDirectoryEntries{"/item": {Files: []string{"child.ts"}}},
 		Symlinks:    map[string]RequestSymlink{"/item": {Target: "/target.ts"}},
-	}, vfstest.FromMap(map[string]string{}, true), "/")
+	}, vfstest.FromMap(map[string]string{}, tspath.CaseSensitive), "/")
 	assert.NilError(t, err)
 	assert.Assert(t, fileSystem.DirectoryExists("/item"))
 	assert.Assert(t, !fileSystem.FileExists("/item"))
-	assert.Equal(t, fileSystem.Realpath("/item"), "/item")
+	assert.Equal(t, fileSystem.Realpath("/item").AsString(), "/item")
 	content, ok := fileSystem.ReadFile("/item/child.ts")
 	assert.Assert(t, ok)
 	assert.Equal(t, content, "child")
@@ -175,7 +176,7 @@ func TestRequestPathTreeSymlinkTakesPrecedenceOverListingHint(t *testing.T) {
 		Files:       map[string]string{"/target/file.ts": "target"},
 		Directories: map[string]RequestDirectoryEntries{"/links": {Directories: []string{"pkg"}}},
 		Symlinks:    map[string]RequestSymlink{"/links/pkg": {Target: "/target"}},
-	}, vfstest.FromMap(map[string]string{}, true), "/")
+	}, vfstest.FromMap(map[string]string{}, tspath.CaseSensitive), "/")
 	assert.NilError(t, err)
 	node, _ := fileSystem.paths.lookup("/links/pkg")
 	_, isSymlink := node.entry.(*requestSymlink)
@@ -184,7 +185,7 @@ func TestRequestPathTreeSymlinkTakesPrecedenceOverListingHint(t *testing.T) {
 	content, ok := fileSystem.ReadFile("/links/pkg/file.ts")
 	assert.Assert(t, ok)
 	assert.Equal(t, content, "target")
-	assert.Equal(t, fileSystem.Realpath("/links/pkg"), "/target")
+	assert.Equal(t, fileSystem.Realpath("/links/pkg").AsString(), "/target")
 	assert.DeepEqual(t, fileSystem.GetAccessibleEntries("/links"), vfs.Entries{
 		Directories: []string{"pkg"},
 		Symlinks:    map[string]struct{}{"pkg": {}},
@@ -197,7 +198,7 @@ func TestRequestPathTreeFileTakesPrecedenceOverSameLayerDirectory(t *testing.T) 
 		Kind:        KindFull,
 		Files:       map[string]string{"/item": "file"},
 		Directories: map[string]RequestDirectoryEntries{"/item": {Files: []string{"listed.ts"}}},
-	}, vfstest.FromMap(map[string]string{}, true), "/")
+	}, vfstest.FromMap(map[string]string{}, tspath.CaseSensitive), "/")
 	assert.NilError(t, err)
 	node, _ := fileSystem.paths.lookup("/item")
 	_, isFile := node.entry.(*requestFile)
@@ -214,7 +215,7 @@ func TestRequestPathTreeFileProvidesStatAndDirEntry(t *testing.T) {
 	fileSystem, err := newRequestFileSystem(&RequestFileSystem{
 		Kind:  KindFull,
 		Files: map[string]string{"/dir/file.ts": "file content"},
-	}, vfstest.FromMap(map[string]string{}, true), "/")
+	}, vfstest.FromMap(map[string]string{}, tspath.CaseSensitive), "/")
 	assert.NilError(t, err)
 	node, _ := fileSystem.paths.lookup("/dir/file.ts")
 	info := fileSystem.Stat("/dir/file.ts")
@@ -238,7 +239,7 @@ func TestRequestPathTreeDirectoryProvidesStatAndDirEntry(t *testing.T) {
 	fileSystem, err := newRequestFileSystem(&RequestFileSystem{
 		Kind:        KindFull,
 		Directories: map[string]RequestDirectoryEntries{"/dir": {}},
-	}, vfstest.FromMap(map[string]string{}, true), "/")
+	}, vfstest.FromMap(map[string]string{}, tspath.CaseSensitive), "/")
 	assert.NilError(t, err)
 	node, _ := fileSystem.paths.lookup("/dir")
 	info := fileSystem.Stat("/dir")
@@ -263,7 +264,7 @@ func TestRequestPathTreeSymlinkReportsTargetMetadata(t *testing.T) {
 		Kind:     KindFull,
 		Files:    map[string]string{"/target/file.ts": "target content"},
 		Symlinks: map[string]RequestSymlink{"/link.ts": {Target: "/target/file.ts"}},
-	}, vfstest.FromMap(map[string]string{}, true), "/")
+	}, vfstest.FromMap(map[string]string{}, tspath.CaseSensitive), "/")
 	assert.NilError(t, err)
 	info := fileSystem.Stat("/target/file.ts")
 	assert.Assert(t, fileSystem.Stat("/link.ts") == info)
@@ -274,11 +275,11 @@ type requestTestHostMetadata struct {
 	info vfs.FileInfo
 }
 
-func (host requestTestHostMetadata) Stat(string) vfs.FileInfo { return host.info }
+func (host requestTestHostMetadata) Stat(tspath.RootedPath) vfs.FileInfo { return host.info }
 
 func TestRequestPathTreeStatPreservesHostMetadata(t *testing.T) {
 	t.Parallel()
-	hostFS := vfstest.FromMap(map[string]string{"/host.ts": "host content"}, true)
+	hostFS := vfstest.FromMap(map[string]string{"/host.ts": "host content"}, tspath.CaseSensitive)
 	modified := time.Date(2026, time.September, 9, 12, 0, 0, 0, time.UTC)
 	assert.NilError(t, hostFS.Chtimes("/host.ts", modified, modified))
 	info := hostFS.Stat("/host.ts")
@@ -295,7 +296,7 @@ func TestRequestPathTreeStatPreservesHostMetadata(t *testing.T) {
 
 func TestRequestPathTreeStatSupportsExistenceOnlyHost(t *testing.T) {
 	t.Parallel()
-	host := requestTestHostMetadata{FS: vfstest.FromMap(map[string]string{"/dir/file.ts": "host content"}, true)}
+	host := requestTestHostMetadata{FS: vfstest.FromMap(map[string]string{"/dir/file.ts": "host content"}, tspath.CaseSensitive)}
 	fileSystem, err := newRequestFileSystem(&RequestFileSystem{Kind: KindLayer}, host, "/")
 	assert.NilError(t, err)
 	fileInfo := fileSystem.Stat("/dir/file.ts")

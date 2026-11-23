@@ -1,0 +1,21 @@
+//// [tests/cases/compiler/starDefaultAssignmentCollision.ts] ////
+
+=== first.ts ===
+const first = 1;
+>first : Symbol(first, Decl(first.ts, 0, 5))
+
+export default first;
+>first : Symbol(first, Decl(first.ts, 0, 5))
+
+=== second.ts ===
+const second = 2;
+>second : Symbol(second, Decl(second.ts, 0, 5))
+
+export default second;
+>second : Symbol(second, Decl(second.ts, 0, 5))
+
+=== barrel.ts ===
+
+export * from "./first";
+export * from "./second";
+

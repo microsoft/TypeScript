@@ -30,97 +30,81 @@ func From(fs vfs.FS) vfs.FS {
 	return pnpFS
 }
 
-func (pnpFS *pnpFS) DirectoryExists(path string) bool {
+// resolve maps a (possibly virtual, possibly zip-internal) path to the FS that owns it and the path within that FS.
+func (pnpFS *pnpFS) resolve(path string) (fs vfs.FS, formattedPath string, zipPath string) {
 	path, _, _ = resolveVirtual(path)
+	return getMatchingFS(pnpFS, path)
+}
 
-	if strings.HasSuffix(path, ".zip") {
-		return pnpFS.fs.FileExists(path)
+func (pnpFS *pnpFS) DirectoryExists(path tspath.RootedDirectoryPath) bool {
+	realPath, _, _ := resolveVirtual(path.AsString())
+	if strings.HasSuffix(realPath, ".zip") {
+		return pnpFS.fs.FileExists(tspath.RootedFilePathFromNormalized(realPath))
 	}
-
-	fs, formattedPath, _ := getMatchingFS(pnpFS, path)
-
-	return fs.DirectoryExists(formattedPath)
+	fs, formattedPath, _ := getMatchingFS(pnpFS, realPath)
+	return fs.DirectoryExists(tspath.RootedDirectoryPathFromNormalized(formattedPath))
 }
 
-func (pnpFS *pnpFS) FileExists(path string) bool {
-	path, _, _ = resolveVirtual(path)
-
-	if strings.HasSuffix(path, ".zip") {
-		return pnpFS.fs.FileExists(path)
+func (pnpFS *pnpFS) FileExists(path tspath.RootedFilePath) bool {
+	realPath, _, _ := resolveVirtual(path.AsString())
+	if strings.HasSuffix(realPath, ".zip") {
+		return pnpFS.fs.FileExists(tspath.RootedFilePathFromNormalized(realPath))
 	}
-
-	fs, formattedPath, _ := getMatchingFS(pnpFS, path)
-	return fs.FileExists(formattedPath)
+	fs, formattedPath, _ := getMatchingFS(pnpFS, realPath)
+	return fs.FileExists(tspath.RootedFilePathFromNormalized(formattedPath))
 }
 
-func (pnpFS *pnpFS) GetAccessibleEntries(path string) vfs.Entries {
-	path, _, _ = resolveVirtual(path)
-
-	fs, formattedPath, _ := getMatchingFS(pnpFS, path)
-	return fs.GetAccessibleEntries(formattedPath)
+func (pnpFS *pnpFS) GetAccessibleEntries(path tspath.RootedDirectoryPath) vfs.Entries {
+	fs, formattedPath, _ := pnpFS.resolve(path.AsString())
+	return fs.GetAccessibleEntries(tspath.RootedDirectoryPathFromNormalized(formattedPath))
 }
 
-func (pnpFS *pnpFS) ReadFile(path string) (contents string, ok bool) {
-	path, _, _ = resolveVirtual(path)
-
-	fs, formattedPath, _ := getMatchingFS(pnpFS, path)
-	return fs.ReadFile(formattedPath)
+func (pnpFS *pnpFS) ReadFile(path tspath.RootedFilePath) (contents string, ok bool) {
+	fs, formattedPath, _ := pnpFS.resolve(path.AsString())
+	return fs.ReadFile(tspath.RootedFilePathFromNormalized(formattedPath))
 }
 
-func (pnpFS *pnpFS) Chtimes(path string, mtime time.Time, atime time.Time) error {
-	path, _, _ = resolveVirtual(path)
-
-	fs, formattedPath, _ := getMatchingFS(pnpFS, path)
-	return fs.Chtimes(formattedPath, mtime, atime)
+func (pnpFS *pnpFS) Chtimes(path tspath.RootedPath, mtime time.Time, atime time.Time) error {
+	fs, formattedPath, _ := pnpFS.resolve(path.AsString())
+	return fs.Chtimes(tspath.RootedPathFromNormalized(formattedPath), mtime, atime)
 }
 
-func (pnpFS *pnpFS) Realpath(path string) string {
-	path, hash, basePath := resolveVirtual(path)
-
-	fs, formattedPath, zipPath := getMatchingFS(pnpFS, path)
-	fullPath := zipPath + fs.Realpath(formattedPath)
-	return makeVirtualPath(basePath, hash, fullPath)
+func (pnpFS *pnpFS) Realpath(path tspath.RootedPath) tspath.RootedPath {
+	realPath, hash, basePath := resolveVirtual(path.AsString())
+	fs, formattedPath, zipPath := getMatchingFS(pnpFS, realPath)
+	fullPath := zipPath + fs.Realpath(tspath.RootedPathFromNormalized(formattedPath)).AsString()
+	return tspath.RootedPathFromNormalized(makeVirtualPath(basePath, hash, fullPath))
 }
 
-func (pnpFS *pnpFS) Remove(path string) error {
-	path, _, _ = resolveVirtual(path)
-
-	fs, formattedPath, _ := getMatchingFS(pnpFS, path)
-	return fs.Remove(formattedPath)
+func (pnpFS *pnpFS) Remove(path tspath.RootedPath) error {
+	fs, formattedPath, _ := pnpFS.resolve(path.AsString())
+	return fs.Remove(tspath.RootedPathFromNormalized(formattedPath))
 }
 
-func (pnpFS *pnpFS) Stat(path string) vfs.FileInfo {
-	path, _, _ = resolveVirtual(path)
-
-	fs, formattedPath, _ := getMatchingFS(pnpFS, path)
-	return fs.Stat(formattedPath)
+func (pnpFS *pnpFS) Stat(path tspath.RootedPath) vfs.FileInfo {
+	fs, formattedPath, _ := pnpFS.resolve(path.AsString())
+	return fs.Stat(tspath.RootedPathFromNormalized(formattedPath))
 }
 
-func (pnpFS *pnpFS) UseCaseSensitiveFileNames() bool {
+func (pnpFS *pnpFS) CaseSensitivity() tspath.CaseSensitivity {
 	// pnp fs is always case sensitive
-	return true
+	return tspath.CaseSensitive
 }
 
-func (pnpFS *pnpFS) WriteFile(path string, data string) error {
-	path, _, _ = resolveVirtual(path)
-
-	fs, formattedPath, zipPath := getMatchingFS(pnpFS, path)
+func (pnpFS *pnpFS) WriteFile(path tspath.RootedFilePath, data string) error {
+	fs, formattedPath, zipPath := pnpFS.resolve(path.AsString())
 	if zipPath != "" {
 		panic("cannot write to zip file")
 	}
-
-	return fs.WriteFile(formattedPath, data)
+	return fs.WriteFile(tspath.RootedFilePathFromNormalized(formattedPath), data)
 }
 
-func (pnpFS *pnpFS) AppendFile(path string, data string) error {
-	path, _, _ = resolveVirtual(path)
-
-	fs, formattedPath, zipPath := getMatchingFS(pnpFS, path)
+func (pnpFS *pnpFS) AppendFile(path tspath.RootedFilePath, data string) error {
+	fs, formattedPath, zipPath := pnpFS.resolve(path.AsString())
 	if zipPath != "" {
 		panic("cannot append to zip file")
 	}
-
-	return fs.AppendFile(formattedPath, data)
+	return fs.AppendFile(tspath.RootedFilePathFromNormalized(formattedPath), data)
 }
 
 func splitZipPath(path string) (string, string) {
@@ -138,7 +122,7 @@ func getMatchingFS(pnpFS *pnpFS, path string) (vfs.FS, string, string) {
 
 	zipPath, internalPath := splitZipPath(path)
 
-	zipStat := pnpFS.fs.Stat(zipPath)
+	zipStat := pnpFS.fs.Stat(tspath.RootedPathFromNormalized(zipPath))
 	if zipStat == nil {
 		return pnpFS.fs, path, ""
 	}
@@ -161,7 +145,7 @@ func getMatchingFS(pnpFS *pnpFS, path string) (vfs.FS, string, string) {
 		pnpFS.cachedZipReadersMap[zipPath] = usedReader
 	}
 
-	return iovfs.From(usedReader /*useCaseSensitiveFileNames, always true for pnpfs*/, true), internalPath, zipPath
+	return iovfs.From(usedReader, tspath.CaseSensitive), internalPath, zipPath
 }
 
 // Virtual paths are used to make different paths resolve to the same real file or folder, which is necessary in some cases when PnP is enabled
@@ -207,7 +191,7 @@ func makeVirtualPath(basePath string, hash string, targetPath string) string {
 	relativePath := tspath.GetRelativePathFromDirectory(
 		tspath.GetDirectoryPath(basePath),
 		targetPath,
-		tspath.ComparePathsOptions{UseCaseSensitiveFileNames: true})
+		tspath.CaseSensitive)
 
 	segments := strings.Split(relativePath, "/")
 

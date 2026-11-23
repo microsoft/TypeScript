@@ -30,5 +30,5 @@ type fullType2 = import('./foo/types')./*foo4*/[|foo|]./*full2*/[|Full|];`
 	f.VerifyBaselineRename(t, nil /*preferences*/, f.Ranges()[3])
 	f.VerifyBaselineRename(t, nil /*preferences*/, f.Ranges()[5], f.Ranges()[10])
 	f.VerifyBaselineRename(t, nil /*preferences*/, f.Ranges()[7], f.Ranges()[8])
-	f.VerifyBaselineRename(t, &lsutil.UserPreferences{UseAliasesForRename: core.TSFalse}, f.Ranges()[7], f.Ranges()[8], f.Ranges()[10], f.Ranges()[3], f.Ranges()[5])
+	f.VerifyBaselineRename(t, &lsutil.UserPreferences{ProvidePrefixAndSuffixTextForRename: core.TSFalse}, f.Ranges()[7], f.Ranges()[8], f.Ranges()[10], f.Ranges()[3], f.Ranges()[5])
 }

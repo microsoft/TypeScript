@@ -60,7 +60,7 @@ export const m = mod;
     },
 }
 
-tsgo --b logic2/tsconfig.json --verbose
+tsc --b logic2/tsconfig.json --verbose
 ExitStatus:: DiagnosticsPresent_OutputsSkipped
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 

@@ -1,0 +1,26 @@
+//// [tests/cases/compiler/noFlakyDiagnosticsExpressionNameShadowedInBody1.ts] ////
+
+=== noFlakyDiagnosticsExpressionNameShadowedInBody1.ts ===
+const x = function f() {
+>x : () => void
+>function f() {    let f = 1;} : () => void
+>f : () => void
+
+    let f = 1;
+>f : number
+>1 : 1
+
+};
+
+const y = class C {
+>y : typeof C
+>class C {    static {        let C = 1;    }} : typeof C
+>C : typeof C
+
+    static {
+        let C = 1;
+>C : number
+>1 : 1
+    }
+};
+

@@ -42,17 +42,17 @@ type SpecialCasingEntry = {
 };
 
 async function loadCodePoints(property: string): Promise<number[]> {
-    const module = await import(`${PACKAGE}/${property}/code-points.js`);
+    const module = await import(`${PACKAGE}/${property}/code-points.mjs`);
     return module.default as number[];
 }
 
 async function loadMapping(property: string): Promise<Map<number, number[]>> {
-    const module = await import(`${PACKAGE}/${property}/code-points.js`);
+    const module = await import(`${PACKAGE}/${property}/code-points.mjs`);
     return module.default as Map<number, number[]>;
 }
 
 async function loadSimpleMapping(property: string): Promise<Map<number, number>> {
-    const module = await import(`${PACKAGE}/${property}/code-points.js`);
+    const module = await import(`${PACKAGE}/${property}/code-points.mjs`);
     return module.default as Map<number, number>;
 }
 
@@ -231,17 +231,18 @@ ${renderRangeTable("unicodeESNextIdentifierPart", partTable)}
 `;
 }
 
+export const outputs = ["js_case_generated.go", "identifier_parts_generated.go"] as const;
+
 export default async function generateUnicode(force = false, outDir = path.resolve(scriptDir, "..")) {
     outDir = path.resolve(outDir);
     const inputs = [
         import.meta.filename,
         fileURLToPath(import.meta.resolve(`${PACKAGE}/package.json`)),
     ];
-    const caseOutput = new GeneratedFile(path.join(outDir, "js_case_generated.go"), inputs);
-    const identifierOutput = new GeneratedFile(path.join(outDir, "identifier_parts_generated.go"), inputs);
+    const caseOutput = new GeneratedFile(path.join(outDir, outputs[0]), inputs);
+    const identifierOutput = new GeneratedFile(path.join(outDir, outputs[1]), inputs);
     const generatedFiles = [caseOutput, identifierOutput];
     if (generatedFiles.every(file => file.isCurrent(force))) {
-        console.log("Unicode tables are up to date.");
         return;
     }
 

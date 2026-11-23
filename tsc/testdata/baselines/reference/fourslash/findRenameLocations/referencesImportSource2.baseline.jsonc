@@ -1,0 +1,25 @@
+// === findRenameLocations ===
+// === /a.js ===
+// export default function /*RENAME*/[|fRENAME|]() {}
+// 
+
+// === /b.ts ===
+// import [|fRENAME|] from "./a.js";
+// [|fRENAME|]();
+// 
+
+
+
+// === findRenameLocations ===
+// === /b.ts ===
+// import /*RENAME*/[|fRENAME|] from "./a.js";
+// [|fRENAME|]();
+// 
+
+
+
+// === findRenameLocations ===
+// === /c.ts ===
+// import source /*RENAME*/[|fRENAME|] from "./a.js";
+// [|fRENAME|];
+// import.source("./a.js");

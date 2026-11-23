@@ -1,0 +1,22 @@
+//// [tests/cases/compiler/domElementStringKeyConstraint.ts] ////
+
+=== domElementStringKeyConstraint.ts ===
+declare function setProperty<T extends Element, K extends keyof T & string>(element: T, property: K, value: T[K]): void;
+>setProperty : <T extends Element, K extends keyof T & string>(element: T, property: K, value: T[K]) => void
+>element : T
+>property : K
+>value : T[K]
+
+declare const element: Element;
+>element : Element
+
+declare const key: keyof Element;
+>key : keyof Element
+
+setProperty(element, key, true);
+>setProperty(element, key, true) : void
+>setProperty : <T extends Element, K extends keyof T & string>(element: T, property: K, value: T[K]) => void
+>element : Element
+>key : keyof Element
+>true : true
+

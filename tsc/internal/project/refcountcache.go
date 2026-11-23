@@ -57,6 +57,26 @@ func (c *RefCountCache[K, V, AcquireArgs]) Has(identity K) bool {
 	return ok
 }
 
+// AcquireExisting retrieves an existing entry and increments its reference count.
+// It returns false without producing a value when no live entry exists.
+//
+// The caller is responsible for calling Deref when a value is returned.
+func (c *RefCountCache[K, V, AcquireArgs]) AcquireExisting(identity K) (V, bool) {
+	entry, ok := c.entries.Load(identity)
+	if !ok {
+		var zero V
+		return zero, false
+	}
+	entry.mu.Lock()
+	defer entry.mu.Unlock()
+	if entry.refCount <= 0 && !c.Options.DisableDeletion {
+		var zero V
+		return zero, false
+	}
+	entry.refCount++
+	return entry.value, true
+}
+
 // AcquireOrError retrieves an existing entry (incrementing its refcount) or produces a new one via
 // produce. If produce returns an error, no entry is stored and the error is returned, so callers can
 // cache only successful results. produce runs while holding the new entry's lock, so concurrent

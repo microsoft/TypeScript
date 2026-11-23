@@ -175,7 +175,7 @@ let c2 = !true ? opts : {};
 >{} : {}
 
 let c3 = !true ? { a: 0, b: 0 } : {};
->c3 : { a: number; b: number; } | { b?: undefined; a?: undefined; }
+>c3 : { a: number; b: number; } | { a?: undefined; b?: undefined; }
 >!true ? { a: 0, b: 0 } : {} : { a: number; b: number; } | {}
 >!true : false
 >true : true
@@ -187,7 +187,7 @@ let c3 = !true ? { a: 0, b: 0 } : {};
 >{} : {}
 
 let c4 = !true ? {} : { a: 0, b: 0 };
->c4 : { b?: undefined; a?: undefined; } | { a: number; b: number; }
+>c4 : { a?: undefined; b?: undefined; } | { a: number; b: number; }
 >!true ? {} : { a: 0, b: 0 } : {} | { a: number; b: number; }
 >!true : false
 >true : true
@@ -200,7 +200,7 @@ let c4 = !true ? {} : { a: 0, b: 0 };
 
 // Normalization applies to nested properties
 let d1 = [{ kind: 'a', pos: { x: 0, y: 0 } }, { kind: 'b', pos: !true ? { a: "x" } : { b: 0 } }][0];
->d1 : { kind: string; pos: { b?: undefined; a?: undefined; x: number; y: number; }; } | { kind: string; pos: { b?: undefined; x?: undefined; y?: undefined; a: string; } | { a?: undefined; x?: undefined; y?: undefined; b: number; }; }
+>d1 : { kind: string; pos: { x: number; y: number; a?: undefined; b?: undefined; }; } | { kind: string; pos: { x?: undefined; y?: undefined; a: string; b?: undefined; } | { x?: undefined; y?: undefined; a?: undefined; b: number; }; }
 >[{ kind: 'a', pos: { x: 0, y: 0 } }, { kind: 'b', pos: !true ? { a: "x" } : { b: 0 } }][0] : { kind: string; pos: { x: number; y: number; }; } | { kind: string; pos: { a: string; } | { b: number; }; }
 >[{ kind: 'a', pos: { x: 0, y: 0 } }, { kind: 'b', pos: !true ? { a: "x" } : { b: 0 } }] : ({ kind: string; pos: { x: number; y: number; }; } | { kind: string; pos: { a: string; } | { b: number; }; })[]
 >{ kind: 'a', pos: { x: 0, y: 0 } } : { kind: string; pos: { x: number; y: number; }; }
@@ -229,40 +229,40 @@ let d1 = [{ kind: 'a', pos: { x: 0, y: 0 } }, { kind: 'b', pos: !true ? { a: "x"
 
 d1.kind;
 >d1.kind : string
->d1 : { kind: string; pos: { b?: undefined; a?: undefined; x: number; y: number; }; } | { kind: string; pos: { b?: undefined; x?: undefined; y?: undefined; a: string; } | { a?: undefined; x?: undefined; y?: undefined; b: number; }; }
+>d1 : { kind: string; pos: { x: number; y: number; a?: undefined; b?: undefined; }; } | { kind: string; pos: { x?: undefined; y?: undefined; a: string; b?: undefined; } | { x?: undefined; y?: undefined; a?: undefined; b: number; }; }
 >kind : string
 
 d1.pos;
->d1.pos : { b?: undefined; a?: undefined; x: number; y: number; } | { b?: undefined; x?: undefined; y?: undefined; a: string; } | { a?: undefined; x?: undefined; y?: undefined; b: number; }
->d1 : { kind: string; pos: { b?: undefined; a?: undefined; x: number; y: number; }; } | { kind: string; pos: { b?: undefined; x?: undefined; y?: undefined; a: string; } | { a?: undefined; x?: undefined; y?: undefined; b: number; }; }
->pos : { b?: undefined; a?: undefined; x: number; y: number; } | { b?: undefined; x?: undefined; y?: undefined; a: string; } | { a?: undefined; x?: undefined; y?: undefined; b: number; }
+>d1.pos : { x: number; y: number; a?: undefined; b?: undefined; } | { x?: undefined; y?: undefined; a: string; b?: undefined; } | { x?: undefined; y?: undefined; a?: undefined; b: number; }
+>d1 : { kind: string; pos: { x: number; y: number; a?: undefined; b?: undefined; }; } | { kind: string; pos: { x?: undefined; y?: undefined; a: string; b?: undefined; } | { x?: undefined; y?: undefined; a?: undefined; b: number; }; }
+>pos : { x: number; y: number; a?: undefined; b?: undefined; } | { x?: undefined; y?: undefined; a: string; b?: undefined; } | { x?: undefined; y?: undefined; a?: undefined; b: number; }
 
 d1.pos.x;
 >d1.pos.x : number | undefined
->d1.pos : { b?: undefined; a?: undefined; x: number; y: number; } | { b?: undefined; x?: undefined; y?: undefined; a: string; } | { a?: undefined; x?: undefined; y?: undefined; b: number; }
->d1 : { kind: string; pos: { b?: undefined; a?: undefined; x: number; y: number; }; } | { kind: string; pos: { b?: undefined; x?: undefined; y?: undefined; a: string; } | { a?: undefined; x?: undefined; y?: undefined; b: number; }; }
->pos : { b?: undefined; a?: undefined; x: number; y: number; } | { b?: undefined; x?: undefined; y?: undefined; a: string; } | { a?: undefined; x?: undefined; y?: undefined; b: number; }
+>d1.pos : { x: number; y: number; a?: undefined; b?: undefined; } | { x?: undefined; y?: undefined; a: string; b?: undefined; } | { x?: undefined; y?: undefined; a?: undefined; b: number; }
+>d1 : { kind: string; pos: { x: number; y: number; a?: undefined; b?: undefined; }; } | { kind: string; pos: { x?: undefined; y?: undefined; a: string; b?: undefined; } | { x?: undefined; y?: undefined; a?: undefined; b: number; }; }
+>pos : { x: number; y: number; a?: undefined; b?: undefined; } | { x?: undefined; y?: undefined; a: string; b?: undefined; } | { x?: undefined; y?: undefined; a?: undefined; b: number; }
 >x : number | undefined
 
 d1.pos.y;
 >d1.pos.y : number | undefined
->d1.pos : { b?: undefined; a?: undefined; x: number; y: number; } | { b?: undefined; x?: undefined; y?: undefined; a: string; } | { a?: undefined; x?: undefined; y?: undefined; b: number; }
->d1 : { kind: string; pos: { b?: undefined; a?: undefined; x: number; y: number; }; } | { kind: string; pos: { b?: undefined; x?: undefined; y?: undefined; a: string; } | { a?: undefined; x?: undefined; y?: undefined; b: number; }; }
->pos : { b?: undefined; a?: undefined; x: number; y: number; } | { b?: undefined; x?: undefined; y?: undefined; a: string; } | { a?: undefined; x?: undefined; y?: undefined; b: number; }
+>d1.pos : { x: number; y: number; a?: undefined; b?: undefined; } | { x?: undefined; y?: undefined; a: string; b?: undefined; } | { x?: undefined; y?: undefined; a?: undefined; b: number; }
+>d1 : { kind: string; pos: { x: number; y: number; a?: undefined; b?: undefined; }; } | { kind: string; pos: { x?: undefined; y?: undefined; a: string; b?: undefined; } | { x?: undefined; y?: undefined; a?: undefined; b: number; }; }
+>pos : { x: number; y: number; a?: undefined; b?: undefined; } | { x?: undefined; y?: undefined; a: string; b?: undefined; } | { x?: undefined; y?: undefined; a?: undefined; b: number; }
 >y : number | undefined
 
 d1.pos.a;
 >d1.pos.a : string | undefined
->d1.pos : { b?: undefined; a?: undefined; x: number; y: number; } | { b?: undefined; x?: undefined; y?: undefined; a: string; } | { a?: undefined; x?: undefined; y?: undefined; b: number; }
->d1 : { kind: string; pos: { b?: undefined; a?: undefined; x: number; y: number; }; } | { kind: string; pos: { b?: undefined; x?: undefined; y?: undefined; a: string; } | { a?: undefined; x?: undefined; y?: undefined; b: number; }; }
->pos : { b?: undefined; a?: undefined; x: number; y: number; } | { b?: undefined; x?: undefined; y?: undefined; a: string; } | { a?: undefined; x?: undefined; y?: undefined; b: number; }
+>d1.pos : { x: number; y: number; a?: undefined; b?: undefined; } | { x?: undefined; y?: undefined; a: string; b?: undefined; } | { x?: undefined; y?: undefined; a?: undefined; b: number; }
+>d1 : { kind: string; pos: { x: number; y: number; a?: undefined; b?: undefined; }; } | { kind: string; pos: { x?: undefined; y?: undefined; a: string; b?: undefined; } | { x?: undefined; y?: undefined; a?: undefined; b: number; }; }
+>pos : { x: number; y: number; a?: undefined; b?: undefined; } | { x?: undefined; y?: undefined; a: string; b?: undefined; } | { x?: undefined; y?: undefined; a?: undefined; b: number; }
 >a : string | undefined
 
 d1.pos.b;
 >d1.pos.b : number | undefined
->d1.pos : { b?: undefined; a?: undefined; x: number; y: number; } | { b?: undefined; x?: undefined; y?: undefined; a: string; } | { a?: undefined; x?: undefined; y?: undefined; b: number; }
->d1 : { kind: string; pos: { b?: undefined; a?: undefined; x: number; y: number; }; } | { kind: string; pos: { b?: undefined; x?: undefined; y?: undefined; a: string; } | { a?: undefined; x?: undefined; y?: undefined; b: number; }; }
->pos : { b?: undefined; a?: undefined; x: number; y: number; } | { b?: undefined; x?: undefined; y?: undefined; a: string; } | { a?: undefined; x?: undefined; y?: undefined; b: number; }
+>d1.pos : { x: number; y: number; a?: undefined; b?: undefined; } | { x?: undefined; y?: undefined; a: string; b?: undefined; } | { x?: undefined; y?: undefined; a?: undefined; b: number; }
+>d1 : { kind: string; pos: { x: number; y: number; a?: undefined; b?: undefined; }; } | { kind: string; pos: { x?: undefined; y?: undefined; a: string; b?: undefined; } | { x?: undefined; y?: undefined; a?: undefined; b: number; }; }
+>pos : { x: number; y: number; a?: undefined; b?: undefined; } | { x?: undefined; y?: undefined; a: string; b?: undefined; } | { x?: undefined; y?: undefined; a?: undefined; b: number; }
 >b : number | undefined
 
 declare function f<T>(...items: T[]): T;
@@ -292,8 +292,8 @@ let e1 = f({ a: 1, b: 2 }, { a: "abc" }, {});
 >{} : {}
 
 let e2 = f({}, { a: "abc" }, { a: 1, b: 2 });
->e2 : { b?: undefined; a?: undefined; } | { b?: undefined; a: string; } | { a: number; b: number; }
->f({}, { a: "abc" }, { a: 1, b: 2 }) : { b?: undefined; a?: undefined; } | { b?: undefined; a: string; } | { a: number; b: number; }
+>e2 : { a?: undefined; b?: undefined; } | { a: string; b?: undefined; } | { a: number; b: number; }
+>f({}, { a: "abc" }, { a: 1, b: 2 }) : { a?: undefined; b?: undefined; } | { a: string; b?: undefined; } | { a: number; b: number; }
 >f : <T>(...items: T[]) => T
 >{} : {}
 >{ a: "abc" } : { a: string; }

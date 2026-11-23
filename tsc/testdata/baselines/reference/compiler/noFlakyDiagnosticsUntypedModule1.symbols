@@ -1,0 +1,9 @@
+//// [tests/cases/compiler/noFlakyDiagnosticsUntypedModule1.ts] ////
+
+=== /index.js ===
+import { x } from "untyped";
+>x : Symbol(x, Decl(index.js, 0, 8))
+
+x;
+>x : Symbol(x, Decl(index.js, 0, 8))
+

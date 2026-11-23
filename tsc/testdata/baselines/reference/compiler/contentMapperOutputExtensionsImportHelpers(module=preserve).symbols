@@ -1,0 +1,38 @@
+//// [tests/cases/compiler/contentMapperOutputExtensionsImportHelpers.ts] ////
+
+=== /Card.astro ===
+const __VERSION = "1.0.0";
+>__VERSION : Symbol(__VERSION, Decl(Card.astro, 0, 5))
+
+export const Card = 1;
+>Card : Symbol(Card, Decl(Card.astro, 1, 12))
+
+=== /main.ts ===
+export function dynamic(path: string) { return import(path); }
+>dynamic : Symbol(dynamic, Decl(main.ts, 0, 0))
+>path : Symbol(path, Decl(main.ts, 0, 24))
+>path : Symbol(path, Decl(main.ts, 0, 24))
+
+export function literal() { return import("./Card.astro"); }
+>literal : Symbol(literal, Decl(main.ts, 0, 62))
+>"./Card.astro" : Symbol("./Card.astro", Decl(Card.astro, 0, 0))
+
+=== /require.js ===
+/** @param {string} path */
+export function dynamicRequire(path) { return require(path); }
+>dynamicRequire : Symbol(dynamicRequire, Decl(require.js, 0, 0))
+>path : Symbol(path, Decl(require.js, 1, 31))
+>require : Symbol(require, Decl(globals.d.ts, 0, 0))
+>path : Symbol(path, Decl(require.js, 1, 31))
+
+=== /globals.d.ts ===
+declare function require(path: string): unknown;
+>require : Symbol(require, Decl(globals.d.ts, 0, 0))
+>path : Symbol(path, Decl(globals.d.ts, 0, 25))
+
+=== /node_modules/tslib/index.d.ts ===
+export declare function __rewriteRelativeImportExtension(path: any, preserveJsx?: boolean): any;
+>__rewriteRelativeImportExtension : Symbol(__rewriteRelativeImportExtension, Decl(index.d.ts, 0, 0))
+>path : Symbol(path, Decl(index.d.ts, 0, 57))
+>preserveJsx : Symbol(preserveJsx, Decl(index.d.ts, 0, 67))
+

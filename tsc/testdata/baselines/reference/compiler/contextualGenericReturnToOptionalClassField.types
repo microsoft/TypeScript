@@ -1,0 +1,37 @@
+//// [tests/cases/compiler/contextualGenericReturnToOptionalClassField.ts] ////
+
+=== contextualGenericReturnToOptionalClassField.ts ===
+declare function lookup<T extends object = object>(): T;
+>lookup : <T extends object = object>() => T
+
+class Container {
+>Container : Container
+
+    item?: { label: string };
+>item : { label: string; } | undefined
+>label : string
+
+    getLabel() {
+>getLabel : () => string
+
+        if (!this.item) this.item = lookup();
+>!this.item : boolean
+>this.item : { label: string; } | undefined
+>this : this
+>item : { label: string; } | undefined
+>this.item = lookup() : { label: string; }
+>this.item : { label: string; } | undefined
+>this : this
+>item : { label: string; } | undefined
+>lookup() : { label: string; }
+>lookup : <T extends object = object>() => T
+
+        return this.item.label;
+>this.item.label : string
+>this.item : { label: string; }
+>this : this
+>item : { label: string; }
+>label : string
+    }
+}
+

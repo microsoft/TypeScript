@@ -24,8 +24,8 @@ type System interface {
 	Writer() io.Writer
 	ErrorWriter() io.Writer
 	FS() vfs.FS
-	DefaultLibraryPath() string
-	GetCurrentDirectory() string
+	DefaultLibraryPath() tspath.RootedDirectoryPath
+	GetCurrentDirectory() tspath.RootedDirectoryPath
 	WriteOutputIsTTY() bool
 	GetWidthOfTerminal() int
 	GetEnvironmentVariable(name string) (string, bool)
@@ -59,10 +59,11 @@ const (
 	ExitStatusInvalidProject_OutputsSkipped        ExitStatus = 3
 	ExitStatusProjectReferenceCycle_OutputsSkipped ExitStatus = 4
 	ExitStatusNotImplemented                       ExitStatus = 5
+	ExitStatusCancelled                            ExitStatus = 6
 )
 
 type Watcher interface {
-	DoCycle()
+	DoCycle(ctx context.Context)
 }
 
 type CommandLineResult struct {
@@ -72,7 +73,7 @@ type CommandLineResult struct {
 
 type CommandLineTesting interface {
 	// Ensure that all emitted files are timestamped in order to ensure they are deterministic for test baseline
-	OnEmittedFiles(result *compiler.EmitResult, mTimesCache *collections.SyncMap[tspath.Path, time.Time])
+	OnEmittedFiles(result *compiler.EmitResult, mTimesCache *collections.SyncMap[tspath.PathKey, time.Time])
 	OnListFilesStart(w io.Writer)
 	OnListFilesEnd(w io.Writer)
 	OnStatisticsStart(w io.Writer)

@@ -43,7 +43,7 @@ type tscInput struct {
 }
 
 func (test *tscInput) executeCommand(ctx context.Context, sys *TestSys, baselineBuilder *strings.Builder, commandLineArgs []string) tsc.CommandLineResult {
-	fmt.Fprint(baselineBuilder, "tsgo ", strings.Join(commandLineArgs, " "), "\n")
+	fmt.Fprint(baselineBuilder, "tsc ", strings.Join(commandLineArgs, " "), "\n")
 	result := execute.CommandLine(ctx, sys, commandLineArgs, sys)
 	switch result.Status {
 	case tsc.ExitStatusSuccess:
@@ -58,6 +58,8 @@ func (test *tscInput) executeCommand(ctx context.Context, sys *TestSys, baseline
 		baselineBuilder.WriteString("ExitStatus:: ProjectReferenceCycle_OutputsSkipped")
 	case tsc.ExitStatusNotImplemented:
 		baselineBuilder.WriteString("ExitStatus:: NotImplemented")
+	case tsc.ExitStatusCancelled:
+		baselineBuilder.WriteString("ExitStatus:: Cancelled")
 	default:
 		panic(fmt.Sprintf("UnknownExitStatus %d", result.Status))
 	}
@@ -78,7 +80,7 @@ func (test *tscInput) run(t *testing.T, scenario string) {
 			"currentDirectory::",
 			sys.GetCurrentDirectory(),
 			"\nuseCaseSensitiveFileNames::",
-			sys.FS().UseCaseSensitiveFileNames(),
+			sys.FS().CaseSensitivity(),
 			"\nInput::\n",
 		)
 		sys.baselineFSwithDiff(baselineBuilder)
@@ -92,7 +94,7 @@ func (test *tscInput) run(t *testing.T, scenario string) {
 
 		for index, do := range test.edits {
 			sys.clearOutput()
-			wg := core.NewWorkGroup(false)
+			wg := core.NewWorkGroup(0)
 			var nonIncrementalSys *TestSys
 			commandLineArgs := core.IfElse(do.commandLineArgs == nil, test.commandLineArgs, do.commandLineArgs)
 			wg.Queue(func() {
@@ -107,7 +109,7 @@ func (test *tscInput) run(t *testing.T, scenario string) {
 					test.executeCommand(ctx, sys, baselineBuilder, commandLineArgs)
 				} else {
 					sys.mockWatchBackend.SendChangedPaths(changedPaths)
-					result.Watcher.DoCycle()
+					result.Watcher.DoCycle(ctx)
 				}
 				sys.serializeState(baselineBuilder)
 				if result.Watcher != nil && sys.mockWatchBackend.HasWatches() {
@@ -152,21 +154,22 @@ func getDiffForIncremental(incrementalSys *TestSys, nonIncrementalSys *TestSys) 
 	nonIncrementalOutputs := nonIncrementalSys.fs.writtenFiles.ToSlice()
 	slices.Sort(nonIncrementalOutputs)
 	for _, nonIncrementalOutput := range nonIncrementalOutputs {
-		if tspath.FileExtensionIs(nonIncrementalOutput, tspath.ExtensionTsBuildInfo) ||
-			strings.HasSuffix(nonIncrementalOutput, ".readable.baseline.txt") {
+		nonIncrementalOutputText := nonIncrementalOutput.AsString()
+		if nonIncrementalOutput.ExtensionIs(tspath.ExtensionTsBuildInfo) ||
+			strings.HasSuffix(nonIncrementalOutputText, ".readable.baseline.txt") {
 			// Just check existence
 			if !incrementalSys.fsFromFileMap().FileExists(nonIncrementalOutput) {
-				diffBuilder.WriteString(baseline.DiffText("nonIncremental "+nonIncrementalOutput, "incremental "+nonIncrementalOutput, "Exists", ""))
+				diffBuilder.WriteString(baseline.DiffText("nonIncremental "+nonIncrementalOutputText, "incremental "+nonIncrementalOutputText, "Exists", ""))
 				diffBuilder.WriteString("\n")
 			}
 		} else {
 			nonIncrementalText, ok := nonIncrementalSys.fsFromFileMap().ReadFile(nonIncrementalOutput)
 			if !ok {
-				panic("Written file not found " + nonIncrementalOutput)
+				panic("Written file not found " + nonIncrementalOutputText)
 			}
 			incrementalText, ok := incrementalSys.fsFromFileMap().ReadFile(nonIncrementalOutput)
 			if !ok || incrementalText != nonIncrementalText {
-				diffBuilder.WriteString(baseline.DiffText("nonIncremental "+nonIncrementalOutput, "incremental "+nonIncrementalOutput, nonIncrementalText, incrementalText))
+				diffBuilder.WriteString(baseline.DiffText("nonIncremental "+nonIncrementalOutputText, "incremental "+nonIncrementalOutputText, nonIncrementalText, incrementalText))
 				diffBuilder.WriteString("\n")
 			}
 		}

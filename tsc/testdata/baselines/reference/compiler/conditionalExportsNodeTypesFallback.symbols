@@ -1,0 +1,13 @@
+//// [tests/cases/compiler/conditionalExportsNodeTypesFallback.ts] ////
+
+=== /index.mts ===
+import { value } from "provider";
+>value : Symbol(value, Decl(index.mts, 0, 8))
+
+value;
+>value : Symbol(value, Decl(index.mts, 0, 8))
+
+=== /node_modules/provider/types.d.ts ===
+export const value: number;
+>value : Symbol(value, Decl(types.d.ts, 0, 12))
+

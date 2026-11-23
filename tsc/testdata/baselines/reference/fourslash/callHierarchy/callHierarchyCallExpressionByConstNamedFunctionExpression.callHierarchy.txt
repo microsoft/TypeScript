@@ -42,8 +42,9 @@
 │ │ │        ^^^
 │ ╰ ╰
 │ ╭ from:
-│ │ ╭ name: /callHierarchyCallExpressionByConstNamedFunctionExpression.ts
+│ │ ╭ name: callHierarchyCallExpressionByConstNamedFunctionExpression.ts
 │ │ ├ kind: file
+│ │ ├ containerName: /
 │ │ ├ file: /callHierarchyCallExpressionByConstNamedFunctionExpression.ts
 │ │ ├ span:
 │ │ │ ╭ /callHierarchyCallExpressionByConstNamedFunctionExpression.ts:1:1-12:6

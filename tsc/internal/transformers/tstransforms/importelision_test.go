@@ -47,11 +47,15 @@ func (p *fakeProgram) GetEmitSyntaxForUsageLocation(sourceFile ast.HasFileName, 
 }
 
 // CommonSourceDirectory implements checker.Program.
-func (p *fakeProgram) CommonSourceDirectory() string {
+func (p *fakeProgram) CommonSourceDirectory() tspath.RootedDirectoryPath {
 	panic("unimplemented")
 }
 
-func (p *fakeProgram) ContentMapperExtensions() []string {
+func (p *fakeProgram) ContentMapperExtensionForFileName(tspath.RootedFilePath) string {
+	return ""
+}
+
+func (p *fakeProgram) ContentMapperExtensionRewrites() []tspath.ExtensionRewrite {
 	return nil
 }
 
@@ -59,11 +63,11 @@ func (p *fakeProgram) GetResolvedModuleFromModuleSpecifier(file ast.HasFileName,
 	panic("unimplemented")
 }
 
-func (p *fakeProgram) FileExists(path string) bool {
+func (p *fakeProgram) FileExists(path tspath.RootedFilePath) bool {
 	return false
 }
 
-func (p *fakeProgram) GetCurrentDirectory() string {
+func (p *fakeProgram) BaseDirectory() tspath.RootedDirectoryPath {
 	return ""
 }
 
@@ -71,11 +75,11 @@ func (p *fakeProgram) PnpApi() *pnp.PnpApi {
 	return nil
 }
 
-func (p *fakeProgram) GetGlobalTypingsCacheLocation() string {
+func (p *fakeProgram) GetGlobalTypingsCacheLocation() tspath.RootedDirectoryPath {
 	return ""
 }
 
-func (p *fakeProgram) GetNearestAncestorDirectoryWithPackageJson(dirname string) string {
+func (p *fakeProgram) GetNearestAncestorDirectoryWithPackageJson(dirname tspath.RootedDirectoryPath) tspath.RootedDirectoryPath {
 	return ""
 }
 
@@ -83,27 +87,27 @@ func (p *fakeProgram) GetSymlinkCache() *symlinks.KnownSymlinks {
 	return nil
 }
 
-func (p *fakeProgram) ResolveModuleName(moduleName string, containingFile string, resolutionMode core.ResolutionMode) *module.ResolvedModule {
+func (p *fakeProgram) ResolveModuleName(moduleName string, containingFile tspath.RootedFilePath, resolutionMode core.ResolutionMode) *module.ResolvedModule {
 	return nil
 }
 
-func (p *fakeProgram) GetPackageJsonInfo(pkgJsonPath string) *packagejson.InfoCacheEntry {
+func (p *fakeProgram) GetPackageJsonInfo(pkgJsonPath tspath.RootedFilePath) *packagejson.InfoCacheEntry {
 	return nil
 }
 
-func (p *fakeProgram) GetRedirectTargets(path tspath.Path) []string {
+func (p *fakeProgram) GetRedirectTargets(path tspath.PathKey) []tspath.RootedFilePath {
 	return nil
 }
 
-func (p *fakeProgram) GetSourceOfProjectReferenceIfOutputIncluded(file ast.HasFileName) string {
+func (p *fakeProgram) GetSourceOfProjectReferenceIfOutputIncluded(file ast.HasFileName) tspath.RootedFilePath {
 	return ""
 }
 
-func (p *fakeProgram) GetProjectReferenceFromSource(path tspath.Path) *tsoptions.SourceOutputAndProjectReference {
+func (p *fakeProgram) GetProjectReferenceFromSource(path tspath.PathKey) *tsoptions.SourceOutputAndProjectReference {
 	return nil
 }
 
-func (p *fakeProgram) IsSourceFromProjectReference(path tspath.Path) bool {
+func (p *fakeProgram) IsSourceFromProjectReference(path tspath.PathKey) bool {
 	return false
 }
 
@@ -111,12 +115,12 @@ func (p *fakeProgram) GetPackagesMap() map[string]bool {
 	return nil
 }
 
-func (p *fakeProgram) GetProjectReferenceFromOutputDts(path tspath.Path) *tsoptions.SourceOutputAndProjectReference {
+func (p *fakeProgram) GetProjectReferenceFromOutputDts(path tspath.PathKey) *tsoptions.SourceOutputAndProjectReference {
 	return nil
 }
 
-func (p *fakeProgram) UseCaseSensitiveFileNames() bool {
-	return true
+func (p *fakeProgram) CaseSensitivity() tspath.CaseSensitivity {
+	return tspath.CaseSensitive
 }
 
 func (p *fakeProgram) Options() *core.CompilerOptions {
@@ -128,7 +132,7 @@ func (p *fakeProgram) SourceFiles() []*ast.SourceFile {
 }
 
 func (p *fakeProgram) BindSourceFiles() {
-	wg := core.NewWorkGroup(p.singleThreaded)
+	wg := core.NewWorkGroup(core.WorkGroupConcurrency(p.singleThreaded))
 	for _, file := range p.files {
 		if !file.IsBound() {
 			wg.Queue(func() {
@@ -159,31 +163,31 @@ func (p *fakeProgram) GetResolvedModule(currentSourceFile ast.HasFileName, modul
 	return p.getResolvedModule(currentSourceFile, moduleReference, mode)
 }
 
-func (p *fakeProgram) GetSourceFile(FileName string) *ast.SourceFile {
-	return p.getSourceFile(FileName)
+func (p *fakeProgram) GetSourceFile(fileName tspath.RootedFilePath) *ast.SourceFile {
+	return p.getSourceFile(fileName.AsString())
 }
 
-func (p *fakeProgram) GetSourceFileForResolvedModule(FileName string) *ast.SourceFile {
-	return p.getSourceFileForResolvedModule(FileName)
+func (p *fakeProgram) GetSourceFileForResolvedModule(resolved *module.ResolvedModule) *ast.SourceFile {
+	return p.getSourceFileForResolvedModule(resolved.ResolvedFileName.AsString())
 }
 
-func (p *fakeProgram) GetSourceFileMetaData(path tspath.Path) ast.SourceFileMetaData {
+func (p *fakeProgram) GetSourceFileMetaData(path tspath.PathKey) ast.SourceFileMetaData {
 	return ast.SourceFileMetaData{}
 }
 
-func (p *fakeProgram) GetImportHelpersImportSpecifier(path tspath.Path) *ast.Node {
+func (p *fakeProgram) GetImportHelpersImportSpecifier(path tspath.PathKey) *ast.Node {
 	return nil
 }
 
-func (p *fakeProgram) GetJSXRuntimeImportSpecifier(path tspath.Path) (moduleReference string, specifier *ast.Node) {
+func (p *fakeProgram) GetJSXRuntimeImportSpecifier(path tspath.PathKey) (moduleReference string, specifier *ast.Node) {
 	return "", nil
 }
 
-func (p *fakeProgram) GetResolvedModules() map[tspath.Path]module.ModeAwareCache[*module.ResolvedModule] {
+func (p *fakeProgram) GetResolvedModules() map[tspath.PathKey]module.ModeAwareCache[*module.ResolvedModule] {
 	panic("unimplemented")
 }
 
-func (p *fakeProgram) IsSourceFileDefaultLibrary(path tspath.Path) bool {
+func (p *fakeProgram) IsSourceFileDefaultLibrary(path tspath.PathKey) bool {
 	return false
 }
 
@@ -252,7 +256,7 @@ func TestImportElision(t *testing.T) {
 					return nil
 				},
 				getSourceFileForResolvedModule: func(fileName string) *ast.SourceFile {
-					if fileName == "other.ts" {
+					if fileName == "/other.ts" {
 						return other
 					}
 					return nil
@@ -260,7 +264,7 @@ func TestImportElision(t *testing.T) {
 				getResolvedModule: func(currentSourceFile ast.HasFileName, moduleReference string, mode core.ResolutionMode) *module.ResolvedModule {
 					if currentSourceFile == file && moduleReference == "other" {
 						return &module.ResolvedModule{
-							ResolvedFileName: "other.ts",
+							ResolvedFileName: tspath.RootedFilePath("/other.ts"),
 							Extension:        tspath.ExtensionTs,
 						}
 					}
@@ -268,9 +272,10 @@ func TestImportElision(t *testing.T) {
 				},
 			}, nil)
 
-			emitResolver := c.GetEmitResolver()
+			emitContext := printer.NewEmitContext()
+			emitResolver := c.NewEmitResolver(emitContext)
 
-			opts := &transformers.TransformOptions{CompilerOptions: compilerOptions, Context: printer.NewEmitContext(), EmitResolver: emitResolver, Resolver: emitResolver}
+			opts := &transformers.TransformOptions{CompilerOptions: compilerOptions, Context: emitContext, EmitResolver: emitResolver, Resolver: emitResolver}
 			file = tstransforms.NewTypeEraserTransformer(opts).TransformSourceFile(file)
 			file = tstransforms.NewImportElisionTransformer(opts).TransformSourceFile(file)
 			emittestutil.CheckEmit(t, nil, file, rec.output)

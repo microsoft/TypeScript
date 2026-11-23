@@ -59,7 +59,7 @@ declare class C {
      * @readonly
      * @type {number}
      */
-    y: number;
+    readonly y: number;
     /** @readonly */
     readonly x = 6;
     /** @readonly */

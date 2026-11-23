@@ -49,7 +49,7 @@ func TestPnpVfs_BasicFileOperations(t *testing.T) {
 	underlyingFS := vfstest.FromMap(map[string]string{
 		"/project/src/index.ts": "export const hello = 'world';",
 		"/project/package.json": `{"name": "test"}`,
-	}, true)
+	}, tspath.CaseSensitive)
 
 	fs := From(underlyingFS)
 	assert.Assert(t, fs.FileExists("/project/src/index.ts"))
@@ -80,12 +80,12 @@ func TestPnpVfs_ZipFileDetection(t *testing.T) {
 
 	zipPath, fs := createTestZip(t, zipFiles)
 
-	assert.Assert(t, fs.FileExists(zipPath))
+	assert.Assert(t, fs.FileExists(tspath.RootedFilePathFromAbsolute(zipPath)))
 
 	zipInternalPath := zipPath + "/src/index.ts"
-	assert.Assert(t, fs.FileExists(zipInternalPath))
+	assert.Assert(t, fs.FileExists(tspath.RootedFilePathFromAbsolute(zipInternalPath)))
 
-	content, ok := fs.ReadFile(zipInternalPath)
+	content, ok := fs.ReadFile(tspath.RootedFilePathFromAbsolute(zipInternalPath))
 	assert.Assert(t, ok)
 	assert.Equal(t, content, zipFiles["src/index.ts"])
 }
@@ -113,7 +113,7 @@ func TestPnpVfs_ErrorHandling(t *testing.T) {
 		err := os.WriteFile(fakePath, []byte("not a zip file"), 0o644)
 		assert.NilError(t, err)
 
-		result := fs.FileExists(fakePath + "/file.txt")
+		result := fs.FileExists(tspath.RootedFilePathFromAbsolute(fakePath + "/file.txt"))
 		assert.Assert(t, !result)
 	})
 
@@ -126,7 +126,7 @@ func TestPnpVfs_ErrorHandling(t *testing.T) {
 		zipPath, zipFS := createTestZip(t, zipFiles)
 
 		testutil.AssertPanics(t, func() {
-			_ = zipFS.WriteFile(zipPath+"/src/index.ts", "hello, world")
+			_ = zipFS.WriteFile(tspath.RootedFilePathFromAbsolute(zipPath+"/src/index.ts"), "hello, world")
 		}, "cannot write to zip file")
 	})
 }
@@ -134,11 +134,11 @@ func TestPnpVfs_ErrorHandling(t *testing.T) {
 func TestPnpVfs_CaseSensitivity(t *testing.T) {
 	t.Parallel()
 
-	sensitiveFS := From(vfstest.FromMap(map[string]string{}, true))
-	assert.Assert(t, sensitiveFS.UseCaseSensitiveFileNames())
-	insensitiveFS := From(vfstest.FromMap(map[string]string{}, false))
+	sensitiveFS := From(vfstest.FromMap(map[string]string{}, tspath.CaseSensitive))
+	assert.Equal(t, sensitiveFS.CaseSensitivity(), tspath.CaseSensitive)
+	insensitiveFS := From(vfstest.FromMap(map[string]string{}, tspath.CaseInsensitive))
 	// pnpvfs is always case sensitive
-	assert.Assert(t, insensitiveFS.UseCaseSensitiveFileNames())
+	assert.Equal(t, insensitiveFS.CaseSensitivity(), tspath.CaseSensitive)
 }
 
 func TestPnpVfs_FallbackToRegularFiles(t *testing.T) {
@@ -151,12 +151,12 @@ func TestPnpVfs_FallbackToRegularFiles(t *testing.T) {
 
 	fs := From(osvfs.FS())
 
-	assert.Assert(t, fs.FileExists(regularFile))
+	assert.Assert(t, fs.FileExists(tspath.RootedFilePathFromAbsolute(regularFile)))
 
-	content, ok := fs.ReadFile(regularFile)
+	content, ok := fs.ReadFile(tspath.RootedFilePathFromAbsolute(regularFile))
 	assert.Assert(t, ok)
 	assert.Equal(t, "regular content", content)
-	assert.Assert(t, fs.DirectoryExists(tmpDir))
+	assert.Assert(t, fs.DirectoryExists(tspath.RootedDirectoryPathFromAbsolute(tmpDir)))
 }
 
 func TestZipPath_Detection(t *testing.T) {
@@ -191,7 +191,7 @@ func TestPnpVfs_VirtualPathHandling(t *testing.T) {
 		"/project/packages/packageA/package.json": `{"name": "packageA"}`,
 		"/project/packages/packageB/indexB.ts":    "export const helloB = 'world';",
 		"/project/packages/packageB/package.json": `{"name": "packageB"}`,
-	}, true)
+	}, tspath.CaseSensitive)
 
 	fs := From(underlyingFS)
 	assert.Assert(t, fs.FileExists("/project/packages/__virtual__/packageA-virtual-123456/0/packageA/package.json"))
@@ -224,35 +224,35 @@ func TestPnpVfs_RealZipIntegration(t *testing.T) {
 
 	zipPath, fs := createTestZip(t, zipFiles)
 
-	assert.Assert(t, fs.FileExists(zipPath))
+	assert.Assert(t, fs.FileExists(tspath.RootedFilePathFromAbsolute(zipPath)))
 
 	indexPath := zipPath + "/src/index.ts"
 	packagePath := zipPath + "/package.json"
-	assert.Assert(t, fs.FileExists(indexPath))
-	assert.Assert(t, fs.FileExists(packagePath))
-	assert.Assert(t, fs.DirectoryExists(zipPath+"/src"))
+	assert.Assert(t, fs.FileExists(tspath.RootedFilePathFromAbsolute(indexPath)))
+	assert.Assert(t, fs.FileExists(tspath.RootedFilePathFromAbsolute(packagePath)))
+	assert.Assert(t, fs.DirectoryExists(tspath.RootedDirectoryPathFromAbsolute(zipPath+"/src")))
 
-	content, ok := fs.ReadFile(indexPath)
+	content, ok := fs.ReadFile(tspath.RootedFilePathFromAbsolute(indexPath))
 	assert.Assert(t, ok)
 	assert.Equal(t, content, zipFiles["src/index.ts"])
 
-	content, ok = fs.ReadFile(packagePath)
+	content, ok = fs.ReadFile(tspath.RootedFilePathFromAbsolute(packagePath))
 	assert.Assert(t, ok)
 	assert.Equal(t, content, zipFiles["package.json"])
 
-	entries := fs.GetAccessibleEntries(zipPath)
+	entries := fs.GetAccessibleEntries(tspath.RootedDirectoryPathFromAbsolute(zipPath))
 	assert.DeepEqual(t, entries.Files, []string{"package.json", "tsconfig.json"})
 	assert.DeepEqual(t, entries.Directories, []string{"src"})
 
-	entries = fs.GetAccessibleEntries(zipPath + "/src")
+	entries = fs.GetAccessibleEntries(tspath.RootedDirectoryPathFromAbsolute(zipPath + "/src"))
 	assert.DeepEqual(t, entries.Files, []string{"index.ts"})
 	assert.DeepEqual(t, entries.Directories, []string{"utils"})
 
-	assert.Equal(t, fs.Realpath(indexPath), indexPath)
+	assert.Equal(t, fs.Realpath(tspath.RootedPathFromAbsolute(indexPath)).AsString(), indexPath)
 
-	assert.Assert(t, fs.FileExists(zipPath+"/src/__virtual__/src-virtual-123456/0/index.ts"))
+	assert.Assert(t, fs.FileExists(tspath.RootedFilePathFromAbsolute(zipPath+"/src/__virtual__/src-virtual-123456/0/index.ts")))
 
 	splitZipPath := strings.Split(zipPath, "/")
 	beforeZipVirtualPath := strings.Join(splitZipPath[0:len(splitZipPath)-2], "/") + "/__virtual__/zip-virtual-123456/0/" + strings.Join(splitZipPath[len(splitZipPath)-2:], "/") + "/src/index.ts"
-	assert.Assert(t, fs.FileExists(beforeZipVirtualPath))
+	assert.Assert(t, fs.FileExists(tspath.RootedFilePathFromAbsolute(beforeZipVirtualPath)))
 }

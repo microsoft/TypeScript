@@ -27,23 +27,27 @@ func WrapFS(fs vfs.FS) vfs.FS {
 // LibPath returns the path to the directory containing the bundled lib.d.ts files.
 // If embedding is not enabled, this is a path on disk, and must be accessed through
 // a real OS filesystem.
-func LibPath() string {
-	return libPath()
+func LibPath() tspath.RootedDirectoryPath {
+	return tspath.RootedDirectoryPathFromNormalized(libPath())
 }
 
-var bundledSourceDir = sync.OnceValue(func() string {
+var bundledSourceDir = sync.OnceValue(func() tspath.RootedDirectoryPath {
 	_, filename, _, ok := runtime.Caller(0)
 	if !ok {
 		panic("bundled: could not get current filename")
 	}
-	return filepath.Dir(filepath.FromSlash(filename))
+	filename = filepath.FromSlash(filename)
+	if !filepath.IsAbs(filename) {
+		panic("bundled: source directory cannot be found when built with -trimpath")
+	}
+	return tspath.RootedDirectoryPathFromAbsolute(filepath.Dir(filename))
 })
 
 var testingLibPath = sync.OnceValue(func() string {
 	if !testing.Testing() {
 		panic("bundled: TestingLibPath should only be called during tests")
 	}
-	return tspath.NormalizeSlashes(filepath.Join(bundledSourceDir(), "libs"))
+	return bundledSourceDir().ResolveDirectory("libs").AsString()
 })
 
 // TestingLibPath returns the path to the source bundled libs directory.

@@ -96,7 +96,7 @@ func createSourceMapPreviewLink(sourceMap *harnessutil.TestFile, result *harness
 			return strings.HasSuffix(td.UnitName, s)
 		})
 		if sourceFile != nil {
-			if programSource := result.Program.GetSourceFile(sourceFile.UnitName); programSource != nil {
+			if programSource := result.Program.GetSourceFile(tspath.ToRootedFilePath(sourceFile.UnitName, result.CurrentDirectory())); programSource != nil {
 				return &harnessutil.TestFile{UnitName: sourceFile.UnitName, Content: programSource.OriginalText()}
 			}
 		}

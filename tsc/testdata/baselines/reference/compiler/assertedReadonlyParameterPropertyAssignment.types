@@ -1,0 +1,22 @@
+//// [tests/cases/compiler/assertedReadonlyParameterPropertyAssignment.ts] ////
+
+=== assertedReadonlyParameterPropertyAssignment.ts ===
+class ReadonlyState {
+>ReadonlyState : ReadonlyState
+
+    constructor(readonly value: object) {}
+>value : object
+
+    clear() {
+>clear : () => void
+
+        (this.value as unknown) = null;
+>(this.value as unknown) = null : null
+>(this.value as unknown) : unknown
+>this.value as unknown : unknown
+>this.value : object
+>this : this
+>value : object
+    }
+}
+

@@ -1,0 +1,16 @@
+//// [tests/cases/compiler/conditionalExportsTypesImportFallback.ts] ////
+
+=== /index.mts ===
+import color from "theme/tokens";
+>color : string
+
+color;
+>color : string
+
+=== /node_modules/theme/tokens.d.mts ===
+declare const color: string;
+>color : string
+
+export default color;
+>color : string
+

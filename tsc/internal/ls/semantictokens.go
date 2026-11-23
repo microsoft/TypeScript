@@ -200,7 +200,7 @@ func sortSemanticTokens(tokens []semanticToken, converters *lsconv.Converters) {
 		if result := cmp.Compare(aRange.Start.Character, bRange.Start.Character); result != 0 {
 			return result
 		}
-		if result := cmp.Compare(a.file.Path(), b.file.Path()); result != 0 {
+		if result := cmp.Compare(a.file.PathKey(), b.file.PathKey()); result != 0 {
 			return result
 		}
 		return cmp.Compare(a.node.Pos(), b.node.Pos())
@@ -257,7 +257,7 @@ func (l *LanguageService) collectSemanticTokensInRange(ctx context.Context, c *c
 			symbol := c.GetSymbolAtLocation(node)
 			if symbol != nil {
 				// Resolve aliases
-				if symbol.Flags&ast.SymbolFlagsAlias != 0 {
+				if symbol.Flags()&ast.SymbolFlagsAlias != 0 {
 					symbol = c.GetAliasedSymbol(symbol)
 				}
 
@@ -283,7 +283,7 @@ func (l *LanguageService) collectSemanticTokensInRange(ctx context.Context, c *c
 					tokenType = reclassifyByType(c, node, tokenType)
 
 					// Get the value declaration to check modifiers
-					if decl := symbol.ValueDeclaration; decl != nil {
+					if decl := symbol.ValueDeclaration(); decl != nil {
 						modifiers := ast.GetCombinedModifierFlags(decl)
 						nodeFlags := ast.GetCombinedNodeFlags(decl)
 
@@ -294,7 +294,7 @@ func (l *LanguageService) collectSemanticTokensInRange(ctx context.Context, c *c
 							tokenModifier |= tokenModifierAsync
 						}
 						if tokenType != tokenTypeClass && tokenType != tokenTypeInterface {
-							if (modifiers&ast.ModifierFlagsReadonly != 0) || (nodeFlags&ast.NodeFlagsConst != 0) || (symbol.Flags&ast.SymbolFlagsEnumMember != 0) {
+							if (modifiers&ast.ModifierFlagsReadonly != 0) || (nodeFlags&ast.NodeFlagsConst != 0) || (symbol.Flags()&ast.SymbolFlagsEnumMember != 0) {
 								tokenModifier |= tokenModifierReadonly
 							}
 						}
@@ -302,13 +302,13 @@ func (l *LanguageService) collectSemanticTokensInRange(ctx context.Context, c *c
 							tokenModifier |= tokenModifierLocal
 						}
 						declSourceFile := ast.GetSourceFileOfNode(decl)
-						if declSourceFile != nil && program.IsSourceFileDefaultLibrary(declSourceFile.Path()) {
+						if declSourceFile != nil && program.IsSourceFileDefaultLibrary(declSourceFile.PathKey()) {
 							tokenModifier |= tokenModifierDefaultLibrary
 						}
-					} else if symbol.Declarations != nil {
-						for _, decl := range symbol.Declarations {
+					} else if symbol.Declarations() != nil {
+						for _, decl := range symbol.Declarations() {
 							declSourceFile := ast.GetSourceFileOfNode(decl)
-							if declSourceFile != nil && program.IsSourceFileDefaultLibrary(declSourceFile.Path()) {
+							if declSourceFile != nil && program.IsSourceFileDefaultLibrary(declSourceFile.PathKey()) {
 								tokenModifier |= tokenModifierDefaultLibrary
 								break
 							}
@@ -340,7 +340,7 @@ func (l *LanguageService) collectSemanticTokensInRange(ctx context.Context, c *c
 }
 
 func classifySymbol(symbol *ast.Symbol, meaning ast.SemanticMeaning) (tokenType, bool) {
-	flags := symbol.Flags
+	flags := symbol.Flags()
 	if flags&ast.SymbolFlagsClass != 0 {
 		return tokenTypeClass, true
 	}
@@ -360,9 +360,9 @@ func classifySymbol(symbol *ast.Symbol, meaning ast.SemanticMeaning) (tokenType,
 	}
 
 	// Check the value declaration
-	decl := symbol.ValueDeclaration
-	if decl == nil && len(symbol.Declarations) > 0 {
-		decl = symbol.Declarations[0]
+	decl := symbol.ValueDeclaration()
+	if decl == nil && len(symbol.Declarations()) > 0 {
+		decl = symbol.Declarations()[0]
 	}
 	if decl != nil {
 		if ast.IsBindingElement(decl) {

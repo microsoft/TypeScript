@@ -1,0 +1,15 @@
+//// [tests/cases/compiler/missingModuleInEnumComputedNameNoFlake.ts] ////
+
+=== missingModuleInEnumComputedNameNoFlake.ts ===
+// TS2307: Cannot find module 'missing' or its corresponding type declarations.
+export enum Values {
+>Values : Values
+
+    [import("missing").value] = 1,
+>[import("missing").value] : Values
+>import("missing").value : any
+>import("missing") : Promise<any>
+>"missing" : "missing"
+>value : any
+>1 : 1
+}

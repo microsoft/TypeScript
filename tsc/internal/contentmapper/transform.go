@@ -56,7 +56,7 @@ func ParseResult(parseOptions ast.SourceFileParseOptions, content string, mapper
 		return SourceFiles{}, NewTransformError(TransformErrorKindResponse, nil)
 	}
 	baseParseOptions := parseOptions
-	virtualFileName := baseParseOptions.FileName + virtualExtension
+	virtualFileName := baseParseOptions.FileName.AppendSuffix(virtualExtension)
 	parseOptions = baseParseOptions
 	if isModuleVirtualExtension(virtualExtension) {
 		parseOptions.ExternalModuleIndicatorOptions.Force = true
@@ -83,8 +83,8 @@ func ParseResult(parseOptions ast.SourceFileParseOptions, content string, mapper
 			return SourceFiles{}, NewTransformError(TransformErrorKindResponse, nil)
 		}
 		suffix := "." + strconv.Itoa(i) + supplemental.VirtualExtension
-		supplementalOptions.FileName += suffix
-		supplementalOptions.Path = tspath.Path(string(parseOptions.Path) + suffix)
+		supplementalOptions.FileName = supplementalOptions.FileName.AppendSuffix(suffix)
+		supplementalOptions.PathKey = parseOptions.PathKey.AppendCanonicalSuffix(suffix)
 		if isModuleVirtualExtension(supplemental.VirtualExtension) {
 			supplementalOptions.ExternalModuleIndicatorOptions.Force = true
 		}
@@ -125,7 +125,7 @@ func isModuleVirtualExtension(extension string) bool {
 }
 
 // CheckSupplementalFileNameCollisions rejects compiler-assigned virtual filenames that name physical files.
-func CheckSupplementalFileNameCollisions(files SourceFiles, fileExists func(string) bool) error {
+func CheckSupplementalFileNameCollisions(files SourceFiles, fileExists func(tspath.RootedFilePath) bool) error {
 	for _, file := range files.Supplemental {
 		if fileExists(file.FileName()) {
 			return &SupplementalFileCollisionError{FileName: file.FileName()}

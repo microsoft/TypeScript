@@ -91,7 +91,7 @@ process([{ type: 'foo', data: 'abc' }]);
 // --------
 
 type LetterMap = { A: string, B: number }
-type LetterCaller<K extends keyof LetterMap> = { [P in K]: { letter: Record<P, LetterMap[P]>, caller: (x: Record<P, LetterMap[P]>) => void } }[K];
+type LetterCaller<K extends keyof LetterMap> = { [P in K]: { letter: Record<P, LetterMap[P]>, caller: (x: NoInfer<Record<P, LetterMap[P]>>) => void } }[K];
 
 function call<K extends keyof LetterMap>({ letter, caller }: LetterCaller<K>): void {
   caller(letter);

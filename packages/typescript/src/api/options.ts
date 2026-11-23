@@ -2,8 +2,13 @@
  * Shared utilities for the TypeScript API client.
  */
 
-import getExePath from "#getExePath";
-import type { FileSystem } from "./fs.ts";
+import type { AsyncTransport } from "./async/transport.ts";
+import type { FileSystemCallbacks } from "./fs.ts";
+import {
+    getDefaultExePath,
+    nodeProcess,
+} from "./nodeProcess.ts";
+import type { SyncTransport } from "./sync/transport.ts";
 
 export interface ClientSocketOptions {
     /** Path to the Unix domain socket or Windows named pipe for API communication */
@@ -17,8 +22,10 @@ export interface ClientSpawnOptions {
     tsserverPath?: string | undefined;
     /** Current working directory */
     cwd?: string | undefined;
-    /** Virtual filesystem callbacks */
-    fs?: FileSystem | undefined;
+    /** Host filesystem callbacks. */
+    fs?: FileSystemCallbacks | undefined;
+    /** Whether file names are case-sensitive. Inferred from the client filesystem when omitted. */
+    useCaseSensitiveFileNames?: boolean | undefined;
     /** Allow trusted projects to execute configured external content mapper processes. */
     runExternalCode?: boolean | undefined;
     /** Maximum encoded byte size of each batch response page. Defaults to 300 million bytes. Individual responses can be larger than this size, but this controls where batch pages are cutoff. */
@@ -29,6 +36,9 @@ export interface ClientSpawnOptions {
      * measures its own per-request processing time; both are combined (along
      * with an estimated transport overhead) in the snapshot returned by
      * {@link API.getTimingInfo}.
+     * Setting `TS_API_TIMING_DIR` to a nonempty output directory also enables
+     * collection, even when this option is false, and writes a JSON snapshot
+     * when the API is closed.
      */
     collectTiming?: boolean | undefined;
 }
@@ -39,21 +49,67 @@ export function isSpawnOptions(options: ClientOptions): options is ClientSpawnOp
     return !("pipe" in options);
 }
 
+interface TransportOptionsBase {
+    /** Maximum encoded byte size of each batch response page. Defaults to 300 million bytes. Individual responses can be larger than this size, but this controls where batch pages are cutoff. */
+    maxResponseBytesPerPage?: number | undefined;
+    /** Virtual filesystem callbacks used by transports that support them. */
+    fs?: FileSystemCallbacks | undefined;
+    /** Collect timing information for requests made through the transport. */
+    collectTiming?: boolean | undefined;
+}
+
+export interface ClientTransportOptions extends TransportOptionsBase {
+    /**
+     * An existing synchronous transport connected to an API session.
+     * Custom module resolution callbacks must obey the transport's reentrancy
+     * constraints.
+     */
+    transport: SyncTransport;
+}
+
+export type SyncClientOptions = ClientSocketOptions | ClientSpawnOptions | ClientTransportOptions;
+
+export function isTransportOptions<T extends SyncClientOptions | AsyncClientOptions>(options: T): options is Extract<T, { transport: unknown; }> {
+    return "transport" in options;
+}
+
+export interface AsyncClientTransportOptions extends TransportOptionsBase {
+    /**
+     * An existing asynchronous transport connected to an API session.
+     * Custom module resolution callbacks must obey the transport's support
+     * for Promise results and reentrancy.
+     */
+    transport: AsyncTransport;
+}
+
+export type AsyncClientOptions = ClientOptions | AsyncClientTransportOptions;
+
 export function resolveExePath(options: ClientSpawnOptions): string {
-    return options.tsserverPath ?? getExePath();
+    return options.tsserverPath ?? getDefaultExePath();
 }
 
 export function getAPIProcessArgs(options: ClientSpawnOptions, async: boolean): string[] {
     const args = ["--api"];
     if (async) args.push("--async");
-    args.push("--cwd", options.cwd ?? process.cwd());
+    args.push("--cwd", options.cwd ?? nodeProcess().cwd());
+    args.push(`--useCaseSensitiveFileNames=${options.useCaseSensitiveFileNames ?? inferUseCaseSensitiveFileNames()}`);
     if (options.runExternalCode) args.push("--runExternalCode");
     if (options.collectTiming) args.push("--timing");
     return args;
 }
 
+function inferUseCaseSensitiveFileNames(): boolean {
+    const process = nodeProcess();
+    if (process.platform === "win32") {
+        return false;
+    }
+    const fileName = process.getBuiltinModule("node:url").fileURLToPath(import.meta.url);
+    return !process.getBuiltinModule("node:fs").existsSync(fileName.replace(/\w/g, char => char === char.toUpperCase() ? char.toLowerCase() : char.toUpperCase()));
+}
+
 export interface LSPConnectionOptions extends ClientSocketOptions {
 }
 
-export interface APIOptions extends ClientSpawnOptions {
-}
+export type APIOptions = ClientSpawnOptions | AsyncClientTransportOptions;
+
+export type SyncAPIOptions = ClientSpawnOptions | ClientTransportOptions;

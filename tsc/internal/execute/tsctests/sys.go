@@ -92,11 +92,11 @@ func (t *TestClock) SinceStart() time.Duration {
 	return t.Now().Sub(t.start)
 }
 
-func NewTscSystem(files FileMap, useCaseSensitiveFileNames bool, cwd string) *TestSys {
+func NewTscSystem(files FileMap, caseSensitivity tspath.CaseSensitivity, cwd tspath.RootedDirectoryPath) *TestSys {
 	clock := &TestClock{start: time.Now()}
-	var fs vfs.FS = vfstest.FromMapWithClock(files, useCaseSensitiveFileNames, clock)
+	var fs vfs.FS = vfstest.FromMapWithClock(files, caseSensitivity, clock)
 
-	pnpApi := pnp.InitPnpApi(fs, tspath.NormalizePath(cwd))
+	pnpApi := pnp.InitPnpApi(fs, cwd.AsString())
 	if pnpApi != nil {
 		fs = pnpvfs.From(fs)
 	}
@@ -117,9 +117,9 @@ func GetFileMapWithBuild(files FileMap, commandLineArgs []string) FileMap {
 		files: maps.Clone(files),
 	}, false)
 	execute.CommandLine(context.Background(), sys, commandLineArgs, sys)
-	sys.fs.writtenFiles.Range(func(key string) bool {
-		if text, ok := sys.fsFromFileMap().ReadFile(key); ok {
-			files[key] = text
+	sys.fs.writtenFiles.Range(func(fileName tspath.RootedFilePath) bool {
+		if text, ok := sys.fsFromFileMap().ReadFile(fileName); ok {
+			files[fileName.AsString()] = text
 		}
 		return true
 	})
@@ -136,24 +136,31 @@ func newTestSys(tscInput *tscInput, forIncrementalCorrectness bool) *TestSys {
 		libPath = tscInput.windowsStyleRoot + libPath[1:]
 	}
 	currentWrite := &strings.Builder{}
-	sys := NewTscSystem(tscInput.files, !tscInput.ignoreCase, cwd)
-	sys.defaultLibraryPath = libPath
+	caseSensitivity := tspath.CaseSensitive
+	if tscInput.ignoreCase {
+		caseSensitivity = tspath.CaseInsensitive
+	}
+	sys := NewTscSystem(tscInput.files, caseSensitivity, tspath.RootedDirectoryPathFromNormalized(cwd))
+	sys.defaultLibraryPath = tspath.ToRootedDirectoryPath(libPath, sys.cwd)
 	sys.currentWrite = currentWrite
 	if tscInput.outputIsTTY != nil {
 		sys.outputIsTTY = *tscInput.outputIsTTY
 	}
-	sys.tracer = harnessutil.NewTracerForBaselining(tspath.ComparePathsOptions{
-		UseCaseSensitiveFileNames: !tscInput.ignoreCase,
-		CurrentDirectory:          cwd,
-	}, currentWrite)
+	sys.tracer = harnessutil.NewTracerForBaselining(
+		sys.cwd,
+		caseSensitivity,
+		currentWrite,
+	)
 	sys.env = tscInput.env
 	sys.forIncrementalCorrectness = forIncrementalCorrectness
 	sys.mockWatchBackend = NewMockWatchBackend()
-	sys.mockWatchBackend.DirectoryExists = sys.fs.FS.DirectoryExists
-	sys.mockWatchBackend.UseCaseSensitiveFileNames = !tscInput.ignoreCase
+	sys.mockWatchBackend.DirectoryExists = func(path tspath.RootedDirectoryPath) bool {
+		return sys.fs.FS.DirectoryExists(path)
+	}
+	sys.mockWatchBackend.CaseSensitivity = caseSensitivity
 	sys.fsDiffer = &fsbaselineutil.FSDiffer{
 		FS:           sys.fs.FS.(iovfs.FsWithSys),
-		DefaultLibs:  func() *collections.SyncSet[string] { return sys.fs.defaultLibs },
+		DefaultLibs:  func() *collections.SyncSet[tspath.RootedPath] { return sys.fs.defaultLibs },
 		WrittenFiles: &sys.fs.writtenFiles,
 	}
 
@@ -178,8 +185,8 @@ type TestSys struct {
 	mockWatchBackend          *MockWatchBackend
 
 	fs                 *testFs
-	defaultLibraryPath string
-	cwd                string
+	defaultLibraryPath tspath.RootedDirectoryPath
+	cwd                tspath.RootedDirectoryPath
 	env                map[string]string
 	outputIsTTY        bool
 	clock              *TestClock
@@ -213,24 +220,24 @@ func (s *TestSys) mapFs() *vfstest.MapFS {
 }
 
 func (s *TestSys) ensureLibPathExists(path string) {
-	path = s.defaultLibraryPath + "/" + path
-	if _, ok := s.fsFromFileMap().ReadFile(path); !ok {
+	fileName := s.defaultLibraryPath.ResolveFile(path)
+	if _, ok := s.fsFromFileMap().ReadFile(fileName); !ok {
 		if s.fs.defaultLibs == nil {
-			s.fs.defaultLibs = &collections.SyncSet[string]{}
+			s.fs.defaultLibs = &collections.SyncSet[tspath.RootedPath]{}
 		}
-		s.fs.defaultLibs.Add(path)
-		err := s.fsFromFileMap().WriteFile(path, tscDefaultLibContent)
+		s.fs.defaultLibs.Add(fileName.AsPath())
+		err := s.fsFromFileMap().WriteFile(fileName, tscDefaultLibContent)
 		if err != nil {
 			panic("Failed to write default library file: " + err.Error())
 		}
 	}
 }
 
-func (s *TestSys) DefaultLibraryPath() string {
+func (s *TestSys) DefaultLibraryPath() tspath.RootedDirectoryPath {
 	return s.defaultLibraryPath
 }
 
-func (s *TestSys) GetCurrentDirectory() string {
+func (s *TestSys) GetCurrentDirectory() tspath.RootedDirectoryPath {
 	return s.cwd
 }
 
@@ -269,12 +276,13 @@ func (s *TestSys) Spawn(command []string, dir string, stderr io.Writer) (io.Read
 	return contentmappertest.NewSpawner().Spawn(command, dir, stderr)
 }
 
-func (s *TestSys) OnEmittedFiles(result *compiler.EmitResult, mTimesCache *collections.SyncMap[tspath.Path, time.Time]) {
+func (s *TestSys) OnEmittedFiles(result *compiler.EmitResult, mTimesCache *collections.SyncMap[tspath.PathKey, time.Time]) {
 	if result != nil {
 		for _, file := range result.EmittedFiles {
-			modTime := s.mapFs().GetModTime(file)
+			fileName := file.AsString()
+			modTime := s.mapFs().GetModTime(fileName)
 			if serializedDiff := s.fsDiffer.SerializedDiff(); serializedDiff != nil {
-				if diff, ok := serializedDiff.Snap[file]; ok && diff.MTime.Equal(modTime) {
+				if diff, ok := serializedDiff.Snap[fileName]; ok && diff.MTime.Equal(modTime) {
 					// Even though written, timestamp was reverted
 					continue
 				}
@@ -282,12 +290,12 @@ func (s *TestSys) OnEmittedFiles(result *compiler.EmitResult, mTimesCache *colle
 
 			// Ensure that the timestamp for emitted files is in the order
 			now := s.Now()
-			if err := s.fsFromFileMap().Chtimes(file, time.Time{}, now); err != nil {
-				panic("Failed to change time for emitted file: " + file + ": " + err.Error())
+			if err := s.fsFromFileMap().Chtimes(file.AsPath(), time.Time{}, now); err != nil {
+				panic("Failed to change time for emitted file: " + fileName + ": " + err.Error())
 			}
 			// Update the mTime cache in --b mode to store the updated timestamp so tests will behave deteministically when finding newest output
 			if mTimesCache != nil {
-				path := tspath.ToPath(file, s.GetCurrentDirectory(), s.FS().UseCaseSensitiveFileNames())
+				path := s.FS().CaseSensitivity().PathKey(tspath.RootedPath(file))
 				if _, found := mTimesCache.Load(path); found {
 					mTimesCache.Store(path, now)
 				}
@@ -345,10 +353,11 @@ func (s *TestSys) writeHeaderToBaseline(builder *strings.Builder, program *incre
 	}
 
 	if configFilePath := program.Options().ConfigFilePath; configFilePath != "" {
-		builder.WriteString(tspath.GetRelativePathFromDirectory(s.cwd, configFilePath, tspath.ComparePathsOptions{
-			UseCaseSensitiveFileNames: s.FS().UseCaseSensitiveFileNames(),
-			CurrentDirectory:          s.GetCurrentDirectory(),
-		}))
+		if relativePath, ok := s.FS().CaseSensitivity().RelativePathFromDirectory(s.cwd, configFilePath); ok {
+			builder.WriteString(relativePath.AsString())
+		} else {
+			builder.WriteString(configFilePath.AsString())
+		}
 		builder.WriteString("::\n")
 	}
 }
@@ -363,15 +372,15 @@ func (s *TestSys) OnProgram(program *incremental.Program) {
 	testingData := program.GetTestingData()
 	s.programBaselines.WriteString("SemanticDiagnostics::\n")
 	for _, file := range program.GetProgram().GetSourceFiles() {
-		if diagnostics, ok := testingData.SemanticDiagnosticsPerFile.Load(file.Path()); ok {
-			if oldDiagnostics, ok := testingData.OldProgramSemanticDiagnosticsPerFile.Load(file.Path()); !ok || oldDiagnostics != diagnostics {
+		if diagnostics, ok := testingData.SemanticDiagnosticsPerFile.Load(file.PathKey()); ok {
+			if oldDiagnostics, ok := testingData.OldProgramSemanticDiagnosticsPerFile.Load(file.PathKey()); !ok || oldDiagnostics != diagnostics {
 				s.programBaselines.WriteString("*refresh*    ")
-				s.programBaselines.WriteString(file.FileName())
+				s.programBaselines.WriteString(file.FileName().AsString())
 				s.programBaselines.WriteString("\n")
 			}
 		} else {
 			s.programBaselines.WriteString("*not cached* ")
-			s.programBaselines.WriteString(file.FileName())
+			s.programBaselines.WriteString(file.FileName().AsString())
 			s.programBaselines.WriteString("\n")
 		}
 	}
@@ -379,19 +388,19 @@ func (s *TestSys) OnProgram(program *incremental.Program) {
 	// Write signature updates
 	s.programBaselines.WriteString("Signatures::\n")
 	for _, file := range program.GetProgram().GetSourceFiles() {
-		if kind, ok := testingData.UpdatedSignatureKinds[file.Path()]; ok {
+		if kind, ok := testingData.UpdatedSignatureKinds[file.PathKey()]; ok {
 			switch kind {
 			case incremental.SignatureUpdateKindComputedDts:
 				s.programBaselines.WriteString("(computed .d.ts) ")
-				s.programBaselines.WriteString(file.FileName())
+				s.programBaselines.WriteString(file.FileName().AsString())
 				s.programBaselines.WriteString("\n")
 			case incremental.SignatureUpdateKindStoredAtEmit:
 				s.programBaselines.WriteString("(stored at emit) ")
-				s.programBaselines.WriteString(file.FileName())
+				s.programBaselines.WriteString(file.FileName().AsString())
 				s.programBaselines.WriteString("\n")
 			case incremental.SignatureUpdateKindUsedVersion:
 				s.programBaselines.WriteString("(used version)   ")
-				s.programBaselines.WriteString(file.FileName())
+				s.programBaselines.WriteString(file.FileName().AsString())
 				s.programBaselines.WriteString("\n")
 			}
 		}
@@ -401,8 +410,8 @@ func (s *TestSys) OnProgram(program *incremental.Program) {
 	var fileNotInProgramWithIncludeReason []string
 	includeReasons := program.GetProgram().GetIncludeReasons()
 	for _, file := range program.GetProgram().GetSourceFiles() {
-		if _, ok := includeReasons[file.Path()]; !ok {
-			filesWithoutIncludeReason = append(filesWithoutIncludeReason, string(file.Path()))
+		if _, ok := includeReasons[file.PathKey()]; !ok {
+			filesWithoutIncludeReason = append(filesWithoutIncludeReason, string(file.PathKey()))
 		}
 	}
 	for path := range includeReasons {
@@ -492,10 +501,20 @@ var (
 
 func (o *outputSanitizer) addOutputLine(s string) {
 	s = strings.ReplaceAll(s, fmt.Sprintf("'%s'", core.Version()), fmt.Sprintf("'%s'", harnessutil.FakeTSVersion))
-	s = strings.ReplaceAll(s, englishVersion, fakeEnglishVersion)
-	s = strings.ReplaceAll(s, czechVersion, fakeCzechVersion)
+	s = sanitizeVersion(s, englishVersion, fakeEnglishVersion)
+	s = sanitizeVersion(s, czechVersion, fakeCzechVersion)
 	s = fsbaselineutil.SanitizeInternalSymbolName(s)
 	o.outputLines = append(o.outputLines, s)
+}
+
+func sanitizeVersion(s string, version string, replacement string) string {
+	if before, after, ok := strings.Cut(s, version); ok && strings.HasPrefix(after, "  ") {
+		// Preserve the padded field width when replacing the version in the help header.
+		suffix := strings.TrimLeft(after, " ")
+		width := len(version) + len(after) - len(suffix)
+		s = before + fmt.Sprintf("%-*s", width, replacement) + suffix
+	}
+	return strings.ReplaceAll(s, version, replacement)
 }
 
 func (o *outputSanitizer) sanitizeBuildStatusTimeStamp() string {
@@ -580,19 +599,19 @@ func (s *TestSys) baselineFSwithDiff(baseline io.Writer) {
 }
 
 func (s *TestSys) writeFileNoError(path string, content string) {
-	if err := s.fsFromFileMap().WriteFile(path, content); err != nil {
+	if err := s.fsFromFileMap().WriteFile(tspath.ToRootedFilePath(path, s.GetCurrentDirectory()), content); err != nil {
 		panic(err)
 	}
 }
 
 func (s *TestSys) removeNoError(path string) {
-	if err := s.fsFromFileMap().Remove(path); err != nil {
+	if err := s.fsFromFileMap().Remove(tspath.ToRootedPath(path, s.GetCurrentDirectory())); err != nil {
 		panic(err)
 	}
 }
 
 func (s *TestSys) readFileNoError(path string) string {
-	content, ok := s.fsFromFileMap().ReadFile(path)
+	content, ok := s.fsFromFileMap().ReadFile(tspath.ToRootedFilePath(path, s.GetCurrentDirectory()))
 	if !ok {
 		panic("File not found: " + path)
 	}

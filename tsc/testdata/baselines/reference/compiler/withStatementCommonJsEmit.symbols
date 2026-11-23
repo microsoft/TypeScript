@@ -1,0 +1,21 @@
+//// [tests/cases/compiler/withStatementCommonJsEmit.ts] ////
+
+=== withStatementCommonJsEmit.cts ===
+declare const obj: object;
+>obj : Symbol(obj, Decl(withStatementCommonJsEmit.cts, 0, 13))
+
+with (obj) export let a;
+>obj : Symbol(obj, Decl(withStatementCommonJsEmit.cts, 0, 13))
+
+with (obj) export let d = 1;
+>obj : Symbol(obj, Decl(withStatementCommonJsEmit.cts, 0, 13))
+
+with (obj) var local = 2;
+>obj : Symbol(obj, Decl(withStatementCommonJsEmit.cts, 0, 13))
+
+with (obj) {
+>obj : Symbol(obj, Decl(withStatementCommonJsEmit.cts, 0, 13))
+
+    export let e;
+}
+

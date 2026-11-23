@@ -1,0 +1,53 @@
+//// [tests/cases/compiler/largeDiscriminantUnionArrayPredicate.ts] ////
+
+=== largeDiscriminantUnionArrayPredicate.ts ===
+type TreeNode =
+>TreeNode : TreeNode
+
+    | { kind: 0 }
+>kind : 0
+
+    | { kind: 1 }
+>kind : 1
+
+    | { kind: 2 }
+>kind : 2
+
+    | { kind: 3 }
+>kind : 3
+
+    | { kind: 4 }
+>kind : 4
+
+    | { kind: 5 }
+>kind : 5
+
+    | { kind: 6 }
+>kind : 6
+
+    | { kind: 7 }
+>kind : 7
+
+    | { kind: 8 }
+>kind : 8
+
+    | { kind: 9 };
+>kind : 9
+
+declare const ancestor: TreeNode | TreeNode[];
+>ancestor : TreeNode[] | TreeNode
+
+if (!Array.isArray(ancestor)) {
+>!Array.isArray(ancestor) : boolean
+>Array.isArray(ancestor) : boolean
+>Array.isArray : (arg: any) => arg is any[]
+>Array : ArrayConstructor
+>isArray : (arg: any) => arg is any[]
+>ancestor : TreeNode[] | TreeNode
+
+    ancestor.kind;
+>ancestor.kind : 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+>ancestor : TreeNode
+>kind : 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+}
+

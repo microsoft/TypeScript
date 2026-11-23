@@ -1,0 +1,33 @@
+a.js(17,17): error TS2315: Type '(Anonymous class)' is not generic.
+a.js(19,23): error TS2339: Property 'value' does not exist on type 'B'.
+a.js(20,23): error TS2339: Property 'extra' does not exist on type 'B'.
+
+
+==== a.js (3 errors) ====
+    /** @template T */
+    class A {
+        /** @returns {T} */
+        get value() {
+            throw new Error();
+        }
+    }
+    
+    /** @param {any} Base */
+    function mixin(Base) {
+        return class extends Base {
+            extra = 1;
+        };
+    }
+    
+    /** @extends {A<string>} */
+    class B extends mixin(A) {}
+                    ~~~~~~~~
+!!! error TS2315: Type '(Anonymous class)' is not generic.
+    
+    const value = new B().value;
+                          ~~~~~
+!!! error TS2339: Property 'value' does not exist on type 'B'.
+    const extra = new B().extra;
+                          ~~~~~
+!!! error TS2339: Property 'extra' does not exist on type 'B'.
+    

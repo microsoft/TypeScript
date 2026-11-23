@@ -166,19 +166,19 @@ func (p *PnpApi) ResolveToUnqualified(specifier string, parentPath string) (stri
 		// it as an absolute path.
 		resolvedPath = tspath.ResolvePath(resolvedPath, "."+modulePath)
 	}
-	return tspath.RemoveTrailingDirectorySeparators(resolvedPath), nil
+	return tspath.RemoveTrailingDirectorySeparator(resolvedPath), nil
 }
 
 func (p *PnpApi) findClosestPnpManifest() (*PnpManifestData, error) {
-	directoryPath := tspath.GetNormalizedAbsolutePath(p.url, "/")
+	directoryPath := tspath.GetNormalizedAbsolutePath(p.url, tspath.RootedDirectoryPathFromNormalized("/"))
 
 	for {
 		pnpPath := tspath.CombinePaths(directoryPath, ".pnp.cjs")
-		if p.fs.FileExists(pnpPath) {
+		if p.fs.FileExists(tspath.RootedFilePathFromAbsolute(pnpPath)) {
 			return parseManifestFromPath(p.fs, directoryPath)
 		}
 
-		if tspath.IsDiskPathRoot(directoryPath) {
+		if tspath.GetRootLength(directoryPath) == len(directoryPath) {
 			return nil, errors.New("no PnP manifest found")
 		}
 
@@ -203,8 +203,7 @@ func (p *PnpApi) IsPathIgnored(path string) bool {
 	if p.manifest == nil || p.manifest.ignorePatternData == nil || path == "" {
 		return false
 	}
-	relativePath := tspath.GetRelativePathFromDirectory(p.manifest.dirPath, path,
-		tspath.ComparePathsOptions{UseCaseSensitiveFileNames: true})
+	relativePath := tspath.GetRelativePathFromDirectory(p.manifest.dirPath, path, tspath.CaseSensitive)
 	return p.manifest.ignorePatternData.MatchString(relativePath)
 }
 
@@ -217,8 +216,7 @@ func (p *PnpApi) FindLocator(parentPath string) (*Locator, *PnpError) {
 		return nil, nil
 	}
 
-	relativePath := tspath.GetRelativePathFromDirectory(p.manifest.dirPath, parentPath,
-		tspath.ComparePathsOptions{UseCaseSensitiveFileNames: true})
+	relativePath := tspath.GetRelativePathFromDirectory(p.manifest.dirPath, parentPath, tspath.CaseSensitive)
 
 	var relativePathWithDot string
 	if strings.HasPrefix(relativePath, "../") {
@@ -307,32 +305,24 @@ func (p *PnpApi) ParseBareIdentifier(specifier string) (ident string, modulePath
 	return ident, modulePath, nil
 }
 
-func (p *PnpApi) GetPnpTypeRoots(currentDirectory string) []string {
+func (p *PnpApi) GetPnpTypeRoots(currentDirectory tspath.RootedDirectoryPath) []tspath.RootedDirectoryPath {
 	if p.manifest == nil {
-		return []string{}
+		return nil
 	}
 
-	currentDirectory = tspath.NormalizePath(currentDirectory)
-
-	currentPackage, err := p.FindLocator(currentDirectory)
-	if err != nil {
-		return []string{}
+	currentPackage, err := p.FindLocator(currentDirectory.AsString())
+	if err != nil || currentPackage == nil {
+		return nil
 	}
 
-	if currentPackage == nil {
-		return []string{}
-	}
-
-	packageDependencies := p.GetPackage(currentPackage).PackageDependencies
-
-	typeRoots := []string{}
-	for _, dep := range packageDependencies {
+	var typeRoots []tspath.RootedDirectoryPath
+	for _, dep := range p.GetPackage(currentPackage).PackageDependencies {
 		if strings.HasPrefix(dep.Ident, "@types/") && dep.Reference != "" {
 			dependencyLocator := dep.Locator()
 			packageInfo := p.GetPackage(&dependencyLocator)
-			typeRoots = append(typeRoots, tspath.GetDirectoryPath(
+			typeRoots = append(typeRoots, tspath.RootedDirectoryPathFromAbsolute(tspath.GetDirectoryPath(
 				tspath.ResolvePath(p.manifest.dirPath, packageInfo.PackageLocation),
-			))
+			)))
 		}
 	}
 
@@ -369,7 +359,7 @@ func (p *PnpApi) GetPackageLocationAbsolutePath(packageInfo *PackageInfo) string
 	}
 
 	packageLocation := packageInfo.PackageLocation
-	return tspath.RemoveTrailingDirectorySeparators(tspath.ResolvePath(p.manifest.dirPath, packageLocation))
+	return tspath.RemoveTrailingDirectorySeparator(tspath.ResolvePath(p.manifest.dirPath, packageLocation))
 }
 
 // Checks if toFileName is in a module defined in the dependencies of fromFileName
@@ -392,9 +382,8 @@ func (p *PnpApi) IsInPnpModule(toFileName string, fromFileName string) bool {
 	return false
 }
 
-func (p *PnpApi) AppendPnpTypeRoots(nmTypes []string, currentDirectory string, compilerOptions *core.CompilerOptions, nmFromConfig bool) ([]string, bool) {
-	baseDir := compilerOptions.GetBaseDirFromOptions(currentDirectory)
-	pnpTypes := p.GetPnpTypeRoots(baseDir)
+func (p *PnpApi) AppendPnpTypeRoots(nmTypes []tspath.RootedDirectoryPath, currentDirectory tspath.RootedDirectoryPath, compilerOptions *core.CompilerOptions, nmFromConfig bool) ([]tspath.RootedDirectoryPath, bool) {
+	pnpTypes := p.GetPnpTypeRoots(compilerOptions.GetBaseDirFromOptions(currentDirectory))
 
 	if len(nmTypes) > 0 {
 		return append(nmTypes, pnpTypes...), nmFromConfig

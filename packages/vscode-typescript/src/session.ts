@@ -1,9 +1,14 @@
+import type {
+    LspMiddlewareMethod,
+    LspMiddlewareTransformer,
+    TypeScriptSDK,
+} from "@typescript/typescript/vscode";
 import * as path from "path";
 import * as vscode from "vscode";
 import { ActiveJsTsEditorTracker } from "./activeJsTsEditorTracker";
 import { Client } from "./client";
 import {
-    registerCodeLensShowLocationsCommand,
+    registerServerCommands,
     updateWorkspaceUseTsgoSetting,
 } from "./commands";
 import {
@@ -12,21 +17,32 @@ import {
     serializeContentMapperContributions,
     validateContentMapperRegistration,
 } from "./contentMapperContributions";
+import { LspMiddlewareRegistry } from "./lspMiddleware";
 import { ProjectStatus } from "./projectStatus";
 import { setupStatusBar } from "./statusBar";
 import { TelemetryReporter } from "./telemetryReporting";
 import {
+    acquireTypeScriptSDK,
+    createTypeScriptSDK,
+    type DetectedTypeScriptVersion,
+    hasModifiedAcquiredTypeScriptInstallation,
+    isSameTypeScriptInstallation,
+} from "./tsdkPackage";
+import {
+    type ExeInfo,
     getDefaultExePath,
     getExe,
     getWorkspaceTsdkConfigValue,
     getWorkspaceTsdkForPrompt,
-    readNativePreviewConfig,
+    getWorkspaceTypeScriptVersions,
+    readConfigWithLegacyFallback,
     resolveTsdkPath,
     resolveTsdkPathToExe,
     updateWorkspaceTsdkConfig,
     useWorkspaceTsdkStorageKey,
     workspaceConfigBase,
 } from "./util";
+import { workspaceSymbolSendRequestMiddleware } from "./workspaceSymbolMiddleware";
 
 /**
  * SessionManager's lifetime is equal to that of the extension. It is responsible
@@ -36,21 +52,45 @@ export class SessionManager implements vscode.Disposable {
     currentSession?: Session;
     private disposables: vscode.Disposable[] = [];
     private outputChannel: vscode.LogOutputChannel;
-    private initializedEventEmitter: vscode.EventEmitter<void>;
     private telemetryReporter: TelemetryReporter;
     private readonly contentMapperRegistrations = new Map<string, readonly ContentMapperContribution[]>();
+    private readonly lspMiddleware: LspMiddlewareRegistry;
     private lifecycleOperation = Promise.resolve();
     private contentMapperSyncOperation = Promise.resolve();
+    private readonly languageServerInitialized = new vscode.EventEmitter<TypeScriptSDK>();
+    private sdk: TypeScriptSDK | undefined;
+
+    readonly onLanguageServerInitialized: vscode.Event<TypeScriptSDK> = (listener, thisArgs, disposables) => {
+        const invoke = (sdk: TypeScriptSDK) => {
+            acquireTypeScriptSDK(sdk);
+            listener.call(thisArgs, sdk);
+        };
+        const subscription = this.languageServerInitialized.event(invoke, undefined, disposables);
+        const sdk = this.currentSession?.client.isInitialized ? this.sdk : undefined;
+        if (sdk) {
+            try {
+                invoke(sdk);
+            }
+            catch (error) {
+                subscription.dispose();
+                throw error;
+            }
+        }
+        return subscription;
+    };
 
     constructor(
         context: vscode.ExtensionContext,
         outputChannel: vscode.LogOutputChannel,
-        initializedEventEmitter: vscode.EventEmitter<void>,
         telemetryReporter: TelemetryReporter,
     ) {
         this.outputChannel = outputChannel;
         this.telemetryReporter = telemetryReporter;
-        this.initializedEventEmitter = initializedEventEmitter;
+        this.disposables.push(this.languageServerInitialized);
+        this.lspMiddleware = new LspMiddlewareRegistry((method, error) => {
+            const detail = error instanceof Error ? error.stack ?? error.message : String(error);
+            this.outputChannel.error(`LSP middleware for '${method}' failed; using original server data: ${detail}`);
+        }, [workspaceSymbolSendRequestMiddleware]);
 
         this.disposables.push(vscode.workspace.onDidChangeConfiguration(event => {
             if (this.currentSession && event.affectsConfiguration("js/ts.contentMappers.enabled")) {
@@ -64,9 +104,31 @@ export class SessionManager implements vscode.Disposable {
                 void this.syncContentMapperContributions();
             }
         }));
-        this.disposables.push(initializedEventEmitter.event(() => {
-            void this.syncContentMapperContributions();
+        this.disposables.push(vscode.commands.registerCommand("typescript.native-preview.restart", async () => {
+            this.telemetryReporter.sendTelemetryEvent("command.restartLanguageServer");
+            await this.restartServer(context);
         }));
+        this.disposables.push(vscode.commands.registerCommand("typescript.native-preview.selectVersion", async () => {
+            const client = this.currentSession?.client;
+            if (!client) {
+                throw new Error(vscode.l10n.t("Language server is not running."));
+            }
+            await promptSelectVersion(context, client, this.outputChannel, () => this.stop());
+        }));
+    }
+
+    private handleLanguageServerInitialized(exe: ExeInfo): void {
+        this.sdk = createTypeScriptSDK(
+            exe.version,
+            exe.apiPackageJsonPath,
+            pipe => this.initializeAPISession(exe, pipe),
+            () => {
+                const client = this.currentSession?.client;
+                return !!client?.isInitialized && isSameTypeScriptInstallation(client.getCurrentExe(), exe);
+            },
+        );
+        this.languageServerInitialized.fire(this.sdk);
+        void this.syncContentMapperContributions();
     }
 
     start(context: vscode.ExtensionContext): Promise<void> {
@@ -77,16 +139,41 @@ export class SessionManager implements vscode.Disposable {
         return this.enqueueLifecycleOperation(() => this.restartNow(context));
     }
 
+    private restartServer(context: vscode.ExtensionContext): Promise<void> {
+        return this.enqueueLifecycleOperation(async () => {
+            if (await hasModifiedAcquiredTypeScriptInstallation(this.currentSession?.client.getCurrentExe()?.apiPackageJsonPath)) {
+                const restart = vscode.l10n.t("Restart Extensions");
+                const selected = await vscode.window.showWarningMessage(
+                    vscode.l10n.t("One or more extensions are using a TypeScript installation that has been modified on disk. Restart the extension host to ensure they continue functioning."),
+                    vscode.l10n.t("Dismiss"),
+                    restart,
+                );
+                if (selected === restart) {
+                    await vscode.commands.executeCommand("workbench.action.restartExtensionHost");
+                }
+                return;
+            }
+            if (this.currentSession && await this.currentSession.client.tryRestart(context)) return;
+            await this.restartNow(context);
+        });
+    }
+
     private async restartNow(context: vscode.ExtensionContext): Promise<void> {
         if (this.currentSession) {
             this.outputChannel.appendLine("Restarting TypeScript language server...");
             await this.currentSession.stop();
         }
-        const session = new Session(context, this.outputChannel, this.initializedEventEmitter, this.telemetryReporter, () => this.stop(), () => this.restart(context));
+        const session = new Session(
+            context,
+            this.outputChannel,
+            exe => this.handleLanguageServerInitialized(exe),
+            this.telemetryReporter,
+            this.lspMiddleware,
+        );
         this.currentSession = session;
         try {
             await session.start(context);
-            await this.syncContentMapperContributions();
+            await this.contentMapperSyncOperation;
         }
         catch (error) {
             if (this.currentSession === session) {
@@ -97,6 +184,20 @@ export class SessionManager implements vscode.Disposable {
         }
     }
 
+    private initializeAPISession(exe: ExeInfo, pipe?: string): Promise<string> {
+        return this.enqueueLifecycleOperation(async () => {
+            const client = this.currentSession?.client;
+            if (!client) {
+                throw new Error(vscode.l10n.t("Language server is not running."));
+            }
+            if (!isSameTypeScriptInstallation(client.getCurrentExe(), exe)) {
+                throw new Error(vscode.l10n.t("The selected TypeScript installation has changed. Use the SDK from the latest language server initialization."));
+            }
+            const result = await client.initializeAPISession(pipe);
+            return result.pipe;
+        });
+    }
+
     stop(): Promise<void> {
         return this.enqueueLifecycleOperation(async () => {
             if (this.currentSession) {
@@ -104,14 +205,6 @@ export class SessionManager implements vscode.Disposable {
                 this.currentSession = undefined;
             }
         });
-    }
-
-    async initializeAPIConnection(pipe?: string): Promise<string> {
-        if (!this.currentSession) {
-            throw new Error(vscode.l10n.t("Language server is not running."));
-        }
-        const result = await this.currentSession.client.initializeAPISession(pipe);
-        return result.pipe;
     }
 
     registerContentMappers(contributorId: string, contributions: readonly ContentMapperContribution[]): vscode.Disposable {
@@ -128,6 +221,10 @@ export class SessionManager implements vscode.Disposable {
             this.contentMapperRegistrations.delete(contributorId);
             void this.syncContentMapperContributions();
         });
+    }
+
+    registerLspMiddleware<M extends LspMiddlewareMethod>(method: M, transformer: LspMiddlewareTransformer<NoInfer<M>>): vscode.Disposable {
+        return this.lspMiddleware.register(method, transformer);
     }
 
     private syncContentMapperContributions(): Promise<void> {
@@ -152,14 +249,15 @@ export class SessionManager implements vscode.Disposable {
         }
     }
 
-    private enqueueLifecycleOperation(operation: () => Promise<void>): Promise<void> {
+    private enqueueLifecycleOperation<T>(operation: () => Promise<T>): Promise<T> {
         const result = this.lifecycleOperation.then(operation);
-        this.lifecycleOperation = result.catch(() => {});
+        this.lifecycleOperation = result.then(() => {}, () => {});
         return result;
     }
 
     dispose(): Promise<void> {
         return this.enqueueLifecycleOperation(async () => {
+            this.lspMiddleware.dispose();
             await this.currentSession?.dispose();
             this.currentSession = undefined;
             await Promise.all(this.disposables.splice(0).map(d => d.dispose()));
@@ -172,8 +270,8 @@ export class SessionManager implements vscode.Disposable {
  * can be restarted within the same Session only if the underlying exe path/version
  * has not changed. Otherwise, a new Session must be created. Since Session only
  * exists while the LSP server is running (or actively starting/restarting/stopping),
- * it also owns the commands and UI elements that should only be active while the
- * server is running.
+ * it owns the editor features and commands that operate on that client.
+ * Lifecycle commands and the public extension API belong to SessionManager.
  */
 class Session implements vscode.Disposable {
     client: Client;
@@ -181,72 +279,47 @@ class Session implements vscode.Disposable {
     private context: vscode.ExtensionContext;
     private outputChannel: vscode.LogOutputChannel;
     private telemetryReporter: TelemetryReporter;
-    private initializedEventEmitter: vscode.EventEmitter<void>;
-    private stopSession: () => Promise<void>;
-    private restartSession: () => Promise<void>;
+    private projectStatus?: ProjectStatus;
 
     constructor(
         context: vscode.ExtensionContext,
         outputChannel: vscode.LogOutputChannel,
-        initializedEventEmitter: vscode.EventEmitter<void>,
+        private readonly onLanguageServerInitialized: (exe: ExeInfo) => void,
         telemetryReporter: TelemetryReporter,
-        stopSession: () => Promise<void>,
-        restartSession: () => Promise<void>,
+        lspMiddleware: LspMiddlewareRegistry,
     ) {
-        this.client = new Client(outputChannel, initializedEventEmitter, telemetryReporter);
+        this.client = new Client(
+            outputChannel,
+            exe => {
+                this.projectStatus?.onLanguageServerInitialized();
+                this.onLanguageServerInitialized(exe);
+            },
+            telemetryReporter,
+            lspMiddleware,
+        );
         this.context = context;
         this.outputChannel = outputChannel;
         this.telemetryReporter = telemetryReporter;
-        this.initializedEventEmitter = initializedEventEmitter;
-        this.stopSession = stopSession;
-        this.restartSession = restartSession;
         this.registerCommands();
     }
 
     async start(context: vscode.ExtensionContext): Promise<void> {
         await vscode.commands.executeCommand("setContext", "typescript.isManagedFile", false);
+        const activeEditorTracker = new ActiveJsTsEditorTracker();
+        this.disposables.push(activeEditorTracker);
+
+        this.projectStatus = new ProjectStatus(this.client, activeEditorTracker);
+        this.disposables.push(this.projectStatus);
+
         const exe = await getExe(context);
         await this.client.start(exe);
         this.disposables.push(setupStatusBar(exe));
 
-        // Set up active editor tracker and UI features
-        const activeEditorTracker = new ActiveJsTsEditorTracker();
-        this.disposables.push(activeEditorTracker);
-
-        const projectStatus = new ProjectStatus(this.client, activeEditorTracker, this.initializedEventEmitter.event);
-        this.disposables.push(projectStatus);
-
-        // If already initialized, fire immediately so projectStatus picks it up
-        if (this.client.isInitialized) {
-            this.initializedEventEmitter.fire();
-        }
-
         await vscode.commands.executeCommand("setContext", "typescript.native-preview.serverRunning", true);
     }
 
-    tryRestartClient(context: vscode.ExtensionContext): Promise<boolean> {
-        return this.client.tryRestart(context);
-    }
-
     registerCommands(): void {
-        this.disposables.push(registerCodeLensShowLocationsCommand());
-
-        this.disposables.push(vscode.commands.registerCommand("typescript.native-preview.restart", async () => {
-            this.telemetryReporter.sendTelemetryEvent("command.restartLanguageServer");
-            if (await this.tryRestartClient(this.context)) {
-                return;
-            }
-
-            await this.restartSession();
-        }));
-
-        this.disposables.push(vscode.commands.registerCommand("typescript.native-preview.output.focus", () => {
-            this.outputChannel.show();
-        }));
-
-        this.disposables.push(vscode.commands.registerCommand("typescript.native-preview.selectVersion", async () => {
-            await promptSelectVersion(this.context, this.client, this.outputChannel, this.stopSession);
-        }));
+        this.disposables.push(registerServerCommands(this.outputChannel));
 
         // TODO: Support the standard reload/go-to-project-config commands while
         // Strada leaves their command palette entries visible in native mode:
@@ -255,20 +328,6 @@ class Session implements vscode.Disposable {
 
         this.disposables.push(vscode.commands.registerCommand("typescript.native-preview.showMenu", () => {
             showCommands(this.client);
-        }));
-
-        this.disposables.push(vscode.commands.registerCommand("typescript.native-preview.sortImports", () => {
-            return vscode.commands.executeCommand("editor.action.sourceAction", {
-                kind: "source.sortImports",
-                apply: "first",
-            });
-        }));
-
-        this.disposables.push(vscode.commands.registerCommand("typescript.native-preview.removeUnusedImports", () => {
-            return vscode.commands.executeCommand("editor.action.sourceAction", {
-                kind: "source.removeUnusedImports",
-                apply: "first",
-            });
         }));
 
         this.disposables.push(vscode.commands.registerCommand("typescript.native-preview.reportIssue", () => {
@@ -412,7 +471,7 @@ async function showCommands(client: Client): Promise<void> {
         },
     ];
 
-    const showDebugInfo = readNativePreviewConfig("showDebugInfo", false);
+    const showDebugInfo = readConfigWithLegacyFallback("showDebugInfo", false);
     if (showDebugInfo) {
         const exe = client.getCurrentExe();
         const pid = client.serverPid;
@@ -460,15 +519,8 @@ interface VersionQuickPickItem extends vscode.QuickPickItem {
 }
 
 function readStringArrayConfig(key: string): string[] {
-    const value = readNativePreviewConfig<unknown>(key, undefined);
+    const value = readConfigWithLegacyFallback<unknown>(key, undefined);
     return Array.isArray(value) ? value.filter((v): v is string => typeof v === "string") : [];
-}
-
-interface DetectedVersion {
-    folder: vscode.WorkspaceFolder;
-    version: string;
-    tsdkPath: string;
-    exePath: string;
 }
 
 interface StradaVersion {
@@ -498,29 +550,13 @@ async function getStradaExtensionVersion(extensionId: string, pathToTypescript: 
     }
 }
 
-async function findWorkspaceNativePreviewPackages(): Promise<DetectedVersion[]> {
-    const results: DetectedVersion[] = [];
-    for (const folder of vscode.workspace.workspaceFolders ?? []) {
-        const packagePath = vscode.Uri.joinPath(folder.uri, "node_modules", "@typescript", "native-preview");
-        const resolved = await resolveTsdkPathToExe(path.normalize(packagePath.fsPath));
-        if (!resolved) continue;
-        results.push({
-            folder,
-            version: resolved?.version ?? "unknown",
-            tsdkPath: path.normalize(packagePath.fsPath),
-            exePath: resolved?.path ?? "",
-        });
-    }
-    return results;
-}
-
 /**
  * Compute the tsdk path to persist in workspace config. Uses a path relative
  * to the workspace config base directory (the `.code-workspace` file's parent
  * in multi-root, or the lone workspace folder in single-root). Falls back to
  * the absolute path if there is no workspace.
  */
-function tsdkPathForConfig(detected: DetectedVersion): string {
+function tsdkPathForConfig(detected: DetectedTypeScriptVersion): string {
     const base = workspaceConfigBase();
     if (!base) {
         return detected.tsdkPath;
@@ -534,7 +570,7 @@ function tsdkPathForConfig(detected: DetectedVersion): string {
  * unnecessary config churn from formatting differences like absolute vs
  * relative, leading ./, etc.).
  */
-async function updateTsdkConfig(detected: DetectedVersion): Promise<void> {
+async function updateTsdkConfig(detected: DetectedTypeScriptVersion): Promise<void> {
     const currentValue = getWorkspaceTsdkConfigValue();
     const newValue = tsdkPathForConfig(detected);
     if (currentValue !== undefined && resolveTsdkPath(currentValue) === resolveTsdkPath(newValue)) {
@@ -547,7 +583,7 @@ async function promptSelectVersion(context: vscode.ExtensionContext, client: Cli
     const currentExePath = client.getCurrentExe()?.path;
     const defaultExe = await getDefaultExePath(context);
     const stradaVersion = await getStradaVersion();
-    const workspaceVersions = await findWorkspaceNativePreviewPackages();
+    const workspaceVersions = await getWorkspaceTypeScriptVersions();
     const items: VersionQuickPickItem[] = [];
 
     if (stradaVersion) {
@@ -567,7 +603,7 @@ async function promptSelectVersion(context: vscode.ExtensionContext, client: Cli
     items.push({
         label: (currentExePath === defaultExe.path ? "• " : "") + vscode.l10n.t("Use TypeScript 7"),
         description: defaultExe.version,
-        detail: "",
+        detail: defaultExe.path,
         restart: true,
         run: async () => {
             await context.workspaceState.update(useWorkspaceTsdkStorageKey, false);
@@ -589,7 +625,7 @@ async function promptSelectVersion(context: vscode.ExtensionContext, client: Cli
                     await context.workspaceState.update(useWorkspaceTsdkStorageKey, true);
                     await updateTsdkConfig(wsVersion);
                     await updateWorkspaceUseTsgoSetting(true);
-                    outputChannel.appendLine(`Switched to workspace tsgo version (${wsVersion.version}).`);
+                    outputChannel.appendLine(`Switched to workspace TypeScript version (${wsVersion.version}).`);
                 },
             });
         }
@@ -655,7 +691,7 @@ async function promptSelectVersion(context: vscode.ExtensionContext, client: Cli
 
 /**
  * If the workspace has a tsdk setting pending consent, or has
- * `@typescript/typescript` installed in node_modules, prompt the user
+ * TypeScript 7 installed in node_modules, prompt the user
  * to allow using it.
  */
 export async function promptUseWorkspaceVersion(context: vscode.ExtensionContext): Promise<void> {
@@ -694,9 +730,9 @@ export async function promptUseWorkspaceVersion(context: vscode.ExtensionContext
         }
     }
     else {
-        // No workspace tsdk config, but check if native-preview is installed
+        // No workspace tsdk config, but check if TypeScript 7 is installed
         // in the workspace's node_modules.
-        const workspaceVersions = await findWorkspaceNativePreviewPackages();
+        const workspaceVersions = await getWorkspaceTypeScriptVersions();
         if (workspaceVersions.length === 0) return;
 
         const wsVersion = workspaceVersions[0];

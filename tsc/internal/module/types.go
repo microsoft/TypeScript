@@ -7,7 +7,6 @@ import (
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
-	"github.com/microsoft/TypeScript/tsc/internal/packagejson"
 	"github.com/microsoft/TypeScript/tsc/internal/pnp"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
@@ -15,36 +14,30 @@ import (
 
 type ResolutionHost interface {
 	FS() vfs.FS
-	GetCurrentDirectory() string
+	GetCurrentDirectory() tspath.RootedDirectoryPath
 	PnpApi() *pnp.PnpApi
 }
 
 type Resolver interface {
+	BaseDirectory() tspath.RootedDirectoryPath
 	ResolveModuleName(
 		moduleName string,
-		containingFile string,
+		containingFile tspath.RootedFilePath,
 		resolutionMode core.ResolutionMode,
 		redirectedReference ResolvedProjectReference,
 	) (*ResolvedModule, []DiagAndArgs, error)
 	ResolveModuleNameFromDirectory(
 		moduleName string,
-		containingDirectory string,
+		containingDirectory tspath.RootedDirectoryPath,
 		resolutionMode core.ResolutionMode,
 	) (*ResolvedModule, []DiagAndArgs, error)
 	ResolveTypeReferenceDirective(
 		typeReferenceDirectiveName string,
-		containingFile string,
+		containingFile tspath.RootedFilePath,
 		resolutionMode core.ResolutionMode,
 		redirectedReference ResolvedProjectReference,
 	) (*ResolvedTypeReferenceDirective, []DiagAndArgs)
-	GetPackageScopeForPath(directory string) *packagejson.InfoCacheEntry
-	PackageJsonCacheEntries(f func(key tspath.Path, value *packagejson.InfoCacheEntry) bool)
-	ResolvePackageDirectory(
-		moduleName string,
-		containingFile string,
-		resolutionMode core.ResolutionMode,
-		redirectedReference ResolvedProjectReference,
-	) *ResolvedModule
+	GetResolutionData() *ResolutionData
 }
 
 type ModeAwareCacheKey struct {
@@ -53,7 +46,7 @@ type ModeAwareCacheKey struct {
 }
 
 type ResolvedProjectReference interface {
-	ConfigName() string
+	ConfigName() tspath.RootedFilePath
 	CompilerOptions() *core.CompilerOptions
 }
 
@@ -95,14 +88,16 @@ func (p *PackageId) PackageName() string {
 
 type ResolvedModule struct {
 	ResolutionDiagnostics        []*ast.Diagnostic
-	ResolvedFileName             string
-	OriginalPath                 string
+	ResolvedFileName             tspath.RootedFilePath
+	ResolvedPath                 tspath.PathKey
+	OriginalPath                 tspath.RootedFilePath
 	Extension                    string
 	ResolvedUsingTsExtension     bool
 	ResolvedUsingExtraExtensions bool
-	PackageId                    PackageId
 	IsExternalLibraryImport      bool
-	AlternateResult              string
+	IsCustomResolution           bool
+	PackageId                    PackageId
+	AlternateResult              tspath.RootedFilePath
 }
 
 func (r *ResolvedModule) IsResolved() bool {
@@ -112,8 +107,9 @@ func (r *ResolvedModule) IsResolved() bool {
 type ResolvedTypeReferenceDirective struct {
 	ResolutionDiagnostics   []*ast.Diagnostic
 	Primary                 bool
-	ResolvedFileName        string
-	OriginalPath            string
+	ResolvedFileName        tspath.RootedFilePath
+	ResolvedPath            tspath.PathKey
+	OriginalPath            tspath.RootedFilePath
 	PackageId               PackageId
 	IsExternalLibraryImport bool
 }

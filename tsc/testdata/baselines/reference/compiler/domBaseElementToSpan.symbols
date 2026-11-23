@@ -1,0 +1,12 @@
+//// [tests/cases/compiler/domBaseElementToSpan.ts] ////
+
+=== domBaseElementToSpan.ts ===
+declare const element: HTMLElement;
+>element : Symbol(element, Decl(domBaseElementToSpan.ts, 0, 13))
+>HTMLElement : Symbol(HTMLElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+const span: HTMLSpanElement = element;
+>span : Symbol(span, Decl(domBaseElementToSpan.ts, 1, 5))
+>HTMLSpanElement : Symbol(HTMLSpanElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>element : Symbol(element, Decl(domBaseElementToSpan.ts, 0, 13))
+

@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 )
 
@@ -12,11 +13,11 @@ type FS struct {
 	fs      vfs.FS
 	enabled atomic.Bool
 
-	directoryExistsCache      collections.SyncMap[string, bool]
-	fileExistsCache           collections.SyncMap[string, bool]
-	getAccessibleEntriesCache collections.SyncMap[string, vfs.Entries]
-	realpathCache             collections.SyncMap[string, string]
-	statCache                 collections.SyncMap[string, vfs.FileInfo]
+	directoryExistsCache      collections.SyncMap[tspath.RootedDirectoryPath, bool]
+	fileExistsCache           collections.SyncMap[tspath.RootedFilePath, bool]
+	getAccessibleEntriesCache collections.SyncMap[tspath.RootedDirectoryPath, vfs.Entries]
+	realpathCache             collections.SyncMap[tspath.RootedPath, tspath.RootedPath]
+	statCache                 collections.SyncMap[tspath.RootedPath, vfs.FileInfo]
 }
 
 var _ vfs.FS = (*FS)(nil)
@@ -54,7 +55,7 @@ func (fsys *FS) ClearCache() {
 	}
 }
 
-func (fsys *FS) DirectoryExists(path string) bool {
+func (fsys *FS) DirectoryExists(path tspath.RootedDirectoryPath) bool {
 	if fsys.enabled.Load() {
 		if ret, ok := fsys.directoryExistsCache.Load(path); ok {
 			return ret
@@ -70,7 +71,7 @@ func (fsys *FS) DirectoryExists(path string) bool {
 	return ret
 }
 
-func (fsys *FS) FileExists(path string) bool {
+func (fsys *FS) FileExists(path tspath.RootedFilePath) bool {
 	if fsys.enabled.Load() {
 		if ret, ok := fsys.fileExistsCache.Load(path); ok {
 			return ret
@@ -86,7 +87,7 @@ func (fsys *FS) FileExists(path string) bool {
 	return ret
 }
 
-func (fsys *FS) GetAccessibleEntries(path string) vfs.Entries {
+func (fsys *FS) GetAccessibleEntries(path tspath.RootedDirectoryPath) vfs.Entries {
 	if fsys.enabled.Load() {
 		if ret, ok := fsys.getAccessibleEntriesCache.Load(path); ok {
 			return ret
@@ -102,11 +103,11 @@ func (fsys *FS) GetAccessibleEntries(path string) vfs.Entries {
 	return ret
 }
 
-func (fsys *FS) ReadFile(path string) (contents string, ok bool) {
+func (fsys *FS) ReadFile(path tspath.RootedFilePath) (contents string, ok bool) {
 	return fsys.fs.ReadFile(path)
 }
 
-func (fsys *FS) Realpath(path string) string {
+func (fsys *FS) Realpath(path tspath.RootedPath) tspath.RootedPath {
 	if fsys.enabled.Load() {
 		if ret, ok := fsys.realpathCache.Load(path); ok {
 			return ret
@@ -122,15 +123,15 @@ func (fsys *FS) Realpath(path string) string {
 	return ret
 }
 
-func (fsys *FS) Remove(path string) error {
+func (fsys *FS) Remove(path tspath.RootedPath) error {
 	return fsys.fs.Remove(path)
 }
 
-func (fsys *FS) Chtimes(path string, aTime time.Time, mTime time.Time) error {
+func (fsys *FS) Chtimes(path tspath.RootedPath, aTime time.Time, mTime time.Time) error {
 	return fsys.fs.Chtimes(path, aTime, mTime)
 }
 
-func (fsys *FS) Stat(path string) vfs.FileInfo {
+func (fsys *FS) Stat(path tspath.RootedPath) vfs.FileInfo {
 	if fsys.enabled.Load() {
 		if ret, ok := fsys.statCache.Load(path); ok {
 			return ret
@@ -146,14 +147,14 @@ func (fsys *FS) Stat(path string) vfs.FileInfo {
 	return ret
 }
 
-func (fsys *FS) UseCaseSensitiveFileNames() bool {
-	return fsys.fs.UseCaseSensitiveFileNames()
+func (fsys *FS) CaseSensitivity() tspath.CaseSensitivity {
+	return fsys.fs.CaseSensitivity()
 }
 
-func (fsys *FS) WriteFile(path string, data string) error {
+func (fsys *FS) WriteFile(path tspath.RootedFilePath, data string) error {
 	return fsys.fs.WriteFile(path, data)
 }
 
-func (fsys *FS) AppendFile(path string, data string) error {
+func (fsys *FS) AppendFile(path tspath.RootedFilePath, data string) error {
 	return fsys.fs.AppendFile(path, data)
 }

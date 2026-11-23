@@ -7,6 +7,12 @@ export interface Foo {
     a: number;
 >a : Symbol(Foo.a, Decl(types.ts, 0, 22))
 }
+export interface Unused {
+>Unused : Symbol(Unused, Decl(types.ts, 2, 1))
+
+    unused: true;
+>unused : Symbol(Unused.unused, Decl(types.ts, 3, 25))
+}
 
 === /foo.js ===
 /**
@@ -19,4 +25,32 @@ export interface Foo {
 function f(foo) {}
 >f : Symbol(f, Decl(foo.js, 0, 0))
 >foo : Symbol(foo, Decl(foo.js, 7, 11))
+
+=== /imports.js ===
+/**
+ * @import { Foo, Unused } from "./types"
+ */
+/**
+ * @param {Foo} foo
+ */
+export function filtered(foo) {
+>filtered : Symbol(filtered, Decl(imports.js, 0, 0))
+>foo : Symbol(foo, Decl(imports.js, 6, 25))
+
+    return foo;
+>foo : Symbol(foo, Decl(imports.js, 6, 25))
+}
+/**
+ * @import * as types from "./types"
+ */
+/**
+ * @param {types.Foo} foo
+ */
+export function namespace(foo) {
+>namespace : Symbol(namespace, Decl(imports.js, 8, 1))
+>foo : Symbol(foo, Decl(imports.js, 15, 26))
+
+    return foo;
+>foo : Symbol(foo, Decl(imports.js, 15, 26))
+}
 

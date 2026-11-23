@@ -1,0 +1,33 @@
+//// [tests/cases/compiler/emptyMappedJsxProps.tsx] ////
+
+=== emptyMappedJsxProps.tsx ===
+declare namespace JSX {
+>JSX : Symbol(JSX, Decl(emptyMappedJsxProps.tsx, 0, 0))
+
+    interface Element {}
+>Element : Symbol(Element, Decl(emptyMappedJsxProps.tsx, 0, 23))
+
+    interface ElementAttributesProperty { props: {}; }
+>ElementAttributesProperty : Symbol(ElementAttributesProperty, Decl(emptyMappedJsxProps.tsx, 1, 24))
+>props : Symbol(ElementAttributesProperty.props, Decl(emptyMappedJsxProps.tsx, 2, 41))
+
+    interface ElementChildrenAttribute { children: {}; }
+>ElementChildrenAttribute : Symbol(ElementChildrenAttribute, Decl(emptyMappedJsxProps.tsx, 2, 54))
+>children : Symbol(ElementChildrenAttribute.children, Decl(emptyMappedJsxProps.tsx, 3, 40))
+
+    interface IntrinsicAttributes { key?: string; }
+>IntrinsicAttributes : Symbol(IntrinsicAttributes, Decl(emptyMappedJsxProps.tsx, 3, 56))
+>key : Symbol(IntrinsicAttributes.key, Decl(emptyMappedJsxProps.tsx, 4, 35))
+}
+
+class Component {
+>Component : Symbol(Component, Decl(emptyMappedJsxProps.tsx, 5, 1))
+
+    props: Readonly<{}> = {};
+>props : Symbol(Component.props, Decl(emptyMappedJsxProps.tsx, 7, 17))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+}
+<Component>content</Component>;
+>Component : Symbol(Component, Decl(emptyMappedJsxProps.tsx, 5, 1))
+>Component : Symbol(Component, Decl(emptyMappedJsxProps.tsx, 5, 1))
+

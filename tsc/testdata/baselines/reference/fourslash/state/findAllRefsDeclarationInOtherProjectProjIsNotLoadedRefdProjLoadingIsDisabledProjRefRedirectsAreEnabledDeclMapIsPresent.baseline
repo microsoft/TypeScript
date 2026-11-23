@@ -1,4 +1,4 @@
-UseCaseSensitiveFileNames: true
+CaseSensitivity: true
 //// [/myproject/a/index.ts] *new* 
 import { B } from "../b/lib";
 const b: B = new B();

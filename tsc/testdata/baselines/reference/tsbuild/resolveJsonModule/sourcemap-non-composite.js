@@ -23,7 +23,7 @@ export default hello.hello
     "files": [ "src/index.ts", "src/hello.json", ],
 }
 
-tsgo --b project --v --explainFiles --listEmittedFiles
+tsc --b project --v --explainFiles --listEmittedFiles
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -91,7 +91,7 @@ const hello_json_1 = __importDefault(require("./hello.json"));
 exports.default = hello_json_1.default.hello;
 //# sourceMappingURL=index.js.map
 //// [/home/src/workspaces/solution/project/dist/src/index.js.map] *new* 
-{"version":3,"file":"index.js","sourceRoot":"","sources":["../../src/index.ts"],"names":[],"mappings":";;;;;AAAA,8DAAgC;kBACjB,oBAAK,CAAC,KAAK"}
+{"version":3,"file":"index.js","sources":["../../src/index.ts"],"names":[],"mappings":";;;;;AAAA,8DAAgC;kBACjB,oBAAK,CAAC,KAAK"}
 //// [/home/src/workspaces/solution/project/dist/tsconfig.tsbuildinfo] *new* 
 {"version":"FakeTSVersion","errors":true,"root":["../src/index.ts","../src/hello.json"]}
 //// [/home/src/workspaces/solution/project/dist/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
@@ -125,7 +125,7 @@ Signatures::
 
 Edit [0]:: no change
 
-tsgo --b project --v --explainFiles --listEmittedFiles
+tsc --b project --v --explainFiles --listEmittedFiles
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 

@@ -1,0 +1,32 @@
+//// [tests/cases/compiler/promiseAllArrayAssertionOverlap.ts] ////
+
+=== promiseAllArrayAssertionOverlap.ts ===
+interface Row {
+>Row : Symbol(Row, Decl(promiseAllArrayAssertionOverlap.ts, 0, 0))
+
+    [name: string]: any;
+>name : Symbol(name, Decl(promiseAllArrayAssertionOverlap.ts, 1, 5))
+}
+interface Entity {
+>Entity : Symbol(Entity, Decl(promiseAllArrayAssertionOverlap.ts, 2, 1))
+
+    id: number;
+>id : Symbol(Entity.id, Decl(promiseAllArrayAssertionOverlap.ts, 3, 18))
+}
+declare const result: Promise<Row | null>;
+>result : Symbol(result, Decl(promiseAllArrayAssertionOverlap.ts, 6, 13))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Row : Symbol(Row, Decl(promiseAllArrayAssertionOverlap.ts, 0, 0))
+
+export async function load() {
+>load : Symbol(load, Decl(promiseAllArrayAssertionOverlap.ts, 6, 42))
+
+    return (await Promise.all([result, result])) as Entity[];
+>Promise.all : Symbol(PromiseConstructor.all, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>all : Symbol(PromiseConstructor.all, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>result : Symbol(result, Decl(promiseAllArrayAssertionOverlap.ts, 6, 13))
+>result : Symbol(result, Decl(promiseAllArrayAssertionOverlap.ts, 6, 13))
+>Entity : Symbol(Entity, Decl(promiseAllArrayAssertionOverlap.ts, 2, 1))
+}
+

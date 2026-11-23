@@ -1,0 +1,13 @@
+//// [tests/cases/conformance/importSource/importSource14.ts] ////
+
+=== a.ts ===
+
+export {};
+
+=== b.cts ===
+export const a = import.source("./a.ts");
+>a : Promise<AbstractModuleSource>
+>import.source("./a.ts") : Promise<AbstractModuleSource>
+>source : any
+>"./a.ts" : "./a.ts"
+

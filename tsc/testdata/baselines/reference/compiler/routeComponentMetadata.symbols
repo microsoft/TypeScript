@@ -1,0 +1,49 @@
+//// [tests/cases/compiler/routeComponentMetadata.ts] ////
+
+=== routeComponentMetadata.ts ===
+type Component = (() => number) | ((() => number) & { readonly $$typeof: symbol });
+>Component : Symbol(Component, Decl(routeComponentMetadata.ts, 0, 0))
+>$$typeof : Symbol($$typeof, Decl(routeComponentMetadata.ts, 0, 53))
+
+type RouteComponent = Component & { preload?: () => Promise<void> };
+>RouteComponent : Symbol(RouteComponent, Decl(routeComponentMetadata.ts, 0, 83))
+>Component : Symbol(Component, Decl(routeComponentMetadata.ts, 0, 0))
+>preload : Symbol(preload, Decl(routeComponentMetadata.ts, 1, 35))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+
+declare function createRoute<Search = {}>(options: { component?: RouteComponent; validateSearch?: (search: unknown) => Search }): { useSearch(): Search };
+>createRoute : Symbol(createRoute, Decl(routeComponentMetadata.ts, 1, 68))
+>Search : Symbol(Search, Decl(routeComponentMetadata.ts, 2, 29))
+>options : Symbol(options, Decl(routeComponentMetadata.ts, 2, 42))
+>component : Symbol(component, Decl(routeComponentMetadata.ts, 2, 52))
+>RouteComponent : Symbol(RouteComponent, Decl(routeComponentMetadata.ts, 0, 83))
+>validateSearch : Symbol(validateSearch, Decl(routeComponentMetadata.ts, 2, 80))
+>search : Symbol(search, Decl(routeComponentMetadata.ts, 2, 99))
+>Search : Symbol(Search, Decl(routeComponentMetadata.ts, 2, 29))
+>useSearch : Symbol(useSearch, Decl(routeComponentMetadata.ts, 2, 131))
+>Search : Symbol(Search, Decl(routeComponentMetadata.ts, 2, 29))
+
+declare const schema: { parse(search: unknown): { page: number } };
+>schema : Symbol(schema, Decl(routeComponentMetadata.ts, 3, 13))
+>parse : Symbol(parse, Decl(routeComponentMetadata.ts, 3, 23))
+>search : Symbol(search, Decl(routeComponentMetadata.ts, 3, 30))
+>page : Symbol(page, Decl(routeComponentMetadata.ts, 3, 49))
+
+const route = createRoute({ component: () => 0, validateSearch: search => schema.parse(search) });
+>route : Symbol(route, Decl(routeComponentMetadata.ts, 4, 5))
+>createRoute : Symbol(createRoute, Decl(routeComponentMetadata.ts, 1, 68))
+>component : Symbol(component, Decl(routeComponentMetadata.ts, 4, 27))
+>validateSearch : Symbol(validateSearch, Decl(routeComponentMetadata.ts, 4, 47))
+>search : Symbol(search, Decl(routeComponentMetadata.ts, 4, 63))
+>schema.parse : Symbol(parse, Decl(routeComponentMetadata.ts, 3, 23))
+>schema : Symbol(schema, Decl(routeComponentMetadata.ts, 3, 13))
+>parse : Symbol(parse, Decl(routeComponentMetadata.ts, 3, 23))
+>search : Symbol(search, Decl(routeComponentMetadata.ts, 4, 63))
+
+route.useSearch().page;
+>route.useSearch().page : Symbol(page, Decl(routeComponentMetadata.ts, 3, 49))
+>route.useSearch : Symbol(useSearch, Decl(routeComponentMetadata.ts, 2, 131))
+>route : Symbol(route, Decl(routeComponentMetadata.ts, 4, 5))
+>useSearch : Symbol(useSearch, Decl(routeComponentMetadata.ts, 2, 131))
+>page : Symbol(page, Decl(routeComponentMetadata.ts, 3, 49))
+

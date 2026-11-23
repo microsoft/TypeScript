@@ -23,7 +23,7 @@ export default hello.hello
     "files": [ "src/index.ts", "src/hello.json", ],
 }
 
-tsgo --b project --v --explainFiles --listEmittedFiles
+tsc --b project --v --explainFiles --listEmittedFiles
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 

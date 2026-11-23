@@ -1,0 +1,27 @@
+//// [tests/cases/compiler/workerImplementationHandlerThis.ts] ////
+
+=== workerImplementationHandlerThis.ts ===
+declare class WorkerReplacement extends EventTarget implements Worker {
+>WorkerReplacement : WorkerReplacement
+>EventTarget : EventTarget
+
+    onmessage: ((this: Worker, event: MessageEvent) => any) | null;
+>onmessage : ((this: Worker, event: MessageEvent) => any) | null
+>this : Worker
+>event : MessageEvent<any>
+
+    onmessageerror: ((this: Worker, event: MessageEvent) => any) | null;
+>onmessageerror : ((this: Worker, event: MessageEvent) => any) | null
+>this : Worker
+>event : MessageEvent<any>
+
+    onerror: Worker["onerror"];
+>onerror : ((this: AbstractWorker, ev: ErrorEvent) => any) | null
+
+    postMessage: Worker["postMessage"];
+>postMessage : { (message: any, transfer: Transferable[]): void; (message: any, options?: StructuredSerializeOptions): void; }
+
+    terminate: Worker["terminate"];
+>terminate : () => void
+}
+

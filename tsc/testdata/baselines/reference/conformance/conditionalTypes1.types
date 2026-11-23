@@ -691,6 +691,40 @@ function f23<T extends string[]>(x: T extends (infer U)[] ? U[] : never) {
 >0 : 0
 }
 
+function inferTuple<T>(x: T extends [infer U, infer V] ? [U, V] : never) {
+>inferTuple : <T>(x: T extends [infer U, infer V] ? [U, V] : never) => T extends [infer U, infer V] ? [U, V] : never
+>x : T extends [infer U, infer V] ? [U, V] : never
+
+    return x;
+>x : T extends [infer U, infer V] ? [U, V] : never
+}
+
+function inferObject<T>(x: T extends { value: infer U } ? { value: U } : never) {
+>inferObject : <T>(x: T extends { value: infer U; } ? { value: U; } : never) => T extends { value: infer U; } ? { value: U; } : never
+>x : T extends { value: infer U; } ? { value: U; } : never
+>value : U
+>value : U
+
+    return x;
+>x : T extends { value: infer U; } ? { value: U; } : never
+}
+
+function inferFunction<T>(x: T extends () => infer U ? () => U : never) {
+>inferFunction : <T>(x: T extends () => infer U ? () => U : never) => T extends () => infer U ? () => U : never
+>x : T extends () => infer U ? () => U : never
+
+    return x;
+>x : T extends () => infer U ? () => U : never
+}
+
+function inferNested<T>(x: T extends (infer U)[] ? U extends (infer V)[] ? [U[], V[]] : U[] : never) {
+>inferNested : <T>(x: T extends (infer U)[] ? U extends (infer V)[] ? [U[], V[]] : U[] : never) => T extends (infer U)[] ? U extends (infer V)[] ? [U[], V[]] : U[] : never
+>x : T extends (infer U)[] ? U extends (infer V)[] ? [U[], V[]] : U[] : never
+
+    return x;
+>x : T extends (infer U)[] ? U extends (infer V)[] ? [U[], V[]] : U[] : never
+}
+
 // Repros from #21664
 
 type Eq<T, U> = T extends U ? U extends T ? true : false : false;

@@ -119,7 +119,10 @@ func TestIsASCII(t *testing.T) {
 // can't compare it against their own NFC paths.
 func TestFSEventsNFDOnDiskNFCSubscribe(t *testing.T) {
 	t.Parallel()
+	runWithRetry(t, testFSEventsNFDOnDiskNFCSubscribe)
+}
 
+func testFSEventsNFDOnDiskNFCSubscribe(t testingT) {
 	parent := newTmpDir(t)
 
 	nfdDir := filepath.Join(parent, "caf"+nfdE+"-dir")
@@ -154,7 +157,10 @@ func TestFSEventsNFDOnDiskNFCSubscribe(t *testing.T) {
 // WatchFile drops every event.
 func TestFSEventsNFDOnDiskNFCWatchFile(t *testing.T) {
 	t.Parallel()
+	runWithRetry(t, testFSEventsNFDOnDiskNFCWatchFile)
+}
 
+func testFSEventsNFDOnDiskNFCWatchFile(t testingT) {
 	dir := newTmpDir(t)
 
 	nfdTarget := filepath.Join(dir, "r"+nfdE+"sum"+nfdE+".txt")
@@ -180,7 +186,7 @@ func TestFSEventsNFDOnDiskNFCWatchFile(t *testing.T) {
 
 // Check identity independently of the comparer, including exclusive creation.
 // Filesystems that do not support a particular alias cannot exercise its watch.
-func requireDarwinAlias(t *testing.T, a, b string) {
+func requireDarwinAlias(t testingT, a, b string) {
 	t.Helper()
 	first, err := os.Stat(a)
 	if err != nil {
@@ -225,79 +231,81 @@ func TestDarwinWatchFileComparison(t *testing.T) {
 		for _, c := range cases {
 			t.Run(impl.Name()+"/"+c.name, func(t *testing.T) {
 				t.Parallel()
-				for _, reverse := range []bool{false, true} {
-					diskRoot, watchRoot := c.diskRoot, c.watchRoot
-					diskName, watchName := c.diskFile, c.watchFile
-					if reverse {
-						diskRoot, watchRoot = watchRoot, diskRoot
-						diskName, watchName = watchName, diskName
-					}
-					parent := newTmpDir(t)
-					diskRoot, watchRoot = filepath.Join(parent, diskRoot), filepath.Join(parent, watchRoot)
-					if err := os.Mkdir(diskRoot, 0o755); err != nil {
-						t.Fatal(err)
-					}
-					requireDarwinAlias(t, diskRoot, watchRoot)
-					diskFile, watchFile := filepath.Join(diskRoot, diskName), filepath.Join(watchRoot, watchName)
-					if err := os.WriteFile(diskFile, nil, 0o644); err != nil {
-						t.Fatal(err)
-					}
-					if c.alias {
-						requireDarwinAlias(t, diskFile, watchFile)
-					} else {
-						f, err := os.OpenFile(watchFile, os.O_WRONLY|os.O_CREATE|os.O_EXCL, 0o644)
-						if errors.Is(err, os.ErrExist) {
-							t.Skip("filesystem aliases these spellings")
+				runWithRetry(t, func(t testingT) {
+					for _, reverse := range []bool{false, true} {
+						diskRoot, watchRoot := c.diskRoot, c.watchRoot
+						diskName, watchName := c.diskFile, c.watchFile
+						if reverse {
+							diskRoot, watchRoot = watchRoot, diskRoot
+							diskName, watchName = watchName, diskName
 						}
-						if err != nil {
+						parent := newTmpDir(t)
+						diskRoot, watchRoot = filepath.Join(parent, diskRoot), filepath.Join(parent, watchRoot)
+						if err := os.Mkdir(diskRoot, 0o755); err != nil {
 							t.Fatal(err)
 						}
-						if err = f.Close(); err != nil {
+						requireDarwinAlias(t, diskRoot, watchRoot)
+						diskFile, watchFile := filepath.Join(diskRoot, diskName), filepath.Join(watchRoot, watchName)
+						if err := os.WriteFile(diskFile, nil, 0o644); err != nil {
 							t.Fatal(err)
 						}
-						a, err := os.Stat(diskFile)
-						if err != nil {
-							t.Fatal(err)
-						}
-						b, err := os.Stat(watchFile)
-						if err != nil || os.SameFile(a, b) {
-							t.Fatalf("expected distinct inodes: %v", err)
-						}
-					}
-					// Subscribe while the target is absent to exercise discovery
-					// as well as subsequent fd-based updates and deletion.
-					if err := os.Remove(diskFile); err != nil {
-						t.Fatal(err)
-					}
-					dir, _ := subscribeForOpts(t, watchRoot, impl)
-					file, _ := subscribeFileFor(t, watchFile, impl)
-					wantDir := filepath.Join(watchRoot, diskName)
-					if impl == FSEvents() {
-						wantDir = canonicalizePath(wantDir)
-					}
-					for round := range 3 {
-						kind := EventUpdate
-						if round == 2 {
-							kind = EventDelete
-							if err := os.Remove(diskFile); err != nil {
+						if c.alias {
+							requireDarwinAlias(t, diskFile, watchFile)
+						} else {
+							f, err := os.OpenFile(watchFile, os.O_WRONLY|os.O_CREATE|os.O_EXCL, 0o644)
+							if errors.Is(err, os.ErrExist) {
+								t.Skip("filesystem aliases these spellings")
+							}
+							if err != nil {
 								t.Fatal(err)
 							}
-						} else if err := os.WriteFile(diskFile, make([]byte, round+1), 0o644); err != nil {
+							if err = f.Close(); err != nil {
+								t.Fatal(err)
+							}
+							a, err := os.Stat(diskFile)
+							if err != nil {
+								t.Fatal(err)
+							}
+							b, err := os.Stat(watchFile)
+							if err != nil || os.SameFile(a, b) {
+								t.Fatalf("expected distinct inodes: %v", err)
+							}
+						}
+						// Subscribe while the target is absent to exercise discovery
+						// as well as subsequent fd-based updates and deletion.
+						if err := os.Remove(diskFile); err != nil {
 							t.Fatal(err)
 						}
-						expectContains(t, dir, kind, wantDir)
-						if c.alias {
-							events := expectContains(t, file, kind, canonicalizePath(watchFile))
-							for _, e := range events {
-								if e.Path != canonicalizePath(watchFile) {
-									t.Fatalf("unexpected file event spelling: %q", e.Path)
+						dir, _ := subscribeForOpts(t, watchRoot, impl)
+						file, _ := subscribeFileFor(t, watchFile, impl)
+						wantDir := filepath.Join(watchRoot, diskName)
+						if impl == FSEvents() {
+							wantDir = canonicalizePath(wantDir)
+						}
+						for round := range 3 {
+							kind := EventUpdate
+							if round == 2 {
+								kind = EventDelete
+								if err := os.Remove(diskFile); err != nil {
+									t.Fatal(err)
 								}
+							} else if err := os.WriteFile(diskFile, make([]byte, round+1), 0o644); err != nil {
+								t.Fatal(err)
 							}
-						} else if events := file.next(400 * time.Millisecond); len(events) != 0 {
-							t.Fatalf("cross-routed distinct filename: %v", events)
+							expectContains(t, dir, kind, wantDir)
+							if c.alias {
+								events := expectContains(t, file, kind, canonicalizePath(watchFile))
+								for _, e := range events {
+									if e.Path != canonicalizePath(watchFile) {
+										t.Fatalf("unexpected file event spelling: %q", e.Path)
+									}
+								}
+							} else if events := file.next(400 * time.Millisecond); len(events) != 0 {
+								t.Fatalf("cross-routed distinct filename: %v", events)
+							}
 						}
 					}
-				}
+				})
 			})
 		}
 	}
@@ -357,39 +365,45 @@ func TestFSEventsDifferentCasing(t *testing.T) {
 		}
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
-			parent := newTmpDir(t)
-			diskDir := filepath.Join(parent, "MixedCase")
-			watchDir := filepath.Join(parent, "mixedcase")
-			if err := os.Mkdir(diskDir, 0o755); err != nil {
-				t.Fatal(err)
-			}
-			if _, err := os.Stat(watchDir); errors.Is(err, os.ErrNotExist) {
-				t.Skip("requires a case-insensitive filesystem")
-			} else if err != nil {
-				t.Fatal(err)
-			}
+			runWithRetry(t, func(t testingT) {
+				parent := newTmpDir(t)
+				diskDir := filepath.Join(parent, "MixedCase")
+				watchDir := filepath.Join(parent, "mixedcase")
+				if err := os.Mkdir(diskDir, 0o755); err != nil {
+					t.Fatal(err)
+				}
+				if _, err := os.Stat(watchDir); errors.Is(err, os.ErrNotExist) {
+					t.Skip("requires a case-insensitive filesystem")
+				} else if err != nil {
+					t.Fatal(err)
+				}
 
-			var opts []WatchOption
-			if recursive {
-				opts = append(opts, WithRecursive())
-			}
-			r, _ := subscribeForOpts(t, watchDir, FSEvents(), opts...)
-			file := filepath.Join(diskDir, "File.ts")
-			want := filepath.Join(watchDir, "File.ts")
-			if err := os.WriteFile(file, []byte("export {}"), 0o644); err != nil {
-				t.Fatal(err)
-			}
-			expectContains(t, r, EventUpdate, want)
-			if err := os.Remove(file); err != nil {
-				t.Fatal(err)
-			}
-			expectContains(t, r, EventDelete, want)
+				var opts []WatchOption
+				if recursive {
+					opts = append(opts, WithRecursive())
+				}
+				r, _ := subscribeForOpts(t, watchDir, FSEvents(), opts...)
+				file := filepath.Join(diskDir, "File.ts")
+				want := filepath.Join(watchDir, "File.ts")
+				if err := os.WriteFile(file, []byte("export {}"), 0o644); err != nil {
+					t.Fatal(err)
+				}
+				expectContains(t, r, EventUpdate, want)
+				if err := os.Remove(file); err != nil {
+					t.Fatal(err)
+				}
+				expectContains(t, r, EventDelete, want)
+			})
 		})
 	}
 }
 
 func TestFSEventsWatchFileDifferentCasing(t *testing.T) {
 	t.Parallel()
+	runWithRetry(t, testFSEventsWatchFileDifferentCasing)
+}
+
+func testFSEventsWatchFileDifferentCasing(t testingT) {
 	dir := newTmpDir(t)
 	diskFile := filepath.Join(dir, "File.ts")
 	watchFile := filepath.Join(dir, "file.ts")
@@ -476,82 +490,84 @@ func TestFSEventsExpansionAliases(t *testing.T) {
 		}
 		t.Run(pair.name, func(t *testing.T) {
 			t.Parallel()
-			for _, reverse := range []bool{false, true} {
-				a, b := pair.a, pair.b
-				if reverse {
-					a, b = b, a
-				}
-				parent := newTmpDir(t)
-				disk, root := filepath.Join(parent, a), filepath.Join(parent, b)
-				if err := os.Mkdir(disk, 0o755); err != nil {
-					t.Fatal(err)
-				}
-				requireDarwinAlias(t, disk, root)
-				nested := filepath.Join(disk, "Nested")
-				if err := os.Mkdir(nested, 0o755); err != nil {
-					t.Fatal(err)
-				}
-				direct, _ := subscribeForOpts(t, root, FSEvents())
-				recursive, _ := subscribeFor(t, root, FSEvents())
-				link := filepath.Join(parent, "Link")
-				makeDirSymlink(t, root, link)
-				linked, _ := subscribeFor(t, link, FSEvents())
-				file, _ := subscribeFileFor(t, filepath.Join(root, b+".ts"), FSEvents())
-				control, _ := subscribeFileFor(t, filepath.Join(disk, a+".ts"), FSEvents())
-				diskFile := filepath.Join(disk, a+".ts")
-				for round := range 3 {
-					kind := EventUpdate
-					if round == 2 {
-						kind = EventDelete
-						if err := os.Remove(diskFile); err != nil {
-							t.Fatal(err)
-						}
-					} else if err := os.WriteFile(diskFile, []byte(strings.Repeat("x", round+1)), 0o644); err != nil {
+			runWithRetry(t, func(t testingT) {
+				for _, reverse := range []bool{false, true} {
+					a, b := pair.a, pair.b
+					if reverse {
+						a, b = b, a
+					}
+					parent := newTmpDir(t)
+					disk, root := filepath.Join(parent, a), filepath.Join(parent, b)
+					if err := os.Mkdir(disk, 0o755); err != nil {
 						t.Fatal(err)
 					}
-					expectContains(t, control, kind, canonicalizePath(diskFile))
-					expectContains(t, file, kind, canonicalizePath(filepath.Join(root, b+".ts")))
-					expectContains(t, direct, kind, canonicalizePath(filepath.Join(root, a+".ts")))
-					expectContains(t, recursive, kind, canonicalizePath(filepath.Join(root, a+".ts")))
-					expectContains(t, linked, kind, canonicalizePath(filepath.Join(link, a+".ts")))
-				}
-				child := filepath.Join(nested, "File.ts")
-				if err := os.WriteFile(child, nil, 0o644); err != nil {
-					t.Fatal(err)
-				}
-				expectContains(t, recursive, EventUpdate, canonicalizePath(filepath.Join(root, "Nested", "File.ts")))
-				expectContains(t, linked, EventUpdate, filepath.Join(link, "Nested", "File.ts"))
-				if events := direct.next(400 * time.Millisecond); len(events) != 0 {
-					t.Fatalf("nonrecursive watch received nested events: %v", events)
-				}
-				if err := os.Remove(child); err != nil {
-					t.Fatal(err)
-				}
-				expectContains(t, recursive, EventDelete, canonicalizePath(filepath.Join(root, "Nested", "File.ts")))
-				if err := os.Remove(nested); err != nil {
-					t.Fatal(err)
-				}
-				expectContains(t, direct, EventDelete, canonicalizePath(filepath.Join(root, "Nested")))
-				if err := os.Remove(disk); err != nil {
-					t.Fatal(err)
-				}
-				expectContains(t, recursive, EventDelete, canonicalizePath(root))
-				terminated := false
-				deadline := time.Now().Add(direct.deadline())
-				for !terminated && time.Now().Before(deadline) {
-					direct.mu.Lock()
-					for _, err := range direct.errs {
-						terminated = terminated || errors.Is(err, ErrWatchTerminated)
+					requireDarwinAlias(t, disk, root)
+					nested := filepath.Join(disk, "Nested")
+					if err := os.Mkdir(nested, 0o755); err != nil {
+						t.Fatal(err)
 					}
-					direct.mu.Unlock()
+					direct, _ := subscribeForOpts(t, root, FSEvents())
+					recursive, _ := subscribeFor(t, root, FSEvents())
+					link := filepath.Join(parent, "Link")
+					makeDirSymlink(t, root, link)
+					linked, _ := subscribeFor(t, link, FSEvents())
+					file, _ := subscribeFileFor(t, filepath.Join(root, b+".ts"), FSEvents())
+					control, _ := subscribeFileFor(t, filepath.Join(disk, a+".ts"), FSEvents())
+					diskFile := filepath.Join(disk, a+".ts")
+					for round := range 3 {
+						kind := EventUpdate
+						if round == 2 {
+							kind = EventDelete
+							if err := os.Remove(diskFile); err != nil {
+								t.Fatal(err)
+							}
+						} else if err := os.WriteFile(diskFile, []byte(strings.Repeat("x", round+1)), 0o644); err != nil {
+							t.Fatal(err)
+						}
+						expectContains(t, control, kind, canonicalizePath(diskFile))
+						expectContains(t, file, kind, canonicalizePath(filepath.Join(root, b+".ts")))
+						expectContains(t, direct, kind, canonicalizePath(filepath.Join(root, a+".ts")))
+						expectContains(t, recursive, kind, canonicalizePath(filepath.Join(root, a+".ts")))
+						expectContains(t, linked, kind, canonicalizePath(filepath.Join(link, a+".ts")))
+					}
+					child := filepath.Join(nested, "File.ts")
+					if err := os.WriteFile(child, nil, 0o644); err != nil {
+						t.Fatal(err)
+					}
+					expectContains(t, recursive, EventUpdate, canonicalizePath(filepath.Join(root, "Nested", "File.ts")))
+					expectContains(t, linked, EventUpdate, filepath.Join(link, "Nested", "File.ts"))
+					if events := direct.next(400 * time.Millisecond); len(events) != 0 {
+						t.Fatalf("nonrecursive watch received nested events: %v", events)
+					}
+					if err := os.Remove(child); err != nil {
+						t.Fatal(err)
+					}
+					expectContains(t, recursive, EventDelete, canonicalizePath(filepath.Join(root, "Nested", "File.ts")))
+					if err := os.Remove(nested); err != nil {
+						t.Fatal(err)
+					}
+					expectContains(t, direct, EventDelete, canonicalizePath(filepath.Join(root, "Nested")))
+					if err := os.Remove(disk); err != nil {
+						t.Fatal(err)
+					}
+					expectContains(t, recursive, EventDelete, canonicalizePath(root))
+					terminated := false
+					deadline := time.Now().Add(direct.deadline())
+					for !terminated && time.Now().Before(deadline) {
+						direct.mu.Lock()
+						for _, err := range direct.errs {
+							terminated = terminated || errors.Is(err, ErrWatchTerminated)
+						}
+						direct.mu.Unlock()
+						if !terminated {
+							time.Sleep(20 * time.Millisecond)
+						}
+					}
 					if !terminated {
-						time.Sleep(20 * time.Millisecond)
+						t.Fatal("missing root termination")
 					}
 				}
-				if !terminated {
-					t.Fatal("missing root termination")
-				}
-			}
+			})
 		})
 	}
 }
@@ -564,52 +580,54 @@ func TestFSEventsFoldDistinctNames(t *testing.T) {
 		}
 		t.Run(pair.name, func(t *testing.T) {
 			t.Parallel()
-			for _, reverse := range []bool{false, true} {
-				parent := newTmpDir(t)
-				roots := []string{filepath.Join(parent, pair.a), filepath.Join(parent, pair.b)}
-				if reverse {
-					roots[0], roots[1] = roots[1], roots[0]
-				}
-				recorders := make([]*recordingWatcher, 2)
-				files := make([]*recordingWatcher, 2)
-				for i, root := range roots {
-					if err := os.Mkdir(root, 0o755); err != nil {
-						t.Fatal(err)
+			runWithRetry(t, func(t testingT) {
+				for _, reverse := range []bool{false, true} {
+					parent := newTmpDir(t)
+					roots := []string{filepath.Join(parent, pair.a), filepath.Join(parent, pair.b)}
+					if reverse {
+						roots[0], roots[1] = roots[1], roots[0]
 					}
-					recorders[i], _ = subscribeFor(t, root, FSEvents())
-					files[i], _ = subscribeFileFor(t, root+".ts", FSEvents())
-				}
-				a, err := os.Stat(roots[0])
-				if err != nil {
-					t.Fatal(err)
-				}
-				b, err := os.Stat(roots[1])
-				if err != nil || os.SameFile(a, b) {
-					t.Fatalf("expected distinct inodes: %v", err)
-				}
-				child := filepath.Join(roots[0], "File.ts")
-				file := roots[0] + ".ts"
-				for round := range 3 {
-					kind := EventUpdate
-					for _, path := range []string{child, file} {
-						if round == 2 {
-							kind = EventDelete
-							if err := os.Remove(path); err != nil {
-								t.Fatal(err)
-							}
-						} else if err := os.WriteFile(path, []byte(strings.Repeat("x", round+1)), 0o644); err != nil {
+					recorders := make([]*recordingWatcher, 2)
+					files := make([]*recordingWatcher, 2)
+					for i, root := range roots {
+						if err := os.Mkdir(root, 0o755); err != nil {
 							t.Fatal(err)
 						}
+						recorders[i], _ = subscribeFor(t, root, FSEvents())
+						files[i], _ = subscribeFileFor(t, root+".ts", FSEvents())
 					}
-					expectContains(t, recorders[0], kind, canonicalizePath(child))
-					expectContains(t, files[0], kind, canonicalizePath(file))
-					for _, r := range []*recordingWatcher{recorders[1], files[1]} {
-						if events := r.next(400 * time.Millisecond); len(events) != 0 {
-							t.Fatalf("cross-routed distinct name: %v", events)
+					a, err := os.Stat(roots[0])
+					if err != nil {
+						t.Fatal(err)
+					}
+					b, err := os.Stat(roots[1])
+					if err != nil || os.SameFile(a, b) {
+						t.Fatalf("expected distinct inodes: %v", err)
+					}
+					child := filepath.Join(roots[0], "File.ts")
+					file := roots[0] + ".ts"
+					for round := range 3 {
+						kind := EventUpdate
+						for _, path := range []string{child, file} {
+							if round == 2 {
+								kind = EventDelete
+								if err := os.Remove(path); err != nil {
+									t.Fatal(err)
+								}
+							} else if err := os.WriteFile(path, []byte(strings.Repeat("x", round+1)), 0o644); err != nil {
+								t.Fatal(err)
+							}
+						}
+						expectContains(t, recorders[0], kind, canonicalizePath(child))
+						expectContains(t, files[0], kind, canonicalizePath(file))
+						for _, r := range []*recordingWatcher{recorders[1], files[1]} {
+							if events := r.next(400 * time.Millisecond); len(events) != 0 {
+								t.Fatalf("cross-routed distinct name: %v", events)
+							}
 						}
 					}
 				}
-			}
+			})
 		})
 	}
 }

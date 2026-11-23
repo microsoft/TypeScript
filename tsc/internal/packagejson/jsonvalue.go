@@ -54,7 +54,7 @@ func (v *JSONValue) IsFalsy() bool {
 	case JSONValueTypeString:
 		return v.Value == ""
 	case JSONValueTypeNumber:
-		return v.Value == 0
+		return v.Value == float64(0)
 	case JSONValueTypeBoolean:
 		return !v.Value.(bool)
 	default:

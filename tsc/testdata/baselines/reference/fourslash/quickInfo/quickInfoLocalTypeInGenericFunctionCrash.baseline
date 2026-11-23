@@ -1,0 +1,298 @@
+// === QuickInfo ===
+=== /quickInfoLocalTypeInGenericFunctionCrash.ts ===
+// function foo<A>() {
+//          ^^^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | function foo<A>(): X.m<number, boolean>.(Anonymous function)<Date>.Y<string>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     class X {
+//           ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | class X
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//         m<B, C>() {
+//         ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (method) X.m<B, C>(): (Anonymous function)<Date>.Y
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//             return (function <D>() {
+//                 class Y<E> {
+//                       ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | class Y<E>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//                 }
+//                 return new Y<string>();
+//                            ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | constructor Y<string>(): Y<string>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//             })<Date>();
+//         }
+//     }
+//     var x = new X();
+//         ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var x: X
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+//     return x.m<number, boolean>();
+//              ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | (method) X<A>.m<number, boolean>(): X.m<number, boolean>.(Anonymous function)<Date>.Y<string>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// }
+// var x = foo<void>();
+//     ^
+// | ----------------------------------------------------------------------
+// | ```typescript
+// | var x: foo<void>.X.m<number, boolean>.(Anonymous function)<Date>.Y<string>
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 9,
+      "LSPosition": {
+        "line": 0,
+        "character": 9
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nfunction foo<A>(): X.m<number, boolean>.(Anonymous function)<Date>.Y<string>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 9
+        },
+        "end": {
+          "line": 0,
+          "character": 12
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 30,
+      "LSPosition": {
+        "line": 1,
+        "character": 10
+      },
+      "Name": "2",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nclass X\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 1,
+          "character": 10
+        },
+        "end": {
+          "line": 1,
+          "character": 11
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 42,
+      "LSPosition": {
+        "line": 2,
+        "character": 8
+      },
+      "Name": "3",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(method) X.m<B, C>(): (Anonymous function)<Date>.Y\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 2,
+          "character": 8
+        },
+        "end": {
+          "line": 2,
+          "character": 9
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 113,
+      "LSPosition": {
+        "line": 4,
+        "character": 22
+      },
+      "Name": "4",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nclass Y<E>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 4,
+          "character": 22
+        },
+        "end": {
+          "line": 4,
+          "character": 23
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 165,
+      "LSPosition": {
+        "line": 6,
+        "character": 27
+      },
+      "Name": "5",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nconstructor Y<string>(): Y<string>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 6,
+          "character": 27
+        },
+        "end": {
+          "line": 6,
+          "character": 28
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 226,
+      "LSPosition": {
+        "line": 10,
+        "character": 8
+      },
+      "Name": "6",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar x: X\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 10,
+          "character": 8
+        },
+        "end": {
+          "line": 10,
+          "character": 9
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 252,
+      "LSPosition": {
+        "line": 11,
+        "character": 13
+      },
+      "Name": "7",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\n(method) X<A>.m<number, boolean>(): X.m<number, boolean>.(Anonymous function)<Date>.Y<string>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 11,
+          "character": 13
+        },
+        "end": {
+          "line": 11,
+          "character": 14
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  },
+  {
+    "marker": {
+      "Position": 280,
+      "LSPosition": {
+        "line": 13,
+        "character": 4
+      },
+      "Name": "8",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```typescript\nvar x: foo<void>.X.m<number, boolean>.(Anonymous function)<Date>.Y<string>\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 13,
+          "character": 4
+        },
+        "end": {
+          "line": 13,
+          "character": 5
+        }
+      },
+      "canIncreaseVerbosity": true
+    }
+  }
+]

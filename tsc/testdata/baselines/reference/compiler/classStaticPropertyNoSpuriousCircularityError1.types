@@ -1,0 +1,125 @@
+//// [tests/cases/compiler/classStaticPropertyNoSpuriousCircularityError1.ts] ////
+
+=== classStaticPropertyNoSpuriousCircularityError1.ts ===
+// https://github.com/microsoft/TypeScript/issues/59271
+// https://github.com/microsoft/TypeScript/issues/62552
+
+function id<T>(x: T): T {
+>id : <T>(x: T) => T
+>x : T
+
+  return x
+>x : T
+}
+
+const Foo = id(class {
+>Foo : typeof (Anonymous class)
+>id(class {  static readonly foo = id(42) // ok}) : typeof (Anonymous class)
+>id : <T>(x: T) => T
+>class {  static readonly foo = id(42) // ok} : typeof (Anonymous class)
+
+  static readonly foo = id(42) // ok
+>foo : 42
+>id(42) : 42
+>id : <T>(x: T) => T
+>42 : 42
+
+})
+
+Foo.foo // 42
+>Foo.foo : 42
+>Foo : typeof (Anonymous class)
+>foo : 42
+
+const Foo2 = id(class {
+>Foo2 : typeof (Anonymous class)
+>id(class {  static foo = id(42) // ok}) : typeof (Anonymous class)
+>id : <T>(x: T) => T
+>class {  static foo = id(42) // ok} : typeof (Anonymous class)
+
+  static foo = id(42) // ok
+>foo : number
+>id(42) : 42
+>id : <T>(x: T) => T
+>42 : 42
+
+})
+
+Foo2.foo // number
+>Foo2.foo : number
+>Foo2 : typeof (Anonymous class)
+>foo : number
+
+const Foo3 = id(class {
+>Foo3 : typeof (Anonymous class)
+>id(class {  static readonly foo = [42];}) : typeof (Anonymous class)
+>id : <T>(x: T) => T
+>class {  static readonly foo = [42];} : typeof (Anonymous class)
+
+  static readonly foo = [42];
+>foo : number[]
+>[42] : number[]
+>42 : 42
+
+});
+
+const Foo4 = id(
+>Foo4 : typeof A
+>id(  class A {    static foo = {};  },) : typeof A
+>id : <T>(x: T) => T
+
+  class A {
+>class A {    static foo = {};  } : typeof A
+>A : typeof A
+
+    static foo = {};
+>foo : {}
+>{} : {}
+
+  },
+);
+
+Foo4.foo // {}
+>Foo4.foo : {}
+>Foo4 : typeof A
+>foo : {}
+
+class Circular {
+>Circular : Circular
+
+  static foo = Circular.foo; // error
+>foo : any
+>Circular.foo : any
+>Circular : typeof Circular
+>foo : any
+}
+
+const Circular2 = id(class C {
+>Circular2 : typeof C
+>id(class C {  static foo = C.foo; // error}) : typeof C
+>id : <T>(x: T) => T
+>class C {  static foo = C.foo; // error} : typeof C
+>C : typeof C
+
+  static foo = C.foo; // error
+>foo : any
+>C.foo : any
+>C : typeof C
+>foo : any
+
+});
+
+const Circular3 = id(class {
+>Circular3 : typeof (Anonymous class)
+>id(class {  static foo = Circular3.foo; // error}) : typeof (Anonymous class)
+>id : <T>(x: T) => T
+>class {  static foo = Circular3.foo; // error} : typeof (Anonymous class)
+
+  static foo = Circular3.foo; // error
+>foo : any
+>Circular3.foo : any
+>Circular3 : typeof (Anonymous class)
+>foo : any
+
+});
+

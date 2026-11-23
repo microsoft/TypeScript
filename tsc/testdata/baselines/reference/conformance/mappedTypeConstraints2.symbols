@@ -316,3 +316,26 @@ function genericTest<K extends string>(objectWithUnderscoredKeys: ObjectWithUnde
 >key : Symbol(key, Decl(mappedTypeConstraints2.ts, 88, 95))
 }
 
+type M2<T> = { [K in keyof T & string as [K] extends ['a'] ? 'x' : 'y']: 1 };
+>M2 : Symbol(M2, Decl(mappedTypeConstraints2.ts, 90, 1))
+>T : Symbol(T, Decl(mappedTypeConstraints2.ts, 92, 8))
+>K : Symbol(K, Decl(mappedTypeConstraints2.ts, 92, 16))
+>T : Symbol(T, Decl(mappedTypeConstraints2.ts, 92, 8))
+>K : Symbol(K, Decl(mappedTypeConstraints2.ts, 92, 16))
+
+function bare<T>(k: keyof M2<T>): 'x' | 'y' { return k; }
+>bare : Symbol(bare, Decl(mappedTypeConstraints2.ts, 92, 77))
+>T : Symbol(T, Decl(mappedTypeConstraints2.ts, 93, 14))
+>k : Symbol(k, Decl(mappedTypeConstraints2.ts, 93, 17))
+>M2 : Symbol(M2, Decl(mappedTypeConstraints2.ts, 90, 1))
+>T : Symbol(T, Decl(mappedTypeConstraints2.ts, 93, 14))
+>k : Symbol(k, Decl(mappedTypeConstraints2.ts, 93, 17))
+
+function inTemplate<T>(k: `p${keyof M2<T>}`): 'px' | 'py' { return k; }
+>inTemplate : Symbol(inTemplate, Decl(mappedTypeConstraints2.ts, 93, 57))
+>T : Symbol(T, Decl(mappedTypeConstraints2.ts, 94, 20))
+>k : Symbol(k, Decl(mappedTypeConstraints2.ts, 94, 23))
+>M2 : Symbol(M2, Decl(mappedTypeConstraints2.ts, 90, 1))
+>T : Symbol(T, Decl(mappedTypeConstraints2.ts, 94, 20))
+>k : Symbol(k, Decl(mappedTypeConstraints2.ts, 94, 23))
+

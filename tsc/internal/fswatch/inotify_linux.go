@@ -271,6 +271,8 @@ func (b *inotifyBackend) handleEvents() error {
 		}
 		// Walk the buffer.
 		for offset := 0; offset < n; {
+			// SAFETY: read(2) on an inotify fd only returns whole, suitably aligned event records,
+			// so a full header starts at every record offset below n.
 			ev := (*unix.InotifyEvent)(unsafe.Pointer(&buf[offset]))
 			recordSize := unix.SizeofInotifyEvent + int(ev.Len)
 			var name string

@@ -1,0 +1,27 @@
+//// [tests/cases/compiler/callbackAssignedNonNull.ts] ////
+
+=== callbackAssignedNonNull.ts ===
+declare function initialize(callback: (cancel: () => void) => void): void;
+>initialize : Symbol(initialize, Decl(callbackAssignedNonNull.ts, 0, 0))
+>callback : Symbol(callback, Decl(callbackAssignedNonNull.ts, 0, 28))
+>cancel : Symbol(cancel, Decl(callbackAssignedNonNull.ts, 0, 39))
+
+function start() {
+>start : Symbol(start, Decl(callbackAssignedNonNull.ts, 0, 74))
+
+    let cancel;
+>cancel : Symbol(cancel, Decl(callbackAssignedNonNull.ts, 3, 7))
+
+    initialize(value => {
+>initialize : Symbol(initialize, Decl(callbackAssignedNonNull.ts, 0, 0))
+>value : Symbol(value, Decl(callbackAssignedNonNull.ts, 4, 15))
+
+        cancel = value;
+>cancel : Symbol(cancel, Decl(callbackAssignedNonNull.ts, 3, 7))
+>value : Symbol(value, Decl(callbackAssignedNonNull.ts, 4, 15))
+
+    });
+    cancel!();
+>cancel : Symbol(cancel, Decl(callbackAssignedNonNull.ts, 3, 7))
+}
+

@@ -17,7 +17,7 @@ import (
 type Project interface {
 	Id() string
 	GetProgram() *compiler.Program
-	HasFile(fileName string) bool
+	HasFile(fileName tspath.RootedFilePath) bool
 }
 
 type projectAndTextDocumentPosition struct {
@@ -40,7 +40,7 @@ type CrossProjectOrchestrator interface {
 	GetAllProjectsForInitialRequest() []Project
 	GetLanguageServiceForProjectWithFile(ctx context.Context, project Project, uri lsproto.DocumentUri) *LanguageService
 	GetProjectsForFile(ctx context.Context, uri lsproto.DocumentUri) ([]Project, error)
-	GetProjectsLoadingProjectTree(ctx context.Context, requestedProjectTrees *collections.Set[tspath.Path]) iter.Seq[Project]
+	GetProjectsLoadingProjectTree(ctx context.Context, requestedProjectTrees *collections.Set[tspath.PathKey]) iter.Seq[Project]
 }
 
 func (defaultLs *LanguageService) handleCrossProject[Req lsproto.HasTextDocumentPosition, Resp any](
@@ -76,7 +76,7 @@ func (defaultLs *LanguageService) handleCrossProject[Req lsproto.HasTextDocument
 		_, searched := results.Load(project.Id())
 		return !searched
 	}
-	wg := core.NewWorkGroup(false)
+	wg := core.NewWorkGroup(0)
 	var errMu sync.Mutex
 	var enqueueItem func(item projectAndTextDocumentPosition)
 	var panicsOccurred []string
@@ -231,13 +231,13 @@ func (defaultLs *LanguageService) handleCrossProject[Req lsproto.HasTextDocument
 			return resp, err
 		}
 
-		wg = core.NewWorkGroup(false)
+		wg = core.NewWorkGroup(0)
 		hasMoreWork := false
 		if defaultDefinition != nil {
-			var requestedProjectTrees collections.Set[tspath.Path]
+			var requestedProjectTrees collections.Set[tspath.PathKey]
 			results.Range(func(key string, response *response[Resp]) bool {
 				if response.complete {
-					requestedProjectTrees.Add(tspath.Path(key))
+					requestedProjectTrees.Add(tspath.PathKeyFromCanonical(key))
 				}
 				return true
 			})

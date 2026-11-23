@@ -1,0 +1,39 @@
+//// [tests/cases/compiler/simplifiedConditionalTypeWritingCache.ts] ////
+
+=== simplifiedConditionalTypeWritingCache.ts ===
+type Value<T extends { a: string; b: number }> = T["a" | "b"] extends unknown
+>Value : Symbol(Value, Decl(simplifiedConditionalTypeWritingCache.ts, 0, 0))
+>T : Symbol(T, Decl(simplifiedConditionalTypeWritingCache.ts, 0, 11))
+>a : Symbol(a, Decl(simplifiedConditionalTypeWritingCache.ts, 0, 22))
+>b : Symbol(b, Decl(simplifiedConditionalTypeWritingCache.ts, 0, 33))
+>T : Symbol(T, Decl(simplifiedConditionalTypeWritingCache.ts, 0, 11))
+
+  ? T["a" | "b"]
+>T : Symbol(T, Decl(simplifiedConditionalTypeWritingCache.ts, 0, 11))
+
+  : never;
+
+function test<T extends { a: string; b: number }>(value: Value<T>, a: T["a"]) {
+>test : Symbol(test, Decl(simplifiedConditionalTypeWritingCache.ts, 2, 10))
+>T : Symbol(T, Decl(simplifiedConditionalTypeWritingCache.ts, 4, 14))
+>a : Symbol(a, Decl(simplifiedConditionalTypeWritingCache.ts, 4, 25))
+>b : Symbol(b, Decl(simplifiedConditionalTypeWritingCache.ts, 4, 36))
+>value : Symbol(value, Decl(simplifiedConditionalTypeWritingCache.ts, 4, 50))
+>Value : Symbol(Value, Decl(simplifiedConditionalTypeWritingCache.ts, 0, 0))
+>T : Symbol(T, Decl(simplifiedConditionalTypeWritingCache.ts, 4, 14))
+>a : Symbol(a, Decl(simplifiedConditionalTypeWritingCache.ts, 4, 66))
+>T : Symbol(T, Decl(simplifiedConditionalTypeWritingCache.ts, 4, 14))
+
+  const read: T["a"] | T["b"] = value;
+>read : Symbol(read, Decl(simplifiedConditionalTypeWritingCache.ts, 5, 7))
+>T : Symbol(T, Decl(simplifiedConditionalTypeWritingCache.ts, 4, 14))
+>T : Symbol(T, Decl(simplifiedConditionalTypeWritingCache.ts, 4, 14))
+>value : Symbol(value, Decl(simplifiedConditionalTypeWritingCache.ts, 4, 50))
+
+  const write: Value<T> = a;
+>write : Symbol(write, Decl(simplifiedConditionalTypeWritingCache.ts, 6, 7))
+>Value : Symbol(Value, Decl(simplifiedConditionalTypeWritingCache.ts, 0, 0))
+>T : Symbol(T, Decl(simplifiedConditionalTypeWritingCache.ts, 4, 14))
+>a : Symbol(a, Decl(simplifiedConditionalTypeWritingCache.ts, 4, 66))
+}
+

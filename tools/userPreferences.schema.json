@@ -1,0 +1,494 @@
+{
+    "$comment": "Edit this schema and run npx hereby generate:preferences to update Go/TypeScript definitions and typed Go parsing, overlays, and serialization. All properties are optional. Go field names capitalize the first letter of the wire name; allOf groups become embedded Go structs and inherited TypeScript interfaces. Enum type names follow the field-name rule, constant names append the capitalized wire value with hyphens removed, and parsing is case-insensitive. Standard default values specify enum parsing fallbacks. Booleans use core.Tristate unless x-go-type overrides the Go representation; x-go-type also references external Go enum types. x-go-underlying preserves existing non-string enum representations, and x-accept-number allows numeric input and serialization for numeric editor settings. x-config and x-fallback-config specify editor configuration mappings, including the invert modifier. x-config-parser and x-validator name typed helpers for specialized behavior. Preference defaults and existing Go enum declarations remain in lsutil.",
+    "$defs": {
+        "CodeLensUserPreferences": {
+            "properties": {
+                "implementationsCodeLensEnabled": {
+                    "type": "boolean",
+                    "x-config": "implementationsCodeLens.enabled"
+                },
+                "implementationsCodeLensShowOnAllClassMethods": {
+                    "type": "boolean",
+                    "x-config": "implementationsCodeLens.showOnAllClassMethods"
+                },
+                "implementationsCodeLensShowOnInterfaceMethods": {
+                    "type": "boolean",
+                    "x-config": "implementationsCodeLens.showOnInterfaceMethods"
+                },
+                "referencesCodeLensEnabled": {
+                    "type": "boolean",
+                    "x-config": "referencesCodeLens.enabled"
+                },
+                "referencesCodeLensShowOnAllFunctions": {
+                    "type": "boolean",
+                    "x-config": "referencesCodeLens.showOnAllFunctions"
+                }
+            },
+            "type": "object"
+        },
+        "CompletionPreferences": {
+            "description": "CompletionPreferences contains preferences used while producing completions.",
+            "properties": {
+                "includeAutomaticOptionalChainCompletions": {
+                    "description": "Unless this option is `false`, member completion lists triggered with `.` will include entries\non potentially-null and potentially-undefined values, with insertion text to replace\npreceding `.` tokens with `?.`.",
+                    "type": "boolean",
+                    "x-config": "suggest.includeAutomaticOptionalChainCompletions"
+                },
+                "includeCompletionsForImportStatements": {
+                    "description": "Enables auto-import-style completions on partially-typed import statements. E.g., allows\n`import write|` to be completed to `import { writeResult } from \"./utils.js\"`.",
+                    "type": "boolean",
+                    "x-config": "suggest.includeCompletionsForImportStatements"
+                },
+                "includeCompletionsForModuleExports": {
+                    "description": "If enabled, TypeScript will search through all external modules' exports and add them to the completions list.\nThis affects lone identifier completions but not completions on the right hand side of `obj.`.",
+                    "type": "boolean",
+                    "x-config": "suggest.autoImports"
+                },
+                "includeCompletionsWithClassMemberSnippets": {
+                    "description": "If enabled, completions for class members (e.g. methods and properties) will include\na whole declaration for the member.",
+                    "type": "boolean",
+                    "x-config": "suggest.classMemberSnippets.enabled"
+                },
+                "includeCompletionsWithObjectLiteralMethodSnippets": {
+                    "description": "If enabled, object literal methods will have a method declaration completion entry in addition\nto the regular completion entry containing just the method name.",
+                    "type": "boolean",
+                    "x-config": "suggest.objectLiteralMethodSnippets.enabled"
+                },
+                "jsxAttributeCompletionStyle": {
+                    "enum": [
+                        "auto",
+                        "braces",
+                        "none"
+                    ],
+                    "type": "string",
+                    "x-config": "preferences.jsxAttributeCompletionStyle",
+                    "default": "auto"
+                }
+            },
+            "type": "object"
+        },
+        "EditorSettings": {
+            "properties": {
+                "baseIndentSize": {
+                    "type": "integer",
+                    "x-config": "format.baseIndentSize"
+                },
+                "convertTabsToSpaces": {
+                    "type": "boolean",
+                    "x-config": "format.convertTabsToSpaces"
+                },
+                "indentSize": {
+                    "type": "integer",
+                    "x-config": "format.indentSize"
+                },
+                "indentStyle": {
+                    "enum": [
+                        "none",
+                        "block",
+                        "smart"
+                    ],
+                    "type": "string",
+                    "x-config": "format.indentStyle",
+                    "x-go-underlying": "int",
+                    "x-accept-number": true,
+                    "default": "smart"
+                },
+                "newLineCharacter": {
+                    "type": "string",
+                    "x-config": "format.newLineCharacter"
+                },
+                "tabSize": {
+                    "type": "integer",
+                    "x-config": "format.tabSize"
+                },
+                "trimTrailingWhitespace": {
+                    "type": "boolean",
+                    "x-config": "format.trimTrailingWhitespace"
+                }
+            },
+            "type": "object"
+        },
+        "FormatCodeSettings": {
+            "allOf": [
+                {
+                    "$ref": "#/$defs/EditorSettings"
+                }
+            ],
+            "properties": {
+                "indentMultiLineObjectLiteralBeginningOnBlankLine": {
+                    "type": "boolean",
+                    "x-config": "format.indentMultiLineObjectLiteralBeginningOnBlankLine"
+                },
+                "indentSwitchCase": {
+                    "type": "boolean",
+                    "x-config": "format.indentSwitchCase"
+                },
+                "insertSpaceAfterCommaDelimiter": {
+                    "type": "boolean",
+                    "x-config": "format.insertSpaceAfterCommaDelimiter"
+                },
+                "insertSpaceAfterConstructor": {
+                    "type": "boolean",
+                    "x-config": "format.insertSpaceAfterConstructor"
+                },
+                "insertSpaceAfterFunctionKeywordForAnonymousFunctions": {
+                    "type": "boolean",
+                    "x-config": "format.insertSpaceAfterFunctionKeywordForAnonymousFunctions"
+                },
+                "insertSpaceAfterKeywordsInControlFlowStatements": {
+                    "type": "boolean",
+                    "x-config": "format.insertSpaceAfterKeywordsInControlFlowStatements"
+                },
+                "insertSpaceAfterOpeningAndBeforeClosingEmptyBraces": {
+                    "type": "boolean",
+                    "x-config": "format.insertSpaceAfterOpeningAndBeforeClosingEmptyBraces"
+                },
+                "insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces": {
+                    "type": "boolean",
+                    "x-config": "format.insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces"
+                },
+                "insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": {
+                    "type": "boolean",
+                    "x-config": "format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces"
+                },
+                "insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets": {
+                    "type": "boolean",
+                    "x-config": "format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets"
+                },
+                "insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis": {
+                    "type": "boolean",
+                    "x-config": "format.insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis"
+                },
+                "insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces": {
+                    "type": "boolean",
+                    "x-config": "format.insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces"
+                },
+                "insertSpaceAfterSemicolonInForStatements": {
+                    "type": "boolean",
+                    "x-config": "format.insertSpaceAfterSemicolonInForStatements"
+                },
+                "insertSpaceAfterTypeAssertion": {
+                    "type": "boolean",
+                    "x-config": "format.insertSpaceAfterTypeAssertion"
+                },
+                "insertSpaceBeforeAndAfterBinaryOperators": {
+                    "type": "boolean",
+                    "x-config": "format.insertSpaceBeforeAndAfterBinaryOperators"
+                },
+                "insertSpaceBeforeFunctionParenthesis": {
+                    "type": "boolean",
+                    "x-config": "format.insertSpaceBeforeFunctionParenthesis"
+                },
+                "insertSpaceBeforeTypeAnnotation": {
+                    "type": "boolean",
+                    "x-config": "format.insertSpaceBeforeTypeAnnotation"
+                },
+                "placeOpenBraceOnNewLineForControlBlocks": {
+                    "type": "boolean",
+                    "x-config": "format.placeOpenBraceOnNewLineForControlBlocks"
+                },
+                "placeOpenBraceOnNewLineForFunctions": {
+                    "type": "boolean",
+                    "x-config": "format.placeOpenBraceOnNewLineForFunctions"
+                },
+                "semicolons": {
+                    "enum": [
+                        "ignore",
+                        "insert",
+                        "remove"
+                    ],
+                    "type": "string",
+                    "x-config": "format.semicolons",
+                    "x-go-type": "SemicolonPreference",
+                    "default": "ignore"
+                }
+            },
+            "type": "object"
+        },
+        "InlayHintsPreferences": {
+            "properties": {
+                "includeInlayEnumMemberValueHints": {
+                    "type": "boolean",
+                    "x-config": "inlayHints.enumMemberValues.enabled"
+                },
+                "includeInlayFunctionLikeReturnTypeHints": {
+                    "type": "boolean",
+                    "x-config": "inlayHints.functionLikeReturnTypes.enabled"
+                },
+                "includeInlayFunctionParameterTypeHints": {
+                    "type": "boolean",
+                    "x-config": "inlayHints.parameterTypes.enabled"
+                },
+                "includeInlayParameterNameHints": {
+                    "enum": [
+                        "none",
+                        "literals",
+                        "all"
+                    ],
+                    "type": "string",
+                    "x-config": "inlayHints.parameterNames.enabled",
+                    "default": "none"
+                },
+                "includeInlayParameterNameHintsWhenArgumentMatchesName": {
+                    "type": "boolean",
+                    "x-config": "inlayHints.parameterNames.suppressWhenArgumentMatchesName,invert"
+                },
+                "includeInlayPropertyDeclarationTypeHints": {
+                    "type": "boolean",
+                    "x-config": "inlayHints.propertyDeclarationTypes.enabled"
+                },
+                "includeInlayVariableTypeHints": {
+                    "type": "boolean",
+                    "x-config": "inlayHints.variableTypes.enabled"
+                },
+                "includeInlayVariableTypeHintsWhenTypeMatchesName": {
+                    "type": "boolean",
+                    "x-config": "inlayHints.variableTypes.suppressWhenTypeMatchesName,invert"
+                }
+            },
+            "type": "object"
+        },
+        "UserPreferences": {
+            "allOf": [
+                {
+                    "$ref": "#/$defs/FormatCodeSettings"
+                },
+                {
+                    "$ref": "#/$defs/CompletionPreferences"
+                },
+                {
+                    "$ref": "#/$defs/InlayHintsPreferences"
+                },
+                {
+                    "$ref": "#/$defs/CodeLensUserPreferences"
+                }
+            ],
+            "description": "UserPreferences represents TypeScript language service preferences.",
+            "properties": {
+                "allowRenameOfImportPath": {
+                    "type": "boolean"
+                },
+                "allowTextChangesInNewFiles": {
+                    "type": "boolean"
+                },
+                "autoClosingTags": {
+                    "type": "boolean",
+                    "x-config": "autoClosingTags.enabled",
+                    "x-fallback-config": "autoClosingTags"
+                },
+                "autoImportEntrypointDirectorySearch": {
+                    "type": "boolean",
+                    "x-config": "preferences.autoImportEntrypointDirectorySearch"
+                },
+                "autoImportFileExcludePatterns": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array",
+                    "x-config": "preferences.autoImportFileExcludePatterns"
+                },
+                "autoImportSpecifierExcludeRegexes": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array",
+                    "x-config": "preferences.autoImportSpecifierExcludeRegexes"
+                },
+                "automaticTypeAcquisitionEnabled": {
+                    "description": "AutomaticTypeAcquisitionEnabled is the unified setting from tsserver.automaticTypeAcquisition.enabled under the js/ts section.\nWhen set, it takes precedence over DisableAutomaticTypeAcquisition.",
+                    "type": "boolean",
+                    "x-config": "tsserver.automaticTypeAcquisition.enabled"
+                },
+                "completeJSDocs": {
+                    "type": "boolean",
+                    "x-config": "suggest.jsdoc.enabled",
+                    "x-fallback-config": "suggest.completeJSDocs"
+                },
+                "customConfigFileName": {
+                    "description": "CustomConfigFileName specifies a custom config file name to use before defaulting to tsconfig.json/jsconfig.json.",
+                    "type": "string",
+                    "x-config": "customConfigFileName",
+                    "x-validator": "normalizeCustomConfigFileName"
+                },
+                "disableAutomaticTypeAcquisition": {
+                    "description": "DisableAutomaticTypeAcquisition is the deprecated setting from typescript.disableAutomaticTypeAcquisition.",
+                    "type": "boolean",
+                    "x-config": "disableAutomaticTypeAcquisition"
+                },
+                "disableLineTextInReferences": {
+                    "type": "boolean"
+                },
+                "disableSuggestions": {
+                    "type": "boolean"
+                },
+                "displayPartsForJSDoc": {
+                    "type": "boolean"
+                },
+                "excludeLibrarySymbolsInNavTo": {
+                    "type": "boolean",
+                    "x-config": "workspaceSymbols.excludeLibrarySymbols"
+                },
+                "formatEnabled": {
+                    "type": "boolean",
+                    "x-config": "format.enabled",
+                    "x-fallback-config": "format.enable"
+                },
+                "generateReturnInDocTemplate": {
+                    "type": "boolean",
+                    "x-config": "suggest.jsdoc.generateReturns"
+                },
+                "importModuleSpecifierEnding": {
+                    "description": "Determines whether we import `foo/index.ts` as \"foo\", \"foo/index\", or \"foo/index.js\"",
+                    "enum": [
+                        "auto",
+                        "minimal",
+                        "index",
+                        "js"
+                    ],
+                    "type": "string",
+                    "x-config": "preferences.importModuleSpecifierEnding",
+                    "x-go-type": "modulespecifiers.ImportModuleSpecifierEndingPreference",
+                    "default": "auto"
+                },
+                "importModuleSpecifierPreference": {
+                    "enum": [
+                        "shortest",
+                        "project-relative",
+                        "relative",
+                        "non-relative"
+                    ],
+                    "type": "string",
+                    "x-config": "preferences.importModuleSpecifier",
+                    "x-go-type": "modulespecifiers.ImportModuleSpecifierPreference",
+                    "default": "shortest"
+                },
+                "lazyConfiguredProjectsFromExternalProject": {
+                    "type": "boolean"
+                },
+                "locale": {
+                    "type": "string",
+                    "x-config": "locale"
+                },
+                "maximumHoverLength": {
+                    "description": "A positive integer indicating the maximum length of a hover text before it is truncated.\n\nDefault: `500`",
+                    "type": "integer"
+                },
+                "organizeImportsAccentCollation": {
+                    "description": "Indicates whether accents and other diacritic marks are considered unequal for the purpose of sorting.\n\nThis preference is ignored if organizeImportsCollation is not `unicode`.\n\nDefault: `true`",
+                    "type": "boolean",
+                    "x-config": "preferences.organizeImports.accentCollation"
+                },
+                "organizeImportsCaseFirst": {
+                    "description": "Indicates whether upper case or lower case should sort first.\n\nThis permission is ignored if:\n\t- organizeImportsCollation is not `unicode`\n\t- organizeImportsIgnoreCase is `true`\n\t- organizeImportsIgnoreCase is `auto` and the auto-detected case sensitivity is case-insensitive.\n\nDefault: `false`",
+                    "enum": [
+                        "default",
+                        "lower",
+                        "upper"
+                    ],
+                    "type": "string",
+                    "x-config": "preferences.organizeImports.caseFirst",
+                    "x-go-underlying": "int",
+                    "default": "default"
+                },
+                "organizeImportsCollation": {
+                    "description": "Indicates whether imports should be organized via an \"ordinal\" (binary) comparison using the numeric value of their\ncode points, or via \"unicode\" natural sorting. This implementation is locale-agnostic and approximates the practical\nimport-sorting behavior rather than the full Unicode Collation Algorithm.\n\nDefault: Ordinal",
+                    "enum": [
+                        "ordinal",
+                        "unicode"
+                    ],
+                    "type": "string",
+                    "x-config": "preferences.organizeImports.unicodeCollation",
+                    "x-go-underlying": "bool",
+                    "default": "ordinal"
+                },
+                "organizeImportsIgnoreCase": {
+                    "description": "Indicates whether imports should be organized in a case-insensitive manner.\n\nIf unspecified, case sensitivity is detected.",
+                    "type": "boolean",
+                    "x-config": "preferences.organizeImports.caseSensitivity",
+                    "x-config-parser": "parseOrganizeImportsCaseSensitivity"
+                },
+                "organizeImportsLocale": {
+                    "description": "Indicates the locale to use for \"unicode\" collation in legacy clients. This is accepted for compatibility, but\ncurrently ignored because organize-import sorting is deterministic and locale-agnostic.\n\nThis preference is ignored if organizeImportsCollation is not `unicode`.\n\nDefault: `\"en\"`",
+                    "type": "string",
+                    "x-config": "preferences.organizeImports.locale"
+                },
+                "organizeImportsNumericCollation": {
+                    "description": "Indicates whether numeric collation should be used for digit sequences in strings. When `true`, will collate\nstrings such that `a1z < a2z < a100z`. When `false`, will collate strings such that `a1z < a100z < a2z`.\n\nThis preference is ignored if organizeImportsCollation is not `unicode`.\n\nDefault: `false`",
+                    "type": "boolean",
+                    "x-config": "preferences.organizeImports.numericCollation"
+                },
+                "organizeImportsSort": {
+                    "description": "Indicates which deterministic preset should be used to sort imports.\n\"auto\" detects the existing ordinal case sensitivity where possible.",
+                    "enum": [
+                        "auto",
+                        "ordinal",
+                        "ordinalIgnoreCase",
+                        "natural",
+                        "naturalIgnoreCase"
+                    ],
+                    "type": "string",
+                    "x-config": "preferences.organizeImports.sort",
+                    "x-go-underlying": "int",
+                    "default": "auto"
+                },
+                "organizeImportsTypeOrder": {
+                    "description": "Indicates where named type-only imports should sort. \"inline\" sorts named imports without regard to if the import is type-only.\n\nDefault: `auto`, which defaults to `last`",
+                    "enum": [
+                        "auto",
+                        "last",
+                        "inline",
+                        "first"
+                    ],
+                    "type": "string",
+                    "x-config": "preferences.organizeImports.typeOrder",
+                    "x-go-underlying": "int",
+                    "default": "auto"
+                },
+                "preferGoToSourceDefinition": {
+                    "type": "boolean",
+                    "x-go-type": "bool"
+                },
+                "preferTypeOnlyAutoImports": {
+                    "type": "boolean",
+                    "x-config": "preferences.preferTypeOnlyAutoImports"
+                },
+                "providePrefixAndSuffixTextForRename": {
+                    "type": "boolean",
+                    "x-config": "preferences.useAliasesForRenames"
+                },
+                "provideRefactorNotApplicableReason": {
+                    "type": "boolean"
+                },
+                "quotePreference": {
+                    "enum": [
+                        "auto",
+                        "double",
+                        "single"
+                    ],
+                    "type": "string",
+                    "x-config": "preferences.quoteStyle"
+                },
+                "reportStyleChecksAsWarnings": {
+                    "type": "boolean",
+                    "x-config": "reportStyleChecksAsWarnings"
+                },
+                "validateEnabled": {
+                    "type": "boolean",
+                    "x-config": "validate.enabled",
+                    "x-fallback-config": "validate.enable"
+                },
+                "workspaceSymbolsScope": {
+                    "enum": [
+                        "allOpenProjects",
+                        "currentProject"
+                    ],
+                    "type": "string",
+                    "x-config": "workspaceSymbols.scope"
+                }
+            },
+            "type": "object"
+        }
+    },
+    "$ref": "#/$defs/UserPreferences",
+    "$schema": "https://json-schema.org/draft/2020-12/schema"
+}

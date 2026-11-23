@@ -7,7 +7,9 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/bundled"
+	"github.com/microsoft/TypeScript/tsc/internal/compiler"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/internal/json"
@@ -57,7 +59,7 @@ func TestProjectProgramUpdateKind(t *testing.T) {
 		_, err := session.GetLanguageService(context.Background(), lsproto.DocumentUri("file:///src/index.ts"))
 		assert.NilError(t, err)
 		snapshot := session.Snapshot()
-		configured := snapshot.ProjectCollection.ConfiguredProject(tspath.Path("/src/tsconfig.json"))
+		configured := snapshot.ProjectCollection.ConfiguredProject(tspath.PathKey("/src/tsconfig.json"))
 		assert.Assert(t, configured != nil)
 		assert.Equal(t, configured.ProgramUpdateKind, project.ProgramUpdateKindNewFiles)
 	})
@@ -78,9 +80,49 @@ func TestProjectProgramUpdateKind(t *testing.T) {
 		_, err = session.GetLanguageService(context.Background(), lsproto.DocumentUri("file:///src/index.ts"))
 		assert.NilError(t, err)
 		snapshot := session.Snapshot()
-		configured := snapshot.ProjectCollection.ConfiguredProject(tspath.Path("/src/tsconfig.json"))
+		configured := snapshot.ProjectCollection.ConfiguredProject(tspath.PathKey("/src/tsconfig.json"))
 		assert.Assert(t, configured != nil)
 		assert.Equal(t, configured.ProgramUpdateKind, project.ProgramUpdateKindCloned)
+	})
+
+	t.Run("Cloned on change to file with unchanged synthetic imports", func(t *testing.T) {
+		t.Parallel()
+		files := map[string]any{
+			"/src/tsconfig.json":                       `{"compilerOptions": {"module": "esnext", "moduleResolution": "bundler", "jsx": "react-jsx", "importHelpers": true, "noEmit": true}}`,
+			"/src/index.tsx":                           "export const a = <div />;",
+			"/src/node_modules/react/package.json":     `{"name": "react", "version": "1.0.0"}`,
+			"/src/node_modules/react/jsx-runtime.d.ts": "export declare function jsx(...args: any[]): any;\ndeclare global { namespace JSX { interface IntrinsicElements { [name: string]: any } } }",
+			"/src/node_modules/tslib/package.json":     `{"name": "tslib", "version": "1.0.0", "types": "tslib.d.ts"}`,
+			"/src/node_modules/tslib/tslib.d.ts":       "export {};",
+		}
+		session, _ := projecttestutil.Setup(files)
+		uri := lsproto.DocumentUri("file:///src/index.tsx")
+		session.DidOpenFile(context.Background(), uri, 1, files["/src/index.tsx"].(string), lsproto.LanguageKindTypeScriptReact)
+		_, err := session.GetLanguageService(context.Background(), uri)
+		assert.NilError(t, err)
+
+		change := func(version int32, text string) *compiler.Program {
+			session.DidChangeFile(context.Background(), uri, version, []lsproto.TextDocumentContentChangePartialOrWholeDocument{{
+				WholeDocument: &lsproto.TextDocumentContentChangeWholeDocument{Text: text},
+			}})
+			ls, lsErr := session.GetLanguageService(context.Background(), uri)
+			assert.NilError(t, lsErr)
+			return ls.GetProgram()
+		}
+		updateKind := func() project.ProgramUpdateKind {
+			return session.Snapshot().ProjectCollection.ConfiguredProject(tspath.PathKey("/src/tsconfig.json")).ProgramUpdateKind
+		}
+
+		program := change(2, "export const a = <span />;")
+		assert.Equal(t, updateKind(), project.ProgramUpdateKindCloned)
+		file := program.GetSourceFile("/src/index.tsx")
+		_, jsxSpecifier := program.GetJSXRuntimeImportSpecifier(file.PathKey())
+		assert.Equal(t, ast.GetSourceFileOfNode(jsxSpecifier), file)
+		assert.Equal(t, ast.GetSourceFileOfNode(program.GetImportHelpersImportSpecifier(file.PathKey())), file)
+		assert.Equal(t, len(program.GetSemanticDiagnostics(projecttestutil.WithRequestID(t.Context()), file)), 0)
+
+		change(3, "/** @jsxImportSource preact */\nexport const a = <span />;")
+		assert.Assert(t, updateKind() != project.ProgramUpdateKindCloned)
 	})
 
 	t.Run("compiler options update inferred project", func(t *testing.T) {
@@ -154,7 +196,7 @@ const value: Value = { mode: "require" };`,
 		assert.Equal(t, len(diags), 1)
 		assert.Equal(t, diags[0].Code(), diagnostics.Type_0_is_not_assignable_to_type_1.Code())
 
-		configured := session.Snapshot().ProjectCollection.ConfiguredProject(tspath.Path("/src/tsconfig.json"))
+		configured := session.Snapshot().ProjectCollection.ConfiguredProject(tspath.PathKey("/src/tsconfig.json"))
 		assert.Assert(t, configured != nil)
 		assert.Equal(t, configured.ProgramUpdateKind, project.ProgramUpdateKindNewFiles)
 	})
@@ -175,7 +217,7 @@ const value: Value = { mode: "require" };`,
 		_, err = session.GetLanguageService(context.Background(), lsproto.DocumentUri("file:///src/index.ts"))
 		assert.NilError(t, err)
 		snapshot := session.Snapshot()
-		configured := snapshot.ProjectCollection.ConfiguredProject(tspath.Path("/src/tsconfig.json"))
+		configured := snapshot.ProjectCollection.ConfiguredProject(tspath.PathKey("/src/tsconfig.json"))
 		assert.Assert(t, configured != nil)
 		assert.Equal(t, configured.ProgramUpdateKind, project.ProgramUpdateKindSameFileNames)
 	})
@@ -198,7 +240,7 @@ const value: Value = { mode: "require" };`,
 		_, err = session.GetLanguageService(context.Background(), lsproto.DocumentUri("file:///src/newfile.ts"))
 		assert.NilError(t, err)
 		snapshot := session.Snapshot()
-		configured := snapshot.ProjectCollection.ConfiguredProject(tspath.Path("/src/tsconfig.json"))
+		configured := snapshot.ProjectCollection.ConfiguredProject(tspath.PathKey("/src/tsconfig.json"))
 		assert.Assert(t, configured != nil)
 		assert.Equal(t, configured.ProgramUpdateKind, project.ProgramUpdateKindNewFiles)
 	})
@@ -221,7 +263,7 @@ const value: Value = { mode: "require" };`,
 		_, err = session.GetLanguageService(context.Background(), lsproto.DocumentUri("file:///src/index.ts"))
 		assert.NilError(t, err)
 		snapshot := session.Snapshot()
-		configured := snapshot.ProjectCollection.ConfiguredProject(tspath.Path("/src/tsconfig.json"))
+		configured := snapshot.ProjectCollection.ConfiguredProject(tspath.PathKey("/src/tsconfig.json"))
 		assert.Assert(t, configured != nil)
 		assert.Equal(t, configured.ProgramUpdateKind, project.ProgramUpdateKindSameFileNames)
 	})
@@ -552,7 +594,7 @@ func TestPushDiagnostics(t *testing.T) {
 		}
 		session, utils := projecttestutil.Setup(files)
 		prefs := lsutil.NewDefaultUserPreferences()
-		prefs.EnableValidation = core.TSFalse
+		prefs.ValidateEnabled = core.TSFalse
 		session.Configure(prefs)
 		session.DidOpenFile(context.Background(), "file:///src/index.ts", 1, files["/src/index.ts"].(string), lsproto.LanguageKindTypeScript)
 		_, err := session.GetLanguageService(context.Background(), lsproto.DocumentUri("file:///src/index.ts"))
@@ -587,7 +629,7 @@ func TestPushDiagnostics(t *testing.T) {
 		assert.Assert(t, len(tsconfigCalls[len(tsconfigCalls)-1].Params.Diagnostics) > 0, "expected initial diagnostics")
 
 		prefs := lsutil.NewDefaultUserPreferences()
-		prefs.EnableValidation = core.TSFalse
+		prefs.ValidateEnabled = core.TSFalse
 		session.Configure(prefs)
 		_, err = session.GetLanguageService(context.Background(), lsproto.DocumentUri("file:///src/index.ts"))
 		assert.NilError(t, err)
@@ -794,7 +836,7 @@ func TestDisplayName(t *testing.T) {
 		assert.NilError(t, err)
 
 		snapshot := session.Snapshot()
-		configured := snapshot.ProjectCollection.ConfiguredProject(tspath.Path("/home/projects/tsconfig.json"))
+		configured := snapshot.ProjectCollection.ConfiguredProject(tspath.PathKey("/home/projects/tsconfig.json"))
 		assert.Assert(t, configured != nil)
 		assert.Equal(t, configured.DisplayName("/home/projects"), "tsconfig.json")
 	})
@@ -811,7 +853,7 @@ func TestDisplayName(t *testing.T) {
 		assert.NilError(t, err)
 
 		snapshot := session.Snapshot()
-		configured := snapshot.ProjectCollection.ConfiguredProject(tspath.Path("/home/projects/sub/tsconfig.json"))
+		configured := snapshot.ProjectCollection.ConfiguredProject(tspath.PathKey("/home/projects/sub/tsconfig.json"))
 		assert.Assert(t, configured != nil)
 		assert.Equal(t, configured.DisplayName("/home/projects"), "sub/tsconfig.json")
 	})
@@ -827,7 +869,7 @@ func TestDisplayName(t *testing.T) {
 		_, err := session.GetLanguageService(context.Background(), lsproto.DocumentUri("file:///home/projects/Project/index.ts"))
 		assert.NilError(t, err)
 
-		configured := session.Snapshot().ProjectCollection.ConfiguredProject(tspath.Path("/home/projects/project/tsconfig.json"))
+		configured := session.Snapshot().ProjectCollection.ConfiguredProject(tspath.PathKey("/home/projects/project/tsconfig.json"))
 		assert.Assert(t, configured != nil)
 		assert.Equal(t, configured.DisplayName("/home/projects"), "Project/tsconfig.json")
 	})

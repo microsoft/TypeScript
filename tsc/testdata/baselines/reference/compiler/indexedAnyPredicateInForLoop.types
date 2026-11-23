@@ -1,0 +1,47 @@
+//// [tests/cases/compiler/indexedAnyPredicateInForLoop.ts] ////
+
+=== indexedAnyPredicateInForLoop.ts ===
+declare function isPrimitive(value: any): value is string | number;
+>isPrimitive : (value: any) => value is string | number
+>value : any
+
+declare function createText(text: string | undefined): object;
+>createText : (text: string | undefined) => object
+>text : string | undefined
+
+function normalize(children: any) {
+>normalize : (children: any) => void
+>children : any
+
+    for (let index = 0; index < children.length; ++index) {
+>index : number
+>0 : 0
+>index < children.length : boolean
+>index : number
+>children.length : any
+>children : any
+>length : any
+>++index : number
+>index : number
+
+        if (isPrimitive(children[index])) {
+>isPrimitive(children[index]) : boolean
+>isPrimitive : (value: any) => value is string | number
+>children[index] : any
+>children : any
+>index : number
+
+            children[index] = createText(children[index]);
+>children[index] = createText(children[index]) : object
+>children[index] : any
+>children : any
+>index : number
+>createText(children[index]) : object
+>createText : (text: string | undefined) => object
+>children[index] : any
+>children : any
+>index : number
+        }
+    }
+}
+
