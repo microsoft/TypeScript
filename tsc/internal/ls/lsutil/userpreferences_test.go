@@ -35,6 +35,7 @@ func TestUserPreferencesParsingEdgeCases(t *testing.T) {
 				"quotePreference": "SINGLE", "jsxAttributeCompletionStyle": "BRACES",
 				"organizeImportsCaseFirst": "LOWER", "includeInlayParameterNameHints": "ALL",
 				"organizeImportsTypeOrder": "FIRST", "workspaceSymbolsScope": "CURRENTPROJECT",
+				"indentStyle": "BLOCK",
 			},
 			expected: func(p *UserPreferences) {
 				p.QuotePreference = QuotePreferenceSingle
@@ -43,6 +44,7 @@ func TestUserPreferencesParsingEdgeCases(t *testing.T) {
 				p.InlayHintsPreferences.IncludeInlayParameterNameHints = IncludeInlayParameterNameHintsAll
 				p.OrganizeImportsTypeOrder = OrganizeImportsTypeOrderFirst
 				p.WorkspaceSymbolsScope = WorkspaceSymbolsScopeCurrentProject
+				p.IndentStyle = IndentStyleBlock
 			},
 		},
 		{
@@ -62,12 +64,11 @@ func TestUserPreferencesParsingEdgeCases(t *testing.T) {
 		{
 			name: "numeric conversion and array filtering",
 			config: map[string]any{
-				"maximumHoverLength": float64(9.8), "indentStyle": float64(1.7),
+				"maximumHoverLength":            float64(9.8),
 				"autoImportFileExcludePatterns": []any{"first", false, 3, "second"},
 			},
 			expected: func(p *UserPreferences) {
 				p.MaximumHoverLength = 9
-				p.IndentStyle = IndentStyleBlock
 				p.AutoImportFileExcludePatterns = []string{"first", "second"}
 			},
 		},
@@ -138,6 +139,8 @@ func getValidStringValue(t reflect.Type) string {
 		return string(IncludeInlayParameterNameHintsAll)
 	case "lsutil.SemicolonPreference":
 		return string(SemicolonPreferenceInsert)
+	case "lsutil.IndentStyle":
+		return string(IndentStyleBlock)
 	case "modulespecifiers.ImportModuleSpecifierPreference":
 		return string(modulespecifiers.ImportModuleSpecifierPreferenceRelative)
 	case "modulespecifiers.ImportModuleSpecifierEndingPreference":
@@ -172,6 +175,33 @@ func TestUserPreferencesRoundtrip(t *testing.T) {
 		parsed := UserPreferences{}.withConfig(config)
 		assert.DeepEqual(t, original, parsed)
 	})
+}
+
+func TestIndentStyleJSON(t *testing.T) {
+	t.Parallel()
+	for _, name := range []string{"none", "block", "smart"} {
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+			var prefs UserPreferences
+			assert.NilError(t, json.Unmarshal([]byte(`{"format":{"indentStyle":"`+name+`"}}`), &prefs))
+
+			encoded, err := json.Marshal(&prefs)
+			assert.NilError(t, err)
+			var config map[string]any
+			assert.NilError(t, json.Unmarshal(encoded, &config))
+			assert.Equal(t, config["format"].(map[string]any)["indentStyle"], any(name))
+
+			encoded, err = json.Marshal(&prefs.FormatCodeSettings)
+			assert.NilError(t, err)
+			var settings map[string]any
+			assert.NilError(t, json.Unmarshal(encoded, &settings))
+			assert.Equal(t, settings["indentStyle"], any(name))
+
+			var decoded FormatCodeSettings
+			assert.NilError(t, json.Unmarshal(encoded, &decoded))
+			assert.Equal(t, decoded.IndentStyle, prefs.IndentStyle)
+		})
+	}
 }
 
 func TestUserPreferencesSerialize(t *testing.T) {

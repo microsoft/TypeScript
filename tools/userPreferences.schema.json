@@ -89,8 +89,6 @@
                     ],
                     "type": "string",
                     "x-config": "format.indentStyle",
-                    "x-go-underlying": "int",
-                    "x-accept-number": true,
                     "default": "smart"
                 },
                 "newLineCharacter": {
