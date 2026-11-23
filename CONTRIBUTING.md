@@ -126,7 +126,8 @@ npx hereby build         # Build the native compiler into built/local/tsc
 npx hereby test          # Run compiler and language-service Go tests
 npx hereby test:all      # Also run benchmarks, tools, and API tests
 npx hereby test:codegen  # Run codegen tests without regenerating source outputs
-npx hereby lint          # Run custom golangci-lint for both Go modules
+npx hereby lint          # Lint both Go modules and the TypeScript package
+npx hereby lint:typescript # Lint the TypeScript package using the local compiler
 npx hereby generate:go   # Run the generators also exposed through go generate
 npx hereby generate      # Regenerate all sources, assets, localization, and vendored files
 npx hereby format        # Format Go, TypeScript, JSON, and YAML
@@ -141,6 +142,9 @@ to bypass incremental caches. `generate` includes every generator and fetches
 the pinned LSP model when its local cache is missing or stale. Use
 `generate:go` for the narrower scope of `go generate ./...` in the `tsc` module.
 Up-to-date generators emit no status messages.
+
+TypeScript linting uses the experimental native typescript-eslint project service,
+the local API build, and `built/local/tsc`. The lint tasks build these prerequisites.
 
 `npx hereby build` runs `generate` before compiling; a separate generation step
 is not needed. The API and package build tasks share this prerequisite, and

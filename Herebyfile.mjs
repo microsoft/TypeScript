@@ -1432,11 +1432,13 @@ const customLinterTool = createCachedTool({
 
 export const lint = task({
     name: "lint",
-    description: "Runs golangci-lint.",
+    description: "Runs Go and TypeScript linters.",
+    dependencies: [local, buildAPI],
     run: runLint,
 });
 
 async function runLint() {
+    await runLintTypeScript();
     const lintArgs = ["run"];
     if (defaultGoBuildTags.length) {
         lintArgs.push("--build-tags", defaultGoBuildTags.join(","));
@@ -1449,6 +1451,22 @@ async function runLint() {
     console.log("Linting tools");
     await customLinterTool.run([...lintArgs, "--config", "../.golangci.yml"], { cwd: "./tools" });
 }
+
+async function runLintTypeScript() {
+    await run("node", ["--test", "packages/typescript/eslint/lint.test.mjs"]);
+    const args = ["packages/typescript/{src,test,scripts}/**/*.ts"];
+    if (options.fix) {
+        args.push("--fix");
+    }
+    await run("eslint", args);
+}
+
+export const lintTypeScript = task({
+    name: "lint:typescript",
+    description: "Lints TypeScript package sources with the local compiler.",
+    dependencies: [local, buildAPI],
+    run: runLintTypeScript,
+});
 
 export const installTools = task({
     name: "install-tools",
@@ -1512,7 +1530,7 @@ async function fixLineEndings() {
 export const validate = task({
     name: "validate",
     description: "Generates, builds, tests, lints, and formats the repo. Pass --api to include API tests, or --all to include API and ancillary repository tests. Benchmarks are separate: test:benchmarks and test:benchmarks:api.",
-    dependencies: [build],
+    dependencies: [build, buildAPI],
     run: async () => {
         /** @type {{ name: string; error: unknown }[]} */
         const failures = [];
