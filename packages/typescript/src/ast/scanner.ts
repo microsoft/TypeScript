@@ -121,7 +121,6 @@ export const textToKeywordObj: Record<string, KeywordSyntaxKind> = {
     function: SyntaxKind.FunctionKeyword,
     get: SyntaxKind.GetKeyword,
     if: SyntaxKind.IfKeyword,
-    immediate: SyntaxKind.ImmediateKeyword,
     implements: SyntaxKind.ImplementsKeyword,
     import: SyntaxKind.ImportKeyword,
     in: SyntaxKind.InKeyword,

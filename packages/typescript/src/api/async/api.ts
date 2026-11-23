@@ -125,6 +125,7 @@ import type {
     ResolvedModule,
     ResolvedTypeReferenceDirective,
     ResolveModuleNameResult,
+    ResolveTypeReferenceDirectiveResult,
     SignaturePropertyMethod,
     SignatureResponse,
     SourceFileDescriptor,
@@ -271,6 +272,7 @@ export type {
     ResolvedModule,
     ResolvedTypeReferenceDirective,
     ResolveModuleNameResult,
+    ResolveTypeReferenceDirectiveResult,
     SourceFileMetadata,
     StaticModuleResolution,
     StringLiteralType,
@@ -529,6 +531,22 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     async getDefaultFormatCodeSettings(): Promise<FormatCodeSettings> {
         await this.ensureInitialized();
         return this.client.apiRequest("getDefaultFormatCodeSettings", null);
+    }
+
+    /** Returns configured type roots or ancestor node_modules/@types candidates, without checking directory existence. */
+    async getEffectiveTypeRoots(compilerOptions: RawCompilerOptions): Promise<readonly RootedDirectoryPath[]> {
+        await this.ensureInitialized();
+        return this.client.apiRequest("getEffectiveTypeRoots", {
+            compilerOptions: prepareCompilerOptions(compilerOptions, this.getCurrentDirectory()),
+        });
+    }
+
+    /** Returns the native build-info output path, or undefined when the options do not produce one. */
+    async getTsBuildInfoEmitOutputFilePath(compilerOptions: RawCompilerOptions): Promise<RootedFilePath | undefined> {
+        await this.ensureInitialized();
+        return (await this.client.apiRequest("getTsBuildInfoEmitOutputFilePath", {
+            compilerOptions: prepareCompilerOptions(compilerOptions, this.getCurrentDirectory()),
+        })) ?? undefined;
     }
 
     async parseConfigFile(file: DocumentIdentifier): Promise<ParsedCommandLine> {
@@ -1262,6 +1280,27 @@ export class ModuleResolver {
             resolver: this.id,
             moduleName,
             containingDirectory,
+            resolutionMode,
+        });
+    }
+
+    /** Resolves a type directive using this resolver's options and the selected snapshot or live filesystem. */
+    async resolveTypeReferenceDirective(
+        typeReferenceDirectiveName: string,
+        containingFile: DocumentIdentifier,
+        resolutionMode?: ResolutionMode,
+        options?: { snapshot?: Snapshot | InProgressSnapshot | undefined; },
+    ): Promise<ResolveTypeReferenceDirectiveResult> {
+        this.ensureNotDisposed();
+        if (options?.snapshot instanceof Snapshot && options.snapshot.isDisposed()) {
+            throw new Error("Snapshot is disposed");
+        }
+        return this.client.apiRequest("resolveTypeReferenceDirective", {
+            snapshot: options?.snapshot instanceof Snapshot ? options.snapshot.id : undefined,
+            inProgressSnapshot: typeof options?.snapshot === "number" ? -options.snapshot : undefined,
+            resolver: this.id,
+            typeReferenceDirectiveName,
+            containingFile,
             resolutionMode,
         });
     }
