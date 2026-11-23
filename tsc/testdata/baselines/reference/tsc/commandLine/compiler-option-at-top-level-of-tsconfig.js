@@ -6,7 +6,7 @@ Input::
 //// [/home/src/workspaces/project/tsconfig.json] *new* 
 { "strict": true }
 
-tsgo --pretty false
+tsc --pretty false
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 tsconfig.json(1,3): error TS6258: 'strict' should be set inside the 'compilerOptions' object of the config json file

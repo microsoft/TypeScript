@@ -548,7 +548,7 @@ export class ListType extends TypeBase {
     formatTypeScript(): string {
         const elementType = this.elementType.formatTypeScript();
         if (this.listKind === "raw") {
-            return `readonly ${elementType}[]`;
+            return `readonly ${this.elementType.kind === "union" ? `(${elementType})` : elementType}[]`;
         }
         return `NodeArray<${elementType}>`;
     }
@@ -1261,7 +1261,16 @@ export class SchemaAPI {
     }
 }
 
-export const api = new SchemaAPI(JSON.parse(
-    fs.readFileSync(path.join(ROOT, "tools/scripts/tsc/ast.json"), "utf-8"),
-) as Schema);
-api.validate();
+function readSchema(): SchemaAPI {
+    const schema = new SchemaAPI(JSON.parse(
+        fs.readFileSync(path.join(ROOT, "tools/scripts/tsc/ast.json"), "utf-8"),
+    ) as Schema);
+    schema.validate();
+    return schema;
+}
+
+export let api = readSchema();
+
+export function reloadSchema(): void {
+    api = readSchema();
+}

@@ -1,0 +1,243 @@
+//// [tests/cases/compiler/noFlakyDiagnosticsSpellingSuggestionOrder.ts] ////
+
+=== /main.ts ===
+/// <reference path="./ambient.d.ts" />
+/// <reference path="./ua.d.ts" />
+/// <reference path="./ub.d.ts" />
+/// <reference path="./uf1.d.ts" />
+/// <reference path="./uf2.d.ts" />
+/// <reference path="./uf3.d.ts" />
+/// <reference path="./uf4.d.ts" />
+/// <reference path="./uf5.d.ts" />
+/// <reference path="./uf6.d.ts" />
+/// <reference path="./uf7.d.ts" />
+/// <reference path="./uf8.d.ts" />
+/// <reference path="./uf9.d.ts" />
+/// <reference path="./uf10.d.ts" />
+declare const oxa: typeof import("xa");
+>oxa : O
+
+declare const oxb: typeof import("xb");
+>oxb : O
+
+declare function expand<X>(): { [K in keyof X]: X[K] };
+>expand : <X>() => { [K in keyof X]: X[K]; }
+
+const q = zz;
+>q : any
+>zz : any
+
+const obsA: never = expand<typeof oxa>();
+>obsA : never
+>expand<typeof oxa>() : { pb: 0; readonly mb: 1; v: 0; }
+>expand : <X>() => { [K in keyof X]: X[K]; }
+>oxa : O
+
+const obsB: never = expand<typeof oxb>();
+>obsB : never
+>expand<typeof oxb>() : { v: 0; }
+>expand : <X>() => { [K in keyof X]: X[K]; }
+>oxb : O
+
+=== /ambient.d.ts ===
+declare module "ma" {
+>"ma" : typeof import("ma")
+
+    export { v as pa } from "xa";
+>v : 0
+>pa : 0
+
+    export const ma: 1;
+>ma : 1
+}
+declare module "mb" {
+>"mb" : typeof import("mb")
+
+    export { v as pb } from "xb";
+>v : 0
+>pb : 0
+
+    export const mb: 1;
+>mb : 1
+}
+declare module "xa" {
+>"xa" : typeof import("xa")
+
+    type T = typeof import("mb");
+>T : typeof import("mb")
+
+    interface O extends T { v: 0 }
+>v : 0
+
+    const o: O;
+>o : O
+
+    export = o;
+>o : O
+}
+declare module "xb" {
+>"xb" : typeof import("xb")
+
+    type T = typeof import("ma");
+>T : typeof import("ma")
+
+    interface O extends T { v: 0 }
+>v : 0
+
+    const o: O;
+>o : O
+
+    export = o;
+>o : O
+}
+declare module "ia" {
+>"ia" : typeof import("ia")
+
+    type T = typeof import("ma");
+>T : typeof import("ma")
+
+    interface O extends T { v: 0 }
+>v : 0
+
+    const o: O;
+>o : O
+
+    export = o;
+>o : O
+}
+declare module "ib" {
+>"ib" : typeof import("ib")
+
+    type T = typeof import("mb");
+>T : typeof import("mb")
+
+    interface O extends T { v: 0 }
+>v : 0
+
+    const o: O;
+>o : O
+
+    export = o;
+>o : O
+}
+
+=== /ua.d.ts ===
+import { v } from "ia";
+>v : 0
+
+export = v;
+>v : 0
+
+export as namespace UA;
+>UA : 0
+
+=== /ub.d.ts ===
+import { v } from "ib";
+>v : 0
+
+export = v;
+>v : 0
+
+export as namespace UB;
+>UB : 0
+
+=== /uf1.d.ts ===
+declare const x: 1;
+>x : 1
+
+export = x;
+>x : 1
+
+export as namespace UF1;
+>UF1 : 1
+
+=== /uf2.d.ts ===
+declare const x: 2;
+>x : 2
+
+export = x;
+>x : 2
+
+export as namespace UF2;
+>UF2 : 2
+
+=== /uf3.d.ts ===
+declare const x: 3;
+>x : 3
+
+export = x;
+>x : 3
+
+export as namespace UF3;
+>UF3 : 3
+
+=== /uf4.d.ts ===
+declare const x: 4;
+>x : 4
+
+export = x;
+>x : 4
+
+export as namespace UF4;
+>UF4 : 4
+
+=== /uf5.d.ts ===
+declare const x: 5;
+>x : 5
+
+export = x;
+>x : 5
+
+export as namespace UF5;
+>UF5 : 5
+
+=== /uf6.d.ts ===
+declare const x: 6;
+>x : 6
+
+export = x;
+>x : 6
+
+export as namespace UF6;
+>UF6 : 6
+
+=== /uf7.d.ts ===
+declare const x: 7;
+>x : 7
+
+export = x;
+>x : 7
+
+export as namespace UF7;
+>UF7 : 7
+
+=== /uf8.d.ts ===
+declare const x: 8;
+>x : 8
+
+export = x;
+>x : 8
+
+export as namespace UF8;
+>UF8 : 8
+
+=== /uf9.d.ts ===
+declare const x: 9;
+>x : 9
+
+export = x;
+>x : 9
+
+export as namespace UF9;
+>UF9 : 9
+
+=== /uf10.d.ts ===
+declare const x: 10;
+>x : 10
+
+export = x;
+>x : 10
+
+export as namespace UF10;
+>UF10 : 10
+

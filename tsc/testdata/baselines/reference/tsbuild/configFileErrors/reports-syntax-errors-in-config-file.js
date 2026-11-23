@@ -16,7 +16,7 @@ export function bar() { }
     ]
 }
 
-tsgo --b
+tsc --b
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96mtsconfig.json[0m:[93m7[0m:[93m9[0m - [91merror[0m[90m TS1005: [0m',' expected.
@@ -150,7 +150,7 @@ Edit [0]:: reports syntax errors after change to config file
     ]
 }
 
-tsgo --b
+tsc --b
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96mtsconfig.json[0m:[93m7[0m:[93m9[0m - [91merror[0m[90m TS1005: [0m',' expected.
@@ -171,7 +171,7 @@ Edit [1]:: reports syntax errors after change to ts file
 //// [/home/src/workspaces/project/a.ts] *modified* 
 export function foo() { }export function fooBar() { }
 
-tsgo --b
+tsc --b
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96mtsconfig.json[0m:[93m7[0m:[93m9[0m - [91merror[0m[90m TS1005: [0m',' expected.
@@ -266,7 +266,7 @@ Signatures::
 
 Edit [2]:: no change
 
-tsgo --b
+tsc --b
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96mtsconfig.json[0m:[93m7[0m:[93m9[0m - [91merror[0m[90m TS1005: [0m',' expected.
@@ -295,7 +295,7 @@ Edit [3]:: builds after fixing config file errors
     ]
 }
 
-tsgo --b
+tsc --b
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *modified* 

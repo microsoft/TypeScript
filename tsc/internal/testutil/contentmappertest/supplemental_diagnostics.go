@@ -22,19 +22,16 @@ func (supplementalDiagnosticsHandler) HandleRequest(ctx context.Context, method 
 			return nil, err
 		}
 		const prefix = "missingSupplementalGlobal;\n"
-		mappings, err := spanmap.New([]spanmap.Segment{{
+		mappings := spanmap.New([]spanmap.Segment{{
 			VirtualStart: core.TextPos(len(prefix)),
 			VirtualEnd:   core.TextPos(len(prefix) + len(p.Content)),
 			OriginalEnd:  core.TextPos(len(p.Content)),
 			Kind:         spanmap.KindVerbatim,
 			Features:     spanmap.FeatureAll,
-		}}).Marshal()
-		if err != nil {
-			return nil, err
-		}
+		}}).Tuples()
 		return contentmapper.TransformResult{
 			Text: "export {};", Extension: ".ts",
-			Supplemental: []contentmapper.SupplementalOutput{{Text: prefix + p.Content, Extension: ".ts", Mappings: json.Value(mappings)}},
+			Supplemental: []contentmapper.SupplementalOutput{{Text: prefix + p.Content, Extension: ".ts", Mappings: mappings}},
 		}, nil
 	default:
 		return nil, fmt.Errorf("contentmappertest: unexpected method %q", method)

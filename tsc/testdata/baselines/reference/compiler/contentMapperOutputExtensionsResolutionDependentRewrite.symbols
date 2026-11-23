@@ -1,0 +1,90 @@
+//// [tests/cases/compiler/contentMapperOutputExtensionsResolutionDependentRewrite.ts] ////
+
+=== /generated/root.toml ===
+const __VERSION = "1.0.0";
+>__VERSION : Symbol(__VERSION, Decl(root.toml, 0, 5))
+
+export class Root {}
+>Root : Symbol(Root, Decl(root.toml, 0, 26))
+
+export interface TypeOnly {}
+>TypeOnly : Symbol(TypeOnly, Decl(root.toml, 1, 20))
+
+export function make() { return new Root(); }
+>make : Symbol(make, Decl(root.toml, 2, 28))
+>Root : Symbol(Root, Decl(root.toml, 0, 26))
+
+=== /src/suffixed.native.toml ===
+const __VERSION = "1.0.0";
+>__VERSION : Symbol(__VERSION, Decl(suffixed.native.toml, 0, 5))
+
+export const suffixed = 1;
+>suffixed : Symbol(suffixed, Decl(suffixed.native.toml, 1, 12))
+
+=== /generated/allowed/blob.toml ===
+const __VERSION = "1.0.0";
+>__VERSION : Symbol(__VERSION, Decl(blob.toml, 0, 5))
+
+export const allowed = 1;
+>allowed : Symbol(allowed, Decl(blob.toml, 1, 12))
+
+=== /generated/second/blob.part.toml ===
+const __VERSION = "1.0.0";
+>__VERSION : Symbol(__VERSION, Decl(blob.part.toml, 0, 5))
+
+export const second = 1;
+>second : Symbol(second, Decl(blob.part.toml, 1, 12))
+
+=== /generated/blob.identity ===
+const __VERSION = "1.0.0";
+>__VERSION : Symbol(__VERSION, Decl(blob.identity, 0, 5))
+
+export const identity = 1;
+>identity : Symbol(identity, Decl(blob.identity, 1, 12))
+
+=== /generated/declaration.d.toml.ts ===
+export const declaration: number;
+>declaration : Symbol(declaration, Decl(declaration.d.toml.ts, 0, 12))
+
+=== /src/main.ts ===
+import { make } from "./root.toml";
+>make : Symbol(make, Decl(main.ts, 0, 8))
+
+import type { TypeOnly } from "./root.toml";
+>TypeOnly : Symbol(TypeOnly, Decl(main.ts, 1, 13))
+
+export { suffixed } from "./suffixed.toml";
+>suffixed : Symbol(suffixed, Decl(main.ts, 2, 8))
+
+export { allowed } from "./allowed/blob.toml";
+>allowed : Symbol(allowed, Decl(main.ts, 3, 8))
+
+export { second } from "./second/blob.part.toml";
+>second : Symbol(second, Decl(main.ts, 4, 8))
+
+export { identity } from "./blob.identity";
+>identity : Symbol(identity, Decl(main.ts, 5, 8))
+
+export { declaration } from "./declaration.toml";
+>declaration : Symbol(declaration, Decl(main.ts, 6, 8))
+
+export type { TypeOnly as ExportedType } from "./root.toml";
+>TypeOnly : Symbol(TypeOnly, Decl(root.toml, 1, 20))
+>ExportedType : Symbol(ExportedType, Decl(main.ts, 7, 13))
+
+export const root = make();
+>root : Symbol(root, Decl(main.ts, 8, 12))
+>make : Symbol(make, Decl(main.ts, 0, 8))
+
+export const load = () => import("./root.toml");
+>load : Symbol(load, Decl(main.ts, 9, 12))
+>"./root.toml" : Symbol("./root.toml", Decl(root.toml, 0, 0))
+
+export type RootType = import("./root.toml").Root;
+>RootType : Symbol(RootType, Decl(main.ts, 9, 48))
+>Root : Symbol(Root, Decl(root.toml, 0, 26))
+
+export type DirectType = TypeOnly;
+>DirectType : Symbol(DirectType, Decl(main.ts, 10, 50))
+>TypeOnly : Symbol(TypeOnly, Decl(main.ts, 1, 13))
+

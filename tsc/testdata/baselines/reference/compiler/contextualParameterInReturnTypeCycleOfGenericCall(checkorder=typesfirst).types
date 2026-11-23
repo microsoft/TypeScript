@@ -1,0 +1,43 @@
+//// [tests/cases/compiler/contextualParameterInReturnTypeCycleOfGenericCall.ts] ////
+
+=== contextualParameterInReturnTypeCycleOfGenericCall.ts ===
+// Inferring `T` for `g` needs the return type of the arrow, whose body is a
+// call to `f` that is contextually typed by that same return type, a cycle.
+// `state` must still get the contextual type `number` (S inferred from
+// `initialState`), as in main and TS 6.0 (redux-toolkit `createSlice` inside
+// vitest `expect(() => ...)` pattern).
+
+declare function f<S, CR extends Record<string, (state: S) => S>>(options: {
+>f : <S, CR extends Record<string, (state: S) => S>>(options: { initialState: S; reducers: CR; }) => CR
+>state : S
+>options : { initialState: S; reducers: CR; }
+
+    initialState: S;
+>initialState : S
+
+    reducers: CR;
+>reducers : CR
+
+}): CR;
+declare function g<T>(a: T): void;
+>g : <T>(a: T) => void
+>a : T
+
+g(() => f({ reducers: { a: (state) => state + 1 }, initialState: 0 }));
+>g(() => f({ reducers: { a: (state) => state + 1 }, initialState: 0 })) : void
+>g : <T>(a: T) => void
+>() => f({ reducers: { a: (state) => state + 1 }, initialState: 0 }) : () => { a: (state: number) => number; }
+>f({ reducers: { a: (state) => state + 1 }, initialState: 0 }) : { a: (state: number) => number; }
+>f : <S, CR extends Record<string, (state: S) => S>>(options: { initialState: S; reducers: CR; }) => CR
+>{ reducers: { a: (state) => state + 1 }, initialState: 0 } : { reducers: { a: (state: number) => number; }; initialState: number; }
+>reducers : { a: (state: number) => number; }
+>{ a: (state) => state + 1 } : { a: (state: number) => number; }
+>a : (state: number) => number
+>(state) => state + 1 : (state: number) => number
+>state : number
+>state + 1 : number
+>state : number
+>1 : 1
+>initialState : number
+>0 : 0
+

@@ -111,7 +111,7 @@ func (v *View) search(searchFn func(*RegistryBucket) []*Export) []*Export {
 		exports := searchFn(bucket)
 		results = slices.Grow(results, len(exports))
 		for _, e := range exports {
-			if modulePath, ok := e.ModuleID.AsPathKey(); ok && modulePath == v.importingFile.PathKey() {
+			if e.ModuleID.IsFile(v.importingFile.PathKey()) {
 				// Don't auto-import from the importing file itself
 				continue
 			}

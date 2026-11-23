@@ -59,6 +59,7 @@ export interface APIMethodInfo {
     resolveModuleName: APIMethod<ResolveModuleNameParams, ResolveModuleNameResult>;
     parseCommandLine: APIMethod<ParseCommandLineParams, ConfigFileResponse>;
     readConfigFile: APIMethod<ReadConfigFileParams, ReadConfigFileResponse>;
+    parseConfigFileTextToJson: APIMethod<ParseConfigFileTextToJsonParams, ReadConfigFileResponse>;
     parseJsonConfigFileContent: APIMethod<ParseJsonConfigFileContentParams, ConfigFileResponse>;
     parseConfigFile: APIMethod<ParseConfigFileParams, ConfigFileResponse>;
     createSourceFile: APIMethod<CreateSourceFileParams, SourceFileResponse>;
@@ -80,6 +81,7 @@ export interface APIMethodInfo {
     getNonMissingTypeOfSymbol: APIMethod<GetTypeOfSymbolParams, TypeResponse>;
     getSourceFile: APIMethod<GetSourceFileParams, SourceFileResponse | null>;
     getSourceFileNames: APIMethod<GetSourceFileNamesParams, RootedFilePath[]>;
+    getProgramStatistics: APIMethod<GetProjectDiagnosticsParams, ProgramStatisticsResponse>;
     getSourceFileMetadata: APIMethod<GetSourceFileParams, SourceFileMetadata | null>;
     getModeForUsageLocation: APIMethod<GetModeForUsageLocationParams, ModuleKind>;
     getModeForResolutionAtIndex: APIMethod<GetModeForResolutionAtIndexParams, ModuleKind>;
@@ -123,14 +125,27 @@ export interface APIMethodInfo {
     getNameTypeOfMappedType: APIMethod<GetTypePropertyParams, TypeResponse | null>;
     getTemplateTypeOfMappedType: APIMethod<GetTypePropertyParams, TypeResponse>;
     getTypeParametersOfSignature: APIMethod<GetSignaturePropertyParams, TypeResponse[] | null>;
+    getTypeArgumentsForResolvedSignature: APIMethod<GetSignaturePropertyParams, TypeResponse[]>;
     getParametersOfSignature: APIMethod<GetSignaturePropertyParams, SymbolResponse[] | null>;
     getThisParameterOfSignature: APIMethod<GetSignaturePropertyParams, SymbolResponse | null>;
     getTargetOfSignature: APIMethod<GetSignaturePropertyParams, SignatureResponse | null>;
+    isOptionalParameter: APIMethod<CheckerNodeParams, boolean>;
+    getTypeOfAssignmentPattern: APIMethod<CheckerNodeParams, TypeResponse | null>;
+    isValidPropertyAccess: APIMethod<IsValidPropertyAccessParams, boolean>;
+    getSymbolsOfParameterPropertyDeclaration: APIMethod<CheckerNodeParams, ParameterPropertySymbolsResponse>;
     getContextualType: APIMethod<GetContextualTypeParams, TypeResponse | null>;
     getContextualTypeForArgument: APIMethod<GetContextualTypeForArgumentParams, TypeResponse | null>;
     getAwaitedType: APIMethod<CheckerTypeParams, TypeResponse | null>;
     getBaseTypeOfLiteralType: APIMethod<GetBaseTypeOfLiteralTypeParams, TypeResponse>;
     getNonNullableType: APIMethod<GetTypePropertyParams, TypeResponse>;
+    getNullableType: APIMethod<GetNullableTypeParams, TypeResponse>;
+    getStringLiteralType: APIMethod<GetStringLiteralTypeParams, TypeResponse>;
+    getNumberLiteralType: APIMethod<GetNumberLiteralTypeParams, TypeResponse>;
+    getBigIntLiteralType: APIMethod<GetBigIntLiteralTypeParams, TypeResponse>;
+    getFalseType: APIMethod<GetIntrinsicTypeParams, TypeResponse>;
+    getTrueType: APIMethod<GetIntrinsicTypeParams, TypeResponse>;
+    getJsxIntrinsicTagNamesAt: APIMethod<CheckerNodeParams, SymbolResponse[] | null>;
+    getPrivateIdentifierPropertyOfType: APIMethod<GetPrivateIdentifierPropertyOfTypeParams, SymbolResponse | null>;
     getTypeFromTypeNode: APIMethod<GetTypeFromTypeNodeParams, TypeResponse>;
     getWidenedType: APIMethod<GetWidenedTypeParams, TypeResponse>;
     getParameterType: APIMethod<GetParameterTypeParams, TypeResponse>;
@@ -142,6 +157,15 @@ export interface APIMethodInfo {
     typeToTypeNode: APIMethod<TypeToTypeNodeParams, SourceFileResponse | null>;
     signatureToSignatureDeclaration: APIMethod<SignatureToSignatureDeclarationParams, SourceFileResponse | null>;
     typeToString: APIMethod<TypeToTypeNodeParams, unknown>;
+    symbolToString: APIMethod<SymbolToStringParams, string>;
+    symbolToEntityName: APIMethod<SymbolToNodeParams, SourceFileResponse | null>;
+    symbolToExpression: APIMethod<SymbolToNodeParams, SourceFileResponse | null>;
+    symbolToParameterDeclaration: APIMethod<SymbolToDeclarationParams, SourceFileResponse | null>;
+    symbolToTypeParameterDeclarations: APIMethod<SymbolToDeclarationParams, SourceFileResponse[] | null>;
+    typeParameterToDeclaration: APIMethod<TypeToTypeNodeParams, SourceFileResponse | null>;
+    indexInfoToIndexSignatureDeclaration: APIMethod<IndexInfoToIndexSignatureDeclarationParams, SourceFileResponse | null>;
+    typePredicateToString: APIMethod<TypePredicateToStringParams, string>;
+    signatureToString: APIMethod<SignatureToStringParams, string>;
     isContextSensitive: APIMethod<GetContextualTypeParams, boolean>;
     getReturnTypeOfSignature: APIMethod<GetSignaturePropertyParams, TypeResponse>;
     getRestTypeOfSignature: APIMethod<CheckerSignatureParams, TypeResponse>;
@@ -169,6 +193,7 @@ export interface APIMethodInfo {
     getImmediateAliasedSymbol: APIMethod<CheckerSymbolParams, SymbolResponse | null>;
     getTargetSymbol: APIMethod<CheckerSymbolParams, SymbolResponse>;
     getMergedSymbol: APIMethod<CheckerSymbolParams, SymbolResponse>;
+    getRootSymbols: APIMethod<CheckerSymbolParams, SymbolResponse[]>;
     getSymbolOfNode: APIMethod<CheckerNodeParams, SymbolResponse | null>;
     getSymbolOfDeclarationForChecker: APIMethod<CheckerNodeParams, SymbolResponse | null>;
     getParentOfSymbolForChecker: APIMethod<CheckerSymbolParams, SymbolResponse | null>;
@@ -180,6 +205,9 @@ export interface APIMethodInfo {
     getDocumentationComment: APIMethod<CheckerSymbolParams, string>;
     isArrayType: APIMethod<CheckerTypeParams, boolean>;
     isReadonlySymbol: APIMethod<CheckerSymbolParams, boolean>;
+    isImplementationOfOverload: APIMethod<CheckerNodeParams, boolean>;
+    getPropertySymbolOfDestructuringAssignment: APIMethod<CheckerNodeParams, SymbolResponse | null>;
+    getAmbientModules: APIMethod<GetIntrinsicTypeParams, SymbolResponse[] | null>;
     getReferencesToSymbolInFile: APIMethod<GetReferencesToSymbolInFileParams, string[]>;
     getReferencedSymbolsForNode: APIMethod<GetReferencedSymbolsForNodeParams, ReferencedSymbolEntry[] | null>;
     getSignatureUsages: APIMethod<GetSignatureUsagesParams, SignatureUsageResponse[] | null>;
@@ -308,7 +336,9 @@ export interface CreateSnapshotParams extends SnapshotRequestChangesParams {
     /**
      * FileSystem supplies file contents and directory listings for the new snapshot.
      * A full filesystem is canonical and total. A filesystem layer is checked
-     * before falling back to the base snapshot or host filesystem.
+     * before falling back to the base snapshot or host filesystem. A snapshot
+     * filesystem overlays retained request entries from another active snapshot,
+     * then applies an optional layer or full filesystem.
      */
     fileSystem?: RequestFileSystem | undefined;
 }
@@ -421,6 +451,11 @@ export interface ReadConfigFileParams {
 export interface ReadConfigFileResponse {
     config: unknown;
     error?: DiagnosticResponse | undefined;
+}
+
+export interface ParseConfigFileTextToJsonParams {
+    fileName: string;
+    jsonText: string;
 }
 
 export interface ParseJsonConfigFileContentParams {
@@ -589,6 +624,21 @@ export interface GetSourceFileNamesParams {
     project: number;
 }
 
+/** GetProjectDiagnosticsParams are parameters for project-wide diagnostic methods. */
+export interface GetProjectDiagnosticsParams {
+    snapshot: number;
+    project: number;
+}
+
+export interface ProgramStatisticsResponse {
+    nodeCount: number;
+    identifierCount: number;
+    symbolCount: number;
+    typeCount: number;
+    instantiationCount: number;
+    relationCacheSizes: RelationCacheSizes;
+}
+
 /** SourceFileMetadata carries program-stored metadata about a single source file. */
 export interface SourceFileMetadata {
     isDefaultLibrary: boolean;
@@ -660,12 +710,6 @@ export interface GetResolvedTypeReferenceDirectiveFromReferenceParams {
     sourceFile: DocumentIdentifier;
     typeDirectiveName: string;
     resolutionMode: ModuleKind;
-}
-
-/** GetProjectDiagnosticsParams are parameters for project-wide diagnostic methods. */
-export interface GetProjectDiagnosticsParams {
-    snapshot: number;
-    project: number;
 }
 
 export interface ResolveNameParams {
@@ -769,6 +813,25 @@ export interface GetSignaturePropertyParams {
     objectId: number;
 }
 
+/** CheckerNodeParams are parameters for checker methods that operate on a node location. */
+export interface CheckerNodeParams {
+    snapshot: number;
+    project: number;
+    location: string;
+}
+
+export interface IsValidPropertyAccessParams {
+    snapshot: number;
+    project: number;
+    location: string;
+    propertyName: string;
+}
+
+export interface ParameterPropertySymbolsResponse {
+    parameter: SymbolResponse;
+    property: SymbolResponse;
+}
+
 /** GetContextualTypeParams returns the contextual type for a node. */
 export interface GetContextualTypeParams {
     snapshot: number;
@@ -797,21 +860,64 @@ export interface GetBaseTypeOfLiteralTypeParams {
     type: number;
 }
 
-/** GetTypeFromTypeNodeParams are the parameters for the getTypeFromTypeNode method. */
+export interface GetNullableTypeParams {
+    snapshot: number;
+    project: number;
+    type: number;
+    flags: number;
+}
+
+export interface GetStringLiteralTypeParams {
+    snapshot: number;
+    project: number;
+    value: string;
+}
+
+export interface GetNumberLiteralTypeParams {
+    snapshot: number;
+    project: number;
+    /**
+     * Value is a JSON number, except JSON cannot represent NaN/Infinity/-Infinity,
+     * so the client encodes those as the strings "NaN"/"+Infinity"/"-Infinity"
+     * (mirroring literalValueToJSON's response-direction encoding).
+     */
+    value: unknown;
+}
+
+/** Base10Value is the absolute value in base 10 with no leading zeros (empty for zero). */
+export interface GetBigIntLiteralTypeParams {
+    snapshot: number;
+    project: number;
+    negative?: boolean | undefined;
+    base10Value?: string | undefined;
+}
+
+/** GetIntrinsicTypeParams is used for intrinsic type getters (anyType, stringType, etc.). */
+export interface GetIntrinsicTypeParams {
+    snapshot: number;
+    project: number;
+}
+
+export interface GetPrivateIdentifierPropertyOfTypeParams {
+    snapshot: number;
+    project: number;
+    type: number;
+    name: string;
+    location: string;
+}
+
 export interface GetTypeFromTypeNodeParams {
     snapshot: number;
     project: number;
     location: string;
 }
 
-/** GetWidenedTypeParams are the parameters for the getWidenedType method. */
 export interface GetWidenedTypeParams {
     snapshot: number;
     project: number;
     type: number;
 }
 
-/** GetParameterTypeParams are the parameters for the getParameterType method. */
 export interface GetParameterTypeParams {
     snapshot: number;
     project: number;
@@ -819,14 +925,12 @@ export interface GetParameterTypeParams {
     index: number;
 }
 
-/** IsArrayLikeTypeParams checks whether a type is array-like. */
 export interface IsArrayLikeTypeParams {
     snapshot: number;
     project: number;
     type: number;
 }
 
-/** IsTypeAssignableToParams checks assignability between two types. */
 export interface IsTypeAssignableToParams {
     snapshot: number;
     project: number;
@@ -857,6 +961,62 @@ export interface SignatureToSignatureDeclarationParams {
     project: number;
     signature: number;
     kind: number;
+    location?: string | undefined;
+    flags?: number | undefined;
+}
+
+export interface SymbolToStringParams {
+    snapshot: number;
+    project: number;
+    symbol: SymbolReference;
+    location?: string | undefined;
+    meaning?: number | undefined;
+    flags?: number | undefined;
+}
+
+export interface SymbolToNodeParams {
+    snapshot: number;
+    project: number;
+    symbol: SymbolReference;
+    meaning: number;
+    location?: string | undefined;
+    flags?: number | undefined;
+}
+
+export interface SymbolToDeclarationParams {
+    snapshot: number;
+    project: number;
+    symbol: SymbolReference;
+    location?: string | undefined;
+    flags?: number | undefined;
+}
+
+export interface IndexInfoToIndexSignatureDeclarationParams {
+    snapshot: number;
+    project: number;
+    keyType: number;
+    valueType: number;
+    isReadonly?: boolean | undefined;
+    declaration?: string | undefined;
+    location?: string | undefined;
+    flags?: number | undefined;
+}
+
+export interface TypePredicateToStringParams {
+    snapshot: number;
+    project: number;
+    kind: number;
+    parameterName?: string | undefined;
+    parameterIndex?: number | undefined;
+    type?: number | undefined;
+    location?: string | undefined;
+    flags?: number | undefined;
+}
+
+export interface SignatureToStringParams {
+    snapshot: number;
+    project: number;
+    signature: number;
     location?: string | undefined;
     flags?: number | undefined;
 }
@@ -910,13 +1070,6 @@ export interface TextEdit {
     pos: number;
     end: number;
     newText: string;
-}
-
-/** CheckerNodeParams are parameters for checker methods that operate on a node location. */
-export interface CheckerNodeParams {
-    snapshot: number;
-    project: number;
-    location: string;
 }
 
 export interface ConstantValueResponse {
@@ -1058,6 +1211,7 @@ export interface PrintNodeParams {
     preserveSourceNewlines?: boolean | undefined;
     neverAsciiEscape?: boolean | undefined;
     terminateUnterminatedLiterals?: boolean | undefined;
+    emitNodes?: Record<number, PrintEmitNode | null> | undefined;
 }
 
 export interface EmitParams {
@@ -1087,12 +1241,6 @@ export interface SelectedFilesEmitParams {
     snapshot: number;
     project: number;
     files: readonly DocumentIdentifier[] | null;
-}
-
-/** GetIntrinsicTypeParams is used for intrinsic type getters (anyType, stringType, etc.). */
-export interface GetIntrinsicTypeParams {
-    snapshot: number;
-    project: number;
 }
 
 /**
@@ -1167,6 +1315,7 @@ export interface BatchRequest {
         | "getAliasSymbolOfType"
         | "getAliasTypeArgumentsOfType"
         | "getAliasedSymbol"
+        | "getAmbientModules"
         | "getAnyType"
         | "getApparentPropertiesOfType"
         | "getApparentType"
@@ -1175,6 +1324,7 @@ export interface BatchRequest {
         | "getBaseTypeOfLiteralType"
         | "getBaseTypeOfType"
         | "getBaseTypes"
+        | "getBigIntLiteralType"
         | "getBigIntType"
         | "getBindDiagnostics"
         | "getBooleanType"
@@ -1204,6 +1354,7 @@ export interface BatchRequest {
         | "getExportsOfModule"
         | "getExportsOfSymbol"
         | "getExtendsTypeOfType"
+        | "getFalseType"
         | "getFalseTypeOfConditionalType"
         | "getFreshTypeOfType"
         | "getFullyQualifiedName"
@@ -1215,6 +1366,7 @@ export interface BatchRequest {
         | "getIndexTypeOfType"
         | "getJavaScriptEmit"
         | "getJsDocTags"
+        | "getJsxIntrinsicTagNamesAt"
         | "getLocalTypeParametersOfType"
         | "getMemberInModuleExports"
         | "getMembersOfSymbol"
@@ -1227,6 +1379,8 @@ export interface BatchRequest {
         | "getNonNullableType"
         | "getNonPrimitiveType"
         | "getNullType"
+        | "getNullableType"
+        | "getNumberLiteralType"
         | "getNumberType"
         | "getObjectTypeOfType"
         | "getOuterTypeParametersOfType"
@@ -1234,9 +1388,12 @@ export interface BatchRequest {
         | "getParametersOfSignature"
         | "getParentOfSymbol"
         | "getParentOfSymbolForChecker"
+        | "getPrivateIdentifierPropertyOfType"
         | "getProgramDiagnostics"
+        | "getProgramStatistics"
         | "getPropertiesOfType"
         | "getPropertyOfType"
+        | "getPropertySymbolOfDestructuringAssignment"
         | "getReducedType"
         | "getReferencedSymbolsForNode"
         | "getReferencesToSymbolInFile"
@@ -1248,6 +1405,7 @@ export interface BatchRequest {
         | "getResolvedTypeReferenceDirectiveFromTypeReferenceDirective"
         | "getRestTypeOfSignature"
         | "getReturnTypeOfSignature"
+        | "getRootSymbols"
         | "getSemanticDiagnostics"
         | "getShorthandAssignmentValueSymbol"
         | "getSignatureFromDeclaration"
@@ -1256,6 +1414,7 @@ export interface BatchRequest {
         | "getSourceFile"
         | "getSourceFileMetadata"
         | "getSourceFileNames"
+        | "getStringLiteralType"
         | "getStringType"
         | "getSuggestionDiagnostics"
         | "getSymbolAtLocation"
@@ -1268,6 +1427,7 @@ export interface BatchRequest {
         | "getSymbolsAtLocations"
         | "getSymbolsAtPositions"
         | "getSymbolsInScope"
+        | "getSymbolsOfParameterPropertyDeclaration"
         | "getSymbolsOfSourceFiles"
         | "getSyntacticDiagnostics"
         | "getTargetOfSignature"
@@ -1276,12 +1436,15 @@ export interface BatchRequest {
         | "getTemplateTypeOfMappedType"
         | "getThisParameterOfSignature"
         | "getThisTypeOfType"
+        | "getTrueType"
         | "getTrueTypeOfConditionalType"
         | "getTypeArguments"
+        | "getTypeArgumentsForResolvedSignature"
         | "getTypeAtLocation"
         | "getTypeAtLocations"
         | "getTypeAtPosition"
         | "getTypeFromTypeNode"
+        | "getTypeOfAssignmentPattern"
         | "getTypeOfPropertyOfType"
         | "getTypeOfSymbol"
         | "getTypeOfSymbolAtLocation"
@@ -1299,14 +1462,19 @@ export interface BatchRequest {
         | "getWellKnownSignatures"
         | "getWellKnownSymbols"
         | "getWidenedType"
+        | "indexInfoToIndexSignatureDeclaration"
         | "initialize"
         | "isArrayLikeType"
         | "isArrayType"
         | "isContextSensitive"
+        | "isImplementationOfOverload"
+        | "isOptionalParameter"
         | "isReadonlySymbol"
         | "isTypeAssignableTo"
+        | "isValidPropertyAccess"
         | "parseCommandLine"
         | "parseConfigFile"
+        | "parseConfigFileTextToJson"
         | "parseJsonConfigFileContent"
         | "printNode"
         | "readConfigFile"
@@ -1318,12 +1486,20 @@ export interface BatchRequest {
         | "retainSourceFile"
         | "saveHeapProfile"
         | "signatureToSignatureDeclaration"
+        | "signatureToString"
         | "startCPUProfile"
         | "stopCPUProfile"
+        | "symbolToEntityName"
+        | "symbolToExpression"
+        | "symbolToParameterDeclaration"
+        | "symbolToString"
+        | "symbolToTypeParameterDeclarations"
         | "transpileDeclaration"
         | "transpileDeclarationFromFile"
         | "transpileModule"
         | "transpileModuleFromFile"
+        | "typeParameterToDeclaration"
+        | "typePredicateToString"
         | "typeToString"
         | "typeToTypeNode"
         | "updateSnapshot";
@@ -1349,6 +1525,7 @@ export interface BatchResponse {
         | "getAliasSymbolOfType"
         | "getAliasTypeArgumentsOfType"
         | "getAliasedSymbol"
+        | "getAmbientModules"
         | "getAnyType"
         | "getApparentPropertiesOfType"
         | "getApparentType"
@@ -1357,6 +1534,7 @@ export interface BatchResponse {
         | "getBaseTypeOfLiteralType"
         | "getBaseTypeOfType"
         | "getBaseTypes"
+        | "getBigIntLiteralType"
         | "getBigIntType"
         | "getBindDiagnostics"
         | "getBooleanType"
@@ -1386,6 +1564,7 @@ export interface BatchResponse {
         | "getExportsOfModule"
         | "getExportsOfSymbol"
         | "getExtendsTypeOfType"
+        | "getFalseType"
         | "getFalseTypeOfConditionalType"
         | "getFreshTypeOfType"
         | "getFullyQualifiedName"
@@ -1397,6 +1576,7 @@ export interface BatchResponse {
         | "getIndexTypeOfType"
         | "getJavaScriptEmit"
         | "getJsDocTags"
+        | "getJsxIntrinsicTagNamesAt"
         | "getLocalTypeParametersOfType"
         | "getMemberInModuleExports"
         | "getMembersOfSymbol"
@@ -1409,6 +1589,8 @@ export interface BatchResponse {
         | "getNonNullableType"
         | "getNonPrimitiveType"
         | "getNullType"
+        | "getNullableType"
+        | "getNumberLiteralType"
         | "getNumberType"
         | "getObjectTypeOfType"
         | "getOuterTypeParametersOfType"
@@ -1416,9 +1598,12 @@ export interface BatchResponse {
         | "getParametersOfSignature"
         | "getParentOfSymbol"
         | "getParentOfSymbolForChecker"
+        | "getPrivateIdentifierPropertyOfType"
         | "getProgramDiagnostics"
+        | "getProgramStatistics"
         | "getPropertiesOfType"
         | "getPropertyOfType"
+        | "getPropertySymbolOfDestructuringAssignment"
         | "getReducedType"
         | "getReferencedSymbolsForNode"
         | "getReferencesToSymbolInFile"
@@ -1430,6 +1615,7 @@ export interface BatchResponse {
         | "getResolvedTypeReferenceDirectiveFromTypeReferenceDirective"
         | "getRestTypeOfSignature"
         | "getReturnTypeOfSignature"
+        | "getRootSymbols"
         | "getSemanticDiagnostics"
         | "getShorthandAssignmentValueSymbol"
         | "getSignatureFromDeclaration"
@@ -1438,6 +1624,7 @@ export interface BatchResponse {
         | "getSourceFile"
         | "getSourceFileMetadata"
         | "getSourceFileNames"
+        | "getStringLiteralType"
         | "getStringType"
         | "getSuggestionDiagnostics"
         | "getSymbolAtLocation"
@@ -1450,6 +1637,7 @@ export interface BatchResponse {
         | "getSymbolsAtLocations"
         | "getSymbolsAtPositions"
         | "getSymbolsInScope"
+        | "getSymbolsOfParameterPropertyDeclaration"
         | "getSymbolsOfSourceFiles"
         | "getSyntacticDiagnostics"
         | "getTargetOfSignature"
@@ -1458,12 +1646,15 @@ export interface BatchResponse {
         | "getTemplateTypeOfMappedType"
         | "getThisParameterOfSignature"
         | "getThisTypeOfType"
+        | "getTrueType"
         | "getTrueTypeOfConditionalType"
         | "getTypeArguments"
+        | "getTypeArgumentsForResolvedSignature"
         | "getTypeAtLocation"
         | "getTypeAtLocations"
         | "getTypeAtPosition"
         | "getTypeFromTypeNode"
+        | "getTypeOfAssignmentPattern"
         | "getTypeOfPropertyOfType"
         | "getTypeOfSymbol"
         | "getTypeOfSymbolAtLocation"
@@ -1481,14 +1672,19 @@ export interface BatchResponse {
         | "getWellKnownSignatures"
         | "getWellKnownSymbols"
         | "getWidenedType"
+        | "indexInfoToIndexSignatureDeclaration"
         | "initialize"
         | "isArrayLikeType"
         | "isArrayType"
         | "isContextSensitive"
+        | "isImplementationOfOverload"
+        | "isOptionalParameter"
         | "isReadonlySymbol"
         | "isTypeAssignableTo"
+        | "isValidPropertyAccess"
         | "parseCommandLine"
         | "parseConfigFile"
+        | "parseConfigFileTextToJson"
         | "parseJsonConfigFileContent"
         | "printNode"
         | "readConfigFile"
@@ -1500,12 +1696,20 @@ export interface BatchResponse {
         | "retainSourceFile"
         | "saveHeapProfile"
         | "signatureToSignatureDeclaration"
+        | "signatureToString"
         | "startCPUProfile"
         | "stopCPUProfile"
+        | "symbolToEntityName"
+        | "symbolToExpression"
+        | "symbolToParameterDeclaration"
+        | "symbolToString"
+        | "symbolToTypeParameterDeclarations"
         | "transpileDeclaration"
         | "transpileDeclarationFromFile"
         | "transpileModule"
         | "transpileModuleFromFile"
+        | "typeParameterToDeclaration"
+        | "typePredicateToString"
         | "typeToString"
         | "typeToTypeNode"
         | "updateSnapshot";
@@ -1570,7 +1774,11 @@ export interface FileNotifications {
  * for a request that creates a snapshot.
  */
 export interface RequestFileSystem {
-    kind: "full" | "layer";
+    kind: "full" | "layer" | "snapshot";
+    /** Snapshot identifies the retained snapshot supplying request entries for KindSnapshot. */
+    snapshot?: number | undefined;
+    /** FileSystem is an optional layer or full filesystem applied on top of KindSnapshot. */
+    fileSystem?: RequestFileSystem | undefined;
     /** Files maps file names to their complete contents. */
     files: Record<string, string>;
     /**
@@ -1663,6 +1871,13 @@ export interface TranspileOptions {
     reportDiagnostics?: boolean | undefined;
 }
 
+export interface RelationCacheSizes {
+    assignable: number;
+    identity: number;
+    subtype: number;
+    strictSubtype: number;
+}
+
 export interface PackageId {
     name: string;
     subModuleName: string;
@@ -1696,6 +1911,16 @@ export interface DiagnosticPositionResponse {
 export interface DiagnosticSourceLineResponse {
     line: number;
     text: string;
+}
+
+/**
+ * PrintEmitNode carries the EmitFlags and synthetic comments a client attaches to a
+ * specific node (by index) via EmitContext before printing.
+ */
+export interface PrintEmitNode {
+    emitFlags?: number | undefined;
+    leadingComments?: PrintSynthesizedComment[] | undefined;
+    trailingComments?: PrintSynthesizedComment[] | undefined;
 }
 
 export interface EmitOutputFile {
@@ -1770,6 +1995,14 @@ export interface ModuleResolutionEntry {
 export interface CompletionEntryLabelDetailsResponse {
     detail?: string | undefined;
     description?: string | undefined;
+}
+
+/** PrintSynthesizedComment is a synthetic comment attached to a node via EmitContext */
+export interface PrintSynthesizedComment {
+    kind: number;
+    text: string;
+    hasTrailingNewLine?: boolean | undefined;
+    hasLeadingNewLine?: boolean | undefined;
 }
 
 export interface CreateProgramOptions {
@@ -1866,6 +2099,7 @@ export interface RawCompilerOptions {
     resolvePackageJsonExports?: boolean | undefined;
     resolvePackageJsonImports?: boolean | undefined;
     removeComments?: boolean | undefined;
+    disableDynamicImportExtensionRewriting?: boolean | undefined;
     rewriteRelativeImportExtensions?: boolean | undefined;
     reactNamespace?: string | undefined;
     rootDir?: string | undefined;

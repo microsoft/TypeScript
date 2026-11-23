@@ -1,0 +1,88 @@
+//// [tests/cases/compiler/sharedMemberLayoutGenericBase2.ts] ////
+
+=== sharedMemberLayoutGenericBase2.ts ===
+declare function queryOptions<U>(): Omit<{
+>queryOptions : Symbol(queryOptions, Decl(sharedMemberLayoutGenericBase2.ts, 0, 0))
+>U : Symbol(U, Decl(sharedMemberLayoutGenericBase2.ts, 0, 30))
+>Omit : Symbol(Omit, Decl(lib.es5.d.ts, --, --))
+
+    queryKey: string;
+>queryKey : Symbol(queryKey, Decl(sharedMemberLayoutGenericBase2.ts, 0, 42))
+
+    queryFn: () => { slug: string };
+>queryFn : Symbol(queryFn, Decl(sharedMemberLayoutGenericBase2.ts, 1, 21))
+>slug : Symbol(slug, Decl(sharedMemberLayoutGenericBase2.ts, 2, 20))
+
+}, keyof U>;
+>U : Symbol(U, Decl(sharedMemberLayoutGenericBase2.ts, 0, 30))
+
+// Keep the call before the interface declarations.
+const resume = ensureQueryData(queryOptions());
+>resume : Symbol(resume, Decl(sharedMemberLayoutGenericBase2.ts, 6, 5))
+>ensureQueryData : Symbol(ensureQueryData, Decl(sharedMemberLayoutGenericBase2.ts, 19, 38))
+>queryOptions : Symbol(queryOptions, Decl(sharedMemberLayoutGenericBase2.ts, 0, 0))
+
+resume.slug;
+>resume.slug : Symbol(slug, Decl(sharedMemberLayoutGenericBase2.ts, 2, 20))
+>resume : Symbol(resume, Decl(sharedMemberLayoutGenericBase2.ts, 6, 5))
+>slug : Symbol(slug, Decl(sharedMemberLayoutGenericBase2.ts, 2, 20))
+
+interface QueryOptions<T, K> {
+>QueryOptions : Symbol(QueryOptions, Decl(sharedMemberLayoutGenericBase2.ts, 7, 12))
+>T : Symbol(T, Decl(sharedMemberLayoutGenericBase2.ts, 9, 23))
+>K : Symbol(K, Decl(sharedMemberLayoutGenericBase2.ts, 9, 25))
+
+    queryKey?: K;
+>queryKey : Symbol(QueryOptions.queryKey, Decl(sharedMemberLayoutGenericBase2.ts, 9, 30))
+>K : Symbol(K, Decl(sharedMemberLayoutGenericBase2.ts, 9, 25))
+
+    queryFn?: () => T;
+>queryFn : Symbol(QueryOptions.queryFn, Decl(sharedMemberLayoutGenericBase2.ts, 10, 17))
+>T : Symbol(T, Decl(sharedMemberLayoutGenericBase2.ts, 9, 23))
+}
+type WithRequired<T> = T & { queryKey: {} };
+>WithRequired : Symbol(WithRequired, Decl(sharedMemberLayoutGenericBase2.ts, 12, 1))
+>T : Symbol(T, Decl(sharedMemberLayoutGenericBase2.ts, 13, 18))
+>T : Symbol(T, Decl(sharedMemberLayoutGenericBase2.ts, 13, 18))
+>queryKey : Symbol(queryKey, Decl(sharedMemberLayoutGenericBase2.ts, 13, 28))
+
+interface FetchQueryOptions<T, K>
+>FetchQueryOptions : Symbol(FetchQueryOptions, Decl(sharedMemberLayoutGenericBase2.ts, 13, 44))
+>T : Symbol(T, Decl(sharedMemberLayoutGenericBase2.ts, 14, 28))
+>K : Symbol(K, Decl(sharedMemberLayoutGenericBase2.ts, 14, 30))
+
+    extends WithRequired<QueryOptions<T, K>> {
+>WithRequired : Symbol(WithRequired, Decl(sharedMemberLayoutGenericBase2.ts, 12, 1))
+>QueryOptions : Symbol(QueryOptions, Decl(sharedMemberLayoutGenericBase2.ts, 7, 12))
+>T : Symbol(T, Decl(sharedMemberLayoutGenericBase2.ts, 14, 28))
+>K : Symbol(K, Decl(sharedMemberLayoutGenericBase2.ts, 14, 30))
+
+    initialPageParam?: never;
+>initialPageParam : Symbol(FetchQueryOptions.initialPageParam, Decl(sharedMemberLayoutGenericBase2.ts, 15, 46))
+}
+interface EnsureQueryDataOptions<T, K>
+>EnsureQueryDataOptions : Symbol(EnsureQueryDataOptions, Decl(sharedMemberLayoutGenericBase2.ts, 17, 1))
+>T : Symbol(T, Decl(sharedMemberLayoutGenericBase2.ts, 18, 33))
+>K : Symbol(K, Decl(sharedMemberLayoutGenericBase2.ts, 18, 35))
+
+    extends FetchQueryOptions<T, K> {}
+>FetchQueryOptions : Symbol(FetchQueryOptions, Decl(sharedMemberLayoutGenericBase2.ts, 13, 44))
+>T : Symbol(T, Decl(sharedMemberLayoutGenericBase2.ts, 18, 33))
+>K : Symbol(K, Decl(sharedMemberLayoutGenericBase2.ts, 18, 35))
+
+declare function ensureQueryData<T, K>(
+>ensureQueryData : Symbol(ensureQueryData, Decl(sharedMemberLayoutGenericBase2.ts, 19, 38))
+>T : Symbol(T, Decl(sharedMemberLayoutGenericBase2.ts, 21, 33))
+>K : Symbol(K, Decl(sharedMemberLayoutGenericBase2.ts, 21, 35))
+
+    options: EnsureQueryDataOptions<T, K>
+>options : Symbol(options, Decl(sharedMemberLayoutGenericBase2.ts, 21, 39))
+>EnsureQueryDataOptions : Symbol(EnsureQueryDataOptions, Decl(sharedMemberLayoutGenericBase2.ts, 17, 1))
+>T : Symbol(T, Decl(sharedMemberLayoutGenericBase2.ts, 21, 33))
+>K : Symbol(K, Decl(sharedMemberLayoutGenericBase2.ts, 21, 35))
+
+): T;
+>T : Symbol(T, Decl(sharedMemberLayoutGenericBase2.ts, 21, 33))
+
+export {};
+

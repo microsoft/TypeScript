@@ -1,0 +1,55 @@
+//// [tests/cases/compiler/nestedCallContextualTypeCheckOrderJsx.tsx] ////
+
+=== nestedCallContextualTypeCheckOrderJsx.tsx ===
+// A generic call in a JSX attribute is resolved after the element, whichever
+// is queried first.
+
+declare namespace JSX {
+    interface Element {}
+    interface IntrinsicElements {}
+}
+declare function Outer<T>(props: { cb: (x: T) => void; v: T }): JSX.Element;
+>Outer : <T>(props: { cb: (x: T) => void; v: T; }) => JSX.Element
+>props : { cb: (x: T) => void; v: T; }
+>cb : (x: T) => void
+>x : T
+>v : T
+>JSX : any
+
+declare function wrap<U>(f: U): U;
+>wrap : <U>(f: U) => U
+>f : U
+
+const a = <Outer cb={wrap((x) => x.toFixed())} v={1} />;
+>a : JSX.Element
+><Outer cb={wrap((x) => x.toFixed())} v={1} /> : JSX.Element
+>Outer : <T>(props: { cb: (x: T) => void; v: T; }) => JSX.Element
+>cb : (x: never) => never
+>wrap((x) => x.toFixed()) : (x: never) => never
+>wrap : <U>(f: U) => U
+>(x) => x.toFixed() : (x: never) => never
+>x : never
+>x.toFixed() : never
+>x.toFixed : never
+>x : never
+>toFixed : never
+>v : number
+>1 : 1
+
+const b = <Outer {...{ cb: wrap((x) => x.toFixed()) }} v={1} />;
+>b : JSX.Element
+><Outer {...{ cb: wrap((x) => x.toFixed()) }} v={1} /> : JSX.Element
+>Outer : <T>(props: { cb: (x: T) => void; v: T; }) => JSX.Element
+>{ cb: wrap((x) => x.toFixed()) } : { cb: (x: never) => never; }
+>cb : (x: never) => never
+>wrap((x) => x.toFixed()) : (x: never) => never
+>wrap : <U>(f: U) => U
+>(x) => x.toFixed() : (x: never) => never
+>x : never
+>x.toFixed() : never
+>x.toFixed : never
+>x : never
+>toFixed : never
+>v : number
+>1 : 1
+

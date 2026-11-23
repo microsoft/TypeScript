@@ -98,3 +98,321 @@ export function local(): Recursive {
 >inner : Symbol(inner, Decl(annotatedLocal.ts, 4, 9))
 }
 
+=== recursiveMappedResolve.ts ===
+// https://github.com/microsoft/TypeScript/issues/64656
+type show<t> = { [k in keyof t]: t[k] } & unknown;
+>show : Symbol(show, Decl(recursiveMappedResolve.ts, 0, 0))
+>t : Symbol(t, Decl(recursiveMappedResolve.ts, 1, 10))
+>k : Symbol(k, Decl(recursiveMappedResolve.ts, 1, 18))
+>t : Symbol(t, Decl(recursiveMappedResolve.ts, 1, 10))
+>t : Symbol(t, Decl(recursiveMappedResolve.ts, 1, 10))
+>k : Symbol(k, Decl(recursiveMappedResolve.ts, 1, 18))
+
+type resolve<$, k extends keyof $> = show<{
+>resolve : Symbol(resolve, Decl(recursiveMappedResolve.ts, 1, 50))
+>$ : Symbol($, Decl(recursiveMappedResolve.ts, 2, 13))
+>k : Symbol(k, Decl(recursiveMappedResolve.ts, 2, 15))
+>$ : Symbol($, Decl(recursiveMappedResolve.ts, 2, 13))
+>show : Symbol(show, Decl(recursiveMappedResolve.ts, 0, 0))
+
+    [p in keyof $[k]]: $[k][p] extends "ref" ? resolve<$, k> : $[k][p]
+>p : Symbol(p, Decl(recursiveMappedResolve.ts, 3, 5))
+>$ : Symbol($, Decl(recursiveMappedResolve.ts, 2, 13))
+>k : Symbol(k, Decl(recursiveMappedResolve.ts, 2, 15))
+>$ : Symbol($, Decl(recursiveMappedResolve.ts, 2, 13))
+>k : Symbol(k, Decl(recursiveMappedResolve.ts, 2, 15))
+>p : Symbol(p, Decl(recursiveMappedResolve.ts, 3, 5))
+>resolve : Symbol(resolve, Decl(recursiveMappedResolve.ts, 1, 50))
+>$ : Symbol($, Decl(recursiveMappedResolve.ts, 2, 13))
+>k : Symbol(k, Decl(recursiveMappedResolve.ts, 2, 15))
+>$ : Symbol($, Decl(recursiveMappedResolve.ts, 2, 13))
+>k : Symbol(k, Decl(recursiveMappedResolve.ts, 2, 15))
+>p : Symbol(p, Decl(recursiveMappedResolve.ts, 3, 5))
+
+}>;
+declare const mod: <$>() => { [k in keyof $]: resolve<$, k> };
+>mod : Symbol(mod, Decl(recursiveMappedResolve.ts, 5, 13))
+>$ : Symbol($, Decl(recursiveMappedResolve.ts, 5, 20))
+>k : Symbol(k, Decl(recursiveMappedResolve.ts, 5, 31))
+>$ : Symbol($, Decl(recursiveMappedResolve.ts, 5, 20))
+>resolve : Symbol(resolve, Decl(recursiveMappedResolve.ts, 1, 50))
+>$ : Symbol($, Decl(recursiveMappedResolve.ts, 5, 20))
+>k : Symbol(k, Decl(recursiveMappedResolve.ts, 5, 31))
+
+export const n = mod<{ Node: { value: number; next: "ref" } }>();
+>n : Symbol(n, Decl(recursiveMappedResolve.ts, 6, 12))
+>mod : Symbol(mod, Decl(recursiveMappedResolve.ts, 5, 13))
+>Node : Symbol(Node, Decl(recursiveMappedResolve.ts, 6, 22))
+>value : Symbol(value, Decl(recursiveMappedResolve.ts, 6, 30))
+>next : Symbol(next, Decl(recursiveMappedResolve.ts, 6, 45))
+
+=== yieldableErrors.ts ===
+// https://github.com/microsoft/TypeScript/issues/64656
+export interface Effect<A, E> {
+>Effect : Symbol(Effect, Decl(yieldableErrors.ts, 0, 0))
+>A : Symbol(A, Decl(yieldableErrors.ts, 1, 24))
+>E : Symbol(E, Decl(yieldableErrors.ts, 1, 26))
+
+    readonly variance: (_: never) => E;
+>variance : Symbol(Effect.variance, Decl(yieldableErrors.ts, 1, 31))
+>_ : Symbol(_, Decl(yieldableErrors.ts, 2, 24))
+>E : Symbol(E, Decl(yieldableErrors.ts, 1, 26))
+}
+export declare function YieldableError<Self>(): new () => Effect<never, Self> & { readonly _tag: string };
+>YieldableError : Symbol(YieldableError, Decl(yieldableErrors.ts, 3, 1))
+>Self : Symbol(Self, Decl(yieldableErrors.ts, 4, 39))
+>Effect : Symbol(Effect, Decl(yieldableErrors.ts, 0, 0))
+>Self : Symbol(Self, Decl(yieldableErrors.ts, 4, 39))
+>_tag : Symbol(_tag, Decl(yieldableErrors.ts, 4, 81))
+
+class NotFound extends YieldableError<NotFound>() {}
+>NotFound : Symbol(NotFound, Decl(yieldableErrors.ts, 4, 106))
+>YieldableError : Symbol(YieldableError, Decl(yieldableErrors.ts, 3, 1))
+>NotFound : Symbol(NotFound, Decl(yieldableErrors.ts, 4, 106))
+
+export const endpoint = { error: NotFound };
+>endpoint : Symbol(endpoint, Decl(yieldableErrors.ts, 6, 12))
+>error : Symbol(error, Decl(yieldableErrors.ts, 6, 25))
+>NotFound : Symbol(NotFound, Decl(yieldableErrors.ts, 4, 106))
+
+=== yieldableClient.ts ===
+import { endpoint } from "./yieldableErrors";
+>endpoint : Symbol(endpoint, Decl(yieldableClient.ts, 0, 8))
+
+declare function client<T>(t: T): { readonly call: () => T };
+>client : Symbol(client, Decl(yieldableClient.ts, 0, 45))
+>T : Symbol(T, Decl(yieldableClient.ts, 1, 24))
+>t : Symbol(t, Decl(yieldableClient.ts, 1, 27))
+>T : Symbol(T, Decl(yieldableClient.ts, 1, 24))
+>call : Symbol(call, Decl(yieldableClient.ts, 1, 35))
+>T : Symbol(T, Decl(yieldableClient.ts, 1, 24))
+
+export const api = client(endpoint);
+>api : Symbol(api, Decl(yieldableClient.ts, 2, 12))
+>client : Symbol(client, Decl(yieldableClient.ts, 0, 45))
+>endpoint : Symbol(endpoint, Decl(yieldableClient.ts, 0, 8))
+
+=== selfGetter.ts ===
+// https://github.com/microsoft/TypeScript/issues/65331
+export const x = {
+>x : Symbol(x, Decl(selfGetter.ts, 1, 12))
+
+    data: 1,
+>data : Symbol(data, Decl(selfGetter.ts, 1, 18))
+
+    get self() {
+>self : Symbol(self, Decl(selfGetter.ts, 2, 12))
+
+        return x;
+>x : Symbol(x, Decl(selfGetter.ts, 1, 12))
+
+    },
+};
+
+=== deepMapped.ts ===
+// https://github.com/kestra-io/kestra/pull/22375
+type Deep<T> = T extends object ? { [K in keyof T]: Deep<T[K]> } : T;
+>Deep : Symbol(Deep, Decl(deepMapped.ts, 0, 0))
+>T : Symbol(T, Decl(deepMapped.ts, 1, 10))
+>T : Symbol(T, Decl(deepMapped.ts, 1, 10))
+>K : Symbol(K, Decl(deepMapped.ts, 1, 37))
+>T : Symbol(T, Decl(deepMapped.ts, 1, 10))
+>Deep : Symbol(Deep, Decl(deepMapped.ts, 0, 0))
+>T : Symbol(T, Decl(deepMapped.ts, 1, 10))
+>K : Symbol(K, Decl(deepMapped.ts, 1, 37))
+>T : Symbol(T, Decl(deepMapped.ts, 1, 10))
+
+declare function wrap<T>(value: T): { value: Deep<T> };
+>wrap : Symbol(wrap, Decl(deepMapped.ts, 1, 69))
+>T : Symbol(T, Decl(deepMapped.ts, 2, 22))
+>value : Symbol(value, Decl(deepMapped.ts, 2, 25))
+>T : Symbol(T, Decl(deepMapped.ts, 2, 22))
+>value : Symbol(value, Decl(deepMapped.ts, 2, 37))
+>Deep : Symbol(Deep, Decl(deepMapped.ts, 0, 0))
+>T : Symbol(T, Decl(deepMapped.ts, 2, 22))
+
+export type Node = { child?: Node };
+>Node : Symbol(Node, Decl(deepMapped.ts, 2, 55))
+>child : Symbol(child, Decl(deepMapped.ts, 3, 20))
+>Node : Symbol(Node, Decl(deepMapped.ts, 2, 55))
+
+export function make() {
+>make : Symbol(make, Decl(deepMapped.ts, 3, 36))
+
+    return wrap<Node>({});
+>wrap : Symbol(wrap, Decl(deepMapped.ts, 1, 69))
+>Node : Symbol(Node, Decl(deepMapped.ts, 2, 55))
+}
+
+=== mappable.ts ===
+// https://github.com/ddd-ts/monorepo/pull/98
+declare function map<T, U>(iterable: AsyncIterable<T>, fn: (value: T) => U): AsyncGenerator<Awaited<U>, void, unknown>;
+>map : Symbol(map, Decl(mappable.ts, 0, 0))
+>T : Symbol(T, Decl(mappable.ts, 1, 21))
+>U : Symbol(U, Decl(mappable.ts, 1, 23))
+>iterable : Symbol(iterable, Decl(mappable.ts, 1, 27))
+>AsyncIterable : Symbol(AsyncIterable, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>T : Symbol(T, Decl(mappable.ts, 1, 21))
+>fn : Symbol(fn, Decl(mappable.ts, 1, 54))
+>value : Symbol(value, Decl(mappable.ts, 1, 60))
+>T : Symbol(T, Decl(mappable.ts, 1, 21))
+>U : Symbol(U, Decl(mappable.ts, 1, 23))
+>AsyncGenerator : Symbol(AsyncGenerator, Decl(lib.es2018.asyncgenerator.d.ts, --, --))
+>Awaited : Symbol(Awaited, Decl(lib.es5.d.ts, --, --))
+>U : Symbol(U, Decl(mappable.ts, 1, 23))
+
+export function mappable<T extends AsyncIterable<any>, U>(iterable: T) {
+>mappable : Symbol(mappable, Decl(mappable.ts, 1, 119))
+>T : Symbol(T, Decl(mappable.ts, 2, 25))
+>AsyncIterable : Symbol(AsyncIterable, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>U : Symbol(U, Decl(mappable.ts, 2, 54))
+>iterable : Symbol(iterable, Decl(mappable.ts, 2, 58))
+>T : Symbol(T, Decl(mappable.ts, 2, 25))
+
+    return Object.assign(iterable, {
+>Object.assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>iterable : Symbol(iterable, Decl(mappable.ts, 2, 58))
+
+        map(fn: (value: T extends AsyncIterable<infer V> ? V : never) => U) {
+>map : Symbol(map, Decl(mappable.ts, 3, 36))
+>fn : Symbol(fn, Decl(mappable.ts, 4, 12))
+>value : Symbol(value, Decl(mappable.ts, 4, 17))
+>T : Symbol(T, Decl(mappable.ts, 2, 25))
+>AsyncIterable : Symbol(AsyncIterable, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>V : Symbol(V, Decl(mappable.ts, 4, 53))
+>V : Symbol(V, Decl(mappable.ts, 4, 53))
+>U : Symbol(U, Decl(mappable.ts, 2, 54))
+
+            return mappable(map(iterable, fn));
+>mappable : Symbol(mappable, Decl(mappable.ts, 1, 119))
+>map : Symbol(map, Decl(mappable.ts, 0, 0))
+>iterable : Symbol(iterable, Decl(mappable.ts, 2, 58))
+>fn : Symbol(fn, Decl(mappable.ts, 4, 12))
+
+        },
+    });
+}
+
+=== either.ts ===
+// https://github.com/ddd-ts/monorepo/pull/98
+export const Either = <Inline>() => {
+>Either : Symbol(Either, Decl(either.ts, 1, 12))
+>Inline : Symbol(Inline, Decl(either.ts, 1, 23))
+
+    class $Either {
+>$Either : Symbol($Either, Decl(either.ts, 1, 37))
+
+        constructor(public value: Inline) {}
+>value : Symbol($Either.value, Decl(either.ts, 3, 20))
+>Inline : Symbol(Inline, Decl(either.ts, 1, 23))
+
+        static deserialize<T extends typeof $Either>(this: T, value: Inline): InstanceType<T> {
+>deserialize : Symbol($Either.deserialize, Decl(either.ts, 3, 44))
+>T : Symbol(T, Decl(either.ts, 4, 27))
+>$Either : Symbol($Either, Decl(either.ts, 1, 37))
+>this : Symbol(this, Decl(either.ts, 4, 53))
+>T : Symbol(T, Decl(either.ts, 4, 27))
+>value : Symbol(value, Decl(either.ts, 4, 61))
+>Inline : Symbol(Inline, Decl(either.ts, 1, 23))
+>InstanceType : Symbol(InstanceType, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(either.ts, 4, 27))
+
+            return new this(this.$deserialize(value)) as InstanceType<T>;
+>this : Symbol(this, Decl(either.ts, 4, 53))
+>this.$deserialize : Symbol($Either.$deserialize, Decl(either.ts, 6, 9))
+>this : Symbol(this, Decl(either.ts, 4, 53))
+>$deserialize : Symbol($Either.$deserialize, Decl(either.ts, 6, 9))
+>value : Symbol(value, Decl(either.ts, 4, 61))
+>InstanceType : Symbol(InstanceType, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(either.ts, 4, 27))
+        }
+        static $deserialize<T extends typeof $Either>(this: T, value: Inline): Inline {
+>$deserialize : Symbol($Either.$deserialize, Decl(either.ts, 6, 9))
+>T : Symbol(T, Decl(either.ts, 7, 28))
+>$Either : Symbol($Either, Decl(either.ts, 1, 37))
+>this : Symbol(this, Decl(either.ts, 7, 54))
+>T : Symbol(T, Decl(either.ts, 7, 28))
+>value : Symbol(value, Decl(either.ts, 7, 62))
+>Inline : Symbol(Inline, Decl(either.ts, 1, 23))
+>Inline : Symbol(Inline, Decl(either.ts, 1, 23))
+
+            return value;
+>value : Symbol(value, Decl(either.ts, 7, 62))
+        }
+    }
+    return $Either;
+>$Either : Symbol($Either, Decl(either.ts, 1, 37))
+
+};
+export class StringOrNumber extends Either<string | number>() {}
+>StringOrNumber : Symbol(StringOrNumber, Decl(either.ts, 12, 2))
+>Either : Symbol(Either, Decl(either.ts, 1, 12))
+
+=== expand.ts ===
+// https://github.com/ddd-ts/monorepo/pull/98
+type Expand<T> = T extends { serialize(): any }
+>Expand : Symbol(Expand, Decl(expand.ts, 0, 0))
+>T : Symbol(T, Decl(expand.ts, 1, 12))
+>T : Symbol(T, Decl(expand.ts, 1, 12))
+>serialize : Symbol(serialize, Decl(expand.ts, 1, 28))
+
+    ? T
+>T : Symbol(T, Decl(expand.ts, 1, 12))
+
+    : T extends Date
+>T : Symbol(T, Decl(expand.ts, 1, 12))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 1 more)
+
+        ? T
+>T : Symbol(T, Decl(expand.ts, 1, 12))
+
+        : T extends Record<string, any>
+>T : Symbol(T, Decl(expand.ts, 1, 12))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+            ? { [key in keyof T]: Expand<T[key]> }
+>key : Symbol(key, Decl(expand.ts, 6, 17))
+>T : Symbol(T, Decl(expand.ts, 1, 12))
+>Expand : Symbol(Expand, Decl(expand.ts, 0, 0))
+>T : Symbol(T, Decl(expand.ts, 1, 12))
+>key : Symbol(key, Decl(expand.ts, 6, 17))
+
+            : T;
+>T : Symbol(T, Decl(expand.ts, 1, 12))
+
+interface TreeNode {
+>TreeNode : Symbol(TreeNode, Decl(expand.ts, 7, 16))
+
+    name: string;
+>name : Symbol(TreeNode.name, Decl(expand.ts, 8, 20))
+
+    children?: TreeNode[];
+>children : Symbol(TreeNode.children, Decl(expand.ts, 9, 17))
+>TreeNode : Symbol(TreeNode, Decl(expand.ts, 7, 16))
+}
+declare function Dict<S>(): {
+>Dict : Symbol(Dict, Decl(expand.ts, 11, 1))
+>S : Symbol(S, Decl(expand.ts, 12, 22))
+
+    new (value: S): { serialize(): Expand<S> };
+>value : Symbol(value, Decl(expand.ts, 13, 9))
+>S : Symbol(S, Decl(expand.ts, 12, 22))
+>serialize : Symbol(serialize, Decl(expand.ts, 13, 21))
+>Expand : Symbol(Expand, Decl(expand.ts, 0, 0))
+>S : Symbol(S, Decl(expand.ts, 12, 22))
+
+    deserialize(value: Expand<S>): S;
+>deserialize : Symbol(deserialize, Decl(expand.ts, 13, 47))
+>value : Symbol(value, Decl(expand.ts, 14, 16))
+>Expand : Symbol(Expand, Decl(expand.ts, 0, 0))
+>S : Symbol(S, Decl(expand.ts, 12, 22))
+>S : Symbol(S, Decl(expand.ts, 12, 22))
+
+};
+export class Tree extends Dict<TreeNode>() {}
+>Tree : Symbol(Tree, Decl(expand.ts, 15, 2))
+>Dict : Symbol(Dict, Decl(expand.ts, 11, 1))
+>TreeNode : Symbol(TreeNode, Decl(expand.ts, 7, 16))
+

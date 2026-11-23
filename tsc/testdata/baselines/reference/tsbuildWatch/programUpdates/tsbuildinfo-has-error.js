@@ -8,7 +8,7 @@ export const x = 10;
 //// [/user/username/projects/project/tsconfig.tsbuildinfo] *new* 
 Some random string
 
-tsgo --b -i -w
+tsc --b -i -w
 ExitStatus:: Success
 Output::
 [2J[3J[H[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...

@@ -1,0 +1,42 @@
+signatureHelpForCallInLoopCheckOrder.ts(18,13): error TS7022: 'tmp' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+signatureHelpForCallInLoopCheckOrder.ts(18,31): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type 'XMLNode | undefined' is not assignable to parameter of type 'XMLNode'.
+      Type 'undefined' is not assignable to type 'XMLNode'.
+
+
+==== signatureHelpForCallInLoopCheckOrder.ts (2 errors) ====
+    // The type of tmp depends on the type of cur in the loop, which depends on
+    // tmp. Signature help for the call analyzes the loop with the arguments
+    // typed so far, and the type it finds at the loop does not outlive the
+    // request (49529).
+    
+    interface XMLNode {}
+    
+    declare function accessArray(node: XMLNode, createIfNotExists: true): XMLNode;
+    declare function accessArray(node: XMLNode, createIfNotExists: boolean): XMLNode | undefined;
+    declare function accessCatalogEntry(createIfNotExists: boolean): XMLNode | undefined;
+    
+    function accessFieldValue(createIfNotExists: boolean): XMLNode | undefined {
+        let cur = accessCatalogEntry(createIfNotExists);
+        if (!cur) {
+            return undefined;
+        }
+        for (let i = 0; i < 5; ++i) {
+            let tmp = accessArray(cur, createIfNotExists);
+                ~~~
+!!! error TS7022: 'tmp' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+                                  ~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   The last overload gave the following error.
+!!! error TS2769:     Argument of type 'XMLNode | undefined' is not assignable to parameter of type 'XMLNode'.
+!!! error TS2769:       Type 'undefined' is not assignable to type 'XMLNode'.
+!!! related TS2771 signatureHelpForCallInLoopCheckOrder.ts:9:18: The last overload is declared here.
+            if (!tmp) {
+                return undefined;
+            }
+            cur = tmp;
+        }
+        return cur;
+    }
+    

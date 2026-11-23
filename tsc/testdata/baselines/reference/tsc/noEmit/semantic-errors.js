@@ -11,7 +11,7 @@ const a: number = "hello"
     }
 }
 
-tsgo --noEmit
+tsc --noEmit
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96ma.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
@@ -50,7 +50,7 @@ declare const console: { log(msg: any): void; };
 
 Edit [0]:: no change
 
-tsgo --noEmit
+tsc --noEmit
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96ma.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
@@ -68,7 +68,7 @@ Edit [1]:: Fix error
 //// [/home/src/projects/project/a.ts] *modified* 
 const a = "hello";
 
-tsgo --noEmit
+tsc --noEmit
 ExitStatus:: Success
 Output::
 
@@ -76,7 +76,7 @@ Output::
 
 Edit [2]:: no change
 
-tsgo --noEmit
+tsc --noEmit
 ExitStatus:: Success
 Output::
 
@@ -84,7 +84,7 @@ Output::
 
 Edit [3]:: Emit after fixing error
 
-tsgo 
+tsc 
 ExitStatus:: Success
 Output::
 //// [/home/src/projects/project/a.js] *new* 
@@ -96,7 +96,7 @@ const a = "hello";
 
 Edit [4]:: no change
 
-tsgo --noEmit
+tsc --noEmit
 ExitStatus:: Success
 Output::
 
@@ -106,7 +106,7 @@ Edit [5]:: Introduce error
 //// [/home/src/projects/project/a.ts] *modified* 
 const a: number = "hello"
 
-tsgo --noEmit
+tsc --noEmit
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96ma.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
@@ -122,7 +122,7 @@ Found 1 error in a.ts[90m:1[0m
 
 Edit [6]:: Emit when error
 
-tsgo 
+tsc 
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96ma.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
@@ -139,7 +139,7 @@ Found 1 error in a.ts[90m:1[0m
 
 Edit [7]:: no change
 
-tsgo --noEmit
+tsc --noEmit
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96ma.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.

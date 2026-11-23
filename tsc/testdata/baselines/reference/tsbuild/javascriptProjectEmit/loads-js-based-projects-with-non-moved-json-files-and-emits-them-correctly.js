@@ -78,7 +78,7 @@ export const m = mod;
     "include": [],
 }
 
-tsgo -b
+tsc -b
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96mcommon/index.ts[0m:[93m1[0m:[93m1[0m - [91merror[0m[90m TS1202: [0mImport assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.

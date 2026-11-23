@@ -15,7 +15,6 @@ declare module "./file1" {
 }
 
 // @filename: file3.ts
-// @filename: file3.ts
 import x = require("./file1");
 import "./file2";
 let a: x.A; // should not work

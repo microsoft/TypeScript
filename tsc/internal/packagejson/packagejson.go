@@ -115,6 +115,7 @@ type Fields struct {
 }
 
 type ContentMapperFields struct {
+	Extensions       Expected[[]string]          `json:"extensions"`
 	Exec             Expected[[]string]          `json:"exec"`
 	CompilerOptions  Expected[[]string]          `json:"compilerOptions"`
 	DynamicConfig    Expected[bool]              `json:"dynamicConfig"`

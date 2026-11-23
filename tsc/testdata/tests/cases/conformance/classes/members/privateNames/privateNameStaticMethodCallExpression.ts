@@ -21,6 +21,15 @@ class AA {
         AA.getClass().#method2(0, ...arr, 3); 
         const b2 = new (AA.getClass().#method2)(0, ...arr, 3); //Error 
         const str2 = AA.getClass().#method2`head${1}middle${2}tail`;
+
+        (AA.#method)();
+        AA.#method!();
+        (AA.#method as () => void)();
+        (AA.#method satisfies () => void)();
+        (AA.#method)?.();
+        AA.#method!?.();
+        (AA.getClass().#method2)(0, ...arr, 3);
+        (AA.#method2)`test${1}and${2}`;
     }
     static getClass() { return AA; }
 }

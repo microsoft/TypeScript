@@ -75,7 +75,7 @@ func NewNodeFactory(hooks NodeFactoryHooks) *NodeFactory {
 
 func newNode(kind Kind, n *Node, hooks NodeFactoryHooks) *Node {
 	n.Loc = core.UndefinedTextRange()
-	n.Kind = kind
+	n.Kind = kind //nolint:customlint
 	if hooks.OnCreate != nil {
 		hooks.OnCreate(n)
 	}
@@ -174,9 +174,10 @@ func (list *ModifierList) Clone(f *NodeFactory) *ModifierList {
 
 // Every concrete AST node embeds Node at offset zero. Kind identifies the
 // enclosing allocation, which generated accessors recover without a data pointer.
+// Kind is set only by newNode; the protectedfield lint rejects other writes.
 
 type Node struct {
-	Kind   Kind
+	Kind   Kind `customlint:"protected"`
 	Flags  NodeFlags
 	Loc    core.TextRange
 	id     atomic.Uint64
@@ -337,7 +338,7 @@ func (n *Node) Expression() *Node {
 	case KindSwitchStatement:
 		return n.AsSwitchStatement().Expression
 	case KindCaseClause:
-		return n.AsCaseOrDefaultClause().Expression
+		return n.AsCaseClause().Expression
 	case KindExpressionStatement:
 		return n.AsExpressionStatement().Expression
 	case KindReturnStatement:
@@ -426,7 +427,7 @@ func (m *MutableNode) SetExpression(expr *Node) {
 	case KindSwitchStatement:
 		n.AsSwitchStatement().Expression = expr
 	case KindCaseClause:
-		n.AsCaseOrDefaultClause().Expression = expr
+		n.AsCaseClause().Expression = expr
 	case KindExpressionStatement:
 		n.AsExpressionStatement().Expression = expr
 	case KindReturnStatement:
@@ -562,7 +563,7 @@ func (n *Node) StatementList() *NodeList {
 	case KindModuleBlock:
 		return n.AsModuleBlock().Statements
 	case KindCaseClause, KindDefaultClause:
-		return n.AsCaseOrDefaultClause().Statements
+		return n.CaseOrDefaultClauseData().Statements
 	}
 	panic("Unhandled case in Node.StatementList: " + n.Kind.String())
 }
@@ -1149,6 +1150,8 @@ func (n *Node) AsFlowSwitchClauseData() *FlowSwitchClauseData {
 	if n.Kind != kindFlowSwitchClauseData {
 		panic("Invalid node cast to FlowSwitchClauseData")
 	}
+	// SAFETY: Only NewFlowSwitchClauseData assigns this kind, to the Node header embedded at
+	// offset zero of a FlowSwitchClauseData.
 	return (*FlowSwitchClauseData)(unsafe.Pointer(n))
 }
 
@@ -1156,6 +1159,8 @@ func (n *Node) AsFlowReduceLabelData() *FlowReduceLabelData {
 	if n.Kind != kindFlowReduceLabelData {
 		panic("Invalid node cast to FlowReduceLabelData")
 	}
+	// SAFETY: Only NewFlowReduceLabelData assigns this kind, to the Node header embedded at
+	// offset zero of a FlowReduceLabelData.
 	return (*FlowReduceLabelData)(unsafe.Pointer(n))
 }
 
@@ -1468,6 +1473,10 @@ func (node *FunctionLikeBase) FunctionLikeData() *FunctionLikeBase { return node
 // BodyBase
 
 func (node *BodyBase) BodyData() *BodyBase { return node }
+
+func (node *CaseOrDefaultClauseBase) CaseOrDefaultClauseData() *CaseOrDefaultClauseBase {
+	return node
+}
 
 // FunctionLikeWithBodyBase
 
@@ -2709,7 +2718,7 @@ func (node *SourceFile) ForEachChild(v Visitor) bool {
 }
 
 func (node *SourceFile) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateSourceFile(node, v.visitTopLevelStatements(node.Statements), v.visitToken(node.EndOfFileToken))
+	return v.Factory.UpdateSourceFile(node, requiredChild(node.Statements, v.visitTopLevelStatements(node.Statements)), requiredChild(node.EndOfFileToken, v.visitToken(node.EndOfFileToken)))
 }
 
 func (node *SourceFile) IsJS() bool {
@@ -3104,7 +3113,7 @@ func forEachChild_JSDocParameterOrPropertyTag(node *JSDocParameterOrPropertyTag,
 }
 
 func visitEachChild_JSDocParameterOrPropertyTag(node *JSDocParameterOrPropertyTag, v *NodeVisitor) *Node {
-	return v.Factory.UpdateJSDocParameterOrPropertyTag(node, v.visitNode(node.TagName), v.visitNode(node.name), node.IsBracketed, v.visitNode(node.TypeExpression), node.IsNameFirst, v.visitNodes(node.Comment))
+	return v.Factory.UpdateJSDocParameterOrPropertyTag(node, requiredChild(node.TagName, v.visitNode(node.TagName)), requiredChild(node.name, v.visitNode(node.name)), node.IsBracketed, v.visitNode(node.TypeExpression), node.IsNameFirst, v.visitNodes(node.Comment))
 }
 
 func (f *NodeFactory) ReleaseArenas() {

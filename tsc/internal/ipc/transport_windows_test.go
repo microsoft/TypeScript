@@ -15,7 +15,7 @@ import (
 func TestPipeTransportPermissions(t *testing.T) {
 	t.Parallel()
 
-	transport, err := NewPrivatePipeTransport(fmt.Sprintf("tsgo-api-test-%d", os.Getpid()))
+	transport, err := NewPrivatePipeTransport(fmt.Sprintf("typescript-api-test-%d", os.Getpid()))
 	if err != nil {
 		t.Fatal(err)
 	}

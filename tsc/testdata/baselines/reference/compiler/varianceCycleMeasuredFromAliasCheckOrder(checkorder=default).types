@@ -1,0 +1,55 @@
+//// [tests/cases/compiler/varianceCycleMeasuredFromAliasCheckOrder.ts] ////
+
+=== varianceCycleMeasuredFromAliasCheckOrder.ts ===
+// Settings, Hover and Renderer refer to each other. Relating two
+// instantiations of Hover measures the variances of the cycle starting
+// from Hover, and whether a Renderer<NodeAttrs> is a Renderer must not
+// depend on whether the types were requested before (64635).
+
+type Attrs = { [name: string]: any };
+>Attrs : Attrs
+>name : string
+
+interface Settings<N extends Attrs = Attrs, E extends Attrs = Attrs> {
+    hover: Hover<N, E>;
+>hover : Hover<N, E>
+
+    reducer: (data: N) => void;
+>reducer : (data: N) => void
+>data : N
+
+    program: (renderer: Renderer<N, E>) => void;
+>program : (renderer: Renderer<N, E>) => void
+>renderer : Renderer<N, E>
+}
+interface Renderer<N extends Attrs = Attrs, E extends Attrs = Attrs> {
+    getSettings(): Settings<N, E>;
+>getSettings : () => Settings<N, E>
+}
+type Hover<N extends Attrs = Attrs, E extends Attrs = Attrs> = (settings: Settings<N, E>) => void;
+>Hover : Hover<N, E>
+>settings : Settings<N, E>
+
+type NodeAttrs = { x: number };
+>NodeAttrs : NodeAttrs
+>x : number
+
+declare const hover: Hover<NodeAttrs>;
+>hover : Hover<NodeAttrs, Attrs>
+
+const h: Hover<NodeAttrs, {}> = hover;
+>h : Hover<NodeAttrs, {}>
+>hover : Hover<NodeAttrs, Attrs>
+
+declare function fit(renderer: Renderer): void;
+>fit : (renderer: Renderer) => void
+>renderer : Renderer<Attrs, Attrs>
+
+declare const renderer: Renderer<NodeAttrs>;
+>renderer : Renderer<NodeAttrs, Attrs>
+
+fit(renderer);
+>fit(renderer) : void
+>fit : (renderer: Renderer) => void
+>renderer : Renderer<NodeAttrs, Attrs>
+

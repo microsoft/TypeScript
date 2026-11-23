@@ -1,0 +1,18 @@
+closureNarrowingAssignmentInClassExtends.ts(5,27): error TS2339: Property 'length' does not exist on type 'string | number'.
+  Property 'length' does not exist on type 'number'.
+
+
+==== closureNarrowingAssignmentInClassExtends.ts (1 errors) ====
+    declare class Base {}
+    
+    function f(x: string | number) {
+        if (typeof x === "string") {
+            const g = () => x.length;
+                              ~~~~~~
+!!! error TS2339: Property 'length' does not exist on type 'string | number'.
+!!! error TS2339:   Property 'length' does not exist on type 'number'.
+            class C extends (x = 1, Base) {}
+            return g;
+        }
+    }
+    

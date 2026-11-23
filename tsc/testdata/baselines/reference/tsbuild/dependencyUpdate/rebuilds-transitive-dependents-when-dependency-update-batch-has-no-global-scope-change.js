@@ -46,7 +46,7 @@ export type { Kind } from "dep-a";
     "include": ["src/**/*"]
 }
 
-tsgo --b --verbose
+tsc --b --verbose
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -254,7 +254,7 @@ Edit [0]:: update dep-a with a breaking type change
 //// [/home/src/workspaces/project/node_modules/dep-a/index.d.ts] *modified* 
 export type Kind = "a" | "b" | "c";
 
-tsgo --b --verbose
+tsc --b --verbose
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 

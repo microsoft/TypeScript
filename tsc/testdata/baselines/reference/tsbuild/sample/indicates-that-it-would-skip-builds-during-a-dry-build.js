@@ -60,7 +60,7 @@ export const m = mod;
     },
 }
 
-tsgo --b tests
+tsc --b tests
 ExitStatus:: Success
 Output::
 //// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
@@ -415,7 +415,7 @@ Signatures::
 
 Edit [0]:: --dry
 
-tsgo --b tests --dry
+tsc --b tests --dry
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Project '/user/username/projects/sample1/core/tsconfig.json' is up to date

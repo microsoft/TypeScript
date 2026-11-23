@@ -27,7 +27,7 @@ test("", async function () {
 //// [/home/src/workspaces/project/tsconfig.json] *new* 
 {"compilerOptions": {"allowJs": true, "composite": true}}
 
-tsgo --noEmit
+tsc --noEmit
 ExitStatus:: Success
 Output::
 //// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*

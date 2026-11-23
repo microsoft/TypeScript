@@ -16,7 +16,7 @@ export const b = 2;
 //// [/user/username/projects/project/tsconfig.json] *new* 
 {"compilerOptions":{"composite":true,"outDir":"dist"},"files":["src/a.ts","src/b.ts"]}
 
-tsgo --b -v
+tsc --b -v
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 

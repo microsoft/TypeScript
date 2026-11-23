@@ -60,7 +60,7 @@ export const m = mod;
     },
 }
 
-tsgo --b tests --verbose
+tsc --b tests --verbose
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -437,7 +437,7 @@ export function leftPad(s: string, n: number) { return s + n; }
 export function multiply(a: number, b: number) { return a * b; }
 export class someClass { }
 
-tsgo --b tests --verbose
+tsc --b tests --verbose
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -757,7 +757,7 @@ export function multiply(a: number, b: number) { return a * b; }
 export class someClass { }
 class someClass2 { }
 
-tsgo --b tests --verbose
+tsc --b tests --verbose
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -880,7 +880,7 @@ Signatures::
 
 Edit [2]:: no change
 
-tsgo --b tests --verbose
+tsc --b tests --verbose
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -912,7 +912,7 @@ Edit [3]:: when logic config changes declaration dir
     ],
 }
 
-tsgo --b tests --verbose
+tsc --b tests --verbose
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -1123,7 +1123,7 @@ Signatures::
 
 Edit [4]:: no change
 
-tsgo --b tests --verbose
+tsc --b tests --verbose
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 

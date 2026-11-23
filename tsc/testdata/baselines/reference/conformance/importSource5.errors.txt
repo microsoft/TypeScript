@@ -2,8 +2,8 @@ b.ts(1,14): error TS1005: '(' expected.
 b.ts(2,15): error TS1005: '(' expected.
 b.ts(3,23): error TS1005: '(' expected.
 b.ts(4,14): error TS1005: '(' expected.
-b.ts(6,1): message TS1450: Dynamic imports can only accept a module specifier and an optional set of attributes as arguments
-b.ts(7,1): message TS1450: Dynamic imports can only accept a module specifier and an optional set of attributes as arguments
+b.ts(6,1): error TS1450: Dynamic imports can only accept a module specifier and an optional set of attributes as arguments
+b.ts(7,1): error TS1450: Dynamic imports can only accept a module specifier and an optional set of attributes as arguments
 b.ts(8,14): error TS18114: Optional chaining cannot be used with 'import.source'.
 b.ts(9,1): error TS1326: This use of 'import' is invalid. 'import()' calls can be written, but they must have parentheses and cannot have type arguments.
 b.ts(10,15): error TS1325: Argument of dynamic import cannot be spread element.
@@ -33,10 +33,10 @@ f.ts(1,8): error TS18061: 'a' is not a valid meta-property for keyword 'import'.
     
     import.source();
     ~~~~~~~~~~~~~~~
-!!! message TS1450: Dynamic imports can only accept a module specifier and an optional set of attributes as arguments
+!!! error TS1450: Dynamic imports can only accept a module specifier and an optional set of attributes as arguments
     import.source("./a.js", {}, {});
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! message TS1450: Dynamic imports can only accept a module specifier and an optional set of attributes as arguments
+!!! error TS1450: Dynamic imports can only accept a module specifier and an optional set of attributes as arguments
     import.source?.("./a.js");
                  ~~
 !!! error TS18114: Optional chaining cannot be used with 'import.source'.

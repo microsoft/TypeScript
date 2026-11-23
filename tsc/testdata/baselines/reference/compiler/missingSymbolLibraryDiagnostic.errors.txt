@@ -1,0 +1,27 @@
+missingSymbolLibraryDiagnostic.ts(12,1): error TS2583: Cannot find name 'Symbol'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+missingSymbolLibraryDiagnostic.ts(13,21): error TS2583: Cannot find name 'Symbol'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+missingSymbolLibraryDiagnostic.ts(14,22): error TS2583: Cannot find name 'Symbol'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+
+
+==== missingSymbolLibraryDiagnostic.ts (3 errors) ====
+    interface Array<T> {}
+    interface Boolean {}
+    interface Function {}
+    interface CallableFunction extends Function {}
+    interface NewableFunction extends Function {}
+    interface IArguments {}
+    interface Number {}
+    interface Object {}
+    interface RegExp {}
+    interface String {}
+    
+    Symbol("value");
+    ~~~~~~
+!!! error TS2583: Cannot find name 'Symbol'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    const shorthand = { Symbol };
+                        ~~~~~~
+!!! error TS2583: Cannot find name 'Symbol'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    type MissingSymbol = Symbol;
+                         ~~~~~~
+!!! error TS2583: Cannot find name 'Symbol'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    

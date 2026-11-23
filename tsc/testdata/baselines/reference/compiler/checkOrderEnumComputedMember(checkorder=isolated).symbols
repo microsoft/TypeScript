@@ -1,0 +1,29 @@
+//// [tests/cases/compiler/checkOrderEnumComputedMember.ts] ////
+
+=== checkOrderEnumComputedMember.ts ===
+enum E {
+>E : Symbol(E, Decl(checkOrderEnumComputedMember.ts, 0, 0))
+
+    A = 0,
+>A : Symbol(E.A, Decl(checkOrderEnumComputedMember.ts, 0, 8))
+
+    B = E.A.valueOf(),
+>B : Symbol(E.B, Decl(checkOrderEnumComputedMember.ts, 1, 10))
+>E.A.valueOf : Symbol(Number.valueOf, Decl(lib.es5.d.ts, --, --))
+>E.A : Symbol(E.A, Decl(checkOrderEnumComputedMember.ts, 0, 8))
+>E : Symbol(E, Decl(checkOrderEnumComputedMember.ts, 0, 0))
+>A : Symbol(E.A, Decl(checkOrderEnumComputedMember.ts, 0, 8))
+>valueOf : Symbol(Number.valueOf, Decl(lib.es5.d.ts, --, --))
+
+    C = 1,
+>C : Symbol(E.C, Decl(checkOrderEnumComputedMember.ts, 2, 22))
+}
+
+const member: Extract<E, 1> = E.C;
+>member : Symbol(member, Decl(checkOrderEnumComputedMember.ts, 6, 5))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>E : Symbol(E, Decl(checkOrderEnumComputedMember.ts, 0, 0))
+>E.C : Symbol(E.C, Decl(checkOrderEnumComputedMember.ts, 2, 22))
+>E : Symbol(E, Decl(checkOrderEnumComputedMember.ts, 0, 0))
+>C : Symbol(E.C, Decl(checkOrderEnumComputedMember.ts, 2, 22))
+

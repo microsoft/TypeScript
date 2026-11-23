@@ -16,7 +16,7 @@ import { b } from "./b";export const d = b;
     }
 }
 
-tsgo --build --verbose
+tsc --build --verbose
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -160,7 +160,7 @@ Signatures::
 
 Edit [0]:: with sourceMap
 
-tsgo --build --verbose --sourceMap
+tsc --build --verbose --sourceMap
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -287,7 +287,7 @@ Signatures::
 
 Edit [1]:: should re-emit only js so they dont contain sourcemap
 
-tsgo --build --verbose
+tsc --build --verbose
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -403,7 +403,7 @@ Signatures::
 
 Edit [2]:: with declaration, emit Dts and should not emit js
 
-tsgo --build --verbose --declaration
+tsc --build --verbose --declaration
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -542,7 +542,7 @@ Signatures::
 
 Edit [3]:: with declaration and declarationMap
 
-tsgo --build --verbose --declaration --declarationMap
+tsc --build --verbose --declaration --declarationMap
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -686,7 +686,7 @@ Signatures::
 
 Edit [4]:: no change
 
-tsgo --build --verbose
+tsc --build --verbose
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -701,7 +701,7 @@ Edit [5]:: local change
 //// [/home/src/workspaces/project/a.ts] *modified* 
 export const a = 10;const aLocal = 100;
 
-tsgo --build --verbose
+tsc --build --verbose
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -827,7 +827,7 @@ Signatures::
 
 Edit [6]:: with declaration and declarationMap
 
-tsgo --build --verbose --declaration --declarationMap
+tsc --build --verbose --declaration --declarationMap
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -959,7 +959,7 @@ Signatures::
 
 Edit [7]:: no change
 
-tsgo --build --verbose
+tsc --build --verbose
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -972,7 +972,7 @@ Output::
 
 Edit [8]:: with inlineSourceMap
 
-tsgo --build --verbose --inlineSourceMap
+tsc --build --verbose --inlineSourceMap
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -1111,7 +1111,7 @@ Signatures::
 
 Edit [9]:: with sourceMap
 
-tsgo --build --verbose --sourceMap
+tsc --build --verbose --sourceMap
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -1255,7 +1255,7 @@ Signatures::
 
 Edit [10]:: emit js files
 
-tsgo --build --verbose
+tsc --build --verbose
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -1391,7 +1391,7 @@ Signatures::
 
 Edit [11]:: with declaration and declarationMap
 
-tsgo --build --verbose --declaration --declarationMap
+tsc --build --verbose --declaration --declarationMap
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -1523,7 +1523,7 @@ Signatures::
 
 Edit [12]:: with declaration and declarationMap, should not re-emit
 
-tsgo --build --verbose --declaration --declarationMap
+tsc --build --verbose --declaration --declarationMap
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 

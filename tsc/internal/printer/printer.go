@@ -741,7 +741,6 @@ func (p *Printer) writeCommentRangeWorker(text string, lineMap []core.TextPos, k
 
 func (p *Printer) shouldEmitComments(node *ast.Node) bool {
 	return !p.commentsDisabled &&
-		p.currentSourceFile != nil &&
 		!ast.IsSourceFile(node)
 }
 
@@ -1120,13 +1119,12 @@ func (p *Printer) emitIdentifierText(node *ast.Identifier) {
 	debug.Assert(f == nil || p.currentSourceFile == nil || f.FileName() == p.currentSourceFile.FileName())
 	text := p.getTextOfNode(node.AsNode(), false /*includeTrivia*/)
 
-	if p.IdToSymbol != nil {
-		if symbol, ok := p.IdToSymbol[node.AsNode()]; ok {
-			p.writeSymbol(text, symbol)
-			return
-		}
+	if symbol, ok := p.IdToSymbol[node.AsNode()]; ok {
+		p.writeSymbol(text, symbol)
+	} else {
+		p.write(text)
 	}
-	p.write(text)
+	p.emitDisplayTypeArguments(node.AsNode(), p.emitContext.DisplayTypeArguments(node.AsNode()))
 }
 
 func (p *Printer) emitIdentifierName(node *ast.Identifier) {
@@ -1229,10 +1227,6 @@ func (p *Printer) emitEntityName(node *ast.EntityName) {
 		p.emitIdentifierReference(node.AsIdentifier())
 	case ast.KindQualifiedName:
 		p.emitQualifiedName(node.AsQualifiedName())
-	case ast.KindPropertyAccessExpression:
-		// TypeQuery nodes may have PropertyAccessExpression as exprName (e.g. typeof foo.x).
-		// TS's emitter handles this via generic emit(); we dispatch to expression emitter here.
-		p.emitExpression(node, ast.OperatorPrecedenceDisallowComma)
 	default:
 		panic(fmt.Sprintf("unexpected EntityName: %v", node.Kind))
 	}
@@ -1461,13 +1455,7 @@ func (p *Printer) emitTypeParameter(node *ast.TypeParameterDeclaration) {
 }
 
 func (p *Printer) emitTypeParameterDeclarationNode(node *ast.TypeParameterDeclarationNode) {
-	// NOTE: QuickInfo uses TypeFormatFlagsWriteTypeArgumentsOfSignature to instruct the NodeBuilder to store type arguments
-	// (i.e. type nodes) instead of type parameter declarations in the type parameter list.
-	if ast.IsTypeParameterDeclaration(node) {
-		p.emitTypeParameter(node.AsTypeParameterDeclaration())
-	} else {
-		p.emitTypeArgument(node)
-	}
+	p.emitTypeParameter(node.AsTypeParameterDeclaration())
 }
 
 func (p *Printer) emitParameterName(node *ast.BindingName) {
@@ -1519,6 +1507,14 @@ func (p *Printer) emitTypeParameters(parentNode *ast.Node, nodes *ast.TypeParame
 		return
 	}
 	p.emitList((*Printer).emitTypeParameterDeclarationNode, parentNode, nodes, LFTypeParameters|core.IfElse(ast.IsArrowFunction(parentNode) /*p.shouldAllowTrailingComma(parentNode, nodes)*/, LFAllowTrailingComma, LFNone)) // TODO: preserve trailing comma after Strada migration
+}
+
+func (p *Printer) emitSignatureTypeArgumentsOrParameters(node *ast.Node) {
+	if arguments := p.emitContext.DisplayTypeArguments(node); arguments != nil {
+		p.emitDisplayTypeArguments(node, arguments)
+	} else {
+		p.emitTypeParameters(node, node.FunctionLikeData().TypeParameters)
+	}
 }
 
 func (p *Printer) emitTypeAnnotation(node *ast.TypeNode) {
@@ -1586,12 +1582,7 @@ func (p *Printer) emitParametersForIndexSignature(parentNode *ast.Node, paramete
 func (p *Printer) emitSignature(node *ast.Node) {
 	n := node.FunctionLikeData()
 
-	// !!! In old emitter, quickinfo used type arguments in place of type parameters on instantiated signatures
-	////if n.TypeArguments != nil {
-	////	p.emitTypeArguments(node, n.TypeArguments)
-	////} else {
-	p.emitTypeParameters(node, n.TypeParameters)
-	////}
+	p.emitSignatureTypeArgumentsOrParameters(node)
 
 	p.emitParameters(node, n.Parameters)
 	p.emitTypeAnnotation(n.Type)
@@ -1905,7 +1896,24 @@ func (p *Printer) emitTypeArguments(parentNode *ast.Node, nodes *ast.TypeArgumen
 	if nodes == nil {
 		return
 	}
-	p.emitList((*Printer).emitTypeParameterDeclarationNode, parentNode, nodes, LFTypeArguments /*|core.IfElse(p.shouldAllowTrailingComma(parentNode, nodes), LFAllowTrailingComma, LFNone)*/) // TODO: preserve trailing comma after Strada migration
+	p.emitList((*Printer).emitTypeArgument, parentNode, nodes, LFTypeArguments /*|core.IfElse(p.shouldAllowTrailingComma(parentNode, nodes), LFAllowTrailingComma, LFNone)*/) // TODO: preserve trailing comma after Strada migration
+}
+
+// emitDisplayTypeArguments prints type arguments recorded for display. They can
+// include type parameter declarations.
+func (p *Printer) emitDisplayTypeArguments(parentNode *ast.Node, nodes *ast.NodeList) {
+	if nodes == nil {
+		return
+	}
+	p.emitList((*Printer).emitDisplayTypeArgument, parentNode, nodes, LFTypeArguments)
+}
+
+func (p *Printer) emitDisplayTypeArgument(node *ast.Node) {
+	if ast.IsTypeParameterDeclaration(node) {
+		p.emitTypeParameter(node.AsTypeParameterDeclaration())
+	} else {
+		p.emitTypeArgument(node)
+	}
 }
 
 func (p *Printer) emitTypeReference(node *ast.TypeReferenceNode) {
@@ -1939,8 +1947,7 @@ func (p *Printer) emitFunctionType(node *ast.FunctionTypeNode) {
 	indented := p.shouldEmitIndented(node.AsNode())
 	p.increaseIndentIf(indented)
 	p.pushNameGenerationScope(node.AsNode())
-	// !!! in the old emitter, quickinfo uses type arguments in place of type parameters for instantiated signatures
-	p.emitTypeParameters(node.AsNode(), node.TypeParameters)
+	p.emitSignatureTypeArgumentsOrParameters(node.AsNode())
 	p.emitParameters(node.AsNode(), node.Parameters)
 	p.writeSpace()
 	p.emitReturnType(node.Type)
@@ -1957,8 +1964,7 @@ func (p *Printer) emitConstructorType(node *ast.ConstructorTypeNode) {
 	indented := p.shouldEmitIndented(node.AsNode())
 	p.increaseIndentIf(indented)
 	p.pushNameGenerationScope(node.AsNode())
-	// !!! in the old emitter, quickinfo uses type arguments in place of type parameters for instantiated signatures
-	p.emitTypeParameters(node.AsNode(), node.TypeParameters)
+	p.emitSignatureTypeArgumentsOrParameters(node.AsNode())
 	p.emitParameters(node.AsNode(), node.Parameters)
 	p.writeSpace()
 	p.emitReturnType(node.Type)
@@ -2367,13 +2373,6 @@ func (p *Printer) emitTypeNode(node *ast.TypeNode, precedence ast.TypePrecedence
 	case ast.KindImportType:
 		p.emitImportTypeNode(node.AsImportTypeNode())
 
-	case ast.KindPropertyAccessExpression:
-		// Occurs in pseudo-types such as `f<T>.C`, where `f` is a generic function and `C` is a local type
-		p.emitPropertyAccessExpression(node.AsPropertyAccessExpression())
-	case ast.KindExpressionWithTypeArguments:
-		// !!! Should this actually be considered a type?
-		p.emitExpressionWithTypeArguments(node.AsExpressionWithTypeArguments())
-
 	case ast.KindJSDocAllType:
 		p.emitJSDocAllType(node)
 	case ast.KindJSDocNonNullableType:
@@ -2593,8 +2592,9 @@ func (p *Printer) emitNewExpression(node *ast.NewExpression) {
 	state := p.enterNode(node.AsNode())
 	p.emitToken(ast.KindNewKeyword, node.Pos(), WriteKindKeyword, node.AsNode())
 	p.writeSpace()
-	if ast.SkipPartiallyEmittedExpressions(node.Expression).Kind == ast.KindCallExpression {
-		// Parenthesize `C()` inside of a NewExpression so it is treated as `new (C())` and not `new C()`
+	if hasUnparenthesizedCallAtStartOfMemberChain(node.Expression) {
+		// Parenthesize `C()` or `C().D` inside of a NewExpression so it is treated as `new (C())` or `new (C().D)`
+		// and not `new C()` or `new C().D`
 		p.emitExpression(node.Expression, ast.OperatorPrecedenceParentheses)
 	} else {
 		p.emitExpression(node.Expression, ast.OperatorPrecedenceMember)
@@ -3058,37 +3058,43 @@ func (p *Printer) commentWillEmitNewLine(comment ast.CommentRange) bool {
 	return comment.Kind == ast.KindSingleLineCommentTrivia || comment.HasTrailingNewLine
 }
 
-func (p *Printer) syntheticCommentWillEmitNewLine(comment SynthesizedComment) bool {
-	return comment.Kind == ast.KindSingleLineCommentTrivia || comment.HasTrailingNewLine
+func (p *Printer) syntheticLeadingCommentWillEmitNewLine(comment SynthesizedComment) bool {
+	return comment.Kind == ast.KindSingleLineCommentTrivia ||
+		comment.HasLeadingNewLine || comment.HasTrailingNewLine ||
+		strings.ContainsFunc(comment.Text, stringutil.IsLineBreak)
+}
+
+func (p *Printer) hasSyntheticLeadingCommentIntroducingNewLine(node *ast.Expression) bool {
+	return p.emitContext.EmitFlags(node)&EFNoLeadingComments == 0 &&
+		slices.ContainsFunc(p.emitContext.GetSyntheticLeadingComments(node), p.syntheticLeadingCommentWillEmitNewLine)
 }
 
 func (p *Printer) willEmitLeadingNewLine(node *ast.Expression) bool {
-	if p.currentSourceFile == nil {
-		return false
-	}
-	hasLeadingCommentRanges := false
-	hasNewLineComment := false
-	for comment := range scanner.GetLeadingCommentRanges(p.emitContext.Factory.AsNodeFactory(), p.currentSourceFile.Text(), node.Pos()) {
-		hasLeadingCommentRanges = true
-		if p.commentWillEmitNewLine(comment) {
-			hasNewLineComment = true
+	if p.currentSourceFile != nil {
+		hasLeadingCommentRanges := false
+		hasNewLineComment := false
+		for comment := range scanner.GetLeadingCommentRanges(p.emitContext.Factory.AsNodeFactory(), p.currentSourceFile.Text(), node.Pos()) {
+			hasLeadingCommentRanges = true
+			if p.commentWillEmitNewLine(comment) {
+				hasNewLineComment = true
+			}
 		}
-	}
-	if hasLeadingCommentRanges {
-		parseNode := p.emitContext.ParseNode(node)
-		if parseNode != nil && ast.IsParenthesizedExpression(parseNode.Parent) {
+		if hasLeadingCommentRanges {
+			parseNode := p.emitContext.ParseNode(node)
+			if parseNode != nil && ast.IsParenthesizedExpression(parseNode.Parent) {
+				return true
+			}
+		}
+		if hasNewLineComment {
 			return true
 		}
 	}
-	if hasNewLineComment {
-		return true
-	}
-	if slices.ContainsFunc(p.emitContext.GetSyntheticLeadingComments(node), p.syntheticCommentWillEmitNewLine) {
+	if p.hasSyntheticLeadingCommentIntroducingNewLine(node) {
 		return true
 	}
 	if ast.IsPartiallyEmittedExpression(node) {
 		pee := node.AsPartiallyEmittedExpression()
-		if node.Pos() != pee.Expression.Pos() {
+		if p.currentSourceFile != nil && node.Pos() != pee.Expression.Pos() {
 			for comment := range scanner.GetTrailingCommentRanges(p.emitContext.Factory.AsNodeFactory(), p.currentSourceFile.Text(), pee.Expression.Pos()) {
 				if p.commentWillEmitNewLine(comment) {
 					return true
@@ -3104,6 +3110,9 @@ func (p *Printer) willEmitLeadingNewLine(node *ast.Expression) bool {
 // that would introduce a line separator between the node and its parent.
 func (p *Printer) parenthesizeExpressionForNoAsi(node *ast.Expression) *ast.Expression {
 	if !p.commentsDisabled {
+		if node.Kind != ast.KindPartiallyEmittedExpression && p.hasSyntheticLeadingCommentIntroducingNewLine(node) {
+			return p.emitContext.Factory.NewParenthesizedExpression(node)
+		}
 		switch node.Kind {
 		case ast.KindPartiallyEmittedExpression:
 			if p.willEmitLeadingNewLine(node) {
@@ -3311,8 +3320,6 @@ func (p *Printer) emitExpression(node *ast.Expression, precedence ast.OperatorPr
 		p.emitMetaProperty(node.AsMetaProperty())
 	case ast.KindSyntheticExpression:
 		panic("SyntheticExpression should never be printed.")
-	case ast.KindMissingDeclaration:
-		// Missing declarations do not emit an expression.
 
 	// JSX
 	case ast.KindJsxElement:
@@ -4447,12 +4454,13 @@ func (p *Printer) emitJsxAttributeValue(node *ast.JsxAttributeValue) {
 //
 
 func (p *Printer) emitCaseOrDefaultClauseStatements(node *ast.CaseOrDefaultClause, colonPos int) {
-	emitAsSingleStatement := len(node.Statements.Nodes) == 1 &&
+	statements := node.StatementList()
+	emitAsSingleStatement := len(statements.Nodes) == 1 &&
 		// treat synthesized nodes as located on the same line for emit purposes
 		(p.currentSourceFile == nil ||
-			ast.NodeIsSynthesized(node.AsNode()) ||
-			ast.NodeIsSynthesized(node.Statements.Nodes[0]) ||
-			RangeStartPositionsAreOnSameLine(node.Loc, node.Statements.Nodes[0].Loc, p.currentSourceFile))
+			ast.NodeIsSynthesized(node) ||
+			ast.NodeIsSynthesized(statements.Nodes[0]) ||
+			RangeStartPositionsAreOnSameLine(node.Loc, statements.Nodes[0].Loc, p.currentSourceFile))
 
 	format := LFCaseOrDefaultClauseStatements
 	if emitAsSingleStatement {
@@ -4462,34 +4470,34 @@ func (p *Printer) emitCaseOrDefaultClauseStatements(node *ast.CaseOrDefaultClaus
 		p.writeSpace()
 		format &^= LFMultiLine | LFIndented
 	} else {
-		p.emitToken(ast.KindColonToken, colonPos, WriteKindPunctuation, node.AsNode())
+		p.emitToken(ast.KindColonToken, colonPos, WriteKindPunctuation, node)
 	}
 
-	p.emitList((*Printer).emitStatement, node.AsNode(), node.Statements, format)
+	p.emitList((*Printer).emitStatement, node, statements, format)
 }
 
-func (p *Printer) emitCaseClause(node *ast.CaseOrDefaultClause) {
+func (p *Printer) emitCaseClause(node *ast.CaseClause) {
 	state := p.enterNode(node.AsNode())
 	p.emitToken(ast.KindCaseKeyword, node.Pos(), WriteKindKeyword, node.AsNode())
 	p.writeSpace()
 	p.emitExpression(node.Expression, ast.OperatorPrecedenceLowest)
-	p.emitCaseOrDefaultClauseStatements(node, node.Expression.End())
+	p.emitCaseOrDefaultClauseStatements(node.AsNode(), node.Expression.End())
 	p.exitNode(node.AsNode(), state)
 }
 
-func (p *Printer) emitDefaultClause(node *ast.CaseOrDefaultClause) {
+func (p *Printer) emitDefaultClause(node *ast.DefaultClause) {
 	state := p.enterNode(node.AsNode())
 	pos := p.emitToken(ast.KindDefaultKeyword, node.Pos(), WriteKindKeyword, node.AsNode())
-	p.emitCaseOrDefaultClauseStatements(node, pos)
+	p.emitCaseOrDefaultClauseStatements(node.AsNode(), pos)
 	p.exitNode(node.AsNode(), state)
 }
 
-func (p *Printer) emitCaseOrDefaultClauseNode(node *ast.CaseOrDefaultClauseNode) {
+func (p *Printer) emitCaseOrDefaultClauseNode(node *ast.CaseOrDefaultClause) {
 	switch node.Kind {
 	case ast.KindCaseClause:
-		p.emitCaseClause(node.AsCaseOrDefaultClause())
+		p.emitCaseClause(node.AsCaseClause())
 	case ast.KindDefaultClause:
-		p.emitDefaultClause(node.AsCaseOrDefaultClause())
+		p.emitDefaultClause(node.AsDefaultClause())
 	default:
 		panic(fmt.Sprintf("unhandled CaseOrDefaultClause: %v", node.Kind))
 	}
@@ -5095,7 +5103,7 @@ func (p *Printer) Write(node *ast.Node, sourceFile *ast.SourceFile, writer EmitT
 	}
 	p.writer = writer
 	p.writer.Clear()
-	if sourceFile != nil {
+	if sourceFile != nil && node == sourceFile.AsNode() {
 		if grower, ok := p.writer.(interface{ Grow(n int) }); ok {
 			grower.Grow(len(sourceFile.Text()))
 		}
@@ -5227,9 +5235,9 @@ func (p *Printer) Write(node *ast.Node, sourceFile *ast.SourceFile, writer EmitT
 
 	// Clauses
 	case ast.KindCaseClause:
-		p.emitCaseClause(node.AsCaseOrDefaultClause())
+		p.emitCaseClause(node.AsCaseClause())
 	case ast.KindDefaultClause:
-		p.emitDefaultClause(node.AsCaseOrDefaultClause())
+		p.emitDefaultClause(node.AsDefaultClause())
 	case ast.KindHeritageClause:
 		p.emitHeritageClause(node.AsHeritageClause())
 	case ast.KindCatchClause:
@@ -5503,11 +5511,14 @@ func (p *Printer) emitTrailingSyntheticCommentsOfNode(node *ast.Node, emitFlags 
 }
 
 func (p *Printer) emitTrailingSynthesizedComment(comment SynthesizedComment) {
-	if !p.writer.IsAtStartOfLine() {
+	if comment.HasLeadingNewLine {
+		p.writer.WriteLine()
+	} else if !p.writer.IsAtStartOfLine() {
 		p.writer.WriteSpace(" ")
 	}
 	p.writeSynthesizedComment(comment)
-	if comment.HasTrailingNewLine {
+	// A single-line comment must end the line, or it would comment out the code that follows it.
+	if comment.HasTrailingNewLine || comment.Kind == ast.KindSingleLineCommentTrivia {
 		p.writer.WriteLine()
 	}
 }

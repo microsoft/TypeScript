@@ -30,7 +30,7 @@ function fn2(x4: number) {
 
 //// [compoundExponentiationAssignmentLHSIsReference.js]
 "use strict";
-var _a, _b, _c;
+var _a, _b, _c, _d, _e, _f;
 var value;
 // identifiers: variable and parameter
 var x1;
@@ -43,9 +43,9 @@ var x3;
 (_a = x3).a = Math.pow(_a.a, value);
 (_b = x3)[_c = 'a'] = Math.pow(_b[_c], value);
 // parentheses, the contained expression is reference
-(x1) = Math.pow((x1), value);
+x1 = Math.pow(x1, value);
 function fn2(x4) {
-    (x4) = Math.pow((x4), value);
+    x4 = Math.pow(x4, value);
 }
-(x3.a) = Math.pow((x3.a), value);
-(x3['a']) = Math.pow((x3['a']), value);
+(_d = x3).a = Math.pow(_d.a, value);
+(_e = x3)[_f = 'a'] = Math.pow(_e[_f], value);

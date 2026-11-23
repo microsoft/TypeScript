@@ -1,0 +1,22 @@
+//// [tests/cases/compiler/identicalSignaturesWithTypePredicates.ts] ////
+
+=== identicalSignaturesWithTypePredicates.ts ===
+declare var isString: (x: unknown) => x is string;
+>isString : Symbol(isString, Decl(identicalSignaturesWithTypePredicates.ts, 0, 11), Decl(identicalSignaturesWithTypePredicates.ts, 1, 11))
+>x : Symbol(x, Decl(identicalSignaturesWithTypePredicates.ts, 0, 23))
+>x : Symbol(x, Decl(identicalSignaturesWithTypePredicates.ts, 0, 23))
+
+declare var isString: (x: unknown) => boolean;
+>isString : Symbol(isString, Decl(identicalSignaturesWithTypePredicates.ts, 0, 11), Decl(identicalSignaturesWithTypePredicates.ts, 1, 11))
+>x : Symbol(x, Decl(identicalSignaturesWithTypePredicates.ts, 1, 23))
+
+declare var isNumber: (x: unknown) => x is number;
+>isNumber : Symbol(isNumber, Decl(identicalSignaturesWithTypePredicates.ts, 3, 11), Decl(identicalSignaturesWithTypePredicates.ts, 4, 11))
+>x : Symbol(x, Decl(identicalSignaturesWithTypePredicates.ts, 3, 23))
+>x : Symbol(x, Decl(identicalSignaturesWithTypePredicates.ts, 3, 23))
+
+declare var isNumber: (x: unknown) => x is number;
+>isNumber : Symbol(isNumber, Decl(identicalSignaturesWithTypePredicates.ts, 3, 11), Decl(identicalSignaturesWithTypePredicates.ts, 4, 11))
+>x : Symbol(x, Decl(identicalSignaturesWithTypePredicates.ts, 4, 23))
+>x : Symbol(x, Decl(identicalSignaturesWithTypePredicates.ts, 4, 23))
+

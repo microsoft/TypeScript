@@ -37,26 +37,44 @@ const (
 	msgpackU8          byte = 0xCC
 )
 
-// MessagePackProtocol implements the Protocol interface using a custom
-// msgpack-based tuple format: [MessageType, method, payload].
-type MessagePackProtocol struct {
+// TupleTransport carries [MessageType, method, payload] tuples between the
+// server and a client.
+type TupleTransport interface {
+	ReadTuple() (MessageType, string, []byte, error)
+	WriteTuple(msgType MessageType, method string, payload []byte) error
+}
+
+// TupleProtocol implements the Protocol interface over [MessageType, method,
+// payload] tuples. Requests and responses are matched by method name.
+type TupleProtocol struct {
+	t TupleTransport
+}
+
+var _ ipc.Protocol = (*TupleProtocol)(nil)
+
+// NewTupleProtocol creates a protocol handler that exchanges tuples over t.
+func NewTupleProtocol(t TupleTransport) *TupleProtocol {
+	return &TupleProtocol{t: t}
+}
+
+// NewMessagePackProtocol creates a protocol handler that frames tuples as
+// MessagePack arrays on rw.
+func NewMessagePackProtocol(rw io.ReadWriter) *TupleProtocol {
+	return NewTupleProtocol(&messagePackTransport{
+		r: bufio.NewReader(rw),
+		w: bufio.NewWriter(rw),
+	})
+}
+
+// messagePackTransport frames tuples as fixed three-element MessagePack arrays.
+type messagePackTransport struct {
 	r *bufio.Reader
 	w *bufio.Writer
 }
 
-var _ ipc.Protocol = (*MessagePackProtocol)(nil)
-
-// NewMessagePackProtocol creates a new msgpack protocol handler.
-func NewMessagePackProtocol(rw io.ReadWriter) *MessagePackProtocol {
-	return &MessagePackProtocol{
-		r: bufio.NewReader(rw),
-		w: bufio.NewWriter(rw),
-	}
-}
-
 // ReadMessage implements Protocol.
-func (p *MessagePackProtocol) ReadMessage() (*ipc.Message, error) {
-	msgType, method, payload, err := p.readTuple()
+func (p *TupleProtocol) ReadMessage() (*ipc.Message, error) {
+	msgType, method, payload, err := p.t.ReadTuple()
 	if err != nil {
 		return nil, err
 	}
@@ -94,7 +112,7 @@ func (p *MessagePackProtocol) ReadMessage() (*ipc.Message, error) {
 	return msg, nil
 }
 
-func (p *MessagePackProtocol) readTuple() (MessageType, string, []byte, error) {
+func (p *messagePackTransport) ReadTuple() (MessageType, string, []byte, error) {
 	// Read fixed array marker (0x93 = 3-element array)
 	t, err := p.r.ReadByte()
 	if err != nil {
@@ -143,7 +161,7 @@ func (p *MessagePackProtocol) readTuple() (MessageType, string, []byte, error) {
 	return msgType, method, payload, nil
 }
 
-func (p *MessagePackProtocol) readBin() ([]byte, error) {
+func (p *messagePackTransport) readBin() ([]byte, error) {
 	t, err := p.r.ReadByte()
 	if err != nil {
 		return nil, err
@@ -181,23 +199,23 @@ func (p *MessagePackProtocol) readBin() ([]byte, error) {
 }
 
 // WriteRequest implements Protocol.
-func (p *MessagePackProtocol) WriteRequest(id *jsonrpc.ID, method string, params any) error {
+func (p *TupleProtocol) WriteRequest(id *jsonrpc.ID, method string, params any) error {
 	// For msgpack protocol, requests from server are "Call" type
 	payload, err := json.Marshal(params)
 	if err != nil {
 		return err
 	}
-	return p.writeTuple(MessageTypeCall, method, payload)
+	return p.t.WriteTuple(MessageTypeCall, method, payload)
 }
 
 // WriteNotification implements Protocol.
-func (p *MessagePackProtocol) WriteNotification(method string, params any) error {
+func (p *TupleProtocol) WriteNotification(method string, params any) error {
 	// Msgpack protocol doesn't distinguish notifications from calls
 	return p.WriteRequest(nil, method, params)
 }
 
 // WriteResponse implements Protocol.
-func (p *MessagePackProtocol) WriteResponse(id *jsonrpc.ID, result any) error {
+func (p *TupleProtocol) WriteResponse(id *jsonrpc.ID, result any) error {
 	method := ""
 	if id != nil {
 		method = id.String()
@@ -216,19 +234,19 @@ func (p *MessagePackProtocol) WriteResponse(id *jsonrpc.ID, result any) error {
 		}
 	}
 
-	return p.writeTuple(MessageTypeResponse, method, payload)
+	return p.t.WriteTuple(MessageTypeResponse, method, payload)
 }
 
 // WriteError implements Protocol.
-func (p *MessagePackProtocol) WriteError(id *jsonrpc.ID, respErr *jsonrpc.ResponseError) error {
+func (p *TupleProtocol) WriteError(id *jsonrpc.ID, respErr *jsonrpc.ResponseError) error {
 	method := ""
 	if id != nil {
 		method = id.String()
 	}
-	return p.writeTuple(MessageTypeError, method, []byte(respErr.Message))
+	return p.t.WriteTuple(MessageTypeError, method, []byte(respErr.Message))
 }
 
-func (p *MessagePackProtocol) writeTuple(msgType MessageType, method string, payload []byte) error {
+func (p *messagePackTransport) WriteTuple(msgType MessageType, method string, payload []byte) error {
 	// Write fixed array marker
 	if err := p.w.WriteByte(msgpackFixedArray3); err != nil {
 		return err
@@ -248,7 +266,7 @@ func (p *MessagePackProtocol) writeTuple(msgType MessageType, method string, pay
 	return p.w.Flush()
 }
 
-func (p *MessagePackProtocol) writeBin(data []byte) error {
+func (p *messagePackTransport) writeBin(data []byte) error {
 	length := len(data)
 	if length < 256 {
 		if err := p.w.WriteByte(msgpackBin8); err != nil {
@@ -277,5 +295,5 @@ func (p *MessagePackProtocol) writeBin(data []byte) error {
 }
 
 // RawBinary is a marker type for binary data that should be written
-// directly by MessagePackProtocol instead of being JSON-encoded.
+// directly by TupleProtocol instead of being JSON-encoded.
 type RawBinary []byte

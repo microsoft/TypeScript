@@ -1,0 +1,42 @@
+//// [tests/cases/compiler/sharedMemberLayoutThisIntersectionBase.ts] ////
+
+=== sharedMemberLayoutThisIntersectionBase.ts ===
+interface A { kind: string; m: this["kind"] }
+>kind : string
+>m : this["kind"]
+
+interface B { m: "a" }
+>m : "a"
+
+type AB = A & B;
+>AB : AB
+
+interface D<T extends string> extends AB { kind: T }
+>kind : T
+
+declare let d: D<"b">;
+>d : D<"b">
+
+d.m;
+>d.m : any
+>d : D<"b">
+>m : any
+
+declare const ABCtor: new () => AB;
+>ABCtor : new () => AB
+
+class C<T extends string> extends ABCtor { declare kind: T }
+>C : C<T>
+>ABCtor : A & B
+>kind : T
+
+declare let c: C<"b">;
+>c : C<"b">
+
+c.m;
+>c.m : any
+>c : C<"b">
+>m : any
+
+export {};
+

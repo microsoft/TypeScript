@@ -21,7 +21,7 @@ export const x = 10;
     "extends": "@something/tsconfig-node/tsconfig.json"
 }
 
-tsgo -b src --extendedDiagnostics
+tsc -b src --extendedDiagnostics
 ExitStatus:: Success
 Output::
 //// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*

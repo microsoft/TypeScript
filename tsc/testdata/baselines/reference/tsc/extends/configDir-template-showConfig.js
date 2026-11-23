@@ -36,7 +36,7 @@ import { x } from "@myscope/sometype";
 //// [/home/src/projects/myproject/types/sometype.ts] *new* 
 export const x = 10;
 
-tsgo --showConfig
+tsc --showConfig
 ExitStatus:: Success
 Output::
 {

@@ -1,0 +1,14 @@
+//// [tests/cases/compiler/bigintZeroIsDefinitelyFalsy.ts] ////
+
+=== bigintZeroIsDefinitelyFalsy.ts ===
+declare const x: 0n | 1n;
+>x : Symbol(x, Decl(bigintZeroIsDefinitelyFalsy.ts, 0, 13))
+
+const y = x && "a";
+>y : Symbol(y, Decl(bigintZeroIsDefinitelyFalsy.ts, 1, 5))
+>x : Symbol(x, Decl(bigintZeroIsDefinitelyFalsy.ts, 0, 13))
+
+const z: 0n | "a" = x && "a";
+>z : Symbol(z, Decl(bigintZeroIsDefinitelyFalsy.ts, 2, 5))
+>x : Symbol(x, Decl(bigintZeroIsDefinitelyFalsy.ts, 0, 13))
+

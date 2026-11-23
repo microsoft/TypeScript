@@ -1,0 +1,25 @@
+//// [tests/cases/compiler/jsdocHeritageBuiltinNames.ts] ////
+
+=== a.js ===
+/** @extends {String} */
+class S extends String {}
+>S : Symbol(S, Decl(a.js, 0, 0))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 7 more)
+
+class Boolean {
+>Boolean : Symbol(Boolean, Decl(a.js, 1, 25))
+
+    value = true;
+>value : Symbol(Boolean.value, Decl(a.js, 3, 15))
+}
+
+/** @implements {Boolean} */
+class B {
+>B : Symbol(B, Decl(a.js, 5, 1))
+
+    value = false;
+>value : Symbol(B.value, Decl(a.js, 8, 9))
+}
+
+export {};
+

@@ -13,7 +13,6 @@ See the Apache Version 2.0 License for specific language governing permissions
 and limitations under the License.
 ***************************************************************************** */
 
-
 /// <reference lib="es2015.symbol.wellknown" />
 /// <reference lib="es2020.intl" />
 /// <reference lib="es2025.intl" />
@@ -276,6 +275,8 @@ declare namespace Temporal {
         offset?: "use" | "ignore" | "prefer" | "reject" | undefined;
     }
 
+    interface ZonedDateTimeToLocaleStringOptions extends Omit<Intl.DateTimeFormatOptions, "timeZone"> {}
+
     interface ZonedDateTime {
         readonly calendarId: string;
         readonly timeZoneId: string;
@@ -317,7 +318,7 @@ declare namespace Temporal {
         round(roundTo: RoundingOptions<"day" | TimeUnit>): ZonedDateTime;
         equals(other: ZonedDateTimeLike): boolean;
         toString(options?: ZonedDateTimeToStringOptions): string;
-        toLocaleString(locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions): string;
+        toLocaleString(locales?: Intl.LocalesArgument, options?: ZonedDateTimeToLocaleStringOptions): string;
         toJSON(): string;
         valueOf(): never;
         startOfDay(): ZonedDateTime;

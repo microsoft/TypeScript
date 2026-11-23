@@ -17,7 +17,7 @@ export { default as ConstantNumber } from "./constants"
 //// [/home/src/workspaces/project/types.d.ts] *new* 
 type MagicNumber = typeof import('./reexport').ConstantNumber
 
-tsgo 
+tsc 
 ExitStatus:: Success
 Output::
 //// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
@@ -191,7 +191,7 @@ Edit [0]:: Modify imports used in global file
 //// [/home/src/workspaces/project/constants.ts] *modified* 
 export default 2;
 
-tsgo 
+tsc 
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96mclass1.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType '1' is not assignable to type '2'.

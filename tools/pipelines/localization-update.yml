@@ -26,7 +26,7 @@ jobs:
     steps:
       - checkout: self
         clean: true
-        fetchDepth: 1
+        fetchDepth: 0
         fetchTags: false
         submodules: false
 
@@ -207,16 +207,27 @@ jobs:
                 git config --local http.https://github.com/.extraheader "AUTHORIZATION: basic $basicAuth"
                 git remote set-url origin https://github.com/microsoft/TypeScript.git
 
+                $existingPr = gh pr list --repo microsoft/TypeScript --base main --head $branch --state open --json url --jq '.[0].url // empty'
                 $remoteBranch = git ls-remote --heads origin $branch
                 $branchExists = [bool] $remoteBranch
+                $remoteCommit = ""
                 if ($branchExists) {
-                    git fetch --depth=1 --no-tags --progress origin "refs/heads/${branch}:refs/remotes/origin/${branch}"
+                    git fetch --no-tags --progress origin "refs/heads/${branch}:refs/remotes/origin/${branch}"
+                    $remoteCommit = git rev-parse "origin/${branch}"
+                }
+
+                $candidate = git rev-parse HEAD
+                if ($existingPr) {
+                    if (!$branchExists) {
+                        throw "The open localization pull request no longer has a remote branch."
+                    }
+                    $candidate = node tools/scripts/preserve-localization-base.mjs $remoteCommit
                 }
 
                 $shouldPush = $true
                 if ($branchExists) {
-                    $localTree = git rev-parse 'HEAD^{tree}'
-                    $remoteTree = git rev-parse "origin/${branch}^{tree}"
+                    $localTree = git rev-parse "${candidate}^{tree}"
+                    $remoteTree = git rev-parse "${remoteCommit}^{tree}"
                     if ($localTree -eq $remoteTree) {
                         Write-Host "Remote branch already contains the same files."
                         $shouldPush = $false
@@ -224,10 +235,9 @@ jobs:
                 }
 
                 if ($shouldPush) {
-                    git push --force-with-lease --set-upstream origin $branch
+                    git push "--force-with-lease=refs/heads/${branch}:${remoteCommit}" origin "${candidate}:refs/heads/${branch}"
                 }
 
-                $existingPr = gh pr list --repo microsoft/TypeScript --base main --head $branch --state open --json url --jq '.[0].url // empty'
                 if ($existingPr) {
                     Write-Host "Updated existing pull request: $existingPr"
                 }

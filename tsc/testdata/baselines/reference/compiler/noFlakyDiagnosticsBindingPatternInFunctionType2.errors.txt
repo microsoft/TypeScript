@@ -1,0 +1,18 @@
+/a.js(3,33): error TS1005: ';' expected.
+/a.js(3,39): error TS2842: 'boolean' is an unused renaming of 'a'. Did you intend to use it as a type annotation?
+/a.js(3,39): error TS7031: Binding element 'boolean' implicitly has an 'any' type.
+
+
+==== /a.js (3 errors) ====
+    /** @template T */
+    class Base {}
+    /** @extends {Base<{ e: function({ a: boolean }): void }>} */
+                                    ~
+!!! error TS1005: ';' expected.
+                                          ~~~~~~~
+!!! error TS2842: 'boolean' is an unused renaming of 'a'. Did you intend to use it as a type annotation?
+!!! related TS2843 /a.js:3:48: We can only write a type for 'a' by adding a type for the entire parameter here.
+                                          ~~~~~~~
+!!! error TS7031: Binding element 'boolean' implicitly has an 'any' type.
+    export class C extends Base {}
+    

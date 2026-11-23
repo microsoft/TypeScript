@@ -1,0 +1,13 @@
+constEnumInitializerTypeErasureIsolated.ts(3,9): error TS2474: const enum member initializers must be constant expressions.
+
+
+==== constEnumInitializerTypeErasureIsolated.ts (1 errors) ====
+    const enum E {
+        A = 1,
+        B = A + (1 as number),
+            ~~~~~~~~~~~~~~~~~
+!!! error TS2474: const enum member initializers must be constant expressions.
+    }
+    
+    export const value = E.A;
+    
