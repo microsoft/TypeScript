@@ -122,7 +122,188 @@ test("index signatures allow an omitted type", () => {
     assert.strictEqual(declaration.members.length, 2);
 });
 
+describe("JSDoc helpers", { concurrency }, () => {
+    test("isJSDocLinkLike narrows all three link kinds", () => {
+        const isLink: (node: Node) => node is astModule.JSDocLink | astModule.JSDocLinkCode | astModule.JSDocLinkPlain = astModule.isJSDocLinkLike;
+        const nodes: Node[] = [
+            factory.createJSDocLink(createIdentifier("target"), "link text"),
+            factory.createJSDocLinkCode(createIdentifier("target"), "code text"),
+            factory.createJSDocLinkPlain(createIdentifier("target"), "plain text"),
+            factory.createJSDocText("ordinary text"),
+            factory.createJSDocNameReference(createIdentifier("target")),
+            createIdentifier("target"),
+        ];
+        const links = nodes.filter(isLink);
+        assert.deepStrictEqual(links, nodes.slice(0, 3));
+        assert.deepStrictEqual(links.map(link => link.text), ["link text", "code text", "plain text"]);
+    });
+
+    test("getJSDocParameterTags matches identifiers by name", () => {
+        using api = spawnAPI();
+        const source = api.createSourceFile(
+            "/parameters.ts",
+            `/**
+ * @param second the second parameter
+ * @param first the first parameter
+ * @param first another description
+ * @param first.property a nested property
+ */
+function f(first: object, second: string, undocumented: number) {}
+`,
+        ).sourceFile;
+        const declaration = source.statements[0];
+        assert.ok(astModule.isFunctionDeclaration(declaration));
+        const tags = astModule.getJSDocTags(declaration).filter(astModule.isJSDocParameterTag);
+        assert.deepStrictEqual(astModule.getJSDocParameterTags(declaration.parameters[0]), [tags[1], tags[2]]);
+        assert.deepStrictEqual(astModule.getJSDocParameterTags(declaration.parameters[1]), [tags[0]]);
+        assert.deepStrictEqual(astModule.getJSDocParameterTags(declaration.parameters[2]), []);
+    });
+
+    test("getJSDocTypeParameterTags matches names within template tags", () => {
+        using api = spawnAPI();
+        const source = api.createSourceFile(
+            "/templates.ts",
+            `/**
+ * @template U, V shared description
+ * @template T the first description
+ * @template T another description
+ * @template Other an unrelated type parameter
+ */
+function f<T, U, V, Undocumented>() {}
+`,
+        ).sourceFile;
+        const declaration = source.statements[0];
+        assert.ok(astModule.isFunctionDeclaration(declaration));
+        const parameters = declaration.typeParameters;
+        assert.ok(parameters);
+        const tags = astModule.getJSDocTags(declaration).filter(astModule.isJSDocTemplateTag);
+        assert.deepStrictEqual(astModule.getJSDocTypeParameterTags(parameters[0]), [tags[1], tags[2]]);
+        assert.deepStrictEqual(astModule.getJSDocTypeParameterTags(parameters[1]), [tags[0]]);
+        assert.deepStrictEqual(astModule.getJSDocTypeParameterTags(parameters[2]), [tags[0]]);
+        assert.deepStrictEqual(astModule.getJSDocTypeParameterTags(parameters[3]), []);
+    });
+
+    test("getJSDocParameterTags matches binding patterns by position", () => {
+        using api = spawnAPI();
+        const source = api.createSourceFile(
+            "/bindings.js",
+            `/**
+ * @param {string} named a named parameter
+ * @param {object} options an object parameter
+ * @param {Array} entries an array parameter
+ */
+function f(named, { value }, [entry], { undocumented }) {}
+`,
+        ).sourceFile;
+        const declaration = source.statements[0];
+        assert.ok(astModule.isFunctionDeclaration(declaration));
+        const tags = astModule.getJSDocTags(declaration).filter(astModule.isJSDocParameterTag);
+        assert.deepStrictEqual(astModule.getJSDocParameterTags(declaration.parameters[1]), [tags[1]]);
+        assert.deepStrictEqual(astModule.getJSDocParameterTags(declaration.parameters[2]), [tags[2]]);
+        assert.deepStrictEqual(astModule.getJSDocParameterTags(declaration.parameters[3]), []);
+    });
+});
+
 describe("AST property contracts", { concurrency }, () => {
+    test("JSDoc typedefs expose type nodes", () => {
+        using api = spawnAPI();
+        const source = api.createSourceFile(
+            "/typedef.js",
+            `/** @typedef {string} Text */
+function text() {}
+/**
+ * @typedef {Object} Options
+ * @property {string} name
+ */
+function options() {}
+/** @typedef Missing */
+function missing() {}
+`,
+        ).sourceFile;
+        const kinds = [SyntaxKind.JSDocTypeExpression, SyntaxKind.JSDocTypeLiteral, undefined];
+        const declarations = source.statements.filter(astModule.isFunctionDeclaration);
+        assert.strictEqual(declarations.length, kinds.length);
+        for (const [index, declaration] of declarations.entries()) {
+            const docs: readonly JSDoc[] | undefined = declaration.jsDoc;
+            const tag = docs?.[0].tags?.[0];
+            assert.ok(tag && astModule.isJSDocTypedefTag(tag));
+            const type: astModule.JSDocTypeExpression | astModule.JSDocTypeLiteral | undefined = tag.typeExpression;
+            assert.strictEqual(type?.kind, kinds[index]);
+            assert.strictEqual(visitEachChild(tag, node => node), tag);
+            assert.strictEqual(getSynthesizedDeepClone(tag).typeExpression?.kind, kinds[index]);
+        }
+
+        const tagName = factory.createIdentifier("typedef");
+        const notAType = factory.createTypeReferenceNode(factory.createIdentifier("notAType"));
+        // @ts-expect-error A typedef type expression must be a JSDoc type expression or literal.
+        factory.createJSDocTypedefTag(tagName, notAType);
+    });
+
+    test("JSDoc signatures expose tags rather than declaration children", () => {
+        using api = spawnAPI();
+        const source = api.createSourceFile(
+            "/callback.js",
+            `/**
+ * @callback Callback
+ * @this {Object}
+ * @param {string} value
+ * @returns {number}
+ */
+function f() {}
+`,
+        ).sourceFile;
+        const declaration = source.statements.find(astModule.isFunctionDeclaration);
+        assert.ok(declaration);
+        const doc = declaration.jsDoc?.[0];
+        assert.ok(doc && astModule.isJSDoc(doc));
+        const callback = doc.tags?.[0];
+        assert.ok(callback && astModule.isJSDocCallbackTag(callback));
+        const signature = callback.typeExpression;
+        assert.ok(astModule.isJSDocSignature(signature));
+        const parameters: astModule.NodeArray<astModule.JSDocParameterTag | astModule.JSDocThisTag> = signature.parameters;
+        const result: astModule.JSDocReturnTag | undefined = signature.type;
+        assert.strictEqual(parameters[0].kind, SyntaxKind.JSDocThisTag);
+        assert.strictEqual(parameters[1].kind, SyntaxKind.JSDocParameterTag);
+        assert.strictEqual(result?.kind, SyntaxKind.JSDocReturnTag);
+        assert.strictEqual(visitEachChild(signature, node => node), signature);
+
+        const template = factory.createJSDocTemplateTag(factory.createIdentifier("template"), undefined, []);
+        const typeParameters: readonly astModule.JSDocTemplateTag[] = [template];
+        const synthesized = factory.createJSDocSignature(typeParameters, parameters, result);
+        const clone = getSynthesizedDeepClone(synthesized);
+        assert.strictEqual(clone.typeParameters?.[0].kind, SyntaxKind.JSDocTemplateTag);
+        assert.deepStrictEqual(clone.parameters.map(parameter => parameter.kind), [SyntaxKind.JSDocThisTag, SyntaxKind.JSDocParameterTag]);
+        assert.strictEqual(clone.type?.kind, SyntaxKind.JSDocReturnTag);
+        assert.strictEqual(visitEachChild(clone, node => node), clone);
+        assert.strictEqual(visitEachChild(synthesized, node => node), synthesized);
+    });
+
+    test("JSDoc namespace bodies include their final identifier", () => {
+        using api = spawnAPI();
+        const source = api.createSourceFile(
+            "/namespace.js",
+            `/** @typedef {string} Outer.Inner.Value */
+function f() {}
+`,
+        ).sourceFile;
+        const declaration = source.statements.find(astModule.isFunctionDeclaration);
+        assert.ok(declaration);
+        const doc = declaration.jsDoc?.[0];
+        assert.ok(doc && astModule.isJSDoc(doc));
+        const tag = doc.tags?.[0];
+        assert.ok(tag && astModule.isJSDocTypedefTag(tag));
+        const outer = tag.name;
+        assert.ok(outer && astModule.isModuleDeclaration(outer));
+        const inner = outer.body;
+        assert.ok(inner && astModule.isModuleDeclaration(inner));
+        const body: astModule.ModuleBody = factory.createIdentifier("Value");
+        assert.ok(astModule.isModuleBody(body));
+        assert.ok(inner.body && astModule.isIdentifier(inner.body));
+        assert.strictEqual(inner.body.text, "Value");
+        assert.strictEqual(visitEachChild(inner, node => node), inner);
+        assert.deepStrictEqual(collectKinds(getSynthesizedDeepClone(outer)), collectKinds(outer));
+    });
+
     test("absent parser children have optional types", () => {
         const absent: {
             exportType: astModule.ExportAssignment["type"];
@@ -971,7 +1152,7 @@ export const x = 1;`,
         });
         try {
             const sf = getRemoteSourceFile(api, "/tsconfig.json", "/src/index.ts");
-            const jsDoc = sf.statements[0].jsDoc?.[0] as JSDoc | undefined;
+            const jsDoc = sf.statements[0].jsDoc?.[0];
             assert.ok(jsDoc?.kind === SyntaxKind.JSDoc);
             const comment = jsDoc.comment;
             assert.ok(typeof comment !== "string");

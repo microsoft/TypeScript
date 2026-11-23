@@ -34,6 +34,13 @@ export function finiteArray() {
     return null as unknown as Nested;
 }
 
+//// [expanding.ts]
+// Each level is a new instantiation, so printing it stops at a bounded depth.
+type G<T> = T extends unknown ? (T | G<[T]>)[] : never;
+declare const g: G<"x">;
+export const h = g;
+export const n: number = g;
+
 
 //// [local.js]
 export function array() {
@@ -57,8 +64,16 @@ export function finite() {
 export function finiteArray() {
     return null;
 }
+//// [expanding.js]
+export const h = g;
+export const n = g;
 
 
+//// [local.d.ts]
+export declare function array(): /*elided*/ any[];
+export declare function tuple(): [/*elided*/ any];
+export declare function readonlyTuple(): readonly [/*elided*/ any];
+export declare function union(): string | (string | /*elided*/ any)[];
 //// [nameable.d.ts]
 export type RecursiveArray = RecursiveArray[];
 export type RecursiveTuple = readonly [RecursiveTuple];
@@ -66,3 +81,6 @@ export declare const namedArray: RecursiveArray;
 export declare const namedTuple: RecursiveTuple;
 export declare function finite(): [[[[[[[[[[[[[number]]]]]]]]]]]]];
 export declare function finiteArray(): number[][][][][][][][][][][][][];
+//// [expanding.d.ts]
+export declare const h: ("x" | ((((((((((/*elided*/ any | [[[[[[[[[["x"]]]]]]]]]])[] | [[[[[[[[["x"]]]]]]]]])[] | [[[[[[[["x"]]]]]]]])[] | [[[[[[["x"]]]]]]])[] | [[[[[["x"]]]]]])[] | [[[[["x"]]]]])[] | [[[["x"]]]])[] | [[["x"]]])[] | [["x"]])[] | ["x"])[])[];
+export declare const n: number;

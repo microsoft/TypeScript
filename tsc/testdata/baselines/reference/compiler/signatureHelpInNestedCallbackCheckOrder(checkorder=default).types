@@ -1,0 +1,64 @@
+//// [tests/cases/compiler/signatureHelpInNestedCallbackCheckOrder.ts] ////
+
+=== signatureHelpInNestedCallbackCheckOrder.ts ===
+// Signature help for the inner call resolves the outer call from within
+// it, while the inner call is being resolved. The errors of that
+// resolution are not reported once the call is checked (48135).
+
+interface Monad<A> { Array: A[] }
+>Array : A[]
+
+type MonadIdentifier = keyof Monad<unknown>
+>MonadIdentifier : "Array"
+
+declare const setBindArray:
+>setBindArray : (bind: <A, B>(g: (a: A) => Monad<B>["Array"]) => (fa: Monad<A>["Array"]) => Monad<B>["Array"]) => void
+
+  (bind: <A, B>(g: (a: A) => Monad<B>["Array"]) => (fa: Monad<A>["Array"]) => Monad<B>["Array"]) => void
+>bind : <A, B>(g: (a: A) => Monad<B>["Array"]) => (fa: Monad<A>["Array"]) => Monad<B>["Array"]
+>g : (a: A) => Monad<B>["Array"]
+>a : A
+>fa : A[]
+
+setBindArray(g => fa => fa.flatMap(g))
+>setBindArray(g => fa => fa.flatMap(g)) : void
+>setBindArray : (bind: <A, B>(g: (a: A) => Monad<B>["Array"]) => (fa: Monad<A>["Array"]) => Monad<B>["Array"]) => void
+>g => fa => fa.flatMap(g) : <A, B>(g: (a: A) => Monad<B>["Array"]) => (fa: A[]) => B[]
+>g : (a: A) => Monad<B>["Array"]
+>fa => fa.flatMap(g) : (fa: A[]) => B[]
+>fa : A[]
+>fa.flatMap(g) : B[]
+>fa.flatMap : <U, This = undefined>(callback: (this: This, value: A, index: number, array: A[]) => U | readonly U[], thisArg?: This | undefined) => U[]
+>fa : A[]
+>flatMap : <U, This = undefined>(callback: (this: This, value: A, index: number, array: A[]) => U | readonly U[], thisArg?: This | undefined) => U[]
+>g : (a: A) => Monad<B>["Array"]
+
+declare const setBindGeneric:
+>setBindGeneric : <I extends MonadIdentifier>(idenfier: I, bind: <A, B>(g: (a: A) => Monad<B>[I]) => (fa: Monad<A>[I]) => Monad<B>[I]) => void
+
+  <I extends MonadIdentifier>
+    ( idenfier: I
+>idenfier : I
+
+    , bind: <A, B>(g: (a: A) => Monad<B>[I]) => (fa: Monad<A>[I]) => Monad<B>[I]
+>bind : <A, B>(g: (a: A) => Monad<B>[I]) => (fa: Monad<A>[I]) => Monad<B>[I]
+>g : (a: A) => Monad<B>[I]
+>a : A
+>fa : Monad<A>[I]
+
+    ) => void
+
+setBindGeneric("Array", g => fa => fa.flatMap(g))
+>setBindGeneric("Array", g => fa => fa.flatMap(g)) : void
+>setBindGeneric : <I extends MonadIdentifier>(idenfier: I, bind: <A, B>(g: (a: A) => Monad<B>[I]) => (fa: Monad<A>[I]) => Monad<B>[I]) => void
+>"Array" : "Array"
+>g => fa => fa.flatMap(g) : <A, B>(g: (a: A) => B[]) => (fa: A_1[]) => B[]
+>g : (a: A) => B[]
+>fa => fa.flatMap(g) : (fa: A[]) => B[]
+>fa : A[]
+>fa.flatMap(g) : B[]
+>fa.flatMap : <U, This = undefined>(callback: (this: This, value: A, index: number, array: A[]) => U | readonly U[], thisArg?: This | undefined) => U[]
+>fa : A[]
+>flatMap : <U, This = undefined>(callback: (this: This, value: A, index: number, array: A[]) => U | readonly U[], thisArg?: This | undefined) => U[]
+>g : (a: A) => B[]
+

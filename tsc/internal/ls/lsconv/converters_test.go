@@ -271,6 +271,31 @@ func TestConvertersSourceFileProjectionExpansion(t *testing.T) {
 	assert.Equal(t, positions[1].Position, core.TextPos(2))
 }
 
+// A failed mapper leaves an empty virtual file without a span map, while the line map still
+// describes the non-ASCII original text. Its second line starts at byte 3, so converting
+// hover positions and inlay-hint ranges previously tried to scan the empty file from
+// offset 3 and panicked. Both requests must instead clamp to the virtual file's offset 0.
+func TestConvertersFailedContentMapperPosition(t *testing.T) {
+	t.Parallel()
+	original := "é\nhover here\n"
+	file := parser.ParseSourceFile(ast.SourceFileParseOptions{FileName: "/component.box", PathKey: "/component.box"}, "", core.ScriptKindTS)
+	file.SetContentMapperInfo(ast.ContentMapperSourceFileInfo{OriginalText: original, ContentMapper: "mapper"})
+	assert.Assert(t, file.IsContentMapperFailureStub())
+
+	lineMap := lsconv.ComputeLSPLineStarts(original)
+	converters := lsconv.NewConverters(lsproto.PositionEncodingKindUTF16, func(_ tspath.RootedFilePath) *lsconv.LSPLineMap { return lineMap })
+	positions := converters.FromLSPPositionForSourceFile(file, lsproto.Position{Line: 1, Character: 2}, spanmap.FeatureHover)
+	assert.Equal(t, len(positions), 1)
+	assert.Equal(t, positions[0].Position, core.TextPos(0))
+
+	ranges := converters.FromLSPRangeIntersectingForSourceFile(file, lsproto.Range{
+		Start: lsproto.Position{Line: 1},
+		End:   lsproto.Position{Line: 1, Character: 5},
+	}, spanmap.FeatureInlayHints)
+	assert.Equal(t, len(ranges), 1)
+	assert.Equal(t, ranges[0].Span, core.NewTextRange(0, 0))
+}
+
 // TestConvertersInvalidUTF8 verifies behavior on text containing invalid UTF-8
 // sequences (e.g. lone continuation bytes). Node's TextDecoder substitutes such
 // bytes with U+FFFD, so the JS-reference test cannot cover this; we assert the

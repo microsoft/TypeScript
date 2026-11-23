@@ -25,16 +25,13 @@ func initializeResult(source string) contentmapper.InitializeResult {
 }
 
 func identityMappedOutput(content string) (contentmapper.MappedOutput, error) {
-	mappings, err := spanmap.New([]spanmap.Segment{{
+	mappings := spanmap.New([]spanmap.Segment{{
 		VirtualEnd:  core.TextPos(len(content)),
 		OriginalEnd: core.TextPos(len(content)),
 		Kind:        spanmap.KindVerbatim,
 		Features:    spanmap.FeatureAll,
-	}}).Marshal()
-	if err != nil {
-		return contentmapper.MappedOutput{}, err
-	}
-	return contentmapper.MappedOutput{Text: content, Extension: ".ts", Mappings: json.Value(mappings)}, nil
+	}}).Tuples()
+	return contentmapper.MappedOutput{Text: content, Extension: ".ts", Mappings: mappings}, nil
 }
 
 type staticProjectHandler struct{ ipc.Handler }

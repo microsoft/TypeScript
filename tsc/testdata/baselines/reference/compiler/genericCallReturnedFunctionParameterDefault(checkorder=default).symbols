@@ -1,0 +1,51 @@
+//// [tests/cases/compiler/genericCallReturnedFunctionParameterDefault.ts] ////
+
+=== genericCallReturnedFunctionParameterDefault.ts ===
+// The function returned from the callback of a generic call has a parameter
+// with a default and no annotation. Once T is inferred, the contextual
+// signature of the returned function is its own signature, but the parameter
+// already has its type (boolean) from the initializer, computed while T was
+// being inferred, so there is no circularity: no TS7022, and 'r()(1)' is an
+// error. (Reduced from open-design ProjectView.tsx, useCallback returning
+// '{ release: (recoverable = false) => ... }'.)
+
+declare function id<T>(callback: T): T;
+>id : Symbol(id, Decl(genericCallReturnedFunctionParameterDefault.ts, 0, 0))
+>T : Symbol(T, Decl(genericCallReturnedFunctionParameterDefault.ts, 8, 20))
+>callback : Symbol(callback, Decl(genericCallReturnedFunctionParameterDefault.ts, 8, 23))
+>T : Symbol(T, Decl(genericCallReturnedFunctionParameterDefault.ts, 8, 20))
+>T : Symbol(T, Decl(genericCallReturnedFunctionParameterDefault.ts, 8, 20))
+
+id(() => {
+>id : Symbol(id, Decl(genericCallReturnedFunctionParameterDefault.ts, 0, 0))
+
+    return (x = false) => {};
+>x : Symbol(x, Decl(genericCallReturnedFunctionParameterDefault.ts, 11, 12))
+
+});
+
+id(() => (y = false) => y);
+>id : Symbol(id, Decl(genericCallReturnedFunctionParameterDefault.ts, 0, 0))
+>y : Symbol(y, Decl(genericCallReturnedFunctionParameterDefault.ts, 14, 10))
+>y : Symbol(y, Decl(genericCallReturnedFunctionParameterDefault.ts, 14, 10))
+
+id(() => {
+>id : Symbol(id, Decl(genericCallReturnedFunctionParameterDefault.ts, 0, 0))
+
+    return { m(z = false) {} };
+>m : Symbol(m, Decl(genericCallReturnedFunctionParameterDefault.ts, 17, 12))
+>z : Symbol(z, Decl(genericCallReturnedFunctionParameterDefault.ts, 17, 15))
+
+});
+
+const r = id(() => {
+>r : Symbol(r, Decl(genericCallReturnedFunctionParameterDefault.ts, 20, 5))
+>id : Symbol(id, Decl(genericCallReturnedFunctionParameterDefault.ts, 0, 0))
+
+    return (w = 0) => {};
+>w : Symbol(w, Decl(genericCallReturnedFunctionParameterDefault.ts, 21, 12))
+
+});
+r()("");
+>r : Symbol(r, Decl(genericCallReturnedFunctionParameterDefault.ts, 20, 5))
+

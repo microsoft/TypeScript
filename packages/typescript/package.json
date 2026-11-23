@@ -40,6 +40,7 @@
         "./package.json": "./package.json",
         "./schemas/tsconfig.schema.json": "./schemas/tsconfig.schema.json",
         "./schemas/jsconfig.schema.json": "./schemas/jsconfig.schema.json",
+        "./schemas/contentmapper.schema.json": "./schemas/contentmapper.schema.json",
         ".": "./lib/version.cjs",
         "./vscode": {
             "@typescript/source": "./src/vscode/extensionApi.ts",

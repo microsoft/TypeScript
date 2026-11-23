@@ -1,0 +1,44 @@
+//// [tests/cases/compiler/circularReturnTypeThroughUncontextualCallbackArgument.ts] ////
+
+=== circularReturnTypeThroughUncontextualCallbackArgument.ts ===
+// `getCreds`'s return type depends on resolving `materialize({ next })`, whose
+// argument check needs the return type of the (non-contextually typed) arrow
+// `next`, which calls `getCreds` again. TypeScript never reports this cycle in
+// any order: call resolution hides the resolutions below it, and the relation
+// reads an in-progress return type as `any` without failing it. So no TS7023,
+// and `getCreds` returns `number`. (Reduced from OmniRoute auth.ts
+// getProviderCredentials/selectNextLeaseCandidate.)
+
+const x = getCreds();
+>x : number
+>getCreds() : number
+>getCreds : () => number
+
+declare function materialize(extra: { next?: (id: string) => unknown }): number;
+>materialize : (extra: { next?: (id: string) => unknown; }) => number
+>extra : { next?: (id: string) => unknown; }
+>next : ((id: string) => unknown) | undefined
+>id : string
+
+function getCreds() {
+>getCreds : () => number
+
+    const next = (id: string) => getCreds();
+>next : (id: string) => number
+>(id: string) => getCreds() : (id: string) => number
+>id : string
+>getCreds() : number
+>getCreds : () => number
+
+    return materialize({ next });
+>materialize({ next }) : number
+>materialize : (extra: { next?: (id: string) => unknown; }) => number
+>{ next } : { next: (id: string) => number; }
+>next : (id: string) => number
+}
+
+const n: number = getCreds();
+>n : number
+>getCreds() : number
+>getCreds : () => number
+

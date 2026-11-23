@@ -1,0 +1,42 @@
+//// [tests/cases/compiler/declarationEmitCommonjsTemplateExportName.ts] ////
+
+=== a.js ===
+const value = 123;
+>value : Symbol(value, Decl(a.js, 0, 5))
+
+exports[`class`] = value;
+>exports : Symbol(exports, Decl(a.js, 0, 0))
+>`class` : Symbol(`class`, Decl(a.js, 0, 18))
+>value : Symbol(value, Decl(a.js, 0, 5))
+
+exports[`ordinary`] = value;
+>exports : Symbol(exports, Decl(a.js, 0, 0))
+>`ordinary` : Symbol(`ordinary`, Decl(a.js, 1, 25))
+>value : Symbol(value, Decl(a.js, 0, 5))
+
+exports[`default`] = value;
+>exports : Symbol(exports, Decl(a.js, 0, 0))
+>`default` : Symbol(`default`, Decl(a.js, 2, 28))
+>value : Symbol(value, Decl(a.js, 0, 5))
+
+exports[`a b`] = value;
+>exports : Symbol(exports, Decl(a.js, 0, 0))
+>`a b` : Symbol(`a b`, Decl(a.js, 3, 27), Decl(a.js, 4, 23))
+>value : Symbol(value, Decl(a.js, 0, 5))
+
+Object.defineProperty(exports, `a b`, { value });
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>exports : Symbol(exports, Decl(a.js, 0, 0))
+>`a b` : Symbol(`a b`, Decl(a.js, 3, 27), Decl(a.js, 4, 23))
+>value : Symbol(value, Decl(a.js, 5, 39))
+
+Object.defineProperty(exports, `other name`, { value });
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>exports : Symbol(exports, Decl(a.js, 0, 0))
+>`other name` : Symbol(`other name`, Decl(a.js, 5, 49))
+>value : Symbol(value, Decl(a.js, 6, 46))
+

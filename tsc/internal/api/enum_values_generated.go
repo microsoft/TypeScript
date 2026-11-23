@@ -20,6 +20,7 @@ import (
 	diagnostics "github.com/microsoft/TypeScript/tsc/internal/diagnostics"
 	lsproto "github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	nodebuilder "github.com/microsoft/TypeScript/tsc/internal/nodebuilder"
+	printer "github.com/microsoft/TypeScript/tsc/internal/printer"
 	spanmap "github.com/microsoft/TypeScript/tsc/internal/spanmap"
 	tspath "github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
@@ -325,6 +326,15 @@ func main() {
 			"InTypeAlias":                         toInt32(checker.TypeFormatFlagsInTypeAlias),
 			"NodeBuilderFlagsMask":                toInt32(checker.TypeFormatFlagsNodeBuilderFlagsMask),
 		},
+		"SymbolFormatFlags": {
+			"None":                               toInt32(checker.SymbolFormatFlagsNone),
+			"WriteTypeParametersOrArguments":     toInt32(checker.SymbolFormatFlagsWriteTypeParametersOrArguments),
+			"UseOnlyExternalAliasing":            toInt32(checker.SymbolFormatFlagsUseOnlyExternalAliasing),
+			"AllowAnyNodeKind":                   toInt32(checker.SymbolFormatFlagsAllowAnyNodeKind),
+			"UseAliasDefinedOutsideCurrentScope": toInt32(checker.SymbolFormatFlagsUseAliasDefinedOutsideCurrentScope),
+			"WriteComputedProps":                 toInt32(checker.SymbolFormatFlagsWriteComputedProps),
+			"DoNotIncludeSymbolChain":            toInt32(checker.SymbolFormatFlagsDoNotIncludeSymbolChain),
+		},
 		"DiagnosticCategory": {
 			"Warning":    toInt32(diagnostics.CategoryWarning),
 			"Error":      toInt32(diagnostics.CategoryError),
@@ -471,7 +481,6 @@ func main() {
 			"ConstructorKeyword":                           toInt32(ast.KindConstructorKeyword),
 			"DeclareKeyword":                               toInt32(ast.KindDeclareKeyword),
 			"GetKeyword":                                   toInt32(ast.KindGetKeyword),
-			"ImmediateKeyword":                             toInt32(ast.KindImmediateKeyword),
 			"InferKeyword":                                 toInt32(ast.KindInferKeyword),
 			"IntrinsicKeyword":                             toInt32(ast.KindIntrinsicKeyword),
 			"IsKeyword":                                    toInt32(ast.KindIsKeyword),
@@ -1034,6 +1043,37 @@ func main() {
 			"All":     toInt32(compiler.EmitAll),
 			"OnlyJs":  toInt32(compiler.EmitOnlyJs),
 			"OnlyDts": toInt32(compiler.EmitOnlyDts),
+		},
+		"EmitFlags": {
+			"SingleLine":                     toInt32(printer.EFSingleLine),
+			"MultiLine":                      toInt32(printer.EFMultiLine),
+			"NoLeadingSourceMap":             toInt32(printer.EFNoLeadingSourceMap),
+			"NoTrailingSourceMap":            toInt32(printer.EFNoTrailingSourceMap),
+			"NoNestedSourceMaps":             toInt32(printer.EFNoNestedSourceMaps),
+			"NoTokenLeadingSourceMaps":       toInt32(printer.EFNoTokenLeadingSourceMaps),
+			"NoTokenTrailingSourceMaps":      toInt32(printer.EFNoTokenTrailingSourceMaps),
+			"NoLeadingComments":              toInt32(printer.EFNoLeadingComments),
+			"NoTrailingComments":             toInt32(printer.EFNoTrailingComments),
+			"NoNestedComments":               toInt32(printer.EFNoNestedComments),
+			"HelperName":                     toInt32(printer.EFHelperName),
+			"ExportName":                     toInt32(printer.EFExportName),
+			"LocalName":                      toInt32(printer.EFLocalName),
+			"Indented":                       toInt32(printer.EFIndented),
+			"NoIndentation":                  toInt32(printer.EFNoIndentation),
+			"ReuseTempVariableScope":         toInt32(printer.EFReuseTempVariableScope),
+			"CustomPrologue":                 toInt32(printer.EFCustomPrologue),
+			"NoAsciiEscaping":                toInt32(printer.EFNoAsciiEscaping),
+			"ExternalHelpers":                toInt32(printer.EFExternalHelpers),
+			"StartOnNewLine":                 toInt32(printer.EFStartOnNewLine),
+			"IndirectCall":                   toInt32(printer.EFIndirectCall),
+			"AsyncFunctionBody":              toInt32(printer.EFAsyncFunctionBody),
+			"NoLexicalArguments":             toInt32(printer.EFNoLexicalArguments),
+			"TransformPrivateStaticElements": toInt32(printer.EFTransformPrivateStaticElements),
+			"NoLexicalThis":                  toInt32(printer.EFNoLexicalThis),
+			"None":                           toInt32(printer.EFNone),
+			"NoSourceMap":                    toInt32(printer.EFNoSourceMap),
+			"NoTokenSourceMaps":              toInt32(printer.EFNoTokenSourceMaps),
+			"NoComments":                     toInt32(printer.EFNoComments),
 		},
 	}
 	if err := json.NewEncoder(os.Stdout).Encode(values); err != nil {
