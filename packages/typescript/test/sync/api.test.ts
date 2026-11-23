@@ -1278,12 +1278,15 @@ describe("API", { concurrency }, () => {
                 "/workspace/project/types/pkg/index.d.ts": "export {};",
             }),
         });
-        const resolver = api.createModuleResolver({ typeRoots: ["types"], traceResolution: true }, {
-            moduleResolutions: { fallback: "unresolved", entries: [] },
-            resolveModuleName: () => {
-                assert.fail("Type references must not invoke the module-name callback");
+        const resolver = api.createModuleResolver(
+            { typeRoots: ["types"], traceResolution: true },
+            {
+                moduleResolutions: { fallback: "unresolved", entries: [] },
+                resolveModuleName: () => {
+                    assert.fail("Type references must not invoke the module-name callback");
+                },
             },
-        });
+        );
         const result = resolver.resolveTypeReferenceDirective("pkg", "src/index.ts");
         assert.equal(result.resolvedTypeReferenceDirective?.resolvedFileName, "/workspace/project/types/pkg/index.d.ts");
         assert.equal(result.resolvedTypeReferenceDirective?.primary, true);
