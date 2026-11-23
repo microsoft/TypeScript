@@ -34,6 +34,7 @@ func TestDocumentIdentifierUnmarshalJSON(t *testing.T) {
 		input    string
 		fileName string
 		uri      string
+		resolved string
 		err      string
 	}{
 		{
@@ -45,6 +46,72 @@ func TestDocumentIdentifierUnmarshalJSON(t *testing.T) {
 			name:  "uri object",
 			input: `{"uri":"file:///foo.ts"}`,
 			uri:   "file:///foo.ts",
+		},
+		{
+			name:     "file uri with one slash",
+			input:    `{"uri":"file:/workspace/sub/src/index.ts"}`,
+			uri:      "file:///workspace/sub/src/index.ts",
+			resolved: "/workspace/sub/src/index.ts",
+		},
+		{
+			name:     "file uri with opaque path",
+			input:    `{"uri":"file:workspace/sub/src/index.ts"}`,
+			uri:      "file:///workspace/sub/src/index.ts",
+			resolved: "/workspace/sub/src/index.ts",
+		},
+		{
+			name:     "uri without scheme",
+			input:    `{"uri":"/workspace/sub/src/index.ts"}`,
+			uri:      "file:///workspace/sub/src/index.ts",
+			resolved: "/workspace/sub/src/index.ts",
+		},
+		{
+			name:     "escaped file uri",
+			input:    `{"uri":"file:/workspace/file%20name.ts"}`,
+			uri:      "file:///workspace/file%20name.ts",
+			resolved: "/workspace/file name.ts",
+		},
+		{
+			name:     "file uri with authority",
+			input:    `{"uri":"file://server/share/index.ts"}`,
+			uri:      "file://server/share/index.ts",
+			resolved: "//server/share/index.ts",
+		},
+		{
+			name:     "empty file uri path",
+			input:    `{"uri":"file://"}`,
+			uri:      "file:///",
+			resolved: "/",
+		},
+		{
+			name:  "untitled uri",
+			input: `{"uri":"untitled:Untitled-1"}`,
+			uri:   "untitled:Untitled-1",
+		},
+		{
+			name:  "remote uri",
+			input: `{"uri":"vscode-remote://ssh-remote+host/workspace/file%20name.ts?query#fragment"}`,
+			uri:   "vscode-remote://ssh-remote+host/workspace/file%20name.ts?query#fragment",
+		},
+		{
+			name:     "file uri as plain file name",
+			input:    `"file:/workspace/sub/src/index.ts"`,
+			fileName: "file:/workspace/sub/src/index.ts",
+		},
+		{
+			name:  "invalid uri escape",
+			input: `{"uri":"file:///test%xx.ts"}`,
+			err:   "invalid URI",
+		},
+		{
+			name:  "invalid non-file uri",
+			input: `{"uri":"vscode-remote://host/test%xx.ts"}`,
+			err:   "invalid URI",
+		},
+		{
+			name:  "file uri path without authority",
+			input: `{"uri":"file:////server/share"}`,
+			err:   "invalid URI",
 		},
 		{
 			name:  "uri object with unknown fields",
@@ -77,6 +144,11 @@ func TestDocumentIdentifierUnmarshalJSON(t *testing.T) {
 			err:   "uri must be a non-empty string",
 		},
 		{
+			name:  "null uri",
+			input: `{"uri":null}`,
+			err:   "uri must be a non-empty string",
+		},
+		{
 			name:  "duplicate uri",
 			input: `{"uri":"file:///foo.ts","uri":"file:///bar.ts"}`,
 			err:   `duplicate object member name "uri"`,
@@ -100,6 +172,10 @@ func TestDocumentIdentifierUnmarshalJSON(t *testing.T) {
 			assert.NilError(t, err)
 			assert.Equal(t, d.FileName, tt.fileName)
 			assert.Equal(t, string(d.URI), tt.uri)
+			if tt.resolved != "" {
+				assert.Equal(t, d.ToFileName("/cwd").AsString(), tt.resolved)
+				assert.Equal(t, string(d.ToURI("/cwd")), tt.uri)
+			}
 		})
 	}
 }

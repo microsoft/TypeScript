@@ -124,6 +124,8 @@ func TestUnmarshalURI(t *testing.T) {
 		wantErr  bool
 	}{
 		{name: "file", uri: "file:///test.ts", expected: "file:///test.ts"},
+		{name: "single slash file", uri: "file:/test.ts", expected: "file:///test.ts"},
+		{name: "escaped single slash file", uri: "file:/file%20name.ts", expected: "file:///file%20name.ts"},
 		{name: "untitled", uri: "untitled:Untitled-1", expected: "untitled:Untitled-1"},
 		{name: "empty file path", uri: "file://", expected: "file:///"},
 		{name: "relative file path", uri: "file:test.ts", expected: "file:///test.ts"},

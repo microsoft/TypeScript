@@ -1299,6 +1299,28 @@ describe("API", { concurrency }, () => {
         assert.equal(callbackCalls, 1);
     });
 
+    test("module resolvers normalize URI document identifiers", async () => {
+        const resolvedFileName = "/workspace/sub/node_modules/pkg/index.d.ts";
+        await using api = spawnAPI({
+            "/workspace/sub/node_modules/pkg/package.json": JSON.stringify({ name: "pkg", version: "1.0.0", types: "index.d.ts" }),
+            [resolvedFileName]: "export {};",
+        });
+        const resolver = await api.createModuleResolver({
+            typeRoots: [],
+            moduleResolution: ModuleResolutionKind.NodeNext,
+        });
+        for (const prefix of ["file:///", "file:/", "file:", "/"]) {
+            const directory = { uri: `${prefix}workspace/sub/src` };
+            const file = { uri: `${prefix}workspace/sub/src/index.ts` };
+            assert.equal((await resolver.resolveModuleName("pkg", directory)).resolvedModule?.resolvedFileName, resolvedFileName, directory.uri);
+            assert.equal(
+                (await resolver.resolveTypeReferenceDirective("pkg", file)).resolvedTypeReferenceDirective?.resolvedFileName,
+                resolvedFileName,
+                file.uri,
+            );
+        }
+    });
+
     test("type reference resolver uses configured roots independently of module overrides", async () => {
         await using api = new API({
             cwd: "/workspace/project",
