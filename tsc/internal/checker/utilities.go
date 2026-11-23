@@ -2030,3 +2030,12 @@ func GetSetAccessorValueParameter(accessor *ast.Node) *ast.Node {
 func quotedAndCommaSeparated(items []string) string {
 	return strings.Join(core.Map(items, func(item string) string { return "'" + item + "'" }), ", ")
 }
+
+// The type of a member of an object literal type is set when the member is
+// created.
+func (c *Checker) peekTypeOfObjectLiteralMember(s *ast.Symbol) *Type {
+	if links := c.valueSymbolLinks.TryGet(s); links != nil {
+		return links.resolvedType
+	}
+	return nil
+}

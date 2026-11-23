@@ -10,6 +10,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/binder"
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/debug"
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/internal/jsnum"
 	"github.com/microsoft/TypeScript/tsc/internal/stringutil"
@@ -779,23 +780,167 @@ func (c *Checker) isDeeplyNestedType(t *Type, stack []*Type, maxDepth int) bool 
 		} else {
 			identity := getRecursionIdentityFromTarget(target)
 			count := 0
-			lastTypeId := TypeId(0)
+			var previous *Type
 			for _, t := range stack {
 				if hasMatchingRecursionIdentity(t, identity) {
-					// We only count occurrences with a higher type id than the previous occurrence, since higher
-					// type ids are an indicator of newer instantiations caused by recursion.
-					if t.id >= lastTypeId {
+					if previous == nil || c.isDeeperOccurrence(t, previous) {
 						count++
 						if count >= maxDepth {
 							return true
 						}
 					}
-					lastTypeId = t.id
+					previous = t
 				}
 			}
 		}
 	}
 	return false
+}
+
+// isDeeperOccurrence reports whether t, an occurrence of a recursion identity
+// nested within the occurrence previous, counts as another level of nesting.
+// Instantiations caused by recursion are built from the previous occurrence or
+// its parts and so have a higher generation, whereas nested type arguments and
+// the types of nested members have a lower one. However, evaluating a
+// conditional type, an indexed access, or a constraint can step to a type
+// built from fewer layers than the one it was evaluated from, so a lower
+// generation occurrence of such a type counts unless it is one of the types
+// previous was built from. A copy of an intersection or union with the same
+// constituents as previous, such as one without its alias, is the same level
+// of nesting. Two such types that both have aliases are different levels, as
+// the alias type arguments can keep growing while the constituents stay the
+// same, such as `type HasDefault<T> = T & { hasDefault: true }` applied to
+// `this` again and again.
+func (c *Checker) isDeeperOccurrence(t *Type, previous *Type) bool {
+	generation, previousGeneration := c.typeGeneration(t), c.typeGeneration(previous)
+	switch {
+	case generation > previousGeneration:
+		return true
+	case generation == previousGeneration:
+		return t == previous || t.flags&TypeFlagsUnionOrIntersection == 0 ||
+			t.flags&TypeFlagsUnionOrIntersection != previous.flags&TypeFlagsUnionOrIntersection ||
+			!slices.Equal(t.Types(), previous.Types()) ||
+			t.alias != nil && previous.alias != nil
+	}
+	return t.flags&TypeFlagsInstantiable != 0 && !c.isBuiltFrom(previous, t)
+}
+
+// isBuiltFrom reports whether t was instantiated, transitively, from s, as
+// visitTypeSources visits the types a type was instantiated from. Since a type
+// has a higher generation than the types it was built from, only those of a
+// higher generation than s are searched.
+func (c *Checker) isBuiltFrom(t *Type, s *Type) bool {
+	target := c.typeGeneration(s)
+	var visited collections.Set[*Type]
+	var visit func(t *Type) bool
+	visit = func(t *Type) bool {
+		if t == s {
+			return true
+		}
+		if t == nil || c.typeGeneration(t) <= target || visited.Has(t) {
+			return false
+		}
+		visited.Add(t)
+		found := false
+		c.visitTypeSources(t, func(u *Type) {
+			found = found || visit(u)
+		})
+		return found
+	}
+	return visit(t)
+}
+
+// visitTypeSources calls f with each type t was instantiated from, as far as
+// they are known without computing them. Object literals are built from the
+// types of their properties, except for those resolved lazily, such as
+// accessors.
+func (c *Checker) visitTypeSources(t *Type, f func(*Type)) {
+	switch {
+	case t.flags&TypeFlagsObject != 0:
+		if t.objectFlags&ObjectFlagsReference != 0 && t.AsTypeReference().node == nil {
+			for _, a := range t.AsTypeReference().resolvedTypeArguments {
+				f(a)
+			}
+		} else if m := t.AsObjectType().mapper; m != nil {
+			c.visitMapperTargets(m, f)
+		} else if t.symbol != nil && t.symbol.Flags()&ast.SymbolFlagsObjectLiteral != 0 {
+			for prop := range t.AsStructuredType().members.Values() {
+				if prop.Flags()&ast.SymbolFlagsTransient == 0 || prop.CheckFlags()&(ast.CheckFlagsInstantiated|ast.CheckFlagsMapped|ast.CheckFlagsReverseMapped|ast.CheckFlagsDeferredType) != 0 {
+					continue
+				}
+				if propType := c.peekTypeOfObjectLiteralMember(prop); propType != nil {
+					f(propType)
+				}
+			}
+		}
+	case t.flags&TypeFlagsConditional != 0:
+		if m := t.AsConditionalType().mapper; m != nil {
+			c.visitMapperTargets(m, f)
+		}
+	case t.flags&TypeFlagsIndexedAccess != 0:
+		d := t.AsIndexedAccessType()
+		f(d.objectType)
+		f(d.indexType)
+	case t.flags&TypeFlagsUnionOrIntersection != 0, t.flags&TypeFlagsTemplateLiteral != 0:
+		for _, u := range t.Types() {
+			f(u)
+		}
+	case t.flags&TypeFlagsIndex != 0, t.flags&TypeFlagsStringMapping != 0:
+		f(t.Target())
+	case t.flags&TypeFlagsSubstitution != 0:
+		d := t.AsSubstitutionType()
+		f(d.baseType)
+		f(d.constraint)
+	}
+}
+
+// visitMapperTargets calls f with each type m maps to, as far as they are
+// known without computing them.
+func (c *Checker) visitMapperTargets(m *TypeMapper, f func(*Type)) {
+	switch m.kind {
+	case TypeMapperKindSimple:
+		f(castTypeMapper[SimpleTypeMapper](m, TypeMapperKindSimple).target)
+	case TypeMapperKindArray:
+		for _, t := range castTypeMapper[ArrayTypeMapper](m, TypeMapperKindArray).targets {
+			f(t)
+		}
+	case TypeMapperKindArrayToSingle:
+		f(castTypeMapper[ArrayToSingleTypeMapper](m, TypeMapperKindArrayToSingle).target)
+	case TypeMapperKindMerged:
+		d := castTypeMapper[MergedTypeMapper](m, TypeMapperKindMerged)
+		c.visitMapperTargets(d.m1, f)
+		c.visitMapperTargets(d.m2, f)
+	case TypeMapperKindComposite:
+		d := castTypeMapper[CompositeTypeMapper](m, TypeMapperKindComposite)
+		c.visitMapperTargets(d.m1, f)
+		c.visitMapperTargets(d.m2, f)
+	}
+}
+
+const (
+	maxTypeGeneration        = 1<<16 - 3
+	typeGenerationInProgress = 1<<16 - 1
+)
+
+// typeGeneration returns one more than the highest generation of the types t
+// was instantiated from, as visitTypeSources visits them, or zero if it was not
+// instantiated from any. A type is created after the types it is instantiated
+// from, so this orders types by creation where the order follows from their
+// structure, and unlike type ids does not depend on the order in which
+// unrelated types were created.
+func (c *Checker) typeGeneration(t *Type) int {
+	debug.Assert(t.generation != typeGenerationInProgress, "types are only built from existing types")
+	if t.generation != 0 {
+		return int(t.generation) - 1
+	}
+	t.generation = typeGenerationInProgress
+	generation := 0
+	c.visitTypeSources(t, func(s *Type) {
+		generation = max(generation, c.typeGeneration(s)+1)
+	})
+	generation = min(generation, maxTypeGeneration)
+	t.generation = uint16(generation + 1)
+	return generation
 }
 
 func hasMatchingRecursionIdentity(t *Type, identity RecursionId) bool {

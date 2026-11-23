@@ -795,6 +795,7 @@ type Type struct {
 	objectFlags ObjectFlags
 	id          TypeId
 	kind        typeKind `customlint:"protected"`
+	generation  uint16   // see Checker.typeGeneration; zero until computed
 	symbol      *ast.Symbol
 	alias       *TypeAlias
 	checker     *Checker
