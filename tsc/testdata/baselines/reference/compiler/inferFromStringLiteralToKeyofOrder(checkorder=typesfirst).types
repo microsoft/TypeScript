@@ -1,0 +1,64 @@
+//// [tests/cases/compiler/inferFromStringLiteralToKeyofOrder.ts] ////
+
+=== inferFromStringLiteralToKeyofOrder.ts ===
+// Inferring from a string literal or `string` to `keyof T` synthesizes an
+// anonymous object type for `T` and interns it by the key type, so repeated
+// inferences from the same key type produce the same type and union ordering
+// proceeds to subsequent type arguments in every check order.
+
+interface Pair<A, B> { a: A; b: B }
+>a : A
+>b : B
+
+declare function f<T, const U>(k: keyof T, u: U): Pair<T, U>;
+>f : <T, const U>(k: keyof T, u: U) => Pair<T, U>
+>k : keyof T
+>u : U
+
+declare const cond: boolean;
+>cond : boolean
+
+const x = f("a", 1);
+>x : Pair<{ a: any; }, 1>
+>f("a", 1) : Pair<{ a: any; }, 1>
+>f : <T, const U>(k: keyof T, u: U) => Pair<T, U>
+>"a" : "a"
+>1 : 1
+
+const y = f("a", 2);
+>y : Pair<{ a: any; }, 2>
+>f("a", 2) : Pair<{ a: any; }, 2>
+>f : <T, const U>(k: keyof T, u: U) => Pair<T, U>
+>"a" : "a"
+>2 : 2
+
+const z = cond ? x : y;
+>z : Pair<{ a: any; }, 2> | Pair<{ a: any; }, 1>
+>cond ? x : y : Pair<{ a: any; }, 2> | Pair<{ a: any; }, 1>
+>cond : boolean
+>x : Pair<{ a: any; }, 1>
+>y : Pair<{ a: any; }, 2>
+
+const u = f("" as string, 1);
+>u : Pair<{ [x: string]: {}; }, 1>
+>f("" as string, 1) : Pair<{ [x: string]: {}; }, 1>
+>f : <T, const U>(k: keyof T, u: U) => Pair<T, U>
+>"" as string : string
+>"" : ""
+>1 : 1
+
+const v = f("" as string, 2);
+>v : Pair<{ [x: string]: {}; }, 2>
+>f("" as string, 2) : Pair<{ [x: string]: {}; }, 2>
+>f : <T, const U>(k: keyof T, u: U) => Pair<T, U>
+>"" as string : string
+>"" : ""
+>2 : 2
+
+const w = cond ? u : v;
+>w : Pair<{ [x: string]: {}; }, 2> | Pair<{ [x: string]: {}; }, 1>
+>cond ? u : v : Pair<{ [x: string]: {}; }, 2> | Pair<{ [x: string]: {}; }, 1>
+>cond : boolean
+>u : Pair<{ [x: string]: {}; }, 1>
+>v : Pair<{ [x: string]: {}; }, 2>
+

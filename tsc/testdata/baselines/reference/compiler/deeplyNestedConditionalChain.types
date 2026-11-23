@@ -1,0 +1,63 @@
+//// [tests/cases/compiler/deeplyNestedConditionalChain.ts] ////
+
+=== deeplyNestedConditionalChain.ts ===
+// Checking that IsTwo<Unwrap<T>> satisfies the `boolean` constraint relates a chain of
+// distributive conditional types wrapped around the recursive conditional type UnwrapTag.
+// This must not report TS2589 (type instantiation is excessively deep and possibly infinite).
+// The reproduction depends on the name UnwrapTagStep sorting after UnwrapTag.
+
+type Test<T> = RequireBoolean<IsTwo<Unwrap<T>>>;
+>Test : IsTwo<Unwrap<T>>
+
+type RequireBoolean<B extends boolean> = B;
+>RequireBoolean : B
+
+type IsTwo<N> =
+>IsTwo : IsTwo<N>
+
+    N extends 2
+        ? N extends 2
+            ? true
+>true : true
+
+            : false
+>false : false
+
+        : false;
+>false : false
+
+type Unwrap<T> =
+>Unwrap : Unwrap<T>
+
+    T extends 2
+        ? Distribute<KeepTwo<UnwrapTag<T>>>
+        : 1;
+
+type Distribute<T> = T extends unknown ? T : 1;
+>Distribute : Distribute<T>
+
+type KeepTwo<T> =
+>KeepTwo : KeepTwo<T>
+
+    T extends 2
+        ? Distribute<T>
+        : 1;
+
+type UnwrapTag<T> =
+>UnwrapTag : UnwrapTag<T>
+
+    T extends { tag: object }
+>tag : object
+
+        ? UnwrapTag<UnwrapTagStep<keyof T["tag"] | "">>
+        : T;
+
+type UnwrapTagStep<T> =
+>UnwrapTagStep : UnwrapTagStep<T>
+
+    [T] extends [T]
+        ? never
+        : [T] extends [T]
+            ? never
+            : never;
+

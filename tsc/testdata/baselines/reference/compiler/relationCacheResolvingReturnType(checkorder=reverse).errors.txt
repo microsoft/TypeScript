@@ -1,0 +1,66 @@
+relationCacheResolvingReturnType.ts(34,61): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Type 'Schema<PinnedLine>' is not assignable to type 'Schema<this>'.
+      Type 'this' is not assignable to type 'PinnedLine'.
+        Type 'PinnedNested' is not assignable to type 'PinnedLine'.
+          The types returned by '$config()' are incompatible between these types.
+            Type 'BaseConfig & { readonly pin_block?: { readonly extends: typeof ElementNode; readonly json: Schema<PinnedLine>; } | undefined; }' is not assignable to type 'BaseConfig & { readonly pin_block?: { readonly children: "inline"; readonly extends: typeof ElementNode; readonly json: Schema<PinnedLine>; } | undefined; }'.
+              Type 'BaseConfig & { readonly pin_block?: { readonly extends: typeof ElementNode; readonly json: Schema<PinnedLine>; } | undefined; }' is not assignable to type '{ readonly pin_block?: { readonly children: "inline"; readonly extends: typeof ElementNode; readonly json: Schema<PinnedLine>; } | undefined; }'.
+                Types of property 'pin_block' are incompatible.
+                  Type '{ readonly extends: typeof ElementNode; readonly json: Schema<PinnedLine>; } | undefined' is not assignable to type '{ readonly children: "inline"; readonly extends: typeof ElementNode; readonly json: Schema<PinnedLine>; } | undefined'.
+                    Property 'children' is missing in type '{ readonly extends: typeof ElementNode; readonly json: Schema<PinnedLine>; }' but required in type '{ readonly children: "inline"; readonly extends: typeof ElementNode; readonly json: Schema<PinnedLine>; }'.
+
+
+==== relationCacheResolvingReturnType.ts (1 errors) ====
+    // Relating PinnedNested to PinnedLine reads the return type of
+    // PinnedNested.$config, which is being inferred from the call that relates
+    // them. Results computed while that return type reads as any must not be
+    // cached for the argument's object literal type.
+    
+    interface Schema<N> { readonly check?: (n: N) => void }
+    interface ConfigValue<T, Type> {
+      readonly children?: 'inline';
+      readonly extends?: abstract new () => LNode;
+      readonly json?: Schema<T>;
+    }
+    type BaseConfig = { readonly [K in string]?: ConfigValue<LNode, string> };
+    type ConfigRecord<Type extends string, Config> =
+      Config extends { extends: abstract new (...args: never) => infer Inst extends LNode }
+        ? ReturnType<Inst['$config']> & { readonly [K in Type]?: Config }
+        : {};
+    
+    declare class LNode {
+      $config(): BaseConfig;
+      config<const Config extends ConfigValue<this, string>>(type: symbol, config: Config): {};
+      config<Type extends string, const Config extends ConfigValue<this, Type>>(type: Type, config: Config): ConfigRecord<Type, Config>;
+    }
+    declare class ElementNode extends LNode {}
+    declare function nodeSchema<N>(): Schema<N>;
+    
+    const pinSchema = nodeSchema<PinnedLine>();
+    class PinnedLine extends ElementNode {
+      $config() {
+        return this.config('pin_block', { children: 'inline', extends: ElementNode, json: pinSchema });
+      }
+    }
+    class PinnedNested extends ElementNode {
+      $config() {
+        return this.config('pin_block', { extends: ElementNode, json: pinSchema }); // error
+                                                                ~~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   The last overload gave the following error.
+!!! error TS2769:     Type 'Schema<PinnedLine>' is not assignable to type 'Schema<this>'.
+!!! error TS2769:       Type 'this' is not assignable to type 'PinnedLine'.
+!!! error TS2769:         Type 'PinnedNested' is not assignable to type 'PinnedLine'.
+!!! error TS2769:           The types returned by '$config()' are incompatible between these types.
+!!! error TS2769:             Type 'BaseConfig & { readonly pin_block?: { readonly extends: typeof ElementNode; readonly json: Schema<PinnedLine>; } | undefined; }' is not assignable to type 'BaseConfig & { readonly pin_block?: { readonly children: "inline"; readonly extends: typeof ElementNode; readonly json: Schema<PinnedLine>; } | undefined; }'.
+!!! error TS2769:               Type 'BaseConfig & { readonly pin_block?: { readonly extends: typeof ElementNode; readonly json: Schema<PinnedLine>; } | undefined; }' is not assignable to type '{ readonly pin_block?: { readonly children: "inline"; readonly extends: typeof ElementNode; readonly json: Schema<PinnedLine>; } | undefined; }'.
+!!! error TS2769:                 Types of property 'pin_block' are incompatible.
+!!! error TS2769:                   Type '{ readonly extends: typeof ElementNode; readonly json: Schema<PinnedLine>; } | undefined' is not assignable to type '{ readonly children: "inline"; readonly extends: typeof ElementNode; readonly json: Schema<PinnedLine>; } | undefined'.
+!!! error TS2769:                     Property 'children' is missing in type '{ readonly extends: typeof ElementNode; readonly json: Schema<PinnedLine>; }' but required in type '{ readonly children: "inline"; readonly extends: typeof ElementNode; readonly json: Schema<PinnedLine>; }'.
+!!! related TS2728 relationCacheResolvingReturnType.ts:29:39: 'children' is declared here.
+!!! related TS6500 relationCacheResolvingReturnType.ts:10:12: The expected type comes from property 'json' which is declared here on type 'ConfigValue<this, "pin_block">'
+!!! related TS2771 relationCacheResolvingReturnType.ts:21:3: The last overload is declared here.
+      }
+    }
+    

@@ -1,0 +1,27 @@
+//// [tests/cases/compiler/unresolvedQualifiedNamesSharingName.ts] ////
+
+=== unresolvedQualifiedNamesSharingName.ts ===
+// Unresolved qualified names with the same final identifier create distinct
+// unresolved symbols under their qualifying names. Tuples of those names keep
+// both constituents in a union.
+
+import type * as Bidi from "missing-a";
+>Bidi : any
+
+import type { Protocol } from "missing-b";
+>Protocol : any
+
+type CdpEvent = Protocol.Cdp.Event;
+>CdpEvent : Protocol.Cdp.Event
+>Protocol : any
+>Cdp : any
+
+export function f(event: [Bidi.Event] | [CdpEvent], other: [Bidi.Other] | [Protocol.Cdp.Other]) {}
+>f : (event: [Bidi.Event] | [CdpEvent], other: [Bidi.Other] | [Protocol.Cdp.Other]) => void
+>event : [Protocol.Cdp.Event] | [Bidi.Event]
+>Bidi : any
+>other : [Bidi.Other] | [Protocol.Cdp.Other]
+>Bidi : any
+>Protocol : any
+>Cdp : any
+

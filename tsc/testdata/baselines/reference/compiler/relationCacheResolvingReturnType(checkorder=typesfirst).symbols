@@ -1,0 +1,139 @@
+//// [tests/cases/compiler/relationCacheResolvingReturnType.ts] ////
+
+=== relationCacheResolvingReturnType.ts ===
+// Relating PinnedNested to PinnedLine reads the return type of
+// PinnedNested.$config, which is being inferred from the call that relates
+// them. Results computed while that return type reads as any must not be
+// cached for the argument's object literal type.
+
+interface Schema<N> { readonly check?: (n: N) => void }
+>Schema : Symbol(Schema, Decl(relationCacheResolvingReturnType.ts, 0, 0))
+>N : Symbol(N, Decl(relationCacheResolvingReturnType.ts, 5, 17))
+>check : Symbol(Schema.check, Decl(relationCacheResolvingReturnType.ts, 5, 21))
+>n : Symbol(n, Decl(relationCacheResolvingReturnType.ts, 5, 40))
+>N : Symbol(N, Decl(relationCacheResolvingReturnType.ts, 5, 17))
+
+interface ConfigValue<T, Type> {
+>ConfigValue : Symbol(ConfigValue, Decl(relationCacheResolvingReturnType.ts, 5, 55))
+>T : Symbol(T, Decl(relationCacheResolvingReturnType.ts, 6, 22))
+>Type : Symbol(Type, Decl(relationCacheResolvingReturnType.ts, 6, 24))
+
+  readonly children?: 'inline';
+>children : Symbol(ConfigValue.children, Decl(relationCacheResolvingReturnType.ts, 6, 32))
+
+  readonly extends?: abstract new () => LNode;
+>extends : Symbol(ConfigValue.extends, Decl(relationCacheResolvingReturnType.ts, 7, 31))
+>LNode : Symbol(LNode, Decl(relationCacheResolvingReturnType.ts, 15, 9))
+
+  readonly json?: Schema<T>;
+>json : Symbol(ConfigValue.json, Decl(relationCacheResolvingReturnType.ts, 8, 46))
+>Schema : Symbol(Schema, Decl(relationCacheResolvingReturnType.ts, 0, 0))
+>T : Symbol(T, Decl(relationCacheResolvingReturnType.ts, 6, 22))
+}
+type BaseConfig = { readonly [K in string]?: ConfigValue<LNode, string> };
+>BaseConfig : Symbol(BaseConfig, Decl(relationCacheResolvingReturnType.ts, 10, 1))
+>K : Symbol(K, Decl(relationCacheResolvingReturnType.ts, 11, 30))
+>ConfigValue : Symbol(ConfigValue, Decl(relationCacheResolvingReturnType.ts, 5, 55))
+>LNode : Symbol(LNode, Decl(relationCacheResolvingReturnType.ts, 15, 9))
+
+type ConfigRecord<Type extends string, Config> =
+>ConfigRecord : Symbol(ConfigRecord, Decl(relationCacheResolvingReturnType.ts, 11, 74))
+>Type : Symbol(Type, Decl(relationCacheResolvingReturnType.ts, 12, 18))
+>Config : Symbol(Config, Decl(relationCacheResolvingReturnType.ts, 12, 38))
+
+  Config extends { extends: abstract new (...args: never) => infer Inst extends LNode }
+>Config : Symbol(Config, Decl(relationCacheResolvingReturnType.ts, 12, 38))
+>extends : Symbol(extends, Decl(relationCacheResolvingReturnType.ts, 13, 18))
+>args : Symbol(args, Decl(relationCacheResolvingReturnType.ts, 13, 42))
+>Inst : Symbol(Inst, Decl(relationCacheResolvingReturnType.ts, 13, 66))
+>LNode : Symbol(LNode, Decl(relationCacheResolvingReturnType.ts, 15, 9))
+
+    ? ReturnType<Inst['$config']> & { readonly [K in Type]?: Config }
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>Inst : Symbol(Inst, Decl(relationCacheResolvingReturnType.ts, 13, 66))
+>K : Symbol(K, Decl(relationCacheResolvingReturnType.ts, 14, 48))
+>Type : Symbol(Type, Decl(relationCacheResolvingReturnType.ts, 12, 18))
+>Config : Symbol(Config, Decl(relationCacheResolvingReturnType.ts, 12, 38))
+
+    : {};
+
+declare class LNode {
+>LNode : Symbol(LNode, Decl(relationCacheResolvingReturnType.ts, 15, 9))
+
+  $config(): BaseConfig;
+>$config : Symbol(LNode.$config, Decl(relationCacheResolvingReturnType.ts, 17, 21))
+>BaseConfig : Symbol(BaseConfig, Decl(relationCacheResolvingReturnType.ts, 10, 1))
+
+  config<const Config extends ConfigValue<this, string>>(type: symbol, config: Config): {};
+>config : Symbol(LNode.config, Decl(relationCacheResolvingReturnType.ts, 18, 24), Decl(relationCacheResolvingReturnType.ts, 19, 91))
+>Config : Symbol(Config, Decl(relationCacheResolvingReturnType.ts, 19, 9))
+>ConfigValue : Symbol(ConfigValue, Decl(relationCacheResolvingReturnType.ts, 5, 55))
+>type : Symbol(type, Decl(relationCacheResolvingReturnType.ts, 19, 57))
+>config : Symbol(config, Decl(relationCacheResolvingReturnType.ts, 19, 70))
+>Config : Symbol(Config, Decl(relationCacheResolvingReturnType.ts, 19, 9))
+
+  config<Type extends string, const Config extends ConfigValue<this, Type>>(type: Type, config: Config): ConfigRecord<Type, Config>;
+>config : Symbol(LNode.config, Decl(relationCacheResolvingReturnType.ts, 18, 24), Decl(relationCacheResolvingReturnType.ts, 19, 91))
+>Type : Symbol(Type, Decl(relationCacheResolvingReturnType.ts, 20, 9))
+>Config : Symbol(Config, Decl(relationCacheResolvingReturnType.ts, 20, 29))
+>ConfigValue : Symbol(ConfigValue, Decl(relationCacheResolvingReturnType.ts, 5, 55))
+>Type : Symbol(Type, Decl(relationCacheResolvingReturnType.ts, 20, 9))
+>type : Symbol(type, Decl(relationCacheResolvingReturnType.ts, 20, 76))
+>Type : Symbol(Type, Decl(relationCacheResolvingReturnType.ts, 20, 9))
+>config : Symbol(config, Decl(relationCacheResolvingReturnType.ts, 20, 87))
+>Config : Symbol(Config, Decl(relationCacheResolvingReturnType.ts, 20, 29))
+>ConfigRecord : Symbol(ConfigRecord, Decl(relationCacheResolvingReturnType.ts, 11, 74))
+>Type : Symbol(Type, Decl(relationCacheResolvingReturnType.ts, 20, 9))
+>Config : Symbol(Config, Decl(relationCacheResolvingReturnType.ts, 20, 29))
+}
+declare class ElementNode extends LNode {}
+>ElementNode : Symbol(ElementNode, Decl(relationCacheResolvingReturnType.ts, 21, 1))
+>LNode : Symbol(LNode, Decl(relationCacheResolvingReturnType.ts, 15, 9))
+
+declare function nodeSchema<N>(): Schema<N>;
+>nodeSchema : Symbol(nodeSchema, Decl(relationCacheResolvingReturnType.ts, 22, 42))
+>N : Symbol(N, Decl(relationCacheResolvingReturnType.ts, 23, 28))
+>Schema : Symbol(Schema, Decl(relationCacheResolvingReturnType.ts, 0, 0))
+>N : Symbol(N, Decl(relationCacheResolvingReturnType.ts, 23, 28))
+
+const pinSchema = nodeSchema<PinnedLine>();
+>pinSchema : Symbol(pinSchema, Decl(relationCacheResolvingReturnType.ts, 25, 5))
+>nodeSchema : Symbol(nodeSchema, Decl(relationCacheResolvingReturnType.ts, 22, 42))
+>PinnedLine : Symbol(PinnedLine, Decl(relationCacheResolvingReturnType.ts, 25, 43))
+
+class PinnedLine extends ElementNode {
+>PinnedLine : Symbol(PinnedLine, Decl(relationCacheResolvingReturnType.ts, 25, 43))
+>ElementNode : Symbol(ElementNode, Decl(relationCacheResolvingReturnType.ts, 21, 1))
+
+  $config() {
+>$config : Symbol(PinnedLine.$config, Decl(relationCacheResolvingReturnType.ts, 26, 38))
+
+    return this.config('pin_block', { children: 'inline', extends: ElementNode, json: pinSchema });
+>this.config : Symbol(LNode.config, Decl(relationCacheResolvingReturnType.ts, 18, 24), Decl(relationCacheResolvingReturnType.ts, 19, 91))
+>this : Symbol(PinnedLine, Decl(relationCacheResolvingReturnType.ts, 25, 43))
+>config : Symbol(LNode.config, Decl(relationCacheResolvingReturnType.ts, 18, 24), Decl(relationCacheResolvingReturnType.ts, 19, 91))
+>children : Symbol(children, Decl(relationCacheResolvingReturnType.ts, 28, 37))
+>extends : Symbol(extends, Decl(relationCacheResolvingReturnType.ts, 28, 57))
+>ElementNode : Symbol(ElementNode, Decl(relationCacheResolvingReturnType.ts, 21, 1))
+>json : Symbol(json, Decl(relationCacheResolvingReturnType.ts, 28, 79))
+>pinSchema : Symbol(pinSchema, Decl(relationCacheResolvingReturnType.ts, 25, 5))
+  }
+}
+class PinnedNested extends ElementNode {
+>PinnedNested : Symbol(PinnedNested, Decl(relationCacheResolvingReturnType.ts, 30, 1))
+>ElementNode : Symbol(ElementNode, Decl(relationCacheResolvingReturnType.ts, 21, 1))
+
+  $config() {
+>$config : Symbol(PinnedNested.$config, Decl(relationCacheResolvingReturnType.ts, 31, 40))
+
+    return this.config('pin_block', { extends: ElementNode, json: pinSchema }); // error
+>this.config : Symbol(LNode.config, Decl(relationCacheResolvingReturnType.ts, 18, 24), Decl(relationCacheResolvingReturnType.ts, 19, 91))
+>this : Symbol(PinnedNested, Decl(relationCacheResolvingReturnType.ts, 30, 1))
+>config : Symbol(LNode.config, Decl(relationCacheResolvingReturnType.ts, 18, 24), Decl(relationCacheResolvingReturnType.ts, 19, 91))
+>extends : Symbol(extends, Decl(relationCacheResolvingReturnType.ts, 33, 37))
+>ElementNode : Symbol(ElementNode, Decl(relationCacheResolvingReturnType.ts, 21, 1))
+>json : Symbol(json, Decl(relationCacheResolvingReturnType.ts, 33, 59))
+>pinSchema : Symbol(pinSchema, Decl(relationCacheResolvingReturnType.ts, 25, 5))
+  }
+}
+

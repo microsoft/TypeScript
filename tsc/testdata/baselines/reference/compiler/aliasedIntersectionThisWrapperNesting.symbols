@@ -1,0 +1,112 @@
+//// [tests/cases/compiler/aliasedIntersectionThisWrapperNesting.ts] ////
+
+=== aliasedIntersectionThisWrapperNesting.ts ===
+// Reduced from drizzle-orm column builders. Each method wraps `this` in an
+// intersection alias, so measuring the variance of `Initial` compares
+// intersections with the same constituents under ever longer aliases, such
+// as HasDefault<NotNull<HasDefault<B>>>. Each is another level of nesting.
+
+interface Base { _: object }
+>Base : Symbol(Base, Decl(aliasedIntersectionThisWrapperNesting.ts, 0, 0))
+>_ : Symbol(Base._, Decl(aliasedIntersectionThisWrapperNesting.ts, 5, 16))
+
+type NotNull<T extends Base> = T & { _: { notNull: true } };
+>NotNull : Symbol(NotNull, Decl(aliasedIntersectionThisWrapperNesting.ts, 5, 28))
+>T : Symbol(T, Decl(aliasedIntersectionThisWrapperNesting.ts, 6, 13))
+>Base : Symbol(Base, Decl(aliasedIntersectionThisWrapperNesting.ts, 0, 0))
+>T : Symbol(T, Decl(aliasedIntersectionThisWrapperNesting.ts, 6, 13))
+>_ : Symbol(_, Decl(aliasedIntersectionThisWrapperNesting.ts, 6, 36))
+>notNull : Symbol(notNull, Decl(aliasedIntersectionThisWrapperNesting.ts, 6, 41))
+
+type HasDefault<T extends Base> = T & { _: { hasDefault: true } };
+>HasDefault : Symbol(HasDefault, Decl(aliasedIntersectionThisWrapperNesting.ts, 6, 60))
+>T : Symbol(T, Decl(aliasedIntersectionThisWrapperNesting.ts, 7, 16))
+>Base : Symbol(Base, Decl(aliasedIntersectionThisWrapperNesting.ts, 0, 0))
+>T : Symbol(T, Decl(aliasedIntersectionThisWrapperNesting.ts, 7, 16))
+>_ : Symbol(_, Decl(aliasedIntersectionThisWrapperNesting.ts, 7, 39))
+>hasDefault : Symbol(hasDefault, Decl(aliasedIntersectionThisWrapperNesting.ts, 7, 44))
+
+type HasRuntimeDefault<T extends Base> = T & { _: { hasRuntimeDefault: true } };
+>HasRuntimeDefault : Symbol(HasRuntimeDefault, Decl(aliasedIntersectionThisWrapperNesting.ts, 7, 66))
+>T : Symbol(T, Decl(aliasedIntersectionThisWrapperNesting.ts, 8, 23))
+>Base : Symbol(Base, Decl(aliasedIntersectionThisWrapperNesting.ts, 0, 0))
+>T : Symbol(T, Decl(aliasedIntersectionThisWrapperNesting.ts, 8, 23))
+>_ : Symbol(_, Decl(aliasedIntersectionThisWrapperNesting.ts, 8, 46))
+>hasRuntimeDefault : Symbol(hasRuntimeDefault, Decl(aliasedIntersectionThisWrapperNesting.ts, 8, 51))
+
+type $Type<T extends Base, TType> = T & { _: { $type: TType } };
+>$Type : Symbol($Type, Decl(aliasedIntersectionThisWrapperNesting.ts, 8, 80))
+>T : Symbol(T, Decl(aliasedIntersectionThisWrapperNesting.ts, 9, 11))
+>Base : Symbol(Base, Decl(aliasedIntersectionThisWrapperNesting.ts, 0, 0))
+>TType : Symbol(TType, Decl(aliasedIntersectionThisWrapperNesting.ts, 9, 26))
+>T : Symbol(T, Decl(aliasedIntersectionThisWrapperNesting.ts, 9, 11))
+>_ : Symbol(_, Decl(aliasedIntersectionThisWrapperNesting.ts, 9, 41))
+>$type : Symbol($type, Decl(aliasedIntersectionThisWrapperNesting.ts, 9, 46))
+>TType : Symbol(TType, Decl(aliasedIntersectionThisWrapperNesting.ts, 9, 26))
+
+declare class ColumnBuilder<T extends { data: unknown }> {
+>ColumnBuilder : Symbol(ColumnBuilder, Decl(aliasedIntersectionThisWrapperNesting.ts, 9, 64))
+>T : Symbol(T, Decl(aliasedIntersectionThisWrapperNesting.ts, 11, 28))
+>data : Symbol(data, Decl(aliasedIntersectionThisWrapperNesting.ts, 11, 39))
+
+    _: T;
+>_ : Symbol(ColumnBuilder._, Decl(aliasedIntersectionThisWrapperNesting.ts, 11, 58))
+>T : Symbol(T, Decl(aliasedIntersectionThisWrapperNesting.ts, 11, 28))
+
+    $type<TType>(): $Type<this, TType>;
+>$type : Symbol(ColumnBuilder.$type, Decl(aliasedIntersectionThisWrapperNesting.ts, 12, 9))
+>TType : Symbol(TType, Decl(aliasedIntersectionThisWrapperNesting.ts, 13, 10))
+>$Type : Symbol($Type, Decl(aliasedIntersectionThisWrapperNesting.ts, 8, 80))
+>TType : Symbol(TType, Decl(aliasedIntersectionThisWrapperNesting.ts, 13, 10))
+
+    notNull(): NotNull<this>;
+>notNull : Symbol(ColumnBuilder.notNull, Decl(aliasedIntersectionThisWrapperNesting.ts, 13, 39))
+>NotNull : Symbol(NotNull, Decl(aliasedIntersectionThisWrapperNesting.ts, 5, 28))
+
+    default(value: this['_']['data']): HasDefault<this>;
+>default : Symbol(ColumnBuilder.default, Decl(aliasedIntersectionThisWrapperNesting.ts, 14, 29))
+>value : Symbol(value, Decl(aliasedIntersectionThisWrapperNesting.ts, 15, 12))
+>HasDefault : Symbol(HasDefault, Decl(aliasedIntersectionThisWrapperNesting.ts, 6, 60))
+
+    $defaultFn(fn: this['_']['data']): HasRuntimeDefault<HasDefault<this>>;
+>$defaultFn : Symbol(ColumnBuilder.$defaultFn, Decl(aliasedIntersectionThisWrapperNesting.ts, 15, 56))
+>fn : Symbol(fn, Decl(aliasedIntersectionThisWrapperNesting.ts, 16, 15))
+>HasRuntimeDefault : Symbol(HasRuntimeDefault, Decl(aliasedIntersectionThisWrapperNesting.ts, 7, 66))
+>HasDefault : Symbol(HasDefault, Decl(aliasedIntersectionThisWrapperNesting.ts, 6, 60))
+
+    $onUpdateFn(fn: this['_']['data']): HasDefault<this>;
+>$onUpdateFn : Symbol(ColumnBuilder.$onUpdateFn, Decl(aliasedIntersectionThisWrapperNesting.ts, 16, 75))
+>fn : Symbol(fn, Decl(aliasedIntersectionThisWrapperNesting.ts, 17, 16))
+>HasDefault : Symbol(HasDefault, Decl(aliasedIntersectionThisWrapperNesting.ts, 6, 60))
+
+    $default: (fn: this['_']['data']) => HasRuntimeDefault<HasDefault<this>>;
+>$default : Symbol(ColumnBuilder.$default, Decl(aliasedIntersectionThisWrapperNesting.ts, 17, 57))
+>fn : Symbol(fn, Decl(aliasedIntersectionThisWrapperNesting.ts, 18, 15))
+>HasRuntimeDefault : Symbol(HasRuntimeDefault, Decl(aliasedIntersectionThisWrapperNesting.ts, 7, 66))
+>HasDefault : Symbol(HasDefault, Decl(aliasedIntersectionThisWrapperNesting.ts, 6, 60))
+
+    $onUpdate: (fn: this['_']['data']) => HasDefault<this>;
+>$onUpdate : Symbol(ColumnBuilder.$onUpdate, Decl(aliasedIntersectionThisWrapperNesting.ts, 18, 77))
+>fn : Symbol(fn, Decl(aliasedIntersectionThisWrapperNesting.ts, 19, 16))
+>HasDefault : Symbol(HasDefault, Decl(aliasedIntersectionThisWrapperNesting.ts, 6, 60))
+}
+
+type Initial<TName> = NotNull<HasDefault<ColumnBuilder<{ name: TName; data: number }>>>;
+>Initial : Symbol(Initial, Decl(aliasedIntersectionThisWrapperNesting.ts, 20, 1))
+>TName : Symbol(TName, Decl(aliasedIntersectionThisWrapperNesting.ts, 22, 13))
+>NotNull : Symbol(NotNull, Decl(aliasedIntersectionThisWrapperNesting.ts, 5, 28))
+>HasDefault : Symbol(HasDefault, Decl(aliasedIntersectionThisWrapperNesting.ts, 6, 60))
+>ColumnBuilder : Symbol(ColumnBuilder, Decl(aliasedIntersectionThisWrapperNesting.ts, 9, 64))
+>name : Symbol(name, Decl(aliasedIntersectionThisWrapperNesting.ts, 22, 56))
+>TName : Symbol(TName, Decl(aliasedIntersectionThisWrapperNesting.ts, 22, 13))
+>data : Symbol(data, Decl(aliasedIntersectionThisWrapperNesting.ts, 22, 69))
+
+declare let a: Initial<"a">;
+>a : Symbol(a, Decl(aliasedIntersectionThisWrapperNesting.ts, 24, 11))
+>Initial : Symbol(Initial, Decl(aliasedIntersectionThisWrapperNesting.ts, 20, 1))
+
+let b: Initial<string> = a;
+>b : Symbol(b, Decl(aliasedIntersectionThisWrapperNesting.ts, 25, 3))
+>Initial : Symbol(Initial, Decl(aliasedIntersectionThisWrapperNesting.ts, 20, 1))
+>a : Symbol(a, Decl(aliasedIntersectionThisWrapperNesting.ts, 24, 11))
+

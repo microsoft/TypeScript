@@ -1,0 +1,80 @@
+//// [tests/cases/compiler/aliasedIntersectionThisWrapperNesting.ts] ////
+
+=== aliasedIntersectionThisWrapperNesting.ts ===
+// Reduced from drizzle-orm column builders. Each method wraps `this` in an
+// intersection alias, so measuring the variance of `Initial` compares
+// intersections with the same constituents under ever longer aliases, such
+// as HasDefault<NotNull<HasDefault<B>>>. Each is another level of nesting.
+
+interface Base { _: object }
+>_ : object
+
+type NotNull<T extends Base> = T & { _: { notNull: true } };
+>NotNull : NotNull<T>
+>_ : { notNull: true; }
+>notNull : true
+>true : true
+
+type HasDefault<T extends Base> = T & { _: { hasDefault: true } };
+>HasDefault : HasDefault<T>
+>_ : { hasDefault: true; }
+>hasDefault : true
+>true : true
+
+type HasRuntimeDefault<T extends Base> = T & { _: { hasRuntimeDefault: true } };
+>HasRuntimeDefault : HasRuntimeDefault<T>
+>_ : { hasRuntimeDefault: true; }
+>hasRuntimeDefault : true
+>true : true
+
+type $Type<T extends Base, TType> = T & { _: { $type: TType } };
+>$Type : $Type<T, TType>
+>_ : { $type: TType; }
+>$type : TType
+
+declare class ColumnBuilder<T extends { data: unknown }> {
+>ColumnBuilder : ColumnBuilder<T>
+>data : unknown
+
+    _: T;
+>_ : T
+
+    $type<TType>(): $Type<this, TType>;
+>$type : <TType>() => $Type<this, TType>
+
+    notNull(): NotNull<this>;
+>notNull : () => NotNull<this>
+
+    default(value: this['_']['data']): HasDefault<this>;
+>default : (value: this['_']['data']) => HasDefault<this>
+>value : this["_"]["data"]
+
+    $defaultFn(fn: this['_']['data']): HasRuntimeDefault<HasDefault<this>>;
+>$defaultFn : (fn: this['_']['data']) => HasRuntimeDefault<HasDefault<this>>
+>fn : this["_"]["data"]
+
+    $onUpdateFn(fn: this['_']['data']): HasDefault<this>;
+>$onUpdateFn : (fn: this['_']['data']) => HasDefault<this>
+>fn : this["_"]["data"]
+
+    $default: (fn: this['_']['data']) => HasRuntimeDefault<HasDefault<this>>;
+>$default : (fn: this['_']['data']) => HasRuntimeDefault<HasDefault<this>>
+>fn : this["_"]["data"]
+
+    $onUpdate: (fn: this['_']['data']) => HasDefault<this>;
+>$onUpdate : (fn: this['_']['data']) => HasDefault<this>
+>fn : this["_"]["data"]
+}
+
+type Initial<TName> = NotNull<HasDefault<ColumnBuilder<{ name: TName; data: number }>>>;
+>Initial : Initial<TName>
+>name : TName
+>data : number
+
+declare let a: Initial<"a">;
+>a : Initial<"a">
+
+let b: Initial<string> = a;
+>b : Initial<string>
+>a : Initial<"a">
+

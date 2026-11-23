@@ -1,0 +1,54 @@
+bindingPatternImpliedMembers.ts(5,14): error TS7031: Binding element 'a' implicitly has an 'any' type.
+bindingPatternImpliedMembers.ts(5,24): error TS7031: Binding element 'b' implicitly has an 'any' type.
+bindingPatternImpliedMembers.ts(19,19): error TS7031: Binding element 'a' implicitly has an 'any' type.
+bindingPatternImpliedMembers.ts(20,22): error TS7031: Binding element 'b' implicitly has an 'any' type.
+bindingPatternImpliedMembers.ts(28,19): error TS7031: Binding element 'a' implicitly has an 'any' type.
+bindingPatternImpliedMembers.ts(29,22): error TS7031: Binding element 'b' implicitly has an 'any' type.
+
+
+==== bindingPatternImpliedMembers.ts (6 errors) ====
+    // Two function parameters are object binding patterns with the same
+    // property name. Indexing the parameter list with number unions those
+    // parameter types.
+    
+    function f({ a }, { a: b }) {}
+                 ~
+!!! error TS7031: Binding element 'a' implicitly has an 'any' type.
+                           ~
+!!! error TS7031: Binding element 'b' implicitly has an 'any' type.
+    
+    type Params<T extends (...args: any) => any> = T extends (...args: infer P) => any ? P : never;
+    
+    export type Both = Params<typeof f>[number];
+    
+    // The parameter types of f1 and f2 differ only in their member symbols.
+    // An array literal of a value of each keeps one of the two types, and a
+    // union with the type of p1 shows which one it keeps. The namespaces
+    // resolve the parameter types in opposite orders.
+    
+    namespace First {
+        declare const p1: Params<typeof f1>[0];
+        declare const p2: Params<typeof f2>[0];
+        function f1({ a }) {}
+                      ~
+!!! error TS7031: Binding element 'a' implicitly has an 'any' type.
+        function f2({ a: b }) {}
+                         ~
+!!! error TS7031: Binding element 'b' implicitly has an 'any' type.
+        const arr = [p1, p2];
+        declare const u: typeof arr[number] | typeof p1;
+    }
+    
+    namespace Second {
+        declare const p2: Params<typeof f2>[0];
+        declare const p1: Params<typeof f1>[0];
+        function f1({ a }) {}
+                      ~
+!!! error TS7031: Binding element 'a' implicitly has an 'any' type.
+        function f2({ a: b }) {}
+                         ~
+!!! error TS7031: Binding element 'b' implicitly has an 'any' type.
+        const arr = [p1, p2];
+        declare const u: typeof arr[number] | typeof p1;
+    }
+    

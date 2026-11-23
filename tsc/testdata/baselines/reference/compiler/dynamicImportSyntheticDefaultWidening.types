@@ -1,0 +1,46 @@
+//// [tests/cases/compiler/dynamicImportSyntheticDefaultWidening.ts] ////
+
+=== mod.d.ts ===
+declare const mod: { a: number };
+>mod : { a: number; }
+>a : number
+
+export = mod;
+>mod : { a: number; }
+
+=== main.ts ===
+declare const flag: boolean;
+>flag : boolean
+
+async function f() {
+>f : () => Promise<{ a: number; default: { a: number; }; }[]>
+
+    const widened = await import("./mod");
+>widened : { a: number; default: { a: number; }; }
+>await import("./mod") : { a: number; default: { a: number; }; }
+>import("./mod") : Promise<{ a: number; default: { a: number; }; }>
+>"./mod" : "./mod"
+
+    const labelled = flag ? [widened, "variable"] as const : [await import("./mod"), "import"] as const;
+>labelled : readonly [{ a: number; default: { a: number; }; }, "import"] | readonly [{ a: number; default: { a: number; }; }, "variable"]
+>flag ? [widened, "variable"] as const : [await import("./mod"), "import"] as const : readonly [{ a: number; default: { a: number; }; }, "import"] | readonly [{ a: number; default: { a: number; }; }, "variable"]
+>flag : boolean
+>[widened, "variable"] as const : readonly [{ a: number; default: { a: number; }; }, "variable"]
+>[widened, "variable"] : readonly [{ a: number; default: { a: number; }; }, "variable"]
+>widened : { a: number; default: { a: number; }; }
+>"variable" : "variable"
+>[await import("./mod"), "import"] as const : readonly [{ a: number; default: { a: number; }; }, "import"]
+>[await import("./mod"), "import"] : readonly [{ a: number; default: { a: number; }; }, "import"]
+>await import("./mod") : { a: number; default: { a: number; }; }
+>import("./mod") : Promise<{ a: number; default: { a: number; }; }>
+>"./mod" : "./mod"
+>"import" : "import"
+
+    return [await import("./mod"), widened];
+>[await import("./mod"), widened] : { a: number; default: { a: number; }; }[]
+>await import("./mod") : { a: number; default: { a: number; }; }
+>import("./mod") : Promise<{ a: number; default: { a: number; }; }>
+>"./mod" : "./mod"
+>widened : { a: number; default: { a: number; }; }
+}
+

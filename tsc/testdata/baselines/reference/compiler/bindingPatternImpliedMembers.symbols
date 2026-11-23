@@ -1,0 +1,98 @@
+//// [tests/cases/compiler/bindingPatternImpliedMembers.ts] ////
+
+=== bindingPatternImpliedMembers.ts ===
+// Two function parameters are object binding patterns with the same
+// property name. Indexing the parameter list with number unions those
+// parameter types.
+
+function f({ a }, { a: b }) {}
+>f : Symbol(f, Decl(bindingPatternImpliedMembers.ts, 0, 0))
+>a : Symbol(a, Decl(bindingPatternImpliedMembers.ts, 4, 12))
+>a : Symbol(a)
+>b : Symbol(b, Decl(bindingPatternImpliedMembers.ts, 4, 19))
+
+type Params<T extends (...args: any) => any> = T extends (...args: infer P) => any ? P : never;
+>Params : Symbol(Params, Decl(bindingPatternImpliedMembers.ts, 4, 30))
+>T : Symbol(T, Decl(bindingPatternImpliedMembers.ts, 6, 12))
+>args : Symbol(args, Decl(bindingPatternImpliedMembers.ts, 6, 23))
+>T : Symbol(T, Decl(bindingPatternImpliedMembers.ts, 6, 12))
+>args : Symbol(args, Decl(bindingPatternImpliedMembers.ts, 6, 58))
+>P : Symbol(P, Decl(bindingPatternImpliedMembers.ts, 6, 72))
+>P : Symbol(P, Decl(bindingPatternImpliedMembers.ts, 6, 72))
+
+export type Both = Params<typeof f>[number];
+>Both : Symbol(Both, Decl(bindingPatternImpliedMembers.ts, 6, 95))
+>Params : Symbol(Params, Decl(bindingPatternImpliedMembers.ts, 4, 30))
+>f : Symbol(f, Decl(bindingPatternImpliedMembers.ts, 0, 0))
+
+// The parameter types of f1 and f2 differ only in their member symbols.
+// An array literal of a value of each keeps one of the two types, and a
+// union with the type of p1 shows which one it keeps. The namespaces
+// resolve the parameter types in opposite orders.
+
+namespace First {
+>First : Symbol(First, Decl(bindingPatternImpliedMembers.ts, 8, 44))
+
+    declare const p1: Params<typeof f1>[0];
+>p1 : Symbol(p1, Decl(bindingPatternImpliedMembers.ts, 16, 17))
+>Params : Symbol(Params, Decl(bindingPatternImpliedMembers.ts, 4, 30))
+>f1 : Symbol(f1, Decl(bindingPatternImpliedMembers.ts, 17, 43))
+
+    declare const p2: Params<typeof f2>[0];
+>p2 : Symbol(p2, Decl(bindingPatternImpliedMembers.ts, 17, 17))
+>Params : Symbol(Params, Decl(bindingPatternImpliedMembers.ts, 4, 30))
+>f2 : Symbol(f2, Decl(bindingPatternImpliedMembers.ts, 18, 25))
+
+    function f1({ a }) {}
+>f1 : Symbol(f1, Decl(bindingPatternImpliedMembers.ts, 17, 43))
+>a : Symbol(a, Decl(bindingPatternImpliedMembers.ts, 18, 17))
+
+    function f2({ a: b }) {}
+>f2 : Symbol(f2, Decl(bindingPatternImpliedMembers.ts, 18, 25))
+>a : Symbol(a)
+>b : Symbol(b, Decl(bindingPatternImpliedMembers.ts, 19, 17))
+
+    const arr = [p1, p2];
+>arr : Symbol(arr, Decl(bindingPatternImpliedMembers.ts, 20, 9))
+>p1 : Symbol(p1, Decl(bindingPatternImpliedMembers.ts, 16, 17))
+>p2 : Symbol(p2, Decl(bindingPatternImpliedMembers.ts, 17, 17))
+
+    declare const u: typeof arr[number] | typeof p1;
+>u : Symbol(u, Decl(bindingPatternImpliedMembers.ts, 21, 17))
+>arr : Symbol(arr, Decl(bindingPatternImpliedMembers.ts, 20, 9))
+>p1 : Symbol(p1, Decl(bindingPatternImpliedMembers.ts, 16, 17))
+}
+
+namespace Second {
+>Second : Symbol(Second, Decl(bindingPatternImpliedMembers.ts, 22, 1))
+
+    declare const p2: Params<typeof f2>[0];
+>p2 : Symbol(p2, Decl(bindingPatternImpliedMembers.ts, 25, 17))
+>Params : Symbol(Params, Decl(bindingPatternImpliedMembers.ts, 4, 30))
+>f2 : Symbol(f2, Decl(bindingPatternImpliedMembers.ts, 27, 25))
+
+    declare const p1: Params<typeof f1>[0];
+>p1 : Symbol(p1, Decl(bindingPatternImpliedMembers.ts, 26, 17))
+>Params : Symbol(Params, Decl(bindingPatternImpliedMembers.ts, 4, 30))
+>f1 : Symbol(f1, Decl(bindingPatternImpliedMembers.ts, 26, 43))
+
+    function f1({ a }) {}
+>f1 : Symbol(f1, Decl(bindingPatternImpliedMembers.ts, 26, 43))
+>a : Symbol(a, Decl(bindingPatternImpliedMembers.ts, 27, 17))
+
+    function f2({ a: b }) {}
+>f2 : Symbol(f2, Decl(bindingPatternImpliedMembers.ts, 27, 25))
+>a : Symbol(a)
+>b : Symbol(b, Decl(bindingPatternImpliedMembers.ts, 28, 17))
+
+    const arr = [p1, p2];
+>arr : Symbol(arr, Decl(bindingPatternImpliedMembers.ts, 29, 9))
+>p1 : Symbol(p1, Decl(bindingPatternImpliedMembers.ts, 26, 17))
+>p2 : Symbol(p2, Decl(bindingPatternImpliedMembers.ts, 25, 17))
+
+    declare const u: typeof arr[number] | typeof p1;
+>u : Symbol(u, Decl(bindingPatternImpliedMembers.ts, 30, 17))
+>arr : Symbol(arr, Decl(bindingPatternImpliedMembers.ts, 29, 9))
+>p1 : Symbol(p1, Decl(bindingPatternImpliedMembers.ts, 26, 17))
+}
+

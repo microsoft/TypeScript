@@ -1,0 +1,77 @@
+//// [tests/cases/compiler/spreadOfInstantiatedMappedMember.ts] ////
+
+=== spreadOfInstantiatedMappedMember.ts ===
+// Two instantiations of a generic function each return a spread of the
+// same mapped type member. Spreading a union of those return types orders
+// the resulting object types by their members.
+
+type Member = { [F in "text"]: { filter: F } }["text"];
+>Member : { filter: "text"; }
+>filter : F
+
+function wrap<T extends "text" | "other">() {
+>wrap : <T extends "text" | "other">() => { filter: "text"; }
+
+    return { ...({ filter: "text" } as Member) };
+>{ ...({ filter: "text" } as Member) } : { filter: "text"; }
+>({ filter: "text" } as Member) : { filter: "text"; }
+>{ filter: "text" } as Member : { filter: "text"; }
+>{ filter: "text" } : { filter: "text"; }
+>filter : "text"
+>"text" : "text"
+}
+
+declare const token: ReturnType<typeof wrap> | ReturnType<typeof wrap<"text">>;
+>token : { filter: "text"; } | { filter: "text"; }
+>wrap : <T extends "text" | "other">() => { filter: "text"; }
+>wrap : <T extends "text" | "other">() => { filter: "text"; }
+
+export const spread = { ...token };
+>spread : { filter: "text"; } | { filter: "text"; }
+>{ ...token } : { filter: "text"; } | { filter: "text"; }
+>token : { filter: "text"; } | { filter: "text"; }
+
+// An object rest of a union of two instantiations of `boxed` takes the member
+// `p` of each. Each is `p` of `Box<T>` instantiated a second time, with `T` as
+// one of two literal types. `restD` takes the rest of the instantiation with
+// "d" before `restCD` takes the rest of both, and `restAB` and `restCD` list
+// their constituents in the same order.
+
+interface Box<A> { p: A }
+>p : A
+
+function boxed<T>(b: Box<T>) {
+>boxed : <T>(b: Box<T>) => { p: T; }
+>b : Box<T>
+
+    return { ...b };
+>{ ...b } : { p: T; }
+>b : Box<T>
+}
+
+declare const ab: ReturnType<typeof boxed<"a">> | ReturnType<typeof boxed<"b">>;
+>ab : { p: "a"; } | { p: "b"; }
+>boxed : <T>(b: Box<T>) => { p: T; }
+>boxed : <T>(b: Box<T>) => { p: T; }
+
+export const { ...restAB } = ab;
+>restAB : { p: "a"; } | { p: "b"; }
+>ab : { p: "a"; } | { p: "b"; }
+
+declare const d: ReturnType<typeof boxed<"d">>;
+>d : { p: "d"; }
+>boxed : <T>(b: Box<T>) => { p: T; }
+
+export const { ...restD } = d;
+>restD : { p: "d"; }
+>d : { p: "d"; }
+
+declare const cd: ReturnType<typeof boxed<"c">> | ReturnType<typeof boxed<"d">>;
+>cd : { p: "c"; } | { p: "d"; }
+>boxed : <T>(b: Box<T>) => { p: T; }
+>boxed : <T>(b: Box<T>) => { p: T; }
+
+export const { ...restCD } = cd;
+>restCD : { p: "c"; } | { p: "d"; }
+>cd : { p: "c"; } | { p: "d"; }
+
