@@ -2,7 +2,7 @@
 
 <!-- ## What are they? -->
 
-TypeScript has long had powerful checking and tooling for TypeScript and JavaScript code; however, lots of developers use specialized file types for writing out their components.
+TypeScript has long had powerful checking and tooling for TypeScript and JavaScript code; however, lots of developers use specialized file types for UI components, schemas, data queries, etc.
 For example, Vue.js has regions of HTML, JavaScript/TypeScript, and CSS, all within a single `.vue` file:
 
 `UserList.vue`:
@@ -31,12 +31,15 @@ For the example above, a Vue content mapper could map that `.vue` file into the 
 import { ref } from 'vue'
 const count = ref<number>(0);
 // ... vue-specific definitions ...
+const __VLS_export = (await import('vue')).defineComponent({
+});
+export default {} as typeof __VLS_export;
 ```
 
 <!-- ## What can it do? -->
 
 This virtual file is then treated as any other TypeScript file that is part of your TypeScript program.
-TypeScript can then analyze it and provide diagnostics for it, and all the typical editor commands will also work (go to definition, hover, rename, etc).
+TypeScript can analyze it and provide diagnostics for it, and all the typical editor commands will also work (go to definition, hover, rename, etc).
 For instance, you can hover over the TypeScript portions of the above `.vue` file:
 
 ![Screenshot of the previous Vue code snippet open in VSCode with the cursor positioned above the `ref` call, and a hover window showing `ref`'s signature and documentation overlaid.](vue-hover-1.png)
@@ -75,8 +78,6 @@ To start using content mappers, you need to have your content mapper installed a
 
 In the configuration above, files with `.vue` extension will be content mapped by `@vue/content-mapper`, and the `"target": 3.5` option (along with anything specified under `"options"`) will be passed directly to the content mapper.
 
-Note that if any content mapper you're using in your project specifies `outputExtension`, you'll need to enable `rewriteRelativeImportExtensions` in your project's compiler options.
-For more details, see [the implementation PR](https://github.com/microsoft/TypeScript/pull/64581).
 
 If you have multiple configured projects that all share the same content mappers, it's possible to configure them by extending a tsconfig that specifies the content mappers:
 
