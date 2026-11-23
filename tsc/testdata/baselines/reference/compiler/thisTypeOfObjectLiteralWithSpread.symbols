@@ -27,6 +27,12 @@ f({
 >upper : Symbol(upper, Decl(thisTypeOfObjectLiteralWithSpread.ts, 7, 13))
 
         return this.name.toUpperCase();
+>this.name.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>this.name : Symbol(name, Decl(thisTypeOfObjectLiteralWithSpread.ts, 4, 22))
+>this : Symbol(__object, Decl(thisTypeOfObjectLiteralWithSpread.ts, 6, 2))
+>name : Symbol(name, Decl(thisTypeOfObjectLiteralWithSpread.ts, 4, 22))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+
     },
 });
 

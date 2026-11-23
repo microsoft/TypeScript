@@ -6,6 +6,6 @@ declare namespace JSX {
 }
 
 <a />;
-><a /> : any
+><a /> : error
 >a : any
 

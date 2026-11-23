@@ -88,7 +88,7 @@ class PinnedNested extends ElementNode {
 >ElementNode : ElementNode
 
   $config() {
->$config : () => BaseConfig & { readonly pin_block?: { readonly extends: typeof ElementNode; readonly json: Schema<PinnedLine>; } | undefined; }
+>$config : () => {}
 
     return this.config('pin_block', { extends: ElementNode, json: pinSchema }); // error
 >this.config('pin_block', { extends: ElementNode, json: pinSchema }) : {}

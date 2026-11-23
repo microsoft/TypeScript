@@ -6,15 +6,15 @@ declare function fan(g: () => number): number;
 >g : () => number
 
 export function a(n: number) {
->a : (n: number) => any
+>a : (n: number) => number
 >n : number
 
     return fan(() => a(n));
 >fan(() => a(n)) : number
 >fan : (g: () => number) => number
->() => a(n) : () => any
->a(n) : any
->a : (n: number) => any
+>() => a(n) : () => number
+>a(n) : number
+>a : (n: number) => number
 >n : number
 }
 
@@ -25,7 +25,7 @@ declare function fanAll(g: () => Promise<{ ok: boolean }>): Promise<{ ok: boolea
 >ok : boolean
 
 export async function b(n: number) {
->b : (n: number) => any
+>b : (n: number) => Promise<{ ok: boolean; }>
 >n : number
 
     if (n > 0) {
@@ -36,9 +36,9 @@ export async function b(n: number) {
         return fanAll(() => b(n - 1));
 >fanAll(() => b(n - 1)) : Promise<{ ok: boolean; }>
 >fanAll : (g: () => Promise<{ ok: boolean; }>) => Promise<{ ok: boolean; }>
->() => b(n - 1) : () => any
->b(n - 1) : any
->b : (n: number) => any
+>() => b(n - 1) : () => Promise<{ ok: boolean; }>
+>b(n - 1) : Promise<{ ok: boolean; }>
+>b : (n: number) => Promise<{ ok: boolean; }>
 >n - 1 : number
 >n : number
 >1 : 1
@@ -66,7 +66,7 @@ declare const other: Other;
 >other : Other
 
 export async function c(n: number) {
->c : (n: number) => any
+>c : (n: number) => Promise<Other | Result>
 >n : number
 
     if (n) return other;
@@ -76,9 +76,9 @@ export async function c(n: number) {
     return fanOut(() => c(n - 1));
 >fanOut(() => c(n - 1)) : Promise<Result>
 >fanOut : (generateOne: () => Promise<Result>) => Promise<Result>
->() => c(n - 1) : () => any
->c(n - 1) : any
->c : (n: number) => any
+>() => c(n - 1) : () => Promise<Other | Result>
+>c(n - 1) : Promise<Other | Result>
+>c : (n: number) => Promise<Other | Result>
 >n - 1 : number
 >n : number
 >1 : 1

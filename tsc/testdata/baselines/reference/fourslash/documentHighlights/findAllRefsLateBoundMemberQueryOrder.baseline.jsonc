@@ -21,5 +21,5 @@
 // }
 // declare const j2: J<"d">;
 // export const w1 = j2.[|c|];
-// export const w2 = j1.c;
+// export const w2 = j1.[|c|];
 // export const o2: J<"d"> = { x: "d", /*HIGHLIGHTS*/[|c|]: "d" };

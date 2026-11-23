@@ -13,7 +13,7 @@ declare const named: { name: string };
 >name : string
 
 f({
->f({    ...named,    get upper() {        return this.name.toUpperCase();    },}) : unknown
+>f({    ...named,    get upper() {        return this.name.toUpperCase();    },}) : { name: string; upper: any; }
 >f : <D>(def: D & ThisType<D>) => D
 >{    ...named,    get upper() {        return this.name.toUpperCase();    },} : { name: string; upper: any; }
 
@@ -24,12 +24,12 @@ f({
 >upper : any
 
         return this.name.toUpperCase();
->this.name.toUpperCase() : any
->this.name.toUpperCase : any
->this.name : any
->this : unknown
->name : any
->toUpperCase : any
+>this.name.toUpperCase() : string
+>this.name.toUpperCase : () => string
+>this.name : string
+>this : { name: string; upper: any; }
+>name : string
+>toUpperCase : () => string
 
     },
 });

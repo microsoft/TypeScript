@@ -82,11 +82,7 @@ export const $ = scope({
 
     b: () => $.type("a").pipe(function (n) { return n === 0; }),
 >b : Symbol(b, Decl(circularScopeThunkReverseMapped.ts, 12, 62))
->$.type("a").pipe : Symbol(Type.pipe, Decl(circularScopeThunkReverseMapped.ts, 5, 19))
->$.type : Symbol(Scope.type, Decl(circularScopeThunkReverseMapped.ts, 2, 22))
 >$ : Symbol($, Decl(circularScopeThunkReverseMapped.ts, 11, 12))
->type : Symbol(Scope.type, Decl(circularScopeThunkReverseMapped.ts, 2, 22))
->pipe : Symbol(Type.pipe, Decl(circularScopeThunkReverseMapped.ts, 5, 19))
 >n : Symbol(n, Decl(circularScopeThunkReverseMapped.ts, 13, 40))
 >n : Symbol(n, Decl(circularScopeThunkReverseMapped.ts, 13, 40))
 
@@ -109,11 +105,7 @@ export const $2 = scope({
 
     b: () => $2.type("a").pipe((n: number) => n === 0),
 >b : Symbol(b, Decl(circularScopeThunkReverseMapped.ts, 18, 62))
->$2.type("a").pipe : Symbol(Type.pipe, Decl(circularScopeThunkReverseMapped.ts, 5, 19))
->$2.type : Symbol(Scope.type, Decl(circularScopeThunkReverseMapped.ts, 2, 22))
 >$2 : Symbol($2, Decl(circularScopeThunkReverseMapped.ts, 17, 12))
->type : Symbol(Scope.type, Decl(circularScopeThunkReverseMapped.ts, 2, 22))
->pipe : Symbol(Type.pipe, Decl(circularScopeThunkReverseMapped.ts, 5, 19))
 >n : Symbol(n, Decl(circularScopeThunkReverseMapped.ts, 19, 32))
 >n : Symbol(n, Decl(circularScopeThunkReverseMapped.ts, 19, 32))
 

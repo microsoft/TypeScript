@@ -1,0 +1,223 @@
+//// [tests/cases/compiler/typeLiteralInLoopCycleIdentity.ts] ////
+
+=== a.js ===
+/** @param {unknown[]} sources */
+function f(sources) {
+>f : (sources: unknown[]) => ({ source: unknown; theirs?: undefined; } | { source?: undefined; theirs: { tokens?: unknown[]; }; })[]
+>sources : unknown[]
+
+    const differences = [];
+>differences : any[]
+>[] : never[]
+
+    for (const source of sources) {
+>source : unknown
+>sources : unknown[]
+
+        differences.push({ source });
+>differences.push({ source }) : number
+>differences.push : (...items: any[]) => number
+>differences : any[]
+>push : (...items: any[]) => number
+>{ source } : { source: unknown; }
+>source : unknown
+
+        const expected = /** @type {{ tokens?: unknown[] }} */ (source);
+>expected : { tokens?: unknown[]; }
+>(source) : { tokens?: unknown[]; }
+>source : unknown
+
+        for (const x of sources) {
+>x : unknown
+>sources : unknown[]
+
+            const wanted = expected.tokens ? { tokens: expected.tokens } : expected;
+>wanted : { tokens?: unknown[]; }
+>expected.tokens ? { tokens: expected.tokens } : expected : { tokens?: unknown[]; }
+>expected.tokens : unknown[] | undefined
+>expected : { tokens?: unknown[]; }
+>tokens : unknown[] | undefined
+>{ tokens: expected.tokens } : { tokens: unknown[]; }
+>tokens : unknown[]
+>expected.tokens : unknown[]
+>expected : { tokens?: unknown[]; }
+>tokens : unknown[]
+>expected : { tokens?: unknown[]; }
+
+            differences.push({ theirs: wanted });
+>differences.push({ theirs: wanted }) : number
+>differences.push : (...items: any[]) => number
+>differences : any[]
+>push : (...items: any[]) => number
+>{ theirs: wanted } : { theirs: { tokens?: unknown[]; }; }
+>theirs : { tokens?: unknown[]; }
+>wanted : { tokens?: unknown[]; }
+        }
+    }
+    return differences;
+>differences : ({ source: unknown; } | { theirs: { tokens?: unknown[]; }; })[]
+}
+
+/** @param {unknown[]} sources */
+function g(sources) {
+>g : (sources: unknown[]) => ({ source: unknown; theirs?: undefined; } | { source?: undefined; theirs: { tokens?: unknown[] | undefined; }; })[]
+>sources : unknown[]
+
+    const differences = [];
+>differences : any[]
+>[] : never[]
+
+    for (const source of sources) {
+>source : unknown
+>sources : unknown[]
+
+        differences.push({ source });
+>differences.push({ source }) : number
+>differences.push : (...items: any[]) => number
+>differences : any[]
+>push : (...items: any[]) => number
+>{ source } : { source: unknown; }
+>source : unknown
+
+        const expected = /** @type {{ [K in "tokens"]?: unknown[] }} */ (source);
+>expected : { tokens?: unknown[] | undefined; }
+>(source) : { tokens?: unknown[] | undefined; }
+>source : unknown
+
+        for (const x of sources) {
+>x : unknown
+>sources : unknown[]
+
+            const wanted = source ? { tokens: [] } : expected;
+>wanted : { tokens?: unknown[] | undefined; }
+>source ? { tokens: [] } : expected : { tokens?: unknown[] | undefined; }
+>source : unknown
+>{ tokens: [] } : { tokens: never[]; }
+>tokens : never[]
+>[] : never[]
+>expected : { tokens?: unknown[] | undefined; }
+
+            differences.push({ theirs: wanted });
+>differences.push({ theirs: wanted }) : number
+>differences.push : (...items: any[]) => number
+>differences : any[]
+>push : (...items: any[]) => number
+>{ theirs: wanted } : { theirs: { tokens?: unknown[] | undefined; }; }
+>theirs : { tokens?: unknown[] | undefined; }
+>wanted : { tokens?: unknown[] | undefined; }
+        }
+    }
+    return differences;
+>differences : ({ source: unknown; } | { theirs: { tokens?: unknown[] | undefined; }; })[]
+}
+
+/** @param {unknown[]} sources */
+function h(sources) {
+>h : (sources: unknown[]) => ({ source: unknown; theirs?: undefined; } | { source?: undefined; theirs: (() => unknown[]) | { tokens: never[]; }; })[]
+>sources : unknown[]
+
+    const differences = [];
+>differences : any[]
+>[] : never[]
+
+    for (const source of sources) {
+>source : unknown
+>sources : unknown[]
+
+        differences.push({ source });
+>differences.push({ source }) : number
+>differences.push : (...items: any[]) => number
+>differences : any[]
+>push : (...items: any[]) => number
+>{ source } : { source: unknown; }
+>source : unknown
+
+        const expected = /** @type {() => unknown[]} */ (source);
+>expected : () => unknown[]
+>(source) : () => unknown[]
+>source : unknown
+
+        for (const x of sources) {
+>x : unknown
+>sources : unknown[]
+
+            const wanted = source ? { tokens: [] } : expected;
+>wanted : (() => unknown[]) | { tokens: never[]; }
+>source ? { tokens: [] } : expected : (() => unknown[]) | { tokens: never[]; }
+>source : unknown
+>{ tokens: [] } : { tokens: never[]; }
+>tokens : never[]
+>[] : never[]
+>expected : () => unknown[]
+
+            differences.push({ theirs: wanted });
+>differences.push({ theirs: wanted }) : number
+>differences.push : (...items: any[]) => number
+>differences : any[]
+>push : (...items: any[]) => number
+>{ theirs: wanted } : { theirs: (() => unknown[]) | { tokens: never[]; }; }
+>theirs : (() => unknown[]) | { tokens: never[]; }
+>wanted : (() => unknown[]) | { tokens: never[]; }
+        }
+    }
+    return differences;
+>differences : ({ source: unknown; } | { theirs: (() => unknown[]) | { tokens: never[]; }; })[]
+}
+
+/**
+ * @template T
+ * @param {T[]} sources
+ */
+function k(sources) {
+>k : <T>(sources: T[]) => ({ source: T; theirs?: undefined; } | { source?: undefined; theirs: { tokens: never[]; } | (T extends string ? { a: 1; } : { b: 2; }); })[]
+>sources : T[]
+
+    const differences = [];
+>differences : any[]
+>[] : never[]
+
+    for (const source of sources) {
+>source : T
+>sources : T[]
+
+        differences.push({ source });
+>differences.push({ source }) : number
+>differences.push : (...items: any[]) => number
+>differences : any[]
+>push : (...items: any[]) => number
+>{ source } : { source: T; }
+>source : T
+
+        const expected = /** @type {T extends string ? { a: 1 } : { b: 2 }} */ (/** @type {unknown} */ (source));
+>expected : T extends string ? { a: 1; } : { b: 2; }
+>(/** @type {unknown} */ (source)) : T extends string ? { a: 1; } : { b: 2; }
+>(source) : unknown
+>source : T
+
+        for (const x of sources) {
+>x : T
+>sources : T[]
+
+            const wanted = source ? { tokens: [] } : expected;
+>wanted : { tokens: never[]; } | (T extends string ? { a: 1; } : { b: 2; })
+>source ? { tokens: [] } : expected : { tokens: never[]; } | (T extends string ? { a: 1; } : { b: 2; })
+>source : T
+>{ tokens: [] } : { tokens: never[]; }
+>tokens : never[]
+>[] : never[]
+>expected : T extends string ? { a: 1; } : { b: 2; }
+
+            differences.push({ theirs: wanted });
+>differences.push({ theirs: wanted }) : number
+>differences.push : (...items: any[]) => number
+>differences : any[]
+>push : (...items: any[]) => number
+>{ theirs: wanted } : { theirs: { tokens: never[]; } | (T extends string ? { a: 1; } : { b: 2; }); }
+>theirs : { tokens: never[]; } | (T extends string ? { a: 1; } : { b: 2; })
+>wanted : { tokens: never[]; } | (T extends string ? { a: 1; } : { b: 2; })
+        }
+    }
+    return differences;
+>differences : ({ source: T; } | { theirs: { tokens: never[]; } | (T extends string ? { a: 1; } : { b: 2; }); })[]
+}
+

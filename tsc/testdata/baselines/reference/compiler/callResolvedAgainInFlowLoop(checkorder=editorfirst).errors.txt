@@ -1,0 +1,30 @@
+callResolvedAgainInFlowLoop.ts(16,25): error TS7022: 'name' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+
+
+==== callResolvedAgainInFlowLoop.ts (1 errors) ====
+    // Destructuring func in the loop reads its declared type, which reaches the
+    // assignment of the call below it, so the call is resolved again while it
+    // is being resolved, from flow analysis of the loop (seen in a repro of
+    // 60130).
+    
+    declare function inferStuff<T>(arg: T, checkStuff?: boolean): T;
+    
+    export function test(lines: string[]): string[] {
+        let func: { name: string } | null = null;
+    
+        for (const _ of lines) {
+            if (Math.random() < 0.5) {
+                func = { name: "qwer" };
+            } else {
+                if (func) {
+                    const { name } = func;
+                            ~~~~
+!!! error TS7022: 'name' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+                    func = inferStuff({ name: "other" }, name === "abc");
+                }
+            }
+        }
+    
+        return lines;
+    }
+    
