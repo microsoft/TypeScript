@@ -9321,6 +9321,59 @@ export const obj = { m: 1, s: "hi", b: true };
         );
     });
 
+    test("printNode with emitContext comment emit flags only suppress source comments", () => {
+        using api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": `/* source leading */ leading;\ntrailing; /* source trailing */\n`,
+        });
+        const snapshot = api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const sourceFile = snapshot.getConfiguredProject("/tsconfig.json")!.program.getSourceFile("/src/main.ts");
+        assert.ok(sourceFile);
+        const [leading, trailing] = sourceFile.statements;
+
+        // Source comments are only emitted when printing the whole source file, so print that
+        // and attach the emit context state to the statement of interest.
+        const print = (statement: typeof leading, flags: EmitFlags, side: "leading" | "trailing") => {
+            const emitContext = api.printer.createEmitContext();
+            emitContext.setEmitFlags(statement, flags);
+            if (side === "leading") {
+                emitContext.addSyntheticLeadingComment(statement, SyntaxKind.MultiLineCommentTrivia, " synthesized ", false, false);
+            }
+            else {
+                emitContext.addSyntheticTrailingComment(statement, SyntaxKind.MultiLineCommentTrivia, " synthesized ", false, false);
+            }
+            return (api.printer.printNode(sourceFile, { emitContext })).trimEnd();
+        };
+
+        assert.strictEqual(print(leading, EmitFlags.None, "leading"), "/* source leading */ /* synthesized */ leading;\ntrailing; /* source trailing */");
+        assert.strictEqual(print(leading, EmitFlags.NoLeadingComments, "leading"), "/* synthesized */ leading;\ntrailing; /* source trailing */");
+        assert.strictEqual(print(leading, EmitFlags.NoComments, "leading"), "/* synthesized */ leading;\ntrailing; /* source trailing */");
+
+        assert.strictEqual(print(trailing, EmitFlags.None, "trailing"), "/* source leading */ leading;\ntrailing; /* synthesized */ /* source trailing */");
+        assert.strictEqual(print(trailing, EmitFlags.NoTrailingComments, "trailing"), "/* source leading */ leading;\ntrailing; /* synthesized */");
+        assert.strictEqual(print(trailing, EmitFlags.NoComments, "trailing"), "/* source leading */ leading;\ntrailing; /* synthesized */");
+    });
+
+    test("printNode parenthesizes an operand whose synthesized leading comment introduces a newline even with NoLeadingComments", () => {
+        using api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": `function f() {\n    /* source */ return a.b;\n}\n`,
+        });
+        const snapshot = api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const sourceFile = snapshot.getConfiguredProject("/tsconfig.json")!.program.getSourceFile("/src/main.ts");
+        assert.ok(sourceFile);
+        // `return` cannot be followed by a line break, so an operand whose leading comment
+        // starts a new line has to be parenthesized.
+        const declaration = sourceFile.statements[0] as import("@typescript/typescript/ast").FunctionDeclaration;
+        const returnStatement = declaration.body!.statements[0] as import("@typescript/typescript/ast").ReturnStatement;
+        const operand = (returnStatement.expression as import("@typescript/typescript/ast").PropertyAccessExpression).expression;
+
+        const emitContext = api.printer.createEmitContext();
+        emitContext.setEmitFlags(operand, EmitFlags.NoLeadingComments);
+        emitContext.addSyntheticLeadingComment(operand, SyntaxKind.SingleLineCommentTrivia, " synthesized", true, false);
+        assert.strictEqual((api.printer.printNode(sourceFile, { emitContext })).trimEnd(), "function f() {\n    /* source */ return (\n    // synthesized\n    a).b;\n}");
+    });
+
     test("printNode honors newline flags on synthetic trailing comments", () => {
         using api = spawnAPI(emitterFiles);
 
