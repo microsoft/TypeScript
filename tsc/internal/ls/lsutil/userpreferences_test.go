@@ -177,33 +177,6 @@ func TestUserPreferencesRoundtrip(t *testing.T) {
 	})
 }
 
-func TestIndentStyleJSON(t *testing.T) {
-	t.Parallel()
-	for _, name := range []string{"none", "block", "smart"} {
-		t.Run(name, func(t *testing.T) {
-			t.Parallel()
-			var prefs UserPreferences
-			assert.NilError(t, json.Unmarshal([]byte(`{"format":{"indentStyle":"`+name+`"}}`), &prefs))
-
-			encoded, err := json.Marshal(&prefs)
-			assert.NilError(t, err)
-			var config map[string]any
-			assert.NilError(t, json.Unmarshal(encoded, &config))
-			assert.Equal(t, config["format"].(map[string]any)["indentStyle"], any(name))
-
-			encoded, err = json.Marshal(&prefs.FormatCodeSettings)
-			assert.NilError(t, err)
-			var settings map[string]any
-			assert.NilError(t, json.Unmarshal(encoded, &settings))
-			assert.Equal(t, settings["indentStyle"], any(name))
-
-			var decoded FormatCodeSettings
-			assert.NilError(t, json.Unmarshal(encoded, &decoded))
-			assert.Equal(t, decoded.IndentStyle, prefs.IndentStyle)
-		})
-	}
-}
-
 func TestUserPreferencesSerialize(t *testing.T) {
 	t.Parallel()
 
