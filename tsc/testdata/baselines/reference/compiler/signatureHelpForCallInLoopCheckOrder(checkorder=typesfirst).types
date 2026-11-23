@@ -1,0 +1,74 @@
+//// [tests/cases/compiler/signatureHelpForCallInLoopCheckOrder.ts] ////
+
+=== signatureHelpForCallInLoopCheckOrder.ts ===
+// The type of tmp depends on the type of cur in the loop, which depends on
+// tmp. Signature help for the call analyzes the loop with the arguments
+// typed so far, and the type it finds at the loop does not outlive the
+// request (49529).
+
+interface XMLNode {}
+
+declare function accessArray(node: XMLNode, createIfNotExists: true): XMLNode;
+>accessArray : { (node: XMLNode, createIfNotExists: true): XMLNode; (node: XMLNode, createIfNotExists: boolean): XMLNode | undefined; }
+>node : XMLNode
+>createIfNotExists : true
+>true : true
+
+declare function accessArray(node: XMLNode, createIfNotExists: boolean): XMLNode | undefined;
+>accessArray : { (node: XMLNode, createIfNotExists: true): XMLNode; (node: XMLNode, createIfNotExists: boolean): XMLNode | undefined; }
+>node : XMLNode
+>createIfNotExists : boolean
+
+declare function accessCatalogEntry(createIfNotExists: boolean): XMLNode | undefined;
+>accessCatalogEntry : (createIfNotExists: boolean) => XMLNode | undefined
+>createIfNotExists : boolean
+
+function accessFieldValue(createIfNotExists: boolean): XMLNode | undefined {
+>accessFieldValue : (createIfNotExists: boolean) => XMLNode | undefined
+>createIfNotExists : boolean
+
+    let cur = accessCatalogEntry(createIfNotExists);
+>cur : XMLNode | undefined
+>accessCatalogEntry(createIfNotExists) : XMLNode | undefined
+>accessCatalogEntry : (createIfNotExists: boolean) => XMLNode | undefined
+>createIfNotExists : boolean
+
+    if (!cur) {
+>!cur : boolean
+>cur : XMLNode | undefined
+
+        return undefined;
+>undefined : undefined
+    }
+    for (let i = 0; i < 5; ++i) {
+>i : number
+>0 : 0
+>i < 5 : boolean
+>i : number
+>5 : 5
+>++i : number
+>i : number
+
+        let tmp = accessArray(cur, createIfNotExists);
+>tmp : any
+>accessArray(cur, createIfNotExists) : XMLNode
+>accessArray : { (node: XMLNode, createIfNotExists: true): XMLNode; (node: XMLNode, createIfNotExists: boolean): XMLNode | undefined; }
+>cur : XMLNode | undefined
+>createIfNotExists : boolean
+
+        if (!tmp) {
+>!tmp : boolean
+>tmp : any
+
+            return undefined;
+>undefined : undefined
+        }
+        cur = tmp;
+>cur = tmp : any
+>cur : XMLNode | undefined
+>tmp : any
+    }
+    return cur;
+>cur : XMLNode | undefined
+}
+

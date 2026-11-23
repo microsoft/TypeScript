@@ -1,0 +1,32 @@
+//// [tests/cases/compiler/instantiationDepthSharedCheckOrder.ts] ////
+
+=== instantiationDepthSharedCheckOrder.ts ===
+// Instantiating Deep<[]> fresh nests 100 instantiations of Deep, which is
+// too deep. In program order each declaration finds the rest of the chain
+// already instantiated by the one before it, so none of them nests more
+// than 25. Whether DeepAll is too deep must not depend on which comes first.
+
+type Deep<N extends 0[]> = N["length"] extends 100 ? never : Deep<[...N, 0]> | N["length"];
+>Deep : Symbol(Deep, Decl(instantiationDepthSharedCheckOrder.ts, 0, 0))
+>N : Symbol(N, Decl(instantiationDepthSharedCheckOrder.ts, 5, 10))
+>N : Symbol(N, Decl(instantiationDepthSharedCheckOrder.ts, 5, 10))
+>Deep : Symbol(Deep, Decl(instantiationDepthSharedCheckOrder.ts, 0, 0))
+>N : Symbol(N, Decl(instantiationDepthSharedCheckOrder.ts, 5, 10))
+>N : Symbol(N, Decl(instantiationDepthSharedCheckOrder.ts, 5, 10))
+
+type Deep75 = Deep<[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]>;
+>Deep75 : Symbol(Deep75, Decl(instantiationDepthSharedCheckOrder.ts, 5, 91))
+>Deep : Symbol(Deep, Decl(instantiationDepthSharedCheckOrder.ts, 0, 0))
+
+type Deep50 = Deep<[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]>;
+>Deep50 : Symbol(Deep50, Decl(instantiationDepthSharedCheckOrder.ts, 6, 246))
+>Deep : Symbol(Deep, Decl(instantiationDepthSharedCheckOrder.ts, 0, 0))
+
+type Deep25 = Deep<[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]>;
+>Deep25 : Symbol(Deep25, Decl(instantiationDepthSharedCheckOrder.ts, 7, 171))
+>Deep : Symbol(Deep, Decl(instantiationDepthSharedCheckOrder.ts, 0, 0))
+
+type DeepAll = Deep<[]>;
+>DeepAll : Symbol(DeepAll, Decl(instantiationDepthSharedCheckOrder.ts, 8, 96))
+>Deep : Symbol(Deep, Decl(instantiationDepthSharedCheckOrder.ts, 0, 0))
+

@@ -5,6 +5,7 @@ import (
 
 	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
 	. "github.com/microsoft/TypeScript/tsc/internal/fourslash/tests/util"
+	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil"
 )
 
@@ -69,6 +70,158 @@ export const x = 0;
 		Items: &fourslash.CompletionsExpectedItems{
 			Unsorted: []fourslash.CompletionsExpectedItem{
 				"inner1",
+			},
+		},
+	})
+}
+
+func TestPathCompletionEscaping(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @Filename: /src/main.ts
+import "./[|a/*double*/|]";
+import './[|a/*single*/|]';
+// @Filename: /src/a"b.ts
+export {};
+// @Filename: /src/a'b.ts
+export {};
+`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	for i, test := range []struct {
+		marker     string
+		label      string
+		insertText string
+		newText    string
+	}{
+		{"double", `a"b`, `a\"b`, `a\"b`},
+		{"single", `a'b`, `a\'b`, `a\'b`},
+	} {
+		item := &lsproto.CompletionItem{
+			Label:  test.label,
+			Detail: new(test.label + ".ts"),
+			TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
+				TextEdit: &lsproto.TextEdit{NewText: test.newText, Range: f.Ranges()[i].LSRange},
+			},
+		}
+		if test.insertText != "" {
+			item.InsertText = &test.insertText
+		}
+		f.VerifyCompletions(t, test.marker, &fourslash.CompletionsExpectedList{
+			IsIncomplete: false,
+			ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
+				CommitCharacters: &[]string{},
+				EditRange:        Ignored,
+			},
+			Items: &fourslash.CompletionsExpectedItems{Includes: []fourslash.CompletionsExpectedItem{item}},
+		})
+	}
+}
+
+func TestPathCompletionEscapedDirectory(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @Filename: /src/main.ts
+import "./a\"b/c/*escaped*/";
+import "./\u0061\x2fc/*escapedSeparator*/";
+// @Filename: /src/a"b/cd.ts
+export {};
+// @Filename: /src/a/cd.ts
+export {};
+`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	for _, test := range []struct {
+		marker string
+		// Character offset of the replaced text; the "c" is at 15 and 20 respectively.
+		character uint32
+	}{
+		{"escaped", 15},
+		{"escapedSeparator", 20},
+	} {
+		line := f.MarkerByName(t, test.marker).LSPos().Line
+		f.VerifyCompletions(t, test.marker, &fourslash.CompletionsExpectedList{
+			IsIncomplete: false,
+			ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
+				CommitCharacters: &[]string{},
+				EditRange:        Ignored,
+			},
+			Items: &fourslash.CompletionsExpectedItems{
+				Includes: []fourslash.CompletionsExpectedItem{
+					&lsproto.CompletionItem{
+						Label:  "cd",
+						Detail: new("cd.ts"),
+						TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
+							TextEdit: &lsproto.TextEdit{
+								NewText: "cd",
+								Range: lsproto.Range{
+									Start: lsproto.Position{Line: line, Character: test.character},
+									End:   lsproto.Position{Line: line, Character: test.character + 1},
+								},
+							},
+						},
+					},
+				},
+			},
+		})
+	}
+}
+
+func TestTripleSlashReferenceCompletionQuotes(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @Filename: /src/main.ts
+/// <reference path="./a/*reference*/" />
+// @Filename: /src/a"b.ts
+export {};
+// @Filename: /src/a'b.ts
+export {};
+`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyCompletions(t, "reference", &fourslash.CompletionsExpectedList{
+		IsIncomplete: false,
+		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
+			CommitCharacters: &[]string{},
+			EditRange:        Ignored,
+		},
+		Items: &fourslash.CompletionsExpectedItems{
+			Includes: []fourslash.CompletionsExpectedItem{"a'b.ts"},
+			Excludes: []string{`a"b.ts`},
+		},
+	})
+}
+
+func TestPathCompletionEscapedTemplate(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = "// @Filename: /src/main.ts\n" +
+		"import(`./\\x61/c/*template*/`);\n" +
+		"// @Filename: /src/a/cd.ts\n" +
+		"export {};\n"
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyCompletions(t, "template", &fourslash.CompletionsExpectedList{
+		IsIncomplete: false,
+		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
+			CommitCharacters: &[]string{},
+			EditRange:        Ignored,
+		},
+		Items: &fourslash.CompletionsExpectedItems{
+			Includes: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label:  "cd",
+					Detail: new("cd.ts"),
+					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
+						TextEdit: &lsproto.TextEdit{
+							NewText: "cd",
+							Range: lsproto.Range{
+								Start: lsproto.Position{Line: 0, Character: 15},
+								End:   lsproto.Position{Line: 0, Character: 16},
+							},
+						},
+					},
+				},
 			},
 		},
 	})

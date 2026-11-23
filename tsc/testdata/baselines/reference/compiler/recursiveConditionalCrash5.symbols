@@ -1,0 +1,13 @@
+//// [tests/cases/compiler/recursiveConditionalCrash5.ts] ////
+
+=== recursiveConditionalCrash5.ts ===
+// https://github.com/microsoft/TypeScript/issues/63040
+
+type StringTreeArrayAsTuple<T> = (T extends [...infer R] ? [...StringTreeArrayAsTuple<R>] : never) & boolean;
+>StringTreeArrayAsTuple : Symbol(StringTreeArrayAsTuple, Decl(recursiveConditionalCrash5.ts, 0, 0))
+>T : Symbol(T, Decl(recursiveConditionalCrash5.ts, 2, 28))
+>T : Symbol(T, Decl(recursiveConditionalCrash5.ts, 2, 28))
+>R : Symbol(R, Decl(recursiveConditionalCrash5.ts, 2, 53))
+>StringTreeArrayAsTuple : Symbol(StringTreeArrayAsTuple, Decl(recursiveConditionalCrash5.ts, 0, 0))
+>R : Symbol(R, Decl(recursiveConditionalCrash5.ts, 2, 53))
+

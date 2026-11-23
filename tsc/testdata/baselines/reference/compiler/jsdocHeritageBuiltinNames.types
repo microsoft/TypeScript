@@ -1,0 +1,27 @@
+//// [tests/cases/compiler/jsdocHeritageBuiltinNames.ts] ////
+
+=== a.js ===
+/** @extends {String} */
+class S extends String {}
+>S : S
+>String : String
+
+class Boolean {
+>Boolean : Boolean
+
+    value = true;
+>value : boolean
+>true : true
+}
+
+/** @implements {Boolean} */
+class B {
+>B : B
+
+    value = false;
+>value : boolean
+>false : false
+}
+
+export {};
+

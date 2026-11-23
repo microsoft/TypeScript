@@ -1,0 +1,58 @@
+//// [tests/cases/compiler/signatureHelpReverseMappedArgumentCheckOrder.ts] ////
+
+=== signatureHelpReverseMappedArgumentCheckOrder.ts ===
+// Printing the candidates of signature help computes the members of the
+// reverse mapped type inferred for the call, which resolves the call
+// again. That happens within the request, and does not change what
+// checking the call infers (29479).
+
+type Selector<S, R> = (state: S, meta: number) => R;
+>Selector : Selector<S, R>
+>state : S
+>meta : number
+
+declare function createStructuredSelector<S, T>(selectors: {
+>createStructuredSelector : <S, T>(selectors: { [K in keyof T]: Selector<S, T[K]>; }) => Selector<S, T>
+>selectors : { [K in keyof T]: Selector<S, T[K]>; }
+
+  [K in keyof T]: Selector<S, T[K]>;
+}): Selector<S, T>;
+
+type State = { foo: number };
+>State : State
+>foo : number
+
+declare const mySelector: Selector<State, boolean>
+>mySelector : Selector<State, boolean>
+
+const result1 = createStructuredSelector({
+>result1 : Selector<unknown, { mySelector: boolean; }>
+>createStructuredSelector({  mySelector: mySelector,}) : Selector<unknown, { mySelector: boolean; }>
+>createStructuredSelector : <S, T>(selectors: { [K in keyof T]: Selector<S, T[K]>; }) => Selector<S, T>
+>{  mySelector: mySelector,} : { mySelector: Selector<State, boolean>; }
+
+  mySelector: mySelector,
+>mySelector : Selector<State, boolean>
+>mySelector : Selector<State, boolean>
+
+});
+
+const result2 = createStructuredSelector({
+>result2 : Selector<unknown, { mySelector: boolean; }>
+>createStructuredSelector({  mySelector: (state: State) => true,}) : Selector<unknown, { mySelector: boolean; }>
+>createStructuredSelector : <S, T>(selectors: { [K in keyof T]: Selector<S, T[K]>; }) => Selector<S, T>
+>{  mySelector: (state: State) => true,} : { mySelector: (state: State) => boolean; }
+
+  mySelector: (state: State) => true,
+>mySelector : (state: State) => boolean
+>(state: State) => true : (state: State) => boolean
+>state : State
+>true : true
+
+});
+
+result2;
+>result2 : Selector<unknown, { mySelector: boolean; }>
+
+export {};
+
