@@ -133,3 +133,26 @@ if (isType<"a" & { kind: "a" }>(o1)) {
 >o1 : Symbol(o1, Decl(narrowingByLiteralKeyedTypes.ts, 41, 13))
 }
 
+enum N { A = NaN, B = 1, C = 2 }
+>N : Symbol(N, Decl(narrowingByLiteralKeyedTypes.ts, 44, 1))
+>A : Symbol(N.A, Decl(narrowingByLiteralKeyedTypes.ts, 46, 8))
+>NaN : Symbol(NaN, Decl(lib.es5.d.ts, --, --))
+>B : Symbol(N.B, Decl(narrowingByLiteralKeyedTypes.ts, 46, 17))
+>C : Symbol(N.C, Decl(narrowingByLiteralKeyedTypes.ts, 46, 24))
+
+declare const n2: N;
+>n2 : Symbol(n2, Decl(narrowingByLiteralKeyedTypes.ts, 47, 13))
+>N : Symbol(N, Decl(narrowingByLiteralKeyedTypes.ts, 44, 1))
+
+if (isType<N.A | N.B>(n2)) {
+>isType : Symbol(isType, Decl(narrowingByLiteralKeyedTypes.ts, 0, 64))
+>N : Symbol(N, Decl(narrowingByLiteralKeyedTypes.ts, 44, 1))
+>A : Symbol(N.A, Decl(narrowingByLiteralKeyedTypes.ts, 46, 8))
+>N : Symbol(N, Decl(narrowingByLiteralKeyedTypes.ts, 44, 1))
+>B : Symbol(N.B, Decl(narrowingByLiteralKeyedTypes.ts, 46, 17))
+>n2 : Symbol(n2, Decl(narrowingByLiteralKeyedTypes.ts, 47, 13))
+
+    n2;
+>n2 : Symbol(n2, Decl(narrowingByLiteralKeyedTypes.ts, 47, 13))
+}
+

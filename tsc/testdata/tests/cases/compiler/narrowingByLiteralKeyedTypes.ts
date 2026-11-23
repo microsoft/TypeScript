@@ -46,3 +46,9 @@ declare const o1: "a" | "b" | { kind: "a" } | { kind: "b" };
 if (isType<"a" & { kind: "a" }>(o1)) {
     o1;
 }
+
+enum N { A = NaN, B = 1, C = 2 }
+declare const n2: N;
+if (isType<N.A | N.B>(n2)) {
+    n2;
+}

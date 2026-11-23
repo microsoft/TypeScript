@@ -134,3 +134,26 @@ if (isType<"a" & { kind: "a" }>(o1)) {
 >o1 : "a" & { kind: "a"; }
 }
 
+enum N { A = NaN, B = 1, C = 2 }
+>N : N
+>A : N.A
+>NaN : number
+>B : N.B
+>1 : 1
+>C : N.C
+>2 : 2
+
+declare const n2: N;
+>n2 : N
+
+if (isType<N.A | N.B>(n2)) {
+>isType<N.A | N.B>(n2) : boolean
+>isType : <T>(x: unknown) => x is T
+>N : any
+>N : any
+>n2 : N
+
+    n2;
+>n2 : N.B
+}
+
