@@ -1,0 +1,32 @@
+//// [tests/cases/compiler/checkOrderCircularDefaults.ts] ////
+
+=== a.ts ===
+import type { B } from "./b";
+>B : Symbol(B, Decl(a.ts, 0, 13))
+
+export interface A<T = B> { a: T }
+>A : Symbol(A, Decl(a.ts, 0, 29))
+>T : Symbol(T, Decl(a.ts, 1, 19))
+>B : Symbol(B, Decl(a.ts, 0, 13))
+>a : Symbol(A.a, Decl(a.ts, 1, 27))
+>T : Symbol(T, Decl(a.ts, 1, 19))
+
+export declare const a: A;
+>a : Symbol(a, Decl(a.ts, 2, 20))
+>A : Symbol(A, Decl(a.ts, 0, 29))
+
+=== b.ts ===
+import type { A } from "./a";
+>A : Symbol(A, Decl(b.ts, 0, 13))
+
+export interface B<U = A> { b: U }
+>B : Symbol(B, Decl(b.ts, 0, 29))
+>U : Symbol(U, Decl(b.ts, 1, 19))
+>A : Symbol(A, Decl(b.ts, 0, 13))
+>b : Symbol(B.b, Decl(b.ts, 1, 27))
+>U : Symbol(U, Decl(b.ts, 1, 19))
+
+export declare const b: B;
+>b : Symbol(b, Decl(b.ts, 2, 20))
+>B : Symbol(B, Decl(b.ts, 0, 29))
+

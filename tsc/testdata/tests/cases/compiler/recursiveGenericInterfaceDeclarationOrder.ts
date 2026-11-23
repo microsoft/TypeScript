@@ -1,0 +1,17 @@
+// @strict: true
+// @noEmit: true
+// @target: esnext
+
+// The assignment is valid, as method parameters are compared bivariantly, and
+// must be accepted whichever of the interfaces is declared first.
+
+type M = { kind: "m" };
+type Filtered<T> = { [K in keyof T as T[K] extends M ? K : never]: T[K] };
+interface Config<T> { measure: keyof T }
+interface Ref<N> { dataset: DS<Record<string, M>, N> }
+interface DS<T, N> {
+  a(config: Config<Filtered<T>>): void;
+  b: Ref<N>;
+}
+declare const x: DS<{ total: M }, string>;
+export const y: DS<Record<string, M>, string> = x;

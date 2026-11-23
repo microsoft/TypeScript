@@ -1,0 +1,90 @@
+//// [tests/cases/compiler/mixinMethodsReferringToAppliedClassCheckOrder.ts] ////
+
+=== mixinMethodsReferringToAppliedClassCheckOrder.ts ===
+// The mixin classes have methods referring to the class built from them,
+// so checking the classes and typing their members first reach the same
+// cycle in different places (55640).
+
+type ConstructorType<T> = abstract new (...args: any[]) => T;
+>ConstructorType : ConstructorType<T>
+>args : any[]
+
+function makeMixin<TBase extends ConstructorType<any>, FinalConstructor>(
+>makeMixin : <TBase extends ConstructorType<any>, FinalConstructor>(mixinFunction: (Base: TBase) => FinalConstructor) => (Base?: TBase) => FinalConstructor
+
+    mixinFunction: (Base: TBase) => FinalConstructor
+>mixinFunction : (Base: TBase) => FinalConstructor
+>Base : TBase
+
+): (Base?: TBase) => FinalConstructor {
+>Base : TBase | undefined
+
+    return (Base?: TBase) => {
+>(Base?: TBase) => {        // do other things with Base, this example is simplified        return mixinFunction(Base ?? (Object as any));    } : (Base?: TBase) => FinalConstructor
+>Base : TBase | undefined
+
+        // do other things with Base, this example is simplified
+        return mixinFunction(Base ?? (Object as any));
+>mixinFunction(Base ?? (Object as any)) : FinalConstructor
+>mixinFunction : (Base: TBase) => FinalConstructor
+>Base ?? (Object as any) : any
+>Base : TBase | undefined
+>(Object as any) : any
+>Object as any : any
+>Object : ObjectConstructor
+
+    };
+}
+
+const MixinF = makeMixin(<TBase extends ConstructorType<any>>(Base: TBase) => {
+>MixinF : <TBase extends ConstructorType<any>>(Base?: TBase | undefined) => ((abstract new (...args: any[]) => Mixin) & { prototype: (Anonymous function).Mixin; }) & TBase
+>makeMixin(<TBase extends ConstructorType<any>>(Base: TBase) => {  abstract class Mixin extends Base {    foo(foo: MixinApplied, extra: boolean): MixinApplied | boolean { return extra }  }  return Mixin}) : <TBase extends ConstructorType<any>>(Base?: TBase | undefined) => ((abstract new (...args: any[]) => Mixin) & { prototype: (Anonymous function).Mixin; }) & TBase
+>makeMixin : <TBase extends ConstructorType<any>, FinalConstructor>(mixinFunction: (Base: TBase) => FinalConstructor) => (Base?: TBase) => FinalConstructor
+><TBase extends ConstructorType<any>>(Base: TBase) => {  abstract class Mixin extends Base {    foo(foo: MixinApplied, extra: boolean): MixinApplied | boolean { return extra }  }  return Mixin} : <TBase extends ConstructorType<any>>(Base: TBase) => ((abstract new (...args: any[]) => Mixin) & { prototype: (Anonymous function).Mixin; }) & TBase
+>Base : TBase
+
+  abstract class Mixin extends Base {
+>Mixin : Mixin
+>Base : TBase
+
+    foo(foo: MixinApplied, extra: boolean): MixinApplied | boolean { return extra }
+>foo : (foo: MixinApplied, extra: boolean) => MixinApplied | boolean
+>foo : MixinApplied
+>extra : boolean
+>extra : boolean
+  }
+  return Mixin
+>Mixin : ((abstract new (...args: any[]) => Mixin) & { prototype: (Anonymous function).Mixin; }) & TBase
+
+})
+
+
+const Mixin2F = makeMixin(<TBase extends ConstructorType<any>>(Base: TBase) => {
+>Mixin2F : <TBase extends ConstructorType<any>>(Base?: TBase | undefined) => ((abstract new (...args: any[]) => Mixin2) & { prototype: (Anonymous function).Mixin2; }) & TBase
+>makeMixin(<TBase extends ConstructorType<any>>(Base: TBase) => {  abstract class Mixin2 extends Base {    bar(foo: MixinApplied, extra: boolean): MixinApplied | boolean { return extra }  }  return Mixin2}) : <TBase extends ConstructorType<any>>(Base?: TBase | undefined) => ((abstract new (...args: any[]) => Mixin2) & { prototype: (Anonymous function).Mixin2; }) & TBase
+>makeMixin : <TBase extends ConstructorType<any>, FinalConstructor>(mixinFunction: (Base: TBase) => FinalConstructor) => (Base?: TBase) => FinalConstructor
+><TBase extends ConstructorType<any>>(Base: TBase) => {  abstract class Mixin2 extends Base {    bar(foo: MixinApplied, extra: boolean): MixinApplied | boolean { return extra }  }  return Mixin2} : <TBase extends ConstructorType<any>>(Base: TBase) => ((abstract new (...args: any[]) => Mixin2) & { prototype: (Anonymous function).Mixin2; }) & TBase
+>Base : TBase
+
+  abstract class Mixin2 extends Base {
+>Mixin2 : Mixin2
+>Base : TBase
+
+    bar(foo: MixinApplied, extra: boolean): MixinApplied | boolean { return extra }
+>bar : (foo: MixinApplied, extra: boolean) => MixinApplied | boolean
+>foo : MixinApplied
+>extra : boolean
+>extra : boolean
+  }
+  return Mixin2
+>Mixin2 : ((abstract new (...args: any[]) => Mixin2) & { prototype: (Anonymous function).Mixin2; }) & TBase
+
+})
+
+class MixinApplied extends Mixin2F(MixinF()) {}
+>MixinApplied : MixinApplied
+>Mixin2F(MixinF()) : never
+>Mixin2F : <TBase extends ConstructorType<any>>(Base?: TBase | undefined) => ((abstract new (...args: any[]) => Mixin2) & { prototype: (Anonymous function).Mixin2; }) & TBase
+>MixinF() : never
+>MixinF : <TBase extends ConstructorType<any>>(Base?: TBase | undefined) => ((abstract new (...args: any[]) => Mixin) & { prototype: (Anonymous function).Mixin; }) & TBase
+

@@ -1,0 +1,44 @@
+//// [tests/cases/compiler/objectRestUnionInstantiationOrder.ts] ////
+
+=== objectRestUnionInstantiationOrder.ts ===
+function f<T>(v: { k: "a"; a: T } | { k: "b"; b: number }) {
+>f : Symbol(f, Decl(objectRestUnionInstantiationOrder.ts, 0, 0))
+>T : Symbol(T, Decl(objectRestUnionInstantiationOrder.ts, 0, 11))
+>v : Symbol(v, Decl(objectRestUnionInstantiationOrder.ts, 0, 14))
+>k : Symbol(k, Decl(objectRestUnionInstantiationOrder.ts, 0, 18))
+>a : Symbol(a, Decl(objectRestUnionInstantiationOrder.ts, 0, 26))
+>T : Symbol(T, Decl(objectRestUnionInstantiationOrder.ts, 0, 11))
+>k : Symbol(k, Decl(objectRestUnionInstantiationOrder.ts, 0, 37))
+>b : Symbol(b, Decl(objectRestUnionInstantiationOrder.ts, 0, 45))
+
+    const { k, ...rest } = v;
+>k : Symbol(k, Decl(objectRestUnionInstantiationOrder.ts, 1, 11))
+>rest : Symbol(rest, Decl(objectRestUnionInstantiationOrder.ts, 1, 14))
+>v : Symbol(v, Decl(objectRestUnionInstantiationOrder.ts, 0, 14))
+
+    return { all: rest, onlyB: "b" in rest ? rest : undefined };
+>all : Symbol(all, Decl(objectRestUnionInstantiationOrder.ts, 2, 12))
+>rest : Symbol(rest, Decl(objectRestUnionInstantiationOrder.ts, 1, 14))
+>onlyB : Symbol(onlyB, Decl(objectRestUnionInstantiationOrder.ts, 2, 23))
+>rest : Symbol(rest, Decl(objectRestUnionInstantiationOrder.ts, 1, 14))
+>rest : Symbol(rest, Decl(objectRestUnionInstantiationOrder.ts, 1, 14))
+>undefined : Symbol(undefined)
+}
+const o = f({ k: "a", a: "s" });
+>o : Symbol(o, Decl(objectRestUnionInstantiationOrder.ts, 4, 5))
+>f : Symbol(f, Decl(objectRestUnionInstantiationOrder.ts, 0, 0))
+>k : Symbol(k, Decl(objectRestUnionInstantiationOrder.ts, 4, 13))
+>a : Symbol(a, Decl(objectRestUnionInstantiationOrder.ts, 4, 21))
+
+const all = o.all;
+>all : Symbol(all, Decl(objectRestUnionInstantiationOrder.ts, 5, 5))
+>o.all : Symbol(all, Decl(objectRestUnionInstantiationOrder.ts, 2, 12))
+>o : Symbol(o, Decl(objectRestUnionInstantiationOrder.ts, 4, 5))
+>all : Symbol(all, Decl(objectRestUnionInstantiationOrder.ts, 2, 12))
+
+const onlyB = o.onlyB;
+>onlyB : Symbol(onlyB, Decl(objectRestUnionInstantiationOrder.ts, 6, 5))
+>o.onlyB : Symbol(onlyB, Decl(objectRestUnionInstantiationOrder.ts, 2, 23))
+>o : Symbol(o, Decl(objectRestUnionInstantiationOrder.ts, 4, 5))
+>onlyB : Symbol(onlyB, Decl(objectRestUnionInstantiationOrder.ts, 2, 23))
+

@@ -312,11 +312,33 @@ func (l *LanguageService) createLspPosition(position int, file *ast.SourceFile) 
 func quote(file *ast.SourceFile, preferences lsutil.UserPreferences, text string) string {
 	// Editors can pass in undefined or empty string - we want to infer the preference in those cases.
 	quotePreference := lsutil.GetQuotePreference(file, preferences)
-	quoted, _ := core.StringifyJson(text, "" /*prefix*/, "" /*indent*/)
+	quoted := `"` + mapLoneSurrogates(text, func(s string) string {
+		quoted, _ := core.StringifyJson(s, "" /*prefix*/, "" /*indent*/)
+		return stringutil.StripQuotes(quoted)
+	}) + `"`
 	if quotePreference == lsutil.QuotePreferenceSingle {
 		quoted = "'" + quoteReplacer.Replace(stringutil.StripQuotes(quoted)) + "'"
 	}
 	return quoted
+}
+
+// mapLoneSurrogates applies f to the text between the lone surrogates in s and
+// writes each lone surrogate as a \uXXXX escape, as JSON.stringify does, since
+// neither JSON nor LSP can carry one as raw text.
+func mapLoneSurrogates(s string, f func(string) string) string {
+	var b strings.Builder
+	start := 0
+	for i := 0; i < len(s); {
+		ch, size := stringutil.DecodeJSStringRune(s[i:])
+		if stringutil.IsSurrogate(ch) {
+			b.WriteString(f(s[start:i]))
+			fmt.Fprintf(&b, `\u%04x`, ch)
+			start = i + size
+		}
+		i += size
+	}
+	b.WriteString(f(s[start:]))
+	return b.String()
 }
 
 var typeKeywords *collections.Set[ast.Kind] = collections.NewSetFromItems(
@@ -704,7 +726,7 @@ func getAdjustedLocationForDeclaration(node *ast.Node, forRename bool, sourceFil
 	case ast.KindClassDeclaration, ast.KindFunctionDeclaration:
 		// for class and function declarations, use the `default` modifier
 		// when the declaration is unnamed.
-		return core.Find(node.ModifierNodes(), func(*ast.Node) bool { return node.Kind == ast.KindDefaultKeyword })
+		return core.Find(node.ModifierNodes(), func(modifier *ast.Node) bool { return modifier.Kind == ast.KindDefaultKeyword })
 	case ast.KindClassExpression:
 		// for class expressions, use the `class` keyword when the class is unnamed
 		return astnav.FindChildOfKind(node, ast.KindClassKeyword, sourceFile)
@@ -1398,11 +1420,14 @@ func getContextualTypeFromParentOrAncestorTypeNode(node *ast.Expression, typeChe
 
 func getAncestorTypeNode(node *ast.Node) *ast.Node {
 	var lastTypeNode *ast.TypeNode
+	// A heritage clause element such as Base<T> is an ExpressionWithTypeArguments,
+	// and its type arguments are written in a type position.
+	isTypeNode := func(n *ast.Node) bool { return ast.IsTypeNode(n) || ast.IsExpressionWithTypeArguments(n) }
 	ast.FindAncestor(node, func(n *ast.Node) bool {
-		if ast.IsTypeNode(n) {
+		if isTypeNode(n) {
 			lastTypeNode = n
 		}
-		return !ast.IsQualifiedName(n.Parent) && !ast.IsTypeNode(n.Parent) && !ast.IsTypeElement(n.Parent)
+		return !ast.IsQualifiedName(n.Parent) && !isTypeNode(n.Parent) && !ast.IsTypeElement(n.Parent)
 	})
 	return lastTypeNode
 }

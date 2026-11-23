@@ -1,0 +1,53 @@
+//// [tests/cases/compiler/selfReferencingObjectLiteralErrorSharedChecker.ts] ////
+
+=== a.ts ===
+import type { T } from "./b";
+>T : number
+
+export const Obj = {
+>Obj : { Updaters: { Template: { commitError: (v: T) => any; }; }; }
+>{    Updaters: {        Template: {            commitError: (v: T) => Obj.Updaters.Core.commitError(v),        },    },} : { Updaters: { Template: { commitError: (v: T) => any; }; }; }
+
+    Updaters: {
+>Updaters : { Template: { commitError: (v: T) => any; }; }
+>{        Template: {            commitError: (v: T) => Obj.Updaters.Core.commitError(v),        },    } : { Template: { commitError: (v: T) => any; }; }
+
+        Template: {
+>Template : { commitError: (v: T) => any; }
+>{            commitError: (v: T) => Obj.Updaters.Core.commitError(v),        } : { commitError: (v: T) => any; }
+
+            commitError: (v: T) => Obj.Updaters.Core.commitError(v),
+>commitError : (v: T) => any
+>(v: T) => Obj.Updaters.Core.commitError(v) : (v: T) => any
+>v : number
+>Obj.Updaters.Core.commitError(v) : any
+>Obj.Updaters.Core.commitError : any
+>Obj.Updaters.Core : any
+>Obj.Updaters : { Template: { commitError: (v: T) => any; }; }
+>Obj : { Updaters: { Template: { commitError: (v: T) => any; }; }; }
+>Updaters : { Template: { commitError: (v: T) => any; }; }
+>Core : any
+>commitError : any
+>v : number
+
+        },
+    },
+};
+
+=== b.ts ===
+import { Obj } from "./a";
+>Obj : { Updaters: { Template: { commitError: (v: T) => any; }; }; }
+
+export type T = number;
+>T : number
+
+export const x = Obj.Updaters.Core.simpleModal;
+>x : any
+>Obj.Updaters.Core.simpleModal : any
+>Obj.Updaters.Core : any
+>Obj.Updaters : { Template: { commitError: (v: T) => any; }; }
+>Obj : { Updaters: { Template: { commitError: (v: T) => any; }; }; }
+>Updaters : { Template: { commitError: (v: T) => any; }; }
+>Core : any
+>simpleModal : any
+

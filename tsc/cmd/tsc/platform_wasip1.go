@@ -69,8 +69,8 @@ func getCurrentDirectory() (string, error) {
 	return cwd, nil
 }
 
-func notifyContext(parent context.Context, _ ...os.Signal) (context.Context, context.CancelFunc) {
-	return context.WithCancel(parent)
+func notifySignals(chan<- os.Signal, ...os.Signal) func() {
+	return func() {}
 }
 
 func getNpmInstall() func(context.Context, string, []string) ([]byte, error) {

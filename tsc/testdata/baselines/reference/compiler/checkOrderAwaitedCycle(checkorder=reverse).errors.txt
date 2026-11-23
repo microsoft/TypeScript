@@ -1,0 +1,24 @@
+a.ts(5,11): error TS2322: Type 'string' is not assignable to type 'number'.
+b.ts(2,11): error TS2322: Type 'string' is not assignable to type 'number'.
+b.ts(2,23): error TS1062: Type is referenced directly or indirectly in the fulfillment callback of its own 'then' method.
+
+
+==== a.ts (1 errors) ====
+    type S = string | Promise<S>;
+    declare const s: S;
+    declare const p: Promise<S>;
+    async function f1() {
+        const a: number = await p;
+              ~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+    }
+    
+==== b.ts (2 errors) ====
+    async function f2() {
+        const b: number = await s;
+              ~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+                          ~~~~~~~
+!!! error TS1062: Type is referenced directly or indirectly in the fulfillment callback of its own 'then' method.
+    }
+    

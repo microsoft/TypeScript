@@ -74,7 +74,6 @@ var textToKeyword = map[string]ast.Kind{
 	"function":    ast.KindFunctionKeyword,
 	"get":         ast.KindGetKeyword,
 	"if":          ast.KindIfKeyword,
-	"immediate":   ast.KindImmediateKeyword,
 	"implements":  ast.KindImplementsKeyword,
 	"import":      ast.KindImportKeyword,
 	"in":          ast.KindInKeyword,
@@ -1370,7 +1369,8 @@ func (s *Scanner) ScanJsxTokenEx(allowMultilineJsxText bool) ast.Kind {
 
 // Scans a JSX identifier; these differ from normal identifiers in that they allow dashes
 func (s *Scanner) ScanJsxIdentifier() ast.Kind {
-	if tokenIsIdentifierOrKeyword(s.token) {
+	// '#' is not a valid JSX identifier character, so a private identifier is left for the parser to report.
+	if s.token != ast.KindPrivateIdentifier && tokenIsIdentifierOrKeyword(s.token) {
 		// An identifier or keyword has already been parsed - check for a `-` or a single instance of `:` and then append it and
 		// everything after it to the token
 		// Do note that this means that `scanJsxIdentifier` effectively _mutates_ the visible token without advancing to a new token
@@ -2471,8 +2471,8 @@ func isConflictMarkerTrivia(text string, pos int) bool {
 
 	// Conflict markers must be at the start of a line.
 	atLineStart := pos == 0 || stringutil.IsLineBreak(rune(text[pos-1]))
-	if !atLineStart && pos >= 2 {
-		prev, _ := utf8.DecodeLastRuneInString(text[:pos-2])
+	if !atLineStart && text[pos-1] > maxAsciiCharacter {
+		prev, _ := utf8.DecodeLastRuneInString(text[:pos])
 		atLineStart = stringutil.IsLineBreak(prev)
 	}
 	if atLineStart {
@@ -2552,6 +2552,35 @@ func GetShebang(text string) string {
 
 	end := scanShebangTrivia(text, 0)
 	return text[:end]
+}
+
+// GetStringLiteralSourceOffset returns the offset in contents, the source text
+// between the delimiters of a string or no-substitution template literal, at
+// which the first valueOffset bytes of the literal's value end. It returns -1
+// if that point is inside an escape sequence or past the end of the value.
+func GetStringLiteralSourceOffset(contents string, valueOffset int, isTemplate bool) int {
+	s := NewScanner()
+	s.SetText(contents)
+	value := 0
+	for value < valueOffset && s.pos < len(contents) {
+		if contents[s.pos] == '\\' {
+			value += len(s.scanEscapeSequence(EscapeSequenceScanningFlagsString | EscapeSequenceScanningFlagsReportErrors))
+		} else if isTemplate && contents[s.pos] == '\r' {
+			// Template values normalize CR and CRLF to LF.
+			s.pos++
+			if s.char() == '\n' {
+				s.pos++
+			}
+			value++
+		} else {
+			s.pos++
+			value++
+		}
+	}
+	if value != valueOffset {
+		return -1
+	}
+	return s.pos
 }
 
 func GetScannerForSourceFile(sourceFile *ast.SourceFile, pos int) *Scanner {

@@ -1,0 +1,83 @@
+// @strict: true
+// @noEmit: true
+// @target: esnext
+
+// The recursion of InferData and UnpackKeyValue is bounded by Next, so
+// inferring it through a closure must not report it as infinite.
+
+type Prettify<T> = { [K in keyof T]: T[K] } & {};
+type ExtractUndefined<T> = { [K in keyof T]: undefined extends T[K] ? K : never }[keyof T];
+type ExtractDefined<T> = { [K in keyof T]: undefined extends T[K] ? never : K }[keyof T];
+type Next = [1, 2, 3, 4, 5, 6];
+type JSONPrimitives = string | number | bigint | boolean | null | undefined;
+type JSONValues = JSONPrimitives | CanBeSerialized<any>;
+type CanBeSerialized<T extends JSONDataTypes> = {
+    toJSON(): T;
+};
+type JSONDataTypes = JSONValues | JSONDataTypes[] | {
+    [key: string]: JSONDataTypes;
+};
+type SerializeJSONObject<T> = {
+    [K in ExtractDefined<T>]: SerializeJSONTypes<T[K]>;
+} & {
+    [K in ExtractUndefined<T>]?: SerializeJSONTypes<T[K]>;
+};
+interface ExtendedJSONTypes {
+}
+type NonAllowedJSTypes = Map<any, any> | Set<any>;
+type ForcefullyAllowedTypes = {
+    [K in keyof ExtendedJSONTypes]: ExtendedJSONTypes[K];
+}[keyof ExtendedJSONTypes];
+type SerializeJSONOwnTypes<T> = T extends JSONPrimitives ? T : T extends ForcefullyAllowedTypes ? T : T extends NonAllowedJSTypes ? never : T extends Array<infer item> ? Array<SerializeJSONTypes<item>> : T extends object ? Prettify<SerializeJSONObject<T>> : never;
+type SerializeJSONTypes<T> = T extends ForcefullyAllowedTypes ? T : T extends CanBeSerialized<infer A> ? SerializeJSONOwnTypes<A> : SerializeJSONOwnTypes<T>;
+interface ItemContract<Transformer extends Record<string, any>, MaxDepth extends Next[number], Variant extends string> {
+    $type: 'item';
+    transformer: {
+        new (...args: any[]): Transformer;
+    };
+    maxDepth: MaxDepth;
+    variant: Variant;
+}
+type UnpackKeyValue<Value extends [any, any], MaxDepth extends number, Depth extends number> = [Value[0]] extends [never] ? SerializeJSONTypes<Value[1]> : Value[0] extends ItemContract<infer Transformer, infer LocalMaxDepth, infer Variant> ? InferData<Transformer, Variant, MaxDepth extends -1 ? LocalMaxDepth : MaxDepth, Next[Depth]> | SerializeJSONTypes<Value[1]> : SerializeJSONTypes<Value[1]>;
+type LimitDepth<Key, Value, MaxDepth extends number, Depth extends number> = [
+    Value
+] extends [never] ? Key : Value extends ItemContract<any, any, any> ? MaxDepth extends Depth ? never : Key : Key;
+type UnpackOptionalValues<Data, MaxDepth extends number, Depth extends number> = {
+    [O in {
+        [K in keyof Data]: [undefined] extends [Data[K]] ? LimitDepth<K, SplitItm<Data[K]>[0], MaxDepth, Depth> : never;
+    }[keyof Data]]?: UnpackKeyValue<SplitItm<Data[O]>, MaxDepth, Depth>;
+};
+type UnpackRequiredValues<Data, MaxDepth extends number, Depth extends number> = {
+    [O in {
+        [K in keyof Data]: [undefined] extends [Data[K]] ? never : LimitDepth<K, SplitItm<Data[K]>[0], MaxDepth, Depth>;
+    }[keyof Data]]: UnpackKeyValue<SplitItm<Data[O]>, MaxDepth, Depth>;
+};
+type SplitItm<T> = [
+    Extract<T, ItemContract<any, any, any>>,
+    Exclude<T, ItemContract<any, any, any>>
+];
+type UnpackAsTopLevelItem<T, Wrapper extends string | undefined> = T extends ItemContract<infer Transformer, any, infer Variant> ? InferData<Transformer, Variant, -1, 0> : never;
+type UnpackValues<Data, MaxDepth extends number, Depth extends number> = Prettify<UnpackRequiredValues<Data, MaxDepth, Depth> & UnpackOptionalValues<Data, MaxDepth, Depth>>;
+type InferData<Transformer, Variant extends string = 'toObject', MaxDepth extends number = -1, Depth extends number = 0> = Transformer extends {
+    [K in Variant]: (...args: any[]) => unknown;
+} ? UnpackValues<Awaited<ReturnType<Transformer[Variant]>>, MaxDepth, Depth> : never;
+declare class Item<Transformer extends Record<string, any>, MaxDepth extends Next[number], Variant extends string> {
+	transformer: { new (...args: any[]): Transformer };
+	maxDepth: MaxDepth;
+	variant: Variant;
+	$type: 'item';
+	resolve(): Promise<UnpackAsTopLevelItem<this, undefined>>;
+}
+type Ctor = { new (resource: any, ...rest: any[]): any };
+declare abstract class BaseTransformer<T> {
+	static transform<Self extends Ctor>(this: Self, data: ConstructorParameters<Self>[0]): Item<InstanceType<Self>, 1, 'toObject'>;
+	constructor(resource: T);
+}
+class Size {
+}
+class SizeTransformer extends BaseTransformer<Size> {
+	toObject() {
+	}
+}
+declare function once<T>(value: T): T;
+once(() => SizeTransformer.transform(new Size()));

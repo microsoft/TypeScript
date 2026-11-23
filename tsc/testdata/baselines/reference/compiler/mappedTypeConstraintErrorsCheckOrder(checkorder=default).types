@@ -1,0 +1,23 @@
+//// [tests/cases/compiler/mappedTypeConstraintErrorsCheckOrder.ts] ////
+
+=== mappedTypeConstraintErrorsCheckOrder.ts ===
+// A mapped type reports the errors of its constraint, here an instantiation
+// that is too deep, at the mapped type, whichever node first requests it.
+
+type Dec<N extends number> =
+>Dec : Dec<N>
+
+    N extends 5 ? 4 : N extends 4 ? 3 : N extends 3 ? 2 :
+    N extends 2 ? any :
+    N extends 1 ? 0 : 0;
+type Recur<N extends number, S> =
+>Recur : Recur<N, S>
+
+    N extends 0 ? S : Recur<Dec<N>, [S]>;
+
+type Explode = {
+>Explode : Explode
+
+    [P in Recur<5, "a"> & string as `${P}_key`]: any;
+};
+
