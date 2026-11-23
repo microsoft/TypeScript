@@ -1,0 +1,63 @@
+//// [tests/cases/compiler/errorStackExactOptionalPropertyTypes.ts] ////
+
+=== errorStackExactOptionalPropertyTypes.ts ===
+// https://github.com/microsoft/TypeScript/issues/45748
+
+// An Error subtype may declare `stack` as possibly undefined.
+interface MyError extends Error {
+>MyError : Symbol(MyError, Decl(errorStackExactOptionalPropertyTypes.ts, 0, 0))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+
+    stack: string | undefined;
+>stack : Symbol(MyError.stack, Decl(errorStackExactOptionalPropertyTypes.ts, 3, 33))
+}
+
+declare const myError: MyError;
+>myError : Symbol(myError, Decl(errorStackExactOptionalPropertyTypes.ts, 7, 13))
+>MyError : Symbol(MyError, Decl(errorStackExactOptionalPropertyTypes.ts, 0, 0))
+
+const asError: Error = myError;
+>asError : Symbol(asError, Decl(errorStackExactOptionalPropertyTypes.ts, 8, 5))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+>myError : Symbol(myError, Decl(errorStackExactOptionalPropertyTypes.ts, 7, 13))
+
+// `stack` may be explicitly set to undefined.
+declare const err: Error;
+>err : Symbol(err, Decl(errorStackExactOptionalPropertyTypes.ts, 11, 13))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+
+err.stack = undefined;
+>err.stack : Symbol(Error.stack, Decl(lib.es5.d.ts, --, --))
+>err : Symbol(err, Decl(errorStackExactOptionalPropertyTypes.ts, 11, 13))
+>stack : Symbol(Error.stack, Decl(lib.es5.d.ts, --, --))
+>undefined : Symbol(undefined)
+
+// Narrowing `stack` back to `string` in a subtype is still allowed.
+interface StrictStackError extends Error {
+>StrictStackError : Symbol(StrictStackError, Decl(errorStackExactOptionalPropertyTypes.ts, 12, 22))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+
+    stack?: string;
+>stack : Symbol(StrictStackError.stack, Decl(errorStackExactOptionalPropertyTypes.ts, 15, 42))
+}
+
+class StrictStackErrorClass extends Error {
+>StrictStackErrorClass : Symbol(StrictStackErrorClass, Decl(errorStackExactOptionalPropertyTypes.ts, 17, 1))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+
+    declare stack?: string;
+>stack : Symbol(StrictStackErrorClass.stack, Decl(errorStackExactOptionalPropertyTypes.ts, 19, 43))
+}
+
+// Trade-off: an Error is no longer assignable to a type whose optional `stack`
+// excludes undefined.
+declare function takesErrorLike(e: { message: string; stack?: string }): void;
+>takesErrorLike : Symbol(takesErrorLike, Decl(errorStackExactOptionalPropertyTypes.ts, 21, 1))
+>e : Symbol(e, Decl(errorStackExactOptionalPropertyTypes.ts, 25, 32))
+>message : Symbol(message, Decl(errorStackExactOptionalPropertyTypes.ts, 25, 36))
+>stack : Symbol(stack, Decl(errorStackExactOptionalPropertyTypes.ts, 25, 53))
+
+takesErrorLike(err);
+>takesErrorLike : Symbol(takesErrorLike, Decl(errorStackExactOptionalPropertyTypes.ts, 21, 1))
+>err : Symbol(err, Decl(errorStackExactOptionalPropertyTypes.ts, 11, 13))
+

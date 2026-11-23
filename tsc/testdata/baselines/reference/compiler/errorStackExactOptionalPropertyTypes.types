@@ -1,0 +1,56 @@
+//// [tests/cases/compiler/errorStackExactOptionalPropertyTypes.ts] ////
+
+=== errorStackExactOptionalPropertyTypes.ts ===
+// https://github.com/microsoft/TypeScript/issues/45748
+
+// An Error subtype may declare `stack` as possibly undefined.
+interface MyError extends Error {
+    stack: string | undefined;
+>stack : string | undefined
+}
+
+declare const myError: MyError;
+>myError : MyError
+
+const asError: Error = myError;
+>asError : Error
+>myError : MyError
+
+// `stack` may be explicitly set to undefined.
+declare const err: Error;
+>err : Error
+
+err.stack = undefined;
+>err.stack = undefined : undefined
+>err.stack : string | undefined
+>err : Error
+>stack : string | undefined
+>undefined : undefined
+
+// Narrowing `stack` back to `string` in a subtype is still allowed.
+interface StrictStackError extends Error {
+    stack?: string;
+>stack : string | undefined
+}
+
+class StrictStackErrorClass extends Error {
+>StrictStackErrorClass : StrictStackErrorClass
+>Error : Error
+
+    declare stack?: string;
+>stack : string | undefined
+}
+
+// Trade-off: an Error is no longer assignable to a type whose optional `stack`
+// excludes undefined.
+declare function takesErrorLike(e: { message: string; stack?: string }): void;
+>takesErrorLike : (e: { message: string; stack?: string; }) => void
+>e : { message: string; stack?: string; }
+>message : string
+>stack : string | undefined
+
+takesErrorLike(err);
+>takesErrorLike(err) : void
+>takesErrorLike : (e: { message: string; stack?: string; }) => void
+>err : Error
+
