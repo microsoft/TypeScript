@@ -1,0 +1,30 @@
+//// [tests/cases/compiler/contextualReturnTypeInferenceUnions.ts] ////
+
+=== contextualReturnTypeInferenceUnions.ts ===
+// https://github.com/microsoft/TypeScript/issues/64690
+
+type Ok<T> = { ok: true; value: T };
+>Ok : Ok<T>
+>ok : true
+>true : true
+>value : T
+
+type Err<E> = { ok: false; value: E };
+>Err : Err<E>
+>ok : false
+>false : false
+>value : E
+
+declare function ok<const T>(value: T): Ok<T>;
+>ok : <const T>(value: T) => Ok<T>
+>value : T
+
+export function f(): Ok<string[]> | Err<string> {
+>f : () => Ok<string[]> | Err<string>
+
+  return ok([]);
+>ok([]) : Ok<[]>
+>ok : <const T>(value: T) => Ok<T>
+>[] : []
+}
+
