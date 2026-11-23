@@ -481,7 +481,6 @@ func main() {
 			"ConstructorKeyword":                           toInt32(ast.KindConstructorKeyword),
 			"DeclareKeyword":                               toInt32(ast.KindDeclareKeyword),
 			"GetKeyword":                                   toInt32(ast.KindGetKeyword),
-			"ImmediateKeyword":                             toInt32(ast.KindImmediateKeyword),
 			"InferKeyword":                                 toInt32(ast.KindInferKeyword),
 			"IntrinsicKeyword":                             toInt32(ast.KindIntrinsicKeyword),
 			"IsKeyword":                                    toInt32(ast.KindIsKeyword),

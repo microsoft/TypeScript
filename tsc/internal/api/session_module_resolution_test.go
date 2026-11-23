@@ -69,6 +69,43 @@ func TestModuleResolverUsesSnapshotFileSystem(t *testing.T) {
 	assert.Assert(t, len(result.Trace) > 0)
 }
 
+func TestResolveTypeReferenceDirectiveRejectsInvalidRequests(t *testing.T) {
+	t.Parallel()
+
+	projectSession, _ := projecttestutil.Setup(map[string]any{})
+	t.Cleanup(projectSession.Close)
+	session := NewLSPSession(projectSession, nil)
+	t.Cleanup(session.Close)
+	resolver, err := session.handleCreateModuleResolver(&CreateModuleResolverParams{})
+	assert.NilError(t, err)
+	invalidMode := ResolutionMode(core.ModuleKindAMD)
+	for _, test := range []struct {
+		name   string
+		change func(*ResolveTypeReferenceDirectiveParams)
+		error  string
+	}{
+		{"empty name", func(p *ResolveTypeReferenceDirectiveParams) { p.TypeReferenceDirectiveName = "" }, "typeReferenceDirectiveName is empty"},
+		{"missing containing file", func(p *ResolveTypeReferenceDirectiveParams) { p.ContainingFile = DocumentIdentifier{} }, "containingFile is empty"},
+		{"invalid mode", func(p *ResolveTypeReferenceDirectiveParams) { p.ResolutionMode = &invalidMode }, "invalid resolutionMode"},
+		{"unknown resolver", func(p *ResolveTypeReferenceDirectiveParams) { p.Resolver++ }, "module resolver"},
+		{"unknown snapshot", func(p *ResolveTypeReferenceDirectiveParams) { p.Snapshot = 999 }, "snapshot"},
+		{"unknown in-progress snapshot", func(p *ResolveTypeReferenceDirectiveParams) { p.InProgressSnapshot = 999 }, "in-progress snapshot"},
+		{"conflicting snapshots", func(p *ResolveTypeReferenceDirectiveParams) { p.Snapshot, p.InProgressSnapshot = 999, 999 }, "mutually exclusive"},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+			params := &ResolveTypeReferenceDirectiveParams{
+				Resolver:                   resolver,
+				TypeReferenceDirectiveName: "pkg",
+				ContainingFile:             DocumentIdentifier{FileName: "/src/index.ts"},
+			}
+			test.change(params)
+			_, resolutionErr := session.handleResolveTypeReferenceDirective(t.Context(), params)
+			assert.ErrorContains(t, resolutionErr, test.error)
+		})
+	}
+}
+
 func TestContentMapperModuleResolverProjectContext(t *testing.T) {
 	t.Parallel()
 	init, _ := projecttestutil.GetSessionInitOptions(map[string]any{

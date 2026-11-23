@@ -612,6 +612,62 @@ describe("API", { concurrency }, () => {
         assert.equal(missing.error?.code, 5083);
     });
 
+    test("getEffectiveTypeRoots uses native candidate directories and normalized options", () => {
+        using api = new API({ cwd: "/workspace/project", fs: createVirtualFileSystem({}) });
+
+        assert.deepEqual(api.getEffectiveTypeRoots({}), [
+            "/workspace/project/node_modules/@types",
+            "/workspace/node_modules/@types",
+            "/node_modules/@types",
+        ]);
+        assert.deepEqual(api.getEffectiveTypeRoots({ configFilePath: "/config/tsconfig.json" }), [
+            "/config/node_modules/@types",
+            "/node_modules/@types",
+        ]);
+        assert.deepEqual(api.getEffectiveTypeRoots({ typeRoots: ["types", "../shared"] }), [
+            "/workspace/project/types",
+            "/workspace/shared",
+        ]);
+        assert.deepEqual(api.getEffectiveTypeRoots({ typeRoots: [] }), []);
+        assert.throws(
+            () => api.getEffectiveTypeRoots({ module: "nodenext" } as unknown as RawCompilerOptions),
+            /invalid request.*unmarshal JSON string into Go core\.ModuleKind/,
+        );
+    });
+
+    test("getTsBuildInfoEmitOutputFilePath uses native incremental output paths", () => {
+        using api = new API({ cwd: "/workspace/project", fs: createVirtualFileSystem({}) });
+
+        assert.equal(api.getTsBuildInfoEmitOutputFilePath({}), undefined);
+        assert.equal(api.getTsBuildInfoEmitOutputFilePath({ tsBuildInfoFile: "cache/build.tsbuildinfo" }), undefined);
+        assert.equal(api.getTsBuildInfoEmitOutputFilePath({ incremental: true }), undefined);
+        assert.equal(
+            api.getTsBuildInfoEmitOutputFilePath({ build: true, configFilePath: "tsconfig.json" }),
+            "/workspace/project/tsconfig.tsbuildinfo",
+        );
+        assert.equal(api.getTsBuildInfoEmitOutputFilePath({ build: false, configFilePath: "tsconfig.json" }), undefined);
+        assert.equal(
+            api.getTsBuildInfoEmitOutputFilePath({ incremental: true, configFilePath: "/config/tsconfig.json", outDir: "dist" }),
+            "/workspace/project/dist/tsconfig.tsbuildinfo",
+        );
+        assert.equal(
+            api.getTsBuildInfoEmitOutputFilePath({ composite: true, tsBuildInfoFile: "cache/build.tsbuildinfo" }),
+            "/workspace/project/cache/build.tsbuildinfo",
+        );
+        assert.equal(
+            api.getTsBuildInfoEmitOutputFilePath({ incremental: true, configFilePath: "tsconfig.app.json", outDir: "dist" }),
+            "/workspace/project/dist/tsconfig.app.tsbuildinfo",
+        );
+        assert.equal(
+            api.getTsBuildInfoEmitOutputFilePath({ incremental: true, configFilePath: "tsconfig.app.json", rootDir: "src", outDir: "dist" }),
+            "/workspace/project/tsconfig.app.tsbuildinfo",
+        );
+        assert.equal(
+            api.getTsBuildInfoEmitOutputFilePath({ composite: true, configFilePath: "tsconfig.json", noEmit: true }),
+            "/workspace/project/tsconfig.tsbuildinfo",
+        );
+    });
+
     test("parseConfigFileTextToJson", () => {
         using api = spawnAPI();
 
@@ -1212,6 +1268,132 @@ describe("API", { concurrency }, () => {
         });
         assert.deepEqual([...repeatedCallback.getProgram(callbackProgramId)!.getSourceFileNames()].sort(), [providedA, root]);
         assert.equal(callbackCalls, 1);
+    });
+
+    test("type reference resolver uses configured roots independently of module overrides", () => {
+        using api = new API({
+            cwd: "/workspace/project",
+            fs: createVirtualFileSystem({
+                "/workspace/project/types/pkg/package.json": JSON.stringify({ name: "@types/pkg", version: "1.0.0", types: "index.d.ts" }),
+                "/workspace/project/types/pkg/index.d.ts": "export {};",
+            }),
+        });
+        const resolver = api.createModuleResolver({ typeRoots: ["types"], traceResolution: true }, {
+            moduleResolutions: { fallback: "unresolved", entries: [] },
+            resolveModuleName: () => {
+                assert.fail("Type references must not invoke the module-name callback");
+            },
+        });
+        const result = resolver.resolveTypeReferenceDirective("pkg", "src/index.ts");
+        assert.equal(result.resolvedTypeReferenceDirective?.resolvedFileName, "/workspace/project/types/pkg/index.d.ts");
+        assert.equal(result.resolvedTypeReferenceDirective?.primary, true);
+        assert.ok(result.trace?.some(line => line.includes("successfully resolved")));
+        const missing = resolver.resolveTypeReferenceDirective("missing", "src/index.ts");
+        assert.equal(missing.resolvedTypeReferenceDirective, undefined);
+        assert.ok(missing.trace?.some(line => line.includes("was not resolved")));
+    });
+
+    test("type reference resolver honors conditional exports and resolution modes", () => {
+        using api = spawnAPI({
+            "/node_modules/pkg/package.json": JSON.stringify({
+                name: "pkg",
+                version: "1.0.0",
+                exports: { ".": { import: "./import.d.mts", require: "./require.d.cts" } },
+            }),
+            "/node_modules/pkg/import.d.mts": "export {};",
+            "/node_modules/pkg/require.d.cts": "export {};",
+        });
+        const resolver = api.createModuleResolver({
+            typeRoots: [],
+            module: ModuleKind.NodeNext,
+            moduleResolution: ModuleResolutionKind.NodeNext,
+        });
+        const esm = resolver.resolveTypeReferenceDirective("pkg", "/src/index.ts", ModuleKind.ESNext);
+        assert.equal(esm.resolvedTypeReferenceDirective?.resolvedFileName, "/node_modules/pkg/import.d.mts");
+        assert.equal(esm.resolvedTypeReferenceDirective?.packageId?.name, "pkg");
+        assert.equal(esm.resolvedTypeReferenceDirective?.primary, false);
+        assert.equal(esm.resolvedTypeReferenceDirective?.isExternalLibraryImport, true);
+        assert.equal(
+            (resolver.resolveTypeReferenceDirective("pkg", "/src/index.ts", ModuleKind.CommonJS)).resolvedTypeReferenceDirective?.resolvedFileName,
+            "/node_modules/pkg/require.d.cts",
+        );
+    });
+
+    test("type reference resolver retains snapshot filesystem state and checks disposal", () => {
+        const packageJson = toRootedFilePath("/node_modules/@types/pkg/package.json", undefined);
+        const packageB = toRootedFilePath("/node_modules/@types/pkg/b.d.ts", undefined);
+        const { api: disposableAPI, fs } = spawnAPIWithFS({
+            [packageJson]: JSON.stringify({ name: "@types/pkg", version: "1.0.0", types: "a.d.ts" }),
+            "/node_modules/@types/pkg/a.d.ts": "export {};",
+        });
+        using api = disposableAPI;
+        const resolver = api.createModuleResolver({});
+        const firstSnapshot = api.createSnapshot();
+        assert.equal(
+            (resolver.resolveTypeReferenceDirective("pkg", "/src/index.ts", undefined, { snapshot: firstSnapshot })).resolvedTypeReferenceDirective?.resolvedFileName,
+            "/node_modules/@types/pkg/a.d.ts",
+        );
+        fs.writeFile!(packageJson, JSON.stringify({ name: "@types/pkg", version: "1.0.0", types: "b.d.ts" }));
+        fs.writeFile!(packageB, "export {};");
+        const secondSnapshot = firstSnapshot.update({
+            fileNotifications: { changed: [packageJson], created: [packageB] },
+        });
+        assert.equal(
+            (resolver.resolveTypeReferenceDirective("pkg", "/src/index.ts", undefined, { snapshot: firstSnapshot })).resolvedTypeReferenceDirective?.resolvedFileName,
+            "/node_modules/@types/pkg/a.d.ts",
+        );
+        assert.equal(
+            (resolver.resolveTypeReferenceDirective("pkg", "/src/index.ts", undefined, { snapshot: secondSnapshot })).resolvedTypeReferenceDirective?.resolvedFileName,
+            "/node_modules/@types/pkg/b.d.ts",
+        );
+        assert.equal(
+            (resolver.resolveTypeReferenceDirective("pkg", "/src/index.ts")).resolvedTypeReferenceDirective?.resolvedFileName,
+            "/node_modules/@types/pkg/b.d.ts",
+        );
+        firstSnapshot.dispose();
+        assert.throws(
+            () => resolver.resolveTypeReferenceDirective("pkg", "/src/index.ts", undefined, { snapshot: firstSnapshot }),
+            /Snapshot is disposed/,
+        );
+        resolver.dispose();
+        assert.throws(
+            () => resolver.resolveTypeReferenceDirective("pkg", "/src/index.ts"),
+            /ModuleResolver is disposed/,
+        );
+    });
+
+    test("type reference resolver uses the in-progress snapshot filesystem", () => {
+        using api = spawnAPI({ "/src/index.ts": 'import "layered";' });
+        const compilerOptions = { noLib: true, types: [] };
+        const defaultResolver = api.createModuleResolver(compilerOptions);
+        const customResolver = api.createModuleResolver(compilerOptions, {
+            resolveModuleName: (name, containingDirectory, mode, { snapshot }) => {
+                assert.equal(name, "layered");
+                assert.ok(typeof snapshot === "number");
+                const result = defaultResolver.resolveTypeReferenceDirective(name, `${containingDirectory}/index.ts`, mode, { snapshot });
+                assert.ok(result.resolvedTypeReferenceDirective);
+                return { resolvedFileName: result.resolvedTypeReferenceDirective.resolvedFileName };
+            },
+        });
+        const snapshot = api.createSnapshot({
+            fileSystem: createFileSystemLayer([
+                ["/node_modules/@types/layered/package.json", JSON.stringify({ name: "@types/layered", version: "1.0.0", types: "index.d.ts" })],
+                ["/node_modules/@types/layered/index.d.ts", "export {};"],
+            ]),
+            createPrograms: [{
+                rootFiles: ["/src/index.ts"],
+                compilerOptions,
+                options: { moduleResolver: customResolver },
+            }],
+        });
+        assert.deepEqual(
+            [...snapshot.operation.createdPrograms![0].getSourceFileNames()].sort(),
+            ["/node_modules/@types/layered/index.d.ts", "/src/index.ts"],
+        );
+        assert.equal(
+            (defaultResolver.resolveTypeReferenceDirective("layered", "/src/index.ts")).resolvedTypeReferenceDirective,
+            undefined,
+        );
     });
 
     test("module resolver normalizes raw compiler option paths", () => {
@@ -9315,6 +9497,59 @@ export const obj = { m: 1, s: "hi", b: true };
     a: string; // bulk trailing
 }`,
         );
+    });
+
+    test("printNode with emitContext comment emit flags only suppress source comments", () => {
+        using api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": `/* source leading */ leading;\ntrailing; /* source trailing */\n`,
+        });
+        const snapshot = api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const sourceFile = snapshot.getConfiguredProject("/tsconfig.json")!.program.getSourceFile("/src/main.ts");
+        assert.ok(sourceFile);
+        const [leading, trailing] = sourceFile.statements;
+
+        // Source comments are only emitted when printing the whole source file, so print that
+        // and attach the emit context state to the statement of interest.
+        const print = (statement: typeof leading, flags: EmitFlags, side: "leading" | "trailing") => {
+            const emitContext = api.printer.createEmitContext();
+            emitContext.setEmitFlags(statement, flags);
+            if (side === "leading") {
+                emitContext.addSyntheticLeadingComment(statement, SyntaxKind.MultiLineCommentTrivia, " synthesized ", false, false);
+            }
+            else {
+                emitContext.addSyntheticTrailingComment(statement, SyntaxKind.MultiLineCommentTrivia, " synthesized ", false, false);
+            }
+            return (api.printer.printNode(sourceFile, { emitContext })).trimEnd();
+        };
+
+        assert.strictEqual(print(leading, EmitFlags.None, "leading"), "/* source leading */ /* synthesized */ leading;\ntrailing; /* source trailing */");
+        assert.strictEqual(print(leading, EmitFlags.NoLeadingComments, "leading"), "/* synthesized */ leading;\ntrailing; /* source trailing */");
+        assert.strictEqual(print(leading, EmitFlags.NoComments, "leading"), "/* synthesized */ leading;\ntrailing; /* source trailing */");
+
+        assert.strictEqual(print(trailing, EmitFlags.None, "trailing"), "/* source leading */ leading;\ntrailing; /* synthesized */ /* source trailing */");
+        assert.strictEqual(print(trailing, EmitFlags.NoTrailingComments, "trailing"), "/* source leading */ leading;\ntrailing; /* synthesized */");
+        assert.strictEqual(print(trailing, EmitFlags.NoComments, "trailing"), "/* source leading */ leading;\ntrailing; /* synthesized */");
+    });
+
+    test("printNode parenthesizes an operand whose synthesized leading comment introduces a newline even with NoLeadingComments", () => {
+        using api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": `function f() {\n    /* source */ return a.b;\n}\n`,
+        });
+        const snapshot = api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const sourceFile = snapshot.getConfiguredProject("/tsconfig.json")!.program.getSourceFile("/src/main.ts");
+        assert.ok(sourceFile);
+        // `return` cannot be followed by a line break, so an operand whose leading comment
+        // starts a new line has to be parenthesized.
+        const declaration = sourceFile.statements[0] as import("@typescript/typescript/ast").FunctionDeclaration;
+        const returnStatement = declaration.body!.statements[0] as import("@typescript/typescript/ast").ReturnStatement;
+        const operand = (returnStatement.expression as import("@typescript/typescript/ast").PropertyAccessExpression).expression;
+
+        const emitContext = api.printer.createEmitContext();
+        emitContext.setEmitFlags(operand, EmitFlags.NoLeadingComments);
+        emitContext.addSyntheticLeadingComment(operand, SyntaxKind.SingleLineCommentTrivia, " synthesized", true, false);
+        assert.strictEqual((api.printer.printNode(sourceFile, { emitContext })).trimEnd(), "function f() {\n    /* source */ return (\n    // synthesized\n    a).b;\n}");
     });
 
     test("printNode honors newline flags on synthetic trailing comments", () => {
