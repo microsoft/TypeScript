@@ -1,0 +1,73 @@
+//// [tests/cases/compiler/lexicalMissingOverloadDiagnostic.ts] ////
+
+=== lexicalMissingOverloadDiagnostic.ts ===
+// Relating Nested to Inline reads the return type of the call being resolved.
+// A hidden re-entry of that call still reports that no overload matches, and
+// the call has the type of the last overload tried.
+
+interface ConfigValue<T> {
+>ConfigValue : Symbol(ConfigValue, Decl(lexicalMissingOverloadDiagnostic.ts, 0, 0))
+>T : Symbol(T, Decl(lexicalMissingOverloadDiagnostic.ts, 4, 22))
+
+  children?: 'inline';
+>children : Symbol(ConfigValue.children, Decl(lexicalMissingOverloadDiagnostic.ts, 4, 26))
+
+  json?: (n: T) => void;
+>json : Symbol(ConfigValue.json, Decl(lexicalMissingOverloadDiagnostic.ts, 5, 22))
+>n : Symbol(n, Decl(lexicalMissingOverloadDiagnostic.ts, 6, 10))
+>T : Symbol(T, Decl(lexicalMissingOverloadDiagnostic.ts, 4, 22))
+}
+declare class Base {
+>Base : Symbol(Base, Decl(lexicalMissingOverloadDiagnostic.ts, 7, 1))
+
+  describe(): {};
+>describe : Symbol(Base.describe, Decl(lexicalMissingOverloadDiagnostic.ts, 8, 20))
+
+  config<Config extends ConfigValue<this>>(type: symbol, config: Config): {};
+>config : Symbol(Base.config, Decl(lexicalMissingOverloadDiagnostic.ts, 9, 17), Decl(lexicalMissingOverloadDiagnostic.ts, 10, 77))
+>Config : Symbol(Config, Decl(lexicalMissingOverloadDiagnostic.ts, 10, 9))
+>ConfigValue : Symbol(ConfigValue, Decl(lexicalMissingOverloadDiagnostic.ts, 0, 0))
+>type : Symbol(type, Decl(lexicalMissingOverloadDiagnostic.ts, 10, 43))
+>config : Symbol(config, Decl(lexicalMissingOverloadDiagnostic.ts, 10, 56))
+>Config : Symbol(Config, Decl(lexicalMissingOverloadDiagnostic.ts, 10, 9))
+
+  config<Config extends ConfigValue<this>>(type: string, config: Config): { kind?: Config };
+>config : Symbol(Base.config, Decl(lexicalMissingOverloadDiagnostic.ts, 9, 17), Decl(lexicalMissingOverloadDiagnostic.ts, 10, 77))
+>Config : Symbol(Config, Decl(lexicalMissingOverloadDiagnostic.ts, 11, 9))
+>ConfigValue : Symbol(ConfigValue, Decl(lexicalMissingOverloadDiagnostic.ts, 0, 0))
+>type : Symbol(type, Decl(lexicalMissingOverloadDiagnostic.ts, 11, 43))
+>config : Symbol(config, Decl(lexicalMissingOverloadDiagnostic.ts, 11, 56))
+>Config : Symbol(Config, Decl(lexicalMissingOverloadDiagnostic.ts, 11, 9))
+>kind : Symbol(kind, Decl(lexicalMissingOverloadDiagnostic.ts, 11, 75))
+>Config : Symbol(Config, Decl(lexicalMissingOverloadDiagnostic.ts, 11, 9))
+}
+declare const pinSchema: (n: Inline) => void;
+>pinSchema : Symbol(pinSchema, Decl(lexicalMissingOverloadDiagnostic.ts, 13, 13))
+>n : Symbol(n, Decl(lexicalMissingOverloadDiagnostic.ts, 13, 26))
+>Inline : Symbol(Inline, Decl(lexicalMissingOverloadDiagnostic.ts, 13, 45))
+
+declare class Inline extends Base {
+>Inline : Symbol(Inline, Decl(lexicalMissingOverloadDiagnostic.ts, 13, 45))
+>Base : Symbol(Base, Decl(lexicalMissingOverloadDiagnostic.ts, 7, 1))
+
+  describe(): { kind?: { children: 'inline' } };
+>describe : Symbol(Inline.describe, Decl(lexicalMissingOverloadDiagnostic.ts, 14, 35))
+>kind : Symbol(kind, Decl(lexicalMissingOverloadDiagnostic.ts, 15, 15))
+>children : Symbol(children, Decl(lexicalMissingOverloadDiagnostic.ts, 15, 24))
+}
+class Nested extends Base {
+>Nested : Symbol(Nested, Decl(lexicalMissingOverloadDiagnostic.ts, 16, 1))
+>Base : Symbol(Base, Decl(lexicalMissingOverloadDiagnostic.ts, 7, 1))
+
+  describe() {
+>describe : Symbol(Nested.describe, Decl(lexicalMissingOverloadDiagnostic.ts, 17, 27))
+
+    return this.config('kind', { json: pinSchema }); // error
+>this.config : Symbol(Base.config, Decl(lexicalMissingOverloadDiagnostic.ts, 9, 17), Decl(lexicalMissingOverloadDiagnostic.ts, 10, 77))
+>this : Symbol(Nested, Decl(lexicalMissingOverloadDiagnostic.ts, 16, 1))
+>config : Symbol(Base.config, Decl(lexicalMissingOverloadDiagnostic.ts, 9, 17), Decl(lexicalMissingOverloadDiagnostic.ts, 10, 77))
+>json : Symbol(json, Decl(lexicalMissingOverloadDiagnostic.ts, 19, 32))
+>pinSchema : Symbol(pinSchema, Decl(lexicalMissingOverloadDiagnostic.ts, 13, 13))
+  }
+}
+

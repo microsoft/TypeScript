@@ -2310,7 +2310,12 @@ func (c *Checker) getTypeOfDottedName(node *ast.Node, diagnostic *ast.Diagnostic
 
 func (c *Checker) getExplicitTypeOfSymbol(symbol *ast.Symbol, diagnostic *ast.Diagnostic) *Type {
 	symbol = c.resolveSymbol(symbol)
-	if c.isResolvingAnywhere(symbol, TypeSystemPropertyNameExplicitType) {
+	if i := c.resolvingAnywhereIndex(symbol, TypeSystemPropertyNameExplicitType); i >= 0 {
+		c.markTypeResolutionCircular(i)
+		// The cycle through control flow may pass through members declared
+		// before the one observed, which are then resolved first, as if
+		// entered first, failing as they would had they been.
+		c.yieldObservedCycle(i)
 		return nil
 	}
 	c.beginTypeResolution(symbol, TypeSystemPropertyNameExplicitType, nil)

@@ -717,6 +717,7 @@ var unmemoizedCacheFields = map[string]string{
 	"instantiationExpressionEntry.t":                    unmemoizedFlagMemo,
 	"ModuleSymbolLinks.resolvedExports":                 unmemoizedFlagMemo,
 	"ModuleSymbolLinks.typeOnlyExportStarMap":           unmemoizedFlagMemo,
+	"SignatureLinks.hiddenReentry":                      unmemoizedGuarded,
 	"LateBoundLinks.lateSymbol":                         unmemoizedGuarded,
 	"TypeAliasLinks.typeParameters":                     unmemoizedGuarded,
 	"MarkedAssignmentSymbolLinks.lastAssignmentPos":     unmemoizedGuarded,

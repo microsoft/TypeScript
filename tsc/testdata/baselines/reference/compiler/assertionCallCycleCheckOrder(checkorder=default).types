@@ -1,0 +1,42 @@
+//// [tests/cases/compiler/assertionCallCycleCheckOrder.ts] ////
+
+=== assertionCallCycleCheckOrder.ts ===
+// Analyzing the flow of handlers checks whether the call to setHandler is an
+// assertion, which needs the type of theClass, which needs the type of
+// handlers. The same members are circular whichever is checked first (50200).
+
+class GenericClass<T> {
+>GenericClass : GenericClass<T>
+
+    setHandler(handler: (date: T) => void) {
+>setHandler : (handler: (date: T) => void) => void
+>handler : (date: T) => void
+>date : T
+    }
+}
+
+const theClass: GenericClass<typeof handlers> = new GenericClass();
+>theClass : any
+>handlers : any
+>new GenericClass() : GenericClass<any>
+>GenericClass : typeof GenericClass
+
+theClass.setHandler(() => {});
+>theClass.setHandler(() => {}) : any
+>theClass.setHandler : any
+>theClass : any
+>setHandler : any
+>() => {} : () => void
+
+const handlers = {
+>handlers : any
+>{    thisDoesnt: console.log,} : { thisDoesnt: (...data: any[]) => void; }
+
+    thisDoesnt: console.log,
+>thisDoesnt : (...data: any[]) => void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+
+};
+

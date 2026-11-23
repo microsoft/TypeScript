@@ -26,7 +26,10 @@ const (
 	SignatureCheckModeIgnoreReturnTypes  SignatureCheckMode = 1 << 2
 	SignatureCheckModeStrictArity        SignatureCheckMode = 1 << 3
 	SignatureCheckModeStrictTopSignature SignatureCheckMode = 1 << 4
-	SignatureCheckModeCallback           SignatureCheckMode = SignatureCheckModeBivariantCallback | SignatureCheckModeStrictCallback
+	// SignatureCheckModeAssumeResolving assumes the return type of a signature in progress related, instead
+	// of comparing it as any, which is not a subtype of anything but any; see compareSignaturesRelated.
+	SignatureCheckModeAssumeResolving SignatureCheckMode = 1 << 5
+	SignatureCheckModeCallback        SignatureCheckMode = SignatureCheckModeBivariantCallback | SignatureCheckModeStrictCallback
 )
 
 type MinArgumentCountFlags uint32
@@ -2148,6 +2151,13 @@ func (c *Checker) compareSignaturesRelated(source *Signature, target *Signature,
 			return result
 		}
 		sourceReturnType := c.getNonCircularReturnTypeOfSignature(source)
+		if checkMode&SignatureCheckModeAssumeResolving != 0 && sourceReturnType == c.anyType && c.isResolvingReturnTypeOfSignature(source) {
+			// A return type in progress is assumed related, as the pair of types being compared is
+			// when a comparison recurs, so that what subtype reduction makes of it is the same
+			// whichever return type was requested first. Comparing it as any would not be: any is
+			// not a strict subtype.
+			return result
+		}
 		// The following block preserves behavior forbidding boolean returning functions from being assignable to type guard returning functions
 		targetTypePredicate := c.getTypePredicateOfSignature(target)
 		if targetTypePredicate != nil {
@@ -2692,7 +2702,22 @@ func (c *Checker) isResolvingReturnTypeOfSignature(signature *Signature) bool {
 	if signature.getComposite() != nil && core.Some(signature.getComposite().signatures, c.isResolvingReturnTypeOfSignature) {
 		return true
 	}
-	return signature.resolvedReturnType.cached(c) == nil && c.isResolutionInProgress(signature, TypeSystemPropertyNameResolvedReturnType)
+	// An instantiation of a signature is resolving its return type while the
+	// signature it instantiates is.
+	resolving := signature
+	start := c.findResolutionCycleStartIndex(resolving, TypeSystemPropertyNameResolvedReturnType)
+	for start < 0 && resolving.target != nil {
+		resolving = resolving.target
+		start = c.findResolutionCycleStartIndex(resolving, TypeSystemPropertyNameResolvedReturnType)
+	}
+	if start < 0 {
+		return false
+	}
+	c.markTypeResolutionCircular(start)
+	// Computed from the first member of the cycle, the return type may be
+	// available after all.
+	c.yieldObservedCycle(start)
+	return resolving.resolvedReturnType.inProgress(c) == nil
 }
 
 func (c *Checker) findMatchingSignatures(signatureLists [][]*Signature, signature *Signature, listIndex int) []*Signature {
@@ -5369,7 +5394,7 @@ func (r *Relater) signatureRelatedTo(source *Signature, target *Signature, erase
 	case r.relation == r.c.subtypeRelation:
 		checkMode = SignatureCheckModeStrictTopSignature
 	case r.relation == r.c.strictSubtypeRelation:
-		checkMode = SignatureCheckModeStrictTopSignature | SignatureCheckModeStrictArity
+		checkMode = SignatureCheckModeStrictTopSignature | SignatureCheckModeStrictArity | SignatureCheckModeAssumeResolving
 	}
 	if erase {
 		source = r.c.getErasedSignature(source)

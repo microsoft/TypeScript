@@ -537,6 +537,13 @@ type SignatureLinks struct {
 	resolvedSignature  memo[*Signature] // Cached signature of signature node or call expression
 	effectsSignature   memo[*Signature] // Signature with possible control flow effects
 	decoratorSignature memo[*Signature] // Signature for decorator as if invoked by the runtime
+	// hiddenReentry records, while a resolution of this call is in progress,
+	// that it re-entered a hidden resolution of itself. Its failure falls back
+	// to the candidate the error is reported against. The longest earlier
+	// candidate's return type can be assignable where the failing one is not,
+	// so elaborating the error after caching it would report nothing, and the
+	// enclosing resolution would keep a recovery type the call did not fail as.
+	hiddenReentry bool
 }
 
 type TypeFlags uint32

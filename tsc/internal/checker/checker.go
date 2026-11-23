@@ -96,6 +96,10 @@ type TypeResolution struct {
 	// restartHidden records that a cycle entered below this resolution of a
 	// module table passes through it; see resolveModuleTableMembers.
 	restartHidden bool
+	// soft records that a relation requested the resolution, which it only
+	// needs for comparing, and so observes in progress instead of failing it;
+	// see firstCycleMember.
+	soft bool
 }
 
 // ContextualInfo
@@ -702,6 +706,7 @@ type Checker struct {
 	resolutionStart                             int                 // Index in resolutions below which resolutions are not searched for cycles
 	visibleStart                                int                 // Index in resolutions below which nothing in progress is visible; see yieldCycle
 	cycleYields                                 []cycleYield        // Canonical recomputations in progress; see yieldCycle
+	softReturnType                              *Signature          // The signature whose return type a relation is requesting; see getNonCircularReturnTypeOfSignature
 	circularityStart                            int                 // 1-based index in resolutions of the outermost cycle in progress, or 0; see memo.go
 	currentNodeErrors                           []*currentNodeError // Errors reported at the current node while collecting; see startCurrentNodeErrors
 	currentNodeErrorCollectors                  int                 // Number of computations collecting currentNodeErrors
@@ -9016,8 +9021,10 @@ func (c *Checker) getResolvedSignatureUncached(node *ast.Node, candidatesOutArra
 	// or that a different candidatesOutArray was passed in. Therefore, we need to redo the work
 	// to correctly fill the candidatesOutArray.
 	cached := links.resolvedSignature.cached(c)
+	hiddenReentry := false
 	if cached == c.resolvingSignature && c.isSignatureResolutionHidden(links) {
 		cached = nil
+		hiddenReentry = true
 	}
 	if cached != nil && cached != c.resolvingSignature && candidatesOutArray == nil {
 		return cached
@@ -9034,6 +9041,7 @@ func (c *Checker) getResolvedSignatureUncached(node *ast.Node, candidatesOutArra
 		cached = links.resolvedSignature.cached(c)
 		if cached == c.resolvingSignature && c.isSignatureResolutionHidden(links) {
 			cached = nil
+			hiddenReentry = true
 		}
 		if cached != nil && cached != c.resolvingSignature && candidatesOutArray == nil {
 			return cached
@@ -9051,7 +9059,10 @@ func (c *Checker) getResolvedSignatureUncached(node *ast.Node, candidatesOutArra
 	}
 	links.resolvedSignature.swap(c.resolvingSignature)
 	c.signaturesResolving = append(c.signaturesResolving, links)
+	saveHiddenReentry := links.hiddenReentry
+	links.hiddenReentry = hiddenReentry
 	result := c.resolveSignature(node, candidatesOutArray, checkMode)
+	links.hiddenReentry = saveHiddenReentry
 	c.signaturesResolving = c.signaturesResolving[:len(c.signaturesResolving)-1]
 	c.resolutionStart = saveResolutionStart
 	// When CheckMode.SkipGenericFunctions is set we use resolvingSignature to indicate that call
@@ -9603,6 +9614,19 @@ func (c *Checker) resolveCall(node *ast.Node, signatures []*Signature, candidate
 		return result
 	}
 	result = c.getCandidateForOverloadFailure(s.node, s.candidates, s.args, candidatesOutArray != nil, checkMode)
+	// A hidden re-entry of this call failed while its return type was being
+	// inferred from itself. The longest earlier candidate is the usual
+	// recovery signature, but its return type can be assignable where the
+	// candidate the error is reported against is not: elaborating after
+	// caching it then reports nothing, and every enclosing resolution of the
+	// call keeps that recovery type. Return the candidate the error is
+	// reported against, the one checking the call from scratch fails as.
+	if c.signatureLinks.Get(node).hiddenReentry && len(s.candidatesForArgumentError) != 0 {
+		// The candidate chooseOverload instantiated may have fallen back to the
+		// constraint, whose return type is assignable where the argument's type
+		// is not. Infer again from the arguments, as the usual recovery does.
+		result = c.instantiateHiddenReentryFailure(node, s.candidatesForArgumentError[len(s.candidatesForArgumentError)-1], s.args, checkMode)
+	}
 	// Preemptively cache the result; getResolvedSignature will do this after we return, but
 	// we need to ensure that the result is present for the error checks below so that if
 	// this signature is encountered again, we handle the circularity (rather than producing a
@@ -9625,6 +9649,22 @@ func (c *Checker) resolveCall(node *ast.Node, signatures []*Signature, candidate
 		c.reportCallResolutionErrors(node, &s, signatures, headMessage)
 	}
 	return result
+}
+
+// instantiateHiddenReentryFailure instantiates the candidate a hidden
+// re-entry failed as, inferring from the arguments the way the usual
+// overload-failure recovery does. sig may already be an instantiation.
+func (c *Checker) instantiateHiddenReentryFailure(node *ast.Node, sig *Signature, args []*ast.Node, checkMode CheckMode) *Signature {
+	for sig != nil && sig.target != nil {
+		sig = sig.target
+	}
+	if sig == nil {
+		return nil
+	}
+	if tps := sig.TypeParameters(); len(tps) != 0 {
+		return c.inferSignatureInstantiationForOverloadFailure(node, tps, sig, args, checkMode)
+	}
+	return sig
 }
 
 func (c *Checker) reorderCandidates(signatures []*Signature, callChainFlags SignatureFlags) []*Signature {
@@ -10332,6 +10372,12 @@ func (c *Checker) reportCallResolutionErrors(node *ast.Node, s *CallState, signa
 		last := s.candidatesForArgumentError[len(s.candidatesForArgumentError)-1]
 		var diags []*ast.Diagnostic
 		c.isSignatureApplicable(s.node, s.args, last, c.assignableRelation, CheckModeNormal, true /*reportErrors*/, &diags)
+		if len(diags) == 0 && c.signatureLinks.Get(s.node).hiddenReentry {
+			// The re-check succeeded even though chooseOverload rejected this
+			// candidate: the recovery signature cached above changed the return
+			// type the comparison reads. The failure still stands.
+			c.addDiagnostic(NewDiagnosticForNode(s.node, diagnostics.No_overload_matches_this_call))
+		}
 		for _, diagnostic := range diags {
 			if len(s.candidatesForArgumentError) > 1 {
 				diagnostic = ast.NewDiagnosticChain(diagnostic, diagnostics.The_last_overload_gave_the_following_error)
@@ -10852,23 +10898,30 @@ func (c *Checker) contextuallyCheckFunctionExpressionOrObjectLiteralMethodUncach
 	if links.flags&NodeCheckFlagsContextChecked == 0 || links.flags&NodeCheckFlagsSignatureContextChecked != 0 && !hidden {
 		return
 	}
+	// The flag guards against checking the function again from within the
+	// check, so it is set now, and is only discarded if a cycle in progress
+	// logs it.
+	markerLogged := c.logResults()
 	setFlagMemoBits(c, memoKeyOf(node, memoContextChecked), &links.flags, NodeCheckFlagsSignatureContextChecked, NodeCheckFlagsSignatureContextChecked)
 	signature := c.getSignatureFromDeclarationUncontextual(node)
 	contextualSignature := c.getContextualSignature(node)
 	// The return type is inferred now, while the contextual types of the
 	// function's enclosing expressions are in place; a later request may
 	// come from where they are not.
-	if contextualSignature != nil && checkMode&^CheckModeTypeOnly == CheckModeNormal && c.getReturnTypeFromAnnotation(node) == nil && !c.isResolvingReturnTypeOfSignature(signature) {
-		c.getReturnTypeOfSignature(signature)
-	} else if contextualSignature != nil && c.getReturnTypeFromAnnotation(node) == nil && signature.resolvedReturnType.cached(c) == nil && !c.isResolvingReturnTypeOfSignature(signature) && c.pushTypeResolution(signature, TypeSystemPropertyNameResolvedReturnType, nil) {
+	if contextualSignature != nil && c.getReturnTypeFromAnnotation(node) == nil && signature.resolvedReturnType.cached(c) == nil && !c.isResolvingReturnTypeOfSignature(signature) {
 		// resolvedReturnType is cached indefinitely, so the return type here has to be computed without CheckModeSkipContextSensitive;
 		// otherwise anyFunctionType could leak as part of the computed (and cached) return type.
 		returnType := c.getReturnTypeFromBody(node, checkMode&^CheckModeSkipContextSensitive)
-		if !c.popTypeResolution() {
-			returnType = c.circularReturnType(signature)
-		}
 		if signature.resolvedReturnType.cached(c) == nil {
-			signature.resolvedReturnType.set(c, returnType)
+			if markerLogged {
+				signature.resolvedReturnType.set(c, returnType)
+			} else {
+				// A cycle detected since the flag was set would discard the
+				// return type but keep the flag, so a later request would
+				// infer the return type without the contextual types in
+				// place now. Keep the return type with the flag instead.
+				signature.resolvedReturnType.setIdentity(c, returnType)
+			}
 		}
 	}
 	c.checkSignatureDeclaration(node)
@@ -20690,6 +20743,17 @@ func (c *Checker) pushTypeResolution(target TypeSystemEntity, propertyName TypeS
 		}
 	}
 	c.beginTypeResolution(target, propertyName, memo)
+	if sig, ok := target.(*Signature); ok && propertyName == TypeSystemPropertyNameResolvedReturnType && c.softReturnType != nil {
+		for s := c.softReturnType; s != nil; s = s.target {
+			if s == sig {
+				c.topTypeResolution().soft = true
+				break
+			}
+		}
+		if sig.target == nil {
+			c.softReturnType = nil
+		}
+	}
 	return true
 }
 
@@ -20712,36 +20776,179 @@ type shadowedResolving struct {
 
 // yieldCycle handles re-entering the resolution in progress at start, a
 // cycle that would fail the resolution re-entered. Which resolution is
-// re-entered depends on which was entered first, so a cycle through the
-// types of symbols declared before the one re-entered (if it is one)
-// fails at the first of those instead, as if that symbol had been resolved
-// first: its type is computed again from scratch, with nothing in progress
-// visible, and the resolution re-entered is then computed again likewise,
-// by the caller, which pushes it. The computations in progress then continue
-// from those results. Termination: a resolution is never computed again
-// while it is already being computed again.
+// re-entered depends on which was entered first, so a cycle through members
+// declared before the one re-entered (see compareCycleMembers) fails at the
+// first of those instead, as if it had been resolved first: it is computed
+// again from scratch, with nothing in progress visible, and the resolution
+// re-entered is then computed again likewise, by the caller, which pushes it.
+// The computations in progress then continue from those results.
+// Termination: a resolution is never computed again while it is already
+// being computed again.
 func (c *Checker) yieldCycle(start int) bool {
-	r := &c.resolutions[start].typeResolution
-	var first *ast.Symbol
-	if r.propertyName == TypeSystemPropertyNameType {
-		first = r.target.(*ast.Symbol)
+	r := c.resolutions[start].typeResolution
+	if c.isYieldingTo(r.target, r.propertyName) {
+		return false
 	}
-	entered := first
+	first := c.firstCycleMember(start, false /*observed*/)
+	if first == nil {
+		return false
+	}
+	c.resolveCycleMember(*first)
+	c.beginCycleYield(r.target, r.propertyName, len(c.resolutions), len(c.resolutions))
+	return true
+}
+
+// yieldObservedCycle handles observing the resolution in progress at start
+// without failing it, as yieldCycle handles re-entering it: if members of
+// the cycle are declared before the resolution observed, the first of them
+// is computed again from scratch, as if it had been resolved first, so that
+// the caller can use its result.
+func (c *Checker) yieldObservedCycle(start int) {
+	if r := &c.resolutions[start].typeResolution; c.isYieldingTo(r.target, r.propertyName) {
+		return
+	}
+	if first := c.firstCycleMember(start, true /*observed*/); first != nil {
+		c.resolveCycleMember(*first)
+	}
+}
+
+// firstCycleMember returns the member of the cycle from the resolution at
+// start to the top of the stack that is resolved first, if it is not the
+// resolution at start, and is not already being computed again. Members that
+// relations requested are resolved before the others, as a relation observes
+// a resolution in progress without failing it: resolving a member the cycle
+// reaches through a relation first is the order that fails the least, and
+// the one that all orders agree on, as the members the relations request
+// are the same wherever the cycle is entered. Among them, and among the
+// others, the first in program order is resolved first. observed is whether
+// the resolution at start is only being observed, a relation's request.
+func (c *Checker) firstCycleMember(start int, observed bool) *TypeResolution {
+	entered := c.enteredCycleMember(start)
+	var first *TypeResolution
+	firstSoft := false
+	consider := func(r *TypeResolution, soft bool) {
+		if !isCycleMember(r) {
+			return
+		}
+		if first == nil || soft && !firstSoft || soft == firstSoft && c.compareCycleMembers(r, first) < 0 {
+			first, firstSoft = r, soft
+		}
+	}
+	consider(entered, observed || entered.soft)
 	for i := start + 1; i < len(c.resolutions); i++ {
-		if f := &c.resolutions[i]; f.isTypeResolution && f.typeResolution.propertyName == TypeSystemPropertyNameType {
-			if s := f.typeResolution.target.(*ast.Symbol); first == nil || c.compareSymbols(s, first) < 0 {
-				first = s
+		if f := &c.resolutions[i]; f.isTypeResolution {
+			consider(&f.typeResolution, f.typeResolution.soft)
+		}
+	}
+	if first == nil || first == entered || c.isYieldingTo(first.target, first.propertyName) {
+		return nil
+	}
+	return first
+}
+
+// enteredCycleMember returns the resolution at start, or if it is for an
+// instantiated signature, the one for the declared signature it resolves.
+func (c *Checker) enteredCycleMember(start int) *TypeResolution {
+	entered := &c.resolutions[start].typeResolution
+	if sig, ok := entered.target.(*Signature); ok && entered.propertyName == TypeSystemPropertyNameResolvedReturnType {
+		for sig.target != nil {
+			sig = sig.target
+		}
+		for i := start + 1; i < len(c.resolutions); i++ {
+			if f := &c.resolutions[i]; f.isTypeResolution && f.typeResolution.propertyName == entered.propertyName && f.typeResolution.target == sig {
+				return &f.typeResolution
 			}
 		}
 	}
-	if first == nil || first == entered || c.isYieldingTo(first, TypeSystemPropertyNameType) || c.isYieldingTo(r.target, r.propertyName) {
-		return false
+	return entered
+}
+
+// isCycleMember reports whether a type resolution may be resolved first in
+// place of the one a cycle re-entered: the type of a symbol, or the return
+// type of a declared signature.
+func isCycleMember(r *TypeResolution) bool {
+	switch r.propertyName {
+	case TypeSystemPropertyNameType:
+		return true
+	case TypeSystemPropertyNameResolvedReturnType:
+		sig := r.target.(*Signature)
+		return sig.target == nil && sig.getComposite() == nil && sig.declaration != nil
 	}
-	c.beginCycleYield(first, TypeSystemPropertyNameType, -1, len(c.resolutions))
-	c.getTypeOfSymbol(first)
+	return false
+}
+
+// compareCycleMembers orders the members of a cycle in program order of
+// their declarations, symbols first among members with the same one.
+func (c *Checker) compareCycleMembers(a, b *TypeResolution) int {
+	aSymbol, aIsSymbol := a.target.(*ast.Symbol)
+	bSymbol, bIsSymbol := b.target.(*ast.Symbol)
+	switch {
+	case aIsSymbol && bIsSymbol:
+		return c.compareSymbols(aSymbol, bSymbol)
+	case aIsSymbol:
+		return c.compareSymbolToNode(aSymbol, b.target.(*Signature).declaration)
+	case bIsSymbol:
+		return -c.compareSymbolToNode(bSymbol, a.target.(*Signature).declaration)
+	}
+	return c.compareNodes(a.target.(*Signature).declaration, b.target.(*Signature).declaration)
+}
+
+// compareSymbolToNode orders a symbol by its first declaration against node,
+// the symbol first if that is node.
+func (c *Checker) compareSymbolToNode(s *ast.Symbol, node *ast.Node) int {
+	if len(s.Declarations()) == 0 {
+		return 1
+	}
+	if r := c.compareNodes(s.Declarations()[0], node); r != 0 {
+		return r
+	}
+	return -1
+}
+
+// resolveCycleMember computes the result of a member of a cycle again from
+// scratch, with nothing in progress visible.
+func (c *Checker) resolveCycleMember(r TypeResolution) {
+	target, propertyName := r.target, r.propertyName
+	c.beginCycleYield(target, propertyName, -1, len(c.resolutions))
+	switch propertyName {
+	case TypeSystemPropertyNameType:
+		c.getTypeOfSymbol(target.(*ast.Symbol))
+	case TypeSystemPropertyNameResolvedReturnType:
+		sig := target.(*Signature)
+		if requested := c.requestedSignature(sig); requested != sig {
+			// The instantiation keeps only its own result: the return type of
+			// sig, resolved within it, observes it in progress. The resolution
+			// re-entered is computed again next and may request sig's, which
+			// would re-enter the cycle, so resolve that from scratch too.
+			c.getReturnTypeOfSignature(requested)
+		}
+		c.getReturnTypeOfSignature(sig)
+	}
 	c.endCycleYield()
-	c.beginCycleYield(r.target, r.propertyName, len(c.resolutions), len(c.resolutions))
-	return true
+}
+
+// requestedSignature returns the signature a relation requested the return
+// type of that resolves the return type of sig, if it is in progress, for
+// resolving it first as it would have been if requested first: its
+// instantiation is the computation that fails or finishes, and sig only
+// part of it.
+func (c *Checker) requestedSignature(sig *Signature) *Signature {
+	for i := range c.resolutions {
+		f := &c.resolutions[i]
+		if !f.isTypeResolution || f.typeResolution.propertyName != TypeSystemPropertyNameResolvedReturnType || !f.typeResolution.soft {
+			continue
+		}
+		s, ok := f.typeResolution.target.(*Signature)
+		if !ok || s == sig {
+			continue
+		}
+		for t := s.target; t != nil; t = t.target {
+			if t == sig {
+				return s
+			}
+		}
+	}
+	return sig
 }
 
 // yieldCycleToMembers handles re-entering the type resolution in progress
@@ -22911,11 +23118,19 @@ func (c *Checker) circularReturnType(sig *Signature) *Type {
 	return c.anyType
 }
 
+// getNonCircularReturnTypeOfSignature returns the return type of sig for a
+// relation, which compares as any if it is in progress, and does not need it
+// to be resolved at all: a cycle through the relation is one the resolution
+// requested only observes, so resolving the return type first would not fail.
 func (c *Checker) getNonCircularReturnTypeOfSignature(sig *Signature) *Type {
 	if c.isResolvingReturnTypeOfSignature(sig) {
 		return c.anyType
 	}
-	return c.getReturnTypeOfSignature(sig)
+	saved := c.softReturnType
+	c.softReturnType = sig
+	t := c.getReturnTypeOfSignature(sig)
+	c.softReturnType = saved
+	return t
 }
 
 func (c *Checker) getReturnTypeFromAnnotation(declaration *ast.Node) *Type {

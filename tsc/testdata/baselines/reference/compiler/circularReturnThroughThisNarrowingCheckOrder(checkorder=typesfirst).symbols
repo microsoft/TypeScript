@@ -3,44 +3,45 @@
 === circularReturnThroughThisNarrowingCheckOrder.ts ===
 // Narrowing this by a type guard in a method relates the class to a
 // derived class, whose members include the method being inferred. The
-// circularity is reported whether the class or its methods are typed first
+// relation only observes the method's return type in progress, so the
+// method is not circular, whether the class or its methods are typed first
 // (55069).
 
 declare function isDerived(p: Base): p is Derived;
 >isDerived : Symbol(isDerived, Decl(circularReturnThroughThisNarrowingCheckOrder.ts, 0, 0))
->p : Symbol(p, Decl(circularReturnThroughThisNarrowingCheckOrder.ts, 5, 27))
->Base : Symbol(Base, Decl(circularReturnThroughThisNarrowingCheckOrder.ts, 5, 50))
->p : Symbol(p, Decl(circularReturnThroughThisNarrowingCheckOrder.ts, 5, 27))
->Derived : Symbol(Derived, Decl(circularReturnThroughThisNarrowingCheckOrder.ts, 15, 1))
+>p : Symbol(p, Decl(circularReturnThroughThisNarrowingCheckOrder.ts, 6, 27))
+>Base : Symbol(Base, Decl(circularReturnThroughThisNarrowingCheckOrder.ts, 6, 50))
+>p : Symbol(p, Decl(circularReturnThroughThisNarrowingCheckOrder.ts, 6, 27))
+>Derived : Symbol(Derived, Decl(circularReturnThroughThisNarrowingCheckOrder.ts, 16, 1))
 
 class Base {
->Base : Symbol(Base, Decl(circularReturnThroughThisNarrowingCheckOrder.ts, 5, 50))
+>Base : Symbol(Base, Decl(circularReturnThroughThisNarrowingCheckOrder.ts, 6, 50))
 
     private add() {
->add : Symbol(Base.add, Decl(circularReturnThroughThisNarrowingCheckOrder.ts, 6, 12))
+>add : Symbol(Base.add, Decl(circularReturnThroughThisNarrowingCheckOrder.ts, 7, 12))
 
         if (isDerived(this)) {
 >isDerived : Symbol(isDerived, Decl(circularReturnThroughThisNarrowingCheckOrder.ts, 0, 0))
->this : Symbol(Base, Decl(circularReturnThroughThisNarrowingCheckOrder.ts, 5, 50))
+>this : Symbol(Base, Decl(circularReturnThroughThisNarrowingCheckOrder.ts, 6, 50))
 
             if (this.name) return 1;
->this.name : Symbol(Derived.name, Decl(circularReturnThroughThisNarrowingCheckOrder.ts, 16, 28))
->name : Symbol(Derived.name, Decl(circularReturnThroughThisNarrowingCheckOrder.ts, 16, 28))
+>this.name : Symbol(Derived.name, Decl(circularReturnThroughThisNarrowingCheckOrder.ts, 17, 28))
+>name : Symbol(Derived.name, Decl(circularReturnThroughThisNarrowingCheckOrder.ts, 17, 28))
         }
         const w = this.add2();
->w : Symbol(w, Decl(circularReturnThroughThisNarrowingCheckOrder.ts, 11, 13))
->this.add2 : Symbol(Base.add2, Decl(circularReturnThroughThisNarrowingCheckOrder.ts, 13, 5))
->this : Symbol(Base, Decl(circularReturnThroughThisNarrowingCheckOrder.ts, 5, 50))
->add2 : Symbol(Base.add2, Decl(circularReturnThroughThisNarrowingCheckOrder.ts, 13, 5))
+>w : Symbol(w, Decl(circularReturnThroughThisNarrowingCheckOrder.ts, 12, 13))
+>this.add2 : Symbol(Base.add2, Decl(circularReturnThroughThisNarrowingCheckOrder.ts, 14, 5))
+>this : Symbol(Base, Decl(circularReturnThroughThisNarrowingCheckOrder.ts, 6, 50))
+>add2 : Symbol(Base.add2, Decl(circularReturnThroughThisNarrowingCheckOrder.ts, 14, 5))
 
         return w;
->w : Symbol(w, Decl(circularReturnThroughThisNarrowingCheckOrder.ts, 11, 13))
+>w : Symbol(w, Decl(circularReturnThroughThisNarrowingCheckOrder.ts, 12, 13))
     }
     private add2() { return 2; }
->add2 : Symbol(Base.add2, Decl(circularReturnThroughThisNarrowingCheckOrder.ts, 13, 5))
+>add2 : Symbol(Base.add2, Decl(circularReturnThroughThisNarrowingCheckOrder.ts, 14, 5))
 }
 class Derived extends Base { name = ""; }
->Derived : Symbol(Derived, Decl(circularReturnThroughThisNarrowingCheckOrder.ts, 15, 1))
->Base : Symbol(Base, Decl(circularReturnThroughThisNarrowingCheckOrder.ts, 5, 50))
->name : Symbol(Derived.name, Decl(circularReturnThroughThisNarrowingCheckOrder.ts, 16, 28))
+>Derived : Symbol(Derived, Decl(circularReturnThroughThisNarrowingCheckOrder.ts, 16, 1))
+>Base : Symbol(Base, Decl(circularReturnThroughThisNarrowingCheckOrder.ts, 6, 50))
+>name : Symbol(Derived.name, Decl(circularReturnThroughThisNarrowingCheckOrder.ts, 17, 28))
 
