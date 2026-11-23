@@ -1,0 +1,20 @@
+//// [tests/cases/compiler/jsdocImplementsTagMissingTypeArguments.ts] ////
+
+=== a.js ===
+/** @template T */
+class Base {
+>Base : Symbol(Base, Decl(a.js, 0, 0))
+
+    /** @type {T | undefined} */
+    value;
+>value : Symbol(Base.value, Decl(a.js, 1, 12))
+}
+
+/** @implements {Base} */
+class C {
+>C : Symbol(C, Decl(a.js, 4, 1))
+
+    value = 1;
+>value : Symbol(C.value, Decl(a.js, 7, 9))
+}
+

@@ -1,0 +1,65 @@
+//// [tests/cases/compiler/inferenceThroughSortOfFlattenedIterable.ts] ////
+
+=== inferenceThroughSortOfFlattenedIterable.ts ===
+// Sorting the array made from a flattened iterable must keep its element type.
+
+function getAllValuesUnsorted(m: ReadonlyArray<ReadonlyArray<string>>): ReadonlyArray<string> {
+>getAllValuesUnsorted : Symbol(getAllValuesUnsorted, Decl(inferenceThroughSortOfFlattenedIterable.ts, 0, 0))
+>m : Symbol(m, Decl(inferenceThroughSortOfFlattenedIterable.ts, 2, 30))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --) ... and 3 more)
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --) ... and 3 more)
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --) ... and 3 more)
+
+	// OK
+	return Array.from(flatten(m.values()))
+>Array.from : Symbol(ArrayConstructor.from, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>from : Symbol(ArrayConstructor.from, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>flatten : Symbol(flatten, Decl(inferenceThroughSortOfFlattenedIterable.ts, 10, 1))
+>m.values : Symbol(ReadonlyArray.values, Decl(lib.es2015.iterable.d.ts, --, --))
+>m : Symbol(m, Decl(inferenceThroughSortOfFlattenedIterable.ts, 2, 30))
+>values : Symbol(ReadonlyArray.values, Decl(lib.es2015.iterable.d.ts, --, --))
+}
+
+function getAllValuesSorted(m: ReadonlyArray<ReadonlyArray<string>>): ReadonlyArray<string> {
+>getAllValuesSorted : Symbol(getAllValuesSorted, Decl(inferenceThroughSortOfFlattenedIterable.ts, 5, 1))
+>m : Symbol(m, Decl(inferenceThroughSortOfFlattenedIterable.ts, 7, 28))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --) ... and 3 more)
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --) ... and 3 more)
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --) ... and 3 more)
+
+	// Type 'unknown[]' is not assignable to type 'readonly string[]'.
+	return Array.from(flatten(m.values())).sort()
+>Array.from(flatten(m.values())).sort : Symbol(Array.sort, Decl(lib.es5.d.ts, --, --))
+>Array.from : Symbol(ArrayConstructor.from, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>from : Symbol(ArrayConstructor.from, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>flatten : Symbol(flatten, Decl(inferenceThroughSortOfFlattenedIterable.ts, 10, 1))
+>m.values : Symbol(ReadonlyArray.values, Decl(lib.es2015.iterable.d.ts, --, --))
+>m : Symbol(m, Decl(inferenceThroughSortOfFlattenedIterable.ts, 7, 28))
+>values : Symbol(ReadonlyArray.values, Decl(lib.es2015.iterable.d.ts, --, --))
+>sort : Symbol(Array.sort, Decl(lib.es5.d.ts, --, --))
+}
+
+function* flatten<T>(a: Iterable<Iterable<T>>): Iterable<T> {
+>flatten : Symbol(flatten, Decl(inferenceThroughSortOfFlattenedIterable.ts, 10, 1))
+>T : Symbol(T, Decl(inferenceThroughSortOfFlattenedIterable.ts, 12, 18))
+>a : Symbol(a, Decl(inferenceThroughSortOfFlattenedIterable.ts, 12, 21))
+>Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+>Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+>T : Symbol(T, Decl(inferenceThroughSortOfFlattenedIterable.ts, 12, 18))
+>Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+>T : Symbol(T, Decl(inferenceThroughSortOfFlattenedIterable.ts, 12, 18))
+
+	for (const xs of a)
+>xs : Symbol(xs, Decl(inferenceThroughSortOfFlattenedIterable.ts, 13, 11))
+>a : Symbol(a, Decl(inferenceThroughSortOfFlattenedIterable.ts, 12, 21))
+
+		for (const x of xs)
+>x : Symbol(x, Decl(inferenceThroughSortOfFlattenedIterable.ts, 14, 12))
+>xs : Symbol(xs, Decl(inferenceThroughSortOfFlattenedIterable.ts, 13, 11))
+
+			yield x
+>x : Symbol(x, Decl(inferenceThroughSortOfFlattenedIterable.ts, 14, 12))
+}
+

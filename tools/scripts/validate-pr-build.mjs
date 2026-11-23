@@ -3,20 +3,24 @@
 // in them (including the publish manifest) is trusted; everything is checked
 // against values computed by the trusted part of the workflow.
 //
-// Usage: node validate-pr-build.mjs <tarball dir> <prerelease> <git head> <packages>
+// Each tarball is extracted into <output dir>, and the extracted files are
+// validated and published; npm never reads the tarballs.
+//
+// Usage: node validate-pr-build.mjs <tarball dir> <output dir> <prerelease> <git head> <packages>
 //
 // <packages> is the JSON package list written by typescript:build-platform-matrix
 // when run from trusted code: { main, platforms: [...], wasm }.
 //
-// Prints the tarball file names in publish order, one per line.
+// Prints the extracted package directories in publish order, one per line.
 
-import assert from "node:assert";
+import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
 
-const [tarballDir, prerelease, gitHead, packagesJson] = process.argv.slice(2);
-assert(tarballDir && prerelease && gitHead && packagesJson, "Usage: validate-pr-build.mjs <tarball dir> <prerelease> <git head> <packages>");
+const [tarballDir, outputDir, prerelease, gitHead, packagesJson] = process.argv.slice(2);
+assert(tarballDir && outputDir && prerelease && gitHead && packagesJson, "Usage: validate-pr-build.mjs <tarball dir> <output dir> <prerelease> <git head> <packages>");
+assert.deepEqual(fs.readdirSync(outputDir), [], "Output directory must be empty");
 assert.match(prerelease, /^pr\.[1-9]\d*\.[1-9]\d*$/);
 assert.match(gitHead, /^[0-9a-f]{40}$/);
 
@@ -24,45 +28,72 @@ assert.match(gitHead, /^[0-9a-f]{40}$/);
 const { main: mainName, platforms: platformNames, wasm: wasmName } = JSON.parse(packagesJson);
 assert(typeof mainName === "string" && typeof wasmName === "string" && Array.isArray(platformNames) && platformNames.length > 0, "Invalid package list");
 const expectedNames = new Set([mainName, ...platformNames, wasmName]);
-const versionPattern = new RegExp(`^\\d+\\.\\d+\\.\\d+-${prerelease.replaceAll(".", "\\.")}$`);
+const versionPattern = new RegExp(`^(?:0|[1-9]\\d*)\\.(?:0|[1-9]\\d*)\\.(?:0|[1-9]\\d*)-${prerelease.replaceAll(".", "\\.")}$`);
 
 // npm gives some root files (binding.gyp, npm-shrinkwrap.json, node_modules)
 // install-time meaning, so only allow what the packages actually contain.
 const allowedRootEntries = new Set(["LICENSE", "NOTICE.txt", "README.md", "bin", "dist", "enums", "lib", "package.json", "schemas", "vendor"]);
 
-/** @type {Map<string, { filename: string; version: string; manifest: any }>} */
-const packages = new Map();
-for (const filename of fs.readdirSync(tarballDir)) {
-    if (!filename.endsWith(".tgz")) continue;
-    const tarball = path.join(tarballDir, filename);
+// Many package.json fields affect installation, so only allow the ones in use.
+const allowedManifestFields = new Set([
+    "author",
+    "bin",
+    "bugs",
+    "cpu",
+    "description",
+    "engines",
+    "exports",
+    "files",
+    "gitHead",
+    "homepage",
+    "keywords",
+    "license",
+    "name",
+    "optionalDependencies",
+    "os",
+    "preferUnplugged",
+    "publishConfig",
+    "repository",
+    "type",
+    "version",
+]);
 
-    // npm extracts everything under package/; reject anything that is not a
-    // plain file or directory there.
-    // Paths must be canonical and unique, since GNU tar and npm disagree on
-    // which duplicate wins.
-    const listing = execFileSync("tar", ["-tvzf", tarball], { encoding: "utf8" }).split("\n").filter(Boolean);
-    const entryPaths = new Set();
-    for (const line of listing) {
-        const entryPath = line.split(/\s+/).slice(5).join(" ").replace(/\/$/, "");
-        const segments = entryPath.split("/");
-        assert(line[0] === "-" || line[0] === "d", `${filename}: unexpected entry type: ${line}`);
-        assert(segments[0] === "package" && segments.every(s => s !== "" && s !== "." && s !== ".."), `${filename}: unexpected path: ${entryPath}`);
-        assert(!entryPaths.has(entryPath), `${filename}: duplicate entry: ${entryPath}`);
-        assert(segments.length === 1 || allowedRootEntries.has(segments[1]), `${filename}: unexpected root entry: ${entryPath}`);
-        entryPaths.add(entryPath);
+/** @type {Map<string, { packageDir: string; version: string; manifest: any }>} */
+const packages = new Map();
+const tarballs = fs.readdirSync(tarballDir).filter(filename => filename.endsWith(".tgz"));
+for (const [index, filename] of tarballs.entries()) {
+    // npm publish parses some paths as git URLs, so don't use the tarball name.
+    const extractDir = path.join(outputDir, String(index));
+    fs.mkdirSync(extractDir);
+    execFileSync("tar", ["-xzf", path.join(tarballDir, filename), "-C", extractDir, "--no-same-owner", "--no-same-permissions"]);
+
+    // Only allow plain files and directories under package/.
+    const pending = [extractDir];
+    for (const dir of pending) {
+        for (const name of fs.readdirSync(dir)) {
+            const entryPath = path.join(dir, name);
+            const relativePath = path.relative(extractDir, entryPath);
+            const segments = relativePath.split(path.sep);
+            const stat = fs.lstatSync(entryPath);
+            assert(stat.isDirectory() || (stat.isFile() && stat.nlink === 1), `${filename}: unexpected entry type: ${relativePath}`);
+            assert(segments[0] === "package" && (segments.length > 1 || stat.isDirectory()), `${filename}: unexpected path: ${relativePath}`);
+            assert(segments.length !== 2 || allowedRootEntries.has(segments[1]), `${filename}: unexpected root entry: ${relativePath}`);
+            if (stat.isDirectory()) {
+                pending.push(entryPath);
+            }
+        }
     }
 
-    const manifest = JSON.parse(execFileSync("tar", ["-xzOf", tarball, "package/package.json"], { encoding: "utf8" }));
+    const packageDir = path.join(extractDir, "package");
+    const manifest = JSON.parse(fs.readFileSync(path.join(packageDir, "package.json"), "utf8"));
     const { name, version } = manifest;
     assert(expectedNames.has(name), `${filename}: unexpected package name ${name}`);
     assert(!packages.has(name), `${filename}: duplicate package ${name}`);
     assert.match(version, versionPattern, `${filename}: unexpected version`);
     assert.equal(manifest.gitHead, gitHead, `${filename}: unexpected gitHead`);
     assert.deepEqual(manifest.publishConfig, { access: "public", tag: "pr" }, `${filename}: unexpected publishConfig`);
-    // No lifecycle scripts; installing a PR build must not run code.
-    assert.equal(manifest.scripts, undefined, `${filename}: must not declare scripts`);
-    for (const field of ["dependencies", "peerDependencies", "bundleDependencies", "bundledDependencies"]) {
-        assert.equal(manifest[field], undefined, `${filename}: must not declare ${field}`);
+    for (const field of Object.keys(manifest)) {
+        assert(allowedManifestFields.has(field), `${filename}: unexpected package.json field ${field}`);
     }
     if (name === mainName) {
         assert.deepEqual(manifest.bin, { tsc: "./bin/tsc" }, `${filename}: unexpected bin`);
@@ -71,7 +102,7 @@ for (const filename of fs.readdirSync(tarballDir)) {
         assert.equal(manifest.bin, undefined, `${filename}: must not declare bin`);
         assert.equal(manifest.optionalDependencies, undefined, `${filename}: must not declare optionalDependencies`);
     }
-    packages.set(name, { filename, version, manifest });
+    packages.set(name, { packageDir, version, manifest });
 }
 
 for (const name of expectedNames) {
@@ -92,5 +123,5 @@ assert.deepEqual(
 // Platform and WASM packages first, so the main package never refers to a
 // version that does not exist yet.
 for (const name of [...platformNames, wasmName, mainName]) {
-    console.log(packages.get(name)?.filename);
+    console.log(packages.get(name)?.packageDir);
 }

@@ -1,0 +1,99 @@
+//// [tests/cases/compiler/mixinMethodsReferringToAppliedClassCheckOrder.ts] ////
+
+=== mixinMethodsReferringToAppliedClassCheckOrder.ts ===
+// The mixin classes have methods referring to the class built from them,
+// so checking the classes and typing their members first reach the same
+// cycle in different places (55640).
+
+type ConstructorType<T> = abstract new (...args: any[]) => T;
+>ConstructorType : Symbol(ConstructorType, Decl(mixinMethodsReferringToAppliedClassCheckOrder.ts, 0, 0))
+>T : Symbol(T, Decl(mixinMethodsReferringToAppliedClassCheckOrder.ts, 4, 21))
+>args : Symbol(args, Decl(mixinMethodsReferringToAppliedClassCheckOrder.ts, 4, 40))
+>T : Symbol(T, Decl(mixinMethodsReferringToAppliedClassCheckOrder.ts, 4, 21))
+
+function makeMixin<TBase extends ConstructorType<any>, FinalConstructor>(
+>makeMixin : Symbol(makeMixin, Decl(mixinMethodsReferringToAppliedClassCheckOrder.ts, 4, 61))
+>TBase : Symbol(TBase, Decl(mixinMethodsReferringToAppliedClassCheckOrder.ts, 6, 19))
+>ConstructorType : Symbol(ConstructorType, Decl(mixinMethodsReferringToAppliedClassCheckOrder.ts, 0, 0))
+>FinalConstructor : Symbol(FinalConstructor, Decl(mixinMethodsReferringToAppliedClassCheckOrder.ts, 6, 54))
+
+    mixinFunction: (Base: TBase) => FinalConstructor
+>mixinFunction : Symbol(mixinFunction, Decl(mixinMethodsReferringToAppliedClassCheckOrder.ts, 6, 73))
+>Base : Symbol(Base, Decl(mixinMethodsReferringToAppliedClassCheckOrder.ts, 7, 20))
+>TBase : Symbol(TBase, Decl(mixinMethodsReferringToAppliedClassCheckOrder.ts, 6, 19))
+>FinalConstructor : Symbol(FinalConstructor, Decl(mixinMethodsReferringToAppliedClassCheckOrder.ts, 6, 54))
+
+): (Base?: TBase) => FinalConstructor {
+>Base : Symbol(Base, Decl(mixinMethodsReferringToAppliedClassCheckOrder.ts, 8, 4))
+>TBase : Symbol(TBase, Decl(mixinMethodsReferringToAppliedClassCheckOrder.ts, 6, 19))
+>FinalConstructor : Symbol(FinalConstructor, Decl(mixinMethodsReferringToAppliedClassCheckOrder.ts, 6, 54))
+
+    return (Base?: TBase) => {
+>Base : Symbol(Base, Decl(mixinMethodsReferringToAppliedClassCheckOrder.ts, 9, 12))
+>TBase : Symbol(TBase, Decl(mixinMethodsReferringToAppliedClassCheckOrder.ts, 6, 19))
+
+        // do other things with Base, this example is simplified
+        return mixinFunction(Base ?? (Object as any));
+>mixinFunction : Symbol(mixinFunction, Decl(mixinMethodsReferringToAppliedClassCheckOrder.ts, 6, 73))
+>Base : Symbol(Base, Decl(mixinMethodsReferringToAppliedClassCheckOrder.ts, 9, 12))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    };
+}
+
+const MixinF = makeMixin(<TBase extends ConstructorType<any>>(Base: TBase) => {
+>MixinF : Symbol(MixinF, Decl(mixinMethodsReferringToAppliedClassCheckOrder.ts, 15, 5))
+>makeMixin : Symbol(makeMixin, Decl(mixinMethodsReferringToAppliedClassCheckOrder.ts, 4, 61))
+>TBase : Symbol(TBase, Decl(mixinMethodsReferringToAppliedClassCheckOrder.ts, 15, 26))
+>ConstructorType : Symbol(ConstructorType, Decl(mixinMethodsReferringToAppliedClassCheckOrder.ts, 0, 0))
+>Base : Symbol(Base, Decl(mixinMethodsReferringToAppliedClassCheckOrder.ts, 15, 62))
+>TBase : Symbol(TBase, Decl(mixinMethodsReferringToAppliedClassCheckOrder.ts, 15, 26))
+
+  abstract class Mixin extends Base {
+>Mixin : Symbol(Mixin, Decl(mixinMethodsReferringToAppliedClassCheckOrder.ts, 15, 79))
+>Base : Symbol(Base, Decl(mixinMethodsReferringToAppliedClassCheckOrder.ts, 15, 62))
+
+    foo(foo: MixinApplied, extra: boolean): MixinApplied | boolean { return extra }
+>foo : Symbol(Mixin.foo, Decl(mixinMethodsReferringToAppliedClassCheckOrder.ts, 16, 37))
+>foo : Symbol(foo, Decl(mixinMethodsReferringToAppliedClassCheckOrder.ts, 17, 8))
+>MixinApplied : Symbol(MixinApplied, Decl(mixinMethodsReferringToAppliedClassCheckOrder.ts, 28, 2))
+>extra : Symbol(extra, Decl(mixinMethodsReferringToAppliedClassCheckOrder.ts, 17, 26))
+>MixinApplied : Symbol(MixinApplied, Decl(mixinMethodsReferringToAppliedClassCheckOrder.ts, 28, 2))
+>extra : Symbol(extra, Decl(mixinMethodsReferringToAppliedClassCheckOrder.ts, 17, 26))
+  }
+  return Mixin
+>Mixin : Symbol(Mixin, Decl(mixinMethodsReferringToAppliedClassCheckOrder.ts, 15, 79))
+
+})
+
+
+const Mixin2F = makeMixin(<TBase extends ConstructorType<any>>(Base: TBase) => {
+>Mixin2F : Symbol(Mixin2F, Decl(mixinMethodsReferringToAppliedClassCheckOrder.ts, 23, 5))
+>makeMixin : Symbol(makeMixin, Decl(mixinMethodsReferringToAppliedClassCheckOrder.ts, 4, 61))
+>TBase : Symbol(TBase, Decl(mixinMethodsReferringToAppliedClassCheckOrder.ts, 23, 27))
+>ConstructorType : Symbol(ConstructorType, Decl(mixinMethodsReferringToAppliedClassCheckOrder.ts, 0, 0))
+>Base : Symbol(Base, Decl(mixinMethodsReferringToAppliedClassCheckOrder.ts, 23, 63))
+>TBase : Symbol(TBase, Decl(mixinMethodsReferringToAppliedClassCheckOrder.ts, 23, 27))
+
+  abstract class Mixin2 extends Base {
+>Mixin2 : Symbol(Mixin2, Decl(mixinMethodsReferringToAppliedClassCheckOrder.ts, 23, 80))
+>Base : Symbol(Base, Decl(mixinMethodsReferringToAppliedClassCheckOrder.ts, 23, 63))
+
+    bar(foo: MixinApplied, extra: boolean): MixinApplied | boolean { return extra }
+>bar : Symbol(Mixin2.bar, Decl(mixinMethodsReferringToAppliedClassCheckOrder.ts, 24, 38))
+>foo : Symbol(foo, Decl(mixinMethodsReferringToAppliedClassCheckOrder.ts, 25, 8))
+>MixinApplied : Symbol(MixinApplied, Decl(mixinMethodsReferringToAppliedClassCheckOrder.ts, 28, 2))
+>extra : Symbol(extra, Decl(mixinMethodsReferringToAppliedClassCheckOrder.ts, 25, 26))
+>MixinApplied : Symbol(MixinApplied, Decl(mixinMethodsReferringToAppliedClassCheckOrder.ts, 28, 2))
+>extra : Symbol(extra, Decl(mixinMethodsReferringToAppliedClassCheckOrder.ts, 25, 26))
+  }
+  return Mixin2
+>Mixin2 : Symbol(Mixin2, Decl(mixinMethodsReferringToAppliedClassCheckOrder.ts, 23, 80))
+
+})
+
+class MixinApplied extends Mixin2F(MixinF()) {}
+>MixinApplied : Symbol(MixinApplied, Decl(mixinMethodsReferringToAppliedClassCheckOrder.ts, 28, 2))
+>Mixin2F : Symbol(Mixin2F, Decl(mixinMethodsReferringToAppliedClassCheckOrder.ts, 23, 5))
+>MixinF : Symbol(MixinF, Decl(mixinMethodsReferringToAppliedClassCheckOrder.ts, 15, 5))
+

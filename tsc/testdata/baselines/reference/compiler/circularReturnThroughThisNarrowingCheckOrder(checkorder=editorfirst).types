@@ -1,0 +1,49 @@
+//// [tests/cases/compiler/circularReturnThroughThisNarrowingCheckOrder.ts] ////
+
+=== circularReturnThroughThisNarrowingCheckOrder.ts ===
+// Narrowing this by a type guard in a method relates the class to a
+// derived class, whose members include the method being inferred. The
+// circularity is reported whether the class or its methods are typed first
+// (55069).
+
+declare function isDerived(p: Base): p is Derived;
+>isDerived : (p: Base) => p is Derived
+>p : Base
+
+class Base {
+>Base : Base
+
+    private add() {
+>add : () => any
+
+        if (isDerived(this)) {
+>isDerived(this) : boolean
+>isDerived : (p: Base) => p is Derived
+>this : this
+
+            if (this.name) return 1;
+>this.name : string
+>this : this & Derived
+>name : string
+>1 : 1
+        }
+        const w = this.add2();
+>w : any
+>this.add2() : number
+>this.add2 : () => number
+>this : this
+>add2 : () => number
+
+        return w;
+>w : any
+    }
+    private add2() { return 2; }
+>add2 : () => number
+>2 : 2
+}
+class Derived extends Base { name = ""; }
+>Derived : Derived
+>Base : Base
+>name : string
+>"" : ""
+

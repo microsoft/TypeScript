@@ -1,0 +1,20 @@
+//// [tests/cases/compiler/keyofIndexSignatureCycleCheckOrder.ts] ////
+
+=== keyofIndexSignatureCycleCheckOrder.ts ===
+// S and the index signature of C depend on each other. Resolving the members
+// of C first gives S from the part of them available so far, and resolving S
+// first must give the same result rather than fail it as circular.
+
+interface C { [k: string]: S; }
+>C : Symbol(C, Decl(keyofIndexSignatureCycleCheckOrder.ts, 0, 0))
+>k : Symbol(k, Decl(keyofIndexSignatureCycleCheckOrder.ts, 4, 15))
+>S : Symbol(S, Decl(keyofIndexSignatureCycleCheckOrder.ts, 4, 31))
+
+type S = keyof C;
+>S : Symbol(S, Decl(keyofIndexSignatureCycleCheckOrder.ts, 4, 31))
+>C : Symbol(C, Decl(keyofIndexSignatureCycleCheckOrder.ts, 0, 0))
+
+const k: S = 123;
+>k : Symbol(k, Decl(keyofIndexSignatureCycleCheckOrder.ts, 6, 5))
+>S : Symbol(S, Decl(keyofIndexSignatureCycleCheckOrder.ts, 4, 31))
+

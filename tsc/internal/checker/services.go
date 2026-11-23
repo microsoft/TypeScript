@@ -158,6 +158,18 @@ func (c *Checker) ForEachExportAndPropertyOfModule(moduleSymbol *ast.Symbol, cb 
 	}
 }
 
+func (c *Checker) IsOptionalParameter(node *ast.Node) bool {
+	return c.isOptionalParameter(node)
+}
+
+func (c *Checker) GetTypeArgumentsForResolvedSignature(signature *Signature) []*Type {
+	if signature.mapper == nil {
+		return nil
+	}
+	target := core.OrElse(signature.target, signature)
+	return c.instantiateTypes(target.TypeParameters(), signature.mapper)
+}
+
 func (c *Checker) IsValidPropertyAccess(node *ast.Node, propertyName string) bool {
 	return c.isValidPropertyAccess(node, propertyName)
 }
@@ -1028,6 +1040,10 @@ func (c *Checker) GetPropertySymbolOfDestructuringAssignment(location *ast.Node)
 // [ a ] from
 //
 //	[a] = [ some array ...]
+func (c *Checker) GetTypeOfAssignmentPattern(expr *ast.Node) *Type {
+	return c.getTypeOfAssignmentPattern(expr)
+}
+
 func (c *Checker) getTypeOfAssignmentPattern(expr *ast.Node) *Type {
 	// If this is from "for of"
 	//     for ( { a } of elems) {

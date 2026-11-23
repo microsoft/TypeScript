@@ -10,7 +10,6 @@ import (
 )
 
 func TestCompletionsJsxAttributeInitializer2(t *testing.T) {
-	t.Skip("Known failing fourslash test")
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: /a.tsx

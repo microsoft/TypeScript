@@ -1,0 +1,16 @@
+//// [tests/cases/compiler/jsdocLinkImportElisionQueryOrder.ts] ////
+
+=== /a.ts ===
+
+export interface A {}
+
+=== /b.ts ===
+import * as a from "./a";
+>a : typeof a
+
+/**
+ * See {@link a.A}.
+ */
+export function foo() {}
+>foo : () => void
+

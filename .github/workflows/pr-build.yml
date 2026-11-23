@@ -221,20 +221,23 @@ jobs:
         id: publish
         env:
           NPM_DIR: ${{ runner.temp }}/npm
+          PACKAGE_DIR: ${{ runner.temp }}/packages
           PRERELEASE: ${{ needs.prepare.outputs.prerelease }}
           MERGE_SHA: ${{ needs.prepare.outputs.merge_sha }}
           PACKAGES: ${{ needs.prepare.outputs.packages }}
         run: |
           set -euo pipefail
-          mapfile -t tarballs < <(node tools/scripts/validate-pr-build.mjs "$NPM_DIR" "$PRERELEASE" "$MERGE_SHA" "$PACKAGES")
+          mkdir "$PACKAGE_DIR"
+          # A plain assignment, so set -e sees validation failures.
+          validated="$(node tools/scripts/validate-pr-build.mjs "$NPM_DIR" "$PACKAGE_DIR" "$PRERELEASE" "$MERGE_SHA" "$PACKAGES")"
+          mapfile -t packageDirs <<< "$validated"
 
           # Trusted publishing needs npm 11.5.1 or later.
           npm install -g npm@11
           toPublish=()
-          for tarball in "${tarballs[@]}"; do
-            manifest="$(tar -xzOf "$NPM_DIR/$tarball" package/package.json)"
-            name="$(jq -r .name <<< "$manifest")"
-            version="$(jq -r .version <<< "$manifest")"
+          for packageDir in "${packageDirs[@]}"; do
+            name="$(jq -r .name "$packageDir/package.json")"
+            version="$(jq -r .version "$packageDir/package.json")"
             if publishedHead="$(npm view "$name@$version" gitHead 2> /dev/null)" && [[ -n "$publishedHead" ]]; then
               if [[ "$publishedHead" != "$MERGE_SHA" ]]; then
                 echo "$name@$version was already published from $publishedHead; request a new build." >&2
@@ -243,10 +246,10 @@ jobs:
               echo "$name@$version is already published."
               continue
             fi
-            toPublish+=("$tarball")
+            toPublish+=("$packageDir")
           done
-          for tarball in "${toPublish[@]}"; do
-            npm publish "$NPM_DIR/$tarball" --access public --tag pr
+          for packageDir in "${toPublish[@]}"; do
+            npm publish "$packageDir" --access public --tag pr --ignore-scripts
           done
           echo "version=$version" >> "$GITHUB_OUTPUT"
 
@@ -254,28 +257,10 @@ jobs:
     needs: [prepare, build-platform, pack, publish]
     if: ${{ !cancelled() && github.repository == 'microsoft/TypeScript' && inputs.distinct_id }}
     runs-on: ubuntu-latest
-    environment:
-      name: azure
-      deployment: false
     permissions:
-      contents: read
-      id-token: write
+      issues: write
+      pull-requests: write
     steps:
-      - uses: azure/login@a641126d1b8aa4d1fa005f4f92df94a3a4c4c906 # v3.1.0
-        with:
-          client-id: ${{ vars.AZURE_CLIENT_ID }}
-          tenant-id: ${{ vars.AZURE_TENANT_ID }}
-          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
-      - name: Create GitHub App token
-        id: app-token
-        uses: microsoft/create-github-app-token-via-key-vault@5ba0d436e9c3cac52feff4d1f2f66f9698ce4a2d # v1
-        with:
-          client-id: ${{ vars.TYPESCRIPT_AUTOMATION_GITHUB_APP_CLIENT_ID }}
-          key-id: ${{ vars.TYPESCRIPT_AUTOMATION_GITHUB_APP_KEY_ID }}
-          owner: microsoft
-          repositories: TypeScript
-          permission-issues: write
-          permission-pull-requests: write
       - name: Check build result
         env:
           PUBLISH_RESULT: ${{ needs.publish.result }}
@@ -296,7 +281,7 @@ jobs:
 
             There is also a playground [for this build](https://www.typescriptlang.org/play/v2/?ts=${{ needs.publish.outputs.version }}).
           failure_comment: 'I was unable to build and publish this PR.'
-          github_token: ${{ steps.app-token.outputs.token }}
+          github_token: ${{ github.token }}
           distinct_id: ${{ inputs.distinct_id }}
           source_issue: ${{ inputs.source_issue }}
           requesting_user: ${{ inputs.requesting_user }}
