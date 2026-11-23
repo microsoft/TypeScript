@@ -79,7 +79,7 @@ To start using content mappers, you need to have your content mapper installed a
 In the configuration above, files with `.vue` extension will be content mapped by `@vue/content-mapper`, and the `"target": 3.5` option (along with anything specified under `"options"`) will be passed directly to the content mapper.
 
 
-If you have multiple configured projects that all share the same content mappers, it's possible to configure them by extending a tsconfig that specifies the content mappers:
+If you have multiple configured projects that all share the same content mappers, you can configure them by extending a tsconfig that specifies the content mappers:
 
 `configs/base.json`:
 ```json

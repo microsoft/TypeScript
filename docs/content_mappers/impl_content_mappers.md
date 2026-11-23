@@ -1,6 +1,7 @@
 # Implementing content mappers
 
-A content mapper can be implemented as any kind of program that satisfies the content mapping protocol that TypeScript expects, but it must be provided as a package with a `package.json` specifying how to invoke it:
+A content mapper is a child process spawned by the TypeScript compiler that receives and responds to JSON-RPC messages over STDIO.
+It can be implemented in any language, but must be provided as a Node.js package with a `package.json` specifying how to launch it:
 
 `package.json`:
 ```jsonc
@@ -16,17 +17,14 @@ A content mapper can be implemented as any kind of program that satisfies the co
   }
 }
 ```
-
-The package.json of the content mapper package must specify a `typescript` top-level field with a nested contentMapper field describing how to spawn the content mapper process and what compiler options its transform requires.
+The `package.json` of the content mapper package must specify a `typescript` top-level field with a nested `contentMapper` field describing how to spawn the content mapper process and what compiler options its transform requires.
 We'll call that configuration the content mapper's **manifest**.
-A mapper that reads additional project-specific configuration from external sources beyond those compiler options should additionally declare `dynamicConfig: true`.
 
+A mapper that reads additional project-specific configuration from external sources beyond the specified compiler options must additionally declare `dynamicConfig: true`.
 For example, if the Vue content mapper's `tsconfig.json` options set `target: "auto"`, it reads the nearest `node_modules/vue/package.json` to determine the Vue version.
-Changing its `version` from `3.5.0` to `3.6.0` can affect the virtual content produced by the content mapper for a Vue file, so the Vue content mapper's manifesto needs to specify `dynamicConfig: true`.
+If the nearest `node_modules/vue/package.json`'s version changes from `3.5.0` to `3.6.0`, it affects the virtual content produced by the content mapper for a Vue file, so the Vue content mapper's manifest needs to specify `dynamicConfig: true`.
 
-In addition to the options above, a content mapper manifest can optionally specify a mapping of output extensions.
-This is useful when the original, content mapped files supported by the content mapper will be emited into different files by another tool.
-For instance, when writing Ember components as `.gts` files, we expect an Ember build tool to emit `.js` files for `.gts` files, so an Ember content mapper's manifest would look like this:
+In addition to the options above, a content mapper manifest can optionally specify a mapping of output extensions:
 
 ```jsonc
 {
@@ -41,47 +39,148 @@ For instance, when writing Ember components as `.gts` files, we expect an Ember 
   }
 }
 ```
-This allows TypeScript to produce the right declaration files for a `.gts` file (i.e. `Component.gts` -> `Component.d.ts` instead of `Component.d.gts.ts`).
+
+This is useful when the original content mapped files will be emitted to a different format, rather than left as-is.
+In the example above, the `.gts` files are Ember components that Ember will emit to `.js` files.
+With this information, TypeScript emits declaration files with the correct file extensions (i.e. `Component.gts` -> `Component.d.ts` instead of `Component.d.gts.ts`) and also permits `.js` import paths to resolve to `.gts` files. 
 For more details, see [the implementation PR](https://github.com/microsoft/TypeScript/pull/64581).
-
-
-Note that the content mapper process need not be run with Node.js or implemented in JavaScript; providing it as a package serves as a convenient way to associate a content mapper with a versioned identity that can be managed alongside other dependencies in a project, but the `exec` field can specify any command.
 
 ## Protocol
 
 A content mapper communicates with TypeScript using JSON-RPC over STDIO.
 A JSON schema of the content mapper protocol types can be found in the TypeScript npm package, under `/schemas/contentmapper.schema.json`.
-TypeScript will send requests to the content mapper; the content mapper should not send requests or notifications to TypeScript, only responses.
+TypeScript will spawn content mappers and send requests as needed.  
+A content mapper must not send requests or notifications to TypeScript; only responses.
 The basic requests that a content mapper must handle are `initialize`, `openProject`, `transform`, and `closeProject`.
 
 ### `initialize`
 
 TypeScript will spawn the content mapper process using the command specified in the `"exec"` option of the content mapper's `package.json`.
 It will then send an `initialize` request containing a list of position encodings that TypeScript supports, and optionally a locale that the mapper should use for its diagnostics.
-The content mapper must respond with one of the supported position encodings that it will use throughout, and also a diagnostic source string that will be used to identify diagnostics emitted by the content mapper.
-The diagnostic source must not be `typescript`, `tsc`, or any other extension supported by TypeScript (`ts`, `tsx`, `json, `js`, etc), so that the content mapper diagnostics are not confused with regular TypeScript diagnostics.
 
-After initialization, the content mapper should be ready to receive the other kinds of requests.
+```ts
+/** Parameters for the initialize request. */
+export interface InitializeParams {
+    /** BCP 47 locale for mapper-authored diagnostic messages, when configured. */
+    locale?: string;
+    /** Coordinate spaces accepted by the host. */
+    positionEncodings: PositionEncoding[];
+}
+
+/** Coordinate space for mappings and diagnostics: UTF-8 byte offsets or UTF-16 code unit offsets. */
+export type PositionEncoding = "utf-8" | "utf-16";
+```
+
+The content mapper must respond with one of the supported position encodings that it will use throughout, and also a diagnostic source string that will be used to identify diagnostics emitted by the content mapper.
+The diagnostic source must not be `typescript`, `tsc`, or any other extension supported by TypeScript (`ts`, `tsx`, `json`, `js`, etc), so that the content mapper diagnostics are not confused with regular TypeScript diagnostics.
+
+```ts
+/** Response to the initialize request. */
+export interface InitializeResult {
+    positionEncoding: PositionEncoding;
+    /**
+     * Prefix for mapper-authored diagnostic codes. It must not be whitespace-only or, ignoring case, typescript, tsc,
+     * or a native source extension without its leading dot.
+     */
+    diagnosticSource: string;
+}
+```
+
+After initialization, the content mapper must be ready to receive the other kinds of requests.
 
 ### `openProject`
 
 The first time TypeScript needs to transform a file in a project, it will send an `openProject` request containing a project handle that uniquely identifies the project, the project's relevant compiler options (as specified in the content mapper's manifest), the content mapper options specified in the project's `tsconfig.json`, and optionally a path to a tsconfig for that project, if any exists.
 
-The content mapper should respond with diagnostics for the project's content mapper options, if any exist.
-Additionally, if the content mapper specified `dynamicConfig: true` in its manifest, the content mapper's response must also contain a `configIdentity`: a stable fingerprint of all *dynamically discovered configuration* that can affect transforms for the project.
-If `dynamicConfig: true`, the content mapper's response may also contain a list of `watchedFiles`, which are the additional files that, if modified, may change the project's `configIdentity` and affect the content mapper's transform.
-In that case, whenever a file in the list of `watchedFiles` changes, TypeScript will send a request to close the project (see [`closeProject`](#closeproject)).
-TypeScript may then call `openProject` for the same project again when needed; if indeed the watched file changes could affect the content mapper's transform behavior, then that mapper should return a different `configIdentity` for this new `openProject` request.
+```ts
+/** Parameters for the openProject request. */
+export interface OpenProjectParams {
+    /** Absolute project configuration file name, or an empty string when there is none. */
+    configFileName: string;
+    /** Opaque, process-local project handle assigned by the host. */
+    projectHandle: string;
+    /** Mapper entry's options from the project's contentMappers configuration. */
+    options?: unknown;
+    /** Project's effective compiler options, serialized by the host. */
+    compilerOptions: unknown;
+}
+```
 
-Note that the compiler options will only be sent by TypeScript as part of the `openProject` request, so the content mapper should store that information associated with that particular project, and use it during transforms.
-Also note that a single content mapper process may handle multiple projects, because TypeScript tries to reuse a content mapper process for any project that matches that content mapper.
+The content mapper must respond to this request.
+Its response should contain diagnostics for the project's content mapper options, if any exist.
+Additionally, if the content mapper specified `dynamicConfig: true` in its manifest, the response must contain a `configIdentity`: a stable fingerprint of all *dynamically discovered configuration* that can affect transforms for the project.
+If `dynamicConfig: true`, the content mapper's response may also contain a list of `watchedFiles`, which are additional files that, if modified, may change the project's `configIdentity` and affect the content mapper's transform.
+In that case, whenever a file in the list of `watchedFiles` changes, TypeScript will send a request to close the project (see [`closeProject`](#closeproject)).
+TypeScript may then call `openProject` for the same project again when needed.
+If changes to the watched files affect the content mapper's transform behavior, that mapper must return a different `configIdentity` for this new `openProject` request.
+
+```ts
+/**
+ * Response to an openProject request. Only mappers declaring dynamicConfig may return a non-empty configIdentity or
+ * watchedFiles.
+ */
+export interface OpenProjectResult {
+    /**
+     * Stable fingerprint of all dynamic configuration affecting transforms. It must be non-empty for dynamicConfig
+     * mappers; otherwise it must be empty or omitted.
+     */
+    configIdentity?: string;
+    /** Absolute file names whose changes may alter configIdentity or transform output. */
+    watchedFiles?: string[];
+    /** Diagnostics reporting invalid mapper options. */
+    optionDiagnostics?: OptionDiagnosticResult[];
+}
+```
+
+Note that compiler options will only be sent by TypeScript as part of the `openProject` request.
+Content mappers should store the compiler options for an opened project, and associate it with the project's handle, so that it can use this information during a [`transform`](#transform) request for the project.
+
+Also note that a single content mapper process must be able to handle multiple projects, because TypeScript tries to reuse a content mapper process for any project that matches that content mapper.
 
 ### `transform`
 
 When TypeScript finds a non-TS file in a project supported by a content mapper, it will send a `transform` request to the content mapper.
 That request will have the absolute filename of the *original file* (e.g. `/home/blah/project/file1.vue`), the content of that file, and the handle of the project that file belongs to.
 
+```ts
+/** Parameters for the transform request. */
+export interface TransformParams {
+    /** Absolute name of the content-mapped source file. */
+    fileName: string;
+    /** Original source text. */
+    content: string;
+    /** Handle for the project configuration opened for this transform. */
+    projectHandle: string;
+}
+```
+
 The content mapper should then respond with information about the content mapped *virtual file*: its transformed content, its extension (e.g. `.ts`, `.tsx`, etc), *span mappings* mapping between spans in the virtual file and the original file, and diagnostic directives for the virtual file (e.g. `@ts-expect-error`).
+
+```ts
+/** Canonical output for one input file, with optional mapper diagnostics and supplemental compiler inputs. */
+export interface TransformResult extends MappedOutput {
+    /** Mapper-authored errors in original-source coordinates. */
+    diagnostics?: Diagnostic[];
+    /** Additional unnamed compiler inputs associated with this source file. */
+    supplemental?: SupplementalOutput[];
+}
+
+export type SupplementalOutput = MappedOutput;
+
+/** Virtual source text and its mapping to the original input. */
+export interface MappedOutput {
+    /** Virtual source text. */
+    text: string;
+    /** Extension determining the virtual source file's syntax. */
+    extension: ".js" | ".jsx" | ".mjs" | ".cjs" | ".ts" | ".tsx" | ".mts" | ".cts" | ".json";
+    /**
+     * Span map tuples in the selected position encoding. Absent, null, or empty mappings describe fully synthesized
+     * output.
+     */
+    mappings?: SpanMapSegment[] | null;
+    diagnosticDirectives?: DiagnosticDirectives;
+}
+```
 
 #### Span mappings
 
@@ -375,7 +474,7 @@ const registration = api?.registerContentMappers(
 This will activate the TypeScript extension, and TypeScript will inspect matching open documents and discover configured projects that provide a content mapper for them.
 
 Your extension should also provide content mapper support for inferred projects (as opposed to configured projects).
-Imagine the user opens e.g. a `.vue` file that doesn't belong to a configured TypeScript project: TypeScript won't know invoke your content mapper for that file, and won't include it in the inferred project.
+Imagine the user opens, for example, a `.vue` file that doesn't belong to a configured TypeScript project: TypeScript won't know how to invoke your content mapper for that file and won't include it in the inferred project.
 Your extension can register a content mapper contribution for inferred projects:
 
 ```ts
@@ -413,7 +512,7 @@ For instance, consider the following Svelte file:
 {/if}
 ```
 
-While TypeScript can provide completions inside the script blocks, which are content-mapped into TypeScript content, it will not provide completions outside of those, e.g. completions for the closing keyword in `{/if}`. Those have to be provided by the Svelte extension.
+While TypeScript can provide completions inside the script blocks, which are content-mapped into TypeScript content, it will not provide completions outside those blocks, such as completions for the closing keyword in `{/if}`. Those completions have to be provided by the Svelte extension.
 
 Extensions can also intercept TypeScript language server responses and process them.
 As an example, consider the following Svelte file:
@@ -432,5 +531,5 @@ class HoverChild__Svelte_Component_ { ... }
 ...
 ```
 
-The special Svelte suffix is necessary to avoid name clashes, but now if that class is used somewhere, and the user hovers over it, they would see the generated name instead of the original name.
+The special Svelte suffix is necessary to avoid name clashes, but now, if that class is used somewhere and the user hovers over it, they would see the generated name instead of the original name.
 To fix this, the Svelte extension processes TypeScript hover responses, and maps those generated names back to user-facing ones (e.g. `HoverChild__Svelte_Component_` -> `HoverChild`).
