@@ -18,6 +18,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/module"
 	"github.com/microsoft/TypeScript/tsc/internal/nativepath"
 	"github.com/microsoft/TypeScript/tsc/internal/parser"
+	"github.com/microsoft/TypeScript/tsc/internal/pnp"
 	"github.com/microsoft/TypeScript/tsc/internal/spanmap"
 	"github.com/microsoft/TypeScript/tsc/internal/tracing"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
@@ -157,6 +158,10 @@ func (h *compilerResolutionHost) FS() vfs.FS {
 
 func (h *compilerResolutionHost) GetCurrentDirectory() tspath.RootedDirectoryPath {
 	return h.baseDirectory
+}
+
+func (h *compilerResolutionHost) PnpApi() *pnp.PnpApi {
+	return h.host.PnpApi()
 }
 
 type jsxRuntimeImportSpecifier struct {
@@ -300,7 +305,7 @@ func (p *fileLoader) resolveAutomaticTypeDirectives(ctx context.Context, contain
 	typeResolutionsTrace []module.DiagAndArgs,
 	pDiagnostics []*processingDiagnostic,
 ) {
-	automaticTypeDirectiveNames := module.GetAutomaticTypeDirectiveNames(p.opts.Config.CompilerOptions(), p.opts.Config.BaseDirectory(), p.host.FS())
+	automaticTypeDirectiveNames := module.GetAutomaticTypeDirectiveNames(p.opts.Config.CompilerOptions(), p.opts.Config.BaseDirectory(), p.host.FS(), p.host.PnpApi())
 	if len(automaticTypeDirectiveNames) != 0 {
 		toParse = make([]resolvedRef, 0, len(automaticTypeDirectiveNames))
 		typeResolutionsInFile = make(module.ModeAwareCache[*module.ResolvedTypeReferenceDirective], len(automaticTypeDirectiveNames))

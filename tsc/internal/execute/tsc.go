@@ -219,7 +219,7 @@ func tscCompilation(ctx context.Context, sys tsc.System, commandLine *tsoptions.
 			commandLineRaw = wrapped
 		}
 		path := sys.FS().CaseSensitivity().PathKey(tspath.RootedPath(configFileName))
-		configParseResult, errors := tsoptions.GetParsedCommandLineOfConfigFilePath(configFileName, path, compilerOptionsFromCommandLine, commandLineRaw, tsoptions.NewDefaultParseConfigHost(sys.FS()), extendedConfigCache)
+		configParseResult, errors := tsoptions.GetParsedCommandLineOfConfigFilePath(configFileName, path, compilerOptionsFromCommandLine, commandLineRaw, tsoptions.NewDefaultParseConfigHost(sys.FS(), sys.PnpApi()), extendedConfigCache)
 		compileTimes.ConfigTime = sys.Now().Sub(configStart)
 		if len(errors) != 0 {
 			// these are unrecoverable errors--exit to report them as diagnostics
@@ -314,6 +314,7 @@ func performIncrementalCompilation(
 		sys.FS(),
 		sys.DefaultLibraryPath(),
 		extendedConfigCache,
+		sys.PnpApi(),
 		getTraceFromSys(sys, config.Locale(), testing),
 		contentMapperProject,
 	)
@@ -382,6 +383,7 @@ func performCompilation(
 		sys.FS(),
 		sys.DefaultLibraryPath(),
 		extendedConfigCache,
+		sys.PnpApi(),
 		getTraceFromSys(sys, config.Locale(), testing),
 		contentMapperProject,
 	)

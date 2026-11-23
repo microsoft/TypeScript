@@ -16,6 +16,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/module"
 	"github.com/microsoft/TypeScript/tsc/internal/modulespecifiers"
 	"github.com/microsoft/TypeScript/tsc/internal/parser"
+	"github.com/microsoft/TypeScript/tsc/internal/pnp"
 	"github.com/microsoft/TypeScript/tsc/internal/spanmap"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
@@ -145,6 +146,7 @@ type sourceDefResolver struct {
 type sourceDefResolutionHost struct {
 	fs               vfs.FS
 	currentDirectory tspath.RootedDirectoryPath
+	pnpApi           *pnp.PnpApi
 }
 
 func (h *sourceDefResolutionHost) FS() vfs.FS {
@@ -153,6 +155,10 @@ func (h *sourceDefResolutionHost) FS() vfs.FS {
 
 func (h *sourceDefResolutionHost) GetCurrentDirectory() tspath.RootedDirectoryPath {
 	return h.currentDirectory
+}
+
+func (h *sourceDefResolutionHost) PnpApi() *pnp.PnpApi {
+	return h.pnpApi
 }
 
 func (l *LanguageService) newSourceDefResolver(
@@ -169,7 +175,7 @@ func (l *LanguageService) newSourceDefResolver(
 		getSourceFile: program.GetSourceFile,
 		resolveFrom:   resolveFrom,
 		resolver: module.NewResolver(module.ResolverOptions{
-			Host:            &sourceDefResolutionHost{fs: program.Host().FS(), currentDirectory: program.BaseDirectory()},
+			Host:            &sourceDefResolutionHost{fs: program.Host().FS(), currentDirectory: program.BaseDirectory(), pnpApi: program.PnpApi()},
 			CompilerOptions: noDtsOptions,
 			TypingsLocation: program.GetGlobalTypingsCacheLocation(),
 			ExtraExtensions: program.CommandLine().ContentMapperExtensions(),

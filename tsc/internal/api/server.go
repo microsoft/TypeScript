@@ -9,10 +9,12 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/contentmapper"
 	"github.com/microsoft/TypeScript/tsc/internal/ipc"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
+	"github.com/microsoft/TypeScript/tsc/internal/pnp"
 	"github.com/microsoft/TypeScript/tsc/internal/project"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/osvfs"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs/pnpvfs"
 )
 
 // StdioServerOptions configures the STDIO-based API server.
@@ -98,6 +100,10 @@ func (s *StdioServer) Run(ctx context.Context) error {
 	if baseFS == nil {
 		baseFS = osvfs.FS()
 	}
+	pnpApi := pnp.InitPnpApi(baseFS, s.options.Cwd.AsString())
+	if pnpApi != nil {
+		baseFS = pnpvfs.From(baseFS)
+	}
 	fs := bundled.WrapFS(baseFS)
 
 	// Wrap the base FS when callbacks or an explicit case-sensitivity setting are requested.
@@ -111,6 +117,7 @@ func (s *StdioServer) Run(ctx context.Context) error {
 		BackgroundCtx: ctx,
 		Logger:        nil, // TODO: Add logging support
 		FS:            fs,
+		PnpApi:        pnpApi,
 		Options: &project.SessionOptions{
 			CurrentDirectory:   s.options.Cwd,
 			DefaultLibraryPath: s.options.DefaultLibraryPath,

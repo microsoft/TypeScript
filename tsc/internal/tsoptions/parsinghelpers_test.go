@@ -51,7 +51,7 @@ func TestParseConfigCircularityPreservesRaw(t *testing.T) {
 					input = nil
 					source = NewTsconfigSourceFileFromFilePath(fileName, path, text)
 				}
-				got, errors := parseConfig(input, source, fs, "/project", fileName, []tspath.PathKey{path}, nil)
+				got, errors := parseConfig(input, source, fs, nil, "/project", fileName, []tspath.PathKey{path}, nil)
 				assert.Equal(t, len(errors), 1)
 				assert.Equal(t, errors[0].Code(), diagnostics.Circularity_detected_while_resolving_configuration_Colon_0.Code())
 				assert.DeepEqual(t, errors[0].MessageArgs(), []string{"/project/tsconfig.json -> /project/tsconfig.json"})

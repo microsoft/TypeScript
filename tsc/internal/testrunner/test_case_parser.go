@@ -8,11 +8,13 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/parser"
+	"github.com/microsoft/TypeScript/tsc/internal/pnp"
 	"github.com/microsoft/TypeScript/tsc/internal/scanner"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/harnessutil"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions/tsoptionstest"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs/pnpvfs"
 )
 
 var lineDelimiter = regexp.MustCompile("\r?\n")
@@ -68,6 +70,10 @@ func makeUnitsFromTest(code string, fileName string) testCaseContent {
 		allFiles[tspath.ToRootedFilePath(data.name, currentDirectory).AsString()] = data.content
 	}
 	configFS := tsoptionstest.NewVFSWithSymlinks(allFiles, symlinks, currentDirectory, tspath.CaseSensitive /*caseSensitivity*/)
+	pnpApi := pnp.InitPnpApi(configFS, currentDirectory.AsString())
+	if pnpApi != nil {
+		configFS = pnpvfs.From(configFS)
+	}
 
 	// Content mappers are gated behind --runExternalCode, a command-line-only option. A test
 	// opts in with a top-level `// @runExternalCode: true`, which we surface to the config
@@ -94,7 +100,7 @@ func makeUnitsFromTest(code string, fileName string) testCaseContent {
 			configDir := configFileName.Directory()
 			tsConfig = tsoptions.ParseJsonSourceFileConfigFileContent(
 				tsConfigSourceFile,
-				tsoptions.NewDefaultParseConfigHost(configFS),
+				tsoptions.NewDefaultParseConfigHost(configFS, pnpApi),
 				configDir,
 				existingOptions,
 				nil, /*existingOptionsRaw*/

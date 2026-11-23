@@ -148,6 +148,7 @@ func (w *Watcher) start(ctx context.Context) {
 		w.sys.FS(),
 		w.sys.DefaultLibraryPath(),
 		w.extendedConfigCache,
+		w.sys.PnpApi(),
 		getTraceFromSys(w.sys, w.config.Locale(), w.testing),
 		w.contentMapperProject,
 	)
@@ -473,6 +474,7 @@ func (w *Watcher) doBuild(ctx context.Context) error {
 			cached,
 			w.sys.DefaultLibraryPath(),
 			w.extendedConfigCache,
+			w.sys.PnpApi(),
 			getTraceFromSys(w.sys, w.config.Locale(), w.testing),
 			w.contentMapperProject,
 		)
@@ -514,6 +516,7 @@ func (w *Watcher) doBuild(ctx context.Context) error {
 		tfs,
 		w.sys.DefaultLibraryPath(),
 		w.extendedConfigCache,
+		w.sys.PnpApi(),
 		getTraceFromSys(w.sys, w.config.Locale(), w.testing),
 		w.contentMapperProject,
 	)
@@ -824,7 +827,7 @@ func (w *Watcher) recheckTsConfig(force bool) bool {
 
 func (w *Watcher) parseConfigFile() *tsoptions.ParsedCommandLine {
 	extendedConfigCache := &tsc.ExtendedConfigCache{}
-	configParseResult, errors := tsoptions.GetParsedCommandLineOfConfigFile(w.configFileName, w.compilerOptionsFromCommandLine, w.commandLineRaw, tsoptions.NewDefaultParseConfigHost(w.sys.FS()), extendedConfigCache)
+	configParseResult, errors := tsoptions.GetParsedCommandLineOfConfigFile(w.configFileName, w.compilerOptionsFromCommandLine, w.commandLineRaw, tsoptions.NewDefaultParseConfigHost(w.sys.FS(), w.sys.PnpApi()), extendedConfigCache)
 	if len(errors) > 0 {
 		for _, e := range errors {
 			w.reportDiagnostic(e)

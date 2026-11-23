@@ -15,6 +15,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/compiler"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/execute/incremental"
+	"github.com/microsoft/TypeScript/tsc/internal/pnp"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
@@ -68,7 +69,7 @@ func TestEmitStopsOnCancellation(t *testing.T) {
 			config := tsoptions.NewParsedCommandLine(&core.CompilerOptions{NoLib: core.TSTrue, ExtendedDiagnostics: core.TSTrue}, []tspath.RootedFilePath{"/project/a.ts"}, nil, "/project", tspath.CaseSensitive)
 			program, err := compiler.NewProgram(t.Context(), compiler.ProgramOptions{
 				Config: config,
-				Host:   compiler.NewCompilerHost(fs, "/lib", nil, nil, nil),
+				Host:   compiler.NewCompilerHost(fs, "/lib", nil, nil, nil, nil),
 			})
 			assert.NilError(t, err)
 			ctx, cancel := context.WithCancel(t.Context())
@@ -139,7 +140,7 @@ func TestExplainFilesStopsOnCancellation(t *testing.T) {
 			}, []tspath.RootedFilePath{"/project/a.ts", "/project/b.ts"}, nil, "/project", tspath.CaseSensitive)
 			program, err := compiler.NewProgram(t.Context(), compiler.ProgramOptions{
 				Config: config,
-				Host:   compiler.NewCompilerHost(fs, "/lib", nil, nil, nil),
+				Host:   compiler.NewCompilerHost(fs, "/lib", nil, nil, nil, nil),
 			})
 			assert.NilError(t, err)
 			ctx, cancel := context.WithCancel(t.Context())
@@ -174,6 +175,7 @@ func TestExplainFilesStopsOnCancellation(t *testing.T) {
 
 type contentMapperLoggingTestSystem struct {
 	*timingTestSystem
+	pnpApi  *pnp.PnpApi
 	enabled bool
 	stderr  bytes.Buffer
 }
@@ -188,6 +190,8 @@ func (s *contentMapperLoggingTestSystem) GetEnvironmentVariable(name string) (st
 func (s *contentMapperLoggingTestSystem) ErrorWriter() io.Writer {
 	return &s.stderr
 }
+
+func (s *contentMapperLoggingTestSystem) PnpApi() *pnp.PnpApi { return s.pnpApi }
 
 func TestContentMapperLoggerEnvironmentVariable(t *testing.T) {
 	t.Parallel()
@@ -262,6 +266,7 @@ type timingTestSystem struct {
 func (s *timingTestSystem) Writer() io.Writer                               { return io.Discard }
 func (s *timingTestSystem) ErrorWriter() io.Writer                          { return io.Discard }
 func (s *timingTestSystem) FS() vfs.FS                                      { return s.fs }
+func (s *timingTestSystem) PnpApi() *pnp.PnpApi                             { return nil }
 func (s *timingTestSystem) DefaultLibraryPath() tspath.RootedDirectoryPath  { return "/lib" }
 func (s *timingTestSystem) GetCurrentDirectory() tspath.RootedDirectoryPath { return "/project" }
 func (s *timingTestSystem) WriteOutputIsTTY() bool                          { return false }
@@ -318,7 +323,7 @@ export const make = (): Box => ({ value: "ok" });
 	}), nil, currentDirectory, tspath.CaseSensitive)
 
 	compile := func(oldProgram *incremental.Program) (*incremental.Program, *CompileTimes) {
-		host := compiler.NewCachedFSCompilerHost(sys.FS(), sys.DefaultLibraryPath(), nil, nil, nil)
+		host := compiler.NewCachedFSCompilerHost(sys.FS(), sys.DefaultLibraryPath(), nil, sys.PnpApi(), nil, nil)
 		program, err := compiler.NewProgram(t.Context(), compiler.ProgramOptions{
 			Config: config,
 			Host:   host,

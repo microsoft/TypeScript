@@ -5,6 +5,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/module"
 	"github.com/microsoft/TypeScript/tsc/internal/packagejson"
+	"github.com/microsoft/TypeScript/tsc/internal/pnp"
 	"github.com/microsoft/TypeScript/tsc/internal/symlinks"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
@@ -55,6 +56,8 @@ type ModuleSpecifierGenerationHost interface {
 	GetGlobalTypingsCacheLocation() tspath.RootedDirectoryPath
 	CaseSensitivity() tspath.CaseSensitivity
 	BaseDirectory() tspath.RootedDirectoryPath
+
+	PnpApi() *pnp.PnpApi
 
 	GetProjectReferenceFromSource(path tspath.PathKey) *tsoptions.SourceOutputAndProjectReference
 	GetRedirectTargets(path tspath.PathKey) []tspath.RootedFilePath

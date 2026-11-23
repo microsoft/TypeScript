@@ -50,7 +50,7 @@ func TestTimestampUpdatesStopOnCancellation(t *testing.T) {
 					Sys:     &timestampTestSystem{},
 					Command: &tsoptions.ParsedBuildCommandLine{CompilerOptions: options, BuildOptions: &core.BuildOptions{}},
 				},
-				host: &host{host: compiler.NewCompilerHost(fs, "/lib", nil, nil, nil)},
+				host: &host{host: compiler.NewCompilerHost(fs, "/lib", nil, nil, nil, nil)},
 			}
 			if before {
 				cancel()

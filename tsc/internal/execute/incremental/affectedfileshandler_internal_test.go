@@ -17,7 +17,7 @@ import (
 
 func buildTestProgram(t *testing.T, fs vfs.FS) *Program {
 	t.Helper()
-	host := compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil)
+	host := compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil, nil)
 	config, diagnostics := tsoptions.GetParsedCommandLineOfConfigFile("/tsconfig.json", &core.CompilerOptions{}, nil, tsoptions.NewDefaultParseConfigHost(fs), nil)
 	assert.Equal(t, len(diagnostics), 0)
 	old := ReadBuildInfoProgram(config, NewBuildInfoReader(host), host)

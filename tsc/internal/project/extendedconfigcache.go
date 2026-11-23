@@ -1,6 +1,7 @@
 package project
 
 import (
+	"github.com/microsoft/TypeScript/tsc/internal/pnp"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
@@ -12,6 +13,7 @@ type ExtendedConfigParseArgs struct {
 	Content         string
 	FS              FileSource
 	ConfigFS        vfs.FS
+	PnpApi          *pnp.PnpApi
 	ResolutionStack []tspath.PathKey
 	Cache           tsoptions.ExtendedConfigCache
 }
@@ -27,7 +29,7 @@ func NewExtendedConfigCache() *ExtendedConfigCache {
 	return NewOwnerCache(
 		func(path tspath.PathKey, args ExtendedConfigParseArgs) *ExtendedConfigCacheEntry {
 			result := &ExtendedConfigCacheEntry{
-				ExtendedConfigCacheEntry: tsoptions.ParseExtendedConfig(args.FileName, path, args.ResolutionStack, args.ConfigFS, args.Cache),
+				ExtendedConfigCacheEntry: tsoptions.ParseExtendedConfig(args.FileName, path, args.ResolutionStack, args.ConfigFS, args.PnpApi, args.Cache),
 			}
 			result.Hash = hash(result.ExtendedConfigCacheEntry, args)
 			return result

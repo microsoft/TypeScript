@@ -11,6 +11,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/internal/module"
 	"github.com/microsoft/TypeScript/tsc/internal/packagejson"
+	"github.com/microsoft/TypeScript/tsc/internal/pnp"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 )
@@ -22,6 +23,7 @@ import (
 type contentMapperResolutionHost struct {
 	fs               vfs.FS
 	currentDirectory tspath.RootedDirectoryPath
+	pnpApi           *pnp.PnpApi
 }
 
 func (h *contentMapperResolutionHost) FS() vfs.FS {
@@ -32,10 +34,14 @@ func (h *contentMapperResolutionHost) GetCurrentDirectory() tspath.RootedDirecto
 	return h.currentDirectory
 }
 
+func (h *contentMapperResolutionHost) PnpApi() *pnp.PnpApi {
+	return h.pnpApi
+}
+
 func resolveContentMapperManifest(host ParseConfigHost, containingFile tspath.RootedFilePath, packageName string) (contentmapper.Manifest, tspath.RootedDirectoryPath, *ast.Diagnostic) {
 	fs := host.FS()
 	resolver := module.NewResolver(module.ResolverOptions{
-		Host:            &contentMapperResolutionHost{fs: fs, currentDirectory: containingFile.Directory()},
+		Host:            &contentMapperResolutionHost{fs: fs, currentDirectory: containingFile.Directory(), pnpApi: host.PnpApi()},
 		CompilerOptions: &core.CompilerOptions{ModuleResolution: core.ModuleResolutionKindBundler},
 	})
 	resolved := resolver.ResolvePackageDirectory(packageName, containingFile, core.ResolutionModeNone, nil)

@@ -19,6 +19,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/module"
+	"github.com/microsoft/TypeScript/tsc/internal/pnp"
 	"github.com/microsoft/TypeScript/tsc/internal/project/ata"
 	"github.com/microsoft/TypeScript/tsc/internal/project/dirty"
 	"github.com/microsoft/TypeScript/tsc/internal/project/logging"
@@ -52,6 +53,8 @@ type Snapshot struct {
 
 	builderLogs *logging.LogTree
 	apiError    error
+
+	pnpApi *pnp.PnpApi
 	// fileSystemOverride indicates that this snapshot was built from a filesystem
 	// supplied by an API update rather than the session host filesystem.
 	fileSystemOverride bool
@@ -89,6 +92,7 @@ func (host *SnapshotHost) newSnapshot(
 	userPreferences lsutil.UserPreferences,
 	autoImports *autoimport.Registry,
 	autoImportsWatch *WatchedFiles[map[tspath.PathKey]tspath.RootedDirectoryPath],
+	pnpApi *pnp.PnpApi,
 ) *Snapshot {
 	overlays := snapshotOverlays(fs)
 	s := &Snapshot{
@@ -99,9 +103,11 @@ func (host *SnapshotHost) newSnapshot(
 		ConfigFileRegistry:                 configFileRegistry,
 		ProjectCollection:                  &ProjectCollection{caseSensitivity: host.caseSensitivity, openFiles: openFilePaths(overlays)},
 		compilerOptionsForInferredProjects: compilerOptionsForInferredProjects,
-		userPreferences:                    userPreferences,
-		AutoImports:                        autoImports,
-		autoImportsWatch:                   autoImportsWatch,
+
+		userPreferences:  userPreferences,
+		AutoImports:      autoImports,
+		autoImportsWatch: autoImportsWatch,
+		pnpApi:           pnpApi,
 	}
 	s.refCount.Store(1)
 	s.converters = lsconv.NewConverters(host.options.PositionEncoding, s.LSPLineMap)
@@ -272,6 +278,10 @@ func (s *Snapshot) hasOverlayWithin(path tspath.PathKey) bool {
 		}
 	}
 	return false
+}
+
+func (s *Snapshot) PnpApi() *pnp.PnpApi {
+	return s.pnpApi
 }
 
 // FileSystem returns the filesystem backing this snapshot.
@@ -522,6 +532,15 @@ func (s *Snapshot) Clone(
 	fs := newSnapshotFSBuilderFromSource(layeredFS, s.fs.cacheFiles, s.fs.cacheDirectories, s.fs.nodeModulesRealpathAliases)
 	change.fileChanges = s.processFileChanges(fs, change.fileChanges, logger, change.contentMapperContributions, s.overlays(), overlays)
 
+	pnpApi := s.pnpApi
+	if s.pnpApi != nil && change.fileChanges.InvalidateAll {
+		if newPnpApi, err := s.pnpApi.RefreshManifest(); err != nil {
+			logger.Logf("Failed to refresh PnP manifest: %v", err)
+		} else {
+			pnpApi = newPnpApi
+		}
+	}
+
 	compilerOptionsForInferredProjects := s.compilerOptionsForInferredProjects
 	if change.compilerOptionsForInferredProjects != nil {
 		compilerOptionsForInferredProjects = change.compilerOptionsForInferredProjects
@@ -538,6 +557,7 @@ func (s *Snapshot) Clone(
 		ctx,
 		newSnapshotID,
 		fs,
+		pnpApi,
 		overlays,
 		s.ProjectCollection,
 		s.ConfigFileRegistry,
@@ -653,6 +673,7 @@ func (s *Snapshot) Clone(
 		projectCollection,
 		store.parseCache,
 		fs,
+		pnpApi,
 	)
 	openFiles := make(map[tspath.PathKey]tspath.RootedFilePath, len(overlays))
 	for path, overlay := range overlays {
@@ -692,6 +713,7 @@ func (s *Snapshot) Clone(
 		config,
 		autoImports,
 		autoImportsWatch,
+		pnpApi,
 	)
 	newSnapshot.parentId = s.id
 	newSnapshot.ProjectCollection = projectCollection

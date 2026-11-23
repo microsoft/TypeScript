@@ -26,7 +26,7 @@ func TestEmitStopsWritingOnCancellation(t *testing.T) {
 			testFileNames("/src/a.ts", "/src/b.ts"), nil, "/src", tspath.CaseSensitive,
 		),
 		SingleThreaded: core.TSTrue,
-		Host:           compiler.NewCompilerHost(fs, "/", nil, nil, nil),
+		Host:           compiler.NewCompilerHost(fs, "/", nil, nil, nil, nil),
 	})
 	if err != nil {
 		t.Fatal(err)
@@ -87,7 +87,7 @@ func BenchmarkEmitLongLines(b *testing.B) {
 				OutDir:    "/dev/out",
 			}
 
-			host := compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil)
+			host := compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil, nil)
 
 			p, err := compiler.NewProgram(b.Context(), compiler.ProgramOptions{
 				Config: tsoptions.NewParsedCommandLine(&opts, testFileNames("/dev/src/index.ts"), nil, "/dev/src", fs.CaseSensitivity()),
@@ -140,7 +140,7 @@ func BenchmarkEmitManyFiles(b *testing.B) {
 		OutDir:    "/dev/out",
 	}
 
-	host := compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil)
+	host := compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil, nil)
 
 	p, err := compiler.NewProgram(b.Context(), compiler.ProgramOptions{
 		Config: tsoptions.NewParsedCommandLine(&opts, testFileNames(fileNames...), nil, "/dev/src", fs.CaseSensitivity()),
@@ -196,7 +196,7 @@ func BenchmarkEmitLongLinesWithLineBreaks(b *testing.B) {
 		OutDir:    "/dev/out",
 	}
 
-	host := compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil)
+	host := compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil, nil)
 
 	p, err := compiler.NewProgram(b.Context(), compiler.ProgramOptions{
 		Config: tsoptions.NewParsedCommandLine(&opts, testFileNames("/dev/src/index.ts"), nil, "/dev/src", fs.CaseSensitivity()),

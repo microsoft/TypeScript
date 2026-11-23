@@ -287,9 +287,14 @@ func GetEachFileNameOfModule(
 	if !preferSymlinks {
 		for _, p := range targets {
 			if !(shouldFilterIgnoredPaths && containsIgnoredPath(p)) {
+				IsInNodeModules := p.ContainsLowercaseDirectorySequence("/node_modules/")
+				if pnpApi := host.PnpApi(); pnpApi != nil {
+					IsInNodeModules = IsInNodeModules || pnpApi.IsInPnpModule(p.AsString(), importingFileName.AsString())
+				}
+
 				results = append(results, ModulePath{
 					FileName:        p,
-					IsInNodeModules: p.ContainsLowercaseDirectorySequence("/node_modules/"),
+					IsInNodeModules: IsInNodeModules,
 					IsRedirect:      referenceRedirect == p,
 				})
 			}
@@ -337,9 +342,14 @@ func GetEachFileNameOfModule(
 	if preferSymlinks {
 		for _, p := range targets {
 			if !(shouldFilterIgnoredPaths && containsIgnoredPath(p)) {
+				IsInNodeModules := p.ContainsLowercaseDirectorySequence("/node_modules/")
+				if pnpApi := host.PnpApi(); pnpApi != nil {
+					IsInNodeModules = IsInNodeModules || pnpApi.IsInPnpModule(p.AsString(), importingFileName.AsString())
+				}
+
 				results = append(results, ModulePath{
 					FileName:        p,
-					IsInNodeModules: p.ContainsLowercaseDirectorySequence("/node_modules/"),
+					IsInNodeModules: IsInNodeModules,
 					IsRedirect:      referenceRedirect == p,
 				})
 			}
@@ -742,6 +752,136 @@ func tryGetModuleNameFromRootDirs(
 	return processEnding(shortest, moduleFileName, allowedEndings, compilerOptions, host)
 }
 
+// TODO: This code partially duplicates tryGetModuleNameAsNodeModule, is it better to keep it isolated from the node module version or should we merge them?
+func tryGetModuleNameAsPnpPackage(
+	pathObj ModulePath,
+	info Info,
+	importingSourceFile SourceFileForSpecifierGeneration,
+	host ModuleSpecifierGenerationHost,
+	options *core.CompilerOptions,
+	userPreferences UserPreferences,
+	packageNameOnly bool,
+	overrideMode core.ResolutionMode,
+) tspath.ModuleSpecifier {
+	pnpApi := host.PnpApi()
+	if pnpApi == nil {
+		return ""
+	}
+
+	pnpPackageName := ""
+	fromLocator, _ := pnpApi.FindLocator(importingSourceFile.FileName().AsString())
+	toLocator, _ := pnpApi.FindLocator(pathObj.FileName.AsString())
+	parts := GetNodeModulePathParts(pathObj.FileName)
+
+	if fromLocator != nil && toLocator != nil {
+		// Don't use the package name when the imported file is inside
+		// the source directory (prefer a relative path instead)
+		if *fromLocator == *toLocator {
+			return ""
+		}
+
+		fromInfo := pnpApi.GetPackage(fromLocator)
+
+		for i := range fromInfo.PackageDependencies {
+			dep := fromInfo.PackageDependencies[i]
+			depLocator := dep.Locator()
+			if depLocator.Name == toLocator.Name && depLocator.Reference == toLocator.Reference {
+				pnpPackageName = dep.Ident
+				break
+			}
+		}
+
+		if parts == nil {
+			toInfo := pnpApi.GetPackage(toLocator)
+			packageRootDirectory := tspath.RootedDirectoryPathFromAbsolute(pnpApi.GetPackageLocationAbsolutePath(toInfo))
+			packageRelativePath, ok := pathObj.FileName.RelativeTo(packageRootDirectory)
+			if !ok {
+				return ""
+			}
+			parts = &NodeModulePathParts{
+				TopLevelNodeModulesDirectory: packageRootDirectory.AsPath().Directory(),
+				PackageRootDirectory:         packageRootDirectory,
+				PackageRelativePath:          packageRelativePath,
+			}
+		}
+	}
+
+	if parts == nil {
+		return ""
+	}
+
+	// Simplify the full file path to something that can be resolved by Node.
+	preferences := getModuleSpecifierPreferences(userPreferences, host, options, importingSourceFile, "")
+	allowedEndings := preferences.getAllowedEndingsInPreferredOrder(core.ResolutionModeNone)
+
+	moduleSpecifier := pathObj.FileName.AsString()
+	isPackageRootPath := false
+	if !packageNameOnly {
+		var moduleFileName tspath.RootedFilePath
+		packageRootDirectory := parts.PackageRootDirectory
+		relativeComponents := strings.Split(parts.PackageRelativePath.AsString(), "/")
+		for i := 0; ; i++ {
+			packageName := pnpPackageName
+			if packageName == "" {
+				packagePath, ok := packageRootDirectory.AsPath().RelativeTo(parts.TopLevelNodeModulesDirectory)
+				if !ok {
+					return ""
+				}
+				packageName = packagePath.AsString()
+			}
+			// If the module could be imported by a directory name, use that directory's name
+			pkgJsonResults := tryDirectoryWithPackageJson(
+				packageRootDirectory,
+				parts.PackageRootDirectory,
+				packageName,
+				pathObj,
+				importingSourceFile,
+				host,
+				overrideMode,
+				options,
+				allowedEndings,
+			)
+			moduleFileToTry := pkgJsonResults.moduleFileToTry
+			packageRootPath := pkgJsonResults.packageRootDirectory
+			blockedByExports := pkgJsonResults.blockedByExports
+			verbatimFromExports := pkgJsonResults.verbatimFromExports
+			if blockedByExports {
+				return "" // File is under this package.json, but is not publicly exported - there's no way to name it via `node_modules` resolution
+			}
+			if verbatimFromExports != "" {
+				return verbatimFromExports
+			}
+			//}
+			if len(packageRootPath) > 0 {
+				moduleSpecifier = packageRootPath.AsString()
+				isPackageRootPath = true
+				break
+			}
+			if len(moduleFileName) == 0 {
+				moduleFileName = moduleFileToTry
+			}
+			// try with next level of directory
+			if i >= len(relativeComponents)-1 {
+				moduleSpecifier = processEnding(moduleFileName.AsModuleSpecifier(), moduleFileName, allowedEndings, options, host).AsString()
+				break
+			}
+			packageRootDirectory = packageRootDirectory.ResolveDirectory(relativeComponents[i])
+		}
+	}
+
+	if pathObj.IsRedirect && !isPackageRootPath {
+		return ""
+	}
+
+	// If the module was found in @types, get the actual Node package name
+	nodeModulesDirectoryName := strings.TrimPrefix(moduleSpecifier, tspath.EnsureTrailingDirectorySeparator(parts.TopLevelNodeModulesDirectory.AsString()))
+	if pnpPackageName != "" {
+		nodeModulesDirectoryName = pnpPackageName + strings.TrimPrefix(moduleSpecifier, parts.PackageRootDirectory.AsString())
+	}
+
+	return tspath.ToModuleSpecifier(module.GetPackageNameFromTypesPackageName(nodeModulesDirectoryName))
+}
+
 func tryGetModuleNameAsNodeModule(
 	pathObj ModulePath,
 	info Info,
@@ -752,6 +892,11 @@ func tryGetModuleNameAsNodeModule(
 	packageNameOnly bool,
 	overrideMode core.ResolutionMode,
 ) tspath.ModuleSpecifier {
+	pnpModuleName := tryGetModuleNameAsPnpPackage(pathObj, info, importingSourceFile, host, options, userPreferences, packageNameOnly, overrideMode)
+	if pnpModuleName != "" {
+		return pnpModuleName
+	}
+
 	parts := GetNodeModulePathParts(pathObj.FileName)
 	if parts == nil {
 		return ""

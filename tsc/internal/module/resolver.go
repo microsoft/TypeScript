@@ -11,6 +11,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/internal/packagejson"
+	"github.com/microsoft/TypeScript/tsc/internal/pnp"
 	"github.com/microsoft/TypeScript/tsc/internal/stringutil"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
@@ -343,6 +344,7 @@ type DefaultResolver struct {
 	*ResolutionData
 	fs            vfs.FS
 	baseDirectory tspath.RootedDirectoryPath
+	pnpApi        *pnp.PnpApi
 	// reportDiagnostic: DiagnosticReporter
 
 	moduleResolutionCache           moduleResolutionCache
@@ -388,6 +390,7 @@ func (d *ResolutionData) NewResolver(host ResolutionHost) *DefaultResolver {
 		ResolutionData: d,
 		fs:             fs,
 		baseDirectory:  baseDirectory,
+		pnpApi:         host.PnpApi(),
 	}
 }
 
@@ -454,6 +457,9 @@ func (r *DefaultResolver) ResolveTypeReferenceDirective(
 	compilerOptions := GetCompilerOptionsWithRedirect(r.compilerOptions, redirectedReference)
 
 	typeRoots, fromConfig := compilerOptions.GetEffectiveTypeRoots(r.baseDirectory)
+	if r.pnpApi != nil {
+		typeRoots, fromConfig = r.pnpApi.AppendPnpTypeRoots(typeRoots, r.baseDirectory, compilerOptions, fromConfig)
+	}
 	if traceBuilder != nil {
 		traceBuilder.write(diagnostics.Resolving_type_reference_directive_0_containing_file_1_root_directory_2, typeReferenceDirectiveName, containingFile.AsString(), strings.Join(core.Map(typeRoots, func(root tspath.RootedDirectoryPath) string { return root.AsString() }), ","))
 		traceBuilder.traceResolutionUsingProjectReference(redirectedReference)
@@ -802,7 +808,7 @@ func (r *resolutionState) resolveNodeLikeWorker() *ResolvedModule {
 		resolved := r.nodeLoadModuleByRelativeName(r.extensions, candidate, true)
 		return r.createResolvedModule(
 			resolved,
-			resolved != nil && resolved.path.ContainsLowercaseDirectorySequence("/node_modules/"),
+			r.isExternalLibraryImport(resolved),
 		)
 	}
 	return r.createResolvedModule(nil, false)
@@ -1221,6 +1227,10 @@ func (r *resolutionState) loadModuleFromNearestNodeModulesDirectory(typesScopeOn
 }
 
 func (r *resolutionState) loadModuleFromNearestNodeModulesDirectoryWorker(ext extensions, mode core.ResolutionMode, typesScopeOnly bool) *resolved {
+	if pnpApi := r.resolver.pnpApi; pnpApi != nil && !pnpApi.IsPathIgnored(r.containingDirectory.AsString()) {
+		return r.loadModuleFromImmediateNodeModulesDirectoryPnP(ext, r.containingDirectory, typesScopeOnly)
+	}
+
 	result, _ := r.containingDirectory.ForEachAncestorDirectory(
 		func(directory tspath.RootedDirectoryPath) (result *resolved, stop bool) {
 			// !!! stop at global cache
@@ -1263,6 +1273,41 @@ func (r *resolutionState) loadModuleFromImmediateNodeModulesDirectory(extensions
 	return continueSearching()
 }
 
+/*
+With Plug and Play, we directly resolve the path of the moduleName using the PnP API, instead of searching for it in the node_modules directory
+
+See github.com/microsoft/TypeScript/tsc/internal/pnp package for more details
+*/
+func (r *resolutionState) loadModuleFromImmediateNodeModulesDirectoryPnP(extensions extensions, directory tspath.RootedDirectoryPath, typesScopeOnly bool) *resolved {
+	if !typesScopeOnly {
+		if packageResult := r.loadModuleFromPnpResolution(extensions, r.name, directory); !packageResult.shouldContinueSearching() {
+			return packageResult
+		}
+	}
+
+	if extensions&extensionsDeclaration != 0 {
+		return r.loadModuleFromPnpResolution(extensionsDeclaration, "@types/"+r.mangleScopedPackageName(r.name), directory)
+	}
+
+	return nil
+}
+
+func (r *resolutionState) loadModuleFromPnpResolution(ext extensions, moduleName string, issuer tspath.RootedDirectoryPath) *resolved {
+	packageName, rest := ParsePackageName(moduleName)
+	packageDirectory, err := r.resolver.pnpApi.ResolveToUnqualified(packageName, issuer.AsString())
+	if err != nil {
+		if r.tracer != nil {
+			r.tracer.write(err.Message, err.Args...)
+		}
+		return nil
+	}
+	if packageDirectory == "" {
+		return nil
+	}
+	packageDirectoryPath := tspath.RootedDirectoryPathFromAbsolute(packageDirectory)
+	return r.loadModuleFromSpecificNodeModulesDirectoryImpl(ext, resolutionCandidateFromDirectoryPath(packageDirectoryPath, rest), rest, packageDirectoryPath)
+}
+
 func (r *resolutionState) loadModuleFromSpecificNodeModulesDirectory(ext extensions, moduleName string, nodeModulesDirectory tspath.RootedDirectoryPath) *resolved {
 	// Strip any trailing directory separator so that imports like `pkg/` and `pkg`
 	// produce identical `candidate` and `packageDirectory` strings. Otherwise the
@@ -1273,11 +1318,10 @@ func (r *resolutionState) loadModuleFromSpecificNodeModulesDirectory(ext extensi
 	// check to fail and skip loading the package's `main`/`types` entry.
 	// https://github.com/microsoft/TypeScript/tsc/issues/3526
 	candidate := resolutionCandidateFromDirectoryPath(nodeModulesDirectory, moduleName)
-	candidateDirectory := candidate.AsDirectoryPath()
 	packageName, rest := ParsePackageName(moduleName)
 	var packageDirectory tspath.RootedDirectoryPath
 	if packageName == "" {
-		packageDirectory = candidateDirectory
+		packageDirectory = candidate.AsDirectoryPath()
 	} else {
 		packageDirectory = nodeModulesDirectory.ResolveDirectory(pathForDynamicResolution(nodeModulesDirectory, packageName, true))
 	}
@@ -1289,6 +1333,11 @@ func (r *resolutionState) loadModuleFromSpecificNodeModulesDirectory(ext extensi
 		return continueSearching()
 	}
 
+	return r.loadModuleFromSpecificNodeModulesDirectoryImpl(ext, candidate, rest, packageDirectory)
+}
+
+func (r *resolutionState) loadModuleFromSpecificNodeModulesDirectoryImpl(ext extensions, candidate resolutionCandidate, rest string, packageDirectory tspath.RootedDirectoryPath) *resolved {
+	candidateDirectory := candidate.AsDirectoryPath()
 	var rootPackageInfo *packagejson.InfoCacheEntry
 	// First look for a nested package.json, as in `node_modules/foo/bar/package.json`
 	packageInfo := r.getPackageJsonInfo(r.packageDirectory(candidateDirectory))
@@ -1368,7 +1417,7 @@ func (r *resolutionState) loadModuleFromSpecificNodeModulesDirectory(ext extensi
 }
 
 func (r *resolutionState) createResolvedModuleHandlingSymlink(resolved *resolved) *ResolvedModule {
-	isExternalLibraryImport := resolved != nil && resolved.path.ContainsLowercaseDirectorySequence("/node_modules/")
+	isExternalLibraryImport := r.isExternalLibraryImport(resolved)
 	if r.compilerOptions.PreserveSymlinks != core.TSTrue &&
 		isExternalLibraryImport &&
 		resolved.originalPath == "" &&
@@ -1414,7 +1463,7 @@ func (r *resolutionState) createResolvedTypeReferenceDirective(resolved *resolve
 		resolvedTypeReferenceDirective.ResolvedFileName = resolved.path
 		resolvedTypeReferenceDirective.Primary = primary
 		resolvedTypeReferenceDirective.PackageId = resolved.packageId
-		resolvedTypeReferenceDirective.IsExternalLibraryImport = resolved.path.ContainsLowercaseDirectorySequence("/node_modules/")
+		resolvedTypeReferenceDirective.IsExternalLibraryImport = r.isExternalLibraryImport(resolved)
 
 		if r.compilerOptions.PreserveSymlinks != core.TSTrue {
 			originalPath, resolvedFileName := r.getOriginalAndResolvedFileName(resolved.path)
@@ -2093,8 +2142,26 @@ func (r *resolutionState) readPackageJsonPeerDependencies(packageJsonInfo *packa
 	names := slices.AppendSeq(make([]string, 0, len(peerDependencies.Value)), maps.Keys(peerDependencies.Value))
 	slices.Sort(names)
 	builder := strings.Builder{}
+	pnpApi := r.resolver.pnpApi
 	for _, name := range names {
-		peerPackageJson := r.getPackageJsonInfo(r.packageDirectory(nodeModules.ResolveDirectory(pathForDynamicResolution(nodeModules, name, true))))
+		var peerDependencyDirectory tspath.RootedDirectoryPath
+		if pnpApi != nil && !pnpApi.IsPathIgnored(packageDirectory.AsString()) {
+			peerDependencyPath, err := pnpApi.ResolveToUnqualified(name, packageDirectory.AsString())
+			if err != nil {
+				if r.tracer != nil {
+					r.tracer.write(err.Message, err.Args...)
+				}
+				continue
+			}
+			if peerDependencyPath != "" {
+				peerDependencyDirectory = tspath.RootedDirectoryPathFromAbsolute(peerDependencyPath)
+			}
+		}
+		if peerDependencyDirectory == "" {
+			peerDependencyDirectory = nodeModules.ResolveDirectory(pathForDynamicResolution(nodeModules, name, true))
+		}
+
+		peerPackageJson := r.getPackageJsonInfo(r.packageDirectory(peerDependencyDirectory))
 		if peerPackageJson.Exists() {
 			version := peerPackageJson.Contents.Version.Value
 			builder.WriteString("+")
@@ -2159,6 +2226,16 @@ func (r *resolutionState) conditionMatches(condition string) bool {
 		return false // only apply versioned types conditions if the types condition is applied
 	}
 	return IsApplicableVersionedTypesKey(condition)
+}
+
+func (r *resolutionState) isExternalLibraryImport(resolved *resolved) bool {
+	if resolved == nil {
+		return false
+	}
+	if resolved.path.ContainsLowercaseDirectorySequence("/node_modules/") {
+		return true
+	}
+	return r.resolver.pnpApi != nil && r.resolver.pnpApi.IsInPnpModule(resolved.path.AsString(), r.containingDirectory.AsString())
 }
 
 func (r *resolutionState) getTraceFunc() func(m *diagnostics.Message, args ...any) {
@@ -2330,6 +2407,7 @@ func extensionIsOk(extensions extensions, extension string) bool {
 type fileSystemResolutionHost struct {
 	fs               vfs.FS
 	currentDirectory tspath.RootedDirectoryPath
+	pnpApi           *pnp.PnpApi
 }
 
 func (h *fileSystemResolutionHost) FS() vfs.FS {
@@ -2340,15 +2418,19 @@ func (h *fileSystemResolutionHost) GetCurrentDirectory() tspath.RootedDirectoryP
 	return h.currentDirectory
 }
 
-func ResolveConfig(moduleName string, containingFile tspath.RootedFilePath, fs vfs.FS) *ResolvedModule {
+func (h *fileSystemResolutionHost) PnpApi() *pnp.PnpApi {
+	return h.pnpApi
+}
+
+func ResolveConfig(moduleName string, containingFile tspath.RootedFilePath, fs vfs.FS, pnpApi *pnp.PnpApi) *ResolvedModule {
 	resolver := NewResolver(ResolverOptions{
-		Host:            &fileSystemResolutionHost{fs: fs, currentDirectory: containingFile.Directory()},
+		Host:            &fileSystemResolutionHost{fs: fs, currentDirectory: containingFile.Directory(), pnpApi: pnpApi},
 		CompilerOptions: &core.CompilerOptions{ModuleResolution: core.ModuleResolutionKindNodeNext},
 	})
 	return resolver.resolveConfig(moduleName, containingFile)
 }
 
-func GetAutomaticTypeDirectiveNames(options *core.CompilerOptions, baseDirectory tspath.RootedDirectoryPath, fs vfs.FS) []string {
+func GetAutomaticTypeDirectiveNames(options *core.CompilerOptions, baseDirectory tspath.RootedDirectoryPath, fs vfs.FS, pnpApi *pnp.PnpApi) []string {
 	if !options.UsesWildcardTypes() {
 		if options.Types != nil {
 			return options.Types
@@ -2359,6 +2441,9 @@ func GetAutomaticTypeDirectiveNames(options *core.CompilerOptions, baseDirectory
 	// Walk the primary type lookup locations
 	var wildcardMatches []string
 	typeRoots, _ := options.GetEffectiveTypeRoots(baseDirectory)
+	if pnpApi != nil {
+		typeRoots, _ = pnpApi.AppendPnpTypeRoots(typeRoots, baseDirectory, options, false)
+	}
 	for _, root := range typeRoots {
 		if fs.DirectoryExists(root) {
 			for _, typeDirectivePath := range fs.GetAccessibleEntries(root).Directories {

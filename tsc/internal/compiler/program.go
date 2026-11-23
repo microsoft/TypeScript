@@ -25,6 +25,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/outputpaths"
 	"github.com/microsoft/TypeScript/tsc/internal/packagejson"
 	"github.com/microsoft/TypeScript/tsc/internal/parser"
+	"github.com/microsoft/TypeScript/tsc/internal/pnp"
 	"github.com/microsoft/TypeScript/tsc/internal/printer"
 	"github.com/microsoft/TypeScript/tsc/internal/scanner"
 	"github.com/microsoft/TypeScript/tsc/internal/sourcemap"
@@ -160,6 +161,11 @@ func (p *Program) BaseDirectory() tspath.RootedDirectoryPath {
 
 func (p *Program) GetCurrentDirectory() tspath.RootedDirectoryPath {
 	return p.BaseDirectory()
+}
+
+// PnpApi implements checker.Program.
+func (p *Program) PnpApi() *pnp.PnpApi {
+	return p.Host().PnpApi()
 }
 
 func (p *Program) ContentMapperProject() contentmapper.Project {

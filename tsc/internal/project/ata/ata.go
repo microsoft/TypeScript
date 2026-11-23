@@ -12,6 +12,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/json"
 	"github.com/microsoft/TypeScript/tsc/internal/module"
+	"github.com/microsoft/TypeScript/tsc/internal/pnp"
 	"github.com/microsoft/TypeScript/tsc/internal/project/logging"
 	"github.com/microsoft/TypeScript/tsc/internal/semver"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
@@ -71,6 +72,11 @@ func (h *resolutionHost) FS() vfs.FS {
 
 func (h *resolutionHost) GetCurrentDirectory() tspath.RootedDirectoryPath {
 	return h.currentDirectory
+}
+
+// PnpApi returns nil: typings are installed into the global cache, which is never a PnP project.
+func (h *resolutionHost) PnpApi() *pnp.PnpApi {
+	return nil
 }
 
 func NewTypingsInstaller(options *TypingsInstallerOptions, fs vfs.FS, npmExecutor NpmExecutor) *TypingsInstaller {

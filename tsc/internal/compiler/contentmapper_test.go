@@ -67,7 +67,7 @@ func newContentMapperProgramWithOutputExtensions(t *testing.T, contentMapperProj
 	config.ParsedConfig.ContentMappers = []*contentmapper.Mapper{{Package: "vue", Extensions: []string{".vue"}, OutputExtensions: outputExtensions, Name: "vue-mapper", Version: "1.0.0"}}
 	program, err := compiler.NewProgram(t.Context(), compiler.ProgramOptions{
 		Config: config,
-		Host:   compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, contentMapperProject),
+		Host:   compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil, contentMapperProject),
 		// Load files on the calling goroutine for deterministic diagnostics ordering.
 		SingleThreaded: core.TSTrue,
 	})
@@ -122,7 +122,7 @@ func TestContentMapperSymlinkedPackage(t *testing.T) {
 			}
 			program, err := compiler.NewProgram(t.Context(), compiler.ProgramOptions{
 				Config: config,
-				Host: compiler.NewCompilerHost(fs, "/", nil, nil, fakeContentMapperHost{
+				Host: compiler.NewCompilerHost(fs, "/", nil, nil, nil, fakeContentMapperHost{
 					transform: func(fileName, content string) (contentmapper.Result, error) {
 						return contentmapper.Result{Text: "export const value = 1;", VirtualExtension: ".ts", Mappings: spanmap.New(nil)}, nil
 					},
@@ -169,7 +169,7 @@ func TestContentMapperRelativeSymlinkedDirectory(t *testing.T) {
 			assert.Assert(t, slices.Contains(config.FileNames(), "/project/src/linked/data.vue"))
 			program, err := compiler.NewProgram(t.Context(), compiler.ProgramOptions{
 				Config: config,
-				Host: compiler.NewCompilerHost(fs, "/", nil, nil, fakeContentMapperHost{
+				Host: compiler.NewCompilerHost(fs, "/", nil, nil, nil, fakeContentMapperHost{
 					transform: func(fileName, content string) (contentmapper.Result, error) {
 						return contentmapper.Result{Text: "export const value = 1;", VirtualExtension: ".ts", Mappings: spanmap.New(nil)}, nil
 					},
@@ -229,7 +229,7 @@ func TestContentMapperDynamicRewriteValidation(t *testing.T) {
 			config.ParsedConfig.ContentMappers = []*contentmapper.Mapper{mapper}
 			program, err := compiler.NewProgram(t.Context(), compiler.ProgramOptions{
 				Config:         config,
-				Host:           compiler.NewCompilerHost(fs, "/", nil, nil, nil),
+				Host:           compiler.NewCompilerHost(fs, "/", nil, nil, nil, nil),
 				SingleThreaded: core.TSTrue,
 			})
 			assert.NilError(t, err)
@@ -279,7 +279,7 @@ func TestContentMapperRuntimeRewrites(t *testing.T) {
 				}
 				program, err := compiler.NewProgram(t.Context(), compiler.ProgramOptions{
 					Config: config,
-					Host: compiler.NewCompilerHost(fs, "/", nil, nil, fakeContentMapperHost{
+					Host: compiler.NewCompilerHost(fs, "/", nil, nil, nil, fakeContentMapperHost{
 						transform: func(fileName, content string) (contentmapper.Result, error) {
 							return contentmapper.Result{Text: content, VirtualExtension: ".ts", Mappings: spanmap.New(nil)}, nil
 						},
@@ -319,7 +319,7 @@ func TestContentMapperOverlappingExtensionDeclarationRoundTrip(t *testing.T) {
 		RootDir: "/project", OutDir: "/dist",
 	}, []tspath.RootedFilePath{"/project/special/widget.part.toml", "/project/other/widget.part.toml"}, nil, "/project", fs.CaseSensitivity())
 	config.ParsedConfig.ContentMappers = mappers
-	host := compiler.NewCompilerHost(fs, "/", nil, nil, fakeContentMapperHost{
+	host := compiler.NewCompilerHost(fs, "/", nil, nil, nil, fakeContentMapperHost{
 		transform: func(fileName, content string) (contentmapper.Result, error) {
 			return contentmapper.Result{Text: content, VirtualExtension: ".ts", Mappings: spanmap.New(nil)}, nil
 		},
@@ -386,7 +386,7 @@ func TestContentMapperExcludedResolution(t *testing.T) {
 			}}
 			program, err := compiler.NewProgram(t.Context(), compiler.ProgramOptions{
 				Config: config,
-				Host: compiler.NewCompilerHost(fs, "/", nil, nil, fakeContentMapperHost{
+				Host: compiler.NewCompilerHost(fs, "/", nil, nil, nil, fakeContentMapperHost{
 					transform: func(fileName, content string) (contentmapper.Result, error) {
 						t.Errorf("unexpected transform of %s", fileName)
 						return contentmapper.Result{}, errors.New("unexpected transform")
@@ -459,7 +459,7 @@ func TestContentMapperLiteralRewriteValidation(t *testing.T) {
 					}}
 					program, err := compiler.NewProgram(t.Context(), compiler.ProgramOptions{
 						Config: config,
-						Host: compiler.NewCompilerHost(fs, "/", nil, nil, fakeContentMapperHost{
+						Host: compiler.NewCompilerHost(fs, "/", nil, nil, nil, fakeContentMapperHost{
 							transform: func(fileName, content string) (contentmapper.Result, error) {
 								return contentmapper.Result{Text: content, VirtualExtension: ".ts", Mappings: spanmap.New(nil)}, nil
 							},
@@ -764,7 +764,7 @@ func TestContentMapperMissingSourceFile(t *testing.T) {
 	config.ParsedConfig.ContentMappers = []*contentmapper.Mapper{{Package: "vue", Extensions: []string{".vue"}, Name: "vue-mapper", Version: "1.0.0"}}
 	program, err := compiler.NewProgram(t.Context(), compiler.ProgramOptions{
 		Config: config,
-		Host:   missingContentMappedCompilerHost{CompilerHost: compiler.NewCompilerHost(fs, "/", nil, nil, nil)},
+		Host:   missingContentMappedCompilerHost{CompilerHost: compiler.NewCompilerHost(fs, "/", nil, nil, nil, nil)},
 	})
 	assert.NilError(t, err)
 	assert.Assert(t, program.GetSourceFile("/src/Component.vue") == nil)

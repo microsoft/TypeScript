@@ -21,6 +21,7 @@ const (
 	FileChangeKindWatchCreate
 	FileChangeKindWatchChange
 	FileChangeKindWatchDelete
+	FileChangeKindPnpInstall
 )
 
 func (k FileChangeKind) IsWatchKind() bool {

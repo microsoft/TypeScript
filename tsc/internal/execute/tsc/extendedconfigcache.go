@@ -4,6 +4,7 @@ import (
 	"sync"
 
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
+	"github.com/microsoft/TypeScript/tsc/internal/pnp"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
@@ -25,11 +26,11 @@ type extendedConfigCacheEntry struct {
 var _ tsoptions.ExtendedConfigCache = (*ExtendedConfigCache)(nil)
 
 // GetExtendedConfig implements tsoptions.ExtendedConfigCache.
-func (e *ExtendedConfigCache) GetExtendedConfig(fileName tspath.RootedFilePath, path tspath.PathKey, resolutionStack []tspath.PathKey, fs vfs.FS) *tsoptions.ExtendedConfigCacheEntry {
+func (e *ExtendedConfigCache) GetExtendedConfig(fileName tspath.RootedFilePath, path tspath.PathKey, resolutionStack []tspath.PathKey, fs vfs.FS, pnpApi *pnp.PnpApi) *tsoptions.ExtendedConfigCacheEntry {
 	entry, loaded := e.loadOrStoreNewLockedEntry(path)
 	defer entry.mu.Unlock()
 	if !loaded {
-		entry.ExtendedConfigCacheEntry = tsoptions.ParseExtendedConfig(fileName, path, resolutionStack, fs, e)
+		entry.ExtendedConfigCacheEntry = tsoptions.ParseExtendedConfig(fileName, path, resolutionStack, fs, pnpApi, e)
 	}
 	return entry.ExtendedConfigCacheEntry
 }

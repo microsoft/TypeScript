@@ -1,0 +1,60 @@
+//// [tests/cases/compiler/pnpTypeRootsResolution.ts] ////
+
+=== /src/index.ts ===
+// Test that TypeScript can resolve @types packages through PnP
+import type { Request, Response } from 'server-lib';
+>Request : Symbol(Request, Decl(index.ts, 1, 13))
+>Response : Symbol(Response, Decl(index.ts, 1, 22))
+
+import { createServer } from 'server-lib';
+>createServer : Symbol(createServer, Decl(index.ts, 2, 8))
+
+export function handleRequest(req: Request, res: Response): void {
+>handleRequest : Symbol(handleRequest, Decl(index.ts, 2, 42))
+>req : Symbol(req, Decl(index.ts, 4, 30))
+>Request : Symbol(Request, Decl(index.ts, 1, 13))
+>res : Symbol(res, Decl(index.ts, 4, 43))
+>Response : Symbol(Response, Decl(index.ts, 1, 22))
+
+  res.json({ data: 'Hello, world!' });
+>res.json : Symbol(Response.json, Decl(index.d.ts, 6, 44))
+>res : Symbol(res, Decl(index.ts, 4, 43))
+>json : Symbol(Response.json, Decl(index.d.ts, 6, 44))
+>data : Symbol(data, Decl(index.ts, 5, 12))
+}
+
+export const server = createServer();
+>server : Symbol(server, Decl(index.ts, 8, 12))
+>createServer : Symbol(createServer, Decl(index.ts, 2, 8))
+
+=== /.yarn/cache/@types-server-lib-npm-2.0.0-mnop3456/node_modules/@types/server-lib/index.d.ts ===
+export interface Request {
+>Request : Symbol(Request, Decl(index.d.ts, 0, 0))
+
+  params: Record<string, unknown>;
+>params : Symbol(Request.params, Decl(index.d.ts, 0, 26))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+  query: Record<string, unknown>;
+>query : Symbol(Request.query, Decl(index.d.ts, 1, 34))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+}
+
+export interface Response {
+>Response : Symbol(Response, Decl(index.d.ts, 3, 1))
+
+  send(body: Record<string, unknown>): void;
+>send : Symbol(Response.send, Decl(index.d.ts, 5, 27))
+>body : Symbol(body, Decl(index.d.ts, 6, 7))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+  json(body: Record<string, unknown>): void;
+>json : Symbol(Response.json, Decl(index.d.ts, 6, 44))
+>body : Symbol(body, Decl(index.d.ts, 7, 7))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+}
+
+export declare function createServer(): Record<string, unknown>;
+>createServer : Symbol(createServer, Decl(index.d.ts, 8, 1))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+

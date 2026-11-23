@@ -11,6 +11,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/packagejson"
+	"github.com/microsoft/TypeScript/tsc/internal/pnp"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
@@ -19,8 +20,9 @@ import (
 )
 
 type resolutionTestInputs struct {
-	fs  vfs.FS
-	cwd tspath.RootedDirectoryPath
+	fs     vfs.FS
+	cwd    tspath.RootedDirectoryPath
+	pnpApi *pnp.PnpApi
 }
 
 func (i *resolutionTestInputs) FS() vfs.FS {
@@ -29,6 +31,10 @@ func (i *resolutionTestInputs) FS() vfs.FS {
 
 func (i *resolutionTestInputs) GetCurrentDirectory() tspath.RootedDirectoryPath {
 	return i.cwd
+}
+
+func (i *resolutionTestInputs) PnpApi() *pnp.PnpApi {
+	return i.pnpApi
 }
 
 type caseInsensitiveViewFS struct {
@@ -1367,6 +1373,74 @@ func TestResolveModuleNameExportTargetWithTrailingSlashDoesNotResolveAsFile(t *t
 	resolved, _, _ := resolver.ResolveModuleName("pkg", tspath.RootedFilePath("/repo/src/file.ts"), core.ModuleKindESNext, nil)
 	if resolved.IsResolved() {
 		t.Fatalf("expected directory-only export target to remain unresolved, got %q", resolved.ResolvedFileName)
+	}
+}
+
+func TestResolvePnpLodashSubmodulesHaveDistinctPackageIds(t *testing.T) {
+	t.Parallel()
+
+	fs := vfstest.FromMap(map[string]string{
+		"/repo/.pnp.cjs": "",
+		"/repo/.pnp.data.json": `{
+			"dependencyTreeRoots": [{"name": "root", "reference": "workspace:."}],
+			"enableTopLevelFallback": false,
+			"fallbackPool": [],
+			"fallbackExclusionList": [],
+			"packageRegistryData": [
+				[null, [[null, {
+					"packageLocation": "./",
+					"packageDependencies": [["lodash", "npm:4.17.21"]],
+					"linkType": "SOFT"
+				}]]],
+				["root", [["workspace:.", {
+					"packageLocation": "./",
+					"packageDependencies": [["lodash", "npm:4.17.21"]],
+					"linkType": "SOFT"
+				}]]],
+				["lodash", [["npm:4.17.21", {
+					"packageLocation": "./.yarn/cache/lodash/node_modules/lodash/",
+					"packageDependencies": [],
+					"linkType": "HARD"
+				}]]]
+			]
+		}`,
+		"/repo/.yarn/cache/lodash/node_modules/lodash/package.json": `{"name":"lodash","version":"4.17.21"}`,
+		"/repo/.yarn/cache/lodash/node_modules/lodash/get.d.ts":     "declare function get(): unknown; export = get;",
+		"/repo/.yarn/cache/lodash/node_modules/lodash/set.d.ts":     "declare function set(): unknown; export = set;",
+		"/repo/src/file.ts": "",
+	}, tspath.CaseSensitive)
+	pnpApi := pnp.InitPnpApi(fs, "/repo")
+	if pnpApi == nil {
+		t.Fatal("failed to initialize PnP API")
+	}
+
+	host := &resolutionTestInputs{fs: fs, cwd: "/repo", pnpApi: pnpApi}
+	opts := &core.CompilerOptions{
+		ModuleResolution: core.ModuleResolutionKindBundler,
+		Module:           core.ModuleKindESNext,
+		Target:           core.ScriptTargetESNext,
+	}
+	resolver := NewResolver(ResolverOptions{Host: host, CompilerOptions: opts})
+
+	get, _, _ := resolver.ResolveModuleName("lodash/get", "/repo/src/file.ts", core.ModuleKindESNext, nil)
+	set, _, _ := resolver.ResolveModuleName("lodash/set", "/repo/src/file.ts", core.ModuleKindESNext, nil)
+	if !get.IsResolved() || !set.IsResolved() {
+		t.Fatalf("expected both lodash submodules to resolve, got get=%q set=%q", get.ResolvedFileName, set.ResolvedFileName)
+	}
+	if get.PackageId == set.PackageId {
+		t.Fatalf(
+			"lodash/get resolved to %q and lodash/set resolved to %q, but both received package ID %q",
+			get.ResolvedFileName,
+			set.ResolvedFileName,
+			get.PackageId.String(),
+		)
+	}
+	if get.PackageId.SubModuleName != "get.d.ts" || set.PackageId.SubModuleName != "set.d.ts" {
+		t.Fatalf(
+			"expected submodule package IDs get.d.ts and set.d.ts, got %q and %q",
+			get.PackageId.SubModuleName,
+			set.PackageId.SubModuleName,
+		)
 	}
 }
 

@@ -8,6 +8,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/module"
 	"github.com/microsoft/TypeScript/tsc/internal/packagejson"
+	"github.com/microsoft/TypeScript/tsc/internal/pnp"
 	"github.com/microsoft/TypeScript/tsc/internal/symlinks"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
@@ -106,6 +107,10 @@ type mockModuleSpecifierGenerationHost struct {
 
 func (h *mockModuleSpecifierGenerationHost) BaseDirectory() tspath.RootedDirectoryPath {
 	return h.currentDir
+}
+
+func (h *mockModuleSpecifierGenerationHost) PnpApi() *pnp.PnpApi {
+	return nil
 }
 
 func (h *mockModuleSpecifierGenerationHost) CaseSensitivity() tspath.CaseSensitivity {

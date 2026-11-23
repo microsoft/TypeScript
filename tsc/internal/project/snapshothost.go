@@ -11,6 +11,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
+	"github.com/microsoft/TypeScript/tsc/internal/pnp"
 	"github.com/microsoft/TypeScript/tsc/internal/project/logging"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
@@ -21,6 +22,7 @@ type SnapshotHost struct {
 	options         *SessionOptions
 	caseSensitivity tspath.CaseSensitivity
 	fs              vfs.FS
+	pnpApi          *pnp.PnpApi
 
 	parseCache              *ParseCache
 	contentMappedParseCache *ContentMappedParseCache
@@ -88,6 +90,7 @@ func NewSnapshotHost(init *SessionInit) *SnapshotHost {
 		options:                 init.Options,
 		caseSensitivity:         init.FS.CaseSensitivity(),
 		fs:                      init.FS,
+		pnpApi:                  init.PnpApi,
 		parseCache:              parseCache,
 		contentMappedParseCache: contentMappedParseCache,
 		extendedConfigCache:     NewExtendedConfigCache(),
@@ -178,6 +181,7 @@ func (s *SnapshotHost) newRootSnapshot(id uint64, relativePatternSupport bool) *
 				}
 			},
 		),
+		s.pnpApi,
 	)
 }
 
@@ -187,6 +191,10 @@ func (s *SnapshotHost) FS() vfs.FS {
 
 func (s *SnapshotHost) GetCurrentDirectory() tspath.RootedDirectoryPath {
 	return s.options.CurrentDirectory
+}
+
+func (s *SnapshotHost) PnpApi() *pnp.PnpApi {
+	return s.pnpApi
 }
 
 func (s *SnapshotHost) DefaultLibraryPath() tspath.RootedDirectoryPath {

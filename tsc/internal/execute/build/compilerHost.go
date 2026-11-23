@@ -5,6 +5,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/compiler"
 	"github.com/microsoft/TypeScript/tsc/internal/contentmapper"
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
+	"github.com/microsoft/TypeScript/tsc/internal/pnp"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
@@ -24,6 +25,10 @@ func (h *compilerHost) FS() vfs.FS {
 
 func (h *compilerHost) DefaultLibraryPath() tspath.RootedDirectoryPath {
 	return h.host.DefaultLibraryPath()
+}
+
+func (h *compilerHost) PnpApi() *pnp.PnpApi {
+	return h.host.PnpApi()
 }
 
 func (h *compilerHost) Trace(msg *diagnostics.Message, args ...any) {

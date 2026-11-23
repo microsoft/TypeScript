@@ -6,6 +6,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/internal/parser"
+	"github.com/microsoft/TypeScript/tsc/internal/pnp"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
@@ -27,6 +28,7 @@ type CompilerHost interface {
 	// command line has no content mappers. The project owns transform identity and lifecycle state.
 	ContentMapperProject() contentmapper.Project
 	GetResolvedProjectReference(fileName tspath.RootedFilePath, path tspath.PathKey) *tsoptions.ParsedCommandLine
+	PnpApi() *pnp.PnpApi
 }
 
 var _ CompilerHost = (*compilerHost)(nil)
@@ -35,6 +37,7 @@ type compilerHost struct {
 	fs                   vfs.FS
 	defaultLibraryPath   tspath.RootedDirectoryPath
 	extendedConfigCache  tsoptions.ExtendedConfigCache
+	pnpApi               *pnp.PnpApi
 	trace                func(msg *diagnostics.Message, args ...any)
 	contentMapperProject contentmapper.Project
 }
@@ -43,27 +46,31 @@ func NewCachedFSCompilerHost(
 	fs vfs.FS,
 	defaultLibraryPath tspath.RootedDirectoryPath,
 	extendedConfigCache tsoptions.ExtendedConfigCache,
+	pnpApi *pnp.PnpApi,
 	trace func(msg *diagnostics.Message, args ...any),
 	contentMapperProject contentmapper.Project,
 ) CompilerHost {
-	return NewCompilerHost(cachedvfs.From(fs), defaultLibraryPath, extendedConfigCache, trace, contentMapperProject)
+	return NewCompilerHost(cachedvfs.From(fs), defaultLibraryPath, extendedConfigCache, pnpApi, trace, contentMapperProject)
 }
 
 func NewCompilerHost(
 	fs vfs.FS,
 	defaultLibraryPath tspath.RootedDirectoryPath,
 	extendedConfigCache tsoptions.ExtendedConfigCache,
+	pnpApi *pnp.PnpApi,
 	trace func(msg *diagnostics.Message, args ...any),
 	contentMapperProject contentmapper.Project,
 ) CompilerHost {
 	if trace == nil {
 		trace = func(msg *diagnostics.Message, args ...any) {}
 	}
+
 	return &compilerHost{
 		fs:                   fs,
 		defaultLibraryPath:   defaultLibraryPath,
 		extendedConfigCache:  extendedConfigCache,
 		trace:                trace,
+		pnpApi:               pnpApi,
 		contentMapperProject: contentMapperProject,
 	}
 }
@@ -74,6 +81,10 @@ func (h *compilerHost) FS() vfs.FS {
 
 func (h *compilerHost) DefaultLibraryPath() tspath.RootedDirectoryPath {
 	return h.defaultLibraryPath
+}
+
+func (h *compilerHost) PnpApi() *pnp.PnpApi {
+	return h.pnpApi
 }
 
 func (h *compilerHost) Trace(msg *diagnostics.Message, args ...any) {
@@ -108,6 +119,6 @@ func (h *compilerHost) ContentMapperProject() contentmapper.Project {
 }
 
 func (h *compilerHost) GetResolvedProjectReference(fileName tspath.RootedFilePath, path tspath.PathKey) *tsoptions.ParsedCommandLine {
-	commandLine, _ := tsoptions.GetParsedCommandLineOfConfigFilePath(fileName, path, nil, nil /*optionsRaw*/, tsoptions.NewDefaultParseConfigHost(h.fs), h.extendedConfigCache)
+	commandLine, _ := tsoptions.GetParsedCommandLineOfConfigFilePath(fileName, path, nil, nil /*optionsRaw*/, tsoptions.NewDefaultParseConfigHost(h.fs, h.pnpApi), h.extendedConfigCache)
 	return commandLine
 }

@@ -9,6 +9,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/compiler"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/autoimport"
 	"github.com/microsoft/TypeScript/tsc/internal/packagejson"
+	"github.com/microsoft/TypeScript/tsc/internal/pnp"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 )
@@ -62,6 +63,7 @@ type autoImportRegistryCloneHost struct {
 	projectCollection *ProjectCollection
 	parseCache        *ParseCache
 	fs                *sourceFS
+	pnpApi            *pnp.PnpApi
 
 	filesMu sync.Mutex
 	files   []ParseCacheKey
@@ -73,17 +75,24 @@ func newAutoImportRegistryCloneHost(
 	projectCollection *ProjectCollection,
 	parseCache *ParseCache,
 	snapshotFSBuilder *snapshotFSBuilder,
+	pnpApi *pnp.PnpApi,
 ) *autoImportRegistryCloneHost {
 	return &autoImportRegistryCloneHost{
 		projectCollection: projectCollection,
 		parseCache:        parseCache,
 		fs:                newSourceFS(false, &autoImportBuilderFS{snapshotFSBuilder: snapshotFSBuilder}),
+		pnpApi:            pnpApi,
 	}
 }
 
 // FS implements autoimport.RegistryCloneHost.
 func (a *autoImportRegistryCloneHost) FS() vfs.FS {
 	return a.fs
+}
+
+// PnpApi implements autoimport.RegistryCloneHost.
+func (a *autoImportRegistryCloneHost) PnpApi() *pnp.PnpApi {
+	return a.pnpApi
 }
 
 // GetDefaultProject implements autoimport.RegistryCloneHost.

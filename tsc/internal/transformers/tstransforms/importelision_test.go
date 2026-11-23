@@ -9,6 +9,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/module"
 	"github.com/microsoft/TypeScript/tsc/internal/packagejson"
+	"github.com/microsoft/TypeScript/tsc/internal/pnp"
 	"github.com/microsoft/TypeScript/tsc/internal/printer"
 	"github.com/microsoft/TypeScript/tsc/internal/symlinks"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/emittestutil"
@@ -68,6 +69,10 @@ func (p *fakeProgram) FileExists(path tspath.RootedFilePath) bool {
 
 func (p *fakeProgram) BaseDirectory() tspath.RootedDirectoryPath {
 	return ""
+}
+
+func (p *fakeProgram) PnpApi() *pnp.PnpApi {
+	return nil
 }
 
 func (p *fakeProgram) GetGlobalTypingsCacheLocation() tspath.RootedDirectoryPath {

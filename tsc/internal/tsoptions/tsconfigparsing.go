@@ -18,6 +18,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/module"
 	"github.com/microsoft/TypeScript/tsc/internal/nativepath"
 	"github.com/microsoft/TypeScript/tsc/internal/parser"
+	"github.com/microsoft/TypeScript/tsc/internal/pnp"
 	"github.com/microsoft/TypeScript/tsc/internal/scanner"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
@@ -70,7 +71,7 @@ func (c *configFileSpecs) getMatchedFileSpec(filePath tspath.PathKey) tspath.Fil
 }
 
 type ExtendedConfigCache interface {
-	GetExtendedConfig(fileName tspath.RootedFilePath, path tspath.PathKey, resolutionStack []tspath.PathKey, fs vfs.FS) *ExtendedConfigCacheEntry
+	GetExtendedConfig(fileName tspath.RootedFilePath, path tspath.PathKey, resolutionStack []tspath.PathKey, fs vfs.FS, pnpApi *pnp.PnpApi) *ExtendedConfigCacheEntry
 }
 
 type ExtendedConfigCacheEntry struct {
@@ -110,6 +111,7 @@ func (o *parsedCompilerOptions) ParseOption(key string, value any) {
 func parseOwnConfigOfJsonSourceFile(
 	sourceFile *ast.SourceFile,
 	fs vfs.FS,
+	pnpApi *pnp.PnpApi,
 	basePath tspath.RootedDirectoryPath,
 	configFileName tspath.RootedFilePath,
 ) (*parsedTsconfig, []*ast.Diagnostic) {
@@ -171,7 +173,7 @@ func parseOwnConfigOfJsonSourceFile(
 			}
 		} else if parentOption == tsconfigRootOptionsMap {
 			if option == extendsOptionDeclaration {
-				configPath, err := getExtendsConfigPathOrArray(value, fs, basePath, configFileName, propertyAssignment, propertyAssignment.Initializer, sourceFile)
+				configPath, err := getExtendsConfigPathOrArray(value, fs, pnpApi, basePath, configFileName, propertyAssignment, propertyAssignment.Initializer, sourceFile)
 				extendedConfigPaths = configPath
 				propertySetErrors = append(propertySetErrors, err...)
 			} else if option == nil {
@@ -438,6 +440,7 @@ func convertJsonOption(
 func getExtendsConfigPathOrArray(
 	value CompilerOptionsValue,
 	fs vfs.FS,
+	pnpApi *pnp.PnpApi,
 	basePath tspath.RootedDirectoryPath,
 	configFileName tspath.RootedFilePath,
 	propertyAssignment *ast.PropertyAssignment,
@@ -454,7 +457,7 @@ func getExtendsConfigPathOrArray(
 		return extendedConfigPathArray, errors
 	}
 	if reflect.TypeOf(value).Kind() == reflect.String {
-		val, err := getExtendsConfigPath(value.(string), fs, newBase, valueExpression, sourceFile)
+		val, err := getExtendsConfigPath(value.(string), fs, pnpApi, newBase, valueExpression, sourceFile)
 		if val != "" {
 			extendedConfigPathArray = append(extendedConfigPathArray, val)
 		}
@@ -468,7 +471,7 @@ func getExtendsConfigPathOrArray(
 				expression = valueExpression.Elements()[index]
 			}
 			if isStringValue(fileName) {
-				val, err := getExtendsConfigPath(fileName.(string), fs, newBase, expression, sourceFile)
+				val, err := getExtendsConfigPath(fileName.(string), fs, pnpApi, newBase, expression, sourceFile)
 				if val != "" {
 					extendedConfigPathArray = append(extendedConfigPathArray, val)
 				}
@@ -487,6 +490,7 @@ func getExtendsConfigPathOrArray(
 func getExtendsConfigPath(
 	extendedConfig string,
 	fs vfs.FS,
+	pnpApi *pnp.PnpApi,
 	basePath tspath.RootedDirectoryPath,
 	valueExpression *ast.Expression,
 	sourceFile *ast.SourceFile,
@@ -513,7 +517,7 @@ func getExtendsConfigPath(
 		return extendedConfigPath, errors
 	}
 	// If the path isn't a rooted or relative path, resolve like a module
-	if resolved := module.ResolveConfig(extendedConfig, basePath.ResolveFile("tsconfig.json"), fs); resolved.IsResolved() {
+	if resolved := module.ResolveConfig(extendedConfig, basePath.ResolveFile("tsconfig.json"), fs, pnpApi); resolved.IsResolved() {
 		return resolved.ResolvedFileName, errors
 	}
 	if extendedConfig == "" {
@@ -645,15 +649,22 @@ func ParseConfigFileTextToJson(fileName tspath.RootedFilePath, path tspath.PathK
 type ParseConfigHost interface {
 	FS() vfs.FS
 	IsContentMapperPackageAllowed(packageDirectory tspath.RootedDirectoryPath) bool
+	PnpApi() *pnp.PnpApi
 }
 
 type defaultParseConfigHost struct {
-	fs vfs.FS
+	fs     vfs.FS
+	pnpApi *pnp.PnpApi
 }
 
 // NewDefaultParseConfigHost leaves external code authorization to the runExternalCode option.
-func NewDefaultParseConfigHost(fs vfs.FS) ParseConfigHost {
-	return &defaultParseConfigHost{fs: fs}
+// An optional pnpApi enables Yarn PnP resolution.
+func NewDefaultParseConfigHost(fs vfs.FS, pnpApi ...*pnp.PnpApi) ParseConfigHost {
+	host := &defaultParseConfigHost{fs: fs}
+	if len(pnpApi) > 0 {
+		host.pnpApi = pnpApi[0]
+	}
+	return host
 }
 
 func (h *defaultParseConfigHost) FS() vfs.FS {
@@ -662,6 +673,10 @@ func (h *defaultParseConfigHost) FS() vfs.FS {
 
 func (h *defaultParseConfigHost) IsContentMapperPackageAllowed(packageDirectory tspath.RootedDirectoryPath) bool {
 	return true
+}
+
+func (h *defaultParseConfigHost) PnpApi() *pnp.PnpApi {
+	return h.pnpApi
 }
 
 func ParseJsonSourceFileConfigFileContent(
@@ -885,6 +900,7 @@ func convertTypeAcquisitionFromJsonWorker(jsonOptions any, basePath tspath.Roote
 func parseOwnConfigOfJson(
 	json *collections.OrderedMap[string, any],
 	fs vfs.FS,
+	pnpApi *pnp.PnpApi,
 	basePath tspath.RootedDirectoryPath,
 	configFileName tspath.RootedFilePath,
 ) (*parsedTsconfig, []*ast.Diagnostic) {
@@ -902,7 +918,7 @@ func parseOwnConfigOfJson(
 	}
 	var extendedConfigPaths []tspath.RootedFilePath
 	if extends := json.GetOrZero("extends"); extends != nil && extends != "" {
-		extendedConfigPaths, err = getExtendsConfigPathOrArray(extends, fs, basePath, configFileName, nil, nil, nil)
+		extendedConfigPaths, err = getExtendsConfigPathOrArray(extends, fs, pnpApi, basePath, configFileName, nil, nil, nil)
 		errors = append(errors, err...)
 	}
 	parsedConfig := &parsedTsconfig{
@@ -938,6 +954,7 @@ func getExtendedConfig(
 	sourceFile *TsConfigSourceFile,
 	extendedConfigFileName tspath.RootedFilePath,
 	fs vfs.FS,
+	pnpApi *pnp.PnpApi,
 	resolutionStack []tspath.PathKey,
 	extendedConfigCache ExtendedConfigCache,
 	result *extendsResult,
@@ -951,9 +968,9 @@ func getExtendedConfig(
 	// to re-lock the same entry, resulting in a deadlock. Let parseConfig handle the
 	// circularity error via its own resolution stack check.
 	if extendedConfigCache != nil && !slices.Contains(resolutionStack, extendedConfigPath) {
-		cacheEntry = extendedConfigCache.GetExtendedConfig(extendedConfigFileName, extendedConfigPath, resolutionStack, fs)
+		cacheEntry = extendedConfigCache.GetExtendedConfig(extendedConfigFileName, extendedConfigPath, resolutionStack, fs, pnpApi)
 	} else {
-		cacheEntry = ParseExtendedConfig(extendedConfigFileName, extendedConfigPath, resolutionStack, fs, extendedConfigCache)
+		cacheEntry = ParseExtendedConfig(extendedConfigFileName, extendedConfigPath, resolutionStack, fs, pnpApi, extendedConfigCache)
 	}
 
 	if len(cacheEntry.errors) > 0 {
@@ -976,6 +993,7 @@ func ParseExtendedConfig(
 	path tspath.PathKey,
 	resolutionStack []tspath.PathKey,
 	fs vfs.FS,
+	pnpApi *pnp.PnpApi,
 	extendedConfigCache ExtendedConfigCache,
 ) *ExtendedConfigCacheEntry {
 	extendedResult, readErrors := readJsonConfigFile(fileName, path, fs.ReadFile)
@@ -994,7 +1012,7 @@ func ParseExtendedConfig(
 	}
 
 	var parseErrors []*ast.Diagnostic
-	entry.extendedConfig, parseErrors = parseConfig(nil, extendedResult, fs, fileName.Directory(), fileName, resolutionStack, extendedConfigCache)
+	entry.extendedConfig, parseErrors = parseConfig(nil, extendedResult, fs, pnpApi, fileName.Directory(), fileName, resolutionStack, extendedConfigCache)
 	entry.errors = parseErrors
 	return entry
 }
@@ -1005,6 +1023,7 @@ func parseConfig(
 	json *collections.OrderedMap[string, any],
 	sourceFile *TsConfigSourceFile,
 	fs vfs.FS,
+	pnpApi *pnp.PnpApi,
 	basePath tspath.RootedDirectoryPath,
 	configFileName tspath.RootedFilePath,
 	resolutionStack []tspath.PathKey,
@@ -1032,9 +1051,9 @@ func parseConfig(
 	var ownConfig *parsedTsconfig
 	var err []*ast.Diagnostic
 	if json != nil {
-		ownConfig, err = parseOwnConfigOfJson(json, fs, basePath, configFileName)
+		ownConfig, err = parseOwnConfigOfJson(json, fs, pnpApi, basePath, configFileName)
 	} else {
-		ownConfig, err = parseOwnConfigOfJsonSourceFile(tsconfigToSourceFile(sourceFile), fs, basePath, configFileName)
+		ownConfig, err = parseOwnConfigOfJsonSourceFile(tsconfigToSourceFile(sourceFile), fs, pnpApi, basePath, configFileName)
 	}
 	errors = append(errors, err...)
 	ownConfig.contentMapperSourceFile = tsconfigToSourceFile(sourceFile)
@@ -1047,7 +1066,7 @@ func parseConfig(
 	}
 
 	applyExtendedConfig := func(result *extendsResult, extendedConfigPath tspath.RootedFilePath) {
-		extendedConfig, extendedErrors := getExtendedConfig(sourceFile, extendedConfigPath, fs, resolutionStack, extendedConfigCache, result)
+		extendedConfig, extendedErrors := getExtendedConfig(sourceFile, extendedConfigPath, fs, pnpApi, resolutionStack, extendedConfigCache, result)
 		errors = append(errors, extendedErrors...)
 		if extendedConfig != nil && extendedConfig.options != nil {
 			extendsRaw := extendedConfig.raw
@@ -1185,6 +1204,7 @@ func parseJsonConfigFileContentWorker(
 	extendedConfigCache ExtendedConfigCache,
 ) *ParsedCommandLine {
 	fs := host.FS()
+	pnpApi := host.PnpApi()
 	debug.Assert((json == nil && sourceFile != nil) || (json != nil && sourceFile == nil))
 
 	baseDirectory := basePath
@@ -1196,7 +1216,7 @@ func parseJsonConfigFileContentWorker(
 	}
 
 	var errors []*ast.Diagnostic
-	parsedConfig, errors := parseConfig(json, sourceFile, fs, baseDirectory, configFileName, resolutionStack, extendedConfigCache)
+	parsedConfig, errors := parseConfig(json, sourceFile, fs, pnpApi, baseDirectory, configFileName, resolutionStack, extendedConfigCache)
 	mergeParsedCompilerOptions(parsedConfig.options, &parsedCompilerOptions{CompilerOptions: existingOptions}, existingOptionsRaw)
 	handleOptionConfigDirTemplateSubstitution(parsedConfig.options, basePathForFileNames)
 	rawConfig := parseJsonToStringKey(parsedConfig.raw)

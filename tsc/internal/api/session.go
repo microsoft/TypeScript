@@ -37,6 +37,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/module"
 	"github.com/microsoft/TypeScript/tsc/internal/nodebuilder"
+	"github.com/microsoft/TypeScript/tsc/internal/pnp"
 	"github.com/microsoft/TypeScript/tsc/internal/pprof"
 	"github.com/microsoft/TypeScript/tsc/internal/printer"
 	"github.com/microsoft/TypeScript/tsc/internal/project"
@@ -679,6 +680,13 @@ func (s *Session) FS() vfs.FS {
 		return s.projectSession.FS()
 	}
 	return s.snapshotHost.FS()
+}
+
+func (s *Session) PnpApi() *pnp.PnpApi {
+	if s.projectSession != nil {
+		return s.projectSession.PnpApi()
+	}
+	return s.snapshotHost.PnpApi()
 }
 
 func (s *Session) DefaultLibraryPath() tspath.RootedDirectoryPath {
@@ -2056,6 +2064,7 @@ type apiBuildSystem struct {
 func (s *apiBuildSystem) Writer() io.Writer      { return io.Discard }
 func (s *apiBuildSystem) ErrorWriter() io.Writer { return io.Discard }
 func (s *apiBuildSystem) FS() vfs.FS             { return s.session.snapshotHost.FS() }
+func (s *apiBuildSystem) PnpApi() *pnp.PnpApi    { return s.session.PnpApi() }
 func (s *apiBuildSystem) DefaultLibraryPath() tspath.RootedDirectoryPath {
 	return s.session.DefaultLibraryPath()
 }
@@ -2133,7 +2142,7 @@ func (s *Session) handleParseJsonConfigFileContent(ctx context.Context, params *
 
 	parsedCommandLine := tsoptions.ParseJsonConfigFileContent(
 		jsonValueToAny(params.JSON),
-		tsoptions.NewDefaultParseConfigHost(s.snapshotHost.FS()),
+		tsoptions.NewDefaultParseConfigHost(s.snapshotHost.FS(), s.PnpApi()),
 		basePath,
 		nil, /*existingOptions*/
 		configFileName,
@@ -2159,7 +2168,7 @@ func (s *Session) handleParseConfigFile(ctx context.Context, params *ParseConfig
 	)
 	parsedCommandLine := tsoptions.ParseJsonSourceFileConfigFileContent(
 		tsConfigSourceFile,
-		tsoptions.NewDefaultParseConfigHost(s.snapshotHost.FS()),
+		tsoptions.NewDefaultParseConfigHost(s.snapshotHost.FS(), s.PnpApi()),
 		configDir,
 		nil, /*existingOptions*/
 		nil, /*existingOptionsRaw*/

@@ -25,7 +25,7 @@ func TestCheckerGroupStopsOnCancellation(t *testing.T) {
 	program, err := NewProgram(t.Context(), ProgramOptions{
 		Config:         config,
 		SingleThreaded: core.TSTrue,
-		Host:           NewCompilerHost(fs, "/", nil, nil, nil),
+		Host:           NewCompilerHost(fs, "/", nil, nil, nil, nil),
 	})
 	assert.NilError(t, err)
 	ctx, cancel := context.WithCancel(t.Context())
@@ -52,7 +52,7 @@ func TestSemanticDiagnosticsWithCancelledContext(t *testing.T) {
 			program, err := NewProgram(t.Context(), ProgramOptions{
 				Config:         config,
 				SingleThreaded: singleThreaded,
-				Host:           NewCompilerHost(fs, "/", nil, nil, nil),
+				Host:           NewCompilerHost(fs, "/", nil, nil, nil, nil),
 			})
 			assert.NilError(t, err)
 			ctx, cancel := context.WithCancel(t.Context())

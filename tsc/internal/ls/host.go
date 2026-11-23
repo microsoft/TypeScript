@@ -4,6 +4,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/ls/autoimport"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
+	"github.com/microsoft/TypeScript/tsc/internal/pnp"
 	"github.com/microsoft/TypeScript/tsc/internal/sourcemap"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
@@ -14,6 +15,7 @@ type WorkspaceFolder struct {
 }
 
 type Host interface {
+	PnpApi() *pnp.PnpApi
 	CaseSensitivity() tspath.CaseSensitivity
 	ReadFile(path tspath.RootedFilePath) (contents string, ok bool)
 	Converters() *lsconv.Converters

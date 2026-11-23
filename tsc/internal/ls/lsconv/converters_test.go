@@ -43,6 +43,9 @@ func TestDocumentURIToFileName(t *testing.T) {
 		{"file://localhost/c%24/GitDevelopment/express", "//localhost/c$/GitDevelopment/express"},
 		{"file:///c%3A/test%20with%20%2525/c%23code", "c:/test with %25/c#code"},
 
+		{"zip:///path/to/archive.zip/file.ts", "/path/to/archive.zip/file.ts"},
+		{"zip:///d:/work/tsgo932/lib/archive.zip/utils.ts", "d:/work/tsgo932/lib/archive.zip/utils.ts"},
+
 		{"untitled:Untitled-1", "^/~ts-uri~/untitled/ts-nul-authority/Untitled-1"},
 		{"untitled:Untitled-1#fragment", "^/~ts-uri~/untitled/ts-nul-authority/~ts-uri-escape~556e7469746c65642d310023667261676d656e74~"},
 		{"untitled:c:/Users/jrieken/Code/abc.txt", "^/~ts-uri~/untitled/ts-nul-authority/~ts-uri-escape~633a~/Users/jrieken/Code/abc.txt"},
@@ -80,6 +83,9 @@ func TestFileNameToDocumentURI(t *testing.T) {
 		{tspath.RootedFilePathFromAbsolute("/users/me/c#-projects/"), "file:///users/me/c%23-projects"},
 		{tspath.RootedFilePath("//localhost/c$/GitDevelopment/express"), "file://localhost/c%24/GitDevelopment/express"},
 		{tspath.RootedFilePath("c:/test with %25/c#code"), "file:///c%3A/test%20with%20%2525/c%23code"},
+
+		{tspath.RootedFilePath("/path/to/archive.zip/file.ts"), "zip:///path/to/archive.zip/file.ts"},
+		{tspath.RootedFilePath("d:/work/tsgo932/lib/archive.zip/utils.ts"), "zip:///d%3A/work/tsgo932/lib/archive.zip/utils.ts"},
 
 		{tspath.RootedFilePath("^/untitled/ts-nul-authority/Untitled-1"), "untitled:Untitled-1"},
 		{tspath.RootedFilePath("^/untitled/ts-nul-authority/c:/Users/jrieken/Code/abc.txt"), "untitled:c:/Users/jrieken/Code/abc.txt"},

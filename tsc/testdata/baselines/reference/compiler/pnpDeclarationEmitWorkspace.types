@@ -1,0 +1,65 @@
+//// [tests/cases/compiler/pnpDeclarationEmitWorkspace.ts] ////
+
+=== /src/index.ts ===
+import type { ServiceConfig, ConfigFactory } from 'package-a/other-subpath';
+>ServiceConfig : ServiceConfig
+>ConfigFactory : ConfigFactory
+
+import { createServiceConfig } from 'package-a/other-subpath';
+>createServiceConfig : (endpoint: string) => ServiceConfig
+
+export function initializeService(url: string): ServiceConfig {
+>initializeService : (url: string) => ServiceConfig
+>url : string
+
+  return createServiceConfig(url);
+>createServiceConfig(url) : ServiceConfig
+>createServiceConfig : (endpoint: string) => ServiceConfig
+>url : string
+}
+
+export const factory = createServiceConfig;
+>factory : (endpoint: string) => ServiceConfig
+>createServiceConfig : (endpoint: string) => ServiceConfig
+
+export interface AppConfig {
+  service: ServiceConfig;
+>service : ServiceConfig
+
+  debug: boolean;
+>debug : boolean
+}
+
+=== /packages/package-a/index.d.ts ===
+export interface BaseConfig {
+  timeout: number;
+>timeout : number
+
+  retries: number;
+>retries : number
+}
+
+export interface DataOptions {
+  format: "json" | "xml";
+>format : "json" | "xml"
+
+  encoding: string;
+>encoding : string
+}
+
+export interface ServiceConfig extends BaseConfig {
+  endpoint: string;
+>endpoint : string
+
+  options: DataOptions;
+>options : DataOptions
+}
+
+export type ConfigFactory = (endpoint: string) => ServiceConfig;
+>ConfigFactory : ConfigFactory
+>endpoint : string
+
+export declare function createServiceConfig(endpoint: string): ServiceConfig;
+>createServiceConfig : (endpoint: string) => ServiceConfig
+>endpoint : string
+

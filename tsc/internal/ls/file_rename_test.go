@@ -6,6 +6,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/ls/autoimport"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
+	"github.com/microsoft/TypeScript/tsc/internal/pnp"
 	"github.com/microsoft/TypeScript/tsc/internal/sourcemap"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"gotest.tools/v3/assert"
@@ -46,6 +47,7 @@ func (caseInsensitiveHost) DirectoryExists(path tspath.RootedDirectoryPath) bool
 }
 
 func (caseInsensitiveHost) FileExists(path tspath.RootedFilePath) bool { panic("not implemented") }
+func (caseInsensitiveHost) PnpApi() *pnp.PnpApi                        { panic("not implemented") }
 
 func TestTryRemoveIndexFileName(t *testing.T) {
 	t.Parallel()

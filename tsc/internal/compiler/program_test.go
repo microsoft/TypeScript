@@ -49,7 +49,7 @@ func TestProgramLoadingStopsOnCancellation(t *testing.T) {
 	config := tsoptions.NewParsedCommandLine(&core.CompilerOptions{NoLib: core.TSTrue}, []tspath.RootedFilePath{"/src/a.ts", "/src/b.ts"}, nil, "/src", tspath.CaseSensitive)
 	ctx, cancel := context.WithCancel(t.Context())
 	defer cancel()
-	host := &cancellingCompilerHost{CompilerHost: NewCompilerHost(fs, "/", nil, nil, nil), cancel: cancel}
+	host := &cancellingCompilerHost{CompilerHost: NewCompilerHost(fs, "/", nil, nil, nil, nil), cancel: cancel}
 	program, err := NewProgram(ctx, ProgramOptions{
 		Config:         config,
 		SingleThreaded: core.TSTrue,
@@ -144,7 +144,7 @@ import { value } from "./dep.js"; export const result = value;`,
 		"/src/node_modules/@types/dep/index.d.ts": "export {};",
 	}
 	fs := vfstest.FromMap(files, tspath.CaseSensitive)
-	host := NewCompilerHost(fs, "/", nil, nil, nil)
+	host := NewCompilerHost(fs, "/", nil, nil, nil, nil)
 	config, diagnostics := tsoptions.GetParsedCommandLineOfConfigFile("/src/tsconfig.json", nil, nil, tsoptions.NewDefaultParseConfigHost(fs), nil)
 	assert.Equal(t, len(diagnostics), 0)
 	var pools, resolvers int
@@ -163,7 +163,7 @@ import { value } from "./dep.js"; export const result = value;`,
 			resolverFiles := maps.Clone(files)
 			resolverFiles["/factory-only/package.json"] = `{"name":"factory-host"}`
 			options.Host = &compilerResolutionHost{
-				host:          NewCompilerHost(vfstest.FromMap(resolverFiles, tspath.CaseSensitive), "/", nil, nil, nil),
+				host:          NewCompilerHost(vfstest.FromMap(resolverFiles, tspath.CaseSensitive), "/", nil, nil, nil, nil),
 				baseDirectory: "/",
 			}
 			return module.NewResolver(options)
@@ -190,7 +190,7 @@ import { value } from "./dep.js"; export const result = value;`,
 	newFiles := maps.Clone(files)
 	newFiles["/src/index.ts"] = "\n" + files["/src/index.ts"].(string)
 	newFiles["/probe/package.json"] = `{"name":"new-host"}`
-	newHost := NewCompilerHost(vfstest.FromMap(newFiles, tspath.CaseSensitive), "/", nil, nil, nil)
+	newHost := NewCompilerHost(vfstest.FromMap(newFiles, tspath.CaseSensitive), "/", nil, nil, nil, nil)
 	cloned, changed, reused := p.ReuseProgram("/src/index.ts", newHost,
 		func(p *Program) CheckerPool {
 			pools++
@@ -231,7 +231,7 @@ import { value } from "./dep.js"; export const result = value;`,
 
 	newFiles["/src/index.ts"] = `import "./other.js";`
 	newFiles["/src/other.ts"] = "export {};"
-	rebuildHost := NewCompilerHost(vfstest.FromMap(newFiles, tspath.CaseSensitive), "/", nil, nil, nil)
+	rebuildHost := NewCompilerHost(vfstest.FromMap(newFiles, tspath.CaseSensitive), "/", nil, nil, nil, nil)
 	rebuilt, _, reused, err := p.UpdateProgram(t.Context(), "/src/index.ts", rebuildHost, nil, nil)
 	assert.NilError(t, err)
 	assert.Assert(t, !reused)
@@ -258,7 +258,7 @@ func TestClonedProgramProjectReferenceResolution(t *testing.T) {
 				"/reference/index.ts":         "export const value = 1;",
 			}
 			fs := vfstest.FromMap(files, tspath.CaseSensitive)
-			host := NewCompilerHost(fs, "/", nil, nil, nil)
+			host := NewCompilerHost(fs, "/", nil, nil, nil, nil)
 			config, diagnostics := tsoptions.GetParsedCommandLineOfConfigFile("/src/tsconfig.json", &core.CompilerOptions{
 				PreserveSymlinks: core.BoolToTristate(preserveSymlinks),
 			}, nil, tsoptions.NewDefaultParseConfigHost(fs), nil)
@@ -270,7 +270,7 @@ func TestClonedProgramProjectReferenceResolution(t *testing.T) {
 			newFiles := maps.Clone(files)
 			newFiles["/src/index.ts"] = "\n" + files["/src/index.ts"].(string)
 			newFiles["/probe/package.json"] = `{"name":"new-host"}`
-			newHost := NewCompilerHost(vfstest.FromMap(newFiles, tspath.CaseSensitive), "/", nil, nil, nil)
+			newHost := NewCompilerHost(vfstest.FromMap(newFiles, tspath.CaseSensitive), "/", nil, nil, nil, nil)
 			cloned, _, reused := p.ReuseProgram("/src/index.ts", newHost, nil, nil)
 			assert.Assert(t, reused)
 			assert.Equal(t, cloned.projectReferenceFileMapper, p.projectReferenceFileMapper)
@@ -520,7 +520,7 @@ func TestProgram(t *testing.T) {
 
 			program, err := NewProgram(t.Context(), ProgramOptions{
 				Config: tsoptions.NewParsedCommandLine(&opts, []tspath.RootedFilePath{"c:/dev/src/index.ts"}, nil, "c:/dev/src", fs.CaseSensitivity()),
-				Host:   NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil),
+				Host:   NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil, nil),
 			})
 
 			assert.NilError(t, err)
@@ -553,7 +553,7 @@ func TestImportSourceProgram(t *testing.T) {
 				"/src/a.ts":          "export const a = 1;",
 			}
 			fs := vfstest.FromMap(files, tspath.CaseSensitive)
-			host := NewCompilerHost(fs, "/", nil, nil, nil)
+			host := NewCompilerHost(fs, "/", nil, nil, nil, nil)
 			config, diagnostics := tsoptions.GetParsedCommandLineOfConfigFile("/src/tsconfig.json", nil, nil, tsoptions.NewDefaultParseConfigHost(fs), nil)
 			assert.Equal(t, len(diagnostics), 0)
 			program, err := NewProgram(t.Context(), ProgramOptions{Config: config, Host: host})
@@ -565,7 +565,7 @@ func TestImportSourceProgram(t *testing.T) {
 			assert.Equal(t, program.collectPackageNames().unresolved.Len(), 0)
 
 			files["/src/index.ts"] = test.evaluation + strings.TrimPrefix(content, test.source)
-			host = NewCompilerHost(vfstest.FromMap(files, tspath.CaseSensitive), "/", nil, nil, nil)
+			host = NewCompilerHost(vfstest.FromMap(files, tspath.CaseSensitive), "/", nil, nil, nil, nil)
 			program, file, reused, err := program.UpdateProgram(t.Context(), "/src/index.ts", host, nil, nil)
 			assert.NilError(t, err)
 			assert.Assert(t, !reused)
@@ -576,14 +576,14 @@ func TestImportSourceProgram(t *testing.T) {
 			}
 
 			files["/src/index.ts"] = content
-			host = NewCompilerHost(vfstest.FromMap(files, tspath.CaseSensitive), "/", nil, nil, nil)
+			host = NewCompilerHost(vfstest.FromMap(files, tspath.CaseSensitive), "/", nil, nil, nil, nil)
 			program, _, reused, err = program.UpdateProgram(t.Context(), "/src/index.ts", host, nil, nil)
 			assert.NilError(t, err)
 			assert.Assert(t, !reused)
 			assert.Assert(t, program.GetSourceFile("/src/a.ts") == nil)
 
 			files["/src/index.ts"] = test.evaluation + content
-			host = NewCompilerHost(vfstest.FromMap(files, tspath.CaseSensitive), "/", nil, nil, nil)
+			host = NewCompilerHost(vfstest.FromMap(files, tspath.CaseSensitive), "/", nil, nil, nil, nil)
 			program, err = NewProgram(t.Context(), ProgramOptions{Config: config, Host: host})
 			assert.NilError(t, err)
 			file = program.GetSourceFile("/src/index.ts")
@@ -617,7 +617,7 @@ func TestIncludeProcessorDiagnosticsWithMissingFileCasing(t *testing.T) {
 	// to load because it does not exist on the case-sensitive filesystem.
 	program, err := NewProgram(t.Context(), ProgramOptions{
 		Config: tsoptions.NewParsedCommandLine(&opts, []tspath.RootedFilePath{"/src/MyFile.ts", "/src/myFile.ts"}, nil, "/", fs.CaseSensitivity()),
-		Host:   NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil),
+		Host:   NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil, nil),
 	})
 
 	assert.NilError(t, err)
@@ -656,7 +656,7 @@ func BenchmarkNewProgram(b *testing.B) {
 			opts := core.CompilerOptions{Target: testCase.target}
 			programOpts := ProgramOptions{
 				Config: tsoptions.NewParsedCommandLine(&opts, []tspath.RootedFilePath{"c:/dev/src/index.ts"}, nil, "c:/dev/src", fs.CaseSensitivity()),
-				Host:   NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil),
+				Host:   NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil, nil),
 			}
 
 			for b.Loop() {
@@ -670,7 +670,7 @@ func BenchmarkNewProgram(b *testing.B) {
 	b.Run("compiler", func(b *testing.B) {
 		rootPath := tspath.RootedDirectoryPathFromAbsolute(filepath.Join(repo.TestDataPath(), "fixtures/compiler"))
 		fs := bundled.WrapFS(osvfs.FS())
-		host := NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil)
+		host := NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil, nil)
 		parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile(rootPath.ResolveFile("tsconfig.json"), nil, nil, tsoptions.NewDefaultParseConfigHost(fs), nil)
 		assert.Equal(b, len(errors), 0, "Expected no errors in parsed command line")
 		opts := ProgramOptions{
@@ -695,13 +695,13 @@ func TestUpdateProgramCommonJSFile(t *testing.T) {
 	fs := vfstest.FromMap(files, tspath.CaseSensitive)
 	config, diagnostics := tsoptions.GetParsedCommandLineOfConfigFile("/src/tsconfig.json", nil, nil, tsoptions.NewDefaultParseConfigHost(fs), nil)
 	assert.Equal(t, len(diagnostics), 0)
-	program, err := NewProgram(t.Context(), ProgramOptions{Config: config, Host: NewCompilerHost(fs, "/", nil, nil, nil)})
+	program, err := NewProgram(t.Context(), ProgramOptions{Config: config, Host: NewCompilerHost(fs, "/", nil, nil, nil, nil)})
 	assert.NilError(t, err)
 	program.BindSourceFiles()
 
 	update := func(content string) bool {
 		files["/src/index.js"] = content
-		host := NewCompilerHost(vfstest.FromMap(files, tspath.CaseSensitive), "/", nil, nil, nil)
+		host := NewCompilerHost(vfstest.FromMap(files, tspath.CaseSensitive), "/", nil, nil, nil, nil)
 		var reused bool
 		program, _, reused, err = program.UpdateProgram(t.Context(), "/src/index.js", host, nil, nil)
 		assert.NilError(t, err)

@@ -135,7 +135,7 @@ func newDeletionTestProgram(t *testing.T, files map[string]string, roots []strin
 	t.Helper()
 	files = maps.Clone(files)
 	files["/lib/"+tsoptions.GetDefaultLibFileName(options)] = files["/lib/lib.d.ts"]
-	host := compiler.NewCompilerHost(vfstest.FromMap(files, tspath.CaseSensitive), "/lib", nil, nil, nil)
+	host := compiler.NewCompilerHost(vfstest.FromMap(files, tspath.CaseSensitive), "/lib", nil, nil, nil, nil)
 	paths := core.Map(roots, func(name string) tspath.RootedFilePath {
 		return tspath.ToRootedFilePath(name, "/project")
 	})

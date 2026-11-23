@@ -10,6 +10,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/internal/execute/incremental"
 	"github.com/microsoft/TypeScript/tsc/internal/execute/tsc"
+	"github.com/microsoft/TypeScript/tsc/internal/pnp"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
@@ -43,6 +44,10 @@ func (h *host) DefaultLibraryPath() tspath.RootedDirectoryPath {
 	return h.host.DefaultLibraryPath()
 }
 
+func (h *host) PnpApi() *pnp.PnpApi {
+	return h.host.PnpApi()
+}
+
 func (h *host) Trace(msg *diagnostics.Message, args ...any) {
 	panic("build.Orchestrator.host does not support tracing; use a different host for tracing")
 }
@@ -73,7 +78,7 @@ func (h *host) GetResolvedProjectReference(fileName tspath.RootedFilePath, path 
 			wrapped.Set("compilerOptions", raw)
 			commandLineRaw = wrapped
 		}
-		commandLine, _ := tsoptions.GetParsedCommandLineOfConfigFilePath(fileName, path, h.orchestrator.opts.Command.CompilerOptions, commandLineRaw, tsoptions.NewDefaultParseConfigHost(h.FS()), &h.extendedConfigCache)
+		commandLine, _ := tsoptions.GetParsedCommandLineOfConfigFilePath(fileName, path, h.orchestrator.opts.Command.CompilerOptions, commandLineRaw, tsoptions.NewDefaultParseConfigHost(h.FS(), h.PnpApi()), &h.extendedConfigCache)
 		configTime := h.orchestrator.opts.Sys.Now().Sub(configStart)
 		h.configTimes.Store(path, configTime)
 		return commandLine

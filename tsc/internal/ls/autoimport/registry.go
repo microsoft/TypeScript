@@ -20,6 +20,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/module"
 	"github.com/microsoft/TypeScript/tsc/internal/packagejson"
+	"github.com/microsoft/TypeScript/tsc/internal/pnp"
 	"github.com/microsoft/TypeScript/tsc/internal/project/dirty"
 	"github.com/microsoft/TypeScript/tsc/internal/project/logging"
 	"github.com/microsoft/TypeScript/tsc/internal/symlinks"
@@ -499,6 +500,7 @@ type RegistryChange struct {
 
 type RegistryCloneHost interface {
 	FS() vfs.FS
+	PnpApi() *pnp.PnpApi
 	GetDefaultProject(path tspath.PathKey) (ProjectID, *compiler.Program)
 	GetProgramForProject(projectID ProjectID) *compiler.Program
 	GetPackageJson(fileName tspath.RootedFilePath) *packagejson.InfoCacheEntry
@@ -1105,7 +1107,7 @@ func (b *registryBuilder) updateIndexes(ctx context.Context, change RegistryChan
 		}
 		if len(rootFiles) > 0 {
 			resolverOptions := b.resolverOptions
-			resolverOptions.Host = &resolutionHost{fs: b.host.FS(), currentDirectory: b.currentDirectory}
+			resolverOptions.Host = &resolutionHost{fs: b.host.FS(), currentDirectory: b.currentDirectory, pnpApi: b.host.PnpApi()}
 			resolverOptions.CompilerOptions = core.EmptyCompilerOptions
 			moduleResolver := module.NewResolver(resolverOptions)
 			aliasResolver := newAliasResolver(
@@ -1254,7 +1256,7 @@ func (b *registryBuilder) buildProjectBucket(
 	fileExcludePatterns := b.userPreferences.ParsedAutoImportFileExcludePatterns(b.host.FS().CaseSensitivity())
 	result.bucket = &RegistryBucket{}
 	resolverOptions := b.resolverOptions
-	resolverOptions.Host = &resolutionHost{fs: b.host.FS(), currentDirectory: b.currentDirectory}
+	resolverOptions.Host = &resolutionHost{fs: b.host.FS(), currentDirectory: b.currentDirectory, pnpApi: b.host.PnpApi()}
 	resolverOptions.CompilerOptions = core.EmptyCompilerOptions
 	moduleResolver := module.NewResolver(resolverOptions)
 	program := b.host.GetProgramForProject(projectID)
@@ -1277,7 +1279,13 @@ func (b *registryBuilder) buildProjectBucket(
 		}
 		// Ordinary node_modules files are owned by node_modules buckets. Content-mapped files are not
 		// discovered by those buckets, but files already transformed in the Program can be indexed here.
-		if file.ContentMapper() == "" &&
+		// With PnP, packages live in `.yarn/cache` and no node_modules buckets are built, so every
+		// program file the project is allowed to import is indexed here instead.
+		if pnpApi := b.host.PnpApi(); pnpApi != nil {
+			if !pnpApi.IsImportable(program.BaseDirectory().AsString(), file.FileName().AsString()) {
+				continue
+			}
+		} else if file.ContentMapper() == "" &&
 			(file.FileName().ContainsLowercaseDirectorySequence("/node_modules/") || hasSymlinkToNodeModules(file.PathKey(), projectRootPath, symlinkCache)) {
 			continue
 		}

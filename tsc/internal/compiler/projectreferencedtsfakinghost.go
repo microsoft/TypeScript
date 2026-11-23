@@ -5,6 +5,7 @@ import (
 
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/module"
+	"github.com/microsoft/TypeScript/tsc/internal/pnp"
 	"github.com/microsoft/TypeScript/tsc/internal/symlinks"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
@@ -14,6 +15,7 @@ import (
 type projectReferenceDtsFakingHost struct {
 	currentDirectory tspath.RootedDirectoryPath
 	fs               *cachedvfs.FS
+	pnpApi           *pnp.PnpApi
 }
 
 var _ module.ResolutionHost = (*projectReferenceDtsFakingHost)(nil)
@@ -22,6 +24,7 @@ func newProjectReferenceDtsFakingHost(host module.ResolutionHost, references *pr
 	// Create a new host that will fake the dts files
 	return &projectReferenceDtsFakingHost{
 		currentDirectory: host.GetCurrentDirectory(),
+		pnpApi:           host.PnpApi(),
 		fs: cachedvfs.From(&projectReferenceDtsFakingVfs{
 			host:                       host,
 			projectReferenceFileMapper: references,
@@ -38,6 +41,11 @@ func (h *projectReferenceDtsFakingHost) FS() vfs.FS {
 // GetCurrentDirectory implements module.ResolutionHost.
 func (h *projectReferenceDtsFakingHost) GetCurrentDirectory() tspath.RootedDirectoryPath {
 	return h.currentDirectory
+}
+
+// PnpApi implements module.ResolutionHost.
+func (h *projectReferenceDtsFakingHost) PnpApi() *pnp.PnpApi {
+	return h.pnpApi
 }
 
 type projectReferenceDtsFakingVfs struct {

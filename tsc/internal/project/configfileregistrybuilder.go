@@ -8,6 +8,7 @@ import (
 
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/pnp"
 	"github.com/microsoft/TypeScript/tsc/internal/project/dirty"
 	"github.com/microsoft/TypeScript/tsc/internal/project/logging"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
@@ -32,6 +33,8 @@ type configFileRegistryBuilder struct {
 	sessionOptions               *SessionOptions
 	customConfigFileName         string
 
+	pnpApi *pnp.PnpApi
+
 	base                        *ConfigFileRegistry
 	configs                     *dirty.SyncMap[tspath.PathKey, *configFileEntry]
 	configFileNames             *dirty.Map[tspath.PathKey, *configFileNames]
@@ -48,6 +51,7 @@ func newConfigFileRegistryBuilder(
 	extendedConfigCache *ExtendedConfigCache,
 	snapshotID uint64,
 	sessionOptions *SessionOptions,
+	pnpApi *pnp.PnpApi,
 	customConfigFileName string,
 	logger *logging.LogTree,
 ) *configFileRegistryBuilder {
@@ -58,6 +62,7 @@ func newConfigFileRegistryBuilder(
 		base:                         oldConfigFileRegistry,
 		sessionOptions:               sessionOptions,
 		extendedConfigCache:          extendedConfigCache,
+		pnpApi:                       pnpApi,
 		snapshotID:                   snapshotID,
 		customConfigFileName:         customConfigFileName,
 		customConfigFileNameChanged:  customConfigFileName != oldConfigFileRegistry.customConfigFileName,
@@ -814,8 +819,13 @@ func (c *configFileRegistryBuilder) IsContentMapperPackageAllowed(packageDirecto
 	})
 }
 
+// PnpApi implements tsoptions.ParseConfigHost.
+func (c *configFileRegistryBuilder) PnpApi() *pnp.PnpApi {
+	return c.pnpApi
+}
+
 // GetExtendedConfig implements tsoptions.ExtendedConfigCache.
-func (c *configFileRegistryBuilder) GetExtendedConfig(fileName tspath.RootedFilePath, path tspath.PathKey, resolutionStack []tspath.PathKey, fs vfs.FS) *tsoptions.ExtendedConfigCacheEntry {
+func (c *configFileRegistryBuilder) GetExtendedConfig(fileName tspath.RootedFilePath, path tspath.PathKey, resolutionStack []tspath.PathKey, fs vfs.FS, pnpApi *pnp.PnpApi) *tsoptions.ExtendedConfigCacheEntry {
 	var content string
 	fh := c.fs.GetFileByPath(fileName, path)
 	if fh != nil {
@@ -828,6 +838,7 @@ func (c *configFileRegistryBuilder) GetExtendedConfig(fileName tspath.RootedFile
 		FS:              c.fs.source,
 		ResolutionStack: resolutionStack,
 		ConfigFS:        fs,
+		PnpApi:          pnpApi,
 		Cache:           c,
 	}).ExtendedConfigCacheEntry
 }

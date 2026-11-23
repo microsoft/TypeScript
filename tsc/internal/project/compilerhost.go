@@ -9,6 +9,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/contentmapper"
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/internal/locale"
+	"github.com/microsoft/TypeScript/tsc/internal/pnp"
 	"github.com/microsoft/TypeScript/tsc/internal/project/logging"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
@@ -22,6 +23,7 @@ type compilerHost struct {
 	configFilePath tspath.PathKey
 	sessionOptions *SessionOptions
 
+	pnpApi             *pnp.PnpApi
 	sourceFS           *sourceFS
 	configFileRegistry *ConfigFileRegistry
 
@@ -41,6 +43,7 @@ func newCompilerHost(
 		configFilePath: project.configFilePath,
 		sessionOptions: builder.sessionOptions,
 
+		pnpApi:   builder.pnpApi,
 		sourceFS: newSourceFS(true, builder.fs),
 
 		project: project,
@@ -77,6 +80,11 @@ func (c *compilerHost) DefaultLibraryPath() tspath.RootedDirectoryPath {
 // FS implements compiler.CompilerHost.
 func (c *compilerHost) FS() vfs.FS {
 	return c.sourceFS
+}
+
+// PnpApi implements compiler.CompilerHost.
+func (c *compilerHost) PnpApi() *pnp.PnpApi {
+	return c.pnpApi
 }
 
 // GetResolvedProjectReference implements compiler.CompilerHost.
