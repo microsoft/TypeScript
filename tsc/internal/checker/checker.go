@@ -1082,6 +1082,8 @@ type memoStore struct {
 	stateFilter                             stateKeyFilter         // Memo keys that may have a memo state; see memoState
 	errorFilter                             errorKeyFilter         // Memo keys that may have reports; see observeMemo
 	memoPendingCount                        int                    // Number of memoStates with unreplayed effects
+	pendingFilter                           errorKeyFilter         // Memo keys that may have pending effects; see mayBePending
+	pendingStates                           []*memoState           // States given pending effects since pendingFilter was built; see addPending
 	memoErrorStates                         int                    // Number of memoStates with reports; see setReported
 
 	mu sync.Mutex
@@ -21788,7 +21790,8 @@ func (c *Checker) getDeclaredPropertyOfResolvingType(t *Type, name string) *ast.
 func (c *Checker) getValueMemberOfResolvedObjectType(t *Type, name string, skipObjectFunctionPropertyAugment bool) (*ast.Symbol, bool) {
 	// While memos are observed, reading the resolved members must be
 	// observed too, which the full lookup does.
-	if c.observingMemos || t.flags != TypeFlagsObject || t.objectFlags&(ObjectFlagsMapped|ObjectFlagsMembersResolved) != ObjectFlagsMembersResolved ||
+	if t.flags != TypeFlagsObject || t.objectFlags&(ObjectFlagsMapped|ObjectFlagsMembersResolved) != ObjectFlagsMembersResolved ||
+		c.observingMemos && (!c.checking || c.mayBePending(memoKeyBits(memoKeyOf(t, memoStructuredMembers)))) ||
 		t.symbol != nil && t.symbol.Flags()&ast.SymbolFlagsValueModule != 0 {
 		return nil, false
 	}

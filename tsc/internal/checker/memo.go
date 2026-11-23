@@ -191,6 +191,7 @@ func (f *memoEffects) covers(deps []*memoEffects) bool {
 type memoState struct {
 	pending *memoEffects         // Effects not yet replayed by a check
 	errors  *[]*currentNodeError // Errors the computation reported at the current node, out of line since few have any; see setErrors
+	bits    uint64               // memoKeyBits of the result's key, for pendingFilter
 }
 
 // memo is a cached result. Cached checker state must live in a memo so that
@@ -497,7 +498,7 @@ func (m *memoMap[K, V]) observe(c *Checker, k K) {
 	if m.side.memoStates == nil && len(m.side.resolvingKeys) == 0 {
 		return
 	}
-	if c.checking && c.memoPendingCount == 0 && !m.side.hasErrors {
+	if c.checking && !m.side.hasErrors && (c.memoPendingCount == 0 || !c.mayBePending(memoKeyBits(m.entryKey(k)))) {
 		// Only reports are replayed; see observeMemo.
 		return
 	}
@@ -617,7 +618,7 @@ func (m *memoMap[K, V]) begin(c *Checker, k K) {
 	c.resolving.count++
 	c.appendResolution(key, m, len(side.resolvingKeys)-1, int32(len(c.instantiationStack)))
 	c.currentResolution().resolving = true
-	if c.checking && c.memoPendingCount == 0 && c.memoTop|c.currentNodeResolution != 0 && !c.checkingRecords() {
+	if c.checking && !c.mayBePending(memoKeyBits(key)) && c.memoTop|c.currentNodeResolution != 0 && !c.checkingRecords() {
 		// beginCheckedMemo for the common case, without the calls. The memo
 		// state of the result is looked up only if needed; see
 		// resolutionState.
@@ -699,7 +700,7 @@ func (m *memoMap[K, V]) state(k K) *memoState {
 		if s.memoStates == nil {
 			s.memoStates = make(map[K]*memoState)
 		}
-		state = &memoState{}
+		state = &memoState{bits: memoKeyBits(m.entryKey(k))}
 		s.memoStates[k] = state
 		if s.keyBits != nil {
 			s.stateKeys.add(s.keyBits(k), s.memoStates, s.keyBits)
@@ -752,6 +753,47 @@ func (c *Checker) observing() bool {
 // starting to check.
 func (c *Checker) syncObserving() {
 	c.observingMemos = !c.checking || c.memoPendingCount != 0
+	if len(c.pendingStates) > 4*c.memoPendingCount+64 || c.memoPendingCount == 0 && len(c.pendingStates) != 0 {
+		c.rebuildPendingFilter()
+	}
+}
+
+// addPending records that state has just been given pending effects.
+func (c *Checker) addPending(state *memoState) {
+	i := state.bits >> (64 - errorFilterBits)
+	c.pendingFilter[i/64] |= 1 << (i % 64)
+	c.pendingStates = append(c.pendingStates, state)
+}
+
+// mayBePending reports whether the result whose key has memoKeyBits bits may
+// have pending effects. A few results can keep pending effects for long, for
+// example when the only read replaying them was discarded with a variance
+// measurement, so a filter of those keys keeps every other read cheap.
+func (c *Checker) mayBePending(bits uint64) bool {
+	if c.memoPendingCount == 0 {
+		return false
+	}
+	i := bits >> (64 - errorFilterBits)
+	return c.pendingFilter[i/64]&(1<<(i%64)) != 0
+}
+
+//go:noinline
+func (c *Checker) rebuildPendingFilter() {
+	clear(c.pendingFilter[:])
+	states := c.pendingStates
+	c.pendingStates = c.pendingStates[:0]
+	if c.memoPendingCount != 0 {
+		seen := make(map[*memoState]struct{}, c.memoPendingCount)
+		for _, state := range states {
+			if state.pending != nil {
+				if _, ok := seen[state]; !ok {
+					seen[state] = struct{}{}
+					c.addPending(state)
+				}
+			}
+		}
+	}
+	clear(states[len(c.pendingStates):])
 }
 
 // readsWithoutMemo reports whether a memoized computation identified by key,
@@ -760,7 +802,7 @@ func (c *Checker) syncObserving() {
 // only reads, unless it re-enters itself in progress, with the result
 // published before it is complete.
 func (c *Checker) readsWithoutMemo(key memoKey) bool {
-	if c.observing() {
+	if !c.checking || c.mayBePending(memoKeyBits(key)) {
 		return false
 	}
 	_, resolving := c.resolvingGet(key)
@@ -781,7 +823,7 @@ func (c *Checker) beginMemo(key memoKey) {
 	if resolving {
 		c.linkResolution()
 	}
-	if c.checking && c.memoPendingCount == 0 && c.memoTop|c.currentNodeResolution != 0 && !c.checkingRecords() {
+	if c.checking && !c.mayBePending(memoKeyBits(key)) && c.memoTop|c.currentNodeResolution != 0 && !c.checkingRecords() {
 		// beginCheckedMemo for the common case, without the calls. The memo
 		// state of the result is looked up only if needed; see
 		// resolutionState.
@@ -860,7 +902,7 @@ func (c *Checker) memoState(key memoKey) *memoState {
 		if c.memoStates == nil {
 			c.memoStates = make(map[memoKey]*memoState)
 		}
-		state = &memoState{}
+		state = &memoState{bits: memoKeyBits(key)}
 		c.memoStates[key] = state
 		c.stateFilter.add(memoKeyBits(key), c.memoStates, memoKeyBits)
 	}
@@ -991,6 +1033,7 @@ func (c *Checker) linkState(state *memoState, f *memoEffects, log bool) {
 		// Replaying f is replaying a set of deps holding only f.
 		state.pending = f
 		c.memoPendingCount++
+		c.addPending(state)
 		c.syncObserving()
 		if c.recordingFromCheck {
 			c.flushBuf = append(c.flushBuf, state)
@@ -1028,7 +1071,7 @@ func (c *Checker) observeMemo(key memoKey) {
 	if !c.memoActive() {
 		return
 	}
-	if c.checking && c.memoPendingCount == 0 {
+	if c.checking && !c.mayBePending(memoKeyBits(key)) {
 		// Only reports are replayed, which few results have, so a filter
 		// small enough to stay in cache rules out most.
 		if i := errorFilterIndex(key); c.errorFilter[i/64]&(1<<(i%64)) == 0 {
@@ -1295,6 +1338,7 @@ func (c *Checker) retainEffects(state *memoState, f *memoEffects) {
 		f.addDep(state.pending)
 	} else {
 		c.memoPendingCount++
+		c.addPending(state)
 		c.syncObserving()
 		if c.recordingFromCheck {
 			c.flushBuf = append(c.flushBuf, state)
@@ -2097,6 +2141,7 @@ func (c *Checker) logPendingDiscard(state *memoState) {
 			c.syncObserving()
 		case old != nil && state.pending == nil:
 			c.memoPendingCount++
+			c.addPending(state)
 			c.syncObserving()
 		}
 		state.pending = old
