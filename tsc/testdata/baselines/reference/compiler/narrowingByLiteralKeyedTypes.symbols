@@ -1,0 +1,135 @@
+//// [tests/cases/compiler/narrowingByLiteralKeyedTypes.ts] ////
+
+=== narrowingByLiteralKeyedTypes.ts ===
+declare function isBranded<T>(t: T): t is T & { __brand: true };
+>isBranded : Symbol(isBranded, Decl(narrowingByLiteralKeyedTypes.ts, 0, 0))
+>T : Symbol(T, Decl(narrowingByLiteralKeyedTypes.ts, 0, 27))
+>t : Symbol(t, Decl(narrowingByLiteralKeyedTypes.ts, 0, 30))
+>T : Symbol(T, Decl(narrowingByLiteralKeyedTypes.ts, 0, 27))
+>t : Symbol(t, Decl(narrowingByLiteralKeyedTypes.ts, 0, 30))
+>T : Symbol(T, Decl(narrowingByLiteralKeyedTypes.ts, 0, 27))
+>__brand : Symbol(__brand, Decl(narrowingByLiteralKeyedTypes.ts, 0, 47))
+
+declare function isType<T>(x: unknown): x is T;
+>isType : Symbol(isType, Decl(narrowingByLiteralKeyedTypes.ts, 0, 64))
+>T : Symbol(T, Decl(narrowingByLiteralKeyedTypes.ts, 1, 24))
+>x : Symbol(x, Decl(narrowingByLiteralKeyedTypes.ts, 1, 27))
+>x : Symbol(x, Decl(narrowingByLiteralKeyedTypes.ts, 1, 27))
+>T : Symbol(T, Decl(narrowingByLiteralKeyedTypes.ts, 1, 24))
+
+declare const s1: "a" | "b" | "c" | undefined;
+>s1 : Symbol(s1, Decl(narrowingByLiteralKeyedTypes.ts, 3, 13))
+
+if (isBranded(s1)) {
+>isBranded : Symbol(isBranded, Decl(narrowingByLiteralKeyedTypes.ts, 0, 0))
+>s1 : Symbol(s1, Decl(narrowingByLiteralKeyedTypes.ts, 3, 13))
+
+    s1;
+>s1 : Symbol(s1, Decl(narrowingByLiteralKeyedTypes.ts, 3, 13))
+}
+
+declare const s2: "a" | "b" | string;
+>s2 : Symbol(s2, Decl(narrowingByLiteralKeyedTypes.ts, 8, 13))
+
+if (isType<"a" & { tag: 1 }>(s2)) {
+>isType : Symbol(isType, Decl(narrowingByLiteralKeyedTypes.ts, 0, 64))
+>tag : Symbol(tag, Decl(narrowingByLiteralKeyedTypes.ts, 9, 18))
+>s2 : Symbol(s2, Decl(narrowingByLiteralKeyedTypes.ts, 8, 13))
+
+    s2;
+>s2 : Symbol(s2, Decl(narrowingByLiteralKeyedTypes.ts, 8, 13))
+}
+
+declare const n1: 1 | 2 | 3 | -0 | 1n | 2n;
+>n1 : Symbol(n1, Decl(narrowingByLiteralKeyedTypes.ts, 13, 13))
+
+if (isType<(1 & { tag: 1 }) | (0 & { tag: 0 }) | (2n & { tag: 2 })>(n1)) {
+>isType : Symbol(isType, Decl(narrowingByLiteralKeyedTypes.ts, 0, 64))
+>tag : Symbol(tag, Decl(narrowingByLiteralKeyedTypes.ts, 14, 17))
+>tag : Symbol(tag, Decl(narrowingByLiteralKeyedTypes.ts, 14, 36))
+>tag : Symbol(tag, Decl(narrowingByLiteralKeyedTypes.ts, 14, 56))
+>n1 : Symbol(n1, Decl(narrowingByLiteralKeyedTypes.ts, 13, 13))
+
+    n1;
+>n1 : Symbol(n1, Decl(narrowingByLiteralKeyedTypes.ts, 13, 13))
+}
+
+enum E { A = "a", B = "b" }
+>E : Symbol(E, Decl(narrowingByLiteralKeyedTypes.ts, 16, 1))
+>A : Symbol(E.A, Decl(narrowingByLiteralKeyedTypes.ts, 18, 8))
+>B : Symbol(E.B, Decl(narrowingByLiteralKeyedTypes.ts, 18, 17))
+
+declare const e1: E | "a" | "c";
+>e1 : Symbol(e1, Decl(narrowingByLiteralKeyedTypes.ts, 19, 13))
+>E : Symbol(E, Decl(narrowingByLiteralKeyedTypes.ts, 16, 1))
+
+if (isType<"a" & { tag: 1 }>(e1)) {
+>isType : Symbol(isType, Decl(narrowingByLiteralKeyedTypes.ts, 0, 64))
+>tag : Symbol(tag, Decl(narrowingByLiteralKeyedTypes.ts, 20, 18))
+>e1 : Symbol(e1, Decl(narrowingByLiteralKeyedTypes.ts, 19, 13))
+
+    e1;
+>e1 : Symbol(e1, Decl(narrowingByLiteralKeyedTypes.ts, 19, 13))
+}
+if (isType<E.B & { tag: 1 }>(e1)) {
+>isType : Symbol(isType, Decl(narrowingByLiteralKeyedTypes.ts, 0, 64))
+>E : Symbol(E, Decl(narrowingByLiteralKeyedTypes.ts, 16, 1))
+>B : Symbol(E.B, Decl(narrowingByLiteralKeyedTypes.ts, 18, 17))
+>tag : Symbol(tag, Decl(narrowingByLiteralKeyedTypes.ts, 23, 18))
+>e1 : Symbol(e1, Decl(narrowingByLiteralKeyedTypes.ts, 19, 13))
+
+    e1;
+>e1 : Symbol(e1, Decl(narrowingByLiteralKeyedTypes.ts, 19, 13))
+}
+
+declare const b1: ("a" & { x: 1 }) | ("b" & { x: 2 }) | ("c" & { y: 1 }) | "d";
+>b1 : Symbol(b1, Decl(narrowingByLiteralKeyedTypes.ts, 27, 13))
+>x : Symbol(x, Decl(narrowingByLiteralKeyedTypes.ts, 27, 26))
+>x : Symbol(x, Decl(narrowingByLiteralKeyedTypes.ts, 27, 45))
+>y : Symbol(y, Decl(narrowingByLiteralKeyedTypes.ts, 27, 64))
+
+if (isType<("a" & { y: 1 }) | ("b" & { x: 2 }) | "c" | "d">(b1)) {
+>isType : Symbol(isType, Decl(narrowingByLiteralKeyedTypes.ts, 0, 64))
+>y : Symbol(y, Decl(narrowingByLiteralKeyedTypes.ts, 28, 19))
+>x : Symbol(x, Decl(narrowingByLiteralKeyedTypes.ts, 28, 38))
+>b1 : Symbol(b1, Decl(narrowingByLiteralKeyedTypes.ts, 27, 13))
+
+    b1;
+>b1 : Symbol(b1, Decl(narrowingByLiteralKeyedTypes.ts, 27, 13))
+}
+
+function f<T extends "a" | "b">(x: "a" | "b" | "c" | T) {
+>f : Symbol(f, Decl(narrowingByLiteralKeyedTypes.ts, 30, 1))
+>T : Symbol(T, Decl(narrowingByLiteralKeyedTypes.ts, 32, 11))
+>x : Symbol(x, Decl(narrowingByLiteralKeyedTypes.ts, 32, 32))
+>T : Symbol(T, Decl(narrowingByLiteralKeyedTypes.ts, 32, 11))
+
+    if (isType<("a" & T) | ("b" & { tag: 1 })>(x)) {
+>isType : Symbol(isType, Decl(narrowingByLiteralKeyedTypes.ts, 0, 64))
+>T : Symbol(T, Decl(narrowingByLiteralKeyedTypes.ts, 32, 11))
+>tag : Symbol(tag, Decl(narrowingByLiteralKeyedTypes.ts, 33, 35))
+>x : Symbol(x, Decl(narrowingByLiteralKeyedTypes.ts, 32, 32))
+
+        x;
+>x : Symbol(x, Decl(narrowingByLiteralKeyedTypes.ts, 32, 32))
+    }
+    else {
+        x;
+>x : Symbol(x, Decl(narrowingByLiteralKeyedTypes.ts, 32, 32))
+    }
+}
+
+declare const o1: "a" | "b" | { kind: "a" } | { kind: "b" };
+>o1 : Symbol(o1, Decl(narrowingByLiteralKeyedTypes.ts, 41, 13))
+>kind : Symbol(kind, Decl(narrowingByLiteralKeyedTypes.ts, 41, 31))
+>kind : Symbol(kind, Decl(narrowingByLiteralKeyedTypes.ts, 41, 47))
+
+if (isType<"a" & { kind: "a" }>(o1)) {
+>isType : Symbol(isType, Decl(narrowingByLiteralKeyedTypes.ts, 0, 64))
+>kind : Symbol(kind, Decl(narrowingByLiteralKeyedTypes.ts, 42, 18))
+>o1 : Symbol(o1, Decl(narrowingByLiteralKeyedTypes.ts, 41, 13))
+
+    o1;
+>o1 : Symbol(o1, Decl(narrowingByLiteralKeyedTypes.ts, 41, 13))
+}
+
