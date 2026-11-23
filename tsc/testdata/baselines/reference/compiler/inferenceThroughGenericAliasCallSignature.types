@@ -85,23 +85,23 @@ type FindResult<P extends Payload, A> = A extends { select: infer S extends obje
     }
   : never;
 
-type MessagePayload = { objects: {}; scalars: { body: string } };
+type MessagePayload = { objects: object; scalars: { body: string } };
 >MessagePayload : MessagePayload
->objects : {}
+>objects : object
 >scalars : { body: string; }
 >body : string
 
-type ConversationPayload = { objects: { messages: MessagePayload[] }; scalars: {} };
+type ConversationPayload = { objects: { messages: MessagePayload[] }; scalars: object };
 >ConversationPayload : ConversationPayload
 >objects : { messages: MessagePayload[]; }
 >messages : MessagePayload[]
->scalars : {}
+>scalars : object
 
-type ThreadPayload = { objects: { conversations: ConversationPayload[] }; scalars: {} };
+type ThreadPayload = { objects: { conversations: ConversationPayload[] }; scalars: object };
 >ThreadPayload : ThreadPayload
 >objects : { conversations: ConversationPayload[]; }
 >conversations : ConversationPayload[]
->scalars : {}
+>scalars : object
 
 declare function findThread<A>(args: A): FindResult<ThreadPayload, A>;
 >findThread : <A>(args: A) => FindResult<ThreadPayload, A>

@@ -45,9 +45,9 @@ inferenceThroughGenericAliasCallSignature.ts(54,26): error TS2571: Object is of 
         }
       : never;
     
-    type MessagePayload = { objects: {}; scalars: { body: string } };
-    type ConversationPayload = { objects: { messages: MessagePayload[] }; scalars: {} };
-    type ThreadPayload = { objects: { conversations: ConversationPayload[] }; scalars: {} };
+    type MessagePayload = { objects: object; scalars: { body: string } };
+    type ConversationPayload = { objects: { messages: MessagePayload[] }; scalars: object };
+    type ThreadPayload = { objects: { conversations: ConversationPayload[] }; scalars: object };
     
     declare function findThread<A>(args: A): FindResult<ThreadPayload, A>;
     
