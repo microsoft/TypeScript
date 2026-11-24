@@ -122,7 +122,7 @@ export function hasObjectAssignmentInitializer(node: Node): node is ObjectAssign
     return "objectAssignmentInitializer" in node;
 }
 
-export function isExternalModule(file: SourceFile): boolean {
+export function isExternalModule(file: SourceFile): file is SourceFile & Declaration {
     return file.externalModuleIndicator !== undefined;
 }
 

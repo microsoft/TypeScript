@@ -15,6 +15,7 @@ import {
     isClassDeclaration,
     isConstructorDeclaration,
     isExpressionStatement,
+    isExternalModule,
     isFunctionDeclaration,
     isIdentifier,
     isImportDeclaration,
@@ -918,6 +919,30 @@ describe("API", { concurrency }, () => {
         await assert.rejects(getSymbol(shallowClone), /Source file not found/); // @sync: assert.throws(() => getSymbol(shallowClone), /Source file not found/);
         await assert.rejects(api.getSymbol(deepClone), /Source file not found/); // @sync: assert.throws(() => api.getSymbol(deepClone), /Source file not found/);
         assert.equal("getSymbol" in declaration, false);
+    });
+
+    test("getSymbol accepts arbitrary nodes and narrows external module symbols", async () => {
+        await using api = spawnAPI();
+        await using module = await api.createSourceFile("/module.ts", "export function present() {}");
+        await using script = await api.createSourceFile("/script.ts", "function present() {}");
+        const declaration = cast(module.sourceFile.statements[0], isFunctionDeclaration);
+        const node: Node = declaration;
+        const symbol = await getSymbol(declaration);
+        assert.equal(symbol.name, "present");
+        assert.strictEqual(await getSymbol(node), symbol);
+        assert.strictEqual(await api.getSymbol(node), symbol);
+        assert.equal((await api.getSymbol(declaration)).name, "present");
+
+        assert.equal(await getSymbol(declaration.body!), undefined);
+        assert.equal(await api.getSymbol(declaration.body!), undefined);
+        assert.equal(await getSymbol(script.sourceFile), undefined);
+        assert.equal(await api.getSymbol(script.sourceFile), undefined);
+
+        assert.ok(isExternalModule(module.sourceFile));
+        const moduleSymbol = await getSymbol(module.sourceFile);
+        assert.ok(moduleSymbol.name);
+        assert.equal((await api.getSymbol(module.sourceFile)).name, moduleSymbol.name);
+        assert.strictEqual(await api.getSymbol(module.sourceFile), moduleSymbol);
     });
 
     test("source files own separate declaration result and request caches", async () => {

@@ -479,7 +479,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
     });
 
     test("looks up binder symbols through standalone and API generators", () => {
-        using api = spawnAPI();
+        using api = spawnAPI({}, { collectTiming: true });
         using lease = api.createSourceFile("/symbols.ts", "function present() {}");
         const declaration = cast(lease.sourceFile.statements[0], isFunctionDeclaration);
         const [symbol] = api.batch(getSymbol.gen(declaration));
@@ -487,6 +487,18 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
         assert.equal(symbol.name, "present");
         const [cached] = api.batch(api.getSymbol.gen(declaration));
         assert.strictEqual(cached, symbol);
+        const node: Node = declaration;
+        const [fromNode] = api.batch(getSymbol.gen(node));
+        assert.strictEqual(fromNode, symbol);
+
+        api.resetTimingInfo();
+        const [missing] = api.batch(getSymbol.gen(declaration.body!));
+        assert.equal(missing, undefined);
+        const [cachedMissing] = api.batch(api.getSymbol.gen(declaration.body!));
+        assert.equal(cachedMissing, undefined);
+        assert.equal(api.getSymbol(declaration.body!), undefined);
+        assert.equal(api.getTimingInfo().totals.requestCount, 1);
+
         const clone = cloneNode(declaration);
         assert.throws(() => api.batch(getSymbol.gen(clone)), /Source file not found/);
         assert.throws(() => api.batch(api.getSymbol.gen(clone)), /Source file not found/);
