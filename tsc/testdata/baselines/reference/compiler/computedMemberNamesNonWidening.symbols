@@ -1,0 +1,53 @@
+//// [tests/cases/compiler/computedMemberNamesNonWidening.ts] ////
+
+=== computedMemberNamesNonWidening.ts ===
+// https://github.com/microsoft/TypeScript/issues/64437
+
+const K1 = 'a', K2 = 'b';
+>K1 : Symbol(K1, Decl(computedMemberNamesNonWidening.ts, 2, 5))
+>K2 : Symbol(K2, Decl(computedMemberNamesNonWidening.ts, 2, 15))
+
+// Computed keys
+const Computed = {[K1]: 'x', [K2]: 'y'} as const;
+>Computed : Symbol(Computed, Decl(computedMemberNamesNonWidening.ts, 5, 5))
+>[K1] : Symbol([K1], Decl(computedMemberNamesNonWidening.ts, 5, 18))
+>K1 : Symbol(K1, Decl(computedMemberNamesNonWidening.ts, 2, 5))
+>[K2] : Symbol([K2], Decl(computedMemberNamesNonWidening.ts, 5, 28))
+>K2 : Symbol(K2, Decl(computedMemberNamesNonWidening.ts, 2, 15))
+>const : Symbol(const)
+
+declare function computedKey(): keyof typeof Computed;
+>computedKey : Symbol(computedKey, Decl(computedMemberNamesNonWidening.ts, 5, 49))
+>Computed : Symbol(Computed, Decl(computedMemberNamesNonWidening.ts, 5, 5))
+
+const wrapComputed = () => ({key: computedKey()});
+>wrapComputed : Symbol(wrapComputed, Decl(computedMemberNamesNonWidening.ts, 7, 5))
+>key : Symbol(key, Decl(computedMemberNamesNonWidening.ts, 7, 29))
+>computedKey : Symbol(computedKey, Decl(computedMemberNamesNonWidening.ts, 5, 49))
+
+export const fromComputed: {key: 'a' | 'b'} = wrapComputed();
+>fromComputed : Symbol(fromComputed, Decl(computedMemberNamesNonWidening.ts, 8, 12))
+>key : Symbol(key, Decl(computedMemberNamesNonWidening.ts, 8, 28))
+>wrapComputed : Symbol(wrapComputed, Decl(computedMemberNamesNonWidening.ts, 7, 5))
+
+// Literal keys
+const Literal = {a: 'x', b: 'y'} as const;
+>Literal : Symbol(Literal, Decl(computedMemberNamesNonWidening.ts, 11, 5))
+>a : Symbol(a, Decl(computedMemberNamesNonWidening.ts, 11, 17))
+>b : Symbol(b, Decl(computedMemberNamesNonWidening.ts, 11, 24))
+>const : Symbol(const)
+
+declare function literalKey(): keyof typeof Literal;
+>literalKey : Symbol(literalKey, Decl(computedMemberNamesNonWidening.ts, 11, 42))
+>Literal : Symbol(Literal, Decl(computedMemberNamesNonWidening.ts, 11, 5))
+
+const wrapLiteral = () => ({key: literalKey()});
+>wrapLiteral : Symbol(wrapLiteral, Decl(computedMemberNamesNonWidening.ts, 13, 5))
+>key : Symbol(key, Decl(computedMemberNamesNonWidening.ts, 13, 28))
+>literalKey : Symbol(literalKey, Decl(computedMemberNamesNonWidening.ts, 11, 42))
+
+export const fromLiteral: {key: 'a' | 'b'} = wrapLiteral();
+>fromLiteral : Symbol(fromLiteral, Decl(computedMemberNamesNonWidening.ts, 14, 12))
+>key : Symbol(key, Decl(computedMemberNamesNonWidening.ts, 14, 27))
+>wrapLiteral : Symbol(wrapLiteral, Decl(computedMemberNamesNonWidening.ts, 13, 5))
+
