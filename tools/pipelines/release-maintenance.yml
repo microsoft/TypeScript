@@ -1,0 +1,339 @@
+trigger: none
+pr: none
+
+parameters:
+  - name: operation
+    type: string
+    values:
+      - cherry-pick
+      - new-release-branch
+      - set-version
+      - sync-branch
+  - name: pr
+    type: string
+    default: ''
+  - name: target_branch
+    type: string
+    default: ''
+  - name: branch_name
+    type: string
+    default: ''
+  - name: package_version
+    type: string
+    default: ''
+  - name: core_major_minor
+    type: string
+    default: ''
+  - name: distinct_id
+    type: string
+    default: ''
+  - name: source_issue
+    type: string
+    default: ''
+  - name: requesting_user
+    type: string
+    default: ''
+  - name: status_comment
+    type: string
+    default: ''
+
+name: $(Date:yyyyMMdd)$(Rev:.r) ${{ parameters.operation }}
+
+variables:
+  - name: TYPESCRIPT_AUTOMATION_GITHUB_APP_CLIENT_ID
+    value: Iv23li4GolzJSEp1mzHI
+  - name: TYPESCRIPT_AUTOMATION_GITHUB_APP_KEY_ID
+    value: https://jststeam-passwords.vault.azure.net/keys/typescript-automation
+
+jobs:
+  - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
+      - job: ReleaseMaintenance
+        displayName: ${{ parameters.operation }}
+        timeoutInMinutes: 180
+        pool:
+          name: TypeScript-1ES-Large
+          demands:
+            - ImageOverride -equals azure-linux-3
+
+        steps:
+          - checkout: self
+            fetchDepth: 0
+            fetchFilter: blob:none
+            fetchTags: false
+
+          - bash: git fetch --no-tags origin "+refs/heads/*:refs/remotes/origin/*"
+            displayName: Fetch branches
+
+          - bash: |
+              set -euo pipefail
+              if [[ "$OPERATION" == cherry-pick ]]; then
+                if ! [[ "$PR" =~ ^[1-9][0-9]*$ ]]; then
+                  echo "pr must be a PR number." >&2
+                  exit 1
+                fi
+                if [[ -z "$TARGET_BRANCH" ]]; then
+                  echo "target_branch is required." >&2
+                  exit 1
+                fi
+              else
+                if ! [[ "$BRANCH_NAME" =~ ^(release-.+|ts[0-9]+-release)$ ]]; then
+                  echo "Release branch name must start with 'release-' or match 'ts<number>-release'." >&2
+                  exit 1
+                fi
+                if [[ "$OPERATION" != sync-branch && ( -z "$PACKAGE_VERSION" || -z "$CORE_MAJOR_MINOR" ) ]]; then
+                  echo "package_version and core_major_minor are required." >&2
+                  exit 1
+                fi
+              fi
+              cp tools/scripts/configure-release.mjs tools/scripts/release-maintenance.mjs "$AGENT_TEMPDIRECTORY/"
+            displayName: Validate inputs
+            env:
+              OPERATION: ${{ parameters.operation }}
+              PR: ${{ parameters.pr }}
+              TARGET_BRANCH: ${{ parameters.target_branch }}
+              BRANCH_NAME: ${{ parameters.branch_name }}
+              PACKAGE_VERSION: ${{ parameters.package_version }}
+              CORE_MAJOR_MINOR: ${{ parameters.core_major_minor }}
+
+          - task: UseNode@1
+            displayName: Use Node 24.x
+            inputs:
+              version: 24.x
+
+          - template: /tools/pipelines/steps/setup-go.yml@self
+
+          - ${{ if eq(parameters.operation, 'cherry-pick') }}:
+              - bash: |
+                  set -euo pipefail
+                  git switch --detach "origin/$TARGET_BRANCH"
+                displayName: Check out target branch
+                env:
+                  TARGET_BRANCH: ${{ parameters.target_branch }}
+
+              - bash: npm ci
+                displayName: npm ci
+
+          - ${{ if eq(parameters.operation, 'new-release-branch') }}:
+              - bash: |
+                  set -euo pipefail
+                  if git show-ref --verify --quiet "refs/remotes/origin/$BRANCH_NAME"; then
+                    echo "Branch $BRANCH_NAME already exists." >&2
+                    exit 1
+                  fi
+
+                  git switch -c "$BRANCH_NAME"
+                  node "$AGENT_TEMPDIRECTORY/configure-release.mjs" "$PACKAGE_VERSION" "$CORE_MAJOR_MINOR"
+
+                  mapfile -t changedFiles < <(git diff --name-only)
+                  expectedFiles=("Herebyfile.mjs" "tsc/internal/core/version.go")
+                  if [ "${changedFiles[*]}" != "${expectedFiles[*]}" ]; then
+                    echo "Unexpected files in release configuration: ${changedFiles[*]}" >&2
+                    exit 1
+                  fi
+                displayName: Configure release branch
+                env:
+                  BRANCH_NAME: ${{ parameters.branch_name }}
+                  PACKAGE_VERSION: ${{ parameters.package_version }}
+                  CORE_MAJOR_MINOR: ${{ parameters.core_major_minor }}
+
+              - bash: npm ci
+                displayName: npm ci
+
+              - bash: npx hereby validate --all
+                displayName: hereby validate --all
+
+              - bash: |
+                  set -euo pipefail
+                  mapfile -t changedFiles < <(git diff --name-only)
+                  expectedFiles=("Herebyfile.mjs" "tsc/internal/core/version.go")
+                  if [ "${changedFiles[*]}" != "${expectedFiles[*]}" ]; then
+                    echo "Validation produced unexpected changes: ${changedFiles[*]}" >&2
+                    exit 1
+                  fi
+                  git add Herebyfile.mjs tsc/internal/core/version.go
+                  git config user.email "290192711+typescript-automation[bot]@users.noreply.github.com"
+                  git config user.name "typescript-automation[bot]"
+                  git config core.hooksPath /dev/null
+                  git commit -m "Bump version to $PACKAGE_VERSION"
+                displayName: Commit release configuration
+                env:
+                  PACKAGE_VERSION: ${{ parameters.package_version }}
+
+          - ${{ if eq(parameters.operation, 'set-version') }}:
+              - bash: |
+                  set -euo pipefail
+                  git switch --detach "origin/$BRANCH_NAME"
+                displayName: Check out release branch
+                env:
+                  BRANCH_NAME: ${{ parameters.branch_name }}
+
+              - bash: npm ci
+                displayName: npm ci
+
+              - bash: |
+                  set -euo pipefail
+                  node "$AGENT_TEMPDIRECTORY/configure-release.mjs" "$PACKAGE_VERSION" "$CORE_MAJOR_MINOR"
+
+                  mapfile -t changedFiles < <(git diff --name-only)
+                  if [ "${#changedFiles[@]}" -eq 0 ]; then
+                    echo "Version is already $PACKAGE_VERSION."
+                    echo "##vso[task.setvariable variable=ReleaseConfigChanged]false"
+                    exit 0
+                  fi
+
+                  expectedFiles=("Herebyfile.mjs" "tsc/internal/core/version.go")
+                  for changedFile in "${changedFiles[@]}"; do
+                    if [[ ! " ${expectedFiles[*]} " =~ " $changedFile " ]]; then
+                      echo "Unexpected file in release configuration: $changedFile" >&2
+                      exit 1
+                    fi
+                  done
+                  echo "##vso[task.setvariable variable=ReleaseConfigChanged]true"
+                displayName: Configure release version
+                env:
+                  PACKAGE_VERSION: ${{ parameters.package_version }}
+                  CORE_MAJOR_MINOR: ${{ parameters.core_major_minor }}
+
+              - bash: npx hereby validate --all
+                displayName: hereby validate --all
+                condition: and(succeeded(), eq(variables['ReleaseConfigChanged'], 'true'))
+
+              - bash: |
+                  set -euo pipefail
+                  mapfile -t changedFiles < <(git diff --name-only)
+                  expectedFiles=("Herebyfile.mjs" "tsc/internal/core/version.go")
+                  for changedFile in "${changedFiles[@]}"; do
+                    if [[ ! " ${expectedFiles[*]} " =~ " $changedFile " ]]; then
+                      echo "Validation produced unexpected change: $changedFile" >&2
+                      exit 1
+                    fi
+                  done
+                  git add Herebyfile.mjs tsc/internal/core/version.go
+                  git config user.email "290192711+typescript-automation[bot]@users.noreply.github.com"
+                  git config user.name "typescript-automation[bot]"
+                  git config core.hooksPath /dev/null
+                  git commit -m "Bump version to $PACKAGE_VERSION"
+                displayName: Commit release configuration
+                condition: and(succeeded(), eq(variables['ReleaseConfigChanged'], 'true'))
+                env:
+                  PACKAGE_VERSION: ${{ parameters.package_version }}
+
+          - ${{ if eq(parameters.operation, 'sync-branch') }}:
+              - bash: |
+                  set -euo pipefail
+                  git switch --detach "origin/$BRANCH_NAME"
+
+                  releaseVersion="$(node -e '
+                    const source = require("node:fs").readFileSync("tsc/internal/core/version.go", "utf8");
+                    const match = source.match(/var version = "([^"]+)"/);
+                    if (!match) throw new Error("Unable to read the release version");
+                    process.stdout.write(match[1]);
+                  ')"
+                  git config user.email "290192711+typescript-automation[bot]@users.noreply.github.com"
+                  git config user.name "typescript-automation[bot]"
+                  git config core.hooksPath /dev/null
+
+                  if ! git merge origin/main --no-ff --no-commit; then
+                    mapfile -t conflictedFiles < <(git diff --name-only --diff-filter=U)
+                    allowedConflicts=("Herebyfile.mjs" "tsc/internal/core/version.go")
+                    for conflictedFile in "${conflictedFiles[@]}"; do
+                      if [[ ! " ${allowedConflicts[*]} " =~ " $conflictedFile " ]]; then
+                        echo "Merge conflict requires manual resolution: $conflictedFile" >&2
+                        exit 1
+                      fi
+                    done
+                    if [ "${#conflictedFiles[@]}" -eq 0 ]; then
+                      echo "Merge failed without reporting conflicted files." >&2
+                      exit 1
+                    fi
+                    git checkout --theirs -- "${conflictedFiles[@]}"
+                  fi
+
+                  node "$AGENT_TEMPDIRECTORY/configure-release.mjs" "$releaseVersion"
+                  git add Herebyfile.mjs tsc/internal/core/version.go
+                  if git rev-parse --verify --quiet MERGE_HEAD >/dev/null; then
+                    git commit --no-edit
+                  elif ! git diff --cached --quiet; then
+                    git commit -m "Restore release configuration after syncing main"
+                  fi
+                displayName: Merge main
+                env:
+                  BRANCH_NAME: ${{ parameters.branch_name }}
+
+              - bash: npm ci
+                displayName: npm ci
+
+              - bash: npx hereby validate --all
+                displayName: hereby validate --all
+
+              - bash: |
+                  set -euo pipefail
+                  if ! git diff --quiet || ! git diff --cached --quiet; then
+                    echo "Validation modified the worktree; refusing to push the merge." >&2
+                    git status --short
+                    exit 1
+                  fi
+                displayName: Verify clean merge
+
+          - template: /tools/pipelines/steps/create-github-app-token.yml@self
+            parameters:
+              azureSubscription: typescript-automation-signing
+              repositories: TypeScript
+              ${{ if eq(parameters.operation, 'cherry-pick') }}:
+                permissions: contents:write,issues:write,pull_requests:write
+              ${{ else }}:
+                permissions: contents:write,issues:write
+              condition: not(canceled())
+              insertSteps:
+                - bash: |
+                    set -euo pipefail
+                    basic_auth="$(node -e 'process.stdout.write(Buffer.from("x-access-token:" + process.env.GH_TOKEN).toString("base64"))')"
+                    echo "##vso[task.setsecret]$basic_auth"
+                    git remote set-url origin https://github.com/microsoft/TypeScript.git
+                    git config --local http.https://github.com/.extraheader "AUTHORIZATION: basic ${basic_auth}"
+                  displayName: Configure git for GitHub App token
+                  env:
+                    GH_TOKEN: $(GH_TOKEN)
+
+                - ${{ if eq(parameters.operation, 'cherry-pick') }}:
+                    - bash: node "$AGENT_TEMPDIRECTORY/release-maintenance.mjs" cherry-pick
+                      displayName: Create cherry-pick PR
+                      env:
+                        GH_TOKEN: $(GH_TOKEN)
+                        PR: ${{ parameters.pr }}
+                        TARGET_BRANCH: ${{ parameters.target_branch }}
+                        REQUESTING_USER: ${{ parameters.requesting_user }}
+
+                - ${{ if eq(parameters.operation, 'new-release-branch') }}:
+                    - bash: git push --set-upstream origin "$BRANCH_NAME"
+                      displayName: Push release branch
+                      env:
+                        BRANCH_NAME: ${{ parameters.branch_name }}
+
+                - ${{ if eq(parameters.operation, 'set-version') }}:
+                    - bash: git push origin "HEAD:refs/heads/$BRANCH_NAME"
+                      displayName: Push release branch
+                      condition: and(succeeded(), eq(variables['ReleaseConfigChanged'], 'true'))
+                      env:
+                        BRANCH_NAME: ${{ parameters.branch_name }}
+
+                - ${{ if eq(parameters.operation, 'sync-branch') }}:
+                    - bash: git push origin "HEAD:refs/heads/$BRANCH_NAME"
+                      displayName: Push release branch
+                      env:
+                        BRANCH_NAME: ${{ parameters.branch_name }}
+
+                - ${{ if ne(parameters.distinct_id, '') }}:
+                    - bash: node "$AGENT_TEMPDIRECTORY/release-maintenance.mjs" post-result
+                      displayName: Post result
+                      condition: not(canceled())
+                      env:
+                        GH_TOKEN: $(GH_TOKEN)
+                        OPERATION: ${{ parameters.operation }}
+                        BRANCH_NAME: ${{ parameters.branch_name }}
+                        PACKAGE_VERSION: ${{ parameters.package_version }}
+                        CHERRY_PICK_RESULT: $(CherryPickResult)
+                        DISTINCT_ID: ${{ parameters.distinct_id }}
+                        SOURCE_ISSUE: ${{ parameters.source_issue }}
+                        REQUESTING_USER: ${{ parameters.requesting_user }}
+                        STATUS_COMMENT: ${{ parameters.status_comment }}
