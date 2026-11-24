@@ -2292,6 +2292,7 @@ func (s *Session) handleGetCachedSourceFile(params *GetCachedSourceFileParams) (
 	return s.encodeSourceFileResponse(lease.SourceFile())
 }
 
+// @gen-proto-nullable
 func (s *Session) handleGetSymbolOfDeclaration(params *GetSymbolOfDeclarationParams) (*SymbolResponse, error) {
 	lease, err := s.acquireCachedSourceFile(params.File)
 	if err != nil {
@@ -2304,12 +2305,12 @@ func (s *Session) handleGetSymbolOfDeclaration(params *GetSymbolOfDeclarationPar
 		return nil, fmt.Errorf("%w: declaration node index %d is out of range", ErrClientError, params.Index)
 	}
 	node := table.Nodes[params.Index]
-	if node == nil || !ast.IsDeclaration(node) {
-		return nil, fmt.Errorf("%w: node index %d is not a declaration", ErrClientError, params.Index)
+	if node == nil {
+		return nil, fmt.Errorf("%w: node index %d is not a node", ErrClientError, params.Index)
 	}
 	symbol := node.Symbol()
 	if symbol == nil {
-		return nil, fmt.Errorf("%w: declaration node index %d has no binder symbol", ErrClientError, params.Index)
+		return nil, nil
 	}
 	return newFileSymbolResponse(symbol), nil
 }

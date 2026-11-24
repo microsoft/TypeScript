@@ -38,6 +38,7 @@ export class TimingDump {
             startedAt: this.startedAt,
             closedAt: new Date().toISOString(),
             timing: server ? combineTimingInfo(client, server) : client,
+            // eslint-disable-next-line no-restricted-syntax -- Keep the field present in the JSON dump.
             serverTiming: server ?? null,
             serverTimingError,
         };

@@ -6,10 +6,7 @@
 
 import { SyntaxKind } from "../../enums/syntaxKind.js";
 import type {
-    JSDocComment,
     JSDocParameterOrPropertyTag,
-    JSDocParameterTag,
-    JSDocPropertyTag,
     Node,
     NodeArray,
 } from "./ast.ts";

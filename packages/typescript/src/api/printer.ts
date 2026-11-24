@@ -34,7 +34,6 @@ export interface SynthesizedComment {
     hasLeadingNewLine: boolean;
 }
 
-/** @internal */
 interface EmitNode {
     emitFlags: EmitFlags;
     leadingComments: SynthesizedComment[] | undefined;
@@ -119,7 +118,7 @@ export function createEmitContext(): EmitContext {
             return node;
         },
         getEmitFlags(node) {
-            return emitNodes.get(node)?.emitFlags ?? 0 as EmitFlags;
+            return emitNodes.get(node)?.emitFlags ?? 0;
         },
 
         addSyntheticLeadingComment(node, kind, text, hasTrailingNewLine, hasLeadingNewLine) {

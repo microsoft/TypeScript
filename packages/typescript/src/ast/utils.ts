@@ -18,8 +18,10 @@ import type {
     Expression,
     HasExpression,
     HasInitializer,
+    Identifier,
     JSDocSignature,
     ModifierLike,
+    NumericOrStringLikeLiteral,
     ObjectAssignmentInitializer,
     PropertyAccessExpression,
     PropertyAssignment,
@@ -32,8 +34,7 @@ import {
     isAccessExpression,
     isIdentifier,
     isJSDocTypeExpression,
-    isNumericLiteral,
-    isStringLiteralLikeNode,
+    isNumericOrStringLikeLiteral,
 } from "./is.generated.ts";
 import { skipOuterExpressions } from "./is.ts";
 import { modifierToFlag } from "./modifiers.ts";
@@ -137,18 +138,18 @@ export function cast<TOut extends TIn, TIn = any>(value: TIn | undefined, test: 
 }
 
 export function hasExpression(node: Node): node is HasExpression {
-    return "expression" in node;
+    return !!(node as HasExpression).expression;
 }
 
 export function hasInitializer(node: Node): node is HasInitializer {
-    return "initializer" in node;
+    return !!(node as HasInitializer).initializer;
 }
 
 export function hasObjectAssignmentInitializer(node: Node): node is ObjectAssignmentInitializer {
-    return "objectAssignmentInitializer" in node;
+    return !!(node as ObjectAssignmentInitializer).objectAssignmentInitializer;
 }
 
-export function isExternalModule(file: SourceFile): boolean {
+export function isExternalModule(file: SourceFile): file is SourceFile & Declaration {
     return file.externalModuleIndicator !== undefined;
 }
 
@@ -176,9 +177,7 @@ function getRootDeclaration(node: Node): Node {
 }
 
 function getModifierFlags(node: Node): ModifierFlags {
-    const modifiers = "modifiers" in node
-        ? (node as Node & { readonly modifiers?: readonly ModifierLike[]; }).modifiers
-        : undefined;
+    const modifiers = (node as Node & { readonly modifiers?: readonly ModifierLike[]; }).modifiers;
     let flags = ModifierFlags.None;
     if (modifiers) {
         for (const modifier of modifiers) {
@@ -217,20 +216,17 @@ function skipParentheses(node: Expression): Expression {
     return skipOuterExpressions(node, OuterExpressionKinds.Parentheses);
 }
 
-function isStringOrNumericLiteralLike(node: Node): node is DeclarationName {
-    return isStringLiteralLikeNode(node) || isNumericLiteral(node);
-}
-
-function getElementOrPropertyAccessName(node: AccessExpression): DeclarationName | undefined {
+function getElementOrPropertyAccessName(node: AccessExpression): Identifier | NumericOrStringLikeLiteral | undefined {
     if (node.kind === SyntaxKind.PropertyAccessExpression) {
         return isIdentifier(node.name) ? node.name : undefined;
     }
     const argument = skipParentheses(node.argumentExpression);
-    return isStringOrNumericLiteralLike(argument) ? argument : undefined;
+    return isNumericOrStringLikeLiteral(argument) ? argument : undefined;
 }
 
-function getNameText(node: DeclarationName | undefined): string | undefined {
-    return node && "text" in node && typeof node.text === "string" ? node.text : undefined;
+function getNameText(node: Identifier | NumericOrStringLikeLiteral | undefined): string | undefined {
+    const text = node?.text;
+    return typeof text === "string" ? text : undefined;
 }
 
 function isEntityNameExpression(node: Node, allowJS = false): boolean {
@@ -243,22 +239,22 @@ function isEntityNameExpression(node: Node, allowJS = false): boolean {
     if (node.kind === SyntaxKind.ThisKeyword) return true;
     if (node.kind !== SyntaxKind.ElementAccessExpression) return false;
     const access = node as ElementAccessExpression;
-    return isStringOrNumericLiteralLike(access.argumentExpression) &&
-        isEntityNameExpression(access.expression, true);
+    return isNumericOrStringLikeLiteral(access.argumentExpression) &&
+        isEntityNameExpression(access.expression, /*allowJS*/ true);
 }
 
 function isBindableStaticAccessExpression(node: Node, excludeThisKeyword: boolean): node is AccessExpression {
     if (node.kind === SyntaxKind.PropertyAccessExpression) {
         const access = node as PropertyAccessExpression;
         return !excludeThisKeyword && access.expression.kind === SyntaxKind.ThisKeyword ||
-            isIdentifier(access.name) && isBindableStaticNameExpression(access.expression, true);
+            isIdentifier(access.name) && isBindableStaticNameExpression(access.expression, /*excludeThisKeyword*/ true);
     }
     if (node.kind !== SyntaxKind.ElementAccessExpression) return false;
     const access = node as ElementAccessExpression;
-    return isStringOrNumericLiteralLike(access.argumentExpression) &&
+    return isNumericOrStringLikeLiteral(access.argumentExpression) &&
         (!excludeThisKeyword && access.expression.kind === SyntaxKind.ThisKeyword ||
             isEntityNameExpression(access.expression) ||
-            isBindableStaticAccessExpression(access.expression, true));
+            isBindableStaticAccessExpression(access.expression, /*excludeThisKeyword*/ true));
 }
 
 function isBindableStaticNameExpression(node: Node, excludeThisKeyword: boolean): boolean {
@@ -280,8 +276,8 @@ function isBindableObjectDefinePropertyCall(node: CallExpression): boolean {
     return isIdentifier(access.expression) &&
         access.expression.text === "Object" &&
         access.name.text === "defineProperty" &&
-        isStringOrNumericLiteralLike(node.arguments[1]) &&
-        isBindableStaticNameExpression(node.arguments[0], true);
+        isNumericOrStringLikeLiteral(node.arguments[1]) &&
+        isBindableStaticNameExpression(node.arguments[0], /*excludeThisKeyword*/ true);
 }
 
 function getAssignmentDeclarationKind(node: BinaryExpression | CallExpression): JSDeclarationKind {
@@ -374,7 +370,7 @@ function getAssignedName(node: Node): DeclarationName | undefined {
             if (left.kind === SyntaxKind.PropertyAccessExpression) return (left as PropertyAccessExpression).name;
             if (left.kind === SyntaxKind.ElementAccessExpression) {
                 const argument = skipParentheses((left as ElementAccessExpression).argumentExpression);
-                return isStringOrNumericLiteralLike(argument) ? argument : undefined;
+                return isNumericOrStringLikeLiteral(argument) ? argument : undefined;
             }
             return undefined;
         }

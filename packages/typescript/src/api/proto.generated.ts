@@ -45,7 +45,7 @@ export interface APIMethodInfo {
     releaseSourceFile: APIMethod<ReleaseSourceFileParams, unknown>;
     retainSourceFile: APIMethod<RetainSourceFileParams, RetainSourceFileResponse>;
     getCachedSourceFile: APIMethod<GetCachedSourceFileParams, SourceFileResponse>;
-    getSymbolOfDeclaration: APIMethod<GetSymbolOfDeclarationParams, SymbolResponse>;
+    getSymbolOfDeclaration: APIMethod<GetSymbolOfDeclarationParams, SymbolResponse | null>;
     batchRequests: APIMethod<BatchRequestsParams, BatchRequestsResponse>;
     initialize: APIMethod<null, InitializeResponse>;
     getDefaultFormatCodeSettings: APIMethod<null, FormatCodeSettings>;
