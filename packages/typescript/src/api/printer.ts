@@ -45,8 +45,9 @@ export interface EmitContext {
 
     /**
      * Suppresses emission of the leading and trailing source comments of `node` by adding
-     * `NoLeadingComments` to the node and its chain of first children, and `NoTrailingComments`
-     * to the node and its chain of last children. Comments inside the node are still emitted.
+     * `NoLeadingComments` to the node and each first child that starts where its parent starts,
+     * and `NoTrailingComments` to the node and each last child that ends where its parent ends.
+     * Comments inside the node are still emitted.
      */
     suppressLeadingAndTrailingComments<T extends Node>(node: T): T;
 }
@@ -116,10 +117,10 @@ export function createEmitContext(): EmitContext {
         },
 
         suppressLeadingAndTrailingComments(node) {
-            for (let n: Node | undefined = node; n; n = getFirstChild(n)) {
+            for (let n: Node | undefined = node; n; n = getFirstChildAtStart(n)) {
                 getOrCreateEmitNode(n).emitFlags |= EmitFlags.NoLeadingComments;
             }
-            for (let n: Node | undefined = node; n; n = getLastChild(n)) {
+            for (let n: Node | undefined = node; n; n = getLastChildAtEnd(n)) {
                 getOrCreateEmitNode(n).emitFlags |= EmitFlags.NoTrailingComments;
             }
             return node;
@@ -127,11 +128,12 @@ export function createEmitContext(): EmitContext {
     };
 }
 
-function getFirstChild(node: Node): Node | undefined {
-    return node.forEachChild(child => child);
+function getFirstChildAtStart(node: Node): Node | undefined {
+    const child = node.forEachChild(child => child);
+    return child?.pos === node.pos ? child : undefined;
 }
 
-function getLastChild(node: Node): Node | undefined {
+function getLastChildAtEnd(node: Node): Node | undefined {
     let lastChild: Node | undefined;
     node.forEachChild(
         child => {
@@ -146,7 +148,7 @@ function getLastChild(node: Node): Node | undefined {
             }
         },
     );
-    return lastChild;
+    return lastChild?.end === node.end ? lastChild : undefined;
 }
 
 function nodeIsPresent(node: Node): boolean {
