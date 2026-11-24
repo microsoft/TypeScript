@@ -13,7 +13,7 @@ Input::
     },
 }
 
-tsgo -b -w -verbose --incremental
+tsc -b -w -verbose --incremental
 ExitStatus:: Success
 Output::
 [2J[3J[H[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...

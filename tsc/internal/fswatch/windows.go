@@ -349,16 +349,25 @@ func (s *windowsSubscription) processCompletion(callErr error, buf []byte, bytes
 		}
 	}
 
+	// A successful read of 0 bytes means the buffer was too small
+	// to hold all the events
+	if bytes == 0 {
+		s.dirWatch.events.setError(ErrOverflow)
+		s.dirWatch.notify()
+		return false
+	}
+
 	// Walk the FILE_NOTIFY_INFORMATION chain.
 	offset := uint32(0)
-	if bytes == 0 {
-		bytes = uint32(len(buf))
-	}
 	for offset < bytes {
+		// SAFETY: ReadDirectoryChangesW fills buf with DWORD-aligned FILE_NOTIFY_INFORMATION
+		// records, and offset only follows NextEntryOffset links between them.
 		fni := (*windows.FileNotifyInformation)(unsafe.Pointer(&buf[offset]))
 		nameLen := int(fni.FileNameLength) / 2
 		// The FileName field is a flexible array; reslice.
+		// SAFETY: The record's FileName holds FileNameLength bytes of UTF-16 within buf.
 		base := unsafe.Pointer(&fni.FileName)
+		// SAFETY: base points to nameLen UTF-16 code units, as above.
 		nameSlice := unsafe.Slice((*uint16)(base), nameLen)
 		name := windows.UTF16ToString(nameSlice)
 
@@ -386,6 +395,7 @@ func (s *windowsSubscription) processOne(action uint32, name string) {
 	case windows.FILE_ACTION_MODIFIED:
 		if pathPtr, err := windows.UTF16PtrFromString(watchPath); err == nil {
 			var data windows.Win32FileAttributeData
+			// SAFETY: GetFileExInfoStandard writes a Win32FileAttributeData, which data is.
 			if err := windows.GetFileAttributesEx(pathPtr, windows.GetFileExInfoStandard, (*byte)(unsafe.Pointer(&data))); err == nil {
 				if data.FileAttributes&windows.FILE_ATTRIBUTE_DIRECTORY == 0 {
 					s.dirWatch.events.update(path)

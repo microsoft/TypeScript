@@ -1,0 +1,54 @@
+//// [tests/cases/compiler/checkOrderSpreadCycle.ts] ////
+
+=== /ia.js ===
+/** @type {typeof import("./ma")} */
+const M = /** @type {any} */ (null);
+>M : Symbol(M, Decl(ia.js, 1, 5))
+
+module.exports = { v: { ...M } };
+>module.exports : Symbol(exports, Decl(ia.js, 0, 0))
+>module : Symbol(module, Decl(ia.js, 0, 0))
+>exports : Symbol(exports, Decl(ia.js, 0, 0))
+>v : Symbol(v, Decl(ia.js, 2, 18))
+>M : Symbol(M, Decl(ia.js, 1, 5))
+
+=== /ma.js ===
+export { v as pa } from "./xa";
+>v : Symbol(v, Decl(xa.js, 2, 18))
+>pa : Symbol(pa, Decl(ma.js, 0, 8))
+
+export const ma = 1;
+>ma : Symbol(ma, Decl(ma.js, 1, 12))
+
+=== /mb.js ===
+export { v as pb } from "./xb";
+>v : Symbol(v, Decl(xb.js, 2, 18))
+>pb : Symbol(pb, Decl(mb.js, 0, 8))
+
+export const mb = 1;
+>mb : Symbol(mb, Decl(mb.js, 1, 12))
+
+=== /xa.js ===
+/** @type {typeof import("./mb")} */
+const M = /** @type {any} */ (null);
+>M : Symbol(M, Decl(xa.js, 1, 5))
+
+module.exports = { v: { ...M } };
+>module.exports : Symbol(exports, Decl(xa.js, 0, 0))
+>module : Symbol(module, Decl(xa.js, 0, 0))
+>exports : Symbol(exports, Decl(xa.js, 0, 0))
+>v : Symbol(v, Decl(xa.js, 2, 18))
+>M : Symbol(M, Decl(xa.js, 1, 5))
+
+=== /xb.js ===
+/** @type {typeof import("./ma")} */
+const M = /** @type {any} */ (null);
+>M : Symbol(M, Decl(xb.js, 1, 5))
+
+module.exports = { v: { ...M } };
+>module.exports : Symbol(exports, Decl(xb.js, 0, 0))
+>module : Symbol(module, Decl(xb.js, 0, 0))
+>exports : Symbol(exports, Decl(xb.js, 0, 0))
+>v : Symbol(v, Decl(xb.js, 2, 18))
+>M : Symbol(M, Decl(xb.js, 1, 5))
+

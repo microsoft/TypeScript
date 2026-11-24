@@ -5,12 +5,16 @@ import {
     getFirstToken,
     getLastToken,
     getTokenPosOfNode,
+    isJSDoc,
+    type JSDoc,
+    type Modifier,
     ModifierFlags,
     type Node,
     type NodeArray,
     type SourceFile,
     SyntaxKind,
 } from "../../ast/index.ts";
+import { getModifiers } from "../../ast/modifiers.ts";
 import {
     modifierToFlag,
     NODE_CHILD_MASK,
@@ -58,11 +62,11 @@ export class RemoteNodeList extends Array<RemoteNode> implements NodeArray<Remot
     private _cursorNodeIndex: number = 0;
 
     get pos(): number {
-        return this.view.getUint32(this._byteIndex + NODE_OFFSET_POS, true);
+        return this.view.getInt32(this._byteIndex + NODE_OFFSET_POS, true);
     }
 
     get end(): number {
-        return this.view.getUint32(this._byteIndex + NODE_OFFSET_END, true);
+        return this.view.getInt32(this._byteIndex + NODE_OFFSET_END, true);
     }
 
     get next(): number {
@@ -305,15 +309,15 @@ export class RemoteNode extends RemoteNodeBase implements Node {
         }
     }
 
-    get jsDoc(): readonly Node[] | undefined {
+    get jsDoc(): readonly JSDoc[] | undefined {
         if (!this.hasChildren()) {
             return undefined;
         }
-        let result: Node[] | undefined;
+        let result: JSDoc[] | undefined;
         let next = this.index + 1;
         do {
             const child = this.getOrCreateChildAtNodeIndex(next);
-            if (!(child instanceof RemoteNodeList) && child.kind === SyntaxKind.JSDoc) {
+            if (!(child instanceof RemoteNodeList) && isJSDoc(child)) {
                 (result ??= []).push(child);
             }
             next = child.next;
@@ -960,6 +964,10 @@ export class RemoteNode extends RemoteNodeBase implements Node {
     }
 
     // ═══ Generated extended data property getters ═══
+
+    getModifiers(): readonly Modifier[] | undefined {
+        return getModifiers(this as unknown as Node);
+    }
 
     // ═══ Other property getters ═══
 

@@ -1,0 +1,71 @@
+//// [tests/cases/compiler/signatureHelpReverseMappedArgumentCheckOrder.ts] ////
+
+=== signatureHelpReverseMappedArgumentCheckOrder.ts ===
+// Printing the candidates of signature help computes the members of the
+// reverse mapped type inferred for the call, which resolves the call
+// again. That happens within the request, and does not change what
+// checking the call infers (29479).
+
+type Selector<S, R> = (state: S, meta: number) => R;
+>Selector : Symbol(Selector, Decl(signatureHelpReverseMappedArgumentCheckOrder.ts, 0, 0))
+>S : Symbol(S, Decl(signatureHelpReverseMappedArgumentCheckOrder.ts, 5, 14))
+>R : Symbol(R, Decl(signatureHelpReverseMappedArgumentCheckOrder.ts, 5, 16))
+>state : Symbol(state, Decl(signatureHelpReverseMappedArgumentCheckOrder.ts, 5, 23))
+>S : Symbol(S, Decl(signatureHelpReverseMappedArgumentCheckOrder.ts, 5, 14))
+>meta : Symbol(meta, Decl(signatureHelpReverseMappedArgumentCheckOrder.ts, 5, 32))
+>R : Symbol(R, Decl(signatureHelpReverseMappedArgumentCheckOrder.ts, 5, 16))
+
+declare function createStructuredSelector<S, T>(selectors: {
+>createStructuredSelector : Symbol(createStructuredSelector, Decl(signatureHelpReverseMappedArgumentCheckOrder.ts, 5, 52))
+>S : Symbol(S, Decl(signatureHelpReverseMappedArgumentCheckOrder.ts, 7, 42))
+>T : Symbol(T, Decl(signatureHelpReverseMappedArgumentCheckOrder.ts, 7, 44))
+>selectors : Symbol(selectors, Decl(signatureHelpReverseMappedArgumentCheckOrder.ts, 7, 48))
+
+  [K in keyof T]: Selector<S, T[K]>;
+>K : Symbol(K, Decl(signatureHelpReverseMappedArgumentCheckOrder.ts, 8, 3))
+>T : Symbol(T, Decl(signatureHelpReverseMappedArgumentCheckOrder.ts, 7, 44))
+>Selector : Symbol(Selector, Decl(signatureHelpReverseMappedArgumentCheckOrder.ts, 0, 0))
+>S : Symbol(S, Decl(signatureHelpReverseMappedArgumentCheckOrder.ts, 7, 42))
+>T : Symbol(T, Decl(signatureHelpReverseMappedArgumentCheckOrder.ts, 7, 44))
+>K : Symbol(K, Decl(signatureHelpReverseMappedArgumentCheckOrder.ts, 8, 3))
+
+}): Selector<S, T>;
+>Selector : Symbol(Selector, Decl(signatureHelpReverseMappedArgumentCheckOrder.ts, 0, 0))
+>S : Symbol(S, Decl(signatureHelpReverseMappedArgumentCheckOrder.ts, 7, 42))
+>T : Symbol(T, Decl(signatureHelpReverseMappedArgumentCheckOrder.ts, 7, 44))
+
+type State = { foo: number };
+>State : Symbol(State, Decl(signatureHelpReverseMappedArgumentCheckOrder.ts, 9, 19))
+>foo : Symbol(foo, Decl(signatureHelpReverseMappedArgumentCheckOrder.ts, 11, 14))
+
+declare const mySelector: Selector<State, boolean>
+>mySelector : Symbol(mySelector, Decl(signatureHelpReverseMappedArgumentCheckOrder.ts, 13, 13))
+>Selector : Symbol(Selector, Decl(signatureHelpReverseMappedArgumentCheckOrder.ts, 0, 0))
+>State : Symbol(State, Decl(signatureHelpReverseMappedArgumentCheckOrder.ts, 9, 19))
+
+const result1 = createStructuredSelector({
+>result1 : Symbol(result1, Decl(signatureHelpReverseMappedArgumentCheckOrder.ts, 15, 5))
+>createStructuredSelector : Symbol(createStructuredSelector, Decl(signatureHelpReverseMappedArgumentCheckOrder.ts, 5, 52))
+
+  mySelector: mySelector,
+>mySelector : Symbol(mySelector, Decl(signatureHelpReverseMappedArgumentCheckOrder.ts, 15, 42))
+>mySelector : Symbol(mySelector, Decl(signatureHelpReverseMappedArgumentCheckOrder.ts, 13, 13))
+
+});
+
+const result2 = createStructuredSelector({
+>result2 : Symbol(result2, Decl(signatureHelpReverseMappedArgumentCheckOrder.ts, 19, 5))
+>createStructuredSelector : Symbol(createStructuredSelector, Decl(signatureHelpReverseMappedArgumentCheckOrder.ts, 5, 52))
+
+  mySelector: (state: State) => true,
+>mySelector : Symbol(mySelector, Decl(signatureHelpReverseMappedArgumentCheckOrder.ts, 19, 42))
+>state : Symbol(state, Decl(signatureHelpReverseMappedArgumentCheckOrder.ts, 20, 15))
+>State : Symbol(State, Decl(signatureHelpReverseMappedArgumentCheckOrder.ts, 9, 19))
+
+});
+
+result2;
+>result2 : Symbol(result2, Decl(signatureHelpReverseMappedArgumentCheckOrder.ts, 19, 5))
+
+export {};
+

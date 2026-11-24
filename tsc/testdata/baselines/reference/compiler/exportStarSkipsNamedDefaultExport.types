@@ -1,0 +1,37 @@
+//// [tests/cases/compiler/exportStarSkipsNamedDefaultExport.ts] ////
+
+=== /a.ts ===
+interface I {}
+export default I;
+>I : I
+
+export interface J {}
+
+=== /b.ts ===
+export {};
+declare module './a' {
+>'./a' : typeof import("./a")
+
+    export default interface I { x: number; }
+>x : number
+}
+
+=== /c.ts ===
+
+export * from "./a";
+
+=== /d.ts ===
+import { I, J } from "./c";
+>I : any
+>J : any
+
+export const i: I = { x: 0 };
+>i : I
+>{ x: 0 } : { x: number; }
+>x : number
+>0 : 0
+
+export const j: J = {};
+>j : J
+>{} : {}
+

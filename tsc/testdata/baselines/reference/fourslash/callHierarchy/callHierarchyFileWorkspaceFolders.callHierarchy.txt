@@ -1,0 +1,43 @@
+// === Call Hierarchy ===
+╭ name: foo
+├ kind: function
+├ file: /workspace/project/src/callers.ts
+├ span:
+│ ╭ /workspace/project/src/callers.ts:2:1-3:2
+│ │ 2: function foo() {
+│ │    ^^^^^^^^^^^^^^^^
+│ │ 3: }
+│ │    ^
+│ ╰
+├ selectionSpan:
+│ ╭ /workspace/project/src/callers.ts:2:10-2:13
+│ │ 2: function foo() {
+│ │             ^^^
+│ ╰
+├ incoming:
+│ ╭ from:
+│ │ ╭ name: callers.ts
+│ │ ├ kind: file
+│ │ ├ containerName: inner/src
+│ │ ├ file: /workspace/project/src/callers.ts
+│ │ ├ span:
+│ │ │ ╭ /workspace/project/src/callers.ts:1:1-3:2
+│ │ │ │ 1: foo();
+│ │ │ │    ^^^^^^
+│ │ │ │ 2: function foo() {
+│ │ │ │    ^^^^^^^^^^^^^^^^
+│ │ │ │ 3: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /workspace/project/src/callers.ts:1:1-1:1
+│ │ │ │ 1: foo();
+│ │ │ │    <
+│ │ │ ╰
+│ │ ╰ incoming: none
+│ ├ fromSpans:
+│ │ ╭ /workspace/project/src/callers.ts:1:1-1:4
+│ │ │ 1: foo();
+│ │ │    ^^^
+│ ╰ ╰
+╰ outgoing: none

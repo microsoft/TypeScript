@@ -1,0 +1,12 @@
+//// [tests/cases/compiler/noFlakyDiagnosticsBindingPatternInFunctionType2.ts] ////
+
+=== /a.js ===
+/** @template T */
+class Base {}
+>Base : Base<T>
+
+/** @extends {Base<{ e: function({ a: boolean }): void }>} */
+export class C extends Base {}
+>C : C
+>Base : Base<{ ({ a: boolean }: { a: any; }): void; e: Function; }>
+

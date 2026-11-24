@@ -1,0 +1,85 @@
+//// [tests/cases/compiler/jsElementAccessAssignmentChainCheckOrder.ts] ////
+
+=== bubble.js ===
+// Each element access on the right of a chained assignment reports its
+// implicit any once, whichever of the assignments is typed first (64710,
+// 64849).
+
+export class C {
+>C : C
+
+  /** @param {any} iScale @param {any} vScale @param {boolean} reset */
+  updateElements(iScale, vScale, reset) {
+>updateElements : (iScale: any, vScale: any, reset: boolean) => void
+>iScale : any
+>vScale : any
+>reset : boolean
+
+    const iAxis = iScale.axis;
+>iAxis : any
+>iScale.axis : any
+>iScale : any
+>axis : any
+
+    const vAxis = vScale.axis;
+>vAxis : any
+>vScale.axis : any
+>vScale : any
+>axis : any
+
+    const properties = {};
+>properties : { skip: any; }
+>{} : { skip: any; }
+
+    const iPixel = properties[iAxis] = reset ? iScale.getPixelForDecimal(0.5) : iScale.getPixelForValue(1);
+>iPixel : any
+>properties[iAxis] = reset ? iScale.getPixelForDecimal(0.5) : iScale.getPixelForValue(1) : any
+>properties[iAxis] : any
+>properties : { skip: any; }
+>iAxis : any
+>reset ? iScale.getPixelForDecimal(0.5) : iScale.getPixelForValue(1) : any
+>reset : boolean
+>iScale.getPixelForDecimal(0.5) : any
+>iScale.getPixelForDecimal : any
+>iScale : any
+>getPixelForDecimal : any
+>0.5 : 0.5
+>iScale.getPixelForValue(1) : any
+>iScale.getPixelForValue : any
+>iScale : any
+>getPixelForValue : any
+>1 : 1
+
+    const vPixel = properties[vAxis] = reset ? vScale.getBasePixel() : vScale.getPixelForValue(2);
+>vPixel : any
+>properties[vAxis] = reset ? vScale.getBasePixel() : vScale.getPixelForValue(2) : any
+>properties[vAxis] : any
+>properties : { skip: any; }
+>vAxis : any
+>reset ? vScale.getBasePixel() : vScale.getPixelForValue(2) : any
+>reset : boolean
+>vScale.getBasePixel() : any
+>vScale.getBasePixel : any
+>vScale : any
+>getBasePixel : any
+>vScale.getPixelForValue(2) : any
+>vScale.getPixelForValue : any
+>vScale : any
+>getPixelForValue : any
+>2 : 2
+
+    properties.skip = isNaN(iPixel) || isNaN(vPixel);
+>properties.skip = isNaN(iPixel) || isNaN(vPixel) : boolean
+>properties.skip : any
+>properties : { skip: any; }
+>skip : any
+>isNaN(iPixel) || isNaN(vPixel) : boolean
+>isNaN(iPixel) : boolean
+>isNaN : (number: number) => boolean
+>iPixel : any
+>isNaN(vPixel) : boolean
+>isNaN : (number: number) => boolean
+>vPixel : any
+  }
+}
+

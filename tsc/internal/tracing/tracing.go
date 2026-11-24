@@ -170,7 +170,7 @@ func StartTracing(fs vfs.FS, traceDir tspath.RootedDirectoryPath, configFilePath
 	// Write metadata events (matching TypeScript's format)
 	metaTs := tr.timestamp()
 	tr.metadataTS = metaTs
-	tr.writeEvent(traceEvent{PID: 1, TID: mainThreadID, PH: "M", Cat: "__metadata", TS: metaTs, Name: "process_name", Args: map[string]any{"name": "tsgo"}})
+	tr.writeEvent(traceEvent{PID: 1, TID: mainThreadID, PH: "M", Cat: "__metadata", TS: metaTs, Name: "process_name", Args: map[string]any{"name": "tsc"}})
 	tr.traceContent.WriteString(",\n")
 	tr.writeEvent(traceEvent{PID: 1, TID: mainThreadID, PH: "M", Cat: "__metadata", TS: metaTs, Name: "thread_name", Args: map[string]any{"name": "Main"}})
 	tr.traceContent.WriteString(",\n")
@@ -374,10 +374,15 @@ func traceThreadKeyFromArgs(args map[string]any) (traceThreadKey, bool) {
 	}
 
 	for _, key := range traceThreadArgKeys {
-		if value, ok := args[key]; ok {
-			if path, ok := value.(string); ok && path != "" {
-				return traceThreadKey{kind: traceThreadKindFile, text: path}, true
-			}
+		var path string
+		switch value := args[key].(type) {
+		case string:
+			path = value
+		case tspath.RootedFilePath:
+			path = value.AsString()
+		}
+		if path != "" {
+			return traceThreadKey{kind: traceThreadKindFile, text: path}, true
 		}
 	}
 

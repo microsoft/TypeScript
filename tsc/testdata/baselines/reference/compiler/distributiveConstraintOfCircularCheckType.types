@@ -1,0 +1,31 @@
+//// [tests/cases/compiler/distributiveConstraintOfCircularCheckType.ts] ////
+
+=== distributiveConstraintOfCircularCheckType.ts ===
+// The base constraint of Collect<F, unknown> is circular, since its
+// constraint includes Collect<F, F>, whose constraint includes itself.
+// Distributing Parameters over that constraint leads back into the
+// circularity, so Parameters<Collect<F, unknown>> must instead have the
+// constraint of its branches, unknown[], and be spreadable.
+
+type Collect<F, Result> =
+>Collect : Collect<F, Result>
+
+    Result & F extends (arg: infer A) => infer R
+>arg : A
+
+        ? Collect<F, F> | (() => R)
+        : never;
+
+function pipe<F extends (...args: any) => unknown>(args: Parameters<Collect<F, unknown>>, f: F) {
+>pipe : <F extends (...args: any) => unknown>(args: Parameters<Collect<F, unknown>>, f: F) => void
+>args : any
+>args : Parameters<Collect<F, unknown>>
+>f : F
+
+    f(...args);
+>f(...args) : unknown
+>f : F
+>...args : unknown
+>args : Parameters<Collect<F, unknown>>
+}
+

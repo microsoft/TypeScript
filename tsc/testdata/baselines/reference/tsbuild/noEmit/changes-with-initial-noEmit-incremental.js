@@ -27,7 +27,7 @@ function someFunc(arguments: boolean, ...rest: any[]) {
     "compilerOptions":  { "incremental": true }
 }
 
-tsgo -b -v --noEmit
+tsc -b -v --noEmit
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -239,7 +239,7 @@ Signatures::
 
 Edit [0]:: No Change run with emit
 
-tsgo -b -v
+tsc -b -v
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -421,7 +421,7 @@ export class classC {
     prop1 = 1;
 }
 
-tsgo -b -v
+tsc -b -v
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -694,7 +694,7 @@ export class classC {
     prop = 1;
 }
 
-tsgo -b -v --noEmit
+tsc -b -v --noEmit
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
@@ -874,7 +874,7 @@ Signatures::
 
 Edit [3]:: No Change run with emit
 
-tsgo -b -v
+tsc -b -v
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 

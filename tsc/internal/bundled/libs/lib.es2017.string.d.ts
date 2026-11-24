@@ -13,7 +13,6 @@ See the Apache Version 2.0 License for specific language governing permissions
 and limitations under the License.
 ***************************************************************************** */
 
-
 interface String {
     /**
      * Pads the current string with a given string (repeated and/or truncated, if needed) so that the resulting string has a given length.

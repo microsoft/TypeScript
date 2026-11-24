@@ -4,7 +4,7 @@ Input::
 //// [/home/src/workspaces/project/index.ts] *new* 
 export function* values() { yield 1; }
 
-tsgo index.ts --noEmit
+tsc index.ts --noEmit
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [91merror[0m[90m TS2318: [0mCannot find global type 'IterableIterator'.

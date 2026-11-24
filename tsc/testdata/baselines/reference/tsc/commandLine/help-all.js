@@ -2,7 +2,7 @@ currentDirectory::/home/src/workspaces/project
 useCaseSensitiveFileNames::true
 Input::
 
-tsgo --help --all
+tsc --help --all
 ExitStatus:: Success
 Output::
 tsc: The TypeScript Compiler - Version FakeTSVersion
@@ -84,6 +84,11 @@ Specify the base directory to resolve non-relative module names.
 
 [94m--customConditions[39m
 Conditions to set in addition to the resolver-specific defaults when resolving imports.
+
+[94m--disableDynamicImportExtensionRewriting[39m
+Disable runtime rewriting of file extensions in non-literal 'import()' and 'require()' calls when 'rewriteRelativeImportExtensions' is enabled.
+type: boolean
+default: false
 
 [94m--module, -m[39m
 Specify what module code is generated.

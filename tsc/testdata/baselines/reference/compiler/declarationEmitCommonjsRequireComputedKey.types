@@ -1,0 +1,165 @@
+//// [tests/cases/compiler/declarationEmitCommonjsRequireComputedKey.ts] ////
+
+=== b.js ===
+const key = "value";
+>key : "value"
+>"value" : "value"
+
+const {[key]: dynamic, ["text"]: text, other, nested: {value}, ...rest} = require("./a"),
+>key : "value"
+>dynamic : any
+>"text" : "text"
+>text : any
+>other : true
+>nested : any
+>value : number
+>rest : any
+>require("./a") : typeof sibling
+>require : any
+>"./a" : "./a"
+
+    sibling = require("./a");
+>sibling : typeof sibling
+>require("./a") : typeof sibling
+>require : any
+>"./a" : "./a"
+
+exports.dynamic = dynamic;
+>exports.dynamic = dynamic : error
+>exports.dynamic : error
+>exports : typeof import("./b")
+>dynamic : any
+>dynamic : error
+
+exports.text = text;
+>exports.text = text : error
+>exports.text : error
+>exports : typeof import("./b")
+>text : any
+>text : error
+
+exports.other = other;
+>exports.other = other : true
+>exports.other : true
+>exports : typeof import("./b")
+>other : true
+>other : true
+
+exports.value = value;
+>exports.value = value : number
+>exports.value : number
+>exports : typeof import("./b")
+>value : number
+>value : number
+
+exports.rest = rest;
+>exports.rest = rest : error
+>exports.rest : error
+>exports : typeof import("./b")
+>rest : any
+>rest : error
+
+exports.sibling = sibling;
+>exports.sibling = sibling : typeof sibling
+>exports.sibling : typeof sibling
+>exports : typeof import("./b")
+>sibling : typeof sibling
+>sibling : typeof sibling
+
+const {[key]: extra, Obj} = require("./a");
+>key : "value"
+>extra : any
+>Obj : typeof Obj
+>require("./a") : typeof sibling
+>require : any
+>"./a" : "./a"
+
+/** @param {Obj} o */
+function useObj(o) {}
+>useObj : (o: Obj) => void
+>o : Obj
+
+exports.Obj = Obj;
+>exports.Obj = Obj : typeof Obj
+>exports.Obj : typeof Obj
+>exports : typeof import("./b")
+>Obj : typeof Obj
+>Obj : typeof Obj
+
+exports.extra = extra;
+>exports.extra = extra : error
+>exports.extra : error
+>exports : typeof import("./b")
+>extra : any
+>extra : error
+
+exports.useObj = useObj;
+>exports.useObj = useObj : (o: Obj) => void
+>exports.useObj : (o: Obj) => void
+>exports : typeof import("./b")
+>useObj : (o: Obj) => void
+>useObj : (o: Obj) => void
+
+const {[key]: unusedDynamic, text: unusedText} = require("./a"), keep = 1;
+>key : "value"
+>unusedDynamic : any
+>text : any
+>unusedText : "text"
+>require("./a") : typeof sibling
+>require : any
+>"./a" : "./a"
+>keep : 1
+>1 : 1
+
+exports.keep = keep;
+>exports.keep = keep : 1
+>exports.keep : 1
+>exports : typeof import("./b")
+>keep : 1
+>keep : 1
+
+=== a.js ===
+exports.value = 123;
+>exports.value = 123 : 123
+>exports.value : 123
+>exports : typeof import("./a")
+>value : 123
+>123 : 123
+
+exports.text = "text";
+>exports.text = "text" : "text"
+>exports.text : "text"
+>exports : typeof import("./a")
+>text : "text"
+>"text" : "text"
+
+exports.other = true;
+>exports.other = true : true
+>exports.other : true
+>exports : typeof import("./a")
+>other : true
+>true : true
+
+exports.nested = { value: 1 };
+>exports.nested = { value: 1 } : { value: number; }
+>exports.nested : { value: number; }
+>exports : typeof import("./a")
+>nested : { value: number; }
+>{ value: 1 } : { value: number; }
+>value : number
+>1 : 1
+
+class Obj {
+>Obj : Obj
+
+    x = 1;
+>x : number
+>1 : 1
+}
+exports.Obj = Obj;
+>exports.Obj = Obj : typeof Obj
+>exports.Obj : typeof Obj
+>exports : typeof import("./a")
+>Obj : typeof Obj
+>Obj : typeof Obj
+

@@ -78,8 +78,10 @@ func FormatSpan(ctx context.Context, span core.TextRange, file *ast.SourceFile, 
 	)
 }
 
+// FormatNodeGivenIndentation formats a printed fragment using node as its traversal
+// root and file as its text context, including comments outside the node's range.
 func FormatNodeGivenIndentation(ctx context.Context, node *ast.Node, file *ast.SourceFile, languageVariant core.LanguageVariant, initialIndentation int, delta int) []core.TextChange {
-	textRange := core.NewTextRange(node.Pos(), node.End())
+	textRange := core.NewTextRange(0, len(file.Text()))
 	return newFormattingScanner(
 		file.Text(),
 		languageVariant,

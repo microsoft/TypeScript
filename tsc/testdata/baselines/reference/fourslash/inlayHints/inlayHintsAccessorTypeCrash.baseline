@@ -1,0 +1,109 @@
+// === Inlay Hints ===
+var divergent = { get a(): number { return 0; }, set a(value: string) {} };
+             ^
+{
+  "position": {
+    "line": 0,
+    "character": 13
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "{"
+    },
+    {
+      "value": " "
+    },
+    {
+      "value": "get "
+    },
+    {
+      "value": "a",
+      "location": {
+        "uri": "file:///inlayHintsAccessorTypeCrash.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 22
+          },
+          "end": {
+            "line": 0,
+            "character": 23
+          }
+        }
+      }
+    },
+    {
+      "value": "("
+    },
+    {
+      "value": ")"
+    },
+    {
+      "value": ": "
+    },
+    {
+      "value": "number"
+    },
+    {
+      "value": "; "
+    },
+    {
+      "value": "set "
+    },
+    {
+      "value": "a",
+      "location": {
+        "uri": "file:///inlayHintsAccessorTypeCrash.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 22
+          },
+          "end": {
+            "line": 0,
+            "character": 23
+          }
+        }
+      }
+    },
+    {
+      "value": "("
+    },
+    {
+      "value": "value",
+      "location": {
+        "uri": "file:///inlayHintsAccessorTypeCrash.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 55
+          },
+          "end": {
+            "line": 0,
+            "character": 60
+          }
+        }
+      }
+    },
+    {
+      "value": ": "
+    },
+    {
+      "value": "string"
+    },
+    {
+      "value": ")"
+    },
+    {
+      "value": " "
+    },
+    {
+      "value": "}"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}

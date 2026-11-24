@@ -6,9 +6,14 @@ steps:
 
   - bash: |
       cat > .npmrc << 'EOF'
-      registry=https://packagefeedproxy.microsoft.io/npm/
+      registry=https://pkgs.dev.azure.com/devdiv/devdiv/_packaging/devdiv_PublicPackages/npm/registry/
       EOF
     displayName: 'Set up .npmrc'
+
+  - task: npmAuthenticate@0
+    inputs:
+      workingFile: .npmrc
+    displayName: 'Authenticate npm'
 
   - pwsh: |
       $ErrorActionPreference = 'Stop'

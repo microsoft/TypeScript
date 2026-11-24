@@ -330,7 +330,7 @@ func getDocumentationFromDeclaration(getMappedLocation documentationLocationMapp
 					case ast.KindJSDocParameterTag, ast.KindJSDocPropertyTag:
 						writeOptionalEntityName(&b, tag.Name())
 					case ast.KindJSDocAugmentsTag:
-						writeOptionalEntityName(&b, tag.ClassName())
+						writeOptionalEntityName(&b, tag.ClassName().AsTypeReferenceNode().TypeName)
 					case ast.KindJSDocTemplateTag:
 						for i, tp := range tag.TypeParameters() {
 							if i != 0 {
@@ -692,7 +692,22 @@ func getQuickInfoAndDeclarationAtLocation(c *checker.Checker, symbol *ast.Symbol
 		}
 		if flags&(ast.SymbolFlagsVariable|ast.SymbolFlagsProperty|ast.SymbolFlagsAccessor) != 0 {
 			writeNewLine()
-			if symbol.CheckFlags()&ast.CheckFlagsIndexSymbol == 0 {
+			if symbol.CheckFlags()&ast.CheckFlagsIndexSymbol != 0 {
+				dpw.WritePunctuation("(")
+				dpw.Write("index")
+				dpw.WritePunctuation(") ")
+				if symbol.Parent() != nil {
+					writeSymbolClassified(symbol.Parent(), nil, ast.SymbolFlagsNone, symbolFormatFlags)
+				}
+				dpw.WritePunctuation("[")
+				for i, info := range c.GetIndexInfosOfIndexSymbol(symbol) {
+					if i != 0 {
+						dpw.WritePunctuation(" | ")
+					}
+					writeTypeClassified(info.KeyType(), container, typeFormatFlags)
+				}
+				dpw.WritePunctuation("]: ")
+			} else {
 				switch {
 				case flags&ast.SymbolFlagsProperty != 0:
 					dpw.WritePunctuation("(")

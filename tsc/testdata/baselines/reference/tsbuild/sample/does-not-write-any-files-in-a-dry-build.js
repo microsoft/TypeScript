@@ -60,7 +60,7 @@ export const m = mod;
     },
 }
 
-tsgo --b tests --dry
+tsc --b tests --dry
 ExitStatus:: Success
 Output::
 [[90mHH:MM:SS AM[0m] A non-dry build would build project '/user/username/projects/sample1/core/tsconfig.json'

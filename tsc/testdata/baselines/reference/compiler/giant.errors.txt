@@ -16,7 +16,6 @@ giant.ts(34,29): error TS1005: '{' expected.
 giant.ts(35,12): error TS2300: Duplicate identifier 'tgF'.
 giant.ts(36,16): error TS2300: Duplicate identifier 'tgF'.
 giant.ts(36,20): error TS1005: '{' expected.
-giant.ts(62,5): error TS1021: An index signature must have a type annotation.
 giant.ts(63,6): error TS1096: An index signature must have exactly one parameter.
 giant.ts(76,5): error TS2386: Overload signatures must all be optional or required.
 giant.ts(87,16): error TS2300: Duplicate identifier 'pgF'.
@@ -37,7 +36,6 @@ giant.ts(98,33): error TS1005: '{' expected.
 giant.ts(99,16): error TS2300: Duplicate identifier 'tgF'.
 giant.ts(100,20): error TS2300: Duplicate identifier 'tgF'.
 giant.ts(100,24): error TS1005: '{' expected.
-giant.ts(126,9): error TS1021: An index signature must have a type annotation.
 giant.ts(127,10): error TS1096: An index signature must have exactly one parameter.
 giant.ts(140,9): error TS2386: Overload signatures must all be optional or required.
 giant.ts(154,39): error TS1183: An implementation cannot be declared in ambient contexts.
@@ -59,7 +57,6 @@ giant.ts(177,33): error TS1005: '{' expected.
 giant.ts(178,16): error TS2300: Duplicate identifier 'tgF'.
 giant.ts(179,20): error TS2300: Duplicate identifier 'tgF'.
 giant.ts(179,24): error TS1005: '{' expected.
-giant.ts(205,9): error TS1021: An index signature must have a type annotation.
 giant.ts(206,10): error TS1096: An index signature must have exactly one parameter.
 giant.ts(219,9): error TS2386: Overload signatures must all be optional or required.
 giant.ts(233,39): error TS1183: An implementation cannot be declared in ambient contexts.
@@ -107,7 +104,6 @@ giant.ts(292,29): error TS1005: '{' expected.
 giant.ts(293,12): error TS2300: Duplicate identifier 'tgF'.
 giant.ts(294,16): error TS2300: Duplicate identifier 'tgF'.
 giant.ts(294,20): error TS1005: '{' expected.
-giant.ts(320,5): error TS1021: An index signature must have a type annotation.
 giant.ts(321,6): error TS1096: An index signature must have exactly one parameter.
 giant.ts(334,5): error TS2386: Overload signatures must all be optional or required.
 giant.ts(345,16): error TS2300: Duplicate identifier 'pgF'.
@@ -128,7 +124,6 @@ giant.ts(356,33): error TS1005: '{' expected.
 giant.ts(357,16): error TS2300: Duplicate identifier 'tgF'.
 giant.ts(358,20): error TS2300: Duplicate identifier 'tgF'.
 giant.ts(358,24): error TS1005: '{' expected.
-giant.ts(384,9): error TS1021: An index signature must have a type annotation.
 giant.ts(385,10): error TS1096: An index signature must have exactly one parameter.
 giant.ts(398,9): error TS2386: Overload signatures must all be optional or required.
 giant.ts(412,39): error TS1183: An implementation cannot be declared in ambient contexts.
@@ -150,7 +145,6 @@ giant.ts(435,33): error TS1005: '{' expected.
 giant.ts(436,16): error TS2300: Duplicate identifier 'tgF'.
 giant.ts(437,20): error TS2300: Duplicate identifier 'tgF'.
 giant.ts(437,24): error TS1005: '{' expected.
-giant.ts(463,9): error TS1021: An index signature must have a type annotation.
 giant.ts(464,10): error TS1096: An index signature must have exactly one parameter.
 giant.ts(477,9): error TS2386: Overload signatures must all be optional or required.
 giant.ts(491,39): error TS1183: An implementation cannot be declared in ambient contexts.
@@ -208,7 +202,6 @@ giant.ts(556,21): error TS1036: Statements are not allowed in ambient contexts.
 giant.ts(558,24): error TS1183: An implementation cannot be declared in ambient contexts.
 giant.ts(561,21): error TS1183: An implementation cannot be declared in ambient contexts.
 giant.ts(563,21): error TS1183: An implementation cannot be declared in ambient contexts.
-giant.ts(588,9): error TS1021: An index signature must have a type annotation.
 giant.ts(589,10): error TS1096: An index signature must have exactly one parameter.
 giant.ts(602,9): error TS2386: Overload signatures must all be optional or required.
 giant.ts(606,22): error TS1183: An implementation cannot be declared in ambient contexts.
@@ -223,7 +216,6 @@ giant.ts(621,26): error TS1183: An implementation cannot be declared in ambient 
 giant.ts(623,24): error TS1183: An implementation cannot be declared in ambient contexts.
 giant.ts(626,21): error TS1183: An implementation cannot be declared in ambient contexts.
 giant.ts(628,21): error TS1183: An implementation cannot be declared in ambient contexts.
-giant.ts(654,9): error TS1021: An index signature must have a type annotation.
 giant.ts(655,10): error TS1096: An index signature must have exactly one parameter.
 giant.ts(668,9): error TS2386: Overload signatures must all be optional or required.
 giant.ts(672,22): error TS1183: An implementation cannot be declared in ambient contexts.
@@ -231,7 +223,7 @@ giant.ts(672,25): error TS1036: Statements are not allowed in ambient contexts.
 giant.ts(676,30): error TS1183: An implementation cannot be declared in ambient contexts.
 
 
-==== giant.ts (231 errors) ====
+==== giant.ts (223 errors) ====
     /*
         Prefixes
         p -> public
@@ -330,8 +322,6 @@ giant.ts(676,30): error TS1183: An implementation cannot be declared in ambient 
         //Index Signature
         [p];
         [p1: string];
-        ~~~~~~~~~~~~~
-!!! error TS1021: An index signature must have a type annotation.
         [p2: string, p3: number];
          ~~
 !!! error TS1096: An index signature must have exactly one parameter.
@@ -436,8 +426,6 @@ giant.ts(676,30): error TS1183: An implementation cannot be declared in ambient 
             //Index Signature
             [p];
             [p1: string];
-            ~~~~~~~~~~~~~
-!!! error TS1021: An index signature must have a type annotation.
             [p2: string, p3: number];
              ~~
 !!! error TS1096: An index signature must have exactly one parameter.
@@ -559,8 +547,6 @@ giant.ts(676,30): error TS1183: An implementation cannot be declared in ambient 
             //Index Signature
             [p];
             [p1: string];
-            ~~~~~~~~~~~~~
-!!! error TS1021: An index signature must have a type annotation.
             [p2: string, p3: number];
              ~~
 !!! error TS1096: An index signature must have exactly one parameter.
@@ -770,8 +756,6 @@ giant.ts(676,30): error TS1183: An implementation cannot be declared in ambient 
         //Index Signature
         [p];
         [p1: string];
-        ~~~~~~~~~~~~~
-!!! error TS1021: An index signature must have a type annotation.
         [p2: string, p3: number];
          ~~
 !!! error TS1096: An index signature must have exactly one parameter.
@@ -876,8 +860,6 @@ giant.ts(676,30): error TS1183: An implementation cannot be declared in ambient 
             //Index Signature
             [p];
             [p1: string];
-            ~~~~~~~~~~~~~
-!!! error TS1021: An index signature must have a type annotation.
             [p2: string, p3: number];
              ~~
 !!! error TS1096: An index signature must have exactly one parameter.
@@ -999,8 +981,6 @@ giant.ts(676,30): error TS1183: An implementation cannot be declared in ambient 
             //Index Signature
             [p];
             [p1: string];
-            ~~~~~~~~~~~~~
-!!! error TS1021: An index signature must have a type annotation.
             [p2: string, p3: number];
              ~~
 !!! error TS1096: An index signature must have exactly one parameter.
@@ -1240,8 +1220,6 @@ giant.ts(676,30): error TS1183: An implementation cannot be declared in ambient 
             //Index Signature
             [p];
             [p1: string];
-            ~~~~~~~~~~~~~
-!!! error TS1021: An index signature must have a type annotation.
             [p2: string, p3: number];
              ~~
 !!! error TS1096: An index signature must have exactly one parameter.
@@ -1336,8 +1314,6 @@ giant.ts(676,30): error TS1183: An implementation cannot be declared in ambient 
             //Index Signature
             [p];
             [p1: string];
-            ~~~~~~~~~~~~~
-!!! error TS1021: An index signature must have a type annotation.
             [p2: string, p3: number];
              ~~
 !!! error TS1096: An index signature must have exactly one parameter.

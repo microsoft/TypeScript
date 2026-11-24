@@ -11,6 +11,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/project"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs"
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/osvfs"
 )
 
@@ -41,6 +42,12 @@ type StdioServerOptions struct {
 	// RunExternalCode allows configured content mappers to execute.
 	RunExternalCode      bool
 	ContentMapperSpawner contentmapper.Spawner
+	// FS replaces the operating-system file system as the server's base file
+	// system, which callbacks fall back to.
+	FS vfs.FS
+	// Tuples, if set, carries synchronous protocol messages directly instead
+	// of In, Out, or PipePath.
+	Tuples TupleTransport
 }
 
 // StdioServer runs an API session over STDIO using MessagePack protocol.
@@ -61,10 +68,16 @@ func NewStdioServer(options *StdioServerOptions) *StdioServer {
 	}
 }
 
-// Run starts the server and blocks until the connection closes.
+// Run starts the server and blocks until the connection closes or ctx is cancelled.
 func (s *StdioServer) Run(ctx context.Context) error {
+	ctx, cancel := context.WithCancel(ctx)
+	defer cancel()
 	var transport ipc.Transport
-	if s.options.PipePath != "" {
+	if s.options.Tuples != nil {
+		if s.options.Async {
+			panic("StdioServerOptions.Tuples requires the synchronous protocol")
+		}
+	} else if s.options.PipePath != "" {
 		t, err := ipc.NewPipeTransport(s.options.PipePath)
 		if err != nil {
 			return fmt.Errorf("failed to create pipe transport: %w", err)
@@ -76,8 +89,16 @@ func (s *StdioServer) Run(ctx context.Context) error {
 		defer t.Close()
 		transport = t
 	}
+	if transport != nil {
+		stopAccept := context.AfterFunc(ctx, func() { _ = transport.Close() })
+		defer stopAccept()
+	}
 
-	fs := bundled.WrapFS(osvfs.FS())
+	baseFS := s.options.FS
+	if baseFS == nil {
+		baseFS = osvfs.FS()
+	}
+	fs := bundled.WrapFS(baseFS)
 
 	// Wrap the base FS when callbacks or an explicit case-sensitivity setting are requested.
 	var callbackFS *callbackFS
@@ -105,24 +126,31 @@ func (s *StdioServer) Run(ctx context.Context) error {
 	})
 	defer session.Close()
 
-	// Accept connection from transport
-	rwc, err := transport.Accept()
-	if err != nil {
-		return fmt.Errorf("failed to accept connection: %w", err)
-	}
-
-	// Create protocol and connection based on async mode
 	var conn ipc.Conn
-	if s.options.Async {
-		protocol := ipc.NewJSONRPCProtocol(rwc)
-		asyncConn := ipc.NewAsyncConnWithProtocol(rwc, protocol, session)
-		asyncConn.SetCollectTiming(s.options.CollectTiming)
-		conn = asyncConn
-	} else {
-		protocol := NewMessagePackProtocol(rwc)
-		syncConn := ipc.NewSyncConn(rwc, protocol, session)
+	if s.options.Tuples != nil {
+		protocol := newCancellableProtocol(ctx, NewTupleProtocol(s.options.Tuples))
+		syncConn := ipc.NewSyncConn(nil, protocol, session)
 		syncConn.SetCollectTiming(s.options.CollectTiming)
 		conn = syncConn
+	} else {
+		rwc, err := transport.Accept()
+		if err != nil {
+			return serverRunError(ctx, fmt.Errorf("failed to accept connection: %w", err))
+		}
+		defer rwc.Close()
+		stopConnection := context.AfterFunc(ctx, func() { _ = rwc.Close() })
+		defer stopConnection()
+		if s.options.Async {
+			protocol := newCancellableProtocol(ctx, ipc.NewJSONRPCProtocol(rwc))
+			asyncConn := ipc.NewAsyncConnWithProtocol(rwc, protocol, session)
+			asyncConn.SetCollectTiming(s.options.CollectTiming)
+			conn = asyncConn
+		} else {
+			protocol := newCancellableProtocol(ctx, NewMessagePackProtocol(rwc))
+			syncConn := ipc.NewSyncConn(rwc, protocol, session)
+			syncConn.SetCollectTiming(s.options.CollectTiming)
+			conn = syncConn
+		}
 	}
 
 	// If callbacks are enabled, set the connection on the FS
@@ -132,6 +160,61 @@ func (s *StdioServer) Run(ctx context.Context) error {
 	session.SetConnection(conn)
 
 	return serverRunError(ctx, conn.Run(ctx))
+}
+
+type protocolReadResult struct {
+	message *ipc.Message
+	err     error
+}
+
+type cancellableProtocol struct {
+	ipc.Protocol
+	ctx      context.Context
+	requests chan struct{}
+	results  chan protocolReadResult
+}
+
+func newCancellableProtocol(ctx context.Context, protocol ipc.Protocol) *cancellableProtocol {
+	p := &cancellableProtocol{
+		Protocol: protocol,
+		ctx:      ctx,
+		requests: make(chan struct{}),
+		results:  make(chan protocolReadResult),
+	}
+	go func() {
+		for {
+			select {
+			case <-ctx.Done():
+				return
+			case <-p.requests:
+				message, err := protocol.ReadMessage()
+				select {
+				case <-ctx.Done():
+					return
+				case p.results <- protocolReadResult{message: message, err: err}:
+					continue
+				}
+			}
+		}
+	}()
+	return p
+}
+
+// Stdin reads may remain blocked even after Close. Keep that read separate from
+// request handling so cancellation can finish handlers and close the session.
+// Reads are demand-driven because synchronous callbacks also read responses.
+func (p *cancellableProtocol) ReadMessage() (*ipc.Message, error) {
+	select {
+	case <-p.ctx.Done():
+		return nil, p.ctx.Err()
+	case p.requests <- struct{}{}:
+		select {
+		case <-p.ctx.Done():
+			return nil, p.ctx.Err()
+		case result := <-p.results:
+			return result.message, result.err
+		}
+	}
 }
 
 func serverRunError(ctx context.Context, err error) error {

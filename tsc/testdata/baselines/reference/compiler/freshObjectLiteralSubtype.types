@@ -72,7 +72,7 @@ declare function utilValidate(): {
 >msg : string
 }
 
-validate().msg; // Error in TSGO
+validate().msg; // Was incorrectly an error
 >validate().msg : string | undefined
 >validate() : { valid: boolean; msg?: undefined; } | { valid: boolean; msg: string; }
 >validate : () => { valid: boolean; msg?: undefined; } | { valid: boolean; msg: string; }

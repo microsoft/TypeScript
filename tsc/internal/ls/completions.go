@@ -769,6 +769,7 @@ func (l *LanguageService) getCompletionData(
 						if parent != previousToken.Parent &&
 							parent.Initializer() == nil &&
 							astnav.FindChildOfKind(parent, ast.KindEqualsToken, file) != nil {
+							jsxInitializer.isInitializer = true
 							jsxInitializer.initializer = previousToken
 						}
 					}
@@ -1408,9 +1409,9 @@ func (l *LanguageService) getCompletionData(
 		if localSymbol != nil {
 			localExports = localSymbol.Exports()
 		}
-		for name, symbol := range localsContainer.Locals() {
+		for name, symbol := range localsContainer.Locals().All() {
 			symbols = append(symbols, symbol)
-			if _, ok := localExports[name]; ok {
+			if _, ok := localExports.Lookup(name); ok {
 				symbolId := ast.GetSymbolId(symbol)
 				symbolToSortTextMap[symbolId] = SortTextOptionalMember
 			}
@@ -1901,7 +1902,7 @@ func (l *LanguageService) completionInfoFromData(
 	}
 
 	for _, literal := range literals {
-		literalEntry := createCompletionItemForLiteral(file, preferences, literal)
+		literalEntry := createCompletionItemForLiteral(file, preferences, literal, data.jsxInitializer.isInitializer)
 		uniqueNames.Add(literalEntry.Label)
 		sortedEntries = append(sortedEntries, &CompletionItem{CompletionItem: literalEntry})
 	}
@@ -1923,7 +1924,6 @@ func (l *LanguageService) completionInfoFromData(
 				caseBlock.AsCaseBlock(),
 				file,
 				position,
-				compilerOptions,
 				l.program,
 				typeChecker,
 			)
@@ -2169,13 +2169,24 @@ func createCompletionItemForLiteral(
 	file *ast.SourceFile,
 	preferences lsutil.UserPreferences,
 	literal literalValue,
+	isJsxInitializer bool,
 ) *lsproto.CompletionItem {
-	return &lsproto.CompletionItem{
+	item := &lsproto.CompletionItem{
 		Label:            completionNameForLiteral(file, preferences, literal),
 		Kind:             new(lsproto.CompletionItemKindConstant),
 		SortText:         new(string(SortTextLocationPriority)),
 		CommitCharacters: new([]string{}),
 	}
+	if isJsxInitializer {
+		insertText := "{" + item.Label + "}"
+		if value, ok := literal.(string); ok {
+			insertText = jsxAttributeInitializerText(file, preferences, value)
+		}
+		if insertText != item.Label {
+			item.InsertText = &insertText
+		}
+	}
+	return item
 }
 
 func (l *LanguageService) createCompletionItem(
@@ -2202,6 +2213,12 @@ func (l *LanguageService) createCompletionItem(
 	source := getSourceFromOrigin(origin)
 	var labelDetails *lsproto.CompletionItemLabelDetails
 	preferences := l.UserPreferences()
+	if data.completionKind == CompletionKindString {
+		escaped := printer.EscapeString(name, stringCompletionQuoteChar(contextToken))
+		if escaped != name {
+			insertText = escaped
+		}
+	}
 	insertQuestionDot := originIsNullableMember(origin)
 	useBraces := originIsSymbolMember(origin) || needsConvertPropertyAccess
 	if originIsThisTypeNode(origin) {
@@ -2406,7 +2423,7 @@ func (l *LanguageService) createCompletionItem(
 	parentNamedImportOrExport := ast.FindAncestor(data.location, isNamedImportsOrExports)
 	if parentNamedImportOrExport != nil {
 		if !scanner.IsIdentifierText(name, core.LanguageVariantStandard) {
-			insertText = quotePropertyName(file, preferences, name)
+			insertText = quote(file, preferences, name)
 
 			if parentNamedImportOrExport.Kind == ast.KindNamedImports {
 				// Check if it is `import { ^here as name } from '...'``.
@@ -3557,7 +3574,7 @@ func getContextualType(previousToken *ast.Node, position int, file *ast.SourceFi
 	}
 }
 
-func getSwitchedType(caseClause *ast.CaseOrDefaultClauseNode, typeChecker *checker.Checker) *checker.Type {
+func getSwitchedType(caseClause *ast.CaseOrDefaultClause, typeChecker *checker.Checker) *checker.Type {
 	return typeChecker.GetTypeAtLocation(caseClause.Parent.Parent.Expression())
 }
 
@@ -3710,8 +3727,7 @@ func (l *LanguageService) createRangeFromStringLiteralLikeContent(file *ast.Sour
 }
 
 func quotePropertyName(file *ast.SourceFile, preferences lsutil.UserPreferences, name string) string {
-	r, _ := utf8.DecodeRuneInString(name)
-	if unicode.IsDigit(r) {
+	if len(name) > 0 && name[0] >= '0' && name[0] <= '9' && jsnum.IsNumericLiteralName(name) {
 		return name
 	}
 	return quote(file, preferences, name)
@@ -6592,7 +6608,6 @@ func (l *LanguageService) getExhaustiveCaseSnippets(
 	caseBlock *ast.CaseBlock,
 	file *ast.SourceFile,
 	position int,
-	options *core.CompilerOptions,
 	program *compiler.Program,
 	c *checker.Checker,
 ) (*lsproto.CompletionItem, error) {
@@ -6601,7 +6616,6 @@ func (l *LanguageService) getExhaustiveCaseSnippets(
 	if switchType != nil && switchType.IsUnion() && core.Every(switchType.Types(), isLiteral) {
 		// Collect constant values in existing clauses.
 		tracker := newCaseClauseTracker(c, clauses)
-		target := options.GetEmitScriptTarget()
 		quotePreference := lsutil.GetQuotePreference(file, l.UserPreferences())
 		// Tolerate a nil import adder in untitled files.
 		var importAdder autoimport.ImportAdder
@@ -6646,7 +6660,7 @@ func (l *LanguageService) getExhaustiveCaseSnippets(
 				if typeNode == nil {
 					return nil, nil
 				}
-				expr := typeNodeToExpression(typeNode, target, quotePreference, factory)
+				expr := typeNodeToExpression(typeNode, quotePreference, factory)
 				if expr == nil {
 					return nil, nil
 				}
@@ -6680,8 +6694,8 @@ func (l *LanguageService) getExhaustiveCaseSnippets(
 			return nil, nil
 		}
 
-		newClauses := core.Map(elements, func(element *ast.Node) *ast.CaseOrDefaultClauseNode {
-			return factory.NewCaseOrDefaultClause(ast.KindCaseClause, element, factory.NewNodeList(nil))
+		newClauses := core.Map(elements, func(element *ast.Node) *ast.CaseOrDefaultClause {
+			return factory.NewCaseClause(element, factory.NewNodeList(nil))
 		})
 		newLineChar := l.FormatOptions().NewLineCharacter
 		printer := createSnippetPrinter(printer.PrinterOptions{
@@ -6727,24 +6741,21 @@ func (l *LanguageService) getExhaustiveCaseSnippets(
 
 func typeNodeToExpression(
 	typeNode *ast.TypeNode,
-	target core.ScriptTarget,
 	quotePreference lsutil.QuotePreference,
 	factory *ast.NodeFactory,
 ) *ast.Expression {
 	switch typeNode.Kind {
 	case ast.KindTypeReference:
 		typeName := typeNode.AsTypeReferenceNode().TypeName
-		return entityNameToExpression(typeName, target, quotePreference, factory)
+		return entityNameToExpression(typeName, factory)
 	case ast.KindIndexedAccessType:
 		objectExpression := typeNodeToExpression(
 			typeNode.AsIndexedAccessTypeNode().ObjectType,
-			target,
 			quotePreference,
 			factory,
 		)
 		indexExpression := typeNodeToExpression(
 			typeNode.AsIndexedAccessTypeNode().IndexType,
-			target,
 			quotePreference,
 			factory,
 		)
@@ -6767,7 +6778,6 @@ func typeNodeToExpression(
 	case ast.KindParenthesizedType:
 		expr := typeNodeToExpression(
 			typeNode.AsParenthesizedTypeNode().Type,
-			target,
 			quotePreference,
 			factory,
 		)
@@ -6779,7 +6789,7 @@ func typeNodeToExpression(
 		}
 		return factory.NewParenthesizedExpression(expr)
 	case ast.KindTypeQuery:
-		return entityNameToExpression(typeNode.AsTypeQueryNode().ExprName, target, quotePreference, factory)
+		return entityNameToExpression(typeNode.AsTypeQueryNode().ExprName, factory)
 	case ast.KindImportType:
 		debug.Fail(`We should not get an import type after calling 'typeToAutoImportableTypeNode'.`)
 		return nil
@@ -6789,15 +6799,13 @@ func typeNodeToExpression(
 
 func entityNameToExpression(
 	entityName *ast.EntityName,
-	target core.ScriptTarget,
-	quotePreference lsutil.QuotePreference,
 	factory *ast.NodeFactory,
 ) *ast.Expression {
 	if ast.IsIdentifier(entityName) {
 		return entityName
 	}
 	return factory.NewPropertyAccessExpression(
-		entityNameToExpression(entityName.AsQualifiedName().Left, target, quotePreference, factory),
+		entityNameToExpression(entityName.AsQualifiedName().Left, factory),
 		nil, /*questionDotToken*/
 		entityName.AsQualifiedName().Right,
 		ast.NodeFlagsNone,
@@ -6835,7 +6843,7 @@ func (p *snippetPrinter) printAndFormatNode(ctx context.Context, node *ast.Node,
 func (p *snippetPrinter) printAndFormatNodeWithSettings(ctx context.Context, node *ast.Node, sourceFile *ast.SourceFile, formatOptions lsutil.FormatCodeSettings) string {
 	text := p.printUnescapedNode(node)
 	nodeWithPos := p.baseWriter.AssignPositionsToNode(node, p.factory)
-	syntheticFile := printer.CreateSyntheticSourceFile(p.factory, nodeWithPos, text, sourceFile.ParseOptions())
+	syntheticFile := printer.CreateSyntheticSourceFile(p.factory, text, sourceFile.ParseOptions())
 	ctx = format.WithFormatCodeSettings(ctx, formatOptions, formatOptions.NewLineCharacter)
 	changes := format.FormatNodeGivenIndentation(
 		ctx,

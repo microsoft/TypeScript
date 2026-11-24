@@ -1,0 +1,13 @@
+identicalSignaturesWithTypePredicates.ts(2,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'isString' must be of type '(x: unknown) => x is string', but here has type '(x: unknown) => boolean'.
+
+
+==== identicalSignaturesWithTypePredicates.ts (1 errors) ====
+    declare var isString: (x: unknown) => x is string;
+    declare var isString: (x: unknown) => boolean;
+                ~~~~~~~~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'isString' must be of type '(x: unknown) => x is string', but here has type '(x: unknown) => boolean'.
+!!! related TS6203 identicalSignaturesWithTypePredicates.ts:1:13: 'isString' was also declared here.
+    
+    declare var isNumber: (x: unknown) => x is number;
+    declare var isNumber: (x: unknown) => x is number;
+    

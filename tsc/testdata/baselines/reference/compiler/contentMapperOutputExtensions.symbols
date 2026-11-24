@@ -17,8 +17,9 @@ export declare const Card: (props: CardProps) => string;
 const __VERSION = "1.0.0";
 >__VERSION : Symbol(__VERSION, Decl(Widget.y.z, 0, 5))
 
+// @box-extension: .mts
 export declare const Widget: () => string;
->Widget : Symbol(Widget, Decl(Widget.y.z, 1, 20))
+>Widget : Symbol(Widget, Decl(Widget.y.z, 2, 20))
 
 === /typed.ts ===
 export const annotated: import("./Card.astro").CardProps = { title: "" };

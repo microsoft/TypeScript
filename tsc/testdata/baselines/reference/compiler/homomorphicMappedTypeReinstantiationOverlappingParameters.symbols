@@ -1,0 +1,122 @@
+//// [tests/cases/compiler/homomorphicMappedTypeReinstantiationOverlappingParameters.ts] ////
+
+=== homomorphicMappedTypeReinstantiationOverlappingParameters.ts ===
+// Self-referential homomorphic mapped types whose type variable is instantiated to another of their own type parameters.
+
+type F<T, U> = { [K in keyof T]: F<U, string> };
+>F : Symbol(F, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 0, 0))
+>T : Symbol(T, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 2, 7))
+>U : Symbol(U, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 2, 9))
+>K : Symbol(K, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 2, 18))
+>T : Symbol(T, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 2, 7))
+>F : Symbol(F, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 0, 0))
+>U : Symbol(U, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 2, 9))
+
+declare const f: F<{ a: 1 }, number>;
+>f : Symbol(f, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 3, 13))
+>F : Symbol(F, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 0, 0))
+>a : Symbol(a, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 3, 20))
+
+const f1 = f.a;
+>f1 : Symbol(f1, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 4, 5))
+>f.a : Symbol(a, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 3, 20))
+>f : Symbol(f, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 3, 13))
+>a : Symbol(a, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 3, 20))
+
+const f2: F<string, string> = "x";
+>f2 : Symbol(f2, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 5, 5))
+>F : Symbol(F, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 0, 0))
+
+type X = { x: 1 };
+>X : Symbol(X, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 5, 34))
+>x : Symbol(x, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 7, 10))
+
+type R<T, U> = {
+>R : Symbol(R, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 7, 18))
+>T : Symbol(T, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 8, 7))
+>U : Symbol(U, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 8, 9))
+
+    [K in keyof T]: {
+>K : Symbol(K, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 9, 5))
+>T : Symbol(T, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 8, 7))
+
+        rec: R<U, U | X>;
+>rec : Symbol(rec, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 9, 21))
+>R : Symbol(R, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 7, 18))
+>U : Symbol(U, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 8, 9))
+>U : Symbol(U, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 8, 9))
+>X : Symbol(X, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 5, 34))
+
+        direct: R<U | X, U | X>;
+>direct : Symbol(direct, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 10, 25))
+>R : Symbol(R, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 7, 18))
+>U : Symbol(U, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 8, 9))
+>X : Symbol(X, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 5, 34))
+>U : Symbol(U, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 8, 9))
+>X : Symbol(X, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 5, 34))
+    }
+};
+declare const r: R<{ a: 1 }, { b: 2 }>;
+>r : Symbol(r, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 14, 13))
+>R : Symbol(R, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 7, 18))
+>a : Symbol(a, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 14, 20))
+>b : Symbol(b, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 14, 30))
+
+const r1 = r.a.rec;
+>r1 : Symbol(r1, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 15, 5))
+>r.a.rec : Symbol(rec, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 9, 21))
+>r.a : Symbol(a, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 14, 20))
+>r : Symbol(r, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 14, 13))
+>a : Symbol(a, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 14, 20))
+>rec : Symbol(rec, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 9, 21))
+
+const r2 = r.a.direct;
+>r2 : Symbol(r2, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 16, 5))
+>r.a.direct : Symbol(direct, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 10, 25))
+>r.a : Symbol(a, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 14, 20))
+>r : Symbol(r, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 14, 13))
+>a : Symbol(a, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 14, 20))
+>direct : Symbol(direct, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 10, 25))
+
+type G<T, U> = { [K in keyof T]: { next: G<U, string[]>; value: T[K] } };
+>G : Symbol(G, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 16, 22))
+>T : Symbol(T, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 18, 7))
+>U : Symbol(U, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 18, 9))
+>K : Symbol(K, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 18, 18))
+>T : Symbol(T, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 18, 7))
+>next : Symbol(next, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 18, 34))
+>G : Symbol(G, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 16, 22))
+>U : Symbol(U, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 18, 9))
+>value : Symbol(value, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 18, 56))
+>T : Symbol(T, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 18, 7))
+>K : Symbol(K, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 18, 18))
+
+declare const g: G<{ a: 1 }, number>;
+>g : Symbol(g, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 19, 13))
+>G : Symbol(G, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 16, 22))
+>a : Symbol(a, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 19, 20))
+
+const g1 = g.a.next;
+>g1 : Symbol(g1, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 20, 5))
+>g.a.next : Symbol(next, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 18, 34))
+>g.a : Symbol(a, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 19, 20))
+>g : Symbol(g, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 19, 13))
+>a : Symbol(a, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 19, 20))
+>next : Symbol(next, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 18, 34))
+
+declare const g2: G<string[], string[]>;
+>g2 : Symbol(g2, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 21, 13))
+>G : Symbol(G, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 16, 22))
+
+const g3 = g2[0].value;
+>g3 : Symbol(g3, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 22, 5))
+>g2[0].value : Symbol(value, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 18, 56))
+>g2 : Symbol(g2, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 21, 13))
+>value : Symbol(value, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 18, 56))
+
+const g4 = g2.length;
+>g4 : Symbol(g4, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 23, 5))
+>g2.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>g2 : Symbol(g2, Decl(homomorphicMappedTypeReinstantiationOverlappingParameters.ts, 21, 13))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+

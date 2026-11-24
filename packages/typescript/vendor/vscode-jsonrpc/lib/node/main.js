@@ -84,7 +84,7 @@ class IPCMessageWriter extends api_1.AbstractMessageWriter {
         this.errorCount = 0;
         const eventEmitter = this.process;
         eventEmitter.on('error', (error) => this.fireError(error));
-        eventEmitter.on('close', () => this.fireClose);
+        eventEmitter.on('close', () => this.fireClose());
     }
     write(msg) {
         try {
@@ -119,7 +119,7 @@ class PortMessageReader extends api_1.AbstractMessageReader {
     constructor(port) {
         super();
         this.onData = new api_1.Emitter;
-        port.on('close', () => this.fireClose);
+        port.on('close', () => this.fireClose());
         port.on('error', (error) => this.fireError(error));
         port.on('message', (message) => {
             this.onData.fire(message);
@@ -227,7 +227,8 @@ function createClientPipeTransport(pipeName, encoding = 'utf-8') {
         server.listen(pipeName, () => {
             server.removeListener('error', reject);
             resolve({
-                onConnected: () => { return connected; }
+                onConnected: () => { return connected; },
+                close: () => { server.close(); }
             });
         });
     });
@@ -255,8 +256,16 @@ function createClientSocketTransport(port, encoding = 'utf-8') {
         server.on('error', reject);
         server.listen(port, '127.0.0.1', () => {
             server.removeListener('error', reject);
+            const address = server.address();
+            if (address === null || typeof address === 'string') {
+                reject(new Error(`Unexpected server address: ${address}`));
+                return;
+            }
+            const boundPort = address.port;
             resolve({
-                onConnected: () => { return connected; }
+                port: () => boundPort,
+                onConnected: () => { return connected; },
+                close: () => { server.close(); }
             });
         });
     });

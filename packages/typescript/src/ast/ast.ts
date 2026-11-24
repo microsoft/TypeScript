@@ -8,28 +8,58 @@ import type { NodeFlags } from "../../enums/nodeFlags.js";
 import type { ScriptKind } from "../../enums/scriptKind.js";
 import { SyntaxKind } from "../../enums/syntaxKind.js";
 import type {
+    ArrowFunction,
     AssertionExpression,
     BindingElement,
+    BindingPattern,
+    CallExpression,
     CaseClause,
+    ClassDeclaration,
+    ClassExpression,
     ComputedPropertyName,
+    ConstructorDeclaration,
+    ConstructorTypeNode,
     Decorator,
-    DefaultClause,
     DoStatement,
+    ElementAccessExpression,
     EndOfFile,
     EntityName,
+    EnumDeclaration,
     EnumMember,
+    ExportAssignment,
+    ExportDeclaration,
+    ExportSpecifier,
     Expression,
     ExpressionStatement,
     ForInStatement,
     ForOfStatement,
     ForStatement,
+    FunctionDeclaration,
+    FunctionExpression,
+    GetAccessorDeclaration,
     Identifier,
     IfStatement,
+    ImportClause,
+    ImportDeclaration,
+    ImportEqualsDeclaration,
+    ImportSpecifier,
+    IndexSignatureDeclaration,
+    InterfaceDeclaration,
+    JSDoc,
     JsxAttribute,
     JsxExpression,
     JsxSpreadAttribute,
     KeywordSyntaxKind,
+    MethodDeclaration,
+    MethodSignatureDeclaration,
+    Modifier,
     ModifierSyntaxKind,
+    ModuleDeclaration,
+    NamedExports,
+    NamedImports,
+    NamespaceExport,
+    NamespaceImport,
+    NonNullExpression,
     ParameterDeclaration,
     PropertyAccessExpression,
     PropertyAssignment,
@@ -38,6 +68,7 @@ import type {
     PunctuationSyntaxKind,
     ReturnStatement,
     SatisfiesExpression,
+    SetAccessorDeclaration,
     ShorthandPropertyAssignment,
     SpreadAssignment,
     Statement,
@@ -46,7 +77,10 @@ import type {
     ThisExpression,
     ThrowStatement,
     Token,
+    TypeAliasDeclaration,
+    TypeParameterDeclaration,
     VariableDeclaration,
+    VariableStatement,
     WhileStatement,
     WithStatement,
 } from "./ast.generated.ts";
@@ -57,6 +91,96 @@ export { TokenFlags } from "../../enums/tokenFlags.js";
 
 export * from "./ast.generated.ts";
 export * as factory from "./factory.generated.ts";
+
+export type CanHaveDecorators =
+    | ParameterDeclaration
+    | PropertyDeclaration
+    | MethodDeclaration
+    | GetAccessorDeclaration
+    | SetAccessorDeclaration
+    | ClassExpression
+    | ClassDeclaration;
+
+export type CanHaveModifiers =
+    | TypeParameterDeclaration
+    | ParameterDeclaration
+    | PropertySignatureDeclaration
+    | PropertyDeclaration
+    | MethodSignatureDeclaration
+    | MethodDeclaration
+    | ConstructorDeclaration
+    | GetAccessorDeclaration
+    | SetAccessorDeclaration
+    | IndexSignatureDeclaration
+    | ConstructorTypeNode
+    | FunctionExpression
+    | ArrowFunction
+    | ClassExpression
+    | VariableStatement
+    | FunctionDeclaration
+    | ClassDeclaration
+    | InterfaceDeclaration
+    | TypeAliasDeclaration
+    | EnumDeclaration
+    | ModuleDeclaration
+    | ImportEqualsDeclaration
+    | ImportDeclaration
+    | (Omit<ImportDeclaration, "kind"> & { readonly kind: SyntaxKind.JSImportDeclaration; })
+    | ExportAssignment
+    | ExportDeclaration;
+
+declare const autoAccessorBrand: unique symbol;
+export interface AutoAccessorPropertyDeclaration extends PropertyDeclaration {
+    readonly [autoAccessorBrand]: void;
+}
+
+declare const optionalChainBrand: unique symbol;
+export interface CallChain extends CallExpression {
+    readonly [optionalChainBrand]: void;
+}
+
+export interface ElementAccessChain extends ElementAccessExpression {
+    readonly [optionalChainBrand]: void;
+}
+
+declare const emptyBindingPatternBrand: unique symbol;
+export type EmptyBindingPattern = BindingPattern & { readonly [emptyBindingPatternBrand]: void; };
+
+export interface NonNullChain extends NonNullExpression {
+    readonly [optionalChainBrand]: void;
+}
+
+export interface PropertyAccessChain extends PropertyAccessExpression {
+    readonly [optionalChainBrand]: void;
+}
+
+export type OptionalChain = PropertyAccessChain | ElementAccessChain | CallChain | NonNullChain;
+
+declare const parameterPropertyBrand: unique symbol;
+export interface ParameterPropertyDeclaration extends ParameterDeclaration {
+    readonly [parameterPropertyBrand]: void;
+}
+
+export type TypeOnlyImportDeclaration =
+    | ImportClause & { readonly phaseModifier: SyntaxKind.TypeKeyword; }
+    | ImportEqualsDeclaration & { readonly isTypeOnly: true; }
+    | NamespaceImport & { readonly parent: ImportClause & { readonly phaseModifier: SyntaxKind.TypeKeyword; }; }
+    | ImportSpecifier
+        & (
+            | { readonly isTypeOnly: true; }
+            | { readonly parent: NamedImports & { readonly parent: ImportClause & { readonly phaseModifier: SyntaxKind.TypeKeyword; }; }; }
+        );
+
+export type TypeOnlyExportDeclaration =
+    | ExportSpecifier
+        & (
+            | { readonly isTypeOnly: true; }
+            | { readonly parent: NamedExports & { readonly parent: ExportDeclaration & { readonly isTypeOnly: true; }; }; }
+        )
+    | ExportDeclaration & { readonly isTypeOnly: true; readonly moduleSpecifier: Expression; readonly exportClause?: undefined; }
+    | NamespaceExport & { readonly parent: ExportDeclaration & { readonly isTypeOnly: true; }; };
+
+export type TypeOnlyAliasDeclaration = TypeOnlyImportDeclaration | TypeOnlyExportDeclaration;
 
 // ── Core types ──
 
@@ -139,7 +263,7 @@ export interface Node extends ReadonlyTextRange {
     readonly kind: SyntaxKind;
     readonly flags: NodeFlags;
     readonly parent: Node;
-    readonly jsDoc?: readonly Node[] | undefined;
+    readonly jsDoc?: readonly JSDoc[] | undefined;
     childrenIter<TNext = void>(): Generator<Node, TNext | undefined, TNext>;
     forEachChild<T>(visitor: (node: Node) => T, visitArray?: (nodes: NodeArray<Node>) => T): T | undefined;
     getSourceFile(): SourceFile;
@@ -156,6 +280,8 @@ export interface Node extends ReadonlyTextRange {
     getChildren(sourceFile?: SourceFile): readonly Node[];
     getFirstToken(sourceFile?: SourceFile): Node | undefined;
     getLastToken(sourceFile?: SourceFile): Node | undefined;
+    /** Gets syntactic modifiers without decorators, or `undefined` if there are none. */
+    getModifiers(): readonly Modifier[] | undefined;
 }
 
 export interface FileReference extends TextRange {
@@ -265,7 +391,6 @@ export type HasExpression =
     | WithStatement
     | SwitchStatement
     | CaseClause
-    | DefaultClause
     | ThrowStatement
     | AssertionExpression
     | TemplateSpan

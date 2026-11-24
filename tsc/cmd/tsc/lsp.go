@@ -5,9 +5,6 @@ import (
 	"flag"
 	"fmt"
 	"os"
-	"os/exec"
-	"os/signal"
-	"syscall"
 	"time"
 
 	"github.com/microsoft/TypeScript/tsc/internal/bundled"
@@ -18,7 +15,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/vfs/osvfs"
 )
 
-func runLSP(args []string) int {
+func runLSP(ctx context.Context, args []string) int {
 	flag := flag.NewFlagSet("lsp", flag.ContinueOnError)
 	stdio := flag.Bool("stdio", false, "use stdio for communication")
 	pprofDir := flag.String("pprofDir", "", "Generate pprof CPU/memory profiles to the given directory.")
@@ -45,25 +42,21 @@ func runLSP(args []string) int {
 	fs := bundled.WrapFS(osvfs.FS())
 	defaultLibraryPath := bundled.LibPath()
 	typingsLocation := osvfs.GetGlobalTypingsCacheLocation()
-	cwd := tspath.RootedDirectoryPathFromAbsolute(core.Must(os.Getwd()))
+	cwd := tspath.RootedDirectoryPathFromAbsolute(core.Must(getCurrentDirectory()))
 
-	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+	ctx, stop := context.WithCancel(ctx)
 	defer stop()
 
 	s := lsp.NewServer(&lsp.ServerOptions{
-		In:                 lsp.ToReader(os.Stdin),
+		In:                 lsp.ToReader(stdioStdin),
 		Out:                lsp.ToWriter(os.Stdout),
 		Err:                os.Stderr,
 		Cwd:                cwd,
 		FS:                 fs,
 		DefaultLibraryPath: defaultLibraryPath,
 		TypingsLocation:    typingsLocation,
-		NpmInstall: func(ctx context.Context, cwd string, args []string) ([]byte, error) {
-			cmd := exec.CommandContext(ctx, "npm", args...)
-			cmd.Dir = cwd
-			return cmd.Output()
-		},
-		Spawn:              spawnProcess,
+		NpmInstall:         getNpmInstall(),
+		Spawn:              getLSPSpawn(),
 		ProgressDelay:      250 * time.Millisecond,
 		SetParentProcessID: newParentProcessWatchdog(ctx, stop, *clientProcessID),
 	})

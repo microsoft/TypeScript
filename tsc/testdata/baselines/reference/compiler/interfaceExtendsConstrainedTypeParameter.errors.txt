@@ -1,0 +1,24 @@
+interfaceExtendsConstrainedTypeParameter.ts(1,11): error TS2884: Interface 'Constrained<T>' cannot extend type parameter 'T'.
+  'Constrained<T>' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'object'.
+interfaceExtendsConstrainedTypeParameter.ts(2,36): error TS2312: An interface can only extend an object type or intersection of object types with statically known members.
+interfaceExtendsConstrainedTypeParameter.ts(5,11): error TS2430: Interface 'Derived' incorrectly extends interface 'Base'.
+  Types of property 'value' are incompatible.
+    Type 'string' is not assignable to type 'number'.
+
+
+==== interfaceExtendsConstrainedTypeParameter.ts (3 errors) ====
+    interface Constrained<T extends object> extends T {}
+              ~~~~~~~~~~~
+!!! error TS2884: Interface 'Constrained<T>' cannot extend type parameter 'T'.
+!!! error TS2884:   'Constrained<T>' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'object'.
+    interface Unconstrained<T> extends T {}
+                                       ~
+!!! error TS2312: An interface can only extend an object type or intersection of object types with statically known members.
+    
+    interface Base { value: number }
+    interface Derived extends Base { value: string }
+              ~~~~~~~
+!!! error TS2430: Interface 'Derived' incorrectly extends interface 'Base'.
+!!! error TS2430:   Types of property 'value' are incompatible.
+!!! error TS2430:     Type 'string' is not assignable to type 'number'.
+    

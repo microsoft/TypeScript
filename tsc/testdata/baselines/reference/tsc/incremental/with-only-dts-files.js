@@ -8,7 +8,7 @@ export const x = 10;
 //// [/home/src/workspaces/project/tsconfig.json] *new* 
 {}
 
-tsgo --incremental
+tsc --incremental
 ExitStatus:: Success
 Output::
 //// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
@@ -95,7 +95,7 @@ Signatures::
 
 Edit [0]:: no change
 
-tsgo --incremental
+tsc --incremental
 ExitStatus:: Success
 Output::
 
@@ -108,7 +108,7 @@ Edit [1]:: modify d.ts file
 //// [/home/src/workspaces/project/src/main.d.ts] *modified* 
 export const x = 10;export const xy = 100;
 
-tsgo --incremental
+tsc --incremental
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *modified* 

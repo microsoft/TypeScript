@@ -146,7 +146,7 @@ export function createZoo(): Array<Dog> {
     ];
 }
 
-tsgo --b --verbose
+tsc --b --verbose
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
