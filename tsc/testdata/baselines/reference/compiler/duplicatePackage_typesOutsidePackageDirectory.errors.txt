@@ -1,0 +1,33 @@
+/index.ts(4,1): error TS2322: Type 'import("/node_modules/b/node_modules/pkg/x/index").C' is not assignable to type 'import("/node_modules/a/node_modules/pkg-x/index").C'.
+  Types have separate declarations of a private property 'p'.
+
+
+==== /index.ts (1 errors) ====
+    import { a } from "a";
+    import { b } from "b";
+    let x = a;
+    x = b;
+    ~
+!!! error TS2322: Type 'import("/node_modules/b/node_modules/pkg/x/index").C' is not assignable to type 'import("/node_modules/a/node_modules/pkg-x/index").C'.
+!!! error TS2322:   Types have separate declarations of a private property 'p'.
+    
+==== /node_modules/a/index.d.ts (0 errors) ====
+    import { C } from "pkg";
+    export declare const a: C;
+    
+==== /node_modules/a/node_modules/pkg-x/index.d.ts (0 errors) ====
+    export declare class C { private p; }
+    
+==== /node_modules/a/node_modules/pkg/package.json (0 errors) ====
+    { "name": "pkg", "version": "1.0.0", "types": "../pkg-x/index.d.ts" }
+    
+==== /node_modules/b/index.d.ts (0 errors) ====
+    import { C } from "pkg";
+    export declare const b: C;
+    
+==== /node_modules/b/node_modules/pkg/package.json (0 errors) ====
+    { "name": "pkg", "version": "1.0.0", "types": "./x/index.d.ts" }
+    
+==== /node_modules/b/node_modules/pkg/x/index.d.ts (0 errors) ====
+    export declare class C { private p; }
+    

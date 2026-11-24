@@ -1,0 +1,12 @@
+//// [tests/cases/compiler/typeReferenceDirectiveRelativeNameFromTypeRoot.ts] ////
+
+=== /a.ts ===
+/// <reference types="../pkg" />
+export const a: number = pkg;
+>a : number
+>pkg : number
+
+=== /pkg/index.d.ts ===
+declare const pkg: number;
+>pkg : number
+

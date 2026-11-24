@@ -1,0 +1,22 @@
+//// [tests/cases/compiler/declarationEmitNodeModulesIndexFile.ts] ////
+
+=== /a.ts ===
+import { make } from "./re";
+>make : () => import("index.js").T
+
+export const v = make();
+>v : import("./node_modules").T
+>make() : import("./node_modules").T
+>make : () => import("./node_modules").T
+
+=== /node_modules/index.d.ts ===
+export interface T { v: number }
+>v : number
+
+export declare function make(): T;
+>make : () => T
+
+=== /re.ts ===
+export { make } from "./node_modules/index";
+>make : () => import("./node_modules/index").T
+

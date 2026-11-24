@@ -1,0 +1,10 @@
+======== Resolving type reference directive '../pkg', containing file '/a.ts', root directory '/types'. ========
+Resolving with primary search path '/types'.
+File '/pkg.d.ts' does not exist.
+Found 'package.json' at '/pkg/package.json'.
+'package.json' does not have a 'typesVersions' field.
+'package.json' does not have a 'typings' field.
+'package.json' has 'types' field 'index.d.ts' that references '/pkg/index.d.ts'.
+File '/pkg/index.d.ts' exists - use it as a name resolution result.
+Resolving real path for '/pkg/index.d.ts', result '/pkg/index.d.ts'.
+======== Type reference directive '../pkg' was successfully resolved to '/pkg/index.d.ts', primary: true. ========
