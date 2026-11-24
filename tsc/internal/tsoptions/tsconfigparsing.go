@@ -1615,6 +1615,8 @@ func parseJsonConfigFileContentWorker(
 		baseDirectory:       basePathForFileNames,
 		caseSensitivity:     fs.CaseSensitivity(),
 		literalFileNamesLen: literalFileNamesLen,
+
+		contentMapperSourceFile: contentMapperSourceFile,
 	}
 }
 
@@ -1801,11 +1803,20 @@ func GetContentMapperOptionDiagnosticLocation(config *ParsedCommandLine, mapper 
 	if config == nil || config.ConfigFile == nil {
 		return nil, core.UndefinedTextRange()
 	}
+	// The "contentMappers" setting may be inherited through "extends", so look for its syntax in the
+	// config file that declared it, as the diagnostics reported while parsing it do.
+	file := config.contentMapperSourceFile
+	if file == nil {
+		file = config.ConfigFile.SourceFile
+	}
 	index := slices.Index(config.ContentMappers(), mapper)
-	mapperNode := getContentMapperSyntax(config.ConfigFile.SourceFile, index, "")
-	node := getContentMapperSyntax(config.ConfigFile.SourceFile, index, "options")
+	mapperNode := getContentMapperSyntax(file, index, "")
+	node := getContentMapperSyntax(file, index, "options")
 	if node == nil {
 		node = mapperNode
+	}
+	if node == nil {
+		return nil, core.UndefinedTextRange()
 	}
 	for _, segment := range path {
 		var next *ast.Node
@@ -1825,10 +1836,6 @@ func GetContentMapperOptionDiagnosticLocation(config *ParsedCommandLine, mapper 
 		}
 		node = next
 	}
-	if node == nil {
-		return nil, core.UndefinedTextRange()
-	}
-	file := config.ConfigFile.SourceFile
 	return file, core.NewTextRange(scanner.SkipTrivia(file.Text(), node.Pos()), node.End())
 }
 

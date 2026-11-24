@@ -76,6 +76,9 @@ type ParsedCommandLine struct {
 	contentMapperExtensionRewritesOnce sync.Once
 	contentMapperFileMatcherOnce       sync.Once
 	contentMapperFileMatcher           *contentmapper.FileMatcher
+	// contentMapperSourceFile is the config file whose "contentMappers" setting is in effect:
+	// this config's own file, or the extended config the setting was inherited from.
+	contentMapperSourceFile *ast.SourceFile
 
 	locale     locale.Locale
 	localeOnce sync.Once
@@ -115,6 +118,7 @@ func (p *ParsedCommandLine) WithFileNames(fileNames []tspath.RootedFilePath) *Pa
 		includeGlobs:                p.includeGlobs,
 		literalFileNamesLen:         p.literalFileNamesLen,
 		rootFileNamesForDiagnostics: p.rootFileNamesForDiagnostics,
+		contentMapperSourceFile:     p.contentMapperSourceFile,
 	}
 }
 
@@ -586,6 +590,7 @@ func (p *ParsedCommandLine) ReloadFileNamesOfParsedCommandLine(fs vfs.FS) *Parse
 		includeGlobs:                p.includeGlobs,
 		literalFileNamesLen:         literalFileNamesLen,
 		rootFileNamesForDiagnostics: p.rootFileNamesForDiagnostics,
+		contentMapperSourceFile:     p.contentMapperSourceFile,
 	}
 	return &parsedCommandLine
 }

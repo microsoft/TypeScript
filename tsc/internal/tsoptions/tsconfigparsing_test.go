@@ -1398,6 +1398,96 @@ func TestContentMapperOptionDiagnosticLocation(t *testing.T) {
 	assert.Equal(t, file.Text()[loc.Pos():loc.End()], "1")
 }
 
+func TestContentMapperOptionDiagnosticLocationInheritedFromExtendedConfig(t *testing.T) {
+	t.Parallel()
+	config := testConfig{
+		jsonText:       `{ "extends": "../base/tsconfig.base.json" }`,
+		configFileName: "tsconfig.json",
+		basePath:       "/project",
+		allFileList: map[string]string{
+			"/base/tsconfig.base.json": `{
+				"contentMappers": [{
+					"package": "mapper",
+					"extensions": [".vue"],
+					"options": { "plugins": [{ "name": 1 }] }
+				}]
+			}`,
+			"/project/index.ts":                 "export {};",
+			"/node_modules/mapper/package.json": `{ "name": "mapper", "version": "1.0.0", "typescript": { "contentMapper": { "exec": ["mapper"] } } }`,
+		},
+		existingOptions: &core.CompilerOptions{RunExternalCode: core.TSTrue},
+	}
+	fs := tsoptionstest.NewVFS(config.allFileList, tspath.CaseSensitive /*caseSensitivity*/)
+	parsed := getParsedWithJsonSourceFileApi(config, fs, config.basePath)
+	assert.Equal(t, len(parsed.Errors), 0)
+	assert.Equal(t, len(parsed.ContentMappers()), 1)
+
+	for name, test := range map[string]struct {
+		mapper *contentmapper.Mapper
+		path   []contentmapper.OptionPathSegment
+		want   string
+	}{
+		"nested option": {
+			mapper: parsed.ContentMappers()[0],
+			path:   []contentmapper.OptionPathSegment{{Property: "plugins"}, {Index: 0, IsIndex: true}, {Property: "name"}},
+			want:   "1",
+		},
+		"array element": {
+			mapper: parsed.ContentMappers()[0],
+			path:   []contentmapper.OptionPathSegment{{Property: "plugins"}, {Index: 0, IsIndex: true}},
+			want:   `{ "name": 1 }`,
+		},
+		"options object": {
+			mapper: parsed.ContentMappers()[0],
+			want:   `{ "plugins": [{ "name": 1 }] }`,
+		},
+		"unknown mapper": {
+			mapper: &contentmapper.Mapper{},
+			path:   []contentmapper.OptionPathSegment{{Property: "plugins"}},
+			want: `[{
+					"package": "mapper",
+					"extensions": [".vue"],
+					"options": { "plugins": [{ "name": 1 }] }
+				}]`,
+		},
+	} {
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+			file, loc := tsoptions.GetContentMapperOptionDiagnosticLocation(parsed, test.mapper, test.path)
+			assert.Assert(t, file != nil)
+			assert.Equal(t, file.FileName(), tspath.RootedFilePath("/base/tsconfig.base.json"))
+			assert.Equal(t, file.Text()[loc.Pos():loc.End()], test.want)
+		})
+	}
+}
+
+func TestContentMapperOptionDiagnosticLocationWithoutContentMappersSyntax(t *testing.T) {
+	t.Parallel()
+	config := testConfig{
+		jsonText:       `{}`,
+		configFileName: "tsconfig.json",
+		basePath:       "/",
+		allFileList: map[string]string{
+			"/index.ts": "export {};",
+		},
+	}
+	fs := tsoptionstest.NewVFS(config.allFileList, tspath.CaseSensitive /*caseSensitivity*/)
+	parsed := getParsedWithJsonSourceFileApi(config, fs, config.basePath)
+	mapper := &contentmapper.Mapper{}
+	parsed.ParsedConfig.ContentMappers = []*contentmapper.Mapper{mapper}
+	for name, path := range map[string][]contentmapper.OptionPathSegment{
+		"property": {{Property: "plugins"}},
+		"index":    {{Index: 0, IsIndex: true}},
+	} {
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+			file, loc := tsoptions.GetContentMapperOptionDiagnosticLocation(parsed, mapper, path)
+			assert.Assert(t, file == nil)
+			assert.Equal(t, loc, core.UndefinedTextRange())
+		})
+	}
+}
+
 func TestContentMappersAreInheritedFromExtendedConfig(t *testing.T) {
 	t.Parallel()
 	config := testConfig{
