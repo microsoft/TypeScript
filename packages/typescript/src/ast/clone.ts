@@ -1,6 +1,4 @@
-import { EmitFlags } from "../../enums/emitFlags.js";
 import { SyntaxKind } from "../../enums/syntaxKind.js";
-import type { EmitContext } from "../api/printer.ts";
 import type {
     Node,
     NodeArray,
@@ -91,95 +89,23 @@ function setTextRange<T extends Node>(node: T, range: ReadonlyTextRange | undefi
  * Creates a deep clone of a node and its subtree, synthesizing new nodes for every child.
  * Every cloned node keeps the text range of the node it was cloned from, and the resulting
  * tree has fully set parent pointers.
- *
- * @param node The node to clone.
- * @param includeTrivia Whether the clone should keep the leading and trailing comments of `node`
- * when printed. When `false` and `emitContext` is provided, comment emission is suppressed with
- * emit flags on the clone's outermost nodes, leaving text ranges and inner comments intact.
- * When `false` and no `emitContext` is provided, the clone's text ranges are cleared entirely.
- * @param emitContext The emit context used to suppress leading and trailing comments.
  */
-export function getSynthesizedDeepClone<T extends Node>(node: T, includeTrivia?: boolean, emitContext?: EmitContext): T;
-export function getSynthesizedDeepClone<T extends Node>(node: T | undefined, includeTrivia?: boolean, emitContext?: EmitContext): T | undefined;
-export function getSynthesizedDeepClone<T extends Node>(node: T | undefined, includeTrivia = true, emitContext?: EmitContext): T | undefined {
-    const clone = node && getSynthesizedDeepCloneWorker(node);
-    if (clone && !includeTrivia) {
-        if (emitContext) {
-            suppressLeadingAndTrailingComments(clone, emitContext);
-        }
-        else {
-            clearTextRanges(clone);
-        }
-    }
-    return setParentRecursive(clone);
+export function getSynthesizedDeepClone<T extends Node>(node: T): T;
+export function getSynthesizedDeepClone<T extends Node>(node: T | undefined): T | undefined;
+export function getSynthesizedDeepClone<T extends Node>(node: T | undefined): T | undefined {
+    return setParentRecursive(node && getSynthesizedDeepCloneWorker(node));
 }
 
 /**
  * Creates deep clones of a NodeArray and all its elements.
  */
-export function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T>, includeTrivia?: boolean, emitContext?: EmitContext): NodeArray<T>;
-export function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T> | undefined, includeTrivia?: boolean, emitContext?: EmitContext): NodeArray<T> | undefined;
-export function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T> | undefined, includeTrivia = true, emitContext?: EmitContext): NodeArray<T> | undefined {
+export function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T>): NodeArray<T>;
+export function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T> | undefined): NodeArray<T> | undefined;
+export function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T> | undefined): NodeArray<T> | undefined {
     if (nodes) {
-        const cloned = createNodeArray(
-            nodes.map(n => getSynthesizedDeepClone(n, includeTrivia, emitContext)),
-            nodes.pos,
-            nodes.end,
-        );
-        return cloned;
+        return createNodeArray(nodes.map(n => getSynthesizedDeepClone(n)), nodes.pos, nodes.end);
     }
     return nodes;
-}
-
-function suppressLeadingAndTrailingComments(node: Node, emitContext: EmitContext): void {
-    for (let n: Node | undefined = node; n; n = getFirstChild(n)) {
-        emitContext.setEmitFlags(n, emitContext.getEmitFlags(n) | EmitFlags.NoLeadingComments);
-    }
-    for (let n: Node | undefined = node; n; n = getLastChild(n)) {
-        emitContext.setEmitFlags(n, emitContext.getEmitFlags(n) | EmitFlags.NoTrailingComments);
-    }
-}
-
-function getFirstChild(node: Node): Node | undefined {
-    return node.forEachChild(child => child);
-}
-
-function getLastChild(node: Node): Node | undefined {
-    let lastChild: Node | undefined;
-    node.forEachChild(
-        child => {
-            if (nodeIsPresent(child)) lastChild = child;
-        },
-        children => {
-            for (let i = children.length - 1; i >= 0; i--) {
-                if (nodeIsPresent(children[i])) {
-                    lastChild = children[i];
-                    break;
-                }
-            }
-        },
-    );
-    return lastChild;
-}
-
-function nodeIsPresent(node: Node): boolean {
-    return node.pos !== node.end || node.pos < 0 || node.kind === SyntaxKind.EndOfFile;
-}
-
-function clearTextRanges(rootNode: Node): void {
-    setTextRange(rootNode, { pos: -1, end: -1 });
-    forEachChildRecursively(
-        rootNode,
-        child => {
-            setTextRange(child, { pos: -1, end: -1 });
-            return undefined;
-        },
-        nodes => {
-            (nodes as { pos: number; end: number; }).pos = -1;
-            (nodes as { pos: number; end: number; }).end = -1;
-            return undefined;
-        },
-    );
 }
 
 function getSynthesizedDeepCloneWorker<T extends Node>(node: T): T {

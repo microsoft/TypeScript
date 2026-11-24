@@ -9345,24 +9345,19 @@ export const obj = { m: 1, s: "hi", b: true };
         assert.strictEqual(await api.printer.printFile(getSynthesizedDeepClone(sourceFile)), await api.printer.printFile(sourceFile));
     });
 
-    test("getSynthesizedDeepClone without trivia suppresses leading and trailing comments", async () => {
+    test("suppressLeadingAndTrailingComments keeps inner comments of a cloned node", async () => {
         await using api = spawnAPI();
         await using lease = await api.createSourceFile("/test.ts", "// leading\nfoo(/* arg */ 1); // trailing\nbar();\n");
         const { sourceFile } = lease;
-        const printWithClone = async (clone: Node, emitContext?: EmitContext) => await api.printer.printFile(updateSourceFile(sourceFile, [sourceFile.statements[1], clone as Statement], sourceFile.endOfFileToken), { emitContext });
+        const printWithClone = async (clone: Statement, emitContext?: EmitContext) => await api.printer.printFile(updateSourceFile(sourceFile, [sourceFile.statements[1], clone], sourceFile.endOfFileToken), { emitContext });
 
         assert.strictEqual(await printWithClone(getSynthesizedDeepClone(sourceFile.statements[0])), "bar();\n// leading\nfoo(/* arg */ 1); // trailing\n");
 
         const emitContext = api.printer.createEmitContext();
-        const clone = getSynthesizedDeepClone(sourceFile.statements[0], /*includeTrivia*/ false, emitContext);
+        const clone = emitContext.suppressLeadingAndTrailingComments(getSynthesizedDeepClone(sourceFile.statements[0]));
         assert.strictEqual(clone.pos, sourceFile.statements[0].pos);
         assert.strictEqual(clone.end, sourceFile.statements[0].end);
         assert.strictEqual(await printWithClone(clone, emitContext), "bar();\nfoo(/* arg */ 1);\n");
-
-        const synthesized = getSynthesizedDeepClone(sourceFile.statements[0], /*includeTrivia*/ false);
-        assert.strictEqual(synthesized.pos, -1);
-        assert.strictEqual(synthesized.end, -1);
-        assert.strictEqual(await printWithClone(synthesized), "bar();\nfoo(1);\n");
     });
 
     test("printFile", async () => {

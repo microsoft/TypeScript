@@ -1,8 +1,6 @@
 import { EmitFlags } from "../../enums/emitFlags.js";
-import type {
-    Node,
-    SyntaxKind,
-} from "../ast/index.ts";
+import { SyntaxKind } from "../../enums/syntaxKind.js";
+import type { Node } from "../ast/index.ts";
 import {
     encodeNode,
     uint8ArrayToBase64,
@@ -44,6 +42,13 @@ export interface EmitContext {
     addSyntheticTrailingComment(node: Node, kind: CommentKind, text: string, hasTrailingNewLine: boolean, hasLeadingNewLine: boolean): Node;
     setSyntheticTrailingComments<T extends Node>(node: T, comments: SynthesizedComment[]): T;
     getSyntheticTrailingComments(node: Node): readonly SynthesizedComment[] | undefined;
+
+    /**
+     * Suppresses emission of the leading and trailing source comments of `node` by adding
+     * `NoLeadingComments` to the node and its chain of first children, and `NoTrailingComments`
+     * to the node and its chain of last children. Comments inside the node are still emitted.
+     */
+    suppressLeadingAndTrailingComments<T extends Node>(node: T): T;
 }
 
 /** @internal */
@@ -109,5 +114,41 @@ export function createEmitContext(): EmitContext {
         getSyntheticTrailingComments(node) {
             return emitNodes.get(node)?.trailingComments;
         },
+
+        suppressLeadingAndTrailingComments(node) {
+            for (let n: Node | undefined = node; n; n = getFirstChild(n)) {
+                getOrCreateEmitNode(n).emitFlags |= EmitFlags.NoLeadingComments;
+            }
+            for (let n: Node | undefined = node; n; n = getLastChild(n)) {
+                getOrCreateEmitNode(n).emitFlags |= EmitFlags.NoTrailingComments;
+            }
+            return node;
+        },
     };
+}
+
+function getFirstChild(node: Node): Node | undefined {
+    return node.forEachChild(child => child);
+}
+
+function getLastChild(node: Node): Node | undefined {
+    let lastChild: Node | undefined;
+    node.forEachChild(
+        child => {
+            if (nodeIsPresent(child)) lastChild = child;
+        },
+        children => {
+            for (let i = children.length - 1; i >= 0; i--) {
+                if (nodeIsPresent(children[i])) {
+                    lastChild = children[i];
+                    break;
+                }
+            }
+        },
+    );
+    return lastChild;
+}
+
+function nodeIsPresent(node: Node): boolean {
+    return node.pos !== node.end || node.pos < 0 || node.kind === SyntaxKind.EndOfFile;
 }

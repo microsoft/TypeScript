@@ -944,16 +944,6 @@ describe("getSynthesizedDeepClone", { concurrency }, () => {
         assert.strictEqual(clone.text, "hello");
     });
 
-    test("deeply clones identifier without trivia", () => {
-        const id = createIdentifier("hello");
-        const clone = getSynthesizedDeepClone(id, /*includeTrivia*/ false);
-
-        assert.strictEqual(clone.kind, SyntaxKind.Identifier);
-        assert.strictEqual(clone.text, "hello");
-        assert.strictEqual(clone.pos, -1);
-        assert.strictEqual(clone.end, -1);
-    });
-
     test("deeply clones binary expression", () => {
         const left = createIdentifier("a");
         const right = createNumericLiteral("42", TokenFlags.None);
