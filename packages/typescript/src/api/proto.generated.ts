@@ -1238,6 +1238,10 @@ export interface PrintNodeParams {
     neverAsciiEscape?: boolean | undefined;
     terminateUnterminatedLiterals?: boolean | undefined;
     emitNodes?: Record<number, PrintEmitNode | null> | undefined;
+    /** OriginalFiles are the source files containing the nodes referenced by OriginalNodes. */
+    originalFiles?: readonly SourceFileDescriptor[] | undefined;
+    /** OriginalNodes maps encoded node indices to the parsed nodes they were created from. */
+    originalNodes?: Record<number, PrintOriginalNode | null> | undefined;
 }
 
 export interface EmitParams {
@@ -1955,6 +1959,15 @@ export interface PrintEmitNode {
     emitFlags?: number | undefined;
     leadingComments?: PrintSynthesizedComment[] | undefined;
     trailingComments?: PrintSynthesizedComment[] | undefined;
+}
+
+/**
+ * PrintOriginalNode identifies a parsed node by the index of its source file in
+ * PrintNodeParams.OriginalFiles and its index within that file.
+ */
+export interface PrintOriginalNode {
+    file: number;
+    index: number;
 }
 
 export interface EmitOutputFile {

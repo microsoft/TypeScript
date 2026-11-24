@@ -29,6 +29,7 @@ import {
     getChildren,
     getCombinedModifierFlags,
     getNameOfDeclaration,
+    getOriginalNode,
     getTokenAtPosition,
     isClassDeclaration,
     isExternalModule,
@@ -980,6 +981,22 @@ describe("getSynthesizedDeepClone", { concurrency }, () => {
         assert.strictEqual(clone.left.parent, clone);
         assert.strictEqual(clone.right.parent, clone);
         assert.strictEqual(clone.operatorToken.parent, clone);
+    });
+
+    test("records each cloned node's original", () => {
+        const left = createIdentifier("a");
+        const right = createNumericLiteral("42", TokenFlags.None);
+        const op = createToken(SyntaxKind.PlusToken);
+        const bin = createBinaryExpression(undefined, left, undefined, op, right);
+
+        const clone = getSynthesizedDeepClone(bin);
+        const cloneOfClone = getSynthesizedDeepClone(clone);
+
+        assert.strictEqual(getOriginalNode(clone), bin);
+        assert.strictEqual(getOriginalNode(clone.left), left);
+        assert.strictEqual(getOriginalNode(clone.right), right);
+        assert.strictEqual(getOriginalNode(cloneOfClone.operatorToken), op);
+        assert.strictEqual(getOriginalNode(bin), bin);
     });
 
     test("returns undefined for undefined input", () => {

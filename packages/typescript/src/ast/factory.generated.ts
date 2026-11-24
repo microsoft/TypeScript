@@ -271,7 +271,10 @@ import {
     getModifiers,
     modifierToFlag,
 } from "./modifiers.ts";
-import { cloneSourceFileData } from "./utils.ts";
+import {
+    cloneSourceFileData,
+    setOriginalNode,
+} from "./utils.ts";
 import {
     forEachChildOfJSDocParameterTag,
     forEachChildOfJSDocPropertyTag,
@@ -794,7 +797,7 @@ export function createNodeArray<T extends Node>(elements: readonly T[], pos: num
 function update<T extends Node>(updated: T, original: T): T {
     (updated as any).pos = original.pos;
     (updated as any).end = original.end;
-    return updated;
+    return setOriginalNode(updated, original);
 }
 
 export function cloneNode<T extends Node>(node: T): T {
@@ -803,7 +806,7 @@ export function cloneNode<T extends Node>(node: T): T {
     (clone as any).flags = node.flags | NodeFlags.Synthesized;
     (clone as any).pos = node.pos;
     (clone as any).end = node.end;
-    return clone as unknown as T;
+    return setOriginalNode(clone as unknown as T, node);
 }
 
 function cloneNodeData(node: Node): any {

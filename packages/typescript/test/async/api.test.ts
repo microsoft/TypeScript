@@ -7,6 +7,7 @@ import {
     getJSDocCommentsAndTags,
     getJSDocTags,
     getSynthesizedDeepClone,
+    getSynthesizedDeepClones,
     getTextOfJSDocComment,
     type Identifier,
     InternalSymbolName,
@@ -9371,6 +9372,46 @@ export const obj = { m: 1, s: "hi", b: true };
         const clones = sourceFile.statements.slice(0, 2).map(s => emitContext.suppressLeadingAndTrailingComments(getSynthesizedDeepClone(s)));
         const updated = updateSourceFile(sourceFile, [sourceFile.statements[2], ...clones], sourceFile.endOfFileToken);
         assert.strictEqual(await api.printer.printFile(updated, { emitContext }), "bar();\nfoo(1 /* keep */);\n{\n    // keep\n    foo();\n}\n");
+    });
+
+    test("suppressLeadingAndTrailingComments keeps comments before a function body's closing brace", async () => {
+        await using api = spawnAPI();
+        await using lease = await api.createSourceFile("/test.ts", "function f() {\n    foo();\n    // keep\n} // trailing\nbar();\n");
+        const { sourceFile } = lease;
+        const emitContext = api.printer.createEmitContext();
+        const clone = emitContext.suppressLeadingAndTrailingComments(getSynthesizedDeepClone(sourceFile.statements[0]));
+        const updated = updateSourceFile(sourceFile, [sourceFile.statements[1], clone], sourceFile.endOfFileToken);
+        assert.strictEqual(await api.printer.printFile(updated, { emitContext }), "bar();\nfunction f() {\n    foo();\n    // keep\n}\n");
+    });
+
+    test("suppressLeadingAndTrailingComments reaches parsed children of created nodes", async () => {
+        await using api = spawnAPI();
+        await using lease = await api.createSourceFile("/test.ts", "// leading\nfoo() /* trailing */;\nbar();\n");
+        const { sourceFile } = lease;
+        const statement = sourceFile.statements[0];
+        assert(isExpressionStatement(statement));
+        const emitContext = api.printer.createEmitContext();
+        const created = emitContext.suppressLeadingAndTrailingComments(createExpressionStatement(statement.expression));
+        const updated = updateSourceFile(sourceFile, [sourceFile.statements[1], created], sourceFile.endOfFileToken);
+        assert.strictEqual(await api.printer.printFile(updated, { emitContext }), "bar();\nfoo();\n");
+    });
+
+    test("deep clones keep comments next to tokens", async () => {
+        await using api = spawnAPI();
+        const text = "function f() { return /* keep */ 1; }\n{ /* keep */ }\n";
+        await using lease = await api.createSourceFile("/test.ts", text);
+        const { sourceFile } = lease;
+        const updated = updateSourceFile(sourceFile, getSynthesizedDeepClones(sourceFile.statements), sourceFile.endOfFileToken);
+        assert.strictEqual(await api.printer.printFile(updated), text);
+    });
+
+    test("printing clones of a released source file", async () => {
+        await using api = spawnAPI();
+        const lease = await api.createSourceFile("/test.ts", "function f() { return /* keep */ 1; }\n");
+        const { sourceFile } = lease;
+        const updated = updateSourceFile(sourceFile, getSynthesizedDeepClones(sourceFile.statements), sourceFile.endOfFileToken);
+        await lease.dispose();
+        assert.match(await api.printer.printFile(updated), /^function f\(\) \{ return (\/\* keep \*\/ )?1; \}\n$/);
     });
 
     test("updated mixed ?? and || operands are parenthesized", async () => {

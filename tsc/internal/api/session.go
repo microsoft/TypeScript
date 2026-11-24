@@ -4398,7 +4398,12 @@ func (s *Session) handleSymbolToString(ctx context.Context, params *SymbolToStri
 
 // handlePrintNode decodes a binary-encoded AST node and prints it to text.
 func (s *Session) handlePrintNode(_ context.Context, params *PrintNodeParams) (string, error) {
-	node, emitContext, err := decodePrintNode(params.Data, params.EmitNodes)
+	originals, release, err := s.resolvePrintOriginals(params.OriginalFiles, params.OriginalNodes)
+	if err != nil {
+		return "", err
+	}
+	defer release()
+	node, emitContext, err := decodePrintNode(params.Data, params.EmitNodes, originals)
 	if err != nil {
 		return "", err
 	}
@@ -4422,7 +4427,52 @@ func mapComments(comments []PrintSynthesizedComment) []printer.SynthesizedCommen
 	})
 }
 
-func decodePrintNode(encoded string, emitNodes map[int]*PrintEmitNode) (*ast.Node, *printer.EmitContext, error) {
+// resolvePrintOriginals finds the parsed nodes that printed nodes were created from. Originals
+// whose source files are no longer cached are skipped. The returned function releases the
+// source files and must be called once printing is finished.
+func (s *Session) resolvePrintOriginals(files []SourceFileDescriptor, nodes map[int]*PrintOriginalNode) (map[int]*ast.Node, func(), error) {
+	if len(nodes) == 0 {
+		return nil, func() {}, nil
+	}
+	leases := make([]*project.SourceFileLease, len(files))
+	release := func() {
+		for _, lease := range leases {
+			if lease != nil {
+				lease.Release()
+			}
+		}
+	}
+	acquired := make([]bool, len(files))
+	originals := make(map[int]*ast.Node, len(nodes))
+	for index, original := range nodes {
+		if original == nil {
+			continue
+		}
+		if int(original.File) >= len(files) {
+			release()
+			return nil, nil, fmt.Errorf("%w: original node %d references file %d outside of originalFiles", ErrClientError, index, original.File)
+		}
+		if !acquired[original.File] {
+			acquired[original.File] = true
+			if lease, err := s.acquireCachedSourceFile(files[original.File]); err == nil {
+				leases[original.File] = lease
+			}
+		}
+		lease := leases[original.File]
+		if lease == nil {
+			continue
+		}
+		table := encoder.GetNodeIndexTable(lease.SourceFile())
+		if original.Index != 0 && int(original.Index) < len(table.Nodes) {
+			if parsed := table.Nodes[original.Index]; parsed != nil {
+				originals[index] = parsed
+			}
+		}
+	}
+	return originals, release, nil
+}
+
+func decodePrintNode(encoded string, emitNodes map[int]*PrintEmitNode, originals map[int]*ast.Node) (*ast.Node, *printer.EmitContext, error) {
 	emitContext := printer.NewEmitContext()
 	data, err := base64.StdEncoding.DecodeString(encoded)
 	if err != nil {
@@ -4442,6 +4492,11 @@ func decodePrintNode(encoded string, emitNodes map[int]*PrintEmitNode) (*ast.Nod
 	}
 	usedEmitNodes := 0
 	node, err := encoder.DecodeNodesWithCallback(data, func(node *ast.Node, index int) {
+		// A decoded source file stays its own original so that emit flags set on it
+		// by the client are not hidden behind the cached file.
+		if original := originals[index]; original != nil && original.Kind == node.Kind && !ast.IsSourceFile(node) {
+			emitContext.SetOriginal(node, original)
+		}
 		emitNode, ok := emitNodes[index]
 		if !ok || emitNode == nil {
 			return

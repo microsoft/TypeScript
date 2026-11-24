@@ -57,6 +57,32 @@ export function formatSyntaxKind(kind: SyntaxKind): string {
     return getSyntaxKindNames().get(kind) ?? `Unknown(${kind})`;
 }
 
+const originalNodes = new WeakMap<Node, Node>();
+
+/**
+ * Records `original` as the node that `node` was created from. Update and clone
+ * functions set this automatically.
+ */
+export function setOriginalNode<T extends Node>(node: T, original: Node | undefined): T {
+    if (original && original !== node) {
+        originalNodes.set(node, original);
+    }
+    return node;
+}
+
+/**
+ * Follows the chain of nodes recorded by {@link setOriginalNode} and returns the
+ * node at its root, or `node` itself if it has no original.
+ */
+export function getOriginalNode(node: Node): Node {
+    let original = originalNodes.get(node);
+    while (original) {
+        node = original;
+        original = originalNodes.get(node);
+    }
+    return node;
+}
+
 /**
  * Remove one extra leading underscore from an identifier name, recovering the
  * display form from its escaped {@link __String} key.

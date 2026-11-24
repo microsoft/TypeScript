@@ -12,6 +12,7 @@ import {
     createNumericLiteral,
     createStringLiteral,
 } from "./factory.generated.ts";
+import { setOriginalNode } from "./utils.ts";
 import { visitEachChild } from "./visitor.ts";
 
 function isArray(value: any): value is readonly unknown[] {
@@ -119,7 +120,7 @@ function getSynthesizedDeepCloneWorker<T extends Node>(node: T): T {
             : node.kind === SyntaxKind.NumericLiteral
             ? createNumericLiteral((node as Node as NumericLiteral).text, (node as Node as NumericLiteral).tokenFlags) as Node as T
             : cloneNode(node);
-        return setTextRange(clone, node);
+        return setOriginalNode(setTextRange(clone, node), node);
     }
 
     // visitEachChild already created a new node with visited children.

@@ -669,9 +669,9 @@ function generateFactory(): string {
     out.push(`} from "./ast.ts";`);
     out.push(`import { getModifiers, modifierToFlag } from "./modifiers.ts";`);
     out.push(`import { getChildren, getFirstToken, getLastToken, getTokenPosOfNode } from "./astnav.ts";`);
-    if (handWrittenCloneHelpers.length > 0) {
+    {
         out.push(`import {`);
-        for (const helperName of [...new Set(handWrittenCloneHelpers.map(h => h.helperName))].sort((a, b) => a.localeCompare(b))) {
+        for (const helperName of [...new Set([...handWrittenCloneHelpers.map(h => h.helperName), "setOriginalNode"])].sort((a, b) => a.localeCompare(b))) {
             out.push(`    ${helperName},`);
         }
         out.push(`} from "./utils.ts";`);
@@ -824,7 +824,7 @@ function generateFactory(): string {
     out.push(`function update<T extends Node>(updated: T, original: T): T {`);
     out.push(`    (updated as any).pos = original.pos;`);
     out.push(`    (updated as any).end = original.end;`);
-    out.push(`    return updated;`);
+    out.push(`    return setOriginalNode(updated, original);`);
     out.push(`}`);
     out.push(``);
     out.push(`export function cloneNode<T extends Node>(node: T): T {`);
@@ -833,7 +833,7 @@ function generateFactory(): string {
     out.push(`    (clone as any).flags = node.flags | NodeFlags.Synthesized;`);
     out.push(`    (clone as any).pos = node.pos;`);
     out.push(`    (clone as any).end = node.end;`);
-    out.push(`    return clone as unknown as T;`);
+    out.push(`    return setOriginalNode(clone as unknown as T, node);`);
     out.push(`}`);
     out.push(``);
 
