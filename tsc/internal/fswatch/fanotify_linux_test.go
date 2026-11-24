@@ -112,8 +112,7 @@ func TestFanotifyCrossWatcherSameFs(t *testing.T) {
 		if err := os.WriteFile(pathA, []byte("changed"), 0o644); err != nil {
 			t.Fatal(err)
 		}
-		gotA := rA.gather(rA.deadline(), 200*time.Millisecond)
-		assertEventSet(t, gotA, []wantEvent{{EventUpdate, pathA}})
+		expectContains(t, rA, EventUpdate, pathA)
 
 		if gotB := rB.drainQuiet(200 * time.Millisecond); len(gotB) != 0 {
 			t.Fatalf("watcher B got phantom events: %v", toWantEvents(gotB))

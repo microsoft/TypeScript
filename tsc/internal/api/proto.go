@@ -76,6 +76,7 @@ const (
 
 	MethodBatchRequests                                  Method = "batchRequests"
 	MethodInitialize                                     Method = "initialize"
+	MethodGetDefaultFormatCodeSettings                   Method = "getDefaultFormatCodeSettings"
 	MethodCreateSnapshot                                 Method = "createSnapshot"
 	MethodUpdateSnapshot                                 Method = "updateSnapshot"
 	MethodGetCurrentLanguageServerSnapshot               Method = "getCurrentLanguageServerSnapshot"
@@ -88,6 +89,9 @@ const (
 	MethodCreateModuleResolver                           Method = "createModuleResolver"
 	MethodReleaseModuleResolver                          Method = "releaseModuleResolver"
 	MethodResolveModuleName                              Method = "resolveModuleName"
+	MethodResolveTypeReferenceDirective                  Method = "resolveTypeReferenceDirective"
+	MethodGetEffectiveTypeRoots                          Method = "getEffectiveTypeRoots"
+	MethodGetTsBuildInfoEmitOutputFilePath               Method = "getTsBuildInfoEmitOutputFilePath"
 	MethodParseCommandLine                               Method = "parseCommandLine"
 	MethodReadConfigFile                                 Method = "readConfigFile"
 	MethodParseConfigFileTextToJson                      Method = "parseConfigFileTextToJson"
@@ -554,6 +558,10 @@ type CreateModuleResolverParams struct {
 	ResolveModuleNameCallback string                `json:"resolveModuleNameCallback,omitempty"`
 }
 
+type CompilerOptionsParams struct {
+	CompilerOptions core.CompilerOptions `json:"compilerOptions"`
+}
+
 type ReleaseModuleResolverParams struct {
 	Resolver ModuleResolverID `json:"resolver"`
 }
@@ -565,6 +573,21 @@ type ResolveModuleNameParams struct {
 	ModuleName          string             `json:"moduleName"`
 	ContainingDirectory DocumentIdentifier `json:"containingDirectory"`
 	ResolutionMode      *ResolutionMode    `json:"resolutionMode,omitempty"`
+}
+
+type ResolveTypeReferenceDirectiveParams struct {
+	Snapshot                   SnapshotID         `json:"snapshot,omitempty"`
+	InProgressSnapshot         uint64             `json:"inProgressSnapshot,omitempty"`
+	Resolver                   ModuleResolverID   `json:"resolver"`
+	TypeReferenceDirectiveName string             `json:"typeReferenceDirectiveName"`
+	ContainingFile             DocumentIdentifier `json:"containingFile"`
+	ResolutionMode             *ResolutionMode    `json:"resolutionMode,omitempty"`
+}
+
+type ResolveTypeReferenceDirectiveResult struct {
+	ResolvedTypeReferenceDirective *ResolvedTypeReferenceDirective `json:"resolvedTypeReferenceDirective,omitempty"`
+	// Trace is provided when compilerOptions.traceResolution is true.
+	Trace []string `json:"trace,omitempty"`
 }
 
 type ResolveModuleNameCallbackParams struct {
@@ -631,6 +654,7 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodGetCachedSourceFile:                            unmarshallerFor[GetCachedSourceFileParams],
 	MethodGetSymbolOfDeclaration:                         unmarshallerFor[GetSymbolOfDeclarationParams],
 	MethodInitialize:                                     noParams,
+	MethodGetDefaultFormatCodeSettings:                   noParams,
 	MethodCreateSnapshot:                                 unmarshallerFor[CreateSnapshotParams],
 	MethodUpdateSnapshot:                                 unmarshallerFor[UpdateSnapshotParams],
 	MethodGetCurrentLanguageServerSnapshot:               unmarshallerFor[GetCurrentLanguageServerSnapshotParams],
@@ -643,6 +667,9 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodCreateModuleResolver:                           unmarshallerFor[CreateModuleResolverParams],
 	MethodReleaseModuleResolver:                          unmarshallerFor[ReleaseModuleResolverParams],
 	MethodResolveModuleName:                              unmarshallerFor[ResolveModuleNameParams],
+	MethodResolveTypeReferenceDirective:                  unmarshallerFor[ResolveTypeReferenceDirectiveParams],
+	MethodGetEffectiveTypeRoots:                          unmarshallerFor[CompilerOptionsParams],
+	MethodGetTsBuildInfoEmitOutputFilePath:               unmarshallerFor[CompilerOptionsParams],
 	MethodParseCommandLine:                               unmarshallerFor[ParseCommandLineParams],
 	MethodReadConfigFile:                                 unmarshallerFor[ReadConfigFileParams],
 	MethodParseConfigFileTextToJson:                      unmarshallerFor[ParseConfigFileTextToJsonParams],

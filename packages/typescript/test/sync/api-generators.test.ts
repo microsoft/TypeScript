@@ -1613,6 +1613,10 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
             exercisedMethods.add("API.createModuleResolver");
 
             const cases: ParityCase[] = [
+                parityCase("API", "getDefaultFormatCodeSettings", api.getDefaultFormatCodeSettings, assertDeepEquivalent),
+                parityCase("API", "getEffectiveTypeRoots", api.getEffectiveTypeRoots, assertDeepEquivalent, { typeRoots: ["types"] }),
+                parityCase("API", "getTsBuildInfoEmitOutputFilePath", api.getTsBuildInfoEmitOutputFilePath, assertDeepEquivalent, { incremental: true, configFilePath: "/tsconfig.json" }),
+                parityCase("API", "getTsBuildInfoEmitOutputFilePath", api.getTsBuildInfoEmitOutputFilePath, assertDeepEquivalent, {}),
                 parityCase("API", "parseConfigFile", api.parseConfigFile, assertDeepEquivalent, "/tsconfig.json"),
                 parityCase("API", "parseCommandLine", api.parseCommandLine, assertDeepEquivalent, ["--strict", "--noEmit"]),
                 parityCase("API", "readConfigFile", api.readConfigFile, assertDeepEquivalent, "/tsconfig.json"),
@@ -1636,6 +1640,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
                 }),
                 parityCase("Snapshot", "getDefaultProjectForFile", snapshot.getDefaultProjectForFile, assertOptionalProjectsEquivalent, "/src/index.ts"),
                 parityCase("ModuleResolver", "resolveModuleName", moduleResolver.resolveModuleName, assertDeepEquivalent, "models", "/src"),
+                parityCase("ModuleResolver", "resolveTypeReferenceDirective", moduleResolver.resolveTypeReferenceDirective, assertDeepEquivalent, "parity", "/src/index.ts"),
                 parityCase("Snapshot", "update", snapshot.update, assertSnapshotsEquivalent, {}),
 
                 parityCase("LanguageService", "getImportAdderEdits", languageService.getImportAdderEdits, assertDeepEquivalent, "/src/index.ts", [{ kind: "importSymbol", symbol: unimportedSymbol }]),

@@ -1,5 +1,5 @@
-import * as vscode from "vscode";
 import type { CancellationToken } from "vscode";
+import * as vscode from "vscode";
 import type { MessageSignature } from "vscode-languageserver-protocol";
 import { isSupportedLanguageMode } from "./util";
 

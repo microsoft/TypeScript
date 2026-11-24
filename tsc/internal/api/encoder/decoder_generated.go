@@ -195,7 +195,6 @@ func (d *astDecoder) createChildrenNode(kind ast.Kind, data uint32, childIndices
 		ast.KindConstructorKeyword,
 		ast.KindDeclareKeyword,
 		ast.KindGetKeyword,
-		ast.KindImmediateKeyword,
 		ast.KindInferKeyword,
 		ast.KindIsKeyword,
 		ast.KindKeyOfKeyword,

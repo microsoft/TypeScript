@@ -43,10 +43,10 @@ import {
     type RootedFilePath,
     type SourceFile,
     type StringLiteralLikeNode,
+    symbolName,
     type SyntaxKind,
     type TypeNode,
     type TypeParameterDeclaration,
-    unescapeLeadingUnderscores,
 } from "../../ast/index.ts";
 import { assertNever } from "../../internal/utils.ts";
 import {
@@ -103,6 +103,7 @@ import type {
     DocumentPosition,
     EmitOutputResponse as ProtocolEmitOutputResponse,
     FileNotifications,
+    FormatCodeSettings,
     ImportAdderAction,
     InferredProjectId,
     IntrinsicTypeMethod,
@@ -124,6 +125,7 @@ import type {
     ResolvedModule,
     ResolvedTypeReferenceDirective,
     ResolveModuleNameResult,
+    ResolveTypeReferenceDirectiveResult,
     SignaturePropertyMethod,
     SignatureResponse,
     SourceFileDescriptor,
@@ -236,6 +238,7 @@ export type {
     EmitOutputFile,
     EmitResult,
     FileNotifications,
+    FormatCodeSettings,
     FormatDiagnosticsHost,
     FreshableType,
     GenericType,
@@ -269,6 +272,7 @@ export type {
     ResolvedModule,
     ResolvedTypeReferenceDirective,
     ResolveModuleNameResult,
+    ResolveTypeReferenceDirectiveResult,
     SourceFileMetadata,
     StaticModuleResolution,
     StringLiteralType,
@@ -521,6 +525,28 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         });
         this.activeBuildOrchestrators.add(orchestrator);
         return orchestrator;
+    }
+
+    /** Gets the compiler's default formatting settings, independent of snapshot preferences. */
+    async getDefaultFormatCodeSettings(): Promise<FormatCodeSettings> {
+        await this.ensureInitialized();
+        return this.client.apiRequest("getDefaultFormatCodeSettings", null);
+    }
+
+    /** Returns configured type roots or ancestor node_modules/@types candidates, without checking directory existence. */
+    async getEffectiveTypeRoots(compilerOptions: RawCompilerOptions): Promise<readonly RootedDirectoryPath[]> {
+        await this.ensureInitialized();
+        return this.client.apiRequest("getEffectiveTypeRoots", {
+            compilerOptions: prepareCompilerOptions(compilerOptions, this.getCurrentDirectory()),
+        });
+    }
+
+    /** Returns the native build-info output path, or undefined when the options do not produce one. */
+    async getTsBuildInfoEmitOutputFilePath(compilerOptions: RawCompilerOptions): Promise<RootedFilePath | undefined> {
+        await this.ensureInitialized();
+        return (await this.client.apiRequest("getTsBuildInfoEmitOutputFilePath", {
+            compilerOptions: prepareCompilerOptions(compilerOptions, this.getCurrentDirectory()),
+        })) ?? undefined;
     }
 
     async parseConfigFile(file: DocumentIdentifier): Promise<ParsedCommandLine> {
@@ -1254,6 +1280,27 @@ export class ModuleResolver {
             resolver: this.id,
             moduleName,
             containingDirectory,
+            resolutionMode,
+        });
+    }
+
+    /** Resolves a type directive using this resolver's options and the selected snapshot or live filesystem. */
+    async resolveTypeReferenceDirective(
+        typeReferenceDirectiveName: string,
+        containingFile: DocumentIdentifier,
+        resolutionMode?: ResolutionMode,
+        options?: { snapshot?: Snapshot | InProgressSnapshot | undefined; },
+    ): Promise<ResolveTypeReferenceDirectiveResult> {
+        this.ensureNotDisposed();
+        if (options?.snapshot instanceof Snapshot && options.snapshot.isDisposed()) {
+            throw new Error("Snapshot is disposed");
+        }
+        return this.client.apiRequest("resolveTypeReferenceDirective", {
+            snapshot: options?.snapshot instanceof Snapshot ? options.snapshot.id : undefined,
+            inProgressSnapshot: typeof options?.snapshot === "number" ? -options.snapshot : undefined,
+            resolver: this.id,
+            typeReferenceDirectiveName,
+            containingFile,
             resolutionMode,
         });
     }
@@ -3620,7 +3667,7 @@ export class Symbol {
     }
     /** The escaped (`__String`) name, used as the key in member/export tables. */
     readonly escapedName: __String;
-    /** The display name (escaped underscores removed). */
+    /** The display name, including the source spelling of private identifiers. */
     readonly name: string;
     readonly flags: SymbolFlags;
     readonly checkFlags: CheckFlags;
@@ -3642,7 +3689,7 @@ export class Symbol {
         this.reference = data.reference;
 
         this.escapedName = data.name as __String;
-        this.name = unescapeLeadingUnderscores(data.name as __String);
+        this.name = symbolName(this);
         this.flags = data.flags;
         this.checkFlags = data.checkFlags ?? 0;
         this.declarationHandles = data.declarations;

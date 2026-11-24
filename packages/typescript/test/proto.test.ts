@@ -5,11 +5,11 @@ import type {
     SymbolOwner as ProtocolSymbolOwner,
     SymbolResponse as ProtocolSymbolResponse,
 } from "../src/api/proto.generated.ts";
+import type { ProjectId } from "../src/api/proto.ts";
 import {
     validateSymbolOwner,
     validateSymbolResponse,
 } from "../src/api/proto.ts";
-import type { ProjectId } from "../src/api/proto.ts";
 import { SourceFileCache } from "../src/api/sourceFileCache.ts";
 import type {
     PathKey,

@@ -510,8 +510,9 @@ export const generateTristate = goGenerateTask("generate:tristate", [
     stringerGenerator("tsc/internal/core/tristate.go", "Tristate", "tristate_stringer_generated.go"),
 ]);
 
-export const generateDiagnostics = goGenerateTask("generate:diagnostics", [
-    {
+export const generateDiagnostics = goGenerateTask(
+    "generate:diagnostics",
+    [{
         file: "tsc/internal/diagnostics/diagnostics.go",
         inputs: ["generate.go", "diagnosticMessages.json", "../../../tools/LocProject.json", "../{collections,json}/*.go", "loc/*.generated.json"],
         exclude: ["**/*_test.go"],
@@ -534,9 +535,9 @@ export const generateDiagnostics = goGenerateTask("generate:diagnostics", [
             ],
             ["dprint", "fmt", "diagnostics_generated.go", "loc_generated.go"],
         ],
-    },
-    stringerGenerator("tsc/internal/diagnostics/diagnostics.go", "Category", "stringer_generated.go"),
-], ["tsc/internal/diagnostics/loc"]);
+    }, stringerGenerator("tsc/internal/diagnostics/diagnostics.go", "Category", "stringer_generated.go")],
+    ["tsc/internal/diagnostics/loc"],
+);
 
 export const generateAutoImport = goGenerateTask("generate:autoimport", [
     stringerGenerator("tsc/internal/ls/autoimport/export.go", "ExportSyntax", "export_stringer_generated.go"),
@@ -2119,15 +2120,13 @@ async function sign(filelist, unchangedOutputOkay = false) {
     const tmp = await getSignTempDir();
     const propsPath = path.resolve(tmp, `signing-items-${signCount++}.props`);
     const signingItems = signingFilelist.SignFileRecordList.flatMap(record => record.SignFileList.map(file => ({ path: file.SrcPath, cert: record.Certs, macAppName: record.MacAppName })));
-    const items = signingItems.map(({ path: filePath, cert, macAppName }) =>
-        `    <FilesToSign Include="${assertMsbuildXmlValue(filePath)}">
+    const items = signingItems.map(({ path: filePath, cert, macAppName }) => `    <FilesToSign Include="${assertMsbuildXmlValue(filePath)}">
       <Authenticode>${assertMsbuildXmlValue(cert)}</Authenticode>
       <StrongName>None</StrongName>${
-            macAppName ? `
+          macAppName ? `
       <MacAppName>${assertMsbuildXmlValue(macAppName)}</MacAppName>` : ""
-        }
-    </FilesToSign>`
-    ).join("\n");
+      }
+    </FilesToSign>`).join("\n");
     await fs.promises.writeFile(
         propsPath,
         `<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
