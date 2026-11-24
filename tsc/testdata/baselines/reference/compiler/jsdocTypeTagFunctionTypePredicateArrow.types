@@ -4,7 +4,7 @@
 /** @type {(el: Node) => el is HTMLElement} */
 const func1 = (el) => el instanceof HTMLElement && el.className === "foo";
 >func1 : (el: Node) => el is HTMLElement
->(el) => el instanceof HTMLElement && el.className === "foo" : (el: Node) => boolean
+>(el) => el instanceof HTMLElement && el.className === "foo" : (el: Node) => el is HTMLElement
 >el : Node
 >el instanceof HTMLElement && el.className === "foo" : boolean
 >el instanceof HTMLElement : boolean
@@ -63,7 +63,7 @@ function func4(el) {
 /** @type {(el: Node) => el is HTMLElement} */
 const func5 = function(el) {
 >func5 : (el: Node) => el is HTMLElement
->function(el) {    return el instanceof HTMLElement && el.className === "foo";} : (el: Node) => boolean
+>function(el) {    return el instanceof HTMLElement && el.className === "foo";} : (el: Node) => el is HTMLElement
 >el : Node
 
     return el instanceof HTMLElement && el.className === "foo";
@@ -86,7 +86,7 @@ const obj = {
     /** @type {(el: Node) => el is HTMLElement} */
     isElement: (el) => el instanceof HTMLElement && el.className === "foo",
 >isElement : (el: Node) => el is HTMLElement
->(el) => el instanceof HTMLElement && el.className === "foo" : (el: Node) => boolean
+>(el) => el instanceof HTMLElement && el.className === "foo" : (el: Node) => el is HTMLElement
 >el : Node
 >el instanceof HTMLElement && el.className === "foo" : boolean
 >el instanceof HTMLElement : boolean
@@ -106,7 +106,7 @@ class C {
     /** @type {(el: Node) => el is HTMLElement} */
     isElement = (el) => el instanceof HTMLElement && el.className === "foo";
 >isElement : (el: Node) => el is HTMLElement
->(el) => el instanceof HTMLElement && el.className === "foo" : (el: Node) => boolean
+>(el) => el instanceof HTMLElement && el.className === "foo" : (el: Node) => el is HTMLElement
 >el : Node
 >el instanceof HTMLElement && el.className === "foo" : boolean
 >el instanceof HTMLElement : boolean
@@ -161,11 +161,11 @@ func8b = (el) => el instanceof HTMLElement && el.className === "foo";
 
 /** @type {(el: Node) => el is HTMLElement} */
 module.exports = (el) => el instanceof HTMLElement && el.className === "foo";
->module.exports = (el) => el instanceof HTMLElement && el.className === "foo" : (el: Node) => boolean
+>module.exports = (el) => el instanceof HTMLElement && el.className === "foo" : (el: Node) => el is HTMLElement
 >module.exports : (el: Node) => el is HTMLElement
 >module : { exports: (el: Node) => el is HTMLElement; }
 >exports : (el: Node) => el is HTMLElement
->(el) => el instanceof HTMLElement && el.className === "foo" : (el: Node) => boolean
+>(el) => el instanceof HTMLElement && el.className === "foo" : (el: Node) => el is HTMLElement
 >el : Node
 >el instanceof HTMLElement && el.className === "foo" : boolean
 >el instanceof HTMLElement : boolean
@@ -181,7 +181,7 @@ module.exports = (el) => el instanceof HTMLElement && el.className === "foo";
 /** @type {MyPredicate} */
 const func10 = (el) => el instanceof HTMLElement && el.className === "foo";
 >func10 : MyPredicate
->(el) => el instanceof HTMLElement && el.className === "foo" : (el: Node) => boolean
+>(el) => el instanceof HTMLElement && el.className === "foo" : (el: Node) => el is HTMLElement
 >el : Node
 >el instanceof HTMLElement && el.className === "foo" : boolean
 >el instanceof HTMLElement : boolean
@@ -196,7 +196,7 @@ const func10 = (el) => el instanceof HTMLElement && el.className === "foo";
 /** @type {(el: Node) => asserts el is HTMLElement} */
 const func11 = (el) => {
 >func11 : (el: Node) => asserts el is HTMLElement
->(el) => {    if (!(el instanceof HTMLElement)) throw new Error();} : (el: Node) => void
+>(el) => {    if (!(el instanceof HTMLElement)) throw new Error();} : (el: Node) => asserts el is HTMLElement
 >el : Node
 
     if (!(el instanceof HTMLElement)) throw new Error();
@@ -214,7 +214,7 @@ const func11 = (el) => {
 /** @type {(element: Node) => element is HTMLElement} */
 const mismatch = (el) => el instanceof HTMLElement && el.className === "foo";
 >mismatch : (element: Node) => element is HTMLElement
->(el) => el instanceof HTMLElement && el.className === "foo" : (el: Node) => boolean
+>(el) => el instanceof HTMLElement && el.className === "foo" : (el: Node) => element is HTMLElement
 >el : Node
 >el instanceof HTMLElement && el.className === "foo" : boolean
 >el instanceof HTMLElement : boolean
@@ -230,7 +230,7 @@ const mismatch = (el) => el instanceof HTMLElement && el.className === "foo";
 /** @type {(el: Node) => el is HTMLElement} */
 const badReturn = (el) => 123;
 >badReturn : (el: Node) => el is HTMLElement
->(el) => 123 : (el: Node) => number
+>(el) => 123 : (el: Node) => el is HTMLElement
 >el : Node
 >123 : 123
 
