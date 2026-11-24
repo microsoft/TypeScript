@@ -70,7 +70,7 @@ export const f$oo = 0;
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:      "f$oo",
-					InsertText: new("import { f\\$oo } from \"./mod\";"),
+					InsertText: new("import { f$oo } from \"./mod\";"),
 					Data: &lsproto.CompletionItemData{
 						AutoImport: &lsproto.AutoImportFix{
 							ModuleSpecifier: "./mod",
@@ -78,7 +78,7 @@ export const f$oo = 0;
 					},
 					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 						TextEdit: &lsproto.TextEdit{
-							NewText: "import { f\\$oo } from \"./mod\";",
+							NewText: "import { f$oo } from \"./mod\";",
 							Range:   f.Ranges()[0].LSRange,
 						},
 					},

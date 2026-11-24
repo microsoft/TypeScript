@@ -38,9 +38,9 @@ switch (s) {
 		name := "plain"
 		var insertTextFormat *lsproto.InsertTextFormat
 		classMemberM := `m(x: "a\\b"): void {` + "\n}"
-		classMember := `"c\$d"(): void {` + "\n}"
+		classMember := `"c$d"(): void {` + "\n}"
 		objectMethodA := `"a\\b"() {` + "\n},"
-		objectMethodC := `"c\$d"() {` + "\n},"
+		objectMethodC := `"c$d"() {` + "\n},"
 		if snippet {
 			name = "snippet"
 			insertTextFormat = new(lsproto.InsertTextFormatSnippet)
