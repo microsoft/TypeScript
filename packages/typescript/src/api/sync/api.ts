@@ -3246,6 +3246,29 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
                     return retained as unknown as SourceFile;
                 }
 
+                return owner.fetchSourceFile(file);
+            },
+            function* (file: DocumentIdentifier, path: PathKey): Generator<ProtocolRequest, SourceFile | undefined, ProtocolResponse["result"]> {
+                // Check if we already have a retained cache entry for this (snapshot, project) pair
+                const retained = owner.sourceFileCache.getRetained(path, owner.snapshotId, owner.project.id);
+                if (retained) {
+                    return retained as unknown as SourceFile;
+                }
+
+                return yield* owner.fetchSourceFile.gen(file);
+            },
+        );
+    }
+
+    private get fetchSourceFile(): {
+        (file: DocumentIdentifier): SourceFile | undefined;
+        gen(file: DocumentIdentifier): Generator<ProtocolRequest, SourceFile | undefined, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "fetchSourceFile",
+            function (file: DocumentIdentifier): SourceFile | undefined {
                 // Fetch from server
                 const binaryData = owner.client.apiRequestBinary("getSourceFile", {
                     snapshot: owner.snapshotId,
@@ -3260,13 +3283,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
                 const decoded = new RemoteSourceFile(binaryData, owner.decoder, owner.client.getTimingCollector(), owner.project.api);
                 return owner.sourceFileCache.set(decoded, owner.snapshotId, owner.project.id) as unknown as SourceFile;
             },
-            function* (file: DocumentIdentifier, path: PathKey): Generator<ProtocolRequest, SourceFile | undefined, ProtocolResponse["result"]> {
-                // Check if we already have a retained cache entry for this (snapshot, project) pair
-                const retained = owner.sourceFileCache.getRetained(path, owner.snapshotId, owner.project.id);
-                if (retained) {
-                    return retained as unknown as SourceFile;
-                }
-
+            function* (file: DocumentIdentifier): Generator<ProtocolRequest, SourceFile | undefined, ProtocolResponse["result"]> {
                 // Fetch from server
                 const binaryData = sourceFileResponseToUint8Array(
                     yield* apiRequest("getSourceFile", {

@@ -1987,6 +1987,34 @@ declare module "augmentation" {}`,
 
 // @sync-skip-block-start
 describe("API - automatic batching", { concurrency }, () => {
+    test("shares concurrent Program source file requests and retries failures", async context => {
+        const file = "/src/main.ts";
+        const text = "export const value = 1;";
+        await using api = spawnAPI({ [file]: text });
+        await using program = await api.createProgram([file], { noLib: true });
+        // @ts-ignore -- Internal client requests are exercised by source tests.
+        const client = api["client"];
+        const request = context.mock.method(client, "apiRequestBinary");
+        const error = new Error("Source file request failed");
+        request.mock.mockImplementationOnce(() => Promise.reject(error));
+
+        await Promise.all([
+            assert.rejects(program.getSourceFile(file), error),
+            assert.rejects(program.getSourceFile("/src/./main.ts"), error),
+        ]);
+        assert.equal(request.mock.callCount(), 1);
+
+        const [sourceFile, repeated] = await Promise.all([
+            program.getSourceFile(file),
+            program.getSourceFile("/src/./main.ts"),
+        ]);
+        assert.equal(request.mock.callCount(), 2);
+        assert.equal(sourceFile?.text, text);
+        assert.strictEqual(repeated, sourceFile);
+        assert.strictEqual(await program.getSourceFile(file), sourceFile);
+        assert.equal(request.mock.callCount(), 2);
+    });
+
     test("fetches Program statistics for every request", async context => {
         await using api = spawnAPI({ "/src/main.ts": "export const value = 1;" });
         await using program = await api.createProgram(["/src/main.ts"], { noLib: true });
