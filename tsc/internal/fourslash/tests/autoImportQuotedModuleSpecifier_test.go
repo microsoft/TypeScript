@@ -184,6 +184,6 @@ const x = 0;`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
 	f.GoToFile(t, "/b.js")
-	f.VerifyImportFixAtPosition(t, []string{`/** @type {import("./dir*/mod").T} */
+	f.VerifyImportFixAtPosition(t, []string{`/** @type {import("./dir*\/mod").T} */
 const x = 0;`}, nil /*preferences*/)
 }

@@ -12,6 +12,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/debug"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/change"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
+	"github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/modulespecifiers"
 	"github.com/microsoft/TypeScript/tsc/internal/printer"
@@ -246,7 +247,14 @@ func (l *LanguageService) updateImportsForFileRename(program *compiler.Program, 
 		for _, importStringLiteral := range sourceFile.Imports() {
 			updated := l.getUpdatedImportSpecifier(program, checker, sourceFile, importStringLiteral, oldToNew, movedFiles, newImportFromPath, fileMoved, moduleSpecifierPreferences)
 			if updated != "" && updated != importStringLiteral.Text() {
-				changeTracker.ReplaceTextRangeWithText(sourceFile, createStringTextRange(sourceFile, importStringLiteral), printer.EscapeString(updated, getStringLiteralQuoteChar(sourceFile, importStringLiteral)))
+				quoteChar := getStringLiteralQuoteChar(sourceFile, importStringLiteral)
+				var newText string
+				if importStringLiteral.Flags&ast.NodeFlagsJSDoc != 0 {
+					newText = lsutil.EscapeStringInComment(updated, quoteChar)
+				} else {
+					newText = printer.EscapeString(updated, quoteChar)
+				}
+				changeTracker.ReplaceTextRangeWithText(sourceFile, createStringTextRange(sourceFile, importStringLiteral), newText)
 			}
 		}
 	}

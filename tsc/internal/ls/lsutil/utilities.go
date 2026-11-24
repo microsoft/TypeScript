@@ -8,6 +8,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/astnav"
 	"github.com/microsoft/TypeScript/tsc/internal/compiler"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
+	"github.com/microsoft/TypeScript/tsc/internal/printer"
 	"github.com/microsoft/TypeScript/tsc/internal/scanner"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
@@ -86,6 +87,12 @@ func ShouldUseUriStyleNodeCoreModules(file *ast.SourceFile, program *compiler.Pr
 	}
 
 	return program.UsesUriStyleNodeCoreModules()
+}
+
+// EscapeStringInComment escapes s for a string literal delimited by quoteChar
+// that appears inside a block comment, such as a JSDoc type.
+func EscapeStringInComment(s string, quoteChar printer.QuoteChar) string {
+	return strings.ReplaceAll(printer.EscapeString(s, quoteChar), "*/", `*\/`)
 }
 
 func QuotePreferenceFromString(str *ast.StringLiteral) QuotePreference {

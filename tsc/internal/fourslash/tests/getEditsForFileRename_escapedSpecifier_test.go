@@ -66,7 +66,7 @@ const x = null;`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
 	f.VerifyWillRenameFilesEdits(t, "/src/index.js", "/src/sub/index.js", map[string]string{
-		"/src/sub/index.js": `/** @type {import("../../pkg*/a.js").Foo} */
+		"/src/sub/index.js": `/** @type {import("../../pkg*\/a.js").Foo} */
 const x = null;`,
 	}, nil /*preferences*/)
 }

@@ -152,7 +152,7 @@ func addImportType(f *Fix, file *ast.SourceFile, preferences lsutil.UserPreferen
 	if quotePreference == lsutil.QuotePreferenceSingle {
 		quoteChar = printer.QuoteCharSingleQuote
 	}
-	importTypePrefix := fmt.Sprintf("import(%c%s%c).", quoteChar, printer.EscapeString(f.ModuleSpecifier, quoteChar), quoteChar)
+	importTypePrefix := fmt.Sprintf("import(%c%s%c).", quoteChar, lsutil.EscapeStringInComment(f.ModuleSpecifier, quoteChar), quoteChar)
 	tracker.InsertText(file, *f.UsagePosition, importTypePrefix)
 	return diagnostics.Change_0_to_1.Localize(locale, f.Name, importTypePrefix+f.Name)
 }
