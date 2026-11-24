@@ -1461,6 +1461,73 @@ func TestContentMapperOptionDiagnosticLocationInheritedFromExtendedConfig(t *tes
 	}
 }
 
+func TestContentMapperOptionDiagnosticLocationIsInDeclaringConfig(t *testing.T) {
+	t.Parallel()
+	contentMappers := func(name string) string {
+		return `"contentMappers": [{ "package": "mapper", "extensions": [".vue"], "options": { "plugins": [{ "name": "` + name + `" }] } }]`
+	}
+	for name, test := range map[string]struct {
+		jsonText string
+		files    map[string]string
+		wantFile tspath.RootedFilePath
+		want     string
+	}{
+		"two levels of extends": {
+			jsonText: `{ "extends": "../config/middle.json" }`,
+			files: map[string]string{
+				"/config/middle.json": `{ "extends": "./base.json" }`,
+				"/config/base.json":   `{ ` + contentMappers("base") + ` }`,
+			},
+			wantFile: "/config/base.json",
+			want:     `"base"`,
+		},
+		"earlier entry of an extends list": {
+			jsonText: `{ "extends": ["../config/base.json", "../config/other.json"] }`,
+			files: map[string]string{
+				"/config/base.json":  `{ ` + contentMappers("base") + ` }`,
+				"/config/other.json": `{ "compilerOptions": { "strict": true } }`,
+			},
+			wantFile: "/config/base.json",
+			want:     `"base"`,
+		},
+		"overridden in the child": {
+			jsonText: `{ "extends": "../config/base.json", ` + contentMappers("child") + ` }`,
+			files: map[string]string{
+				"/config/base.json": `{ ` + contentMappers("base") + ` }`,
+			},
+			wantFile: "/project/tsconfig.json",
+			want:     `"child"`,
+		},
+	} {
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+			config := testConfig{
+				jsonText:       test.jsonText,
+				configFileName: "tsconfig.json",
+				basePath:       "/project",
+				allFileList: map[string]string{
+					"/project/index.ts":                 "export {};",
+					"/node_modules/mapper/package.json": `{ "name": "mapper", "version": "1.0.0", "typescript": { "contentMapper": { "exec": ["mapper"] } } }`,
+				},
+				existingOptions: &core.CompilerOptions{RunExternalCode: core.TSTrue},
+			}
+			maps.Copy(config.allFileList, test.files)
+			fs := tsoptionstest.NewVFS(config.allFileList, tspath.CaseSensitive /*caseSensitivity*/)
+			parsed := getParsedWithJsonSourceFileApi(config, fs, config.basePath)
+			assert.Equal(t, len(parsed.Errors), 0)
+			assert.Equal(t, len(parsed.ContentMappers()), 1)
+			file, loc := tsoptions.GetContentMapperOptionDiagnosticLocation(parsed, parsed.ContentMappers()[0], []contentmapper.OptionPathSegment{
+				{Property: "plugins"},
+				{Index: 0, IsIndex: true},
+				{Property: "name"},
+			})
+			assert.Assert(t, file != nil)
+			assert.Equal(t, file.FileName(), test.wantFile)
+			assert.Equal(t, file.Text()[loc.Pos():loc.End()], test.want)
+		})
+	}
+}
+
 func TestContentMapperOptionDiagnosticLocationWithoutContentMappersSyntax(t *testing.T) {
 	t.Parallel()
 	config := testConfig{
