@@ -27802,7 +27802,7 @@ func (c *Checker) checkComputedPropertyName(node *ast.Node) *Type {
 			links.resolvedType = c.errorType
 			return links.resolvedType
 		}
-		links.resolvedType = c.checkExpression(node.Expression())
+		links.resolvedType = c.getRegularTypeOfLiteralType(c.checkExpression(node.Expression()))
 		// This will allow types number, string, symbol or any. It will also allow enums, the unknown
 		// type, and any union of these types (like string | number).
 		if links.resolvedType.flags&TypeFlagsNullable != 0 ||
