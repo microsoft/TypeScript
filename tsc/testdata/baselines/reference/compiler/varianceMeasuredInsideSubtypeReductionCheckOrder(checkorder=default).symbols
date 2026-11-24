@@ -1,0 +1,56 @@
+//// [tests/cases/compiler/varianceMeasuredInsideSubtypeReductionCheckOrder.ts] ////
+
+=== varianceMeasuredInsideSubtypeReductionCheckOrder.ts ===
+// The return type of 'm' is a union reduced by relating 'Box<string>' to
+// 'Box<number>', which measures the variances of 'Box', which resolves 'm'
+// again inside the measurement while it is incomplete. Whichever of 'm' or
+// the measurement is entered first, 'm' returns 'Box<string>'.
+
+declare const cond: boolean;
+>cond : Symbol(cond, Decl(varianceMeasuredInsideSubtypeReductionCheckOrder.ts, 5, 13))
+
+declare let a1: Box<string>;
+>a1 : Symbol(a1, Decl(varianceMeasuredInsideSubtypeReductionCheckOrder.ts, 6, 11))
+>Box : Symbol(Box, Decl(varianceMeasuredInsideSubtypeReductionCheckOrder.ts, 7, 28))
+
+declare let a2: Box<number>;
+>a2 : Symbol(a2, Decl(varianceMeasuredInsideSubtypeReductionCheckOrder.ts, 7, 11))
+>Box : Symbol(Box, Decl(varianceMeasuredInsideSubtypeReductionCheckOrder.ts, 7, 28))
+
+class Box<T> {
+>Box : Symbol(Box, Decl(varianceMeasuredInsideSubtypeReductionCheckOrder.ts, 7, 28))
+>T : Symbol(T, Decl(varianceMeasuredInsideSubtypeReductionCheckOrder.ts, 8, 10))
+
+    value!: T;
+>value : Symbol(Box.value, Decl(varianceMeasuredInsideSubtypeReductionCheckOrder.ts, 8, 14))
+>T : Symbol(T, Decl(varianceMeasuredInsideSubtypeReductionCheckOrder.ts, 8, 10))
+
+    m() {
+>m : Symbol(Box.m, Decl(varianceMeasuredInsideSubtypeReductionCheckOrder.ts, 9, 14))
+
+        if (cond) return a1;
+>cond : Symbol(cond, Decl(varianceMeasuredInsideSubtypeReductionCheckOrder.ts, 5, 13))
+>a1 : Symbol(a1, Decl(varianceMeasuredInsideSubtypeReductionCheckOrder.ts, 6, 11))
+
+        return a2;
+>a2 : Symbol(a2, Decl(varianceMeasuredInsideSubtypeReductionCheckOrder.ts, 7, 11))
+    }
+}
+const r = new Box<boolean>().m();
+>r : Symbol(r, Decl(varianceMeasuredInsideSubtypeReductionCheckOrder.ts, 15, 5))
+>new Box<boolean>().m : Symbol(Box.m, Decl(varianceMeasuredInsideSubtypeReductionCheckOrder.ts, 9, 14))
+>Box : Symbol(Box, Decl(varianceMeasuredInsideSubtypeReductionCheckOrder.ts, 7, 28))
+>m : Symbol(Box.m, Decl(varianceMeasuredInsideSubtypeReductionCheckOrder.ts, 9, 14))
+
+declare let b1: Box<string>;
+>b1 : Symbol(b1, Decl(varianceMeasuredInsideSubtypeReductionCheckOrder.ts, 16, 11))
+>Box : Symbol(Box, Decl(varianceMeasuredInsideSubtypeReductionCheckOrder.ts, 7, 28))
+
+declare let b2: Box<number>;
+>b2 : Symbol(b2, Decl(varianceMeasuredInsideSubtypeReductionCheckOrder.ts, 17, 11))
+>Box : Symbol(Box, Decl(varianceMeasuredInsideSubtypeReductionCheckOrder.ts, 7, 28))
+
+b1 = b2;
+>b1 : Symbol(b1, Decl(varianceMeasuredInsideSubtypeReductionCheckOrder.ts, 16, 11))
+>b2 : Symbol(b2, Decl(varianceMeasuredInsideSubtypeReductionCheckOrder.ts, 17, 11))
+

@@ -1720,9 +1720,11 @@ func (c *Checker) getVariancesWorker(symbol *ast.Symbol, typeParameters []*Type)
 		}()
 	}
 	links.variances.begin(c)
-	saveResolutionStart := c.resolutionStart
 	if len(c.varianceStack) == 0 {
-		c.resolutionStart = len(c.resolutions)
+		// The measurement hides the computations in progress below it, memoized
+		// ones included, so that its results equal those of a measurement
+		// entered with nothing in progress.
+		c.beginCycleYield(nil, TypeSystemPropertyNameVariances, -1, len(c.resolutions)-1)
 	}
 	index := len(c.varianceStack)
 	c.varianceStack = append(c.varianceStack, VarianceStackEntry{symbol: symbol, resolution: len(c.resolutions), low: index, min: symbol, minTypeParameters: typeParameters, discardPoint: c.discardPoint(), provisionalStart: len(c.varianceProvisional)})
@@ -1782,7 +1784,7 @@ func (c *Checker) getVariancesWorker(symbol *ast.Symbol, typeParameters []*Type)
 	}
 	c.popTypeResolution()
 	if len(c.varianceStack) == 0 {
-		c.resolutionStart = saveResolutionStart
+		c.endCycleYield()
 	}
 	c.endMemo()
 	return variances
