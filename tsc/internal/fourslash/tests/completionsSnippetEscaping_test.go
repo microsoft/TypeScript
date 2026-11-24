@@ -44,9 +44,9 @@ switch (s) {
 		if snippet {
 			name = "snippet"
 			insertTextFormat = new(lsproto.InsertTextFormatSnippet)
-			classMemberM = `m(x: "a\\b"): void {` + "\n    $0\n}"
+			classMemberM = `m(x: "a\\\\b"): void {` + "\n    $0\n}"
 			classMember = `"c\$d"(): void {` + "\n    $0\n}"
-			objectMethodA = `"a\\b"() {` + "\n    $0\n},"
+			objectMethodA = `"a\\\\b"() {` + "\n    $0\n},"
 			objectMethodC = `"c\$d"() {` + "\n    $0\n},"
 		}
 		t.Run(name, func(t *testing.T) {
@@ -113,7 +113,7 @@ switch (s) {
 						Includes: []fourslash.CompletionsExpectedItem{
 							&lsproto.CompletionItem{
 								Label:            `case "a\\b": ...`,
-								InsertText:       new(`case "a\\b":$1` + "\n" + `case "x":$2`),
+								InsertText:       new(`case "a\\\\b":$1` + "\n" + `case "x":$2`),
 								SortText:         new(string(ls.SortTextGlobalsOrKeywords)),
 								InsertTextFormat: new(lsproto.InsertTextFormatSnippet),
 							},

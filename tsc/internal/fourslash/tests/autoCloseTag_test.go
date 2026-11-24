@@ -81,6 +81,6 @@ const x = <div\u0024bar>/*0*/;`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
 	f.VerifyJsxClosingTag(t, map[string]*string{
-		"0": new(`</div\u0024bar>`),
+		"0": new(`</div\\u0024bar>`),
 	})
 }

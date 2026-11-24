@@ -2144,7 +2144,7 @@ func getInsertTextAndReplacementSpanForImportCompletion(fix *autoimport.Fix, imp
 	quotedModuleSpecifier := quote(file, preferences, fix.ModuleSpecifier)
 	name := fix.Name
 	if isSnippet {
-		quotedModuleSpecifier = escapeSnippetText(strings.ReplaceAll(quotedModuleSpecifier, `\`, `\\`))
+		quotedModuleSpecifier = escapeSnippetText(quotedModuleSpecifier)
 		name = escapeSnippetText(name)
 	}
 	tabStop := core.IfElse(isSnippet, "$1", "")
@@ -3750,8 +3750,10 @@ func areIntersectedTypesAvoidingStringReduction(typeChecker *checker.Checker, t1
 	return t1.IsString() && typeChecker.IsEmptyAnonymousObjectType(t2)
 }
 
+var snippetTextEscaper = strings.NewReplacer(`\`, `\\`, `$`, `\$`)
+
 func escapeSnippetText(text string) string {
-	return strings.ReplaceAll(text, `$`, `\$`)
+	return snippetTextEscaper.Replace(text)
 }
 
 func isNamedImportsOrExports(node *ast.Node) bool {
