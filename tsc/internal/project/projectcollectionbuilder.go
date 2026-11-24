@@ -1086,6 +1086,41 @@ type searchResult struct {
 	retain  collections.Set[tspath.PathKey]
 }
 
+func removeRedundantFindRequests(level *core.BreadthFirstSearchLevel[searchNodeKey, searchNode]) {
+	var redundantKeys []searchNodeKey
+	level.Range(func(key searchNodeKey, _ searchNode) bool {
+		if key.loadKind == projectLoadKindFind && level.Has(searchNodeKey{configFileName: key.configFileName, loadKind: projectLoadKindCreate}) {
+			redundantKeys = append(redundantKeys, key)
+		}
+		return true
+	})
+	for _, key := range redundantKeys {
+		level.Delete(key)
+	}
+}
+
+// Earlier candidates can still win, so keep them in the parallel search.
+func pruneAfterCachedMatch(
+	level *core.BreadthFirstSearchLevel[searchNodeKey, searchNode],
+	isCachedMatch func(searchNodeKey) bool,
+) {
+	foundMatch := false
+	var trailingKeys []searchNodeKey
+	level.Range(func(key searchNodeKey, _ searchNode) bool {
+		if foundMatch {
+			trailingKeys = append(trailingKeys, key)
+		} else {
+			foundMatch = isCachedMatch(key)
+		}
+		return true
+	})
+	// Delete after traversal so entries are not skipped.
+	// Removing from the end keeps pruning linear.
+	for _, key := range slices.Backward(trailingKeys) {
+		level.Delete(key)
+	}
+}
+
 func (b *ProjectCollectionBuilder) findOrCreateDefaultConfiguredProjectWorker(
 	fileName tspath.RootedFilePath,
 	path tspath.PathKey,
@@ -1175,50 +1210,31 @@ func (b *ProjectCollectionBuilder) findOrCreateDefaultConfiguredProjectWorker(
 		core.BreadthFirstSearchOptions[searchNodeKey, searchNode]{
 			Visited: visited,
 			PreprocessLevel: func(level *core.BreadthFirstSearchLevel[searchNodeKey, searchNode]) {
-				level.Range(func(key searchNodeKey, node searchNode) bool {
-					if node.loadKind == projectLoadKindFind && level.Has(searchNodeKey{configFileName: node.configFileName, loadKind: projectLoadKindCreate}) {
-						// Remove find requests when a create request for the same project is already present.
-						level.Delete(key)
-					}
-					return true
-				})
-				// A clean project that directly contains the file can rule out later candidates.
-				// Earlier candidates still take precedence and can be checked in parallel.
-				foundMatch := false
-				var trailingKeys []searchNodeKey
-				level.Range(func(key searchNodeKey, node searchNode) bool {
-					if foundMatch {
-						trailingKeys = append(trailingKeys, key)
-						return true
-					}
+				removeRedundantFindRequests(level)
+				pruneAfterCachedMatch(level, func(key searchNodeKey) bool {
 					if visited.Has(key) {
-						return true
+						return false
 					}
-					configPath := b.toPathKey(node.configFileName)
+					configPath := b.toPathKey(key.configFileName)
 					projectEntry, ok := b.configuredProjects.Load(ConfiguredProjectIDFromPathKey(configPath))
 					if !ok || projectEntry.Value().IsDirty() {
-						return true
+						return false
 					}
 					configEntry, ok := b.configFileRegistryBuilder.configs.Load(configPath)
 					if !ok || configEntry.Value().pendingReload != PendingReloadNone {
-						return true
+						return false
 					}
 					config := configEntry.Value().commandLine
 					project := projectEntry.Value()
 					if config == nil || project.CommandLine != config {
-						return true
+						return false
 					}
 					if !configMayContainFile(config, nil) {
-						return true
+						return false
 					}
-					_, foundMatch = fileInclusion(project, nil)
-					return true
+					_, direct := fileInclusion(project, nil)
+					return direct
 				})
-				// Delete after traversal so entries are not skipped.
-				// Removing from the end keeps pruning linear.
-				for _, key := range slices.Backward(trailingKeys) {
-					level.Delete(key)
-				}
 			},
 		},
 		func(node searchNode) searchNodeKey {

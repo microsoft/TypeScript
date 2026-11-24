@@ -159,6 +159,36 @@ func TestProjectCollectionBuilder(t *testing.T) {
 		}
 	})
 
+	t.Run("cached source redirect does not prune a later direct match", func(t *testing.T) {
+		t.Parallel()
+		files := map[string]any{
+			"/project/tsconfig.json": `{"files": [], "references": [{"path": "./first.json"}, {"path": "./second.json"}]}`,
+			"/project/first.json":    `{"files": ["entry.ts"], "references": [{"path": "./redirect.json"}]}`,
+			"/project/second.json":   `{"files": ["main.ts"]}`,
+			"/project/redirect.json": `{"compilerOptions": {"composite": true}, "files": ["main.ts"]}`,
+			"/project/entry.ts":      `import "./main";`,
+			"/project/main.ts":       `export const value = 1;`,
+		}
+		session, utils := projecttestutil.Setup(files)
+		defer session.Close()
+		ctx := context.Background()
+
+		entryURI := lsproto.DocumentUri("file:///project/entry.ts")
+		session.DidOpenFile(ctx, entryURI, 1, files["/project/entry.ts"].(string), lsproto.LanguageKindTypeScript)
+		first := session.Snapshot().GetDefaultProject(entryURI)
+		assert.Assert(t, first != nil)
+		assert.Equal(t, first.ConfigFileName(), tspath.RootedFilePath("/project/first.json"))
+		assert.Assert(t, !first.IsDirty())
+		assert.Assert(t, first.Program.GetSourceFile("/project/main.ts") != nil)
+		assert.Assert(t, first.IsSourceFromProjectReference(utils.PathKey("/project/main.ts")))
+
+		uri := lsproto.DocumentUri("file:///project/main.ts")
+		session.DidOpenFile(ctx, uri, 1, files["/project/main.ts"].(string), lsproto.LanguageKindTypeScript)
+		defaultProject := session.Snapshot().GetDefaultProject(uri)
+		assert.Assert(t, defaultProject != nil)
+		assert.Equal(t, defaultProject.ConfigFileName(), tspath.RootedFilePath("/project/second.json"))
+	})
+
 	t.Run("when project found is solution referencing default project directly", func(t *testing.T) {
 		t.Parallel()
 		files := filesForSolutionConfigFile([]string{"./tsconfig-src.json"}, "", nil)
