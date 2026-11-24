@@ -49,10 +49,10 @@ export interface CachedSourceFile<TSymbol> {
     refs: Set<string>;
     /** Binder symbols owned by this exact source-file incarnation. */
     readonly symbolsById: Map<number, TSymbol>;
-    /** Successfully resolved declaration symbols. */
-    readonly symbolsByDeclarationNodeIndex: Map<number, TSymbol>;
-    /** In-flight async declaration symbol lookups. */
-    readonly declarationSymbolRequests: Map<number, Promise<TSymbol>>;
+    /** Resolved binder symbol lookups, including nodes without symbols. */
+    readonly symbolsByDeclarationNodeIndex: Map<number, TSymbol | undefined>;
+    /** In-flight async binder symbol lookups. */
+    readonly declarationSymbolRequests: Map<number, Promise<TSymbol | undefined>>;
 }
 
 /**

@@ -397,16 +397,17 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     }
 
     /**
-     * Looks up a remote declaration's binder symbol. Throws for synthesized or configuration ASTs.
+     * Looks up a remote node's binder symbol. Throws for synthesized or configuration ASTs.
      */
-    async getSymbol(declaration: Declaration): Promise<Symbol> {
-        const file = getRemoteSourceFile(declaration);
+    getSymbol(node: Declaration): Promise<Symbol>;
+    getSymbol(node: Node): Promise<Symbol | undefined>;
+    async getSymbol(node: Node): Promise<Symbol | undefined> {
+        const file = getRemoteSourceFile(node);
         if (!file) throw new Error(`Source file not found for declaration`);
         const record = file.symbolCache as CachedSourceFile<Symbol> | undefined;
         if (!record) throw new Error(`Cached source file not found for declaration`);
-        const index = parseNodeHandleFromCompiler(getNodeId(declaration)).index;
-        const cached = record.symbolsByDeclarationNodeIndex.get(index);
-        if (cached) return cached;
+        const index = parseNodeHandleFromCompiler(getNodeId(node)).index;
+        if (record.symbolsByDeclarationNodeIndex.has(index)) return record.symbolsByDeclarationNodeIndex.get(index);
         // @sync-only-start
         // return this.fetchDeclarationSymbol(record, index);
         // @sync-only-end
@@ -425,11 +426,15 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         // @sync-skip-block-end
     }
 
-    private async fetchDeclarationSymbol(record: CachedSourceFile<Symbol>, index: number): Promise<Symbol> {
+    private async fetchDeclarationSymbol(record: CachedSourceFile<Symbol>, index: number): Promise<Symbol | undefined> {
         const data = await this.client.apiRequest("getSymbolOfDeclaration", {
             file: record.descriptor,
             index,
         });
+        if (!data) {
+            record.symbolsByDeclarationNodeIndex.set(index, undefined);
+            return undefined;
+        }
         validateSymbolResponse(data);
         const reference = data.reference;
         if (reference.kind !== SymbolOwnerKind.File) {
@@ -972,22 +977,28 @@ function getNodeAPI(node: Node): API<boolean> | undefined {
     return api;
 }
 
-/** Looks up a remote declaration's binder symbol through its API. Throws for non-remote declarations. */
-export async function getSymbol(declaration: Declaration): Promise<Symbol> {
-    const api = getNodeAPI(declaration);
+/** Looks up a remote node's binder symbol through its API. Throws for non-remote nodes. */
+export function getSymbol(node: Declaration): Promise<Symbol>;
+export function getSymbol(node: Node): Promise<Symbol | undefined>;
+export async function getSymbol(node: Node): Promise<Symbol | undefined> {
+    const api = getNodeAPI(node);
     if (!api) throw new Error("Source file not found for declaration");
-    return api.getSymbol(declaration);
+    return api.getSymbol(node);
 }
 
 // @sync-only-start
 // export declare namespace getSymbol {
-//     function gen(declaration: Declaration): Generator<ProtocolRequest, Symbol, ProtocolResponse["result"]>;
+//     function gen(node: Declaration): Generator<ProtocolRequest, Symbol, ProtocolResponse["result"]>;
+//     function gen(node: Node): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]>;
 // }
-// getSymbol.gen = function* (declaration: Declaration): Generator<ProtocolRequest, Symbol, ProtocolResponse["result"]> {
-//     const api = getNodeAPI(declaration);
+// function getSymbolGenerator(node: Declaration): Generator<ProtocolRequest, Symbol, ProtocolResponse["result"]>;
+// function getSymbolGenerator(node: Node): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]>;
+// function* getSymbolGenerator(node: Node): Generator<ProtocolRequest, Symbol | undefined, ProtocolResponse["result"]> {
+//     const api = getNodeAPI(node);
 //     if (!api) throw new Error("Source file not found for declaration");
-//     return yield* api.getSymbol.gen(declaration);
-// };
+//     return yield* api.getSymbol.gen(node);
+// }
+// getSymbol.gen = getSymbolGenerator;
 // @sync-only-end
 
 /** An independently retained source file and its disposable remote-lifetime lease. */

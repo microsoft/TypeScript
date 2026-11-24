@@ -23,6 +23,7 @@ import {
     isClassDeclaration,
     isConstructorDeclaration,
     isExpressionStatement,
+    isExternalModule,
     isFunctionDeclaration,
     isIdentifier,
     isImportDeclaration,
@@ -907,6 +908,30 @@ describe("API", { concurrency }, () => {
         assert.throws(() => getSymbol(shallowClone), /Source file not found/);
         assert.throws(() => api.getSymbol(deepClone), /Source file not found/);
         assert.equal("getSymbol" in declaration, false);
+    });
+
+    test("getSymbol accepts arbitrary nodes and narrows external module symbols", () => {
+        using api = spawnAPI();
+        using module = api.createSourceFile("/module.ts", "export function present() {}");
+        using script = api.createSourceFile("/script.ts", "function present() {}");
+        const declaration = cast(module.sourceFile.statements[0], isFunctionDeclaration);
+        const node: Node = declaration;
+        const symbol = getSymbol(declaration);
+        assert.equal(symbol.name, "present");
+        assert.strictEqual(getSymbol(node), symbol);
+        assert.strictEqual(api.getSymbol(node), symbol);
+        assert.equal((api.getSymbol(declaration)).name, "present");
+
+        assert.equal(getSymbol(declaration.body!), undefined);
+        assert.equal(api.getSymbol(declaration.body!), undefined);
+        assert.equal(getSymbol(script.sourceFile), undefined);
+        assert.equal(api.getSymbol(script.sourceFile), undefined);
+
+        assert.ok(isExternalModule(module.sourceFile));
+        const moduleSymbol = getSymbol(module.sourceFile);
+        assert.ok(moduleSymbol.name);
+        assert.equal((api.getSymbol(module.sourceFile)).name, moduleSymbol.name);
+        assert.strictEqual(api.getSymbol(module.sourceFile), moduleSymbol);
     });
 
     test("source files own separate declaration result and request caches", () => {
