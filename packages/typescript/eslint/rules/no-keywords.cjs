@@ -48,13 +48,12 @@ module.exports = createRule({
         /** @type {(node: TSESTree.ObjectPattern) => void} */
         const checkProperties = node => {
             node.properties.forEach(property => {
-                if (
-                    property &&
-                    property.type === AST_NODE_TYPES.Property &&
-                    property.key.type === AST_NODE_TYPES.Identifier &&
-                    isKeyword(property.key.name)
-                ) {
-                    report(property.key);
+                if (property.type !== AST_NODE_TYPES.Property) {
+                    return;
+                }
+                const binding = property.value.type === AST_NODE_TYPES.AssignmentPattern ? property.value.left : property.value;
+                if (binding.type === AST_NODE_TYPES.Identifier && isKeyword(binding.name)) {
+                    report(binding);
                 }
             });
         };

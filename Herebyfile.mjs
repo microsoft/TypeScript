@@ -1431,15 +1431,24 @@ const customLinterTool = createCachedTool({
     },
 });
 
+// ESLint runs the local compiler, which can't execute when GOOS/GOARCH target another platform.
+const lintTypeScriptOnHost = (!process.env.GOOS || process.env.GOOS === nodeToGOOS(process.platform))
+    && (!process.env.GOARCH || process.env.GOARCH === nodeToGOARCH(process.arch, process.platform));
+
 export const lint = task({
     name: "lint",
     description: "Runs Go and TypeScript linters.",
-    dependencies: [local, buildAPI],
+    dependencies: lintTypeScriptOnHost ? [local, buildAPI] : [],
     run: runLint,
 });
 
 async function runLint() {
-    await runLintTypeScript();
+    if (lintTypeScriptOnHost) {
+        await runLintTypeScript();
+    }
+    else {
+        console.log("Skipping TypeScript lint for non-host GOOS/GOARCH");
+    }
     const lintArgs = ["run"];
     if (defaultGoBuildTags.length) {
         lintArgs.push("--build-tags", defaultGoBuildTags.join(","));

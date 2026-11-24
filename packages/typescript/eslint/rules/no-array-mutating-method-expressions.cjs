@@ -118,7 +118,7 @@ module.exports = createRule({
 
         return Object.fromEntries(
             Object.entries(mutatingMethods).map(([method, toMethod]) => [
-                `CallExpression > MemberExpression[property.name='${method}'][computed=false]`,
+                `CallExpression > MemberExpression.callee[property.name='${method}'][computed=false]`,
                 node => check(node, method, toMethod),
             ]),
         );
