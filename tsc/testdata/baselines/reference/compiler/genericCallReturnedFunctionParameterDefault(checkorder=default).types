@@ -1,0 +1,67 @@
+//// [tests/cases/compiler/genericCallReturnedFunctionParameterDefault.ts] ////
+
+=== genericCallReturnedFunctionParameterDefault.ts ===
+// The function returned from the callback of a generic call has a parameter
+// with a default and no annotation. Once T is inferred, the contextual
+// signature of the returned function is its own signature, but the parameter
+// already has its type (boolean) from the initializer, computed while T was
+// being inferred, so there is no circularity: no TS7022, and 'r()(1)' is an
+// error. (Reduced from open-design ProjectView.tsx, useCallback returning
+// '{ release: (recoverable = false) => ... }'.)
+
+declare function id<T>(callback: T): T;
+>id : <T>(callback: T) => T
+>callback : T
+
+id(() => {
+>id(() => {    return (x = false) => {};}) : () => (x?: boolean) => void
+>id : <T>(callback: T) => T
+>() => {    return (x = false) => {};} : () => (x?: boolean) => void
+
+    return (x = false) => {};
+>(x = false) => {} : (x?: boolean) => void
+>x : boolean
+>false : false
+
+});
+
+id(() => (y = false) => y);
+>id(() => (y = false) => y) : () => (y?: boolean) => boolean
+>id : <T>(callback: T) => T
+>() => (y = false) => y : () => (y?: boolean) => boolean
+>(y = false) => y : (y?: boolean) => boolean
+>y : boolean
+>false : false
+>y : boolean
+
+id(() => {
+>id(() => {    return { m(z = false) {} };}) : () => { m(z?: boolean): void; }
+>id : <T>(callback: T) => T
+>() => {    return { m(z = false) {} };} : () => { m(z?: boolean): void; }
+
+    return { m(z = false) {} };
+>{ m(z = false) {} } : { m(z?: boolean): void; }
+>m : (z?: boolean) => void
+>z : boolean
+>false : false
+
+});
+
+const r = id(() => {
+>r : () => (w?: number) => void
+>id(() => {    return (w = 0) => {};}) : () => (w?: number) => void
+>id : <T>(callback: T) => T
+>() => {    return (w = 0) => {};} : () => (w?: number) => void
+
+    return (w = 0) => {};
+>(w = 0) => {} : (w?: number) => void
+>w : number
+>0 : 0
+
+});
+r()("");
+>r()("") : void
+>r() : (w?: number) => void
+>r : () => (w?: number) => void
+>"" : ""
+

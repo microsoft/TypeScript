@@ -1,0 +1,52 @@
+//// [tests/cases/compiler/inferenceDeeplyNestedCheckOrder.ts] ////
+
+=== first.ts ===
+declare function flatten1<T>(iterable: Iterable<Iterable<T>>): T[];
+>flatten1 : Symbol(flatten1, Decl(first.ts, 0, 0))
+>T : Symbol(T, Decl(first.ts, 0, 26))
+>iterable : Symbol(iterable, Decl(first.ts, 0, 29))
+>Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+>Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+>T : Symbol(T, Decl(first.ts, 0, 26))
+>T : Symbol(T, Decl(first.ts, 0, 26))
+
+declare const lists1: string[][];
+>lists1 : Symbol(lists1, Decl(first.ts, 1, 13))
+
+const flat1: null = flatten1(lists1);
+>flat1 : Symbol(flat1, Decl(first.ts, 2, 5))
+>flatten1 : Symbol(flatten1, Decl(first.ts, 0, 0))
+>lists1 : Symbol(lists1, Decl(first.ts, 1, 13))
+
+declare const items1: string[];
+>items1 : Symbol(items1, Decl(first.ts, 4, 13))
+
+for (const item of items1) {}
+>item : Symbol(item, Decl(first.ts, 5, 10))
+>items1 : Symbol(items1, Decl(first.ts, 4, 13))
+
+=== second.ts ===
+declare const items2: number[];
+>items2 : Symbol(items2, Decl(second.ts, 0, 13))
+
+for (const item of items2) {}
+>item : Symbol(item, Decl(second.ts, 1, 10))
+>items2 : Symbol(items2, Decl(second.ts, 0, 13))
+
+declare function flatten2<T>(iterable: Iterable<Iterable<T>>): T[];
+>flatten2 : Symbol(flatten2, Decl(second.ts, 1, 29))
+>T : Symbol(T, Decl(second.ts, 3, 26))
+>iterable : Symbol(iterable, Decl(second.ts, 3, 29))
+>Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+>Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+>T : Symbol(T, Decl(second.ts, 3, 26))
+>T : Symbol(T, Decl(second.ts, 3, 26))
+
+declare const lists2: number[][];
+>lists2 : Symbol(lists2, Decl(second.ts, 4, 13))
+
+const flat2: null = flatten2(lists2);
+>flat2 : Symbol(flat2, Decl(second.ts, 5, 5))
+>flatten2 : Symbol(flatten2, Decl(second.ts, 1, 29))
+>lists2 : Symbol(lists2, Decl(second.ts, 4, 13))
+

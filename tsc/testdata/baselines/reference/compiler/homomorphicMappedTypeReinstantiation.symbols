@@ -1,0 +1,156 @@
+//// [tests/cases/compiler/homomorphicMappedTypeReinstantiation.ts] ////
+
+=== homomorphicMappedTypeReinstantiation.ts ===
+// https://github.com/microsoft/TypeScript/issues/65560
+
+declare function either<A, B>(a: A, b: B): A | B;
+>either : Symbol(either, Decl(homomorphicMappedTypeReinstantiation.ts, 0, 0))
+>A : Symbol(A, Decl(homomorphicMappedTypeReinstantiation.ts, 2, 24))
+>B : Symbol(B, Decl(homomorphicMappedTypeReinstantiation.ts, 2, 26))
+>a : Symbol(a, Decl(homomorphicMappedTypeReinstantiation.ts, 2, 30))
+>A : Symbol(A, Decl(homomorphicMappedTypeReinstantiation.ts, 2, 24))
+>b : Symbol(b, Decl(homomorphicMappedTypeReinstantiation.ts, 2, 35))
+>B : Symbol(B, Decl(homomorphicMappedTypeReinstantiation.ts, 2, 26))
+>A : Symbol(A, Decl(homomorphicMappedTypeReinstantiation.ts, 2, 24))
+>B : Symbol(B, Decl(homomorphicMappedTypeReinstantiation.ts, 2, 26))
+
+type Options = Partial<{ verbose: boolean }>;
+>Options : Symbol(Options, Decl(homomorphicMappedTypeReinstantiation.ts, 2, 49))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>verbose : Symbol(verbose, Decl(homomorphicMappedTypeReinstantiation.ts, 4, 24))
+
+declare const options: (Options | string)[];
+>options : Symbol(options, Decl(homomorphicMappedTypeReinstantiation.ts, 5, 13))
+>Options : Symbol(Options, Decl(homomorphicMappedTypeReinstantiation.ts, 2, 49))
+
+const r1 = either(options[0], options.map(value => value)[0]);
+>r1 : Symbol(r1, Decl(homomorphicMappedTypeReinstantiation.ts, 6, 5))
+>either : Symbol(either, Decl(homomorphicMappedTypeReinstantiation.ts, 0, 0))
+>options : Symbol(options, Decl(homomorphicMappedTypeReinstantiation.ts, 5, 13))
+>options.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>options : Symbol(options, Decl(homomorphicMappedTypeReinstantiation.ts, 5, 13))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(homomorphicMappedTypeReinstantiation.ts, 6, 42))
+>value : Symbol(value, Decl(homomorphicMappedTypeReinstantiation.ts, 6, 42))
+
+type ReadonlyOptions = Readonly<{ verbose: boolean }>;
+>ReadonlyOptions : Symbol(ReadonlyOptions, Decl(homomorphicMappedTypeReinstantiation.ts, 6, 62))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>verbose : Symbol(verbose, Decl(homomorphicMappedTypeReinstantiation.ts, 8, 33))
+
+declare const readonlyOptions: (ReadonlyOptions | string)[];
+>readonlyOptions : Symbol(readonlyOptions, Decl(homomorphicMappedTypeReinstantiation.ts, 9, 13))
+>ReadonlyOptions : Symbol(ReadonlyOptions, Decl(homomorphicMappedTypeReinstantiation.ts, 6, 62))
+
+const r2 = either(readonlyOptions[0], readonlyOptions.map(value => value)[0]);
+>r2 : Symbol(r2, Decl(homomorphicMappedTypeReinstantiation.ts, 10, 5))
+>either : Symbol(either, Decl(homomorphicMappedTypeReinstantiation.ts, 0, 0))
+>readonlyOptions : Symbol(readonlyOptions, Decl(homomorphicMappedTypeReinstantiation.ts, 9, 13))
+>readonlyOptions.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>readonlyOptions : Symbol(readonlyOptions, Decl(homomorphicMappedTypeReinstantiation.ts, 9, 13))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(homomorphicMappedTypeReinstantiation.ts, 10, 58))
+>value : Symbol(value, Decl(homomorphicMappedTypeReinstantiation.ts, 10, 58))
+
+type Nullable<T> = { [K in keyof T]: T[K] | null };
+>Nullable : Symbol(Nullable, Decl(homomorphicMappedTypeReinstantiation.ts, 10, 78))
+>T : Symbol(T, Decl(homomorphicMappedTypeReinstantiation.ts, 12, 14))
+>K : Symbol(K, Decl(homomorphicMappedTypeReinstantiation.ts, 12, 22))
+>T : Symbol(T, Decl(homomorphicMappedTypeReinstantiation.ts, 12, 14))
+>T : Symbol(T, Decl(homomorphicMappedTypeReinstantiation.ts, 12, 14))
+>K : Symbol(K, Decl(homomorphicMappedTypeReinstantiation.ts, 12, 22))
+
+type NullableOptions = Nullable<{ verbose: boolean }>;
+>NullableOptions : Symbol(NullableOptions, Decl(homomorphicMappedTypeReinstantiation.ts, 12, 51))
+>Nullable : Symbol(Nullable, Decl(homomorphicMappedTypeReinstantiation.ts, 10, 78))
+>verbose : Symbol(verbose, Decl(homomorphicMappedTypeReinstantiation.ts, 13, 33))
+
+declare const nullableOptions: (NullableOptions | string)[];
+>nullableOptions : Symbol(nullableOptions, Decl(homomorphicMappedTypeReinstantiation.ts, 14, 13))
+>NullableOptions : Symbol(NullableOptions, Decl(homomorphicMappedTypeReinstantiation.ts, 12, 51))
+
+const r3 = either(nullableOptions[0], nullableOptions.map(value => value)[0]);
+>r3 : Symbol(r3, Decl(homomorphicMappedTypeReinstantiation.ts, 15, 5))
+>either : Symbol(either, Decl(homomorphicMappedTypeReinstantiation.ts, 0, 0))
+>nullableOptions : Symbol(nullableOptions, Decl(homomorphicMappedTypeReinstantiation.ts, 14, 13))
+>nullableOptions.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>nullableOptions : Symbol(nullableOptions, Decl(homomorphicMappedTypeReinstantiation.ts, 14, 13))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(homomorphicMappedTypeReinstantiation.ts, 15, 58))
+>value : Symbol(value, Decl(homomorphicMappedTypeReinstantiation.ts, 15, 58))
+
+declare const unionOptions: (Partial<{ a: boolean } | { b: string }> | string)[];
+>unionOptions : Symbol(unionOptions, Decl(homomorphicMappedTypeReinstantiation.ts, 17, 13))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(homomorphicMappedTypeReinstantiation.ts, 17, 38))
+>b : Symbol(b, Decl(homomorphicMappedTypeReinstantiation.ts, 17, 55))
+
+const r4 = either(unionOptions[0], unionOptions.map(value => value)[0]);
+>r4 : Symbol(r4, Decl(homomorphicMappedTypeReinstantiation.ts, 18, 5))
+>either : Symbol(either, Decl(homomorphicMappedTypeReinstantiation.ts, 0, 0))
+>unionOptions : Symbol(unionOptions, Decl(homomorphicMappedTypeReinstantiation.ts, 17, 13))
+>unionOptions.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>unionOptions : Symbol(unionOptions, Decl(homomorphicMappedTypeReinstantiation.ts, 17, 13))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(homomorphicMappedTypeReinstantiation.ts, 18, 52))
+>value : Symbol(value, Decl(homomorphicMappedTypeReinstantiation.ts, 18, 52))
+
+type AliasedUnionOptions = Partial<{ a: boolean } | { b: string }>;
+>AliasedUnionOptions : Symbol(AliasedUnionOptions, Decl(homomorphicMappedTypeReinstantiation.ts, 18, 72))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(homomorphicMappedTypeReinstantiation.ts, 20, 36))
+>b : Symbol(b, Decl(homomorphicMappedTypeReinstantiation.ts, 20, 53))
+
+declare const aliasedUnionOptions: (AliasedUnionOptions | string)[];
+>aliasedUnionOptions : Symbol(aliasedUnionOptions, Decl(homomorphicMappedTypeReinstantiation.ts, 21, 13))
+>AliasedUnionOptions : Symbol(AliasedUnionOptions, Decl(homomorphicMappedTypeReinstantiation.ts, 18, 72))
+
+const r5 = either(aliasedUnionOptions[0], aliasedUnionOptions.map(value => value)[0]);
+>r5 : Symbol(r5, Decl(homomorphicMappedTypeReinstantiation.ts, 22, 5))
+>either : Symbol(either, Decl(homomorphicMappedTypeReinstantiation.ts, 0, 0))
+>aliasedUnionOptions : Symbol(aliasedUnionOptions, Decl(homomorphicMappedTypeReinstantiation.ts, 21, 13))
+>aliasedUnionOptions.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>aliasedUnionOptions : Symbol(aliasedUnionOptions, Decl(homomorphicMappedTypeReinstantiation.ts, 21, 13))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(homomorphicMappedTypeReinstantiation.ts, 22, 66))
+>value : Symbol(value, Decl(homomorphicMappedTypeReinstantiation.ts, 22, 66))
+
+type Named = { verbose: boolean };
+>Named : Symbol(Named, Decl(homomorphicMappedTypeReinstantiation.ts, 22, 86))
+>verbose : Symbol(verbose, Decl(homomorphicMappedTypeReinstantiation.ts, 24, 14))
+
+type A1 = Partial<Named>;
+>A1 : Symbol(A1, Decl(homomorphicMappedTypeReinstantiation.ts, 24, 34))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Named : Symbol(Named, Decl(homomorphicMappedTypeReinstantiation.ts, 22, 86))
+
+type A2 = Partial<Named>;
+>A2 : Symbol(A2, Decl(homomorphicMappedTypeReinstantiation.ts, 25, 25))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Named : Symbol(Named, Decl(homomorphicMappedTypeReinstantiation.ts, 22, 86))
+
+declare const a1: A1;
+>a1 : Symbol(a1, Decl(homomorphicMappedTypeReinstantiation.ts, 27, 13))
+>A1 : Symbol(A1, Decl(homomorphicMappedTypeReinstantiation.ts, 24, 34))
+
+declare const a2: A2;
+>a2 : Symbol(a2, Decl(homomorphicMappedTypeReinstantiation.ts, 28, 13))
+>A2 : Symbol(A2, Decl(homomorphicMappedTypeReinstantiation.ts, 25, 25))
+
+declare const a3: Partial<Named>;
+>a3 : Symbol(a3, Decl(homomorphicMappedTypeReinstantiation.ts, 29, 13))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Named : Symbol(Named, Decl(homomorphicMappedTypeReinstantiation.ts, 22, 86))
+
+const r6 = either(a1, a2);
+>r6 : Symbol(r6, Decl(homomorphicMappedTypeReinstantiation.ts, 30, 5))
+>either : Symbol(either, Decl(homomorphicMappedTypeReinstantiation.ts, 0, 0))
+>a1 : Symbol(a1, Decl(homomorphicMappedTypeReinstantiation.ts, 27, 13))
+>a2 : Symbol(a2, Decl(homomorphicMappedTypeReinstantiation.ts, 28, 13))
+
+const r7 = either(a1, a3);
+>r7 : Symbol(r7, Decl(homomorphicMappedTypeReinstantiation.ts, 31, 5))
+>either : Symbol(either, Decl(homomorphicMappedTypeReinstantiation.ts, 0, 0))
+>a1 : Symbol(a1, Decl(homomorphicMappedTypeReinstantiation.ts, 27, 13))
+>a3 : Symbol(a3, Decl(homomorphicMappedTypeReinstantiation.ts, 29, 13))
+

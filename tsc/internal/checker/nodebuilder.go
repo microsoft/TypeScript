@@ -288,6 +288,10 @@ func NewNodeBuilderEx(ch *Checker, e *printer.EmitContext, idToSymbol map[*ast.I
 func (c *Checker) getNodeBuilder() (*NodeBuilder, func()) {
 	releaseNodes := func() {
 		c.typeToStringNodebuilder.EmitContext().Factory.ReleaseArenas() // Allow any allocated nodes to be freed if they're no longer in a cache
+		if c.typeToStringNodebuilder.impl.ctx == nil {
+			// Nested operations return during the outermost operation, so only the outermost one clears.
+			c.typeToStringNodebuilder.EmitContext().ClearDisplayTypeArguments()
+		}
 	}
 	if c.typeToStringNodebuilder != nil {
 		return c.typeToStringNodebuilder, releaseNodes

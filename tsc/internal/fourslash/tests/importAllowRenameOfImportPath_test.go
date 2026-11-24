@@ -17,9 +17,9 @@ export const x = 0;
 // @Filename: /dir/index.ts
 export const x = 0;
 // @Filename: /b.ts
-import * as a from "./[|a|]";
-import * as dir from "./[|dir|]";
-import * as dir2 from "./dir/[|index|]";
+import * as a from "./[|/*a*/a|]";
+import * as dir from "./[|/*dir*/dir|]";
+import * as dir2 from "./dir/[|/*index*/index|]";
 // @Filename: /c.js
 const a = require("./[|a|]");
 `

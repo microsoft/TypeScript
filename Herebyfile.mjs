@@ -29,6 +29,7 @@ import {
     ensureModel as ensureLSPModel,
     outputs as lspModelOutputs,
 } from "./tools/scripts/lsp/fetchModel.mts";
+import { outputs as contentMapperOutputs } from "./tools/scripts/tsc/generate-contentmapper.ts";
 import { outputs as encoderOutputs } from "./tools/scripts/tsc/generate-encoder.ts";
 import { outputs as enumOutputs } from "./tools/scripts/tsc/generate-enums.ts";
 import { outputs as goASTOutputs } from "./tools/scripts/tsc/generate-go-ast.ts";
@@ -319,6 +320,8 @@ export const cleanBuilt = task({
 const goGenerateActions = [];
 
 async function runGenerateGo() {
+    // Some Go generators load packages that depend on the generated content mapper types.
+    await runGenerateContentMapper();
     for (const generate of goGenerateActions) {
         await generate();
     }
@@ -507,8 +510,9 @@ export const generateTristate = goGenerateTask("generate:tristate", [
     stringerGenerator("tsc/internal/core/tristate.go", "Tristate", "tristate_stringer_generated.go"),
 ]);
 
-export const generateDiagnostics = goGenerateTask("generate:diagnostics", [
-    {
+export const generateDiagnostics = goGenerateTask(
+    "generate:diagnostics",
+    [{
         file: "tsc/internal/diagnostics/diagnostics.go",
         inputs: ["generate.go", "diagnosticMessages.json", "../../../tools/LocProject.json", "../{collections,json}/*.go", "loc/*.generated.json"],
         exclude: ["**/*_test.go"],
@@ -531,9 +535,9 @@ export const generateDiagnostics = goGenerateTask("generate:diagnostics", [
             ],
             ["dprint", "fmt", "diagnostics_generated.go", "loc_generated.go"],
         ],
-    },
-    stringerGenerator("tsc/internal/diagnostics/diagnostics.go", "Category", "stringer_generated.go"),
-], ["tsc/internal/diagnostics/loc"]);
+    }, stringerGenerator("tsc/internal/diagnostics/diagnostics.go", "Category", "stringer_generated.go")],
+    ["tsc/internal/diagnostics/loc"],
+);
 
 export const generateAutoImport = goGenerateTask("generate:autoimport", [
     stringerGenerator("tsc/internal/ls/autoimport/export.go", "ExportSyntax", "export_stringer_generated.go"),
@@ -675,6 +679,18 @@ export const generateAST = task({
     description: "Generates AST, kind stringer, and encoder files from ast.json. Pass --force to regenerate unchanged files.",
     outputs: [...goASTOutputs, ...tsASTOutputs, ...encoderOutputs],
     run: runGenerateAST,
+});
+
+async function runGenerateContentMapper() {
+    const { default: generate } = await import("./tools/scripts/tsc/generate-contentmapper.ts");
+    generate(!!options.force);
+}
+
+export const generateContentMapper = task({
+    name: "generate:contentmapper",
+    description: "Generates content mapper protocol and Go/TypeScript span map types from the JSON schema.",
+    outputs: contentMapperOutputs,
+    run: runGenerateContentMapper,
 });
 
 async function runGenerateSync() {
@@ -857,6 +873,7 @@ export const buildWatch = task({
                 "tools/gen-proto",
                 "tools/gen-preferences",
                 "tools/userPreferences.schema.json",
+                "packages/typescript/schemas/contentmapper.schema.json",
                 "packages/typescript/src/api/async",
                 "packages/typescript/test/async",
                 "packages/vscode-typescript/src",
@@ -899,9 +916,9 @@ function goTestFlags(taskName) {
         ...goBuildFlags,
         ...goBuildTags(),
         ...(options.tests ? [`-run=${options.tests}`] : []),
-        // Go 1.27 duplicates promoted AST wrappers, exhausting CI disk under coverage.
+        // Go 1.27 duplicates promoted AST wrappers, exhausting CI disk under coverage and the race detector.
         // Tests strip DWARF when linking; omit it earlier to shrink temporary and cached archives.
-        ...(options.coverage && !options.debug ? ["-gcflags=all=-dwarf=false"] : []),
+        ...((options.coverage || options.race) && !options.debug ? ["-gcflags=all=-dwarf=false"] : []),
         ...(options.coverage ? [`-coverprofile=${path.join(coverageDir, "coverage." + taskName + ".out")}`, "-coverpkg=./..."] : []),
     ];
 }
@@ -1164,10 +1181,12 @@ export const testTools = task({
 export const testCodegen = task({
     name: "test:codegen",
     description: "Runs codegen tests without regenerating sources.",
-    run: async () => {
-        await run("node", ["--test", "--test-concurrency=1", "./tools/scripts/gen/*.test.mts", "./tools/scripts/tsc/*.test.ts"]);
-    },
+    run: runTestCodegen,
 });
+
+async function runTestCodegen() {
+    await run("node", ["--test", "--test-concurrency=1", "./tools/scripts/gen/*.test.mts", "./tools/scripts/tsc/*.test.ts"]);
+}
 
 export const buildAPI = task({
     name: "build:api",
@@ -1520,9 +1539,7 @@ export const validate = task({
         if (options.all) {
             await runValidation("check:herebyfile", runCheckHerebyfile);
             await runValidation("test:tools", runTestTools);
-            await runValidation("test:options", async () => {
-                await run("node", ["--test", "./tools/scripts/tsc/options.test.ts"]);
-            });
+            await runValidation("test:codegen", runTestCodegen);
             await runValidation("test:smoke", runSmokeTest); // in CI this is run with `--race`
         }
         await runValidation("lint", runLint);
@@ -2103,15 +2120,13 @@ async function sign(filelist, unchangedOutputOkay = false) {
     const tmp = await getSignTempDir();
     const propsPath = path.resolve(tmp, `signing-items-${signCount++}.props`);
     const signingItems = signingFilelist.SignFileRecordList.flatMap(record => record.SignFileList.map(file => ({ path: file.SrcPath, cert: record.Certs, macAppName: record.MacAppName })));
-    const items = signingItems.map(({ path: filePath, cert, macAppName }) =>
-        `    <FilesToSign Include="${assertMsbuildXmlValue(filePath)}">
+    const items = signingItems.map(({ path: filePath, cert, macAppName }) => `    <FilesToSign Include="${assertMsbuildXmlValue(filePath)}">
       <Authenticode>${assertMsbuildXmlValue(cert)}</Authenticode>
       <StrongName>None</StrongName>${
-            macAppName ? `
+          macAppName ? `
       <MacAppName>${assertMsbuildXmlValue(macAppName)}</MacAppName>` : ""
-        }
-    </FilesToSign>`
-    ).join("\n");
+      }
+    </FilesToSign>`).join("\n");
     await fs.promises.writeFile(
         propsPath,
         `<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
@@ -2894,7 +2909,7 @@ async function testTypeScriptPackage(platforms) {
             packed[0].files.some(file => file.path === "dist/wasm/index.js"),
             "Main package is missing the WASM host entrypoint",
         );
-        for (const name of ["tsconfig", "jsconfig"]) {
+        for (const name of ["tsconfig", "jsconfig", "contentmapper"]) {
             const schemaPath = `schemas/${name}.schema.json`;
             assert(packed[0].files.some(file => file.path === schemaPath), `Package is missing ${schemaPath}`);
             assert.deepEqual(

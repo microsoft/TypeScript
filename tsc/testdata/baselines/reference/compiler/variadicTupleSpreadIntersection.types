@@ -1,0 +1,30 @@
+//// [tests/cases/compiler/variadicTupleSpreadIntersection.ts] ////
+
+=== variadicTupleSpreadIntersection.ts ===
+type Spread<T extends readonly unknown[]> = [0, ...(T & readonly unknown[])];
+>Spread : [0, ...T & readonly unknown[]]
+
+type A = Spread<[1, 2]>;
+>A : [0, ...(1 | 2)[]]
+
+type Tagged<T extends unknown[]> = [0, ...(T & { tag?: 1 })];
+>Tagged : [0, ...T & { tag?: 1; }]
+>tag : 1 | undefined
+
+type B = Tagged<string[]>;
+>B : [0, ...string[]]
+
+declare function f<T extends unknown[]>(x: T): [0, ...(T & { tag?: 1 })];
+>f : <T extends unknown[]>(x: T) => [0, ...(T & { tag?: 1; })]
+>x : T
+>tag : 1 | undefined
+
+const c = f([1, "a"] as [1, "a"]);
+>c : [0, ...("a" | 1)[]]
+>f([1, "a"] as [1, "a"]) : [0, ...("a" | 1)[]]
+>f : <T extends unknown[]>(x: T) => [0, ...(T & { tag?: 1; })]
+>[1, "a"] as [1, "a"] : [1, "a"]
+>[1, "a"] : [1, "a"]
+>1 : 1
+>"a" : "a"
+

@@ -1,0 +1,68 @@
+//// [tests/cases/compiler/instantiationExpressionConstraintCycleCheckOrder.ts] ////
+
+=== instantiationExpressionConstraintCycleCheckOrder.ts ===
+// Checking the type arguments of the instantiation expressions against their
+// constraints needs the variances of A, which need the type of child. The
+// constraint errors and the types of child must not depend on whether child
+// is queried before A is checked.
+
+namespace InterfaceCycle {
+>InterfaceCycle : Symbol(InterfaceCycle, Decl(instantiationExpressionConstraintCycleCheckOrder.ts, 0, 0))
+
+    declare function b<U extends A = A>(): U;
+>b : Symbol(b, Decl(instantiationExpressionConstraintCycleCheckOrder.ts, 5, 26))
+>U : Symbol(U, Decl(instantiationExpressionConstraintCycleCheckOrder.ts, 6, 23))
+>A : Symbol(A, Decl(instantiationExpressionConstraintCycleCheckOrder.ts, 6, 45))
+>A : Symbol(A, Decl(instantiationExpressionConstraintCycleCheckOrder.ts, 6, 45))
+>U : Symbol(U, Decl(instantiationExpressionConstraintCycleCheckOrder.ts, 6, 23))
+
+    interface A<T = number> {
+>A : Symbol(A, Decl(instantiationExpressionConstraintCycleCheckOrder.ts, 6, 45))
+>T : Symbol(T, Decl(instantiationExpressionConstraintCycleCheckOrder.ts, 7, 16))
+
+        value: T;
+>value : Symbol(A.value, Decl(instantiationExpressionConstraintCycleCheckOrder.ts, 7, 29))
+>T : Symbol(T, Decl(instantiationExpressionConstraintCycleCheckOrder.ts, 7, 16))
+
+        child: typeof b<A<T>>;
+>child : Symbol(A.child, Decl(instantiationExpressionConstraintCycleCheckOrder.ts, 8, 17))
+>b : Symbol(b, Decl(instantiationExpressionConstraintCycleCheckOrder.ts, 5, 26))
+>A : Symbol(A, Decl(instantiationExpressionConstraintCycleCheckOrder.ts, 6, 45))
+>T : Symbol(T, Decl(instantiationExpressionConstraintCycleCheckOrder.ts, 7, 16))
+    }
+}
+
+namespace ClassCycle {
+>ClassCycle : Symbol(ClassCycle, Decl(instantiationExpressionConstraintCycleCheckOrder.ts, 11, 1))
+
+    class A<T = number> {
+>A : Symbol(A, Decl(instantiationExpressionConstraintCycleCheckOrder.ts, 13, 22))
+>T : Symbol(T, Decl(instantiationExpressionConstraintCycleCheckOrder.ts, 14, 12))
+
+        value!: T;
+>value : Symbol(A.value, Decl(instantiationExpressionConstraintCycleCheckOrder.ts, 14, 25))
+>T : Symbol(T, Decl(instantiationExpressionConstraintCycleCheckOrder.ts, 14, 12))
+
+        child!: InstanceType<typeof A.B<A<T>>>;
+>child : Symbol(A.child, Decl(instantiationExpressionConstraintCycleCheckOrder.ts, 15, 18))
+>InstanceType : Symbol(InstanceType, Decl(lib.es5.d.ts, --, --))
+>A.B : Symbol(A.B, Decl(instantiationExpressionConstraintCycleCheckOrder.ts, 16, 47))
+>A : Symbol(A, Decl(instantiationExpressionConstraintCycleCheckOrder.ts, 13, 22))
+>B : Symbol(A.B, Decl(instantiationExpressionConstraintCycleCheckOrder.ts, 16, 47))
+>A : Symbol(A, Decl(instantiationExpressionConstraintCycleCheckOrder.ts, 13, 22))
+>T : Symbol(T, Decl(instantiationExpressionConstraintCycleCheckOrder.ts, 14, 12))
+
+        static B = class B<T extends A> {
+>B : Symbol(A.B, Decl(instantiationExpressionConstraintCycleCheckOrder.ts, 16, 47))
+>B : Symbol(B, Decl(instantiationExpressionConstraintCycleCheckOrder.ts, 17, 18))
+>T : Symbol(T, Decl(instantiationExpressionConstraintCycleCheckOrder.ts, 17, 27))
+>A : Symbol(A, Decl(instantiationExpressionConstraintCycleCheckOrder.ts, 13, 22))
+
+            parent!: T;
+>parent : Symbol(B.parent, Decl(instantiationExpressionConstraintCycleCheckOrder.ts, 17, 41))
+>T : Symbol(T, Decl(instantiationExpressionConstraintCycleCheckOrder.ts, 17, 27))
+
+        };
+    }
+}
+

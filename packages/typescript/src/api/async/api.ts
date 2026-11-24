@@ -2,6 +2,7 @@ import { CheckFlags } from "../../../enums/checkFlags.js";
 import { CompletionItemKind } from "../../../enums/completionItemKind.js";
 import { DiagnosticCategory } from "../../../enums/diagnosticCategory.js";
 import { ElementFlags } from "../../../enums/elementFlags.js";
+import { EmitFlags } from "../../../enums/emitFlags.js";
 import { EmitOnly } from "../../../enums/emitOnly.js";
 import { IndexKind } from "../../../enums/indexKind.js";
 import { JsxEmit } from "../../../enums/jsxEmit.js";
@@ -14,30 +15,38 @@ import { ScriptKind } from "../../../enums/scriptKind.js";
 import { SignatureFlags } from "../../../enums/signatureFlags.js";
 import { SignatureKind } from "../../../enums/signatureKind.js";
 import { SymbolFlags } from "../../../enums/symbolFlags.js";
+import { SymbolFormatFlags } from "../../../enums/symbolFormatFlags.js";
 import { SymbolOwnerKind } from "../../../enums/symbolOwnerKind.js";
 import { TypeFlags } from "../../../enums/typeFlags.js";
 import { TypeFormatFlags } from "../../../enums/typeFormatFlags.js";
 import { TypePredicateKind } from "../../../enums/typePredicateKind.js";
 import {
     type __String,
+    type ArrayLiteralExpression,
     type CallLikeExpression,
     type Declaration,
+    type EntityName,
     type Expression,
     type FileReference,
     type Identifier,
+    type ImportTypeNode,
     type IndexSignatureDeclaration,
     ModifierFlags,
     type NamedTupleMember,
     type Node,
+    type ObjectLiteralExpression,
     type ParameterDeclaration,
     type PathKey,
+    type PropertyAccessExpression,
+    type QualifiedName,
     type RootedDirectoryPath,
     type RootedFilePath,
     type SourceFile,
     type StringLiteralLikeNode,
+    symbolName,
     type SyntaxKind,
     type TypeNode,
-    unescapeLeadingUnderscores,
+    type TypeParameterDeclaration,
 } from "../../ast/index.ts";
 import { assertNever } from "../../internal/utils.ts";
 import {
@@ -69,6 +78,12 @@ import {
     toRootedPath,
 } from "../path.ts";
 import { prepareCompilerOptions } from "../prepareCompilerOptions.generated.ts";
+import {
+    createEmitContext,
+    type EmitContext,
+    encodePrintNode,
+    type PrintNodeOptions,
+} from "../printer.ts";
 import type {
     BuildResponse,
     CleanBuildResponse,
@@ -88,6 +103,7 @@ import type {
     DocumentPosition,
     EmitOutputResponse as ProtocolEmitOutputResponse,
     FileNotifications,
+    FormatCodeSettings,
     ImportAdderAction,
     InferredProjectId,
     IntrinsicTypeMethod,
@@ -109,6 +125,7 @@ import type {
     ResolvedModule,
     ResolvedTypeReferenceDirective,
     ResolveModuleNameResult,
+    ResolveTypeReferenceDirectiveResult,
     SignaturePropertyMethod,
     SignatureResponse,
     SourceFileDescriptor,
@@ -192,9 +209,11 @@ import type {
     UnionType,
 } from "./types.ts";
 
-export { formatDiagnostics, formatDiagnosticsWithColorAndContext } from "../diagnosticFormatter.ts";
+export { flattenDiagnosticMessage, formatDiagnostics, formatDiagnosticsWithColorAndContext } from "../diagnosticFormatter.ts";
+export { sortAndDeduplicateDiagnostics } from "../diagnosticUtils.ts";
 export { documentURIToFileName, fileNameToDocumentURI } from "../path.ts";
-export { CheckFlags, CompletionItemKind, DiagnosticCategory, ElementFlags, EmitOnly, IndexKind, JsxEmit, ModifierFlags, ModuleKind, ModuleResolutionKind, NodeBuilderFlags, ObjectFlags, ScriptKind, SignatureFlags, SignatureKind, SymbolFlags, SymbolOwnerKind, TypeFlags, TypeFormatFlags, TypePredicateKind };
+export type { EmitContext, PrintNodeOptions, SynthesizedComment } from "../printer.ts";
+export { CheckFlags, CompletionItemKind, DiagnosticCategory, ElementFlags, EmitFlags, EmitOnly, IndexKind, JsxEmit, ModifierFlags, ModuleKind, ModuleResolutionKind, NodeBuilderFlags, ObjectFlags, ScriptKind, SignatureFlags, SignatureKind, SymbolFlags, SymbolFormatFlags, SymbolOwnerKind, TypeFlags, TypeFormatFlags, TypePredicateKind };
 export type {
     APIImportAdderAction as ImportAdderAction,
     APIOptions,
@@ -219,6 +238,7 @@ export type {
     EmitOutputFile,
     EmitResult,
     FileNotifications,
+    FormatCodeSettings,
     FormatDiagnosticsHost,
     FreshableType,
     GenericType,
@@ -252,6 +272,7 @@ export type {
     ResolvedModule,
     ResolvedTypeReferenceDirective,
     ResolveModuleNameResult,
+    ResolveTypeReferenceDirectiveResult,
     SourceFileMetadata,
     StaticModuleResolution,
     StringLiteralType,
@@ -504,6 +525,28 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         });
         this.activeBuildOrchestrators.add(orchestrator);
         return orchestrator;
+    }
+
+    /** Gets the compiler's default formatting settings, independent of snapshot preferences. */
+    async getDefaultFormatCodeSettings(): Promise<FormatCodeSettings> {
+        await this.ensureInitialized();
+        return this.client.apiRequest("getDefaultFormatCodeSettings", null);
+    }
+
+    /** Returns configured type roots or ancestor node_modules/@types candidates, without checking directory existence. */
+    async getEffectiveTypeRoots(compilerOptions: RawCompilerOptions): Promise<readonly RootedDirectoryPath[]> {
+        await this.ensureInitialized();
+        return this.client.apiRequest("getEffectiveTypeRoots", {
+            compilerOptions: prepareCompilerOptions(compilerOptions, this.getCurrentDirectory()),
+        });
+    }
+
+    /** Returns the native build-info output path, or undefined when the options do not produce one. */
+    async getTsBuildInfoEmitOutputFilePath(compilerOptions: RawCompilerOptions): Promise<RootedFilePath | undefined> {
+        await this.ensureInitialized();
+        return (await this.client.apiRequest("getTsBuildInfoEmitOutputFilePath", {
+            compilerOptions: prepareCompilerOptions(compilerOptions, this.getCurrentDirectory()),
+        })) ?? undefined;
     }
 
     async parseConfigFile(file: DocumentIdentifier): Promise<ParsedCommandLine> {
@@ -1237,6 +1280,27 @@ export class ModuleResolver {
             resolver: this.id,
             moduleName,
             containingDirectory,
+            resolutionMode,
+        });
+    }
+
+    /** Resolves a type directive using this resolver's options and the selected snapshot or live filesystem. */
+    async resolveTypeReferenceDirective(
+        typeReferenceDirectiveName: string,
+        containingFile: DocumentIdentifier,
+        resolutionMode?: ResolutionMode,
+        options?: { snapshot?: Snapshot | InProgressSnapshot | undefined; },
+    ): Promise<ResolveTypeReferenceDirectiveResult> {
+        this.ensureNotDisposed();
+        if (options?.snapshot instanceof Snapshot && options.snapshot.isDisposed()) {
+            throw new Error("Snapshot is disposed");
+        }
+        return this.client.apiRequest("resolveTypeReferenceDirective", {
+            snapshot: options?.snapshot instanceof Snapshot ? options.snapshot.id : undefined,
+            inProgressSnapshot: typeof options?.snapshot === "number" ? -options.snapshot : undefined,
+            resolver: this.id,
+            typeReferenceDirectiveName,
+            containingFile,
             resolutionMode,
         });
     }
@@ -2331,6 +2395,63 @@ function encodeNumberLiteralValue(value: number): number | string {
 }
 
 export class Checker {
+    /** Get the original symbols underlying a synthetic, instantiated, or mapped property. */
+    async getRootSymbols(symbol: Symbol): Promise<readonly Symbol[]> {
+        const data = await this.client.apiRequest("getRootSymbols", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            symbol: symbol.reference,
+        });
+        return data ? data.map(symbol => this.objectRegistry.getOrCreateSymbol(symbol)) : [];
+    }
+
+    /** Get inferred or explicit signature type arguments; empty when the signature has no instantiation. */
+    async getTypeArgumentsForResolvedSignature(signature: Signature): Promise<readonly Type[]> {
+        return signature.getTypeArguments();
+    }
+
+    /** Get the source type of an object/array assignment pattern, including nested patterns and for-of initializers. */
+    async getTypeOfAssignmentPattern(node: ObjectLiteralExpression | ArrayLiteralExpression): Promise<Type | undefined> {
+        const data = await this.client.apiRequest("getTypeOfAssignmentPattern", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            location: getNodeRequestHandle(node),
+        });
+        return data ? this.objectRegistry.getOrCreateType(data) : undefined;
+    }
+
+    /** Get the distinct constructor parameter and instance property symbols of a parameter property. */
+    async getSymbolsOfParameterPropertyDeclaration(node: ParameterDeclaration): Promise<{ parameter: Symbol; property: Symbol; }> {
+        const data = await this.client.apiRequest("getSymbolsOfParameterPropertyDeclaration", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            location: getNodeRequestHandle(node),
+        });
+        return {
+            parameter: this.objectRegistry.getOrCreateSymbol(data.parameter),
+            property: this.objectRegistry.getOrCreateSymbol(data.property),
+        };
+    }
+
+    /** Whether the named property exists and is accessible at this access location. */
+    async isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName | ImportTypeNode, propertyName: string): Promise<boolean> {
+        return this.client.apiRequest("isValidPropertyAccess", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            location: getNodeRequestHandle(node),
+            propertyName,
+        });
+    }
+
+    /** Whether a parameter may be omitted, including defaults and untyped IIFE parameters. */
+    async isOptionalParameter(node: ParameterDeclaration): Promise<boolean> {
+        return this.client.apiRequest("isOptionalParameter", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            location: getNodeRequestHandle(node),
+        });
+    }
+
     private snapshotId: number;
     private project: Project;
     private objectRegistry: ProjectObjectRegistry;
@@ -2894,6 +3015,119 @@ export class Checker {
         return decodeNode(binaryData) as Node;
     }
 
+    async symbolToEntityName(symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): Promise<EntityName | undefined> {
+        const binaryData = await this.client.apiRequestBinary("symbolToEntityName", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            symbol: symbol.reference,
+            meaning,
+            location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+            flags,
+        });
+        if (!binaryData) return undefined;
+        return decodeNode(binaryData) as EntityName;
+    }
+
+    async symbolToExpression(symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): Promise<Expression | undefined> {
+        const binaryData = await this.client.apiRequestBinary("symbolToExpression", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            symbol: symbol.reference,
+            meaning,
+            location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+            flags,
+        });
+        if (!binaryData) return undefined;
+        return decodeNode(binaryData) as Expression;
+    }
+
+    async symbolToParameterDeclaration(symbol: Symbol, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): Promise<ParameterDeclaration | undefined> {
+        const binaryData = await this.client.apiRequestBinary("symbolToParameterDeclaration", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            symbol: symbol.reference,
+            location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+            flags,
+        });
+        if (!binaryData) return undefined;
+        return decodeNode(binaryData) as ParameterDeclaration;
+    }
+
+    async symbolToTypeParameterDeclarations(symbol: Symbol, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): Promise<readonly TypeParameterDeclaration[] | undefined> {
+        const data = await this.client.apiRequest("symbolToTypeParameterDeclarations", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            symbol: symbol.reference,
+            location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+            flags,
+        });
+        return data?.length ? data.map(node => decodeNode(sourceFileResponseToUint8Array(node)!) as TypeParameterDeclaration) : undefined;
+    }
+
+    async typeParameterToDeclaration(parameter: TypeParameter, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): Promise<TypeParameterDeclaration | undefined> {
+        const binaryData = await this.client.apiRequestBinary("typeParameterToDeclaration", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            type: parameter.id,
+            location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+            flags,
+        });
+        if (!binaryData) return undefined;
+        return decodeNode(binaryData) as TypeParameterDeclaration;
+    }
+
+    async indexInfoToIndexSignatureDeclaration(info: IndexInfo, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): Promise<IndexSignatureDeclaration | undefined> {
+        const declaration = info.declaration ? await info.declaration.resolve(this.project) : undefined;
+        const binaryData = await this.client.apiRequestBinary("indexInfoToIndexSignatureDeclaration", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            keyType: info.keyType.id,
+            valueType: info.valueType.id,
+            isReadonly: info.isReadonly,
+            declaration: declaration ? getNodeRequestHandle(declaration) : undefined,
+            location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+            flags,
+        });
+        if (!binaryData) return undefined;
+        return decodeNode(binaryData) as IndexSignatureDeclaration;
+    }
+
+    async typePredicateToString(predicate: TypePredicate, enclosingDeclaration?: Node, flags?: TypeFormatFlags): Promise<string> {
+        return this.client.apiRequest("typePredicateToString", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            kind: predicate.kind,
+            parameterName: predicate.parameterName,
+            parameterIndex: predicate.parameterIndex,
+            type: predicate.type?.id,
+            location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+            flags,
+        });
+    }
+
+    /** Formats a call or construct signature, using the signature's own kind. */
+    async signatureToString(signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags): Promise<string> {
+        return this.client.apiRequest("signatureToString", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            signature: signature.id,
+            location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+            flags,
+        });
+    }
+
+    /** Formats a symbol, optionally qualifying its name relative to an enclosing declaration. */
+    async symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags): Promise<string> {
+        return this.client.apiRequest("symbolToString", {
+            snapshot: this.snapshotId,
+            project: this.project.handle,
+            symbol: symbol.reference,
+            location: enclosingDeclaration ? getNodeRequestHandle(enclosingDeclaration) : undefined,
+            meaning,
+            flags,
+        });
+    }
+
     async typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): Promise<string> {
         const result = await this.client.apiRequest("typeToString", {
             snapshot: this.snapshotId,
@@ -3305,12 +3539,6 @@ export class Checker {
     }
 }
 
-export interface PrintNodeOptions {
-    preserveSourceNewlines?: boolean | undefined;
-    neverAsciiEscape?: boolean | undefined;
-    terminateUnterminatedLiterals?: boolean | undefined;
-}
-
 export class Printer {
     private client: Client;
 
@@ -3319,10 +3547,8 @@ export class Printer {
     }
 
     async printNode(node: Node, options: PrintNodeOptions = {}): Promise<string> {
-        const encoded = encodeNode(node);
-        const base64 = uint8ArrayToBase64(encoded);
         return this.client.apiRequest("printNode", {
-            data: base64,
+            ...encodePrintNode(node, options.emitContext),
             preserveSourceNewlines: options.preserveSourceNewlines,
             neverAsciiEscape: options.neverAsciiEscape,
             terminateUnterminatedLiterals: options.terminateUnterminatedLiterals,
@@ -3330,14 +3556,11 @@ export class Printer {
     }
 
     async printFile(sourceFile: SourceFile, options: PrintNodeOptions = {}): Promise<string> {
-        const encoded = encodeNode(sourceFile);
-        const base64 = uint8ArrayToBase64(encoded);
-        return this.client.apiRequest("printNode", {
-            data: base64,
-            preserveSourceNewlines: options.preserveSourceNewlines,
-            neverAsciiEscape: options.neverAsciiEscape,
-            terminateUnterminatedLiterals: options.terminateUnterminatedLiterals,
-        });
+        return this.printNode(sourceFile, options);
+    }
+
+    createEmitContext(): EmitContext {
+        return createEmitContext();
     }
 }
 
@@ -3444,7 +3667,7 @@ export class Symbol {
     }
     /** The escaped (`__String`) name, used as the key in member/export tables. */
     readonly escapedName: __String;
-    /** The display name (escaped underscores removed). */
+    /** The display name, including the source spelling of private identifiers. */
     readonly name: string;
     readonly flags: SymbolFlags;
     readonly checkFlags: CheckFlags;
@@ -3466,7 +3689,7 @@ export class Symbol {
         this.reference = data.reference;
 
         this.escapedName = data.name as __String;
-        this.name = unescapeLeadingUnderscores(data.name as __String);
+        this.name = symbolName(this);
         this.flags = data.flags;
         this.checkFlags = data.checkFlags ?? 0;
         this.declarationHandles = data.declarations;
@@ -4114,6 +4337,7 @@ export class Signature {
     readonly thisParameter?: CompactSymbolReference | undefined;
     readonly target?: number | undefined;
     private returnType: number | false;
+    private typeArguments: readonly number[] | false;
 
     constructor(data: SignatureResponse, project: Project, objectRegistry: ProjectObjectRegistry) {
         this.id = data.id;
@@ -4127,6 +4351,7 @@ export class Signature {
         this.thisParameter = data.thisParameter;
         this.target = data.target;
         this.returnType = false;
+        this.typeArguments = false;
     }
 
     get declaration(): NodeHandle<Declaration> | undefined {
@@ -4138,6 +4363,13 @@ export class Signature {
 
     async getTypeParameters(): Promise<readonly TypeParameter[]> {
         return this.objectRegistry.fetchTypes(this, "getTypeParametersOfSignature", this.typeParameters) as Promise<readonly TypeParameter[]>;
+    }
+
+    /** Get inferred or explicit type arguments; empty when this signature has no instantiation. */
+    async getTypeArguments(): Promise<readonly Type[]> {
+        const result = await this.objectRegistry.fetchTypes(this, "getTypeArgumentsForResolvedSignature", this.typeArguments || undefined);
+        this.typeArguments = result.map(type => type.id);
+        return result;
     }
 
     async getParameters(): Promise<readonly Symbol[]> {

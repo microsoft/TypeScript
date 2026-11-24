@@ -354,70 +354,70 @@ function showConfig(): string {
     return `func serializeCompilerOptions(options *core.CompilerOptions, configFilePath tspath.RootedFilePath, caseSensitivity tspath.CaseSensitivity) *collections.OrderedMap[string, any] {
     result := collections.NewOrderedMapWithSizeHint[string, any](32)
 ${
-        serializedOptions.map(option => {
-            const field = `options.${fieldName(option)}`;
-            const name = JSON.stringify(option.name);
-            const declaration = option.declaration!;
-            let value = field;
-            let condition = `${field} != ${zeroValue(option)}`;
-            switch (optionKind(option)) {
-                case "Enum":
-                    return `if ${condition} {
+    serializedOptions.map(option => {
+        const field = `options.${fieldName(option)}`;
+        const name = JSON.stringify(option.name);
+        const declaration = option.declaration!;
+        let value = field;
+        let condition = `${field} != ${zeroValue(option)}`;
+        switch (optionKind(option)) {
+            case "Enum":
+                return `if ${condition} {
     if value := serializeCompilerOptionEnum(${field}); value != "" {
         result.Set(${name}, value)
     }
 }`;
-                case "Boolean":
-                    condition = `${field} == core.TSTrue || ${field} == core.TSFalse`;
-                    value = `${field} == core.TSTrue`;
-                    break;
-                case "String":
-                    if (option.pathKind === "file" || option.pathKind === "directory") {
-                        value = `serializeCompilerOptionPath(${field}.AsPath(), configFilePath, caseSensitivity)`;
-                    }
-                    else if (option.pathKind === "fileOrDirectory") {
-                        value = `serializeCompilerOptionPath(${field}, configFilePath, caseSensitivity)`;
-                    }
-                    break;
-                case "List": {
-                    const element = options.elements[option.name];
-                    if (option.pathKind === "directory") {
-                        assert.equal(option.type, "[]string", `Unsupported file path list: ${option.name}`);
-                        value = `core.Map(${field}, func(value tspath.RootedDirectoryPath) string {
+            case "Boolean":
+                condition = `${field} == core.TSTrue || ${field} == core.TSFalse`;
+                value = `${field} == core.TSTrue`;
+                break;
+            case "String":
+                if (option.pathKind === "file" || option.pathKind === "directory") {
+                    value = `serializeCompilerOptionPath(${field}.AsPath(), configFilePath, caseSensitivity)`;
+                }
+                else if (option.pathKind === "fileOrDirectory") {
+                    value = `serializeCompilerOptionPath(${field}, configFilePath, caseSensitivity)`;
+                }
+                break;
+            case "List": {
+                const element = options.elements[option.name];
+                if (option.pathKind === "directory") {
+                    assert.equal(option.type, "[]string", `Unsupported file path list: ${option.name}`);
+                    value = `core.Map(${field}, func(value tspath.RootedDirectoryPath) string {
     if value == "" { return "" }
     return serializeCompilerOptionPath(value.AsPath(), configFilePath, caseSensitivity)
 })`;
-                    }
-                    else if (element?.kind === "Enum") {
-                        assert.equal(option.type, "[]string", `Unsupported enum list: ${option.name}`);
-                        value = `serializeCompilerOptionEnumList(${field}, ${options.enumMaps[option.name].goName})`;
-                    }
-                    break;
                 }
+                else if (element?.kind === "Enum") {
+                    assert.equal(option.type, "[]string", `Unsupported enum list: ${option.name}`);
+                    value = `serializeCompilerOptionEnumList(${field}, ${options.enumMaps[option.name].goName})`;
+                }
+                break;
             }
-            return `if ${condition} {
+        }
+        return `if ${condition} {
     result.Set(${name}, ${value})
 }`;
-        }).join("\n")
-    }
+    }).join("\n")
+}
     return result
 }
 
 func serializeCompilerOptionEnum(value any) string {
     switch value := value.(type) {
 ${
-        enumOptions.map(option => {
-            const seen = new Set<string>();
-            const entries = options.enumMaps[option.name].values.filter(entry => {
-                const value = goValue(entry.value);
-                if (seen.has(value)) return false;
-                seen.add(value);
-                return true;
-            });
-            return `case core.${option.type}:
+    enumOptions.map(option => {
+        const seen = new Set<string>();
+        const entries = options.enumMaps[option.name].values.filter(entry => {
+            const value = goValue(entry.value);
+            if (seen.has(value)) return false;
+            seen.add(value);
+            return true;
+        });
+        return `case core.${option.type}:
 ${entries.map(entry => `if value == ${goValue(entry.value)} { return ${JSON.stringify(entry.name)} }`).join("\n")}`;
-        }).join("\n")
-    }
+    }).join("\n")
+}
     }
     return ""
 }
@@ -429,19 +429,19 @@ function configDirSubstitution(): string {
     return `func handleOptionConfigDirTemplateSubstitution(compilerOptions *parsedCompilerOptions, basePath tspath.RootedDirectoryPath) {
     if compilerOptions == nil { return }
 ${
-        substitutedOptions.map(option => {
-            const field = `compilerOptions.${fieldName(option)}`;
-            switch (option.type) {
-                case "string":
-                    return `if startsWithConfigDirTemplate(${field}) {
+    substitutedOptions.map(option => {
+        const field = `compilerOptions.${fieldName(option)}`;
+        switch (option.type) {
+            case "string":
+                return `if startsWithConfigDirTemplate(${field}) {
     ${field} = getSubstitutedPathWithConfigDirTemplate(${field}, basePath)
 }`;
-                case "[]string":
-                    return `if substitution := getSubstitutedStringArrayWithConfigDirTemplate(${field}, basePath); substitution != nil {
+            case "[]string":
+                return `if substitution := getSubstitutedStringArrayWithConfigDirTemplate(${field}, basePath); substitution != nil {
     ${field} = substitution
 }`;
-                case "*collections.OrderedMap[string, []string]":
-                    return `{
+            case "*collections.OrderedMap[string, []string]":
+                return `{
     var paths *collections.OrderedMap[string, []string]
     for k, v := range ${field}.Entries() {
         if substitution := getSubstitutedStringArrayWithConfigDirTemplate(v, basePath); substitution != nil {
@@ -453,11 +453,11 @@ ${
         }
     }
 }`;
-                default:
-                    throw new Error(`Unsupported configDir substitution type for ${option.name}: ${option.type}`);
-            }
-        }).join("\n")
-    }
+            default:
+                throw new Error(`Unsupported configDir substitution type for ${option.name}: ${option.type}`);
+        }
+    }).join("\n")
+}
     for key, value := range compilerOptions.unresolvedPaths {
         option := CommandLineCompilerOptionsMap.Get(key)
         if option.Kind == CommandLineOptionTypeList {
@@ -477,16 +477,16 @@ ${
 function mergeCompilerOptions(): string {
     return `func mergeCompilerOptionFields(targetOptions, sourceOptions *core.CompilerOptions, explicitNullFields collections.Set[string]) {
 ${
-        options.compilerOptions.map(option => {
-            const field = fieldName(option);
-            const zero = zeroValue(option);
-            return `if explicitNullFields.Has(${JSON.stringify(option.name)}) {
+    options.compilerOptions.map(option => {
+        const field = fieldName(option);
+        const zero = zeroValue(option);
+        return `if explicitNullFields.Has(${JSON.stringify(option.name)}) {
     targetOptions.${field} = ${zero}
 } else if sourceOptions.${field} != ${zero} {
     targetOptions.${field} = sourceOptions.${field}
 }`;
-        }).join("\n")
-    }
+    }).join("\n")
+}
 }
 `;
 }
@@ -500,17 +500,17 @@ import "github.com/microsoft/TypeScript/tsc/internal/core"
 
 func setOptionsForTranspile(options *core.CompilerOptions, declaration bool) {
 ${
-        transformedOptions.map(option => {
-            const { value, declarationValue, unless } = option.transpile!;
-            const field = `options.${fieldName(option)}`;
-            const assigned = value === "clear" ? zeroValue(option) : value ? "core.TSTrue" : "core.TSFalse";
-            let code = `${field} = ${assigned}`;
-            if (declarationValue === "preserve") code = `if !declaration { ${code} }`;
-            else if (declarationValue !== undefined) code = `if declaration { ${field} = ${declarationValue ? "core.TSTrue" : "core.TSFalse"} } else { ${code} }`;
-            if (unless) code = `if !options.${fieldName(options.compilerOptions.find(option => option.name === unless)!)}.IsTrue() { ${code} }`;
-            return code;
-        }).join("\n")
-    }
+    transformedOptions.map(option => {
+        const { value, declarationValue, unless } = option.transpile!;
+        const field = `options.${fieldName(option)}`;
+        const assigned = value === "clear" ? zeroValue(option) : value ? "core.TSTrue" : "core.TSFalse";
+        let code = `${field} = ${assigned}`;
+        if (declarationValue === "preserve") code = `if !declaration { ${code} }`;
+        else if (declarationValue !== undefined) code = `if declaration { ${field} = ${declarationValue ? "core.TSTrue" : "core.TSFalse"} } else { ${code} }`;
+        if (unless) code = `if !options.${fieldName(options.compilerOptions.find(option => option.name === unless)!)}.IsTrue() { ${code} }`;
+        return code;
+    }).join("\n")
+}
 }
 `;
 }
@@ -520,12 +520,10 @@ function generateBuildInfoOptions(): string {
     return `// ForEachCompilerOptionAffectingBuildInfo visits nonzero options in CompilerOptions field order.
 func ForEachCompilerOptionAffectingBuildInfo(options *core.CompilerOptions, fn func(option *CommandLineOption, value any)) {
 ${
-        storedOptions.map(option =>
-            `if options.${fieldName(option)} != ${zeroValue(option)} {
+    storedOptions.map(option => `if options.${fieldName(option)} != ${zeroValue(option)} {
     fn(CommandLineCompilerOptionsMap.Get(${JSON.stringify(option.name)}), options.${fieldName(option)})
-}`
-        ).join("\n")
-    }
+}`).join("\n")
+}
 }
 `;
 }
@@ -572,13 +570,13 @@ function enumStrings(): string {
     case 0:
         panic("should not use zero value of ${enumDef.name}")
     ${
-            enumDef.members.filter(member => typeof member.value === "number" && member.value !== 0).map(member => {
-                const constant = `${enumDef.name}${member.name}`;
-                const text = stringer === "name" ? member.name : options.enumMaps[stringer.enumMap].values.find(entry => typeof entry.value === "object" && entry.value.go === `core.${constant}`)?.name;
-                assert(text, `Missing display name for ${constant}`);
-                return `case ${constant}: return ${JSON.stringify(text)}`;
-            }).join("\n")
-        }
+        enumDef.members.filter(member => typeof member.value === "number" && member.value !== 0).map(member => {
+            const constant = `${enumDef.name}${member.name}`;
+            const text = stringer === "name" ? member.name : options.enumMaps[stringer.enumMap].values.find(entry => typeof entry.value === "object" && entry.value.go === `core.${constant}`)?.name;
+            assert(text, `Missing display name for ${constant}`);
+            return `case ${constant}: return ${JSON.stringify(text)}`;
+        }).join("\n")
+    }
     default:
         panic("unhandled case in ${enumDef.name}.String")
     }
@@ -589,14 +587,12 @@ function enumStrings(): string {
 
 function numericEnums(): string {
     return `${
-        options.enums.map(enumDef =>
-            `type ${enumDef.name} int32
+        options.enums.map(enumDef => `type ${enumDef.name} int32
 
 const (
 ${enumDef.members.map(member => `${member.comment ? "// " + member.comment.replaceAll("\n", "\n// ") + "\n" : ""}${enumDef.name}${member.name} ${enumDef.name} = ${typeof member.value === "number" ? member.value : enumDef.name + member.value}${member.trailingComment ? " // " + member.trailingComment : ""}`).join("\n")}
 )
-`
-        ).join("\n")
+`).join("\n")
     }
 
 var ModuleKindToModuleResolutionKind = map[ModuleKind]ModuleResolutionKind{
@@ -758,12 +754,12 @@ func getDefaultCompilerOptions(configFileName tspath.RootedFilePath) *parsedComp
    if configFileName != "" && configFileName.BaseName() == "jsconfig.json" {
        options = &core.CompilerOptions{
         ${
-        options.compilerOptions.filter(option => option.jsconfigDefault !== undefined).map(option => {
-            const value = option.jsconfigDefault!;
-            const expression = typeof value === "boolean" ? `core.TS${value ? "True" : "False"}` : typeof value === "number" ? `new(${value})` : JSON.stringify(value);
-            return `${fieldName(option)}: ${expression},`;
-        }).join("\n")
-    }
+            options.compilerOptions.filter(option => option.jsconfigDefault !== undefined).map(option => {
+                const value = option.jsconfigDefault!;
+                const expression = typeof value === "boolean" ? `core.TS${value ? "True" : "False"}` : typeof value === "number" ? `new(${value})` : JSON.stringify(value);
+                return `${fieldName(option)}: ${expression},`;
+            }).join("\n")
+        }
         }
     }
     return &parsedCompilerOptions{
@@ -878,11 +874,11 @@ import "github.com/microsoft/TypeScript/tsc/internal/collections"
 
 var compilerVaryBy = collections.NewSetFromItems(
 ${
-                options.compilerOptions.filter(option =>
-                    option.declaration && !option.declaration.isCommandLineOnly &&
-                    (optionKind(option) === "Boolean" || optionKind(option) === "Enum")
-                ).map(option => option.name.toLowerCase()).sort().map(name => `${JSON.stringify(name)},`).join("\n")
-            }
+    options.compilerOptions.filter(option =>
+        option.declaration && !option.declaration.isCommandLineOnly &&
+        (optionKind(option) === "Boolean" || optionKind(option) === "Enum")
+    ).map(option => option.name.toLowerCase()).sort().map(name => `${JSON.stringify(name)},`).join("\n")
+}
 )
 `,
         ],

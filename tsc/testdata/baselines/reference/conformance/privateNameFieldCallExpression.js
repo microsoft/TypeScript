@@ -17,6 +17,15 @@ class A {
         const b = new this.#fieldFunc2(0, ...arr, 3);
         const str = this.#fieldFunc2`head${1}middle${2}tail`;
         this.getInstance().#fieldFunc2`test${1}and${2}`;
+
+        (this.#fieldFunc)();
+        this.#fieldFunc!();
+        (this.#fieldFunc as () => void)();
+        (this.#fieldFunc satisfies () => void)();
+        (this.#fieldFunc)?.();
+        this.#fieldFunc!?.();
+        (this.getInstance().#fieldFunc)();
+        (this.#fieldFunc2)`test${1}and${2}`;
     }
     getInstance() { return new A(); }
 }
@@ -37,8 +46,8 @@ class A {
         this.x = 1;
     }
     test() {
-        var _a;
-        var _b;
+        var _a, _b, _c;
+        var _d, _e;
         __classPrivateFieldGet(this, _A_fieldFunc, "f").call(this);
         (_a = __classPrivateFieldGet(this, _A_fieldFunc, "f")) === null || _a === void 0 ? void 0 : _a.call(this);
         const func = __classPrivateFieldGet(this, _A_fieldFunc, "f");
@@ -48,7 +57,15 @@ class A {
         __classPrivateFieldGet(this, _A_fieldFunc2, "f").call(this, 0, ...arr, 3);
         const b = new (__classPrivateFieldGet(this, _A_fieldFunc2, "f"))(0, ...arr, 3);
         const str = __classPrivateFieldGet(this, _A_fieldFunc2, "f").bind(this) `head${1}middle${2}tail`;
-        __classPrivateFieldGet((_b = this.getInstance()), _A_fieldFunc2, "f").bind(_b) `test${1}and${2}`;
+        __classPrivateFieldGet((_d = this.getInstance()), _A_fieldFunc2, "f").bind(_d) `test${1}and${2}`;
+        (__classPrivateFieldGet(this, _A_fieldFunc, "f")).call(this);
+        __classPrivateFieldGet(this, _A_fieldFunc, "f").call(this);
+        __classPrivateFieldGet(this, _A_fieldFunc, "f").call(this);
+        __classPrivateFieldGet(this, _A_fieldFunc, "f").call(this);
+        (_b = (__classPrivateFieldGet(this, _A_fieldFunc, "f"))) === null || _b === void 0 ? void 0 : _b.call(this);
+        (_c = __classPrivateFieldGet(this, _A_fieldFunc, "f")) === null || _c === void 0 ? void 0 : _c.call(this);
+        (__classPrivateFieldGet((_e = this.getInstance()), _A_fieldFunc, "f")).call(_e);
+        (__classPrivateFieldGet(this, _A_fieldFunc2, "f")).bind(this) `test${1}and${2}`;
     }
     getInstance() { return new A(); }
 }

@@ -1,0 +1,84 @@
+//// [tests/cases/compiler/signatureHelpInNestedCallbackCheckOrder.ts] ////
+
+=== signatureHelpInNestedCallbackCheckOrder.ts ===
+// Signature help for the inner call resolves the outer call from within
+// it, while the inner call is being resolved. The errors of that
+// resolution are not reported once the call is checked (48135).
+
+interface Monad<A> { Array: A[] }
+>Monad : Symbol(Monad, Decl(signatureHelpInNestedCallbackCheckOrder.ts, 0, 0))
+>A : Symbol(A, Decl(signatureHelpInNestedCallbackCheckOrder.ts, 4, 16))
+>Array : Symbol(Monad.Array, Decl(signatureHelpInNestedCallbackCheckOrder.ts, 4, 20))
+>A : Symbol(A, Decl(signatureHelpInNestedCallbackCheckOrder.ts, 4, 16))
+
+type MonadIdentifier = keyof Monad<unknown>
+>MonadIdentifier : Symbol(MonadIdentifier, Decl(signatureHelpInNestedCallbackCheckOrder.ts, 4, 33))
+>Monad : Symbol(Monad, Decl(signatureHelpInNestedCallbackCheckOrder.ts, 0, 0))
+
+declare const setBindArray:
+>setBindArray : Symbol(setBindArray, Decl(signatureHelpInNestedCallbackCheckOrder.ts, 7, 13))
+
+  (bind: <A, B>(g: (a: A) => Monad<B>["Array"]) => (fa: Monad<A>["Array"]) => Monad<B>["Array"]) => void
+>bind : Symbol(bind, Decl(signatureHelpInNestedCallbackCheckOrder.ts, 8, 3))
+>A : Symbol(A, Decl(signatureHelpInNestedCallbackCheckOrder.ts, 8, 10))
+>B : Symbol(B, Decl(signatureHelpInNestedCallbackCheckOrder.ts, 8, 12))
+>g : Symbol(g, Decl(signatureHelpInNestedCallbackCheckOrder.ts, 8, 16))
+>a : Symbol(a, Decl(signatureHelpInNestedCallbackCheckOrder.ts, 8, 20))
+>A : Symbol(A, Decl(signatureHelpInNestedCallbackCheckOrder.ts, 8, 10))
+>Monad : Symbol(Monad, Decl(signatureHelpInNestedCallbackCheckOrder.ts, 0, 0))
+>B : Symbol(B, Decl(signatureHelpInNestedCallbackCheckOrder.ts, 8, 12))
+>fa : Symbol(fa, Decl(signatureHelpInNestedCallbackCheckOrder.ts, 8, 52))
+>Monad : Symbol(Monad, Decl(signatureHelpInNestedCallbackCheckOrder.ts, 0, 0))
+>A : Symbol(A, Decl(signatureHelpInNestedCallbackCheckOrder.ts, 8, 10))
+>Monad : Symbol(Monad, Decl(signatureHelpInNestedCallbackCheckOrder.ts, 0, 0))
+>B : Symbol(B, Decl(signatureHelpInNestedCallbackCheckOrder.ts, 8, 12))
+
+setBindArray(g => fa => fa.flatMap(g))
+>setBindArray : Symbol(setBindArray, Decl(signatureHelpInNestedCallbackCheckOrder.ts, 7, 13))
+>g : Symbol(g, Decl(signatureHelpInNestedCallbackCheckOrder.ts, 10, 13))
+>fa : Symbol(fa, Decl(signatureHelpInNestedCallbackCheckOrder.ts, 10, 17))
+>fa.flatMap : Symbol(Array.flatMap, Decl(lib.es2019.array.d.ts, --, --))
+>fa : Symbol(fa, Decl(signatureHelpInNestedCallbackCheckOrder.ts, 10, 17))
+>flatMap : Symbol(Array.flatMap, Decl(lib.es2019.array.d.ts, --, --))
+>g : Symbol(g, Decl(signatureHelpInNestedCallbackCheckOrder.ts, 10, 13))
+
+declare const setBindGeneric:
+>setBindGeneric : Symbol(setBindGeneric, Decl(signatureHelpInNestedCallbackCheckOrder.ts, 12, 13))
+
+  <I extends MonadIdentifier>
+>I : Symbol(I, Decl(signatureHelpInNestedCallbackCheckOrder.ts, 13, 3))
+>MonadIdentifier : Symbol(MonadIdentifier, Decl(signatureHelpInNestedCallbackCheckOrder.ts, 4, 33))
+
+    ( idenfier: I
+>idenfier : Symbol(idenfier, Decl(signatureHelpInNestedCallbackCheckOrder.ts, 14, 5))
+>I : Symbol(I, Decl(signatureHelpInNestedCallbackCheckOrder.ts, 13, 3))
+
+    , bind: <A, B>(g: (a: A) => Monad<B>[I]) => (fa: Monad<A>[I]) => Monad<B>[I]
+>bind : Symbol(bind, Decl(signatureHelpInNestedCallbackCheckOrder.ts, 15, 5))
+>A : Symbol(A, Decl(signatureHelpInNestedCallbackCheckOrder.ts, 15, 13))
+>B : Symbol(B, Decl(signatureHelpInNestedCallbackCheckOrder.ts, 15, 15))
+>g : Symbol(g, Decl(signatureHelpInNestedCallbackCheckOrder.ts, 15, 19))
+>a : Symbol(a, Decl(signatureHelpInNestedCallbackCheckOrder.ts, 15, 23))
+>A : Symbol(A, Decl(signatureHelpInNestedCallbackCheckOrder.ts, 15, 13))
+>Monad : Symbol(Monad, Decl(signatureHelpInNestedCallbackCheckOrder.ts, 0, 0))
+>B : Symbol(B, Decl(signatureHelpInNestedCallbackCheckOrder.ts, 15, 15))
+>I : Symbol(I, Decl(signatureHelpInNestedCallbackCheckOrder.ts, 13, 3))
+>fa : Symbol(fa, Decl(signatureHelpInNestedCallbackCheckOrder.ts, 15, 49))
+>Monad : Symbol(Monad, Decl(signatureHelpInNestedCallbackCheckOrder.ts, 0, 0))
+>A : Symbol(A, Decl(signatureHelpInNestedCallbackCheckOrder.ts, 15, 13))
+>I : Symbol(I, Decl(signatureHelpInNestedCallbackCheckOrder.ts, 13, 3))
+>Monad : Symbol(Monad, Decl(signatureHelpInNestedCallbackCheckOrder.ts, 0, 0))
+>B : Symbol(B, Decl(signatureHelpInNestedCallbackCheckOrder.ts, 15, 15))
+>I : Symbol(I, Decl(signatureHelpInNestedCallbackCheckOrder.ts, 13, 3))
+
+    ) => void
+
+setBindGeneric("Array", g => fa => fa.flatMap(g))
+>setBindGeneric : Symbol(setBindGeneric, Decl(signatureHelpInNestedCallbackCheckOrder.ts, 12, 13))
+>g : Symbol(g, Decl(signatureHelpInNestedCallbackCheckOrder.ts, 18, 23))
+>fa : Symbol(fa, Decl(signatureHelpInNestedCallbackCheckOrder.ts, 18, 28))
+>fa.flatMap : Symbol(Array.flatMap, Decl(lib.es2019.array.d.ts, --, --))
+>fa : Symbol(fa, Decl(signatureHelpInNestedCallbackCheckOrder.ts, 18, 28))
+>flatMap : Symbol(Array.flatMap, Decl(lib.es2019.array.d.ts, --, --))
+>g : Symbol(g, Decl(signatureHelpInNestedCallbackCheckOrder.ts, 18, 23))
+

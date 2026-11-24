@@ -1,0 +1,65 @@
+//// [tests/cases/compiler/indexedAccessUnionKeyIdentity.ts] ////
+
+=== indexedAccessUnionKeyIdentity.ts ===
+// An indexed access type with a union index must be the same type wherever
+// it is written, whatever flags the access was made with, as reading and
+// writing the same type are related by identity.
+
+function f<T, K1 extends keyof T, K2 extends keyof T>(obj: T, key: K1 | K2) {
+>f : <T, K1 extends keyof T, K2 extends keyof T>(obj: T, key: K1 | K2) => T[K1 | K2]
+>obj : T
+>key : K1 | K2
+
+    const value: T[K1 | K2] = obj[key];
+>value : T[K1 | K2]
+>obj[key] : T[K1 | K2]
+>obj : T
+>key : K1 | K2
+
+    return value;
+>value : T[K1 | K2]
+}
+
+declare function set<T>(obj: T, key: keyof T, value: T[keyof T]): void;
+>set : <T>(obj: T, key: keyof T, value: T[keyof T]) => void
+>obj : T
+>key : keyof T
+>value : T[keyof T]
+
+function g<A, B>(obj: A & B, key: keyof (A & B)) {
+>g : <A, B>(obj: A & B, key: keyof (A & B)) => void
+>obj : A & B
+>key : keyof A | keyof B
+
+    set<A & B>(obj, key, obj[key]);
+>set<A & B>(obj, key, obj[key]) : void
+>set : <T>(obj: T, key: keyof T, value: T[keyof T]) => void
+>obj : A & B
+>key : keyof A | keyof B
+>obj[key] : (A & B)[keyof A | keyof B]
+>obj : A & B
+>key : keyof A | keyof B
+}
+
+function h<T, K1 extends keyof T, K2 extends keyof T>(obj: T, key: K1 | K2) {
+>h : <T, K1 extends keyof T, K2 extends keyof T>(obj: T, key: K1 | K2) => T[K1 | K2]
+>obj : T
+>key : K1 | K2
+
+    const a = obj[key];
+>a : T[K1 | K2]
+>obj[key] : T[K1 | K2]
+>obj : T
+>key : K1 | K2
+
+    const value: typeof a = obj[key];
+>value : T[K1 | K2]
+>a : T[K1 | K2]
+>obj[key] : T[K1 | K2]
+>obj : T
+>key : K1 | K2
+
+    return value;
+>value : T[K1 | K2]
+}
+

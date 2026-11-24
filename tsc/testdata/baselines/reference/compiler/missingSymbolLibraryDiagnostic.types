@@ -1,0 +1,27 @@
+//// [tests/cases/compiler/missingSymbolLibraryDiagnostic.ts] ////
+
+=== missingSymbolLibraryDiagnostic.ts ===
+interface Array<T> {}
+interface Boolean {}
+interface Function {}
+interface CallableFunction extends Function {}
+interface NewableFunction extends Function {}
+interface IArguments {}
+interface Number {}
+interface Object {}
+interface RegExp {}
+interface String {}
+
+Symbol("value");
+>Symbol("value") : any
+>Symbol : any
+>"value" : "value"
+
+const shorthand = { Symbol };
+>shorthand : { Symbol: any; }
+>{ Symbol } : { Symbol: any; }
+>Symbol : any
+
+type MissingSymbol = Symbol;
+>MissingSymbol : Symbol
+

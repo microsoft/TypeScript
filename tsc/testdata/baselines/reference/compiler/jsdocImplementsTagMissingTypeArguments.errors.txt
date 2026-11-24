@@ -1,0 +1,17 @@
+a.js(7,18): error TS2314: Generic type 'Base<T>' requires 1 type argument(s).
+
+
+==== a.js (1 errors) ====
+    /** @template T */
+    class Base {
+        /** @type {T | undefined} */
+        value;
+    }
+    
+    /** @implements {Base} */
+                     ~~~~
+!!! error TS2314: Generic type 'Base<T>' requires 1 type argument(s).
+    class C {
+        value = 1;
+    }
+    

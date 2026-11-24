@@ -4,6 +4,7 @@ import { ModifierFlags } from "../../enums/modifierFlags.js";
 import { NodeFlags } from "../../enums/nodeFlags.js";
 import { OuterExpressionKinds } from "../../enums/outerExpressionKinds.js";
 import { SyntaxKind } from "../../enums/syntaxKind.js";
+import { isRootedDiskPath } from "../api/path.ts";
 import type {
     __String,
     AccessExpression,
@@ -17,10 +18,12 @@ import type {
     Expression,
     HasExpression,
     HasInitializer,
+    JSDocSignature,
     ModifierLike,
     ObjectAssignmentInitializer,
     PropertyAccessExpression,
     PropertyAssignment,
+    SignatureDeclaration,
     SourceFile,
     VariableDeclaration,
 } from "./ast.ts";
@@ -28,6 +31,7 @@ import type { Node } from "./ast.ts";
 import {
     isAccessExpression,
     isIdentifier,
+    isJSDocTypeExpression,
     isNumericLiteral,
     isStringLiteralLikeNode,
 } from "./is.generated.ts";
@@ -62,6 +66,12 @@ export function unescapeLeadingUnderscores(identifier: __String): string {
     return id.length >= 3 && id.charCodeAt(0) === CharacterCodes._ && id.charCodeAt(1) === CharacterCodes._ && id.charCodeAt(2) === CharacterCodes._
         ? id.slice(1)
         : id;
+}
+
+/** Gets a symbol's display name from its escaped symbol-table key. */
+export function symbolName(symbol: { readonly escapedName: __String; }): string {
+    const privateName = /^__#\d+@(#.*)$/.exec(symbol.escapedName);
+    return privateName ? privateName[1] : unescapeLeadingUnderscores(symbol.escapedName);
 }
 
 /**
@@ -116,6 +126,22 @@ export function isExternalModule(file: SourceFile): boolean {
     return file.externalModuleIndicator !== undefined;
 }
 
+/** Reports whether the final parameter is a rest parameter, including JSDoc variadic types. */
+export function hasRestParameter(node: SignatureDeclaration | JSDocSignature): boolean {
+    const last = node.parameters[node.parameters.length - 1];
+    if (!last) return false;
+    if (last.kind === SyntaxKind.Parameter && last.dotDotDotToken) return true;
+    let type = last.kind === SyntaxKind.Parameter ? last.type
+        : last.kind === SyntaxKind.JSDocParameterTag ? last.typeExpression
+        : undefined;
+    if (type && isJSDocTypeExpression(type)) type = type.type;
+    return type?.kind === SyntaxKind.JSDocVariadicType;
+}
+
+export function isExternalModuleNameRelative(moduleName: string): boolean {
+    return /^\.\.?(?:$|[\\/])/.test(moduleName) || isRootedDiskPath(moduleName);
+}
+
 function getRootDeclaration(node: Node): Node {
     while (node.kind === SyntaxKind.BindingElement) {
         node = node.parent.parent;
@@ -137,17 +163,26 @@ function getModifierFlags(node: Node): ModifierFlags {
 }
 
 export function getCombinedModifierFlags(node: Declaration): ModifierFlags {
+    return getCombinedFlags(node, getModifierFlags);
+}
+
+/** Includes flags carried by a binding's root declaration, declaration list, and statement. */
+export function getCombinedNodeFlags(node: Node): NodeFlags {
+    return getCombinedFlags(node, node => node.flags);
+}
+
+function getCombinedFlags(node: Node, getFlags: (node: Node) => number): number {
     let current: Node | undefined = getRootDeclaration(node);
-    let flags = getModifierFlags(current);
+    let flags = getFlags(current);
     if (current.kind === SyntaxKind.VariableDeclaration) {
         current = current.parent;
     }
     if (current?.kind === SyntaxKind.VariableDeclarationList) {
-        flags |= getModifierFlags(current);
+        flags |= getFlags(current);
         current = current.parent;
     }
     if (current?.kind === SyntaxKind.VariableStatement) {
-        flags |= getModifierFlags(current);
+        flags |= getFlags(current);
     }
     return flags;
 }

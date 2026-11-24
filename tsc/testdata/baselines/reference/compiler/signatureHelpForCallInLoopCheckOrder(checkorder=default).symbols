@@ -1,0 +1,71 @@
+//// [tests/cases/compiler/signatureHelpForCallInLoopCheckOrder.ts] ////
+
+=== signatureHelpForCallInLoopCheckOrder.ts ===
+// The type of tmp depends on the type of cur in the loop, which depends on
+// tmp. Signature help for the call analyzes the loop with the arguments
+// typed so far, and the type it finds at the loop does not outlive the
+// request (49529).
+
+interface XMLNode {}
+>XMLNode : Symbol(XMLNode, Decl(signatureHelpForCallInLoopCheckOrder.ts, 0, 0))
+
+declare function accessArray(node: XMLNode, createIfNotExists: true): XMLNode;
+>accessArray : Symbol(accessArray, Decl(signatureHelpForCallInLoopCheckOrder.ts, 5, 20), Decl(signatureHelpForCallInLoopCheckOrder.ts, 7, 78))
+>node : Symbol(node, Decl(signatureHelpForCallInLoopCheckOrder.ts, 7, 29))
+>XMLNode : Symbol(XMLNode, Decl(signatureHelpForCallInLoopCheckOrder.ts, 0, 0))
+>createIfNotExists : Symbol(createIfNotExists, Decl(signatureHelpForCallInLoopCheckOrder.ts, 7, 43))
+>XMLNode : Symbol(XMLNode, Decl(signatureHelpForCallInLoopCheckOrder.ts, 0, 0))
+
+declare function accessArray(node: XMLNode, createIfNotExists: boolean): XMLNode | undefined;
+>accessArray : Symbol(accessArray, Decl(signatureHelpForCallInLoopCheckOrder.ts, 5, 20), Decl(signatureHelpForCallInLoopCheckOrder.ts, 7, 78))
+>node : Symbol(node, Decl(signatureHelpForCallInLoopCheckOrder.ts, 8, 29))
+>XMLNode : Symbol(XMLNode, Decl(signatureHelpForCallInLoopCheckOrder.ts, 0, 0))
+>createIfNotExists : Symbol(createIfNotExists, Decl(signatureHelpForCallInLoopCheckOrder.ts, 8, 43))
+>XMLNode : Symbol(XMLNode, Decl(signatureHelpForCallInLoopCheckOrder.ts, 0, 0))
+
+declare function accessCatalogEntry(createIfNotExists: boolean): XMLNode | undefined;
+>accessCatalogEntry : Symbol(accessCatalogEntry, Decl(signatureHelpForCallInLoopCheckOrder.ts, 8, 93))
+>createIfNotExists : Symbol(createIfNotExists, Decl(signatureHelpForCallInLoopCheckOrder.ts, 9, 36))
+>XMLNode : Symbol(XMLNode, Decl(signatureHelpForCallInLoopCheckOrder.ts, 0, 0))
+
+function accessFieldValue(createIfNotExists: boolean): XMLNode | undefined {
+>accessFieldValue : Symbol(accessFieldValue, Decl(signatureHelpForCallInLoopCheckOrder.ts, 9, 85))
+>createIfNotExists : Symbol(createIfNotExists, Decl(signatureHelpForCallInLoopCheckOrder.ts, 11, 26))
+>XMLNode : Symbol(XMLNode, Decl(signatureHelpForCallInLoopCheckOrder.ts, 0, 0))
+
+    let cur = accessCatalogEntry(createIfNotExists);
+>cur : Symbol(cur, Decl(signatureHelpForCallInLoopCheckOrder.ts, 12, 7))
+>accessCatalogEntry : Symbol(accessCatalogEntry, Decl(signatureHelpForCallInLoopCheckOrder.ts, 8, 93))
+>createIfNotExists : Symbol(createIfNotExists, Decl(signatureHelpForCallInLoopCheckOrder.ts, 11, 26))
+
+    if (!cur) {
+>cur : Symbol(cur, Decl(signatureHelpForCallInLoopCheckOrder.ts, 12, 7))
+
+        return undefined;
+>undefined : Symbol(undefined)
+    }
+    for (let i = 0; i < 5; ++i) {
+>i : Symbol(i, Decl(signatureHelpForCallInLoopCheckOrder.ts, 16, 12))
+>i : Symbol(i, Decl(signatureHelpForCallInLoopCheckOrder.ts, 16, 12))
+>i : Symbol(i, Decl(signatureHelpForCallInLoopCheckOrder.ts, 16, 12))
+
+        let tmp = accessArray(cur, createIfNotExists);
+>tmp : Symbol(tmp, Decl(signatureHelpForCallInLoopCheckOrder.ts, 17, 11))
+>accessArray : Symbol(accessArray, Decl(signatureHelpForCallInLoopCheckOrder.ts, 5, 20), Decl(signatureHelpForCallInLoopCheckOrder.ts, 7, 78))
+>cur : Symbol(cur, Decl(signatureHelpForCallInLoopCheckOrder.ts, 12, 7))
+>createIfNotExists : Symbol(createIfNotExists, Decl(signatureHelpForCallInLoopCheckOrder.ts, 11, 26))
+
+        if (!tmp) {
+>tmp : Symbol(tmp, Decl(signatureHelpForCallInLoopCheckOrder.ts, 17, 11))
+
+            return undefined;
+>undefined : Symbol(undefined)
+        }
+        cur = tmp;
+>cur : Symbol(cur, Decl(signatureHelpForCallInLoopCheckOrder.ts, 12, 7))
+>tmp : Symbol(tmp, Decl(signatureHelpForCallInLoopCheckOrder.ts, 17, 11))
+    }
+    return cur;
+>cur : Symbol(cur, Decl(signatureHelpForCallInLoopCheckOrder.ts, 12, 7))
+}
+

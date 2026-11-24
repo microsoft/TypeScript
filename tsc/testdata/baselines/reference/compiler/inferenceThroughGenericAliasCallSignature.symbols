@@ -1,0 +1,218 @@
+//// [tests/cases/compiler/inferenceThroughGenericAliasCallSignature.ts] ////
+
+=== inferenceThroughGenericAliasCallSignature.ts ===
+// R is inferred from the return type of a function passed through a call
+// signature of a generic type alias, and M from a recursive mapped result
+// (64757).
+
+interface Effect<out A, out R = never> {
+>Effect : Symbol(Effect, Decl(inferenceThroughGenericAliasCallSignature.ts, 0, 0))
+>A : Symbol(A, Decl(inferenceThroughGenericAliasCallSignature.ts, 4, 17))
+>R : Symbol(R, Decl(inferenceThroughGenericAliasCallSignature.ts, 4, 23))
+
+  readonly _A: () => A;
+>_A : Symbol(Effect._A, Decl(inferenceThroughGenericAliasCallSignature.ts, 4, 40))
+>A : Symbol(A, Decl(inferenceThroughGenericAliasCallSignature.ts, 4, 17))
+
+  readonly _R: () => R;
+>_R : Symbol(Effect._R, Decl(inferenceThroughGenericAliasCallSignature.ts, 5, 23))
+>R : Symbol(R, Decl(inferenceThroughGenericAliasCallSignature.ts, 4, 23))
+
+  [Symbol.iterator](): Iterator<Effect<A, R>, A>;
+>[Symbol.iterator] : Symbol(Effect[Symbol.iterator], Decl(inferenceThroughGenericAliasCallSignature.ts, 6, 23))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Effect : Symbol(Effect, Decl(inferenceThroughGenericAliasCallSignature.ts, 0, 0))
+>A : Symbol(A, Decl(inferenceThroughGenericAliasCallSignature.ts, 4, 17))
+>R : Symbol(R, Decl(inferenceThroughGenericAliasCallSignature.ts, 4, 23))
+>A : Symbol(A, Decl(inferenceThroughGenericAliasCallSignature.ts, 4, 17))
+}
+declare function succeed<A>(value: A): Effect<A>;
+>succeed : Symbol(succeed, Decl(inferenceThroughGenericAliasCallSignature.ts, 8, 1))
+>A : Symbol(A, Decl(inferenceThroughGenericAliasCallSignature.ts, 9, 25))
+>value : Symbol(value, Decl(inferenceThroughGenericAliasCallSignature.ts, 9, 28))
+>A : Symbol(A, Decl(inferenceThroughGenericAliasCallSignature.ts, 9, 25))
+>Effect : Symbol(Effect, Decl(inferenceThroughGenericAliasCallSignature.ts, 0, 0))
+>A : Symbol(A, Decl(inferenceThroughGenericAliasCallSignature.ts, 9, 25))
+
+declare function gen<Eff extends Effect<any, any>, AEff>(
+>gen : Symbol(gen, Decl(inferenceThroughGenericAliasCallSignature.ts, 9, 49))
+>Eff : Symbol(Eff, Decl(inferenceThroughGenericAliasCallSignature.ts, 10, 21))
+>Effect : Symbol(Effect, Decl(inferenceThroughGenericAliasCallSignature.ts, 0, 0))
+>AEff : Symbol(AEff, Decl(inferenceThroughGenericAliasCallSignature.ts, 10, 50))
+
+  body: () => Generator<Eff, AEff, never>,
+>body : Symbol(body, Decl(inferenceThroughGenericAliasCallSignature.ts, 10, 57))
+>Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
+>Eff : Symbol(Eff, Decl(inferenceThroughGenericAliasCallSignature.ts, 10, 21))
+>AEff : Symbol(AEff, Decl(inferenceThroughGenericAliasCallSignature.ts, 10, 50))
+
+): () => Effect<AEff, Eff extends Effect<infer _A, infer R> ? R : never>;
+>Effect : Symbol(Effect, Decl(inferenceThroughGenericAliasCallSignature.ts, 0, 0))
+>AEff : Symbol(AEff, Decl(inferenceThroughGenericAliasCallSignature.ts, 10, 50))
+>Eff : Symbol(Eff, Decl(inferenceThroughGenericAliasCallSignature.ts, 10, 21))
+>Effect : Symbol(Effect, Decl(inferenceThroughGenericAliasCallSignature.ts, 0, 0))
+>_A : Symbol(_A, Decl(inferenceThroughGenericAliasCallSignature.ts, 12, 46))
+>R : Symbol(R, Decl(inferenceThroughGenericAliasCallSignature.ts, 12, 56))
+>R : Symbol(R, Decl(inferenceThroughGenericAliasCallSignature.ts, 12, 56))
+
+interface Req { readonly url: string }
+>Req : Symbol(Req, Decl(inferenceThroughGenericAliasCallSignature.ts, 12, 73))
+>url : Symbol(Req.url, Decl(inferenceThroughGenericAliasCallSignature.ts, 14, 15))
+
+declare const req: Effect<Req, Req>;
+>req : Symbol(req, Decl(inferenceThroughGenericAliasCallSignature.ts, 15, 13))
+>Effect : Symbol(Effect, Decl(inferenceThroughGenericAliasCallSignature.ts, 0, 0))
+>Req : Symbol(Req, Decl(inferenceThroughGenericAliasCallSignature.ts, 12, 73))
+>Req : Symbol(Req, Decl(inferenceThroughGenericAliasCallSignature.ts, 12, 73))
+
+type Make<P> = <R>(m: Effect<() => Effect<string, R>>) => [R];
+>Make : Symbol(Make, Decl(inferenceThroughGenericAliasCallSignature.ts, 15, 36))
+>P : Symbol(P, Decl(inferenceThroughGenericAliasCallSignature.ts, 17, 10))
+>R : Symbol(R, Decl(inferenceThroughGenericAliasCallSignature.ts, 17, 16))
+>m : Symbol(m, Decl(inferenceThroughGenericAliasCallSignature.ts, 17, 19))
+>Effect : Symbol(Effect, Decl(inferenceThroughGenericAliasCallSignature.ts, 0, 0))
+>Effect : Symbol(Effect, Decl(inferenceThroughGenericAliasCallSignature.ts, 0, 0))
+>R : Symbol(R, Decl(inferenceThroughGenericAliasCallSignature.ts, 17, 16))
+>R : Symbol(R, Decl(inferenceThroughGenericAliasCallSignature.ts, 17, 16))
+
+declare const make: Make<unknown>;
+>make : Symbol(make, Decl(inferenceThroughGenericAliasCallSignature.ts, 18, 13))
+>Make : Symbol(Make, Decl(inferenceThroughGenericAliasCallSignature.ts, 15, 36))
+
+const r = make(succeed(gen(function* () {
+>r : Symbol(r, Decl(inferenceThroughGenericAliasCallSignature.ts, 20, 5))
+>make : Symbol(make, Decl(inferenceThroughGenericAliasCallSignature.ts, 18, 13))
+>succeed : Symbol(succeed, Decl(inferenceThroughGenericAliasCallSignature.ts, 8, 1))
+>gen : Symbol(gen, Decl(inferenceThroughGenericAliasCallSignature.ts, 9, 49))
+
+  yield* req;
+>req : Symbol(req, Decl(inferenceThroughGenericAliasCallSignature.ts, 15, 13))
+
+  return "";
+})));
+const check: [1] = r; // error message shows what R was inferred as
+>check : Symbol(check, Decl(inferenceThroughGenericAliasCallSignature.ts, 24, 5))
+>r : Symbol(r, Decl(inferenceThroughGenericAliasCallSignature.ts, 20, 5))
+
+type Payload = { scalars: object; objects: object };
+>Payload : Symbol(Payload, Decl(inferenceThroughGenericAliasCallSignature.ts, 24, 21))
+>scalars : Symbol(scalars, Decl(inferenceThroughGenericAliasCallSignature.ts, 26, 16))
+>objects : Symbol(objects, Decl(inferenceThroughGenericAliasCallSignature.ts, 26, 33))
+
+type FindResult<P extends Payload, A> = A extends { select: infer S extends object }
+>FindResult : Symbol(FindResult, Decl(inferenceThroughGenericAliasCallSignature.ts, 26, 52))
+>P : Symbol(P, Decl(inferenceThroughGenericAliasCallSignature.ts, 28, 16))
+>Payload : Symbol(Payload, Decl(inferenceThroughGenericAliasCallSignature.ts, 24, 21))
+>A : Symbol(A, Decl(inferenceThroughGenericAliasCallSignature.ts, 28, 34))
+>A : Symbol(A, Decl(inferenceThroughGenericAliasCallSignature.ts, 28, 34))
+>select : Symbol(select, Decl(inferenceThroughGenericAliasCallSignature.ts, 28, 51))
+>S : Symbol(S, Decl(inferenceThroughGenericAliasCallSignature.ts, 28, 65))
+
+  ? {
+      [K in keyof S]: S[K] extends object
+>K : Symbol(K, Decl(inferenceThroughGenericAliasCallSignature.ts, 30, 7))
+>S : Symbol(S, Decl(inferenceThroughGenericAliasCallSignature.ts, 28, 65))
+>S : Symbol(S, Decl(inferenceThroughGenericAliasCallSignature.ts, 28, 65))
+>K : Symbol(K, Decl(inferenceThroughGenericAliasCallSignature.ts, 30, 7))
+
+        ? P extends { objects: { [k in K]: (infer O)[] } }
+>P : Symbol(P, Decl(inferenceThroughGenericAliasCallSignature.ts, 28, 16))
+>objects : Symbol(objects, Decl(inferenceThroughGenericAliasCallSignature.ts, 31, 21))
+>k : Symbol(k, Decl(inferenceThroughGenericAliasCallSignature.ts, 31, 34))
+>K : Symbol(K, Decl(inferenceThroughGenericAliasCallSignature.ts, 30, 7))
+>O : Symbol(O, Decl(inferenceThroughGenericAliasCallSignature.ts, 31, 49))
+
+          ? FindResult<O & Payload, S[K]>[]
+>FindResult : Symbol(FindResult, Decl(inferenceThroughGenericAliasCallSignature.ts, 26, 52))
+>O : Symbol(O, Decl(inferenceThroughGenericAliasCallSignature.ts, 31, 49))
+>Payload : Symbol(Payload, Decl(inferenceThroughGenericAliasCallSignature.ts, 24, 21))
+>S : Symbol(S, Decl(inferenceThroughGenericAliasCallSignature.ts, 28, 65))
+>K : Symbol(K, Decl(inferenceThroughGenericAliasCallSignature.ts, 30, 7))
+
+          : never
+        : P['scalars'][K & keyof P['scalars']];
+>P : Symbol(P, Decl(inferenceThroughGenericAliasCallSignature.ts, 28, 16))
+>K : Symbol(K, Decl(inferenceThroughGenericAliasCallSignature.ts, 30, 7))
+>P : Symbol(P, Decl(inferenceThroughGenericAliasCallSignature.ts, 28, 16))
+    }
+  : never;
+
+type MessagePayload = { objects: {}; scalars: { body: string } };
+>MessagePayload : Symbol(MessagePayload, Decl(inferenceThroughGenericAliasCallSignature.ts, 36, 10))
+>objects : Symbol(objects, Decl(inferenceThroughGenericAliasCallSignature.ts, 38, 23))
+>scalars : Symbol(scalars, Decl(inferenceThroughGenericAliasCallSignature.ts, 38, 36))
+>body : Symbol(body, Decl(inferenceThroughGenericAliasCallSignature.ts, 38, 47))
+
+type ConversationPayload = { objects: { messages: MessagePayload[] }; scalars: {} };
+>ConversationPayload : Symbol(ConversationPayload, Decl(inferenceThroughGenericAliasCallSignature.ts, 38, 65))
+>objects : Symbol(objects, Decl(inferenceThroughGenericAliasCallSignature.ts, 39, 28))
+>messages : Symbol(messages, Decl(inferenceThroughGenericAliasCallSignature.ts, 39, 39))
+>MessagePayload : Symbol(MessagePayload, Decl(inferenceThroughGenericAliasCallSignature.ts, 36, 10))
+>scalars : Symbol(scalars, Decl(inferenceThroughGenericAliasCallSignature.ts, 39, 69))
+
+type ThreadPayload = { objects: { conversations: ConversationPayload[] }; scalars: {} };
+>ThreadPayload : Symbol(ThreadPayload, Decl(inferenceThroughGenericAliasCallSignature.ts, 39, 84))
+>objects : Symbol(objects, Decl(inferenceThroughGenericAliasCallSignature.ts, 40, 22))
+>conversations : Symbol(conversations, Decl(inferenceThroughGenericAliasCallSignature.ts, 40, 33))
+>ConversationPayload : Symbol(ConversationPayload, Decl(inferenceThroughGenericAliasCallSignature.ts, 38, 65))
+>scalars : Symbol(scalars, Decl(inferenceThroughGenericAliasCallSignature.ts, 40, 73))
+
+declare function findThread<A>(args: A): FindResult<ThreadPayload, A>;
+>findThread : Symbol(findThread, Decl(inferenceThroughGenericAliasCallSignature.ts, 40, 88))
+>A : Symbol(A, Decl(inferenceThroughGenericAliasCallSignature.ts, 42, 28))
+>args : Symbol(args, Decl(inferenceThroughGenericAliasCallSignature.ts, 42, 31))
+>A : Symbol(A, Decl(inferenceThroughGenericAliasCallSignature.ts, 42, 28))
+>FindResult : Symbol(FindResult, Decl(inferenceThroughGenericAliasCallSignature.ts, 26, 52))
+>ThreadPayload : Symbol(ThreadPayload, Decl(inferenceThroughGenericAliasCallSignature.ts, 39, 84))
+>A : Symbol(A, Decl(inferenceThroughGenericAliasCallSignature.ts, 42, 28))
+
+const thread = findThread({
+>thread : Symbol(thread, Decl(inferenceThroughGenericAliasCallSignature.ts, 44, 5))
+>findThread : Symbol(findThread, Decl(inferenceThroughGenericAliasCallSignature.ts, 40, 88))
+
+  select: { conversations: { select: { messages: { select: { body: true } } } } },
+>select : Symbol(select, Decl(inferenceThroughGenericAliasCallSignature.ts, 44, 27))
+>conversations : Symbol(conversations, Decl(inferenceThroughGenericAliasCallSignature.ts, 45, 11))
+>select : Symbol(select, Decl(inferenceThroughGenericAliasCallSignature.ts, 45, 28))
+>messages : Symbol(messages, Decl(inferenceThroughGenericAliasCallSignature.ts, 45, 38))
+>select : Symbol(select, Decl(inferenceThroughGenericAliasCallSignature.ts, 45, 50))
+>body : Symbol(body, Decl(inferenceThroughGenericAliasCallSignature.ts, 45, 60))
+
+});
+
+type ThreadRow<M> = { conversations: Array<{ messages: Array<M> }> };
+>ThreadRow : Symbol(ThreadRow, Decl(inferenceThroughGenericAliasCallSignature.ts, 46, 3))
+>M : Symbol(M, Decl(inferenceThroughGenericAliasCallSignature.ts, 48, 15))
+>conversations : Symbol(conversations, Decl(inferenceThroughGenericAliasCallSignature.ts, 48, 21))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>messages : Symbol(messages, Decl(inferenceThroughGenericAliasCallSignature.ts, 48, 44))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>M : Symbol(M, Decl(inferenceThroughGenericAliasCallSignature.ts, 48, 15))
+
+declare function firstMessageViaAlias<M>(thread: ThreadRow<M>): M;
+>firstMessageViaAlias : Symbol(firstMessageViaAlias, Decl(inferenceThroughGenericAliasCallSignature.ts, 48, 69))
+>M : Symbol(M, Decl(inferenceThroughGenericAliasCallSignature.ts, 50, 38))
+>thread : Symbol(thread, Decl(inferenceThroughGenericAliasCallSignature.ts, 50, 41))
+>ThreadRow : Symbol(ThreadRow, Decl(inferenceThroughGenericAliasCallSignature.ts, 46, 3))
+>M : Symbol(M, Decl(inferenceThroughGenericAliasCallSignature.ts, 50, 38))
+>M : Symbol(M, Decl(inferenceThroughGenericAliasCallSignature.ts, 50, 38))
+
+declare function firstMessageInline<M>(thread: { conversations: Array<{ messages: Array<M> }> }): M;
+>firstMessageInline : Symbol(firstMessageInline, Decl(inferenceThroughGenericAliasCallSignature.ts, 50, 66))
+>M : Symbol(M, Decl(inferenceThroughGenericAliasCallSignature.ts, 51, 36))
+>thread : Symbol(thread, Decl(inferenceThroughGenericAliasCallSignature.ts, 51, 39))
+>conversations : Symbol(conversations, Decl(inferenceThroughGenericAliasCallSignature.ts, 51, 48))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>messages : Symbol(messages, Decl(inferenceThroughGenericAliasCallSignature.ts, 51, 71))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>M : Symbol(M, Decl(inferenceThroughGenericAliasCallSignature.ts, 51, 36))
+>M : Symbol(M, Decl(inferenceThroughGenericAliasCallSignature.ts, 51, 36))
+
+const viaAlias: string = firstMessageViaAlias(thread).body; 
+>viaAlias : Symbol(viaAlias, Decl(inferenceThroughGenericAliasCallSignature.ts, 53, 5))
+>firstMessageViaAlias : Symbol(firstMessageViaAlias, Decl(inferenceThroughGenericAliasCallSignature.ts, 48, 69))
+>thread : Symbol(thread, Decl(inferenceThroughGenericAliasCallSignature.ts, 44, 5))
+
