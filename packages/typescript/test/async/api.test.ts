@@ -11,6 +11,7 @@ import {
     type Identifier,
     InternalSymbolName,
     isArrayLiteralExpression,
+    isBinaryExpression,
     isCallExpression,
     isClassDeclaration,
     isConstructorDeclaration,
@@ -80,6 +81,8 @@ import {
     createVariableDeclaration,
     createVariableDeclarationList,
     createVariableStatement,
+    updateBinaryExpression,
+    updateExpressionStatement,
     updateSourceFile,
 } from "@typescript/typescript/ast/factory";
 import { visitEachChild } from "@typescript/typescript/ast/visitor";
@@ -9358,6 +9361,32 @@ export const obj = { m: 1, s: "hi", b: true };
         assert.strictEqual(clone.pos, sourceFile.statements[0].pos);
         assert.strictEqual(clone.end, sourceFile.statements[0].end);
         assert.strictEqual(await printWithClone(clone, emitContext), "bar();\nfoo(/* arg */ 1);\n");
+    });
+
+    test("suppressLeadingAndTrailingComments keeps comments inside delimiters", async () => {
+        await using api = spawnAPI();
+        await using lease = await api.createSourceFile("/test.ts", "// leading\nfoo(1 /* keep */); // trailing\n{\n    // keep\n    foo();\n} // trailing\nbar();\n");
+        const { sourceFile } = lease;
+        const emitContext = api.printer.createEmitContext();
+        const clones = sourceFile.statements.slice(0, 2).map(s => emitContext.suppressLeadingAndTrailingComments(getSynthesizedDeepClone(s)));
+        const updated = updateSourceFile(sourceFile, [sourceFile.statements[2], ...clones], sourceFile.endOfFileToken);
+        assert.strictEqual(await api.printer.printFile(updated, { emitContext }), "bar();\nfoo(1 /* keep */);\n{\n    // keep\n    foo();\n}\n");
+    });
+
+    test("updated mixed ?? and || operands are parenthesized", async () => {
+        await using api = spawnAPI();
+        await using lease = await api.createSourceFile("/test.ts", "a || b || c;\n");
+        const { sourceFile } = lease;
+        const statement = sourceFile.statements[0];
+        assert(isExpressionStatement(statement) && isBinaryExpression(statement.expression));
+        const outer = statement.expression;
+        const inner = outer.left;
+        assert(isBinaryExpression(inner));
+        const newInner = updateBinaryExpression(inner, undefined, inner.left, undefined, createToken(SyntaxKind.QuestionQuestionToken), inner.right);
+        const newOuter = updateBinaryExpression(outer, undefined, newInner, undefined, outer.operatorToken, outer.right);
+        const updated = updateSourceFile(sourceFile, [updateExpressionStatement(statement, newOuter)], sourceFile.endOfFileToken);
+        assert.strictEqual(newInner.pos, inner.pos);
+        assert.strictEqual(await api.printer.printFile(updated), "(a ?? b) || c;\n");
     });
 
     test("printFile", async () => {

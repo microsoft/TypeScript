@@ -282,7 +282,7 @@ import {
 /** @internal */
 export class NodeObject {
     readonly kind: SyntaxKind;
-    flags: NodeFlags = 0 as NodeFlags;
+    flags: NodeFlags = NodeFlags.Synthesized;
     readonly pos: number = -1;
     readonly end: number = -1;
     parent: Node = undefined!;
@@ -800,7 +800,7 @@ function update<T extends Node>(updated: T, original: T): T {
 export function cloneNode<T extends Node>(node: T): T {
     const data = cloneNodeData(node);
     const clone = new NodeObject(node.kind, data);
-    (clone as any).flags = node.flags;
+    (clone as any).flags = node.flags | NodeFlags.Synthesized;
     (clone as any).pos = node.pos;
     (clone as any).end = node.end;
     return clone as unknown as T;
@@ -4143,7 +4143,7 @@ export function createVariableDeclarationList(declarations: readonly VariableDec
     const node = new NodeObject(SyntaxKind.VariableDeclarationList, {
         declarations: createNodeArray(declarations),
     }) as unknown as VariableDeclarationList;
-    (node as any).flags = flags;
+    (node as any).flags = flags | NodeFlags.Synthesized;
     return node;
 }
 
@@ -4561,7 +4561,7 @@ export function createPropertyAccessExpression(expression: Expression, questionD
         questionDotToken,
         name,
     }) as unknown as PropertyAccessExpression;
-    (node as any).flags = flags;
+    (node as any).flags = flags | NodeFlags.Synthesized;
     return node;
 }
 
@@ -4571,7 +4571,7 @@ export function createElementAccessExpression(expression: Expression, questionDo
         questionDotToken,
         argumentExpression,
     }) as unknown as ElementAccessExpression;
-    (node as any).flags = flags;
+    (node as any).flags = flags | NodeFlags.Synthesized;
     return node;
 }
 
@@ -4582,7 +4582,7 @@ export function createCallExpression(expression: Expression, questionDotToken: Q
         typeArguments: typeArguments ? createNodeArray(typeArguments) : undefined,
         arguments: createNodeArray(arguments_),
     }) as unknown as CallExpression;
-    (node as any).flags = flags;
+    (node as any).flags = flags | NodeFlags.Synthesized;
     return node;
 }
 
@@ -4605,7 +4605,7 @@ export function createNonNullExpression(expression: Expression, flags: NodeFlags
     const node = new NodeObject(SyntaxKind.NonNullExpression, {
         expression,
     }) as unknown as NonNullExpression;
-    (node as any).flags = flags;
+    (node as any).flags = flags | NodeFlags.Synthesized;
     return node;
 }
 
@@ -4636,7 +4636,7 @@ export function createTaggedTemplateExpression(tag: Expression, questionDotToken
         typeArguments: typeArguments ? createNodeArray(typeArguments) : undefined,
         template,
     }) as unknown as TaggedTemplateExpression;
-    (node as any).flags = flags;
+    (node as any).flags = flags | NodeFlags.Synthesized;
     return node;
 }
 

@@ -705,7 +705,7 @@ function generateFactory(): string {
     out.push(`/** @internal */`);
     out.push(`export class NodeObject {`);
     out.push(`    readonly kind: SyntaxKind;`);
-    out.push(`    flags: NodeFlags = 0 as NodeFlags;`);
+    out.push(`    flags: NodeFlags = NodeFlags.Synthesized;`);
     out.push(`    readonly pos: number = -1;`);
     out.push(`    readonly end: number = -1;`);
     out.push(`    parent: Node = undefined!;`);
@@ -830,7 +830,7 @@ function generateFactory(): string {
     out.push(`export function cloneNode<T extends Node>(node: T): T {`);
     out.push(`    const data = cloneNodeData(node);`);
     out.push(`    const clone = new NodeObject(node.kind, data);`);
-    out.push(`    (clone as any).flags = node.flags;`);
+    out.push(`    (clone as any).flags = node.flags | NodeFlags.Synthesized;`);
     out.push(`    (clone as any).pos = node.pos;`);
     out.push(`    (clone as any).end = node.end;`);
     out.push(`    return clone as unknown as T;`);
@@ -1134,7 +1134,8 @@ function generateFactory(): string {
         if (nodeProps.length > 0) {
             out.push(`    const node = new NodeObject(${kindExpr}, ${dataStr}) as unknown as ${returnType};`);
             for (const { propName, paramName } of nodeProps) {
-                out.push(`    (node as any).${propName} = ${paramName};`);
+                const value = propName === "flags" ? `${paramName} | NodeFlags.Synthesized` : paramName;
+                out.push(`    (node as any).${propName} = ${value};`);
             }
             out.push(`    return node;`);
         }
