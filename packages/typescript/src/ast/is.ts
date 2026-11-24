@@ -49,6 +49,7 @@ import type {
     JSDocTypeExpression,
     JSDocTypeLiteral,
     JsxAttributeLike,
+    JsxClosingElement,
     JsxExpression,
     JsxOpeningElement,
     JsxOpeningFragment,
@@ -59,6 +60,7 @@ import type {
     LiteralExpression,
     MetaProperty,
     MinusToken,
+    ModifiersBase,
     ModuleDeclaration,
     NewExpression,
     Node,
@@ -155,7 +157,7 @@ export function isAutoAccessorPropertyDeclaration(node: Node): node is AutoAcces
 
 type JSDocNamespaceDeclaration = ModuleDeclaration;
 
-type WrappedExpression<T extends Expression> =
+type WrappedExpression<_T extends Expression> =
     | ParenthesizedExpression
     | TypeAssertion
     | AsExpression
@@ -291,7 +293,7 @@ function isPartOfPossiblyValidTypeOrAbstractComputedPropertyName(node: Node): bo
     if (!isComputedPropertyName(node)) {
         return false;
     }
-    if (hasModifierFlags(node.parent) && node.parent.modifierFlags & ModifierFlags.Abstract) {
+    if ((node.parent as ModifiersBase).modifiers?.some(modifier => modifier.kind === SyntaxKind.AbstractKeyword)) {
         return true;
     }
     const containerKind = node.parent.parent.kind;
@@ -315,10 +317,6 @@ function findAncestor(node: Node, callback: (node: Node) => AncestorCallbackResu
         }
         node = node.parent;
     }
-}
-
-function hasModifierFlags(node: Node): node is Node & { readonly modifierFlags: ModifierFlags; } {
-    return "modifierFlags" in node;
 }
 
 function isExpressionNode(node: Node): boolean {
@@ -474,14 +472,10 @@ function isJSXTagName(node: Node): boolean {
         case SyntaxKind.JsxOpeningElement:
         case SyntaxKind.JsxSelfClosingElement:
         case SyntaxKind.JsxClosingElement:
-            return hasTagName(parent) && parent.tagName === node;
+            return (parent as JsxOpeningElement | JsxSelfClosingElement | JsxClosingElement).tagName === node;
         default:
             return false;
     }
-}
-
-function hasTagName(node: Node): node is Node & { readonly tagName: Node; } {
-    return "tagName" in node;
 }
 
 export function isBlockOrExpression(node: Node): node is BlockOrExpression {
@@ -744,7 +738,7 @@ export function isIterationStatement(node: Node, lookInLabeledStatements: boolea
         case SyntaxKind.WhileStatement:
             return true;
         case SyntaxKind.LabeledStatement:
-            return lookInLabeledStatements && isIterationStatement((node as LabeledStatement).statement, true);
+            return lookInLabeledStatements && isIterationStatement((node as LabeledStatement).statement, /*lookInLabeledStatements*/ true);
         default:
             return false;
     }

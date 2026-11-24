@@ -143,9 +143,6 @@ the pinned LSP model when its local cache is missing or stale. Use
 `generate:go` for the narrower scope of `go generate ./...` in the `tsc` module.
 Up-to-date generators emit no status messages.
 
-TypeScript linting uses the experimental native typescript-eslint project service,
-the local API build, and `built/local/tsc`. The lint tasks build these prerequisites.
-
 `npx hereby build` runs `generate` before compiling; a separate generation step
 is not needed. The API and package build tasks share this prerequisite, and
 `build:watch` runs the full incremental generation suite before every rebuild.

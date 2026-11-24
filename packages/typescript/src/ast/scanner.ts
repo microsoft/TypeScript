@@ -790,7 +790,7 @@ export function isIdentifierText(name: string, _languageVersion?: ScriptTarget, 
     }
 
     for (let i = charSize(ch); i < name.length; i += charSize(ch)) {
-        if (!isIdentifierPart(ch = name.codePointAt(i)!, undefined, identifierVariant)) {
+        if (!isIdentifierPart(ch = name.codePointAt(i)!, /*languageVersion*/ undefined, identifierVariant)) {
             return false;
         }
     }
@@ -988,7 +988,6 @@ export function createScanner(
     function scanNumberFragment(): string {
         let start = pos;
         let allowSeparator = false;
-        let isPreviousTokenSeparator = false;
         let result = "";
         while (true) {
             const ch = charCodeUnchecked(pos);
@@ -996,7 +995,6 @@ export function createScanner(
                 tokenFlags |= TokenFlags.ContainsSeparator;
                 if (allowSeparator) {
                     allowSeparator = false;
-                    isPreviousTokenSeparator = true;
                     result += text.substring(start, pos);
                 }
                 else {
@@ -1008,7 +1006,6 @@ export function createScanner(
             }
             if (isDigit(ch)) {
                 allowSeparator = true;
-                isPreviousTokenSeparator = false;
                 pos++;
                 continue;
             }
@@ -1021,7 +1018,7 @@ export function createScanner(
     }
 
     function scanNumber(): SyntaxKind {
-        let start = pos;
+        const start = pos;
         let mainFragment: string;
         if (charCodeUnchecked(pos) === CharacterCodes._0) {
             pos++;
@@ -1040,9 +1037,6 @@ export function createScanner(
             else {
                 tokenValue = "" + parseInt(tokenValue, 8);
                 tokenFlags |= TokenFlags.Octal;
-                const withMinus = token === SyntaxKind.MinusToken;
-                const literal = (withMinus ? "-" : "") + "0o" + (+tokenValue).toString(8);
-                if (withMinus) start--;
                 return SyntaxKind.NumericLiteral;
             }
         }
@@ -1486,14 +1480,12 @@ export function createScanner(
     function scanBinaryOrOctalDigits(base: 2 | 8): string {
         let value = "";
         let separatorAllowed = false;
-        let isPreviousTokenSeparator = false;
         while (true) {
             const ch = charCodeUnchecked(pos);
             if (ch === CharacterCodes._) {
                 tokenFlags |= TokenFlags.ContainsSeparator;
                 if (separatorAllowed) {
                     separatorAllowed = false;
-                    isPreviousTokenSeparator = true;
                 }
                 pos++;
                 continue;
@@ -1504,7 +1496,6 @@ export function createScanner(
             }
             value += text[pos];
             pos++;
-            isPreviousTokenSeparator = false;
         }
         return value;
     }
@@ -2143,17 +2134,12 @@ export function createScanner(
             }
             else {
                 pos++;
-                let regExpFlags: number = RegularExpressionFlags.None;
                 while (true) {
                     const ch = codePointChecked(pos);
                     if (ch === CharacterCodes.EOF || !isIdentifierPart(ch)) {
                         break;
                     }
                     const size = charSize(ch);
-                    const flag = characterCodeToRegularExpressionFlag(ch);
-                    if (flag !== undefined) {
-                        regExpFlags |= flag;
-                    }
                     pos += size;
                 }
             }

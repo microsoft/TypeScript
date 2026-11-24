@@ -163,12 +163,12 @@ export class MsgpackReader {
         const byte = this.buf[this.pos++];
         if ((byte & 0xf0) === 0x90) return byte & 0x0f;
         if (byte === 0xdc) {
-            const len = this.view.getUint16(this.pos, false);
+            const len = this.view.getUint16(this.pos, /*littleEndian*/ false);
             this.pos += 2;
             return len;
         }
         if (byte === 0xdd) {
-            const len = this.view.getUint32(this.pos, false);
+            const len = this.view.getUint32(this.pos, /*littleEndian*/ false);
             this.pos += 4;
             return len;
         }
@@ -180,12 +180,12 @@ export class MsgpackReader {
         if (byte <= 0x7f) return byte;
         if (byte === 0xcc) return this.buf[this.pos++];
         if (byte === 0xcd) {
-            const val = this.view.getUint16(this.pos, false);
+            const val = this.view.getUint16(this.pos, /*littleEndian*/ false);
             this.pos += 2;
             return val;
         }
         if (byte === 0xce) {
-            const val = this.view.getUint32(this.pos, false);
+            const val = this.view.getUint32(this.pos, /*littleEndian*/ false);
             this.pos += 4;
             return val;
         }
@@ -202,11 +202,11 @@ export class MsgpackReader {
             len = this.buf[this.pos++];
         }
         else if (byte === 0xda) {
-            len = this.view.getUint16(this.pos, false);
+            len = this.view.getUint16(this.pos, /*littleEndian*/ false);
             this.pos += 2;
         }
         else if (byte === 0xdb) {
-            len = this.view.getUint32(this.pos, false);
+            len = this.view.getUint32(this.pos, /*littleEndian*/ false);
             this.pos += 4;
         }
         else {

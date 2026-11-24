@@ -109,7 +109,7 @@ class RpcClient {
         const { spawn } = nodeProcess().getBuiltinModule("node:child_process");
 
         return new Promise((resolve, reject) => {
-            const args = getAPIProcessArgs(options, true);
+            const args = getAPIProcessArgs(options, /*async*/ true);
             const fsConfiguration = configureFileSystemCallbacks(options.fs);
 
             if (fsConfiguration.arguments.length > 0) {
@@ -255,7 +255,7 @@ class RpcClient {
             method: requestType.method,
             roundTripMs,
             bytesSent,
-            bytesReceived: result === undefined || result === null
+            bytesReceived: result == undefined
                 ? 0
                 : Buffer.byteLength(JSON.stringify(result), "utf-8"),
         });
@@ -406,7 +406,7 @@ class RpcClient {
         if (this.connected && this.connection) {
             // Keep the server's collection in sync so combined totals stay meaningful.
             const requestType = this.requestType<unknown, void>("resetServerTiming");
-            await this.connection.sendRequest(requestType, undefined);
+            await this.connection.sendRequest(requestType, /*params*/ undefined);
         }
     }
 
@@ -417,7 +417,7 @@ class RpcClient {
         // Fetch the server's own timing collection via a dedicated request. This
         // bypasses the client-side collector so the query does not pollute it.
         const requestType = this.requestType<unknown, ServerTimingInfo>("getServerTiming");
-        return this.connection.sendRequest(requestType, undefined);
+        return this.connection.sendRequest(requestType, /*params*/ undefined);
     }
 
     close(): Promise<void> {

@@ -102,7 +102,7 @@ export class WasmTransport {
     private readonly callbacks = new Map<string, TransportCallback>();
     private readonly fileSystemCallbacks = new Map<string, TransportCallback>();
     private fs: FileSystemCallbacks | undefined;
-    private readonly stack: Frame[] = [];
+    private stack: Frame[] = [];
     private started = false;
     private closed = false;
 
@@ -324,7 +324,8 @@ export class WasmTransport {
     }
 
     private abort(error: Error): void {
-        const frames = this.stack.splice(0);
+        const frames = this.stack;
+        this.stack = [];
         for (const frame of frames) {
             if (frame.kind === "request" && !frame.settlement) {
                 frame.settlement = { ok: false, error };
@@ -417,7 +418,7 @@ function getReactorExports(instance: WasmReactorInstance): WasmReactorExports {
         "response_method_len",
     ] as const;
     const missing: string[] = required.filter(name => typeof exports[name] !== "function");
-    if (exports.memory == null || typeof exports.memory !== "object" || !("buffer" in exports.memory)) {
+    if (typeof exports.memory !== "object" || exports.memory == undefined || !exports.memory.buffer) {
         missing.push("memory");
     }
     if (missing.length > 0) {

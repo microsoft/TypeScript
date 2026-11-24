@@ -206,7 +206,7 @@ function parityCase<Args extends readonly unknown[], Result>(
     return {
         ownerName,
         methodName,
-        runGenerator: function* () {
+        *runGenerator() {
             generatedResult = { value: yield* method.gen(...args) };
         },
         assertEquivalent: message => {
@@ -434,7 +434,7 @@ function observeRequestBatches(
     context: TestContext,
 ): void {
     // @ts-ignore -- Internal client transport is exercised by source tests.
-    const client = api["client"];
+    const client = api.client;
     const batchRequests = client.batchRequests.bind(client);
     context.mock.method(client, "batchRequests", (requests: readonly APIRequest[]) => {
         requestBatches.push(requests.map(request => request.method));
@@ -519,6 +519,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
 
     test("all and defer yield discriminated host messages without starting children", () => {
         let started = false;
+        // eslint-disable-next-line require-yield -- This child must never start.
         function* child() {
             started = true;
             return "child";
@@ -530,6 +531,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
         const generators: APIRequestGenerator[] = [all(joined), defer(deferred)];
         for (const generator of generators) {
             const state = generator.next();
+            // eslint-disable-next-line local/no-in-operator -- Narrow the host message union.
             if (state.done || !("method" in state.value)) assert.fail("Expected a host message");
             switch (state.value.method) {
                 case "__all":
@@ -549,6 +551,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
 
     test("all preserves generator protocol behavior", () => {
         let started = false;
+        // eslint-disable-next-line require-yield -- This child must never start.
         function* child() {
             started = true;
             return "child";
@@ -580,6 +583,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
 
     test("defer preserves generator protocol behavior", () => {
         let started = false;
+        // eslint-disable-next-line require-yield -- This child must never start.
         function* child() {
             started = true;
             return "child";
@@ -600,11 +604,12 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
                 thrown.next();
                 disposed.next();
             }
-            assert.deepEqual(returned.return(undefined), { done: true, value: undefined });
+            assert.deepEqual(returned.return(/*value*/ undefined), { done: true, value: undefined });
             assert.deepEqual(returned.next(), { done: true, value: undefined });
             const error = new Error("failed");
             assert.throws(() => thrown.throw(error), actual => actual === error);
             assert.deepEqual(thrown.next(), { done: true, value: undefined });
+            // eslint-disable-next-line local/no-in-operator -- Narrow the iterator with its inherited disposal method.
             assert.ok(globalThis.Symbol.dispose in disposed);
             const dispose = disposed[globalThis.Symbol.dispose];
             assert.ok(typeof dispose === "function");
@@ -617,7 +622,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
     test("rejects deferred generator reuse after completion", () => {
         let completed = false;
         function* child(): Generator<APIRequest, string, string> {
-            const result = yield { method: "request", params: null } as unknown as APIRequest;
+            const result = yield { method: "request", params: undefined } as unknown as APIRequest;
             completed = true;
             return result;
         }
@@ -630,12 +635,13 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
     });
 
     test("joins nested, empty, and synchronously completed groups in result order", () => {
+        // eslint-disable-next-line require-yield -- Exercise synchronous completion.
         function* completed(value: string) {
             return value;
         }
         function* request(value: string, rounds: number): Generator<APIRequest, string, string> {
             for (let round = 0; round < rounds; round++) {
-                yield { method: value, params: null } as unknown as APIRequest;
+                yield { method: value, params: undefined } as unknown as APIRequest;
             }
             return value;
         }
@@ -652,9 +658,11 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
     });
 
     test("preserves tuple results through all and any generator types", () => {
+        // eslint-disable-next-line require-yield -- Exercise synchronous completion.
         function* numberResult() {
             return 42;
         }
+        // eslint-disable-next-line require-yield -- Exercise synchronous completion.
         function* stringResult() {
             return "result";
         }
@@ -678,7 +686,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
 
     test("preserves sibling order across repeated nested joins", () => {
         function* request(method: string): Generator<APIRequest, string, string> {
-            return yield { method, params: null } as unknown as APIRequest;
+            return yield { method, params: undefined } as unknown as APIRequest;
         }
         function* foreground() {
             for (let round = 0; round < 3; round++) {
@@ -702,7 +710,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
                 const events: string[] = [];
                 const batches: string[][] = [];
                 function* request(method: string): Generator<APIRequest, string, string> {
-                    const result = yield { method, params: null } as unknown as APIRequest;
+                    const result = yield { method, params: undefined } as unknown as APIRequest;
                     events.push(method);
                     return result;
                 }
@@ -749,7 +757,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
     test("preserves singleton join continuations through requests, errors, and deferred work", () => {
         const events: string[] = [];
         function* request(method: string): Generator<APIRequest, string, string> {
-            return yield { method, params: null } as unknown as APIRequest;
+            return yield { method, params: undefined } as unknown as APIRequest;
         }
         function* recovering() {
             try {
@@ -785,7 +793,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
     test("finishes joined foreground cleanup before deferred request errors", () => {
         const events: string[] = [];
         function* request(method: string): Generator<APIRequest, void, unknown> {
-            yield { method, params: null } as unknown as APIRequest;
+            yield { method, params: undefined } as unknown as APIRequest;
         }
         function* foreground() {
             try {
@@ -805,22 +813,21 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
     });
 
     test("completes root all helpers before detached work finishes", () => {
-        let joined: AllAPIRequestGenerator<[string]>;
         function* foreground(): Generator<APIRequest, string, string> {
-            return yield { method: "foreground", params: null } as unknown as APIRequest;
+            return yield { method: "foreground", params: undefined } as unknown as APIRequest;
         }
         function* background(): Generator<APIRequest, void, unknown> {
-            yield { method: "background", params: null } as unknown as APIRequest;
+            yield { method: "background", params: undefined } as unknown as APIRequest;
             assert.deepEqual(joined.next(["unexpected"]), { done: true, value: undefined });
         }
-        joined = all(foreground(), defer(background()));
+        const joined: AllAPIRequestGenerator<[string]> = all(foreground(), defer(background()));
         assert.deepEqual(executeRequestGenerators([joined], requests => requests.map(request => ({ result: request.method }))), [["foreground"]]);
     });
 
     test("throws nested all failures into the waiting parent", () => {
         const events: string[] = [];
         function* failing(): Generator<APIRequest, void, unknown> {
-            yield { method: "bad", params: null } as unknown as APIRequest;
+            yield { method: "bad", params: undefined } as unknown as APIRequest;
         }
         function* parent() {
             try {
@@ -839,7 +846,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
     test("cancels failed join siblings but finishes detached and unrelated work", () => {
         const events: string[] = [];
         function* request(method: string): Generator<APIRequest, string, string> {
-            const result = yield { method, params: null } as unknown as APIRequest;
+            const result = yield { method, params: undefined } as unknown as APIRequest;
             events.push(method);
             return result;
         }
@@ -859,7 +866,9 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
     });
 
     test("catches synchronous join failures including undefined", () => {
+        // eslint-disable-next-line require-yield -- Exercise synchronous failure.
         function* failing(): APIRequestGenerator {
+            // eslint-disable-next-line no-throw-literal -- Exercise propagation of an undefined error.
             throw undefined;
         }
         function* parent() {
@@ -867,7 +876,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
                 yield* all(all(failing()));
             }
             catch (error) {
-                assert.strictEqual(error, undefined);
+                assert.strictEqual(error, /*expected*/ undefined);
                 return "recovered";
             }
             return "unexpected";
@@ -877,6 +886,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
 
     test("does not route synchronous deferred failures through a waiting join", () => {
         const events: string[] = [];
+        // eslint-disable-next-line require-yield -- Exercise synchronous failure.
         function* failing(): APIRequestGenerator {
             throw new Error("deferred failure");
         }
@@ -897,7 +907,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
 
     test("rejects generator reuse across joins and deferred work", () => {
         function* request(): Generator<APIRequest, string, string> {
-            return yield { method: "request", params: null } as unknown as APIRequest;
+            return yield { method: "request", params: undefined } as unknown as APIRequest;
         }
         for (const wrap of [all, defer]) {
             const generator = request();
@@ -910,7 +920,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
 
     test("rejects completed generator reuse after a join finishes", () => {
         function* request(): Generator<APIRequest, string, string> {
-            return yield { method: "request", params: null } as unknown as APIRequest;
+            return yield { method: "request", params: undefined } as unknown as APIRequest;
         }
         for (const wrap of [all, defer]) {
             const generator = request();
@@ -944,6 +954,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
 
     test("deduplicates initialization across nested joins", () => {
         function* request(method: string): Generator<APIRequest, string, string> {
+            // eslint-disable-next-line no-restricted-syntax -- Initialize requests require null parameters.
             return yield { method, params: null } as unknown as APIRequest;
         }
         const batches: string[][] = [];
@@ -994,7 +1005,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
         const events: string[] = [];
         function* requestWithCleanup(): Generator<APIRequest, string, APIResponse["result"]> {
             try {
-                yield { method: "unknown", params: null } as unknown as APIRequest;
+                yield { method: "unknown", params: undefined } as unknown as APIRequest;
                 return "unexpected";
             }
             catch {
@@ -1051,7 +1062,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
     });
 
     test("transparently paginates batch responses", () => {
-        const api = spawnAPI(undefined, { maxResponseBytesPerPage: 1 });
+        const api = spawnAPI(/*files*/ undefined, { maxResponseBytesPerPage: 1 });
         try {
             const [strict, config, noImplicitAny] = api.batch(
                 api.parseCommandLine.gen(["--strict"]),
@@ -1185,6 +1196,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
     test("omits deferred results in any batch position", () => {
         const api = spawnAPI();
         let synchronousWorkCompleted = false;
+        // eslint-disable-next-line require-yield -- Exercise synchronous completion.
         function* synchronousWork() {
             synchronousWorkCompleted = true;
             return "ignored";
@@ -1211,7 +1223,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
         const events: string[] = [];
         function* requestWithCleanup(): Generator<APIRequest, void, APIResponse["result"]> {
             try {
-                yield { method: "unknown", params: null } as unknown as APIRequest;
+                yield { method: "unknown", params: undefined } as unknown as APIRequest;
             }
             catch {
                 events.push("caught");
@@ -1233,6 +1245,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
     test("batch execution deduplicates only initialize requests within a round", () => {
         const requestBatches: string[][] = [];
         function* request(method: string): Generator<APIRequest, APIResponse["result"], APIResponse["result"]> {
+            // eslint-disable-next-line no-restricted-syntax -- Initialize requests require null parameters.
             return yield { method, params: null } as unknown as APIRequest;
         }
 
@@ -1250,6 +1263,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
 
     test("does not execute an empty request round", () => {
         let executions = 0;
+        // eslint-disable-next-line require-yield -- Exercise synchronous completion.
         function* completed(value: string) {
             return value;
         }
@@ -1275,13 +1289,16 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
         const requestBatches: string[][] = [];
         function* groupedRequests(): Generator<readonly APIRequest[], readonly string[], readonly { result: string; }[]> {
             const responses = yield [
+                // eslint-disable-next-line no-restricted-syntax -- Initialize requests require null parameters.
                 { method: "initialize", params: null },
-                { method: "other", params: null },
+                { method: "other", params: undefined },
+                // eslint-disable-next-line no-restricted-syntax -- Initialize requests require null parameters.
                 { method: "initialize", params: null },
             ] as unknown as readonly APIRequest[];
             return responses.map(response => response.result);
         }
         function* initializeRequest(): Generator<APIRequest, string, string> {
+            // eslint-disable-next-line no-restricted-syntax -- Initialize requests require null parameters.
             return yield { method: "initialize", params: null } as unknown as APIRequest;
         }
 
@@ -1298,15 +1315,15 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
         const requestBatches: string[][] = [];
         function* recoveringRequest(): Generator<APIRequest, string, string> {
             try {
-                yield { method: "bad", params: null } as unknown as APIRequest;
+                yield { method: "bad", params: undefined } as unknown as APIRequest;
             }
             catch {
-                return yield { method: "recovery", params: null } as unknown as APIRequest;
+                return yield { method: "recovery", params: undefined } as unknown as APIRequest;
             }
             return "unexpected";
         }
         function* successfulRequest(): Generator<APIRequest, string, string> {
-            return yield { method: "good", params: null } as unknown as APIRequest;
+            return yield { method: "good", params: undefined } as unknown as APIRequest;
         }
 
         const results = executeRequestGenerators([recoveringRequest(), successfulRequest()], requests => {
@@ -1321,17 +1338,17 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
     test("executes recursively deferred generators", () => {
         const events: string[] = [];
         function* grandchild() {
-            yield { method: "grandchild", params: null } as unknown as APIRequest;
+            yield { method: "grandchild", params: undefined } as unknown as APIRequest;
             events.push("grandchild completed");
         }
         function* child() {
             yield* defer(grandchild());
-            yield { method: "child", params: null } as unknown as APIRequest;
+            yield { method: "child", params: undefined } as unknown as APIRequest;
             events.push("child completed");
         }
         function* parent() {
             yield* defer(child());
-            yield { method: "parent", params: null } as unknown as APIRequest;
+            yield { method: "parent", params: undefined } as unknown as APIRequest;
             events.push("parent completed");
         }
 
@@ -1343,7 +1360,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
     test("surfaces deferred errors after the parent completes", () => {
         const events: string[] = [];
         function* background() {
-            yield { method: "background", params: null } as unknown as APIRequest;
+            yield { method: "background", params: undefined } as unknown as APIRequest;
         }
         function* parent() {
             yield* defer(background());
@@ -1360,11 +1377,11 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
     test("appends deferred work after the parent request", () => {
         const requestBatches: string[][] = [];
         function* background() {
-            yield { method: "background", params: null } as unknown as APIRequest;
+            yield { method: "background", params: undefined } as unknown as APIRequest;
         }
         function* parent() {
             yield* defer(background());
-            yield { method: "parent", params: null } as unknown as APIRequest;
+            yield { method: "parent", params: undefined } as unknown as APIRequest;
         }
 
         executeRequestGenerators([parent()], requests => {
@@ -1377,7 +1394,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
 
     test("rejects repeated generator instances", () => {
         function* request(): Generator<APIRequest, string, string> {
-            return yield { method: "request", params: null } as unknown as APIRequest;
+            return yield { method: "request", params: undefined } as unknown as APIRequest;
         }
         const generator = request();
 
@@ -1420,8 +1437,8 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
                 project.program.getSourceFileNames.gen(),
             );
             assert.strictEqual(defaultProject, project);
-            assert.ok(sourceFileNames.includes(toRootedFilePath("/src/foo.ts", undefined)));
-            assert.ok(sourceFileNames.includes(toRootedFilePath("/src/index.ts", undefined)));
+            assert.ok(sourceFileNames.includes(toRootedFilePath("/src/foo.ts", /*currentDirectory*/ undefined)));
+            assert.ok(sourceFileNames.includes(toRootedFilePath("/src/index.ts", /*currentDirectory*/ undefined)));
 
             const [symbol, type] = api.batch(
                 project.checker.getSymbolAtLocation.gen(node),
@@ -1909,7 +1926,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
 
             assertPublicGeneratorCoverage([
                 { name: "API", value: api },
-                { name: "API", value: api.constructor as object, own: true },
+                { name: "API", value: api.constructor, own: true },
                 { name: "DebugHandlers", value: api.debug },
                 { name: "Snapshot", value: snapshot },
                 { name: "ModuleResolver", value: moduleResolver },

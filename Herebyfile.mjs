@@ -1453,7 +1453,6 @@ async function runLint() {
 }
 
 async function runLintTypeScript() {
-    await run("node", ["--test", "packages/typescript/eslint/lint.test.mjs"]);
     const args = ["packages/typescript/{src,test,scripts}/**/*.ts"];
     if (options.fix) {
         args.push("--fix");

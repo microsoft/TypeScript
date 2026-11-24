@@ -11,7 +11,6 @@ import {
     SpanMapFeature,
     SpanMapKind,
     SyntaxKind,
-    TokenFlags,
 } from "../../ast/index.ts";
 import type { API as AsyncAPI } from "../async/api.ts";
 import { tryPathKeyFromCanonical } from "../path.ts";
@@ -116,14 +115,14 @@ export class RemoteSourceFile extends RemoteNode implements SourceFileInfo {
         api?: AsyncAPI<boolean> | SyncAPI<boolean> | undefined,
     ) {
         const view = new DataView(data.buffer, data.byteOffset, data.byteLength);
-        const offsetNodes = view.getUint32(HEADER_OFFSET_NODES, true);
+        const offsetNodes = view.getUint32(HEADER_OFFSET_NODES, /*littleEndian*/ true);
         super(view, 1, undefined!, undefined!, offsetNodes);
         this._sourceFile = this;
         this._offsetNodes = offsetNodes;
-        this._offsetStringTableOffsets = view.getUint32(HEADER_OFFSET_STRING_TABLE_OFFSETS, true);
-        this._offsetStringTable = view.getUint32(HEADER_OFFSET_STRING_TABLE, true);
-        this._offsetExtendedData = view.getUint32(HEADER_OFFSET_EXTENDED_DATA, true);
-        this._offsetStructuredData = view.getUint32(HEADER_OFFSET_STRUCTURED_DATA, true);
+        this._offsetStringTableOffsets = view.getUint32(HEADER_OFFSET_STRING_TABLE_OFFSETS, /*littleEndian*/ true);
+        this._offsetStringTable = view.getUint32(HEADER_OFFSET_STRING_TABLE, /*littleEndian*/ true);
+        this._offsetExtendedData = view.getUint32(HEADER_OFFSET_EXTENDED_DATA, /*littleEndian*/ true);
+        this._offsetStructuredData = view.getUint32(HEADER_OFFSET_STRUCTURED_DATA, /*littleEndian*/ true);
         this._decoder = decoder;
         this._timing = timing;
         this.api = api;
@@ -156,7 +155,7 @@ export class RemoteSourceFile extends RemoteNode implements SourceFileInfo {
      */
     get handleFileKey(): string {
         if (this._handleFileKey === undefined) {
-            const nodeId = this.view.getBigUint64(HEADER_OFFSET_SOURCE_FILE_ID, true);
+            const nodeId = this.view.getBigUint64(HEADER_OFFSET_SOURCE_FILE_ID, /*littleEndian*/ true);
             if (nodeId === 0n) {
                 throw new Error("Node has no server source-file identity");
             }
@@ -223,12 +222,12 @@ export class RemoteSourceFile extends RemoteNode implements SourceFileInfo {
             // container; skip those to mirror normal traversal, where list elements take the
             // list's parent. The walk terminates at the source file, which occupies index 1
             // and is already cached.
-            let parentIndex = this.view.getUint32(this._offsetNodes + index * NODE_LEN + NODE_OFFSET_PARENT, true);
+            let parentIndex = this.view.getUint32(this._offsetNodes + index * NODE_LEN + NODE_OFFSET_PARENT, /*littleEndian*/ true);
             while (
                 parentIndex !== index &&
-                this.view.getUint32(this._offsetNodes + parentIndex * NODE_LEN + NODE_OFFSET_KIND, true) === KIND_NODE_LIST
+                this.view.getUint32(this._offsetNodes + parentIndex * NODE_LEN + NODE_OFFSET_KIND, /*littleEndian*/ true) === KIND_NODE_LIST
             ) {
-                parentIndex = this.view.getUint32(this._offsetNodes + parentIndex * NODE_LEN + NODE_OFFSET_PARENT, true);
+                parentIndex = this.view.getUint32(this._offsetNodes + parentIndex * NODE_LEN + NODE_OFFSET_PARENT, /*littleEndian*/ true);
             }
             const parent = parentIndex === index ? this : this.getOrCreateNodeAtIndex(parentIndex) as RemoteNode;
             node = new RemoteNode(this.view, index, parent, this, this._offsetNodes);
@@ -257,26 +256,26 @@ export class RemoteSourceFile extends RemoteNode implements SourceFileInfo {
     }
 
     get fileName(): RootedFilePath {
-        const stringIndex = this.view.getUint32(this.extendedDataOffset + sourceFileExtendedDataOffsets.FileName, true);
+        const stringIndex = this.view.getUint32(this.extendedDataOffset + sourceFileExtendedDataOffsets.FileName, /*littleEndian*/ true);
         return this.getFileName(stringIndex);
     }
 
     get path(): PathKey {
-        const stringIndex = this.view.getUint32(this.extendedDataOffset + sourceFileExtendedDataOffsets.Path, true);
+        const stringIndex = this.view.getUint32(this.extendedDataOffset + sourceFileExtendedDataOffsets.Path, /*littleEndian*/ true);
         return this.getPathKey(stringIndex);
     }
 
     get languageVariant(): number {
-        return this.view.getUint32(this.extendedDataOffset + sourceFileExtendedDataOffsets.LanguageVariant, true);
+        return this.view.getUint32(this.extendedDataOffset + sourceFileExtendedDataOffsets.LanguageVariant, /*littleEndian*/ true);
     }
 
     get scriptKind(): number {
-        return this.view.getUint32(this.extendedDataOffset + sourceFileExtendedDataOffsets.ScriptKind, true);
+        return this.view.getUint32(this.extendedDataOffset + sourceFileExtendedDataOffsets.ScriptKind, /*littleEndian*/ true);
     }
 
     get referencedFiles(): readonly FileReference[] {
         if (this._cachedReferencedFiles !== undefined) return this._cachedReferencedFiles;
-        const offset = this.view.getUint32(this.extendedDataOffset + sourceFileExtendedDataOffsets.ReferencedFiles, true);
+        const offset = this.view.getUint32(this.extendedDataOffset + sourceFileExtendedDataOffsets.ReferencedFiles, /*littleEndian*/ true);
         const files = this.readFileReferences(offset);
         this._cachedReferencedFiles = files;
         return files;
@@ -284,7 +283,7 @@ export class RemoteSourceFile extends RemoteNode implements SourceFileInfo {
 
     get typeReferenceDirectives(): readonly FileReference[] {
         if (this._cachedTypeReferenceDirectives !== undefined) return this._cachedTypeReferenceDirectives;
-        const offset = this.view.getUint32(this.extendedDataOffset + sourceFileExtendedDataOffsets.TypeReferenceDirectives, true);
+        const offset = this.view.getUint32(this.extendedDataOffset + sourceFileExtendedDataOffsets.TypeReferenceDirectives, /*littleEndian*/ true);
         const directives = this.readFileReferences(offset);
         this._cachedTypeReferenceDirectives = directives;
         return directives;
@@ -292,7 +291,7 @@ export class RemoteSourceFile extends RemoteNode implements SourceFileInfo {
 
     get libReferenceDirectives(): readonly FileReference[] {
         if (this._cachedLibReferenceDirectives !== undefined) return this._cachedLibReferenceDirectives;
-        const offset = this.view.getUint32(this.extendedDataOffset + sourceFileExtendedDataOffsets.LibReferenceDirectives, true);
+        const offset = this.view.getUint32(this.extendedDataOffset + sourceFileExtendedDataOffsets.LibReferenceDirectives, /*littleEndian*/ true);
         const directives = this.readFileReferences(offset);
         this._cachedLibReferenceDirectives = directives;
         return directives;
@@ -300,7 +299,7 @@ export class RemoteSourceFile extends RemoteNode implements SourceFileInfo {
 
     get imports(): readonly Node[] {
         if (this._cachedImports !== undefined) return this._cachedImports;
-        const offset = this.view.getUint32(this.extendedDataOffset + sourceFileExtendedDataOffsets.Imports, true);
+        const offset = this.view.getUint32(this.extendedDataOffset + sourceFileExtendedDataOffsets.Imports, /*littleEndian*/ true);
         const imports = this.readNodeIndexArray(offset);
         this._cachedImports = imports;
         return imports;
@@ -308,7 +307,7 @@ export class RemoteSourceFile extends RemoteNode implements SourceFileInfo {
 
     get moduleAugmentations(): readonly Node[] {
         if (this._cachedModuleAugmentations !== undefined) return this._cachedModuleAugmentations;
-        const offset = this.view.getUint32(this.extendedDataOffset + sourceFileExtendedDataOffsets.ModuleAugmentations, true);
+        const offset = this.view.getUint32(this.extendedDataOffset + sourceFileExtendedDataOffsets.ModuleAugmentations, /*littleEndian*/ true);
         const moduleAugmentations = this.readNodeIndexArray(offset);
         this._cachedModuleAugmentations = moduleAugmentations;
         return moduleAugmentations;
@@ -316,28 +315,28 @@ export class RemoteSourceFile extends RemoteNode implements SourceFileInfo {
 
     get ambientModuleNames(): readonly string[] {
         if (this._cachedAmbientModuleNames !== undefined) return this._cachedAmbientModuleNames;
-        const offset = this.view.getUint32(this.extendedDataOffset + sourceFileExtendedDataOffsets.AmbientModuleNames, true);
+        const offset = this.view.getUint32(this.extendedDataOffset + sourceFileExtendedDataOffsets.AmbientModuleNames, /*littleEndian*/ true);
         const names = this.readStringArray(offset);
         this._cachedAmbientModuleNames = names;
         return names;
     }
 
     get externalModuleIndicator(): Node | true | undefined {
-        const nodeIndex = this.view.getUint32(this.extendedDataOffset + sourceFileExtendedDataOffsets.ExternalModuleIndicator, true);
+        const nodeIndex = this.view.getUint32(this.extendedDataOffset + sourceFileExtendedDataOffsets.ExternalModuleIndicator, /*littleEndian*/ true);
         if (nodeIndex === 0) return undefined;
         if (nodeIndex === this.index) return true;
-        return this.getOrCreateNodeAtIndex(nodeIndex) as Node;
+        return this.getOrCreateNodeAtIndex(nodeIndex);
     }
 
     get originalText(): string {
-        const stringIndex = this.view.getUint32(this.extendedDataOffset + sourceFileExtendedDataOffsets.OriginalText, true);
+        const stringIndex = this.view.getUint32(this.extendedDataOffset + sourceFileExtendedDataOffsets.OriginalText, /*littleEndian*/ true);
         return this.getString(stringIndex);
     }
 
     get spanMap(): SpanMap | undefined {
         if (this._spanMapRead) return this._cachedSpanMap;
         this._spanMapRead = true;
-        const offset = this.view.getUint32(this.extendedDataOffset + sourceFileExtendedDataOffsets.SpanMap, true);
+        const offset = this.view.getUint32(this.extendedDataOffset + sourceFileExtendedDataOffsets.SpanMap, /*littleEndian*/ true);
         if (offset === NO_STRUCTURED_DATA) return undefined;
         const buf = new Uint8Array(this.view.buffer, this.view.byteOffset, this.view.byteLength);
         const reader = new MsgpackReader(buf, this._offsetStructuredData + offset);
@@ -367,30 +366,30 @@ export class RemoteSourceFile extends RemoteNode implements SourceFileInfo {
 
     get supplementalSourceFileNames(): readonly RootedFilePath[] | undefined {
         if (this._cachedSupplementalSourceFileNames !== undefined) return this._cachedSupplementalSourceFileNames;
-        const offset = this.view.getUint32(this.extendedDataOffset + sourceFileExtendedDataOffsets.SupplementalSourceFileNames, true);
+        const offset = this.view.getUint32(this.extendedDataOffset + sourceFileExtendedDataOffsets.SupplementalSourceFileNames, /*littleEndian*/ true);
         if (offset === NO_STRUCTURED_DATA) return undefined;
         return this._cachedSupplementalSourceFileNames = this.readFileNameArray(offset);
     }
 
     get canonicalSourceFileName(): RootedFilePath | undefined {
-        const stringIndex = this.view.getUint32(this.extendedDataOffset + sourceFileExtendedDataOffsets.CanonicalSourceFileName, true);
+        const stringIndex = this.view.getUint32(this.extendedDataOffset + sourceFileExtendedDataOffsets.CanonicalSourceFileName, /*littleEndian*/ true);
         return stringIndex === NO_STRUCTURED_DATA ? undefined : this.getFileName(stringIndex);
     }
 
     get contentMapper(): string | undefined {
-        const stringIndex = this.view.getUint32(this.extendedDataOffset + sourceFileExtendedDataOffsets.ContentMapper, true);
+        const stringIndex = this.view.getUint32(this.extendedDataOffset + sourceFileExtendedDataOffsets.ContentMapper, /*littleEndian*/ true);
         return stringIndex === NO_STRUCTURED_DATA ? undefined : this.getString(stringIndex);
     }
 
     get virtualFileName(): RootedFilePath | undefined {
-        const stringIndex = this.view.getUint32(this.extendedDataOffset + sourceFileExtendedDataOffsets.VirtualFileName, true);
+        const stringIndex = this.view.getUint32(this.extendedDataOffset + sourceFileExtendedDataOffsets.VirtualFileName, /*littleEndian*/ true);
         return stringIndex === NO_STRUCTURED_DATA ? undefined : this.getFileName(stringIndex);
     }
 
     get diagnosticDirectives(): readonly MappedDiagnosticDirective[] | undefined {
         if (this._diagnosticDirectivesRead) return this._cachedDiagnosticDirectives;
         this._diagnosticDirectivesRead = true;
-        const offset = this.view.getUint32(this.extendedDataOffset + sourceFileExtendedDataOffsets.DiagnosticDirectives, true);
+        const offset = this.view.getUint32(this.extendedDataOffset + sourceFileExtendedDataOffsets.DiagnosticDirectives, /*littleEndian*/ true);
         if (offset === NO_STRUCTURED_DATA) return undefined;
         const buf = new Uint8Array(this.view.buffer, this.view.byteOffset, this.view.byteLength);
         const reader = new MsgpackReader(buf, this._offsetStructuredData + offset);
@@ -532,7 +531,7 @@ export function parseNodeHandleFromCompiler(handle: string): ParsedNodeHandle {
         !Number.isSafeInteger(kind) ||
         kind < 0 ||
         String(kind) !== kindText ||
-        !/^#[1-9][0-9]*$/.test(fileKey) ||
+        !/^#[1-9]\d*$/.test(fileKey) ||
         BigInt(sourceFileId) > 0xFFFFFFFFFFFFFFFFn ||
         key === undefined
     ) {
@@ -540,7 +539,7 @@ export function parseNodeHandleFromCompiler(handle: string): ParsedNodeHandle {
     }
     return {
         index,
-        kind: kind as SyntaxKind,
+        kind,
         sourceFileId,
         path: key,
     };
@@ -553,7 +552,7 @@ export function parseNodeHandleFromCompiler(handle: string): ParsedNodeHandle {
  */
 export function decodeNode(data: Uint8Array): Node {
     const sf = new RemoteSourceFile(data, new Wtf8Decoder());
-    return sf as unknown as Node;
+    return sf;
 }
 
 /**

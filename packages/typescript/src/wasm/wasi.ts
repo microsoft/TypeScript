@@ -3,15 +3,13 @@ import type { WasmReactorInstance } from "./transport.ts";
 declare namespace WebAssembly {
     interface Module {}
 
-    type Imports = Record<string, Record<string, object | Function | number | bigint>>;
+    type Imports = Record<string, Record<string, object | number | bigint>>;
 
     interface Instance {
         readonly exports: Record<string, unknown>;
     }
 
-    const Instance: {
-        new (module: Module, imports?: Imports): Instance;
-    };
+    const Instance: new (module: Module, imports?: Imports) => Instance;
 
     interface Memory {
         readonly buffer: ArrayBufferLike;
@@ -27,7 +25,7 @@ declare namespace WebAssembly {
 
 interface StreamingTextDecoder {
     decode(
-        input?: ArrayBuffer | ArrayBufferView<ArrayBufferLike> | null,
+        input?: Uint8Array<ArrayBufferLike>,
         options?: { stream?: boolean | undefined; },
     ): string;
 }
@@ -153,8 +151,8 @@ function createWasiHost(options: InstantiateWasmOptions): {
         let length = 0;
         for (let i = 0; i < iovsLength; i++) {
             const iovPointer = iovsPointer + i * 8;
-            const chunkLength = view.getUint32(iovPointer + 4, true);
-            text += decoder.decode(new Uint8Array(memory.buffer, view.getUint32(iovPointer, true), chunkLength), { stream: true });
+            const chunkLength = view.getUint32(iovPointer + 4, /*littleEndian*/ true);
+            text += decoder.decode(new Uint8Array(memory.buffer, view.getUint32(iovPointer, /*littleEndian*/ true), chunkLength), { stream: true });
             length += chunkLength;
         }
         view.setUint32(writtenPointer, length, true);
@@ -208,10 +206,10 @@ function createWasiHost(options: InstantiateWasmOptions): {
         for (let i = 0; i < subscriptionsLength; i++) {
             const subscription = subscriptionsPointer + i * 48;
             if (view.getUint8(subscription + 8) !== eventTypeClock) continue;
-            const clockId = view.getUint32(subscription + 16, true);
+            const clockId = view.getUint32(subscription + 16, /*littleEndian*/ true);
             if (clockId !== 0 && clockId !== 1) return errnoInvalidArgument;
-            const timeout = view.getBigUint64(subscription + 24, true);
-            const flags = view.getUint16(subscription + 40, true);
+            const timeout = view.getBigUint64(subscription + 24, /*littleEndian*/ true);
+            const flags = view.getUint16(subscription + 40, /*littleEndian*/ true);
             const now = clockId === 0 ? Date.now() : performance.now();
             const delay = flags & subscriptionClockAbstime
                 ? Number(timeout) / 1e6 - now
@@ -231,7 +229,7 @@ function createWasiHost(options: InstantiateWasmOptions): {
         }
 
         new Uint8Array(memory.buffer, eventsPointer, 32).fill(0);
-        view.setBigUint64(eventsPointer, view.getBigUint64(selected, true), true);
+        view.setBigUint64(eventsPointer, view.getBigUint64(selected, /*littleEndian*/ true), true);
         view.setUint8(eventsPointer + 10, eventTypeClock);
         view.setUint32(eventsLengthPointer, 1, true);
         return errnoSuccess;

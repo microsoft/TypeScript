@@ -81,6 +81,6 @@ describe("sync transport", () => {
         assert.deepStrictEqual(methods, ["initialize", "parseCommandLine", "batchRequests"]);
         assert.strictEqual(batchParams?.maxResponseBytesPerPage, 1);
         api.close();
-        assert.strictEqual(closed, true);
+        assert.strictEqual(closed, /*expected*/ true);
     });
 });

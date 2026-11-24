@@ -176,7 +176,7 @@ export class SyncRpcChannel {
                     break;
                 }
                 catch {
-                    if (this.child.exitCode !== null) {
+                    if (this.child.exitCode != undefined) {
                         throw new Error(
                             `Child process exited with code ${this.child.exitCode} before pipe was ready`,
                         );
@@ -432,13 +432,13 @@ export class SyncRpcChannel {
                 if (payloadIsString) {
                     // Encode string directly into write buffer — avoids
                     // Buffer.from(string, 'utf-8') allocation entirely.
-                    this.writeBuf.write(payload as string, off, payloadLen, "utf-8");
+                    this.writeBuf.write(payload, off, payloadLen, "utf-8");
                 }
                 else if (payload instanceof Buffer) {
                     (payload as Buffer).copy(this.writeBuf, off);
                 }
                 else {
-                    this.writeBuf.set(payload as Uint8Array, off);
+                    this.writeBuf.set(payload, off);
                 }
             }
             this.writeAllBuf(this.writeBuf, totalSize);
@@ -457,10 +457,10 @@ export class SyncRpcChannel {
                 if (payloadIsString) {
                     // Large string: must allocate (can't stream-encode
                     // across multiple writeSync calls).
-                    this.writeAllBuf(Buffer.from(payload as string, "utf-8"));
+                    this.writeAllBuf(Buffer.from(payload, "utf-8"));
                 }
                 else {
-                    this.writeAllBuf(payload as Buffer | Uint8Array);
+                    this.writeAllBuf(payload);
                 }
             }
         }
@@ -533,7 +533,7 @@ export class SyncRpcChannel {
     private eofError(): Error {
         const code = this.child.exitCode;
         const signal = this.child.signalCode;
-        const detail = signal ? `killed by signal ${signal}` : code !== null ? `exited with code ${code}` : "unknown reason";
+        const detail = signal ? `killed by signal ${signal}` : code != undefined ? `exited with code ${code}` : "unknown reason";
         return new Error(`Unexpected EOF while reading from child process (${detail})`);
     }
 
@@ -571,7 +571,7 @@ export class SyncRpcChannel {
         this.readBufLen = 0;
         for (;;) {
             try {
-                const n = this.fs.readSync(this.readFd, this.readBuf, 0, this.readBuf.length, null);
+                const n = this.fs.readSync(this.readFd, this.readBuf);
                 if (n === 0) {
                     throw this.eofError();
                 }
@@ -579,7 +579,7 @@ export class SyncRpcChannel {
                 return;
             }
             catch (e: unknown) {
-                if (e instanceof Error && ("code" in e) && ((e as NodeJS.ErrnoException).code === "EAGAIN" || (e as NodeJS.ErrnoException).code === "EWOULDBLOCK")) {
+                if (e instanceof Error && ((e as NodeJS.ErrnoException).code === "EAGAIN" || (e as NodeJS.ErrnoException).code === "EWOULDBLOCK")) {
                     sleep(1);
                     continue;
                 }
@@ -609,14 +609,14 @@ export class SyncRpcChannel {
                 // Remaining data is larger than read buffer; read directly
                 // into the target to avoid unnecessary copying.
                 try {
-                    const n = this.fs.readSync(this.readFd, buffer, pos, length - pos, null);
+                    const n = this.fs.readSync(this.readFd, buffer, { offset: pos, length: length - pos });
                     if (n === 0) {
                         throw this.eofError();
                     }
                     pos += n;
                 }
                 catch (e: unknown) {
-                    if (e instanceof Error && ("code" in e) && ((e as NodeJS.ErrnoException).code === "EAGAIN" || (e as NodeJS.ErrnoException).code === "EWOULDBLOCK")) {
+                    if (e instanceof Error && ((e as NodeJS.ErrnoException).code === "EAGAIN" || (e as NodeJS.ErrnoException).code === "EWOULDBLOCK")) {
                         sleep(1);
                         continue;
                     }
@@ -643,7 +643,7 @@ export class SyncRpcChannel {
                 pos += n;
             }
             catch (e: unknown) {
-                if (e instanceof Error && ("code" in e) && ((e as NodeJS.ErrnoException).code === "EAGAIN" || (e as NodeJS.ErrnoException).code === "EWOULDBLOCK")) {
+                if (e instanceof Error && ((e as NodeJS.ErrnoException).code === "EAGAIN" || (e as NodeJS.ErrnoException).code === "EWOULDBLOCK")) {
                     sleep(1);
                     continue;
                 }

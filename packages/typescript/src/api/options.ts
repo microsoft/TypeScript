@@ -46,7 +46,7 @@ export interface ClientSpawnOptions {
 export type ClientOptions = ClientSocketOptions | ClientSpawnOptions;
 
 export function isSpawnOptions(options: ClientOptions): options is ClientSpawnOptions {
-    return !("pipe" in options);
+    return !(options as ClientSocketOptions).pipe;
 }
 
 interface TransportOptionsBase {
@@ -70,7 +70,7 @@ export interface ClientTransportOptions extends TransportOptionsBase {
 export type SyncClientOptions = ClientSocketOptions | ClientSpawnOptions | ClientTransportOptions;
 
 export function isTransportOptions<T extends SyncClientOptions | AsyncClientOptions>(options: T): options is Extract<T, { transport: unknown; }> {
-    return "transport" in options;
+    return !!(options as { transport?: unknown; }).transport;
 }
 
 export interface AsyncClientTransportOptions extends TransportOptionsBase {

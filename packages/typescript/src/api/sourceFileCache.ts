@@ -290,7 +290,8 @@ export class SourceFileCache<TSymbol> {
         for (let i = entries.length - 1; i >= 0; i--) {
             entries[i].refs.delete(ref);
             if (entries[i].refs.size === 0) {
-                const [evicted] = entries.splice(i, 1);
+                const evicted = entries[i];
+                entries.splice(i, 1);
                 if (this.recordsByNodeId.get(evicted.descriptor.nodeId) === evicted) {
                     this.recordsByNodeId.delete(evicted.descriptor.nodeId);
                 }
