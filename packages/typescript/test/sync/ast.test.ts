@@ -985,7 +985,7 @@ describe("getSynthesizedDeepClone", { concurrency }, () => {
         const left = createIdentifier("a");
         const right = createNumericLiteral("42", TokenFlags.None);
         const op = createToken(SyntaxKind.PlusToken);
-        const bin = createBinaryExpression(undefined, left, undefined, op, right);
+        const bin = createBinaryExpression(/*modifiers*/ undefined, left, /*type*/ undefined, op, right);
 
         const clone = getSynthesizedDeepClone(bin);
         const cloneOfClone = getSynthesizedDeepClone(clone);

@@ -9389,7 +9389,7 @@ export const obj = { m: 1, s: "hi", b: true };
         await using api = spawnAPI();
         await using lease = await api.createSourceFile("/test.ts", "// leading\nfoo(/* arg */ 1); // trailing\nbar();\n");
         const { sourceFile } = lease;
-        const printWithClone = async (clone: Statement, emitContext?: EmitContext) => await api.printer.printFile(updateSourceFile(sourceFile, [sourceFile.statements[1], clone], sourceFile.endOfFileToken), { emitContext });
+        const printWithClone = async (clone: Statement, emitContext?: EmitContext) => api.printer.printFile(updateSourceFile(sourceFile, [sourceFile.statements[1], clone], sourceFile.endOfFileToken), { emitContext });
 
         assert.strictEqual(await printWithClone(getSynthesizedDeepClone(sourceFile.statements[0])), "bar();\n// leading\nfoo(/* arg */ 1); // trailing\n");
 
@@ -9459,8 +9459,8 @@ export const obj = { m: 1, s: "hi", b: true };
         const outer = statement.expression;
         const inner = outer.left;
         assert(isBinaryExpression(inner));
-        const newInner = updateBinaryExpression(inner, undefined, inner.left, undefined, createToken(SyntaxKind.QuestionQuestionToken), inner.right);
-        const newOuter = updateBinaryExpression(outer, undefined, newInner, undefined, outer.operatorToken, outer.right);
+        const newInner = updateBinaryExpression(inner, /*modifiers*/ undefined, inner.left, /*type*/ undefined, createToken(SyntaxKind.QuestionQuestionToken), inner.right);
+        const newOuter = updateBinaryExpression(outer, /*modifiers*/ undefined, newInner, /*type*/ undefined, outer.operatorToken, outer.right);
         const updated = updateSourceFile(sourceFile, [updateExpressionStatement(statement, newOuter)], sourceFile.endOfFileToken);
         assert.strictEqual(newInner.pos, inner.pos);
         assert.strictEqual(await api.printer.printFile(updated), "(a ?? b) || c;\n");

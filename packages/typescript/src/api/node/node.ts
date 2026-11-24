@@ -151,7 +151,7 @@ export class RemoteSourceFile extends RemoteNode implements SourceFileInfo {
 
     /** @internal */
     get hasServerIdentity(): boolean {
-        return this.view.getBigUint64(HEADER_OFFSET_SOURCE_FILE_ID, true) !== 0n;
+        return this.view.getBigUint64(HEADER_OFFSET_SOURCE_FILE_ID, /*littleEndian*/ true) !== 0n;
     }
 
     /**
