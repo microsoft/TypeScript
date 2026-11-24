@@ -6,14 +6,14 @@ import type {
     SymbolOwner as ProtocolSymbolOwner,
     SymbolResponse as ProtocolSymbolResponse,
 } from "../src/api/proto.generated.ts";
+import type {
+    DocumentIdentifier,
+    ProjectId,
+} from "../src/api/proto.ts";
 import {
     resolveFileName,
     validateSymbolOwner,
     validateSymbolResponse,
-} from "../src/api/proto.ts";
-import type {
-    DocumentIdentifier,
-    ProjectId,
 } from "../src/api/proto.ts";
 import { SourceFileCache } from "../src/api/sourceFileCache.ts";
 import type {

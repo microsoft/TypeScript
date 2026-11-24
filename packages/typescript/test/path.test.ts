@@ -321,9 +321,7 @@ test("createVirtualFileSystem supports object prototype path components", () => 
 });
 
 test("createVirtualFileSystem respects case sensitivity", () => {
-    const fs = createVirtualFileSystem({
-        "/Workspace/Foo.ts": "content",
-    }, { caseSensitivity: CaseSensitivity.Insensitive });
+    const fs = createVirtualFileSystem({ "/Workspace/Foo.ts": "content" }, { caseSensitivity: CaseSensitivity.Insensitive });
     assert.strictEqual(fs.readFile(toRootedFilePath("/workspace/foo.ts", /*currentDirectory*/ undefined)), "content");
     assert.deepStrictEqual(fs.getAccessibleEntries(toRootedDirectoryPath("/workspace", /*currentDirectory*/ undefined)), {
         files: ["Foo.ts"],

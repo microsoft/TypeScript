@@ -6,6 +6,7 @@ import { ScriptTarget } from "../../enums/scriptTarget.js";
 import { SyntaxKind } from "../../enums/syntaxKind.js";
 import { TokenFlags } from "../../enums/tokenFlags.js";
 import type {
+    Identifier,
     JsxTokenSyntaxKind,
     KeywordSyntaxKind,
 } from "./ast.ts";
@@ -177,6 +178,11 @@ export const textToKeywordObj: Record<string, KeywordSyntaxKind> = {
 
 const textToKeyword = new Map(Object.entries(textToKeywordObj));
 
+/** Returns the keyword represented by an identifier's decoded text, if any. */
+export function identifierToKeywordKind(node: Identifier): KeywordSyntaxKind | undefined {
+    return textToKeyword.get(node.text);
+}
+
 const textToToken = new Map(Object.entries({
     ...textToKeywordObj,
     "{": SyntaxKind.OpenBraceToken,
@@ -299,7 +305,7 @@ function scanJSDocCommentForTags(text: string, tokenFlags: TokenFlags): TokenFla
         }
         if (
             (tokenFlags & (TokenFlags.PrecedingJSDocWithDeprecated | TokenFlags.PrecedingJSDocWithSeeOrLink)) ===
-                (TokenFlags.PrecedingJSDocWithDeprecated | TokenFlags.PrecedingJSDocWithSeeOrLink)
+            (TokenFlags.PrecedingJSDocWithDeprecated | TokenFlags.PrecedingJSDocWithSeeOrLink)
         ) {
             return tokenFlags;
         }

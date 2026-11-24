@@ -17,6 +17,8 @@ import type {
     BooleanLiteral,
     CallChain,
     CallExpression,
+    CanHaveDecorators,
+    CanHaveModifiers,
     ClassElement,
     ComputedPropertyName,
     ConciseBody,
@@ -149,6 +151,55 @@ import {
 } from "./utils.ts";
 
 export * from "./is.generated.ts";
+
+export function canHaveDecorators(node: Node): node is CanHaveDecorators {
+    switch (node.kind) {
+        case SyntaxKind.Parameter:
+        case SyntaxKind.PropertyDeclaration:
+        case SyntaxKind.MethodDeclaration:
+        case SyntaxKind.GetAccessor:
+        case SyntaxKind.SetAccessor:
+        case SyntaxKind.ClassExpression:
+        case SyntaxKind.ClassDeclaration:
+            return true;
+        default:
+            return false;
+    }
+}
+
+export function canHaveModifiers(node: Node): node is CanHaveModifiers {
+    switch (node.kind) {
+        case SyntaxKind.TypeParameter:
+        case SyntaxKind.Parameter:
+        case SyntaxKind.PropertySignature:
+        case SyntaxKind.PropertyDeclaration:
+        case SyntaxKind.MethodSignature:
+        case SyntaxKind.MethodDeclaration:
+        case SyntaxKind.Constructor:
+        case SyntaxKind.GetAccessor:
+        case SyntaxKind.SetAccessor:
+        case SyntaxKind.IndexSignature:
+        case SyntaxKind.ConstructorType:
+        case SyntaxKind.FunctionExpression:
+        case SyntaxKind.ArrowFunction:
+        case SyntaxKind.ClassExpression:
+        case SyntaxKind.VariableStatement:
+        case SyntaxKind.FunctionDeclaration:
+        case SyntaxKind.ClassDeclaration:
+        case SyntaxKind.InterfaceDeclaration:
+        case SyntaxKind.TypeAliasDeclaration:
+        case SyntaxKind.EnumDeclaration:
+        case SyntaxKind.ModuleDeclaration:
+        case SyntaxKind.ImportEqualsDeclaration:
+        case SyntaxKind.ImportDeclaration:
+        case SyntaxKind.JSImportDeclaration:
+        case SyntaxKind.ExportAssignment:
+        case SyntaxKind.ExportDeclaration:
+            return true;
+        default:
+            return false;
+    }
+}
 
 export function isAutoAccessorPropertyDeclaration(node: Node): node is AutoAccessorPropertyDeclaration {
     return node.kind === SyntaxKind.PropertyDeclaration &&
@@ -304,9 +355,12 @@ function isShorthandPropertyNameUseSite(useSite: Node): boolean {
     return isIdentifier(useSite) && isShorthandPropertyAssignment(useSite.parent) && useSite.parent.name === useSite;
 }
 
-type AncestorCallbackResult = boolean | "quit";
+export type AncestorCallbackResult = boolean | "quit";
 
-function findAncestor(node: Node, callback: (node: Node) => AncestorCallbackResult): Node | undefined {
+/** Searches a node and its ancestors, stopping if the callback returns `"quit"`. */
+export function findAncestor<T extends Node>(node: Node | undefined, callback: (node: Node) => node is T): T | undefined;
+export function findAncestor(node: Node | undefined, callback: (node: Node) => AncestorCallbackResult): Node | undefined;
+export function findAncestor(node: Node | undefined, callback: (node: Node) => AncestorCallbackResult): Node | undefined {
     while (node) {
         const result = callback(node);
         if (result === "quit") {

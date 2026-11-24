@@ -22,6 +22,7 @@ import {
     isJSDoc,
     isJSDocParameterTag,
     isJsxSelfClosingElement,
+    isMethodDeclaration,
     isModuleDeclaration,
     isNamedImports,
     isObjectLiteralExpression,
@@ -48,6 +49,7 @@ import {
     type PathKey,
     type PropertyAccessExpression,
     type RootedFilePath,
+    symbolName,
     SyntaxKind,
     TokenFlags,
     tryGetAmbientModuleNameFromSymbolName,
@@ -400,6 +402,20 @@ function g(before = 1, required: number, after = 2, ...rest: number[]) {}
 });
 
 describe("API", { concurrency }, () => {
+    test("getDefaultFormatCodeSettings returns native defaults independently of snapshot preferences", async () => {
+        await using api = spawnAPI();
+        const defaults = await api.getDefaultFormatCodeSettings();
+        const { indentSize, convertTabsToSpaces } = defaults;
+        assert.ok(typeof indentSize === "number");
+        assert.ok(typeof convertTabsToSpaces === "boolean");
+        const snapshot = await api.createSnapshot({ userPreferences: { indentSize: indentSize + 1, convertTabsToSpaces: !convertTabsToSpaces } });
+        assert.ok(snapshot);
+        defaults.indentSize = indentSize + 1;
+        const next = await api.getDefaultFormatCodeSettings();
+        assert.strictEqual(next.indentSize, indentSize);
+        assert.strictEqual(next.convertTabsToSpaces, convertTabsToSpaces);
+    });
+
     test("getCurrentLanguageServerSnapshot is LSP-only", async () => {
         async function _checkTypes() {
             await using standalone = new API();
@@ -622,6 +638,62 @@ describe("API", { concurrency }, () => {
         assert.equal(missing.error?.code, 5083);
     });
 
+    test("getEffectiveTypeRoots uses native candidate directories and normalized options", async () => {
+        await using api = new API({ cwd: "/workspace/project", fs: createVirtualFileSystem({}) });
+
+        assert.deepEqual(await api.getEffectiveTypeRoots({}), [
+            "/workspace/project/node_modules/@types",
+            "/workspace/node_modules/@types",
+            "/node_modules/@types",
+        ]);
+        assert.deepEqual(await api.getEffectiveTypeRoots({ configFilePath: "/config/tsconfig.json" }), [
+            "/config/node_modules/@types",
+            "/node_modules/@types",
+        ]);
+        assert.deepEqual(await api.getEffectiveTypeRoots({ typeRoots: ["types", "../shared"] }), [
+            "/workspace/project/types",
+            "/workspace/shared",
+        ]);
+        assert.deepEqual(await api.getEffectiveTypeRoots({ typeRoots: [] }), []);
+        await assert.rejects( // @sync: assert.throws(
+            () => api.getEffectiveTypeRoots({ module: "nodenext" } as unknown as RawCompilerOptions),
+            /invalid request.*unmarshal JSON string into Go core\.ModuleKind/,
+        );
+    });
+
+    test("getTsBuildInfoEmitOutputFilePath uses native incremental output paths", async () => {
+        await using api = new API({ cwd: "/workspace/project", fs: createVirtualFileSystem({}) });
+
+        assert.equal(await api.getTsBuildInfoEmitOutputFilePath({}), undefined);
+        assert.equal(await api.getTsBuildInfoEmitOutputFilePath({ tsBuildInfoFile: "cache/build.tsbuildinfo" }), undefined);
+        assert.equal(await api.getTsBuildInfoEmitOutputFilePath({ incremental: true }), undefined);
+        assert.equal(
+            await api.getTsBuildInfoEmitOutputFilePath({ build: true, configFilePath: "tsconfig.json" }),
+            "/workspace/project/tsconfig.tsbuildinfo",
+        );
+        assert.equal(await api.getTsBuildInfoEmitOutputFilePath({ build: false, configFilePath: "tsconfig.json" }), undefined);
+        assert.equal(
+            await api.getTsBuildInfoEmitOutputFilePath({ incremental: true, configFilePath: "/config/tsconfig.json", outDir: "dist" }),
+            "/workspace/project/dist/tsconfig.tsbuildinfo",
+        );
+        assert.equal(
+            await api.getTsBuildInfoEmitOutputFilePath({ composite: true, tsBuildInfoFile: "cache/build.tsbuildinfo" }),
+            "/workspace/project/cache/build.tsbuildinfo",
+        );
+        assert.equal(
+            await api.getTsBuildInfoEmitOutputFilePath({ incremental: true, configFilePath: "tsconfig.app.json", outDir: "dist" }),
+            "/workspace/project/dist/tsconfig.app.tsbuildinfo",
+        );
+        assert.equal(
+            await api.getTsBuildInfoEmitOutputFilePath({ incremental: true, configFilePath: "tsconfig.app.json", rootDir: "src", outDir: "dist" }),
+            "/workspace/project/tsconfig.app.tsbuildinfo",
+        );
+        assert.equal(
+            await api.getTsBuildInfoEmitOutputFilePath({ composite: true, configFilePath: "tsconfig.json", noEmit: true }),
+            "/workspace/project/tsconfig.tsbuildinfo",
+        );
+    });
+
     test("parseConfigFileTextToJson", async () => {
         await using api = spawnAPI();
 
@@ -743,9 +815,7 @@ describe("API", { concurrency }, () => {
         });
         assert.equal(isolatedDeclarationModuleOutput.diagnostics?.length ?? 0, 0);
 
-        const moduleFileOutput = await api.transpileModuleFromFile({ uri: "file:///input.ts" }, {
-            compilerOptions: { module: ModuleKind.CommonJS },
-        });
+        const moduleFileOutput = await api.transpileModuleFromFile({ uri: "file:///input.ts" }, { compilerOptions: { module: ModuleKind.CommonJS } });
         assert.match(moduleFileOutput.outputText, /exports\.x = 1/);
 
         const declarationOutput = await api.transpileDeclaration("export const x: number = 1;");
@@ -1230,6 +1300,135 @@ describe("API", { concurrency }, () => {
         });
         assert.deepEqual([...await repeatedCallback.getProgram(callbackProgramId)!.getSourceFileNames()].sort(), [providedA, root]);
         assert.equal(callbackCalls, 1);
+    });
+
+    test("type reference resolver uses configured roots independently of module overrides", async () => {
+        await using api = new API({
+            cwd: "/workspace/project",
+            fs: createVirtualFileSystem({
+                "/workspace/project/types/pkg/package.json": JSON.stringify({ name: "@types/pkg", version: "1.0.0", types: "index.d.ts" }),
+                "/workspace/project/types/pkg/index.d.ts": "export {};",
+            }),
+        });
+        const resolver = await api.createModuleResolver(
+            { typeRoots: ["types"], traceResolution: true },
+            {
+                moduleResolutions: { fallback: "unresolved", entries: [] },
+                resolveModuleName: () => {
+                    assert.fail("Type references must not invoke the module-name callback");
+                },
+            },
+        );
+        const result = await resolver.resolveTypeReferenceDirective("pkg", "src/index.ts");
+        assert.equal(result.resolvedTypeReferenceDirective?.resolvedFileName, "/workspace/project/types/pkg/index.d.ts");
+        assert.equal(result.resolvedTypeReferenceDirective?.primary, true);
+        assert.ok(result.trace?.some(line => line.includes("successfully resolved")));
+        const missing = await resolver.resolveTypeReferenceDirective("missing", "src/index.ts");
+        assert.equal(missing.resolvedTypeReferenceDirective, undefined);
+        assert.ok(missing.trace?.some(line => line.includes("was not resolved")));
+    });
+
+    test("type reference resolver honors conditional exports and resolution modes", async () => {
+        await using api = spawnAPI({
+            "/node_modules/pkg/package.json": JSON.stringify({
+                name: "pkg",
+                version: "1.0.0",
+                exports: { ".": { import: "./import.d.mts", require: "./require.d.cts" } },
+            }),
+            "/node_modules/pkg/import.d.mts": "export {};",
+            "/node_modules/pkg/require.d.cts": "export {};",
+        });
+        const resolver = await api.createModuleResolver({
+            typeRoots: [],
+            module: ModuleKind.NodeNext,
+            moduleResolution: ModuleResolutionKind.NodeNext,
+        });
+        const esm = await resolver.resolveTypeReferenceDirective("pkg", "/src/index.ts", ModuleKind.ESNext);
+        assert.equal(esm.resolvedTypeReferenceDirective?.resolvedFileName, "/node_modules/pkg/import.d.mts");
+        assert.equal(esm.resolvedTypeReferenceDirective?.packageId?.name, "pkg");
+        assert.equal(esm.resolvedTypeReferenceDirective?.primary, false);
+        assert.equal(esm.resolvedTypeReferenceDirective?.isExternalLibraryImport, true);
+        assert.equal(
+            (await resolver.resolveTypeReferenceDirective("pkg", "/src/index.ts", ModuleKind.CommonJS)).resolvedTypeReferenceDirective?.resolvedFileName,
+            "/node_modules/pkg/require.d.cts",
+        );
+    });
+
+    test("type reference resolver retains snapshot filesystem state and checks disposal", async () => {
+        const packageJson = toRootedFilePath("/node_modules/@types/pkg/package.json", /*currentDirectory*/ undefined);
+        const packageB = toRootedFilePath("/node_modules/@types/pkg/b.d.ts", /*currentDirectory*/ undefined);
+        const { api: disposableAPI, fs } = spawnAPIWithFS({
+            [packageJson]: JSON.stringify({ name: "@types/pkg", version: "1.0.0", types: "a.d.ts" }),
+            "/node_modules/@types/pkg/a.d.ts": "export {};",
+        });
+        await using api = disposableAPI;
+        const resolver = await api.createModuleResolver({});
+        const firstSnapshot = await api.createSnapshot();
+        assert.equal(
+            (await resolver.resolveTypeReferenceDirective("pkg", "/src/index.ts", /*resolutionMode*/ undefined, { snapshot: firstSnapshot })).resolvedTypeReferenceDirective?.resolvedFileName,
+            "/node_modules/@types/pkg/a.d.ts",
+        );
+        fs.writeFile(packageJson, JSON.stringify({ name: "@types/pkg", version: "1.0.0", types: "b.d.ts" }));
+        fs.writeFile(packageB, "export {};");
+        const secondSnapshot = await firstSnapshot.update({
+            fileNotifications: { changed: [packageJson], created: [packageB] },
+        });
+        assert.equal(
+            (await resolver.resolveTypeReferenceDirective("pkg", "/src/index.ts", /*resolutionMode*/ undefined, { snapshot: firstSnapshot })).resolvedTypeReferenceDirective?.resolvedFileName,
+            "/node_modules/@types/pkg/a.d.ts",
+        );
+        assert.equal(
+            (await resolver.resolveTypeReferenceDirective("pkg", "/src/index.ts", /*resolutionMode*/ undefined, { snapshot: secondSnapshot })).resolvedTypeReferenceDirective?.resolvedFileName,
+            "/node_modules/@types/pkg/b.d.ts",
+        );
+        assert.equal(
+            (await resolver.resolveTypeReferenceDirective("pkg", "/src/index.ts")).resolvedTypeReferenceDirective?.resolvedFileName,
+            "/node_modules/@types/pkg/b.d.ts",
+        );
+        await firstSnapshot.dispose();
+        await assert.rejects( // @sync: assert.throws(
+            () => resolver.resolveTypeReferenceDirective("pkg", "/src/index.ts", /*resolutionMode*/ undefined, { snapshot: firstSnapshot }),
+            /Snapshot is disposed/,
+        );
+        await resolver.dispose();
+        await assert.rejects( // @sync: assert.throws(
+            () => resolver.resolveTypeReferenceDirective("pkg", "/src/index.ts"),
+            /ModuleResolver is disposed/,
+        );
+    });
+
+    test("type reference resolver uses the in-progress snapshot filesystem", async () => {
+        await using api = spawnAPI({ "/src/index.ts": 'import "layered";' });
+        const compilerOptions = { noLib: true, types: [] };
+        const defaultResolver = await api.createModuleResolver(compilerOptions);
+        const customResolver = await api.createModuleResolver(compilerOptions, {
+            resolveModuleName: async (name, containingDirectory, mode, { snapshot }) => {
+                assert.equal(name, "layered");
+                assert.ok(typeof snapshot === "number");
+                const result = await defaultResolver.resolveTypeReferenceDirective(name, `${containingDirectory}/index.ts`, mode, { snapshot });
+                assert.ok(result.resolvedTypeReferenceDirective);
+                return { resolvedFileName: result.resolvedTypeReferenceDirective.resolvedFileName };
+            },
+        });
+        const snapshot = await api.createSnapshot({
+            fileSystem: createFileSystemLayer([
+                ["/node_modules/@types/layered/package.json", JSON.stringify({ name: "@types/layered", version: "1.0.0", types: "index.d.ts" })],
+                ["/node_modules/@types/layered/index.d.ts", "export {};"],
+            ]),
+            createPrograms: [{
+                rootFiles: ["/src/index.ts"],
+                compilerOptions,
+                options: { moduleResolver: customResolver },
+            }],
+        });
+        assert.deepEqual(
+            [...await snapshot.operation.createdPrograms[0].getSourceFileNames()].sort(),
+            ["/node_modules/@types/layered/index.d.ts", "/src/index.ts"],
+        );
+        assert.equal(
+            (await defaultResolver.resolveTypeReferenceDirective("layered", "/src/index.ts")).resolvedTypeReferenceDirective,
+            undefined,
+        );
     });
 
     test("module resolver normalizes raw compiler option paths", async () => {
@@ -3034,11 +3233,14 @@ describe("SourceFile", { concurrency }, () => {
     });
 
     test("Program statistics reflect checker work without forcing diagnostics", async () => {
-        await using api = spawnAPI({
-            "/src/main.ts": `type Box<T> = { value: T };
+        await using api = spawnAPI(
+            {
+                "/src/main.ts": `type Box<T> = { value: T };
 export const box: Box<string> = { value: "hello" };
 export const other: { value: string } = box;`,
-        }, { collectTiming: true });
+            },
+            { collectTiming: true },
+        );
         const snapshot = await api.createSnapshot({
             createPrograms: [{ rootFiles: ["/src/main.ts"], compilerOptions: { noLib: true } }],
         });
@@ -3104,9 +3306,7 @@ export const other: { value: string } = box;`,
         const references = await program.getProjectReferences();
         assert.equal(references?.length, 4);
 
-        await using synthetic = await api.createProgram([], { noLib: true }, {
-            projectReferences: [{ path: "/a/tsconfig.json" }, { path: "/missing/tsconfig.json" }],
-        });
+        await using synthetic = await api.createProgram([], { noLib: true }, { projectReferences: [{ path: "/a/tsconfig.json" }, { path: "/missing/tsconfig.json" }] });
         assert.equal((await synthetic.getProjectReferences())!.length, 2);
     });
 
@@ -4655,10 +4855,7 @@ export const value = 1;
 
     test("snapshot-owned symbols resolve cached file-owned parents", async () => {
         const source = `interface Box<T> { value: T; }\ndeclare const box: Box<string>;\nbox;`;
-        await using api = spawnAPI({
-            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true }, files: ["/src/box.ts"] }),
-            "/src/box.ts": source,
-        }, { collectTiming: true });
+        await using api = spawnAPI({ "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true }, files: ["/src/box.ts"] }), "/src/box.ts": source }, { collectTiming: true });
         const snapshot = await api.createSnapshot({ openProjects: ["/tsconfig.json"] });
         const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const box = await project.checker.getSymbolAtPosition("/src/box.ts", source.indexOf("Box"));
@@ -7413,6 +7610,32 @@ notCallable();
 });
 
 describe("Symbol - escaped names and tables", { concurrency }, () => {
+    test("private member display names do not expose unique symbol table keys", async () => {
+        await using api = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/src/main.ts": "export class A { #value = 1; #method() {} } export class B { #value = 2; }",
+        });
+        const snapshot = await api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const project = snapshot.getConfiguredProject("/tsconfig.json")!;
+        const source = await project.program.getSourceFile("/src/main.ts");
+        assert.ok(source);
+        const symbols = [];
+        for (const declaration of source.statements.filter(isClassDeclaration)) {
+            for (const member of declaration.members) {
+                if (!(isPropertyDeclaration(member) || isMethodDeclaration(member)) || !isPrivateIdentifier(member.name)) continue;
+                const symbol = await project.checker.getSymbolAtLocation(member.name);
+                assert.ok(symbol);
+                assert.strictEqual(symbolName(symbol), member.name.text);
+                assert.strictEqual(symbol.name, member.name.text);
+                assert.notStrictEqual(symbol.escapedName, symbol.name);
+                symbols.push(symbol);
+            }
+        }
+        assert.strictEqual(symbols.length, 3);
+        assert.notStrictEqual(symbols[0].escapedName, symbols[2].escapedName);
+        assert.strictEqual(symbols[0].name, symbols[2].name);
+    });
+
     test("getExports/getMembers return a cached Map keyed by escaped name", async () => {
         await using api = spawnAPI({
             "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
@@ -7508,6 +7731,23 @@ export { x as '${maliciousName}' };
         assert.equal(maliciousExport.name, maliciousName);
         assert.equal(maliciousExport.escapedName, maliciousName);
         assert.equal(tryGetAmbientModuleNameFromSymbolName(maliciousExport.escapedName), undefined);
+    });
+});
+
+describe("ast - symbolName", { concurrency }, () => {
+    test("decodes private keys without changing escaped user names or internal names", () => {
+        for (
+            const [escapedName, expected] of [
+                ["__#1@#value", "#value"],
+                ["__#42@#method", "#method"],
+                [escapeLeadingUnderscores("__#1@#value"), "__#1@#value"],
+                [escapeLeadingUnderscores("__value"), "__value"],
+                [InternalSymbolName.Type, "__type"],
+                ["value", "value"],
+            ]
+        ) {
+            assert.strictEqual(symbolName({ escapedName: escapedName as __String }), expected);
+        }
     });
 });
 
@@ -9574,6 +9814,59 @@ export const obj = { m: 1, s: "hi", b: true };
         );
     });
 
+    test("printNode with emitContext comment emit flags only suppress source comments", async () => {
+        await using api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": `/* source leading */ leading;\ntrailing; /* source trailing */\n`,
+        });
+        const snapshot = await api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const sourceFile = await snapshot.getConfiguredProject("/tsconfig.json")!.program.getSourceFile("/src/main.ts");
+        assert.ok(sourceFile);
+        const [leading, trailing] = sourceFile.statements;
+
+        // Source comments are only emitted when printing the whole source file, so print that
+        // and attach the emit context state to the statement of interest.
+        const print = async (statement: typeof leading, flags: EmitFlags, side: "leading" | "trailing") => {
+            const emitContext = api.printer.createEmitContext();
+            emitContext.setEmitFlags(statement, flags);
+            if (side === "leading") {
+                emitContext.addSyntheticLeadingComment(statement, SyntaxKind.MultiLineCommentTrivia, " synthesized ", /*hasTrailingNewLine*/ false, /*hasLeadingNewLine*/ false);
+            }
+            else {
+                emitContext.addSyntheticTrailingComment(statement, SyntaxKind.MultiLineCommentTrivia, " synthesized ", /*hasTrailingNewLine*/ false, /*hasLeadingNewLine*/ false);
+            }
+            return (await api.printer.printNode(sourceFile, { emitContext })).trimEnd();
+        };
+
+        assert.strictEqual(await print(leading, EmitFlags.None, "leading"), "/* source leading */ /* synthesized */ leading;\ntrailing; /* source trailing */");
+        assert.strictEqual(await print(leading, EmitFlags.NoLeadingComments, "leading"), "/* synthesized */ leading;\ntrailing; /* source trailing */");
+        assert.strictEqual(await print(leading, EmitFlags.NoComments, "leading"), "/* synthesized */ leading;\ntrailing; /* source trailing */");
+
+        assert.strictEqual(await print(trailing, EmitFlags.None, "trailing"), "/* source leading */ leading;\ntrailing; /* synthesized */ /* source trailing */");
+        assert.strictEqual(await print(trailing, EmitFlags.NoTrailingComments, "trailing"), "/* source leading */ leading;\ntrailing; /* synthesized */");
+        assert.strictEqual(await print(trailing, EmitFlags.NoComments, "trailing"), "/* source leading */ leading;\ntrailing; /* synthesized */");
+    });
+
+    test("printNode parenthesizes an operand whose synthesized leading comment introduces a newline even with NoLeadingComments", async () => {
+        await using api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": `function f() {\n    /* source */ return a.b;\n}\n`,
+        });
+        const snapshot = await api.createSnapshot({ openProjects: ["/tsconfig.json"] });
+        const sourceFile = await snapshot.getConfiguredProject("/tsconfig.json")!.program.getSourceFile("/src/main.ts");
+        assert.ok(sourceFile);
+        // `return` cannot be followed by a line break, so an operand whose leading comment
+        // starts a new line has to be parenthesized.
+        const declaration = sourceFile.statements[0] as import("@typescript/typescript/ast").FunctionDeclaration;
+        const returnStatement = declaration.body!.statements[0] as import("@typescript/typescript/ast").ReturnStatement;
+        const operand = (returnStatement.expression as import("@typescript/typescript/ast").PropertyAccessExpression).expression;
+
+        const emitContext = api.printer.createEmitContext();
+        emitContext.setEmitFlags(operand, EmitFlags.NoLeadingComments);
+        emitContext.addSyntheticLeadingComment(operand, SyntaxKind.SingleLineCommentTrivia, " synthesized", /*hasTrailingNewLine*/ true, /*hasLeadingNewLine*/ false);
+        assert.strictEqual((await api.printer.printNode(sourceFile, { emitContext })).trimEnd(), "function f() {\n    /* source */ return (\n    // synthesized\n    a).b;\n}");
+    });
+
     test("printNode honors newline flags on synthetic trailing comments", async () => {
         await using api = spawnAPI(emitterFiles);
 
@@ -9714,12 +10007,7 @@ describe("Program - selected file emit", { concurrency }, () => {
         const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const result = await project.program.getJavaScriptEmit(["/src/a.ts", "/src/b.ts"]);
         assert.equal(result.emitSkipped, false);
-        assert.deepEqual([...result.outputFiles.keys()], [
-            "/src/a.js",
-            "/src/a.js.map",
-            "/src/b.js",
-            "/src/b.js.map",
-        ]);
+        assert.deepEqual([...result.outputFiles.keys()], ["/src/a.js", "/src/a.js.map", "/src/b.js", "/src/b.js.map"]);
         const outputFileName = toRootedFilePath("/src/a.js", /*currentDirectory*/ undefined);
         assert.equal(result.outputFiles.get(outputFileName)?.sourceFileName, "/src/a.ts");
         assert.match(result.outputFiles.get(outputFileName)!.text, /export const a = 1/);
@@ -9734,12 +10022,7 @@ describe("Program - selected file emit", { concurrency }, () => {
         const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const result = await project.program.getDeclarationEmit(["/src/a.ts", "/src/b.ts"]);
         assert.equal(result.emitSkipped, false);
-        assert.deepEqual([...result.outputFiles.keys()], [
-            "/src/a.d.ts",
-            "/src/a.d.ts.map",
-            "/src/b.d.ts",
-            "/src/b.d.ts.map",
-        ]);
+        assert.deepEqual([...result.outputFiles.keys()], ["/src/a.d.ts", "/src/a.d.ts.map", "/src/b.d.ts", "/src/b.d.ts.map"]);
         assert.equal(result.outputFiles.get(toRootedFilePath("/src/a.d.ts", /*currentDirectory*/ undefined))?.sourceFileName, "/src/a.ts");
         assert.equal(fs.readFile(toRootedFilePath("/src/a.d.ts", /*currentDirectory*/ undefined)), serverFS.useOS);
     });
@@ -10744,10 +11027,7 @@ describe("Program - emit", { concurrency }, () => {
         const snapshot = await api.createSnapshot({ openProjects: ["/tsconfig.json"] });
         const project = snapshot.getConfiguredProject("/tsconfig.json")!;
         const result = await project.program.emitToString(EmitOnly.OnlyDts);
-        assert.deepEqual([...result.outputFiles.keys()], [
-            "/dist/src/index.d.ts",
-            "/dist/src/testing.d.ts",
-        ]);
+        assert.deepEqual([...result.outputFiles.keys()], ["/dist/src/index.d.ts", "/dist/src/testing.d.ts"]);
         assert.equal(fs.readFile(toRootedFilePath("/dist/src/index.js", /*currentDirectory*/ undefined)), serverFS.useOS);
     });
 
@@ -10782,16 +11062,10 @@ describe("Program - emit", { concurrency }, () => {
         assert.ok(fs.fileExists?.(toRootedFilePath("/dist/src/index.d.ts.map", /*currentDirectory*/ undefined)));
 
         const js = await project.program.emitToString(EmitOnly.OnlyJs);
-        assert.deepEqual([...js.outputFiles.keys()], [
-            "/dist/src/index.js",
-            "/dist/src/index.js.map",
-        ]);
+        assert.deepEqual([...js.outputFiles.keys()], ["/dist/src/index.js", "/dist/src/index.js.map"]);
 
         const dts = await project.program.emitToString(EmitOnly.OnlyDts);
-        assert.deepEqual([...dts.outputFiles.keys()], [
-            "/dist/src/index.d.ts",
-            "/dist/src/index.d.ts.map",
-        ]);
+        assert.deepEqual([...dts.outputFiles.keys()], ["/dist/src/index.d.ts", "/dist/src/index.d.ts.map"]);
     });
 
     test("noEmitOnError reports diagnostics without writing output", async () => {

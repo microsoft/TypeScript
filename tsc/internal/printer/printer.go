@@ -3065,8 +3065,7 @@ func (p *Printer) syntheticLeadingCommentWillEmitNewLine(comment SynthesizedComm
 }
 
 func (p *Printer) hasSyntheticLeadingCommentIntroducingNewLine(node *ast.Expression) bool {
-	return p.emitContext.EmitFlags(node)&EFNoLeadingComments == 0 &&
-		slices.ContainsFunc(p.emitContext.GetSyntheticLeadingComments(node), p.syntheticLeadingCommentWillEmitNewLine)
+	return slices.ContainsFunc(p.emitContext.GetSyntheticLeadingComments(node), p.syntheticLeadingCommentWillEmitNewLine)
 }
 
 func (p *Printer) willEmitLeadingNewLine(node *ast.Expression) bool {
@@ -5479,9 +5478,6 @@ func (p *Printer) emitTrailingCommentsOfNode(node *ast.Node, emitFlags EmitFlags
 }
 
 func (p *Printer) emitLeadingSyntheticCommentsOfNode(node *ast.Node, emitFlags EmitFlags) {
-	if emitFlags&EFNoLeadingComments != 0 {
-		return
-	}
 	synth := p.emitContext.GetSyntheticLeadingComments(node)
 	for _, c := range synth {
 		p.emitLeadingSynthesizedComment(c)
@@ -5501,9 +5497,6 @@ func (p *Printer) emitLeadingSynthesizedComment(comment SynthesizedComment) {
 }
 
 func (p *Printer) emitTrailingSyntheticCommentsOfNode(node *ast.Node, emitFlags EmitFlags) {
-	if emitFlags&EFNoTrailingComments != 0 {
-		return
-	}
 	synth := p.emitContext.GetSyntheticTrailingComments(node)
 	for _, c := range synth {
 		p.emitTrailingSynthesizedComment(c)

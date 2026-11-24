@@ -62,10 +62,10 @@ import {
     type RootedFilePath,
     type SourceFile,
     type StringLiteralLikeNode,
+    symbolName,
     type SyntaxKind,
     type TypeNode,
     type TypeParameterDeclaration,
-    unescapeLeadingUnderscores,
 } from "../../ast/index.ts";
 import { assertNever } from "../../internal/utils.ts";
 import {
@@ -119,6 +119,7 @@ import type {
     DocumentPosition,
     EmitOutputResponse as ProtocolEmitOutputResponse,
     FileNotifications,
+    FormatCodeSettings,
     ImportAdderAction,
     InferredProjectId,
     IntrinsicTypeMethod,
@@ -140,6 +141,7 @@ import type {
     ResolvedModule,
     ResolvedTypeReferenceDirective,
     ResolveModuleNameResult,
+    ResolveTypeReferenceDirectiveResult,
     SignaturePropertyMethod,
     SignatureResponse,
     SourceFileDescriptor,
@@ -250,6 +252,7 @@ export type {
     EmitOutputFile,
     EmitResult,
     FileNotifications,
+    FormatCodeSettings,
     FormatDiagnosticsHost,
     FreshableType,
     GenericType,
@@ -283,6 +286,7 @@ export type {
     ResolvedModule,
     ResolvedTypeReferenceDirective,
     ResolveModuleNameResult,
+    ResolveTypeReferenceDirectiveResult,
     SourceFileMetadata,
     StaticModuleResolution,
     StringLiteralType,
@@ -644,6 +648,76 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                 });
                 owner.activeBuildOrchestrators.add(orchestrator);
                 return orchestrator;
+            },
+        );
+    }
+
+    /** Gets the compiler's default formatting settings, independent of snapshot preferences. */
+    get getDefaultFormatCodeSettings(): {
+        (): FormatCodeSettings;
+        gen(): Generator<ProtocolRequest, FormatCodeSettings, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getDefaultFormatCodeSettings",
+            function (): FormatCodeSettings {
+                owner.ensureInitialized();
+                // eslint-disable-next-line no-restricted-syntax -- The getDefaultFormatCodeSettings request requires null parameters.
+                return owner.client.apiRequest("getDefaultFormatCodeSettings", /*params*/ null);
+            },
+            function* (): Generator<ProtocolRequest, FormatCodeSettings, ProtocolResponse["result"]> {
+                yield* owner.ensureInitialized.gen();
+                // eslint-disable-next-line no-restricted-syntax -- The getDefaultFormatCodeSettings request requires null parameters.
+                return yield* apiRequest("getDefaultFormatCodeSettings", null);
+            },
+        );
+    }
+
+    /** Returns configured type roots or ancestor node_modules/@types candidates, without checking directory existence. */
+    get getEffectiveTypeRoots(): {
+        (compilerOptions: RawCompilerOptions): readonly RootedDirectoryPath[];
+        gen(compilerOptions: RawCompilerOptions): Generator<ProtocolRequest, readonly RootedDirectoryPath[], ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getEffectiveTypeRoots",
+            function (compilerOptions: RawCompilerOptions): readonly RootedDirectoryPath[] {
+                owner.ensureInitialized();
+                return owner.client.apiRequest("getEffectiveTypeRoots", {
+                    compilerOptions: prepareCompilerOptions(compilerOptions, owner.getCurrentDirectory()),
+                });
+            },
+            function* (compilerOptions: RawCompilerOptions): Generator<ProtocolRequest, readonly RootedDirectoryPath[], ProtocolResponse["result"]> {
+                yield* owner.ensureInitialized.gen();
+                return yield* apiRequest("getEffectiveTypeRoots", {
+                    compilerOptions: prepareCompilerOptions(compilerOptions, owner.getCurrentDirectory()),
+                });
+            },
+        );
+    }
+
+    /** Returns the native build-info output path, or undefined when the options do not produce one. */
+    get getTsBuildInfoEmitOutputFilePath(): {
+        (compilerOptions: RawCompilerOptions): RootedFilePath | undefined;
+        gen(compilerOptions: RawCompilerOptions): Generator<ProtocolRequest, RootedFilePath | undefined, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "getTsBuildInfoEmitOutputFilePath",
+            function (compilerOptions: RawCompilerOptions): RootedFilePath | undefined {
+                owner.ensureInitialized();
+                return (owner.client.apiRequest("getTsBuildInfoEmitOutputFilePath", {
+                    compilerOptions: prepareCompilerOptions(compilerOptions, owner.getCurrentDirectory()),
+                })) ?? undefined;
+            },
+            function* (compilerOptions: RawCompilerOptions): Generator<ProtocolRequest, RootedFilePath | undefined, ProtocolResponse["result"]> {
+                yield* owner.ensureInitialized.gen();
+                return (yield* apiRequest("getTsBuildInfoEmitOutputFilePath", {
+                    compilerOptions: prepareCompilerOptions(compilerOptions, owner.getCurrentDirectory()),
+                })) ?? undefined;
             },
         );
     }
@@ -1974,6 +2048,46 @@ export class ModuleResolver {
                     resolver: owner.id,
                     moduleName,
                     containingDirectory,
+                    resolutionMode,
+                });
+            },
+        );
+    }
+
+    /** Resolves a type directive using this resolver's options and the selected snapshot or live filesystem. */
+    get resolveTypeReferenceDirective(): {
+        (typeReferenceDirectiveName: string, containingFile: DocumentIdentifier, resolutionMode?: ResolutionMode, options?: { snapshot?: Snapshot | InProgressSnapshot | undefined; }): ResolveTypeReferenceDirectiveResult;
+        gen(typeReferenceDirectiveName: string, containingFile: DocumentIdentifier, resolutionMode?: ResolutionMode, options?: { snapshot?: Snapshot | InProgressSnapshot | undefined; }): Generator<ProtocolRequest, ResolveTypeReferenceDirectiveResult, ProtocolResponse["result"]>;
+    } {
+        const owner = this;
+        return cacheGeneratorMethod(
+            owner,
+            "resolveTypeReferenceDirective",
+            function (typeReferenceDirectiveName: string, containingFile: DocumentIdentifier, resolutionMode?: ResolutionMode, options?: { snapshot?: Snapshot | InProgressSnapshot | undefined; }): ResolveTypeReferenceDirectiveResult {
+                owner.ensureNotDisposed();
+                if (options?.snapshot instanceof Snapshot && options.snapshot.isDisposed()) {
+                    throw new Error("Snapshot is disposed");
+                }
+                return owner.client.apiRequest("resolveTypeReferenceDirective", {
+                    snapshot: options?.snapshot instanceof Snapshot ? options.snapshot.id : undefined,
+                    inProgressSnapshot: typeof options?.snapshot === "number" ? -options.snapshot : undefined,
+                    resolver: owner.id,
+                    typeReferenceDirectiveName,
+                    containingFile,
+                    resolutionMode,
+                });
+            },
+            function* (typeReferenceDirectiveName: string, containingFile: DocumentIdentifier, resolutionMode?: ResolutionMode, options?: { snapshot?: Snapshot | InProgressSnapshot | undefined; }): Generator<ProtocolRequest, ResolveTypeReferenceDirectiveResult, ProtocolResponse["result"]> {
+                owner.ensureNotDisposed();
+                if (options?.snapshot instanceof Snapshot && options.snapshot.isDisposed()) {
+                    throw new Error("Snapshot is disposed");
+                }
+                return yield* apiRequest("resolveTypeReferenceDirective", {
+                    snapshot: options?.snapshot instanceof Snapshot ? options.snapshot.id : undefined,
+                    inProgressSnapshot: typeof options?.snapshot === "number" ? -options.snapshot : undefined,
+                    resolver: owner.id,
+                    typeReferenceDirectiveName,
+                    containingFile,
                     resolutionMode,
                 });
             },
@@ -7564,7 +7678,7 @@ export class Symbol {
     }
     /** The escaped (`__String`) name, used as the key in member/export tables. */
     readonly escapedName: __String;
-    /** The display name (escaped underscores removed). */
+    /** The display name, including the source spelling of private identifiers. */
     readonly name: string;
     readonly flags: SymbolFlags;
     readonly checkFlags: CheckFlags;
@@ -7586,7 +7700,7 @@ export class Symbol {
         this.reference = data.reference;
 
         this.escapedName = data.name as __String;
-        this.name = unescapeLeadingUnderscores(data.name as __String);
+        this.name = symbolName(this);
         this.flags = data.flags;
         this.checkFlags = data.checkFlags ?? 0;
         this.declarationHandles = data.declarations;
