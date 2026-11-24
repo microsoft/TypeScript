@@ -3,6 +3,7 @@ package ls
 import (
 	"context"
 	"slices"
+	"strings"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/checker"
@@ -13,6 +14,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/modulespecifiers"
+	"github.com/microsoft/TypeScript/tsc/internal/printer"
 	"github.com/microsoft/TypeScript/tsc/internal/scanner"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
@@ -196,7 +198,8 @@ func tryUpdateConfigString(configFile *ast.SourceFile, configDir tspath.RootedDi
 	textRange := core.NewTextRange(scanner.GetTokenPosOfNode(element, configFile, false)+1, element.End()-1)
 	lspRange, fidelity := converters.ToLSPRange(configFile, textRange)
 	debug.Assert(fidelity.IsExact(), "config files are not content-mapped")
-	changeTracker.ReplaceRangeWithText(configFile, lspRange, relativePathFromDirectory(configDir, updated, caseSensitivity).AsString())
+	newText := printer.EscapeString(relativePathFromDirectory(configDir, updated, caseSensitivity).AsString(), getStringLiteralQuoteChar(configFile, element))
+	changeTracker.ReplaceRangeWithText(configFile, lspRange, newText)
 	return true
 }
 
@@ -235,7 +238,7 @@ func (l *LanguageService) updateImportsForFileRename(program *compiler.Program, 
 				continue
 			}
 			updated := l.updateRelativePath(oldToNew, oldFileName, newImportFromPath, tspath.ToModuleSpecifier(ref.FileName))
-			if updated.AsString() != ref.FileName {
+			if updated.AsString() != ref.FileName && canWriteReferencePath(sourceFile, ref, updated.AsString()) {
 				changeTracker.ReplaceTextRangeWithText(sourceFile, ref.TextRange, updated.AsString())
 			}
 		}
@@ -243,7 +246,7 @@ func (l *LanguageService) updateImportsForFileRename(program *compiler.Program, 
 		for _, importStringLiteral := range sourceFile.Imports() {
 			updated := l.getUpdatedImportSpecifier(program, checker, sourceFile, importStringLiteral, oldToNew, movedFiles, newImportFromPath, fileMoved, moduleSpecifierPreferences)
 			if updated != "" && updated != importStringLiteral.Text() {
-				changeTracker.ReplaceTextRangeWithText(sourceFile, createStringTextRange(sourceFile, importStringLiteral), updated)
+				changeTracker.ReplaceTextRangeWithText(sourceFile, createStringTextRange(sourceFile, importStringLiteral), printer.EscapeString(updated, getStringLiteralQuoteChar(sourceFile, importStringLiteral)))
 			}
 		}
 	}
@@ -356,6 +359,24 @@ func getUpdatedImportSpecifierFromMovedSourceFiles(program *compiler.Program, so
 
 func createStringTextRange(sourceFile *ast.SourceFile, node *ast.LiteralLikeNode) core.TextRange {
 	return core.NewTextRange(scanner.GetTokenPosOfNode(node, sourceFile, false)+1, node.End()-1)
+}
+
+func getStringLiteralQuoteChar(sourceFile *ast.SourceFile, node *ast.LiteralLikeNode) printer.QuoteChar {
+	switch sourceFile.Text()[scanner.GetTokenPosOfNode(node, sourceFile, false)] {
+	case '\'':
+		return printer.QuoteCharSingleQuote
+	case '`':
+		return printer.QuoteCharBacktick
+	default:
+		return printer.QuoteCharDoubleQuote
+	}
+}
+
+// Reference directive paths have no escape syntax, so a path containing the
+// directive's quote or a line terminator cannot be written into the comment.
+func canWriteReferencePath(sourceFile *ast.SourceFile, ref *ast.FileReference, path string) bool {
+	quote := sourceFile.Text()[ref.Pos()-1]
+	return !strings.ContainsAny(path, string(quote)+"\r\n\u2028\u2029")
 }
 
 func getTsConfigObjectLiteralExpression(tsConfigSourceFile *ast.SourceFile) *ast.ObjectLiteralExpression {

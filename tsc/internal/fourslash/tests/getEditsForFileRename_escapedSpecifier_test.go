@@ -21,10 +21,10 @@ func TestGetEditsForFileRename_escapedSpecifier(t *testing.T) {
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
 	f.VerifyWillRenameFilesEdits(t, "/libraries/old", "/libraries/new", map[string]string{
-		"/application/app.ts": "import { X } from '../libraries/new/a';process.exit(7);'\"`${b}';\n" +
-			"import { X as Y } from \"../libraries/new/a';process.exit(7);'\"`${b}\";\n" +
-			"const Z = import(`../libraries/new/a';process.exit(7);'\"`${b}`);\n",
-		"/tsconfig.json": "{ \"files\": [\"application/app.ts\", \"libraries/new/a';process.exit(7);'\"`${b}.d.ts\"] }",
+		"/application/app.ts": "import { X } from '../libraries/new/a\\';process.exit(7);\\'\"`${b}';\n" +
+			"import { X as Y } from \"../libraries/new/a';process.exit(7);'\\\"`${b}\";\n" +
+			"const Z = import(`../libraries/new/a';process.exit(7);'\"\\`\\${b}`);\n",
+		"/tsconfig.json": "{ \"files\": [\"application/app.ts\", \"libraries/new/a';process.exit(7);'\\\"`${b}.d.ts\"] }",
 	}, nil /*preferences*/)
 }
 
@@ -44,11 +44,11 @@ export default 0;`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
 	f.VerifyWillRenameFilesEdits(t, "/old", "/n'e\"w", map[string]string{
-		"/a.ts": `/// <reference path="./n'e"w/b.ts" />
-/// <reference path='./n'e"w/b.ts' />
-import b1 from "./n'e"w/b";
-import b2 from './n'e"w/b';
+		"/a.ts": `/// <reference path="./old/b.ts" />
+/// <reference path='./old/b.ts' />
+import b1 from "./n'e\"w/b";
+import b2 from './n\'e"w/b';
 export default 0;`,
-		"/tsconfig.json": `{ "files": ["a.ts", "n'e"w/b.ts"] }`,
+		"/tsconfig.json": `{ "files": ["a.ts", "n'e\"w/b.ts"] }`,
 	}, nil /*preferences*/)
 }
