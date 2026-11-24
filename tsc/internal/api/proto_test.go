@@ -72,6 +72,17 @@ func TestDocumentIdentifierUnmarshalJSON(t *testing.T) {
 			resolved: "/workspace/file name.ts",
 		},
 		{
+			name:     "escaped opaque file uri",
+			input:    `{"uri":"file:workspace/file%20name.ts"}`,
+			uri:      "file:///workspace/file%20name.ts",
+			resolved: "/workspace/file name.ts",
+		},
+		{
+			name:  "invalid opaque file uri escape",
+			input: `{"uri":"file:workspace/file%xx.ts"}`,
+			err:   "invalid URI",
+		},
+		{
 			name:     "file uri with authority",
 			input:    `{"uri":"file://server/share/index.ts"}`,
 			uri:      "file://server/share/index.ts",
