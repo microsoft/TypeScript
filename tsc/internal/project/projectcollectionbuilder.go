@@ -1100,6 +1100,33 @@ func (b *ProjectCollectionBuilder) findOrCreateDefaultConfiguredProjectWorker(
 		visited = &collections.SyncSet[searchNodeKey]{}
 	}
 
+	configMayContainFile := func(config *tsoptions.ParsedCommandLine, logger *logging.LogTree) bool {
+		if len(config.FileNames()) == 0 {
+			// A solution config can still lead to a match through its references.
+			logger.Log("Project does not contain file (no root files)")
+			return false
+		}
+		// !!! what about declaration files in node_modules? wouldn't it be better to
+		//     check project inclusion if the project is already loaded?
+		if config.CompilerOptions().Composite.IsTrue() && !config.FilePaths().Has(path) {
+			logger.Log("Project does not contain file (by composite config inclusion)")
+			return false
+		}
+		return true
+	}
+
+	fileInclusion := func(project *Project, logger *logging.LogTree) (included, direct bool) {
+		if !project.containsFile(path) {
+			logger.Log("Project does not contain file")
+			return false, false
+		}
+		direct = !project.IsSourceFromProjectReference(path)
+		if logger != nil {
+			logger.Logf("Project contains file %s", core.IfElse(direct, "directly", "as a source of a referenced project"))
+		}
+		return true, direct
+	}
+
 	search := core.BreadthFirstSearchParallelEx(
 		searchNode{configFileName: configFileName, loadKind: loadKind, logger: logger},
 		func(node searchNode) []searchNode {
@@ -1128,20 +1155,8 @@ func (b *ProjectCollectionBuilder) findOrCreateDefaultConfiguredProjectWorker(
 				return false, false
 			}
 			configs.Store(configFilePath, config)
-			if len(config.FileNames()) == 0 {
-				// Likely a solution tsconfig.json - the search will fan out to its references.
-				node.logger.Log("Project does not contain file (no root files)")
+			if !configMayContainFile(config, node.logger) {
 				return false, false
-			}
-
-			if config.CompilerOptions().Composite == core.TSTrue {
-				// For composite projects, we can get an early negative result.
-				// !!! what about declaration files in node_modules? wouldn't it be better to
-				//     check project inclusion if the project is already loaded?
-				if !config.FilePaths().Has(path) {
-					node.logger.Log("Project does not contain file (by composite config inclusion)")
-					return false, false
-				}
 			}
 
 			project := b.findOrCreateProject(node.configFileName, configFilePath, node.loadKind, node.logger)
@@ -1155,33 +1170,23 @@ func (b *ProjectCollectionBuilder) findOrCreateDefaultConfiguredProjectWorker(
 				b.updateProgram(project, node.logger)
 			}
 
-			if project.Value().containsFile(path) {
-				isDirectInclusion := !project.Value().IsSourceFromProjectReference(path)
-				if node.logger != nil {
-					node.logger.Logf("Project contains file %s", core.IfElse(isDirectInclusion, "directly", "as a source of a referenced project"))
-				}
-				return true, isDirectInclusion
-			}
-
-			node.logger.Log("Project does not contain file")
-			return false, false
+			return fileInclusion(project.Value(), node.logger)
 		},
 		core.BreadthFirstSearchOptions[searchNodeKey, searchNode]{
 			Visited: visited,
 			PreprocessLevel: func(level *core.BreadthFirstSearchLevel[searchNodeKey, searchNode]) {
-				level.Range(func(node searchNode) bool {
+				level.Range(func(key searchNodeKey, node searchNode) bool {
 					if node.loadKind == projectLoadKindFind && level.Has(searchNodeKey{configFileName: node.configFileName, loadKind: projectLoadKindCreate}) {
 						// Remove find requests when a create request for the same project is already present.
-						level.Delete(searchNodeKey{configFileName: node.configFileName, loadKind: node.loadKind})
+						level.Delete(key)
 					}
 					return true
 				})
-				// Skip later candidates once a clean loaded project contains the file.
-				// Keep earlier candidates in parallel to preserve reference order.
+				// A clean project that directly contains the file can rule out later candidates.
+				// Earlier candidates still take precedence and can be checked in parallel.
 				foundMatch := false
 				var trailingKeys []searchNodeKey
-				level.Range(func(node searchNode) bool {
-					key := searchNodeKey{configFileName: node.configFileName, loadKind: node.loadKind}
+				level.Range(func(key searchNodeKey, node searchNode) bool {
 					if foundMatch {
 						trailingKeys = append(trailingKeys, key)
 						return true
@@ -1200,13 +1205,13 @@ func (b *ProjectCollectionBuilder) findOrCreateDefaultConfiguredProjectWorker(
 					}
 					config := configEntry.Value().commandLine
 					project := projectEntry.Value()
-					if config == nil || project.CommandLine != config || len(config.FileNames()) == 0 {
+					if config == nil || project.CommandLine != config {
 						return true
 					}
-					if config.CompilerOptions().Composite.IsTrue() && !config.FilePaths().Has(path) {
+					if !configMayContainFile(config, nil) {
 						return true
 					}
-					foundMatch = project.containsFile(path) && !project.IsSourceFromProjectReference(path)
+					_, foundMatch = fileInclusion(project, nil)
 					return true
 				})
 				// Delete after traversal so entries are not skipped.
