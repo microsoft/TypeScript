@@ -58,7 +58,7 @@ class TestWasmTransport extends WasmTransport {
 }
 
 /** The disk a native server process would use for `serverFS.useOS`. */
-const diskFileSystem: { [K in keyof FileSystemCallbacks]: Extract<FileSystemCallbacks[K], Function>; } = {
+const diskFileSystem: { [K in keyof FileSystemCallbacks]: Extract<FileSystemCallbacks[K], (...args: never[]) => unknown>; } = {
     directoryExists: path => statSync(path, { throwIfNoEntry: false })?.isDirectory() ?? false,
     fileExists: path => statSync(path, { throwIfNoEntry: false })?.isFile() ?? false,
     getAccessibleEntries: path => {
@@ -149,8 +149,8 @@ function createWasmAPIOptions(options: WasmAPIOptions): WasmAPIOptions {
     };
 }
 
-export function withWasm<T extends typeof AsyncAPI | typeof SyncAPI>(API: T): T {
-    return new Proxy(API, {
+export function withWasm<T extends typeof AsyncAPI | typeof SyncAPI>(apiClass: T): T {
+    return new Proxy(apiClass, {
         construct(target, args) {
             return Reflect.construct(target, [createWasmAPIOptions(args[0] ?? {})]);
         },

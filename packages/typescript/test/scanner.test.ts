@@ -13,16 +13,16 @@ test("identifierToKeywordKind recognizes reserved, contextual, and type keywords
     assert.strictEqual(identifierToKeywordKind(createIdentifier("constructor")), SyntaxKind.ConstructorKeyword);
     assert.strictEqual(identifierToKeywordKind(createIdentifier("string")), SyntaxKind.StringKeyword);
     for (const text of ["ordinary", "immediate", "Class", "__type", "toString", "__proto__", "{"]) {
-        assert.strictEqual(identifierToKeywordKind(createIdentifier(text)), undefined);
+        assert.strictEqual(identifierToKeywordKind(createIdentifier(text)), /*expected*/ undefined);
     }
-    const scanner = createScanner(true);
+    const scanner = createScanner(/*skipTrivia*/ true);
     scanner.setText("\\u0074ype");
     scanner.scan();
     assert.strictEqual(identifierToKeywordKind(createIdentifier(scanner.getTokenValue())), SyntaxKind.TypeKeyword);
 });
 
 test("the scanner recognizes immediate as an identifier", () => {
-    const scanner = createScanner(true);
+    const scanner = createScanner(/*skipTrivia*/ true);
     scanner.setText("immediate value");
     assert.strictEqual(scanner.scan(), SyntaxKind.Identifier);
     assert.strictEqual(scanner.getTokenValue(), "immediate");

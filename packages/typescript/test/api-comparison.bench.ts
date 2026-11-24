@@ -69,7 +69,8 @@ export async function runBenchmarks(options?: { filter?: string; singleIteration
 
     await bench.run();
     for (const task of bench.tasks) {
-        if (task.result && "error" in task.result) throw task.result.error;
+        const error = (task.result as { error?: unknown; } | undefined)?.error;
+        if (error) throw error;
     }
     console.table(bench.table());
 
@@ -158,17 +159,17 @@ export async function runBenchmarks(options?: { filter?: string; singleIteration
     function addExecutorBenchmarks() {
         for (const rounds of [1, flightCount]) {
             for (const depth of [0, 1, 4, 16]) {
-                bench.add(`executor only - ${rounds} flights (${depth ? `all depth ${depth}` : "direct batch"})`, () => run(false), {
+                bench.add(`executor only - ${rounds} flights (${depth ? `all depth ${depth}` : "direct batch"})`, () => run(/*verify*/ false), {
                     async: false,
                     beforeAll: () => {
-                        run(true);
+                        run(/*verify*/ true);
                     },
                 });
                 if (depth && rounds > 1) {
-                    bench.add(`executor only - ${rounds} flights (repeated all depth ${depth})`, () => run(false, true), {
+                    bench.add(`executor only - ${rounds} flights (repeated all depth ${depth})`, () => run(/*verify*/ false, /*repeatedJoins*/ true), {
                         async: false,
                         beforeAll: () => {
-                            run(true, true);
+                            run(/*verify*/ true, /*repeatedJoins*/ true);
                         },
                     });
                 }
@@ -213,6 +214,7 @@ export async function runBenchmarks(options?: { filter?: string; singleIteration
     }
 
     function addDeferBenchmarks() {
+        // eslint-disable-next-line require-yield -- This child must never start.
         const child = (function* () {
             assert.fail("Lifecycle benchmark must not start the child");
         })();
@@ -235,10 +237,10 @@ export async function runBenchmarks(options?: { filter?: string; singleIteration
 
         for (const rounds of [1, flightCount]) {
             for (const mode of ["direct", "batch defer", "yield* defer"] as const) {
-                bench.add(`executor defer - ${rounds} flights (${mode})`, () => run(false), {
+                bench.add(`executor defer - ${rounds} flights (${mode})`, () => run(/*verify*/ false), {
                     async: false,
                     beforeAll: () => {
-                        run(true);
+                        run(/*verify*/ true);
                     },
                 });
 
@@ -298,10 +300,10 @@ export async function runBenchmarks(options?: { filter?: string; singleIteration
         const rounds = 100;
         const generatorsPerRound = generatorCount / rounds;
         for (const mode of ["direct", "yield* defer"] as const) {
-            bench.add(`executor long batch - ${generatorCount} generators (${mode})`, () => run(false), {
+            bench.add(`executor long batch - ${generatorCount} generators (${mode})`, () => run(/*verify*/ false), {
                 async: false,
                 beforeAll: () => {
-                    run(true);
+                    run(/*verify*/ true);
                 },
             });
 
@@ -448,7 +450,7 @@ interface AsyncContext {
 }
 
 function collectIdentifierPositions(fileName: string, count: number): number[] {
-    const sourceFile = ts.createSourceFile(fileName, readFileSync(fileName, "utf8"), ts.ScriptTarget.Latest, true);
+    const sourceFile = ts.createSourceFile(fileName, readFileSync(fileName, "utf8"), ts.ScriptTarget.Latest, /*setParentNodes*/ true);
     const positions: number[] = [];
     sourceFile.forEachChild(function visit(node) {
         if (node.kind === ts.SyntaxKind.Identifier) {
