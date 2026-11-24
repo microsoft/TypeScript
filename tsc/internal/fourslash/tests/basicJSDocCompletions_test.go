@@ -145,8 +145,8 @@ function g({ "*/": c }) {}`
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Includes: []fourslash.CompletionsExpectedItem{
-				`param {string} [a="*/"] `,
-				`param {{ "*/": number; }} [b={ "*/": 1 }] `,
+				"param {string} [a] ",
+				"param {*} [b] ",
 			},
 		},
 	})
@@ -157,7 +157,7 @@ function g({ "*/": c }) {}`
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Includes: []fourslash.CompletionsExpectedItem{
-				"param {object} param0 \n* @param {*} param0.*/ ",
+				"param {*} param0 ",
 			},
 		},
 	})

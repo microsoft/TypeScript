@@ -6348,7 +6348,9 @@ func getJSDocParamAnnotation(
 							// Target: options.Target,
 						}, printer.PrintHandlers{}, *emitContext)
 						(*emitContext).SetEmitFlags(typeNode, printer.EFSingleLine)
-						t = p.Emit(typeNode, file)
+						if typeText := p.Emit(typeNode, file); isSafeInJSDocTag(typeText) {
+							t = typeText
+						}
 					}
 				}
 			}
@@ -6377,9 +6379,15 @@ func getJSDocParamAnnotation(
 	}
 }
 
+// isSafeInJSDocTag reports whether text can be written into a single-line
+// JSDoc tag without ending the comment or breaking the line.
+func isSafeInJSDocTag(text string) bool {
+	return !strings.Contains(text, "*/") && !strings.ContainsAny(text, "\r\n\u2028\u2029")
+}
+
 func getJSDocParamNameWithInitializer(paramName string, initializer *ast.Expression) string {
 	initializerText := strings.TrimSpace(scanner.GetTextOfNode(initializer))
-	if strings.Contains(initializerText, "\n") || len(initializerText) > 80 {
+	if !isSafeInJSDocTag(initializerText) || len(initializerText) > 80 {
 		return fmt.Sprintf("[%s]", paramName)
 	}
 	return fmt.Sprintf("[%s=%s]", paramName, initializerText)
@@ -6521,7 +6529,7 @@ func jsDocParamElementWorker(
 		} else {
 			propertyName = element.Name().Text()
 		}
-		if propertyName == "" {
+		if propertyName == "" || !isSafeInJSDocTag(propertyName) {
 			return nil
 		}
 		paramName := fmt.Sprintf("%s.%s", path, propertyName)
