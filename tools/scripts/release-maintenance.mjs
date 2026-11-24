@@ -117,12 +117,6 @@ function getOperation() {
 function prepare() {
     operation.validate();
 
-    // Later steps run from a release branch checkout, so keep main's copies of the scripts.
-    const tempDir = mustGetEnv("AGENT_TEMPDIRECTORY");
-    for (const file of ["configure-release.mjs", "release-maintenance.mjs"]) {
-        fs.copyFileSync(path.join(import.meta.dirname, file), path.join(tempDir, file));
-    }
-
     run("git", "fetch", "--no-tags", "origin", "+refs/heads/*:refs/remotes/origin/*");
     run("git", "config", "user.email", botEmail);
     run("git", "config", "user.name", botName);

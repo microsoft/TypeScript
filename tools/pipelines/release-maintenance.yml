@@ -81,6 +81,10 @@ jobs:
             fetchFilter: blob:none
             fetchTags: false
 
+          # Later steps run from a release branch checkout, so keep main's copies of the scripts.
+          - bash: cp tools/scripts/configure-release.mjs tools/scripts/release-maintenance.mjs "$AGENT_TEMPDIRECTORY/"
+            displayName: Copy release scripts
+
           - task: UseNode@1
             displayName: Use Node 24.x
             inputs:
@@ -88,7 +92,7 @@ jobs:
 
           - template: /tools/pipelines/steps/setup-go.yml@self
 
-          - bash: node tools/scripts/release-maintenance.mjs prepare
+          - bash: node "$AGENT_TEMPDIRECTORY/release-maintenance.mjs" prepare
             displayName: Prepare ${{ parameters.operation }}
 
           - bash: npm ci
