@@ -26338,6 +26338,19 @@ func (c *Checker) getEnumLiteralType(value any, enumSymbol *ast.Symbol, symbol *
 	return t
 }
 
+// Look up the plain literal that contains this enum member without creating a new type.
+func (c *Checker) getMatchingNonEnumLiteral(t *Type) *Type {
+	if t.flags&TypeFlagsEnumLiteral != 0 {
+		switch {
+		case t.flags&TypeFlagsStringLiteral != 0:
+			return c.stringLiteralTypes[getStringLiteralValue(t)]
+		case t.flags&TypeFlagsNumberLiteral != 0:
+			return c.numberLiteralTypes[getNumberLiteralValue(t)]
+		}
+	}
+	return nil
+}
+
 func isLiteralType(t *Type) bool {
 	if t.flags&TypeFlagsBoolean != 0 {
 		return true
@@ -27241,6 +27254,18 @@ func (c *Checker) addTypeToIntersection(typeSet *orderedSet[*Type], includes Typ
 			}
 			if !typeSet.contains(t) {
 				if t.flags&TypeFlagsUnit != 0 && includes&TypeFlagsUnit != 0 {
+					// An enum member is a subtype of the plain literal with the same value.
+					if flags&TypeFlagsEnumLiteral != 0 {
+						if literal := c.getMatchingNonEnumLiteral(t); literal != nil && typeSet.replace(literal, t) {
+							return includes | flags&TypeFlagsIncludesMask
+						}
+					} else if flags&TypeFlagsStringOrNumberLiteral != 0 && includes&TypeFlagsEnumLiteral != 0 {
+						for _, existing := range typeSet.values {
+							if c.getMatchingNonEnumLiteral(existing) == t {
+								return includes
+							}
+						}
+					}
 					// We have seen two distinct unit types which means we should reduce to an
 					// empty intersection. Adding TypeFlags.NonPrimitive causes that to happen.
 					includes |= TypeFlagsNonPrimitive
@@ -27352,11 +27377,12 @@ func (c *Checker) intersectUnionsOfPrimitiveTypes(types []*Type) ([]*Type, bool)
 }
 
 // Check that the given type has a match in every union. A given type is matched by
-// an identical type, and a literal type is additionally matched by its corresponding
-// primitive type, and missingType is matched by undefinedType (and vice versa).
+// an identical type, a literal type by its corresponding primitive type, an enum member
+// by its plain literal, and missingType by undefinedType (and vice versa).
 func (c *Checker) eachUnionContains(unionTypes []*Type, t *Type) bool {
+	literal := c.getMatchingNonEnumLiteral(t)
 	for _, u := range unionTypes {
-		if !c.unionContainsType(u, t, true /*matchSymbol*/) {
+		if !c.unionContainsType(u, t, true /*matchSymbol*/) && (literal == nil || !containsType(u.Types(), literal)) {
 			return false
 		}
 	}
