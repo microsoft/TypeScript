@@ -1,0 +1,58 @@
+//// [tests/cases/compiler/deprecatedPropertyInNullableContextualType.ts] ////
+
+=== objectLiteral.ts ===
+interface Options {
+>Options : Symbol(Options, Decl(objectLiteral.ts, 0, 0))
+
+    /** @deprecated use other */
+    value: number;
+>value : Symbol(Options.value, Decl(objectLiteral.ts, 0, 19))
+}
+const nullable: Options | undefined = { value: 1 };
+>nullable : Symbol(nullable, Decl(objectLiteral.ts, 4, 5))
+>Options : Symbol(Options, Decl(objectLiteral.ts, 0, 0))
+>value : Symbol(value, Decl(objectLiteral.ts, 4, 39))
+
+const plain: Options = { value: 1 };
+>plain : Symbol(plain, Decl(objectLiteral.ts, 5, 5))
+>Options : Symbol(Options, Decl(objectLiteral.ts, 0, 0))
+>value : Symbol(value, Decl(objectLiteral.ts, 5, 24))
+
+=== jsxAttributes.tsx ===
+declare namespace JSX {
+>JSX : Symbol(JSX, Decl(jsxAttributes.tsx, 0, 0))
+
+    interface Element {}
+>Element : Symbol(Element, Decl(jsxAttributes.tsx, 0, 23))
+}
+interface Props {
+>Props : Symbol(Props, Decl(jsxAttributes.tsx, 2, 1))
+
+    /** @deprecated use other */
+    value: number;
+>value : Symbol(Props.value, Decl(jsxAttributes.tsx, 3, 17))
+}
+declare function Nullable(props: Props | undefined): JSX.Element;
+>Nullable : Symbol(Nullable, Decl(jsxAttributes.tsx, 6, 1))
+>props : Symbol(props, Decl(jsxAttributes.tsx, 7, 26))
+>Props : Symbol(Props, Decl(jsxAttributes.tsx, 2, 1))
+>JSX : Symbol(JSX, Decl(jsxAttributes.tsx, 0, 0))
+>Element : Symbol(JSX.Element, Decl(jsxAttributes.tsx, 0, 23))
+
+declare function Plain(props: Props): JSX.Element;
+>Plain : Symbol(Plain, Decl(jsxAttributes.tsx, 7, 65))
+>props : Symbol(props, Decl(jsxAttributes.tsx, 8, 23))
+>Props : Symbol(Props, Decl(jsxAttributes.tsx, 2, 1))
+>JSX : Symbol(JSX, Decl(jsxAttributes.tsx, 0, 0))
+>Element : Symbol(JSX.Element, Decl(jsxAttributes.tsx, 0, 23))
+
+const nullableElement = <Nullable value={1} />;
+>nullableElement : Symbol(nullableElement, Decl(jsxAttributes.tsx, 9, 5))
+>Nullable : Symbol(Nullable, Decl(jsxAttributes.tsx, 6, 1))
+>value : Symbol(value, Decl(jsxAttributes.tsx, 9, 33))
+
+const plainElement = <Plain value={1} />;
+>plainElement : Symbol(plainElement, Decl(jsxAttributes.tsx, 10, 5))
+>Plain : Symbol(Plain, Decl(jsxAttributes.tsx, 7, 65))
+>value : Symbol(value, Decl(jsxAttributes.tsx, 10, 27))
+
