@@ -7,7 +7,86 @@ const repo = "TypeScript";
 const botEmail = "290192711+typescript-automation[bot]@users.noreply.github.com";
 const botName = "typescript-automation[bot]";
 const releaseConfigFiles = ["Herebyfile.mjs", "tsc/internal/core/version.go"];
-const releaseBranchPattern = /^(release-.+|ts[0-9]+-release)$/;
+
+/**
+ * @typedef {object} Operation
+ * @property {() => void} validate
+ * @property {() => boolean} prepare Returns whether the release configuration changed.
+ * @property {() => void} commit
+ * @property {() => Promise<void>} publish
+ * @property {() => string | undefined} successMessage
+ * @property {() => string} failureMessage
+ */
+
+/** @type {Record<string, Operation>} */
+const operations = {
+    "cherry-pick": {
+        validate() {
+            if (!/^[1-9][0-9]*$/.test(process.env.PR ?? "")) {
+                throw new Error("pr must be a PR number.");
+            }
+            mustGetEnv("TARGET_BRANCH");
+        },
+        prepare() {
+            run("git", "switch", "--detach", `origin/${mustGetEnv("TARGET_BRANCH")}`);
+            return false;
+        },
+        commit() {},
+        publish: cherryPick,
+        successMessage: () => process.env.CHERRYPICKRESULT,
+        failureMessage: () => "I was unable to cherry-pick this PR.",
+    },
+    "new-release-branch": {
+        validate: () => validateReleaseInputs({ requireVersion: true }),
+        prepare() {
+            const branchName = mustGetEnv("BRANCH_NAME");
+            if (tryRun("git", "show-ref", "--verify", "--quiet", `refs/remotes/origin/${branchName}`)) {
+                throw new Error(`Branch ${branchName} already exists.`);
+            }
+            run("git", "switch", "-c", branchName);
+            configureRelease(mustGetEnv("PACKAGE_VERSION"), mustGetEnv("CORE_MAJOR_MINOR"));
+            checkChangedFiles("Unexpected files in release configuration", { exact: true });
+            return true;
+        },
+        commit: () => commitVersionBump({ exact: true }),
+        publish: pushReleaseBranch,
+        successMessage: () => `I've created ${process.env.BRANCH_NAME} with version ${process.env.PACKAGE_VERSION} for you.`,
+        failureMessage: () => "I was unable to create the new release branch.",
+    },
+    "set-version": {
+        validate: () => validateReleaseInputs({ requireVersion: true }),
+        prepare() {
+            switchToReleaseBranch();
+            const packageVersion = mustGetEnv("PACKAGE_VERSION");
+            configureRelease(packageVersion, mustGetEnv("CORE_MAJOR_MINOR"));
+            if (changedFiles().length === 0) {
+                console.log(`Version is already ${packageVersion}.`);
+                return false;
+            }
+            checkChangedFiles("Unexpected files in release configuration", { exact: false });
+            return true;
+        },
+        commit: () => commitVersionBump({ exact: false }),
+        publish: pushReleaseBranch,
+        successMessage: () => `I've set the version of ${process.env.BRANCH_NAME} to ${process.env.PACKAGE_VERSION} for you.`,
+        failureMessage: () => "I was unable to set the version.",
+    },
+    "sync-branch": {
+        validate: () => validateReleaseInputs({ requireVersion: false }),
+        prepare: mergeMain,
+        commit() {
+            if (changedFiles().length || hasStagedChanges()) {
+                run("git", "status", "--short");
+                throw new Error("Validation modified the worktree; refusing to push the merge.");
+            }
+        },
+        publish: pushReleaseBranch,
+        successMessage: () => `I've pulled main into ${process.env.BRANCH_NAME} for you.`,
+        failureMessage: () => `I was unable to merge main into ${process.env.BRANCH_NAME}.`,
+    },
+};
+
+const operation = getOperation();
 
 const [command] = process.argv.slice(2);
 switch (command) {
@@ -15,7 +94,7 @@ switch (command) {
         prepare();
         break;
     case "commit":
-        commit();
+        operation.commit();
         break;
     case "publish":
         await publish();
@@ -27,9 +106,16 @@ switch (command) {
         throw new Error("Usage: node release-maintenance.mjs <prepare|commit|publish|post-result>");
 }
 
+function getOperation() {
+    const name = mustGetEnv("OPERATION");
+    if (!Object.hasOwn(operations, name)) {
+        throw new Error(`Unknown operation: ${name}`);
+    }
+    return operations[name];
+}
+
 function prepare() {
-    const operation = mustGetEnv("OPERATION");
-    validateInputs(operation);
+    operation.validate();
 
     // Later steps run from a release branch checkout, so keep main's copies of the scripts.
     const tempDir = mustGetEnv("AGENT_TEMPDIRECTORY");
@@ -40,77 +126,40 @@ function prepare() {
     run("git", "fetch", "--no-tags", "origin", "+refs/heads/*:refs/remotes/origin/*");
     run("git", "config", "user.email", botEmail);
     run("git", "config", "user.name", botName);
+    run("git", "config", "core.hooksPath", "/dev/null");
 
-    switch (operation) {
-        case "cherry-pick":
-            run("git", "switch", "--detach", `origin/${mustGetEnv("TARGET_BRANCH")}`);
-            return;
-        case "new-release-branch":
-            prepareNewReleaseBranch();
-            break;
-        case "set-version":
-            prepareSetVersion();
-            break;
-        case "sync-branch":
-            prepareSyncBranch();
-            break;
-    }
+    const changed = operation.prepare();
+    console.log(`##vso[task.setvariable variable=ReleaseConfigChanged]${changed}`);
+}
+
+async function publish() {
+    const basicAuth = Buffer.from(`x-access-token:${mustGetEnv("GH_TOKEN")}`).toString("base64");
+    console.log(`##vso[task.setsecret]${basicAuth}`);
+    run("git", "remote", "set-url", "origin", `https://github.com/${owner}/${repo}.git`);
+    run("git", "config", "--local", "http.https://github.com/.extraheader", `AUTHORIZATION: basic ${basicAuth}`);
+
+    await operation.publish();
 }
 
 /**
- * @param {string} operation
+ * @param {{ requireVersion: boolean }} options
  */
-function validateInputs(operation) {
-    if (operation === "cherry-pick") {
-        if (!/^[1-9][0-9]*$/.test(process.env.PR ?? "")) {
-            throw new Error("pr must be a PR number.");
-        }
-        mustGetEnv("TARGET_BRANCH");
-        return;
-    }
-
-    if (!["new-release-branch", "set-version", "sync-branch"].includes(operation)) {
-        throw new Error(`Unknown operation: ${operation}`);
-    }
-    if (!releaseBranchPattern.test(process.env.BRANCH_NAME ?? "")) {
+function validateReleaseInputs({ requireVersion }) {
+    if (!/^(release-.+|ts[0-9]+-release)$/.test(process.env.BRANCH_NAME ?? "")) {
         throw new Error("Release branch name must start with 'release-' or match 'ts<number>-release'.");
     }
-    if (operation !== "sync-branch") {
+    if (requireVersion) {
         mustGetEnv("PACKAGE_VERSION");
         mustGetEnv("CORE_MAJOR_MINOR");
     }
 }
 
-function prepareNewReleaseBranch() {
+function switchToReleaseBranch() {
     const branchName = mustGetEnv("BRANCH_NAME");
-    if (tryRun("git", "show-ref", "--verify", "--quiet", `refs/remotes/origin/${branchName}`)) {
-        throw new Error(`Branch ${branchName} already exists.`);
-    }
-
-    run("git", "config", "core.hooksPath", "/dev/null");
-    run("git", "switch", "-c", branchName);
-    configureRelease(mustGetEnv("PACKAGE_VERSION"), mustGetEnv("CORE_MAJOR_MINOR"));
-    checkChangedFiles("Unexpected files in release configuration", { exact: true });
-    setReleaseConfigChanged(true);
+    run("git", "switch", "-C", branchName, `origin/${branchName}`);
 }
 
-function prepareSetVersion() {
-    run("git", "config", "core.hooksPath", "/dev/null");
-    switchToReleaseBranch();
-    const packageVersion = mustGetEnv("PACKAGE_VERSION");
-    configureRelease(packageVersion, mustGetEnv("CORE_MAJOR_MINOR"));
-
-    if (changedFiles().length === 0) {
-        console.log(`Version is already ${packageVersion}.`);
-        setReleaseConfigChanged(false);
-        return;
-    }
-    checkChangedFiles("Unexpected files in release configuration", { exact: false });
-    setReleaseConfigChanged(true);
-}
-
-function prepareSyncBranch() {
-    run("git", "config", "core.hooksPath", "/dev/null");
+function mergeMain() {
     switchToReleaseBranch();
 
     const versionSource = fs.readFileSync("tsc/internal/core/version.go", "utf8");
@@ -136,59 +185,27 @@ function prepareSyncBranch() {
     if (tryRun("git", "rev-parse", "--verify", "--quiet", "MERGE_HEAD")) {
         run("git", "commit", "--no-edit");
     }
-    else if (!tryRun("git", "diff", "--cached", "--quiet")) {
+    else if (hasStagedChanges()) {
         run("git", "commit", "-m", "Restore release configuration after syncing main");
     }
-    setReleaseConfigChanged(true);
+    return true;
 }
 
-function commit() {
-    const operation = mustGetEnv("OPERATION");
-    if (operation === "sync-branch") {
-        if (changedFiles().length || !tryRun("git", "diff", "--cached", "--quiet")) {
-            run("git", "status", "--short");
-            throw new Error("Validation modified the worktree; refusing to push the merge.");
-        }
-        return;
-    }
-
-    checkChangedFiles("Validation produced unexpected changes", { exact: operation === "new-release-branch" });
+/**
+ * @param {{ exact: boolean }} options
+ */
+function commitVersionBump({ exact }) {
+    checkChangedFiles("Validation produced unexpected changes", { exact });
     run("git", "add", ...releaseConfigFiles);
     run("git", "commit", "-m", `Bump version to ${mustGetEnv("PACKAGE_VERSION")}`);
 }
 
-async function publish() {
-    const token = mustGetEnv("GH_TOKEN");
-    const basicAuth = Buffer.from(`x-access-token:${token}`).toString("base64");
-    console.log(`##vso[task.setsecret]${basicAuth}`);
-    run("git", "remote", "set-url", "origin", `https://github.com/${owner}/${repo}.git`);
-    run("git", "config", "--local", "http.https://github.com/.extraheader", `AUTHORIZATION: basic ${basicAuth}`);
-
-    const operation = mustGetEnv("OPERATION");
-    const branchName = process.env.BRANCH_NAME;
-    switch (operation) {
-        case "cherry-pick":
-            await cherryPick();
-            break;
-        case "new-release-branch":
-            run("git", "push", "--set-upstream", "origin", mustGetEnv("BRANCH_NAME"));
-            break;
-        case "set-version":
-            if (process.env.RELEASECONFIGCHANGED !== "true") {
-                console.log("Version unchanged; nothing to push.");
-                break;
-            }
-            run("git", "push", "origin", `HEAD:refs/heads/${branchName}`);
-            break;
-        case "sync-branch":
-            run("git", "push", "origin", `HEAD:refs/heads/${branchName}`);
-            break;
+async function pushReleaseBranch() {
+    if (process.env.RELEASECONFIGCHANGED !== "true") {
+        console.log("Release configuration unchanged; nothing to push.");
+        return;
     }
-}
-
-function switchToReleaseBranch() {
-    const branchName = mustGetEnv("BRANCH_NAME");
-    run("git", "switch", "-C", branchName, `origin/${branchName}`);
+    run("git", "push", "origin", `HEAD:refs/heads/${mustGetEnv("BRANCH_NAME")}`);
 }
 
 /**
@@ -204,6 +221,10 @@ function changedFiles() {
     return lines(output("git", "diff", "--name-only"));
 }
 
+function hasStagedChanges() {
+    return !tryRun("git", "diff", "--cached", "--quiet");
+}
+
 /**
  * @param {string} message
  * @param {{ exact: boolean }} options
@@ -216,13 +237,6 @@ function checkChangedFiles(message, { exact }) {
     if (!ok) {
         throw new Error(`${message}: ${changed.join(" ")}`);
     }
-}
-
-/**
- * @param {boolean} value
- */
-function setReleaseConfigChanged(value) {
-    console.log(`##vso[task.setvariable variable=ReleaseConfigChanged]${value}`);
 }
 
 async function cherryPick() {
@@ -270,7 +284,7 @@ async function cherryPick() {
         run("npx", "hereby", "test");
         const existingBaselineDirs = baselineDirs.filter(dir => conflictedFiles.some(file => file.startsWith(`${dir}/`)));
         run("git", "add", "--all", "--", ...existingBaselineDirs);
-        if (!tryRun("git", "diff", "--cached", "--quiet")) {
+        if (hasStagedChanges()) {
             run("git", "commit", "-m", "Update baselines");
         }
 
@@ -315,9 +329,6 @@ async function cherryPick() {
 }
 
 async function postResult() {
-    const operation = mustGetEnv("OPERATION");
-    const branchName = process.env.BRANCH_NAME;
-    const packageVersion = process.env.PACKAGE_VERSION;
     const distinctId = mustGetEnv("DISTINCT_ID");
     const sourceIssue = +mustGetEnv("SOURCE_ISSUE");
     const requestingUser = mustGetEnv("REQUESTING_USER");
@@ -326,17 +337,8 @@ async function postResult() {
 
     const success = jobStatus === "Succeeded" || jobStatus === "SucceededWithIssues";
 
-    /** @type {Record<string, [success: string | undefined, failure: string]>} */
-    const comments = {
-        "cherry-pick": [process.env.CHERRYPICKRESULT, "I was unable to cherry-pick this PR."],
-        "new-release-branch": [`I've created ${branchName} with version ${packageVersion} for you.`, "I was unable to create the new release branch."],
-        "set-version": [`I've set the version of ${branchName} to ${packageVersion} for you.`, "I was unable to set the version."],
-        "sync-branch": [`I've pulled main into ${branchName} for you.`, `I was unable to merge main into ${branchName}.`],
-    };
-    const [successComment, failureComment] = comments[operation];
-
     let commentBody = `Hey, @${requestingUser}! `;
-    commentBody += success ? successComment : failureComment;
+    commentBody += success ? operation.successMessage() : operation.failureMessage();
     if (!success) {
         const logsUrl = `${mustGetEnv("SYSTEM_COLLECTIONURI")}${mustGetEnv("SYSTEM_TEAMPROJECT")}/_build/results?buildId=${mustGetEnv("BUILD_BUILDID")}`;
         commentBody += `\n\nCheck the logs at: ${logsUrl}`;
