@@ -1,0 +1,13 @@
+enumMemberTypeCacheConsistency.ts(7,7): error TS2322: Type 'E.C' is not assignable to type 'never'.
+
+
+==== enumMemberTypeCacheConsistency.ts (1 errors) ====
+    enum E {
+        A = 0,
+        B = E.A.valueOf(),
+        C = 1,
+    }
+    
+    const member: Extract<E, 1> = E.C;
+          ~~~~~~
+!!! error TS2322: Type 'E.C' is not assignable to type 'never'.

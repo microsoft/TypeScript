@@ -117,7 +117,7 @@ export interface ChartConfigurationCustomTypesPerDataset<TType extends ChartType
 >data : ChartDataCustomTypesPerDataset<TType>
 
     options: ChartOptions<TType>
->options : Exclude<DeepPartial<CoreChartOptions<TType> & DatasetChartOptions<TType> & TType>, undefined>
+>options : ChartOptions<TType>
 }
 
 const p: Plugin<"bar"> = { id: "x", beforeDraw: (chart: Chart) => {} };

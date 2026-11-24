@@ -51,6 +51,8 @@
         "tsc/internal/bundled/libs/lib.dom.d.ts",
         "tsc/internal/bundled/libs/lib.dom.asynciterable.d.ts",
         "tsc/internal/bundled/libs/lib.dom.iterable.d.ts",
+        // dprint cannot parse negated types.
+        "tsc/internal/bundled/libs/lib.es5.d.ts",
         "tsc/internal/bundled/libs/lib.webworker.d.ts",
         "tsc/internal/bundled/libs/lib.webworker.asynciterable.d.ts",
         "tsc/internal/bundled/libs/lib.webworker.iterable.d.ts",
