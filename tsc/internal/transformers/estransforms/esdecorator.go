@@ -791,7 +791,13 @@ func (tx *esDecoratorTransformer) transformClassLike(node *ast.Node) *ast.Expres
 		valueProperty := f.NewPropertyAssignment(nil, f.NewIdentifier("value"), nil, nil, renamedClassThis)
 		classDescriptor := f.NewObjectLiteralExpression(f.NewNodeList([]*ast.Node{valueProperty}), false)
 		classDescriptorAssignment := f.NewAssignmentExpression(ci.classDescriptorName, classDescriptor)
-		classNameReference := f.NewPropertyAccessExpression(renamedClassThis, nil, f.NewIdentifier("name"), ast.NodeFlagsNone)
+		// Use the declared name directly, since `this.name` can be shadowed by a static `name` member.
+		var classNameReference *ast.Expression
+		if name := node.Name(); name != nil && !transformers.IsGeneratedIdentifier(ec, name) {
+			classNameReference = f.NewStringLiteral(name.Text(), 0)
+		} else {
+			classNameReference = f.NewPropertyAccessExpression(renamedClassThis, nil, f.NewIdentifier("name"), ast.NodeFlagsNone)
+		}
 
 		contextObj := f.NewESDecorateClassContextObject(classNameReference, ci.metadataReference)
 
