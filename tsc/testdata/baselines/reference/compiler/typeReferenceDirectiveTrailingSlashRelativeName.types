@@ -1,6 +1,6 @@
 //// [tests/cases/compiler/typeReferenceDirectiveTrailingSlashRelativeName.ts] ////
 
-=== /a.ts ===
+=== /app/src/a.ts ===
 /// <reference types="../pkg/" />
 fromDirectory;
 >fromDirectory : number

@@ -738,6 +738,57 @@ func TestResolveDynamicDottedDirectory(t *testing.T) {
 	}
 }
 
+func TestResolveDynamicTypeRoot(t *testing.T) {
+	t.Parallel()
+
+	// In a type root under a dynamic URI, the file encoding and the directory
+	// encoding of the name differ. The file encoding keeps ".d.ts" outside the
+	// escape. The directory lookup uses the directory encoding.
+	const (
+		sourceFile          = "^/~ts-uri~/custom/ts-nul-authority/a.ts"
+		typeRoot            = "^/~ts-uri~/custom/ts-nul-authority/types"
+		name                = "~ts-uri-escape~thing.d.ts"
+		fileTargetFile      = typeRoot + "/~ts-uri-escape~7e74732d7572692d6573636170657e7468696e67~.d.ts"
+		directoryTargetFile = typeRoot + "/~ts-uri-escape~7e74732d7572692d6573636170657e7468696e672e642e7473~/index.d.ts"
+	)
+	for _, test := range []struct {
+		name       string
+		targetFile tspath.RootedFilePath
+		module     bool
+	}{
+		{name: "type reference to directory", targetFile: directoryTargetFile},
+		{name: "type reference to file", targetFile: fileTargetFile},
+		{name: "module to directory", targetFile: directoryTargetFile, module: true},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+			fs := vfstest.FromMap(map[string]string{
+				sourceFile:                 "",
+				test.targetFile.AsString(): "declare const value: number;",
+			}, tspath.CaseSensitive)
+			host := &resolutionTestInputs{fs: fs, cwd: "^/~ts-uri~/custom/ts-nul-authority/"}
+			opts := &core.CompilerOptions{
+				ModuleResolution: core.ModuleResolutionKindBundler,
+				TypeRoots:        []tspath.RootedDirectoryPath{typeRoot},
+			}
+
+			resolver := NewResolver(ResolverOptions{Host: host, CompilerOptions: opts})
+			var resolvedFileName tspath.RootedFilePath
+			if test.module {
+				// The module lookup falls back to the type roots.
+				resolved, _, _ := resolver.ResolveModuleName(name, sourceFile, core.ModuleKindCommonJS, nil)
+				resolvedFileName = resolved.ResolvedFileName
+			} else {
+				resolved, _ := resolver.ResolveTypeReferenceDirective(name, sourceFile, core.ResolutionModeNone, nil)
+				resolvedFileName = resolved.ResolvedFileName
+			}
+			if resolvedFileName != test.targetFile {
+				t.Errorf("resolved file = %q, expected %q", resolvedFileName, test.targetFile)
+			}
+		})
+	}
+}
+
 func TestResolvedModuleCarriesCaseInsensitivePath(t *testing.T) {
 	t.Parallel()
 

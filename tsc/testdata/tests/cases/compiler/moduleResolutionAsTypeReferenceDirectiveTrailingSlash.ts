@@ -7,8 +7,12 @@
 
 // The module name "lib/" ends with a separator, so it names a directory. The
 // lookup in "node_modules" fails, and the resolver then looks in the type root
-// "/types". It skips the file lookup and uses "/types/lib/index.d.ts", not
-// "/types/lib/.d.ts". So "fromFile" is an error.
+// "/types". It skips the file lookup, so it does not use "/types/lib.d.ts" or
+// "/types/lib/.d.ts". It uses "/types/lib/index.d.ts", so "fromFile" is an
+// error.
+
+// @filename: /types/lib.d.ts
+export declare const fromFile: number;
 
 // @filename: /types/lib/.d.ts
 export declare const fromFile: number;

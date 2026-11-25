@@ -3,8 +3,8 @@
 // @traceResolution: true
 // @currentDirectory: /
 
-// The name "C:" is only a drive root. The resolver adds the root separator,
-// so the candidate is "C:/". No file is under "C:/", so the name is an error.
+// tsc treats the name "C:" as the drive root "C:/", so the candidate is "C:/".
+// No file is under "C:/", so the name is an error.
 
 // @filename: /types/README.md
 The type root.

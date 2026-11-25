@@ -1,9 +1,9 @@
 // @declaration: true
 // @noImplicitReferences: true
 
-// The "exports" target of "pkg" ends with "/", so it names a directory and
-// not the file "/node_modules/pkg/index.js". Declaration emit does not use
-// "pkg" to name the type of "v", and reports an error.
+// The "exports" target of "pkg" ends with "/", so it names a directory. It
+// does not match the file "/node_modules/pkg/index.d.ts". Declaration emit
+// does not use "pkg" to name the type of "v", and reports an error.
 
 // @filename: /node_modules/pkg/package.json
 { "name": "pkg", "exports": { ".": "./index.js/" } }

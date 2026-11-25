@@ -1,5 +1,8 @@
 //// [tests/cases/compiler/moduleResolutionAsTypeReferenceDirectiveTrailingSlash.ts] ////
 
+//// [lib.d.ts]
+export declare const fromFile: number;
+
 //// [.d.ts]
 export declare const fromFile: number;
 

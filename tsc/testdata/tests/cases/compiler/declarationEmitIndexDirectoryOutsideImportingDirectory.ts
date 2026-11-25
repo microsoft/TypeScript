@@ -1,16 +1,14 @@
 // The type of "v" comes from "/project/shared/lib/index.ts". The file
-// "/project/shared/lib.ts" is next to the "lib" directory, so "./lib" would
-// name a different module. Declaration emit keeps "/index" in the specifier,
-// although the target is outside the directory of "a.ts". The "paths" option
-// makes the emitter also check a "@shared/*" specifier. Both files are in the
-// project, so the emitter uses the relative specifier.
+// "/project/shared/lib.ts" is not in the program, but it is next to the "lib"
+// directory. So the specifier "../../shared/lib" would name "lib.ts", not
+// "lib/index.ts". Declaration emit keeps "/index" in the specifier, although
+// the target is outside the directory of "a.ts".
 
 // @filename: /project/tsconfig.json
 {
     "compilerOptions": {
         "declaration": true,
-        "emitDeclarationOnly": true,
-        "paths": { "@shared/*": ["./shared/*"] }
+        "emitDeclarationOnly": true
     },
     "include": ["app/src"]
 }

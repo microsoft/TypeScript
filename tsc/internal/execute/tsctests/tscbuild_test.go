@@ -722,6 +722,13 @@ func TestBuildConfigFileErrors(t *testing.T) {
 			commandLineArgs: []string{"--b", "bogus.json"},
 		},
 		{
+			subScenario: "reports no inputs found",
+			files: FileMap{
+				"/home/src/workspaces/project/tsconfig.json": `{ "include": ["missing.ts"] }`,
+			},
+			commandLineArgs: []string{"--b"},
+		},
+		{
 			subScenario: "reports syntax errors in config file",
 			files: FileMap{
 				"/home/src/workspaces/project/a.ts": "export function foo() { }",

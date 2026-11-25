@@ -3,6 +3,9 @@
 //// [README.md]
 The type root.
 
+//// [pkg.d.ts]
+declare const fromFile: number;
+
 //// [.d.ts]
 declare const fromFile: number;
 

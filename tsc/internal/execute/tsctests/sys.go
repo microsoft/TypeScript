@@ -613,6 +613,17 @@ func (s *TestSys) replaceFileText(path string, oldText string, newText string) {
 	s.writeFileNoError(path, content)
 }
 
+// replaceFileTextNoMiss is like replaceFileText, but it panics if the file does
+// not contain oldText. Use it when an edit that changes nothing makes the test
+// pass for the wrong reason.
+func (s *TestSys) replaceFileTextNoMiss(path string, oldText string, newText string) {
+	content := s.readFileNoError(path)
+	if !strings.Contains(content, oldText) {
+		panic(fmt.Sprintf("Text %q not found in %s", oldText, path))
+	}
+	s.writeFileNoError(path, strings.Replace(content, oldText, newText, 1))
+}
+
 func (s *TestSys) replaceFileTextAll(path string, oldText string, newText string) {
 	content := s.readFileNoError(path)
 	content = strings.ReplaceAll(content, oldText, newText)

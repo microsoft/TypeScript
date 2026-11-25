@@ -30,6 +30,7 @@ func TestDocumentURIToFileName(t *testing.T) {
 		{"file://server/share/file.ts", "//server/share/file.ts"},
 		{"file:///d%3A/work/ts932/lib/utils.ts", "d:/work/ts932/lib/utils.ts"},
 		{"file:///D%3A/work/ts932/lib/utils.ts", "D:/work/ts932/lib/utils.ts"},
+		{"file:///d%3A", "d:/"},
 		{"file:///d%3A/work/ts932/app/%28test%29/comp/comp-test.tsx", "d:/work/ts932/app/(test)/comp/comp-test.tsx"},
 		{"file:///path/to/file.ts#section", "/path/to/file.ts"},
 		{"file:///c:/test/me", "c:/test/me"},

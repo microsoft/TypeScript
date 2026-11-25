@@ -254,6 +254,20 @@ func TestTscCommandline(t *testing.T) {
 			commandLineArgs: []string{"-p", "/home/src/workspaces/project"},
 		},
 		{
+			subScenario: "Parse -p with path to subfolder that has only declaration files and outDir",
+			files: FileMap{
+				"/home/src/workspaces/project/sub/a.d.ts":        `declare const x: number;`,
+				"/home/src/workspaces/project/sub/tsconfig.json": `{ "compilerOptions": { "outDir": "../out" } }`,
+			},
+			commandLineArgs: []string{"-p", "sub"},
+			edits: []*tscEdit{
+				{
+					caption:         "build with -b",
+					commandLineArgs: []string{"-b", "sub"},
+				},
+			},
+		},
+		{
 			subScenario: "Parse -p with empty tsconfig file",
 			files: FileMap{
 				"/home/src/workspaces/project/first.ts":      `export const a = 1`,
@@ -387,6 +401,17 @@ func TestTscMissingFiles(t *testing.T) {
 				"/home/src/workspaces/project/tsconfig.json": stringtestutil.Dedent(
 					`{
 					"files": ["./src/doesNotExist"]
+					}`,
+				),
+			},
+			commandLineArgs: []string{"-p", "./tsconfig.json"},
+		},
+		{
+			subScenario: "rooted file names in tsconfig do not exist",
+			files: FileMap{
+				"/home/src/workspaces/project/tsconfig.json": stringtestutil.Dedent(
+					`{
+					"files": ["/x/", "C:"]
 					}`,
 				),
 			},
@@ -1726,6 +1751,53 @@ func TestTscIncremental(t *testing.T) {
 					caption: "tsbuildinfo written has error",
 					edit: func(sys *TestSys) {
 						sys.prependFile("/home/src/workspaces/project/tsconfig.tsbuildinfo", "Some random string")
+					},
+				},
+			},
+		},
+		{
+			subScenario: "tsbuildinfo has tuple of wrong length",
+			files: FileMap{
+				"/home/src/workspaces/project/a.ts":          `import { b } from "./b"; export const a = b + 1;`,
+				"/home/src/workspaces/project/b.ts":          "export const b = 2;",
+				"/home/src/workspaces/project/tsconfig.json": "{}",
+			},
+			commandLineArgs: []string{"-i"},
+			edits: []*tscEdit{
+				{
+					caption: "referencedMap entry with one element",
+					edit: func(sys *TestSys) {
+						// The non incremental build has no tsbuildinfo to change
+						if !sys.forIncrementalCorrectness {
+							sys.replaceFileTextNoMiss("/home/src/workspaces/project/tsconfig.tsbuildinfo", `"referencedMap":[[3,1]]`, `"referencedMap":[[3]]`)
+						}
+					},
+				},
+				{
+					caption: "referencedMap entry with three elements",
+					edit: func(sys *TestSys) {
+						// The non incremental build has no tsbuildinfo to change
+						if !sys.forIncrementalCorrectness {
+							sys.replaceFileTextNoMiss("/home/src/workspaces/project/tsconfig.tsbuildinfo", `"referencedMap":[[3,1]]`, `"referencedMap":[[3,1,2]]`)
+						}
+					},
+				},
+				{
+					caption: "root entry with three elements",
+					edit: func(sys *TestSys) {
+						// The non incremental build has no tsbuildinfo to change
+						if !sys.forIncrementalCorrectness {
+							sys.replaceFileTextNoMiss("/home/src/workspaces/project/tsconfig.tsbuildinfo", `"root":[[2,3]]`, `"root":[[1,2,3]]`)
+						}
+					},
+				},
+				{
+					caption: "root entry with no elements",
+					edit: func(sys *TestSys) {
+						// The non incremental build has no tsbuildinfo to change
+						if !sys.forIncrementalCorrectness {
+							sys.replaceFileTextNoMiss("/home/src/workspaces/project/tsconfig.tsbuildinfo", `"root":[[2,3]]`, `"root":[[]]`)
+						}
 					},
 				},
 			},
