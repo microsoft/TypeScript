@@ -54,7 +54,7 @@ new A();`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
 	f.GoToFile(t, "/a.ts")
-	f.VerifyImportFixAtPosition(t, []string{`import { a\u0062 as A, b } from "./m";
+	f.VerifyImportFixAtPosition(t, []string{`import { "a\\u0062" as A, b } from "./m";
 b;
 new A();`}, nil /*preferences*/)
 }

@@ -1134,7 +1134,7 @@ func promoteFromTypeOnly(
 					// Create a synthetic specifier with isTypeOnly=false to compute sorted position
 					var propertyName *ast.Node
 					if spec.PropertyName != nil {
-						propertyName = changes.NodeFactory.NewIdentifier(spec.PropertyName.Text()).AsIdentifier().AsNode()
+						propertyName = changes.NodeFactory.DeepCloneNode(spec.PropertyName)
 					}
 					newSpecifier := changes.NodeFactory.NewImportSpecifier(
 						false, // isTypeOnly = false
