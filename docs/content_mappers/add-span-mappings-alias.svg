@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="740" height="402" viewBox="0 0 740 402" role="img" aria-labelledby="title description" font-family="'Segoe UI', 'DejaVu Sans', sans-serif" fill="#17212e">
+  <title id="title">Alias span mapping for the ADD example</title>
+  <desc id="description">The original Lisp expression (+ 1 2 "oops") becomes add(1, 2, "oops"); in virtual TypeScript. An alias links add at [0, 3) to + at [1, 2) because they name the same entity. Verbatim spans link 1, 2, and "oops" to their identical source text. A diagnostic for the unresolved name add is displayed on + and names + instead of add.</desc>
+  <style>
+    .heading { font-size: 26px; font-weight: 700; }
+    .label { font-size: 16px; font-weight: 700; }
+    .secondary { font-size: 14px; fill: #485768; }
+    .code, .offset, .punctuation { font-family: 'DejaVu Sans Mono', Consolas, 'Liberation Mono', monospace; }
+    .code { font-size: 40px; fill: #657485; }
+    .offset { font-size: 14px; text-anchor: middle; }
+    .punctuation { font-size: 14px; fill: #657485; }
+    .mapped { fill: #17212e; }
+    .alias-span { fill: #fbe8d7; }
+    .verbatim-span { fill: #d9f0eb; }
+    .alias-offset { fill: #8c431f; }
+    .verbatim-offset { fill: #155f56; }
+    .alias-link { stroke: #a6532b; stroke-dasharray: 7 3 1 3; }
+    .verbatim-link { stroke: #247b70; }
+  </style>
+  <defs>
+    <pattern id="diagnostic" width="8" height="4" patternUnits="userSpaceOnUse">
+      <path d="M0 2Q2 -1 4 2T8 2" fill="none" stroke="#bd3449" stroke-width="1.4" />
+    </pattern>
+  </defs>
+
+  <rect x="0.5" y="0.5" width="739" height="401" rx="8" fill="#f8fafc" stroke="#ced9e1" />
+  <text class="heading" x="32" y="44">Span mappings: alias</text>
+  <text class="secondary" x="32" y="68">Offsets start at zero. Each range excludes its end.</text>
+
+  <text class="label" x="32" y="121">Original</text>
+  <text class="secondary" x="32" y="141">Lisp</text>
+  <rect class="alias-span" x="240" y="103" width="24" height="47" rx="4" />
+  <rect class="verbatim-span" x="288" y="103" width="24" height="47" rx="4" />
+  <rect class="verbatim-span" x="336" y="103" width="24" height="47" rx="4" />
+  <rect class="verbatim-span" x="384" y="103" width="144" height="47" rx="4" />
+  <text id="original-code" class="code" x="216" y="137" xml:space="preserve">(<tspan class="mapped" x="240">+</tspan> <tspan class="mapped" x="288">1</tspan> <tspan class="mapped" x="336">2</tspan> <tspan class="mapped" x="384">"oops"</tspan><tspan x="528">)</tspan></text>
+  <rect x="244" y="144" width="16" height="4" fill="url(#diagnostic)" />
+  <g id="original-ranges" class="offset">
+    <text class="alias-offset" x="252" y="168">[1,2)</text>
+    <text class="verbatim-offset" x="300" y="168">[3,4)</text>
+    <text class="verbatim-offset" x="348" y="168">[5,6)</text>
+    <text class="verbatim-offset" x="456" y="168">[7,13)</text>
+  </g>
+
+  <g id="span-links" fill="none" stroke-width="2" stroke-linecap="round">
+    <path class="alias-link" d="M252 238V179" />
+    <path class="verbatim-link" d="M324 238C324 211 300 206 300 179" />
+    <path class="verbatim-link" d="M396 238C396 211 348 206 348 179" />
+    <path class="verbatim-link" d="M528 238C528 211 456 206 456 179" />
+  </g>
+
+  <g id="virtual-ranges" class="offset">
+    <text class="alias-offset" x="252" y="256">[0,3)</text>
+    <text class="verbatim-offset" x="324" y="256">[4,5)</text>
+    <text class="verbatim-offset" x="396" y="256">[7,8)</text>
+    <text class="verbatim-offset" x="528" y="256">[10,16)</text>
+  </g>
+  <text class="label" x="32" y="284">Virtual</text>
+  <text class="secondary" x="32" y="304">TypeScript</text>
+  <rect class="alias-span" x="216" y="266" width="72" height="47" rx="4" />
+  <rect class="verbatim-span" x="312" y="266" width="24" height="47" rx="4" />
+  <rect class="verbatim-span" x="384" y="266" width="24" height="47" rx="4" />
+  <rect class="verbatim-span" x="456" y="266" width="144" height="47" rx="4" />
+  <text id="virtual-code" class="code" x="216" y="300" xml:space="preserve"><tspan class="mapped">add</tspan><tspan x="288">(</tspan><tspan class="mapped" x="312">1</tspan><tspan x="336">, </tspan><tspan class="mapped" x="384">2</tspan><tspan x="408">, </tspan><tspan class="mapped" x="456">"oops"</tspan><tspan x="600">);</tspan></text>
+  <rect x="220" y="308" width="64" height="4" fill="url(#diagnostic)" />
+
+  <path d="M32 330H708" stroke="#ced9e1" />
+  <path class="alias-link" d="M32 349H54" stroke-width="2" stroke-linecap="round" />
+  <text class="secondary" x="63" y="354">Alias: same entity</text>
+  <path class="verbatim-link" d="M226 349H248" stroke-width="2" stroke-linecap="round" />
+  <text class="secondary" x="257" y="354">Verbatim: one-to-one</text>
+  <text class="punctuation" x="476" y="354">();</text>
+  <text class="secondary" x="512" y="354">Unmapped punctuation</text>
+  <text class="secondary" x="32" y="380">The displayed diagnostic on + says: Cannot find name '+'.</text>
+</svg>

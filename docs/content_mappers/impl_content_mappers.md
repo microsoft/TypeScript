@@ -21,8 +21,7 @@ The `package.json` of the content mapper package must specify a `typescript` top
 We'll call that configuration the content mapper's **manifest**.
 
 A mapper that reads additional project-specific configuration from external sources beyond the specified compiler options must additionally declare `dynamicConfig: true`.
-For example, if the Vue content mapper's `tsconfig.json` options set `target: "auto"`, it reads the nearest `node_modules/vue/package.json` to determine the Vue version.
-If the nearest `node_modules/vue/package.json`'s version changes from `3.5.0` to `3.6.0`, it affects the virtual content produced by the content mapper for a Vue file, so the Vue content mapper's manifest needs to specify `dynamicConfig: true`.
+For more details, see [`openProject` requests](#openproject).
 
 In addition to the options above, a content mapper manifest can optionally specify a mapping of output extensions:
 
@@ -132,6 +131,42 @@ export interface OpenProjectResult {
 }
 ```
 
+As an example, if a project uses the Vue content mapper, its content mapper options can specify a Vue target version.
+One way to configure the Vue target is this is to specify `target: "auto"`:
+
+`project/tsconfig.json`:
+```jsonc
+{
+  "compilerOptions": {
+    ...
+  },
+  "contentMappers": [
+    {
+      "package": "@vue/content-mapper",
+      "extensions": [".vue"],
+      "options": {
+        "target": "auto" // Vue content mapper's target
+      }
+    }
+  ]
+}
+```
+
+Under this target option, the Vue content mapper reads the nearest `node_modules/vue/package.json` to determine the Vue version:
+
+`project/node_modules/vue/package.json`:
+```jsonc
+{
+  "name": "vue",
+  "version": "3.5.46", // version that the content mapper will use
+  "description": "The progressive JavaScript framework for building modern web UI.",
+  ...
+}
+```
+
+If the nearest `node_modules/vue/package.json`'s version changes from `3.5.46` to `3.6.0`, it affects the virtual content produced by the content mapper for a Vue file.
+So the Vue content mapper's manifest needs to specify `dynamicConfig: true`, this content mapper's `openProject` response needs to encode the Vue version `3.5.46` in the `configIdentity`, and the response can specify `project/node_modules/vue/package.json` as a watched file.
+
 Note that compiler options will only be sent by TypeScript as part of the `openProject` request.
 Content mappers should store the compiler options for an opened project, and associate it with the project's handle, so that it can use this information during a [`transform`](#transform) request for the project.
 
@@ -165,8 +200,6 @@ export interface TransformResult extends MappedOutput {
     supplemental?: SupplementalOutput[];
 }
 
-export type SupplementalOutput = MappedOutput;
-
 /** Virtual source text and its mapping to the original input. */
 export interface MappedOutput {
     /** Virtual source text. */
@@ -184,128 +217,23 @@ export interface MappedOutput {
 
 #### Span mappings
 
-Span mappings map between spans (start position + length) in the original file and virtual file.
+A *span* is a pair of a position and a length within a given file's source text.
+The position and length use the `positionEncoding` specified in a session's `initialize` request.
+*Span mappings* correlate spans in the original file and virtual file:
+
+![Span mappings between original Lisp code `(+ 1 2 "oops")` and TypeScript virtual code `add(1, 2, "oops")`. + maps to add, 1 and 2 and "oops" match verbatim between the original and virtual.](add-span-mappings.svg)
+
 TypeScript needs these mappings to emit diagnostics and to power other language server features.
-For instance, in the CLI, these mappings are used to show TypeScript-generated diagnostics in the original, non-TypeScript content.
-A mapping can be of kind `verbatim`, meaning the original and virtual content are the same and have the same length; it can be of kind `atom`, meaning the original and virtual content may have different lengths and contents, and it can be an `alias`, meaning the original and virtual contents may have different lengths and content, but that the content of both is a *name* for the same entity.
-
-Consider the example below:
-```
-// original content:
-(+ 1 2 "oops")
-
-// transformed content:
-add(1, 2, "oops");
-
-// span mapping:
-add(1, 2, "oops");
-^^^                 [0, 3)   → [1, 2) + atom
-    ^               [4, 5)   → [3, 4) 1 verbatim
-       ^            [7, 8)   → [5, 6) 2 verbatim
-          ^^^^^^    [10, 16) → [7, 13) "oops" verbatim
-```
-
-TypeScript sees and checks the transformed content, in this case producing a diagnostic for the string literal `"oops"` because it is not a number. The span mapping allows TypeScript to report the diagnostic in the original content, at the correct location of the string literal (`[7, 13)`, instead of `[10, 16)`).
-
-In this example, `add` mapped to `+` with span mapping kind atom, indicating a correspondence between the two spans, but with different lengths and content. If the name `add` failed to resolve, the displayed diagnostic range would cover `+`, but the message would still reference the identifier `add`:
+In the CLI, these mappings are used to show TypeScript-generated diagnostics in the original, non-TypeScript content; in the example above, the following diagnostic is shown:
 
 ```
-add.lisp:1:2 - error TS2304: Cannot find name 'add'.
+add.lisp:7:13 - error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
 
 1 (+ 1 2 "oops")
-   ~
+         ~~~~~~
 ```
 
-The mapper can use span mapping kind `alias` instead of span mapping kind `atom` to indicate that the virtual and original text name the same entity.
-When the diagnostic is rendered, the original text of the alias span (`+`) will be substituted for the virtual text (`add`) in the diagnostic message:
-
-```
-add.lisp:1:2 - error TS2304: Cannot find name '+'.
-1 (+ 1 2 "oops")
-   ~
-```
-
-Gaps in the span map are treated as fully synthesized content and cannot be mapped to a location in the original text.
-Diagnostics in unmappable regions are not discarded.
-In the CLI, they cause a short snippet of the transformed content to be shown with the diagnostic.
-A common case may be a content mapper that synthesizes an import statement at the top of the virtual file used in scaffolding.
-If that import fails to resolve, the user will see:
-
-```
-app.vue:1:26 - error TS2307: Cannot find module '@vue/content-mapper-utils' or its corresponding type declarations.
-  This location is in code generated by the content mapper '@vue/content-mapper@1.0.0' and has no corresponding location in the original file.
-
-1 import { scaffolding } from "@vue/content-mapper-utils";
-                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-```
-
-Spans in the virtual text must not overlap, but multiple may map to the same span in the original content.
-In other words, one range in the original content can map to multiple ranges in the transformed content.
-Span mappings also optionally contain a `features` mask specifying which language server features can use that mapping.
-This can be combined with the ability of mapping an original span to many virtual spans.
-Broadly speaking, when a language server request is received for a position in a content-mapped virtual file, TypeScript maps it to every original file projection whose features mask includes the requested operation, performs analysis on the transformed content, and maps visible results back through spans that participate in the same feature.
-This lets a content mapper independently select, for example, one projection for hover and another for definitions or references.
-
-For instance:
-
-`ClassBinding.vue`:
-```vue
-<script setup lang="ts">
-const { active } = defineProps<{ active: boolean }>();
-</script>
-
-<template><p :class="{ active }">Hello</p></template>
-
-<style scoped>
-.active { color: red; }
-</style>
-```
-
-`ClassBinding.ts` (virtual file):
-```ts
-/// <reference types="./node_modules/@vue/language-core/types/template-helpers.d.ts" />
-
-const { defineProps, } = {} as typeof import('vue');
-type __VLS_Props = { active: boolean };
-const __VLS_props = defineProps<__VLS_Props>();
-const { active } = __VLS_props;
-...
-type __VLS_StyleScopedClasses = {}
- & { active: boolean };
-void ({} as __VLS_StyleScopedClasses);
-__VLS_asFunctionalElement0(__VLS_intrinsics.p, __VLS_intrinsics.p)({
-...{ class: ({ active: active }) },
-});
-/** @type {__VLS_StyleScopedClasses['active']} */;
-...
-export default {} as typeof __VLS_export;
-
-```
-
-In this example, the span for identifier `active` inside the template, i.e. in `<template><p :class="{ active }">Hello</p></template>`, is mapped to three virtual spans:
-`active` property in `...{ class: ({ |active|: active }) }`, `active` reference in `...{ class: ({ active: |active| }) }`, and `active` key text in `/** @type {__VLS_StyleScopedClasses['|active|']} */;`.
-All three span mappings's features mask includes the "definition" feature, so if we run "Go To Definition" on `active` in `<template><p :class="{ active }">Hello</p></template>`, we will get three occurrences, each one corresponding to running "Go To Definition" in the virtual file's span, and then mapping back to the original file:
-![Screenshot showing file `ClassBinding.vue` open in VSCode, and a "Peek Definition" window open below it, showing three highlighted occurrences of the identifier `active`: one one line 2, one on line 5, and one on line 8.](class-active-def.png)
-
-Only the first two span mappings include the "hover" feature, such that if we hover over `active`, we only see hover content corresponding to these two mappings, one for a property, another for a variable reference.
-The third span mapping is ignored:
-
-```
-(property) active: boolean
-const active: boolean
-```
-
-More precisely, the TypeScript language server currently supports the following features for content-mapped files:
-
-- **Diagnostics** - always mapped to original content where possible; diagnostics in synthesized regions are collected and reported at the top of the file. Declared-but-not-used diagnostics are automatically suppressed in synthesized regions. Diagnostics are intentionally not represented by a span-map feature flag. Framework-specific semantic diagnostic suppression is instead expressed explicitly through [`diagnosticDirectives`](#diagnostic-directives).
-- **Position-based features** - hover, signature help, completions, definitions, type definitions, implementations, source definitions, references, document highlights, rename, call hierarchy, code actions, formatting, linked editing, and auto-insert map incoming positions or ranges through spans participating in their corresponding `SpanMapFeature` flag.
-- **Document-wide features** - inlay hints, semantic tokens, folding ranges, selection ranges, document symbols, and CodeLens map visible results back only through spans participating in their corresponding flag.
-- **Text edits** - feature participation does not make a mapping edit-safe. Rename, code action, completion, and formatting edits may be written back only through exact, length-preserving `SpanMapKind.Verbatim` mappings.
-
-Language service requests and visible results can be disabled independently for any span by clearing the corresponding bits, or disabled for all features with `SpanMapFeature.None`. If `features` is omitted from the span mapping tuple, it defaults to `SpanMapFeature.All`, enabling every supported language service feature for that span.
-
-> [!NOTE]
-> Unlike with Volar, feature participation must be statically determined by the content mapper during transformation. This level of LSP feature mapping is not intended to replace fully custom language servers. TypeScript’s goal in providing language service support for content-mapped files is to support a good editing experience inside `<script>` blocks or similar verbatim ranges that embed normal TypeScript or JavaScript code without a third-party language server needing to proxy every request unchanged. We expect that ecosystems implementing complex transforms may still want to implement their own language servers alongside TypeScript’s, and either augment or replace TypeScript’s implementation of these language service features. Content mappers provide a baseline editing experience, but they also provide the API foundation for more specialized language servers to build on. Vue tooling, for example, may choose to enable TypeScript features only for selected projections while a separate language server handles the rest, accessing the AST, type, and symbol information of transformed content through an API connection to TypeScript’s language server.
+For more details, see [More on span mappings](#more-on-span-mappings-and-language-features).
 
 #### Diagnostic directives
 
@@ -336,11 +264,60 @@ The expect-error directive in Vue applies to errors on every line of the `<div>`
 Instead, the content mapper can return `diagnosticDirectives` in the transform result, which specify an original span corresponding to `<!-- @vue-expect-error -->`, a virtual span, and a policy of either `DiagnosticDirectivePolicy.Expect` or `DiagnosticDirectivePolicy.Ignore`, indicating the TypeScript semantics of the directive, similar to `// @ts-expect-error` or `// @ts-ignore`, respectively.
 TypeScript will suppress bind/check diagnostics in that virtual span according to the policy, and report unused `Expect` directives as diagnostics in the original content. Unused-directive diagnostics are stored once in `unusedExpectDirectiveDiagnostics` and referenced by index from directive tuples.
 
+```ts
+
+/** Shared unused-expect diagnostics and compact diagnostic directive tuples. */
+export interface DiagnosticDirectives {
+    unusedExpectDirectiveDiagnostics: UnusedExpectDirectiveDiagnostic[];
+    /** Directives with non-overlapping virtual ranges. */
+    directives: MappedDiagnosticDirective[];
+}
+
+/** Diagnostic directive policy: 0 ignores diagnostics; 1 expects a diagnostic. */
+export type DiagnosticDirectivePolicy = 0 | 1;
+
+/** Diagnostic reported when an expect directive suppresses no diagnostic. */
+export interface UnusedExpectDirectiveDiagnostic {
+    code: number;
+    messageText: string;
+}
+
+/**
+ * [originalStart, originalLength, virtualStart, virtualEnd, policy, unusedExpectDirectiveIndex?]. Expect directives
+ * require a valid original range. An omitted index selects the only shared unused-expect diagnostic and requires
+ * exactly one such diagnostic.
+ */
+export type MappedDiagnosticDirective = [
+    /** Original start offset. It is ignored for ignore directives if the original range is invalid. */
+    originalStart: number,
+    /** Original span length. It is ignored for ignore directives if the original range is invalid. */
+    originalLength: number,
+    /** Inclusive virtual start offset. */
+    virtualStart: number,
+    /** Exclusive virtual end offset, which must not precede the start. */
+    virtualEnd: number,
+    /** Diagnostic directive policy: 0 ignores diagnostics; 1 expects a diagnostic. */
+    policy: DiagnosticDirectivePolicy,
+    /** Index into unusedExpectDirectiveDiagnostics, used by expect directives. */
+    unusedExpectDirectiveIndex?: number,
+];
+```
+
 #### Diagnostics
 
 In its transform result, a content mapper can return diagnostics for unparseable content in a content mapped file.
 Note that these errors are treated by TypeScript as parse errors, and so they block binding and type checking for the virtual file; you shouldn't use those diagnostics to return semantic errors (see [this issue](https://github.com/microsoft/TypeScript/issues/65462)).
-Errors in the virtual content itself are handled by TypeScript like any other file.
+Errors in the virtual content itself are handled by TypeScript like any other file, with the exceptions already mentioned in [span mappings](#span-mappings).
+
+```ts
+/** Mapper-authored error in original-source coordinates using the selected position encoding. */
+export interface Diagnostic {
+    messageText: string;
+    start: number;
+    length: number;
+    code: number;
+}
+```
 
 #### Failure handling
 
@@ -397,6 +374,9 @@ TypeScript automatically includes these supplemental files in the same program a
 Supplemental virtual files receive compiler-assigned virtual file names based on their order and extension, but those names cannot be imported directly.
 Imports written inside supplemental virtual files resolve relative to the directory containing the original file.
 
+```ts
+export type SupplementalOutput = MappedOutput;
+```
 
 ### `closeProject`
 
@@ -404,6 +384,204 @@ TypeScript will send a `closeProject` notification containing the project handle
 This means the content mapper can let go of information stored about that particular project.
 
 TypeScript will typically close a project if it doesn't need it anymore, if a project's relevant compiler options change, or, as mentioned in [`openProject`](#openproject), if the content mapper has dynamic configurations and a watched file changes.
+
+```ts
+/** Parameters for the closeProject request. */
+export interface CloseProjectParams {
+    projectHandle: string;
+}
+```
+
+## More on span mappings and language features
+
+As mentioned earlier, a `transform` result for an original file contains, besides the virtual file content, span mappings correlating spans in the original and virtual file.
+
+```ts
+/**
+ * [virtualStart, virtualLength, originalStart, originalLength, kind, features?]. Segments must be ordered and disjoint
+ * in virtual space and within both texts. Verbatim segments must contain identical text.
+ */
+export type SpanMapSegment = [
+    /** Virtual start offset. */
+    virtualStart: number,
+    /** Virtual span length. */
+    virtualLength: number,
+    /** Original start offset. */
+    originalStart: number,
+    /** Original span length. */
+    originalLength: number,
+    /** Relationship between positions in a virtual span and its original span. */
+    kind: SpanMapKind,
+    /**
+     * Language-service feature bitmask. Omitted means all features (1048575); 0 disables all features. Does not
+     * suppress diagnostics.
+     */
+    features?: SpanMapFeature,
+];
+```
+
+A span mapping can be of different kinds:
+  - `verbatim`, meaning the original and virtual content are the same and have the same length;
+  - `atom`, meaning the original and virtual content may have different lengths and contents;
+  - `alias`, meaning the original and virtual contents may have different lengths and content, but that the content of both is a *name* for the same entity.
+
+```ts
+/** Relationship between positions in a virtual span and its original span. */
+export enum SpanMapKind {
+    /** Length-preserving segment whose interior positions map one-to-one. */
+    Verbatim = 0,
+    /** Segment mapped as a whole; interior positions clamp to its endpoints. */
+    Atom = 1,
+    /** Atom geometry whose virtual and original texts name the same logical entity. */
+    Alias = 2,
+}
+```
+
+Consider the example below:
+
+![Span mappings between original Lisp code `(+ 1 2 "oops")` and TypeScript virtual code `add(1, 2, "oops")`. + maps to add with kind atom, 1 and 2 and "oops" match verbatim between the original and virtual. The diagnostic on "oops" maps back to the original string.](add-span-mappings.svg)
+
+TypeScript sees and checks the transformed content, in this case producing a diagnostic for the string literal `"oops"` because it is not a number.
+The span mapping allows TypeScript to report the diagnostic in the original content, at the correct location of the string literal (`[7, 13)`, instead of `[10, 16)`).
+
+In this example, `add` mapped to `+` with span mapping kind `atom`, indicating a correspondence between the two spans, but with different lengths and content.
+If the name `add` failed to resolve, the displayed diagnostic range would cover `+`, but the message would still reference the identifier `add`:
+
+```
+add.lisp:1:2 - error TS2304: Cannot find name 'add'.
+
+1 (+ 1 2 "oops")
+   ~
+```
+
+The mapper can use span mapping kind `alias` instead of span mapping kind `atom` to indicate that the virtual and original text name the same entity.
+When the diagnostic is rendered, the original text of the alias span (`+`) will be substituted for the virtual text (`add`) in the diagnostic message:
+
+```
+add.lisp:1:2 - error TS2304: Cannot find name '+'.
+1 (+ 1 2 "oops")
+   ~
+```
+
+![Alias mapping from virtual add to the original +. The diagnostic points to + and says Cannot find name '+'.](add-span-mappings-alias.svg)
+
+Gaps in the span map are treated as fully synthesized content and cannot be mapped to a location in the original text.
+Most diagnostics in those unmappable, fully synthesized regions are not discarded; the exceptions are diagnostics that report unnecessary expressions/statements (e.g. unused identifiers).
+In the CLI, diagnostics from fully synthesized regions cause a short snippet of the transformed content to be shown with the diagnostic.
+A common case may be a content mapper that synthesizes an import statement at the top of the virtual file used in scaffolding.
+If that import fails to resolve, the user will see:
+
+```
+app.vue:1:26 - error TS2307: Cannot find module '@vue/content-mapper-utils' or its corresponding type declarations.
+  This location is in code generated by the content mapper '@vue/content-mapper@1.0.0' and has no corresponding location in the original file.
+
+1 import { scaffolding } from "@vue/content-mapper-utils";
+                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+Multiple spans mappings in the virtual text must not overlap, but multiple virtual spans may map to the same span in the original content.
+In other words, one range in the original content can map to multiple ranges in the transformed content.
+
+### Language features
+
+Span mappings also optionally contain a `features` mask specifying which language server features can use that mapping.
+This can be combined with the ability of mapping an original span to many virtual spans.
+Broadly speaking, when a language server request is received for a position in a content-mapped virtual file, TypeScript maps it to every original file projection whose features mask includes the requested operation, performs analysis on the transformed content, and maps visible results back through spans that participate in the same feature.
+This lets a content mapper independently select, for example, one projection for hover and another for definitions or references.
+
+For instance:
+
+`ClassBinding.vue` (original file):
+```vue
+<script setup lang="ts">
+const { active } = defineProps<{ active: boolean }>();
+</script>
+
+<template><p :class="{ active }">Hello</p></template>
+
+<style scoped>
+.active { color: red; }
+</style>
+```
+
+`ClassBinding.ts` (virtual file):
+```ts
+/// <reference types="./node_modules/@vue/language-core/types/template-helpers.d.ts" />
+
+const { defineProps, } = {} as typeof import('vue');
+type __VLS_Props = { active: boolean };
+const __VLS_props = defineProps<__VLS_Props>();
+const { active } = __VLS_props;
+...
+type __VLS_StyleScopedClasses = {}
+ & { active: boolean };
+void ({} as __VLS_StyleScopedClasses);
+__VLS_asFunctionalElement0(__VLS_intrinsics.p, __VLS_intrinsics.p)({
+...{ class: ({ active: active }) },
+});
+/** @type {__VLS_StyleScopedClasses['active']} */;
+...
+export default {} as typeof __VLS_export;
+
+```
+
+In this example, the span for identifier `active` inside the template, i.e. in `<template><p :class="{ active }">Hello</p></template>`, is mapped to three virtual spans:
+`active` property in `...{ class: ({ |active|: active }) }`, `active` reference in `...{ class: ({ active: |active| }) }`, and `active` key text in `/** @type {__VLS_StyleScopedClasses['|active|']} */;`.
+All three span mappings's features mask includes the "definition" feature, so if we run "Go To Definition" on `active` in `<template><p :class="{ active }">Hello</p></template>`, we will get three occurrences, each one corresponding to running "Go To Definition" in the virtual file's span, and then mapping back to the original file:
+
+![Screenshot showing file `ClassBinding.vue` open in VSCode, and a "Peek Definition" window open below it, showing three highlighted occurrences of the identifier `active`: one one line 2, one on line 5, and one on line 8.](class-active-def.png)
+
+Only the first two span mappings include the "hover" feature, such that if we hover over `active`, we only see hover content corresponding to these two mappings, one for a property, another for a variable reference.
+The third span mapping is ignored:
+
+```
+(property) active: boolean
+const active: boolean
+```
+
+More precisely, the TypeScript language server currently supports the following features for content-mapped files:
+
+- **Diagnostics** - always mapped to original content where possible; diagnostics in synthesized regions are collected and reported at the top of the file. Declared-but-not-used diagnostics are automatically suppressed in synthesized regions. Diagnostics are intentionally not represented by a span-map feature flag. Framework-specific semantic diagnostic suppression is instead expressed explicitly through [`diagnosticDirectives`](#diagnostic-directives).
+- **Position-based features** - hover, signature help, completions, definitions, type definitions, implementations, source definitions, references, document highlights, rename, call hierarchy, code actions, formatting, linked editing, and auto-insert map incoming positions or ranges through spans participating in their corresponding `SpanMapFeature` flag.
+- **Document-wide features** - inlay hints, semantic tokens, folding ranges, selection ranges, document symbols, and CodeLens map visible results back only through spans participating in their corresponding flag.
+- **Text edits** - feature participation does not make a mapping edit-safe. Rename, code action, completion, and formatting edits may be written back only through exact, length-preserving `SpanMapKind.Verbatim` mappings.
+
+```ts
+/**
+ * Language-service feature bitmask. Diagnostics and exact edit mapping do not use feature filtering. Named flags may be
+ * combined.
+ */
+export enum SpanMapFeature {
+    Hover = 1,
+    SignatureHelp = 2,
+    Completion = 4,
+    Definition = 8,
+    TypeDefinition = 16,
+    Implementation = 32,
+    References = 64,
+    DocumentHighlights = 128,
+    Rename = 256,
+    CallHierarchy = 512,
+    CodeActions = 1024,
+    Formatting = 2048,
+    InlayHints = 4096,
+    SemanticTokens = 8192,
+    FoldingRanges = 16384,
+    SelectionRanges = 32768,
+    LinkedEditing = 65536,
+    AutoInsert = 131072,
+    DocumentSymbols = 262144,
+    CodeLens = 524288,
+    None = 0,
+    All = 1048575,
+}
+```
+
+Language service requests and visible results can be disabled independently for any span by clearing the corresponding bits, or disabled for all features with `SpanMapFeature.None`. If `features` is omitted from the span mapping tuple, it defaults to `SpanMapFeature.All`, enabling every supported language service feature for that span.
+
+> [!NOTE]
+> Unlike with Volar, feature participation must be statically determined by the content mapper during transformation.
+This level of LSP feature mapping is not intended to replace fully custom language servers. TypeScript’s goal in providing language service support for content-mapped files is to support a good editing experience inside `<script>` blocks or similar verbatim ranges that embed normal TypeScript or JavaScript code without a third-party language server needing to proxy every request unchanged. We expect that ecosystems implementing complex transforms may still want to implement their own language servers alongside TypeScript’s, and either augment or replace TypeScript’s implementation of these language service features. Content mappers provide a baseline editing experience, but they also provide the API foundation for more specialized language servers to build on. Vue tooling, for example, may choose to enable TypeScript features only for selected projections while a separate language server handles the rest, accessing the AST, type, and symbol information of transformed content through an API connection to TypeScript’s language server.
 
 ## Compilation
 
@@ -440,7 +618,7 @@ Content-mapped SourceFiles can be inspected by the JavaScript API. For a content
 ```ts
 const mapped = file.spanMap.virtualToOriginalPosition(10);
 // { position, fidelity }
-// See _packages/native-preview/src/ast/spanMap.ts for details.
+// See packages/typescript/src/ast/spanMap.ts for details.
 ```
 
 If the content mapper provided supplemental outputs for a file, the file names are set on `file.supplementalOutputs` and can be retrieved with `program.getSourceFile(fileName)`.
@@ -463,9 +641,9 @@ To address this problem, you can implement an extension that tells VSCode to act
 
 ```ts
 const extension = vscode.extensions.getExtension("TypeScriptTeam.native-preview");
-const api = await extension?.activate();
+const tsAPI = await extension?.activate();
 
-const registration = api?.registerContentMappers(
+const registration = tsAPI?.registerContentMappers(
     "publisher.vue-language-features",
     [{ extensions: [".vue"] }],
 );
@@ -478,7 +656,7 @@ Imagine the user opens, for example, a `.vue` file that doesn't belong to a conf
 Your extension can register a content mapper contribution for inferred projects:
 
 ```ts
-const registration = api?.registerContentMappers(
+const registration = tsAPI?.registerContentMappers(
     "publisher.vue-language-features",
     [{
         extensions: [".vue"],
@@ -497,39 +675,69 @@ const registration = api?.registerContentMappers(
 );
 ```
 
-Besides activating TypeScript on content mapped files, and providing content mapper support for inferred projects, a companion extension can also provide customized language server features beyond what content mappers enable.
-For instance, consider the following Svelte file:
+If your content mapper also takes in options via a project's tsconfig, then your extension should also contribute a JSON schema for those options:
 
-```svelte
-<script lang="ts">
-  let { visible = true }: { visible?: boolean } = $props();
-</script>
-
-{#if visible}
-  <p>Hello</p>
-{:else}
-  <p>Goodbye</p>
-{/if}
+`content-mapper-extension/package.json`:
+```json
+{
+  ...
+  "contributes": {
+    "jsonValidation": [{
+      "fileMatch": [
+        "tsconfig.json", "tsconfig.*.json", "tsconfig-*.json",
+        "jsconfig.json", "jsconfig.*.json", "jsconfig-*.json"
+      ],
+      "url": "./schemas/mapper-tsconfig.schema.json"
+    }]
+  }
+}
 ```
 
-While TypeScript can provide completions inside the script blocks, which are content-mapped into TypeScript content, it will not provide completions outside those blocks, such as completions for the closing keyword in `{/if}`. Those completions have to be provided by the Svelte extension.
-
-Extensions can also intercept TypeScript language server responses and process them.
-As an example, consider the following Svelte file:
-
-`HoverChild.svelte`:
-```svelte
-<p>Hello</p>
+`content-mapper-extension/schemas/mapper-tsconfig.schema.json`:
+```jsonc
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "contentMappers": {
+      "items": {
+        "if": { // conditional schema: only applies if tsconfig content mapper package match your content mapper package
+          "required": ["package"],
+          "properties": { "package": { "const": "your-content-mapper-package" } } // e.g. "@vue/content-mapper"
+        },
+        "then": {
+          "properties": {
+            "options": { // your content mapper options schema; here we configure Vue as an example
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "target": {
+                  "anyOf": [{ "type": "number" }, { "const": "auto" }],
+                  "description": "Vue target version, or \"auto\" to detect it."
+                },
+                "strictTemplates": { "type": "boolean" }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
 ```
 
-When content mapped, the virtual content will look something like this:
+Besides activating TypeScript on content mapped files, providing content mapper support for inferred projects, and content mapper options schema support, a companion extension can also customize language server features beyond what TypeScript's content mappers API allows.
+A content mapper extension can register an LSP middleware with the TypeScript extension API, allowing it to intercept and modify TypeScript language server responses:
 
-`HoverChild.ts`:
 ```ts
+const disposable = tsAPI.registerLspMiddleware(
+  "textDocument/hover",
+  async (result, { params }) => { ... adjust hover response ... }
+);
+
 ...
-class HoverChild__Svelte_Component_ { ... }
-...
+
+disposable.dispose();
 ```
 
-The special Svelte suffix is necessary to avoid name clashes, but now, if that class is used somewhere and the user hovers over it, they would see the generated name instead of the original name.
-To fix this, the Svelte extension processes TypeScript hover responses, and maps those generated names back to user-facing ones (e.g. `HoverChild__Svelte_Component_` -> `HoverChild`).
+In the example above, the content mapper extension would be able to modify TypeScript's hover response before the response is processed by VSCode.
+
