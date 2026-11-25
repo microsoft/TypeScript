@@ -29,7 +29,7 @@ obj['it\'s "${x}"\\'];
 obj[` + "`it's \"\\${x}\"\\\\`];",
 	})
 	f.VerifyRename(t, "2", `a"b`, map[string]string{
-		"/b.ts": "const foo = { a\"b: true };\n" +
+		"/b.ts": "const foo = { \"a\\\"b\": true };\n" +
 			"foo[\"a\\\"b\"];\n",
 	})
 }

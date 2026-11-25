@@ -454,6 +454,11 @@ func (l *LanguageService) getTextForRename(originalNode *ast.Node, entry *Refere
 		return string(quoteChar) + escapeStringForNode(newText, quoteChar, entry.node) + string(quoteChar)
 	}
 
+	// A numeric property name, as in `{ 0: x }`, must be quoted when the new name is not an identifier.
+	if entry.kind != entryKindRange && ast.IsNumericLiteral(entry.node) && ast.IsDeclarationName(entry.node) {
+		return quoteNonIdentifierName(newText, quotePreference)
+	}
+
 	if entry.kind != entryKindRange && ast.IsIdentifier(entry.node) && isModuleExportNameOfSpecifier(entry.node) {
 		return quoteNonIdentifierName(newText, quotePreference)
 	}
