@@ -4044,9 +4044,9 @@ func (r *Relater) mappedTypeRelatedTo(source *Type, target *Type, reportErrors b
 		r.relation != r.c.identityRelation && r.c.getCombinedMappedTypeOptionality(source) <= r.c.getCombinedMappedTypeOptionality(target)
 	if modifiersRelated {
 		// The constituent types of a homomorphic mapped type reference the distributed form of its type
-		// variable. Normalize both sides to their non-distributed form such that the comparison doesn't
-		// depend on whether either side has been instantiated.
-		source := r.c.getNonDistributedMappedType(source)
+		// variable. The source constituents are instantiated below, which maps them back to the non-distributed
+		// form, but the target ones are related as is, so normalize the target to make the comparison not
+		// depend on whether it has been instantiated.
 		target := r.c.getNonDistributedMappedType(target)
 		targetConstraint := r.c.getConstraintTypeFromMappedType(target)
 		sourceConstraint := r.c.instantiateType(r.c.getConstraintTypeFromMappedType(source), core.IfElse(r.c.getCombinedMappedTypeOptionality(source) < 0, r.c.reportUnmeasurableMapper, r.c.reportUnreliableMapper))
