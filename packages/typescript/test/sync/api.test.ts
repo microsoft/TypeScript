@@ -15,10 +15,12 @@ import {
     getJSDocCommentsAndTags,
     getJSDocTags,
     getSynthesizedDeepClone,
+    getSynthesizedDeepClones,
     getTextOfJSDocComment,
     type Identifier,
     InternalSymbolName,
     isArrayLiteralExpression,
+    isBinaryExpression,
     isCallExpression,
     isClassDeclaration,
     isConstructorDeclaration,
@@ -58,6 +60,7 @@ import {
     type PathKey,
     type PropertyAccessExpression,
     type RootedFilePath,
+    type Statement,
     symbolName,
     SyntaxKind,
     TokenFlags,
@@ -87,6 +90,9 @@ import {
     createVariableDeclaration,
     createVariableDeclarationList,
     createVariableStatement,
+    updateArrayLiteralExpression,
+    updateBinaryExpression,
+    updateExpressionStatement,
     updateSourceFile,
 } from "@typescript/typescript/ast/factory";
 import { visitEachChild } from "@typescript/typescript/ast/visitor";
@@ -113,6 +119,7 @@ import {
     type CreateSnapshotParams,
     DiagnosticCategory,
     type DocumentIdentifier,
+    type EmitContext,
     EmitFlags,
     EmitOnly,
     type FormatDiagnosticsHost,
@@ -9097,6 +9104,145 @@ export const obj = { m: 1, s: "hi", b: true };
 
         assert.strictEqual(api.printer.printNode(updated), expected);
         assert.strictEqual(api.printer.printFile(updated), expected);
+    });
+
+    test("updateSourceFile preserves the shebang", () => {
+        using api = spawnAPI();
+        using lease = api.createSourceFile("/test.ts", "#!/usr/bin/env node\nfoo();\nbar();\n");
+        const { sourceFile } = lease;
+        const updated = updateSourceFile(sourceFile, [sourceFile.statements[1]], sourceFile.endOfFileToken);
+        const expected = "#!/usr/bin/env node\nbar();\n";
+
+        assert.strictEqual(api.printer.printNode(updated), expected);
+        assert.strictEqual(api.printer.printFile(updated), expected);
+    });
+
+    test("updated nodes keep their source comments exactly once", () => {
+        using api = spawnAPI();
+        using lease = api.createSourceFile("/test.ts", "// leading\nfoo(1); // trailing\n/** doc */\nbaz();\n");
+        const { sourceFile } = lease;
+        function rename(node: Node): Node {
+            if (node.kind === SyntaxKind.Identifier && (node as Identifier).text === "foo") return createIdentifier("bar");
+            return visitEachChild(node, rename);
+        }
+        const updated = visitEachChild(sourceFile, rename);
+        assert.notStrictEqual(updated.statements[0], sourceFile.statements[0]);
+
+        assert.strictEqual(api.printer.printFile(updated), "// leading\nbar(1); // trailing\n/** doc */\nbaz();\n");
+
+        const emitContext = api.printer.createEmitContext();
+        emitContext.setEmitFlags(updated.statements[0], EmitFlags.NoComments);
+        assert.strictEqual(api.printer.printFile(updated, { emitContext }), "bar(1);\n/** doc */\nbaz();\n");
+    });
+
+    test("getSynthesizedDeepClone keeps source comments exactly once", () => {
+        using api = spawnAPI();
+        const text = "#!/usr/bin/env node\n// leading\nfoo(/* arg */ 1); // trailing\n/** doc */\nfunction f() {\n    // inner\n    return 1;\n}\n";
+        using lease = api.createSourceFile("/test.ts", text);
+        const { sourceFile } = lease;
+
+        assert.strictEqual(api.printer.printFile(getSynthesizedDeepClone(sourceFile)), api.printer.printFile(sourceFile));
+    });
+
+    test("suppressLeadingAndTrailingComments keeps inner comments of a cloned node", () => {
+        using api = spawnAPI();
+        using lease = api.createSourceFile("/test.ts", "// leading\nfoo(/* arg */ 1); // trailing\nbar();\n");
+        const { sourceFile } = lease;
+        const printWithClone = (clone: Statement, emitContext?: EmitContext) => api.printer.printFile(updateSourceFile(sourceFile, [sourceFile.statements[1], clone], sourceFile.endOfFileToken), { emitContext });
+
+        assert.strictEqual(printWithClone(getSynthesizedDeepClone(sourceFile.statements[0])), "bar();\n// leading\nfoo(/* arg */ 1); // trailing\n");
+
+        const emitContext = api.printer.createEmitContext();
+        const clone = emitContext.suppressLeadingAndTrailingComments(getSynthesizedDeepClone(sourceFile.statements[0]));
+        assert.strictEqual(clone.pos, sourceFile.statements[0].pos);
+        assert.strictEqual(clone.end, sourceFile.statements[0].end);
+        assert.strictEqual(printWithClone(clone, emitContext), "bar();\nfoo(/* arg */ 1);\n");
+    });
+
+    test("suppressLeadingAndTrailingComments keeps comments inside delimiters", () => {
+        using api = spawnAPI();
+        using lease = api.createSourceFile("/test.ts", "// leading\nfoo(1 /* keep */); // trailing\n{\n    // keep\n    foo();\n} // trailing\nbar();\n");
+        const { sourceFile } = lease;
+        const emitContext = api.printer.createEmitContext();
+        const clones = sourceFile.statements.slice(0, 2).map(s => emitContext.suppressLeadingAndTrailingComments(getSynthesizedDeepClone(s)));
+        const updated = updateSourceFile(sourceFile, [sourceFile.statements[2], ...clones], sourceFile.endOfFileToken);
+        assert.strictEqual(api.printer.printFile(updated, { emitContext }), "bar();\nfoo(1 /* keep */);\n{\n    // keep\n    foo();\n}\n");
+    });
+
+    test("suppressLeadingAndTrailingComments keeps comments before a function body's closing brace", () => {
+        using api = spawnAPI();
+        using lease = api.createSourceFile("/test.ts", "function f() {\n    foo();\n    // keep\n} // trailing\nbar();\n");
+        const { sourceFile } = lease;
+        const emitContext = api.printer.createEmitContext();
+        const clone = emitContext.suppressLeadingAndTrailingComments(getSynthesizedDeepClone(sourceFile.statements[0]));
+        const updated = updateSourceFile(sourceFile, [sourceFile.statements[1], clone], sourceFile.endOfFileToken);
+        assert.strictEqual(api.printer.printFile(updated, { emitContext }), "bar();\nfunction f() {\n    foo();\n    // keep\n}\n");
+    });
+
+    test("suppressLeadingAndTrailingComments reaches parsed children of created nodes", () => {
+        using api = spawnAPI();
+        using lease = api.createSourceFile("/test.ts", "// leading\nfoo() /* trailing */;\nbar();\n");
+        const { sourceFile } = lease;
+        const statement = sourceFile.statements[0];
+        assert(isExpressionStatement(statement));
+        const emitContext = api.printer.createEmitContext();
+        const created = emitContext.suppressLeadingAndTrailingComments(createExpressionStatement(statement.expression));
+        const updated = updateSourceFile(sourceFile, [sourceFile.statements[1], created], sourceFile.endOfFileToken);
+        assert.strictEqual(api.printer.printFile(updated, { emitContext }), "bar();\nfoo();\n");
+    });
+
+    test("deep clones keep comments next to tokens", () => {
+        using api = spawnAPI();
+        const text = "function f() { return /* keep */ 1; }\n{ /* keep */ }\n";
+        using lease = api.createSourceFile("/test.ts", text);
+        const { sourceFile } = lease;
+        const updated = updateSourceFile(sourceFile, getSynthesizedDeepClones(sourceFile.statements), sourceFile.endOfFileToken);
+        assert.strictEqual(api.printer.printFile(updated), text);
+    });
+
+    test("printing clones of a released source file", () => {
+        using api = spawnAPI();
+        const lease = api.createSourceFile("/test.ts", "function f() { return /* keep */ 1; }\n");
+        const { sourceFile } = lease;
+        const updated = updateSourceFile(sourceFile, getSynthesizedDeepClones(sourceFile.statements), sourceFile.endOfFileToken);
+        lease.dispose();
+        assert.match(api.printer.printFile(updated), /^function f\(\) \{ return (\/\* keep \*\/ )?1; \}\n$/);
+    });
+
+    test("updated mixed ?? and || operands are parenthesized", () => {
+        using api = spawnAPI();
+        using lease = api.createSourceFile("/test.ts", "a || b || c;\n");
+        const { sourceFile } = lease;
+        const statement = sourceFile.statements[0];
+        assert(isExpressionStatement(statement) && isBinaryExpression(statement.expression));
+        const outer = statement.expression;
+        const inner = outer.left;
+        assert(isBinaryExpression(inner));
+        const newInner = updateBinaryExpression(inner, /*modifiers*/ undefined, inner.left, /*type*/ undefined, createToken(SyntaxKind.QuestionQuestionToken), inner.right);
+        const newOuter = updateBinaryExpression(outer, /*modifiers*/ undefined, newInner, /*type*/ undefined, outer.operatorToken, outer.right);
+        const updated = updateSourceFile(sourceFile, [updateExpressionStatement(statement, newOuter)], sourceFile.endOfFileToken);
+        assert.strictEqual(newInner.pos, inner.pos);
+        assert.strictEqual(api.printer.printFile(updated), "(a ?? b) || c;\n");
+    });
+
+    test("updated nodes keep a trailing array hole", () => {
+        using api = spawnAPI();
+        using lease = api.createSourceFile("/test.ts", "[1];\n[2,,];\n");
+        const { sourceFile } = lease;
+        const [first, second] = sourceFile.statements;
+        assert(isExpressionStatement(first) && isArrayLiteralExpression(first.expression));
+        assert(isExpressionStatement(second) && isArrayLiteralExpression(second.expression));
+        const updated = updateSourceFile(sourceFile, [updateExpressionStatement(first, updateArrayLiteralExpression(first.expression, second.expression.elements))], sourceFile.endOfFileToken);
+        assert.strictEqual((api.printer.printFile(updated)).replace(/\s/g, ""), "[2,,];");
+    });
+
+    test("printing keeps comments in files with non-ASCII text", () => {
+        using api = spawnAPI();
+        using lease = api.createSourceFile("/test.ts", "// é\nfoo(); // trailing\n");
+        const { sourceFile } = lease;
+        assert.strictEqual(api.printer.printFile(sourceFile), "// é\nfoo(); // trailing\n");
+        const updated = updateSourceFile(sourceFile, [getSynthesizedDeepClone(sourceFile.statements[0])], sourceFile.endOfFileToken);
+        assert.strictEqual(api.printer.printFile(updated), "// é\nfoo(); // trailing\n");
     });
 
     test("printFile", () => {

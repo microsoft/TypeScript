@@ -14,6 +14,7 @@ import {
 } from "../../ast/index.ts";
 import type { API as AsyncAPI } from "../async/api.ts";
 import { tryPathKeyFromCanonical } from "../path.ts";
+import type { SourceFileDescriptor } from "../proto.generated.ts";
 import type { CachedSourceFile } from "../sourceFileCache.ts";
 import type { API as SyncAPI } from "../sync/api.ts";
 import type { TimingCollector } from "../timing.ts";
@@ -146,6 +147,11 @@ export class RemoteSourceFile extends RemoteNode implements SourceFileInfo {
     /** @internal */
     get nodeId(): string {
         return readSourceFileNodeId(this.view);
+    }
+
+    /** @internal */
+    get hasServerIdentity(): boolean {
+        return this.view.getBigUint64(HEADER_OFFSET_SOURCE_FILE_ID, /*littleEndian*/ true) !== 0n;
     }
 
     /**
@@ -553,6 +559,30 @@ export function parseNodeHandleFromCompiler(handle: string): ParsedNodeHandle {
 export function decodeNode(data: Uint8Array): Node {
     const sf = new RemoteSourceFile(data, new Wtf8Decoder());
     return sf;
+}
+
+/** @internal */
+export function sourceFileDescriptor(sourceFile: RemoteSourceFile): SourceFileDescriptor {
+    return {
+        fileName: sourceFile.fileName,
+        path: sourceFile.path,
+        contentHash: sourceFile.contentHash,
+        parseOptionsKey: sourceFile.parseOptionsKey,
+        scriptKind: sourceFile.scriptKind,
+        nodeId: sourceFile.nodeId,
+    };
+}
+
+/**
+ * Returns the server source file containing `node` and the node's index within it,
+ * or `undefined` if `node` was not decoded from a server source file.
+ * @internal
+ */
+export function getRemoteNodeLocation(node: Node): { sourceFile: RemoteSourceFile; index: number; } | undefined {
+    if (!(node instanceof RemoteNode)) return undefined;
+    const sourceFile = node["_sourceFile"];
+    if (!(sourceFile instanceof RemoteSourceFile) || !sourceFile.hasServerIdentity) return undefined;
+    return { sourceFile, index: node["index"] };
 }
 
 /**

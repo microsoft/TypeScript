@@ -3,6 +3,11 @@ import * as ts from "@typescript/typescript/sync";
 import fs from "node:fs";
 import path from "node:path";
 
+// These types and their transitive dependencies must be exported from the specified entrypoint.
+const requiredEntrypointTypes: Readonly<Record<string, readonly string[]>> = {
+    "./async": ["CompilerOptions"],
+};
+
 type MessageId = "missingExport" | "missingValueExport" | "missingEntrypointExport" | "missingEntrypointValueExport" | "missingRequiredExport" | "unresolvedReference";
 
 const typeExport = 1;
@@ -401,7 +406,7 @@ export function analyzePublicApi(api: ts.API, project: ts.Project, entrypoints: 
     return { resolve, getModuleExports, getExportAccess, isRelevant, getReferences, allExported, allValueExported, entrypointExports };
 }
 
-export function checkPublicApi(filename: string, requiredExports: string[], analysis: PublicApiAnalysis): PublicApiDiagnostic[] {
+export function checkPublicApi(filename: string, requiredExports: readonly string[], analysis: PublicApiAnalysis): PublicApiDiagnostic[] {
     const { resolve, getModuleExports, getExportAccess, isRelevant, getReferences, allExported, allValueExported, entrypointExports } = analysis;
     const diagnostics: PublicApiDiagnostic[] = [];
     const report = (messageId: MessageId, message: string, node?: ast.Node): void => {
@@ -474,15 +479,22 @@ export function checkPublicApi(filename: string, requiredExports: string[], anal
 function main(): void {
     const packageDir = path.resolve(import.meta.dirname, "..");
     const packageJson: { exports: Record<string, string | { "@typescript/source"?: string; }>; } = JSON.parse(fs.readFileSync(path.join(packageDir, "package.json"), "utf8"));
-    const entrypoints = Object.values(packageJson.exports)
-        .flatMap(value => typeof value === "object" && value["@typescript/source"] ? [path.resolve(packageDir, value["@typescript/source"])] : []);
-    const asyncEntrypoint = path.join(packageDir, "src/api/async/api.ts");
+    const entrypoints = Object.entries(packageJson.exports)
+        .flatMap(([name, value]) =>
+            typeof value === "object" && value["@typescript/source"]
+                ? [{ name, file: path.resolve(packageDir, value["@typescript/source"]), requiredExports: requiredEntrypointTypes[name] ?? [] }]
+                : []
+        );
+    for (const name of Object.keys(requiredEntrypointTypes)) {
+        if (!entrypoints.some(entrypoint => entrypoint.name === name)) throw new Error(`Cannot find public entrypoint '${name}'`);
+    }
+    const files = entrypoints.map(entrypoint => entrypoint.file);
     using api = new ts.API({ cwd: packageDir });
-    using snapshot = api.createSnapshot({ openFiles: entrypoints });
-    const project = snapshot.getDefaultProjectForFile(entrypoints[0]);
-    if (!project) throw new Error(`Cannot find project for ${entrypoints[0]}`);
-    const analysis = analyzePublicApi(api, project, entrypoints);
-    const diagnostics = entrypoints.flatMap(file => checkPublicApi(file, file === asyncEntrypoint ? ["CompilerOptions"] : [], analysis));
+    using snapshot = api.createSnapshot({ openFiles: files });
+    const project = snapshot.getDefaultProjectForFile(files[0]);
+    if (!project) throw new Error(`Cannot find project for ${files[0]}`);
+    const analysis = analyzePublicApi(api, project, files);
+    const diagnostics = entrypoints.flatMap(({ file, requiredExports }) => checkPublicApi(file, requiredExports, analysis));
     for (const diagnostic of diagnostics) {
         console.error(`${diagnostic.file}:${diagnostic.line}:${diagnostic.character}: ${diagnostic.message} (entrypoint: ${diagnostic.entrypoint})`);
     }

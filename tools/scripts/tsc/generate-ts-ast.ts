@@ -669,9 +669,9 @@ function generateFactory(): string {
     out.push(`} from "./ast.ts";`);
     out.push(`import { getModifiers, modifierToFlag } from "./modifiers.ts";`);
     out.push(`import { getChildren, getFirstToken, getLastToken, getTokenPosOfNode } from "./astnav.ts";`);
-    if (handWrittenCloneHelpers.length > 0) {
+    {
         out.push(`import {`);
-        for (const helperName of [...new Set(handWrittenCloneHelpers.map(h => h.helperName))].sort((a, b) => a.localeCompare(b))) {
+        for (const helperName of [...new Set([...handWrittenCloneHelpers.map(h => h.helperName), "setOriginalNode"])].sort((a, b) => a.localeCompare(b))) {
             out.push(`    ${helperName},`);
         }
         out.push(`} from "./utils.ts";`);
@@ -705,7 +705,7 @@ function generateFactory(): string {
     out.push(`/** @internal */`);
     out.push(`export class NodeObject {`);
     out.push(`    readonly kind: SyntaxKind;`);
-    out.push(`    flags: NodeFlags = 0 as NodeFlags;`);
+    out.push(`    flags: NodeFlags = NodeFlags.Synthesized;`);
     out.push(`    readonly pos: number = -1;`);
     out.push(`    readonly end: number = -1;`);
     out.push(`    parent: Node = undefined!;`);
@@ -821,13 +821,19 @@ function generateFactory(): string {
     out.push(`    return arr;`);
     out.push(`}`);
     out.push(``);
+    out.push(`function update<T extends Node>(updated: T, original: T): T {`);
+    out.push(`    (updated as any).pos = original.pos;`);
+    out.push(`    (updated as any).end = original.end;`);
+    out.push(`    return setOriginalNode(updated, original);`);
+    out.push(`}`);
+    out.push(``);
     out.push(`export function cloneNode<T extends Node>(node: T): T {`);
     out.push(`    const data = cloneNodeData(node);`);
     out.push(`    const clone = new NodeObject(node.kind, data);`);
-    out.push(`    (clone as any).flags = node.flags;`);
+    out.push(`    (clone as any).flags = node.flags | NodeFlags.Synthesized;`);
     out.push(`    (clone as any).pos = node.pos;`);
     out.push(`    (clone as any).end = node.end;`);
-    out.push(`    return clone as unknown as T;`);
+    out.push(`    return setOriginalNode(clone as unknown as T, node);`);
     out.push(`}`);
     out.push(``);
 
@@ -1128,7 +1134,8 @@ function generateFactory(): string {
         if (nodeProps.length > 0) {
             out.push(`    const node = new NodeObject(${kindExpr}, ${dataStr}) as unknown as ${returnType};`);
             for (const { propName, paramName } of nodeProps) {
-                out.push(`    (node as any).${propName} = ${paramName};`);
+                const value = propName === "flags" ? `${paramName} | NodeFlags.Synthesized` : paramName;
+                out.push(`    (node as any).${propName} = ${value};`);
             }
             out.push(`    return node;`);
         }
@@ -1241,7 +1248,7 @@ function generateFactory(): string {
         });
 
         out.push(`export function ${funcName}(${paramParts.join(", ")}): ${iface} {`);
-        out.push(`    return ${comparisons.join(" || ")} ? create${iface}(${createArgs.join(", ")}) : node;`);
+        out.push(`    return ${comparisons.join(" || ")} ? update(create${iface}(${createArgs.join(", ")}), node) : node;`);
         out.push(`}`);
         out.push(``);
     }
@@ -1279,7 +1286,7 @@ function generateFactory(): string {
         });
 
         out.push(`export function update${v.tsName}(${paramParts.join(", ")}): ${v.tsName} {`);
-        out.push(`    return ${comparisons.join(" || ")} ? create${v.tsName}(${createArgs.join(", ")}) : node;`);
+        out.push(`    return ${comparisons.join(" || ")} ? update(create${v.tsName}(${createArgs.join(", ")}), node) : node;`);
         out.push(`}`);
         out.push(``);
     }
@@ -1313,7 +1320,7 @@ function generateFactory(): string {
     // ── updateSourceFile (hand-written in schema) ──
     out.push(`export function updateSourceFile(node: SourceFile, statements: readonly Statement[], endOfFileToken: EndOfFile): SourceFile {`);
     out.push(`    return node.statements !== statements || node.endOfFileToken !== endOfFileToken`);
-    out.push(`        ? cloneSourceFileWithChanges(node, statements, endOfFileToken)`);
+    out.push(`        ? update(cloneSourceFileWithChanges(node, statements, endOfFileToken), node)`);
     out.push(`        : node;`);
     out.push(`}`);
     out.push(``);

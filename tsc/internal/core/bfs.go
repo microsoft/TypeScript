@@ -30,9 +30,9 @@ func (l *BreadthFirstSearchLevel[K, N]) Delete(key K) {
 	l.jobs.Delete(key)
 }
 
-func (l *BreadthFirstSearchLevel[K, N]) Range(f func(node N) bool) {
-	for job := range l.jobs.Values() {
-		if !f(job.node) {
+func (l *BreadthFirstSearchLevel[K, N]) Range(f func(key K, node N) bool) {
+	for key, job := range l.jobs.Entries() {
+		if !f(key, job.node) {
 			return
 		}
 	}

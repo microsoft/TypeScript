@@ -1,15 +1,23 @@
-const assert = require("node:assert/strict");
-const fs = require("node:fs");
-const os = require("node:os");
-const path = require("node:path");
-const test = require("node:test");
-const { spawnSync } = require("node:child_process");
-const { API } = require("@typescript/typescript/sync");
-const { analyzePublicApi, checkPublicApi } = require("./checkPublicApi.ts");
+import { API } from "@typescript/typescript/sync";
+import assert from "node:assert/strict";
+import { spawnSync } from "node:child_process";
+import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
+import { test } from "node:test";
+import {
+    analyzePublicApi,
+    checkPublicApi,
+    type PublicApiDiagnostic,
+} from "../scripts/checkPublicApi.ts";
 
 const tsconfig = JSON.stringify({ compilerOptions: { module: "nodenext", strict: true, noEmit: true } });
 
-function lint(files, options = {}, inspectApi) {
+function lint(
+    files: Record<string, string>,
+    options: { entrypoints?: string[]; sameEntrypoint?: string[]; } = {},
+    inspectApi?: (api: API) => void,
+): PublicApiDiagnostic[] {
     const directory = fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(), "public-api-types-")));
     try {
         for (const [file, text] of Object.entries({ "tsconfig.json": tsconfig, ...files })) {
@@ -40,8 +48,8 @@ function lint(files, options = {}, inspectApi) {
     }
 }
 
-const messagesOf = files => lint(files).map(message => message.message);
-const missing = name => `Public API references '${name}', but this type is not exported from any public entrypoint.`;
+const messagesOf = (files: Record<string, string>): string[] => lint(files).map(message => message.message);
+const missing = (name: string): string => `Public API references '${name}', but this type is not exported from any public entrypoint.`;
 
 test("batches independent references and overload queries", () => {
     const fields = Array.from({ length: 64 }, (_, index) => `field${index}: Hidden;`).join("\n");
@@ -49,7 +57,7 @@ test("batches independent references and overload queries", () => {
         method${index}(value: string): void;
         method${index}(value: Hidden): void {}
     `).join("\n");
-    let requestCount;
+    let requestCount: number | undefined;
     const diagnostics = lint(
         {
             "index.ts": `
@@ -66,7 +74,7 @@ test("batches independent references and overload queries", () => {
         },
     );
     assert.deepEqual(diagnostics, []);
-    assert.ok(requestCount < 24, `Expected batched queries, got ${requestCount} IPC requests`);
+    assert.ok(requestCount !== undefined && requestCount < 24, `Expected batched queries, got ${requestCount} IPC requests`);
 });
 
 test("accepts types exported by another entrypoint but reports unexported transitive types", () => {
@@ -100,7 +108,7 @@ test("requires a selected export's transitive types and enum values from the sam
         `,
     };
     const options = { entrypoints: ["index.ts", "other.ts"], sameEntrypoint: ["Options"] };
-    assert.deepEqual(lint(files, options).map(message => [message.messageId, message.message.match(/'(.*?)'/)[1]]), [
+    assert.deepEqual(lint(files, options).map(message => [message.messageId, message.message.match(/'(.*?)'/)?.[1]]), [
         ["missingEntrypointExport", "Chain"],
         ["missingEntrypointExport", "Leaf"],
         ["missingEntrypointValueExport", "Kind"],
@@ -172,17 +180,22 @@ test("standalone command reports errors and exits nonzero", () => {
         fs.mkdirSync(path.join(directory, "scripts"));
         fs.mkdirSync(path.join(directory, "src"));
         fs.mkdirSync(path.join(directory, "node_modules", "@typescript"), { recursive: true });
-        fs.symlinkSync(path.dirname(require.resolve("@typescript/typescript/package.json")), path.join(directory, "node_modules", "@typescript", "typescript"), "junction");
-        fs.copyFileSync(path.join(__dirname, "checkPublicApi.ts"), path.join(directory, "scripts/checkPublicApi.ts"));
+        fs.symlinkSync(path.resolve(import.meta.dirname, ".."), path.join(directory, "node_modules", "@typescript", "typescript"), "junction");
+        fs.copyFileSync(path.resolve(import.meta.dirname, "../scripts/checkPublicApi.ts"), path.join(directory, "scripts/checkPublicApi.ts"));
         fs.writeFileSync(
             path.join(directory, "package.json"),
             JSON.stringify({
                 type: "module",
-                exports: { ".": { "@typescript/source": "./src/index.ts" } },
+                exports: {
+                    ".": { "@typescript/source": "./src/index.ts" },
+                    "./async": { "@typescript/source": "./src/async.ts" },
+                },
             }),
         );
         fs.writeFileSync(path.join(directory, "tsconfig.json"), tsconfig);
         const source = path.join(directory, "src/index.ts");
+        const asyncSource = path.join(directory, "src/async.ts");
+        fs.writeFileSync(asyncSource, "export interface CompilerOptions {}");
         fs.writeFileSync(source, "interface Hidden {} export interface Public { value: Hidden; }");
         const run = () => spawnSync(process.execPath, ["--conditions", "@typescript/source", path.join(directory, "scripts/checkPublicApi.ts")], { encoding: "utf8" });
         const failed = run();
@@ -192,6 +205,30 @@ test("standalone command reports errors and exits nonzero", () => {
         const passed = run();
         assert.equal(passed.status, 0, passed.stderr);
         assert.equal(passed.stderr, "");
+
+        fs.writeFileSync(asyncSource, 'import type { Hidden } from "./index.js"; export interface CompilerOptions { hidden: Hidden; }');
+        const missingDependency = run();
+        assert.equal(missingDependency.status, 1, missingDependency.stderr);
+        assert.match(missingDependency.stderr, /Type 'Hidden', referenced by 'CompilerOptions', is not exported from this entrypoint/);
+        fs.appendFileSync(asyncSource, ' export { Hidden } from "./index.js";');
+        const exportedDependency = run();
+        assert.equal(exportedDependency.status, 0, exportedDependency.stderr);
+
+        fs.writeFileSync(asyncSource, 'export { Hidden } from "./index.js";');
+        const missingRoot = run();
+        assert.equal(missingRoot.status, 1, missingRoot.stderr);
+        assert.match(missingRoot.stderr, /This entrypoint must export 'CompilerOptions'/);
+
+        fs.writeFileSync(
+            path.join(directory, "package.json"),
+            JSON.stringify({
+                type: "module",
+                exports: { ".": { "@typescript/source": "./src/index.ts" } },
+            }),
+        );
+        const missingEntrypoint = run();
+        assert.equal(missingEntrypoint.status, 1, missingEntrypoint.stderr);
+        assert.match(missingEntrypoint.stderr, /Cannot find public entrypoint '\.\/async'/);
     }
     finally {
         fs.rmSync(directory, { recursive: true, force: true });
