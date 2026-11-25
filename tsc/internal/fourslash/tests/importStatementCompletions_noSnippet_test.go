@@ -50,3 +50,40 @@ export const foo = 0;
 		},
 	})
 }
+
+func TestImportStatementCompletions_noSnippetDollarName(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @Filename: /mod.ts
+export const f$oo = 0;
+// @Filename: /index0.ts
+[|import f/**/|]`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
+		IsIncomplete: false,
+		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
+			CommitCharacters: &[]string{},
+			EditRange:        Ignored,
+		},
+		Items: &fourslash.CompletionsExpectedItems{
+			Includes: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label:      "f$oo",
+					InsertText: new("import { f\\$oo } from \"./mod\";"),
+					Data: &lsproto.CompletionItemData{
+						AutoImport: &lsproto.AutoImportFix{
+							ModuleSpecifier: "./mod",
+						},
+					},
+					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
+						TextEdit: &lsproto.TextEdit{
+							NewText: "import { f\\$oo } from \"./mod\";",
+							Range:   f.Ranges()[0].LSRange,
+						},
+					},
+				},
+			},
+		},
+	})
+}
