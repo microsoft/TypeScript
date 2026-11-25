@@ -99,9 +99,7 @@ if (largeNullOrVoid!.type === "1" && largeNullOrVoid !== null) {
 >largeNullOrVoid : Symbol(largeNullOrVoid, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 30, 13))
 
     largeNullOrVoid.type;
->largeNullOrVoid.type : Symbol(type, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 8, 7))
 >largeNullOrVoid : Symbol(largeNullOrVoid, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 30, 13))
->type : Symbol(type, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 8, 7))
 }
 
 declare const smallWithUndefinedTag: Small | { type: undefined } | undefined;

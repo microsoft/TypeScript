@@ -75,7 +75,7 @@ if (large!.type === "1") {
 
     large.type;
 >large.type : "1"
->large : { type: "1"; }
+>large : { type: "1"; } | undefined
 >type : "1"
 }
 
@@ -110,12 +110,12 @@ if (largeNullOrVoid!.type === "1" && largeNullOrVoid !== null) {
 >type : "1" | "10" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
 >"1" : "1"
 >largeNullOrVoid !== null : boolean
->largeNullOrVoid : { type: "1"; }
+>largeNullOrVoid : void | { type: "1"; } | null
 
     largeNullOrVoid.type;
->largeNullOrVoid.type : "1"
->largeNullOrVoid : { type: "1"; }
->type : "1"
+>largeNullOrVoid.type : any
+>largeNullOrVoid : void | { type: "1"; }
+>type : any
 }
 
 declare const smallWithUndefinedTag: Small | { type: undefined } | undefined;
@@ -147,7 +147,7 @@ if (largeWithUndefinedTag?.type === undefined) {
 
     largeWithUndefinedTag.type;
 >largeWithUndefinedTag.type : undefined
->largeWithUndefinedTag : { type: undefined; }
+>largeWithUndefinedTag : { type: undefined; } | undefined
 >type : undefined
 }
 
@@ -205,7 +205,7 @@ if (largeTag === "1") {
 
     large.type;
 >large.type : "1"
->large : { type: "1"; }
+>large : { type: "1"; } | undefined
 >type : "1"
 }
 

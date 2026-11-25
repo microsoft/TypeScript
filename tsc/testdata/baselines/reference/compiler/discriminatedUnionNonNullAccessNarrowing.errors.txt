@@ -1,11 +1,16 @@
 discriminatedUnionNonNullAccessNarrowing.ts(24,5): error TS18048: 'small' is possibly 'undefined'.
+discriminatedUnionNonNullAccessNarrowing.ts(27,5): error TS18048: 'large' is possibly 'undefined'.
 discriminatedUnionNonNullAccessNarrowing.ts(34,21): error TS2339: Property 'type' does not exist on type 'void | { type: "1"; }'.
   Property 'type' does not exist on type 'void'.
+discriminatedUnionNonNullAccessNarrowing.ts(37,21): error TS2339: Property 'type' does not exist on type 'void | { type: "1"; }'.
+  Property 'type' does not exist on type 'void'.
 discriminatedUnionNonNullAccessNarrowing.ts(44,5): error TS18048: 'smallWithUndefinedTag' is possibly 'undefined'.
+discriminatedUnionNonNullAccessNarrowing.ts(47,5): error TS18048: 'largeWithUndefinedTag' is possibly 'undefined'.
 discriminatedUnionNonNullAccessNarrowing.ts(59,5): error TS18048: 'small' is possibly 'undefined'.
+discriminatedUnionNonNullAccessNarrowing.ts(63,5): error TS18048: 'large' is possibly 'undefined'.
 
 
-==== discriminatedUnionNonNullAccessNarrowing.ts (4 errors) ====
+==== discriminatedUnionNonNullAccessNarrowing.ts (8 errors) ====
     // Discriminant narrowing should be consistent regardless of union size (#62511).
     // Large has enough constituents to be narrowed through a constituent map; Small does not.
     
@@ -35,6 +40,8 @@ discriminatedUnionNonNullAccessNarrowing.ts(59,5): error TS18048: 'small' is pos
     }
     if (large!.type === "1") {
         large.type;
+        ~~~~~
+!!! error TS18048: 'large' is possibly 'undefined'.
     }
     
     declare const smallNullOrVoid: Small | null | void;
@@ -48,6 +55,9 @@ discriminatedUnionNonNullAccessNarrowing.ts(59,5): error TS18048: 'small' is pos
     }
     if (largeNullOrVoid!.type === "1" && largeNullOrVoid !== null) {
         largeNullOrVoid.type;
+                        ~~~~
+!!! error TS2339: Property 'type' does not exist on type 'void | { type: "1"; }'.
+!!! error TS2339:   Property 'type' does not exist on type 'void'.
     }
     
     declare const smallWithUndefinedTag: Small | { type: undefined } | undefined;
@@ -60,6 +70,8 @@ discriminatedUnionNonNullAccessNarrowing.ts(59,5): error TS18048: 'small' is pos
     }
     if (largeWithUndefinedTag?.type === undefined) {
         largeWithUndefinedTag.type;
+        ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS18048: 'largeWithUndefinedTag' is possibly 'undefined'.
     }
     
     if (small?.type === "1") {
@@ -78,5 +90,7 @@ discriminatedUnionNonNullAccessNarrowing.ts(59,5): error TS18048: 'small' is pos
     const largeTag = large?.type;
     if (largeTag === "1") {
         large.type;
+        ~~~~~
+!!! error TS18048: 'large' is possibly 'undefined'.
     }
     
