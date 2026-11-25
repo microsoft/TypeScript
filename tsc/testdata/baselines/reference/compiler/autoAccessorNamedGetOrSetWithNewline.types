@@ -1,0 +1,38 @@
+//// [tests/cases/compiler/autoAccessorNamedGetOrSetWithNewline.ts] ////
+
+=== autoAccessorNamedGetOrSetWithNewline.ts ===
+class C {
+>C : C
+
+    accessor get
+>get : any
+
+    m() { return 42; }
+>m : () => number
+>42 : 42
+
+    accessor set
+>set : any
+
+    n() { return 42; }
+>n : () => number
+>42 : 42
+}
+
+const c = new C();
+>c : C
+>new C() : C
+>C : typeof C
+
+const m: () => number = c.m;
+>m : () => number
+>c.m : () => number
+>c : C
+>m : () => number
+
+const n: () => number = c.n;
+>n : () => number
+>c.n : () => number
+>c : C
+>n : () => number
+

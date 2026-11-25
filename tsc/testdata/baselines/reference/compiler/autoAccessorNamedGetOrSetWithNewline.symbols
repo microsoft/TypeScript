@@ -1,0 +1,35 @@
+//// [tests/cases/compiler/autoAccessorNamedGetOrSetWithNewline.ts] ////
+
+=== autoAccessorNamedGetOrSetWithNewline.ts ===
+class C {
+>C : Symbol(C, Decl(autoAccessorNamedGetOrSetWithNewline.ts, 0, 0))
+
+    accessor get
+>get : Symbol(C.get, Decl(autoAccessorNamedGetOrSetWithNewline.ts, 0, 9))
+
+    m() { return 42; }
+>m : Symbol(C.m, Decl(autoAccessorNamedGetOrSetWithNewline.ts, 1, 16))
+
+    accessor set
+>set : Symbol(C.set, Decl(autoAccessorNamedGetOrSetWithNewline.ts, 2, 22))
+
+    n() { return 42; }
+>n : Symbol(C.n, Decl(autoAccessorNamedGetOrSetWithNewline.ts, 4, 16))
+}
+
+const c = new C();
+>c : Symbol(c, Decl(autoAccessorNamedGetOrSetWithNewline.ts, 8, 5))
+>C : Symbol(C, Decl(autoAccessorNamedGetOrSetWithNewline.ts, 0, 0))
+
+const m: () => number = c.m;
+>m : Symbol(m, Decl(autoAccessorNamedGetOrSetWithNewline.ts, 9, 5))
+>c.m : Symbol(C.m, Decl(autoAccessorNamedGetOrSetWithNewline.ts, 1, 16))
+>c : Symbol(c, Decl(autoAccessorNamedGetOrSetWithNewline.ts, 8, 5))
+>m : Symbol(C.m, Decl(autoAccessorNamedGetOrSetWithNewline.ts, 1, 16))
+
+const n: () => number = c.n;
+>n : Symbol(n, Decl(autoAccessorNamedGetOrSetWithNewline.ts, 10, 5))
+>c.n : Symbol(C.n, Decl(autoAccessorNamedGetOrSetWithNewline.ts, 4, 16))
+>c : Symbol(c, Decl(autoAccessorNamedGetOrSetWithNewline.ts, 8, 5))
+>n : Symbol(C.n, Decl(autoAccessorNamedGetOrSetWithNewline.ts, 4, 16))
+
