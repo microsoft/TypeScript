@@ -62,7 +62,7 @@ func (f *missingMemberFixer) createMemberFromSymbol(symbol *ast.Symbol, enclosin
 	if declaration != nil {
 		kind = declaration.Kind
 	}
-	declarationName := createDeclarationName(f.changeTracker.NodeFactory, f.typeChecker, symbol, declaration, quotePreference)
+	declarationName := createDeclarationName(f.changeTracker.NodeFactory, f.typeChecker, symbol, declaration, enclosingDeclaration, quotePreference)
 	modifiers := f.createModifiers(symbol, declaration)
 
 	flags := nodebuilder.FlagsNoTruncation
@@ -487,9 +487,12 @@ func createDummyParameters(factory *ast.NodeFactory, argCount int, names []strin
 	return factory.NewNodeList(parameters)
 }
 
-func createDeclarationName(factory *ast.NodeFactory, typeChecker *checker.Checker, symbol *ast.Symbol, declaration *ast.Node, quotePreference lsutil.QuotePreference) *ast.PropertyName {
+func createDeclarationName(factory *ast.NodeFactory, typeChecker *checker.Checker, symbol *ast.Symbol, declaration *ast.Node, enclosingDeclaration *ast.Node, quotePreference lsutil.QuotePreference) *ast.PropertyName {
 	if symbol != nil && symbol.CheckFlags()&ast.CheckFlagsMapped != 0 {
 		nameType := typeChecker.GetNameTypeOfSymbol(symbol)
+		if nameType != nil && nameType.Flags()&checker.TypeFlagsUniqueESSymbol != 0 {
+			return factory.NewComputedPropertyName(typeChecker.SymbolToExpression(nameType.Symbol(), ast.SymbolFlagsValue, enclosingDeclaration, nodebuilder.FlagsNone))
+		}
 		if nameType != nil && checker.IsTypeUsableAsPropertyName(nameType) {
 			name := checker.GetPropertyNameFromType(nameType)
 			if !scanner.IsIdentifierText(name, core.LanguageVariantStandard) {

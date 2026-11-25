@@ -53,3 +53,22 @@ class C implements I {
 		Index: 0,
 	})
 }
+
+func TestCodeFixClassImplementInterfaceMappedUniqueSymbolKey(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `declare const key: unique symbol;
+type I = { [K in typeof key]: number };
+class C implements I {}`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyCodeFix(t, fourslash.VerifyCodeFixOptions{
+		Description: "Implement interface 'I'",
+		NewFileContent: `declare const key: unique symbol;
+type I = { [K in typeof key]: number };
+class C implements I {
+    [key]: number;
+}`,
+		Index: 0,
+	})
+}
