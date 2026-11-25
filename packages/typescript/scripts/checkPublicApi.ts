@@ -41,7 +41,7 @@ function getReferenceName(node: ast.Node): ast.Node | undefined {
     if (ast.isTypeReferenceNode(node)) return node.typeName;
     if (ast.isExpressionWithTypeArguments(node)) return node.expression;
     if (ast.isTypeQueryNode(node)) return node.exprName;
-    if (ast.isImportTypeNode(node)) return node.qualifier;
+    if (ast.isImportTypeNode(node)) return node.qualifier ?? node;
 }
 
 export interface PublicApiDiagnostic {
@@ -335,7 +335,7 @@ export function analyzePublicApi(api: ts.API, project: ts.Project, entrypoints: 
         return references;
     };
     const loadReferences = (symbols: ts.Symbol[]): void => {
-        const declarations = symbols.map(symbol => getDeclarations(symbol).filter(node => !isPrivateMember(node) && !isInternal(node)));
+        const declarations = symbols.map(symbol => getDeclarations(symbol).filter(node => !ast.isSourceFile(node) && !ast.isModuleDeclaration(node) && !isPrivateMember(node) && !isInternal(node)));
         const overloads = new Set<ast.Node>();
         const collectOverloads = (node: ast.Node): void => {
             if (isOverloadCandidate(node) && !overloadCache.has(node)) overloads.add(node);
@@ -389,6 +389,7 @@ export function analyzePublicApi(api: ts.API, project: ts.Project, entrypoints: 
                         if (isRelevant(target)) next.add(target);
                     }
                 }
+                symbols.push(symbol);
             }
             else {
                 symbols.push(symbol);
@@ -443,7 +444,6 @@ export function checkPublicApi(filename: string, requiredExports: readonly strin
                 for (const member of getModuleExports(symbol).values()) {
                     if (getExportAccess(symbol, member) & typeExport) visitSymbol(member, reference, root);
                 }
-                return;
             }
             for (const { name, target } of getReferences(symbol)) {
                 if (target) {

@@ -369,6 +369,16 @@ test("reports signature, heritage, import type and typeof references", () => {
     );
 });
 
+test("follows unqualified import types through the imported module's exports", () => {
+    assert.deepEqual(
+        messagesOf({
+            "index.ts": 'export type Factory = typeof import("./internal.js");',
+            "internal.ts": "interface Hidden {} export function make(): Hidden { return null!; }",
+        }),
+        [missing("Hidden")],
+    );
+});
+
 test("checks types inferred from exported initializers", () => {
     assert.deepEqual(
         messagesOf({
@@ -476,6 +486,24 @@ test("accepts types exposed through an exported namespace without checking its p
             "types.ts": "export interface Hidden {} type Implementation = {}; const table: Implementation = {};",
         }),
         [],
+    );
+});
+
+test("checks merged class declarations alongside namespace exports", () => {
+    assert.deepEqual(
+        messagesOf({
+            "index.ts": "interface Hidden {} export class Public { value!: Hidden; } export namespace Public { export interface Tag {} }",
+        }),
+        [missing("Hidden")],
+    );
+});
+
+test("checks merged function declarations alongside namespace exports", () => {
+    assert.deepEqual(
+        messagesOf({
+            "index.ts": "interface Hidden {} export function Public(value: Hidden): void {} export namespace Public { export interface Tag {} }",
+        }),
+        [missing("Hidden")],
     );
 });
 
