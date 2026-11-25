@@ -1086,10 +1086,18 @@ type searchResult struct {
 	retain  collections.Set[tspath.PathKey]
 }
 
-func removeRedundantFindRequests(level *core.BreadthFirstSearchLevel[searchNodeKey, searchNode]) {
+func removeRedundantFindRequests(
+	level *core.BreadthFirstSearchLevel[searchNodeKey, searchNode],
+	keepFind func(searchNode) bool,
+) {
 	var redundantKeys []searchNodeKey
-	level.Range(func(key searchNodeKey, _ searchNode) bool {
-		if key.loadKind == projectLoadKindFind && level.Has(searchNodeKey{configFileName: key.configFileName, loadKind: projectLoadKindCreate}) {
+	level.Range(func(key searchNodeKey, node searchNode) bool {
+		if key.loadKind != projectLoadKindFind {
+			return true
+		}
+		createKey := searchNodeKey{configFileName: key.configFileName, loadKind: projectLoadKindCreate}
+		// Built projects can match at their earlier Find position.
+		if level.Has(createKey) && !keepFind(node) {
 			redundantKeys = append(redundantKeys, key)
 		}
 		return true
@@ -1099,7 +1107,7 @@ func removeRedundantFindRequests(level *core.BreadthFirstSearchLevel[searchNodeK
 	}
 }
 
-// Earlier candidates can still win, so keep them in the parallel search.
+// Keep earlier candidates in the parallel search so they can still win.
 func pruneAfterCachedMatch(
 	level *core.BreadthFirstSearchLevel[searchNodeKey, searchNode],
 	isCachedMatch func(searchNodeKey) bool,
@@ -1114,8 +1122,7 @@ func pruneAfterCachedMatch(
 		}
 		return true
 	})
-	// Delete after traversal so entries are not skipped.
-	// Removing from the end keeps pruning linear.
+	// Collect before deleting to avoid skipping entries. Tail deletion keeps pruning linear.
 	for _, key := range slices.Backward(trailingKeys) {
 		level.Delete(key)
 	}
@@ -1135,6 +1142,7 @@ func (b *ProjectCollectionBuilder) findOrCreateDefaultConfiguredProjectWorker(
 		visited = &collections.SyncSet[searchNodeKey]{}
 	}
 
+	// A nil LogTree suppresses logging during cached-match checks.
 	configMayContainFile := func(config *tsoptions.ParsedCommandLine, logger *logging.LogTree) bool {
 		if len(config.FileNames()) == 0 {
 			// A solution config can still lead to a match through its references.
@@ -1162,6 +1170,34 @@ func (b *ProjectCollectionBuilder) findOrCreateDefaultConfiguredProjectWorker(
 		return true, direct
 	}
 
+	visit := func(node searchNode) (included, direct bool) {
+		configFilePath := b.toPathKey(node.configFileName)
+		config := b.configFileRegistryBuilder.findOrAcquireConfigForFile(node.configFileName, configFilePath, path, node.loadKind, node.logger.Fork("Acquiring config for open file"))
+		if config == nil {
+			node.logger.Log("Config file for project does not already exist")
+			return false, false
+		}
+		configs.Store(configFilePath, config)
+		if !configMayContainFile(config, node.logger) {
+			return false, false
+		}
+
+		project := b.findOrCreateProject(node.configFileName, configFilePath, node.loadKind, node.logger)
+		if project == nil {
+			node.logger.Log("Project does not already exist")
+			return false, false
+		}
+
+		if node.loadKind == projectLoadKindCreate {
+			// Ensure project is up to date before checking for file inclusion
+			b.updateProgram(project, node.logger)
+		}
+
+		return fileInclusion(project.Value(), node.logger)
+	}
+
+	// PreprocessLevel sets up the shared visits before the workers for each level start.
+	mixedVisits := make(map[tspath.RootedFilePath]func() (bool, bool))
 	search := core.BreadthFirstSearchParallelEx(
 		searchNode{configFileName: configFileName, loadKind: loadKind, logger: logger},
 		func(node searchNode) []searchNode {
@@ -1182,50 +1218,51 @@ func (b *ProjectCollectionBuilder) findOrCreateDefaultConfiguredProjectWorker(
 			}
 			return nil
 		},
-		func(node searchNode) (isResult bool, stop bool) {
-			configFilePath := b.toPathKey(node.configFileName)
-			config := b.configFileRegistryBuilder.findOrAcquireConfigForFile(node.configFileName, configFilePath, path, node.loadKind, node.logger.Fork("Acquiring config for open file"))
-			if config == nil {
-				node.logger.Log("Config file for project does not already exist")
-				return false, false
+		func(node searchNode) (bool, bool) {
+			if shared := mixedVisits[node.configFileName]; shared != nil {
+				return shared()
 			}
-			configs.Store(configFilePath, config)
-			if !configMayContainFile(config, node.logger) {
-				return false, false
-			}
-
-			project := b.findOrCreateProject(node.configFileName, configFilePath, node.loadKind, node.logger)
-			if project == nil {
-				node.logger.Log("Project does not already exist")
-				return false, false
-			}
-
-			if node.loadKind == projectLoadKindCreate {
-				// Ensure project is up to date before checking for file inclusion
-				b.updateProgram(project, node.logger)
-			}
-
-			return fileInclusion(project.Value(), node.logger)
+			return visit(node)
 		},
 		core.BreadthFirstSearchOptions[searchNodeKey, searchNode]{
 			Visited: visited,
 			PreprocessLevel: func(level *core.BreadthFirstSearchLevel[searchNodeKey, searchNode]) {
-				removeRedundantFindRequests(level)
+				clear(mixedVisits)
+				removeRedundantFindRequests(level, func(node searchNode) bool {
+					entry, ok := b.configuredProjects.Load(ConfiguredProjectIDFromPathKey(b.toPathKey(node.configFileName)))
+					if !ok || entry.Value().Program == nil {
+						return false
+					}
+					createKey := searchNodeKey{configFileName: node.configFileName, loadKind: projectLoadKindCreate}
+					if !visited.Has(createKey) {
+						// Share the refresh while preserving each job's position and reference load kind.
+						node.loadKind = projectLoadKindCreate
+						mixedVisits[node.configFileName] = sync.OnceValues(func() (bool, bool) { return visit(node) })
+					}
+					return true
+				})
 				pruneAfterCachedMatch(level, func(key searchNodeKey) bool {
 					if visited.Has(key) {
 						return false
 					}
 					configPath := b.toPathKey(key.configFileName)
 					projectEntry, ok := b.configuredProjects.Load(ConfiguredProjectIDFromPathKey(configPath))
-					if !ok || projectEntry.Value().IsDirty() {
+					if !ok {
+						return false
+					}
+					project := projectEntry.Value()
+					if project.IsDirty() {
 						return false
 					}
 					configEntry, ok := b.configFileRegistryBuilder.configs.Load(configPath)
-					if !ok || configEntry.Value().pendingReload != PendingReloadNone {
+					if !ok {
 						return false
 					}
-					config := configEntry.Value().commandLine
-					project := projectEntry.Value()
+					cachedConfig := configEntry.Value()
+					if cachedConfig.pendingReload != PendingReloadNone {
+						return false
+					}
+					config := cachedConfig.commandLine
 					if config == nil || project.CommandLine != config {
 						return false
 					}

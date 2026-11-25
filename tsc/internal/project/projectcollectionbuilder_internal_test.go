@@ -85,7 +85,7 @@ func TestRemoveRedundantFindRequests(t *testing.T) {
 				if level.Has(keyFor(root)) {
 					return
 				}
-				removeRedundantFindRequests(level)
+				removeRedundantFindRequests(level, func(searchNode) bool { return false })
 				level.Range(func(key searchNodeKey, _ searchNode) bool {
 					remaining = append(remaining, key)
 					return true

@@ -159,6 +159,97 @@ func TestProjectCollectionBuilder(t *testing.T) {
 		}
 	})
 
+	t.Run("mixed find and create requests preserve project selection", func(t *testing.T) {
+		t.Parallel()
+		for _, test := range []struct {
+			name           string
+			loaded         bool
+			updatedBConfig string
+			want           tspath.RootedFilePath
+		}{
+			{"loaded project keeps its earlier find position", true, "", "/project/b.json"},
+			{"unloaded project can still be created", false, "", "/project/b.json"},
+			{"dirty project keeps its earlier position after refresh", true, `{"files": ["b.ts", "main.ts", "a.ts"]}`, "/project/b.json"},
+			{"dirty project loses stale match", true, `{"files": ["b.ts"]}`, "/project/c.json"},
+		} {
+			t.Run(test.name, func(t *testing.T) {
+				t.Parallel()
+				files := map[string]any{
+					"/project/tsconfig.json": `{"files": [], "references": [{"path": "./find.json"}, {"path": "./create.json"}]}`,
+					"/project/find.json":     `{"compilerOptions": {"disableReferencedProjectLoad": true}, "files": [], "references": [{"path": "./a.json"}, {"path": "./b.json"}]}`,
+					"/project/create.json":   `{"files": [], "references": [{"path": "./c.json"}, {"path": "./a.json"}, {"path": "./b.json"}]}`,
+					"/project/a.json":        `{"files": ["a.ts"]}`,
+					"/project/b.json":        `{"files": ["main.ts", "b.ts"]}`,
+					"/project/c.json":        `{"files": ["c.ts"]}`,
+					"/project/a.ts":          `export {};`,
+					"/project/b.ts":          `export {};`,
+					"/project/c.ts":          `export {};`,
+					"/project/main.ts":       `export {};`,
+				}
+				if test.loaded {
+					files["/project/c.json"] = `{"files": ["main.ts", "c.ts"]}`
+				}
+
+				session, utils := projecttestutil.Setup(files)
+				defer session.Close()
+				ctx := context.Background()
+				if test.loaded {
+					for _, fileName := range []string{"/project/b.ts", "/project/c.ts"} {
+						session.DidOpenFile(ctx, lsproto.DocumentUri("file://"+fileName), 1, files[fileName].(string), lsproto.LanguageKindTypeScript)
+					}
+					projects := session.Snapshot().ProjectCollection
+					for _, configPath := range []string{"/project/b.json", "/project/c.json"} {
+						project := projects.ConfiguredProject(utils.PathKey(configPath))
+						assert.Assert(t, project != nil)
+						assert.Assert(t, !project.IsDirty())
+						assert.Assert(t, project.HasFile("/project/main.ts"))
+					}
+				} else {
+					assert.Assert(t, session.Snapshot().ProjectCollection.ConfiguredProject(utils.PathKey("/project/b.json")) == nil)
+				}
+
+				if test.updatedBConfig != "" {
+					assert.NilError(t, utils.FS().WriteFile("/project/b.json", test.updatedBConfig))
+					session.DidChangeWatchedFiles(ctx, []*lsproto.FileEvent{
+						{Type: lsproto.FileChangeTypeChanged, Uri: "file:///project/b.json"},
+					})
+				}
+				uri := lsproto.DocumentUri("file:///project/main.ts")
+				session.DidOpenFile(ctx, uri, 1, files["/project/main.ts"].(string), lsproto.LanguageKindTypeScript)
+				defaultProject := session.Snapshot().GetDefaultProject(uri)
+				assert.Assert(t, defaultProject != nil)
+				assert.Equal(t, defaultProject.ConfigFileName(), test.want)
+			})
+		}
+	})
+
+	t.Run("registered but unbuilt project waits for its create position", func(t *testing.T) {
+		t.Parallel()
+		files := map[string]any{
+			"/project/tsconfig.json":         `{"files": [], "references": [{"path": "./find.json"}, {"path": "./create.json"}]}`,
+			"/project/find.json":             `{"compilerOptions": {"disableReferencedProjectLoad": true}, "files": [], "references": [{"path": "./b"}]}`,
+			"/project/create.json":           `{"files": [], "references": [{"path": "./c.json"}, {"path": "./b"}]}`,
+			"/project/c.json":                `{"files": ["main.ts"]}`,
+			"/project/b/tsconfig.json":       `{"files": ["../main.ts"], "references": [{"path": "./child"}]}`,
+			"/project/b/child/tsconfig.json": `{"compilerOptions": {"composite": true}, "files": ["child.ts"]}`,
+			"/project/b/child/child.ts":      `export {};`,
+			"/project/main.ts":               `export {};`,
+		}
+		session, utils := projecttestutil.Setup(files)
+		defer session.Close()
+		ctx := context.Background()
+		session.DidOpenFile(ctx, "file:///project/b/child/child.ts", 1, files["/project/b/child/child.ts"].(string), lsproto.LanguageKindTypeScript)
+		registeredProject := session.Snapshot().ProjectCollection.ConfiguredProject(utils.PathKey("/project/b/tsconfig.json"))
+		assert.Assert(t, registeredProject != nil)
+		assert.Assert(t, registeredProject.Program == nil)
+
+		uri := lsproto.DocumentUri("file:///project/main.ts")
+		session.DidOpenFile(ctx, uri, 1, files["/project/main.ts"].(string), lsproto.LanguageKindTypeScript)
+		defaultProject := session.Snapshot().GetDefaultProject(uri)
+		assert.Assert(t, defaultProject != nil)
+		assert.Equal(t, defaultProject.ConfigFileName(), tspath.RootedFilePath("/project/c.json"))
+	})
+
 	t.Run("cached source redirect does not prune a later direct match", func(t *testing.T) {
 		t.Parallel()
 		files := map[string]any{
