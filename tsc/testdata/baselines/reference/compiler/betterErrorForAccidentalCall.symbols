@@ -25,3 +25,13 @@ foo()
 
     (<number>1).toString();
 
+foo()
+>foo : Symbol(foo, Decl(betterErrorForAccidentalCall.ts, 0, 0))
+
+(1 as number).toString();
+
+foo()
+>foo : Symbol(foo, Decl(betterErrorForAccidentalCall.ts, 0, 0))
+
+(1 as number).toString();
+

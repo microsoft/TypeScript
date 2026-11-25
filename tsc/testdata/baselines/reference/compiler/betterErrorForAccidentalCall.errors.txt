@@ -8,9 +8,13 @@ betterErrorForAccidentalCall.ts(10,1): error TS2349: This expression is not call
   Type 'String' has no call signatures.
 betterErrorForAccidentalCall.ts(13,1): error TS2349: This expression is not callable.
   Type 'String' has no call signatures.
+betterErrorForAccidentalCall.ts(16,1): error TS2349: This expression is not callable.
+  Type 'String' has no call signatures.
+betterErrorForAccidentalCall.ts(19,1): error TS2349: This expression is not callable.
+  Type 'String' has no call signatures.
 
 
-==== betterErrorForAccidentalCall.ts (5 errors) ====
+==== betterErrorForAccidentalCall.ts (7 errors) ====
     declare function foo(): string;
     
     foo()(1 as number).toString();
@@ -44,3 +48,15 @@ betterErrorForAccidentalCall.ts(13,1): error TS2349: This expression is not call
 !!! related TS2734 betterErrorForAccidentalCall.ts:13:1: Are you missing a semicolon?
         (<number>1).toString();
     
+    foo() (1 as number).toString();
+    ~~~~~
+!!! error TS2349: This expression is not callable.
+!!! error TS2349:   Type 'String' has no call signatures.
+!!! related TS2734 betterErrorForAccidentalCall.ts:16:1: Are you missing a semicolon?
+    
+    foo() (1 as number).toString();
+    
+    
+!!! error TS2349: This expression is not callable.
+!!! error TS2349:   Type 'String' has no call signatures.
+!!! related TS2734 betterErrorForAccidentalCall.ts:19:1: Are you missing a semicolon?
