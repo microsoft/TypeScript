@@ -1,0 +1,36 @@
+conflictMarkerJujutsuTrivia2.ts(3,1): error TS1185: Merge conflict marker encountered.
+conflictMarkerJujutsuTrivia2.ts(4,1): error TS1185: Merge conflict marker encountered.
+conflictMarkerJujutsuTrivia2.ts(5,6): error TS2304: Cannot find name 'a'.
+conflictMarkerJujutsuTrivia2.ts(6,1): error TS1185: Merge conflict marker encountered.
+conflictMarkerJujutsuTrivia2.ts(8,1): error TS1185: Merge conflict marker encountered.
+conflictMarkerJujutsuTrivia2.ts(10,1): error TS1185: Merge conflict marker encountered.
+
+
+==== conflictMarkerJujutsuTrivia2.ts (6 errors) ====
+    class C {
+      foo() {
+    <<<<<<< conflict 1 of 1
+    ~~~~~~~
+!!! error TS1185: Merge conflict marker encountered.
+    +++++++ lnqukurm 3504bbcc "call a()"
+    ~~~~~~~
+!!! error TS1185: Merge conflict marker encountered.
+         a();
+         ~
+!!! error TS2304: Cannot find name 'a'.
+    ------- puqzxvrm 9be6077e "call c()"
+    ~~~~~~~
+!!! error TS1185: Merge conflict marker encountered.
+         c();
+    +++++++ uxvuvmmx 392ce8b5 "call b()"
+    ~~~~~~~
+!!! error TS1185: Merge conflict marker encountered.
+         b();
+    >>>>>>> conflict 1 of 1 ends
+    ~~~~~~~
+!!! error TS1185: Merge conflict marker encountered.
+      }
+    
+      public bar() { }
+    }
+    
