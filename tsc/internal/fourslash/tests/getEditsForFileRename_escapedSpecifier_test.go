@@ -74,7 +74,7 @@ export default 0;`
 			"import b1 from \"./v\\vt/b\";\n" +
 			"import b2 from './v\\vt/b';\n" +
 			"export default 0;",
-		"/tsconfig.json": `{ "files": ["a.ts", "v\vt/b.ts"] }`,
+		"/tsconfig.json": `{ "files": ["a.ts", "v\u000bt/b.ts"] }`,
 	}, nil /*preferences*/)
 }
 

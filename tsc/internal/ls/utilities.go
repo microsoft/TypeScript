@@ -17,6 +17,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
+	"github.com/microsoft/TypeScript/tsc/internal/printer"
 	"github.com/microsoft/TypeScript/tsc/internal/scanner"
 	"github.com/microsoft/TypeScript/tsc/internal/spanmap"
 	"github.com/microsoft/TypeScript/tsc/internal/stringutil"
@@ -315,15 +316,23 @@ func (l *LanguageService) createLspPosition(position int, file *ast.SourceFile) 
 
 func quote(file *ast.SourceFile, preferences lsutil.UserPreferences, text string) string {
 	// Editors can pass in undefined or empty string - we want to infer the preference in those cases.
-	quotePreference := lsutil.GetQuotePreference(file, preferences)
-	quoted := `"` + mapLoneSurrogates(text, func(s string) string {
+	if lsutil.GetQuotePreference(file, preferences) == lsutil.QuotePreferenceSingle {
+		return "'" + escapeJSONString(text, printer.QuoteCharSingleQuote) + "'"
+	}
+	return `"` + escapeJSONString(text, printer.QuoteCharDoubleQuote) + `"`
+}
+
+// escapeJSONString escapes text for a string literal delimited by quoteChar
+// using only escapes that both JSON and JavaScript accept.
+func escapeJSONString(text string, quoteChar printer.QuoteChar) string {
+	escaped := mapLoneSurrogates(text, func(s string) string {
 		quoted, _ := core.StringifyJson(s, "" /*prefix*/, "" /*indent*/)
 		return lineSeparatorReplacer.Replace(stringutil.StripQuotes(quoted))
-	}) + `"`
-	if quotePreference == lsutil.QuotePreferenceSingle {
-		quoted = "'" + quoteReplacer.Replace(stringutil.StripQuotes(quoted)) + "'"
+	})
+	if quoteChar == printer.QuoteCharSingleQuote {
+		escaped = quoteReplacer.Replace(escaped)
 	}
-	return quoted
+	return escaped
 }
 
 // mapLoneSurrogates applies f to the text between the lone surrogates in s and

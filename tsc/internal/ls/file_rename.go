@@ -199,7 +199,7 @@ func tryUpdateConfigString(configFile *ast.SourceFile, configDir tspath.RootedDi
 	textRange := core.NewTextRange(scanner.GetTokenPosOfNode(element, configFile, false)+1, element.End()-1)
 	lspRange, fidelity := converters.ToLSPRange(configFile, textRange)
 	debug.Assert(fidelity.IsExact(), "config files are not content-mapped")
-	newText := printer.EscapeString(relativePathFromDirectory(configDir, updated, caseSensitivity).AsString(), getStringLiteralQuoteChar(configFile, element))
+	newText := escapeJSONString(relativePathFromDirectory(configDir, updated, caseSensitivity).AsString(), getStringLiteralQuoteChar(configFile, element))
 	changeTracker.ReplaceRangeWithText(configFile, lspRange, newText)
 	return true
 }
