@@ -151,7 +151,7 @@ let x;`
 	defer f.ConfigureWithReset(t, lsutil.UserPreferences{ProvidePrefixAndSuffixTextForRename: core.TSTrue})()
 	f.VerifyRename(t, "1", "a*/b", map[string]string{
 		"/a.ts": `export interface a*/b {}`,
-		"/b.js": `/** @import { "a*/b" as Foo } from "./a" */
+		"/b.js": `/** @import { "a*\/b" as Foo } from "./a" */
 /** @type {Foo} */
 let x;`,
 	})

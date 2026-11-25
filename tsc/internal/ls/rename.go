@@ -424,7 +424,7 @@ func (l *LanguageService) getTextForRename(originalNode *ast.Node, entry *Refere
 		kind := entry.kind
 		parent := node.Parent
 		name := originalNode.Text()
-		propertyText := quoteNonIdentifierName(newText, quotePreference)
+		propertyText := quoteNonIdentifierName(newText, quotePreference, entry.node)
 		isShorthandAssignment := ast.IsShorthandPropertyAssignment(parent)
 		switch {
 		case isShorthandAssignment || (isObjectBindingElementWithoutPropertyName(parent) && parent.Name() == node && parent.AsBindingElement().DotDotDotToken == nil):
@@ -499,11 +499,11 @@ func (l *LanguageService) getTextForRename(originalNode *ast.Node, entry *Refere
 
 	// A numeric property name, as in `{ 0: x }`, must be quoted when the new name is not an identifier.
 	if entry.kind != entryKindRange && ast.IsNumericLiteral(entry.node) && ast.IsDeclarationName(entry.node) {
-		return quoteNonIdentifierName(newText, quotePreference)
+		return quoteNonIdentifierName(newText, quotePreference, entry.node)
 	}
 
 	if entry.kind != entryKindRange && ast.IsIdentifier(entry.node) && isModuleExportNameOfSpecifier(entry.node) {
-		return quoteNonIdentifierName(newText, quotePreference)
+		return quoteNonIdentifierName(newText, quotePreference, entry.node)
 	}
 
 	return newText
@@ -533,12 +533,12 @@ func isModuleExportNameOfSpecifier(node *ast.Node) bool {
 	return false
 }
 
-func quoteNonIdentifierName(name string, quotePreference lsutil.QuotePreference) string {
+func quoteNonIdentifierName(name string, quotePreference lsutil.QuotePreference, node *ast.Node) string {
 	if scanner.IsIdentifierText(name, core.LanguageVariantStandard) {
 		return name
 	}
 	quoteChar := getQuoteFromPreference(quotePreference)
-	return string(quoteChar) + printer.EscapeString(name, quoteChar) + string(quoteChar)
+	return string(quoteChar) + escapeStringForNode(name, quoteChar, node) + string(quoteChar)
 }
 
 func escapeStringForNode(s string, quoteChar printer.QuoteChar, node *ast.Node) string {
