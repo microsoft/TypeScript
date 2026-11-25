@@ -129,3 +129,24 @@ export const rk = dk({ a: { b: sv } }, "a");
 >b : Symbol(b, Decl(reverseMappedTypeNestedInference.ts, 13, 27))
 >sv : Symbol(sv, Decl(reverseMappedTypeNestedInference.ts, 0, 13))
 
+declare function revTuple<V extends unknown[]>(x: { [K in keyof V]: { [J in keyof V[K]]: () => V[K][J] } }): V;
+>revTuple : Symbol(revTuple, Decl(reverseMappedTypeNestedInference.ts, 13, 44))
+>V : Symbol(V, Decl(reverseMappedTypeNestedInference.ts, 15, 26))
+>x : Symbol(x, Decl(reverseMappedTypeNestedInference.ts, 15, 47))
+>K : Symbol(K, Decl(reverseMappedTypeNestedInference.ts, 15, 53))
+>V : Symbol(V, Decl(reverseMappedTypeNestedInference.ts, 15, 26))
+>J : Symbol(J, Decl(reverseMappedTypeNestedInference.ts, 15, 71))
+>V : Symbol(V, Decl(reverseMappedTypeNestedInference.ts, 15, 26))
+>K : Symbol(K, Decl(reverseMappedTypeNestedInference.ts, 15, 53))
+>V : Symbol(V, Decl(reverseMappedTypeNestedInference.ts, 15, 26))
+>K : Symbol(K, Decl(reverseMappedTypeNestedInference.ts, 15, 53))
+>J : Symbol(J, Decl(reverseMappedTypeNestedInference.ts, 15, 71))
+>V : Symbol(V, Decl(reverseMappedTypeNestedInference.ts, 15, 26))
+
+export const rt = revTuple([{ a: () => 1 }, { b: () => "s" }] as const);
+>rt : Symbol(rt, Decl(reverseMappedTypeNestedInference.ts, 16, 12))
+>revTuple : Symbol(revTuple, Decl(reverseMappedTypeNestedInference.ts, 13, 44))
+>a : Symbol(a, Decl(reverseMappedTypeNestedInference.ts, 16, 29))
+>b : Symbol(b, Decl(reverseMappedTypeNestedInference.ts, 16, 45))
+>const : Symbol(const)
+

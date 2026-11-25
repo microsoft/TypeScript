@@ -15,3 +15,6 @@ export const rd = dd({ a: { b: { c: { d: sv } } } });
 
 declare function dk<T, U extends keyof T>(input: { [K in keyof T]: { [J in keyof T[K]]: (i: unknown) => T[K][J] } }, k: U): T[U];
 export const rk = dk({ a: { b: sv } }, "a");
+
+declare function revTuple<V extends unknown[]>(x: { [K in keyof V]: { [J in keyof V[K]]: () => V[K][J] } }): V;
+export const rt = revTuple([{ a: () => 1 }, { b: () => "s" }] as const);

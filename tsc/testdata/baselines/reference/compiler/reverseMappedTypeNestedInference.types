@@ -80,3 +80,22 @@ export const rk = dk({ a: { b: sv } }, "a");
 >sv : (input: unknown) => string | undefined
 >"a" : "a"
 
+declare function revTuple<V extends unknown[]>(x: { [K in keyof V]: { [J in keyof V[K]]: () => V[K][J] } }): V;
+>revTuple : <V extends unknown[]>(x: { [K in keyof V]: { [J in keyof V[K]]: () => V[K][J]; }; }) => V
+>x : { [K in keyof V]: { [J in keyof V[K]]: () => V[K][J]; }; }
+
+export const rt = revTuple([{ a: () => 1 }, { b: () => "s" }] as const);
+>rt : [{ readonly a: number; }, { readonly b: string; }]
+>revTuple([{ a: () => 1 }, { b: () => "s" }] as const) : [{ readonly a: number; }, { readonly b: string; }]
+>revTuple : <V extends unknown[]>(x: { [K in keyof V]: { [J in keyof V[K]]: () => V[K][J]; }; }) => V
+>[{ a: () => 1 }, { b: () => "s" }] as const : [{ readonly a: () => number; }, { readonly b: () => string; }]
+>[{ a: () => 1 }, { b: () => "s" }] : [{ readonly a: () => number; }, { readonly b: () => string; }]
+>{ a: () => 1 } : { readonly a: () => number; }
+>a : () => number
+>() => 1 : () => number
+>1 : 1
+>{ b: () => "s" } : { readonly b: () => string; }
+>b : () => string
+>() => "s" : () => string
+>"s" : "s"
+
