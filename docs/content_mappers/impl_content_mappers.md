@@ -39,9 +39,9 @@ In addition to the options above, a content mapper manifest can optionally speci
 }
 ```
 
-This is useful when the original content mapped files will be emitted to a different format, rather than left as-is.
+This is useful when the original content mapped files will be emitted to a different format, rather than being left as-is.
 In the example above, the `.gts` files are Ember components that Ember will emit to `.js` files.
-With this information, TypeScript emits declaration files with the correct file extensions (i.e. `Component.gts` -> `Component.d.ts` instead of `Component.d.gts.ts`) and also permits `.js` import paths to resolve to `.gts` files. 
+With this information, TypeScript emits declaration files with the correct file extensions (i.e. `Component.gts` -> `Component.d.ts` instead of `Component.d.gts.ts`) and also permits `.gts` import paths to resolve to `.js` files at runtime via `--rewriteRelativeImportExtensions`.
 For more details, see [the implementation PR](https://github.com/microsoft/TypeScript/pull/64581).
 
 ## Protocol
@@ -86,6 +86,9 @@ export interface InitializeResult {
 ```
 
 After initialization, the content mapper must be ready to receive the other kinds of requests.
+
+Note that the protocol will only change in backward-compatible ways after its official release.
+New features may be added via LSP-like capabilities negotiation in `initialize`.
 
 ### `openProject`
 
@@ -132,7 +135,7 @@ export interface OpenProjectResult {
 ```
 
 As an example, if a project uses the Vue content mapper, its content mapper options can specify a Vue target version.
-One way to configure the Vue target is this is to specify `target: "auto"`:
+One way to configure the Vue target is to specify `target: "auto"`:
 
 `project/tsconfig.json`:
 ```jsonc
@@ -165,16 +168,28 @@ Under this target option, the Vue content mapper reads the nearest `node_modules
 ```
 
 If the nearest `node_modules/vue/package.json`'s version changes from `3.5.46` to `3.6.0`, it affects the virtual content produced by the content mapper for a Vue file.
-So the Vue content mapper's manifest needs to specify `dynamicConfig: true`, this content mapper's `openProject` response needs to encode the Vue version `3.5.46` in the `configIdentity`, and the response can specify `project/node_modules/vue/package.json` as a watched file.
+Therefore the Vue content mapper's manifest needs to specify `dynamicConfig: true`, its `openProject` response needs to encode the Vue version `3.5.46` in the `configIdentity`, and the response can specify `project/node_modules/vue/package.json` as a watched file.
 
 Note that compiler options will only be sent by TypeScript as part of the `openProject` request.
-Content mappers should store the compiler options for an opened project, and associate it with the project's handle, so that it can use this information during a [`transform`](#transform) request for the project.
+The content mapper should store the compiler options for each opened project and associate them with the project's handle so that it can use them during a [`transform`](#transform) request.
 
 Also note that a single content mapper process must be able to handle multiple projects, because TypeScript tries to reuse a content mapper process for any project that matches that content mapper.
 
 ### `transform`
 
-When TypeScript finds a non-TS file in a project supported by a content mapper, it will send a `transform` request to the content mapper.
+When a content-mapped file is [included in a TypeScript program](intro_content_mappers.md#including-content-mapped-files), TypeScript will need to transform that file into a file it can understand.
+For instance, if there's a TS file in a program that imports a content-mapped file:
+
+`index.ts`:
+```ts
+import { createApp } from 'vue'
+import UserList from './UserList.vue'
+
+createApp(UserList).mount('#app')
+```
+
+Then TypeScript needs to transform `UserList.vue` into e.g. a TS or JS file.
+To do that, it sends a `transform` request to the content mapper.
 That request will have the absolute filename of the *original file* (e.g. `/home/blah/project/file1.vue`), the content of that file, and the handle of the project that file belongs to.
 
 ```ts
@@ -189,7 +204,7 @@ export interface TransformParams {
 }
 ```
 
-The content mapper should then respond with information about the content mapped *virtual file*: its transformed content, its extension (e.g. `.ts`, `.tsx`, etc), *span mappings* mapping between spans in the virtual file and the original file, and diagnostic directives for the virtual file (e.g. `@ts-expect-error`).
+The content mapper should then respond with information about the content-mapped *virtual file*: its transformed content, its extension (e.g. `.ts`, `.tsx`, etc.), *span mappings* between spans in the virtual file and the original file, and diagnostic directives for the virtual file (e.g. `@ts-expect-error`).
 
 ```ts
 /** Canonical output for one input file, with optional mapper diagnostics and supplemental compiler inputs. */
@@ -307,7 +322,7 @@ export type MappedDiagnosticDirective = [
 
 In its transform result, a content mapper can return diagnostics for unparseable content in a content mapped file.
 Note that these errors are treated by TypeScript as parse errors, and so they block binding and type checking for the virtual file; you shouldn't use those diagnostics to return semantic errors (see [this issue](https://github.com/microsoft/TypeScript/issues/65462)).
-Errors in the virtual content itself are handled by TypeScript like any other file, with the exceptions already mentioned in [span mappings](#span-mappings).
+Errors in the virtual content itself are handled by TypeScript like those in any other file, with the exceptions already mentioned in [span mappings](#span-mappings).
 
 ```ts
 /** Mapper-authored error in original-source coordinates using the selected position encoding. */
@@ -394,7 +409,7 @@ export interface CloseProjectParams {
 
 ## More on span mappings and language features
 
-As mentioned earlier, a `transform` result for an original file contains, besides the virtual file content, span mappings correlating spans in the original and virtual file.
+As mentioned earlier, a `transform` result for an original file contains, besides the virtual file content, span mappings correlating spans in the original and virtual file:
 
 ```ts
 /**
@@ -479,8 +494,11 @@ app.vue:1:26 - error TS2307: Cannot find module '@vue/content-mapper-utils' or i
                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ```
 
-Multiple spans mappings in the virtual text must not overlap, but multiple virtual spans may map to the same span in the original content.
+Multiple span mappings in the virtual text must not overlap, but multiple virtual spans may map to the same span in the original content.
 In other words, one range in the original content can map to multiple ranges in the transformed content.
+
+For forward compatibility, tuples should be considered open-ended.
+A mapper should not assert an exact tuple length or read elements beyond ones it knows how to handle.
 
 ### Language features
 
@@ -527,7 +545,7 @@ export default {} as typeof __VLS_export;
 
 In this example, the span for identifier `active` inside the template, i.e. in `<template><p :class="{ active }">Hello</p></template>`, is mapped to three virtual spans:
 `active` property in `...{ class: ({ |active|: active }) }`, `active` reference in `...{ class: ({ active: |active| }) }`, and `active` key text in `/** @type {__VLS_StyleScopedClasses['|active|']} */;`.
-All three span mappings's features mask includes the "definition" feature, so if we run "Go To Definition" on `active` in `<template><p :class="{ active }">Hello</p></template>`, we will get three occurrences, each one corresponding to running "Go To Definition" in the virtual file's span, and then mapping back to the original file:
+The `features` masks of all three span mappings include the "definition" feature, so if we run "Go To Definition" on `active` in `<template><p :class="{ active }">Hello</p></template>`, we will get three occurrences, each corresponding to running "Go To Definition" on a span in the virtual file and mapping the result back to the original file:
 
 ![Screenshot showing file `ClassBinding.vue` open in VSCode, and a "Peek Definition" window open below it, showing three highlighted occurrences of the identifier `active`: one one line 2, one on line 5, and one on line 8.](class-active-def.png)
 
@@ -594,7 +612,7 @@ When `--declaration` is enabled, however, declaration files are emitted from the
 The declaration file name for `App.svelte` by default is `App.d.svelte.ts`;
 if the content mapper manifest specifies `outputExtensions`, then the declaration file name will match the specified output extension.
 Declaration files for supplemental outputs of a file named `App.svelte` are emitted as `App.svelte.0.d.ts`, `App.svelte.1.d.ts`, etc., and are automatically referenced by `App.d.svelte.ts`.
-Declaration maps are also supported when enabled in a project, they map between the declaration file and the original file by combining the mapping between the declaration file and the virtual file, and the mapping between the virtual file and the original file.
+Declaration maps are also supported when enabled in a project. They map between the declaration file and the original file by combining the mapping between the declaration file and the virtual file with the mapping between the virtual file and the original file.
 
 ### Incremental, build, watch, and process consolidation
 
@@ -675,7 +693,7 @@ const registration = tsAPI?.registerContentMappers(
 );
 ```
 
-If your content mapper also takes in options via a project's tsconfig, then your extension should also contribute a JSON schema for those options:
+If your content mapper also accepts options in a project's tsconfig, your extension should also contribute a JSON schema for those options:
 
 `content-mapper-extension/package.json`:
 ```json
@@ -725,7 +743,7 @@ If your content mapper also takes in options via a project's tsconfig, then your
 }
 ```
 
-Besides activating TypeScript on content mapped files, providing content mapper support for inferred projects, and content mapper options schema support, a companion extension can also customize language server features beyond what TypeScript's content mappers API allows.
+Besides activating TypeScript on content-mapped files, providing content-mapper support for inferred projects, and supporting a schema for content mapper options, a companion extension can also customize language server features beyond what TypeScript's content mappers API allows.
 A content mapper extension can register an LSP middleware with the TypeScript extension API, allowing it to intercept and modify TypeScript language server responses:
 
 ```ts
