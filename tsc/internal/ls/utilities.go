@@ -25,6 +25,10 @@ import (
 
 var quoteReplacer = strings.NewReplacer("'", `\'`, `\"`, `"`)
 
+// JSON leaves line and paragraph separators raw, but they are invisible in
+// source and terminate string literals before ES2019.
+var lineSeparatorReplacer = strings.NewReplacer("\u2028", `\u2028`, "\u2029", `\u2029`)
+
 func IsInString(sourceFile *ast.SourceFile, position int, previousToken *ast.Node) bool {
 	if previousToken != nil && ast.IsStringTextContainingNode(previousToken) {
 		start := astnav.GetStartOfNode(previousToken, sourceFile, false /*includeJSDoc*/)
@@ -314,7 +318,7 @@ func quote(file *ast.SourceFile, preferences lsutil.UserPreferences, text string
 	quotePreference := lsutil.GetQuotePreference(file, preferences)
 	quoted := `"` + mapLoneSurrogates(text, func(s string) string {
 		quoted, _ := core.StringifyJson(s, "" /*prefix*/, "" /*indent*/)
-		return stringutil.StripQuotes(quoted)
+		return lineSeparatorReplacer.Replace(stringutil.StripQuotes(quoted))
 	}) + `"`
 	if quotePreference == lsutil.QuotePreferenceSingle {
 		quoted = "'" + quoteReplacer.Replace(stringutil.StripQuotes(quoted)) + "'"

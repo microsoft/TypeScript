@@ -167,10 +167,10 @@ func TestCompletionPropertyAccessLineSeparator(t *testing.T) {
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:      "a\u2028b",
-					InsertText: new("[\"a\u2028b\"]"),
+					InsertText: new(`["a\u2028b"]`),
 					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 						TextEdit: &lsproto.TextEdit{
-							NewText: "[\"a\u2028b\"]",
+							NewText: `["a\u2028b"]`,
 							Range:   f.Ranges()[0].LSRange,
 						},
 					},
