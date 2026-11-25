@@ -1968,6 +1968,10 @@ func (s *Session) handleCreateBuildOrchestrator(ctx context.Context, params *Cre
 	if params.BuildOptions != nil {
 		command.BuildOptions = params.BuildOptions
 	}
+	if command.CompilerOptions.RunExternalCode.IsUnknown() && s.snapshotHost.RunExternalCode() {
+		// As with snapshots, configured content mappers may run when the session allows external code.
+		command.CompilerOptions.RunExternalCode = core.TSTrue
+	}
 	orchestrator := build.NewOrchestrator(build.Options{
 		Sys:     buildSys,
 		Command: command,
@@ -2083,7 +2087,14 @@ func (s *apiBuildSystem) GetEnvironmentVariable(name string) (string, bool) {
 }
 
 func (s *apiBuildSystem) Spawn(command []string, dir string, stderr io.Writer) (io.ReadWriteCloser, error) {
-	return nil, errors.New("spawning processes is not supported by the API build orchestrator")
+	if !s.session.snapshotHost.RunExternalCode() {
+		return nil, errors.New("the API session does not allow running external code")
+	}
+	spawner := s.session.snapshotHost.ContentMapperSpawner()
+	if spawner == nil {
+		return nil, errors.New("spawning processes is not supported by the API session")
+	}
+	return spawner.Spawn(command, dir, stderr)
 }
 func (s *apiBuildSystem) Now() time.Time            { return time.Now() }
 func (s *apiBuildSystem) SinceStart() time.Duration { return time.Since(s.start) }

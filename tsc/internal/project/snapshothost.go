@@ -27,6 +27,7 @@ type SnapshotHost struct {
 	extendedConfigCache     *ExtendedConfigCache
 	programCounter          *programCounter
 	contentMapperHost       contentmapper.Host
+	contentMapperSpawner    contentmapper.Spawner
 
 	snapshotID atomic.Uint64
 }
@@ -93,6 +94,7 @@ func NewSnapshotHost(init *SessionInit) *SnapshotHost {
 		extendedConfigCache:     NewExtendedConfigCache(),
 		programCounter:          &programCounter{},
 		contentMapperHost:       newContentMapperHost(init),
+		contentMapperSpawner:    init.Spawner,
 	}
 }
 
@@ -191,6 +193,17 @@ func (s *SnapshotHost) GetCurrentDirectory() tspath.RootedDirectoryPath {
 
 func (s *SnapshotHost) DefaultLibraryPath() tspath.RootedDirectoryPath {
 	return s.options.DefaultLibraryPath
+}
+
+// RunExternalCode reports whether configured content mappers may run their (external) processes.
+func (s *SnapshotHost) RunExternalCode() bool {
+	return s.options.RunExternalCode
+}
+
+// ContentMapperSpawner returns the spawner that launches content mapper processes, or nil when the host
+// cannot spawn processes. Callers must check RunExternalCode before spawning.
+func (s *SnapshotHost) ContentMapperSpawner() contentmapper.Spawner {
+	return s.contentMapperSpawner
 }
 
 func (s *SnapshotHost) Close() {
