@@ -1,0 +1,72 @@
+asyncGeneratorInvalidThenableYield.ts(2,11): error TS1321: Type of 'yield' operand in an async generator must either be a valid promise or must not contain a callable 'then' member.
+asyncGeneratorInvalidThenableYield.ts(6,11): error TS1321: Type of 'yield' operand in an async generator must either be a valid promise or must not contain a callable 'then' member.
+asyncGeneratorInvalidThenableYield.ts(7,11): error TS1321: Type of 'yield' operand in an async generator must either be a valid promise or must not contain a callable 'then' member.
+asyncGeneratorInvalidThenableYield.ts(11,11): error TS1321: Type of 'yield' operand in an async generator must either be a valid promise or must not contain a callable 'then' member.
+asyncGeneratorInvalidThenableYield.ts(19,11): error TS1062: Type is referenced directly or indirectly in the fulfillment callback of its own 'then' method.
+asyncGeneratorInvalidThenableYield.ts(24,12): error TS1322: Type of iterated elements of a 'yield*' operand must either be a valid promise or must not contain a callable 'then' member.
+asyncGeneratorInvalidThenableYield.ts(28,11): error TS1321: Type of 'yield' operand in an async generator must either be a valid promise or must not contain a callable 'then' member.
+asyncGeneratorInvalidThenableYield.ts(32,7): error TS2322: Type 'AsyncGenerator<never, void, unknown>' is not assignable to type 'string'.
+asyncGeneratorInvalidThenableYield.ts(33,7): error TS2322: Type 'AsyncGenerator<never, void, unknown>' is not assignable to type 'string'.
+asyncGeneratorInvalidThenableYield.ts(34,7): error TS2322: Type 'AsyncGenerator<never, void, any>' is not assignable to type 'string'.
+asyncGeneratorInvalidThenableYield.ts(35,7): error TS2322: Type 'AsyncGenerator<number, void, unknown>' is not assignable to type 'string'.
+
+
+==== asyncGeneratorInvalidThenableYield.ts (11 errors) ====
+    async function* one() {
+        yield { then() {} };
+              ~~~~~~~~~~~~~
+!!! error TS1321: Type of 'yield' operand in an async generator must either be a valid promise or must not contain a callable 'then' member.
+    }
+    
+    async function* twice() {
+        yield { then() {} };
+              ~~~~~~~~~~~~~
+!!! error TS1321: Type of 'yield' operand in an async generator must either be a valid promise or must not contain a callable 'then' member.
+        yield { then() {} };
+              ~~~~~~~~~~~~~
+!!! error TS1321: Type of 'yield' operand in an async generator must either be a valid promise or must not contain a callable 'then' member.
+    }
+    
+    const contextual: () => AsyncGenerator<number> = async function* () {
+        yield { then() {} };
+              ~~~~~~~~~~~~~
+!!! error TS1321: Type of 'yield' operand in an async generator must either be a valid promise or must not contain a callable 'then' member.
+    };
+    
+    interface SelfThenable {
+        then(onfulfilled: (value: SelfThenable) => void): void;
+    }
+    declare const selfThenable: SelfThenable;
+    async function* circular() {
+        yield selfThenable;
+              ~~~~~~~~~~~~
+!!! error TS1062: Type is referenced directly or indirectly in the fulfillment callback of its own 'then' method.
+    }
+    
+    declare const thenables: AsyncIterable<{ then(): void }>;
+    async function* delegated() {
+        yield* thenables;
+               ~~~~~~~~~
+!!! error TS1322: Type of iterated elements of a 'yield*' operand must either be a valid promise or must not contain a callable 'then' member.
+    }
+    
+    async function* mixed() {
+        yield { then() {} };
+              ~~~~~~~~~~~~~
+!!! error TS1321: Type of 'yield' operand in an async generator must either be a valid promise or must not contain a callable 'then' member.
+        yield 1;
+    }
+    
+    const inferred: string = one();
+          ~~~~~~~~
+!!! error TS2322: Type 'AsyncGenerator<never, void, unknown>' is not assignable to type 'string'.
+    const inferredCircular: string = circular();
+          ~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'AsyncGenerator<never, void, unknown>' is not assignable to type 'string'.
+    const inferredDelegated: string = delegated();
+          ~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'AsyncGenerator<never, void, any>' is not assignable to type 'string'.
+    const inferredMixed: string = mixed();
+          ~~~~~~~~~~~~~
+!!! error TS2322: Type 'AsyncGenerator<number, void, unknown>' is not assignable to type 'string'.
+    

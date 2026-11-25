@@ -1,0 +1,99 @@
+//// [tests/cases/compiler/asyncGeneratorInvalidThenableYield.ts] ////
+
+=== asyncGeneratorInvalidThenableYield.ts ===
+async function* one() {
+>one : () => AsyncGenerator<never, void, unknown>
+
+    yield { then() {} };
+>yield { then() {} } : any
+>{ then() {} } : { then(): void; }
+>then : () => void
+}
+
+async function* twice() {
+>twice : () => AsyncGenerator<never, void, unknown>
+
+    yield { then() {} };
+>yield { then() {} } : any
+>{ then() {} } : { then(): void; }
+>then : () => void
+
+    yield { then() {} };
+>yield { then() {} } : any
+>{ then() {} } : { then(): void; }
+>then : () => void
+}
+
+const contextual: () => AsyncGenerator<number> = async function* () {
+>contextual : () => AsyncGenerator<number>
+>async function* () {    yield { then() {} };} : () => AsyncGenerator<never, void, any>
+
+    yield { then() {} };
+>yield { then() {} } : any
+>{ then() {} } : { then(): void; }
+>then : () => void
+
+};
+
+interface SelfThenable {
+    then(onfulfilled: (value: SelfThenable) => void): void;
+>then : (onfulfilled: (value: SelfThenable) => void) => void
+>onfulfilled : (value: SelfThenable) => void
+>value : SelfThenable
+}
+declare const selfThenable: SelfThenable;
+>selfThenable : SelfThenable
+
+async function* circular() {
+>circular : () => AsyncGenerator<never, void, unknown>
+
+    yield selfThenable;
+>yield selfThenable : any
+>selfThenable : SelfThenable
+}
+
+declare const thenables: AsyncIterable<{ then(): void }>;
+>thenables : AsyncIterable<{ then(): void; }>
+>then : () => void
+
+async function* delegated() {
+>delegated : () => AsyncGenerator<never, void, any>
+
+    yield* thenables;
+>yield* thenables : any
+>thenables : AsyncIterable<{ then(): void; }>
+}
+
+async function* mixed() {
+>mixed : () => AsyncGenerator<number, void, unknown>
+
+    yield { then() {} };
+>yield { then() {} } : any
+>{ then() {} } : { then(): void; }
+>then : () => void
+
+    yield 1;
+>yield 1 : any
+>1 : 1
+}
+
+const inferred: string = one();
+>inferred : string
+>one() : AsyncGenerator<never, void, unknown>
+>one : () => AsyncGenerator<never, void, unknown>
+
+const inferredCircular: string = circular();
+>inferredCircular : string
+>circular() : AsyncGenerator<never, void, unknown>
+>circular : () => AsyncGenerator<never, void, unknown>
+
+const inferredDelegated: string = delegated();
+>inferredDelegated : string
+>delegated() : AsyncGenerator<never, void, any>
+>delegated : () => AsyncGenerator<never, void, any>
+
+const inferredMixed: string = mixed();
+>inferredMixed : string
+>mixed() : AsyncGenerator<number, void, unknown>
+>mixed : () => AsyncGenerator<number, void, unknown>
+
