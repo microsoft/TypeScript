@@ -1,0 +1,12 @@
+/a.ts(1,23): error TS2688: Cannot find type definition file for 'C:'.
+
+
+==== /a.ts (1 errors) ====
+    /// <reference types="C:" />
+                          ~~
+!!! error TS2688: Cannot find type definition file for 'C:'.
+    export {};
+    
+==== /types/README.md (0 errors) ====
+    The type root.
+    

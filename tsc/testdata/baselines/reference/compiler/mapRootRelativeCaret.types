@@ -1,0 +1,7 @@
+//// [tests/cases/compiler/mapRootRelativeCaret.ts] ////
+
+=== /proj/a.ts ===
+export const a = 1;
+>a : 1
+>1 : 1
+

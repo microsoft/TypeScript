@@ -1,0 +1,15 @@
+//// [tests/cases/compiler/nodeNextPackageSelfNameWithOutDirRootDirCaretDirectory.ts] ////
+
+=== /src/a.ts ===
+import { x } from "pkg/x";
+>x : "s"
+
+const n: number = x;
+>n : number
+>x : "s"
+
+=== /src/^/x.ts ===
+export const x = "s";
+>x : "s"
+>"s" : "s"
+

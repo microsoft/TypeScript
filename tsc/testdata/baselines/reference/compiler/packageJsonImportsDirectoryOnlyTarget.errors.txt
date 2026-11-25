@@ -1,0 +1,15 @@
+/index.ts(1,20): error TS2307: Cannot find module '#js/' or its corresponding type declarations.
+
+
+==== /index.ts (1 errors) ====
+    import * as b from "#js/";
+                       ~~~~~~
+!!! error TS2307: Cannot find module '#js/' or its corresponding type declarations.
+    export { b };
+    
+==== /package.json (0 errors) ====
+    { "name": "pkg", "type": "module", "imports": { "#js/": "./dist.js/" } }
+    
+==== /dist.ts (0 errors) ====
+    export const k = 3;
+    

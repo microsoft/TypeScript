@@ -1,0 +1,17 @@
+//// [tests/cases/compiler/moduleResolutionAsTypeReferenceDirectiveTrailingSlash.ts] ////
+
+=== /a.ts ===
+import { fromDirectory, fromFile } from "lib/";
+>fromDirectory : number
+>fromFile : any
+
+export const values = [fromDirectory, fromFile];
+>values : any[]
+>[fromDirectory, fromFile] : any[]
+>fromDirectory : number
+>fromFile : any
+
+=== /types/lib/index.d.ts ===
+export declare const fromDirectory: number;
+>fromDirectory : number
+

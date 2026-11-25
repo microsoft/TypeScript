@@ -1,0 +1,24 @@
+//// [tests/cases/compiler/declarationEmitIndexDirectoryOutsideImportingDirectory.ts] ////
+
+=== /project/app/src/re.ts ===
+export { make } from "../../shared/lib/index";
+>make : Symbol(make, Decl(re.ts, 0, 8))
+
+=== /project/app/src/a.ts ===
+import { make } from "./re";
+>make : Symbol(make, Decl(a.ts, 0, 8))
+
+export const v = make();
+>v : Symbol(v, Decl(a.ts, 1, 12))
+>make : Symbol(make, Decl(a.ts, 0, 8))
+
+=== /project/shared/lib/index.ts ===
+export interface T { v: number }
+>T : Symbol(T, Decl(index.ts, 0, 0))
+>v : Symbol(T.v, Decl(index.ts, 0, 20))
+
+export function make(): T { return { v: 1 }; }
+>make : Symbol(make, Decl(index.ts, 0, 32))
+>T : Symbol(T, Decl(index.ts, 0, 0))
+>v : Symbol(v, Decl(index.ts, 1, 36))
+

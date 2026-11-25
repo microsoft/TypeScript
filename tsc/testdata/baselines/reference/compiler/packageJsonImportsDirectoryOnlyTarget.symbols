@@ -1,0 +1,9 @@
+//// [tests/cases/compiler/packageJsonImportsDirectoryOnlyTarget.ts] ////
+
+=== /index.ts ===
+import * as b from "#js/";
+>b : Symbol(b, Decl(index.ts, 0, 6))
+
+export { b };
+>b : Symbol(b, Decl(index.ts, 1, 8))
+

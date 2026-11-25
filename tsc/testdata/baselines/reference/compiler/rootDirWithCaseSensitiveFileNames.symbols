@@ -1,0 +1,10 @@
+//// [tests/cases/compiler/rootDirWithCaseSensitiveFileNames.ts] ////
+
+=== /proj/src/a.ts ===
+export const a = 1;
+>a : Symbol(a, Decl(a.ts, 0, 12))
+
+=== /proj/SRC/b.ts ===
+export const b = 2;
+>b : Symbol(b, Decl(b.ts, 0, 12))
+

@@ -1,0 +1,12 @@
+//// [tests/cases/compiler/tsconfigIncludeAbsolutePathWithDotDot.ts] ////
+
+=== /shared/a.ts ===
+export const a: number = "s";
+>a : number
+>"s" : "s"
+
+=== /shared/sub/b.ts ===
+export const b: number = "s";
+>b : number
+>"s" : "s"
+

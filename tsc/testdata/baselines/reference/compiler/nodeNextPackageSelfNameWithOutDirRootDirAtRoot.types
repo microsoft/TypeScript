@@ -1,0 +1,14 @@
+//// [tests/cases/compiler/nodeNextPackageSelfNameWithOutDirRootDirAtRoot.ts] ////
+
+=== /a.ts ===
+import { w } from "me/lib";
+>w : 1
+
+w;
+>w : 1
+
+=== /lib.ts ===
+export const w = 1;
+>w : 1
+>1 : 1
+

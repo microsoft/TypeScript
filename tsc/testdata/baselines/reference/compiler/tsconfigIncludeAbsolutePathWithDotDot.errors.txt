@@ -1,0 +1,22 @@
+/shared/a.ts(1,14): error TS2322: Type 'string' is not assignable to type 'number'.
+/shared/sub/b.ts(1,14): error TS2322: Type 'string' is not assignable to type 'number'.
+
+
+==== /proj/tsconfig.json (0 errors) ====
+    {
+        "compilerOptions": {
+            "noEmit": true
+        },
+        "include": ["/shared/sub/.."]
+    }
+    
+==== /shared/a.ts (1 errors) ====
+    export const a: number = "s";
+                 ~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+    
+==== /shared/sub/b.ts (1 errors) ====
+    export const b: number = "s";
+                 ~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+    

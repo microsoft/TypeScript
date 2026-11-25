@@ -1,0 +1,22 @@
+//// [tests/cases/compiler/declarationEmitExportsPatternTargetTrailingSlash.ts] ////
+
+=== /src/main.ts ===
+import { make } from "dep";
+>make : () => import("../node_modules/pkg/dist/foo.js").L
+
+export const v = make();
+>v : import("../node_modules/pkg/dist/foo").L
+>make() : import("../node_modules/pkg/dist/foo").L
+>make : () => import("../node_modules/pkg/dist/foo").L
+
+=== /node_modules/pkg/dist/foo.d.ts ===
+export interface L { x: number }
+>x : number
+
+=== /node_modules/dep/index.d.ts ===
+import type { L } from "../pkg/dist/foo";
+>L : L
+
+export declare function make(): L;
+>make : () => L
+

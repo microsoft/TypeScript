@@ -1,0 +1,13 @@
+//// [tests/cases/compiler/typeReferenceDirectiveTrailingSlashRelativeName.ts] ////
+
+=== /a.ts ===
+/// <reference types="../pkg/" />
+fromDirectory;
+>fromDirectory : Symbol(fromDirectory, Decl(index.d.ts, 0, 13))
+
+fromFile;
+
+=== /pkg/index.d.ts ===
+declare const fromDirectory: number;
+>fromDirectory : Symbol(fromDirectory, Decl(index.d.ts, 0, 13))
+

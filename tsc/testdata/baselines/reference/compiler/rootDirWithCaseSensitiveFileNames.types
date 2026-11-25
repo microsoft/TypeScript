@@ -1,0 +1,12 @@
+//// [tests/cases/compiler/rootDirWithCaseSensitiveFileNames.ts] ////
+
+=== /proj/src/a.ts ===
+export const a = 1;
+>a : 1
+>1 : 1
+
+=== /proj/SRC/b.ts ===
+export const b = 2;
+>b : 2
+>2 : 2
+

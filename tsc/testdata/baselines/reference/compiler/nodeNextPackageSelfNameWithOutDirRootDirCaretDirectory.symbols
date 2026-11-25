@@ -1,0 +1,14 @@
+//// [tests/cases/compiler/nodeNextPackageSelfNameWithOutDirRootDirCaretDirectory.ts] ////
+
+=== /src/a.ts ===
+import { x } from "pkg/x";
+>x : Symbol(x, Decl(a.ts, 0, 8))
+
+const n: number = x;
+>n : Symbol(n, Decl(a.ts, 1, 5))
+>x : Symbol(x, Decl(a.ts, 0, 8))
+
+=== /src/^/x.ts ===
+export const x = "s";
+>x : Symbol(x, Decl(x.ts, 0, 12))
+

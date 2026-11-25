@@ -1,0 +1,8 @@
+//// [tests/cases/compiler/selfReferencingFileWithoutExtension.ts] ////
+
+=== /a.ts ===
+/// <reference path="a" />
+export const a = 1;
+>a : 1
+>1 : 1
+

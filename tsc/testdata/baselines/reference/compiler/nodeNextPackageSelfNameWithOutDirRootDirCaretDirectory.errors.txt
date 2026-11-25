@@ -1,0 +1,15 @@
+/src/a.ts(2,7): error TS2322: Type 'string' is not assignable to type 'number'.
+
+
+==== /src/a.ts (1 errors) ====
+    import { x } from "pkg/x";
+    const n: number = x;
+          ~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+    
+==== /package.json (0 errors) ====
+    { "name": "pkg", "version": "1.0.0", "type": "module", "exports": { "./x": "./dist/^/x.js" } }
+    
+==== /src/^/x.ts (0 errors) ====
+    export const x = "s";
+    
