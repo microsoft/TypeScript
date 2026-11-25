@@ -30,3 +30,26 @@ type ClickEventSupport = ListenActionable<{ Click: 'some-click-event-payload' }>
 		Index: 0,
 	})
 }
+
+func TestCodeFixClassImplementInterfaceNonIdentifierNames(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @Filename: /node_modules/dep/index.d.ts
+interface Hidden { x: number }
+export { Hidden as "a\\u0062" };
+export type I = { [K in "c\\u0064"]: Hidden };
+// @Filename: /a.ts
+import { I } from "dep";
+class C implements I {}`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.GoToFile(t, "/a.ts")
+	f.VerifyCodeFix(t, fourslash.VerifyCodeFixOptions{
+		Description: "Implement interface 'I'",
+		NewFileContent: `import { I } from "dep";
+class C implements I {
+    c\u0064: a\u0062;
+}`,
+		Index: 0,
+	})
+}
