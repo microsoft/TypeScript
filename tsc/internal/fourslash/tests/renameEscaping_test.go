@@ -89,3 +89,29 @@ const o = { "c-d": 1 };
 const { "c-d": x } = o;`,
 	})
 }
+
+func TestRenameStringNamedReExportWithAliases(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @Filename: /a.ts
+const x = 1;
+export { x as "/*1*/a b" };
+// @Filename: /b.ts
+export { "a b" } from "./a";
+// @Filename: /c.ts
+const y = 1;
+export { y as "d e" };
+// @Filename: /d.ts
+export { "/*2*/d e" } from "./c";`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	defer f.ConfigureWithReset(t, lsutil.UserPreferences{ProvidePrefixAndSuffixTextForRename: core.TSTrue})()
+	f.VerifyRename(t, "1", "c", map[string]string{
+		"/a.ts": `const x = 1;
+export { x as "c" };`,
+		"/b.ts": `export { "c as a b" } from "./a";`,
+	})
+	f.VerifyRename(t, "2", "f", map[string]string{
+		"/d.ts": `export { "d e as f" } from "./c";`,
+	})
+}
