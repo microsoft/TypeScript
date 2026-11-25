@@ -10,15 +10,10 @@ const require = createRequire(import.meta.url);
 const rulesDir = path.join(import.meta.dirname, "packages/typescript/eslint/rules");
 const rules = Object.fromEntries(
     fs.readdirSync(rulesDir)
-        .filter(file => (file.endsWith(".cjs") && file !== "utils.cjs") || file === "public-api-types.ts")
-        .map(file => [file.replace(/\.(cjs|ts)$/, ""), file.endsWith(".ts") ? require(path.join(rulesDir, file)).default : require(path.join(rulesDir, file))]),
+        .filter(file => file.endsWith(".cjs") && file !== "utils.cjs")
+        .map(file => [file.slice(0, -4), require(path.join(rulesDir, file))]),
 );
 const localPlugin = { rules };
-const packageExports = JSON.parse(fs.readFileSync(new URL("./packages/typescript/package.json", import.meta.url), "utf8")).exports;
-export const publicSourceEntrypoints = Object.values(packageExports)
-    .filter(value => typeof value === "object" && value["@typescript/source"])
-    .map(value => `packages/typescript/${value["@typescript/source"].replace(/^\.\//, "")}`);
-const publicAPIEntrypoints = publicSourceEntrypoints.map(file => path.resolve(import.meta.dirname, file));
 const generatedIgnores = [
     "packages/typescript/**/*.generated.ts",
     "packages/typescript/src/api/sync/api.ts",
@@ -32,7 +27,6 @@ export default tseslint.config(
             "packages/typescript/dist/**",
             "packages/typescript/vendor/**",
             ...generatedIgnores,
-            ...publicSourceEntrypoints.map(file => `!${file}`),
             "packages/typescript/test/sync/api.bench.ts",
             "packages/typescript/test/sync/api.test.ts",
             "packages/typescript/test/sync/astnav.test.ts",
@@ -40,27 +34,11 @@ export default tseslint.config(
         ],
     },
     {
-        files: publicSourceEntrypoints,
-        plugins: { local: localPlugin },
-        languageOptions: {
-            parser: tseslint.parser,
-            parserOptions: {
-                projectService: { EXPERIMENTAL_backend: "tsgo" },
-                tsconfigRootDir: import.meta.dirname,
-            },
-        },
-        rules: { "local/public-api-types": ["error", { entrypoints: publicAPIEntrypoints }] },
-    },
-    {
-        files: ["packages/typescript/src/api/async/api.ts"],
-        rules: { "local/public-api-types": ["error", { entrypoints: publicAPIEntrypoints, sameEntrypoint: ["CompilerOptions"] }] },
-    },
-    {
         files: generatedIgnores,
         linterOptions: { reportUnusedDisableDirectives: "off" },
     },
     {
-        files: ["packages/typescript/{src,test,scripts}/**/*.ts", "packages/typescript/eslint/rules/**/*.ts"],
+        files: ["packages/typescript/{src,test,scripts}/**/*.ts"],
         ignores: generatedIgnores,
         extends: [
             eslint.configs.recommended,

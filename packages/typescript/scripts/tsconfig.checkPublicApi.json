@@ -1,0 +1,9 @@
+{
+    "extends": "../tsconfig.dev.json",
+    "compilerOptions": {
+        "composite": false,
+        "skipLibCheck": true,
+        "customConditions": ["@typescript/source"]
+    },
+    "include": ["checkPublicApi.ts"]
+}

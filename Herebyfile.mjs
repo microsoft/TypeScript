@@ -1463,9 +1463,10 @@ async function runLint() {
 }
 
 async function runLintTypeScript() {
-    await run("./built/local/tsc", ["-p", "./packages/typescript/eslint/tsconfig.json"]);
-    await run("node", ["--test", "./packages/typescript/eslint/*.test.cjs"]);
-    const args = ["packages/typescript/{src,test,scripts}/**/*.ts", "packages/typescript/eslint/rules/**/*.ts"];
+    await run("./built/local/tsc", ["-p", "./packages/typescript/scripts/tsconfig.checkPublicApi.json"]);
+    await run("node", ["--conditions", "@typescript/source", "--test", "./packages/typescript/scripts/checkPublicApi.test.cjs"]);
+    await run("node", ["--conditions", "@typescript/source", "./packages/typescript/scripts/checkPublicApi.ts"]);
+    const args = ["packages/typescript/{src,test,scripts}/**/*.ts"];
     if (options.fix) {
         args.push("--fix");
     }

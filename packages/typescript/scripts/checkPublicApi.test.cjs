@@ -3,25 +3,37 @@ const fs = require("node:fs");
 const os = require("node:os");
 const path = require("node:path");
 const test = require("node:test");
-const { Linter } = require("eslint");
-const parser = require("@typescript-eslint/parser");
-const rule = require("./rules/public-api-types.ts").default;
+const { spawnSync } = require("node:child_process");
+const { API } = require("@typescript/typescript/sync");
+const { analyzePublicApi, checkPublicApi } = require("./checkPublicApi.ts");
 
 const tsconfig = JSON.stringify({ compilerOptions: { module: "nodenext", strict: true, noEmit: true } });
 
-function lint(files, options, text = files["index.ts"]) {
+function lint(files, options = {}, inspectApi) {
     const directory = fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(), "public-api-types-")));
     try {
         for (const [file, text] of Object.entries({ "tsconfig.json": tsconfig, ...files })) {
             fs.mkdirSync(path.dirname(path.join(directory, file)), { recursive: true });
             fs.writeFileSync(path.join(directory, file), text);
         }
-        return new Linter({ cwd: directory }).verify(text, [{
-            files: ["**/*.ts"],
-            languageOptions: { parser, parserOptions: { projectService: { EXPERIMENTAL_backend: "tsgo" }, tsconfigRootDir: directory } },
-            plugins: { local: { rules: { "public-api-types": rule } } },
-            rules: { "local/public-api-types": options ? ["error", options] : "error" },
-        }], { filename: path.join(directory, "index.ts") });
+        const entrypoints = (options.entrypoints ?? ["index.ts"]).map(file => path.resolve(directory, file));
+        const api = new API({ cwd: directory, collectTiming: !!inspectApi });
+        try {
+            const snapshot = api.createSnapshot({ openFiles: entrypoints });
+            try {
+                const project = snapshot.getDefaultProjectForFile(entrypoints[0]);
+                assert.ok(project);
+                const diagnostics = checkPublicApi(entrypoints[0], options.sameEntrypoint ?? [], analyzePublicApi(api, project, entrypoints));
+                inspectApi?.(api);
+                return diagnostics;
+            }
+            finally {
+                snapshot.dispose();
+            }
+        }
+        finally {
+            api.close();
+        }
     }
     finally {
         fs.rmSync(directory, { recursive: true, force: true });
@@ -30,6 +42,32 @@ function lint(files, options, text = files["index.ts"]) {
 
 const messagesOf = files => lint(files).map(message => message.message);
 const missing = name => `Public API references '${name}', but this type is not exported from any public entrypoint.`;
+
+test("batches independent references and overload queries", () => {
+    const fields = Array.from({ length: 64 }, (_, index) => `field${index}: Hidden;`).join("\n");
+    const methods = Array.from({ length: 32 }, (_, index) => `
+        method${index}(value: string): void;
+        method${index}(value: Hidden): void {}
+    `).join("\n");
+    let requestCount;
+    const diagnostics = lint(
+        {
+            "index.ts": `
+            import { Hidden } from "./types.js";
+            export { Hidden } from "./types.js";
+            export interface Public { ${fields} }
+            export class Methods { ${methods} }
+        `,
+            "types.ts": "export interface Hidden {}",
+        },
+        {},
+        api => {
+            requestCount = api.getTimingInfo().totals.requestCount;
+        },
+    );
+    assert.deepEqual(diagnostics, []);
+    assert.ok(requestCount < 24, `Expected batched queries, got ${requestCount} IPC requests`);
+});
 
 test("accepts types exported by another entrypoint but reports unexported transitive types", () => {
     const files = {
@@ -113,15 +151,51 @@ test("reports public type references that cannot be resolved", () => {
     assert.deepEqual(messages.map(message => message.messageId), ["unresolvedReference"]);
 });
 
-test("analyzes the current ESLint text instead of the file on disk", () => {
+test("analyzes the current source files", () => {
     const files = {
         "index.ts": "export interface Public {}",
         "types.ts": "export interface Hidden {}",
     };
-    const text = 'import { Hidden } from "./types.js"; export interface Public { value: Hidden; }';
-    assert.deepEqual(lint(files, undefined, text).map(message => message.message), [missing("Hidden")]);
-    files["index.ts"] = `${" ".repeat(100)}${text}`;
-    assert.deepEqual(lint(files, undefined, "export interface Public {}"), []);
+    assert.deepEqual(lint(files), []);
+    files["index.ts"] = 'import { Hidden } from "./types.js"; export interface Public { value: Hidden; }';
+    const [diagnostic] = lint(files);
+    assert.equal(diagnostic.message, missing("Hidden"));
+    assert.equal(path.basename(diagnostic.file), "index.ts");
+    assert.equal(path.basename(diagnostic.entrypoint), "index.ts");
+    assert.equal(diagnostic.line, 1);
+    assert.equal(diagnostic.character, files["index.ts"].lastIndexOf("Hidden") + 1);
+});
+
+test("standalone command reports errors and exits nonzero", () => {
+    const directory = fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(), "public-api-command-")));
+    try {
+        fs.mkdirSync(path.join(directory, "scripts"));
+        fs.mkdirSync(path.join(directory, "src"));
+        fs.mkdirSync(path.join(directory, "node_modules", "@typescript"), { recursive: true });
+        fs.symlinkSync(path.dirname(require.resolve("@typescript/typescript/package.json")), path.join(directory, "node_modules", "@typescript", "typescript"), "junction");
+        fs.copyFileSync(path.join(__dirname, "checkPublicApi.ts"), path.join(directory, "scripts/checkPublicApi.ts"));
+        fs.writeFileSync(
+            path.join(directory, "package.json"),
+            JSON.stringify({
+                type: "module",
+                exports: { ".": { "@typescript/source": "./src/index.ts" } },
+            }),
+        );
+        fs.writeFileSync(path.join(directory, "tsconfig.json"), tsconfig);
+        const source = path.join(directory, "src/index.ts");
+        fs.writeFileSync(source, "interface Hidden {} export interface Public { value: Hidden; }");
+        const run = () => spawnSync(process.execPath, ["--conditions", "@typescript/source", path.join(directory, "scripts/checkPublicApi.ts")], { encoding: "utf8" });
+        const failed = run();
+        assert.equal(failed.status, 1, failed.stderr);
+        assert.match(failed.stderr, /index\.ts:1:\d+: Public API references 'Hidden'/);
+        fs.writeFileSync(source, "export interface Hidden {} export interface Public { value: Hidden; }");
+        const passed = run();
+        assert.equal(passed.status, 0, passed.stderr);
+        assert.equal(passed.stderr, "");
+    }
+    finally {
+        fs.rmSync(directory, { recursive: true, force: true });
+    }
 });
 
 test("does not count a type-only star export as an enum value export", () => {
