@@ -1,0 +1,49 @@
+distributedTypeParametersParenthesized.ts(3,65): error TS2344: Type 'U' does not satisfy the constraint 'T'.
+  'U' is only assignable to the non-distributed 'T', but 'T' has been distributed here.
+distributedTypeParametersParenthesized.ts(4,67): error TS2344: Type 'U' does not satisfy the constraint 'T'.
+  'U' is only assignable to the non-distributed 'T', but 'T' has been distributed here.
+distributedTypeParametersParenthesized.ts(5,69): error TS2344: Type 'U' does not satisfy the constraint 'T'.
+  'U' is only assignable to the non-distributed 'T', but 'T' has been distributed here.
+distributedTypeParametersParenthesized.ts(7,58): error TS2344: Type 'U' does not satisfy the constraint 'T'.
+  'U' is only assignable to the non-distributed 'T', but 'T' has been distributed here.
+distributedTypeParametersParenthesized.ts(8,60): error TS2344: Type 'U' does not satisfy the constraint 'T'.
+  'U' is only assignable to the non-distributed 'T', but 'T' has been distributed here.
+distributedTypeParametersParenthesized.ts(9,60): error TS2344: Type 'U' does not satisfy the constraint 'T'.
+  'U' is only assignable to the non-distributed 'T', but 'T' has been distributed here.
+distributedTypeParametersParenthesized.ts(10,64): error TS2344: Type 'U' does not satisfy the constraint 'T'.
+  'U' is only assignable to the non-distributed 'T', but 'T' has been distributed here.
+
+
+==== distributedTypeParametersParenthesized.ts (7 errors) ====
+    type Show<A, B extends A> = B extends A ? true : false;
+    
+    type Conditional1<T, U extends T> = T extends unknown ? Show<T, U> : never;
+                                                                    ~
+!!! error TS2344: Type 'U' does not satisfy the constraint 'T'.
+!!! error TS2344:   'U' is only assignable to the non-distributed 'T', but 'T' has been distributed here.
+    type Conditional2<T, U extends T> = (T) extends unknown ? Show<T, U> : never;
+                                                                      ~
+!!! error TS2344: Type 'U' does not satisfy the constraint 'T'.
+!!! error TS2344:   'U' is only assignable to the non-distributed 'T', but 'T' has been distributed here.
+    type Conditional3<T, U extends T> = ((T)) extends unknown ? Show<T, U> : never;
+                                                                        ~
+!!! error TS2344: Type 'U' does not satisfy the constraint 'T'.
+!!! error TS2344:   'U' is only assignable to the non-distributed 'T', but 'T' has been distributed here.
+    
+    type Mapped1<T, U extends T> = { [K in keyof T]: Show<T, U> };
+                                                             ~
+!!! error TS2344: Type 'U' does not satisfy the constraint 'T'.
+!!! error TS2344:   'U' is only assignable to the non-distributed 'T', but 'T' has been distributed here.
+    type Mapped2<T, U extends T> = { [K in keyof (T)]: Show<T, U> };
+                                                               ~
+!!! error TS2344: Type 'U' does not satisfy the constraint 'T'.
+!!! error TS2344:   'U' is only assignable to the non-distributed 'T', but 'T' has been distributed here.
+    type Mapped3<T, U extends T> = { [K in (keyof T)]: Show<T, U> };
+                                                               ~
+!!! error TS2344: Type 'U' does not satisfy the constraint 'T'.
+!!! error TS2344:   'U' is only assignable to the non-distributed 'T', but 'T' has been distributed here.
+    type Mapped4<T, U extends T> = { [K in ((keyof (T)))]: Show<T, U> };
+                                                                   ~
+!!! error TS2344: Type 'U' does not satisfy the constraint 'T'.
+!!! error TS2344:   'U' is only assignable to the non-distributed 'T', but 'T' has been distributed here.
+    

@@ -1,0 +1,29 @@
+//// [tests/cases/compiler/distributedTypeParametersParenthesized.ts] ////
+
+=== distributedTypeParametersParenthesized.ts ===
+type Show<A, B extends A> = B extends A ? true : false;
+>Show : Show<A, B>
+>true : true
+>false : false
+
+type Conditional1<T, U extends T> = T extends unknown ? Show<T, U> : never;
+>Conditional1 : Conditional1<T, U>
+
+type Conditional2<T, U extends T> = (T) extends unknown ? Show<T, U> : never;
+>Conditional2 : Conditional2<T, U>
+
+type Conditional3<T, U extends T> = ((T)) extends unknown ? Show<T, U> : never;
+>Conditional3 : Conditional3<T, U>
+
+type Mapped1<T, U extends T> = { [K in keyof T]: Show<T, U> };
+>Mapped1 : Mapped1<T, U>
+
+type Mapped2<T, U extends T> = { [K in keyof (T)]: Show<T, U> };
+>Mapped2 : Mapped2<T, U>
+
+type Mapped3<T, U extends T> = { [K in (keyof T)]: Show<T, U> };
+>Mapped3 : Mapped3<T, U>
+
+type Mapped4<T, U extends T> = { [K in ((keyof (T)))]: Show<T, U> };
+>Mapped4 : Mapped4<T, U>
+

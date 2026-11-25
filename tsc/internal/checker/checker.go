@@ -23917,15 +23917,17 @@ func (c *Checker) isInDistributiveContext(node *ast.Node, symbol *ast.Symbol) bo
 		var typeParameterNode *ast.Node
 		switch {
 		case ast.IsConditionalTypeNode(n):
-			typeParameterNode = n.AsConditionalTypeNode().CheckType
+			typeParameterNode = ast.SkipTypeParentheses(n.AsConditionalTypeNode().CheckType)
 		case ast.IsMappedTypeNode(n):
 			// The template and name type of a homomorphic mapped type are distributive contexts, but its
 			// 'keyof T' constraint is not: the constraint of the mapped type's type parameter is shared by
 			// all instantiations of the mapped type and must stay in terms of the non-distributed form.
 			m := n.AsMappedTypeNode()
 			if child == nil || child == m.Type || child == m.NameType {
-				if constraint := m.TypeParameter.AsTypeParameterDeclaration().Constraint; constraint != nil && ast.IsTypeOperatorNode(constraint) && constraint.AsTypeOperatorNode().Operator == ast.KindKeyOfKeyword {
-					typeParameterNode = constraint.Type()
+				if constraint := m.TypeParameter.AsTypeParameterDeclaration().Constraint; constraint != nil {
+					if constraint := ast.SkipTypeParentheses(constraint); ast.IsTypeOperatorNode(constraint) && constraint.AsTypeOperatorNode().Operator == ast.KindKeyOfKeyword {
+						typeParameterNode = ast.SkipTypeParentheses(constraint.Type())
+					}
 				}
 			}
 		}
