@@ -2803,7 +2803,20 @@ func (p *Parser) createUnionOrIntersectionTypeNode(operator ast.Kind, types *ast
 	}
 }
 
+func isContextualTypePrefixKeyword(token ast.Kind) bool {
+	switch token {
+	case ast.KindKeyOfKeyword, ast.KindUniqueKeyword, ast.KindReadonlyKeyword, ast.KindInferKeyword:
+		return true
+	}
+	return false
+}
+
 func (p *Parser) parseTypeOperatorOrHigher() *ast.TypeNode {
+	// A dot after a contextual type prefix starts a qualified name.
+	if isContextualTypePrefixKeyword(p.token) && p.lookAhead((*Parser).nextTokenIsDot) {
+		return p.doInContext(ast.NodeFlagsDisallowConditionalTypesContext, false, (*Parser).parsePostfixTypeOrHigher)
+	}
+
 	operator := p.token
 	switch operator {
 	case ast.KindKeyOfKeyword, ast.KindUniqueKeyword, ast.KindReadonlyKeyword:

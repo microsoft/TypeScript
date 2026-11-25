@@ -1,0 +1,56 @@
+//// [tests/cases/compiler/typeOperatorNamespaceReferences.ts] ////
+
+=== typeOperatorNamespaceReferences.ts ===
+declare namespace keyof {
+    export interface Option {
+        name: string;
+>name : string
+    }
+}
+
+declare namespace unique {
+    export type Option<T> = { value: T };
+>Option : Option<T>
+>value : T
+}
+
+declare namespace readonly {
+    export type Option = "readonly";
+>Option : "readonly"
+}
+
+declare namespace infer {
+    export type Option = [number];
+>Option : Option
+}
+
+type KeyofOption = keyof.Option;
+>KeyofOption : keyof.Option
+>keyof : any
+
+type UniqueOption = unique.Option<number>;
+>UniqueOption : UniqueOption
+>unique : any
+
+type ReadonlyOption = readonly.Option;
+>ReadonlyOption : "readonly"
+>readonly : any
+
+type OptionKeys = keyof keyof.Option;
+>OptionKeys : "name"
+>keyof : any
+
+type OptionElement = infer.Option extends [infer T] ? T : never;
+>OptionElement : number
+>infer : any
+
+type TupleKeys = keyof [number];
+>TupleKeys : keyof [number]
+
+type ReadonlyOptions = readonly readonly.Option[];
+>ReadonlyOptions : ReadonlyOptions
+>readonly : any
+
+declare const tag: unique symbol;
+>tag : unique symbol
+
