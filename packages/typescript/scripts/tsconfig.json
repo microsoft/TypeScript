@@ -5,5 +5,8 @@
         "exactOptionalPropertyTypes": false,
         "lib": ["esnext"]
     },
-    "include": ["*.ts"]
+    "include": ["*.ts"],
+    "references": [
+        { "path": ".." }
+    ]
 }

@@ -1710,7 +1710,7 @@ export const checkScripts = task({
     run: async () => {
         for (const tsconfig of scriptTsconfigs) {
             console.log(`Type-checking ${tsconfig}`);
-            await run("tsc", ["-p", tsconfig]);
+            await run("tsc", ["-b", tsconfig]);
         }
     },
 });
