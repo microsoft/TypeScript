@@ -18,3 +18,6 @@ export const rk = dk({ a: { b: sv } }, "a");
 
 declare function revTuple<V extends unknown[]>(x: { [K in keyof V]: { [J in keyof V[K]]: () => V[K][J] } }): V;
 export const rt = revTuple([{ a: () => 1 }, { b: () => "s" }] as const);
+
+declare function revTupleUnconstrained<V>(x: { [K in keyof V]: { [J in keyof V[K]]: () => V[K][J] } }): V;
+export const rtu = revTupleUnconstrained([{ a: () => 1 }, { b: () => "s" }] as const);

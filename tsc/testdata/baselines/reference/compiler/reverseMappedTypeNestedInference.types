@@ -99,3 +99,22 @@ export const rt = revTuple([{ a: () => 1 }, { b: () => "s" }] as const);
 >() => "s" : () => string
 >"s" : "s"
 
+declare function revTupleUnconstrained<V>(x: { [K in keyof V]: { [J in keyof V[K]]: () => V[K][J] } }): V;
+>revTupleUnconstrained : <V>(x: { [K in keyof V]: { [J in keyof V[K]]: () => V[K][J]; }; }) => V
+>x : { [K in keyof V]: { [J in keyof V[K]]: () => V[K][J]; }; }
+
+export const rtu = revTupleUnconstrained([{ a: () => 1 }, { b: () => "s" }] as const);
+>rtu : readonly [{ readonly a: number; }, { readonly b: string; }]
+>revTupleUnconstrained([{ a: () => 1 }, { b: () => "s" }] as const) : readonly [{ readonly a: number; }, { readonly b: string; }]
+>revTupleUnconstrained : <V>(x: { [K in keyof V]: { [J in keyof V[K]]: () => V[K][J]; }; }) => V
+>[{ a: () => 1 }, { b: () => "s" }] as const : readonly [{ readonly a: () => number; }, { readonly b: () => string; }]
+>[{ a: () => 1 }, { b: () => "s" }] : readonly [{ readonly a: () => number; }, { readonly b: () => string; }]
+>{ a: () => 1 } : { readonly a: () => number; }
+>a : () => number
+>() => 1 : () => number
+>1 : 1
+>{ b: () => "s" } : { readonly b: () => string; }
+>b : () => string
+>() => "s" : () => string
+>"s" : "s"
+

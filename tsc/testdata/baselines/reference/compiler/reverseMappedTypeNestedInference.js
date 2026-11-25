@@ -19,6 +19,9 @@ export const rk = dk({ a: { b: sv } }, "a");
 declare function revTuple<V extends unknown[]>(x: { [K in keyof V]: { [J in keyof V[K]]: () => V[K][J] } }): V;
 export const rt = revTuple([{ a: () => 1 }, { b: () => "s" }] as const);
 
+declare function revTupleUnconstrained<V>(x: { [K in keyof V]: { [J in keyof V[K]]: () => V[K][J] } }): V;
+export const rtu = revTupleUnconstrained([{ a: () => 1 }, { b: () => "s" }] as const);
+
 
 //// [reverseMappedTypeNestedInference.js]
 export const r3 = d3({ a: { b: { c: sv } } });
@@ -26,6 +29,7 @@ export const r4 = d4({ a: { b: { c: { d: sv } } } });
 export const rd = dd({ a: { b: { c: { d: sv } } } });
 export const rk = dk({ a: { b: sv } }, "a");
 export const rt = revTuple([{ a: () => 1 }, { b: () => "s" }]);
+export const rtu = revTupleUnconstrained([{ a: () => 1 }, { b: () => "s" }]);
 
 
 //// [reverseMappedTypeNestedInference.d.ts]
@@ -58,6 +62,11 @@ export declare const rk: {
     b: string | undefined;
 };
 export declare const rt: [{
+    readonly a: number;
+}, {
+    readonly b: string;
+}];
+export declare const rtu: readonly [{
     readonly a: number;
 }, {
     readonly b: string;
