@@ -1,0 +1,99 @@
+//// [tests/cases/compiler/enumLiteralIntersections.ts] ////
+
+=== enumLiteralIntersections.ts ===
+enum A {
+>A : Symbol(A, Decl(enumLiteralIntersections.ts, 0, 0))
+
+    One = 1,
+>One : Symbol(A.One, Decl(enumLiteralIntersections.ts, 0, 8))
+
+    Two = "2",
+>Two : Symbol(A.Two, Decl(enumLiteralIntersections.ts, 1, 12))
+}
+
+const a: "2" = A.Two;
+>a : Symbol(a, Decl(enumLiteralIntersections.ts, 5, 5))
+>A.Two : Symbol(A.Two, Decl(enumLiteralIntersections.ts, 1, 12))
+>A : Symbol(A, Decl(enumLiteralIntersections.ts, 0, 0))
+>Two : Symbol(A.Two, Decl(enumLiteralIntersections.ts, 1, 12))
+
+const b: 1 = A.One;
+>b : Symbol(b, Decl(enumLiteralIntersections.ts, 6, 5))
+>A.One : Symbol(A.One, Decl(enumLiteralIntersections.ts, 0, 8))
+>A : Symbol(A, Decl(enumLiteralIntersections.ts, 0, 0))
+>One : Symbol(A.One, Decl(enumLiteralIntersections.ts, 0, 8))
+
+type Extant1 = A.One & 1;
+>Extant1 : Symbol(Extant1, Decl(enumLiteralIntersections.ts, 6, 19))
+>A : Symbol(A, Decl(enumLiteralIntersections.ts, 0, 0))
+>One : Symbol(A.One, Decl(enumLiteralIntersections.ts, 0, 8))
+
+type Extant2 = A.Two & "2";
+>Extant2 : Symbol(Extant2, Decl(enumLiteralIntersections.ts, 8, 25))
+>A : Symbol(A, Decl(enumLiteralIntersections.ts, 0, 0))
+>Two : Symbol(A.Two, Decl(enumLiteralIntersections.ts, 1, 12))
+
+type ExtantAny1 = A & 1;
+>ExtantAny1 : Symbol(ExtantAny1, Decl(enumLiteralIntersections.ts, 9, 27))
+>A : Symbol(A, Decl(enumLiteralIntersections.ts, 0, 0))
+
+type ExtantAny2 = A & "2";
+>ExtantAny2 : Symbol(ExtantAny2, Decl(enumLiteralIntersections.ts, 10, 24))
+>A : Symbol(A, Decl(enumLiteralIntersections.ts, 0, 0))
+
+const numericMember: Extant1 = A.One;
+>numericMember : Symbol(numericMember, Decl(enumLiteralIntersections.ts, 13, 5))
+>Extant1 : Symbol(Extant1, Decl(enumLiteralIntersections.ts, 6, 19))
+>A.One : Symbol(A.One, Decl(enumLiteralIntersections.ts, 0, 8))
+>A : Symbol(A, Decl(enumLiteralIntersections.ts, 0, 0))
+>One : Symbol(A.One, Decl(enumLiteralIntersections.ts, 0, 8))
+
+const stringMember: Extant2 = A.Two;
+>stringMember : Symbol(stringMember, Decl(enumLiteralIntersections.ts, 14, 5))
+>Extant2 : Symbol(Extant2, Decl(enumLiteralIntersections.ts, 8, 25))
+>A.Two : Symbol(A.Two, Decl(enumLiteralIntersections.ts, 1, 12))
+>A : Symbol(A, Decl(enumLiteralIntersections.ts, 0, 0))
+>Two : Symbol(A.Two, Decl(enumLiteralIntersections.ts, 1, 12))
+
+const numericEnum: ExtantAny1 = A.One;
+>numericEnum : Symbol(numericEnum, Decl(enumLiteralIntersections.ts, 15, 5))
+>ExtantAny1 : Symbol(ExtantAny1, Decl(enumLiteralIntersections.ts, 9, 27))
+>A.One : Symbol(A.One, Decl(enumLiteralIntersections.ts, 0, 8))
+>A : Symbol(A, Decl(enumLiteralIntersections.ts, 0, 0))
+>One : Symbol(A.One, Decl(enumLiteralIntersections.ts, 0, 8))
+
+const stringEnum: ExtantAny2 = A.Two;
+>stringEnum : Symbol(stringEnum, Decl(enumLiteralIntersections.ts, 16, 5))
+>ExtantAny2 : Symbol(ExtantAny2, Decl(enumLiteralIntersections.ts, 10, 24))
+>A.Two : Symbol(A.Two, Decl(enumLiteralIntersections.ts, 1, 12))
+>A : Symbol(A, Decl(enumLiteralIntersections.ts, 0, 0))
+>Two : Symbol(A.Two, Decl(enumLiteralIntersections.ts, 1, 12))
+
+const literalFirst: "2" & A.Two = A.Two;
+>literalFirst : Symbol(literalFirst, Decl(enumLiteralIntersections.ts, 18, 5))
+>A : Symbol(A, Decl(enumLiteralIntersections.ts, 0, 0))
+>Two : Symbol(A.Two, Decl(enumLiteralIntersections.ts, 1, 12))
+>A.Two : Symbol(A.Two, Decl(enumLiteralIntersections.ts, 1, 12))
+>A : Symbol(A, Decl(enumLiteralIntersections.ts, 0, 0))
+>Two : Symbol(A.Two, Decl(enumLiteralIntersections.ts, 1, 12))
+
+const union: A & (0 | "2") = A.Two;
+>union : Symbol(union, Decl(enumLiteralIntersections.ts, 19, 5))
+>A : Symbol(A, Decl(enumLiteralIntersections.ts, 0, 0))
+>A.Two : Symbol(A.Two, Decl(enumLiteralIntersections.ts, 1, 12))
+>A : Symbol(A, Decl(enumLiteralIntersections.ts, 0, 0))
+>Two : Symbol(A.Two, Decl(enumLiteralIntersections.ts, 1, 12))
+
+// @ts-expect-error
+const mismatch: A & (0 | "2") = A.One;
+>mismatch : Symbol(mismatch, Decl(enumLiteralIntersections.ts, 21, 5))
+>A : Symbol(A, Decl(enumLiteralIntersections.ts, 0, 0))
+>A.One : Symbol(A.One, Decl(enumLiteralIntersections.ts, 0, 8))
+>A : Symbol(A, Decl(enumLiteralIntersections.ts, 0, 0))
+>One : Symbol(A.One, Decl(enumLiteralIntersections.ts, 0, 8))
+
+// @ts-expect-error
+const plainString: ExtantAny2 = "2";
+>plainString : Symbol(plainString, Decl(enumLiteralIntersections.ts, 23, 5))
+>ExtantAny2 : Symbol(ExtantAny2, Decl(enumLiteralIntersections.ts, 10, 24))
+
