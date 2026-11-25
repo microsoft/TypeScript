@@ -1197,7 +1197,10 @@ func (c *Checker) replaceIndexedAccess(instantiable *Type, t *Type, replacement 
 	// map type.indexType to 0
 	// map type.objectType to `[TReplacement]`
 	// thus making the indexed access `[TReplacement][0]` or `TReplacement`
-	return c.instantiateType(instantiable, newTypeMapper([]*Type{t.AsIndexedAccessType().indexType, t.AsIndexedAccessType().objectType}, []*Type{c.getNumberLiteralType(0), c.createTupleType([]*Type{replacement})}))
+	// Mappers look up distributed type parameters by their non-distributed form, so the sources must use that form too.
+	indexType := getNonDistributedTypeParameter(t.AsIndexedAccessType().indexType)
+	objectType := getNonDistributedTypeParameter(t.AsIndexedAccessType().objectType)
+	return c.instantiateType(instantiable, newTypeMapper([]*Type{indexType, objectType}, []*Type{c.getNumberLiteralType(0), c.createTupleType([]*Type{replacement})}))
 }
 
 func (c *Checker) typesDefinitelyUnrelated(source *Type, target *Type) bool {
