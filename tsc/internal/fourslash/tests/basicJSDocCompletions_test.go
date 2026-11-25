@@ -122,3 +122,43 @@ function baz(x = 0) {
 		},
 	})
 }
+
+func TestJSDocParamCompletionsWithCommentTerminators(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @filename: file.js
+// @allowJs: true
+/**
+ * @/*1*/
+ */
+function f(a = "*/", b = { "*/": 1 }) {}
+/**
+ * @/*2*/
+ */
+function g({ "*/": c }) {}`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyCompletions(t, "1", &fourslash.CompletionsExpectedList{
+		IsIncomplete: false,
+		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
+			CommitCharacters: &DefaultCommitCharacters,
+		},
+		Items: &fourslash.CompletionsExpectedItems{
+			Includes: []fourslash.CompletionsExpectedItem{
+				`param {string} [a="*/"] `,
+				`param {{ "*/": number; }} [b={ "*/": 1 }] `,
+			},
+		},
+	})
+	f.VerifyCompletions(t, "2", &fourslash.CompletionsExpectedList{
+		IsIncomplete: false,
+		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
+			CommitCharacters: &DefaultCommitCharacters,
+		},
+		Items: &fourslash.CompletionsExpectedItems{
+			Includes: []fourslash.CompletionsExpectedItem{
+				"param {object} param0 \n* @param {*} param0.*/ ",
+			},
+		},
+	})
+}
