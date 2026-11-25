@@ -28,16 +28,16 @@ export declare function g(): C;
 
 === main.ts ===
 import { f, g } from "./mid";
->f : () => import("./dep.js").a b
->g : () => import("./dep.js").a c
+>f : () => A
+>g : () => import("./dep.js").Ok
 
 export const v = f();
->v : import("./dep").a b
->f() : import("./dep").a b
->f : () => import("./dep").a b
+>v : A
+>f() : A
+>f : () => A
 
 export const w = g();
->w : import("./dep").a c
->g() : import("./dep").a c
->g : () => import("./dep").a c
+>w : import("./dep").Ok
+>g() : import("./dep").Ok
+>g : () => import("./dep").Ok
 

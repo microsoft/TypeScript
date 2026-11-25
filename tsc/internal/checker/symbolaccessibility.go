@@ -8,6 +8,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/printer"
+	"github.com/microsoft/TypeScript/tsc/internal/scanner"
 )
 
 func (c *Checker) IsTypeSymbolAccessible(typeSymbol *ast.Symbol, enclosingDeclaration *ast.Node) bool {
@@ -401,6 +402,13 @@ func (c *Checker) getContainersOfSymbol(symbol *ast.Symbol, enclosingDeclaration
 	return append(bestContainers, alternativeContainers...)
 }
 
+// isIdentifierExportName reports whether an export can be written as the
+// qualifier of an import type, such as `b` in `import("a").b`. Exports with
+// string literal names, such as `export { x as "a b" }`, cannot.
+func isIdentifierExportName(name string) bool {
+	return scanner.IsIdentifierText(name, core.LanguageVariantStandard)
+}
+
 func (c *Checker) getAliasForSymbolInContainer(container *ast.Symbol, symbol *ast.Symbol) *ast.Symbol {
 	if container == c.getParentOfSymbol(symbol) {
 		// fast path, `symbol` is either already the alias or isn't aliased
@@ -416,12 +424,12 @@ func (c *Checker) getAliasForSymbolInContainer(container *ast.Symbol, symbol *as
 	}
 	exports := c.getExportsOfSymbol(container)
 	quick, ok := exports.Lookup(symbol.Name())
-	if ok && quick != nil && c.getSymbolIfSameReference(quick, symbol) != nil {
+	if ok && quick != nil && isIdentifierExportName(quick.Name()) && c.getSymbolIfSameReference(quick, symbol) != nil {
 		return quick
 	}
 	var candidates []*ast.Symbol
-	for _, exported := range exports.All() {
-		if c.getSymbolIfSameReference(exported, symbol) != nil {
+	for name, exported := range exports.All() {
+		if isIdentifierExportName(name) && c.getSymbolIfSameReference(exported, symbol) != nil {
 			candidates = append(candidates, exported)
 		}
 	}

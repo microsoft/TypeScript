@@ -48,7 +48,7 @@ class C implements I {}`
 		Description: "Implement interface 'I'",
 		NewFileContent: `import { I } from "dep";
 class C implements I {
-    "c\\u0064": a\u0062;
+    "c\\u0064": Hidden;
 }`,
 		Index: 0,
 	})
