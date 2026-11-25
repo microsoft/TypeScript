@@ -59,3 +59,30 @@ export function Index() {
 }`),
 	})
 }
+
+func TestCompletionsImport_jsxOpeningTagImportDefaultNonASCII(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @module: commonjs
+// @jsx: react
+// @Filename: /中文.tsx
+export default function (props: any) {}
+// @Filename: /index.tsx
+export function Index() {
+    return <中/**/
+}`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
+		IsIncomplete: false,
+		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
+			CommitCharacters: &DefaultCommitCharacters,
+			EditRange:        Ignored,
+		},
+		Items: &fourslash.CompletionsExpectedItems{
+			Excludes: []string{
+				"中文",
+			},
+		},
+	})
+}
