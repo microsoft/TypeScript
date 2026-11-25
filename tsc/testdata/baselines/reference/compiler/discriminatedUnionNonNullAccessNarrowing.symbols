@@ -1,0 +1,189 @@
+//// [tests/cases/compiler/discriminatedUnionNonNullAccessNarrowing.ts] ////
+
+=== discriminatedUnionNonNullAccessNarrowing.ts ===
+// Discriminant narrowing should be consistent regardless of union size (#62511).
+// Large has enough constituents to be narrowed through a constituent map; Small does not.
+
+type Small =
+>Small : Symbol(Small, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 0, 0))
+
+    | { type: "1" }
+>type : Symbol(type, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 4, 7))
+
+    | { type: "2" };
+>type : Symbol(type, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 5, 7))
+
+type Large =
+>Large : Symbol(Large, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 5, 20))
+
+    | { type: "1" }
+>type : Symbol(type, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 8, 7))
+
+    | { type: "2" }
+>type : Symbol(type, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 9, 7))
+
+    | { type: "3" }
+>type : Symbol(type, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 10, 7))
+
+    | { type: "4" }
+>type : Symbol(type, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 11, 7))
+
+    | { type: "5" }
+>type : Symbol(type, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 12, 7))
+
+    | { type: "6" }
+>type : Symbol(type, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 13, 7))
+
+    | { type: "7" }
+>type : Symbol(type, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 14, 7))
+
+    | { type: "8" }
+>type : Symbol(type, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 15, 7))
+
+    | { type: "9" }
+>type : Symbol(type, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 16, 7))
+
+    | { type: "10" };
+>type : Symbol(type, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 17, 7))
+
+declare const small: Small | undefined;
+>small : Symbol(small, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 19, 13))
+>Small : Symbol(Small, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 0, 0))
+
+declare const large: Large | undefined;
+>large : Symbol(large, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 20, 13))
+>Large : Symbol(Large, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 5, 20))
+
+if (small!.type === "1") {
+>small!.type : Symbol(type, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 4, 7), Decl(discriminatedUnionNonNullAccessNarrowing.ts, 5, 7))
+>small : Symbol(small, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 19, 13))
+>type : Symbol(type, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 4, 7), Decl(discriminatedUnionNonNullAccessNarrowing.ts, 5, 7))
+
+    small.type;
+>small.type : Symbol(type, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 4, 7))
+>small : Symbol(small, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 19, 13))
+>type : Symbol(type, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 4, 7))
+}
+if (large!.type === "1") {
+>large!.type : Symbol(type, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 8, 7), Decl(discriminatedUnionNonNullAccessNarrowing.ts, 9, 7), Decl(discriminatedUnionNonNullAccessNarrowing.ts, 10, 7), Decl(discriminatedUnionNonNullAccessNarrowing.ts, 11, 7), Decl(discriminatedUnionNonNullAccessNarrowing.ts, 12, 7) ... and 5 more)
+>large : Symbol(large, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 20, 13))
+>type : Symbol(type, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 8, 7), Decl(discriminatedUnionNonNullAccessNarrowing.ts, 9, 7), Decl(discriminatedUnionNonNullAccessNarrowing.ts, 10, 7), Decl(discriminatedUnionNonNullAccessNarrowing.ts, 11, 7), Decl(discriminatedUnionNonNullAccessNarrowing.ts, 12, 7) ... and 5 more)
+
+    large.type;
+>large.type : Symbol(type, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 8, 7))
+>large : Symbol(large, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 20, 13))
+>type : Symbol(type, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 8, 7))
+}
+
+declare const smallNullOrVoid: Small | null | void;
+>smallNullOrVoid : Symbol(smallNullOrVoid, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 29, 13))
+>Small : Symbol(Small, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 0, 0))
+
+declare const largeNullOrVoid: Large | null | void;
+>largeNullOrVoid : Symbol(largeNullOrVoid, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 30, 13))
+>Large : Symbol(Large, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 5, 20))
+
+if (smallNullOrVoid!.type === "1" && smallNullOrVoid !== null) {
+>smallNullOrVoid!.type : Symbol(type, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 4, 7), Decl(discriminatedUnionNonNullAccessNarrowing.ts, 5, 7))
+>smallNullOrVoid : Symbol(smallNullOrVoid, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 29, 13))
+>type : Symbol(type, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 4, 7), Decl(discriminatedUnionNonNullAccessNarrowing.ts, 5, 7))
+>smallNullOrVoid : Symbol(smallNullOrVoid, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 29, 13))
+
+    smallNullOrVoid.type;
+>smallNullOrVoid : Symbol(smallNullOrVoid, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 29, 13))
+}
+if (largeNullOrVoid!.type === "1" && largeNullOrVoid !== null) {
+>largeNullOrVoid!.type : Symbol(type, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 8, 7), Decl(discriminatedUnionNonNullAccessNarrowing.ts, 9, 7), Decl(discriminatedUnionNonNullAccessNarrowing.ts, 10, 7), Decl(discriminatedUnionNonNullAccessNarrowing.ts, 11, 7), Decl(discriminatedUnionNonNullAccessNarrowing.ts, 12, 7) ... and 5 more)
+>largeNullOrVoid : Symbol(largeNullOrVoid, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 30, 13))
+>type : Symbol(type, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 8, 7), Decl(discriminatedUnionNonNullAccessNarrowing.ts, 9, 7), Decl(discriminatedUnionNonNullAccessNarrowing.ts, 10, 7), Decl(discriminatedUnionNonNullAccessNarrowing.ts, 11, 7), Decl(discriminatedUnionNonNullAccessNarrowing.ts, 12, 7) ... and 5 more)
+>largeNullOrVoid : Symbol(largeNullOrVoid, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 30, 13))
+
+    largeNullOrVoid.type;
+>largeNullOrVoid.type : Symbol(type, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 8, 7))
+>largeNullOrVoid : Symbol(largeNullOrVoid, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 30, 13))
+>type : Symbol(type, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 8, 7))
+}
+
+declare const smallWithUndefinedTag: Small | { type: undefined } | undefined;
+>smallWithUndefinedTag : Symbol(smallWithUndefinedTag, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 39, 13))
+>Small : Symbol(Small, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 0, 0))
+>type : Symbol(type, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 39, 46))
+
+declare const largeWithUndefinedTag: Large | { type: undefined } | undefined;
+>largeWithUndefinedTag : Symbol(largeWithUndefinedTag, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 40, 13))
+>Large : Symbol(Large, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 5, 20))
+>type : Symbol(type, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 40, 46))
+
+if (smallWithUndefinedTag?.type === undefined) {
+>smallWithUndefinedTag?.type : Symbol(type, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 4, 7), Decl(discriminatedUnionNonNullAccessNarrowing.ts, 5, 7), Decl(discriminatedUnionNonNullAccessNarrowing.ts, 39, 46))
+>smallWithUndefinedTag : Symbol(smallWithUndefinedTag, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 39, 13))
+>type : Symbol(type, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 4, 7), Decl(discriminatedUnionNonNullAccessNarrowing.ts, 5, 7), Decl(discriminatedUnionNonNullAccessNarrowing.ts, 39, 46))
+>undefined : Symbol(undefined)
+
+    smallWithUndefinedTag.type;
+>smallWithUndefinedTag.type : Symbol(type, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 39, 46))
+>smallWithUndefinedTag : Symbol(smallWithUndefinedTag, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 39, 13))
+>type : Symbol(type, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 39, 46))
+}
+if (largeWithUndefinedTag?.type === undefined) {
+>largeWithUndefinedTag?.type : Symbol(type, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 8, 7), Decl(discriminatedUnionNonNullAccessNarrowing.ts, 9, 7), Decl(discriminatedUnionNonNullAccessNarrowing.ts, 10, 7), Decl(discriminatedUnionNonNullAccessNarrowing.ts, 11, 7), Decl(discriminatedUnionNonNullAccessNarrowing.ts, 12, 7) ... and 6 more)
+>largeWithUndefinedTag : Symbol(largeWithUndefinedTag, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 40, 13))
+>type : Symbol(type, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 8, 7), Decl(discriminatedUnionNonNullAccessNarrowing.ts, 9, 7), Decl(discriminatedUnionNonNullAccessNarrowing.ts, 10, 7), Decl(discriminatedUnionNonNullAccessNarrowing.ts, 11, 7), Decl(discriminatedUnionNonNullAccessNarrowing.ts, 12, 7) ... and 6 more)
+>undefined : Symbol(undefined)
+
+    largeWithUndefinedTag.type;
+>largeWithUndefinedTag.type : Symbol(type, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 40, 46))
+>largeWithUndefinedTag : Symbol(largeWithUndefinedTag, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 40, 13))
+>type : Symbol(type, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 40, 46))
+}
+
+if (small?.type === "1") {
+>small?.type : Symbol(type, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 4, 7), Decl(discriminatedUnionNonNullAccessNarrowing.ts, 5, 7))
+>small : Symbol(small, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 19, 13))
+>type : Symbol(type, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 4, 7), Decl(discriminatedUnionNonNullAccessNarrowing.ts, 5, 7))
+
+    small.type;
+>small.type : Symbol(type, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 4, 7))
+>small : Symbol(small, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 19, 13))
+>type : Symbol(type, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 4, 7))
+}
+if (large?.type === "1") {
+>large?.type : Symbol(type, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 8, 7), Decl(discriminatedUnionNonNullAccessNarrowing.ts, 9, 7), Decl(discriminatedUnionNonNullAccessNarrowing.ts, 10, 7), Decl(discriminatedUnionNonNullAccessNarrowing.ts, 11, 7), Decl(discriminatedUnionNonNullAccessNarrowing.ts, 12, 7) ... and 5 more)
+>large : Symbol(large, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 20, 13))
+>type : Symbol(type, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 8, 7), Decl(discriminatedUnionNonNullAccessNarrowing.ts, 9, 7), Decl(discriminatedUnionNonNullAccessNarrowing.ts, 10, 7), Decl(discriminatedUnionNonNullAccessNarrowing.ts, 11, 7), Decl(discriminatedUnionNonNullAccessNarrowing.ts, 12, 7) ... and 5 more)
+
+    large.type;
+>large.type : Symbol(type, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 8, 7))
+>large : Symbol(large, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 20, 13))
+>type : Symbol(type, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 8, 7))
+}
+
+const smallTag = small?.type;
+>smallTag : Symbol(smallTag, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 56, 5))
+>small?.type : Symbol(type, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 4, 7), Decl(discriminatedUnionNonNullAccessNarrowing.ts, 5, 7))
+>small : Symbol(small, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 19, 13))
+>type : Symbol(type, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 4, 7), Decl(discriminatedUnionNonNullAccessNarrowing.ts, 5, 7))
+
+if (smallTag === "1") {
+>smallTag : Symbol(smallTag, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 56, 5))
+
+    small.type;
+>small.type : Symbol(type, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 4, 7))
+>small : Symbol(small, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 19, 13))
+>type : Symbol(type, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 4, 7))
+}
+const largeTag = large?.type;
+>largeTag : Symbol(largeTag, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 60, 5))
+>large?.type : Symbol(type, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 8, 7), Decl(discriminatedUnionNonNullAccessNarrowing.ts, 9, 7), Decl(discriminatedUnionNonNullAccessNarrowing.ts, 10, 7), Decl(discriminatedUnionNonNullAccessNarrowing.ts, 11, 7), Decl(discriminatedUnionNonNullAccessNarrowing.ts, 12, 7) ... and 5 more)
+>large : Symbol(large, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 20, 13))
+>type : Symbol(type, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 8, 7), Decl(discriminatedUnionNonNullAccessNarrowing.ts, 9, 7), Decl(discriminatedUnionNonNullAccessNarrowing.ts, 10, 7), Decl(discriminatedUnionNonNullAccessNarrowing.ts, 11, 7), Decl(discriminatedUnionNonNullAccessNarrowing.ts, 12, 7) ... and 5 more)
+
+if (largeTag === "1") {
+>largeTag : Symbol(largeTag, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 60, 5))
+
+    large.type;
+>large.type : Symbol(type, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 8, 7))
+>large : Symbol(large, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 20, 13))
+>type : Symbol(type, Decl(discriminatedUnionNonNullAccessNarrowing.ts, 8, 7))
+}
+
