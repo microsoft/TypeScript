@@ -137,3 +137,23 @@ type Exact<P, I extends P> =
     never;
 
 type X7 = Exact<{ a: 0 } | { b: 1 }, { a: 0 }>;
+
+// Homomorphic mapped types instantiated for a distributed type parameter keep its distributed form
+
+type Mutable<T> = { -readonly [K in keyof T]: T[K] };
+
+type C1<T, U extends T> = T extends unknown ? Show<Mutable<T>, U> : never;  // Error
+type C2<T, U extends T> = T extends unknown ? Show<Partial<T>, U> : never;  // Error
+type C3<T, U extends T> = T extends unknown ? Show<Mutable<T>, Mutable<U>> : never;  // Error
+type C4<T, U extends T> = T extends unknown ? Show<{ [K in keyof T]: T[K] }, U> : never;  // Error
+type M4<T, U extends T> = { [K in keyof T]: Show<Mutable<T>, U> };  // Error
+
+// Normalization doesn't depend on whether the template was resolved before
+
+declare function inferFromMappedGetter<U>(u: { [K in keyof U]: () => U }): () => U;
+
+function f1<T>(getter: () => T) {
+  let r = inferFromMappedGetter(get());
+  r = getter;
+  function get(): { [K in keyof T]: () => T } { return null!; }
+}

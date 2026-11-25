@@ -463,3 +463,105 @@ type X7 = Exact<{ a: 0 } | { b: 1 }, { a: 0 }>;
 >b : Symbol(b, Decl(distributedTypeParameters.ts, 136, 28))
 >a : Symbol(a, Decl(distributedTypeParameters.ts, 136, 38))
 
+// Homomorphic mapped types instantiated for a distributed type parameter keep its distributed form
+
+type Mutable<T> = { -readonly [K in keyof T]: T[K] };
+>Mutable : Symbol(Mutable, Decl(distributedTypeParameters.ts, 136, 47))
+>T : Symbol(T, Decl(distributedTypeParameters.ts, 140, 13))
+>K : Symbol(K, Decl(distributedTypeParameters.ts, 140, 31))
+>T : Symbol(T, Decl(distributedTypeParameters.ts, 140, 13))
+>T : Symbol(T, Decl(distributedTypeParameters.ts, 140, 13))
+>K : Symbol(K, Decl(distributedTypeParameters.ts, 140, 31))
+
+type C1<T, U extends T> = T extends unknown ? Show<Mutable<T>, U> : never;  // Error
+>C1 : Symbol(C1, Decl(distributedTypeParameters.ts, 140, 53))
+>T : Symbol(T, Decl(distributedTypeParameters.ts, 142, 8))
+>U : Symbol(U, Decl(distributedTypeParameters.ts, 142, 10))
+>T : Symbol(T, Decl(distributedTypeParameters.ts, 142, 8))
+>T : Symbol(T, Decl(distributedTypeParameters.ts, 142, 8))
+>Show : Symbol(Show, Decl(distributedTypeParameters.ts, 0, 0))
+>Mutable : Symbol(Mutable, Decl(distributedTypeParameters.ts, 136, 47))
+>T : Symbol(T, Decl(distributedTypeParameters.ts, 142, 8))
+>U : Symbol(U, Decl(distributedTypeParameters.ts, 142, 10))
+
+type C2<T, U extends T> = T extends unknown ? Show<Partial<T>, U> : never;  // Error
+>C2 : Symbol(C2, Decl(distributedTypeParameters.ts, 142, 74))
+>T : Symbol(T, Decl(distributedTypeParameters.ts, 143, 8))
+>U : Symbol(U, Decl(distributedTypeParameters.ts, 143, 10))
+>T : Symbol(T, Decl(distributedTypeParameters.ts, 143, 8))
+>T : Symbol(T, Decl(distributedTypeParameters.ts, 143, 8))
+>Show : Symbol(Show, Decl(distributedTypeParameters.ts, 0, 0))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(distributedTypeParameters.ts, 143, 8))
+>U : Symbol(U, Decl(distributedTypeParameters.ts, 143, 10))
+
+type C3<T, U extends T> = T extends unknown ? Show<Mutable<T>, Mutable<U>> : never;  // Error
+>C3 : Symbol(C3, Decl(distributedTypeParameters.ts, 143, 74))
+>T : Symbol(T, Decl(distributedTypeParameters.ts, 144, 8))
+>U : Symbol(U, Decl(distributedTypeParameters.ts, 144, 10))
+>T : Symbol(T, Decl(distributedTypeParameters.ts, 144, 8))
+>T : Symbol(T, Decl(distributedTypeParameters.ts, 144, 8))
+>Show : Symbol(Show, Decl(distributedTypeParameters.ts, 0, 0))
+>Mutable : Symbol(Mutable, Decl(distributedTypeParameters.ts, 136, 47))
+>T : Symbol(T, Decl(distributedTypeParameters.ts, 144, 8))
+>Mutable : Symbol(Mutable, Decl(distributedTypeParameters.ts, 136, 47))
+>U : Symbol(U, Decl(distributedTypeParameters.ts, 144, 10))
+
+type C4<T, U extends T> = T extends unknown ? Show<{ [K in keyof T]: T[K] }, U> : never;  // Error
+>C4 : Symbol(C4, Decl(distributedTypeParameters.ts, 144, 83))
+>T : Symbol(T, Decl(distributedTypeParameters.ts, 145, 8))
+>U : Symbol(U, Decl(distributedTypeParameters.ts, 145, 10))
+>T : Symbol(T, Decl(distributedTypeParameters.ts, 145, 8))
+>T : Symbol(T, Decl(distributedTypeParameters.ts, 145, 8))
+>Show : Symbol(Show, Decl(distributedTypeParameters.ts, 0, 0))
+>K : Symbol(K, Decl(distributedTypeParameters.ts, 145, 54))
+>T : Symbol(T, Decl(distributedTypeParameters.ts, 145, 8))
+>T : Symbol(T, Decl(distributedTypeParameters.ts, 145, 8))
+>K : Symbol(K, Decl(distributedTypeParameters.ts, 145, 54))
+>U : Symbol(U, Decl(distributedTypeParameters.ts, 145, 10))
+
+type M4<T, U extends T> = { [K in keyof T]: Show<Mutable<T>, U> };  // Error
+>M4 : Symbol(M4, Decl(distributedTypeParameters.ts, 145, 88))
+>T : Symbol(T, Decl(distributedTypeParameters.ts, 146, 8))
+>U : Symbol(U, Decl(distributedTypeParameters.ts, 146, 10))
+>T : Symbol(T, Decl(distributedTypeParameters.ts, 146, 8))
+>K : Symbol(K, Decl(distributedTypeParameters.ts, 146, 29))
+>T : Symbol(T, Decl(distributedTypeParameters.ts, 146, 8))
+>Show : Symbol(Show, Decl(distributedTypeParameters.ts, 0, 0))
+>Mutable : Symbol(Mutable, Decl(distributedTypeParameters.ts, 136, 47))
+>T : Symbol(T, Decl(distributedTypeParameters.ts, 146, 8))
+>U : Symbol(U, Decl(distributedTypeParameters.ts, 146, 10))
+
+// Normalization doesn't depend on whether the template was resolved before
+
+declare function inferFromMappedGetter<U>(u: { [K in keyof U]: () => U }): () => U;
+>inferFromMappedGetter : Symbol(inferFromMappedGetter, Decl(distributedTypeParameters.ts, 146, 66))
+>U : Symbol(U, Decl(distributedTypeParameters.ts, 150, 39))
+>u : Symbol(u, Decl(distributedTypeParameters.ts, 150, 42))
+>K : Symbol(K, Decl(distributedTypeParameters.ts, 150, 48))
+>U : Symbol(U, Decl(distributedTypeParameters.ts, 150, 39))
+>U : Symbol(U, Decl(distributedTypeParameters.ts, 150, 39))
+>U : Symbol(U, Decl(distributedTypeParameters.ts, 150, 39))
+
+function f1<T>(getter: () => T) {
+>f1 : Symbol(f1, Decl(distributedTypeParameters.ts, 150, 83))
+>T : Symbol(T, Decl(distributedTypeParameters.ts, 152, 12))
+>getter : Symbol(getter, Decl(distributedTypeParameters.ts, 152, 15))
+>T : Symbol(T, Decl(distributedTypeParameters.ts, 152, 12))
+
+  let r = inferFromMappedGetter(get());
+>r : Symbol(r, Decl(distributedTypeParameters.ts, 153, 5))
+>inferFromMappedGetter : Symbol(inferFromMappedGetter, Decl(distributedTypeParameters.ts, 146, 66))
+>get : Symbol(get, Decl(distributedTypeParameters.ts, 154, 13))
+
+  r = getter;
+>r : Symbol(r, Decl(distributedTypeParameters.ts, 153, 5))
+>getter : Symbol(getter, Decl(distributedTypeParameters.ts, 152, 15))
+
+  function get(): { [K in keyof T]: () => T } { return null!; }
+>get : Symbol(get, Decl(distributedTypeParameters.ts, 154, 13))
+>K : Symbol(K, Decl(distributedTypeParameters.ts, 155, 21))
+>T : Symbol(T, Decl(distributedTypeParameters.ts, 152, 12))
+>T : Symbol(T, Decl(distributedTypeParameters.ts, 152, 12))
+}
+

@@ -241,3 +241,50 @@ type X7 = Exact<{ a: 0 } | { b: 1 }, { a: 0 }>;
 >b : 1
 >a : 0
 
+// Homomorphic mapped types instantiated for a distributed type parameter keep its distributed form
+
+type Mutable<T> = { -readonly [K in keyof T]: T[K] };
+>Mutable : Mutable<T>
+
+type C1<T, U extends T> = T extends unknown ? Show<Mutable<T>, U> : never;  // Error
+>C1 : C1<T, U>
+
+type C2<T, U extends T> = T extends unknown ? Show<Partial<T>, U> : never;  // Error
+>C2 : C2<T, U>
+
+type C3<T, U extends T> = T extends unknown ? Show<Mutable<T>, Mutable<U>> : never;  // Error
+>C3 : C3<T, U>
+
+type C4<T, U extends T> = T extends unknown ? Show<{ [K in keyof T]: T[K] }, U> : never;  // Error
+>C4 : C4<T, U>
+
+type M4<T, U extends T> = { [K in keyof T]: Show<Mutable<T>, U> };  // Error
+>M4 : M4<T, U>
+
+// Normalization doesn't depend on whether the template was resolved before
+
+declare function inferFromMappedGetter<U>(u: { [K in keyof U]: () => U }): () => U;
+>inferFromMappedGetter : <U>(u: { [K in keyof U]: () => U; }) => () => U
+>u : { [K in keyof U]: () => U; }
+
+function f1<T>(getter: () => T) {
+>f1 : <T>(getter: () => T) => void
+>getter : () => T
+
+  let r = inferFromMappedGetter(get());
+>r : () => T
+>inferFromMappedGetter(get()) : () => T
+>inferFromMappedGetter : <U>(u: { [K in keyof U]: () => U; }) => () => U
+>get() : { [K in keyof T]: () => T; }
+>get : () => { [K in keyof T]: () => T; }
+
+  r = getter;
+>r = getter : () => T
+>r : () => T
+>getter : () => T
+
+  function get(): { [K in keyof T]: () => T } { return null!; }
+>get : () => { [K in keyof T]: () => T; }
+>null! : never
+}
+

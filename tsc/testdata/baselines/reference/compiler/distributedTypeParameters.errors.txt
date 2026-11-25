@@ -29,9 +29,12 @@ distributedTypeParameters.ts(134,35): error TS2344: Type 'I[K]' does not satisfy
   Type 'I' is not assignable to type 'P'.
     'I' is only assignable to the non-distributed 'P', but 'P' has been distributed here.
 distributedTypeParameters.ts(134,35): error TS2536: Type 'K' cannot be used to index type 'I'.
+distributedTypeParameters.ts(155,3): error TS2719: Type '() => T' is not assignable to type '() => T'. Two different types with this name exist, but they are unrelated.
+  Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
+    'T' is only assignable to the non-distributed 'T', but 'T' has been distributed here.
 
 
-==== distributedTypeParameters.ts (15 errors) ====
+==== distributedTypeParameters.ts (16 errors) ====
     // https://github.com/microsoft/TypeScript/issues/63708
     
     type Show<A, B extends A> = [A, B] & {};
@@ -215,4 +218,28 @@ distributedTypeParameters.ts(134,35): error TS2536: Type 'K' cannot be used to i
         never;
     
     type X7 = Exact<{ a: 0 } | { b: 1 }, { a: 0 }>;
+    
+    // Homomorphic mapped types instantiated for a distributed type parameter keep its distributed form
+    
+    type Mutable<T> = { -readonly [K in keyof T]: T[K] };
+    
+    type C1<T, U extends T> = T extends unknown ? Show<Mutable<T>, U> : never;  // Error
+    type C2<T, U extends T> = T extends unknown ? Show<Partial<T>, U> : never;  // Error
+    type C3<T, U extends T> = T extends unknown ? Show<Mutable<T>, Mutable<U>> : never;  // Error
+    type C4<T, U extends T> = T extends unknown ? Show<{ [K in keyof T]: T[K] }, U> : never;  // Error
+    type M4<T, U extends T> = { [K in keyof T]: Show<Mutable<T>, U> };  // Error
+    
+    // Normalization doesn't depend on whether the template was resolved before
+    
+    declare function inferFromMappedGetter<U>(u: { [K in keyof U]: () => U }): () => U;
+    
+    function f1<T>(getter: () => T) {
+      let r = inferFromMappedGetter(get());
+      r = getter;
+      ~
+!!! error TS2719: Type '() => T' is not assignable to type '() => T'. Two different types with this name exist, but they are unrelated.
+!!! error TS2719:   Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
+!!! error TS2719:     'T' is only assignable to the non-distributed 'T', but 'T' has been distributed here.
+      function get(): { [K in keyof T]: () => T } { return null!; }
+    }
     
