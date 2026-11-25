@@ -1,0 +1,49 @@
+//// [tests/cases/compiler/awaitUsingDeclarationWithNewline.ts] ////
+
+=== awaitUsingDeclarationWithNewline.ts ===
+declare const resource: AsyncDisposable;
+>resource : AsyncDisposable
+
+declare const resources: Iterable<AsyncDisposable>;
+>resources : Iterable<AsyncDisposable>
+
+async function statement() {
+>statement : () => Promise<void>
+
+    await
+>await    using : any
+
+    using x = resource;
+>using : any
+>x = resource : AsyncDisposable
+>x : any
+>resource : AsyncDisposable
+}
+
+async function forStatement() {
+>forStatement : () => Promise<void>
+
+    for (await
+>await        using : any
+
+        using x = resource; ;) {}
+>using : any
+>x = resource : AsyncDisposable
+>x : any
+>resource : AsyncDisposable
+> : any
+}
+
+async function forOfStatement() {
+>forOfStatement : () => Promise<void>
+
+    for (await
+>await        using : any
+
+        using x of resources) {}
+>using : any
+>x : any
+>of : any
+>resources : Iterable<AsyncDisposable>
+}
+

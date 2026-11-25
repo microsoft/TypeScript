@@ -1,0 +1,66 @@
+awaitUsingDeclarationWithNewline.ts(6,5): error TS2304: Cannot find name 'using'.
+awaitUsingDeclarationWithNewline.ts(6,11): error TS1005: ';' expected.
+awaitUsingDeclarationWithNewline.ts(6,11): error TS2304: Cannot find name 'x'.
+awaitUsingDeclarationWithNewline.ts(11,9): error TS2304: Cannot find name 'using'.
+awaitUsingDeclarationWithNewline.ts(11,15): error TS1005: ';' expected.
+awaitUsingDeclarationWithNewline.ts(11,15): error TS2304: Cannot find name 'x'.
+awaitUsingDeclarationWithNewline.ts(11,29): error TS1109: Expression expected.
+awaitUsingDeclarationWithNewline.ts(11,30): error TS1128: Declaration or statement expected.
+awaitUsingDeclarationWithNewline.ts(16,9): error TS2304: Cannot find name 'using'.
+awaitUsingDeclarationWithNewline.ts(16,15): error TS1005: ';' expected.
+awaitUsingDeclarationWithNewline.ts(16,15): error TS2304: Cannot find name 'x'.
+awaitUsingDeclarationWithNewline.ts(16,17): error TS1005: ';' expected.
+awaitUsingDeclarationWithNewline.ts(16,17): error TS2304: Cannot find name 'of'.
+awaitUsingDeclarationWithNewline.ts(16,20): error TS1005: ')' expected.
+awaitUsingDeclarationWithNewline.ts(16,29): error TS1128: Declaration or statement expected.
+
+
+==== awaitUsingDeclarationWithNewline.ts (15 errors) ====
+    declare const resource: AsyncDisposable;
+    declare const resources: Iterable<AsyncDisposable>;
+    
+    async function statement() {
+        await
+        using x = resource;
+        ~~~~~
+!!! error TS2304: Cannot find name 'using'.
+              ~
+!!! error TS1005: ';' expected.
+              ~
+!!! error TS2304: Cannot find name 'x'.
+    }
+    
+    async function forStatement() {
+        for (await
+            using x = resource; ;) {}
+            ~~~~~
+!!! error TS2304: Cannot find name 'using'.
+                  ~
+!!! error TS1005: ';' expected.
+                  ~
+!!! error TS2304: Cannot find name 'x'.
+                                ~
+!!! error TS1109: Expression expected.
+                                 ~
+!!! error TS1128: Declaration or statement expected.
+    }
+    
+    async function forOfStatement() {
+        for (await
+            using x of resources) {}
+            ~~~~~
+!!! error TS2304: Cannot find name 'using'.
+                  ~
+!!! error TS1005: ';' expected.
+                  ~
+!!! error TS2304: Cannot find name 'x'.
+                    ~~
+!!! error TS1005: ';' expected.
+                    ~~
+!!! error TS2304: Cannot find name 'of'.
+                       ~~~~~~~~~
+!!! error TS1005: ')' expected.
+                                ~
+!!! error TS1128: Declaration or statement expected.
+    }
+    
