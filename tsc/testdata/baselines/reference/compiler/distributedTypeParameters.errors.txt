@@ -45,9 +45,21 @@ distributedTypeParameters.ts(146,78): error TS2344: Type 'U' does not satisfy th
   Type 'T' is not assignable to type '{ [K in keyof T]: T[K]; }'.
 distributedTypeParameters.ts(147,62): error TS2344: Type 'U' does not satisfy the constraint 'Mutable<T>'.
   Type 'T' is not assignable to type 'Mutable<T>'.
+distributedTypeParameters.ts(159,71): error TS2344: Type 'B' does not satisfy the constraint 'A'.
+  'B' is only assignable to the non-distributed 'A', but 'A' has been distributed here.
+distributedTypeParameters.ts(160,71): error TS2344: Type 'B' does not satisfy the constraint 'A'.
+  'B' is only assignable to the non-distributed 'A', but 'A' has been distributed here.
+distributedTypeParameters.ts(161,66): error TS2344: Type 'C' does not satisfy the constraint 'A'.
+  'C' is only assignable to the non-distributed 'A', but 'A' has been distributed here.
+distributedTypeParameters.ts(162,85): error TS2344: Type 'C' does not satisfy the constraint 'A'.
+  'C' is only assignable to the non-distributed 'A', but 'A' has been distributed here.
+distributedTypeParameters.ts(162,97): error TS2344: Type 'C' does not satisfy the constraint 'B'.
+  'C' is only assignable to the non-distributed 'B', but 'B' has been distributed here.
+distributedTypeParameters.ts(163,54): error TS2344: Type 'B' does not satisfy the constraint 'A'.
+  'B' is only assignable to the non-distributed 'A', but 'A' has been distributed here.
 
 
-==== distributedTypeParameters.ts (20 errors) ====
+==== distributedTypeParameters.ts (26 errors) ====
     // https://github.com/microsoft/TypeScript/issues/63708
     
     type Show<A, B extends A> = [A, B] & {};
@@ -276,4 +288,29 @@ distributedTypeParameters.ts(147,62): error TS2344: Type 'U' does not satisfy th
       r = getter;
       function get(): { [K in keyof T]: () => T } { return null!; }
     }
+    
+    type M5<A, B extends A> = { [K in keyof A]: { [J in keyof B]: Show<A, B> } };
+                                                                          ~
+!!! error TS2344: Type 'B' does not satisfy the constraint 'A'.
+!!! error TS2344:   'B' is only assignable to the non-distributed 'A', but 'A' has been distributed here.
+    type M6<A, B extends A> = { [K in keyof B]: { [J in keyof A]: Show<A, B> } };
+                                                                          ~
+!!! error TS2344: Type 'B' does not satisfy the constraint 'A'.
+!!! error TS2344:   'B' is only assignable to the non-distributed 'A', but 'A' has been distributed here.
+    type M7<A, B extends A, C extends B> = { [K in keyof A]: Show<A, C> };
+                                                                     ~
+!!! error TS2344: Type 'C' does not satisfy the constraint 'A'.
+!!! error TS2344:   'C' is only assignable to the non-distributed 'A', but 'A' has been distributed here.
+    type M8<A, B extends A, C extends B> = { [K in keyof A]: { [J in keyof B]: [Show<A, C>, Show<B, C>] } };
+                                                                                        ~
+!!! error TS2344: Type 'C' does not satisfy the constraint 'A'.
+!!! error TS2344:   'C' is only assignable to the non-distributed 'A', but 'A' has been distributed here.
+                                                                                                    ~
+!!! error TS2344: Type 'C' does not satisfy the constraint 'B'.
+!!! error TS2344:   'C' is only assignable to the non-distributed 'B', but 'B' has been distributed here.
+    type M9<A, B extends A> = { [K in keyof A as Show<A, B> extends never ? never : K]: 0 };
+                                                         ~
+!!! error TS2344: Type 'B' does not satisfy the constraint 'A'.
+!!! error TS2344:   'B' is only assignable to the non-distributed 'A', but 'A' has been distributed here.
+    type M10<A, B extends A> = { [K in keyof [A]]: Show<A, B> };
     

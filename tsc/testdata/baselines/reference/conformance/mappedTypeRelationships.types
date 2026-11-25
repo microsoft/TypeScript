@@ -716,3 +716,291 @@ type GenericSettingsResult1 = GenericSettingsAccess<"audio">;
 type GenericSettingsResult2 = GenericSettingsAccess<"audio" | "video">;
 >GenericSettingsResult2 : GenericSettingsResult2
 
+function mappedRelations1<T>(x: { [K in keyof T]: [T, T[K]] }, y: { [K in keyof T]: [T, T[K]] }) {
+>mappedRelations1 : <T>(x: { [K in keyof T]: [T, T[K]]; }, y: { [K in keyof T]: [T, T[K]]; }) => void
+>x : { [K in keyof T]: [T, T[K]]; }
+>y : { [K in keyof T]: [T, T[K]]; }
+
+    x = y;
+>x = y : { [K in keyof T]: [T, T[K]]; }
+>x : { [K in keyof T]: [T, T[K]]; }
+>y : { [K in keyof T]: [T, T[K]]; }
+
+    y = x;
+>y = x : { [K in keyof T]: [T, T[K]]; }
+>y : { [K in keyof T]: [T, T[K]]; }
+>x : { [K in keyof T]: [T, T[K]]; }
+}
+
+function mappedRelations2<T>(x: { [K in keyof T]: { t: T, k: T[K] } }, y: { [K in keyof T]: { t: T, k: T[K] } }) {
+>mappedRelations2 : <T>(x: { [K in keyof T]: { t: T; k: T[K]; }; }, y: { [K in keyof T]: { t: T; k: T[K]; }; }) => void
+>x : { [K in keyof T]: { t: T; k: T[K]; }; }
+>t : T
+>k : T[K]
+>y : { [K in keyof T]: { t: T; k: T[K]; }; }
+>t : T
+>k : T[K]
+
+    x = y;
+>x = y : { [K in keyof T]: { t: T; k: T[K]; }; }
+>x : { [K in keyof T]: { t: T; k: T[K]; }; }
+>y : { [K in keyof T]: { t: T; k: T[K]; }; }
+
+    y = x;
+>y = x : { [K in keyof T]: { t: T; k: T[K]; }; }
+>y : { [K in keyof T]: { t: T; k: T[K]; }; }
+>x : { [K in keyof T]: { t: T; k: T[K]; }; }
+}
+
+function mappedRelations3<T>(x: { [K in keyof T]: (t: T) => T[K] }, y: { [K in keyof T]: (t: T) => T[K] }) {
+>mappedRelations3 : <T>(x: { [K in keyof T]: (t: T) => T[K]; }, y: { [K in keyof T]: (t: T) => T[K]; }) => void
+>x : { [K in keyof T]: (t: T) => T[K]; }
+>t : T
+>y : { [K in keyof T]: (t: T) => T[K]; }
+>t : T
+
+    x = y;
+>x = y : { [K in keyof T]: (t: T) => T[K]; }
+>x : { [K in keyof T]: (t: T) => T[K]; }
+>y : { [K in keyof T]: (t: T) => T[K]; }
+
+    y = x;
+>y = x : { [K in keyof T]: (t: T) => T[K]; }
+>y : { [K in keyof T]: (t: T) => T[K]; }
+>x : { [K in keyof T]: (t: T) => T[K]; }
+}
+
+function mappedRelations4<T>(
+>mappedRelations4 : <T>(x: { [K in keyof T]: T[K] extends string ? { t: T; } : { u: T; }; }, y: { [K in keyof T]: T[K] extends string ? { t: T; } : { u: T; }; }) => void
+
+    x: { [K in keyof T]: T[K] extends string ? { t: T } : { u: T } },
+>x : { [K in keyof T]: T[K] extends string ? { t: T; } : { u: T; }; }
+>t : T
+>u : T
+
+    y: { [K in keyof T]: T[K] extends string ? { t: T } : { u: T } },
+>y : { [K in keyof T]: T[K] extends string ? { t: T; } : { u: T; }; }
+>t : T
+>u : T
+
+) {
+    x = y;
+>x = y : { [K in keyof T]: T[K] extends string ? { t: T; } : { u: T; }; }
+>x : { [K in keyof T]: T[K] extends string ? { t: T; } : { u: T; }; }
+>y : { [K in keyof T]: T[K] extends string ? { t: T; } : { u: T; }; }
+
+    y = x;
+>y = x : { [K in keyof T]: T[K] extends string ? { t: T; } : { u: T; }; }
+>y : { [K in keyof T]: T[K] extends string ? { t: T; } : { u: T; }; }
+>x : { [K in keyof T]: T[K] extends string ? { t: T; } : { u: T; }; }
+}
+
+function mappedRelations5<T>(x: { [K in keyof T]: { t: T } }) {
+>mappedRelations5 : <T>(x: { [K in keyof T]: { t: T; }; }) => void
+>x : { [K in keyof T]: { t: T; }; }
+>t : T
+
+    const make = <V>(v: V): { [K in keyof T]: { t: T, v: V } } => null!;
+>make : <V>(v: V) => { [K in keyof T]: { t: T; v: V; }; }
+><V>(v: V): { [K in keyof T]: { t: T, v: V } } => null! : <V>(v: V) => { [K in keyof T]: { t: T; v: V; }; }
+>v : V
+>t : T
+>v : V
+>null! : never
+
+    x = make(1);
+>x = make(1) : { [K in keyof T]: { t: T; v: number; }; }
+>x : { [K in keyof T]: { t: T; }; }
+>make(1) : { [K in keyof T]: { t: T; v: number; }; }
+>make : <V>(v: V) => { [K in keyof T]: { t: T; v: V; }; }
+>1 : 1
+}
+
+function mappedRelations6<T>(x: T extends object ? { inner: { [K in keyof T]: T } } : never, y: { [K in keyof T]: T }) {
+>mappedRelations6 : <T>(x: T extends object ? { inner: { [K in keyof T]: T; }; } : never, y: { [K in keyof T]: T; }) => void
+>x : T extends object ? { inner: { [K in keyof T]: T; }; } : never
+>inner : { [K in keyof T]: T; }
+>y : { [K in keyof T]: T; }
+
+    x.inner = y;
+>x.inner = y : { [K in keyof T]: T; }
+>x.inner : { [K in keyof T]: T; }
+>x : T extends object ? { inner: { [K in keyof T]: T; }; } : never
+>inner : { [K in keyof T]: T; }
+>y : { [K in keyof T]: T; }
+
+    y = x.inner;
+>y = x.inner : { [K in keyof T]: T; }
+>y : { [K in keyof T]: T; }
+>x.inner : { [K in keyof T]: T; }
+>x : T extends object ? { inner: { [K in keyof T]: T; }; } : never
+>inner : { [K in keyof T]: T; }
+}
+
+interface MappedBox<X> { value: X }
+>value : X
+
+function mappedRelations7<T>(x: MappedBox<{ [K in keyof T]: { t: T } }>, y: MappedBox<{ [K in keyof T]: { t: T } }>) {
+>mappedRelations7 : <T>(x: MappedBox<{ [K in keyof T]: { t: T; }; }>, y: MappedBox<{ [K in keyof T]: { t: T; }; }>) => void
+>x : MappedBox<{ [K in keyof T]: { t: T; }; }>
+>t : T
+>y : MappedBox<{ [K in keyof T]: { t: T; }; }>
+>t : T
+
+    x = y;
+>x = y : MappedBox<{ [K in keyof T]: { t: T; }; }>
+>x : MappedBox<{ [K in keyof T]: { t: T; }; }>
+>y : MappedBox<{ [K in keyof T]: { t: T; }; }>
+
+    y = x;
+>y = x : MappedBox<{ [K in keyof T]: { t: T; }; }>
+>y : MappedBox<{ [K in keyof T]: { t: T; }; }>
+>x : MappedBox<{ [K in keyof T]: { t: T; }; }>
+}
+
+type MappedAlias<T> = { [K in keyof T]: { t: T, k: T[K] } };
+>MappedAlias : MappedAlias<T>
+>t : T
+>k : T[K]
+
+type MappedRecursive<T> = { [K in keyof T]: { next: MappedRecursive<T>, t: T } };
+>MappedRecursive : MappedRecursive<T>
+>next : MappedRecursive<T>
+>t : T
+
+function mappedRelations8<T>(x: MappedAlias<T>, y: { [K in keyof T]: { t: T, k: T[K] } }) {
+>mappedRelations8 : <T>(x: MappedAlias<T>, y: { [K in keyof T]: { t: T; k: T[K]; }; }) => void
+>x : MappedAlias<T>
+>y : { [K in keyof T]: { t: T; k: T[K]; }; }
+>t : T
+>k : T[K]
+
+    x = y;
+>x = y : { [K in keyof T]: { t: T; k: T[K]; }; }
+>x : MappedAlias<T>
+>y : { [K in keyof T]: { t: T; k: T[K]; }; }
+
+    y = x;
+>y = x : MappedAlias<T>
+>y : { [K in keyof T]: { t: T; k: T[K]; }; }
+>x : MappedAlias<T>
+
+    const make = <V>(v: V): MappedAlias<T> => null!;
+>make : <V>(v: V) => MappedAlias<T>
+><V>(v: V): MappedAlias<T> => null! : <V>(v: V) => MappedAlias<T>
+>v : V
+>null! : never
+
+    x = make(1);
+>x = make(1) : MappedAlias<T>
+>x : MappedAlias<T>
+>make(1) : MappedAlias<T>
+>make : <V>(v: V) => MappedAlias<T>
+>1 : 1
+}
+
+function mappedRelations9<T>(x: MappedRecursive<T>, y: { [K in keyof T]: { next: MappedRecursive<T>, t: T } }) {
+>mappedRelations9 : <T>(x: MappedRecursive<T>, y: { [K in keyof T]: { next: MappedRecursive<T>; t: T; }; }) => void
+>x : MappedRecursive<T>
+>y : { [K in keyof T]: { next: MappedRecursive<T>; t: T; }; }
+>next : MappedRecursive<T>
+>t : T
+
+    x = y;
+>x = y : { [K in keyof T]: { next: MappedRecursive<T>; t: T; }; }
+>x : MappedRecursive<T>
+>y : { [K in keyof T]: { next: MappedRecursive<T>; t: T; }; }
+
+    y = x;
+>y = x : MappedRecursive<T>
+>y : { [K in keyof T]: { next: MappedRecursive<T>; t: T; }; }
+>x : MappedRecursive<T>
+}
+
+function mappedRelations10<T, U>(x: { [K in keyof T]: T }, y: T, z: { [K in keyof T]: U }) {
+>mappedRelations10 : <T, U>(x: { [K in keyof T]: T; }, y: T, z: { [K in keyof T]: U; }) => void
+>x : { [K in keyof T]: T; }
+>y : T
+>z : { [K in keyof T]: U; }
+
+    x = y;
+>x = y : T
+>x : { [K in keyof T]: T; }
+>y : T
+
+    x = z;
+>x = z : { [K in keyof T]: U; }
+>x : { [K in keyof T]: T; }
+>z : { [K in keyof T]: U; }
+
+    z = x;
+>z = x : { [K in keyof T]: T; }
+>z : { [K in keyof T]: U; }
+>x : { [K in keyof T]: T; }
+}
+
+declare let mappedSignature1: <A>(m: A, r: (a: { [K in keyof A]: A }) => void) => void;
+>mappedSignature1 : <A>(m: A, r: (a: { [K in keyof A]: A; }) => void) => void
+>m : A
+>r : (a: { [K in keyof A]: A; }) => void
+>a : { [K in keyof A]: A; }
+
+let mappedSignature2: <A>(m: A, r: (a: { [K in keyof A]: A }) => void) => void = mappedSignature1;
+>mappedSignature2 : <A>(m: A, r: (a: { [K in keyof A]: A; }) => void) => void
+>m : A
+>r : (a: { [K in keyof A]: A; }) => void
+>a : { [K in keyof A]: A; }
+>mappedSignature1 : <A>(m: A, r: (a: { [K in keyof A]: A; }) => void) => void
+
+type MappedSigA = { m<T, U extends { [K in keyof T]: T }>(u: U): void };
+>MappedSigA : MappedSigA
+>m : <T, U extends { [K in keyof T]: T; }>(u: U) => void
+>u : U
+
+type MappedSigB = { m<T, U extends { [K in keyof T]: T }>(u: U): void };
+>MappedSigB : MappedSigB
+>m : <T, U extends { [K in keyof T]: T; }>(u: U) => void
+>u : U
+
+declare const mappedSigs: MappedSigA | MappedSigB;
+>mappedSigs : MappedSigA | MappedSigB
+
+mappedSigs.m({});
+>mappedSigs.m({}) : void
+>mappedSigs.m : (<T, U extends { [K in keyof T]: T; }>(u: U) => void) | (<T, U extends { [K in keyof T]: T; }>(u: U) => void)
+>mappedSigs : MappedSigA | MappedSigB
+>m : (<T, U extends { [K in keyof T]: T; }>(u: U) => void) | (<T, U extends { [K in keyof T]: T; }>(u: U) => void)
+>{} : {}
+
+function mappedRelations11<T>() {
+>mappedRelations11 : <T>() => void
+
+    type M<X> = { [K in keyof X]: X };
+>M : { [K in keyof X]: X; }
+
+    var a: { [K in keyof T]: T };
+>a : { [K in keyof T]: T; }
+
+    var a: M<T>;
+>a : { [K in keyof T]: T; }
+}
+
+class MappedCallbacks {
+>MappedCallbacks : MappedCallbacks
+
+    m<T>(item: T, callbacks: { [K in keyof T]: (item: T) => void }, key: keyof T): void {
+>m : <T>(item: T, callbacks: { [K in keyof T]: (item: T) => void; }, key: keyof T) => void
+>item : T
+>callbacks : { [K in keyof T]: (item: T) => void; }
+>item : T
+>key : keyof T
+
+        callbacks[key](item);
+>callbacks[key](item) : void
+>callbacks[key] : { [K in keyof T]: (item: T) => void; }[keyof T]
+>callbacks : { [K in keyof T]: (item: T) => void; }
+>key : keyof T
+>item : T
+    }
+}
+

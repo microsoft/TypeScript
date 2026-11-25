@@ -198,3 +198,63 @@ const inferredInNonDistributive = inferInNonDistributive({ a: () => 1 });
 
 declare function inferInDistributive<T>(x: T extends unknown ? { [K in keyof T]: () => T[K] } : never): T;
 const inferredInDistributive = inferInDistributive({ a: () => 1 });
+
+declare function inferFromMappedSelf<T>(value: { [P in keyof T]: T }): T;
+function f40<U>(value: { [P in keyof U]: U }, ordinary: U) {
+    const inferred = inferFromMappedSelf(value);
+    const accept: typeof inferred = ordinary;
+}
+
+declare function inferFromMappedBox<X, T>(value: { [P in keyof X]: Box<T> }): T;
+function f41<U>(value: { [P in keyof U]: Box<U> }, ordinary: U) {
+    const inferred = inferFromMappedBox(value);
+    const accept: typeof inferred = ordinary;
+}
+
+declare function inferFromMappedInlineObject<X, T>(value: { [P in keyof X]: { value: T } }): T;
+function f42<U>(value: { [P in keyof U]: { value: U } }, ordinary: U) {
+    const inferred = inferFromMappedInlineObject(value);
+    const accept: typeof inferred = ordinary;
+}
+
+declare function inferFromMappedInlineFunction<X, T>(value: { [P in keyof X]: (arg: T) => T }): T;
+function f43<U>(value: { [P in keyof U]: (arg: U) => U }, ordinary: U) {
+    const inferred = inferFromMappedInlineFunction(value);
+    const accept: typeof inferred = ordinary;
+}
+
+declare function inferFromMappedInlineIntersection<X, T>(value: { [P in keyof X]: { a: T } & { b: T } }): T;
+function f44<U>(value: { [P in keyof U]: { a: U } & { b: U } }, ordinary: U) {
+    const inferred = inferFromMappedInlineIntersection(value);
+    const accept: typeof inferred = ordinary;
+}
+
+declare function inferFromMappedConditional<X, T>(value: { [P in keyof X]: X[P] extends string ? { value: T } : never }): T;
+function f45<U>(value: { [P in keyof U]: U[P] extends string ? { value: U } : never }, ordinary: U) {
+    const inferred = inferFromMappedConditional(value);
+    const accept: typeof inferred = ordinary;
+}
+
+declare function inferFromPlainTargetOfMapped<T>(value: { a: { value: T } }): T;
+function f46<U extends { a: unknown }>(value: { [P in keyof U]: { value: U } }, ordinary: U) {
+    const inferred = inferFromPlainTargetOfMapped(value);
+    const accept: typeof inferred = ordinary;
+}
+
+declare function inferFromWrappedMapped<X, T>(value: { wrap: { [P in keyof X]: { value: T } } }): T;
+function f47<U>(value: { wrap: { [P in keyof U]: { value: U } } }, ordinary: U) {
+    const inferred = inferFromWrappedMapped(value);
+    const accept: typeof inferred = ordinary;
+}
+
+declare function inferFromMappedCallbackParameter<X, T>(cb: (arg: { [P in keyof X]: { value: T } }) => void): T;
+function f48<U>(cb: (arg: { [P in keyof U]: { value: U } }) => void, ordinary: U) {
+    const inferred = inferFromMappedCallbackParameter(cb);
+    const accept: typeof inferred = ordinary;
+}
+
+declare function inferFromDeeplyNestedMapped<X, T>(value: { [P in keyof X]: { a: { b: [() => T] } } }): T;
+function f49<U>(value: { [P in keyof U]: { a: { b: [() => U] } } }, ordinary: U) {
+    const inferred = inferFromDeeplyNestedMapped(value);
+    const accept: typeof inferred = ordinary;
+}

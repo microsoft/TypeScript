@@ -17,6 +17,8 @@ func TestQuickInfoDistributedTypeParameter(t *testing.T) {
 
 type Mapped<T> = { [P in keyof T/*mappedConstraint*/]: T/*mappedType*/ };
 
+type MappedAs<T> = { [P in keyof T as T/*mappedNameType*/ extends unknown ? P : never]: T };
+
 type NonDistributed<T> = [T/*nonDistributed*/] extends [unknown] ? T : never;`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
@@ -26,5 +28,6 @@ type NonDistributed<T> = [T/*nonDistributed*/] extends [unknown] ? T : never;`
 	f.VerifyQuickInfoAt(t, "falseType", "(type parameter) (distributed) T in type Conditional<T>", "")
 	f.VerifyQuickInfoAt(t, "mappedConstraint", "(type parameter) T in type Mapped<T>", "")
 	f.VerifyQuickInfoAt(t, "mappedType", "(type parameter) (distributed) T in type Mapped<T>", "")
+	f.VerifyQuickInfoAt(t, "mappedNameType", "(type parameter) (distributed) T in type MappedAs<T>", "")
 	f.VerifyQuickInfoAt(t, "nonDistributed", "(type parameter) T in type NonDistributed<T>", "")
 }

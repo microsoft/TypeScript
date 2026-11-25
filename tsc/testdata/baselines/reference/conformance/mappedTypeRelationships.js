@@ -210,6 +210,85 @@ type ConcreteSettingsResult2 = Settings<SettingsTypes["audio" | "video"]>;
 type GenericSettingsAccess<T extends keyof SettingsTypes> = Settings<SettingsTypes[T]>;
 type GenericSettingsResult1 = GenericSettingsAccess<"audio">;
 type GenericSettingsResult2 = GenericSettingsAccess<"audio" | "video">;
+function mappedRelations1<T>(x: { [K in keyof T]: [T, T[K]] }, y: { [K in keyof T]: [T, T[K]] }) {
+    x = y;
+    y = x;
+}
+
+function mappedRelations2<T>(x: { [K in keyof T]: { t: T, k: T[K] } }, y: { [K in keyof T]: { t: T, k: T[K] } }) {
+    x = y;
+    y = x;
+}
+
+function mappedRelations3<T>(x: { [K in keyof T]: (t: T) => T[K] }, y: { [K in keyof T]: (t: T) => T[K] }) {
+    x = y;
+    y = x;
+}
+
+function mappedRelations4<T>(
+    x: { [K in keyof T]: T[K] extends string ? { t: T } : { u: T } },
+    y: { [K in keyof T]: T[K] extends string ? { t: T } : { u: T } },
+) {
+    x = y;
+    y = x;
+}
+
+function mappedRelations5<T>(x: { [K in keyof T]: { t: T } }) {
+    const make = <V>(v: V): { [K in keyof T]: { t: T, v: V } } => null!;
+    x = make(1);
+}
+
+function mappedRelations6<T>(x: T extends object ? { inner: { [K in keyof T]: T } } : never, y: { [K in keyof T]: T }) {
+    x.inner = y;
+    y = x.inner;
+}
+
+interface MappedBox<X> { value: X }
+function mappedRelations7<T>(x: MappedBox<{ [K in keyof T]: { t: T } }>, y: MappedBox<{ [K in keyof T]: { t: T } }>) {
+    x = y;
+    y = x;
+}
+
+type MappedAlias<T> = { [K in keyof T]: { t: T, k: T[K] } };
+type MappedRecursive<T> = { [K in keyof T]: { next: MappedRecursive<T>, t: T } };
+function mappedRelations8<T>(x: MappedAlias<T>, y: { [K in keyof T]: { t: T, k: T[K] } }) {
+    x = y;
+    y = x;
+    const make = <V>(v: V): MappedAlias<T> => null!;
+    x = make(1);
+}
+
+function mappedRelations9<T>(x: MappedRecursive<T>, y: { [K in keyof T]: { next: MappedRecursive<T>, t: T } }) {
+    x = y;
+    y = x;
+}
+
+function mappedRelations10<T, U>(x: { [K in keyof T]: T }, y: T, z: { [K in keyof T]: U }) {
+    x = y;
+    x = z;
+    z = x;
+}
+
+declare let mappedSignature1: <A>(m: A, r: (a: { [K in keyof A]: A }) => void) => void;
+let mappedSignature2: <A>(m: A, r: (a: { [K in keyof A]: A }) => void) => void = mappedSignature1;
+
+type MappedSigA = { m<T, U extends { [K in keyof T]: T }>(u: U): void };
+type MappedSigB = { m<T, U extends { [K in keyof T]: T }>(u: U): void };
+declare const mappedSigs: MappedSigA | MappedSigB;
+mappedSigs.m({});
+
+function mappedRelations11<T>() {
+    type M<X> = { [K in keyof X]: X };
+    var a: { [K in keyof T]: T };
+    var a: M<T>;
+}
+
+class MappedCallbacks {
+    m<T>(item: T, callbacks: { [K in keyof T]: (item: T) => void }, key: keyof T): void {
+        callbacks[key](item);
+    }
+}
+
 
 //// [mappedTypeRelationships.js]
 "use strict";
@@ -346,6 +425,60 @@ function f90() {
 function f() {
     return undefined;
 }
+function mappedRelations1(x, y) {
+    x = y;
+    y = x;
+}
+function mappedRelations2(x, y) {
+    x = y;
+    y = x;
+}
+function mappedRelations3(x, y) {
+    x = y;
+    y = x;
+}
+function mappedRelations4(x, y) {
+    x = y;
+    y = x;
+}
+function mappedRelations5(x) {
+    const make = (v) => null;
+    x = make(1);
+}
+function mappedRelations6(x, y) {
+    x.inner = y;
+    y = x.inner;
+}
+function mappedRelations7(x, y) {
+    x = y;
+    y = x;
+}
+function mappedRelations8(x, y) {
+    x = y;
+    y = x;
+    const make = (v) => null;
+    x = make(1);
+}
+function mappedRelations9(x, y) {
+    x = y;
+    y = x;
+}
+function mappedRelations10(x, y, z) {
+    x = y;
+    x = z;
+    z = x;
+}
+let mappedSignature2 = mappedSignature1;
+mappedSigs.m({});
+function mappedRelations11() {
+    var a;
+    var a;
+}
+class MappedCallbacks {
+    m(item, callbacks, key) {
+        callbacks[key](item);
+    }
+}
 
 
 //// [mappedTypeRelationships.d.ts]
@@ -456,3 +589,113 @@ type ConcreteSettingsResult2 = Settings<SettingsTypes["audio" | "video"]>;
 type GenericSettingsAccess<T extends keyof SettingsTypes> = Settings<SettingsTypes[T]>;
 type GenericSettingsResult1 = GenericSettingsAccess<"audio">;
 type GenericSettingsResult2 = GenericSettingsAccess<"audio" | "video">;
+declare function mappedRelations1<T>(x: {
+    [K in keyof T]: [T, T[K]];
+}, y: {
+    [K in keyof T]: [T, T[K]];
+}): void;
+declare function mappedRelations2<T>(x: {
+    [K in keyof T]: {
+        t: T;
+        k: T[K];
+    };
+}, y: {
+    [K in keyof T]: {
+        t: T;
+        k: T[K];
+    };
+}): void;
+declare function mappedRelations3<T>(x: {
+    [K in keyof T]: (t: T) => T[K];
+}, y: {
+    [K in keyof T]: (t: T) => T[K];
+}): void;
+declare function mappedRelations4<T>(x: {
+    [K in keyof T]: T[K] extends string ? {
+        t: T;
+    } : {
+        u: T;
+    };
+}, y: {
+    [K in keyof T]: T[K] extends string ? {
+        t: T;
+    } : {
+        u: T;
+    };
+}): void;
+declare function mappedRelations5<T>(x: {
+    [K in keyof T]: {
+        t: T;
+    };
+}): void;
+declare function mappedRelations6<T>(x: T extends object ? {
+    inner: {
+        [K in keyof T]: T;
+    };
+} : never, y: {
+    [K in keyof T]: T;
+}): void;
+interface MappedBox<X> {
+    value: X;
+}
+declare function mappedRelations7<T>(x: MappedBox<{
+    [K in keyof T]: {
+        t: T;
+    };
+}>, y: MappedBox<{
+    [K in keyof T]: {
+        t: T;
+    };
+}>): void;
+type MappedAlias<T> = {
+    [K in keyof T]: {
+        t: T;
+        k: T[K];
+    };
+};
+type MappedRecursive<T> = {
+    [K in keyof T]: {
+        next: MappedRecursive<T>;
+        t: T;
+    };
+};
+declare function mappedRelations8<T>(x: MappedAlias<T>, y: {
+    [K in keyof T]: {
+        t: T;
+        k: T[K];
+    };
+}): void;
+declare function mappedRelations9<T>(x: MappedRecursive<T>, y: {
+    [K in keyof T]: {
+        next: MappedRecursive<T>;
+        t: T;
+    };
+}): void;
+declare function mappedRelations10<T, U>(x: {
+    [K in keyof T]: T;
+}, y: T, z: {
+    [K in keyof T]: U;
+}): void;
+declare let mappedSignature1: <A>(m: A, r: (a: {
+    [K in keyof A]: A;
+}) => void) => void;
+declare let mappedSignature2: <A>(m: A, r: (a: {
+    [K in keyof A]: A;
+}) => void) => void;
+type MappedSigA = {
+    m<T, U extends {
+        [K in keyof T]: T;
+    }>(u: U): void;
+};
+type MappedSigB = {
+    m<T, U extends {
+        [K in keyof T]: T;
+    }>(u: U): void;
+};
+declare const mappedSigs: MappedSigA | MappedSigB;
+declare function mappedRelations11<T>(): void;
+declare class MappedCallbacks {
+    m<T>(item: T, callbacks: {
+        [K in keyof T]: (item: T) => void;
+    }, key: keyof T): void;
+}

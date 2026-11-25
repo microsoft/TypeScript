@@ -157,3 +157,10 @@ function f1<T>(getter: () => T) {
   r = getter;
   function get(): { [K in keyof T]: () => T } { return null!; }
 }
+
+type M5<A, B extends A> = { [K in keyof A]: { [J in keyof B]: Show<A, B> } };
+type M6<A, B extends A> = { [K in keyof B]: { [J in keyof A]: Show<A, B> } };
+type M7<A, B extends A, C extends B> = { [K in keyof A]: Show<A, C> };
+type M8<A, B extends A, C extends B> = { [K in keyof A]: { [J in keyof B]: [Show<A, C>, Show<B, C>] } };
+type M9<A, B extends A> = { [K in keyof A as Show<A, B> extends never ? never : K]: 0 };
+type M10<A, B extends A> = { [K in keyof [A]]: Show<A, B> };
