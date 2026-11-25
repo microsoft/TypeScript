@@ -135,7 +135,11 @@ function f(a = "*/", b = { "*/": 1 }) {}
 /**
  * @/*2*/
  */
-function g({ "*/": c }) {}`
+function g({ "*/": c }) {}
+/**
+ * @/*3*/
+ */
+function h({ "*/": { x } }) {}`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
 	f.VerifyCompletions(t, "1", &fourslash.CompletionsExpectedList{
@@ -158,6 +162,17 @@ function g({ "*/": c }) {}`
 		Items: &fourslash.CompletionsExpectedItems{
 			Includes: []fourslash.CompletionsExpectedItem{
 				"param {*} param0 ",
+			},
+		},
+	})
+	f.VerifyCompletions(t, "3", &fourslash.CompletionsExpectedList{
+		IsIncomplete: false,
+		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
+			CommitCharacters: &DefaultCommitCharacters,
+		},
+		Items: &fourslash.CompletionsExpectedItems{
+			Includes: []fourslash.CompletionsExpectedItem{
+				"param {object} param0 \n* @param {object} param0.*/ \n* @param {*} param0.*/.x ",
 			},
 		},
 	})
