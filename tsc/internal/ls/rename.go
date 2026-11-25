@@ -142,15 +142,24 @@ func (l *LanguageService) symbolAndEntriesToRename(ctx context.Context, params *
 		if l.UserPreferences().AllowRenameOfImportPath != core.TSTrue && entry.node != nil && ast.IsStringLiteralLike(entry.node) && ast.TryGetImportFromModuleSpecifier(entry.node) != nil {
 			continue
 		}
+		var jsxAttributeText string
+		if entry.kind != entryKindRange && entry.node != nil && ast.IsStringLiteral(entry.node) && ast.IsJsxAttribute(entry.node.Parent) {
+			// JSX attribute strings have no escapes, so the edit replaces the whole initializer.
+			jsxAttributeText = l.getJsxAttributeTextForRename(entry, params.NewName)
+		}
 		rng, ok := l.renameEditRange(entry)
 		if !ok {
 			// The occurrence lies outside a verbatim span of a content-mapped file, so it cannot be
 			// written back to the original text. Skip it and keep renaming the remaining occurrences.
 			continue
 		}
+		newText := jsxAttributeText
+		if newText == "" {
+			newText = l.getTextForRename(data.OriginalNode, entry, params.NewName, ch, quotePreference, useAliasesForRename)
+		}
 		textEdit := &lsproto.TextEdit{
 			Range:   rng,
-			NewText: l.getTextForRename(data.OriginalNode, entry, params.NewName, ch, quotePreference, useAliasesForRename),
+			NewText: newText,
 		}
 		mappedEdits = append(mappedEdits, mappedRenameEdit{uri: uri, edit: textEdit})
 	}
@@ -163,6 +172,22 @@ func (l *LanguageService) symbolAndEntriesToRename(ctx context.Context, params *
 			Changes: &changes,
 		},
 	}, nil
+}
+
+// getJsxAttributeTextForRename returns the text for a renamed JSX attribute string, keeping its
+// quotes when they can contain the new name, and widens the entry's range to the whole string.
+func (l *LanguageService) getJsxAttributeTextForRename(entry *ReferenceEntry, newName string) string {
+	sourceFile := ast.GetSourceFileOfNode(entry.node)
+	start := scanner.GetTokenPosOfNode(entry.node, sourceFile, false /*includeJSDoc*/)
+	textRange := core.NewTextRange(start, entry.node.End())
+	entry.sourceFile = sourceFile
+	entry.textRange = &textRange
+	entry.lspRange = nil
+	quoteChar := sourceFile.Text()[start]
+	if jsxAttributeStringCanContain(newName, quoteChar) {
+		return string(quoteChar) + newName + string(quoteChar)
+	}
+	return jsxAttributeInitializerText(sourceFile, l.UserPreferences(), newName)
 }
 
 // renameEditRange returns the LSP range at which a rename occurrence should be edited. For occurrences in

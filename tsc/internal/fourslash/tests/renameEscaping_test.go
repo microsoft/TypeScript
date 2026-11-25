@@ -130,7 +130,7 @@ const k: "foo" | "bar" = "/*1*/foo";
 	f.VerifyRename(t, "1", `a\"b`, map[string]string{
 		"/a.tsx": `declare function C(props: { kind: "foo" | "bar" }): any;
 const k: "a\\\"b" | "bar" = "a\\\"b";
-<C kind="a\\\"b" />;
-<C kind='a\\"b' />;`,
+<C kind='a\"b' />;
+<C kind='a\"b' />;`,
 	})
 }
