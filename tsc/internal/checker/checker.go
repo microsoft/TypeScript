@@ -26950,6 +26950,12 @@ func (c *Checker) removeSubtypes(types []*Type, hasObjectTypes bool) []*Type {
 	length := len(types)
 	i := length
 	count := 0
+	// The regular types of the key property of each target by position in types, for the key property name of the
+	// last source that had one. The sources of a discriminated union share that name, so each target's key property
+	// is looked up once rather than once per source. A target without a property of a unit type by that name is
+	// marked with unknownType, which is not a unit type.
+	var keyPropertyName string
+	var keyTypes []*Type
 	for i > 0 {
 		i--
 		source := types[i]
@@ -26966,6 +26972,9 @@ func (c *Checker) removeSubtypes(types []*Type, hasObjectTypes bool) []*Type {
 					return t
 				})), c.strictSubtypeRelation) {
 					types = slices.Delete(types, i, i+1)
+					if keyTypes != nil {
+						keyTypes = slices.Delete(keyTypes, i, i+1)
+					}
 				}
 				continue
 			}
@@ -26981,8 +26990,14 @@ func (c *Checker) removeSubtypes(types []*Type, hasObjectTypes bool) []*Type {
 			}
 			if keyProperty != nil {
 				keyPropertyType = c.getRegularTypeOfLiteralType(c.getTypeOfSymbol(keyProperty))
+				if keyTypes == nil {
+					keyTypes = make([]*Type, len(types))
+				} else if keyProperty.Name() != keyPropertyName {
+					clear(keyTypes)
+				}
+				keyPropertyName = keyProperty.Name()
 			}
-			for _, target := range types {
+			for j, target := range types {
 				if source != target {
 					if count == 100000 {
 						// After 100000 subtype checks we estimate the remaining amount of work by assuming the
@@ -27000,8 +27015,15 @@ func (c *Checker) removeSubtypes(types []*Type, hasObjectTypes bool) []*Type {
 					}
 					count++
 					if keyProperty != nil && target.flags&(TypeFlagsObject|TypeFlagsIntersection|TypeFlagsInstantiableNonPrimitive) != 0 {
-						t := c.getTypeOfPropertyOfType(target, keyProperty.Name())
-						if t != nil && isUnitType(t) && c.getRegularTypeOfLiteralType(t) != keyPropertyType {
+						keyType := keyTypes[j]
+						if keyType == nil {
+							keyType = c.unknownType
+							if t := c.getTypeOfPropertyOfType(target, keyPropertyName); t != nil && isUnitType(t) {
+								keyType = c.getRegularTypeOfLiteralType(t)
+							}
+							keyTypes[j] = keyType
+						}
+						if keyType != c.unknownType && keyType != keyPropertyType {
 							continue
 						}
 					}
@@ -27012,6 +27034,9 @@ func (c *Checker) removeSubtypes(types []*Type, hasObjectTypes bool) []*Type {
 						c.getTargetType(target).objectFlags&ObjectFlagsClass == 0 ||
 						c.isTypeDerivedFrom(source, target)) {
 						types = slices.Delete(types, i, i+1)
+						if keyTypes != nil {
+							keyTypes = slices.Delete(keyTypes, i, i+1)
+						}
 						break
 					}
 				}
