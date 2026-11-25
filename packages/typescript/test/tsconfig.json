@@ -6,6 +6,5 @@
     },
     "references": [
         { "path": ".." }
-    ],
-    "include": ["**/*", "../scripts/checkPublicApi.ts"]
+    ]
 }

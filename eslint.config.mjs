@@ -13,20 +13,15 @@ const rules = Object.fromEntries(
         .filter(file => file.endsWith(".cjs") && file !== "utils.cjs")
         .map(file => [file.slice(0, -4), require(path.join(rulesDir, file))]),
 );
-const localPlugin = { rules };
-const generatedIgnores = [
-    "packages/typescript/**/*.generated.ts",
-    "packages/typescript/src/api/sync/api.ts",
-    "packages/typescript/src/api/sync/types.ts",
-];
-
 export default tseslint.config(
     {
         ignores: [
             "**/node_modules/**",
             "packages/typescript/dist/**",
             "packages/typescript/vendor/**",
-            ...generatedIgnores,
+            "packages/typescript/**/*.generated.ts",
+            "packages/typescript/src/api/sync/api.ts",
+            "packages/typescript/src/api/sync/types.ts",
             "packages/typescript/test/sync/api.bench.ts",
             "packages/typescript/test/sync/api.test.ts",
             "packages/typescript/test/sync/astnav.test.ts",
@@ -34,19 +29,14 @@ export default tseslint.config(
         ],
     },
     {
-        files: generatedIgnores,
-        linterOptions: { reportUnusedDisableDirectives: "off" },
-    },
-    {
         files: ["packages/typescript/{src,test,scripts}/**/*.ts"],
-        ignores: generatedIgnores,
         extends: [
             eslint.configs.recommended,
             ...tseslint.configs.recommended,
             ...tseslint.configs.stylistic,
             regexpPlugin.configs["flat/recommended"],
         ],
-        plugins: { local: localPlugin },
+        plugins: { local: { rules } },
         languageOptions: {
             globals: globals.node,
             parserOptions: {

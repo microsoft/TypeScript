@@ -1,4 +1,9 @@
 {
     "extends": "../tsconfig.dev.json",
+    "compilerOptions": {
+        "composite": false,
+        "exactOptionalPropertyTypes": false,
+        "lib": ["esnext"]
+    },
     "include": ["*.ts"]
 }

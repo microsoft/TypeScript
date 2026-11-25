@@ -1188,6 +1188,11 @@ async function runTestCodegen() {
     await run("node", ["--test", "--test-concurrency=1", "./tools/scripts/gen/*.test.mts", "./tools/scripts/tsc/*.test.ts"]);
 }
 
+async function runTestScripts() {
+    await run("tsc", ["-p", "./packages/typescript/scripts"]);
+    await run("node", ["--conditions", "@typescript/source", "--test", "./packages/typescript/scripts/*.test.ts"]);
+}
+
 export const buildAPI = task({
     name: "build:api",
     description: "Builds @typescript/typescript JS API.",
@@ -1195,6 +1200,13 @@ export const buildAPI = task({
     run: async () => {
         await run("npm", ["run", "-w", "@typescript/typescript", "build"]);
     },
+});
+
+export const testScripts = task({
+    name: "test:scripts",
+    description: "Type-checks and tests the @typescript/typescript scripts.",
+    dependencies: [local, buildAPI],
+    run: runTestScripts,
 });
 
 async function runCheckAPIDeclarations() {
@@ -1341,6 +1353,7 @@ export const testAll = task({
         await runTestExtension();
         await runTestBenchmarks();
         await runTestTools();
+        await runTestScripts();
         await runTestAPI();
         await runTestAPIWasm();
         await runTestAPIBenchmarks();
@@ -1567,6 +1580,7 @@ export const validate = task({
             await runValidation("check:herebyfile", runCheckHerebyfile);
             await runValidation("test:tools", runTestTools);
             await runValidation("test:codegen", runTestCodegen);
+            await runValidation("test:scripts", runTestScripts);
             await runValidation("test:smoke", runSmokeTest); // in CI this is run with `--race`
         }
         await runValidation("lint", runLint);
@@ -1683,6 +1697,7 @@ export const checkVsceVersion = task({
 });
 
 const scriptTsconfigs = [
+    "./packages/typescript/scripts/tsconfig.json",
     "./tools/scripts/gen/tsconfig.json",
     "./tools/scripts/tsc/tsconfig.json",
     "./tools/scripts/lsp/tsconfig.json",

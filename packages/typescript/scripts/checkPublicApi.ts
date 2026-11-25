@@ -476,9 +476,11 @@ export function checkPublicApi(filename: string, requiredExports: readonly strin
     return diagnostics;
 }
 
-function main(): void {
-    const packageDir = path.resolve(import.meta.dirname, "..");
-    const packageJson: { exports: Record<string, string | { "@typescript/source"?: string; }>; } = JSON.parse(fs.readFileSync(path.join(packageDir, "package.json"), "utf8"));
+export interface PackageJson {
+    exports: Record<string, string | { "@typescript/source"?: string; }>;
+}
+
+export function checkPackage(api: ts.API, packageDir: string, packageJson: PackageJson, fileSystem?: ts.CreateSnapshotParams["fileSystem"]): PublicApiDiagnostic[] {
     const entrypoints = Object.entries(packageJson.exports)
         .flatMap(([name, value]) =>
             typeof value === "object" && value["@typescript/source"]
@@ -489,12 +491,18 @@ function main(): void {
         if (!entrypoints.some(entrypoint => entrypoint.name === name)) throw new Error(`Cannot find public entrypoint '${name}'`);
     }
     const files = entrypoints.map(entrypoint => entrypoint.file);
-    using api = new ts.API({ cwd: packageDir });
-    using snapshot = api.createSnapshot({ openFiles: files });
+    using snapshot = api.createSnapshot({ openFiles: files, fileSystem });
     const project = snapshot.getDefaultProjectForFile(files[0]);
     if (!project) throw new Error(`Cannot find project for ${files[0]}`);
     const analysis = analyzePublicApi(api, project, files);
-    const diagnostics = entrypoints.flatMap(({ file, requiredExports }) => checkPublicApi(file, requiredExports, analysis));
+    return entrypoints.flatMap(({ file, requiredExports }) => checkPublicApi(file, requiredExports, analysis));
+}
+
+function main(): void {
+    const packageDir = path.resolve(import.meta.dirname, "..");
+    const packageJson: PackageJson = JSON.parse(fs.readFileSync(path.join(packageDir, "package.json"), "utf8"));
+    using api = new ts.API({ cwd: packageDir });
+    const diagnostics = checkPackage(api, packageDir, packageJson);
     for (const diagnostic of diagnostics) {
         console.error(`${diagnostic.file}:${diagnostic.line}:${diagnostic.character}: ${diagnostic.message} (entrypoint: ${diagnostic.entrypoint})`);
     }
