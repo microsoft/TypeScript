@@ -21,14 +21,14 @@ func TestRenameEscapesStringLiterals(t *testing.T) {
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
 	f.VerifyRename(t, "1", "it's \"${x}\"\\", map[string]string{
-		"/a.ts": "const obj = { \"it's \"${x}\"\\\": 1 };\n" +
-			"obj[\"it's \"${x}\"\\\"];\n" +
-			"obj['it's \"${x}\"\\'];\n" +
-			"obj[`it's \"${x}\"\\`];",
+		"/a.ts": `const obj = { "it's \"${x}\"\\": 1 };
+obj["it's \"${x}\"\\"];
+obj['it\'s "${x}"\\'];
+obj[` + "`it's \"\\${x}\"\\\\`];",
 	})
 	f.VerifyRename(t, "2", `a"b`, map[string]string{
 		"/b.ts": "const foo = { a\"b: true };\n" +
-			"foo[\"a\"b\"];\n",
+			"foo[\"a\\\"b\"];\n",
 	})
 }
 
@@ -42,6 +42,6 @@ export { foo as "/*1*/" };`
 	defer done()
 	f.VerifyRename(t, "1", `a"b`, map[string]string{
 		"/a.ts": `const foo = 1;
-export { foo as a"b };`,
+export { foo as "a\"b" };`,
 	})
 }

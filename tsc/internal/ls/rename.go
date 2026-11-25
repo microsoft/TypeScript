@@ -16,6 +16,8 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/module"
+	"github.com/microsoft/TypeScript/tsc/internal/printer"
+	"github.com/microsoft/TypeScript/tsc/internal/scanner"
 	"github.com/microsoft/TypeScript/tsc/internal/spanmap"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
@@ -420,20 +422,38 @@ func (l *LanguageService) getTextForRename(originalNode *ast.Node, entry *Refere
 		}
 	}
 
+	if entry.kind != entryKindRange && ast.IsStringLiteralLike(entry.node) {
+		sourceFile := ast.GetSourceFileOfNode(entry.node)
+		quoteChar := getStringLiteralQuoteChar(sourceFile, entry.node)
+		escaped := escapeStringForNode(newText, quoteChar, entry.node)
+		// The rename range of an empty string literal includes its quotes.
+		if entry.node.End()-scanner.GetTokenPosOfNode(entry.node, sourceFile, false /*includeJSDoc*/) <= 2 {
+			return string(quoteChar) + escaped + string(quoteChar)
+		}
+		return escaped
+	}
+
 	// If the node is a numerical indexing literal, then add quotes around the property access.
 	if entry.kind != entryKindRange && ast.IsNumericLiteral(entry.node) && ast.IsAccessExpression(entry.node.Parent) {
-		quote := getQuoteFromPreference(quotePreference)
-		return quote + newText + quote
+		quoteChar := getQuoteFromPreference(quotePreference)
+		return string(quoteChar) + escapeStringForNode(newText, quoteChar, entry.node) + string(quoteChar)
 	}
 
 	return newText
 }
 
-func getQuoteFromPreference(quotePreference lsutil.QuotePreference) string {
-	if quotePreference == lsutil.QuotePreferenceSingle {
-		return "'"
+func escapeStringForNode(s string, quoteChar printer.QuoteChar, node *ast.Node) string {
+	if node.Flags&ast.NodeFlagsJSDoc != 0 {
+		return lsutil.EscapeStringInComment(s, quoteChar)
 	}
-	return `"`
+	return printer.EscapeString(s, quoteChar)
+}
+
+func getQuoteFromPreference(quotePreference lsutil.QuotePreference) printer.QuoteChar {
+	if quotePreference == lsutil.QuotePreferenceSingle {
+		return printer.QuoteCharSingleQuote
+	}
+	return printer.QuoteCharDoubleQuote
 }
 
 func getRenameInfoError(ctx context.Context, message *diagnostics.Message) RenameInfo {
