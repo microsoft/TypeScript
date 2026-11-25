@@ -172,7 +172,7 @@ function h({ "*/": { x } }) {}`
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Includes: []fourslash.CompletionsExpectedItem{
-				"param {object} param0 \n* @param {object} param0.*/ \n* @param {*} param0.*/.x ",
+				"param {*} param0 ",
 			},
 		},
 	})

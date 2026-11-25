@@ -6552,7 +6552,7 @@ func jsDocParamElementWorker(
 		}
 	} else if element.PropertyName() != nil { // `{ b: {...} }` or `{ b: [...] }`
 		propertyName, _ := ast.TryGetTextOfPropertyName(element.PropertyName())
-		if propertyName == "" {
+		if propertyName == "" || !isSafeInJSDocTag(propertyName) {
 			return nil
 		}
 		return jsDocParamPatternWorker(
