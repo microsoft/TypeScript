@@ -1,0 +1,45 @@
+//// [tests/cases/compiler/declarationEmitNonIdentifierExportName.ts] ////
+
+=== dep.ts ===
+interface A { x: number }
+>A : Symbol(A, Decl(dep.ts, 0, 0))
+>x : Symbol(A.x, Decl(dep.ts, 0, 13))
+
+interface C { y: number }
+>C : Symbol(C, Decl(dep.ts, 0, 25))
+>y : Symbol(C.y, Decl(dep.ts, 1, 13))
+
+export { A as "a b", C as "a c", C as Ok };
+>A : Symbol(A, Decl(dep.ts, 0, 0))
+>"a b" : Symbol("a b", Decl(dep.ts, 2, 8))
+>C : Symbol(C, Decl(dep.ts, 0, 25))
+>"a c" : Symbol("a c", Decl(dep.ts, 2, 20))
+>C : Symbol(C, Decl(dep.ts, 0, 25))
+>Ok : Symbol(Ok, Decl(dep.ts, 2, 32))
+
+=== mid.ts ===
+import { "a b" as B, "a c" as C } from "./dep";
+>B : Symbol(B, Decl(mid.ts, 0, 8))
+>C : Symbol(C, Decl(mid.ts, 0, 20))
+
+export declare function f(): B;
+>f : Symbol(f, Decl(mid.ts, 0, 47))
+>B : Symbol(B, Decl(mid.ts, 0, 8))
+
+export declare function g(): C;
+>g : Symbol(g, Decl(mid.ts, 1, 31))
+>C : Symbol(C, Decl(mid.ts, 0, 20))
+
+=== main.ts ===
+import { f, g } from "./mid";
+>f : Symbol(f, Decl(main.ts, 0, 8))
+>g : Symbol(g, Decl(main.ts, 0, 11))
+
+export const v = f();
+>v : Symbol(v, Decl(main.ts, 1, 12))
+>f : Symbol(f, Decl(main.ts, 0, 8))
+
+export const w = g();
+>w : Symbol(w, Decl(main.ts, 2, 12))
+>g : Symbol(g, Decl(main.ts, 0, 11))
+
