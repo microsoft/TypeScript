@@ -23898,7 +23898,7 @@ func (c *Checker) getTypeFromTypeReference(node *ast.Node) *Type {
 
 func (c *Checker) getDistributedTypeParameter(node *ast.Node, t *Type) *Type {
 	if t.flags&TypeFlagsTypeParameter != 0 && !t.AsTypeParameter().isDistributed && c.isInDistributiveContext(node, t.symbol) {
-		// If node is contained in a distributive conditional type for the given type parameter,
+		// If node is contained in a distributive context for the given type parameter,
 		// return the distributed form of the type parameter.
 		return c.getDistributedTypeFromTypeParameter(t)
 	}
@@ -23959,13 +23959,25 @@ func (c *Checker) getNonDistributedConditionalType(t *Type) *Type {
 }
 
 // Returns the given generic mapped type with references to the distributed form of its homomorphic type
-// variable mapped back to the non-distributed form.
+// variable mapped back to the non-distributed form. Only declared mapped types need this, as instantiation
+// already maps distributed type parameters back to their non-distributed form. A type variable that is itself
+// distributed comes from an enclosing distributive context and must keep its distributed form.
 func (c *Checker) getNonDistributedMappedType(t *Type) *Type {
-	typeVariable := c.getHomomorphicTypeVariable(t)
-	if typeVariable == nil || typeVariable.flags&TypeFlagsTypeParameter == 0 || typeVariable.AsTypeParameter().distributedType == nil {
+	if t.AsMappedType().target != nil {
 		return t
 	}
-	result := c.getNonDistributedType(t, typeVariable.AsTypeParameter().distributedType)
+	constraintType := c.getConstraintTypeFromMappedType(t)
+	if constraintType.flags&TypeFlagsIndex == 0 {
+		return t
+	}
+	typeVariable := constraintType.AsIndexType().target
+	if typeVariable.flags&TypeFlagsSubstitution != 0 {
+		typeVariable = typeVariable.AsSubstitutionType().baseType
+	}
+	if typeVariable.flags&TypeFlagsTypeParameter == 0 || typeVariable.AsTypeParameter().isDistributed {
+		return t
+	}
+	result := c.getNonDistributedType(t, c.getDistributedTypeFromTypeParameter(typeVariable))
 	debug.Assert(result.objectFlags&ObjectFlagsMapped != 0, "Identity instantiation of a generic mapped type should remain a mapped type")
 	return result
 }

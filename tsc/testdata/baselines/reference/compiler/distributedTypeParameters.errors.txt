@@ -29,12 +29,25 @@ distributedTypeParameters.ts(134,35): error TS2344: Type 'I[K]' does not satisfy
   Type 'I' is not assignable to type 'P'.
     'I' is only assignable to the non-distributed 'P', but 'P' has been distributed here.
 distributedTypeParameters.ts(134,35): error TS2536: Type 'K' cannot be used to index type 'I'.
-distributedTypeParameters.ts(155,3): error TS2719: Type '() => T' is not assignable to type '() => T'. Two different types with this name exist, but they are unrelated.
-  Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-    'T' is only assignable to the non-distributed 'T', but 'T' has been distributed here.
+distributedTypeParameters.ts(143,64): error TS2344: Type 'U' does not satisfy the constraint 'Mutable<T>'.
+  Type 'T' is not assignable to type 'Mutable<T>'.
+distributedTypeParameters.ts(144,64): error TS2344: Type 'U' does not satisfy the constraint 'Partial<T>'.
+  Type 'T' is not assignable to type 'Partial<T>'.
+distributedTypeParameters.ts(145,64): error TS2344: Type 'Mutable<U>' does not satisfy the constraint 'Mutable<T>'.
+  Type 'keyof T' is not assignable to type 'keyof U'.
+    Type 'string | number | symbol' is not assignable to type 'keyof U'.
+      Type 'string' is not assignable to type 'keyof U'.
+        Type 'string' is not assignable to type 'keyof T'.
+          Type 'keyof T' is not assignable to type 'keyof T'. Two different types with this name exist, but they are unrelated.
+            Type 'string | number | symbol' is not assignable to type 'keyof T'.
+              Type 'string' is not assignable to type 'keyof T'.
+distributedTypeParameters.ts(146,78): error TS2344: Type 'U' does not satisfy the constraint '{ [K in keyof T]: T[K]; }'.
+  Type 'T' is not assignable to type '{ [K in keyof T]: T[K]; }'.
+distributedTypeParameters.ts(147,62): error TS2344: Type 'U' does not satisfy the constraint 'Mutable<T>'.
+  Type 'T' is not assignable to type 'Mutable<T>'.
 
 
-==== distributedTypeParameters.ts (16 errors) ====
+==== distributedTypeParameters.ts (20 errors) ====
     // https://github.com/microsoft/TypeScript/issues/63708
     
     type Show<A, B extends A> = [A, B] & {};
@@ -224,10 +237,35 @@ distributedTypeParameters.ts(155,3): error TS2719: Type '() => T' is not assigna
     type Mutable<T> = { -readonly [K in keyof T]: T[K] };
     
     type C1<T, U extends T> = T extends unknown ? Show<Mutable<T>, U> : never;  // Error
+                                                                   ~
+!!! error TS2344: Type 'U' does not satisfy the constraint 'Mutable<T>'.
+!!! error TS2344:   Type 'T' is not assignable to type 'Mutable<T>'.
+!!! related TS2208 distributedTypeParameters.ts:143:9: This type parameter might need an `extends Mutable<T>` constraint.
     type C2<T, U extends T> = T extends unknown ? Show<Partial<T>, U> : never;  // Error
+                                                                   ~
+!!! error TS2344: Type 'U' does not satisfy the constraint 'Partial<T>'.
+!!! error TS2344:   Type 'T' is not assignable to type 'Partial<T>'.
+!!! related TS2208 distributedTypeParameters.ts:144:9: This type parameter might need an `extends Partial<T>` constraint.
     type C3<T, U extends T> = T extends unknown ? Show<Mutable<T>, Mutable<U>> : never;  // Error
+                                                                   ~~~~~~~~~~
+!!! error TS2344: Type 'Mutable<U>' does not satisfy the constraint 'Mutable<T>'.
+!!! error TS2344:   Type 'keyof T' is not assignable to type 'keyof U'.
+!!! error TS2344:     Type 'string | number | symbol' is not assignable to type 'keyof U'.
+!!! error TS2344:       Type 'string' is not assignable to type 'keyof U'.
+!!! error TS2344:         Type 'string' is not assignable to type 'keyof T'.
+!!! error TS2344:           Type 'keyof T' is not assignable to type 'keyof T'. Two different types with this name exist, but they are unrelated.
+!!! error TS2344:             Type 'string | number | symbol' is not assignable to type 'keyof T'.
+!!! error TS2344:               Type 'string' is not assignable to type 'keyof T'.
     type C4<T, U extends T> = T extends unknown ? Show<{ [K in keyof T]: T[K] }, U> : never;  // Error
+                                                                                 ~
+!!! error TS2344: Type 'U' does not satisfy the constraint '{ [K in keyof T]: T[K]; }'.
+!!! error TS2344:   Type 'T' is not assignable to type '{ [K in keyof T]: T[K]; }'.
+!!! related TS2208 distributedTypeParameters.ts:146:9: This type parameter might need an `extends { [K in keyof T]: T[K]; }` constraint.
     type M4<T, U extends T> = { [K in keyof T]: Show<Mutable<T>, U> };  // Error
+                                                                 ~
+!!! error TS2344: Type 'U' does not satisfy the constraint 'Mutable<T>'.
+!!! error TS2344:   Type 'T' is not assignable to type 'Mutable<T>'.
+!!! related TS2208 distributedTypeParameters.ts:147:9: This type parameter might need an `extends Mutable<T>` constraint.
     
     // Normalization doesn't depend on whether the template was resolved before
     
@@ -236,10 +274,6 @@ distributedTypeParameters.ts(155,3): error TS2719: Type '() => T' is not assigna
     function f1<T>(getter: () => T) {
       let r = inferFromMappedGetter(get());
       r = getter;
-      ~
-!!! error TS2719: Type '() => T' is not assignable to type '() => T'. Two different types with this name exist, but they are unrelated.
-!!! error TS2719:   Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-!!! error TS2719:     'T' is only assignable to the non-distributed 'T', but 'T' has been distributed here.
       function get(): { [K in keyof T]: () => T } { return null!; }
     }
     
