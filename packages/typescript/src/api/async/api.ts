@@ -62,6 +62,7 @@ import {
     readSourceFileLease,
     RemoteNode,
     RemoteSourceFile,
+    sourceFileDescriptor,
 } from "../node/node.ts";
 import { Wtf8Decoder } from "../node/wtf8.ts";
 import type {
@@ -125,7 +126,6 @@ import type {
     ResolveTypeReferenceDirectiveResult,
     SignaturePropertyMethod,
     SignatureResponse,
-    SourceFileDescriptor,
     SourceFileMetadata,
     StaticModuleResolution,
     SymbolPropertyMethod,
@@ -945,17 +945,6 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
 }
 
 type EnsureInitialized = () => Promise<void>; // @sync: type EnsureInitialized = (() => void) & { gen(): Generator<ProtocolRequest, void, ProtocolResponse["result"]>; };
-
-function sourceFileDescriptor(sourceFile: RemoteSourceFile): SourceFileDescriptor {
-    return {
-        fileName: sourceFile.fileName,
-        path: sourceFile.path,
-        contentHash: sourceFile.contentHash,
-        parseOptionsKey: sourceFile.parseOptionsKey,
-        scriptKind: sourceFile.scriptKind,
-        nodeId: sourceFile.nodeId,
-    };
-}
 
 /** Returns whether a node is backed by a remote compiler response. */
 export function isRemoteNode(node: Node): boolean {

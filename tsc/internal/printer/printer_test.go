@@ -1655,6 +1655,42 @@ func TestParenthesizeSpreadElement1(t *testing.T) {
 	emittestutil.CheckEmit(t, nil, file.AsSourceFile(), "[...(a, b)];")
 }
 
+func TestEmitTrailingArrayHoles(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	file := factory.NewSourceFile(ast.SourceFileParseOptions{FileName: "/file.ts", PathKey: "/file.ts"}, "", factory.NewNodeList(
+		[]*ast.Node{
+			factory.NewExpressionStatement(
+				factory.NewArrayLiteralExpression(
+					factory.NewNodeList([]*ast.Node{
+						factory.NewNumericLiteral("1", ast.TokenFlagsNone),
+						factory.NewOmittedExpression(),
+					}),
+					false, /*multiLine*/
+				),
+			),
+			factory.NewVariableStatement(nil, factory.NewVariableDeclarationList(
+				factory.NewNodeList([]*ast.Node{
+					factory.NewVariableDeclaration(
+						factory.NewBindingPattern(ast.KindArrayBindingPattern, factory.NewNodeList([]*ast.Node{
+							factory.NewBindingElement(nil, nil, factory.NewIdentifier("a"), nil),
+							factory.NewBindingElement(nil, nil, nil, nil),
+						})),
+						nil, /*exclamationToken*/
+						nil, /*typeNode*/
+						factory.NewIdentifier("b"),
+					),
+				}),
+				ast.NodeFlagsConst,
+			)),
+		},
+	), factory.NewToken(ast.KindEndOfFile))
+
+	parsetestutil.MarkSyntheticRecursive(file)
+	emittestutil.CheckEmit(t, nil, file.AsSourceFile(), "[1, ,];\nconst [a, ,] = b;")
+}
+
 func TestParenthesizeSpreadElement2(t *testing.T) {
 	t.Parallel()
 
