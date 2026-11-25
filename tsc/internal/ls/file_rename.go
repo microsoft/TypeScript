@@ -239,8 +239,10 @@ func (l *LanguageService) updateImportsForFileRename(program *compiler.Program, 
 				continue
 			}
 			updated := l.updateRelativePath(oldToNew, oldFileName, newImportFromPath, tspath.ToModuleSpecifier(ref.FileName))
-			if updated.AsString() != ref.FileName && canWriteReferencePath(sourceFile, ref, updated.AsString()) {
-				changeTracker.ReplaceTextRangeWithText(sourceFile, ref.TextRange, updated.AsString())
+			if updated.AsString() != ref.FileName {
+				if textRange, newText, ok := getReferencePathEdit(sourceFile, ref, updated.AsString()); ok {
+					changeTracker.ReplaceTextRangeWithText(sourceFile, textRange, newText)
+				}
 			}
 		}
 
@@ -380,11 +382,26 @@ func getStringLiteralQuoteChar(sourceFile *ast.SourceFile, node *ast.LiteralLike
 	}
 }
 
-// Reference directive paths have no escape syntax, so a path containing the
-// directive's quote or a line terminator cannot be written into the comment.
-func canWriteReferencePath(sourceFile *ast.SourceFile, ref *ast.FileReference, path string) bool {
-	quote := sourceFile.Text()[ref.Pos()-1]
-	return !strings.ContainsAny(path, string(quote)+"\r\n\u2028\u2029")
+// Reference directive paths have no escape syntax. A path containing the
+// directive's quote is written with the other quote character instead, and a
+// path containing both quotes or a line terminator cannot be written at all.
+func getReferencePathEdit(sourceFile *ast.SourceFile, ref *ast.FileReference, path string) (core.TextRange, string, bool) {
+	if strings.ContainsAny(path, "\r\n\u2028\u2029") {
+		return core.TextRange{}, "", false
+	}
+	text := sourceFile.Text()
+	quote := text[ref.Pos()-1]
+	if !strings.ContainsRune(path, rune(quote)) {
+		return ref.TextRange, path, true
+	}
+	otherQuote := byte('"')
+	if quote == '"' {
+		otherQuote = '\''
+	}
+	if strings.ContainsRune(path, rune(otherQuote)) || ref.End() >= len(text) || text[ref.End()] != quote {
+		return core.TextRange{}, "", false
+	}
+	return core.NewTextRange(ref.Pos()-1, ref.End()+1), string(otherQuote) + path + string(otherQuote), true
 }
 
 func getTsConfigObjectLiteralExpression(tsConfigSourceFile *ast.SourceFile) *ast.ObjectLiteralExpression {

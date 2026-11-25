@@ -112,7 +112,7 @@ export default 0;`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
 	f.VerifyWillRenameFilesEdits(t, "/old", "/n\"ew", map[string]string{
-		"/a.ts": `/// <reference path="./old/b.ts" />
+		"/a.ts": `/// <reference path='./n"ew/b.ts' />
 /// <reference path='./n"ew/b.ts' />
 import b1 from "./n\"ew/b";
 import b2 from './n"ew/b';
