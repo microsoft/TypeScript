@@ -3,6 +3,7 @@ package autoimport
 import (
 	"slices"
 	"unicode"
+	"unicode/utf8"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/checker"
@@ -191,7 +192,7 @@ outer:
 		if !scanner.IsIdentifierText(name, core.LanguageVariantStandard) {
 			continue
 		}
-		if forJSX && !(unicode.IsUpper(rune(name[0])) || e.IsRenameable()) {
+		if first, _ := utf8.DecodeRuneInString(name); forJSX && !(unicode.IsUpper(first) || e.IsRenameable()) {
 			continue
 		}
 		target := e.ExportID
