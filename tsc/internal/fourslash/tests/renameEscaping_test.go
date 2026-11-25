@@ -156,3 +156,20 @@ let x;`
 let x;`,
 	})
 }
+
+func TestRenameNamespaceExportToNonIdentifier(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @Filename: /dep.ts
+export const x = 1;
+// @Filename: /a.ts
+export * as /*1*/ns from "./dep";
+// @Filename: /b.ts
+import { ns as bar } from "./a";`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyRename(t, "1", "a-b", map[string]string{
+		"/a.ts": `export * as a-b from "./dep";`,
+		"/b.ts": `import { "a-b" as bar } from "./a";`,
+	})
+}
