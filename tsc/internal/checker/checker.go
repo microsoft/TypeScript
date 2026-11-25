@@ -17728,6 +17728,19 @@ func (c *Checker) getConstraintOfIndexedAccess(t *Type) *Type {
 
 func (c *Checker) getConstraintFromIndexedAccess(t *Type) *Type {
 	d := t.AsIndexedAccessType()
+	if d.resolvedConstraint == nil {
+		// The constraint is cached because it can be expensive to compute (e.g. when the index type is constrained
+		// to a large union) and type relations may request it many times, such as once per constituent of a target union.
+		d.resolvedConstraint = core.OrElse(c.computeConstraintFromIndexedAccess(t), c.noConstraintType)
+	}
+	if d.resolvedConstraint != c.noConstraintType {
+		return d.resolvedConstraint
+	}
+	return nil
+}
+
+func (c *Checker) computeConstraintFromIndexedAccess(t *Type) *Type {
+	d := t.AsIndexedAccessType()
 	if c.isMappedTypeGenericIndexedAccess(t) {
 		// For indexed access types of the form { [P in K]: E }[X], where K is non-generic and X is generic,
 		// we substitute an instantiation of E where P is replaced with X.

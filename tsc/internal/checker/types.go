@@ -1539,9 +1539,10 @@ func (t *IndexType) Target() *Type { return t.target }
 
 type IndexedAccessType struct {
 	ConstrainedType
-	objectType  *Type
-	indexType   *Type
-	accessFlags AccessFlags // Only includes AccessFlags.Persistent
+	objectType         *Type
+	indexType          *Type
+	accessFlags        AccessFlags // Only includes AccessFlags.Persistent
+	resolvedConstraint *Type
 }
 
 func (t *IndexedAccessType) ObjectType() *Type { return t.objectType }
