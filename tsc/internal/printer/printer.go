@@ -4879,6 +4879,10 @@ func (p *Printer) hasTrailingComma(parentNode *ast.Node, children *ast.NodeList)
 	return false
 }
 
+func isArrayHole(node *ast.Node) bool {
+	return ast.IsOmittedExpression(node) || ast.IsBindingElement(node) && node.Name() == nil
+}
+
 func (p *Printer) writeDelimiter(format ListFormat) {
 	switch format & LFDelimitersMask {
 	case LFNone:
@@ -5003,7 +5007,8 @@ func (p *Printer) emitListItems(
 
 	// Write a trailing comma, if requested.
 	skipTrailingComments := p.commentsDisabled || !p.shouldEmitTrailingComments(previousSibling)
-	emitTrailingComma := hasTrailingComma && format&LFAllowTrailingComma != 0 && format&LFCommaDelimited != 0
+	// A trailing hole is only an element if it is followed by a comma.
+	emitTrailingComma := (hasTrailingComma || previousSibling != nil && isArrayHole(previousSibling)) && format&LFAllowTrailingComma != 0 && format&LFCommaDelimited != 0
 	if emitTrailingComma {
 		if previousSibling != nil && !skipTrailingComments {
 			p.emitToken(ast.KindCommaToken, previousSibling.End(), WriteKindPunctuation, previousSibling)

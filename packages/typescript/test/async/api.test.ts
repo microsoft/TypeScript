@@ -82,6 +82,7 @@ import {
     createVariableDeclaration,
     createVariableDeclarationList,
     createVariableStatement,
+    updateArrayLiteralExpression,
     updateBinaryExpression,
     updateExpressionStatement,
     updateSourceFile,
@@ -9464,6 +9465,17 @@ export const obj = { m: 1, s: "hi", b: true };
         const updated = updateSourceFile(sourceFile, [updateExpressionStatement(statement, newOuter)], sourceFile.endOfFileToken);
         assert.strictEqual(newInner.pos, inner.pos);
         assert.strictEqual(await api.printer.printFile(updated), "(a ?? b) || c;\n");
+    });
+
+    test("updated nodes keep a trailing array hole", async () => {
+        await using api = spawnAPI();
+        await using lease = await api.createSourceFile("/test.ts", "[1];\n[2,,];\n");
+        const { sourceFile } = lease;
+        const [first, second] = sourceFile.statements;
+        assert(isExpressionStatement(first) && isArrayLiteralExpression(first.expression));
+        assert(isExpressionStatement(second) && isArrayLiteralExpression(second.expression));
+        const updated = updateSourceFile(sourceFile, [updateExpressionStatement(first, updateArrayLiteralExpression(first.expression, second.expression.elements))], sourceFile.endOfFileToken);
+        assert.strictEqual((await api.printer.printFile(updated)).replace(/\s/g, ""), "[2,,];");
     });
 
     test("printing keeps comments in files with non-ASCII text", async () => {
