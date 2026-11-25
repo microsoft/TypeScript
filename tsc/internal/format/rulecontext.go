@@ -625,5 +625,5 @@ func isSemicolonInsertionContext(context *FormattingContext) bool {
 func isNotPropertyAccessOnIntegerLiteral(context *FormattingContext) bool {
 	return !ast.IsPropertyAccessExpression(context.contextNode) ||
 		!ast.IsNumericLiteral(context.contextNode.Expression()) ||
-		strings.Contains(context.contextNode.Expression().Text(), ".")
+		strings.Contains(scanner.GetSourceTextOfNodeFromSourceFile(context.SourceFile, context.contextNode.Expression(), false /*includeTrivia*/), ".")
 }
