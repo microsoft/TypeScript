@@ -40,7 +40,7 @@ declare const console: { log(msg: any): void; };
 export declare const a = 1;
 
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":[2],"fileNames":["lib.es2026.full.d.ts","./src/a.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"f5c8fff6e1fca35f4a292d48868d4086-export const a = 1;","signature":"3c0d6bd71647a06c9b7bfd6cbfdfc05b-export declare const a = 1;\n\nerror5033: Could_not_write_file_0_Colon_1_5033\n/home/src/workspaces/project/dist/a.js\nwrite \"home/src/workspaces/project/dist/a.js\": path exists but is not a regular file\n","impliedNodeFormat":1}],"options":{"declaration":true,"outDir":"./dist","rootDir":"./src"},"emitDiagnosticsPerFile":[[2,[{"noFile":true,"pos":-1,"end":-1,"code":5033,"category":1,"messageKey":"Could_not_write_file_0_Colon_1_5033","messageArgs":["/home/src/workspaces/project/dist/a.js","write \"home/src/workspaces/project/dist/a.js\": path exists but is not a regular file"]}]]]}
+{"version":"FakeTSVersion","root":[2],"fileNames":["lib.es2026.full.d.ts","./src/a.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"f5c8fff6e1fca35f4a292d48868d4086-export const a = 1;","signature":"67cd7ccc14045107336f34154f76a8ca-export declare const a = 1;\n","impliedNodeFormat":1}],"options":{"declaration":true,"outDir":"./dist","rootDir":"./src"},"emitDiagnosticsPerFile":[[2,[{"noFile":true,"pos":-1,"end":-1,"code":5033,"category":1,"messageKey":"Could_not_write_file_0_Colon_1_5033","messageArgs":["/home/src/workspaces/project/dist/a.js","write \"home/src/workspaces/project/dist/a.js\": path exists but is not a regular file"]}]]]}
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -72,11 +72,11 @@ export declare const a = 1;
     {
       "fileName": "./src/a.ts",
       "version": "f5c8fff6e1fca35f4a292d48868d4086-export const a = 1;",
-      "signature": "3c0d6bd71647a06c9b7bfd6cbfdfc05b-export declare const a = 1;\n\nerror5033: Could_not_write_file_0_Colon_1_5033\n/home/src/workspaces/project/dist/a.js\nwrite \"home/src/workspaces/project/dist/a.js\": path exists but is not a regular file\n",
+      "signature": "67cd7ccc14045107336f34154f76a8ca-export declare const a = 1;\n",
       "impliedNodeFormat": "CommonJS",
       "original": {
         "version": "f5c8fff6e1fca35f4a292d48868d4086-export const a = 1;",
-        "signature": "3c0d6bd71647a06c9b7bfd6cbfdfc05b-export declare const a = 1;\n\nerror5033: Could_not_write_file_0_Colon_1_5033\n/home/src/workspaces/project/dist/a.js\nwrite \"home/src/workspaces/project/dist/a.js\": path exists but is not a regular file\n",
+        "signature": "67cd7ccc14045107336f34154f76a8ca-export declare const a = 1;\n",
         "impliedNodeFormat": 1
       }
     }
@@ -105,7 +105,7 @@ export declare const a = 1;
       ]
     ]
   ],
-  "size": 1572
+  "size": 1394
 }
 
 tsconfig.json::

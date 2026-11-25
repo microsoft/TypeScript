@@ -400,6 +400,12 @@ func (s *snapshot) computeSignatureWithDiagnostics(file *ast.SourceFile, text st
 	var builder strings.Builder
 	builder.WriteString(getTextHandlingSourceMapForSignature(text, data))
 	for _, diag := range data.Diagnostics {
+		// A failed output write is not a diagnostic of the declaration's contents.
+		// Including it would change the signature once a later attempt writes
+		// successfully, marking unchanged declarations as changed.
+		if diag.Code() == diagnostics.Could_not_write_file_0_Colon_1.Code() {
+			continue
+		}
 		diagnosticToStringBuilder(diag, file, &builder)
 	}
 	return s.computeHash(builder.String())
