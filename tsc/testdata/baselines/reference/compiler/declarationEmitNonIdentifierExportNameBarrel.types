@@ -22,10 +22,10 @@ export declare function f(): Ok;
 
 === main.ts ===
 import { f } from "mid";
->f : () => import("dep").a b
+>f : () => import("dep/src/internal/a.js").Ok
 
 export const v = f();
->v : import("dep").a b
->f() : import("dep").a b
->f : () => import("dep").a b
+>v : import("dep/src/internal/a").Ok
+>f() : import("dep/src/internal/a").Ok
+>f : () => import("dep/src/internal/a").Ok
 

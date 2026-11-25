@@ -263,8 +263,10 @@ func (c *Checker) buildExternalModuleContainerIndex() {
 		}
 		container := c.getSymbolOfDeclaration(file.AsNode())
 		index.moduleOrder[container] = len(index.moduleOrder)
-		for _, exported := range c.getExportsOfSymbol(container).All() {
-			index.add(c.getResolvedTarget(exported), container)
+		for name, exported := range c.getExportsOfSymbol(container).All() {
+			if isIdentifierExportName(name) {
+				index.add(c.getResolvedTarget(exported), container)
+			}
 		}
 		if exportEquals := container.Exports().Get(ast.InternalSymbolNameExportEquals); exportEquals != nil {
 			index.add(c.getResolvedTarget(exportEquals), container)
