@@ -72,3 +72,20 @@ class C implements I {
 		Index: 0,
 	})
 }
+
+func TestCodeFixClassImplementInterfaceIntersectedMappedNonIdentifier(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `type I = { [K in "a b"]: string | number } & { [K in "a b"]: number };
+class C implements I {}`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyCodeFix(t, fourslash.VerifyCodeFixOptions{
+		Description: "Implement interface 'I'",
+		NewFileContent: `type I = { [K in "a b"]: string | number } & { [K in "a b"]: number };
+class C implements I {
+    "a b": number;
+}`,
+		Index: 0,
+	})
+}

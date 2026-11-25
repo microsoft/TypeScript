@@ -494,20 +494,23 @@ func createDeclarationName(factory *ast.NodeFactory, typeChecker *checker.Checke
 			return factory.NewComputedPropertyName(typeChecker.SymbolToExpression(nameType.Symbol(), ast.SymbolFlagsValue, enclosingDeclaration, nodebuilder.FlagsNone))
 		}
 		if nameType != nil && checker.IsTypeUsableAsPropertyName(nameType) {
-			name := checker.GetPropertyNameFromType(nameType)
-			if !scanner.IsIdentifierText(name, core.LanguageVariantStandard) {
-				return factory.NewStringLiteral(name, core.IfElse(quotePreference == lsutil.QuotePreferenceSingle, ast.TokenFlagsSingleQuote, ast.TokenFlagsNone))
-			}
-			return factory.NewIdentifier(name)
+			return createPropertyNameFromText(factory, checker.GetPropertyNameFromType(nameType), quotePreference)
 		}
 	}
 	if declaration != nil && declaration.Name() != nil {
 		return declaration.Name().Clone(factory)
 	}
 	if symbol != nil {
-		return factory.NewIdentifier(symbol.Name())
+		return createPropertyNameFromText(factory, symbol.Name(), quotePreference)
 	}
 	return nil
+}
+
+func createPropertyNameFromText(factory *ast.NodeFactory, name string, quotePreference lsutil.QuotePreference) *ast.PropertyName {
+	if !scanner.IsIdentifierText(name, core.LanguageVariantStandard) {
+		return factory.NewStringLiteral(name, core.IfElse(quotePreference == lsutil.QuotePreferenceSingle, ast.TokenFlagsSingleQuote, ast.TokenFlagsNone))
+	}
+	return factory.NewIdentifier(name)
 }
 
 func createPropertyName(factory *ast.NodeFactory, node *ast.Node, quotePreference lsutil.QuotePreference) *ast.PropertyName {
