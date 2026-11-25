@@ -1,0 +1,82 @@
+//// [tests/cases/compiler/reverseMappedTypeNestedInference.ts] ////
+
+=== reverseMappedTypeNestedInference.ts ===
+declare const sv: (input: unknown) => string | undefined;
+>sv : (input: unknown) => string | undefined
+>input : unknown
+
+declare function d3<T>(input: { [K in keyof T]: { [J in keyof T[K]]: { [L in keyof T[K][J]]: (i: unknown) => T[K][J][L] } } }): T;
+>d3 : <T>(input: { [K in keyof T]: { [J in keyof T[K]]: { [L in keyof T[K][J]]: (i: unknown) => T[K][J][L]; }; }; }) => T
+>input : { [K in keyof T]: { [J in keyof T[K]]: { [L in keyof T[K][J]]: (i: unknown) => T[K][J][L]; }; }; }
+>i : unknown
+
+export const r3 = d3({ a: { b: { c: sv } } });
+>r3 : { a: { b: { c: string | undefined; }; }; }
+>d3({ a: { b: { c: sv } } }) : { a: { b: { c: string | undefined; }; }; }
+>d3 : <T>(input: { [K in keyof T]: { [J in keyof T[K]]: { [L in keyof T[K][J]]: (i: unknown) => T[K][J][L]; }; }; }) => T
+>{ a: { b: { c: sv } } } : { a: { b: { c: (input: unknown) => string | undefined; }; }; }
+>a : { b: { c: (input: unknown) => string | undefined; }; }
+>{ b: { c: sv } } : { b: { c: (input: unknown) => string | undefined; }; }
+>b : { c: (input: unknown) => string | undefined; }
+>{ c: sv } : { c: (input: unknown) => string | undefined; }
+>c : (input: unknown) => string | undefined
+>sv : (input: unknown) => string | undefined
+
+declare function d4<T>(input: { [K in keyof T]: { [J in keyof T[K]]: { [L in keyof T[K][J]]: { [M in keyof T[K][J][L]]: (i: unknown) => T[K][J][L][M] } } } }): T;
+>d4 : <T>(input: { [K in keyof T]: { [J in keyof T[K]]: { [L in keyof T[K][J]]: { [M in keyof T[K][J][L]]: (i: unknown) => T[K][J][L][M]; }; }; }; }) => T
+>input : { [K in keyof T]: { [J in keyof T[K]]: { [L in keyof T[K][J]]: { [M in keyof T[K][J][L]]: (i: unknown) => T[K][J][L][M]; }; }; }; }
+>i : unknown
+
+export const r4 = d4({ a: { b: { c: { d: sv } } } });
+>r4 : { a: { b: { c: { d: string | undefined; }; }; }; }
+>d4({ a: { b: { c: { d: sv } } } }) : { a: { b: { c: { d: string | undefined; }; }; }; }
+>d4 : <T>(input: { [K in keyof T]: { [J in keyof T[K]]: { [L in keyof T[K][J]]: { [M in keyof T[K][J][L]]: (i: unknown) => T[K][J][L][M]; }; }; }; }) => T
+>{ a: { b: { c: { d: sv } } } } : { a: { b: { c: { d: (input: unknown) => string | undefined; }; }; }; }
+>a : { b: { c: { d: (input: unknown) => string | undefined; }; }; }
+>{ b: { c: { d: sv } } } : { b: { c: { d: (input: unknown) => string | undefined; }; }; }
+>b : { c: { d: (input: unknown) => string | undefined; }; }
+>{ c: { d: sv } } : { c: { d: (input: unknown) => string | undefined; }; }
+>c : { d: (input: unknown) => string | undefined; }
+>{ d: sv } : { d: (input: unknown) => string | undefined; }
+>d : (input: unknown) => string | undefined
+>sv : (input: unknown) => string | undefined
+
+type Deep2<T> = { [K in keyof T]: { [J in keyof T[K]]: Deep2<T[K][J]> | ((i: unknown) => T[K][J]) } };
+>Deep2 : Deep2<T>
+>i : unknown
+
+declare function dd<T>(input: Deep2<T>): T;
+>dd : <T>(input: Deep2<T>) => T
+>input : Deep2<T>
+
+export const rd = dd({ a: { b: { c: { d: sv } } } });
+>rd : { a: { b: { c: { d: any; }; }; }; }
+>dd({ a: { b: { c: { d: sv } } } }) : { a: { b: { c: { d: any; }; }; }; }
+>dd : <T>(input: Deep2<T>) => T
+>{ a: { b: { c: { d: sv } } } } : { a: { b: { c: { d: (input: unknown) => string | undefined; }; }; }; }
+>a : { b: { c: { d: (input: unknown) => string | undefined; }; }; }
+>{ b: { c: { d: sv } } } : { b: { c: { d: (input: unknown) => string | undefined; }; }; }
+>b : { c: { d: (input: unknown) => string | undefined; }; }
+>{ c: { d: sv } } : { c: { d: (input: unknown) => string | undefined; }; }
+>c : { d: (input: unknown) => string | undefined; }
+>{ d: sv } : { d: (input: unknown) => string | undefined; }
+>d : (input: unknown) => string | undefined
+>sv : (input: unknown) => string | undefined
+
+declare function dk<T, U extends keyof T>(input: { [K in keyof T]: { [J in keyof T[K]]: (i: unknown) => T[K][J] } }, k: U): T[U];
+>dk : <T, U extends keyof T>(input: { [K in keyof T]: { [J in keyof T[K]]: (i: unknown) => T[K][J]; }; }, k: U) => T[U]
+>input : { [K in keyof T]: { [J in keyof T[K]]: (i: unknown) => T[K][J]; }; }
+>i : unknown
+>k : U
+
+export const rk = dk({ a: { b: sv } }, "a");
+>rk : { b: string | undefined; }
+>dk({ a: { b: sv } }, "a") : { b: string | undefined; }
+>dk : <T, U extends keyof T>(input: { [K in keyof T]: { [J in keyof T[K]]: (i: unknown) => T[K][J]; }; }, k: U) => T[U]
+>{ a: { b: sv } } : { a: { b: (input: unknown) => string | undefined; }; }
+>a : { b: (input: unknown) => string | undefined; }
+>{ b: sv } : { b: (input: unknown) => string | undefined; }
+>b : (input: unknown) => string | undefined
+>sv : (input: unknown) => string | undefined
+>"a" : "a"
+
