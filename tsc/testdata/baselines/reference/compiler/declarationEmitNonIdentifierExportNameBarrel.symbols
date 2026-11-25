@@ -1,0 +1,32 @@
+//// [tests/cases/compiler/declarationEmitNonIdentifierExportNameBarrel.ts] ////
+
+=== node_modules/dep/src/internal/a.d.ts ===
+interface A { x: number }
+>A : Symbol(A, Decl(a.d.ts, 0, 0))
+>x : Symbol(A.x, Decl(a.d.ts, 0, 13))
+
+export { A as Ok };
+>A : Symbol(A, Decl(a.d.ts, 0, 0))
+>Ok : Symbol(Ok, Decl(a.d.ts, 1, 8))
+
+=== node_modules/dep/index.d.ts ===
+export { Ok as "a b" } from "./src/internal/a";
+>Ok : Symbol(Ok, Decl(a.d.ts, 1, 8))
+>"a b" : Symbol("a b", Decl(index.d.ts, 0, 8))
+
+=== node_modules/mid/index.d.ts ===
+import { Ok } from "dep/src/internal/a";
+>Ok : Symbol(Ok, Decl(index.d.ts, 0, 8))
+
+export declare function f(): Ok;
+>f : Symbol(f, Decl(index.d.ts, 0, 40))
+>Ok : Symbol(Ok, Decl(index.d.ts, 0, 8))
+
+=== main.ts ===
+import { f } from "mid";
+>f : Symbol(f, Decl(main.ts, 0, 8))
+
+export const v = f();
+>v : Symbol(v, Decl(main.ts, 1, 12))
+>f : Symbol(f, Decl(main.ts, 0, 8))
+
