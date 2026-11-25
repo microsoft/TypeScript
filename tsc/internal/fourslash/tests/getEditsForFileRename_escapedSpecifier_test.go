@@ -95,3 +95,28 @@ const x = null;`
 const x = null;`,
 	}, nil /*preferences*/)
 }
+
+func TestGetEditsForFileRename_referenceDirectiveOtherQuote(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @Filename: /tsconfig.json
+{ "files": ["a.ts", "old/b.ts"] }
+// @Filename: /a.ts
+/// <reference path="./old/b.ts" />
+/// <reference path='./old/b.ts' />
+import b1 from "./old/b";
+import b2 from './old/b';
+export default 0;
+// @Filename: /old/b.ts
+export default 0;`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyWillRenameFilesEdits(t, "/old", "/n\"ew", map[string]string{
+		"/a.ts": `/// <reference path="./old/b.ts" />
+/// <reference path='./n"ew/b.ts' />
+import b1 from "./n\"ew/b";
+import b2 from './n"ew/b';
+export default 0;`,
+		"/tsconfig.json": `{ "files": ["a.ts", "n\"ew/b.ts"] }`,
+	}, nil /*preferences*/)
+}
