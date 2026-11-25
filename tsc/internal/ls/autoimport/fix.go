@@ -6,8 +6,6 @@ import (
 	"fmt"
 	"slices"
 	"strings"
-	"unicode"
-	"unicode/utf8"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/astnav"
@@ -604,10 +602,9 @@ func (v *View) GetFixes(export *Export, forJSX bool, isValidTypeOnlyUseSite bool
 	addAsTypeOnly := getAddAsTypeOnly(isValidTypeOnlyUseSite, export, v.program.Options())
 
 	name := export.Name()
-	first, size := utf8.DecodeRuneInString(name)
-	if forJSX && !unicode.IsUpper(first) {
+	if forJSX && scanner.IsIntrinsicJsxName(name) {
 		if export.IsRenameable() {
-			name = string(unicode.ToUpper(first)) + name[size:]
+			name = strings.ToUpper(name[:1]) + name[1:]
 		} else {
 			return nil
 		}

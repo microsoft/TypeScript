@@ -126,9 +126,28 @@ export function Index() {
 			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
-			Excludes: []string{
-				"éclair",
+			Includes: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label: "éclair",
+					Data: &lsproto.CompletionItemData{
+						AutoImport: &lsproto.AutoImportFix{
+							ModuleSpecifier: "./eclair",
+						},
+					},
+					AdditionalTextEdits: fourslash.AnyTextEdits,
+					SortText:            new(string(ls.SortTextAutoImportSuggestions)),
+				},
 			},
 		},
+	})
+	f.VerifyApplyCodeActionFromCompletion(t, new(""), &fourslash.ApplyCodeActionFromCompletionOptions{
+		Name:        "éclair",
+		Source:      "./eclair",
+		Description: "Add import from \"./eclair\"",
+		NewFileContent: new(`import { éclair } from "./eclair";
+
+export function Index() {
+    return <écl
+}`),
 	})
 }
