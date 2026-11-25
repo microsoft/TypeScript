@@ -32,7 +32,17 @@ function forEachEmittedChild(node: ast.Node, callback: (node: ast.Node) => void,
         if (ast.isFunctionLikeDeclaration(node) && child === node.body) return;
         if ((ast.isVariableDeclaration(node) || ast.isPropertyDeclaration(node) || ast.isParameterDeclaration(node)) && child === node.initializer && node.type) return;
         if (ast.isEnumMember(node) && child === node.initializer) return;
-        if (isPrivateMember(child) || isInternal(child) || isOverloadImplementation(child)) return;
+        if (isPrivateMember(child) || isInternal(child) || isOverloadImplementation(child)) {
+            // Non-private parameter properties are still emitted as class properties.
+            if (ast.isConstructorDeclaration(child) && !isInternal(child)) {
+                for (const parameter of child.parameters) {
+                    if (ast.isParameterPropertyDeclaration(parameter, child) && !(parameter.modifierFlags & ast.ModifierFlags.Private) && !isInternal(parameter)) {
+                        callback(parameter);
+                    }
+                }
+            }
+            return;
+        }
         callback(child);
     });
 }
@@ -100,16 +110,21 @@ export function analyzePublicApi(api: ts.API, project: ts.Project, entrypoints: 
         const targets = api.batch(...aliases.map(symbol => checker.getAliasedSymbol.gen(symbol)));
         for (let i = 0; i < aliases.length; i++) aliasTargets.set(aliases[i], targets[i]);
     };
+    const enumCache = new Map<ast.EnumDeclaration, ts.Symbol>();
     const resolveCache = new Map<ts.Symbol, ts.Symbol>();
     const resolve = (symbol: ts.Symbol): ts.Symbol => {
         let result = resolveCache.get(symbol);
         if (result) return result;
         result = symbol.flags & ts.SymbolFlags.Alias ? aliasTargets.get(symbol) ?? checker.getAliasedSymbol(symbol) : symbol;
         if (result.flags & ts.SymbolFlags.EnumMember) {
-            const declaration = getDeclarations(result)[0];
-            const enumName = declaration && ast.isEnumDeclaration(declaration.parent) ? declaration.parent.name : undefined;
-            const enumSymbol = enumName && checker.getSymbolAtLocation(enumName);
-            if (!enumSymbol) throw new Error(`Cannot resolve enum containing '${result.name}'`);
+            const enumDeclaration = getDeclarations(result)[0]?.parent;
+            if (!enumDeclaration || !ast.isEnumDeclaration(enumDeclaration)) throw new Error(`Cannot resolve enum containing '${result.name}'`);
+            let enumSymbol = enumCache.get(enumDeclaration);
+            if (!enumSymbol) {
+                enumSymbol = checker.getSymbolAtLocation(enumDeclaration.name);
+                if (!enumSymbol) throw new Error(`Cannot resolve enum containing '${result.name}'`);
+                enumCache.set(enumDeclaration, enumSymbol);
+            }
             result = enumSymbol;
         }
         resolveCache.set(symbol, result);
@@ -239,8 +254,8 @@ export function analyzePublicApi(api: ts.API, project: ts.Project, entrypoints: 
             const member = getModuleExports(symbol).get(name);
             if (!member || resolve(member) !== target) continue;
             const moduleFile = getDeclarations(symbol)[0]?.getSourceFile().fileName;
-            const declaration = getDeclarations(member).find(node => node.getSourceFile().fileName === moduleFile);
-            if (declaration && !isInternalExport(declaration)) {
+            const declaration = getDeclarations(member).find(node => node.getSourceFile().fileName === moduleFile && !isInternalExport(node));
+            if (declaration) {
                 let isTypeOnly = typeOnly || (
                     ast.isExportSpecifier(declaration) && (declaration.isTypeOnly || getExportDeclaration(declaration).isTypeOnly)
                     || ast.isNamespaceExport(declaration) && getExportDeclaration(declaration).isTypeOnly

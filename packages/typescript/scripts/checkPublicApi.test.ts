@@ -274,6 +274,58 @@ test("ignores private constructor parameters", () => {
     );
 });
 
+test("checks public parameter properties of private and overloaded constructors", () => {
+    assert.deepEqual(
+        messagesOf({
+            "index.ts": `
+            interface A {}
+            interface B {}
+            interface C {}
+            export class Private { private constructor(public a: A, private c: C) {} }
+            export class Overloaded {
+                constructor();
+                constructor(protected readonly b?: B) {}
+            }
+        `,
+        }),
+        [missing("A"), missing("B")],
+    );
+});
+
+test("checks a public overload that follows an @internal overload", () => {
+    assert.deepEqual(
+        messagesOf({
+            "index.ts": `
+            interface Hidden {}
+            /** @internal */
+            export function f(): void;
+            export function f(value: Hidden): void;
+            export function f(value?: Hidden): void {}
+        `,
+        }),
+        [missing("Hidden")],
+    );
+});
+
+test("resolves members of one enum with a single request", () => {
+    const members = Array.from({ length: 32 }, (_, index) => `M${index}`);
+    let requestCount: number | undefined;
+    const diagnostics = lint(
+        {
+            "index.ts": `
+            export enum Kind { ${members.join(", ")} }
+            export interface Public { ${members.map(member => `${member}: Kind.${member};`).join(" ")} }
+        `,
+        },
+        {},
+        api => {
+            requestCount = api.getTimingInfo().totals.requestCount;
+        },
+    );
+    assert.deepEqual(diagnostics, []);
+    assert.ok(requestCount !== undefined && requestCount < 24, `Expected batched enum lookups, got ${requestCount} IPC requests`);
+});
+
 test("distinguishes static and instance method overloads with the same name", () => {
     assert.deepEqual(
         messagesOf({
