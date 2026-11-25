@@ -71,21 +71,21 @@ bar;`
 	defer f.ConfigureWithReset(t, lsutil.UserPreferences{ProvidePrefixAndSuffixTextForRename: core.TSTrue})()
 	f.VerifyRename(t, "1", "a-b", map[string]string{
 		"/a.ts": `const foo = 1;
-export { foo as a-b };
+export { foo as "a-b" };
 const o = { "x": 1 };
 const { x } = o;`,
-		"/b.ts": `import { a-b } from "./a";
-a-b;
-const o2 = { foo: a-b };
-export { a-b as foo };`,
-		"/c.ts": `export { a-b as foo } from "./a";`,
-		"/d.ts": `import { a-b as bar } from "./a";
+		"/b.ts": `import { "a-b" as foo } from "./a";
+foo;
+const o2 = { foo };
+export { foo };`,
+		"/c.ts": `export { "a-b" as foo } from "./a";`,
+		"/d.ts": `import { "a-b" as bar } from "./a";
 bar;`,
 	})
 	f.VerifyRename(t, "2", "c-d", map[string]string{
 		"/a.ts": `const foo = 1;
-export { foo as a-b };
+export { foo as "a-b" };
 const o = { "c-d": 1 };
-const { c-d: x } = o;`,
+const { "c-d": x } = o;`,
 	})
 }

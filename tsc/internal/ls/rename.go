@@ -112,13 +112,30 @@ func (l *LanguageService) symbolAndEntriesToRename(ctx context.Context, params *
 		return lsproto.WorkspaceEditOrNull{}, nil
 	}
 
-	entries := core.FlatMap(data.SymbolsAndEntries, func(s *SymbolAndEntries) []*ReferenceEntry { return s.references })
 	var mappedEdits []mappedRenameEdit
 	ch, done := program.GetTypeChecker(ctx)
 	defer done()
 
 	quotePreference := lsutil.GetQuotePreference(sourceFile, l.UserPreferences())
 	useAliasesForRename := l.UserPreferences().ProvidePrefixAndSuffixTextForRename.IsTrueOrUnknown()
+	renameToNonIdentifier := useAliasesForRename && !scanner.IsIdentifierText(params.NewName, core.LanguageVariantStandard)
+
+	var entries []*ReferenceEntry
+	for _, symbolAndEntries := range data.SymbolsAndEntries {
+		// A non-identifier name cannot be bound as a local, so `import { foo }` becomes
+		// `import { "new-name" as foo }` and uses of the local `foo` are left alone.
+		if renameToNonIdentifier && symbolAndEntries.definition != nil && symbolAndEntries.definition.symbol != nil {
+			if spec := ast.GetDeclarationOfKind(symbolAndEntries.definition.symbol, ast.KindImportSpecifier); spec != nil && spec.PropertyName() == nil && !isRenamingImportSpecifierLocal(data.OriginalNode, spec, ch) {
+				for _, entry := range symbolAndEntries.references {
+					if entry.kind != entryKindRange && entry.node != nil && ast.GetReparsedNodeForNode(entry.node) == spec.Name() {
+						entries = append(entries, entry)
+					}
+				}
+				continue
+			}
+		}
+		entries = append(entries, symbolAndEntries.references...)
+	}
 
 	for _, entry := range entries {
 		uri := l.getFileNameOfEntry(entry)
@@ -382,6 +399,7 @@ func (l *LanguageService) getTextForRename(originalNode *ast.Node, entry *Refere
 		kind := entry.kind
 		parent := node.Parent
 		name := originalNode.Text()
+		propertyText := quoteNonIdentifierName(newText, quotePreference)
 		isShorthandAssignment := ast.IsShorthandPropertyAssignment(parent)
 		switch {
 		case isShorthandAssignment || (isObjectBindingElementWithoutPropertyName(parent) && parent.Name() == node && parent.AsBindingElement().DotDotDotToken == nil):
@@ -389,7 +407,7 @@ func (l *LanguageService) getTextForRename(originalNode *ast.Node, entry *Refere
 				return name + ": " + newText
 			}
 			if kind == entryKindSearchedPropertyFoundLocal {
-				return newText + ": " + name
+				return propertyText + ": " + name
 			}
 			// In `const o = { x }; o.x`, symbolAtLocation at `x` in `{ x }` is the property symbol.
 			// For a binding element `const { x } = o;`, symbolAtLocation at `x` is the property symbol.
@@ -398,27 +416,24 @@ func (l *LanguageService) getTextForRename(originalNode *ast.Node, entry *Refere
 				if ast.IsObjectLiteralExpression(grandParent) && ast.IsBinaryExpression(grandParent.Parent) && ast.IsModuleExportsAccessExpression(grandParent.Parent.AsBinaryExpression().Left) {
 					return name + ": " + newText
 				}
-				return newText + ": " + name
+				return propertyText + ": " + name
 			}
 			return name + ": " + newText
 		case ast.IsImportSpecifier(parent) && parent.PropertyName() == nil:
 			// If the original symbol was using this alias, just rename the alias.
-			var originalSymbol *ast.Symbol
-			if ast.IsExportSpecifier(originalNode.Parent) {
-				originalSymbol = ch.GetExportSpecifierLocalTargetSymbol(originalNode.Parent)
-			} else {
-				originalSymbol = ch.GetSymbolAtLocation(originalNode)
-			}
-			if originalSymbol != nil && slices.Contains(originalSymbol.Declarations(), parent) {
+			if isRenamingImportSpecifierLocal(originalNode, parent, ch) {
 				return name + " as " + newText
+			}
+			if propertyText != newText {
+				return propertyText + " as " + name
 			}
 			return newText
 		case ast.IsExportSpecifier(parent) && parent.PropertyName() == nil:
 			// If the symbol for the node is same as declared node symbol use prefix text
 			if originalNode == entry.node || ch.GetSymbolAtLocation(originalNode) == ch.GetSymbolAtLocation(entry.node) {
-				return name + " as " + newText
+				return name + " as " + propertyText
 			}
-			return newText + " as " + name
+			return propertyText + " as " + name
 		}
 	}
 
@@ -439,7 +454,43 @@ func (l *LanguageService) getTextForRename(originalNode *ast.Node, entry *Refere
 		return string(quoteChar) + escapeStringForNode(newText, quoteChar, entry.node) + string(quoteChar)
 	}
 
+	if entry.kind != entryKindRange && ast.IsIdentifier(entry.node) && isModuleExportNameOfSpecifier(entry.node) {
+		return quoteNonIdentifierName(newText, quotePreference)
+	}
+
 	return newText
+}
+
+func isRenamingImportSpecifierLocal(originalNode *ast.Node, importSpecifier *ast.Node, ch *checker.Checker) bool {
+	var originalSymbol *ast.Symbol
+	if ast.IsExportSpecifier(originalNode.Parent) {
+		originalSymbol = ch.GetExportSpecifierLocalTargetSymbol(originalNode.Parent)
+	} else {
+		originalSymbol = ch.GetSymbolAtLocation(originalNode)
+	}
+	return originalSymbol != nil && slices.Contains(originalSymbol.Declarations(), importSpecifier)
+}
+
+// isModuleExportNameOfSpecifier reports whether node names a module export, which may be
+// written as a string literal: `a` in `import { a as b }` and `export { b as a }`, and both
+// names in `export { a as b } from "m"`.
+func isModuleExportNameOfSpecifier(node *ast.Node) bool {
+	parent := node.Parent
+	switch {
+	case ast.IsImportSpecifier(parent):
+		return parent.PropertyName() == node
+	case ast.IsExportSpecifier(parent):
+		return parent.Name() == node || parent.Parent.Parent.AsExportDeclaration().ModuleSpecifier != nil
+	}
+	return false
+}
+
+func quoteNonIdentifierName(name string, quotePreference lsutil.QuotePreference) string {
+	if scanner.IsIdentifierText(name, core.LanguageVariantStandard) {
+		return name
+	}
+	quoteChar := getQuoteFromPreference(quotePreference)
+	return string(quoteChar) + printer.EscapeString(name, quoteChar) + string(quoteChar)
 }
 
 func escapeStringForNode(s string, quoteChar printer.QuoteChar, node *ast.Node) string {
