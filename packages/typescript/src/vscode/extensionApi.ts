@@ -8,6 +8,7 @@ export interface Disposable {
 }
 
 export interface Event<T> {
+    // eslint-disable-next-line @typescript-eslint/prefer-function-type -- Preserve declaration merging for this exported interface.
     (listener: (event: T) => unknown, thisArgs?: unknown, disposables?: Disposable[] | undefined): Disposable;
 }
 
@@ -25,10 +26,11 @@ export interface ContentMapperManifest {
     readonly compilerOptions?: readonly string[] | undefined;
     readonly dynamicConfig?: boolean | undefined;
     readonly outputExtensions?: Readonly<Record<string, string>> | undefined;
+    readonly extensions?: readonly string[] | undefined;
 }
 
 export interface ContentMapperContribution {
-    readonly extensions: readonly string[];
+    readonly extensions?: readonly string[] | undefined;
     readonly inferredProjectContribution?: {
         readonly options?: Readonly<Record<string, unknown>> | undefined;
         readonly manifest: ContentMapperManifest;
@@ -41,7 +43,9 @@ export type DeepReadonly<T> = unknown extends T ? unknown : T extends object ? {
 
 export type LspMiddlewareResult<M extends LspMiddlewareMethod> = LspMiddlewareRequests[M]["result"];
 
-export type LspMiddlewareContext<M extends LspMiddlewareMethod> = { readonly params: DeepReadonly<LspMiddlewareRequests[M]["params"]>; };
+export interface LspMiddlewareContext<M extends LspMiddlewareMethod> {
+    readonly params: DeepReadonly<LspMiddlewareRequests[M]["params"]>;
+}
 
 export type LspMiddlewareTransformer<M extends LspMiddlewareMethod> = (
     result: LspMiddlewareResult<M>,

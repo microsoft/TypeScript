@@ -1,0 +1,60 @@
+//// [tests/cases/compiler/relationMaybeCheckOrder.ts] ////
+
+=== relationMaybeCheckOrder.ts ===
+// Relating to 'keyof M<T>' rejects keys that relate only by assuming a
+// comparison still in progress. Relating 'A' to 'B' assumes only itself
+// along 'next', so it completes on its own and must be accepted whether
+// or not the call to 'h' related 'A' to 'B' first.
+
+interface A { next: A; v: "a" }
+>next : A
+>v : "a"
+
+interface B { next: B; v: string }
+>next : B
+>v : string
+
+type M<T> = { [K in keyof T as B]: 1 };
+>M : M<T>
+
+declare const a: A;
+>a : A
+
+declare function h(x: B): 1;
+>h : { (x: B): 1; (x: unknown): 2; }
+>x : B
+
+declare function h(x: unknown): 2;
+>h : { (x: B): 1; (x: unknown): 2; }
+>x : unknown
+
+function f<T>() {
+>f : <T>() => void
+
+    function g(x: keyof M<T>): 1;
+>g : { (x: keyof M<T>): 1; (x: unknown): 2; }
+>x : keyof M<T>
+
+    function g(x: unknown): 2;
+>g : { (x: keyof M<T>): 1; (x: unknown): 2; }
+>x : unknown
+
+    function g(x: unknown) { return 1 as any; }
+>g : { (x: keyof M<T>): 1; (x: unknown): 2; }
+>x : unknown
+>1 as any : any
+>1 : 1
+
+    const r: 1 = g(a);
+>r : 1
+>g(a) : 2
+>g : { (x: keyof M<T>): 1; (x: unknown): 2; }
+>a : A
+}
+
+const w: 1 = h(a);
+>w : 1
+>h(a) : 1
+>h : { (x: B): 1; (x: unknown): 2; }
+>a : A
+

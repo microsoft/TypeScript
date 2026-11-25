@@ -20,12 +20,12 @@ import {
     createIdentifier,
     createIfStatement,
 } from "@typescript/typescript/ast/factory";
-import { API } from "@typescript/typescript/sync";
 import assert from "node:assert/strict";
 import { fileURLToPath } from "node:url";
 import { parseArgs } from "node:util";
 import { Bench } from "tinybench";
 import { createVirtualFileSystem } from "../testUtils.ts";
+import { API } from "./api.testUtils.ts";
 
 const treeDepth = 5;
 const expressionsPerBlock = 6;
@@ -212,7 +212,8 @@ export function runBenchmarks(options?: { filter?: string; singleIteration?: boo
 
     bench.runSync();
     for (const task of bench.tasks) {
-        if (task.result && "error" in task.result) throw task.result.error;
+        const error = (task.result as { error?: unknown; } | undefined)?.error;
+        if (error) throw error;
     }
     console.table(bench.table());
 }

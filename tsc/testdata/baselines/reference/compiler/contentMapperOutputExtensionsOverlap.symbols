@@ -11,8 +11,9 @@ export const short = 1;
 const __VERSION = "1.0.0";
 >__VERSION : Symbol(__VERSION, Decl(Widget.y.z, 0, 5))
 
+// @box-extension: .mts
 export const long = 1;
->long : Symbol(long, Decl(Widget.y.z, 1, 12))
+>long : Symbol(long, Decl(Widget.y.z, 2, 12))
 
 === /Widget.identity.y.z ===
 const __VERSION = "1.0.0";

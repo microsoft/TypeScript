@@ -1,0 +1,28 @@
+//// [tests/cases/compiler/jsdocLinkToTypeCheckOrder.ts] ////
+
+=== jsdocLinkToTypeCheckOrder.ts ===
+// Names in JSDoc links resolve to types and namespaces without errors,
+// whether or not the editor asked about the comment first (59401).
+
+interface TextDocument { uri: string; getText(): string }
+>uri : string
+>getText : () => string
+
+namespace NS { export interface Inner { a: number } }
+>a : number
+
+/**
+ * Uses {@link TextDocument} and {@link TextDocument.getText}.
+ * Also {@link NS.Inner}.
+ */
+export function f(doc: TextDocument): string {
+>f : (doc: TextDocument) => string
+>doc : TextDocument
+
+    return doc.getText();
+>doc.getText() : string
+>doc.getText : () => string
+>doc : TextDocument
+>getText : () => string
+}
+

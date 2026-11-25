@@ -11,6 +11,7 @@
  *   // @sync-skip-block-start/end     — omit all lines between (inclusive)
  *   // @sync-only-start/end           — uncomment lines between (strip "// " prefix)
  *   // @sync: <code>                  — replace this line with <code> (preserving indent)
+ *   // @generators: <code>            - replace this line only in generator output
  *
  * AST-based transforms (applied after directives using the TypeScript compiler API):
  *   - Generate synchronous implementations from async methods
@@ -47,7 +48,7 @@ function generatedHeader(asyncSourceRelPath: string): string {
     ].join("\n");
 }
 
-const ROOT = join(import.meta.dirname!, "..");
+const ROOT = join(import.meta.dirname, "..");
 const SRC = join(ROOT, "src", "api");
 const TEST = join(ROOT, "test");
 
@@ -60,6 +61,7 @@ function generateSyncFile(
     transform: SourceTransform,
     force: boolean,
     variant: SyncVariant = "sync",
+    preserveGeneratorOverrides = false,
 ): GeneratedFile | undefined {
     const generated = new GeneratedFile(destPath, [import.meta.filename, srcPath]);
     if (generated.isCurrent(force)) return;
@@ -69,7 +71,7 @@ function generateSyncFile(
     const normalized = source.replace(/\r/g, "");
 
     // Phase 1: Process sync directives (text-based, operates on comments/lines)
-    const afterDirectives = processDirectives(normalized.split("\n"), variant).join("\n");
+    const afterDirectives = processDirectives(normalized.split("\n"), variant, preserveGeneratorOverrides).join("\n");
 
     // Phase 2: AST-based async→sync transforms
     const fileName = destPath.split("/").pop()!;
@@ -88,7 +90,7 @@ function generateSyncFile(
 
 // ── Directive processing ─────────────────────────────────────────
 
-function processDirectives(lines: string[], variant: SyncVariant): string[] {
+function processDirectives(lines: string[], variant: SyncVariant, preserveGeneratorOverrides = false): string[] {
     const output: string[] = [];
     let skipBlock = false;
     let syncOnlyBlock = false;
@@ -163,7 +165,7 @@ function processDirectives(lines: string[], variant: SyncVariant): string[] {
             continue;
         }
 
-        const lineWithoutGeneratorsDirective = generatorsReplaceMatch
+        const lineWithoutGeneratorsDirective = generatorsReplaceMatch && !preserveGeneratorOverrides
             ? line.slice(0, generatorsReplaceMatch.index).trimEnd()
             : line;
         const syncReplaceMatch = lineWithoutGeneratorsDirective.match(/\/\/ @sync: (.+)$/);
@@ -207,17 +209,38 @@ function applyEdits(source: string, edits: Edit[]): string {
 type TransformMode = "sync" | "generator";
 
 function transformAsyncSource(source: string, fileName: string, attachGenerators: boolean): string {
-    const sourceFile = ts.createSourceFile(fileName, source, ts.ScriptTarget.Latest, true);
+    const sourceFile = ts.createSourceFile(fileName, source, ts.ScriptTarget.Latest, /*setParentNodes*/ true);
     const edits: Edit[] = [];
     const asyncMethodNames = new Set<string>();
     const synchronousMethodNames = new Set<string>();
+    const batchedMethodNames = new Set<string>();
+    const asyncMethods: ts.MethodDeclaration[] = [];
 
     for (const classDeclaration of getNamedClasses(sourceFile).values()) {
         for (const group of getMethodGroups(classDeclaration).values()) {
             const method = group.implementation;
-            if (isGeneratorMethod(method)) asyncMethodNames.add((method.name as ts.Identifier).text);
+            if (isGeneratorMethod(method)) {
+                asyncMethodNames.add((method.name as ts.Identifier).text);
+                asyncMethods.push(method);
+            }
             else synchronousMethodNames.add((method.name as ts.Identifier).text);
         }
+    }
+    let changed = true;
+    while (changed) {
+        changed = false;
+        for (const method of asyncMethods) {
+            const name = (method.name as ts.Identifier).text;
+            if (!batchedMethodNames.has(name) && containsBatchedCall(method.body!)) {
+                batchedMethodNames.add(name);
+                changed = true;
+            }
+        }
+    }
+
+    function containsBatchedCall(node: ts.Node): boolean {
+        if (isPromiseAllCall(node) || ts.isCallExpression(node) && ts.isPropertyAccessExpression(node.expression) && batchedMethodNames.has(node.expression.name.text)) return true;
+        return ts.forEachChild(node, containsBatchedCall) ?? false;
     }
 
     visit(sourceFile);
@@ -278,7 +301,7 @@ function transformAsyncSource(source: string, fileName: string, attachGenerators
         const generatorSignatures = declarations.map(declaration => `${indent}    gen${createAsyncCallSignature(declaration, "generator")}`).join("\n");
         const body = declarations.length > 1
             ? createAsyncOverloadedGetterBody(name, group, indent)
-            : `{\n${indent}    const owner = this;\n${indent}    return cacheGeneratorMethod(\n${indent}        owner,\n${indent}        "${name}",\n${indent}        ${createAsyncFunction(method, "sync", false)},\n${indent}        ${createAsyncFunction(method, "generator", true)},\n${indent}    );\n${indent}}`;
+            : `{\n${indent}    const owner = this;\n${indent}    return cacheGeneratorMethod(\n${indent}        owner,\n${indent}        "${name}",\n${indent}        ${createAsyncFunction(method, "sync", /*generator*/ false)},\n${indent}        ${createAsyncFunction(method, "generator", /*generator*/ true)},\n${indent}    );\n${indent}}`;
         return `${modifiers ? `${modifiers} ` : ""}get ${name}(): {\n${syncSignatures}\n${generatorSignatures}\n${indent}} ${body}`;
     }
 
@@ -286,8 +309,8 @@ function transformAsyncSource(source: string, fileName: string, attachGenerators
         const declarations = getPublicDeclarations(group);
         const syncOverloads = declarations.map(declaration => `function ${name}${createAsyncCallSignature(declaration, "sync")}`).join("\n");
         const generatorOverloads = declarations.map(declaration => `function gen${createAsyncCallSignature(declaration, "generator")}`).join("\n");
-        const syncImplementation = createAsyncNamedFunction(name, group.implementation, "sync", false);
-        const generatorImplementation = createAsyncNamedFunction("gen", group.implementation, "generator", true);
+        const syncImplementation = createAsyncNamedFunction(name, group.implementation, "sync", /*generator*/ false);
+        const generatorImplementation = createAsyncNamedFunction("gen", group.implementation, "generator", /*generator*/ true);
         return `{\n${indent}    const owner = this;\n${indent}${indentLines(syncOverloads, `${indent}    `)}\n${indent}${indentLines(syncImplementation, `${indent}    `)}\n${indent}${indentLines(generatorOverloads, `${indent}    `)}\n${indent}${indentLines(generatorImplementation, `${indent}    `)}\n${indent}    return cacheGeneratorMethod(owner, "${name}", ${name}, gen);\n${indent}}`;
     }
 
@@ -296,14 +319,14 @@ function transformAsyncSource(source: string, fileName: string, attachGenerators
     }
 
     function createAsyncFunction(node: ts.MethodDeclaration, mode: TransformMode, generator: boolean): string {
-        const parameters = node.parameters.map(parameter => transformNodeText(parameter, mode, true)).join(", ");
-        const body = transformNodeText(node.body!, mode, true);
+        const parameters = node.parameters.map(parameter => transformNodeText(parameter, mode, /*replaceThis*/ true)).join(", ");
+        const body = transformNodeText(node.body!, mode, /*replaceThis*/ true);
         return `function${generator ? "*" : ""} ${getTypeParametersText(node, source, sourceFile)}(${parameters}): ${getAsyncReturnType(node, mode)} ${body}`;
     }
 
     function createAsyncNamedFunction(name: string, node: ts.MethodDeclaration, mode: TransformMode, generator: boolean): string {
-        const parameters = node.parameters.map(parameter => transformNodeText(parameter, mode, true)).join(", ");
-        const body = transformNodeText(node.body!, mode, true);
+        const parameters = node.parameters.map(parameter => transformNodeText(parameter, mode, /*replaceThis*/ true)).join(", ");
+        const body = transformNodeText(node.body!, mode, /*replaceThis*/ true);
         return `function${generator ? "*" : ""} ${name}${getTypeParametersText(node, source, sourceFile)}(${parameters}): ${getAsyncReturnType(node, mode)} ${body}`;
     }
 
@@ -312,7 +335,7 @@ function transformAsyncSource(source: string, fileName: string, attachGenerators
             const rest = parameter.dotDotDotToken ? "..." : "";
             const name = source.slice(parameter.name.getStart(sourceFile), parameter.name.end);
             const optional = parameter.questionToken || parameter.initializer ? "?" : "";
-            const type = parameter.type ? transformNodeText(parameter.type, mode, false) : "unknown";
+            const type = parameter.type ? transformNodeText(parameter.type, mode, /*replaceThis*/ false) : "unknown";
             return `${rest}${name}${optional}: ${type}`;
         }).join(", ");
     }
@@ -321,9 +344,12 @@ function transformAsyncSource(source: string, fileName: string, attachGenerators
         if (!node.type) return "void";
         if (mode === "generator" && isPromiseType(node.type)) {
             const returnType = getUnwrappedPromiseText(node.type, source, sourceFile);
+            if (node.name && ts.isIdentifier(node.name) && batchedMethodNames.has(node.name.text)) {
+                return `APIRequestGenerator<${returnType}>`;
+            }
             return `Generator<ProtocolRequest, ${returnType}, ProtocolResponse["result"]>`;
         }
-        return transformNodeText(node.type, mode, false);
+        return transformNodeText(node.type, mode, /*replaceThis*/ false);
     }
 
     function transformNodeText(node: ts.Node, mode: TransformMode, replaceThis: boolean): string {
@@ -347,7 +373,10 @@ function transformAsyncSource(source: string, fileName: string, attachGenerators
         }
 
         visitNode(node);
-        return applyEdits(source.slice(start, node.end), localEdits);
+        const result = applyEdits(source.slice(start, node.end), localEdits);
+        return ts.isBlock(node)
+            ? processDirectives(result.split("\n"), mode === "generator" ? "generators" : "sync").join("\n")
+            : result;
     }
 
     function addGeneratorEdit(node: ts.Node, offset: number, targetEdits: Edit[]): boolean {
@@ -387,6 +416,24 @@ function transformAsyncSource(source: string, fileName: string, attachGenerators
     }
 
     function getGeneratorAwaitText(node: ts.AwaitExpression): string {
+        if (isPromiseAllCall(node.expression)) {
+            const argument = node.expression.arguments[0];
+            if (
+                !ts.isCallExpression(argument) ||
+                !ts.isPropertyAccessExpression(argument.expression) ||
+                argument.expression.name.text !== "map" ||
+                argument.arguments.length !== 1 ||
+                !ts.isArrowFunction(argument.arguments[0]) ||
+                !ts.isCallExpression(argument.arguments[0].body) ||
+                !isGeneratorCall(argument.arguments[0].body)
+            ) {
+                throw new Error("Promise.all requires a map callback returning an API method call");
+            }
+            const callback = argument.arguments[0];
+            const receiver = getTextWithOwner(argument.expression.expression);
+            const parameters = callback.parameters.map(parameter => getTextWithOwner(parameter)).join(", ");
+            return `(yield* all(...${receiver}.map((${parameters}) => ${getGeneratorCallText(argument.arguments[0].body)})))`;
+        }
         if (isAPIRequestCall(node.expression)) {
             const receiver = node.expression.expression.expression;
             if (ts.isPropertyAccessExpression(receiver) && receiver.name.text === "client") return getRequestYieldText(node.expression);
@@ -487,6 +534,11 @@ function transformAsyncSource(source: string, fileName: string, attachGenerators
 }
 
 function addSyncEdit(node: ts.Node, source: string, sourceFile: ts.SourceFile, edits: Edit[], offset: number = 0): boolean {
+    if (isPromiseAllCall(node)) {
+        const argument = node.arguments[0];
+        edits.push({ start: node.getStart(sourceFile) - offset, end: argument.getStart(sourceFile) - offset, newText: "" });
+        edits.push({ start: argument.end - offset, end: node.end - offset, newText: "" });
+    }
     if (
         (ts.isFunctionDeclaration(node) || ts.isMethodDeclaration(node) || ts.isArrowFunction(node) || ts.isFunctionExpression(node)) &&
         node.modifiers
@@ -538,6 +590,15 @@ function addSyncEdit(node: ts.Node, source: string, sourceFile: ts.SourceFile, e
         return true;
     }
     return false;
+}
+
+function isPromiseAllCall(node: ts.Node): node is ts.CallExpression {
+    return ts.isCallExpression(node) &&
+        ts.isPropertyAccessExpression(node.expression) &&
+        ts.isIdentifier(node.expression.expression) &&
+        node.expression.expression.text === "Promise" &&
+        node.expression.name.text === "all" &&
+        node.arguments.length === 1;
 }
 
 function isPromiseTypeReference(node: ts.Node | undefined): node is ts.TypeReferenceNode {
@@ -630,7 +691,6 @@ function getIndent(source: string, position: number): string {
 // ── Main ─────────────────────────────────────────────────────────
 
 export function generateSync(force = false): void {
-    console.log("Generating sync API from async source...");
     const generatedFiles: (GeneratedFile | undefined)[] = [];
 
     // Source files
@@ -642,17 +702,19 @@ export function generateSync(force = false): void {
                 ? (source, fileName) =>
                     [
                         'import type { APIRequest as ProtocolRequest, APIResponse as ProtocolResponse } from "../proto.ts";',
-                        'import { apiRequest, cacheGeneratorMethod } from "./generatorSupport.ts";',
+                        'import { all, apiRequest, cacheGeneratorMethod, type APIRequestGenerator } from "./generatorSupport.ts";',
                         "",
-                        transformAsyncSource(source, fileName, true),
+                        transformAsyncSource(source, fileName, /*attachGenerators*/ true),
                     ].join("\n")
                 : (source, fileName) =>
                     [
                         'import type { APIRequest as ProtocolRequest, APIResponse as ProtocolResponse } from "../proto.ts";',
                         "",
-                        transformAsyncSource(source, fileName, true),
+                        transformAsyncSource(source, fileName, /*attachGenerators*/ true),
                     ].join("\n"),
             force,
+            "sync",
+            relPath === "api.ts",
         ));
     }
 
@@ -661,7 +723,7 @@ export function generateSync(force = false): void {
         generatedFiles.push(generateSyncFile(
             join(TEST, "async", relPath),
             join(TEST, "sync", relPath),
-            (source, fileName) => transformAsyncSource(source, fileName, false),
+            (source, fileName) => transformAsyncSource(source, fileName, /*attachGenerators*/ false),
             force,
         ));
     }
@@ -669,14 +731,13 @@ export function generateSync(force = false): void {
     generatedFiles.push(generateSyncFile(
         join(TEST, "async", "api.bench.ts"),
         join(TEST, "generators", "api.bench.ts"),
-        (source, fileName) => transformAsyncSource(source, fileName, false),
+        (source, fileName) => transformAsyncSource(source, fileName, /*attachGenerators*/ false),
         force,
         "generators",
     ));
 
     const changedFiles = generatedFiles.filter(file => file !== undefined);
     if (!changedFiles.length) {
-        console.log("Sync API is up to date.");
         return;
     }
     console.log("Formatting...");

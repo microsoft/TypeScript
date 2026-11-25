@@ -1,0 +1,47 @@
+// === findAllReferences ===
+// === /a.ts ===
+// /*FIND ALL REFS*/export [|default|] class {}
+
+// === /b.ts ===
+// import [|AnonymousClass|] from "./a";
+// const instance = new [|AnonymousClass|]();
+
+
+
+// === findAllReferences ===
+// === /a.ts ===
+// export /*FIND ALL REFS*/[|default|] class {}
+
+// === /b.ts ===
+// import [|AnonymousClass|] from "./a";
+// const instance = new [|AnonymousClass|]();
+
+
+
+// === findAllReferences ===
+// === /a.ts ===
+// export [|default|] /*FIND ALL REFS*/class {}
+
+// === /b.ts ===
+// import [|AnonymousClass|] from "./a";
+// const instance = new [|AnonymousClass|]();
+
+
+
+// === findAllReferences ===
+// === /a.ts ===
+// export [|default|] class {}
+
+// === /b.ts ===
+// import /*FIND ALL REFS*/[|AnonymousClass|] from "./a";
+// const instance = new [|AnonymousClass|]();
+
+
+
+// === findAllReferences ===
+// === /a.ts ===
+// export [|default|] class {}
+
+// === /b.ts ===
+// import [|AnonymousClass|] from "./a";
+// const instance = new /*FIND ALL REFS*/[|AnonymousClass|]();

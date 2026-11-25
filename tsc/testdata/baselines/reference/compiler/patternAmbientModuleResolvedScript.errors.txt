@@ -1,0 +1,59 @@
+/src/main.ts(1,23): error TS2306: File '/stub.d.ts' is not a module.
+/src/main.ts(2,29): error TS2306: File '/stub.d.ts' is not a module.
+/src/main.ts(3,26): error TS2306: File '/generated/component.svelte.d.ts' is not a module.
+/src/main.ts(4,26): error TS2306: File '/src/script.ts' is not a module.
+
+
+==== /tsconfig.json (0 errors) ====
+    {
+        "compilerOptions": {
+            "paths": { "x.svelte": ["./stub.d.ts"] },
+            "rootDirs": ["./src", "./generated"]
+        },
+        "files": ["ambient.d.ts", "src/main.ts"]
+    }
+    
+==== /ambient.d.ts (0 errors) ====
+    declare module "*.svelte" {
+        const value: number;
+        export default value;
+    }
+    declare module "*.svelte" with { type: "text" } {
+        const value: string;
+        export default value;
+    }
+    declare module "*.js" {
+        const value: number;
+        export default value;
+    }
+    
+==== /src/main.ts (4 errors) ====
+    import fromPaths from "x.svelte";
+                          ~~~~~~~~~~
+!!! error TS2306: File '/stub.d.ts' is not a module.
+    import emptyAttributes from "x.svelte" with {};
+                                ~~~~~~~~~~
+!!! error TS2306: File '/stub.d.ts' is not a module.
+    import fromRootDirs from "./component.svelte";
+                             ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2306: File '/generated/component.svelte.d.ts' is not a module.
+    import fromRelative from "./script.js";
+                             ~~~~~~~~~~~~~
+!!! error TS2306: File '/src/script.ts' is not a module.
+    const fromPathsValue: string = fromPaths;
+    
+    import text from "x.svelte" with { type: "text" };
+    const textValue: string = text;
+    
+    import missing from "./missing.svelte";
+    const missingValue: number = missing;
+    
+==== /stub.d.ts (0 errors) ====
+    // A resolved script must not fall back to a pattern ambient module without attributes.
+    
+==== /generated/component.svelte.d.ts (0 errors) ====
+    // A script resolved through rootDirs.
+    
+==== /src/script.ts (0 errors) ====
+    // A script resolved through a relative import.
+    

@@ -39,6 +39,7 @@ import {
 import {
     encodeNode,
     encodeSourceFile,
+    uint8ArrayToBase64,
 } from "../src/api/node/encoder.ts";
 import {
     RemoteNode,
@@ -59,7 +60,7 @@ const concurrency = areTestsFiltered();
 
 function makeSF(text: string, fileName: string, statements: readonly Statement[]): SourceFile {
     const endOfFileToken = createToken(SyntaxKind.EndOfFile);
-    const rootedFilePath = toRootedFilePath(fileName, undefined);
+    const rootedFilePath = toRootedFilePath(fileName, /*currentDirectory*/ undefined);
     return createSourceFile(
         statements,
         endOfFileToken,
@@ -74,6 +75,21 @@ function decode(data: Uint8Array): RemoteSourceFile {
 }
 
 describe("Encoder", { concurrency }, () => {
+    test("preserves synthesized node and list ranges", () => {
+        const statement = createExpressionStatement(createIdentifier("x"));
+        const sf = makeSF("", "/test.ts", [statement]);
+        const decoded = decode(encodeSourceFile(sf));
+
+        for (const range of [decoded, decoded.statements!, decoded.statements!.at(0), decoded.endOfFileToken!]) {
+            assert.strictEqual(range.pos, -1);
+            assert.strictEqual(range.end, -1);
+        }
+    });
+
+    test("encodes base64 from a subarray", () => {
+        assert.strictEqual(uint8ArrayToBase64(new Uint8Array([0, 1, 2, 3, 4]).subarray(1, 4)), "AQID");
+    });
+
     test("encodes empty source file", () => {
         const sf = makeSF("", "/test.ts", []);
 
@@ -83,7 +99,7 @@ describe("Encoder", { concurrency }, () => {
 
         // Verify header
         const view = new DataView(encoded.buffer, encoded.byteOffset, encoded.byteLength);
-        const metadata = view.getUint32(0, true);
+        const metadata = view.getUint32(0, /*littleEndian*/ true);
         assert.strictEqual(metadata >>> 24, PROTOCOL_VERSION);
         assert.strictEqual(HEADER_SIZE, 64);
 
@@ -93,18 +109,18 @@ describe("Encoder", { concurrency }, () => {
         assert.strictEqual(decoded.fileName, "/test.ts");
         assert.strictEqual(decoded.path, "/test.ts");
         assert.strictEqual(decoded.text, "");
-        assert.strictEqual(decoded.contentMapper, undefined);
-        assert.strictEqual(decoded.virtualFileName, undefined);
-        assert.strictEqual(decoded.diagnosticDirectives, undefined);
-        assert.strictEqual(decoded.supplementalSourceFileNames, undefined);
-        assert.strictEqual(decoded.canonicalSourceFileName, undefined);
+        assert.strictEqual(decoded.contentMapper, /*expected*/ undefined);
+        assert.strictEqual(decoded.virtualFileName, /*expected*/ undefined);
+        assert.strictEqual(decoded.diagnosticDirectives, /*expected*/ undefined);
+        assert.strictEqual(decoded.supplementalSourceFileNames, /*expected*/ undefined);
+        assert.strictEqual(decoded.canonicalSourceFileName, /*expected*/ undefined);
     });
 
     test("keeps adjacent surrogate string-table entries separate", () => {
         const high = String.fromCharCode(0xD800);
         const low = String.fromCharCode(0xDC00);
-        const fileName = toRootedFilePath(`/${high}`, undefined);
-        const path = pathKey(toRootedFilePath(`/${low}`, undefined), CaseSensitivity.Sensitive);
+        const fileName = toRootedFilePath(`/${high}`, /*currentDirectory*/ undefined);
+        const path = pathKey(toRootedFilePath(`/${low}`, /*currentDirectory*/ undefined), CaseSensitivity.Sensitive);
         const sf = createSourceFile([], createToken(SyntaxKind.EndOfFile), "", fileName, path);
 
         const decoded = decode(encodeSourceFile(sf));
@@ -114,9 +130,9 @@ describe("Encoder", { concurrency }, () => {
 
     test("encodes source file with identifier", () => {
         const id = createIdentifier("hello");
-        const decl = createVariableDeclaration(id, undefined, undefined, undefined);
+        const decl = createVariableDeclaration(id, /*exclamationToken*/ undefined, /*type*/ undefined, /*initializer*/ undefined);
         const declList = createVariableDeclarationList([decl], 0);
-        const stmt = createVariableStatement(undefined, declList);
+        const stmt = createVariableStatement(/*modifiers*/ undefined, declList);
         const sf = makeSF("var hello = 42;", "/test.ts", [stmt]);
 
         const encoded = encodeSourceFile(sf);
@@ -129,14 +145,14 @@ describe("Encoder", { concurrency }, () => {
         const stmts = decoded.statements;
         assert.ok(stmts);
         assert.strictEqual(stmts.length, 1);
-        const decodedStmt = stmts.at(0)!;
+        const decodedStmt = stmts.at(0);
         assert.strictEqual(decodedStmt.kind, SyntaxKind.VariableStatement);
     });
 
     test("encodes if statement with optional else", () => {
         const condition = createIdentifier("ok");
         const thenBlock = createBlock([]);
-        const ifStmt = createIfStatement(condition, thenBlock, undefined);
+        const ifStmt = createIfStatement(condition, thenBlock, /*elseStatement*/ undefined);
         const sf = makeSF("if (ok) {}", "/test.ts", [ifStmt]);
 
         const encoded = encodeSourceFile(sf);
@@ -144,7 +160,7 @@ describe("Encoder", { concurrency }, () => {
         const stmts = decoded.statements;
         assert.ok(stmts);
         assert.strictEqual(stmts.length, 1);
-        const decodedIf = stmts.at(0)!;
+        const decodedIf = stmts.at(0);
         assert.strictEqual(decodedIf.kind, SyntaxKind.IfStatement);
         assert.ok(decodedIf.expression);
         assert.strictEqual(decodedIf.expression.kind, SyntaxKind.Identifier);
@@ -152,7 +168,7 @@ describe("Encoder", { concurrency }, () => {
         assert.ok(decodedIf.thenStatement);
         assert.strictEqual(decodedIf.thenStatement.kind, SyntaxKind.Block);
         // No else
-        assert.strictEqual(decodedIf.elseStatement, undefined);
+        assert.strictEqual(decodedIf.elseStatement, /*expected*/ undefined);
     });
 
     test("encodes if statement with else", () => {
@@ -166,7 +182,7 @@ describe("Encoder", { concurrency }, () => {
         const decoded = decode(encoded);
         const stmts = decoded.statements;
         assert.ok(stmts);
-        const decodedIf = stmts.at(0)!;
+        const decodedIf = stmts.at(0);
         assert.strictEqual(decodedIf.kind, SyntaxKind.IfStatement);
         assert.ok(decodedIf.expression);
         assert.ok(decodedIf.thenStatement);
@@ -177,7 +193,7 @@ describe("Encoder", { concurrency }, () => {
     test("encodes function declaration", () => {
         const name = createIdentifier("foo");
         const body = createBlock([]);
-        const fn = createFunctionDeclaration(undefined, undefined, name, undefined, [], undefined, body);
+        const fn = createFunctionDeclaration(/*modifiers*/ undefined, /*asteriskToken*/ undefined, name, /*typeParameters*/ undefined, [], /*type*/ undefined, body);
         const sf = makeSF("function foo() {}", "/test.ts", [fn]);
 
         const encoded = encodeSourceFile(sf);
@@ -185,7 +201,7 @@ describe("Encoder", { concurrency }, () => {
         const stmts = decoded.statements;
         assert.ok(stmts);
         assert.strictEqual(stmts.length, 1);
-        const decodedFn = stmts.at(0)!;
+        const decodedFn = stmts.at(0);
         assert.strictEqual(decodedFn.kind, SyntaxKind.FunctionDeclaration);
         assert.ok(decodedFn.name);
         assert.strictEqual(decodedFn.name.kind, SyntaxKind.Identifier);
@@ -197,15 +213,15 @@ describe("Encoder", { concurrency }, () => {
     test("encodes arbitrary node (not source file)", () => {
         const condition = createIdentifier("x");
         const thenBlock = createBlock([]);
-        const ifStmt = createIfStatement(condition, thenBlock, undefined);
+        const ifStmt = createIfStatement(condition, thenBlock, /*elseStatement*/ undefined);
 
         const encoded = encodeNode(ifStmt);
         assert.ok(encoded instanceof Uint8Array);
 
         // Root node at index 1 should be IfStatement
         const view = new DataView(encoded.buffer, encoded.byteOffset, encoded.byteLength);
-        const offsetNodes = view.getUint32(HEADER_OFFSET_NODES, true);
-        const rootKind = view.getUint32(offsetNodes + NODE_LEN, true);
+        const offsetNodes = view.getUint32(HEADER_OFFSET_NODES, /*littleEndian*/ true);
+        const rootKind = view.getUint32(offsetNodes + NODE_LEN, /*littleEndian*/ true);
         assert.strictEqual(rootKind, SyntaxKind.IfStatement);
     });
 
@@ -213,7 +229,7 @@ describe("Encoder", { concurrency }, () => {
         const sf = makeSF("", "/test.ts", []);
         const encoded = encodeSourceFile(sf);
         const view = new DataView(encoded.buffer, encoded.byteOffset, encoded.byteLength);
-        assert.strictEqual(view.getUint32(0, true) >>> 24, PROTOCOL_VERSION);
+        assert.strictEqual(view.getUint32(0, /*littleEndian*/ true) >>> 24, PROTOCOL_VERSION);
     });
 
     test("encodes source files without content mapping metadata", () => {
@@ -227,11 +243,11 @@ describe("Encoder", { concurrency }, () => {
 
     test("boolean properties are encoded", () => {
         // Block with multiLine=true
-        const block = createBlock([], true);
+        const block = createBlock([], /*multiLine*/ true);
         const encoded = encodeNode(block);
         const view = new DataView(encoded.buffer, encoded.byteOffset, encoded.byteLength);
-        const offsetNodes = view.getUint32(HEADER_OFFSET_NODES, true);
-        const data = view.getUint32(offsetNodes + NODE_LEN + NODE_OFFSET_DATA, true);
+        const offsetNodes = view.getUint32(HEADER_OFFSET_NODES, /*littleEndian*/ true);
+        const data = view.getUint32(offsetNodes + NODE_LEN + NODE_OFFSET_DATA, /*littleEndian*/ true);
         // Bit 24 should be 1 (multiLine)
         assert.strictEqual((data >>> 24) & 1, 1);
     });
@@ -246,7 +262,7 @@ describe("Encoder", { concurrency }, () => {
         const decoded = decode(encoded);
         const stmts = decoded.statements;
         assert.ok(stmts);
-        const decodedStmt = stmts.at(0)!;
+        const decodedStmt = stmts.at(0);
         assert.strictEqual(decodedStmt.kind, SyntaxKind.ExpressionStatement);
         const expr = decodedStmt.expression!;
         assert.strictEqual(expr.kind, SyntaxKind.PostfixUnaryExpression);
@@ -265,7 +281,7 @@ describe("Encoder", { concurrency }, () => {
         const decoded = decode(encoded);
         const stmts = decoded.statements;
         assert.ok(stmts);
-        const expr = stmts.at(0)!.expression!;
+        const expr = stmts.at(0).expression!;
         assert.strictEqual(expr.kind, SyntaxKind.PrefixUnaryExpression);
         assert.strictEqual(expr.operator, SyntaxKind.ExclamationToken);
     });
@@ -278,7 +294,7 @@ describe("Encoder", { concurrency }, () => {
 
         const encoded = encodeSourceFile(sf);
         const decoded = decode(encoded);
-        const expr = decoded.statements!.at(0)!.expression!;
+        const expr = decoded.statements!.at(0).expression!;
         assert.strictEqual(expr.kind, SyntaxKind.PostfixUnaryExpression);
         assert.strictEqual(expr.operator, SyntaxKind.MinusMinusToken);
     });
@@ -290,12 +306,12 @@ describe("Encoder", { concurrency }, () => {
         // must return undefined, not throw "Expected only one child".
         const tagName = createIdentifier("div");
         const emptyAttrs = createJsxAttributes([]);
-        const opening = createJsxOpeningElement(tagName, undefined, emptyAttrs);
+        const opening = createJsxOpeningElement(tagName, /*typeArguments*/ undefined, emptyAttrs);
         const closing = createJsxClosingElement(createIdentifier("div"));
         const jsx = createJsxElement(opening, [], closing);
         const stmt = createVariableStatement(
-            undefined,
-            createVariableDeclarationList([createVariableDeclaration(createIdentifier("x"), undefined, undefined, jsx)], 0),
+            /*modifiers*/ undefined,
+            createVariableDeclarationList([createVariableDeclaration(createIdentifier("x"), /*exclamationToken*/ undefined, /*type*/ undefined, jsx)], 0),
         );
         const sf = makeSF("const x = <div></div>;", "/test.tsx", [stmt]);
 
@@ -303,11 +319,11 @@ describe("Encoder", { concurrency }, () => {
         const decoded = decode(encoded);
 
         // Walk to JsxOpeningElement → attributes (JsxAttributes)
-        const varStmt = decoded.statements!.at(0)!;
+        const varStmt = decoded.statements!.at(0);
         const declList = varStmt.declarationList!;
         const declarationsNode = declList.declarations!;
         assert.ok(declarationsNode instanceof RemoteNodeList);
-        const varDecl = declarationsNode.at(0)!;
+        const varDecl = declarationsNode.at(0);
         const jsxElem = varDecl.initializer!;
         assert.strictEqual(jsxElem.kind, SyntaxKind.JsxElement);
         const openingElem = jsxElem.openingElement!;
@@ -315,7 +331,7 @@ describe("Encoder", { concurrency }, () => {
         const attrs = openingElem.attributes! as RemoteNode;
         assert.strictEqual(attrs.kind, SyntaxKind.JsxAttributes);
         // Empty properties should return undefined, not throw
-        assert.strictEqual(jsxElem.typeArguments, undefined);
+        assert.strictEqual(jsxElem.typeArguments, /*expected*/ undefined);
     });
 
     test("NodeList element access is consistent across forward, backward, and random order", () => {
@@ -333,36 +349,36 @@ describe("Encoder", { concurrency }, () => {
         const sf = makeSF(text, "/test.ts", [stmt]);
 
         const decoded = decode(encodeSourceFile(sf));
-        const arrayExpr = (decoded.statements!.at(0)! as RemoteNode).expression! as RemoteNode;
-        const list = arrayExpr.elements! as unknown as RemoteNodeList;
+        const arrayExpr = decoded.statements!.at(0).expression!;
+        const list = arrayExpr.elements!;
         assert.strictEqual(list.length, count);
 
         // Independent decode used as an oracle: fresh cursor per lookup.
         const posOf = (i: number) => {
-            const freshExpr = (decode(encodeSourceFile(sf)).statements!.at(0)! as RemoteNode).expression! as RemoteNode;
-            return (freshExpr.elements! as unknown as RemoteNodeList).at(i)!.pos;
+            const freshExpr = decode(encodeSourceFile(sf)).statements!.at(0).expression!;
+            return freshExpr.elements!.at(i).pos;
         };
         const expected = Array.from({ length: count }, (_, i) => posOf(i));
 
         // Forward sequential (exercises cursor resume).
         for (let i = 0; i < count; i++) {
-            assert.strictEqual(list.at(i)!.pos, expected[i], `forward at(${i})`);
+            assert.strictEqual(list.at(i).pos, expected[i], `forward at(${i})`);
         }
         // Backward sequential (cursor must reset when index < cursor).
         for (let i = count - 1; i >= 0; i--) {
-            assert.strictEqual(list.at(i)!.pos, expected[i], `backward at(${i})`);
+            assert.strictEqual(list.at(i).pos, expected[i], `backward at(${i})`);
         }
         // Random order, with repeats.
         for (const i of [3, 7, 1, 7, 0, 9, 4, 4, 2, 8, 5, 6, 0, 9]) {
-            assert.strictEqual(list.at(i)!.pos, expected[i], `random at(${i})`);
+            assert.strictEqual(list.at(i).pos, expected[i], `random at(${i})`);
         }
         // Negative indices.
-        assert.strictEqual(list.at(-1)!.pos, expected[count - 1], "at(-1)");
-        assert.strictEqual(list.at(-count)!.pos, expected[0], `at(-${count})`);
+        assert.strictEqual(list.at(-1).pos, expected[count - 1], "at(-1)");
+        assert.strictEqual(list.at(-count).pos, expected[0], `at(-${count})`);
 
         // Indexed getters (0..15) and spread must agree with at().
-        assert.strictEqual((list[0] as RemoteNode).pos, expected[0]);
-        assert.strictEqual((list[9] as RemoteNode).pos, expected[9]);
+        assert.strictEqual(list[0].pos, expected[0]);
+        assert.strictEqual(list[9].pos, expected[9]);
         assert.deepStrictEqual([...list].map(n => n.pos), expected);
     });
 });

@@ -60,7 +60,7 @@ export const m = mod;
     },
 }
 
-tsgo --b tests --listEmittedFiles
+tsc --b tests --listEmittedFiles
 ExitStatus:: Success
 Output::
 TSFILE: /user/username/projects/sample1/core/anotherModule.js
@@ -434,7 +434,7 @@ export function leftPad(s: string, n: number) { return s + n; }
 export function multiply(a: number, b: number) { return a * b; }
 export class someClass { }
 
-tsgo --b tests --listEmittedFiles
+tsc --b tests --listEmittedFiles
 ExitStatus:: Success
 Output::
 TSFILE: /user/username/projects/sample1/core/index.js
@@ -746,7 +746,7 @@ export function multiply(a: number, b: number) { return a * b; }
 export class someClass { }
 class someClass2 { }
 
-tsgo --b tests --listEmittedFiles
+tsc --b tests --listEmittedFiles
 ExitStatus:: Success
 Output::
 TSFILE: /user/username/projects/sample1/core/index.js
@@ -855,7 +855,7 @@ Signatures::
 
 Edit [2]:: no change
 
-tsgo --b tests --listEmittedFiles
+tsc --b tests --listEmittedFiles
 ExitStatus:: Success
 Output::
 

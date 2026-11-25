@@ -60,7 +60,7 @@ export const m = mod;
     },
 }
 
-tsgo --b tests
+tsc --b tests
 ExitStatus:: Success
 Output::
 //// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*
@@ -415,7 +415,7 @@ Signatures::
 
 Edit [0]:: removes all files it built
 
-tsgo --b tests --clean
+tsc --b tests --clean
 ExitStatus:: Success
 Output::
 //// [/user/username/projects/sample1/core/anotherModule.d.ts] *deleted*
@@ -437,7 +437,7 @@ Output::
 
 Edit [1]:: no change --clean
 
-tsgo --b tests --clean
+tsc --b tests --clean
 ExitStatus:: Success
 Output::
 

@@ -16,7 +16,7 @@ export const value = 1;
     ]
 }
 
-tsgo --runExternalCode --explainFiles
+tsc --runExternalCode --explainFiles
 ExitStatus:: Success
 Output::
 ../../tslibs/TS/Lib/lib.es2026.full.d.ts

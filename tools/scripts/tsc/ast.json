@@ -168,7 +168,6 @@
             "ConstructorKeyword",
             "DeclareKeyword",
             "GetKeyword",
-            "ImmediateKeyword",
             "InferKeyword",
             "IntrinsicKeyword",
             "IsKeyword",
@@ -1158,6 +1157,19 @@
                 "NodeBase"
             ]
         },
+        "CaseOrDefaultClauseBase": {
+            "fields": {
+                "Statements": {
+                    "type": "Statement",
+                    "list": "NodeList"
+                },
+                "FallthroughFlowNode": {
+                    "type": "*FlowNode",
+                    "goOnly": true
+                }
+            },
+            "extends": []
+        },
         "JSDocCommentBase": {
             "fields": {
                 "text": {
@@ -1517,34 +1529,35 @@
                     }
                 ]
             },
-            "CaseOrDefaultClause": {
+            "CaseClause": {
                 "generateSubtreeFacts": true,
                 "extends": [
                     "NodeBase",
+                    "CaseOrDefaultClauseBase",
                     "CompositeBase"
                 ],
                 "members": [
-                    {
-                        "name": "Kind",
-                        "type": [
-                            "SyntaxKind.CaseClause",
-                            "SyntaxKind.DefaultClause"
-                        ],
-                        "inherited": true
-                    },
                     {
                         "name": "Expression",
                         "type": "Expression"
                     },
                     {
                         "name": "Statements",
-                        "type": "Statement",
-                        "list": "NodeList"
-                    },
+                        "inherited": true
+                    }
+                ]
+            },
+            "DefaultClause": {
+                "generateSubtreeFacts": true,
+                "extends": [
+                    "NodeBase",
+                    "CaseOrDefaultClauseBase",
+                    "CompositeBase"
+                ],
+                "members": [
                     {
-                        "name": "FallthroughFlowNode",
-                        "type": "*FlowNode",
-                        "goOnly": true
+                        "name": "Statements",
+                        "inherited": true
                     }
                 ]
             },
@@ -2202,7 +2215,8 @@
                     },
                     {
                         "name": "Type",
-                        "type": "TypeNode"
+                        "type": "TypeNode",
+                        "optional": true
                     },
                     {
                         "name": "Expression",
@@ -2482,7 +2496,7 @@
                     {
                         "name": "Type",
                         "inherited": true,
-                        "optional": false
+                        "optional": true
                     }
                 ]
             },
@@ -2603,11 +2617,13 @@
                     },
                     {
                         "name": "Type",
-                        "type": "TypeNode"
+                        "type": "TypeNode",
+                        "optional": true
                     },
                     {
                         "name": "Initializer",
-                        "type": "Expression"
+                        "type": "Expression",
+                        "optional": true
                     }
                 ],
                 "arena": true
@@ -3259,7 +3275,8 @@
                     },
                     {
                         "name": "QuestionDotToken",
-                        "type": "QuestionDotToken"
+                        "type": "QuestionDotToken",
+                        "optional": true
                     },
                     {
                         "name": "TypeArguments",
@@ -3364,7 +3381,8 @@
                     },
                     {
                         "name": "Type",
-                        "type": "TypeNode"
+                        "type": "TypeNode",
+                        "optional": true
                     },
                     {
                         "name": "Initializer",
@@ -3396,7 +3414,8 @@
                     },
                     {
                         "name": "Type",
-                        "type": "TypeNode"
+                        "type": "TypeNode",
+                        "optional": true
                     },
                     {
                         "name": "EqualsToken",
@@ -3901,7 +3920,8 @@
                     },
                     {
                         "name": "Type",
-                        "inherited": true
+                        "inherited": true,
+                        "optional": false
                     }
                 ],
                 "arena": true
@@ -3926,7 +3946,8 @@
                     },
                     {
                         "name": "Type",
-                        "inherited": true
+                        "inherited": true,
+                        "optional": false
                     }
                 ]
             },
@@ -4396,7 +4417,8 @@
                     },
                     {
                         "name": "Constraint",
-                        "type": "Node"
+                        "type": "Node",
+                        "optional": true
                     },
                     {
                         "name": "TypeParameters",
@@ -4531,7 +4553,8 @@
                     },
                     {
                         "name": "NameExpression",
-                        "type": "TypeNode"
+                        "type": "TypeNode",
+                        "optional": true
                     },
                     {
                         "name": "Comment",
@@ -4550,7 +4573,7 @@
                     },
                     {
                         "name": "ClassName",
-                        "type": "ExpressionWithTypeArguments"
+                        "type": "TypeReferenceNode"
                     },
                     {
                         "name": "Comment",
@@ -4569,7 +4592,7 @@
                     },
                     {
                         "name": "ClassName",
-                        "type": "ExpressionWithTypeArguments"
+                        "type": "TypeReferenceNode"
                     },
                     {
                         "name": "Comment",
@@ -4719,7 +4742,11 @@
                     },
                     {
                         "name": "TypeExpression",
-                        "type": "Node",
+                        "type": [
+                            "JSDocTypeExpression",
+                            "JSDocTypeLiteral"
+                        ],
+                        "typeGuard": "isJSDocTypeExpressionOrJSDocTypeLiteral",
                         "optional": true
                     },
                     {
@@ -4737,21 +4764,27 @@
             "JSDocSignature": {
                 "extends": [
                     "JSDocTypeBase",
-                    "DeclarationBase",
-                    "FunctionLikeBase"
+                    "DeclarationBase"
                 ],
                 "members": [
                     {
                         "name": "TypeParameters",
-                        "inherited": true
+                        "type": "JSDocTemplateTag",
+                        "list": "NodeList",
+                        "optional": true
                     },
                     {
                         "name": "Parameters",
-                        "inherited": true
+                        "type": [
+                            "JSDocParameterTag",
+                            "JSDocThisTag"
+                        ],
+                        "list": "NodeList"
                     },
                     {
                         "name": "Type",
-                        "inherited": true
+                        "type": "JSDocReturnTag",
+                        "optional": true
                     }
                 ]
             },
@@ -5204,7 +5237,8 @@
             ],
             "ModuleBody": [
                 "ModuleBlock",
-                "ModuleDeclaration"
+                "ModuleDeclaration",
+                "Identifier"
             ],
             "JSDocFullName": [
                 "Identifier",
@@ -5212,7 +5246,6 @@
             ],
             "ForInitializer": [
                 "Expression",
-                "MissingDeclaration",
                 "VariableDeclarationList"
             ],
             "ModuleReference": [
@@ -5271,6 +5304,10 @@
                 "ThisExpression",
                 "JsxTagNamePropertyAccess",
                 "JsxNamespacedName"
+            ],
+            "CaseOrDefaultClause": [
+                "CaseClause",
+                "DefaultClause"
             ],
             "ClassLikeDeclaration": [
                 "ClassDeclaration",

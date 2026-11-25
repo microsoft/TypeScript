@@ -1,0 +1,32 @@
+relationTruncatedCacheCheckOrder.ts(13,1): error TS2322: Type 'S<string>' is not assignable to type 'R<string>'.
+  The types of 'next.next.leaf' are incompatible between these types.
+    Type 'number' is not assignable to type '[[string]]'.
+relationTruncatedCacheCheckOrder.ts(14,1): error TS2322: Type 'S<[string]>' is not assignable to type 'R<[string]>'.
+  The types of 'next.leaf' are incompatible between these types.
+    Type 'number' is not assignable to type '[[string]]'.
+
+
+==== relationTruncatedCacheCheckOrder.ts (2 errors) ====
+    // Relating 'S<[string]>' to 'R<[string]>' from scratch reaches 'next.leaf'
+    // before giving up on deeply nested types, and fails there. Inside the
+    // relation of 'S<string>' to 'R<string>' it is one level deeper and is cut
+    // short instead. That truncated result must not be cached, so the error for
+    // 'q = p' must be reported whether or not 'y = x' was checked first.
+    
+    type S<T> = { next: S<[T]>; leaf: T extends [[unknown]] ? number : T };
+    type R<T> = { next: R<[T]>; leaf: T };
+    
+    declare let x: S<string>, y: R<string>;
+    declare let p: S<[string]>, q: R<[string]>;
+    
+    y = x;
+    ~
+!!! error TS2322: Type 'S<string>' is not assignable to type 'R<string>'.
+!!! error TS2322:   The types of 'next.next.leaf' are incompatible between these types.
+!!! error TS2322:     Type 'number' is not assignable to type '[[string]]'.
+    q = p;
+    ~
+!!! error TS2322: Type 'S<[string]>' is not assignable to type 'R<[string]>'.
+!!! error TS2322:   The types of 'next.leaf' are incompatible between these types.
+!!! error TS2322:     Type 'number' is not assignable to type '[[string]]'.
+    

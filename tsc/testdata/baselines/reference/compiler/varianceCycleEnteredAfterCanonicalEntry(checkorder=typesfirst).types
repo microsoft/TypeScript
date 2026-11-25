@@ -1,0 +1,77 @@
+//// [tests/cases/compiler/varianceCycleEnteredAfterCanonicalEntry.ts] ////
+
+=== varianceCycleEnteredAfterCanonicalEntry.ts ===
+// Reduced from capnweb's RpcStub types (cloudflare-os). Measuring the variance
+// of Stubify enters a circularity (Stubify -> Stub -> Provider ->
+// MethodOrProperty -> Result -> RpcPromise -> Stubify) whose canonical entry is
+// Stub, so the measurement from Stubify is discarded and the circularity
+// measured again from Stub. The discarded measurement once ran to completion,
+// which on the full types took long enough to exceed the instantiation limit.
+
+interface StubBase<T = unknown> {
+  brand: T;
+>brand : T
+}
+type Stub<T> = T extends object ? Provider<T> & StubBase<T> : StubBase<T>;
+>Stub : Stub<T>
+
+type Stubify<T> = T extends StubBase<any> ? T : T extends Function ? Stub<T> : T;
+>Stubify : Stubify<T>
+
+type RpcPromise<T> = Promise<Stubify<T>> & Provider<T> & StubBase<T>;
+>RpcPromise : RpcPromise<T>
+
+type Result<R> = R extends StubBase<infer U> ? Result<U> : RpcPromise<R>;
+>Result : Result<R>
+
+type MethodOrProperty<V> = V extends (...args: infer P) => infer R ? (...args: P) => Result<Awaited<R>> : Result<Awaited<V>>;
+>MethodOrProperty : MethodOrProperty<V>
+>args : P
+>args : P
+
+type Provider<T> = { [K in keyof T]: MethodOrProperty<T[K]> };
+>Provider : Provider<T>
+
+function f<T>(x: Stubify<T>, y: Stubify<T | undefined>) {
+>f : <T>(x: Stubify<T>, y: Stubify<T | undefined>) => void
+>x : Stubify<T>
+>y : Stubify<T> | undefined
+
+  y = x;
+>y = x : Stubify<T>
+>y : Stubify<T> | undefined
+>x : Stubify<T>
+
+  x = y;
+>x = y : Stubify<T>
+>x : Stubify<T>
+>y : Stubify<T>
+}
+
+declare const api: Stub<{ sub(): Promise<Stub<{}>> }>;
+>api : Provider<{ sub(): Promise<Stub<{}>>; }> & StubBase<{ sub(): Promise<Stub<{}>>; }>
+>sub : () => Promise<Stub<{}>>
+
+export async function g() {
+>g : () => Promise<void>
+
+  await api.sub();
+>await api.sub() : {}
+>api.sub() : RpcPromise<{}>
+>api.sub : () => RpcPromise<{}>
+>api : Provider<{ sub(): Promise<Stub<{}>>; }> & StubBase<{ sub(): Promise<Stub<{}>>; }>
+>sub : () => RpcPromise<{}>
+
+  api.sub().then(s => s);
+>api.sub().then(s => s) : Promise<{}>
+>api.sub().then : <TResult1 = {}, TResult2 = never>(onfulfilled?: ((value: {}) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
+>api.sub() : RpcPromise<{}>
+>api.sub : () => RpcPromise<{}>
+>api : Provider<{ sub(): Promise<Stub<{}>>; }> & StubBase<{ sub(): Promise<Stub<{}>>; }>
+>sub : () => RpcPromise<{}>
+>then : <TResult1 = {}, TResult2 = never>(onfulfilled?: ((value: {}) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
+>s => s : (s: {}) => {}
+>s : {}
+>s : {}
+}
+

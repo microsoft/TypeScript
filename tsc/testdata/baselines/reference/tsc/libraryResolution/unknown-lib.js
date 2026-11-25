@@ -26,7 +26,7 @@ export const x = "type1";
 //// [/home/src/workspace/projects/project1/utils.d.ts] *new* 
 export const y = 10;
 
-tsgo -p project1 --explainFiles
+tsc -p project1 --explainFiles
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 ======== Resolving module '@typescript/lib-es2026/full' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.es2026.full.d.ts__.ts'. ========

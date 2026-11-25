@@ -1,0 +1,389 @@
+===================================================================
+JsFile: types.d.ts
+mapUrl: types.d.ts.map
+sourceRoot: 
+sources: types.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:/types.d.ts
+sourceFile:types.ts
+-------------------------------------------------------------------
+>>>export interface Foo {
+1 >
+2 >^^^^^^
+3 >      ^^^^^^^^^^^
+4 >                 ^^^
+1 >
+2 >export
+3 >       interface 
+4 >                 Foo
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 7) Source(1, 7) + SourceIndex(0)
+3 >Emitted(1, 18) Source(1, 18) + SourceIndex(0)
+4 >Emitted(1, 21) Source(1, 21) + SourceIndex(0)
+---
+>>>    a: number;
+1 >^^^^
+2 >    ^
+3 >     ^^
+4 >       ^^^^^^
+5 >             ^
+1 > {
+  >    
+2 >    a
+3 >     : 
+4 >       number
+5 >             ;
+1 >Emitted(2, 5) Source(2, 5) + SourceIndex(0)
+2 >Emitted(2, 6) Source(2, 6) + SourceIndex(0)
+3 >Emitted(2, 8) Source(2, 8) + SourceIndex(0)
+4 >Emitted(2, 14) Source(2, 14) + SourceIndex(0)
+5 >Emitted(2, 15) Source(2, 15) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(3, 2) Source(3, 2) + SourceIndex(0)
+---
+>>>export interface Unused {
+1->
+2 >^^^^^^
+3 >      ^^^^^^^^^^^
+4 >                 ^^^^^^
+1->
+  >
+2 >export
+3 >       interface 
+4 >                 Unused
+1->Emitted(4, 1) Source(4, 1) + SourceIndex(0)
+2 >Emitted(4, 7) Source(4, 7) + SourceIndex(0)
+3 >Emitted(4, 18) Source(4, 18) + SourceIndex(0)
+4 >Emitted(4, 24) Source(4, 24) + SourceIndex(0)
+---
+>>>    unused: true;
+1 >^^^^
+2 >    ^^^^^^
+3 >          ^^
+4 >            ^^^^
+5 >                ^
+1 > {
+  >    
+2 >    unused
+3 >          : 
+4 >            true
+5 >                ;
+1 >Emitted(5, 5) Source(5, 5) + SourceIndex(0)
+2 >Emitted(5, 11) Source(5, 11) + SourceIndex(0)
+3 >Emitted(5, 13) Source(5, 13) + SourceIndex(0)
+4 >Emitted(5, 17) Source(5, 17) + SourceIndex(0)
+5 >Emitted(5, 18) Source(5, 18) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(6, 2) Source(6, 2) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=types.d.ts.map===================================================================
+JsFile: foo.d.ts
+mapUrl: foo.d.ts.map
+sourceRoot: 
+sources: foo.js
+===================================================================
+-------------------------------------------------------------------
+emittedFile:/foo.d.ts
+sourceFile:foo.js
+-------------------------------------------------------------------
+>>>/**
+1 >
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+---
+>>> * @import { Foo } from "./types"
+>>> */
+1->^^^
+2 >   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->/**
+  > * @import { Foo } from "./types"
+  > */
+1->Emitted(3, 4) Source(3, 4) + SourceIndex(0)
+---
+>>>import type { Foo } from "./types";
+1->
+2 >^^^^^^^
+3 >       ^^^^^
+4 >            ^^
+5 >              ^^^
+6 >                 ^^
+7 >                   ^^^^^^
+8 >                         ^^^^^^^^^
+9 >                                  ^
+1->
+2 >@import 
+3 >       
+4 >            { 
+5 >              Foo
+6 >                  }
+7 >                    from 
+8 >                         "./types"
+9 >                                  
+1->Emitted(4, 1) Source(2, 4) + SourceIndex(0)
+2 >Emitted(4, 8) Source(2, 12) + SourceIndex(0)
+3 >Emitted(4, 13) Source(2, 12) + SourceIndex(0)
+4 >Emitted(4, 15) Source(2, 14) + SourceIndex(0)
+5 >Emitted(4, 18) Source(2, 17) + SourceIndex(0)
+6 >Emitted(4, 20) Source(2, 19) + SourceIndex(0)
+7 >Emitted(4, 26) Source(2, 25) + SourceIndex(0)
+8 >Emitted(4, 35) Source(2, 34) + SourceIndex(0)
+9 >Emitted(4, 36) Source(2, 34) + SourceIndex(0)
+---
+>>>/**
+1 >
+2 >^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  > */
+  >
+  >
+1 >Emitted(5, 1) Source(5, 1) + SourceIndex(0)
+---
+>>> * @param { Foo } foo
+>>> */
+1->^^^
+2 >   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->/**
+  > * @param { Foo } foo
+  > */
+1->Emitted(7, 4) Source(7, 4) + SourceIndex(0)
+---
+>>>declare function f(foo: Foo): void;
+1->
+2 >^^^^^^^^^^^^^^^^^
+3 >                 ^
+4 >                  ^
+5 >                   ^^^
+6 >                      ^^
+7 >                        ^^^
+8 >                           ^^^^^^^^
+1->
+  >
+2 >function 
+3 >                 f
+4 >                  (
+5 >                   foo
+6 >                      
+7 >                        Foo } foo
+  >                         */
+  >                        function f(foo
+8 >                           ) {}
+1->Emitted(8, 1) Source(8, 1) + SourceIndex(0)
+2 >Emitted(8, 18) Source(8, 10) + SourceIndex(0)
+3 >Emitted(8, 19) Source(8, 11) + SourceIndex(0)
+4 >Emitted(8, 20) Source(8, 12) + SourceIndex(0)
+5 >Emitted(8, 23) Source(8, 15) + SourceIndex(0)
+6 >Emitted(8, 25) Source(6, 13) + SourceIndex(0)
+7 >Emitted(8, 28) Source(8, 15) + SourceIndex(0)
+8 >Emitted(8, 36) Source(8, 19) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=foo.d.ts.map===================================================================
+JsFile: imports.d.ts
+mapUrl: imports.d.ts.map
+sourceRoot: 
+sources: imports.js
+===================================================================
+-------------------------------------------------------------------
+emittedFile:/imports.d.ts
+sourceFile:imports.js
+-------------------------------------------------------------------
+>>>import type { Foo } from "./types";
+1 >
+2 >^^^^^^^
+3 >       ^^^^^
+4 >            ^^
+5 >              ^^^
+6 >                 ^^
+7 >                   ^^^^^^
+8 >                         ^^^^^^^^^
+9 >                                  ^
+1 >/**
+  > * 
+2 >@import 
+3 >       
+4 >            { 
+5 >              Foo
+6 >                 , Unused }
+7 >                    from 
+8 >                         "./types"
+9 >                                  
+1 >Emitted(1, 1) Source(2, 4) + SourceIndex(0)
+2 >Emitted(1, 8) Source(2, 12) + SourceIndex(0)
+3 >Emitted(1, 13) Source(2, 12) + SourceIndex(0)
+4 >Emitted(1, 15) Source(2, 14) + SourceIndex(0)
+5 >Emitted(1, 18) Source(2, 17) + SourceIndex(0)
+6 >Emitted(1, 20) Source(2, 27) + SourceIndex(0)
+7 >Emitted(1, 26) Source(2, 33) + SourceIndex(0)
+8 >Emitted(1, 35) Source(2, 42) + SourceIndex(0)
+9 >Emitted(1, 36) Source(2, 42) + SourceIndex(0)
+---
+>>>/**
+1 >
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+1 >Emitted(2, 1) Source(1, 1) + SourceIndex(0)
+---
+>>> * @import { Foo, Unused } from "./types"
+>>> */
+1->^^^
+2 >   ^->
+1->/**
+  > * @import { Foo, Unused } from "./types"
+  > */
+1->Emitted(4, 4) Source(3, 4) + SourceIndex(0)
+---
+>>>/**
+1->
+2 >^^^^^^^^^^^^^^^^^^^^->
+1->
+  >
+1->Emitted(5, 1) Source(4, 1) + SourceIndex(0)
+---
+>>> * @param {Foo} foo
+>>> */
+1->^^^
+2 >   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->/**
+  > * @param {Foo} foo
+  > */
+1->Emitted(7, 4) Source(6, 4) + SourceIndex(0)
+---
+>>>export declare function filtered(foo: Foo): Foo;
+1->
+2 >^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                        ^^^^^^^^
+4 >                                ^
+5 >                                 ^^^
+6 >                                    ^^
+7 >                                      ^^^
+8 >                                         ^^^^^^^
+1->
+  >
+2 >export function 
+3 >                        filtered
+4 >                                (
+5 >                                 foo
+6 >                                    
+7 >                                      Foo} foo
+  >                                       */
+  >                                      export function filtered(foo
+8 >                                         ) {
+  >                                             return foo;
+  >                                         }
+1->Emitted(8, 1) Source(7, 1) + SourceIndex(0)
+2 >Emitted(8, 25) Source(7, 17) + SourceIndex(0)
+3 >Emitted(8, 33) Source(7, 25) + SourceIndex(0)
+4 >Emitted(8, 34) Source(7, 26) + SourceIndex(0)
+5 >Emitted(8, 37) Source(7, 29) + SourceIndex(0)
+6 >Emitted(8, 39) Source(5, 12) + SourceIndex(0)
+7 >Emitted(8, 42) Source(7, 29) + SourceIndex(0)
+8 >Emitted(8, 49) Source(9, 2) + SourceIndex(0)
+---
+>>>import type * as types from "./types";
+1 >
+2 >^^^^^^^
+3 >       ^^^^^
+4 >            ^^^^^
+5 >                 ^^^^^
+6 >                      ^^^^^^
+7 >                            ^^^^^^^^^
+8 >                                     ^
+1 >
+  >/**
+  > * 
+2 >@import 
+3 >       
+4 >            * as 
+5 >                 types
+6 >                       from 
+7 >                            "./types"
+8 >                                     
+1 >Emitted(9, 1) Source(11, 4) + SourceIndex(0)
+2 >Emitted(9, 8) Source(11, 12) + SourceIndex(0)
+3 >Emitted(9, 13) Source(11, 12) + SourceIndex(0)
+4 >Emitted(9, 18) Source(11, 17) + SourceIndex(0)
+5 >Emitted(9, 23) Source(11, 22) + SourceIndex(0)
+6 >Emitted(9, 29) Source(11, 28) + SourceIndex(0)
+7 >Emitted(9, 38) Source(11, 37) + SourceIndex(0)
+8 >Emitted(9, 39) Source(11, 37) + SourceIndex(0)
+---
+>>>/**
+1 >
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+1 >Emitted(10, 1) Source(10, 1) + SourceIndex(0)
+---
+>>> * @import * as types from "./types"
+>>> */
+1->^^^
+2 >   ^->
+1->/**
+  > * @import * as types from "./types"
+  > */
+1->Emitted(12, 4) Source(12, 4) + SourceIndex(0)
+---
+>>>/**
+1->
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->
+  >
+1->Emitted(13, 1) Source(13, 1) + SourceIndex(0)
+---
+>>> * @param {types.Foo} foo
+>>> */
+1->^^^
+2 >   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->/**
+  > * @param {types.Foo} foo
+  > */
+1->Emitted(15, 4) Source(15, 4) + SourceIndex(0)
+---
+>>>export declare function namespace(foo: types.Foo): Foo;
+1->
+2 >^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                        ^^^^^^^^^
+4 >                                 ^
+5 >                                  ^^^
+6 >                                     ^^
+7 >                                       ^^^^^
+8 >                                            ^
+9 >                                             ^^^
+10>                                                ^^^^^^^
+1->
+  >
+2 >export function 
+3 >                        namespace
+4 >                                 (
+5 >                                  foo
+6 >                                     
+7 >                                       types
+8 >                                            .
+9 >                                             Foo} foo
+  >                                              */
+  >                                             export function namespace(foo
+10>                                                ) {
+  >                                                    return foo;
+  >                                                }
+1->Emitted(16, 1) Source(16, 1) + SourceIndex(0)
+2 >Emitted(16, 25) Source(16, 17) + SourceIndex(0)
+3 >Emitted(16, 34) Source(16, 26) + SourceIndex(0)
+4 >Emitted(16, 35) Source(16, 27) + SourceIndex(0)
+5 >Emitted(16, 38) Source(16, 30) + SourceIndex(0)
+6 >Emitted(16, 40) Source(14, 12) + SourceIndex(0)
+7 >Emitted(16, 45) Source(14, 17) + SourceIndex(0)
+8 >Emitted(16, 46) Source(14, 18) + SourceIndex(0)
+9 >Emitted(16, 49) Source(16, 30) + SourceIndex(0)
+10>Emitted(16, 56) Source(18, 2) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=imports.d.ts.map

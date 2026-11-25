@@ -1,0 +1,55 @@
+/src/main.ts(3,26): error TS2306: File '/generated/component.svelte.d.ts' is not a module.
+/src/main.ts(4,26): error TS2306: File '/src/script.ts' is not a module.
+/src/main.ts(5,7): error TS2322: Type 'number' is not assignable to type 'string'.
+
+
+==== /tsconfig.json (0 errors) ====
+    {
+        "compilerOptions": {
+            "rootDirs": ["./src", "./generated"]
+        },
+        "files": ["ambient.d.ts", "src/main.ts"]
+    }
+    
+==== /ambient.d.ts (0 errors) ====
+    declare module "*.svelte" {
+        const value: number;
+        export default value;
+    }
+    declare module "*.svelte" with { type: "text" } {
+        const value: string;
+        export default value;
+    }
+    declare module "*.js" {
+        const value: number;
+        export default value;
+    }
+    
+==== /src/main.ts (3 errors) ====
+    import fromPaths from "x.svelte";
+    import emptyAttributes from "x.svelte" with {};
+    import fromRootDirs from "./component.svelte";
+                             ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2306: File '/generated/component.svelte.d.ts' is not a module.
+    import fromRelative from "./script.js";
+                             ~~~~~~~~~~~~~
+!!! error TS2306: File '/src/script.ts' is not a module.
+    const fromPathsValue: string = fromPaths;
+          ~~~~~~~~~~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+    
+    import text from "x.svelte" with { type: "text" };
+    const textValue: string = text;
+    
+    import missing from "./missing.svelte";
+    const missingValue: number = missing;
+    
+==== /stub.d.ts (0 errors) ====
+    // This file is not resolved without a paths mapping.
+    
+==== /generated/component.svelte.d.ts (0 errors) ====
+    // A script resolved through rootDirs.
+    
+==== /src/script.ts (0 errors) ====
+    // A script resolved through a relative import.
+    

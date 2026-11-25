@@ -27,6 +27,9 @@ func ParseTristate(value any) core.Tristate {
 }
 
 func ParseStringArray(value any) []string {
+	if arr, ok := value.([]string); ok {
+		return arr
+	}
 	if arr, ok := value.([]any); ok {
 		if arr == nil {
 			return nil
@@ -43,6 +46,9 @@ func ParseStringArray(value any) []string {
 }
 
 func parseStringMap(value any) *collections.OrderedMap[string, []string] {
+	if m, ok := value.(*collections.OrderedMap[string, []string]); ok {
+		return m
+	}
 	if m, ok := value.(*collections.OrderedMap[string, any]); ok {
 		result := collections.NewOrderedMapWithSizeHint[string, []string](m.Size())
 		for k, v := range m.Entries() {
@@ -157,8 +163,13 @@ func parseContentMapper(value any) (*contentmapper.Mapper, []*ast.Diagnostic) {
 		} else {
 			errors = append(errors, ast.NewCompilerDiagnostic(diagnostics.Compiler_option_0_requires_a_value_of_type_1, "contentMapper.extensions", "string[]"))
 		}
-	} else {
-		errors = append(errors, ast.NewCompilerDiagnostic(diagnostics.Compiler_option_0_requires_a_value_of_type_1, "contentMapper.extensions", "string[]"))
+	}
+	if include, ok := v.Get("include"); ok {
+		if strs, isStringArray := parseStringArrayStrict(include); isStringArray {
+			mapper.Include = strs
+		} else {
+			errors = append(errors, ast.NewCompilerDiagnostic(diagnostics.Compiler_option_0_requires_a_value_of_type_1, "contentMapper.include", "string[]"))
+		}
 	}
 	if outputExtensions, ok := v.Get("outputExtensions"); ok && outputExtensions != nil {
 		if values, isStringMap := parseStringStringMapStrict(outputExtensions); isStringMap {

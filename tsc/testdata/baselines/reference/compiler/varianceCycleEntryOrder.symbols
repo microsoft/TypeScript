@@ -1,0 +1,106 @@
+//// [tests/cases/compiler/varianceCycleEntryOrder.ts] ////
+
+=== fooFirst.ts ===
+export {};
+
+interface Foo<T> { x: T; b: Bar<Foo<T>> }
+>Foo : Symbol(Foo, Decl(fooFirst.ts, 0, 10))
+>T : Symbol(T, Decl(fooFirst.ts, 2, 14))
+>x : Symbol(Foo.x, Decl(fooFirst.ts, 2, 18))
+>T : Symbol(T, Decl(fooFirst.ts, 2, 14))
+>b : Symbol(Foo.b, Decl(fooFirst.ts, 2, 24))
+>Bar : Symbol(Bar, Decl(fooFirst.ts, 2, 41))
+>Foo : Symbol(Foo, Decl(fooFirst.ts, 0, 10))
+>T : Symbol(T, Decl(fooFirst.ts, 2, 14))
+
+interface Bar<U> { f: (u: U) => void; foo: Foo<Bar<U>> }
+>Bar : Symbol(Bar, Decl(fooFirst.ts, 2, 41))
+>U : Symbol(U, Decl(fooFirst.ts, 3, 14))
+>f : Symbol(Bar.f, Decl(fooFirst.ts, 3, 18))
+>u : Symbol(u, Decl(fooFirst.ts, 3, 23))
+>U : Symbol(U, Decl(fooFirst.ts, 3, 14))
+>foo : Symbol(Bar.foo, Decl(fooFirst.ts, 3, 37))
+>Foo : Symbol(Foo, Decl(fooFirst.ts, 0, 10))
+>Bar : Symbol(Bar, Decl(fooFirst.ts, 2, 41))
+>U : Symbol(U, Decl(fooFirst.ts, 3, 14))
+
+declare let fs: Foo<string>, fl: Foo<"lit">;
+>fs : Symbol(fs, Decl(fooFirst.ts, 5, 11))
+>Foo : Symbol(Foo, Decl(fooFirst.ts, 0, 10))
+>fl : Symbol(fl, Decl(fooFirst.ts, 5, 28))
+>Foo : Symbol(Foo, Decl(fooFirst.ts, 0, 10))
+
+declare let bs: Bar<string>, bl: Bar<"lit">;
+>bs : Symbol(bs, Decl(fooFirst.ts, 6, 11))
+>Bar : Symbol(Bar, Decl(fooFirst.ts, 2, 41))
+>bl : Symbol(bl, Decl(fooFirst.ts, 6, 28))
+>Bar : Symbol(Bar, Decl(fooFirst.ts, 2, 41))
+
+fl = fs; // Error
+>fl : Symbol(fl, Decl(fooFirst.ts, 5, 28))
+>fs : Symbol(fs, Decl(fooFirst.ts, 5, 11))
+
+fs = fl; // Error
+>fs : Symbol(fs, Decl(fooFirst.ts, 5, 11))
+>fl : Symbol(fl, Decl(fooFirst.ts, 5, 28))
+
+bl = bs; // Error
+>bl : Symbol(bl, Decl(fooFirst.ts, 6, 28))
+>bs : Symbol(bs, Decl(fooFirst.ts, 6, 11))
+
+bs = bl; // Error
+>bs : Symbol(bs, Decl(fooFirst.ts, 6, 11))
+>bl : Symbol(bl, Decl(fooFirst.ts, 6, 28))
+
+=== barFirst.ts ===
+export {};
+
+interface Foo<T> { x: T; b: Bar<Foo<T>> }
+>Foo : Symbol(Foo, Decl(barFirst.ts, 0, 10))
+>T : Symbol(T, Decl(barFirst.ts, 2, 14))
+>x : Symbol(Foo.x, Decl(barFirst.ts, 2, 18))
+>T : Symbol(T, Decl(barFirst.ts, 2, 14))
+>b : Symbol(Foo.b, Decl(barFirst.ts, 2, 24))
+>Bar : Symbol(Bar, Decl(barFirst.ts, 2, 41))
+>Foo : Symbol(Foo, Decl(barFirst.ts, 0, 10))
+>T : Symbol(T, Decl(barFirst.ts, 2, 14))
+
+interface Bar<U> { f: (u: U) => void; foo: Foo<Bar<U>> }
+>Bar : Symbol(Bar, Decl(barFirst.ts, 2, 41))
+>U : Symbol(U, Decl(barFirst.ts, 3, 14))
+>f : Symbol(Bar.f, Decl(barFirst.ts, 3, 18))
+>u : Symbol(u, Decl(barFirst.ts, 3, 23))
+>U : Symbol(U, Decl(barFirst.ts, 3, 14))
+>foo : Symbol(Bar.foo, Decl(barFirst.ts, 3, 37))
+>Foo : Symbol(Foo, Decl(barFirst.ts, 0, 10))
+>Bar : Symbol(Bar, Decl(barFirst.ts, 2, 41))
+>U : Symbol(U, Decl(barFirst.ts, 3, 14))
+
+declare let fs: Foo<string>, fl: Foo<"lit">;
+>fs : Symbol(fs, Decl(barFirst.ts, 5, 11))
+>Foo : Symbol(Foo, Decl(barFirst.ts, 0, 10))
+>fl : Symbol(fl, Decl(barFirst.ts, 5, 28))
+>Foo : Symbol(Foo, Decl(barFirst.ts, 0, 10))
+
+declare let bs: Bar<string>, bl: Bar<"lit">;
+>bs : Symbol(bs, Decl(barFirst.ts, 6, 11))
+>Bar : Symbol(Bar, Decl(barFirst.ts, 2, 41))
+>bl : Symbol(bl, Decl(barFirst.ts, 6, 28))
+>Bar : Symbol(Bar, Decl(barFirst.ts, 2, 41))
+
+bl = bs; // Error
+>bl : Symbol(bl, Decl(barFirst.ts, 6, 28))
+>bs : Symbol(bs, Decl(barFirst.ts, 6, 11))
+
+bs = bl; // Error
+>bs : Symbol(bs, Decl(barFirst.ts, 6, 11))
+>bl : Symbol(bl, Decl(barFirst.ts, 6, 28))
+
+fl = fs; // Error
+>fl : Symbol(fl, Decl(barFirst.ts, 5, 28))
+>fs : Symbol(fs, Decl(barFirst.ts, 5, 11))
+
+fs = fl; // Error
+>fs : Symbol(fs, Decl(barFirst.ts, 5, 11))
+>fl : Symbol(fl, Decl(barFirst.ts, 5, 28))
+

@@ -16,6 +16,15 @@ class A {
         const b = new this.#fieldFunc2(0, ...arr, 3);
         const str = this.#fieldFunc2`head${1}middle${2}tail`;
         this.getInstance().#fieldFunc2`test${1}and${2}`;
+
+        (this.#fieldFunc)();
+        this.#fieldFunc!();
+        (this.#fieldFunc as () => void)();
+        (this.#fieldFunc satisfies () => void)();
+        (this.#fieldFunc)?.();
+        this.#fieldFunc!?.();
+        (this.getInstance().#fieldFunc)();
+        (this.#fieldFunc2)`test${1}and${2}`;
     }
     getInstance() { return new A(); }
 }

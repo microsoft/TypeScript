@@ -1,0 +1,233 @@
+//// [tests/cases/compiler/pipeCallbackInferenceCheckOrder.ts] ////
+
+=== pipeCallbackInferenceCheckOrder.ts ===
+// The callback of a pipe is inferred from the error union of the piped
+// effect, also when signature help was requested for the call first
+// (62183).
+
+export interface Pipeable {
+  pipe<A, B = never>(this: A, ab: (_: A) => B): B;
+>pipe : <A, B = never>(this: A, ab: (_: A) => B) => B
+>this : A
+>ab : (_: A) => B
+>_ : A
+}
+
+type Covariant<A> = (_: never) => A;
+>Covariant : Covariant<A>
+>_ : never
+
+interface VarianceStruct<out A, out E, out R> {
+  readonly _V: string;
+>_V : string
+
+  readonly _A: Covariant<A>;
+>_A : Covariant<A>
+
+  readonly _E: Covariant<E>;
+>_E : Covariant<E>
+
+  readonly _R: Covariant<R>;
+>_R : Covariant<R>
+}
+
+declare const EffectTypeId: unique symbol;
+>EffectTypeId : unique symbol
+
+interface Variance<out A, out E, out R> {
+  readonly [EffectTypeId]: VarianceStruct<A, E, R>;
+>[EffectTypeId] : VarianceStruct<A, E, R>
+>EffectTypeId : unique symbol
+}
+
+interface Effect<out A, out E = never, out R = never>
+  extends Variance<A, E, R>,
+    Pipeable {}
+
+interface Class<Fields> extends Pipeable {
+  new (): Fields;
+}
+
+interface TaggedErrorClass<Tag extends string, Fields> extends Class<Fields> {
+  readonly _tag: Tag;
+>_tag : Tag
+}
+
+declare const TaggedError: (identifier?: string) => <
+>TaggedError : (identifier?: string) => <Tag extends string, Fields>(tag: Tag, fieldsOr: Fields) => TaggedErrorClass<Tag, { readonly _tag: Tag; }>
+>identifier : string | undefined
+
+  Tag extends string,
+  Fields
+>(
+  tag: Tag,
+>tag : Tag
+
+  fieldsOr: Fields
+>fieldsOr : Fields
+
+) => TaggedErrorClass<
+  Tag,
+  {
+    readonly _tag: Tag;
+>_tag : Tag
+  }
+>;
+
+declare const log: (
+>log : (...message: ReadonlyArray<any>) => Effect<void, never, never>
+
+  ...message: ReadonlyArray<any>
+>message : readonly any[]
+
+) => Effect<void, never, never>;
+
+export const categoriesKey = "@effect/error/categories";
+>categoriesKey : "@effect/error/categories"
+>"@effect/error/categories" : "@effect/error/categories"
+
+export declare const withCategory: <Categories extends Array<PropertyKey>>(
+>withCategory : <Categories extends Array<PropertyKey>>(...categories: Categories) => <Args extends Array<any>, Ret, C extends { new (...args: Args): Ret; }>(C: C) => C & { new (...args: Args): Ret & { [categoriesKey]: { [Cat in Categories[number]]: true; }; }; }
+
+  ...categories: Categories
+>categories : Categories
+
+) => <Args extends Array<any>, Ret, C extends { new (...args: Args): Ret }>(
+>args : Args
+
+  C: C
+>C : C
+
+) => C & {
+  new (...args: Args): Ret & {
+>args : Args
+
+    [categoriesKey]: { [Cat in Categories[number]]: true };
+>[categoriesKey] : { [Cat in Categories[number]]: true; }
+>categoriesKey : "@effect/error/categories"
+>true : true
+
+  };
+};
+
+export type AllKeys<E> = E extends { [categoriesKey]: infer Q }
+>AllKeys : AllKeys<E>
+>[categoriesKey] : Q
+>categoriesKey : "@effect/error/categories"
+
+  ? keyof Q
+  : never;
+export type ExtractAll<E, Cats extends PropertyKey> = Cats extends any
+>ExtractAll : ExtractAll<E, Cats>
+
+  ? Extract<E, { [categoriesKey]: { [K in Cats]: any } }>
+>[categoriesKey] : { [K in Cats]: any; }
+>categoriesKey : "@effect/error/categories"
+
+  : never;
+
+export declare const catchCategory: <
+>catchCategory : <E, const Categories extends Array<AllKeys<E>>, A2, E2, R2>(...args: [...Categories, f: (err: ExtractAll<E, Categories[number]>) => Effect<A2, E2, R2>]) => <A, R>(effect: Effect<A, E, R>) => Effect<A | A2, E2 | Exclude<E, ExtractAll<E, Categories[number]>>, R | R2>
+
+  E,
+  const Categories extends Array<AllKeys<E>>,
+  A2,
+  E2,
+  R2
+>(
+  ...args: [
+>args : [...Categories, f: (err: ExtractAll<E, Categories[number]>) => Effect<A2, E2, R2>]
+
+    ...Categories,
+    f: (err: ExtractAll<E, Categories[number]>) => Effect<A2, E2, R2>
+>err : ExtractAll<E, Categories[number]>
+
+  ]
+) => <A, R>(
+  effect: Effect<A, E, R>
+>effect : Effect<A, E, R>
+
+) => Effect<A | A2, E2 | Exclude<E, ExtractAll<E, Categories[number]>>, R | R2>;
+
+class FooError extends TaggedError()("FooError", {}).pipe(
+>FooError : FooError
+>TaggedError()("FooError", {}).pipe(  withCategory("domain")) : { readonly _tag: "FooError"; } & { "@effect/error/categories": { domain: true; }; }
+>TaggedError()("FooError", {}).pipe : <A, B = never>(this: A, ab: (_: A) => B) => B
+>TaggedError()("FooError", {}) : TaggedErrorClass<"FooError", { readonly _tag: "FooError"; }>
+>TaggedError() : <Tag extends string, Fields>(tag: Tag, fieldsOr: Fields) => TaggedErrorClass<Tag, { readonly _tag: Tag; }>
+>TaggedError : (identifier?: string) => <Tag extends string, Fields>(tag: Tag, fieldsOr: Fields) => TaggedErrorClass<Tag, { readonly _tag: Tag; }>
+>"FooError" : "FooError"
+>{} : {}
+>pipe : <A, B = never>(this: A, ab: (_: A) => B) => B
+
+  withCategory("domain")
+>withCategory("domain") : <Args extends Array<any>, Ret, C_1 extends { new (...args: Args): Ret; }>(C: C_1) => C_1 & (new (...args: Args) => Ret & { "@effect/error/categories": { domain: true; }; })
+>withCategory : <Categories extends Array<PropertyKey>>(...categories: Categories) => <Args extends Array<any>, Ret, C extends { new (...args: Args): Ret; }>(C: C) => C & { new (...args: Args): Ret & { [categoriesKey]: { [Cat in Categories[number]]: true; }; }; }
+>"domain" : "domain"
+
+) {}
+
+class BarError extends TaggedError()("BarError", {}).pipe(
+>BarError : BarError
+>TaggedError()("BarError", {}).pipe(  withCategory("system", "domain")) : { readonly _tag: "BarError"; } & { "@effect/error/categories": { domain: true; system: true; }; }
+>TaggedError()("BarError", {}).pipe : <A, B = never>(this: A, ab: (_: A) => B) => B
+>TaggedError()("BarError", {}) : TaggedErrorClass<"BarError", { readonly _tag: "BarError"; }>
+>TaggedError() : <Tag extends string, Fields>(tag: Tag, fieldsOr: Fields) => TaggedErrorClass<Tag, { readonly _tag: Tag; }>
+>TaggedError : (identifier?: string) => <Tag extends string, Fields>(tag: Tag, fieldsOr: Fields) => TaggedErrorClass<Tag, { readonly _tag: Tag; }>
+>"BarError" : "BarError"
+>{} : {}
+>pipe : <A, B = never>(this: A, ab: (_: A) => B) => B
+
+  withCategory("system", "domain")
+>withCategory("system", "domain") : <Args extends Array<any>, Ret, C_1 extends { new (...args: Args): Ret; }>(C: C_1) => C_1 & (new (...args: Args) => Ret & { "@effect/error/categories": { domain: true; system: true; }; })
+>withCategory : <Categories extends Array<PropertyKey>>(...categories: Categories) => <Args extends Array<any>, Ret, C extends { new (...args: Args): Ret; }>(C: C) => C & { new (...args: Args): Ret & { [categoriesKey]: { [Cat in Categories[number]]: true; }; }; }
+>"system" : "system"
+>"domain" : "domain"
+
+) {}
+
+class BazError extends TaggedError()("BazError", {}).pipe(
+>BazError : BazError
+>TaggedError()("BazError", {}).pipe(  withCategory("system")) : { readonly _tag: "BazError"; } & { "@effect/error/categories": { system: true; }; }
+>TaggedError()("BazError", {}).pipe : <A, B = never>(this: A, ab: (_: A) => B) => B
+>TaggedError()("BazError", {}) : TaggedErrorClass<"BazError", { readonly _tag: "BazError"; }>
+>TaggedError() : <Tag extends string, Fields>(tag: Tag, fieldsOr: Fields) => TaggedErrorClass<Tag, { readonly _tag: Tag; }>
+>TaggedError : (identifier?: string) => <Tag extends string, Fields>(tag: Tag, fieldsOr: Fields) => TaggedErrorClass<Tag, { readonly _tag: Tag; }>
+>"BazError" : "BazError"
+>{} : {}
+>pipe : <A, B = never>(this: A, ab: (_: A) => B) => B
+
+  withCategory("system")
+>withCategory("system") : <Args extends Array<any>, Ret, C_1 extends { new (...args: Args): Ret; }>(C: C_1) => C_1 & (new (...args: Args) => Ret & { "@effect/error/categories": { system: true; }; })
+>withCategory : <Categories extends Array<PropertyKey>>(...categories: Categories) => <Args extends Array<any>, Ret, C extends { new (...args: Args): Ret; }>(C: C) => C & { new (...args: Args): Ret & { [categoriesKey]: { [Cat in Categories[number]]: true; }; }; }
+>"system" : "system"
+
+) {}
+
+declare const baz: (
+>baz : (x: number) => Effect<never, FooError | BarError | BazError, never>
+
+  x: number
+>x : number
+
+) => Effect<never, FooError | BarError | BazError, never>;
+
+export const program = baz(1).pipe(catchCategory("domain", (_) => log(_._tag)));
+>program : Effect<void, BazError, never>
+>baz(1).pipe(catchCategory("domain", (_) => log(_._tag))) : Effect<void, BazError, never>
+>baz(1).pipe : <A, B = never>(this: A, ab: (_: A) => B) => B
+>baz(1) : Effect<never, BarError | BazError | FooError, never>
+>baz : (x: number) => Effect<never, FooError | BarError | BazError, never>
+>1 : 1
+>pipe : <A, B = never>(this: A, ab: (_: A) => B) => B
+>catchCategory("domain", (_) => log(_._tag)) : <A, R>(effect: Effect<A, BarError | BazError | FooError, R>) => Effect<void | A, BazError, R>
+>catchCategory : <E, const Categories extends Array<AllKeys<E>>, A2, E2, R2>(...args: [...Categories, f: (err: ExtractAll<E, Categories[number]>) => Effect<A2, E2, R2>]) => <A, R>(effect: Effect<A, E, R>) => Effect<A | A2, E2 | Exclude<E, ExtractAll<E, Categories[number]>>, R | R2>
+>"domain" : "domain"
+>(_) => log(_._tag) : (_: BarError | FooError) => Effect<void, never, never>
+>_ : BarError | FooError
+>log(_._tag) : Effect<void, never, never>
+>log : (...message: ReadonlyArray<any>) => Effect<void, never, never>
+>_._tag : "BarError" | "FooError"
+>_ : BarError | FooError
+>_tag : "BarError" | "FooError"
+

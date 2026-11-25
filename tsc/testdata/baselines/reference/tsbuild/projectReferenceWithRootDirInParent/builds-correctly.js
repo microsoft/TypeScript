@@ -33,7 +33,7 @@ export const Other = 0;
     ],
 }
 
-tsgo --b src/main /home/src/workspaces/solution/src/other
+tsc --b src/main /home/src/workspaces/solution/src/other
 ExitStatus:: Success
 Output::
 //// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*

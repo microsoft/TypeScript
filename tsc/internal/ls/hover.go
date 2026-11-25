@@ -330,7 +330,7 @@ func getDocumentationFromDeclaration(getMappedLocation documentationLocationMapp
 					case ast.KindJSDocParameterTag, ast.KindJSDocPropertyTag:
 						writeOptionalEntityName(&b, tag.Name())
 					case ast.KindJSDocAugmentsTag:
-						writeOptionalEntityName(&b, tag.ClassName())
+						writeOptionalEntityName(&b, tag.ClassName().AsTypeReferenceNode().TypeName)
 					case ast.KindJSDocTemplateTag:
 						for i, tp := range tag.TypeParameters() {
 							if i != 0 {

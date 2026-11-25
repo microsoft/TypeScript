@@ -2,16 +2,16 @@ import { API } from "@typescript/typescript/async"; // @sync-skip
 // @sync-only-start
 // import { API } from "@typescript/typescript/sync";
 // @sync-only-end
+import type {
+    Node,
+    SourceFile,
+} from "@typescript/typescript/ast";
 import {
     findNextToken,
     findPrecedingToken,
     formatSyntaxKind,
     getTokenAtPosition,
     getTouchingPropertyName,
-} from "@typescript/typescript/ast";
-import type {
-    Node,
-    SourceFile,
 } from "@typescript/typescript/ast";
 import assert from "node:assert";
 import { readFileSync } from "node:fs";
@@ -71,7 +71,7 @@ function toTokenInfo(node: Node): { kind: string; pos: number; end: number; } {
 // Test configuration
 // ---------------------------------------------------------------------------
 
-const repoRoot = resolve(import.meta.dirname!, "..", "..", "..", "..");
+const repoRoot = resolve(import.meta.dirname, "..", "..", "..", "..");
 const testFile = resolve(repoRoot, "tsc/testdata/fixtures/services/mapCode.ts");
 const baselineDir = resolve(repoRoot, "tsc/testdata/baselines/reference/astnav");
 

@@ -26,11 +26,21 @@ func makeProfileDir(profileDir string) error {
 	return nil
 }
 
+var defaultMemProfileRate = runtime.MemProfileRate
+
+// DisableMemProfiling turns off heap profile sampling, which otherwise
+// costs a stack walk every few hundred kilobytes allocated. It should be
+// called as early as possible; BeginProfiling turns sampling back on.
+func DisableMemProfiling() {
+	runtime.MemProfileRate = 0
+}
+
 type ProfileSession struct {
 	cpuFilePath string
 	memFilePath string
 	cpuFile     *os.File
 	logWriter   io.Writer
+	stopOnce    sync.Once
 }
 
 // BeginProfiling starts CPU and memory profiling, writing the profiles to the specified directory.
@@ -38,6 +48,8 @@ func BeginProfiling(profileDir string, logWriter io.Writer) *ProfileSession {
 	if err := makeProfileDir(profileDir); err != nil {
 		panic(err)
 	}
+
+	runtime.MemProfileRate = defaultMemProfileRate
 
 	pid := os.Getpid()
 
@@ -61,22 +73,27 @@ func BeginProfiling(profileDir string, logWriter io.Writer) *ProfileSession {
 }
 
 func (p *ProfileSession) Stop() {
-	pprof.StopCPUProfile()
-	p.cpuFile.Close()
+	p.stopOnce.Do(func() {
+		pprof.StopCPUProfile()
+		p.cpuFile.Close()
 
-	if p.memFilePath != "" {
-		memFile, err := os.Create(p.memFilePath)
-		if err != nil {
-			panic(err)
+		if p.memFilePath != "" {
+			memFile, err := os.Create(p.memFilePath)
+			if err != nil {
+				panic(err)
+			}
+			// The profile reflects the heap as of the last completed collection,
+			// which can be long before the end of the run.
+			runtime.GC()
+			if err := pprof.Lookup("allocs").WriteTo(memFile, 0); err != nil {
+				panic(err)
+			}
+			memFile.Close()
+			fmt.Fprintf(p.logWriter, "Memory profile: %v\n", p.memFilePath)
 		}
-		if err := pprof.Lookup("allocs").WriteTo(memFile, 0); err != nil {
-			panic(err)
-		}
-		memFile.Close()
-		fmt.Fprintf(p.logWriter, "Memory profile: %v\n", p.memFilePath)
-	}
 
-	fmt.Fprintf(p.logWriter, "CPU profile: %v\n", p.cpuFilePath)
+		fmt.Fprintf(p.logWriter, "CPU profile: %v\n", p.cpuFilePath)
+	})
 }
 
 // CPUProfiler manages on-demand CPU profiling.
@@ -169,6 +186,7 @@ func SaveAllocProfile(profileDir string) (string, error) {
 	}
 	defer allocFile.Close()
 
+	runtime.GC()
 	if err := pprof.Lookup("allocs").WriteTo(allocFile, 0); err != nil {
 		os.Remove(allocProfilePath)
 		return "", fmt.Errorf("failed to write alloc profile: %w", err)

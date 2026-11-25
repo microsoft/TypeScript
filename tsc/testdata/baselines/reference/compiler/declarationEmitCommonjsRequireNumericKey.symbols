@@ -1,0 +1,90 @@
+//// [tests/cases/compiler/declarationEmitCommonjsRequireNumericKey.ts] ////
+
+=== b.js ===
+const {0: numeric, "a b": text, named} = require("./a");
+>numeric : Symbol(numeric, Decl(b.js, 0, 7))
+>text : Symbol(text, Decl(b.js, 0, 18))
+>named : Symbol(named, Decl(b.js, 0, 31))
+>require : Symbol(require)
+>"./a" : Symbol("./a", Decl(a.js, 0, 0))
+
+const {[1]: computedNumeric, [`a b`]: computedTemplate} = require("./a");
+>1 : Symbol(computedNumeric, Decl(b.js, 1, 7))
+>computedNumeric : Symbol(computedNumeric, Decl(b.js, 1, 7))
+>`a b` : Symbol(computedTemplate, Decl(b.js, 1, 28))
+>computedTemplate : Symbol(computedTemplate, Decl(b.js, 1, 28))
+>require : Symbol(require)
+>"./a" : Symbol("./a", Decl(a.js, 0, 0))
+
+exports.numeric = numeric;
+>exports.numeric : Symbol(numeric, Decl(b.js, 1, 73))
+>exports : Symbol(exports, Decl(b.js, 0, 0))
+>numeric : Symbol(numeric, Decl(b.js, 1, 73))
+>numeric : Symbol(numeric, Decl(b.js, 0, 7))
+
+exports.text = text;
+>exports.text : Symbol(text, Decl(b.js, 2, 26))
+>exports : Symbol(exports, Decl(b.js, 0, 0))
+>text : Symbol(text, Decl(b.js, 2, 26))
+>text : Symbol(text, Decl(b.js, 0, 18))
+
+exports.named = named;
+>exports.named : Symbol(named, Decl(b.js, 3, 20))
+>exports : Symbol(exports, Decl(b.js, 0, 0))
+>named : Symbol(named, Decl(b.js, 3, 20))
+>named : Symbol(named, Decl(b.js, 0, 31))
+
+exports.computedNumeric = computedNumeric;
+>exports.computedNumeric : Symbol(computedNumeric, Decl(b.js, 4, 22))
+>exports : Symbol(exports, Decl(b.js, 0, 0))
+>computedNumeric : Symbol(computedNumeric, Decl(b.js, 4, 22))
+>computedNumeric : Symbol(computedNumeric, Decl(b.js, 1, 7))
+
+exports.computedTemplate = computedTemplate;
+>exports.computedTemplate : Symbol(computedTemplate, Decl(b.js, 5, 42))
+>exports : Symbol(exports, Decl(b.js, 0, 0))
+>computedTemplate : Symbol(computedTemplate, Decl(b.js, 5, 42))
+>computedTemplate : Symbol(computedTemplate, Decl(b.js, 1, 28))
+
+const {[-0]: signedZero, ["-0"]: negativeZeroString} = require("./a");
+>signedZero : Symbol(signedZero, Decl(b.js, 8, 7))
+>"-0" : Symbol(negativeZeroString, Decl(b.js, 8, 24))
+>negativeZeroString : Symbol(negativeZeroString, Decl(b.js, 8, 24))
+>require : Symbol(require)
+>"./a" : Symbol("./a", Decl(a.js, 0, 0))
+
+exports.signedZero = signedZero;
+>exports.signedZero : Symbol(signedZero, Decl(b.js, 8, 70))
+>exports : Symbol(exports, Decl(b.js, 0, 0))
+>signedZero : Symbol(signedZero, Decl(b.js, 8, 70))
+>signedZero : Symbol(signedZero, Decl(b.js, 8, 7))
+
+exports.negativeZeroString = negativeZeroString;
+>exports.negativeZeroString : Symbol(negativeZeroString, Decl(b.js, 9, 32))
+>exports : Symbol(exports, Decl(b.js, 0, 0))
+>negativeZeroString : Symbol(negativeZeroString, Decl(b.js, 9, 32))
+>negativeZeroString : Symbol(negativeZeroString, Decl(b.js, 8, 24))
+
+=== a.js ===
+exports[0] = 123;
+>exports : Symbol(exports, Decl(a.js, 0, 0))
+>0 : Symbol(0, Decl(a.js, 0, 0))
+
+exports["a b"] = "text";
+>exports : Symbol(exports, Decl(a.js, 0, 0))
+>"a b" : Symbol("a b", Decl(a.js, 0, 17))
+
+exports.named = true;
+>exports.named : Symbol(named, Decl(a.js, 1, 24))
+>exports : Symbol(exports, Decl(a.js, 0, 0))
+>named : Symbol(named, Decl(a.js, 1, 24))
+
+exports[1] = { value: 1 };
+>exports : Symbol(exports, Decl(a.js, 0, 0))
+>1 : Symbol(1, Decl(a.js, 2, 21))
+>value : Symbol(value, Decl(a.js, 3, 14))
+
+exports["-0"] = "negative zero";
+>exports : Symbol(exports, Decl(a.js, 0, 0))
+>"-0" : Symbol("-0", Decl(a.js, 3, 26))
+

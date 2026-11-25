@@ -11,7 +11,7 @@ const x = 10;
     },
 }
 
-tsgo 
+tsc 
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [96mtsconfig.json[0m:[93m3[0m:[93m19[0m - [91merror[0m[90m TS6046: [0mArgument for '--module' option must be: 'commonjs', 'es6', 'es2015', 'es2020', 'es2022', 'esnext', 'node16', 'node18', 'node20', 'nodenext', 'preserve'.
@@ -121,7 +121,7 @@ Edit [0]:: convert to modules
     },
 }
 
-tsgo 
+tsc 
 ExitStatus:: Success
 Output::
 //// [/home/src/workspaces/project/src/main.js] *rewrite with same content*
@@ -179,4 +179,6 @@ Output::
 
 tsconfig.json::
 SemanticDiagnostics::
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2026.full.d.ts
+*refresh*    /home/src/workspaces/project/src/main.ts
 Signatures::

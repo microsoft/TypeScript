@@ -1,0 +1,31 @@
+//// [tests/cases/compiler/checkOrderEmitBeforeCheck.ts] ////
+
+=== checkOrderEmitBeforeCheck.ts ===
+// The circularity in the mapped type is found by checking the annotation of
+// "each". Emitting first must not instead report it at the use import
+// elision visits, nor cache the result without the error.
+type NonOptionalKeys<T> = { [P in keyof T]: undefined extends T[P] ? never : P }[keyof T];
+>NonOptionalKeys : NonOptionalKeys<T>
+
+type Child<T> = { [P in NonOptionalKeys<T>]: T[P] }
+>Child : Child<T>
+
+export interface ListWidget {
+    "type": "list",
+>"type" : "list"
+
+    "each": Child<ListWidget>;
+>"each" : any
+}
+
+type ListChild = Child<ListWidget>
+>ListChild : ListChild
+
+declare let x: ListChild;
+>x : ListChild
+
+x.type;
+>x.type : any
+>x : ListChild
+>type : any
+

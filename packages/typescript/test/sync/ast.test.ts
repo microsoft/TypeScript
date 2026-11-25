@@ -1,6 +1,5 @@
 import type {
     BinaryExpression,
-    BindingElement,
     CallExpression,
     ClassDeclaration,
     ClassElement,
@@ -46,6 +45,7 @@ import {
     getSynthesizedDeepClone,
     getSynthesizedDeepClones,
 } from "@typescript/typescript/ast/clone";
+import * as factory from "@typescript/typescript/ast/factory";
 import {
     cloneNode,
     createBinaryExpression,
@@ -54,10 +54,10 @@ import {
     createFunctionDeclaration,
     createIdentifier,
     createIfStatement,
+    createIndexSignatureDeclaration,
     createMissingDeclaration,
     createNodeArray,
     createNumericLiteral,
-    createSourceFile,
     createStringLiteral,
     createToken,
 } from "@typescript/typescript/ast/factory";
@@ -67,9 +67,9 @@ import {
     visitNodes,
 } from "@typescript/typescript/ast/visitor";
 import {
-    API,
     Checker,
     isRemoteNode,
+    SignatureKind,
     TypeFlags,
 } from "@typescript/typescript/sync";
 import assert from "node:assert";
@@ -82,9 +82,216 @@ import {
     areTestsFiltered,
     createVirtualFileSystem,
 } from "../testUtils.ts";
+import { API } from "./api.testUtils.ts";
 import { runBenchmarks } from "./ast.bench.ts";
 
 const concurrency = areTestsFiltered();
+
+test("canHaveModifiers includes the reparsed import kind in its narrowed type", () => {
+    using api = spawnAPI();
+    const source = api.createSourceFile("/imports.js", '/** @import { Foo } from "./foo" */\nlet value;').sourceFile;
+    const node: Node = source.statements[0];
+    assert.ok(astModule.canHaveModifiers(node));
+    if (node.kind === SyntaxKind.JSImportDeclaration) {
+        assert.strictEqual(node.moduleSpecifier.kind, SyntaxKind.StringLiteral);
+        assert.strictEqual(node.importClause?.namedBindings?.kind, SyntaxKind.NamedImports);
+    }
+    else {
+        assert.fail("Expected the reparsed JSDoc import");
+    }
+});
+
+test("Node.getModifiers excludes decorators on parsed, synthesized, and cloned nodes", () => {
+    using api = spawnAPI();
+    const source = api.createSourceFile(
+        "/nodeModifiers.ts",
+        "@dec export class C { @dec public static method() {} } @dec class Decorated {} class Plain {}",
+    ).sourceFile;
+    const declaration = source.statements[0];
+    assert.ok(astModule.isClassDeclaration(declaration));
+    const node: Node = declaration;
+    const modifiers: readonly astModule.Modifier[] | undefined = node.getModifiers();
+    assert.deepStrictEqual(modifiers?.map(modifier => modifier.kind), [SyntaxKind.ExportKeyword]);
+    assert.deepStrictEqual(
+        declaration.members[0].getModifiers()?.map(modifier => modifier.kind),
+        [SyntaxKind.PublicKeyword, SyntaxKind.StaticKeyword],
+    );
+    assert.strictEqual(source.statements[1].getModifiers(), /*expected*/ undefined);
+    assert.strictEqual(source.statements[2].getModifiers(), /*expected*/ undefined);
+    assert.strictEqual(source.getModifiers(), /*expected*/ undefined);
+    const synthesized = factory.createClassDeclaration(declaration.modifiers, declaration.name, /*typeParameters*/ undefined, /*heritageClauses*/ undefined, []);
+    assert.deepStrictEqual(synthesized.getModifiers()?.map(modifier => modifier.kind), [SyntaxKind.ExportKeyword]);
+    assert.deepStrictEqual(cloneNode(synthesized).getModifiers()?.map(modifier => modifier.kind), [SyntaxKind.ExportKeyword]);
+    assert.strictEqual(factory.createClassDeclaration([], /*name*/ undefined, /*typeParameters*/ undefined, /*heritageClauses*/ undefined, []).getModifiers(), /*expected*/ undefined);
+    const recovery = factory.createMissingDeclaration([
+        factory.createDecorator(factory.createIdentifier("dec")),
+        factory.createToken(SyntaxKind.ExportKeyword),
+    ]);
+    assert.strictEqual(astModule.canHaveModifiers(recovery), /*expected*/ false);
+    assert.deepStrictEqual(recovery.getModifiers()?.map(modifier => modifier.kind), [SyntaxKind.ExportKeyword]);
+});
+
+test("hasRestParameter handles syntax, JSDoc signatures, and empty parameter lists", () => {
+    using api = spawnAPI();
+    const source = api.createSourceFile(
+        "/rest.ts",
+        "function empty() {} function ordinary(value: string) {} function rest(first: number, ...values: string[]) {} type F = (...values: string[]) => void;",
+    ).sourceFile;
+    const functions = source.statements.filter(astModule.isFunctionDeclaration);
+    assert.deepStrictEqual(functions.map(astModule.hasRestParameter), [false, false, true]);
+    const alias = source.statements[3];
+    assert.ok(astModule.isTypeAliasDeclaration(alias));
+    assert.ok(astModule.isFunctionTypeNode(alias.type));
+    assert.strictEqual(astModule.hasRestParameter(alias.type), /*expected*/ true);
+
+    const js = api.createSourceFile(
+        "/rest.js",
+        `/**
+ * @callback Callback
+ * @param {...string} values
+ */
+function callback() {}
+`,
+    ).sourceFile;
+    const callback = js.statements.find(astModule.isFunctionDeclaration)?.jsDoc?.[0];
+    assert.ok(callback && astModule.isJSDoc(callback));
+    const tag = callback.tags?.[0];
+    assert.ok(tag && astModule.isJSDocCallbackTag(tag) && astModule.isJSDocSignature(tag.typeExpression));
+    assert.strictEqual(astModule.hasRestParameter(tag.typeExpression), /*expected*/ true);
+    const variadic = factory.createJSDocVariadicType(factory.createKeywordTypeNode(SyntaxKind.NumberKeyword));
+    const parameter = factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, factory.createIdentifier("values"), /*questionToken*/ undefined, variadic);
+    const fnType = factory.createFunctionTypeNode(/*typeParameters*/ undefined, [parameter], factory.createKeywordTypeNode(SyntaxKind.VoidKeyword));
+    assert.strictEqual(astModule.hasRestParameter(fnType), /*expected*/ true);
+    assert.strictEqual(astModule.hasRestParameter(factory.createJSDocSignature(/*typeParameters*/ undefined, [], /*type*/ undefined)), /*expected*/ false);
+});
+
+test("getCombinedNodeFlags follows binding declarations to their list and statement", () => {
+    using api = spawnAPI();
+    const source = api.createSourceFile(
+        "/flags.ts",
+        "/** @deprecated */ export const [{ value }] = input; let other = 1; var plain = 2;",
+    ).sourceFile;
+    for (const statement of source.statements) {
+        assert.ok(astModule.isVariableStatement(statement));
+        const list = statement.declarationList;
+        const declaration = list.declarations[0];
+        const expected = declaration.flags | list.flags | statement.flags;
+        assert.strictEqual(astModule.getCombinedNodeFlags(declaration), expected);
+        assert.strictEqual(astModule.getCombinedNodeFlags(list), list.flags | statement.flags);
+        assert.strictEqual(astModule.getCombinedNodeFlags(statement), statement.flags);
+        declaration.forEachChild(function walk(node) {
+            if (astModule.isBindingElement(node)) {
+                assert.strictEqual(astModule.getCombinedNodeFlags(node), expected);
+            }
+            node.forEachChild(walk);
+        });
+    }
+    assert.strictEqual(astModule.getCombinedNodeFlags(source), source.flags);
+    const detached = factory.createVariableDeclaration(factory.createIdentifier("detached"));
+    assert.strictEqual(astModule.getCombinedNodeFlags(detached), detached.flags);
+});
+
+test("canHaveModifiers recognizes declarations without an existing modifier list", () => {
+    using api = spawnAPI();
+    const source = api.createSourceFile(
+        "/modifiers.ts",
+        `
+export class C<T> {
+    property;
+    method(parameter) {}
+    constructor() {}
+    get value() {}
+    set value(v) {}
+    [key: string]: any;
+}
+interface I { property: string; method(): void; }
+const fn = async () => {};
+import x from "x";
+export { x };
+`,
+    ).sourceFile;
+    const supported = new Set([
+        SyntaxKind.ClassDeclaration,
+        SyntaxKind.TypeParameter,
+        SyntaxKind.PropertyDeclaration,
+        SyntaxKind.MethodDeclaration,
+        SyntaxKind.Parameter,
+        SyntaxKind.Constructor,
+        SyntaxKind.GetAccessor,
+        SyntaxKind.SetAccessor,
+        SyntaxKind.IndexSignature,
+        SyntaxKind.InterfaceDeclaration,
+        SyntaxKind.PropertySignature,
+        SyntaxKind.MethodSignature,
+        SyntaxKind.VariableStatement,
+        SyntaxKind.ArrowFunction,
+        SyntaxKind.ImportDeclaration,
+        SyntaxKind.ExportDeclaration,
+    ]);
+    const seen = new Set<SyntaxKind>();
+    function walk(node: Node): void {
+        assert.strictEqual(astModule.canHaveModifiers(node), supported.has(node.kind), formatSyntaxKind(node.kind));
+        if (astModule.canHaveModifiers(node)) {
+            const declaration: astModule.CanHaveModifiers = node;
+            seen.add(declaration.kind);
+        }
+        node.forEachChild(walk);
+    }
+    walk(source);
+    assert.deepStrictEqual(seen, supported);
+});
+
+test("canHaveDecorators narrows all supported declarations, even without decorators", () => {
+    using api = spawnAPI();
+    const source = api.createSourceFile(
+        "/decorators.ts",
+        "class C { property; method(parameter) {} get value() {} set value(v) {} } const expression = class {};",
+    ).sourceFile;
+    const supported = new Set([
+        SyntaxKind.Parameter,
+        SyntaxKind.PropertyDeclaration,
+        SyntaxKind.MethodDeclaration,
+        SyntaxKind.GetAccessor,
+        SyntaxKind.SetAccessor,
+        SyntaxKind.ClassExpression,
+        SyntaxKind.ClassDeclaration,
+    ]);
+    const seen = new Set<SyntaxKind>();
+    function walk(node: Node): void {
+        assert.strictEqual(astModule.canHaveDecorators(node), supported.has(node.kind));
+        if (astModule.canHaveDecorators(node)) {
+            const declaration: astModule.CanHaveDecorators = node;
+            assert.strictEqual(declaration.modifiers, /*expected*/ undefined);
+            seen.add(node.kind);
+        }
+        node.forEachChild(walk);
+    }
+    walk(source);
+    assert.deepStrictEqual(seen, supported);
+});
+
+test("findAncestor visits the starting node and supports narrowing and early termination", () => {
+    using api = spawnAPI();
+    const source = api.createSourceFile("/ancestor.ts", "class C { method() { return 1; } }").sourceFile;
+    const declaration = source.statements[0];
+    assert.ok(astModule.isClassDeclaration(declaration));
+    const member = declaration.members[0];
+    assert.ok(astModule.isMethodDeclaration(member));
+    const ancestor: ClassDeclaration | undefined = astModule.findAncestor(member, astModule.isClassDeclaration);
+    assert.strictEqual(ancestor, declaration);
+    assert.strictEqual(astModule.findAncestor(member, node => node === member), member);
+    const visited: Node[] = [];
+    assert.strictEqual(
+        astModule.findAncestor(member, node => {
+            visited.push(node);
+            return node === declaration ? "quit" : false;
+        }),
+        /*expected*/ undefined,
+    );
+    assert.deepStrictEqual(visited, [member, declaration]);
+    assert.strictEqual(astModule.findAncestor(source, () => false), /*expected*/ undefined);
+    assert.strictEqual(astModule.findAncestor(/*node*/ undefined, () => true), /*expected*/ undefined);
+});
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -103,6 +310,396 @@ describe("NodeObject + childrenIter", { concurrency }, () => {
     test("skips absent optional child lists", () => {
         const node = createMissingDeclaration();
         assert.deepStrictEqual([...node.childrenIter()], []);
+    });
+});
+
+test("index signatures allow an omitted type", () => {
+    using api = spawnAPI();
+    const source = api.createSourceFile("/repro.ts", "interface I { [key: string]; next: number; }").sourceFile;
+    const declaration = source.statements[0];
+    assert.ok(astModule.isInterfaceDeclaration(declaration));
+    const signature = declaration.members[0];
+    assert.ok(astModule.isIndexSignatureDeclaration(signature));
+    const type: astModule.TypeNode | undefined = signature.type;
+    assert.strictEqual(type, /*expected*/ undefined);
+    assert.strictEqual(createIndexSignatureDeclaration(/*modifiers*/ undefined, signature.parameters).type, /*expected*/ undefined);
+    assert.strictEqual(declaration.members.length, 2);
+});
+
+describe("JSDoc helpers", { concurrency }, () => {
+    test("isJSDocLinkLike narrows all three link kinds", () => {
+        const isLink: (node: Node) => node is astModule.JSDocLink | astModule.JSDocLinkCode | astModule.JSDocLinkPlain = astModule.isJSDocLinkLike;
+        const nodes: Node[] = [
+            factory.createJSDocLink(createIdentifier("target"), "link text"),
+            factory.createJSDocLinkCode(createIdentifier("target"), "code text"),
+            factory.createJSDocLinkPlain(createIdentifier("target"), "plain text"),
+            factory.createJSDocText("ordinary text"),
+            factory.createJSDocNameReference(createIdentifier("target")),
+            createIdentifier("target"),
+        ];
+        const links = nodes.filter(isLink);
+        assert.deepStrictEqual(links, nodes.slice(0, 3));
+        assert.deepStrictEqual(links.map(link => link.text), ["link text", "code text", "plain text"]);
+    });
+
+    test("getJSDocParameterTags matches identifiers by name", () => {
+        using api = spawnAPI();
+        const source = api.createSourceFile(
+            "/parameters.ts",
+            `/**
+ * @param second the second parameter
+ * @param first the first parameter
+ * @param first another description
+ * @param first.property a nested property
+ */
+function f(first: object, second: string, undocumented: number) {}
+`,
+        ).sourceFile;
+        const declaration = source.statements[0];
+        assert.ok(astModule.isFunctionDeclaration(declaration));
+        const tags = astModule.getJSDocTags(declaration).filter(astModule.isJSDocParameterTag);
+        assert.deepStrictEqual(astModule.getJSDocParameterTags(declaration.parameters[0]), [tags[1], tags[2]]);
+        assert.deepStrictEqual(astModule.getJSDocParameterTags(declaration.parameters[1]), [tags[0]]);
+        assert.deepStrictEqual(astModule.getJSDocParameterTags(declaration.parameters[2]), []);
+    });
+
+    test("getJSDocTypeParameterTags matches names within template tags", () => {
+        using api = spawnAPI();
+        const source = api.createSourceFile(
+            "/templates.ts",
+            `/**
+ * @template U, V shared description
+ * @template T the first description
+ * @template T another description
+ * @template Other an unrelated type parameter
+ */
+function f<T, U, V, Undocumented>() {}
+`,
+        ).sourceFile;
+        const declaration = source.statements[0];
+        assert.ok(astModule.isFunctionDeclaration(declaration));
+        const parameters = declaration.typeParameters;
+        assert.ok(parameters);
+        const tags = astModule.getJSDocTags(declaration).filter(astModule.isJSDocTemplateTag);
+        assert.deepStrictEqual(astModule.getJSDocTypeParameterTags(parameters[0]), [tags[1], tags[2]]);
+        assert.deepStrictEqual(astModule.getJSDocTypeParameterTags(parameters[1]), [tags[0]]);
+        assert.deepStrictEqual(astModule.getJSDocTypeParameterTags(parameters[2]), [tags[0]]);
+        assert.deepStrictEqual(astModule.getJSDocTypeParameterTags(parameters[3]), []);
+    });
+
+    test("getJSDocParameterTags matches binding patterns by position", () => {
+        using api = spawnAPI();
+        const source = api.createSourceFile(
+            "/bindings.js",
+            `/**
+ * @param {string} named a named parameter
+ * @param {object} options an object parameter
+ * @param {Array} entries an array parameter
+ */
+function f(named, { value }, [entry], { undocumented }) {}
+`,
+        ).sourceFile;
+        const declaration = source.statements[0];
+        assert.ok(astModule.isFunctionDeclaration(declaration));
+        const tags = astModule.getJSDocTags(declaration).filter(astModule.isJSDocParameterTag);
+        assert.deepStrictEqual(astModule.getJSDocParameterTags(declaration.parameters[1]), [tags[1]]);
+        assert.deepStrictEqual(astModule.getJSDocParameterTags(declaration.parameters[2]), [tags[2]]);
+        assert.deepStrictEqual(astModule.getJSDocParameterTags(declaration.parameters[3]), []);
+    });
+});
+
+describe("AST property contracts", { concurrency }, () => {
+    test("JSDoc typedefs expose type nodes", () => {
+        using api = spawnAPI();
+        const source = api.createSourceFile(
+            "/typedef.js",
+            `/** @typedef {string} Text */
+function text() {}
+/**
+ * @typedef {Object} Options
+ * @property {string} name
+ */
+function options() {}
+/** @typedef Missing */
+function missing() {}
+`,
+        ).sourceFile;
+        const kinds = [SyntaxKind.JSDocTypeExpression, SyntaxKind.JSDocTypeLiteral, undefined];
+        const declarations = source.statements.filter(astModule.isFunctionDeclaration);
+        assert.strictEqual(declarations.length, kinds.length);
+        for (const [index, declaration] of declarations.entries()) {
+            const docs: readonly JSDoc[] | undefined = declaration.jsDoc;
+            const tag = docs?.[0].tags?.[0];
+            assert.ok(tag && astModule.isJSDocTypedefTag(tag));
+            const type: astModule.JSDocTypeExpression | astModule.JSDocTypeLiteral | undefined = tag.typeExpression;
+            assert.strictEqual(type?.kind, kinds[index]);
+            assert.strictEqual(visitEachChild(tag, node => node), tag);
+            assert.strictEqual(getSynthesizedDeepClone(tag).typeExpression?.kind, kinds[index]);
+        }
+
+        const tagName = factory.createIdentifier("typedef");
+        const notAType = factory.createTypeReferenceNode(factory.createIdentifier("notAType"));
+        // @ts-expect-error A typedef type expression must be a JSDoc type expression or literal.
+        factory.createJSDocTypedefTag(tagName, notAType);
+    });
+
+    test("JSDoc signatures expose tags rather than declaration children", () => {
+        using api = spawnAPI();
+        const source = api.createSourceFile(
+            "/callback.js",
+            `/**
+ * @callback Callback
+ * @this {Object}
+ * @param {string} value
+ * @returns {number}
+ */
+function f() {}
+`,
+        ).sourceFile;
+        const declaration = source.statements.find(astModule.isFunctionDeclaration);
+        assert.ok(declaration);
+        const doc = declaration.jsDoc?.[0];
+        assert.ok(doc && astModule.isJSDoc(doc));
+        const callback = doc.tags?.[0];
+        assert.ok(callback && astModule.isJSDocCallbackTag(callback));
+        const signature = callback.typeExpression;
+        assert.ok(astModule.isJSDocSignature(signature));
+        const parameters: astModule.NodeArray<astModule.JSDocParameterTag | astModule.JSDocThisTag> = signature.parameters;
+        const result: astModule.JSDocReturnTag | undefined = signature.type;
+        assert.strictEqual(parameters[0].kind, SyntaxKind.JSDocThisTag);
+        assert.strictEqual(parameters[1].kind, SyntaxKind.JSDocParameterTag);
+        assert.strictEqual(result?.kind, SyntaxKind.JSDocReturnTag);
+        assert.strictEqual(visitEachChild(signature, node => node), signature);
+
+        const template = factory.createJSDocTemplateTag(factory.createIdentifier("template"), /*constraint*/ undefined, []);
+        const typeParameters: readonly astModule.JSDocTemplateTag[] = [template];
+        const synthesized = factory.createJSDocSignature(typeParameters, parameters, result);
+        const clone = getSynthesizedDeepClone(synthesized);
+        assert.strictEqual(clone.typeParameters?.[0].kind, SyntaxKind.JSDocTemplateTag);
+        assert.deepStrictEqual(clone.parameters.map(parameter => parameter.kind), [SyntaxKind.JSDocThisTag, SyntaxKind.JSDocParameterTag]);
+        assert.strictEqual(clone.type?.kind, SyntaxKind.JSDocReturnTag);
+        assert.strictEqual(visitEachChild(clone, node => node), clone);
+        assert.strictEqual(visitEachChild(synthesized, node => node), synthesized);
+    });
+
+    test("JSDoc namespace bodies include their final identifier", () => {
+        using api = spawnAPI();
+        const source = api.createSourceFile(
+            "/namespace.js",
+            `/** @typedef {string} Outer.Inner.Value */
+function f() {}
+`,
+        ).sourceFile;
+        const declaration = source.statements.find(astModule.isFunctionDeclaration);
+        assert.ok(declaration);
+        const doc = declaration.jsDoc?.[0];
+        assert.ok(doc && astModule.isJSDoc(doc));
+        const tag = doc.tags?.[0];
+        assert.ok(tag && astModule.isJSDocTypedefTag(tag));
+        const outer = tag.name;
+        assert.ok(outer && astModule.isModuleDeclaration(outer));
+        const inner = outer.body;
+        assert.ok(inner && astModule.isModuleDeclaration(inner));
+        const body: astModule.ModuleBody = factory.createIdentifier("Value");
+        assert.ok(astModule.isModuleBody(body));
+        assert.ok(inner.body && astModule.isIdentifier(inner.body));
+        assert.strictEqual(inner.body.text, "Value");
+        assert.strictEqual(visitEachChild(inner, node => node), inner);
+        assert.deepStrictEqual(collectKinds(getSynthesizedDeepClone(outer)), collectKinds(outer));
+    });
+
+    test("absent parser children have optional types", () => {
+        const absent: {
+            exportType: astModule.ExportAssignment["type"];
+            propertyType: astModule.PropertyAssignment["type"];
+            shorthandType: astModule.ShorthandPropertyAssignment["type"];
+            signatureType: astModule.PropertySignatureDeclaration["type"];
+            signatureInitializer: astModule.PropertySignatureDeclaration["initializer"];
+            questionDotToken: astModule.TaggedTemplateExpression["questionDotToken"];
+            constraint: astModule.JSDocTemplateTag["constraint"];
+            nameExpression: astModule.JSDocSeeTag["nameExpression"];
+        } = {
+            exportType: undefined,
+            propertyType: undefined,
+            shorthandType: undefined,
+            signatureType: undefined,
+            signatureInitializer: undefined,
+            questionDotToken: undefined,
+            constraint: undefined,
+            nameExpression: undefined,
+        };
+        using api = spawnAPI();
+        const seen: Record<string, unknown> = {};
+        function walk(node: Node): void {
+            if (astModule.isDefaultClause(node)) assert.strictEqual((node as { expression?: unknown; }).expression, /*expected*/ undefined);
+            if (astModule.isExportAssignment(node)) seen.exportType = node.type;
+            if (astModule.isPropertyAssignment(node)) seen.propertyType = node.type;
+            if (astModule.isShorthandPropertyAssignment(node)) seen.shorthandType = node.type;
+            if (astModule.isPropertySignatureDeclaration(node)) {
+                seen.signatureType = node.type;
+                seen.signatureInitializer = node.initializer;
+            }
+            if (astModule.isTaggedTemplateExpression(node)) seen.questionDotToken = node.questionDotToken;
+            if (astModule.isJSDocTemplateTag(node)) seen.constraint = node.constraint;
+            if (astModule.isJSDocSeeTag(node)) seen.nameExpression = node.nameExpression;
+            node.forEachChild(walk);
+            node.jsDoc?.forEach(walk);
+        }
+        walk(
+            api.createSourceFile(
+                "/repro.ts",
+                `
+    switch (x) { default: break; }
+    export default 0;
+    const object = { x, y: 1 };
+    interface I { p; [key: string]; }
+    tag\`text\`;
+    `,
+            ).sourceFile,
+        );
+        walk(
+            api.createSourceFile(
+                "/repro.js",
+                `
+    /** @see */ function a() {}
+    /** @template T */ function b() {}
+    `,
+            ).sourceFile,
+        );
+        assert.deepStrictEqual(Object.keys(seen).sort(), Object.keys(absent).sort());
+        for (const name of Object.keys(absent)) {
+            assert.strictEqual(seen[name] === undefined, /*expected*/ true, name);
+        }
+    });
+
+    test("synthesized arrows have an equalsGreaterThanToken", () => {
+        using programAPI = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/src/index.ts": "declare function f(): number;",
+        });
+        const [source, checker] = getRemoteSourceFileAndChecker(programAPI, "/tsconfig.json", "/src/index.ts");
+        const signature = checker.getSignaturesOfType(checker.getTypeAtLocation(source.statements[0]), SignatureKind.Call)[0];
+        const arrow = checker.signatureToSignatureDeclaration(signature, SyntaxKind.ArrowFunction);
+        assert.ok(arrow && astModule.isArrowFunction(arrow));
+        const remoteToken: astModule.EqualsGreaterThanToken = arrow.equalsGreaterThanToken;
+        assert.strictEqual(remoteToken.kind, SyntaxKind.EqualsGreaterThanToken);
+
+        const body = factory.createBlock([]);
+        const local = factory.createArrowFunction(/*modifiers*/ undefined, /*typeParameters*/ undefined, [], /*type*/ undefined, /*equalsGreaterThanToken*/ undefined, body);
+        const localToken: astModule.EqualsGreaterThanToken = local.equalsGreaterThanToken;
+        assert.strictEqual(localToken.kind, SyntaxKind.EqualsGreaterThanToken);
+        assert.strictEqual(cloneNode(local).equalsGreaterThanToken, local.equalsGreaterThanToken);
+        const explicitToken = factory.createToken(SyntaxKind.EqualsGreaterThanToken);
+        const explicit = factory.createArrowFunction(/*modifiers*/ undefined, /*typeParameters*/ undefined, [], /*type*/ undefined, explicitToken, body);
+        assert.strictEqual(explicit.equalsGreaterThanToken, explicitToken);
+    });
+
+    test("required parser children and binding holes retain their contracts", () => {
+        using api = spawnAPI();
+        const source = api.createSourceFile(
+            "/repro.ts",
+            `
+    switch (x) { case 0: break; }
+    type F = () => number;
+    type C = new () => object;
+    const [,, x] = value;
+    `,
+        ).sourceFile;
+        let cases = 0;
+        let returns = 0;
+        let holes = 0;
+        function walk(node: Node): void {
+            if (astModule.isCaseClause(node)) {
+                const expression: astModule.Expression = node.expression;
+                assert.strictEqual(expression.kind, SyntaxKind.NumericLiteral);
+                cases++;
+            }
+            if (astModule.isFunctionTypeNode(node) || astModule.isConstructorTypeNode(node)) {
+                const type: astModule.TypeNode = node.type;
+                assert.ok(type);
+                returns++;
+            }
+            if (astModule.isBindingElement(node) && !node.name) holes++;
+            node.forEachChild(walk);
+        }
+        walk(source);
+        const docs = api.createSourceFile("/repro.js", "/** @see */ function f() {}").sourceFile.statements[0].jsDoc;
+        assert.ok(docs && astModule.isJSDoc(docs[0]));
+        assert.strictEqual(docs[0].comment.length, 0);
+        assert.deepStrictEqual({ cases, returns, holes }, { cases: 1, returns: 2, holes: 2 });
+    });
+
+    test("factory scalar defaults agree with their declared types", () => {
+        const type = factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword);
+        assert.deepStrictEqual({
+            block: factory.createBlock([]).multiLine,
+            array: factory.createArrayLiteralExpression([]).multiLine,
+            object: factory.createObjectLiteralExpression([]).multiLine,
+            attributes: factory.createImportAttributes(SyntaxKind.WithKeyword, []).multiLine,
+            export: factory.createExportDeclaration().isTypeOnly,
+            spread: factory.createSyntheticExpression(type).isSpread,
+            whitespace: factory.createJsxText("text").containsOnlyTriviaWhiteSpaces,
+            arrayType: factory.createJSDocTypeLiteral().isArrayType,
+        }, {
+            block: false,
+            array: false,
+            object: false,
+            attributes: false,
+            export: false,
+            spread: false,
+            whitespace: false,
+            arrayType: false,
+        });
+        assert.strictEqual(factory.createNodeArray([]).transformFlags, 0);
+    });
+
+    test("factory modifierFlags are computed from modifiers", () => {
+        assert.strictEqual(factory.createExportDeclaration().modifierFlags, ModifierFlags.None);
+        const declaration = factory.createFunctionDeclaration(
+            [factory.createToken(SyntaxKind.ExportKeyword), factory.createToken(SyntaxKind.AsyncKeyword)],
+            /*asteriskToken*/ undefined,
+            factory.createIdentifier("f"),
+            /*typeParameters*/ undefined,
+            [],
+        );
+        assert.strictEqual(declaration.modifierFlags, ModifierFlags.Export | ModifierFlags.Async);
+        assert.strictEqual(cloneNode(declaration).modifierFlags, declaration.modifierFlags);
+    });
+
+    test("factory scalar accessors preserve explicit values", () => {
+        assert.strictEqual(factory.createBlock([], /*multiLine*/ true).multiLine, /*expected*/ true);
+        assert.strictEqual(factory.createArrayLiteralExpression([], /*multiLine*/ true).multiLine, /*expected*/ true);
+        assert.strictEqual(factory.createObjectLiteralExpression([], /*multiLine*/ true).multiLine, /*expected*/ true);
+        assert.strictEqual(factory.createImportAttributes(SyntaxKind.WithKeyword, [], /*multiLine*/ true).multiLine, /*expected*/ true);
+        assert.strictEqual(factory.createJsxText(" ", /*containsOnlyTriviaWhiteSpaces*/ true).containsOnlyTriviaWhiteSpaces, /*expected*/ true);
+        assert.strictEqual(factory.createJSDocTypeLiteral(/*jsdocPropertyTags*/ undefined, /*isArrayType*/ true).isArrayType, /*expected*/ true);
+        assert.strictEqual(factory.createExportDeclaration(/*modifiers*/ undefined, /*isTypeOnly*/ true).isTypeOnly, /*expected*/ true);
+        assert.strictEqual(factory.createSyntheticExpression(factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword), /*isSpread*/ true).isSpread, /*expected*/ true);
+    });
+
+    test("optional factory children survive cloning and visiting", () => {
+        const name = factory.createIdentifier("p");
+        const property = factory.createPropertySignatureDeclaration(/*modifiers*/ undefined, name);
+        assert.strictEqual(property.type, /*expected*/ undefined);
+        assert.strictEqual(property.initializer, /*expected*/ undefined);
+        assert.deepStrictEqual(collectKinds(getSynthesizedDeepClone(property)), [SyntaxKind.PropertySignature, SyntaxKind.Identifier]);
+
+        const clause = factory.createDefaultClause([]);
+        const hasExpression: "expression" extends keyof astModule.DefaultClause ? true : false = false;
+        assert.strictEqual(hasExpression, /*expected*/ false);
+        assert.strictEqual((clause as { expression?: unknown; }).expression, /*expected*/ undefined);
+        assert.deepStrictEqual([...clause.childrenIter()], []);
+        assert.strictEqual(visitEachChild(clause, node => node), clause);
+
+        const type = factory.createKeywordTypeNode(SyntaxKind.StringKeyword);
+        const initializer = factory.createStringLiteral("value", TokenFlags.None);
+        const populated = factory.createPropertySignatureDeclaration(/*modifiers*/ undefined, name, /*postfixToken*/ undefined, type, initializer);
+        assert.deepStrictEqual(collectKinds(getSynthesizedDeepClone(populated)), [
+            SyntaxKind.PropertySignature,
+            SyntaxKind.Identifier,
+            SyntaxKind.StringKeyword,
+            SyntaxKind.StringLiteral,
+        ]);
     });
 });
 
@@ -156,7 +753,7 @@ describe("cloneNode", { concurrency }, () => {
         const left = createIdentifier("a");
         const right = createIdentifier("b");
         const op = createToken(SyntaxKind.PlusToken);
-        const bin = createBinaryExpression(undefined, left, undefined, op, right);
+        const bin = createBinaryExpression(/*modifiers*/ undefined, left, /*type*/ undefined, op, right);
         const clone = cloneNode(bin);
 
         assert.notStrictEqual(clone, bin);
@@ -168,7 +765,7 @@ describe("cloneNode", { concurrency }, () => {
     test("clone has no parent", () => {
         const id = createIdentifier("x");
         const clone = cloneNode(id);
-        assert.strictEqual(clone.parent, undefined);
+        assert.strictEqual(clone.parent, /*expected*/ undefined);
     });
 
     test("clones a token", () => {
@@ -188,7 +785,7 @@ describe("visitNode", { concurrency }, () => {
     test("returns undefined for undefined input", () => {
         const nothing: Node | undefined = undefined;
         const result = visitNode(nothing, () => undefined);
-        assert.strictEqual(result, undefined);
+        assert.strictEqual(result, /*expected*/ undefined);
     });
 
     test("returns visitor result", () => {
@@ -201,7 +798,7 @@ describe("visitNode", { concurrency }, () => {
     test("visitor can return undefined to remove node", () => {
         const id = createIdentifier("x");
         const result = visitNode(id, () => undefined);
-        assert.strictEqual(result, undefined);
+        assert.strictEqual(result, /*expected*/ undefined);
     });
 });
 
@@ -209,7 +806,7 @@ describe("visitNodes", { concurrency }, () => {
     test("returns undefined for undefined input", () => {
         const nothing: NodeArray<Node> | undefined = undefined;
         const result = visitNodes(nothing, () => undefined);
-        assert.strictEqual(result, undefined);
+        assert.strictEqual(result, /*expected*/ undefined);
     });
 
     test("returns same array if nothing changed", () => {
@@ -255,7 +852,7 @@ describe("visitEachChild", { concurrency }, () => {
         const left = createIdentifier("a");
         const right = createIdentifier("b");
         const op = createToken(SyntaxKind.PlusToken);
-        const bin = createBinaryExpression(undefined, left, undefined, op, right);
+        const bin = createBinaryExpression(/*modifiers*/ undefined, left, /*type*/ undefined, op, right);
 
         const result = visitEachChild(bin, node => node);
         assert.strictEqual(result, bin);
@@ -264,14 +861,14 @@ describe("visitEachChild", { concurrency }, () => {
     test("returns undefined for undefined input", () => {
         const nothing: Node | undefined = undefined;
         const result = visitEachChild(nothing, node => node);
-        assert.strictEqual(result, undefined);
+        assert.strictEqual(result, /*expected*/ undefined);
     });
 
     test("creates new node when child changes", () => {
         const left = createIdentifier("a");
         const right = createIdentifier("b");
         const op = createToken(SyntaxKind.PlusToken);
-        const bin = createBinaryExpression(undefined, left, undefined, op, right);
+        const bin = createBinaryExpression(/*modifiers*/ undefined, left, /*type*/ undefined, op, right);
 
         const newRight = createIdentifier("c");
         const result = visitEachChild(bin, node => {
@@ -288,7 +885,7 @@ describe("visitEachChild", { concurrency }, () => {
     test("works on if statement with optional else", () => {
         const cond = createIdentifier("ok");
         const thenBranch = createBlock([]);
-        const ifStmt = createIfStatement(cond, thenBranch, undefined);
+        const ifStmt = createIfStatement(cond, thenBranch, /*elseStatement*/ undefined);
 
         const newCond = createIdentifier("notOk");
         const result = visitEachChild(ifStmt, node => {
@@ -299,7 +896,7 @@ describe("visitEachChild", { concurrency }, () => {
         assert.notStrictEqual(result, ifStmt);
         assert.strictEqual(result.expression, newCond);
         assert.strictEqual(result.thenStatement, thenBranch);
-        assert.strictEqual(result.elseStatement, undefined);
+        assert.strictEqual(result.elseStatement, /*expected*/ undefined);
     });
 
     test("works on nodes with NodeArray children", () => {
@@ -359,7 +956,7 @@ describe("getSynthesizedDeepClone", { concurrency }, () => {
         const left = createIdentifier("a");
         const right = createNumericLiteral("42", TokenFlags.None);
         const op = createToken(SyntaxKind.PlusToken);
-        const bin = createBinaryExpression(undefined, left, undefined, op, right);
+        const bin = createBinaryExpression(/*modifiers*/ undefined, left, /*type*/ undefined, op, right);
 
         const clone = getSynthesizedDeepClone(bin);
 
@@ -384,7 +981,7 @@ describe("getSynthesizedDeepClone", { concurrency }, () => {
         const left = createIdentifier("a");
         const right = createIdentifier("b");
         const op = createToken(SyntaxKind.PlusToken);
-        const bin = createBinaryExpression(undefined, left, undefined, op, right);
+        const bin = createBinaryExpression(/*modifiers*/ undefined, left, /*type*/ undefined, op, right);
 
         const clone = getSynthesizedDeepClone(bin);
 
@@ -394,14 +991,14 @@ describe("getSynthesizedDeepClone", { concurrency }, () => {
     });
 
     test("returns undefined for undefined input", () => {
-        const result = getSynthesizedDeepClone(undefined);
-        assert.strictEqual(result, undefined);
+        const result = getSynthesizedDeepClone(/*node*/ undefined);
+        assert.strictEqual(result, /*expected*/ undefined);
     });
 
     test("deeply clones if statement with optional else", () => {
         const cond = createIdentifier("ok");
         const thenBlock = createBlock([]);
-        const ifStmt = createIfStatement(cond, thenBlock, undefined);
+        const ifStmt = createIfStatement(cond, thenBlock, /*elseStatement*/ undefined);
 
         const clone = getSynthesizedDeepClone(ifStmt);
 
@@ -411,7 +1008,7 @@ describe("getSynthesizedDeepClone", { concurrency }, () => {
         assert.strictEqual(clone.expression.kind, SyntaxKind.Identifier);
         assert.notStrictEqual(clone.thenStatement, thenBlock);
         assert.strictEqual(clone.thenStatement.kind, SyntaxKind.Block);
-        assert.strictEqual(clone.elseStatement, undefined);
+        assert.strictEqual(clone.elseStatement, /*expected*/ undefined);
     });
 
     test("preserves tree structure with nested children", () => {
@@ -456,7 +1053,7 @@ describe("getSynthesizedDeepClone", { concurrency }, () => {
         const left = createIdentifier("x");
         const right = createNumericLiteral("1", TokenFlags.None);
         const op = createToken(SyntaxKind.PlusToken);
-        const bin = createBinaryExpression(undefined, left, undefined, op, right);
+        const bin = createBinaryExpression(/*modifiers*/ undefined, left, /*type*/ undefined, op, right);
         const stmt = createExpressionStatement(bin);
 
         const clone = getSynthesizedDeepClone(stmt);
@@ -485,8 +1082,8 @@ describe("getSynthesizedDeepClones", { concurrency }, () => {
     });
 
     test("returns undefined for undefined input", () => {
-        const result = getSynthesizedDeepClones(undefined);
-        assert.strictEqual(result, undefined);
+        const result = getSynthesizedDeepClones(/*nodes*/ undefined);
+        assert.strictEqual(result, /*expected*/ undefined);
     });
 
     test("preserves pos and end on NodeArray", () => {
@@ -656,11 +1253,11 @@ describe("declaration utilities", { concurrency }, () => {
     test("getCombinedModifierFlags includes modifiers on factory nodes", () => {
         const declaration = createFunctionDeclaration(
             [createToken(SyntaxKind.ExportKeyword), createToken(SyntaxKind.AsyncKeyword)],
-            undefined,
+            /*asteriskToken*/ undefined,
             createIdentifier("f"),
-            undefined,
+            /*typeParameters*/ undefined,
             [],
-            undefined,
+            /*type*/ undefined,
             createBlock([]),
         );
 
@@ -678,7 +1275,7 @@ describe("declaration utilities", { concurrency }, () => {
         const sf = getRemoteSourceFile(api, "/tsconfig.json", "/src/index.ts");
         const statement = sf.statements[0] as VariableStatement;
         const declaration = statement.declarationList.declarations[0];
-        const binding = (declaration.name as ObjectBindingPattern).elements[0] as BindingElement;
+        const binding = (declaration.name as ObjectBindingPattern).elements[0];
 
         assert.strictEqual(
             getCombinedModifierFlags(binding),
@@ -723,7 +1320,7 @@ export default declared;
         assert.strictEqual(getNameOfDeclaration(sf.statements[0] as FunctionDeclaration)?.getText(), "declared");
         assert.strictEqual(getNameOfDeclaration(classExpression)?.getText(), "assigned");
         assert.strictEqual(getNameOfDeclaration(sf.statements[2] as ExportAssignment)?.getText(), "declared");
-        assert.strictEqual(getNameOfDeclaration(undefined), undefined);
+        assert.strictEqual(getNameOfDeclaration(/*declaration*/ undefined), /*expected*/ undefined);
     });
 
     test("getNameOfDeclaration returns JavaScript assignment declaration names", () => {
@@ -759,13 +1356,13 @@ export const x = 1;`,
         });
         try {
             const sf = getRemoteSourceFile(api, "/tsconfig.json", "/src/index.ts");
-            const jsDoc = sf.statements[0].jsDoc?.[0] as JSDoc | undefined;
+            const jsDoc = sf.statements[0].jsDoc?.[0];
             assert.ok(jsDoc?.kind === SyntaxKind.JSDoc);
             const comment = jsDoc.comment;
             assert.ok(typeof comment !== "string");
             const link = comment?.[1];
             assert.ok(link && isJSDocLink(link));
-            assert.strictEqual(link.name, undefined);
+            assert.strictEqual(link.name, /*expected*/ undefined);
         }
         finally {
             api.close();
@@ -857,7 +1454,7 @@ interface I extends Parent<boolean> {}
 
             const clone = cloneNode(fooName);
             assert.strictEqual(clone.kind, SyntaxKind.Identifier);
-            assert.strictEqual((clone as Identifier).text, "foo");
+            assert.strictEqual(clone.text, "foo");
         }
         finally {
             api.close();
@@ -1321,8 +1918,8 @@ describe("RemoteNode + child/token getters", { concurrency }, () => {
             const ifToken = stmt.getFirstToken()!;
             assert.strictEqual(ifToken.getChildCount(), 0);
             assert.deepStrictEqual(ifToken.getChildren(), []);
-            assert.strictEqual(ifToken.getFirstToken(), undefined);
-            assert.strictEqual(ifToken.getLastToken(), undefined);
+            assert.strictEqual(ifToken.getFirstToken(), /*expected*/ undefined);
+            assert.strictEqual(ifToken.getLastToken(), /*expected*/ undefined);
         });
     });
 
@@ -1332,7 +1929,7 @@ describe("RemoteNode + child/token getters", { concurrency }, () => {
             assert.ok(arr, "expected an array literal");
             const list = arr.getChildren().find(c => c.kind === SyntaxKind.SyntaxList);
             assert.ok(list, "array literal children should include a SyntaxList");
-            assert.deepStrictEqual(list!.getChildren().map(c => c.getText()), ["1", ",", "2", ",", "3"]);
+            assert.deepStrictEqual(list.getChildren().map(c => c.getText()), ["1", ",", "2", ",", "3"]);
         });
     });
 
@@ -1439,7 +2036,7 @@ describe("RemoteNode + child/token getters", { concurrency }, () => {
             for (let i = 0; i < children.length; i++) {
                 assert.strictEqual(node.getChildAt(i, sf), children[i]);
             }
-            assert.strictEqual(node.getChildAt(children.length, sf), undefined);
+            assert.strictEqual(node.getChildAt(children.length, sf), /*expected*/ undefined);
             assert.strictEqual(node.getChildren(sf), children, "getChildren should be cached");
 
             // JSDoc nodes don't synthesize tokens, so the token/tiling invariants don't apply.
@@ -1495,6 +2092,7 @@ describe("RemoteNode + child/token getters", { concurrency }, () => {
             "export function greet(name: string, count = 1): string {",
             "    const parts: string[] = [];",
             "    for (let i = 0; i < count; i++) {",
+            // eslint-disable-next-line no-template-curly-in-string -- This string is TypeScript source.
             "        parts.push(`hi ${name}`);",
             "    }",
             "    if (parts.length) {",
@@ -1510,7 +2108,7 @@ describe("RemoteNode + child/token getters", { concurrency }, () => {
 
     // Representative constructs, each exercising a distinct structural path of getChildren
     // (token synthesis, SyntaxList wrapping, empty lists, decorator lists, JSDoc, JSX, nesting).
-    const corpus: Array<{ name: string; source: string; jsx?: boolean; js?: boolean; }> = [
+    const corpus: { name: string; source: string; jsx?: boolean; js?: boolean; }[] = [
         { name: "variable declarations", source: "const a = 1; let b: number = 2; var c, d = 3;" },
         { name: "function with optional, default and rest params", source: "function f(a: number, b?: string, c = 1, ...d: any[]): void {}" },
         { name: "class with members", source: "class C { x = 1; #y = 2; static s = 3; readonly r: string; constructor(public p: number) {} m() {} get g() { return 1; } set v(x) {} static {} }" },
@@ -1523,6 +2121,7 @@ describe("RemoteNode + child/token getters", { concurrency }, () => {
         { name: "for variants", source: "for (let i = 0; i < n; i++) {} for (const k in o) {} for (const v of a) {} for (;;) { break; }" },
         { name: "switch with an empty case clause", source: "switch (x) { case 1: y(); break; case 2: case 3: z(); default: w(); }" },
         { name: "object literal with all member kinds", source: "const o = { a: 1, b, [c]: 2, ...d, m() {}, get g() { return 1; }, set s(v) {}, async am() {}, *gm() {} };" },
+        // eslint-disable-next-line no-template-curly-in-string -- This string is TypeScript source.
         { name: "tagged and nested template literals", source: "const r = tag`a${b}c${`inner${d}`}e`;" },
         { name: "comments and jsdoc with tags", source: "// line\n/* block */\n/**\n * @param a the a\n * @returns nothing\n */\nfunction f(a: number) {} // trailing" },
         { name: "empty constructs", source: "function f() {} class C {} interface I {} enum E {} { } ; namespace N {}" },
@@ -1628,9 +2227,9 @@ describe("getChildren scanner reuse", { concurrency }, () => {
         assert.strictEqual(scanner.getToken(), SyntaxKind.Unknown);
         assert.strictEqual(scanner.getTokenFullStart(), 0);
         assert.strictEqual(scanner.getTokenEnd(), 0);
-        assert.strictEqual(scanner.getTokenValue(), undefined);
+        assert.strictEqual(scanner.getTokenValue(), /*expected*/ undefined);
         assert.strictEqual(scanner.getTokenFlags(), TokenFlags.None);
-        assert.strictEqual(scanner.getCommentDirectives(), undefined);
+        assert.strictEqual(scanner.getCommentDirectives(), /*expected*/ undefined);
     }
 
     const sample = [

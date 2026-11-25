@@ -1,0 +1,133 @@
+trigger: none
+pr: none
+
+parameters:
+  - name: operation
+    type: string
+    values:
+      - cherry-pick
+      - new-release-branch
+      - set-version
+      - sync-branch
+  - name: pr
+    type: string
+    default: ''
+  - name: target_branch
+    type: string
+    default: ''
+  - name: branch_name
+    type: string
+    default: ''
+  - name: package_version
+    type: string
+    default: ''
+  - name: core_major_minor
+    type: string
+    default: ''
+  - name: distinct_id
+    type: string
+    default: ''
+  - name: source_issue
+    type: string
+    default: ''
+  - name: requesting_user
+    type: string
+    default: ''
+  - name: status_comment
+    type: string
+    default: ''
+
+name: $(Date:yyyyMMdd)$(Rev:.r) ${{ parameters.operation }}
+
+variables:
+  - name: TYPESCRIPT_AUTOMATION_GITHUB_APP_CLIENT_ID
+    value: Iv23li4GolzJSEp1mzHI
+  - name: TYPESCRIPT_AUTOMATION_GITHUB_APP_KEY_ID
+    value: https://jststeam-passwords.vault.azure.net/keys/typescript-automation
+  - name: OPERATION
+    value: ${{ parameters.operation }}
+  - name: PR
+    value: ${{ parameters.pr }}
+  - name: TARGET_BRANCH
+    value: ${{ parameters.target_branch }}
+  - name: BRANCH_NAME
+    value: ${{ parameters.branch_name }}
+  - name: PACKAGE_VERSION
+    value: ${{ parameters.package_version }}
+  - name: CORE_MAJOR_MINOR
+    value: ${{ parameters.core_major_minor }}
+  - name: DISTINCT_ID
+    value: ${{ parameters.distinct_id }}
+  - name: SOURCE_ISSUE
+    value: ${{ parameters.source_issue }}
+  - name: REQUESTING_USER
+    value: ${{ parameters.requesting_user }}
+  - name: STATUS_COMMENT
+    value: ${{ parameters.status_comment }}
+
+jobs:
+  - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
+      - job: ReleaseMaintenance
+        displayName: ${{ parameters.operation }}
+        timeoutInMinutes: 180
+        pool:
+          name: TypeScript-1ES-Large
+          demands:
+            - ImageOverride -equals azure-linux-3
+
+        steps:
+          - checkout: self
+            fetchDepth: 0
+            fetchFilter: blob:none
+            fetchTags: false
+
+          # Later steps run from a release branch checkout, so keep main's copies of the scripts.
+          - bash: cp tools/scripts/configure-release.mjs tools/scripts/release-maintenance.mjs "$AGENT_TEMPDIRECTORY/"
+            displayName: Copy release scripts
+
+          - task: UseNode@1
+            displayName: Use Node 24.x
+            inputs:
+              version: 24.x
+
+          - template: /tools/pipelines/steps/setup-go.yml@self
+
+          - bash: node "$AGENT_TEMPDIRECTORY/release-maintenance.mjs" prepare
+            displayName: Prepare ${{ parameters.operation }}
+
+          - bash: npm ci
+            displayName: npm ci
+
+          - ${{ if ne(parameters.operation, 'cherry-pick') }}:
+              - bash: npx hereby validate --all
+                displayName: hereby validate --all
+                condition: and(succeeded(), eq(variables['ReleaseConfigChanged'], 'true'))
+
+              - bash: node "$AGENT_TEMPDIRECTORY/release-maintenance.mjs" commit
+                ${{ if eq(parameters.operation, 'sync-branch') }}:
+                  displayName: Verify clean merge
+                ${{ else }}:
+                  displayName: Commit release configuration
+                condition: and(succeeded(), eq(variables['ReleaseConfigChanged'], 'true'))
+
+          - template: /tools/pipelines/steps/create-github-app-token.yml@self
+            parameters:
+              azureSubscription: typescript-automation-signing
+              repositories: TypeScript
+              ${{ if eq(parameters.operation, 'cherry-pick') }}:
+                permissions: contents:write,issues:write,pull_requests:write
+              ${{ else }}:
+                permissions: contents:write,issues:write
+              condition: not(canceled())
+              insertSteps:
+                - bash: node "$AGENT_TEMPDIRECTORY/release-maintenance.mjs" publish
+                  displayName: Publish ${{ parameters.operation }}
+                  env:
+                    GH_TOKEN: $(GH_TOKEN)
+
+                - ${{ if ne(parameters.distinct_id, '') }}:
+                    - bash: node "$AGENT_TEMPDIRECTORY/release-maintenance.mjs" post-result
+                      displayName: Post result
+                      condition: not(canceled())
+                      env:
+                        GH_TOKEN: $(GH_TOKEN)

@@ -21,7 +21,7 @@ export const local = 1;
     ]
 }
 
-tsgo --runExternalCode
+tsc --runExternalCode
 ExitStatus:: Success
 Output::
 //// [/home/src/tslibs/TS/Lib/lib.es2026.full.d.ts] *Lib*

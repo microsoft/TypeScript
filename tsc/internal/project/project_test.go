@@ -7,7 +7,9 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/bundled"
+	"github.com/microsoft/TypeScript/tsc/internal/compiler"
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/internal/json"
@@ -81,6 +83,46 @@ func TestProjectProgramUpdateKind(t *testing.T) {
 		configured := snapshot.ProjectCollection.ConfiguredProject(tspath.PathKey("/src/tsconfig.json"))
 		assert.Assert(t, configured != nil)
 		assert.Equal(t, configured.ProgramUpdateKind, project.ProgramUpdateKindCloned)
+	})
+
+	t.Run("Cloned on change to file with unchanged synthetic imports", func(t *testing.T) {
+		t.Parallel()
+		files := map[string]any{
+			"/src/tsconfig.json":                       `{"compilerOptions": {"module": "esnext", "moduleResolution": "bundler", "jsx": "react-jsx", "importHelpers": true, "noEmit": true}}`,
+			"/src/index.tsx":                           "export const a = <div />;",
+			"/src/node_modules/react/package.json":     `{"name": "react", "version": "1.0.0"}`,
+			"/src/node_modules/react/jsx-runtime.d.ts": "export declare function jsx(...args: any[]): any;\ndeclare global { namespace JSX { interface IntrinsicElements { [name: string]: any } } }",
+			"/src/node_modules/tslib/package.json":     `{"name": "tslib", "version": "1.0.0", "types": "tslib.d.ts"}`,
+			"/src/node_modules/tslib/tslib.d.ts":       "export {};",
+		}
+		session, _ := projecttestutil.Setup(files)
+		uri := lsproto.DocumentUri("file:///src/index.tsx")
+		session.DidOpenFile(context.Background(), uri, 1, files["/src/index.tsx"].(string), lsproto.LanguageKindTypeScriptReact)
+		_, err := session.GetLanguageService(context.Background(), uri)
+		assert.NilError(t, err)
+
+		change := func(version int32, text string) *compiler.Program {
+			session.DidChangeFile(context.Background(), uri, version, []lsproto.TextDocumentContentChangePartialOrWholeDocument{{
+				WholeDocument: &lsproto.TextDocumentContentChangeWholeDocument{Text: text},
+			}})
+			ls, lsErr := session.GetLanguageService(context.Background(), uri)
+			assert.NilError(t, lsErr)
+			return ls.GetProgram()
+		}
+		updateKind := func() project.ProgramUpdateKind {
+			return session.Snapshot().ProjectCollection.ConfiguredProject(tspath.PathKey("/src/tsconfig.json")).ProgramUpdateKind
+		}
+
+		program := change(2, "export const a = <span />;")
+		assert.Equal(t, updateKind(), project.ProgramUpdateKindCloned)
+		file := program.GetSourceFile("/src/index.tsx")
+		_, jsxSpecifier := program.GetJSXRuntimeImportSpecifier(file.PathKey())
+		assert.Equal(t, ast.GetSourceFileOfNode(jsxSpecifier), file)
+		assert.Equal(t, ast.GetSourceFileOfNode(program.GetImportHelpersImportSpecifier(file.PathKey())), file)
+		assert.Equal(t, len(program.GetSemanticDiagnostics(projecttestutil.WithRequestID(t.Context()), file)), 0)
+
+		change(3, "/** @jsxImportSource preact */\nexport const a = <span />;")
+		assert.Assert(t, updateKind() != project.ProgramUpdateKindCloned)
 	})
 
 	t.Run("compiler options update inferred project", func(t *testing.T) {

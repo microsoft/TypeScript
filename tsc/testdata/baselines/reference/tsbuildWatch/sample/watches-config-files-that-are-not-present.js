@@ -48,7 +48,7 @@ export const m = mod;
     },
 }
 
-tsgo --b -w tests
+tsc --b -w tests
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [2J[3J[H[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...

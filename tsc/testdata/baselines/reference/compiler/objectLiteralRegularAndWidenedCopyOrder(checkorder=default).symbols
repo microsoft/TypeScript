@@ -1,0 +1,34 @@
+//// [tests/cases/compiler/objectLiteralRegularAndWidenedCopyOrder.ts] ////
+
+=== objectLiteralRegularAndWidenedCopyOrder.ts ===
+declare const b: boolean;
+>b : Symbol(b, Decl(objectLiteralRegularAndWidenedCopyOrder.ts, 0, 13))
+
+let x;
+>x : Symbol(x, Decl(objectLiteralRegularAndWidenedCopyOrder.ts, 1, 3))
+
+x = { a: 1 };
+>x : Symbol(x, Decl(objectLiteralRegularAndWidenedCopyOrder.ts, 1, 3))
+>a : Symbol(a, Decl(objectLiteralRegularAndWidenedCopyOrder.ts, 2, 5))
+
+let arr = [];
+>arr : Symbol(arr, Decl(objectLiteralRegularAndWidenedCopyOrder.ts, 3, 3))
+
+arr.push(x); // regular copy of the literal
+>arr.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>arr : Symbol(arr, Decl(objectLiteralRegularAndWidenedCopyOrder.ts, 3, 3))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(objectLiteralRegularAndWidenedCopyOrder.ts, 1, 3))
+
+const y = x; // widened copy of the literal
+>y : Symbol(y, Decl(objectLiteralRegularAndWidenedCopyOrder.ts, 5, 5))
+>x : Symbol(x, Decl(objectLiteralRegularAndWidenedCopyOrder.ts, 1, 3))
+
+const z = b ? (b ? arr[0] : y) : { c: 1 };
+>z : Symbol(z, Decl(objectLiteralRegularAndWidenedCopyOrder.ts, 6, 5))
+>b : Symbol(b, Decl(objectLiteralRegularAndWidenedCopyOrder.ts, 0, 13))
+>b : Symbol(b, Decl(objectLiteralRegularAndWidenedCopyOrder.ts, 0, 13))
+>arr : Symbol(arr, Decl(objectLiteralRegularAndWidenedCopyOrder.ts, 3, 3))
+>y : Symbol(y, Decl(objectLiteralRegularAndWidenedCopyOrder.ts, 5, 5))
+>c : Symbol(c, Decl(objectLiteralRegularAndWidenedCopyOrder.ts, 6, 34))
+

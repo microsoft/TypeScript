@@ -1,0 +1,74 @@
+indexSignatureMissingType.ts(33,1): error TS2542: Index signature in type 'C' only permits reading.
+indexSignatureMissingType.ts(36,9): error TS1019: An index signature parameter cannot have a question mark.
+indexSignatureMissingType.ts(40,6): error TS1017: An index signature cannot have a rest parameter.
+indexSignatureMissingType.ts(44,6): error TS1096: An index signature must have exactly one parameter.
+indexSignatureMissingType.ts(48,6): error TS1268: An index signature parameter type must be 'string', 'number', 'symbol', or a template literal type.
+
+
+==== indexSignatureMissingType.ts (5 errors) ====
+    export interface I {
+        [key: string];
+    }
+    
+    export class C {
+        readonly [key: number];
+    }
+    
+    export type T = {
+        [key: string]
+        property: number;
+    };
+    
+    export interface NumberIndex { [key: number]; }
+    export interface SymbolIndex { [key: symbol]; }
+    export interface TemplateIndex { [key: `prefix-${string}`]; }
+    export interface ExplicitAny { [key: string]: any; }
+    export interface ExplicitUnknown { [key: string]: unknown; }
+    
+    declare const value: I;
+    export const asNumber: number = value.anyKey;
+    export const asString: string = value.anyKey;
+    export const indexedValue = value.anyKey;
+    
+    declare const instance: C;
+    declare const numbers: NumberIndex;
+    declare const symbols: SymbolIndex;
+    declare const templates: TemplateIndex;
+    export const classValue = instance[0];
+    export const numberValue = numbers[0];
+    export const symbolValue = symbols[Symbol.iterator];
+    export const templateValue = templates["prefix-foo"];
+    instance[0] = 1;
+    ~~~~~~~~~~~
+!!! error TS2542: Index signature in type 'C' only permits reading.
+    
+    interface OptionalParameter {
+        [key?: string];
+            ~
+!!! error TS1019: An index signature parameter cannot have a question mark.
+    }
+    
+    interface RestParameter {
+        [...key: string[]];
+         ~~~
+!!! error TS1017: An index signature cannot have a rest parameter.
+    }
+    
+    interface MultipleParameters {
+        [key: string, other: number];
+         ~~~
+!!! error TS1096: An index signature must have exactly one parameter.
+    }
+    
+    interface InvalidKey {
+        [key: boolean];
+         ~~~
+!!! error TS1268: An index signature parameter type must be 'string', 'number', 'symbol', or a template literal type.
+    }
+    
+    // @ts-ignore
+    interface Ignored { [key: string]; }
+    
+    // @ts-expect-error
+    interface Expected { [key: boolean]; }
+    

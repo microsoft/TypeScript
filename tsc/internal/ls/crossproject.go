@@ -76,7 +76,7 @@ func (defaultLs *LanguageService) handleCrossProject[Req lsproto.HasTextDocument
 		_, searched := results.Load(project.Id())
 		return !searched
 	}
-	wg := core.NewWorkGroup(false)
+	wg := core.NewWorkGroup(0)
 	var errMu sync.Mutex
 	var enqueueItem func(item projectAndTextDocumentPosition)
 	var panicsOccurred []string
@@ -231,7 +231,7 @@ func (defaultLs *LanguageService) handleCrossProject[Req lsproto.HasTextDocument
 			return resp, err
 		}
 
-		wg = core.NewWorkGroup(false)
+		wg = core.NewWorkGroup(0)
 		hasMoreWork := false
 		if defaultDefinition != nil {
 			var requestedProjectTrees collections.Set[tspath.PathKey]

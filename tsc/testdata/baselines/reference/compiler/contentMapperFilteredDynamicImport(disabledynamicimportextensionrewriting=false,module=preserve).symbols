@@ -1,0 +1,73 @@
+//// [tests/cases/compiler/contentMapperFilteredDynamicImport.ts] ////
+
+=== /data.toml ===
+const __VERSION = "1.0.0";
+>__VERSION : Symbol(__VERSION, Decl(data.toml, 0, 5))
+
+export const data = 1;
+>data : Symbol(data, Decl(data.toml, 1, 12))
+
+=== /main.ts ===
+declare const path: string;
+>path : Symbol(path, Decl(main.ts, 0, 13))
+
+export const dynamic = import(path);
+>dynamic : Symbol(dynamic, Decl(main.ts, 1, 12))
+>path : Symbol(path, Decl(main.ts, 0, 13))
+
+export const template = import(`./${path}.toml`);
+>template : Symbol(template, Decl(main.ts, 2, 12))
+>path : Symbol(path, Decl(main.ts, 0, 13))
+
+export const parenthesized = import(("./data.toml"));
+>parenthesized : Symbol(parenthesized, Decl(main.ts, 3, 12))
+
+export const literal = import("./data.toml");
+>literal : Symbol(literal, Decl(main.ts, 4, 12))
+>"./data.toml" : Symbol("./data.toml", Decl(data.toml, 0, 0))
+
+export const literalTemplate = import(`./data.toml`);
+>literalTemplate : Symbol(literalTemplate, Decl(main.ts, 5, 12))
+>`./data.toml` : Symbol("./data.toml", Decl(data.toml, 0, 0))
+
+declare function require(path: string): unknown;
+>require : Symbol(require, Decl(main.ts, 5, 53))
+>path : Symbol(path, Decl(main.ts, 6, 25))
+
+export const tsRequire = require(path);
+>tsRequire : Symbol(tsRequire, Decl(main.ts, 7, 12))
+>require : Symbol(require, Decl(main.ts, 5, 53))
+>path : Symbol(path, Decl(main.ts, 0, 13))
+
+=== /require.js ===
+/** @type {string} */
+const path = "./data.toml";
+>path : Symbol(path, Decl(require.js, 1, 5))
+
+export const dynamic = import(path);
+>dynamic : Symbol(dynamic, Decl(require.js, 2, 12))
+>path : Symbol(path, Decl(require.js, 1, 5))
+
+export const required = require(path);
+>required : Symbol(required, Decl(require.js, 3, 12))
+>require : Symbol(require, Decl(globals.d.ts, 0, 0))
+>path : Symbol(path, Decl(require.js, 1, 5))
+
+export const template = require(`./${path}.toml`);
+>template : Symbol(template, Decl(require.js, 4, 12))
+>require : Symbol(require, Decl(globals.d.ts, 0, 0))
+>path : Symbol(path, Decl(require.js, 1, 5))
+
+export const literal = require("./data.toml");
+>literal : Symbol(literal, Decl(require.js, 5, 12))
+>require : Symbol(require, Decl(globals.d.ts, 0, 0))
+
+export const literalTemplate = require(`./data.toml`);
+>literalTemplate : Symbol(literalTemplate, Decl(require.js, 6, 12))
+>require : Symbol(require, Decl(globals.d.ts, 0, 0))
+
+=== /globals.d.ts ===
+declare function require(path: string): unknown;
+>require : Symbol(require, Decl(globals.d.ts, 0, 0))
+>path : Symbol(path, Decl(globals.d.ts, 0, 25))
+

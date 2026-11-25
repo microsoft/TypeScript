@@ -191,6 +191,13 @@ func TestCreateSourceFile(t *testing.T) {
 		assert.Equal(t, present.Name, "present")
 		assert.Equal(t, present.Reference.Kind, SymbolOwnerKindFile)
 
+		missing, err := session.handleGetSymbolOfDeclaration(&GetSymbolOfDeclarationParams{
+			File:  descriptor,
+			Index: table.GetIndex(sourceFile.Statements.Nodes[0].AsFunctionDeclaration().Body),
+		})
+		assert.NilError(t, err)
+		assert.Assert(t, missing == nil)
+
 		_, err = session.handleGetSymbolOfDeclaration(&GetSymbolOfDeclarationParams{
 			File:  descriptor,
 			Index: 0,

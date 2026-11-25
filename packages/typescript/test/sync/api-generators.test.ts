@@ -1,10 +1,13 @@
 import {
     cast,
     type Identifier,
+    isBinaryExpression,
     isCallExpression,
     isClassDeclaration,
+    isConstructorDeclaration,
     isEnumDeclaration,
     isExportDeclaration,
+    isExpressionStatement,
     isFunctionDeclaration,
     isIdentifier,
     isImportDeclaration,
@@ -12,6 +15,8 @@ import {
     isNamedExports,
     isNamedImports,
     isObjectLiteralExpression,
+    isParenthesizedExpression,
+    isPropertyAccessExpression,
     isShorthandPropertyAssignment,
     isStringLiteral,
     isTypeAliasDeclaration,
@@ -22,6 +27,7 @@ import {
     SyntaxKind,
 } from "@typescript/typescript/ast";
 import { cloneNode } from "@typescript/typescript/ast/factory";
+import { createFileSystemFromSnapshot } from "@typescript/typescript/fs";
 import { toRootedFilePath } from "@typescript/typescript/path";
 import type {
     APIRequest,
@@ -111,6 +117,7 @@ export type Union = Derived | string;
 export enum Choice { First = 1, Second = "second" }
 export class Unimported { value = "extra"; }
 export type Mapped<T> = { [K in keyof T as \`get\${Capitalize<string & K>}\`]: T[K] };
+export class ParameterProperty { constructor(public parameter: string) {} }
 `,
     "/src/index.ts": `
 /// <reference types="parity" />
@@ -133,6 +140,8 @@ export const badCall = derived();
 export function getArguments() { return arguments; }
 import { absent } from "./absent.js";
 export const missingValue = absent;
+let assigned: Base;
+({ value: assigned } = box);
 `,
     "/node_modules/@types/parity/index.d.ts": `export {};`,
     "/src/syntax.ts": `export const broken: = 1;`,
@@ -141,7 +150,7 @@ export const missingValue = absent;
 };
 
 type GeneratorMethod<Args extends readonly unknown[], Result> = ((...args: Args) => Result) & {
-    gen(...args: Args): Generator<APIRequest, Result, APIResponse["result"]>;
+    gen(...args: Args): APIRequestGenerator<Result>;
 };
 
 type EquivalenceAssertion<Result> = (actual: Result, expected: Result, message?: string) => void;
@@ -149,7 +158,7 @@ type EquivalenceAssertion<Result> = (actual: Result, expected: Result, message?:
 interface ParityCase {
     readonly ownerName: string;
     readonly methodName: string;
-    readonly runGenerator: () => Generator<APIRequest, void, APIResponse["result"]>;
+    readonly runGenerator: () => APIRequestGenerator<void>;
     readonly assertEquivalent: (message?: string) => void;
 }
 
@@ -197,7 +206,7 @@ function parityCase<Args extends readonly unknown[], Result>(
     return {
         ownerName,
         methodName,
-        runGenerator: function* () {
+        *runGenerator() {
             generatedResult = { value: yield* method.gen(...args) };
         },
         assertEquivalent: message => {
@@ -320,6 +329,12 @@ function assertOptionalNodesEquivalent(actual: Node | undefined, expected: Node 
     assertOptionalEquivalent(actual, expected, assertNodesEquivalent, message);
 }
 
+function assertOptionalNodeArraysEquivalent(actual: readonly Node[] | undefined, expected: readonly Node[] | undefined, message?: string): void {
+    assertOptionalEquivalent(actual, expected, (a, b) => {
+        assertArrayElementsEquivalent(a, b, assertNodesEquivalent, message);
+    }, message);
+}
+
 function assertSourceFilesEquivalent(actual: SourceFile, expected: SourceFile, message?: string): void {
     assertNodesEquivalent(actual, expected, message);
     assert.equal(actual.fileName, expected.fileName, message);
@@ -419,7 +434,7 @@ function observeRequestBatches(
     context: TestContext,
 ): void {
     // @ts-ignore -- Internal client transport is exercised by source tests.
-    const client = api["client"];
+    const client = api.client;
     const batchRequests = client.batchRequests.bind(client);
     context.mock.method(client, "batchRequests", (requests: readonly APIRequest[]) => {
         requestBatches.push(requests.map(request => request.method));
@@ -445,8 +460,26 @@ function assertPublicGeneratorCoverage(owners: readonly { readonly name: string;
 }
 
 describe("API - generator batching", { concurrency: areTestsFiltered() }, () => {
+    test("Program statistics are fetched for every sync and generator call", () => {
+        using api = spawnAPI({ "/src/main.ts": "export const value = 1;" }, { collectTiming: true });
+        for (const generatorFirst of [false, true]) {
+            using program = api.createProgram(["/src/main.ts"], { noLib: true });
+            api.resetTimingInfo();
+            const statistics = generatorFirst ? api.batch(program.getStatistics.gen())[0] : program.getStatistics();
+            assert.ok(statistics.nodeCount > 0);
+            const [next, repeated] = api.batch(
+                program.getStatistics.gen(),
+                program.getStatistics.gen(),
+            );
+            assert.deepEqual(next, statistics);
+            assert.deepEqual(repeated, statistics);
+            assert.deepEqual(program.getStatistics(), statistics);
+            assert.equal(api.getTimingInfo().totals.requestCount, 3);
+        }
+    });
+
     test("looks up binder symbols through standalone and API generators", () => {
-        using api = spawnAPI();
+        using api = spawnAPI({}, { collectTiming: true });
         using lease = api.createSourceFile("/symbols.ts", "function present() {}");
         const declaration = cast(lease.sourceFile.statements[0], isFunctionDeclaration);
         const [symbol] = api.batch(getSymbol.gen(declaration));
@@ -454,6 +487,18 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
         assert.equal(symbol.name, "present");
         const [cached] = api.batch(api.getSymbol.gen(declaration));
         assert.strictEqual(cached, symbol);
+        const node: Node = declaration;
+        const [fromNode] = api.batch(getSymbol.gen(node));
+        assert.strictEqual(fromNode, symbol);
+
+        api.resetTimingInfo();
+        const [missing] = api.batch(getSymbol.gen(declaration.body!));
+        assert.equal(missing, undefined);
+        const [cachedMissing] = api.batch(api.getSymbol.gen(declaration.body!));
+        assert.equal(cachedMissing, undefined);
+        assert.equal(api.getSymbol(declaration.body!), undefined);
+        assert.equal(api.getTimingInfo().totals.requestCount, 1);
+
         const clone = cloneNode(declaration);
         assert.throws(() => api.batch(getSymbol.gen(clone)), /Source file not found/);
         assert.throws(() => api.batch(api.getSymbol.gen(clone)), /Source file not found/);
@@ -486,6 +531,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
 
     test("all and defer yield discriminated host messages without starting children", () => {
         let started = false;
+        // eslint-disable-next-line require-yield -- This child must never start.
         function* child() {
             started = true;
             return "child";
@@ -497,6 +543,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
         const generators: APIRequestGenerator[] = [all(joined), defer(deferred)];
         for (const generator of generators) {
             const state = generator.next();
+            // eslint-disable-next-line local/no-in-operator -- Narrow the host message union.
             if (state.done || !("method" in state.value)) assert.fail("Expected a host message");
             switch (state.value.method) {
                 case "__all":
@@ -516,6 +563,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
 
     test("all preserves generator protocol behavior", () => {
         let started = false;
+        // eslint-disable-next-line require-yield -- This child must never start.
         function* child() {
             started = true;
             return "child";
@@ -547,6 +595,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
 
     test("defer preserves generator protocol behavior", () => {
         let started = false;
+        // eslint-disable-next-line require-yield -- This child must never start.
         function* child() {
             started = true;
             return "child";
@@ -567,11 +616,12 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
                 thrown.next();
                 disposed.next();
             }
-            assert.deepEqual(returned.return(undefined), { done: true, value: undefined });
+            assert.deepEqual(returned.return(/*value*/ undefined), { done: true, value: undefined });
             assert.deepEqual(returned.next(), { done: true, value: undefined });
             const error = new Error("failed");
             assert.throws(() => thrown.throw(error), actual => actual === error);
             assert.deepEqual(thrown.next(), { done: true, value: undefined });
+            // eslint-disable-next-line local/no-in-operator -- Narrow the iterator with its inherited disposal method.
             assert.ok(globalThis.Symbol.dispose in disposed);
             const dispose = disposed[globalThis.Symbol.dispose];
             assert.ok(typeof dispose === "function");
@@ -584,7 +634,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
     test("rejects deferred generator reuse after completion", () => {
         let completed = false;
         function* child(): Generator<APIRequest, string, string> {
-            const result = yield { method: "request", params: null } as unknown as APIRequest;
+            const result = yield { method: "request", params: undefined } as unknown as APIRequest;
             completed = true;
             return result;
         }
@@ -597,12 +647,13 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
     });
 
     test("joins nested, empty, and synchronously completed groups in result order", () => {
+        // eslint-disable-next-line require-yield -- Exercise synchronous completion.
         function* completed(value: string) {
             return value;
         }
         function* request(value: string, rounds: number): Generator<APIRequest, string, string> {
             for (let round = 0; round < rounds; round++) {
-                yield { method: value, params: null } as unknown as APIRequest;
+                yield { method: value, params: undefined } as unknown as APIRequest;
             }
             return value;
         }
@@ -619,9 +670,11 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
     });
 
     test("preserves tuple results through all and any generator types", () => {
+        // eslint-disable-next-line require-yield -- Exercise synchronous completion.
         function* numberResult() {
             return 42;
         }
+        // eslint-disable-next-line require-yield -- Exercise synchronous completion.
         function* stringResult() {
             return "result";
         }
@@ -645,7 +698,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
 
     test("preserves sibling order across repeated nested joins", () => {
         function* request(method: string): Generator<APIRequest, string, string> {
-            return yield { method, params: null } as unknown as APIRequest;
+            return yield { method, params: undefined } as unknown as APIRequest;
         }
         function* foreground() {
             for (let round = 0; round < 3; round++) {
@@ -669,7 +722,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
                 const events: string[] = [];
                 const batches: string[][] = [];
                 function* request(method: string): Generator<APIRequest, string, string> {
-                    const result = yield { method, params: null } as unknown as APIRequest;
+                    const result = yield { method, params: undefined } as unknown as APIRequest;
                     events.push(method);
                     return result;
                 }
@@ -716,7 +769,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
     test("preserves singleton join continuations through requests, errors, and deferred work", () => {
         const events: string[] = [];
         function* request(method: string): Generator<APIRequest, string, string> {
-            return yield { method, params: null } as unknown as APIRequest;
+            return yield { method, params: undefined } as unknown as APIRequest;
         }
         function* recovering() {
             try {
@@ -752,7 +805,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
     test("finishes joined foreground cleanup before deferred request errors", () => {
         const events: string[] = [];
         function* request(method: string): Generator<APIRequest, void, unknown> {
-            yield { method, params: null } as unknown as APIRequest;
+            yield { method, params: undefined } as unknown as APIRequest;
         }
         function* foreground() {
             try {
@@ -772,22 +825,21 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
     });
 
     test("completes root all helpers before detached work finishes", () => {
-        let joined: AllAPIRequestGenerator<[string]>;
         function* foreground(): Generator<APIRequest, string, string> {
-            return yield { method: "foreground", params: null } as unknown as APIRequest;
+            return yield { method: "foreground", params: undefined } as unknown as APIRequest;
         }
         function* background(): Generator<APIRequest, void, unknown> {
-            yield { method: "background", params: null } as unknown as APIRequest;
+            yield { method: "background", params: undefined } as unknown as APIRequest;
             assert.deepEqual(joined.next(["unexpected"]), { done: true, value: undefined });
         }
-        joined = all(foreground(), defer(background()));
+        const joined: AllAPIRequestGenerator<[string]> = all(foreground(), defer(background()));
         assert.deepEqual(executeRequestGenerators([joined], requests => requests.map(request => ({ result: request.method }))), [["foreground"]]);
     });
 
     test("throws nested all failures into the waiting parent", () => {
         const events: string[] = [];
         function* failing(): Generator<APIRequest, void, unknown> {
-            yield { method: "bad", params: null } as unknown as APIRequest;
+            yield { method: "bad", params: undefined } as unknown as APIRequest;
         }
         function* parent() {
             try {
@@ -806,7 +858,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
     test("cancels failed join siblings but finishes detached and unrelated work", () => {
         const events: string[] = [];
         function* request(method: string): Generator<APIRequest, string, string> {
-            const result = yield { method, params: null } as unknown as APIRequest;
+            const result = yield { method, params: undefined } as unknown as APIRequest;
             events.push(method);
             return result;
         }
@@ -826,7 +878,9 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
     });
 
     test("catches synchronous join failures including undefined", () => {
+        // eslint-disable-next-line require-yield -- Exercise synchronous failure.
         function* failing(): APIRequestGenerator {
+            // eslint-disable-next-line no-throw-literal -- Exercise propagation of an undefined error.
             throw undefined;
         }
         function* parent() {
@@ -834,7 +888,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
                 yield* all(all(failing()));
             }
             catch (error) {
-                assert.strictEqual(error, undefined);
+                assert.strictEqual(error, /*expected*/ undefined);
                 return "recovered";
             }
             return "unexpected";
@@ -844,6 +898,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
 
     test("does not route synchronous deferred failures through a waiting join", () => {
         const events: string[] = [];
+        // eslint-disable-next-line require-yield -- Exercise synchronous failure.
         function* failing(): APIRequestGenerator {
             throw new Error("deferred failure");
         }
@@ -864,7 +919,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
 
     test("rejects generator reuse across joins and deferred work", () => {
         function* request(): Generator<APIRequest, string, string> {
-            return yield { method: "request", params: null } as unknown as APIRequest;
+            return yield { method: "request", params: undefined } as unknown as APIRequest;
         }
         for (const wrap of [all, defer]) {
             const generator = request();
@@ -877,7 +932,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
 
     test("rejects completed generator reuse after a join finishes", () => {
         function* request(): Generator<APIRequest, string, string> {
-            return yield { method: "request", params: null } as unknown as APIRequest;
+            return yield { method: "request", params: undefined } as unknown as APIRequest;
         }
         for (const wrap of [all, defer]) {
             const generator = request();
@@ -911,6 +966,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
 
     test("deduplicates initialization across nested joins", () => {
         function* request(method: string): Generator<APIRequest, string, string> {
+            // eslint-disable-next-line no-restricted-syntax -- Initialize requests require null parameters.
             return yield { method, params: null } as unknown as APIRequest;
         }
         const batches: string[][] = [];
@@ -961,7 +1017,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
         const events: string[] = [];
         function* requestWithCleanup(): Generator<APIRequest, string, APIResponse["result"]> {
             try {
-                yield { method: "unknown", params: null } as unknown as APIRequest;
+                yield { method: "unknown", params: undefined } as unknown as APIRequest;
                 return "unexpected";
             }
             catch {
@@ -1018,7 +1074,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
     });
 
     test("transparently paginates batch responses", () => {
-        const api = spawnAPI(undefined, { maxResponseBytesPerPage: 1 });
+        const api = spawnAPI(/*files*/ undefined, { maxResponseBytesPerPage: 1 });
         try {
             const [strict, config, noImplicitAny] = api.batch(
                 api.parseCommandLine.gen(["--strict"]),
@@ -1152,6 +1208,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
     test("omits deferred results in any batch position", () => {
         const api = spawnAPI();
         let synchronousWorkCompleted = false;
+        // eslint-disable-next-line require-yield -- Exercise synchronous completion.
         function* synchronousWork() {
             synchronousWorkCompleted = true;
             return "ignored";
@@ -1178,7 +1235,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
         const events: string[] = [];
         function* requestWithCleanup(): Generator<APIRequest, void, APIResponse["result"]> {
             try {
-                yield { method: "unknown", params: null } as unknown as APIRequest;
+                yield { method: "unknown", params: undefined } as unknown as APIRequest;
             }
             catch {
                 events.push("caught");
@@ -1200,6 +1257,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
     test("batch execution deduplicates only initialize requests within a round", () => {
         const requestBatches: string[][] = [];
         function* request(method: string): Generator<APIRequest, APIResponse["result"], APIResponse["result"]> {
+            // eslint-disable-next-line no-restricted-syntax -- Initialize requests require null parameters.
             return yield { method, params: null } as unknown as APIRequest;
         }
 
@@ -1217,6 +1275,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
 
     test("does not execute an empty request round", () => {
         let executions = 0;
+        // eslint-disable-next-line require-yield -- Exercise synchronous completion.
         function* completed(value: string) {
             return value;
         }
@@ -1242,13 +1301,16 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
         const requestBatches: string[][] = [];
         function* groupedRequests(): Generator<readonly APIRequest[], readonly string[], readonly { result: string; }[]> {
             const responses = yield [
+                // eslint-disable-next-line no-restricted-syntax -- Initialize requests require null parameters.
                 { method: "initialize", params: null },
-                { method: "other", params: null },
+                { method: "other", params: undefined },
+                // eslint-disable-next-line no-restricted-syntax -- Initialize requests require null parameters.
                 { method: "initialize", params: null },
             ] as unknown as readonly APIRequest[];
             return responses.map(response => response.result);
         }
         function* initializeRequest(): Generator<APIRequest, string, string> {
+            // eslint-disable-next-line no-restricted-syntax -- Initialize requests require null parameters.
             return yield { method: "initialize", params: null } as unknown as APIRequest;
         }
 
@@ -1265,15 +1327,15 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
         const requestBatches: string[][] = [];
         function* recoveringRequest(): Generator<APIRequest, string, string> {
             try {
-                yield { method: "bad", params: null } as unknown as APIRequest;
+                yield { method: "bad", params: undefined } as unknown as APIRequest;
             }
             catch {
-                return yield { method: "recovery", params: null } as unknown as APIRequest;
+                return yield { method: "recovery", params: undefined } as unknown as APIRequest;
             }
             return "unexpected";
         }
         function* successfulRequest(): Generator<APIRequest, string, string> {
-            return yield { method: "good", params: null } as unknown as APIRequest;
+            return yield { method: "good", params: undefined } as unknown as APIRequest;
         }
 
         const results = executeRequestGenerators([recoveringRequest(), successfulRequest()], requests => {
@@ -1288,17 +1350,17 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
     test("executes recursively deferred generators", () => {
         const events: string[] = [];
         function* grandchild() {
-            yield { method: "grandchild", params: null } as unknown as APIRequest;
+            yield { method: "grandchild", params: undefined } as unknown as APIRequest;
             events.push("grandchild completed");
         }
         function* child() {
             yield* defer(grandchild());
-            yield { method: "child", params: null } as unknown as APIRequest;
+            yield { method: "child", params: undefined } as unknown as APIRequest;
             events.push("child completed");
         }
         function* parent() {
             yield* defer(child());
-            yield { method: "parent", params: null } as unknown as APIRequest;
+            yield { method: "parent", params: undefined } as unknown as APIRequest;
             events.push("parent completed");
         }
 
@@ -1310,7 +1372,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
     test("surfaces deferred errors after the parent completes", () => {
         const events: string[] = [];
         function* background() {
-            yield { method: "background", params: null } as unknown as APIRequest;
+            yield { method: "background", params: undefined } as unknown as APIRequest;
         }
         function* parent() {
             yield* defer(background());
@@ -1327,11 +1389,11 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
     test("appends deferred work after the parent request", () => {
         const requestBatches: string[][] = [];
         function* background() {
-            yield { method: "background", params: null } as unknown as APIRequest;
+            yield { method: "background", params: undefined } as unknown as APIRequest;
         }
         function* parent() {
             yield* defer(background());
-            yield { method: "parent", params: null } as unknown as APIRequest;
+            yield { method: "parent", params: undefined } as unknown as APIRequest;
         }
 
         executeRequestGenerators([parent()], requests => {
@@ -1344,7 +1406,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
 
     test("rejects repeated generator instances", () => {
         function* request(): Generator<APIRequest, string, string> {
-            return yield { method: "request", params: null } as unknown as APIRequest;
+            return yield { method: "request", params: undefined } as unknown as APIRequest;
         }
         const generator = request();
 
@@ -1387,8 +1449,8 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
                 project.program.getSourceFileNames.gen(),
             );
             assert.strictEqual(defaultProject, project);
-            assert.ok(sourceFileNames.includes(toRootedFilePath("/src/foo.ts", undefined)));
-            assert.ok(sourceFileNames.includes(toRootedFilePath("/src/index.ts", undefined)));
+            assert.ok(sourceFileNames.includes(toRootedFilePath("/src/foo.ts", /*currentDirectory*/ undefined)));
+            assert.ok(sourceFileNames.includes(toRootedFilePath("/src/index.ts", /*currentDirectory*/ undefined)));
 
             const [symbol, type] = api.batch(
                 project.checker.getSymbolAtLocation.gen(node),
@@ -1461,6 +1523,9 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
                 isVariableDeclaration,
             );
             const callExpression = cast(calledDeclaration.initializer, isCallExpression);
+            const assignmentStatement = cast(indexFile.statements.find(isExpressionStatement), isExpressionStatement);
+            const assignment = cast(cast(assignmentStatement.expression, isParenthesizedExpression).expression, isBinaryExpression);
+            const assignmentPattern = cast(assignment.left, isObjectLiteralExpression);
             const interfaceDeclaration = cast(modelsFile.statements[0], isInterfaceDeclaration);
             const derivedClassDeclaration = cast(modelsFile.statements[2], isClassDeclaration);
             const boxedAlias = cast(modelsFile.statements[3], isTypeAliasDeclaration);
@@ -1472,6 +1537,8 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
             const unionAlias = cast(modelsFile.statements[9], isTypeAliasDeclaration);
             const enumDeclaration = cast(modelsFile.statements[10], isEnumDeclaration);
             const mappedAlias = cast(modelsFile.statements[12], isTypeAliasDeclaration);
+            const parameterPropertyClass = cast(modelsFile.statements[13], isClassDeclaration);
+            const parameterProperty = cast(parameterPropertyClass.members[0], isConstructorDeclaration).parameters[0];
 
             const importedDerivedSymbol = checker.getSymbolAtLocation(importedDerived)!;
             const combineSymbol = checker.getSymbolAtLocation(combineDeclaration.name!)!;
@@ -1575,9 +1642,14 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
             exercisedMethods.add("API.createModuleResolver");
 
             const cases: ParityCase[] = [
+                parityCase("API", "getDefaultFormatCodeSettings", api.getDefaultFormatCodeSettings, assertDeepEquivalent),
+                parityCase("API", "getEffectiveTypeRoots", api.getEffectiveTypeRoots, assertDeepEquivalent, { typeRoots: ["types"] }),
+                parityCase("API", "getTsBuildInfoEmitOutputFilePath", api.getTsBuildInfoEmitOutputFilePath, assertDeepEquivalent, { incremental: true, configFilePath: "/tsconfig.json" }),
+                parityCase("API", "getTsBuildInfoEmitOutputFilePath", api.getTsBuildInfoEmitOutputFilePath, assertDeepEquivalent, {}),
                 parityCase("API", "parseConfigFile", api.parseConfigFile, assertDeepEquivalent, "/tsconfig.json"),
                 parityCase("API", "parseCommandLine", api.parseCommandLine, assertDeepEquivalent, ["--strict", "--noEmit"]),
                 parityCase("API", "readConfigFile", api.readConfigFile, assertDeepEquivalent, "/tsconfig.json"),
+                parityCase("API", "parseConfigFileTextToJson", api.parseConfigFileTextToJson, assertDeepEquivalent, "/tsconfig.json", `{ "compilerOptions": { "strict": true } }`),
                 parityCase("API", "parseJsonConfigFileContent", api.parseJsonConfigFileContent, assertDeepEquivalent, { compilerOptions: { strict: true } }, { configDirectory: "/" }),
                 parityCase("API", "parseJsonConfigFileContent", api.parseJsonConfigFileContent, assertDeepEquivalent, { extends: "./base.json" }, { configFileName: "/tsconfig.json" }),
                 parityCase("API", "createSourceFile", api.createSourceFile, assertRetainedSourceFilesEquivalent, "/generated.ts", "export const generated = true;"),
@@ -1597,6 +1669,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
                 }),
                 parityCase("Snapshot", "getDefaultProjectForFile", snapshot.getDefaultProjectForFile, assertOptionalProjectsEquivalent, "/src/index.ts"),
                 parityCase("ModuleResolver", "resolveModuleName", moduleResolver.resolveModuleName, assertDeepEquivalent, "models", "/src"),
+                parityCase("ModuleResolver", "resolveTypeReferenceDirective", moduleResolver.resolveTypeReferenceDirective, assertDeepEquivalent, "parity", "/src/index.ts"),
                 parityCase("Snapshot", "update", snapshot.update, assertSnapshotsEquivalent, {}),
 
                 parityCase("LanguageService", "getImportAdderEdits", languageService.getImportAdderEdits, assertDeepEquivalent, "/src/index.ts", [{ kind: "importSymbol", symbol: unimportedSymbol }]),
@@ -1639,9 +1712,11 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
                 parityCase("Program", "getDeclarationEmit", program.getDeclarationEmit, assertDeepEquivalent, ["/src/index.ts"]),
 
                 parityCase("Checker", "getMergedSymbol", checker.getMergedSymbol, assertSymbolsEquivalent, interfaceSymbol),
+                parityCase("Checker", "getRootSymbols", checker.getRootSymbols, assertSymbolArraysEquivalent, boxedOptSymbol),
                 parityCase("Checker", "getSymbolOfNode", checker.getSymbolOfNode, assertOptionalSymbolsEquivalent, interfaceDeclaration),
                 parityCase("Checker", "getSymbolOfNode", checker.getSymbolOfNode, assertOptionalSymbolsEquivalent, interfaceDeclaration.name),
                 parityCase("Checker", "getSymbolOfDeclaration", checker.getSymbolOfDeclaration, assertSymbolsEquivalent, interfaceDeclaration),
+                parityCase("Checker", "getSymbolsOfParameterPropertyDeclaration", checker.getSymbolsOfParameterPropertyDeclaration, assertDeepEquivalent, parameterProperty),
                 parityCase("Checker", "getParentOfSymbol", checker.getParentOfSymbol, assertOptionalSymbolsEquivalent, unimportedSymbol),
                 parityCase("Checker", "getSymbolAtLocation", selectGeneratorMethod<[node: Node], Symbol | undefined>(checker.getSymbolAtLocation), assertOptionalSymbolsEquivalent, importedDerived),
                 parityCase("Checker", "getSymbolAtLocation", checker.getSymbolAtLocation, assertOptionalSymbolArraysEquivalent, [importedDerived, combineDeclaration.name!]),
@@ -1673,8 +1748,10 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
                 parityCase("Checker", "getWidenedType", checker.getWidenedType, assertTypesEquivalent, literalType),
                 parityCase("Checker", "getParameterType", checker.getParameterType, assertTypesEquivalent, signature, 0),
                 parityCase("Checker", "isArrayLikeType", checker.isArrayLikeType, assertDeepEquivalent, arrayType),
+                parityCase("Checker", "isValidPropertyAccess", checker.isValidPropertyAccess, assertDeepEquivalent, cast(callExpression.expression, isPropertyAccessExpression), "call"),
                 parityCase("Checker", "isTypeAssignableTo", checker.isTypeAssignableTo, assertDeepEquivalent, derivedType, interfaceType),
                 parityCase("Checker", "getShorthandAssignmentValueSymbol", checker.getShorthandAssignmentValueSymbol, assertOptionalSymbolsEquivalent, shorthand),
+                parityCase("Checker", "getTypeOfAssignmentPattern", checker.getTypeOfAssignmentPattern, assertOptionalTypesEquivalent, assignmentPattern),
                 parityCase("Checker", "getTypeOfSymbolAtLocation", checker.getTypeOfSymbolAtLocation, assertTypesEquivalent, derivedSymbol, shorthand),
                 parityCase("Checker", "getAnyType", checker.getAnyType, assertTypesEquivalent),
                 parityCase("Checker", "getStringType", checker.getStringType, assertTypesEquivalent),
@@ -1689,13 +1766,23 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
                 parityCase("Checker", "getESSymbolType", checker.getESSymbolType, assertTypesEquivalent),
                 parityCase("Checker", "getNonPrimitiveType", checker.getNonPrimitiveType, assertTypesEquivalent),
                 parityCase("Checker", "typeToTypeNode", checker.typeToTypeNode, assertOptionalNodesEquivalent, interfaceType, interfaceDeclaration),
+                parityCase("Checker", "symbolToEntityName", checker.symbolToEntityName, assertOptionalNodesEquivalent, interfaceSymbol, SymbolFlags.Type, interfaceDeclaration),
+                parityCase("Checker", "symbolToExpression", checker.symbolToExpression, assertOptionalNodesEquivalent, combineSymbol, SymbolFlags.Value, combineDeclaration),
+                parityCase("Checker", "symbolToParameterDeclaration", checker.symbolToParameterDeclaration, assertOptionalNodesEquivalent, signature.getParameters()[0], combineDeclaration),
+                parityCase("Checker", "symbolToTypeParameterDeclarations", checker.symbolToTypeParameterDeclarations, assertOptionalNodeArraysEquivalent, interfaceSymbol, interfaceDeclaration),
+                parityCase("Checker", "typeParameterToDeclaration", checker.typeParameterToDeclaration, assertOptionalNodesEquivalent, typeParameter, interfaceDeclaration),
+                parityCase("Checker", "indexInfoToIndexSignatureDeclaration", checker.indexInfoToIndexSignatureDeclaration, assertOptionalNodesEquivalent, { keyType: checker.getStringType(), valueType: interfaceType, isReadonly: true }, interfaceDeclaration),
+                parityCase("Checker", "typePredicateToString", checker.typePredicateToString, assertDeepEquivalent, checker.getTypePredicateOfSignature(predicateSignature)!, interfaceDeclaration),
                 parityCase("Checker", "signatureToSignatureDeclaration", checker.signatureToSignatureDeclaration, assertOptionalNodesEquivalent, signature, SyntaxKind.FunctionDeclaration, combineDeclaration),
+                parityCase("Checker", "signatureToString", checker.signatureToString, assertDeepEquivalent, signature, combineDeclaration),
                 parityCase("Checker", "typeToString", checker.typeToString, assertDeepEquivalent, interfaceType, interfaceDeclaration),
                 parityCase("Checker", "isContextSensitive", checker.isContextSensitive, assertDeepEquivalent, boxDeclaration.initializer!),
+                parityCase("Checker", "isOptionalParameter", checker.isOptionalParameter, assertDeepEquivalent, combineDeclaration.parameters[1]),
                 parityCase("Checker", "isArrayType", checker.isArrayType, assertDeepEquivalent, arrayType),
                 parityCase("Checker", "isTupleType", checker.isTupleType, assertDeepEquivalent, tupleType),
                 parityCase("Checker", "isTupleTypeTarget", checker.isTupleTypeTarget, assertDeepEquivalent, tupleType),
                 parityCase("Checker", "getReturnTypeOfSignature", checker.getReturnTypeOfSignature, assertTypesEquivalent, signature),
+                parityCase("Checker", "getTypeArgumentsForResolvedSignature", checker.getTypeArgumentsForResolvedSignature, assertTypeArraysEquivalent, checker.getResolvedSignature(callExpression)),
                 parityCase("Checker", "getRestTypeOfSignature", checker.getRestTypeOfSignature, assertOptionalTypesEquivalent, signature),
                 parityCase("Checker", "getTypePredicateOfSignature", checker.getTypePredicateOfSignature, assertOptionalTypePredicatesEquivalent, predicateSignature),
                 parityCase("Checker", "getBaseTypes", checker.getBaseTypes, assertTypeArraysEquivalent, derivedType),
@@ -1715,6 +1802,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
                 parityCase("Checker", "getExportSpecifierLocalTargetSymbol", checker.getExportSpecifierLocalTargetSymbol, assertOptionalSymbolsEquivalent, exportSpecifier),
                 parityCase("Checker", "getAliasedSymbol", checker.getAliasedSymbol, assertSymbolsEquivalent, importedDerivedSymbol),
                 parityCase("Checker", "getFullyQualifiedName", checker.getFullyQualifiedName, assertDeepEquivalent, combineSymbol),
+                parityCase("Checker", "symbolToString", checker.symbolToString, assertDeepEquivalent, interfaceSymbol, interfaceDeclaration, SymbolFlags.Type),
                 parityCase("Checker", "getImmediateAliasedSymbol", checker.getImmediateAliasedSymbol, assertOptionalSymbolsEquivalent, importedDerivedSymbol),
                 parityCase("Checker", "isUnknownSymbol", checker.isUnknownSymbol, assertDeepEquivalent, unknownSymbol),
                 parityCase("Checker", "isUndefinedSymbol", checker.isUndefinedSymbol, assertDeepEquivalent, undefinedSymbol),
@@ -1727,6 +1815,17 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
                 parityCase("Checker", "getTypeArguments", checker.getTypeArguments, assertTypeArraysEquivalent, boxedType),
                 parityCase("Checker", "getNonMissingTypeOfSymbol", checker.getNonMissingTypeOfSymbol, assertTypesEquivalent, boxedOptSymbol),
                 parityCase("Checker", "isReadonlySymbol", checker.isReadonlySymbol, assertDeepEquivalent, boxedOptSymbol),
+                parityCase("Checker", "getNullableType", checker.getNullableType, assertTypesEquivalent, interfaceType, TypeFlags.Null),
+                parityCase("Checker", "getStringLiteralType", checker.getStringLiteralType, assertTypesEquivalent, "hello"),
+                parityCase("Checker", "getNumberLiteralType", checker.getNumberLiteralType, assertTypesEquivalent, 42),
+                parityCase("Checker", "getBigIntLiteralType", checker.getBigIntLiteralType, assertTypesEquivalent, 123n),
+                parityCase("Checker", "getFalseType", checker.getFalseType, assertTypesEquivalent),
+                parityCase("Checker", "getTrueType", checker.getTrueType, assertTypesEquivalent),
+                parityCase("Checker", "getJsxIntrinsicTagNamesAt", checker.getJsxIntrinsicTagNamesAt, assertSymbolArraysEquivalent, combineDeclaration),
+                parityCase("Checker", "getPrivateIdentifierPropertyOfType", checker.getPrivateIdentifierPropertyOfType, assertOptionalSymbolsEquivalent, interfaceType, "#missing", combineDeclaration),
+                parityCase("Checker", "isImplementationOfOverload", checker.isImplementationOfOverload, assertDeepEquivalent, combineDeclaration),
+                parityCase("Checker", "getPropertySymbolOfDestructuringAssignment", checker.getPropertySymbolOfDestructuringAssignment, assertOptionalSymbolsEquivalent, importedDerived),
+                parityCase("Checker", "getAmbientModules", checker.getAmbientModules, assertSymbolArraysEquivalent),
                 parityCase("Checker", "getTargetSymbol", checker.getTargetSymbol, assertOptionalSymbolsEquivalent, boxedOptSymbol),
                 parityCase("Checker", "getExportSymbolOfSymbol", checker.getExportSymbolOfSymbol, assertSymbolsEquivalent, localCombineSymbol),
 
@@ -1780,6 +1879,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
                 parityCase("Type", "getBaseTypes", derivedType.getBaseTypes, assertOptionalTypeArrayEquivalent),
 
                 parityCase("Signature", "getTypeParameters", signature.getTypeParameters, assertTypeArraysEquivalent),
+                parityCase("Signature", "getTypeArguments", signature.getTypeArguments, assertTypeArraysEquivalent),
                 parityCase("Signature", "getParameters", signature.getParameters, assertSymbolArraysEquivalent),
                 parityCase("Signature", "getThisParameter", signature.getThisParameter, assertOptionalSymbolsEquivalent),
                 parityCase("Signature", "getTarget", constructSignature.getTarget, assertOptionalSignaturesEquivalent),
@@ -1788,10 +1888,17 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
             ];
 
             runParityBatch(api, cases);
+            runParityBatch(api, [
+                parityCase("Program", "getStatistics", program.getStatistics, assertDeepEquivalent),
+            ]);
             assert.deepEqual(temporaryProjects, ["/tsconfig.json", "/tsconfig.json"]);
 
-            const snapshotGeneratorAPI = spawnAPI(parityFiles);
-            const snapshotSyncAPI = spawnAPI(parityFiles);
+            const snapshotFiles = {
+                ...parityFiles,
+                "/tsconfig.json": JSON.stringify({ compilerOptions: { noLib: true }, files: ["src/syntax.ts"] }),
+            };
+            const snapshotGeneratorAPI = spawnAPI(snapshotFiles);
+            const snapshotSyncAPI = spawnAPI(snapshotFiles);
             try {
                 const generatorBase = snapshotGeneratorAPI.batch(snapshotGeneratorAPI.createSnapshot.gen({ openProjects: ["/tsconfig.json"] }))[0];
                 const syncBase = snapshotSyncAPI.createSnapshot({ openProjects: ["/tsconfig.json"] });
@@ -1799,6 +1906,16 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
                 const syncUpdated = syncBase.update({});
                 assertSnapshotsEquivalent(generatorUpdated, syncUpdated, "Snapshot.update");
                 exercisedMethods.add("Snapshot.update");
+                const changes = {
+                    fileSystem: { kind: "layer", files: { "/src/syntax.ts": "export const fixed = true;" } },
+                } as const;
+                const generatorExtras = snapshotGeneratorAPI.batch(generatorUpdated.update.gen(changes))[0];
+                const syncExtras = syncUpdated.update(changes);
+                const snapshotChanges = { prepareAutoImports: "/src/syntax.ts", openFiles: ["/src/syntax.ts"] } as const;
+                const generatorOverlay = snapshotGeneratorAPI.batch(generatorBase.update.gen({ ...snapshotChanges, fileSystem: createFileSystemFromSnapshot(generatorExtras) }))[0];
+                const syncOverlay = syncBase.update({ ...snapshotChanges, fileSystem: createFileSystemFromSnapshot(syncExtras) });
+                assertSnapshotsEquivalent(generatorOverlay, syncOverlay, "Snapshot.update with a snapshot filesystem");
+                assert.equal(generatorOverlay.getConfiguredProject("/tsconfig.json")!.program.getSourceFile("/src/syntax.ts")!.text, "export const fixed = true;");
             }
             finally {
                 snapshotGeneratorAPI.close();
@@ -1826,7 +1943,7 @@ describe("API - generator batching", { concurrency: areTestsFiltered() }, () => 
 
             assertPublicGeneratorCoverage([
                 { name: "API", value: api },
-                { name: "API", value: api.constructor as object, own: true },
+                { name: "API", value: api.constructor, own: true },
                 { name: "DebugHandlers", value: api.debug },
                 { name: "Snapshot", value: snapshot },
                 { name: "ModuleResolver", value: moduleResolver },

@@ -4,13 +4,17 @@ import fs from "node:fs";
 import path from "node:path";
 import { test } from "node:test";
 import ts from "typescript";
-import { getTypeScriptModel } from "../lsp/generate.mts";
-import { getMiddlewareMethods } from "../lsp/generateTypeScript.mts";
+import { ensureModel } from "../lsp/fetchModel.mts";
 import type {
     MetaModel,
     Type,
 } from "../lsp/metaModelSchema.mts";
-import { generateTypeScript } from "../lsp/typeScript.mts";
+
+await ensureModel();
+
+const { getTypeScriptModel } = await import("../lsp/generate.mts");
+const { getMiddlewareMethods } = await import("../lsp/generateTypeScript.mts");
+const { generateTypeScript } = await import("../lsp/typeScript.mts");
 
 function fixture(): MetaModel {
     return {
@@ -131,7 +135,7 @@ test("committed TypeScript protocol types are reproducible from the shared model
     const outputPath = path.join(root, "packages/typescript/src/vscode/protocol.generated.ts");
     const methods = getMiddlewareMethods(fs.readFileSync(path.join(root, "packages/vscode-typescript/src/lspMiddleware.ts"), "utf8"));
     const output = generateTypeScript(getTypeScriptModel(), methods);
-    const formatted = execFileSync(path.join(root, "node_modules/.bin/dprint"), ["fmt", "--stdin", outputPath], { input: output, encoding: "utf8" });
+    const formatted = execFileSync(process.execPath, [path.join(root, "node_modules/dprint/bin.cjs"), "fmt", "--stdin", outputPath], { input: output, encoding: "utf8" });
     assert.equal(formatted, fs.readFileSync(outputPath, "utf8"));
     const file = ts.createSourceFile("generated.ts", output, ts.ScriptTarget.Latest, true);
     assert.ok(file.statements.every(statement => ts.isInterfaceDeclaration(statement) || ts.isTypeAliasDeclaration(statement)));

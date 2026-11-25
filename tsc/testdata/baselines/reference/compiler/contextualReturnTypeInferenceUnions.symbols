@@ -1,0 +1,36 @@
+//// [tests/cases/compiler/contextualReturnTypeInferenceUnions.ts] ////
+
+=== contextualReturnTypeInferenceUnions.ts ===
+// https://github.com/microsoft/TypeScript/issues/64690
+
+type Ok<T> = { ok: true; value: T };
+>Ok : Symbol(Ok, Decl(contextualReturnTypeInferenceUnions.ts, 0, 0))
+>T : Symbol(T, Decl(contextualReturnTypeInferenceUnions.ts, 2, 8))
+>ok : Symbol(ok, Decl(contextualReturnTypeInferenceUnions.ts, 2, 14))
+>value : Symbol(value, Decl(contextualReturnTypeInferenceUnions.ts, 2, 24))
+>T : Symbol(T, Decl(contextualReturnTypeInferenceUnions.ts, 2, 8))
+
+type Err<E> = { ok: false; value: E };
+>Err : Symbol(Err, Decl(contextualReturnTypeInferenceUnions.ts, 2, 36))
+>E : Symbol(E, Decl(contextualReturnTypeInferenceUnions.ts, 3, 9))
+>ok : Symbol(ok, Decl(contextualReturnTypeInferenceUnions.ts, 3, 15))
+>value : Symbol(value, Decl(contextualReturnTypeInferenceUnions.ts, 3, 26))
+>E : Symbol(E, Decl(contextualReturnTypeInferenceUnions.ts, 3, 9))
+
+declare function ok<const T>(value: T): Ok<T>;
+>ok : Symbol(ok, Decl(contextualReturnTypeInferenceUnions.ts, 3, 38))
+>T : Symbol(T, Decl(contextualReturnTypeInferenceUnions.ts, 4, 20))
+>value : Symbol(value, Decl(contextualReturnTypeInferenceUnions.ts, 4, 29))
+>T : Symbol(T, Decl(contextualReturnTypeInferenceUnions.ts, 4, 20))
+>Ok : Symbol(Ok, Decl(contextualReturnTypeInferenceUnions.ts, 0, 0))
+>T : Symbol(T, Decl(contextualReturnTypeInferenceUnions.ts, 4, 20))
+
+export function f(): Ok<string[]> | Err<string> {
+>f : Symbol(f, Decl(contextualReturnTypeInferenceUnions.ts, 4, 46))
+>Ok : Symbol(Ok, Decl(contextualReturnTypeInferenceUnions.ts, 0, 0))
+>Err : Symbol(Err, Decl(contextualReturnTypeInferenceUnions.ts, 2, 36))
+
+  return ok([]);
+>ok : Symbol(ok, Decl(contextualReturnTypeInferenceUnions.ts, 3, 38))
+}
+

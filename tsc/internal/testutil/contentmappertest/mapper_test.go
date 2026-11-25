@@ -5,6 +5,7 @@ import (
 	"io"
 	"os"
 	"os/exec"
+	"runtime"
 	"strings"
 	"testing"
 
@@ -18,7 +19,7 @@ import (
 // helperEnv, when set, makes the test binary act as the mapper subprocess instead of running tests. This
 // lets the out-of-process test spawn a real subprocess (itself) that speaks the mapper protocol over
 // stdio, exercising the same handler code that the in-process spawner runs over a pipe.
-const helperEnv = "TSGO_CONTENT_MAPPER_HELPER"
+const helperEnv = "TS_CONTENT_MAPPER_HELPER"
 
 func TestMain(m *testing.M) {
 	if os.Getenv(helperEnv) == "1" {
@@ -58,6 +59,9 @@ func transformRequest() contentmapper.Request {
 // subprocess and drives it over stdio through the production content mapper host.
 func TestOutOfProcess(t *testing.T) {
 	t.Parallel()
+	if runtime.GOOS == "wasip1" {
+		t.Skip("wasip1 cannot run subprocesses")
+	}
 	host := contentmapper.NewHost(t.Context(), execSpawner{}, locale.Default)
 	defer host.Close()
 	mapper := testMapper()

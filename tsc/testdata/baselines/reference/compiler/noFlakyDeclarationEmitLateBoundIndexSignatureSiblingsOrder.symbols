@@ -1,0 +1,168 @@
+//// [tests/cases/compiler/noFlakyDeclarationEmitLateBoundIndexSignatureSiblingsOrder.ts] ////
+
+=== /main.ts ===
+/// <reference path="./ambient.d.ts" />
+declare const k: string;
+>k : Symbol(k, Decl(main.ts, 1, 13))
+
+declare const oxa: typeof import("xa");
+>oxa : Symbol(oxa, Decl(main.ts, 2, 13))
+
+declare const oxb: typeof import("xb");
+>oxb : Symbol(oxb, Decl(main.ts, 3, 13))
+
+declare function expand<X>(): { [K in keyof X]: X[K] };
+>expand : Symbol(expand, Decl(main.ts, 3, 39))
+>X : Symbol(X, Decl(main.ts, 4, 24))
+>K : Symbol(K, Decl(main.ts, 4, 33))
+>X : Symbol(X, Decl(main.ts, 4, 24))
+>X : Symbol(X, Decl(main.ts, 4, 24))
+>K : Symbol(K, Decl(main.ts, 4, 33))
+
+export class C {
+>C : Symbol(C, Decl(main.ts, 4, 55))
+
+    [k]: unknown;
+>[k] : Symbol(C[k], Decl(main.ts, 5, 16))
+>k : Symbol(k, Decl(main.ts, 1, 13))
+
+    sa = { ...(null! as typeof import("ma")) };
+>sa : Symbol(C.sa, Decl(main.ts, 6, 17))
+
+    sb = { ...(null! as typeof import("mb")) };
+>sb : Symbol(C.sb, Decl(main.ts, 7, 47))
+
+    f1 = 1;
+>f1 : Symbol(C.f1, Decl(main.ts, 8, 47))
+
+    f2 = 2;
+>f2 : Symbol(C.f2, Decl(main.ts, 9, 11))
+
+    f3 = 3;
+>f3 : Symbol(C.f3, Decl(main.ts, 10, 11))
+
+    f4 = 4;
+>f4 : Symbol(C.f4, Decl(main.ts, 11, 11))
+
+    f5 = 5;
+>f5 : Symbol(C.f5, Decl(main.ts, 12, 11))
+
+    f6 = 6;
+>f6 : Symbol(C.f6, Decl(main.ts, 13, 11))
+
+    f7 = 7;
+>f7 : Symbol(C.f7, Decl(main.ts, 14, 11))
+
+    f8 = 8;
+>f8 : Symbol(C.f8, Decl(main.ts, 15, 11))
+
+    f9 = 9;
+>f9 : Symbol(C.f9, Decl(main.ts, 16, 11))
+
+    f10 = 10;
+>f10 : Symbol(C.f10, Decl(main.ts, 17, 11))
+}
+export const obsA = expand<typeof oxa>();
+>obsA : Symbol(obsA, Decl(main.ts, 20, 12))
+>expand : Symbol(expand, Decl(main.ts, 3, 39))
+>oxa : Symbol(oxa, Decl(main.ts, 2, 13))
+
+export const obsB = expand<typeof oxb>();
+>obsB : Symbol(obsB, Decl(main.ts, 21, 12))
+>expand : Symbol(expand, Decl(main.ts, 3, 39))
+>oxb : Symbol(oxb, Decl(main.ts, 3, 13))
+
+=== /ambient.d.ts ===
+declare module "ma" {
+>"ma" : Symbol("ma", Decl(ambient.d.ts, 0, 0))
+
+    export { v as pa } from "xa";
+>v : Symbol(O.v, Decl(ambient.d.ts, 10, 27))
+>pa : Symbol(pa, Decl(ambient.d.ts, 1, 12))
+
+    export const ma: 1;
+>ma : Symbol(ma, Decl(ambient.d.ts, 2, 16))
+}
+declare module "mb" {
+>"mb" : Symbol("mb", Decl(ambient.d.ts, 3, 1))
+
+    export { v as pb } from "xb";
+>v : Symbol(O.v, Decl(ambient.d.ts, 16, 27))
+>pb : Symbol(pb, Decl(ambient.d.ts, 5, 12))
+
+    export const mb: 1;
+>mb : Symbol(mb, Decl(ambient.d.ts, 6, 16))
+}
+declare module "xa" {
+>"xa" : Symbol("xa", Decl(ambient.d.ts, 7, 1))
+
+    type T = typeof import("mb");
+>T : Symbol(T, Decl(ambient.d.ts, 8, 21))
+
+    interface O extends T { v: 0 }
+>O : Symbol(O, Decl(ambient.d.ts, 9, 33))
+>T : Symbol(T, Decl(ambient.d.ts, 8, 21))
+>v : Symbol(O.v, Decl(ambient.d.ts, 10, 27))
+
+    const o: O;
+>o : Symbol(o, Decl(ambient.d.ts, 11, 9))
+>O : Symbol(O, Decl(ambient.d.ts, 9, 33))
+
+    export = o;
+>o : Symbol(o, Decl(ambient.d.ts, 11, 9))
+}
+declare module "xb" {
+>"xb" : Symbol("xb", Decl(ambient.d.ts, 13, 1))
+
+    type T = typeof import("ma");
+>T : Symbol(T, Decl(ambient.d.ts, 14, 21))
+
+    interface O extends T { v: 0 }
+>O : Symbol(O, Decl(ambient.d.ts, 15, 33))
+>T : Symbol(T, Decl(ambient.d.ts, 14, 21))
+>v : Symbol(O.v, Decl(ambient.d.ts, 16, 27))
+
+    const o: O;
+>o : Symbol(o, Decl(ambient.d.ts, 17, 9))
+>O : Symbol(O, Decl(ambient.d.ts, 15, 33))
+
+    export = o;
+>o : Symbol(o, Decl(ambient.d.ts, 17, 9))
+}
+declare module "ia" {
+>"ia" : Symbol("ia", Decl(ambient.d.ts, 19, 1))
+
+    type T = typeof import("ma");
+>T : Symbol(T, Decl(ambient.d.ts, 20, 21))
+
+    interface O extends T { v: 0 }
+>O : Symbol(O, Decl(ambient.d.ts, 21, 33))
+>T : Symbol(T, Decl(ambient.d.ts, 20, 21))
+>v : Symbol(O.v, Decl(ambient.d.ts, 22, 27))
+
+    const o: O;
+>o : Symbol(o, Decl(ambient.d.ts, 23, 9))
+>O : Symbol(O, Decl(ambient.d.ts, 21, 33))
+
+    export = o;
+>o : Symbol(o, Decl(ambient.d.ts, 23, 9))
+}
+declare module "ib" {
+>"ib" : Symbol("ib", Decl(ambient.d.ts, 25, 1))
+
+    type T = typeof import("mb");
+>T : Symbol(T, Decl(ambient.d.ts, 26, 21))
+
+    interface O extends T { v: 0 }
+>O : Symbol(O, Decl(ambient.d.ts, 27, 33))
+>T : Symbol(T, Decl(ambient.d.ts, 26, 21))
+>v : Symbol(O.v, Decl(ambient.d.ts, 28, 27))
+
+    const o: O;
+>o : Symbol(o, Decl(ambient.d.ts, 29, 9))
+>O : Symbol(O, Decl(ambient.d.ts, 27, 33))
+
+    export = o;
+>o : Symbol(o, Decl(ambient.d.ts, 29, 9))
+}
+

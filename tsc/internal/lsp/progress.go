@@ -139,7 +139,7 @@ func (p *projectLoadingProgress) run() {
 				loading.Set(text, count+1)
 				if token == "" {
 					tokenID++
-					token = fmt.Sprintf("tsgo-loading-%d", tokenID)
+					token = fmt.Sprintf("typescript-loading-%d", tokenID)
 					begun = false
 					if p.delay <= 0 {
 						delayFired = true

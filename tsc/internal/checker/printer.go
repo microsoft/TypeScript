@@ -230,6 +230,10 @@ func (c *Checker) typePredicateToString(typePredicate *TypePredicate) string {
 	return c.typePredicateToStringEx(typePredicate, nil, TypeFormatFlagsUseAliasDefinedOutsideCurrentScope)
 }
 
+func (c *Checker) TypePredicateToStringEx(typePredicate *TypePredicate, enclosingDeclaration *ast.Node, flags TypeFormatFlags) string {
+	return c.typePredicateToStringEx(typePredicate, enclosingDeclaration, flags)
+}
+
 func (c *Checker) typePredicateToStringEx(typePredicate *TypePredicate, enclosingDeclaration *ast.Node, flags TypeFormatFlags) string {
 	writer, putWriter := printer.GetSingleLineStringWriter()
 	defer putWriter()
@@ -285,15 +289,57 @@ func (c *Checker) formatUnionTypes(types []*Type, expandingEnum bool) []*Type {
 	return result
 }
 
+// hoverOnlyNodeBuilderFlags affect only printed hover text. These entry points
+// return syntax trees, so they clear the flags.
+const hoverOnlyNodeBuilderFlags = nodebuilder.FlagsWriteTypeArgumentsOfSignature | nodebuilder.FlagsUseInstantiationExpressions
+
 func (c *Checker) TypeToTypeNode(t *Type, enclosingDeclaration *ast.Node, flags nodebuilder.Flags, idToSymbol map[*ast.IdentifierNode]*ast.Symbol) *ast.TypeNode {
+	flags &^= hoverOnlyNodeBuilderFlags
 	nodeBuilder := c.getNodeBuilderEx(idToSymbol)
 	return nodeBuilder.TypeToTypeNode(t, enclosingDeclaration, flags, nodebuilder.InternalFlagsNone, nil)
 }
 
 func (c *Checker) SignatureToSignatureDeclaration(signature *Signature, kind ast.Kind, enclosingDeclaration *ast.Node, flags nodebuilder.Flags) *ast.Node {
+	flags &^= hoverOnlyNodeBuilderFlags
 	nodeBuilder, release := c.getNodeBuilder()
 	defer release()
 	return nodeBuilder.SignatureToSignatureDeclaration(signature, kind, enclosingDeclaration, flags, nodebuilder.InternalFlagsNone, nil)
+}
+
+func (c *Checker) SymbolToEntityName(symbol *ast.Symbol, meaning ast.SymbolFlags, enclosingDeclaration *ast.Node, flags nodebuilder.Flags) *ast.Node {
+	nodeBuilder, release := c.getNodeBuilder()
+	defer release()
+	return nodeBuilder.SymbolToEntityName(symbol, meaning, enclosingDeclaration, flags, nodebuilder.InternalFlagsNone, nil)
+}
+
+func (c *Checker) SymbolToExpression(symbol *ast.Symbol, meaning ast.SymbolFlags, enclosingDeclaration *ast.Node, flags nodebuilder.Flags) *ast.Node {
+	nodeBuilder, release := c.getNodeBuilder()
+	defer release()
+	return nodeBuilder.SymbolToExpression(symbol, meaning, enclosingDeclaration, flags, nodebuilder.InternalFlagsNone, nil)
+}
+
+func (c *Checker) SymbolToParameterDeclaration(symbol *ast.Symbol, enclosingDeclaration *ast.Node, flags nodebuilder.Flags) *ast.Node {
+	nodeBuilder, release := c.getNodeBuilder()
+	defer release()
+	return nodeBuilder.SymbolToParameterDeclaration(symbol, enclosingDeclaration, flags, nodebuilder.InternalFlagsNone, nil)
+}
+
+func (c *Checker) SymbolToTypeParameterDeclarations(symbol *ast.Symbol, enclosingDeclaration *ast.Node, flags nodebuilder.Flags) []*ast.Node {
+	nodeBuilder, release := c.getNodeBuilder()
+	defer release()
+	return nodeBuilder.SymbolToTypeParameterDeclarations(symbol, enclosingDeclaration, flags, nodebuilder.InternalFlagsNone, nil)
+}
+
+func (c *Checker) TypeParameterToDeclaration(parameter *Type, enclosingDeclaration *ast.Node, flags nodebuilder.Flags) *ast.Node {
+	nodeBuilder, release := c.getNodeBuilder()
+	defer release()
+	return nodeBuilder.TypeParameterToDeclaration(parameter, enclosingDeclaration, flags, nodebuilder.InternalFlagsNone, nil)
+}
+
+func (c *Checker) IndexInfoToIndexSignatureDeclaration(info *IndexInfo, enclosingDeclaration *ast.Node, flags nodebuilder.Flags) *ast.Node {
+	nodeBuilder, release := c.getNodeBuilder()
+	defer release()
+	return nodeBuilder.IndexInfoToIndexSignatureDeclaration(info, enclosingDeclaration, flags, nodebuilder.InternalFlagsNone, nil)
 }
 
 // ExpandSymbolForHover produces declaration strings for a symbol with verbosity support for expandable hover.

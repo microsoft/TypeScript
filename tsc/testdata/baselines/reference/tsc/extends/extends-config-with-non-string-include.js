@@ -12,7 +12,7 @@ export const x = 1;
     "extends": "./base.json",
 }
 
-tsgo -p tsconfig.json --pretty false
+tsc -p tsconfig.json --pretty false
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 error TS18003: No inputs were found in config file '/home/src/projects/project/tsconfig.json'. Specified 'include' paths were '[1]' and 'exclude' paths were '[]'.

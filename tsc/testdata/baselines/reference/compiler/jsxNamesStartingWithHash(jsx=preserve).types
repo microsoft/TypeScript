@@ -1,0 +1,79 @@
+//// [tests/cases/compiler/jsxNamesStartingWithHash.tsx] ////
+
+=== jsxNamesStartingWithHash.tsx ===
+declare const React: any;
+>React : any
+
+declare namespace JSX {
+    interface IntrinsicElements {
+        [name: string]: any;
+>name : string
+    }
+}
+
+const a = <#a></#a>;
+>a : any
+><#a></#a> : any
+> : any
+> : any
+
+const b = <div #b />;
+>b : any
+><div #b /> : any
+>div : any
+> : true
+
+const c = <div #c="" />;
+>c : any
+><div #c="" /> : any
+>div : any
+> : string
+
+const d = <div #d:e />;
+>d : any
+><div #d:e /> : any
+>div : any
+>#d:e : true
+> : any
+>e : any
+
+const e = <a:#f />;
+>e : any
+><a:#f /> : any
+>a : any
+> : any
+
+const f = <a.#g />;
+>f : any
+><a.#g /> : any
+>a.#g : any
+>a : any
+> : any
+
+const g = <#h:i />;
+>g : any
+><#h:i /> : any
+> : any
+>i : any
+
+const h = <div j:#k />;
+>h : any
+><div j:#k /> : any
+>div : any
+>j:#k : true
+>j : any
+> : any
+
+const i = <div #l #m="" n="" />;
+>i : any
+><div #l #m="" n="" /> : any
+>div : any
+> : true
+> : true
+>n : string
+
+const j = <# />;
+>j : any
+><# /> : any
+> : any
+

@@ -4,6 +4,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"runtime"
 	"testing"
 
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
@@ -12,6 +13,9 @@ import (
 
 func TestSymlinkRealpath(t *testing.T) {
 	t.Parallel()
+	if runtime.GOOS == "wasip1" {
+		t.Skip("WASI runtimes may reject symlinks with absolute targets")
+	}
 
 	targetFile, linkFile := setupSymlinks(t)
 
@@ -105,6 +109,9 @@ func BenchmarkRealpath(b *testing.B) {
 
 func TestGetAccessibleEntries(t *testing.T) {
 	t.Parallel()
+	if runtime.GOOS == "wasip1" {
+		t.Skip("WASI runtimes may reject symlinks with absolute targets")
+	}
 
 	tmp := t.TempDir()
 	target := filepath.Join(tmp, "target")
