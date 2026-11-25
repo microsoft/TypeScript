@@ -430,7 +430,25 @@ func (l *LanguageService) getTextForRename(originalNode *ast.Node, entry *Refere
 			return newText
 		case ast.IsExportSpecifier(parent) && parent.PropertyName() == nil:
 			// If the symbol for the node is same as declared node symbol use prefix text
-			if originalNode == entry.node || ch.GetSymbolAtLocation(originalNode) == ch.GetSymbolAtLocation(entry.node) {
+			usePrefix := originalNode == entry.node || ch.GetSymbolAtLocation(originalNode) == ch.GetSymbolAtLocation(entry.node)
+			if ast.IsStringLiteralLike(node) {
+				// For `export { "a b" } from "m"`, the edit range covers the literal's contents
+				// between its quotes.
+				sourceFile := ast.GetSourceFileOfNode(node)
+				quoteChar := getStringLiteralQuoteChar(sourceFile, node)
+				quote := func(s string) string {
+					return string(quoteChar) + printer.EscapeString(s, quoteChar) + string(quoteChar)
+				}
+				text := quote(newText) + " as " + quote(name)
+				if usePrefix {
+					text = quote(name) + " as " + quote(newText)
+				}
+				if node.End()-scanner.GetTokenPosOfNode(node, sourceFile, false /*includeJSDoc*/) <= 2 {
+					return text
+				}
+				return text[1 : len(text)-1]
+			}
+			if usePrefix {
 				return name + " as " + propertyText
 			}
 			return propertyText + " as " + name

@@ -109,9 +109,9 @@ export { "/*2*/d e" } from "./c";`
 	f.VerifyRename(t, "1", "c", map[string]string{
 		"/a.ts": `const x = 1;
 export { x as "c" };`,
-		"/b.ts": `export { "c as a b" } from "./a";`,
+		"/b.ts": `export { "c" as "a b" } from "./a";`,
 	})
 	f.VerifyRename(t, "2", "f", map[string]string{
-		"/d.ts": `export { "d e as f" } from "./c";`,
+		"/d.ts": `export { "d e" as "f" } from "./c";`,
 	})
 }
