@@ -134,3 +134,25 @@ const k: "a\\\"b" | "bar" = "a\\\"b";
 <C kind='a\"b' />;`,
 	})
 }
+
+func TestRenameToNonIdentifierInJSDocImport(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @allowJs: true
+// @checkJs: true
+// @Filename: /a.ts
+export interface /*1*/Foo {}
+// @Filename: /b.js
+/** @import { Foo } from "./a" */
+/** @type {Foo} */
+let x;`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	defer f.ConfigureWithReset(t, lsutil.UserPreferences{ProvidePrefixAndSuffixTextForRename: core.TSTrue})()
+	f.VerifyRename(t, "1", "a*/b", map[string]string{
+		"/a.ts": `export interface a*/b {}`,
+		"/b.js": `/** @import { "a*/b" as Foo } from "./a" */
+/** @type {Foo} */
+let x;`,
+	})
+}
