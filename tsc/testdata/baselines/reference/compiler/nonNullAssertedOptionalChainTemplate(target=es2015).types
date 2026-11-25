@@ -1,0 +1,84 @@
+//// [tests/cases/compiler/nonNullAssertedOptionalChainTemplate.ts] ////
+
+=== nonNullAssertedOptionalChainTemplate.ts ===
+var f: any;
+>f : any
+
+f?.x!`text`;
+>f?.x!`text` : any
+>f?.x! : any
+>f?.x : any
+>f : any
+>x : any
+>`text` : "text"
+
+f?.x!!`text`;
+>f?.x!!`text` : any
+>f?.x!! : any
+>f?.x! : any
+>f?.x : any
+>f : any
+>x : any
+>`text` : "text"
+
+f?.[0]!`text${1}`;
+>f?.[0]!`text${1}` : any
+>f?.[0]! : any
+>f?.[0] : any
+>f : any
+>0 : 0
+>`text${1}` : string
+>1 : 1
+
+f?.()!`text`;
+>f?.()!`text` : any
+>f?.()! : any
+>f?.() : any
+>f : any
+>`text` : "text"
+
+f?.x!`text`();
+>f?.x!`text`() : any
+>f?.x!`text` : any
+>f?.x! : any
+>f?.x : any
+>f : any
+>x : any
+>`text` : "text"
+
+f?.x!`text`.x;
+>f?.x!`text`.x : any
+>f?.x!`text` : any
+>f?.x! : any
+>f?.x : any
+>f : any
+>x : any
+>`text` : "text"
+>x : any
+
+(f?.x)!`text`;
+>(f?.x)!`text` : any
+>(f?.x)! : any
+>(f?.x) : any
+>f?.x : any
+>f : any
+>x : any
+>`text` : "text"
+
+(f?.x!)`text`;
+>(f?.x!)`text` : any
+>(f?.x!) : any
+>f?.x! : any
+>f?.x : any
+>f : any
+>x : any
+>`text` : "text"
+
+f.x!`text`;
+>f.x!`text` : any
+>f.x! : any
+>f.x : any
+>f : any
+>x : any
+>`text` : "text"
+
