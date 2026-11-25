@@ -115,3 +115,22 @@ export { x as "c" };`,
 		"/d.ts": `export { "d e" as "f" } from "./c";`,
 	})
 }
+
+func TestRenameStringLiteralInJsxAttribute(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @Filename: /a.tsx
+// @jsx: preserve
+declare function C(props: { kind: "foo" | "bar" }): any;
+const k: "foo" | "bar" = "/*1*/foo";
+<C kind="foo" />;
+<C kind='foo' />;`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyRename(t, "1", `a\"b`, map[string]string{
+		"/a.tsx": `declare function C(props: { kind: "foo" | "bar" }): any;
+const k: "a\\\"b" | "bar" = "a\\\"b";
+<C kind="a\\\"b" />;
+<C kind='a\\"b' />;`,
+	})
+}
