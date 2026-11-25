@@ -200,12 +200,13 @@ let a;`
 		Items: &fourslash.CompletionsExpectedItems{
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
-					Label:    "a*/b",
-					Kind:     new(lsproto.CompletionItemKindField),
-					SortText: new(string(ls.SortTextLocationPriority)),
+					Label:      "a*/b",
+					Kind:       new(lsproto.CompletionItemKindField),
+					SortText:   new(string(ls.SortTextLocationPriority)),
+					InsertText: new(`a*\/b`),
 					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 						TextEdit: &lsproto.TextEdit{
-							NewText: "a*/b",
+							NewText: `a*\/b`,
 							Range:   f.Ranges()[0].LSRange,
 						},
 					},

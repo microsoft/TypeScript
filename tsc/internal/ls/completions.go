@@ -2215,7 +2215,7 @@ func (l *LanguageService) createCompletionItem(
 	var labelDetails *lsproto.CompletionItemLabelDetails
 	preferences := l.UserPreferences()
 	if data.completionKind == CompletionKindString {
-		escaped := printer.EscapeString(name, stringCompletionQuoteChar(contextToken))
+		escaped := escapeStringForNode(name, stringCompletionQuoteChar(contextToken), contextToken)
 		if escaped != name {
 			insertText = escaped
 		}

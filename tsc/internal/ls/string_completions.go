@@ -158,7 +158,7 @@ func (l *LanguageService) convertStringLiteralCompletions(
 			filterText := ""
 			replacementSpan := l.getReplacementRangeForContextToken(file, contextToken, position)
 			if !isJsxAttribute {
-				name = printer.EscapeString(value, quoteChar)
+				name = escapeStringForNode(value, quoteChar, contextToken)
 			} else if !jsxAttributeStringCanContain(value, byte(quoteChar)) {
 				// JSX attribute strings have no escape sequences, so replace the
 				// string with an expression container holding the value.
