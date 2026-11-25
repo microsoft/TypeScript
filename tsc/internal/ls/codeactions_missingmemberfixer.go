@@ -13,6 +13,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/ls/change"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
 	"github.com/microsoft/TypeScript/tsc/internal/nodebuilder"
+	"github.com/microsoft/TypeScript/tsc/internal/scanner"
 )
 
 type preserveOptionalFlags int
@@ -61,7 +62,7 @@ func (f *missingMemberFixer) createMemberFromSymbol(symbol *ast.Symbol, enclosin
 	if declaration != nil {
 		kind = declaration.Kind
 	}
-	declarationName := createDeclarationName(f.changeTracker.NodeFactory, f.typeChecker, symbol, declaration)
+	declarationName := createDeclarationName(f.changeTracker.NodeFactory, f.typeChecker, symbol, declaration, quotePreference)
 	modifiers := f.createModifiers(symbol, declaration)
 
 	flags := nodebuilder.FlagsNoTruncation
@@ -486,11 +487,15 @@ func createDummyParameters(factory *ast.NodeFactory, argCount int, names []strin
 	return factory.NewNodeList(parameters)
 }
 
-func createDeclarationName(factory *ast.NodeFactory, typeChecker *checker.Checker, symbol *ast.Symbol, declaration *ast.Node) *ast.PropertyName {
+func createDeclarationName(factory *ast.NodeFactory, typeChecker *checker.Checker, symbol *ast.Symbol, declaration *ast.Node, quotePreference lsutil.QuotePreference) *ast.PropertyName {
 	if symbol != nil && symbol.CheckFlags()&ast.CheckFlagsMapped != 0 {
 		nameType := typeChecker.GetNameTypeOfSymbol(symbol)
 		if nameType != nil && checker.IsTypeUsableAsPropertyName(nameType) {
-			return factory.NewIdentifier(checker.GetPropertyNameFromType(nameType))
+			name := checker.GetPropertyNameFromType(nameType)
+			if !scanner.IsIdentifierText(name, core.LanguageVariantStandard) {
+				return factory.NewStringLiteral(name, core.IfElse(quotePreference == lsutil.QuotePreferenceSingle, ast.TokenFlagsSingleQuote, ast.TokenFlagsNone))
+			}
+			return factory.NewIdentifier(name)
 		}
 	}
 	if declaration != nil && declaration.Name() != nil {
