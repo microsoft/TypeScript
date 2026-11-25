@@ -31,22 +31,22 @@ import * as dep from "./dep";
 >dep : typeof dep
 
 import { f } from "./mid";
->f : () => dep."a b"
+>f : () => A
 
 export const v = f();
->v : dep."a b"
->f() : dep."a b"
->f : () => dep."a b"
+>v : A
+>f() : A
+>f : () => A
 
 === /main2.ts ===
 import * as dep from "./dep";
 >dep : typeof dep
 
 import { g } from "./mid";
->g : () => dep."a c"
+>g : () => dep.Ok
 
 export const w = g();
->w : dep."a c"
->g() : dep."a c"
->g : () => dep."a c"
+>w : dep.Ok
+>g() : dep.Ok
+>g : () => dep.Ok
 

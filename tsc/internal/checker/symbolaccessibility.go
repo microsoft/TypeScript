@@ -642,7 +642,9 @@ func (c *Checker) trySymbolTable(
 			(isLocalNameLookup && !core.Some(symbolFromSymbolTable.Declarations(), isNamespaceReexportDeclaration) || !isLocalNameLookup) &&
 			// While exports are generally considered to be in scope, export-specifier declared symbols are _not_
 			// See similar comment in `resolveName` for details
-			(ignoreQualification || len(getDeclarationsOfKind(symbolFromSymbolTable, ast.KindExportSpecifier)) == 0) {
+			(ignoreQualification || len(getDeclarationsOfKind(symbolFromSymbolTable, ast.KindExportSpecifier)) == 0) &&
+			// A qualified name can only reference exports with identifier names
+			(!ignoreQualification || isIdentifierExportName(symbolFromSymbolTable.Name())) {
 			resolvedImportedSymbol := c.resolveAlias(symbolFromSymbolTable)
 			candidate := c.getCandidateListForSymbol(ctx, symbolFromSymbolTable, resolvedImportedSymbol, ignoreQualification)
 			if len(candidate) > 0 {
