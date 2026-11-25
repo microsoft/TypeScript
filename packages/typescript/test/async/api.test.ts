@@ -9466,6 +9466,15 @@ export const obj = { m: 1, s: "hi", b: true };
         assert.strictEqual(await api.printer.printFile(updated), "(a ?? b) || c;\n");
     });
 
+    test("printing keeps comments in files with non-ASCII text", async () => {
+        await using api = spawnAPI();
+        await using lease = await api.createSourceFile("/test.ts", "// é\nfoo(); // trailing\n");
+        const { sourceFile } = lease;
+        assert.strictEqual(await api.printer.printFile(sourceFile), "// é\nfoo(); // trailing\n");
+        const updated = updateSourceFile(sourceFile, [getSynthesizedDeepClone(sourceFile.statements[0])], sourceFile.endOfFileToken);
+        assert.strictEqual(await api.printer.printFile(updated), "// é\nfoo(); // trailing\n");
+    });
+
     test("printFile", async () => {
         await using api = spawnAPI(emitterFiles);
 
