@@ -45,7 +45,8 @@ export type C = A | B;`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
 	f.VerifyOrganizeImports(t,
-		`import { A, B } from "./a" with { type: "x\" z:\"y" };
+		`import { A } from "./a" with { type: "x\" z:\"y" };
+import { B } from "./a" with { type: "x", z: "y" };
 
 export type C = A | B;`,
 		lsproto.CodeActionKindSourceOrganizeImportsTs,
