@@ -32,5 +32,5 @@ export * from "./a.js";`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
 	f.VerifyImportFixModuleSpecifiers(t, "sibling", []string{"./a.js", "./index.js", "../index.js"}, nil /*preferences*/)
-	f.VerifyImportFixModuleSpecifiers(t, "parent", []string{"../foo/a.js", "../foo/index.js", "../index.js"}, nil /*preferences*/)
+	f.VerifyImportFixModuleSpecifiers(t, "parent", []string{"../foo/index.js", "../foo/a.js", "../index.js"}, nil /*preferences*/)
 }
