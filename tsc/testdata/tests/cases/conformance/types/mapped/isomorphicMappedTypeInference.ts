@@ -190,3 +190,11 @@ function f30<U>(value: { [P in keyof U]: U[P] }, ordinary: U) {
     const inferred = inferFromMapped(value);
     const accept: typeof inferred = ordinary;
 }
+
+// Inference to homomorphic mapped types nested in conditional types
+
+declare function inferInNonDistributive<T>(x: [T] extends [object] ? { [K in keyof T]: () => T[K] } : never): T;
+const inferredInNonDistributive = inferInNonDistributive({ a: () => 1 });
+
+declare function inferInDistributive<T>(x: T extends unknown ? { [K in keyof T]: () => T[K] } : never): T;
+const inferredInDistributive = inferInDistributive({ a: () => 1 });

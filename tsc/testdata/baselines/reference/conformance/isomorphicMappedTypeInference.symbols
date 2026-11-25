@@ -652,3 +652,37 @@ function f30<U>(value: { [P in keyof U]: U[P] }, ordinary: U) {
 >ordinary : Symbol(ordinary, Decl(isomorphicMappedTypeInference.ts, 183, 48))
 }
 
+// Inference to homomorphic mapped types nested in conditional types
+
+declare function inferInNonDistributive<T>(x: [T] extends [object] ? { [K in keyof T]: () => T[K] } : never): T;
+>inferInNonDistributive : Symbol(inferInNonDistributive, Decl(isomorphicMappedTypeInference.ts, 186, 1))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 190, 40))
+>x : Symbol(x, Decl(isomorphicMappedTypeInference.ts, 190, 43))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 190, 40))
+>K : Symbol(K, Decl(isomorphicMappedTypeInference.ts, 190, 72))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 190, 40))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 190, 40))
+>K : Symbol(K, Decl(isomorphicMappedTypeInference.ts, 190, 72))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 190, 40))
+
+const inferredInNonDistributive = inferInNonDistributive({ a: () => 1 });
+>inferredInNonDistributive : Symbol(inferredInNonDistributive, Decl(isomorphicMappedTypeInference.ts, 191, 5))
+>inferInNonDistributive : Symbol(inferInNonDistributive, Decl(isomorphicMappedTypeInference.ts, 186, 1))
+>a : Symbol(a, Decl(isomorphicMappedTypeInference.ts, 191, 58))
+
+declare function inferInDistributive<T>(x: T extends unknown ? { [K in keyof T]: () => T[K] } : never): T;
+>inferInDistributive : Symbol(inferInDistributive, Decl(isomorphicMappedTypeInference.ts, 191, 73))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 193, 37))
+>x : Symbol(x, Decl(isomorphicMappedTypeInference.ts, 193, 40))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 193, 37))
+>K : Symbol(K, Decl(isomorphicMappedTypeInference.ts, 193, 66))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 193, 37))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 193, 37))
+>K : Symbol(K, Decl(isomorphicMappedTypeInference.ts, 193, 66))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 193, 37))
+
+const inferredInDistributive = inferInDistributive({ a: () => 1 });
+>inferredInDistributive : Symbol(inferredInDistributive, Decl(isomorphicMappedTypeInference.ts, 194, 5))
+>inferInDistributive : Symbol(inferInDistributive, Decl(isomorphicMappedTypeInference.ts, 191, 73))
+>a : Symbol(a, Decl(isomorphicMappedTypeInference.ts, 194, 52))
+

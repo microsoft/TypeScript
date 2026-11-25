@@ -645,3 +645,31 @@ function f30<U>(value: { [P in keyof U]: U[P] }, ordinary: U) {
 >ordinary : U
 }
 
+// Inference to homomorphic mapped types nested in conditional types
+
+declare function inferInNonDistributive<T>(x: [T] extends [object] ? { [K in keyof T]: () => T[K] } : never): T;
+>inferInNonDistributive : <T>(x: [T] extends [object] ? { [K in keyof T]: () => T[K]; } : never) => T
+>x : [T] extends [object] ? { [K in keyof T]: () => T[K]; } : never
+
+const inferredInNonDistributive = inferInNonDistributive({ a: () => 1 });
+>inferredInNonDistributive : { a: number; }
+>inferInNonDistributive({ a: () => 1 }) : { a: number; }
+>inferInNonDistributive : <T>(x: [T] extends [object] ? { [K in keyof T]: () => T[K]; } : never) => T
+>{ a: () => 1 } : { a: () => number; }
+>a : () => number
+>() => 1 : () => number
+>1 : 1
+
+declare function inferInDistributive<T>(x: T extends unknown ? { [K in keyof T]: () => T[K] } : never): T;
+>inferInDistributive : <T>(x: T extends unknown ? { [K in keyof T]: () => T[K]; } : never) => T
+>x : T extends unknown ? { [K in keyof T]: () => T[K]; } : never
+
+const inferredInDistributive = inferInDistributive({ a: () => 1 });
+>inferredInDistributive : { a: number; }
+>inferInDistributive({ a: () => 1 }) : { a: number; }
+>inferInDistributive : <T>(x: T extends unknown ? { [K in keyof T]: () => T[K]; } : never) => T
+>{ a: () => 1 } : { a: () => number; }
+>a : () => number
+>() => 1 : () => number
+>1 : 1
+
