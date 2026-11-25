@@ -995,6 +995,7 @@
   "Installing_types_for_0_95203": "'{0}'의 형식을 설치하는 중",
   "Instantiations_of_the_following_types_appear_infinitely_circular_Colon_0_5115": "다음 유형의 인스턴스화는 무한 순환으로 나타납니다. {0}.",
   "Instantiations_of_type_0_appear_infinitely_circular_5114": "'{0}' 형식의 인스턴스화가 무한 순환하는 것으로 보입니다.",
+  "Interface_0_cannot_extend_type_parameter_1_2884": "인터페이스 '{0}'은(는) 형식 매개 변수 '{1}'을(를) 확장할 수 없습니다.",
   "Interface_0_cannot_simultaneously_extend_types_1_and_2_2320": "'{0}' 인터페이스는 '{1}' 및 '{2}' 형식을 동시에 확장할 수 없습니다.",
   "Interface_0_incorrectly_extends_interface_1_2430": "'{0}' 인터페이스가 '{1}' 인터페이스를 잘못 확장합니다.",
   "Interface_declaration_cannot_have_implements_clause_1176": "인터페이스 선언에는 'implements' 절을 사용할 수 없습니다.",

@@ -37,7 +37,7 @@ export class TransportClient {
         if (result.length) {
             return JSON.parse(result) as APIMethodInfo[K]["result"];
         }
-        return undefined as APIMethodInfo[K]["result"];
+        return undefined;
     }
 
     registerCallback(name: string, callback: (params: unknown) => unknown): () => void {

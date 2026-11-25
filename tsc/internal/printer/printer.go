@@ -2871,10 +2871,10 @@ func (p *Printer) getBinaryExpressionPrecedence(node *ast.BinaryExpression) (lef
 
 func (p *Printer) emitBinaryExpression(node *ast.BinaryExpression) {
 	leftPrec, rightPrec := p.getBinaryExpressionPrecedence(node)
-	if emittedLeft := ast.SkipPartiallyEmittedExpressions(node.Left); ast.NodeIsSynthesized(emittedLeft) && emittedLeft.Kind == ast.KindBinaryExpression && mixingBinaryOperatorsRequiresParentheses(node.OperatorToken.Kind, emittedLeft.AsBinaryExpression().OperatorToken.Kind) {
+	if emittedLeft := ast.SkipPartiallyEmittedExpressions(node.Left); isSynthesizedForEmit(emittedLeft) && emittedLeft.Kind == ast.KindBinaryExpression && mixingBinaryOperatorsRequiresParentheses(node.OperatorToken.Kind, emittedLeft.AsBinaryExpression().OperatorToken.Kind) {
 		leftPrec = ast.OperatorPrecedenceHighest
 	}
-	if emittedRight := ast.SkipPartiallyEmittedExpressions(node.Right); ast.NodeIsSynthesized(emittedRight) && emittedRight.Kind == ast.KindBinaryExpression && mixingBinaryOperatorsRequiresParentheses(node.OperatorToken.Kind, emittedRight.AsBinaryExpression().OperatorToken.Kind) {
+	if emittedRight := ast.SkipPartiallyEmittedExpressions(node.Right); isSynthesizedForEmit(emittedRight) && emittedRight.Kind == ast.KindBinaryExpression && mixingBinaryOperatorsRequiresParentheses(node.OperatorToken.Kind, emittedRight.AsBinaryExpression().OperatorToken.Kind) {
 		rightPrec = ast.OperatorPrecedenceHighest
 	}
 	state := p.enterNode(node.AsNode())
@@ -4879,6 +4879,10 @@ func (p *Printer) hasTrailingComma(parentNode *ast.Node, children *ast.NodeList)
 	return false
 }
 
+func isArrayHole(node *ast.Node) bool {
+	return ast.IsOmittedExpression(node) || ast.IsBindingElement(node) && node.Name() == nil
+}
+
 func (p *Printer) writeDelimiter(format ListFormat) {
 	switch format & LFDelimitersMask {
 	case LFNone:
@@ -5003,7 +5007,8 @@ func (p *Printer) emitListItems(
 
 	// Write a trailing comma, if requested.
 	skipTrailingComments := p.commentsDisabled || !p.shouldEmitTrailingComments(previousSibling)
-	emitTrailingComma := hasTrailingComma && format&LFAllowTrailingComma != 0 && format&LFCommaDelimited != 0
+	// A trailing hole is only an element if it is followed by a comma.
+	emitTrailingComma := (hasTrailingComma || previousSibling != nil && isArrayHole(previousSibling)) && format&LFAllowTrailingComma != 0 && format&LFCommaDelimited != 0
 	if emitTrailingComma {
 		if previousSibling != nil && !skipTrailingComments {
 			p.emitToken(ast.KindCommaToken, previousSibling.End(), WriteKindPunctuation, previousSibling)

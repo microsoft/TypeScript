@@ -208,7 +208,7 @@ export class TransportClient {
                 if (this.maxResponseBytesPerPage !== undefined) {
                     params.maxResponseBytesPerPage = this.maxResponseBytesPerPage;
                 }
-                const response = await this.sendRequest("batchRequests", params) as BatchRequestsResponse;
+                const response: BatchRequestsResponse = await this.sendRequest("batchRequests", params);
                 let responses = response.responses;
                 let continuationToken = response.continuationToken;
                 while (continuationToken) {
@@ -219,7 +219,7 @@ export class TransportClient {
                     if (this.maxResponseBytesPerPage !== undefined) {
                         pageParams.maxResponseBytesPerPage = this.maxResponseBytesPerPage;
                     }
-                    const page = await this.sendRequest("batchRequests", pageParams) as BatchRequestsResponse;
+                    const page: BatchRequestsResponse = await this.sendRequest("batchRequests", pageParams);
                     responses = responses.concat(page.responses);
                     continuationToken = page.continuationToken;
                 }
@@ -266,7 +266,7 @@ export class TransportClient {
         this.recordTiming(method, start, response.bytesSent, response.bytesReceived);
         return response.value.length
             ? JSON.parse(response.value) as APIMethodInfo[K]["result"]
-            : undefined as APIMethodInfo[K]["result"];
+            : undefined;
     }
 
     private async sendBinaryRequest(method: SourceFileResponseMethod, payload: Uint8Array): Promise<Uint8Array | undefined> {
@@ -309,8 +309,7 @@ export class TransportClient {
 
 function isPromiseLike(value: unknown): value is PromiseLike<unknown> {
     return (
-        (typeof value === "object" && value !== null || typeof value === "function")
-        && "then" in value
-        && typeof value.then === "function"
+        (typeof value === "object" && value != undefined || typeof value === "function")
+        && typeof (value as { then: unknown; }).then === "function"
     );
 }

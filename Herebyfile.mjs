@@ -510,8 +510,9 @@ export const generateTristate = goGenerateTask("generate:tristate", [
     stringerGenerator("tsc/internal/core/tristate.go", "Tristate", "tristate_stringer_generated.go"),
 ]);
 
-export const generateDiagnostics = goGenerateTask("generate:diagnostics", [
-    {
+export const generateDiagnostics = goGenerateTask(
+    "generate:diagnostics",
+    [{
         file: "tsc/internal/diagnostics/diagnostics.go",
         inputs: ["generate.go", "diagnosticMessages.json", "../../../tools/LocProject.json", "../{collections,json}/*.go", "loc/*.generated.json"],
         exclude: ["**/*_test.go"],
@@ -534,9 +535,9 @@ export const generateDiagnostics = goGenerateTask("generate:diagnostics", [
             ],
             ["dprint", "fmt", "diagnostics_generated.go", "loc_generated.go"],
         ],
-    },
-    stringerGenerator("tsc/internal/diagnostics/diagnostics.go", "Category", "stringer_generated.go"),
-], ["tsc/internal/diagnostics/loc"]);
+    }, stringerGenerator("tsc/internal/diagnostics/diagnostics.go", "Category", "stringer_generated.go")],
+    ["tsc/internal/diagnostics/loc"],
+);
 
 export const generateAutoImport = goGenerateTask("generate:autoimport", [
     stringerGenerator("tsc/internal/ls/autoimport/export.go", "ExportSyntax", "export_stringer_generated.go"),
@@ -1430,13 +1431,24 @@ const customLinterTool = createCachedTool({
     },
 });
 
+// ESLint runs the local compiler, which can't execute when GOOS/GOARCH target another platform.
+const lintTypeScriptOnHost = (!process.env.GOOS || process.env.GOOS === nodeToGOOS(process.platform))
+    && (!process.env.GOARCH || process.env.GOARCH === nodeToGOARCH(process.arch, process.platform));
+
 export const lint = task({
     name: "lint",
-    description: "Runs golangci-lint.",
+    description: "Runs Go and TypeScript linters.",
+    dependencies: lintTypeScriptOnHost ? [local, buildAPI] : [],
     run: runLint,
 });
 
 async function runLint() {
+    if (lintTypeScriptOnHost) {
+        await runLintTypeScript();
+    }
+    else {
+        console.log("Skipping TypeScript lint for non-host GOOS/GOARCH");
+    }
     const lintArgs = ["run"];
     if (defaultGoBuildTags.length) {
         lintArgs.push("--build-tags", defaultGoBuildTags.join(","));
@@ -1449,6 +1461,21 @@ async function runLint() {
     console.log("Linting tools");
     await customLinterTool.run([...lintArgs, "--config", "../.golangci.yml"], { cwd: "./tools" });
 }
+
+async function runLintTypeScript() {
+    const args = ["packages/typescript/{src,test,scripts}/**/*.ts"];
+    if (options.fix) {
+        args.push("--fix");
+    }
+    await run("eslint", args);
+}
+
+export const lintTypeScript = task({
+    name: "lint:typescript",
+    description: "Lints TypeScript package sources with the local compiler.",
+    dependencies: [local, buildAPI],
+    run: runLintTypeScript,
+});
 
 export const installTools = task({
     name: "install-tools",
@@ -1512,7 +1539,7 @@ async function fixLineEndings() {
 export const validate = task({
     name: "validate",
     description: "Generates, builds, tests, lints, and formats the repo. Pass --api to include API tests, or --all to include API and ancillary repository tests. Benchmarks are separate: test:benchmarks and test:benchmarks:api.",
-    dependencies: [build],
+    dependencies: [build, buildAPI],
     run: async () => {
         /** @type {{ name: string; error: unknown }[]} */
         const failures = [];
@@ -2119,15 +2146,13 @@ async function sign(filelist, unchangedOutputOkay = false) {
     const tmp = await getSignTempDir();
     const propsPath = path.resolve(tmp, `signing-items-${signCount++}.props`);
     const signingItems = signingFilelist.SignFileRecordList.flatMap(record => record.SignFileList.map(file => ({ path: file.SrcPath, cert: record.Certs, macAppName: record.MacAppName })));
-    const items = signingItems.map(({ path: filePath, cert, macAppName }) =>
-        `    <FilesToSign Include="${assertMsbuildXmlValue(filePath)}">
+    const items = signingItems.map(({ path: filePath, cert, macAppName }) => `    <FilesToSign Include="${assertMsbuildXmlValue(filePath)}">
       <Authenticode>${assertMsbuildXmlValue(cert)}</Authenticode>
       <StrongName>None</StrongName>${
-            macAppName ? `
+          macAppName ? `
       <MacAppName>${assertMsbuildXmlValue(macAppName)}</MacAppName>` : ""
-        }
-    </FilesToSign>`
-    ).join("\n");
+      }
+    </FilesToSign>`).join("\n");
     await fs.promises.writeFile(
         propsPath,
         `<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">

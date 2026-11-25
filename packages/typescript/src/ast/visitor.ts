@@ -6,10 +6,7 @@
 
 import { SyntaxKind } from "../../enums/syntaxKind.js";
 import type {
-    JSDocComment,
     JSDocParameterOrPropertyTag,
-    JSDocParameterTag,
-    JSDocPropertyTag,
     Node,
     NodeArray,
 } from "./ast.ts";
@@ -100,8 +97,15 @@ export { yieldEachChildOfJSDocParameterOrPropertyTag as yieldEachChildOfJSDocPar
 
 function visitEachChildOfJSDocParameterOrPropertyTag(node: JSDocParameterOrPropertyTag, visitor: Visitor): JSDocParameterOrPropertyTag {
     const _tagName = visitNode(node.tagName, visitor, isIdentifier);
-    const _name = visitNode(node.name, visitor, isEntityName);
-    const _typeExpression = visitNode(node.typeExpression, visitor, isTypeNode);
+    let _name, _typeExpression;
+    if (node.isNameFirst) {
+        _name = visitNode(node.name, visitor, isEntityName);
+        _typeExpression = visitNode(node.typeExpression, visitor, isTypeNode);
+    }
+    else {
+        _typeExpression = visitNode(node.typeExpression, visitor, isTypeNode);
+        _name = visitNode(node.name, visitor, isEntityName);
+    }
     const _comment = visitNodes(node.comment, visitor);
     return node.kind === SyntaxKind.JSDocParameterTag
         ? updateJSDocParameterTag(node, _tagName, _name, _typeExpression, _comment)

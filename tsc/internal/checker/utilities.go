@@ -1024,6 +1024,7 @@ func (s *orderedSet[T]) add(value T) {
 	s.valuesByKey[value] = struct{}{}
 }
 
+// replace preserves order. The caller must ensure newValue is not already in the set.
 func (s *orderedSet[T]) replace(oldValue T, newValue T) bool {
 	if !s.contains(oldValue) {
 		return false
