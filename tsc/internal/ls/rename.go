@@ -529,6 +529,8 @@ func isModuleExportNameOfSpecifier(node *ast.Node) bool {
 		return parent.PropertyName() == node
 	case ast.IsExportSpecifier(parent):
 		return parent.Name() == node || parent.Parent.Parent.AsExportDeclaration().ModuleSpecifier != nil
+	case ast.IsNamespaceExport(parent):
+		return true
 	}
 	return false
 }

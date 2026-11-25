@@ -169,7 +169,7 @@ import { ns as bar } from "./a";`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
 	f.VerifyRename(t, "1", "a-b", map[string]string{
-		"/a.ts": `export * as a-b from "./dep";`,
+		"/a.ts": `export * as "a-b" from "./dep";`,
 		"/b.ts": `import { "a-b" as bar } from "./a";`,
 	})
 }
