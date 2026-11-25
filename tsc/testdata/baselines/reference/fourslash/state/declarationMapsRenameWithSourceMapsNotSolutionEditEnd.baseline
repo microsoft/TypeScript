@@ -241,7 +241,7 @@ Config File Names::
       "line": 2,
       "character": 16
     },
-    "newName": "?"
+    "newName": "RENAME_PLACEHOLDER"
   }
 }
 
@@ -924,7 +924,7 @@ Projects::
       "line": 2,
       "character": 16
     },
-    "newName": "?"
+    "newName": "RENAME_PLACEHOLDER"
   }
 }
 

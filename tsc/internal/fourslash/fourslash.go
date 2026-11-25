@@ -4763,6 +4763,10 @@ func (f *FourslashTest) BaselineAutoImportsCompletions(t *testing.T, markerNames
 // string | *Marker | *RangeMarker
 type MarkerOrRangeOrName = any
 
+// renameBaselinePlaceholder is an identifier, so rename edits take the same form
+// as renames to an ordinary new name.
+const renameBaselinePlaceholder = "RENAME_PLACEHOLDER"
+
 func (f *FourslashTest) VerifyBaselineRename(
 	t *testing.T,
 	preferences *lsutil.UserPreferences,
@@ -4806,7 +4810,7 @@ func (f *FourslashTest) verifyBaselineRename(
 				Uri: lsconv.FileNameToDocumentURI(f.activeFilename),
 			},
 			Position: f.currentCaretPosition,
-			NewName:  "?",
+			NewName:  renameBaselinePlaceholder,
 		}
 
 		result := f.sendRequest(t, lsproto.TextDocumentRenameInfo, params)
@@ -4843,7 +4847,7 @@ func (f *FourslashTest) verifyBaselineRename(
 				endMarker:  "RENAME|]",
 				startMarkerPrefix: func(span documentSpan) *string {
 					text := spanToText[span]
-					prefixAndSuffix := strings.Split(text, "?")
+					prefixAndSuffix := strings.Split(text, renameBaselinePlaceholder)
 					if prefixAndSuffix[0] != "" {
 						return new("/*START PREFIX*/" + prefixAndSuffix[0])
 					}
@@ -4851,7 +4855,7 @@ func (f *FourslashTest) verifyBaselineRename(
 				},
 				endMarkerSuffix: func(span documentSpan) *string {
 					text := spanToText[span]
-					prefixAndSuffix := strings.Split(text, "?")
+					prefixAndSuffix := strings.Split(text, renameBaselinePlaceholder)
 					if prefixAndSuffix[1] != "" {
 						return new(prefixAndSuffix[1] + "/*END SUFFIX*/")
 					}

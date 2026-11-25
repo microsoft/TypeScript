@@ -3,7 +3,9 @@ package fourslash_test
 import (
 	"testing"
 
+	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil"
 )
 
@@ -43,5 +45,47 @@ export { foo as "/*1*/" };`
 	f.VerifyRename(t, "1", `a"b`, map[string]string{
 		"/a.ts": `const foo = 1;
 export { foo as "a\"b" };`,
+	})
+}
+
+func TestRenameToNonIdentifierWithAliases(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @Filename: /a.ts
+const foo = 1;
+export { /*1*/foo };
+const o = { "/*2*/x": 1 };
+const { x } = o;
+// @Filename: /b.ts
+import { foo } from "./a";
+foo;
+const o2 = { foo };
+export { foo };
+// @Filename: /c.ts
+export { foo } from "./a";
+// @Filename: /d.ts
+import { foo as bar } from "./a";
+bar;`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	defer f.ConfigureWithReset(t, lsutil.UserPreferences{ProvidePrefixAndSuffixTextForRename: core.TSTrue})()
+	f.VerifyRename(t, "1", "a-b", map[string]string{
+		"/a.ts": `const foo = 1;
+export { foo as a-b };
+const o = { "x": 1 };
+const { x } = o;`,
+		"/b.ts": `import { a-b } from "./a";
+a-b;
+const o2 = { foo: a-b };
+export { a-b as foo };`,
+		"/c.ts": `export { a-b as foo } from "./a";`,
+		"/d.ts": `import { a-b as bar } from "./a";
+bar;`,
+	})
+	f.VerifyRename(t, "2", "c-d", map[string]string{
+		"/a.ts": `const foo = 1;
+export { foo as a-b };
+const o = { "c-d": 1 };
+const { c-d: x } = o;`,
 	})
 }
