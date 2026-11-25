@@ -53,6 +53,31 @@ export default 0;`,
 	}, nil /*preferences*/)
 }
 
+func TestGetEditsForFileRename_configStringJSONEscapes(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @Filename: /tsconfig.json
+{ "files": ["a.ts", "old/b.ts"] }
+// @Filename: /a.ts
+/// <reference path="./old/b.ts" />
+/// <reference path='./old/b.ts' />
+import b1 from "./old/b";
+import b2 from './old/b';
+export default 0;
+// @Filename: /old/b.ts
+export default 0;`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyWillRenameFilesEdits(t, "/old", "/v\vt", map[string]string{
+		"/a.ts": "/// <reference path=\"./v\vt/b.ts\" />\n" +
+			"/// <reference path='./v\vt/b.ts' />\n" +
+			"import b1 from \"./v\\vt/b\";\n" +
+			"import b2 from './v\\vt/b';\n" +
+			"export default 0;",
+		"/tsconfig.json": `{ "files": ["a.ts", "v\vt/b.ts"] }`,
+	}, nil /*preferences*/)
+}
+
 func TestGetEditsForFileRename_jsDocCommentTerminator(t *testing.T) {
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
