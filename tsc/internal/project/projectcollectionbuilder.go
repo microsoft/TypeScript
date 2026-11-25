@@ -1086,6 +1086,48 @@ type searchResult struct {
 	retain  collections.Set[tspath.PathKey]
 }
 
+func removeRedundantFindRequests(
+	level *core.BreadthFirstSearchLevel[searchNodeKey, searchNode],
+	keepFind func(searchNode) bool,
+) {
+	var redundantKeys []searchNodeKey
+	level.Range(func(key searchNodeKey, node searchNode) bool {
+		if key.loadKind != projectLoadKindFind {
+			return true
+		}
+		createKey := searchNodeKey{configFileName: key.configFileName, loadKind: projectLoadKindCreate}
+		// Built projects can match at their earlier Find position.
+		if level.Has(createKey) && !keepFind(node) {
+			redundantKeys = append(redundantKeys, key)
+		}
+		return true
+	})
+	for _, key := range redundantKeys {
+		level.Delete(key)
+	}
+}
+
+// Keep earlier candidates in the parallel search so they can still win.
+func pruneAfterCachedMatch(
+	level *core.BreadthFirstSearchLevel[searchNodeKey, searchNode],
+	isCachedMatch func(searchNodeKey) bool,
+) {
+	foundMatch := false
+	var trailingKeys []searchNodeKey
+	level.Range(func(key searchNodeKey, _ searchNode) bool {
+		if foundMatch {
+			trailingKeys = append(trailingKeys, key)
+		} else {
+			foundMatch = isCachedMatch(key)
+		}
+		return true
+	})
+	// Collect before deleting to avoid skipping entries. Tail deletion keeps pruning linear.
+	for _, key := range slices.Backward(trailingKeys) {
+		level.Delete(key)
+	}
+}
+
 func (b *ProjectCollectionBuilder) findOrCreateDefaultConfiguredProjectWorker(
 	fileName tspath.RootedFilePath,
 	path tspath.PathKey,
@@ -1100,6 +1142,62 @@ func (b *ProjectCollectionBuilder) findOrCreateDefaultConfiguredProjectWorker(
 		visited = &collections.SyncSet[searchNodeKey]{}
 	}
 
+	// A nil LogTree suppresses logging during cached-match checks.
+	configMayContainFile := func(config *tsoptions.ParsedCommandLine, logger *logging.LogTree) bool {
+		if len(config.FileNames()) == 0 {
+			// A solution config can still lead to a match through its references.
+			logger.Log("Project does not contain file (no root files)")
+			return false
+		}
+		// !!! what about declaration files in node_modules? wouldn't it be better to
+		//     check project inclusion if the project is already loaded?
+		if config.CompilerOptions().Composite.IsTrue() && !config.FilePaths().Has(path) {
+			logger.Log("Project does not contain file (by composite config inclusion)")
+			return false
+		}
+		return true
+	}
+
+	fileInclusion := func(project *Project, logger *logging.LogTree) (included, direct bool) {
+		if !project.containsFile(path) {
+			logger.Log("Project does not contain file")
+			return false, false
+		}
+		direct = !project.IsSourceFromProjectReference(path)
+		if logger != nil {
+			logger.Logf("Project contains file %s", core.IfElse(direct, "directly", "as a source of a referenced project"))
+		}
+		return true, direct
+	}
+
+	visit := func(node searchNode) (included, direct bool) {
+		configFilePath := b.toPathKey(node.configFileName)
+		config := b.configFileRegistryBuilder.findOrAcquireConfigForFile(node.configFileName, configFilePath, path, node.loadKind, node.logger.Fork("Acquiring config for open file"))
+		if config == nil {
+			node.logger.Log("Config file for project does not already exist")
+			return false, false
+		}
+		configs.Store(configFilePath, config)
+		if !configMayContainFile(config, node.logger) {
+			return false, false
+		}
+
+		project := b.findOrCreateProject(node.configFileName, configFilePath, node.loadKind, node.logger)
+		if project == nil {
+			node.logger.Log("Project does not already exist")
+			return false, false
+		}
+
+		if node.loadKind == projectLoadKindCreate {
+			// Ensure project is up to date before checking for file inclusion
+			b.updateProgram(project, node.logger)
+		}
+
+		return fileInclusion(project.Value(), node.logger)
+	}
+
+	// PreprocessLevel sets up the shared visits before the workers for each level start.
+	mixedVisits := make(map[tspath.RootedFilePath]func() (bool, bool))
 	search := core.BreadthFirstSearchParallelEx(
 		searchNode{configFileName: configFileName, loadKind: loadKind, logger: logger},
 		func(node searchNode) []searchNode {
@@ -1120,61 +1218,59 @@ func (b *ProjectCollectionBuilder) findOrCreateDefaultConfiguredProjectWorker(
 			}
 			return nil
 		},
-		func(node searchNode) (isResult bool, stop bool) {
-			configFilePath := b.toPathKey(node.configFileName)
-			config := b.configFileRegistryBuilder.findOrAcquireConfigForFile(node.configFileName, configFilePath, path, node.loadKind, node.logger.Fork("Acquiring config for open file"))
-			if config == nil {
-				node.logger.Log("Config file for project does not already exist")
-				return false, false
+		func(node searchNode) (bool, bool) {
+			if shared := mixedVisits[node.configFileName]; shared != nil {
+				return shared()
 			}
-			configs.Store(configFilePath, config)
-			if len(config.FileNames()) == 0 {
-				// Likely a solution tsconfig.json - the search will fan out to its references.
-				node.logger.Log("Project does not contain file (no root files)")
-				return false, false
-			}
-
-			if config.CompilerOptions().Composite == core.TSTrue {
-				// For composite projects, we can get an early negative result.
-				// !!! what about declaration files in node_modules? wouldn't it be better to
-				//     check project inclusion if the project is already loaded?
-				if !config.FilePaths().Has(path) {
-					node.logger.Log("Project does not contain file (by composite config inclusion)")
-					return false, false
-				}
-			}
-
-			project := b.findOrCreateProject(node.configFileName, configFilePath, node.loadKind, node.logger)
-			if project == nil {
-				node.logger.Log("Project does not already exist")
-				return false, false
-			}
-
-			if node.loadKind == projectLoadKindCreate {
-				// Ensure project is up to date before checking for file inclusion
-				b.updateProgram(project, node.logger)
-			}
-
-			if project.Value().containsFile(path) {
-				isDirectInclusion := !project.Value().IsSourceFromProjectReference(path)
-				if node.logger != nil {
-					node.logger.Logf("Project contains file %s", core.IfElse(isDirectInclusion, "directly", "as a source of a referenced project"))
-				}
-				return true, isDirectInclusion
-			}
-
-			node.logger.Log("Project does not contain file")
-			return false, false
+			return visit(node)
 		},
 		core.BreadthFirstSearchOptions[searchNodeKey, searchNode]{
 			Visited: visited,
 			PreprocessLevel: func(level *core.BreadthFirstSearchLevel[searchNodeKey, searchNode]) {
-				level.Range(func(node searchNode) bool {
-					if node.loadKind == projectLoadKindFind && level.Has(searchNodeKey{configFileName: node.configFileName, loadKind: projectLoadKindCreate}) {
-						// Remove find requests when a create request for the same project is already present.
-						level.Delete(searchNodeKey{configFileName: node.configFileName, loadKind: node.loadKind})
+				clear(mixedVisits)
+				removeRedundantFindRequests(level, func(node searchNode) bool {
+					entry, ok := b.configuredProjects.Load(ConfiguredProjectIDFromPathKey(b.toPathKey(node.configFileName)))
+					if !ok || entry.Value().Program == nil {
+						return false
+					}
+					createKey := searchNodeKey{configFileName: node.configFileName, loadKind: projectLoadKindCreate}
+					if !visited.Has(createKey) {
+						// Share the refresh while preserving each job's position and reference load kind.
+						node.loadKind = projectLoadKindCreate
+						mixedVisits[node.configFileName] = sync.OnceValues(func() (bool, bool) { return visit(node) })
 					}
 					return true
+				})
+				pruneAfterCachedMatch(level, func(key searchNodeKey) bool {
+					if visited.Has(key) {
+						return false
+					}
+					configPath := b.toPathKey(key.configFileName)
+					projectEntry, ok := b.configuredProjects.Load(ConfiguredProjectIDFromPathKey(configPath))
+					if !ok {
+						return false
+					}
+					project := projectEntry.Value()
+					if project.IsDirty() {
+						return false
+					}
+					configEntry, ok := b.configFileRegistryBuilder.configs.Load(configPath)
+					if !ok {
+						return false
+					}
+					cachedConfig := configEntry.Value()
+					if cachedConfig.pendingReload != PendingReloadNone {
+						return false
+					}
+					config := cachedConfig.commandLine
+					if config == nil || project.CommandLine != config {
+						return false
+					}
+					if !configMayContainFile(config, nil) {
+						return false
+					}
+					_, direct := fileInclusion(project, nil)
+					return direct
 				})
 			},
 		},

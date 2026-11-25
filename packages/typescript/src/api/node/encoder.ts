@@ -103,7 +103,7 @@ function getChildrenPropertyMask(node: Node): number {
 // This matches the Go encoder's behavior where non-nil NodeLists (even empty)
 // are treated as present, and only nil NodeLists are absent.
 function isChildPresent(v: unknown): boolean {
-    if (v === undefined || v === null) return false;
+    if (v == undefined) return false;
     return true;
 }
 
@@ -199,7 +199,7 @@ export function encodeSourceFile(sourceFile: SourceFile): Uint8Array {
  * Encode an arbitrary AST node into the binary format.
  * When encoding a non-SourceFile node, the header hash and parse options fields will be zero.
  */
-export function encodeNode(node: Node): Uint8Array {
+export function encodeNode(node: Node, onNodeEncoded?: (node: Node, index: number) => void): Uint8Array {
     const strs = new StringTable();
     const extendedDataValues: number[] = [];
     const structuredWriter = new MsgpackWriter();
@@ -233,9 +233,8 @@ export function encodeNode(node: Node): Uint8Array {
             data,
             node.flags,
         );
-
+        onNodeEncoded?.(node, currentIndex);
         const saveParentIndex = parentIndex;
-        const savePrevIndex = prevIndex;
         parentIndex = currentIndex;
         prevIndex = 0;
 
@@ -287,7 +286,7 @@ export function encodeNode(node: Node): Uint8Array {
             for (const propName of props) {
                 if (propName === undefined) continue;
                 const child = n[propName];
-                if (child === undefined || child === null) continue;
+                if (child == undefined) continue;
                 if (isNodeArray(child)) {
                     visitNodeList(child);
                 }
@@ -315,6 +314,7 @@ export function encodeNode(node: Node): Uint8Array {
     const saveParent = parentIndex;
     prevIndex = 0;
     parentIndex = 1; // root is at index 1
+    onNodeEncoded?.(node, 1);
     visitChildren(node);
     parentIndex = saveParent;
 
@@ -382,7 +382,7 @@ const nodeBuffer = (globalThis as {
 /**
  * Encode a Uint8Array to a base64 string.
  */
-export const uint8ArrayToBase64: (data: Uint8Array) => string = "toBase64" in Uint8Array.prototype
+export const uint8ArrayToBase64: (data: Uint8Array) => string = !!(Uint8Array.prototype as Uint8Array & { toBase64?: unknown; }).toBase64
     ? data => (data as Uint8Array & { toBase64(): string; }).toBase64()
     : nodeBuffer
     ? data => nodeBuffer.from(data.buffer, data.byteOffset, data.byteLength).toString("base64")
@@ -394,7 +394,7 @@ export const uint8ArrayToBase64: (data: Uint8Array) => string = "toBase64" in Ui
         return btoa(binary);
     };
 
-const base64ToUint8Array: (data: string) => Uint8Array = "fromBase64" in Uint8Array
+const base64ToUint8Array: (data: string) => Uint8Array = !!(Uint8Array as typeof Uint8Array & { fromBase64?: unknown; }).fromBase64
     ? (Uint8Array as unknown as { fromBase64(data: string): Uint8Array; }).fromBase64
     : nodeBuffer
     ? data => {
@@ -403,6 +403,7 @@ const base64ToUint8Array: (data: string) => Uint8Array = "fromBase64" in Uint8Ar
     }
     : data => Uint8Array.from(atob(data), character => character.charCodeAt(0));
 
+// eslint-disable-next-line no-restricted-syntax -- A missing source-file response can be null on the wire.
 export function sourceFileResponseToUint8Array(response: { readonly data: string; } | null | undefined): Uint8Array | undefined {
     return response ? base64ToUint8Array(response.data) : undefined;
 }

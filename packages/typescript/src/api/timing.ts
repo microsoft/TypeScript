@@ -1,4 +1,4 @@
-/**
+/*
  * Client-side collection of per-request timing and transfer measurements.
  *
  * When enabled, each request records its round-trip latency and the number of

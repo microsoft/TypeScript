@@ -1,0 +1,28 @@
+indexSignatureWithIndexedAccessOfDerivedInterface.ts(9,11): error TS2430: Interface 'TokenNode' incorrectly extends interface 'BaseNode'.
+  Index signature for type 'string' is missing in type 'TokenNode'.
+
+
+==== indexSignatureWithIndexedAccessOfDerivedInterface.ts (1 errors) ====
+    // The type of data in TokenNode is assignable to its inherited index
+    // signature, which mentions it through an indexed access.
+    
+    interface BaseNode {
+      kind: string;
+      [key: string]: string | TokenNode["data"];
+    }
+    
+    interface TokenNode extends BaseNode {
+              ~~~~~~~~~
+!!! error TS2430: Interface 'TokenNode' incorrectly extends interface 'BaseNode'.
+!!! error TS2430:   Index signature for type 'string' is missing in type 'TokenNode'.
+      kind: 'token';
+      data: TokenData;
+    }
+    
+    interface TokenData {
+      offset: number;
+      width: number;
+      leading_width: number;
+      trailing_width: number;
+    }
+    

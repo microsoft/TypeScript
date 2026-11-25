@@ -1,0 +1,152 @@
+//// [tests/cases/compiler/keyofSelfReferentialIndexSignatureCheckOrder.ts] ////
+
+=== keyofSelfReferentialIndexSignatureCheckOrder.ts ===
+// The index signature of each type refers to its own keyof, so resolving its
+// members needs its keyof, which needs its members. Checking an interface
+// with several bases, or a type with a class base, reads its declared
+// members while they are incomplete. Its keyof, and its index signature,
+// must not depend on whether keyof is needed before or after the type is
+// checked (65543).
+
+interface A { a?: string; }
+>A : Symbol(A, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 0, 0))
+>a : Symbol(A.a, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 7, 13))
+
+interface B { b?: number; }
+>B : Symbol(B, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 7, 27))
+>b : Symbol(B.b, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 8, 13))
+
+class C { c?: string; }
+>C : Symbol(C, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 8, 27))
+>c : Symbol(C.c, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 9, 9))
+
+const k0: keyof P0 = 0;
+>k0 : Symbol(k0, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 11, 5))
+>P0 : Symbol(P0, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 11, 23))
+
+interface P0 { a?: string; [key: string]: P0[keyof P0]; }
+>P0 : Symbol(P0, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 11, 23))
+>a : Symbol(P0.a, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 12, 14))
+>key : Symbol(key, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 12, 28))
+>P0 : Symbol(P0, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 11, 23))
+>P0 : Symbol(P0, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 11, 23))
+
+interface Q0 { a?: string; [key: string]: Q0[keyof Q0]; }
+>Q0 : Symbol(Q0, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 12, 57))
+>a : Symbol(Q0.a, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 13, 14))
+>key : Symbol(key, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 13, 28))
+>Q0 : Symbol(Q0, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 12, 57))
+>Q0 : Symbol(Q0, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 12, 57))
+
+const j0: keyof Q0 = 0;
+>j0 : Symbol(j0, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 14, 5))
+>Q0 : Symbol(Q0, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 12, 57))
+
+const k1: keyof P1 = 0;
+>k1 : Symbol(k1, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 16, 5))
+>P1 : Symbol(P1, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 16, 23))
+
+interface P1 extends A { [key: string]: P1[keyof P1]; }
+>P1 : Symbol(P1, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 16, 23))
+>A : Symbol(A, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 0, 0))
+>key : Symbol(key, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 17, 26))
+>P1 : Symbol(P1, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 16, 23))
+>P1 : Symbol(P1, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 16, 23))
+
+interface Q1 extends A { [key: string]: Q1[keyof Q1]; }
+>Q1 : Symbol(Q1, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 17, 55))
+>A : Symbol(A, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 0, 0))
+>key : Symbol(key, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 18, 26))
+>Q1 : Symbol(Q1, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 17, 55))
+>Q1 : Symbol(Q1, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 17, 55))
+
+const j1: keyof Q1 = 0;
+>j1 : Symbol(j1, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 19, 5))
+>Q1 : Symbol(Q1, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 17, 55))
+
+const k2: keyof P2 = 0;
+>k2 : Symbol(k2, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 21, 5))
+>P2 : Symbol(P2, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 21, 23))
+
+interface P2 extends A, B { [key: string]: P2[keyof P2]; }
+>P2 : Symbol(P2, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 21, 23))
+>A : Symbol(A, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 0, 0))
+>B : Symbol(B, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 7, 27))
+>key : Symbol(key, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 22, 29))
+>P2 : Symbol(P2, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 21, 23))
+>P2 : Symbol(P2, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 21, 23))
+
+interface Q2 extends A, B { [key: string]: Q2[keyof Q2]; }
+>Q2 : Symbol(Q2, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 22, 58))
+>A : Symbol(A, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 0, 0))
+>B : Symbol(B, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 7, 27))
+>key : Symbol(key, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 23, 29))
+>Q2 : Symbol(Q2, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 22, 58))
+>Q2 : Symbol(Q2, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 22, 58))
+
+const j2: keyof Q2 = 0;
+>j2 : Symbol(j2, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 24, 5))
+>Q2 : Symbol(Q2, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 22, 58))
+
+const k3: keyof P3 = 0;
+>k3 : Symbol(k3, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 26, 5))
+>P3 : Symbol(P3, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 26, 23))
+
+interface P3 extends C { [key: string]: P3[keyof P3]; }
+>P3 : Symbol(P3, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 26, 23))
+>C : Symbol(C, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 8, 27))
+>key : Symbol(key, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 27, 26))
+>P3 : Symbol(P3, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 26, 23))
+>P3 : Symbol(P3, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 26, 23))
+
+interface Q3 extends C { [key: string]: Q3[keyof Q3]; }
+>Q3 : Symbol(Q3, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 27, 55))
+>C : Symbol(C, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 8, 27))
+>key : Symbol(key, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 28, 26))
+>Q3 : Symbol(Q3, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 27, 55))
+>Q3 : Symbol(Q3, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 27, 55))
+
+const j3: keyof Q3 = 0;
+>j3 : Symbol(j3, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 29, 5))
+>Q3 : Symbol(Q3, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 27, 55))
+
+const k4: keyof P4 = 0;
+>k4 : Symbol(k4, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 31, 5))
+>P4 : Symbol(P4, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 31, 23))
+
+class P4 extends C { b?: number; [key: string]: P4[keyof P4]; }
+>P4 : Symbol(P4, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 31, 23))
+>C : Symbol(C, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 8, 27))
+>b : Symbol(P4.b, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 32, 20))
+>key : Symbol(key, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 32, 34))
+>P4 : Symbol(P4, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 31, 23))
+>P4 : Symbol(P4, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 31, 23))
+
+class Q4 extends C { b?: number; [key: string]: Q4[keyof Q4]; }
+>Q4 : Symbol(Q4, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 32, 63))
+>C : Symbol(C, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 8, 27))
+>b : Symbol(Q4.b, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 33, 20))
+>key : Symbol(key, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 33, 34))
+>Q4 : Symbol(Q4, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 32, 63))
+>Q4 : Symbol(Q4, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 32, 63))
+
+const j4: keyof Q4 = 0;
+>j4 : Symbol(j4, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 34, 5))
+>Q4 : Symbol(Q4, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 32, 63))
+
+declare const q2: Q2;
+>q2 : Symbol(q2, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 36, 13))
+>Q2 : Symbol(Q2, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 22, 58))
+
+const v2 = q2.other;
+>v2 : Symbol(v2, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 37, 5))
+>q2 : Symbol(q2, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 36, 13))
+
+declare const q3: Q3;
+>q3 : Symbol(q3, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 38, 13))
+>Q3 : Symbol(Q3, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 27, 55))
+
+const v3 = q3.other;
+>v3 : Symbol(v3, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 39, 5))
+>q3 : Symbol(q3, Decl(keyofSelfReferentialIndexSignatureCheckOrder.ts, 38, 13))
+

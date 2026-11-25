@@ -323,36 +323,80 @@ func (s *Session) handleResolveModuleName(ctx context.Context, params *ResolveMo
 	if params.ModuleName == "" {
 		return nil, fmt.Errorf("%w: moduleName is empty", ErrClientError)
 	}
-	s.moduleResolversMu.RLock()
-	data := s.moduleResolvers[params.Resolver]
-	s.moduleResolversMu.RUnlock()
-	if data == nil {
-		return nil, fmt.Errorf("%w: module resolver %d not found", ErrClientError, params.Resolver)
+	mode, err := parseResolutionMode(params.ResolutionMode)
+	if err != nil {
+		return nil, err
 	}
-
-	mode := core.ResolutionModeNone
-	if params.ResolutionMode != nil {
-		mode = core.ModuleKind(*params.ResolutionMode)
-		if mode != core.ResolutionModeNone && mode != core.ResolutionModeCommonJS && mode != core.ResolutionModeESM {
-			return nil, fmt.Errorf("%w: invalid resolutionMode %s", ErrClientError, mode.String())
-		}
+	resolver, err := s.moduleResolverForRequest(ctx, params.Resolver, params.Snapshot, params.InProgressSnapshot)
+	if err != nil {
+		return nil, err
 	}
 	containingDirectory := tspath.ToRootedDirectoryPath(params.ContainingDirectory.ToFileName(s.GetCurrentDirectory()).AsString(), s.GetCurrentDirectory())
+	result, trace, err := resolver.ResolveModuleNameFromDirectory(params.ModuleName, containingDirectory, mode)
+	if err != nil {
+		return nil, err
+	}
+	return &ResolveModuleNameResult{
+		ResolvedModule: newResolvedModuleResponse(result),
+		Trace:          moduleResolutionTraceToStrings(trace),
+	}, nil
+}
+
+func (s *Session) handleResolveTypeReferenceDirective(ctx context.Context, params *ResolveTypeReferenceDirectiveParams) (*ResolveTypeReferenceDirectiveResult, error) {
+	if params.TypeReferenceDirectiveName == "" {
+		return nil, fmt.Errorf("%w: typeReferenceDirectiveName is empty", ErrClientError)
+	}
+	if params.ContainingFile.FileName == "" && params.ContainingFile.URI == "" {
+		return nil, fmt.Errorf("%w: containingFile is empty", ErrClientError)
+	}
+	mode, err := parseResolutionMode(params.ResolutionMode)
+	if err != nil {
+		return nil, err
+	}
+	resolver, err := s.moduleResolverForRequest(ctx, params.Resolver, params.Snapshot, params.InProgressSnapshot)
+	if err != nil {
+		return nil, err
+	}
+	result, trace := resolver.ResolveTypeReferenceDirective(params.TypeReferenceDirectiveName, params.ContainingFile.ToFileName(s.GetCurrentDirectory()), mode, nil)
+	return &ResolveTypeReferenceDirectiveResult{
+		ResolvedTypeReferenceDirective: newResolvedTypeReferenceDirectiveResponse(result),
+		Trace:                          moduleResolutionTraceToStrings(trace),
+	}, nil
+}
+
+func parseResolutionMode(mode *ResolutionMode) (core.ResolutionMode, error) {
+	if mode == nil {
+		return core.ResolutionModeNone, nil
+	}
+	value := core.ModuleKind(*mode)
+	if value != core.ResolutionModeNone && value != core.ResolutionModeCommonJS && value != core.ResolutionModeESM {
+		return core.ResolutionModeNone, fmt.Errorf("%w: invalid resolutionMode %s", ErrClientError, value.String())
+	}
+	return value, nil
+}
+
+func (s *Session) moduleResolverForRequest(ctx context.Context, id ModuleResolverID, snapshot SnapshotID, inProgressSnapshot uint64) (module.Resolver, error) {
+	s.moduleResolversMu.RLock()
+	data := s.moduleResolvers[id]
+	s.moduleResolversMu.RUnlock()
+	if data == nil {
+		return nil, fmt.Errorf("%w: module resolver %d not found", ErrClientError, id)
+	}
 
 	var resolver module.Resolver
-	if params.Snapshot != 0 && params.InProgressSnapshot != 0 {
+	if snapshot != 0 && inProgressSnapshot != 0 {
 		return nil, fmt.Errorf("%w: snapshot and inProgressSnapshot are mutually exclusive", ErrClientError)
 	}
-	if params.InProgressSnapshot != 0 {
+	if inProgressSnapshot != 0 {
 		s.programResolutionContextsMu.RLock()
-		resolutionContext := s.programResolutionContexts[params.InProgressSnapshot]
+		resolutionContext := s.programResolutionContexts[inProgressSnapshot]
 		s.programResolutionContextsMu.RUnlock()
 		if resolutionContext == nil {
-			return nil, fmt.Errorf("%w: in-progress snapshot %d not found", ErrClientError, params.InProgressSnapshot)
+			return nil, fmt.Errorf("%w: in-progress snapshot %d not found", ErrClientError, inProgressSnapshot)
 		}
 		resolver = resolutionContext.resolverFor(data)
-	} else if params.Snapshot != 0 {
-		sd, err := s.getSnapshotData(params.Snapshot)
+	} else if snapshot != 0 {
+		sd, err := s.getSnapshotData(snapshot)
 		if err != nil {
 			return nil, err
 		}
@@ -380,20 +424,13 @@ func (s *Session) handleResolveModuleName(ctx context.Context, params *ResolveMo
 			ctx:                        ctx,
 			currentDirectory:           s.GetCurrentDirectory(),
 			caseSensitivity:            s.caseSensitivity(),
-			snapshot:                   params.Snapshot,
-			programResolutionContextID: params.InProgressSnapshot,
+			snapshot:                   snapshot,
+			programResolutionContextID: inProgressSnapshot,
 			fallbackResolver:           resolver,
 		}
 	}
 	if data.resolutions != nil {
 		resolver = module.NewStaticResolver(resolver, data.resolutions)
 	}
-	result, trace, err := resolver.ResolveModuleNameFromDirectory(params.ModuleName, containingDirectory, mode)
-	if err != nil {
-		return nil, err
-	}
-	return &ResolveModuleNameResult{
-		ResolvedModule: newResolvedModuleResponse(result),
-		Trace:          moduleResolutionTraceToStrings(trace),
-	}, nil
+	return resolver, nil
 }

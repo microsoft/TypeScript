@@ -1655,6 +1655,42 @@ func TestParenthesizeSpreadElement1(t *testing.T) {
 	emittestutil.CheckEmit(t, nil, file.AsSourceFile(), "[...(a, b)];")
 }
 
+func TestEmitTrailingArrayHoles(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	file := factory.NewSourceFile(ast.SourceFileParseOptions{FileName: "/file.ts", PathKey: "/file.ts"}, "", factory.NewNodeList(
+		[]*ast.Node{
+			factory.NewExpressionStatement(
+				factory.NewArrayLiteralExpression(
+					factory.NewNodeList([]*ast.Node{
+						factory.NewNumericLiteral("1", ast.TokenFlagsNone),
+						factory.NewOmittedExpression(),
+					}),
+					false, /*multiLine*/
+				),
+			),
+			factory.NewVariableStatement(nil, factory.NewVariableDeclarationList(
+				factory.NewNodeList([]*ast.Node{
+					factory.NewVariableDeclaration(
+						factory.NewBindingPattern(ast.KindArrayBindingPattern, factory.NewNodeList([]*ast.Node{
+							factory.NewBindingElement(nil, nil, factory.NewIdentifier("a"), nil),
+							factory.NewBindingElement(nil, nil, nil, nil),
+						})),
+						nil, /*exclamationToken*/
+						nil, /*typeNode*/
+						factory.NewIdentifier("b"),
+					),
+				}),
+				ast.NodeFlagsConst,
+			)),
+		},
+	), factory.NewToken(ast.KindEndOfFile))
+
+	parsetestutil.MarkSyntheticRecursive(file)
+	emittestutil.CheckEmit(t, nil, file.AsSourceFile(), "[1, ,];\nconst [a, ,] = b;")
+}
+
 func TestParenthesizeSpreadElement2(t *testing.T) {
 	t.Parallel()
 
@@ -2522,6 +2558,75 @@ func TestPartiallyEmittedExpression(t *testing.T) {
     .left
     .expression
     .expression;`)
+}
+
+func TestSyntheticLeadingCommentsIntroducingNewLine(t *testing.T) {
+	t.Parallel()
+
+	type testCase struct {
+		name    string
+		comment printer.SynthesizedComment
+		operand string
+	}
+	tests := []testCase{
+		{
+			name:    "inline",
+			comment: printer.SynthesizedComment{Kind: ast.KindMultiLineCommentTrivia, Text: " comment "},
+			operand: "/* comment */ x",
+		},
+		{
+			name:    "leading newline",
+			comment: printer.SynthesizedComment{Kind: ast.KindMultiLineCommentTrivia, Text: " comment ", HasLeadingNewLine: true},
+			operand: "(\n/* comment */ x)",
+		},
+		{
+			name:    "trailing newline",
+			comment: printer.SynthesizedComment{Kind: ast.KindMultiLineCommentTrivia, Text: " comment ", HasTrailingNewLine: true},
+			operand: "(/* comment */\nx)",
+		},
+		{
+			name:    "single line",
+			comment: printer.SynthesizedComment{Kind: ast.KindSingleLineCommentTrivia, Text: " comment"},
+			operand: "(\n// comment\nx)",
+		},
+	}
+	for _, lineBreak := range []struct {
+		name string
+		text string
+	}{
+		{name: "LF", text: "\n"},
+		{name: "CR", text: "\r"},
+		{name: "CRLF", text: "\r\n"},
+		{name: "LS", text: "\u2028"},
+		{name: "PS", text: "\u2029"},
+	} {
+		tests = append(tests, testCase{
+			name:    lineBreak.name,
+			comment: printer.SynthesizedComment{Kind: ast.KindMultiLineCommentTrivia, Text: " first" + lineBreak.text + "second "},
+			operand: "(/* first\nsecond */ x)",
+		})
+	}
+
+	for _, keyword := range []string{"return", "throw"} {
+		for _, test := range tests {
+			t.Run(keyword+"/"+test.name, func(t *testing.T) {
+				t.Parallel()
+				emitContext := printer.NewEmitContext()
+				operand := emitContext.Factory.NewIdentifier("x")
+				emitContext.SetSyntheticLeadingComments(operand, []printer.SynthesizedComment{test.comment})
+				var statement *ast.Node
+				if keyword == "throw" {
+					statement = emitContext.Factory.NewThrowStatement(operand)
+				} else {
+					statement = emitContext.Factory.NewReturnStatement(operand)
+				}
+				p := printer.NewPrinter(printer.PrinterOptions{NewLine: core.NewLineKindLF}, printer.PrintHandlers{}, emitContext)
+				if got, want := p.Emit(statement, nil), keyword+" "+test.operand+";"; got != want {
+					t.Fatalf("Emit() = %q, want %q", got, want)
+				}
+			})
+		}
+	}
 }
 
 func TestParenthesizeBinaryExpressionMixingNullishCoalescing(t *testing.T) {

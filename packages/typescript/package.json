@@ -1,7 +1,7 @@
 {
     "private": true,
     "name": "@typescript/typescript",
-    "version": "0.0.0",
+    "version": "7.1.0",
     "license": "Apache-2.0",
     "author": "Microsoft Corp.",
     "homepage": "https://www.typescriptlang.org/",
@@ -40,6 +40,7 @@
         "./package.json": "./package.json",
         "./schemas/tsconfig.schema.json": "./schemas/tsconfig.schema.json",
         "./schemas/jsconfig.schema.json": "./schemas/jsconfig.schema.json",
+        "./schemas/contentmapper.schema.json": "./schemas/contentmapper.schema.json",
         ".": "./lib/version.cjs",
         "./vscode": {
             "@typescript/source": "./src/vscode/extensionApi.ts",
@@ -120,8 +121,8 @@
     },
     "devDependencies": {
         "@types/node": "^22.20.5",
-        "playwright": "^1.64.1",
-        "tinybench": "^6.2.2",
+        "playwright": "^1.65.1",
+        "tinybench": "^6.2.3",
         "vscode-jsonrpc": "^10.0.0"
     }
 }

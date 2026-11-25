@@ -1107,3 +1107,413 @@ type Weird2 = (<U extends boolean>(a: U) => U) extends
 >true : true
 >a : U
 
+// Identical distributive conditional types with locally inferred type parameters
+// should remain mutually assignable.
+function conditionalRelations<T>(
+>conditionalRelations : <T>(x: T extends { value: infer U; } ? [T, U] : never, y: T extends { value: infer U; } ? [T, U] : never) => void
+
+    x: T extends { value: infer U } ? [T, U] : never,
+>x : T extends { value: infer U; } ? [T, U] : never
+>value : U
+
+    y: T extends { value: infer U } ? [T, U] : never,
+>y : T extends { value: infer U; } ? [T, U] : never
+>value : U
+
+) {
+    x = y;
+>x = y : T extends { value: infer U; } ? [T, U] : never
+>x : T extends { value: infer U; } ? [T, U] : never
+>y : T extends { value: infer U; } ? [T, U] : never
+
+    y = x;
+>y = x : T extends { value: infer U; } ? [T, U] : never
+>y : T extends { value: infer U; } ? [T, U] : never
+>x : T extends { value: infer U; } ? [T, U] : never
+}
+
+// The same should hold when the distributed type parameter is nested in an
+// inline object literal, a function type, or a nested conditional type.
+function conditionalRelations2<T>(
+>conditionalRelations2 : <T>(x: T extends { value: infer U; } ? { t: T; u: U; } : never, y: T extends { value: infer U; } ? { t: T; u: U; } : never) => void
+
+    x: T extends { value: infer U } ? { t: T, u: U } : never,
+>x : T extends { value: infer U; } ? { t: T; u: U; } : never
+>value : U
+>t : T
+>u : U
+
+    y: T extends { value: infer U } ? { t: T, u: U } : never,
+>y : T extends { value: infer U; } ? { t: T; u: U; } : never
+>value : U
+>t : T
+>u : U
+
+) {
+    x = y;
+>x = y : T extends { value: infer U; } ? { t: T; u: U; } : never
+>x : T extends { value: infer U; } ? { t: T; u: U; } : never
+>y : T extends { value: infer U; } ? { t: T; u: U; } : never
+
+    y = x;
+>y = x : T extends { value: infer U; } ? { t: T; u: U; } : never
+>y : T extends { value: infer U; } ? { t: T; u: U; } : never
+>x : T extends { value: infer U; } ? { t: T; u: U; } : never
+}
+
+function conditionalRelations3<T>(
+>conditionalRelations3 : <T>(x: T extends { value: infer U; } ? (t: T) => U : never, y: T extends { value: infer U; } ? (t: T) => U : never) => void
+
+    x: T extends { value: infer U } ? (t: T) => U : never,
+>x : T extends { value: infer U; } ? (t: T) => U : never
+>value : U
+>t : T
+
+    y: T extends { value: infer U } ? (t: T) => U : never,
+>y : T extends { value: infer U; } ? (t: T) => U : never
+>value : U
+>t : T
+
+) {
+    x = y;
+>x = y : T extends { value: infer U; } ? (t: T) => U : never
+>x : T extends { value: infer U; } ? (t: T) => U : never
+>y : T extends { value: infer U; } ? (t: T) => U : never
+
+    y = x;
+>y = x : T extends { value: infer U; } ? (t: T) => U : never
+>y : T extends { value: infer U; } ? (t: T) => U : never
+>x : T extends { value: infer U; } ? (t: T) => U : never
+}
+
+function conditionalRelations4<T>(
+>conditionalRelations4 : <T>(x: T extends { value: infer U; } ? (U extends string ? { t: T; u: U; } : { t: T; }) : never, y: T extends { value: infer U; } ? (U extends string ? { t: T; u: U; } : { t: T; }) : never) => void
+
+    x: T extends { value: infer U } ? (U extends string ? { t: T, u: U } : { t: T }) : never,
+>x : T extends { value: infer U; } ? U extends string ? { t: T; u: U; } : { t: T; } : never
+>value : U
+>t : T
+>u : U
+>t : T
+
+    y: T extends { value: infer U } ? (U extends string ? { t: T, u: U } : { t: T }) : never,
+>y : T extends { value: infer U; } ? U extends string ? { t: T; u: U; } : { t: T; } : never
+>value : U
+>t : T
+>u : U
+>t : T
+
+) {
+    x = y;
+>x = y : T extends { value: infer U; } ? U extends string ? { t: T; u: U; } : { t: T; } : never
+>x : T extends { value: infer U; } ? U extends string ? { t: T; u: U; } : { t: T; } : never
+>y : T extends { value: infer U; } ? U extends string ? { t: T; u: U; } : { t: T; } : never
+
+    y = x;
+>y = x : T extends { value: infer U; } ? U extends string ? { t: T; u: U; } : { t: T; } : never
+>y : T extends { value: infer U; } ? U extends string ? { t: T; u: U; } : { t: T; } : never
+>x : T extends { value: infer U; } ? U extends string ? { t: T; u: U; } : { t: T; } : never
+}
+
+// The same should hold when one side is an instantiation that doesn't touch the
+// distributed type parameter, including in the extends and false types.
+function conditionalRelations5<T>(x: T extends { value: infer U } ? never : { t: T }) {
+>conditionalRelations5 : <T>(x: T extends { value: infer U; } ? never : { t: T; }) => void
+>x : T extends { value: infer U; } ? never : { t: T; }
+>value : U
+>t : T
+
+    const make = <V>(v: V): T extends { value: infer U } ? never : { t: T, v: V } => null!;
+>make : <V>(v: V) => T extends { value: infer U; } ? never : { t: T; v: V; }
+><V>(v: V): T extends { value: infer U } ? never : { t: T, v: V } => null! : <V>(v: V) => T extends { value: infer U; } ? never : { t: T; v: V; }
+>v : V
+>value : U
+>t : T
+>v : V
+>null! : never
+
+    x = make(1);
+>x = make(1) : T extends { value: infer U; } ? never : { t: T; v: number; }
+>x : T extends { value: infer U; } ? never : { t: T; }
+>make(1) : T extends { value: infer U; } ? never : { t: T; v: number; }
+>make : <V>(v: V) => T extends { value: infer U; } ? never : { t: T; v: V; }
+>1 : 1
+}
+
+function conditionalRelations6<T>(x: T extends { self: T } ? { t: T } : never) {
+>conditionalRelations6 : <T>(x: T extends { self: T; } ? { t: T; } : never) => void
+>x : T extends { self: T; } ? { t: T; } : never
+>self : T
+>t : T
+
+    const make = <V>(v: V): T extends { self: T } ? { t: T, v: V } : never => null!;
+>make : <V>(v: V) => T extends { self: T; } ? { t: T; v: V; } : never
+><V>(v: V): T extends { self: T } ? { t: T, v: V } : never => null! : <V>(v: V) => T extends { self: T; } ? { t: T; v: V; } : never
+>v : V
+>self : T
+>t : T
+>v : V
+>null! : never
+
+    x = make(1);
+>x = make(1) : T extends { self: T; } ? { t: T; v: number; } : never
+>x : T extends { self: T; } ? { t: T; } : never
+>make(1) : T extends { self: T; } ? { t: T; v: number; } : never
+>make : <V>(v: V) => T extends { self: T; } ? { t: T; v: V; } : never
+>1 : 1
+}
+
+function conditionalRelations7<T>(
+>conditionalRelations7 : <T>(x: T extends object ? { inner: [T] extends [string] ? { t: T; } : never; } : never, y: [T] extends [string] ? { t: T; } : never) => void
+
+    x: T extends object ? { inner: [T] extends [string] ? { t: T } : never } : never,
+>x : T extends object ? { inner: [T] extends [string] ? { t: T; } : never; } : never
+>inner : [T] extends [string] ? { t: T; } : never
+>t : T
+
+    y: [T] extends [string] ? { t: T } : never,
+>y : [T] extends [string] ? { t: T; } : never
+>t : T
+
+) {
+    x.inner = y;
+>x.inner = y : [T] extends [string] ? { t: T; } : never
+>x.inner : [T] extends [string] ? { t: T; } : never
+>x : T extends object ? { inner: [T] extends [string] ? { t: T; } : never; } : never
+>inner : [T] extends [string] ? { t: T; } : never
+>y : [T] extends [string] ? { t: T; } : never
+
+    y = x.inner;
+>y = x.inner : [T] extends [string] ? { t: T; } : never
+>y : [T] extends [string] ? { t: T; } : never
+>x.inner : [T] extends [string] ? { t: T; } : never
+>x : T extends object ? { inner: [T] extends [string] ? { t: T; } : never; } : never
+>inner : [T] extends [string] ? { t: T; } : never
+}
+
+declare function pickT<V>(v: { t: V }): V;
+>pickT : <V>(v: { t: V; }) => V
+>v : { t: V; }
+>t : V
+
+function conditionalRelations8<T>(x: T extends object ? { t: T } : never, t: T) {
+>conditionalRelations8 : <T>(x: T extends object ? { t: T; } : never, t: T) => void
+>x : T extends object ? { t: T; } : never
+>t : T
+>t : T
+
+    let r = pickT(x);
+>r : T
+>pickT(x) : T
+>pickT : <V>(v: { t: V; }) => V
+>x : T extends object ? { t: T; } : never
+
+    r = t;
+>r = t : T
+>r : T
+>t : T
+}
+
+interface Box<X> { value: X }
+>value : X
+
+function conditionalRelations9<T>(
+>conditionalRelations9 : <T>(x: Box<T extends { value: infer U; } ? { t: T; u: U; } : never>, y: Box<T extends { value: infer U; } ? { t: T; u: U; } : never>) => void
+
+    x: Box<T extends { value: infer U } ? { t: T, u: U } : never>,
+>x : Box<T extends { value: infer U; } ? { t: T; u: U; } : never>
+>value : U
+>t : T
+>u : U
+
+    y: Box<T extends { value: infer U } ? { t: T, u: U } : never>,
+>y : Box<T extends { value: infer U; } ? { t: T; u: U; } : never>
+>value : U
+>t : T
+>u : U
+
+) {
+    x = y;
+>x = y : Box<T extends { value: infer U; } ? { t: T; u: U; } : never>
+>x : Box<T extends { value: infer U; } ? { t: T; u: U; } : never>
+>y : Box<T extends { value: infer U; } ? { t: T; u: U; } : never>
+
+    y = x;
+>y = x : Box<T extends { value: infer U; } ? { t: T; u: U; } : never>
+>y : Box<T extends { value: infer U; } ? { t: T; u: U; } : never>
+>x : Box<T extends { value: infer U; } ? { t: T; u: U; } : never>
+}
+
+type Cond<T> = T extends { value: infer U } ? { t: T, u: U } : never;
+>Cond : Cond<T>
+>value : U
+>t : T
+>u : U
+
+type Rec<T> = T extends object ? { next: Rec<T>, t: T } : never;
+>Rec : Rec<T>
+>next : Rec<T>
+>t : T
+
+function conditionalRelations10<T>(x: Cond<T>, y: T extends { value: infer U } ? { t: T, u: U } : never) {
+>conditionalRelations10 : <T>(x: Cond<T>, y: T extends { value: infer U; } ? { t: T; u: U; } : never) => void
+>x : Cond<T>
+>y : T extends { value: infer U; } ? { t: T; u: U; } : never
+>value : U
+>t : T
+>u : U
+
+    x = y;
+>x = y : T extends { value: infer U; } ? { t: T; u: U; } : never
+>x : Cond<T>
+>y : T extends { value: infer U; } ? { t: T; u: U; } : never
+
+    y = x;
+>y = x : Cond<T>
+>y : T extends { value: infer U; } ? { t: T; u: U; } : never
+>x : Cond<T>
+
+    const make = <V>(v: V): Cond<T> => null!;
+>make : <V>(v: V) => Cond<T>
+><V>(v: V): Cond<T> => null! : <V>(v: V) => Cond<T>
+>v : V
+>null! : never
+
+    x = make(1);
+>x = make(1) : Cond<T>
+>x : Cond<T>
+>make(1) : Cond<T>
+>make : <V>(v: V) => Cond<T>
+>1 : 1
+}
+function conditionalRelations11<T>(x: Rec<T>, y: T extends object ? { next: Rec<T>, t: T } : never) {
+>conditionalRelations11 : <T>(x: Rec<T>, y: T extends object ? { next: Rec<T>; t: T; } : never) => void
+>x : Rec<T>
+>y : T extends object ? { next: Rec<T>; t: T; } : never
+>next : Rec<T>
+>t : T
+
+    x = y;
+>x = y : T extends object ? { next: Rec<T>; t: T; } : never
+>x : Rec<T>
+>y : T extends object ? { next: Rec<T>; t: T; } : never
+
+    y = x;
+>y = x : Rec<T>
+>y : T extends object ? { next: Rec<T>; t: T; } : never
+>x : Rec<T>
+}
+
+function conditionalRelations12<T, U>(x: T extends string ? T : never, y: T, z: T extends string ? U : never) {
+>conditionalRelations12 : <T, U>(x: T extends string ? T : never, y: T, z: T extends string ? U : never) => void
+>x : T extends string ? T : never
+>y : T
+>z : T extends string ? U : never
+
+    x = y;  // Error
+>x = y : T
+>x : T extends string ? T : never
+>y : T
+
+    x = z;  // Error
+>x = z : T extends string ? U : never
+>x : T extends string ? T : never
+>z : T extends string ? U : never
+
+    z = x;  // Error
+>z = x : T extends string ? T : never
+>z : T extends string ? U : never
+>x : T extends string ? T : never
+}
+
+type ElementType =
+>ElementType : ElementType
+
+    | { type: "text"; text: string }
+>type : "text"
+>text : string
+
+    | { type: "image"; src: string };
+>type : "image"
+>src : string
+
+interface Page {
+    addElement<T extends ElementType["type"] | (string & {})>(
+>addElement : <T extends ElementType["type"] | (string & {})>(attrs: { type: T; } & (T extends ElementType["type"] ? Partial<Omit<Extract<ElementType, { type: T; }>, "type">> : Record<string, any>)) => void
+
+        attrs: { type: T } & (T extends ElementType["type"]
+>attrs : { type: T; } & (T extends "image" | "text" ? Partial<Omit<Extract<{ type: "text"; text: string; }, { type: T; }> | Extract<{ type: "image"; src: string; }, { type: T; }>, "type">> : Record<string, any>)
+>type : T
+
+            ? Partial<Omit<Extract<ElementType, { type: T }>, "type">>
+>type : T
+
+            : Record<string, any>),
+    ): void;
+}
+declare const returned: {
+>returned : { addElement<T extends ElementType["type"] | (string & {})>(attrs: { type: T; } & (T extends ElementType["type"] ? Partial<Omit<Extract<ElementType, { type: T; }>, "type">> : Record<string, any>)): void; }
+
+    addElement<T extends ElementType["type"] | (string & {})>(
+>addElement : <T extends ElementType["type"] | (string & {})>(attrs: { type: T; } & (T extends ElementType["type"] ? Partial<Omit<Extract<ElementType, { type: T; }>, "type">> : Record<string, any>)) => void
+
+        attrs: { type: T } & (T extends ElementType["type"]
+>attrs : { type: T; } & (T extends "image" | "text" ? Partial<Omit<Extract<{ type: "text"; text: string; }, { type: T; }> | Extract<{ type: "image"; src: string; }, { type: T; }>, "type">> : Record<string, any>)
+>type : T
+
+            ? Partial<Omit<Extract<ElementType, { type: T }>, "type">>
+>type : T
+
+            : Record<string, any>),
+    ): void;
+};
+const page: Page = returned;
+>page : Page
+>returned : { addElement<T extends ElementType["type"] | (string & {})>(attrs: { type: T; } & (T extends ElementType["type"] ? Partial<Omit<Extract<ElementType, { type: T; }>, "type">> : Record<string, any>)): void; }
+
+declare let f: <A>(m: A, r: (a: A extends string ? A : 0) => void) => void;
+>f : <A>(m: A, r: (a: A extends string ? A : 0) => void) => void
+>m : A
+>r : (a: A extends string ? A : 0) => void
+>a : A extends string ? A : 0
+
+let g: <A>(m: A, r: (a: A extends string ? A : 0) => void) => void = f;
+>g : <A>(m: A, r: (a: A extends string ? A : 0) => void) => void
+>m : A
+>r : (a: A extends string ? A : 0) => void
+>a : A extends string ? A : 0
+>f : <A>(m: A, r: (a: A extends string ? A : 0) => void) => void
+
+type SigA = { m<T, U extends T extends 0 ? 1 : 2>(u: U): void };
+>SigA : SigA
+>m : <T, U extends T extends 0 ? 1 : 2>(u: U) => void
+>u : U
+
+type SigB = { m<T, U extends T extends 0 ? 1 : 2>(u: U): void };
+>SigB : SigB
+>m : <T, U extends T extends 0 ? 1 : 2>(u: U) => void
+>u : U
+
+declare const sigs: SigA | SigB;
+>sigs : SigA | SigB
+
+sigs.m(2);
+>sigs.m(2) : void
+>sigs.m : (<T, U extends T extends 0 ? 1 : 2>(u: U) => void) | (<T, U extends T extends 0 ? 1 : 2>(u: U) => void)
+>sigs : SigA | SigB
+>m : (<T, U extends T extends 0 ? 1 : 2>(u: U) => void) | (<T, U extends T extends 0 ? 1 : 2>(u: U) => void)
+>2 : 2
+
+function conditionalRelations13<T>() {
+>conditionalRelations13 : <T>() => void
+
+    type C<X> = X extends 0 ? 1 : 2;
+>C : X extends 0 ? 1 : 2
+
+    var a: T extends 0 ? 1 : 2;
+>a : T extends 0 ? 1 : 2
+
+    var a: C<T>;
+>a : T extends 0 ? 1 : 2
+}
+

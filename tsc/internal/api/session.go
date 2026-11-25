@@ -34,9 +34,11 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/ls"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/autoimport"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
+	"github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/module"
 	"github.com/microsoft/TypeScript/tsc/internal/nodebuilder"
+	"github.com/microsoft/TypeScript/tsc/internal/outputpaths"
 	"github.com/microsoft/TypeScript/tsc/internal/pprof"
 	"github.com/microsoft/TypeScript/tsc/internal/printer"
 	"github.com/microsoft/TypeScript/tsc/internal/project"
@@ -901,6 +903,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetSymbolOfDeclaration(parsed.(*GetSymbolOfDeclarationParams))
 	case string(MethodInitialize):
 		return s.handleInitialize(ctx)
+	case string(MethodGetDefaultFormatCodeSettings):
+		return s.handleGetDefaultFormatCodeSettings()
 	case string(MethodCreateSnapshot):
 		return s.handleCreateSnapshot(ctx, parsed.(*CreateSnapshotParams))
 	case string(MethodUpdateSnapshot):
@@ -913,6 +917,12 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleReleaseModuleResolver(parsed.(*ReleaseModuleResolverParams))
 	case string(MethodResolveModuleName):
 		return s.handleResolveModuleName(ctx, parsed.(*ResolveModuleNameParams))
+	case string(MethodResolveTypeReferenceDirective):
+		return s.handleResolveTypeReferenceDirective(ctx, parsed.(*ResolveTypeReferenceDirectiveParams))
+	case string(MethodGetEffectiveTypeRoots):
+		return s.handleGetEffectiveTypeRoots(parsed.(*CompilerOptionsParams))
+	case string(MethodGetTsBuildInfoEmitOutputFilePath):
+		return s.handleGetTsBuildInfoEmitOutputFilePath(parsed.(*CompilerOptionsParams))
 	case string(MethodParseCommandLine):
 		return s.handleParseCommandLine(ctx, parsed.(*ParseCommandLineParams))
 	case string(MethodReadConfigFile):
@@ -1065,6 +1075,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetFalseTypeOfConditionalType(ctx, parsed.(*GetTypePropertyParams))
 	case string(MethodGetTypeParametersOfSignature):
 		return s.handleGetTypeParametersOfSignature(ctx, parsed.(*GetSignaturePropertyParams))
+	case string(MethodGetTypeArgumentsForResolvedSignature):
+		return s.handleGetTypeArgumentsForResolvedSignature(ctx, parsed.(*GetSignaturePropertyParams))
 	case string(MethodGetParametersOfSignature):
 		return s.handleGetParametersOfSignature(ctx, parsed.(*GetSignaturePropertyParams))
 	case string(MethodGetThisParameterOfSignature):
@@ -1073,6 +1085,14 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetTargetOfSignature(ctx, parsed.(*GetSignaturePropertyParams))
 	case string(MethodGetContextualType):
 		return s.handleGetContextualType(ctx, parsed.(*GetContextualTypeParams))
+	case string(MethodIsOptionalParameter):
+		return s.handleIsOptionalParameter(ctx, parsed.(*CheckerNodeParams))
+	case string(MethodGetTypeOfAssignmentPattern):
+		return s.handleGetTypeOfAssignmentPattern(ctx, parsed.(*CheckerNodeParams))
+	case string(MethodIsValidPropertyAccess):
+		return s.handleIsValidPropertyAccess(ctx, parsed.(*IsValidPropertyAccessParams))
+	case string(MethodGetSymbolsOfParameterPropertyDeclaration):
+		return s.handleGetSymbolsOfParameterPropertyDeclaration(ctx, parsed.(*CheckerNodeParams))
 	case string(MethodGetContextualTypeForArgument):
 		return s.handleGetContextualTypeForArgument(ctx, parsed.(*GetContextualTypeForArgumentParams))
 	case string(MethodGetAwaitedType):
@@ -1115,6 +1135,24 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleSignatureToSignatureDeclaration(ctx, parsed.(*SignatureToSignatureDeclarationParams))
 	case string(MethodTypeToString):
 		return s.handleTypeToString(ctx, parsed.(*TypeToTypeNodeParams))
+	case string(MethodSymbolToString):
+		return s.handleSymbolToString(ctx, parsed.(*SymbolToStringParams))
+	case string(MethodSymbolToEntityName):
+		return s.handleSymbolToEntityName(ctx, parsed.(*SymbolToNodeParams))
+	case string(MethodSymbolToExpression):
+		return s.handleSymbolToExpression(ctx, parsed.(*SymbolToNodeParams))
+	case string(MethodSymbolToParameterDeclaration):
+		return s.handleSymbolToParameterDeclaration(ctx, parsed.(*SymbolToDeclarationParams))
+	case string(MethodSymbolToTypeParameterDeclarations):
+		return s.handleSymbolToTypeParameterDeclarations(ctx, parsed.(*SymbolToDeclarationParams))
+	case string(MethodTypeParameterToDeclaration):
+		return s.handleTypeParameterToDeclaration(ctx, parsed.(*TypeToTypeNodeParams))
+	case string(MethodIndexInfoToIndexSignatureDeclaration):
+		return s.handleIndexInfoToIndexSignatureDeclaration(ctx, parsed.(*IndexInfoToIndexSignatureDeclarationParams))
+	case string(MethodTypePredicateToString):
+		return s.handleTypePredicateToString(ctx, parsed.(*TypePredicateToStringParams))
+	case string(MethodSignatureToString):
+		return s.handleSignatureToString(ctx, parsed.(*SignatureToStringParams))
 	case string(MethodPrintNode):
 		return s.handlePrintNode(ctx, parsed.(*PrintNodeParams))
 	case string(MethodEmit):
@@ -1175,6 +1213,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleMethodGetTargetSymbol(ctx, parsed.(*CheckerSymbolParams))
 	case string(MethodGetMergedSymbol):
 		return s.handleGetMergedSymbol(ctx, parsed.(*CheckerSymbolParams))
+	case string(MethodGetRootSymbols):
+		return s.handleGetRootSymbols(ctx, parsed.(*CheckerSymbolParams))
 	case string(MethodGetSymbolOfNode):
 		return s.handleGetSymbolOfNode(ctx, parsed.(*CheckerNodeParams))
 	case string(MethodGetSymbolOfDeclarationForChecker):
@@ -1388,6 +1428,11 @@ func isSourceFileResponseMethod(method Method) bool {
 		MethodGetCachedSourceFile,
 		MethodGetConfigSourceFile,
 		MethodTypeToTypeNode,
+		MethodSymbolToEntityName,
+		MethodSymbolToExpression,
+		MethodSymbolToParameterDeclaration,
+		MethodTypeParameterToDeclaration,
+		MethodIndexInfoToIndexSignatureDeclaration,
 		MethodSignatureToSignatureDeclaration:
 		return true
 	default:
@@ -1437,6 +1482,11 @@ func (s *Session) handleInitialize(ctx context.Context) (*InitializeResponse, er
 		CaseSensitivity:  s.caseSensitivity(),
 		CurrentDirectory: s.currentDirectory(),
 	}, nil
+}
+
+func (s *Session) handleGetDefaultFormatCodeSettings() (*lsutil.FormatCodeSettings, error) {
+	settings := lsutil.GetDefaultFormatCodeSettings()
+	return &settings, nil
 }
 
 // handleCreateSnapshot creates a new independent snapshot.
@@ -2038,6 +2088,20 @@ func (s *apiBuildSystem) Spawn(command []string, dir string, stderr io.Writer) (
 func (s *apiBuildSystem) Now() time.Time            { return time.Now() }
 func (s *apiBuildSystem) SinceStart() time.Duration { return time.Since(s.start) }
 
+func (s *Session) handleGetEffectiveTypeRoots(params *CompilerOptionsParams) ([]tspath.RootedDirectoryPath, error) {
+	roots, _ := params.CompilerOptions.GetEffectiveTypeRoots(s.GetCurrentDirectory())
+	return roots, nil
+}
+
+// @gen-proto-nullable
+func (s *Session) handleGetTsBuildInfoEmitOutputFilePath(params *CompilerOptionsParams) (*tspath.RootedFilePath, error) {
+	path := outputpaths.GetBuildInfoFileName(&params.CompilerOptions, s.caseSensitivity())
+	if path == "" {
+		return nil, nil
+	}
+	return &path, nil
+}
+
 // handleParseCommandLine parses command-line arguments.
 func (s *Session) handleParseCommandLine(ctx context.Context, params *ParseCommandLineParams) (*ConfigFileResponse, error) {
 	return NewConfigFileResponse(tsoptions.ParseCommandLine(params.CommandLine, s.snapshotHost.FS(), s.currentDirectory())), nil
@@ -2228,6 +2292,7 @@ func (s *Session) handleGetCachedSourceFile(params *GetCachedSourceFileParams) (
 	return s.encodeSourceFileResponse(lease.SourceFile())
 }
 
+// @gen-proto-nullable
 func (s *Session) handleGetSymbolOfDeclaration(params *GetSymbolOfDeclarationParams) (*SymbolResponse, error) {
 	lease, err := s.acquireCachedSourceFile(params.File)
 	if err != nil {
@@ -2240,12 +2305,12 @@ func (s *Session) handleGetSymbolOfDeclaration(params *GetSymbolOfDeclarationPar
 		return nil, fmt.Errorf("%w: declaration node index %d is out of range", ErrClientError, params.Index)
 	}
 	node := table.Nodes[params.Index]
-	if node == nil || !ast.IsDeclaration(node) {
-		return nil, fmt.Errorf("%w: node index %d is not a declaration", ErrClientError, params.Index)
+	if node == nil {
+		return nil, fmt.Errorf("%w: node index %d is not a node", ErrClientError, params.Index)
 	}
 	symbol := node.Symbol()
 	if symbol == nil {
-		return nil, fmt.Errorf("%w: declaration node index %d has no binder symbol", ErrClientError, params.Index)
+		return nil, nil
 	}
 	return newFileSymbolResponse(symbol), nil
 }
@@ -3954,6 +4019,142 @@ func (s *Session) handleGetTypeParameterAtPosition(ctx context.Context, params *
 	return setup.sd.newTypeResponse(setup.projectID, setup.checker.GetTypeParameterAtPosition(sig, int(params.Index)), setup.checker), nil
 }
 
+func (s *Session) handleIsOptionalParameter(ctx context.Context, params *CheckerNodeParams) (bool, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return false, err
+	}
+	defer setup.done()
+
+	node, err := setup.sd.resolveNodeHandle(setup.program, params.Location)
+	if err != nil {
+		return false, err
+	}
+	if !ast.IsParameterDeclaration(node) {
+		return false, fmt.Errorf("%w: expected a parameter declaration", ErrInvalidRequest)
+	}
+	return setup.checker.IsOptionalParameter(node), nil
+}
+
+func (s *Session) handleGetRootSymbols(ctx context.Context, params *CheckerSymbolParams) ([]*SymbolResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	symbol, err := setup.resolveSymbolHandle(params.Symbol)
+	if err != nil {
+		return nil, err
+	}
+	roots := setup.checker.GetRootSymbols(symbol)
+	result := make([]*SymbolResponse, len(roots))
+	for i, root := range roots {
+		result[i] = setup.newSymbolResponse(root)
+	}
+	return result, nil
+}
+
+func (s *Session) handleGetTypeArgumentsForResolvedSignature(ctx context.Context, params *GetSignaturePropertyParams) ([]*TypeResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	signature, err := setup.resolveSignatureHandle(params.Signature)
+	if err != nil {
+		return nil, err
+	}
+	types := setup.checker.GetTypeArgumentsForResolvedSignature(signature)
+	result := make([]*TypeResponse, len(types))
+	for i, t := range types {
+		result[i] = setup.sd.newTypeResponse(setup.projectID, t, setup.checker)
+	}
+	return result, nil
+}
+
+// @gen-proto-nullable
+func (s *Session) handleGetTypeOfAssignmentPattern(ctx context.Context, params *CheckerNodeParams) (*TypeResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	node, err := setup.sd.resolveNodeHandle(setup.program, params.Location)
+	if err != nil {
+		return nil, err
+	}
+	if !isSupportedAssignmentPattern(node) {
+		return nil, fmt.Errorf("%w: expected an object or array assignment pattern in an assignment or for-of initializer", ErrInvalidRequest)
+	}
+	t := setup.checker.GetTypeOfAssignmentPattern(node)
+	if t == nil {
+		return nil, nil
+	}
+	return setup.sd.newTypeResponse(setup.projectID, t, setup.checker), nil
+}
+
+func isSupportedAssignmentPattern(node *ast.Node) bool {
+	if !ast.IsAssignmentPattern(node) {
+		return false
+	}
+	parent := node.Parent
+	switch parent.Kind {
+	case ast.KindBinaryExpression:
+		return parent.AsBinaryExpression().OperatorToken.Kind == ast.KindEqualsToken && parent.AsBinaryExpression().Left == node
+	case ast.KindForOfStatement:
+		return parent.Initializer() == node
+	case ast.KindPropertyAssignment:
+		return parent.Initializer() == node && isSupportedAssignmentPattern(parent.Parent)
+	case ast.KindArrayLiteralExpression:
+		return isSupportedAssignmentPattern(parent)
+	default:
+		return false
+	}
+}
+
+func (s *Session) handleGetSymbolsOfParameterPropertyDeclaration(ctx context.Context, params *CheckerNodeParams) (*ParameterPropertySymbolsResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	node, err := setup.sd.resolveNodeHandle(setup.program, params.Location)
+	if err != nil {
+		return nil, err
+	}
+	if !ast.IsParameterPropertyDeclaration(node, node.Parent) || !ast.IsIdentifier(node.Name()) {
+		return nil, fmt.Errorf("%w: expected a parameter property with an identifier name", ErrInvalidRequest)
+	}
+	parameter, property := setup.checker.GetSymbolsOfParameterPropertyDeclaration(node, node.Name().Text())
+	return &ParameterPropertySymbolsResponse{
+		Parameter: setup.newSymbolResponse(parameter),
+		Property:  setup.newSymbolResponse(property),
+	}, nil
+}
+
+func (s *Session) handleIsValidPropertyAccess(ctx context.Context, params *IsValidPropertyAccessParams) (bool, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return false, err
+	}
+	defer setup.done()
+
+	node, err := setup.sd.resolveNodeHandle(setup.program, params.Location)
+	if err != nil {
+		return false, err
+	}
+	switch node.Kind {
+	case ast.KindPropertyAccessExpression, ast.KindQualifiedName, ast.KindImportType:
+		return setup.checker.IsValidPropertyAccess(node, params.PropertyName), nil
+	default:
+		return false, fmt.Errorf("%w: expected a property access, qualified name, or import type", ErrInvalidRequest)
+	}
+}
+
 func (s *Session) handleIsArrayLikeType(ctx context.Context, params *IsArrayLikeTypeParams) (bool, error) {
 	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
 	if err != nil {
@@ -4148,9 +4349,62 @@ func (s *Session) handleTypeToString(ctx context.Context, params *TypeToTypeNode
 	return setup.checker.TypeToStringEx(t, enclosingDeclaration, checker.TypeFormatFlagsAllowUniqueESSymbolType|checker.TypeFormatFlagsUseAliasDefinedOutsideCurrentScope, nil), nil
 }
 
+func (s *Session) handleSignatureToString(ctx context.Context, params *SignatureToStringParams) (string, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return "", err
+	}
+	defer setup.done()
+	signature, err := setup.resolveSignatureHandle(params.Signature)
+	if err != nil {
+		return "", err
+	}
+	var location *ast.Node
+	if params.Location != "" {
+		location, err = setup.sd.resolveNodeHandle(setup.program, params.Location)
+		if err != nil {
+			return "", err
+		}
+	}
+	return setup.checker.SignatureToStringEx(signature, location, checker.TypeFormatFlags(params.Flags), nil), nil
+}
+
+func (s *Session) handleSymbolToString(ctx context.Context, params *SymbolToStringParams) (string, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return "", err
+	}
+	defer setup.done()
+	symbol, err := setup.resolveSymbolHandle(params.Symbol)
+	if err != nil {
+		return "", err
+	}
+	var location *ast.Node
+	if params.Location != "" {
+		location, err = setup.sd.resolveNodeHandle(setup.program, params.Location)
+		if err != nil {
+			return "", err
+		}
+	}
+	meaning := ast.SymbolFlagsAll
+	if params.Meaning != nil {
+		meaning = ast.SymbolFlags(*params.Meaning)
+	}
+	flags := checker.SymbolFormatFlagsAllowAnyNodeKind
+	if params.Flags != nil {
+		flags = checker.SymbolFormatFlags(*params.Flags)
+	}
+	return setup.checker.SymbolToStringEx(symbol, location, meaning, flags), nil
+}
+
 // handlePrintNode decodes a binary-encoded AST node and prints it to text.
 func (s *Session) handlePrintNode(_ context.Context, params *PrintNodeParams) (string, error) {
-	node, err := decodePrintNode(params.Data)
+	originals, release, err := s.resolvePrintOriginals(params.OriginalFiles, params.OriginalNodes)
+	if err != nil {
+		return "", err
+	}
+	defer release()
+	node, emitContext, err := decodePrintNode(params.Data, params.EmitNodes, originals)
 	if err != nil {
 		return "", err
 	}
@@ -4159,28 +4413,121 @@ func (s *Session) handlePrintNode(_ context.Context, params *PrintNodeParams) (s
 	if ast.IsSourceFile(node) {
 		sourceFile = node.AsSourceFile()
 	}
-	return newPrinter(params).Emit(node, sourceFile), nil
+	return newPrinter(params, emitContext).Emit(node, sourceFile), nil
 }
 
-func decodePrintNode(encoded string) (*ast.Node, error) {
+func mapComments(comments []PrintSynthesizedComment) []printer.SynthesizedComment {
+	return core.Map(comments, func(c PrintSynthesizedComment) printer.SynthesizedComment {
+		return printer.SynthesizedComment{
+			Kind:               ast.Kind(c.Kind),
+			Loc:                core.NewTextRange(-1, -1),
+			HasLeadingNewLine:  c.HasLeadingNewLine,
+			HasTrailingNewLine: c.HasTrailingNewLine,
+			Text:               c.Text,
+		}
+	})
+}
+
+// resolvePrintOriginals finds the parsed nodes that printed nodes were created from. Originals
+// whose source files are no longer cached are skipped. The returned function releases the
+// source files and must be called once printing is finished.
+func (s *Session) resolvePrintOriginals(files []SourceFileDescriptor, nodes map[int]*PrintOriginalNode) (map[int]*ast.Node, func(), error) {
+	if len(nodes) == 0 {
+		return nil, func() {}, nil
+	}
+	leases := make([]*project.SourceFileLease, len(files))
+	release := func() {
+		for _, lease := range leases {
+			if lease != nil {
+				lease.Release()
+			}
+		}
+	}
+	acquired := make([]bool, len(files))
+	originals := make(map[int]*ast.Node, len(nodes))
+	for index, original := range nodes {
+		if original == nil {
+			continue
+		}
+		if int(original.File) >= len(files) {
+			release()
+			return nil, nil, fmt.Errorf("%w: original node %d references file %d outside of originalFiles", ErrClientError, index, original.File)
+		}
+		if !acquired[original.File] {
+			acquired[original.File] = true
+			if lease, err := s.acquireCachedSourceFile(files[original.File]); err == nil {
+				leases[original.File] = lease
+			}
+		}
+		lease := leases[original.File]
+		if lease == nil {
+			continue
+		}
+		table := encoder.GetNodeIndexTable(lease.SourceFile())
+		if original.Index != 0 && int(original.Index) < len(table.Nodes) {
+			if parsed := table.Nodes[original.Index]; parsed != nil {
+				originals[index] = parsed
+			}
+		}
+	}
+	return originals, release, nil
+}
+
+func decodePrintNode(encoded string, emitNodes map[int]*PrintEmitNode, originals map[int]*ast.Node) (*ast.Node, *printer.EmitContext, error) {
+	emitContext := printer.NewEmitContext()
 	data, err := base64.StdEncoding.DecodeString(encoded)
 	if err != nil {
-		return nil, fmt.Errorf("%w: invalid base64 data: %w", ErrClientError, err)
+		return nil, nil, fmt.Errorf("%w: invalid base64 data: %w", ErrClientError, err)
 	}
-
-	node, err := encoder.DecodeNodes(data)
+	for index, emitNode := range emitNodes {
+		if emitNode == nil {
+			continue
+		}
+		for _, comments := range [][]PrintSynthesizedComment{emitNode.LeadingComments, emitNode.TrailingComments} {
+			for _, comment := range comments {
+				if comment.Kind != int32(ast.KindSingleLineCommentTrivia) && comment.Kind != int32(ast.KindMultiLineCommentTrivia) {
+					return nil, nil, fmt.Errorf("%w: invalid synthetic comment kind %d for node %d", ErrClientError, comment.Kind, index)
+				}
+			}
+		}
+	}
+	usedEmitNodes := 0
+	node, err := encoder.DecodeNodesWithCallback(data, func(node *ast.Node, index int) {
+		// A decoded source file stays its own original so that emit flags set on it
+		// by the client are not hidden behind the cached file.
+		if original := originals[index]; original != nil && original.Kind == node.Kind && !ast.IsSourceFile(node) {
+			emitContext.SetOriginal(node, original)
+		}
+		emitNode, ok := emitNodes[index]
+		if !ok || emitNode == nil {
+			return
+		}
+		usedEmitNodes++
+		emitContext.SetEmitFlags(node, printer.EmitFlags(emitNode.EmitFlags))
+		if len(emitNode.LeadingComments) != 0 {
+			leadingComments := mapComments(emitNode.LeadingComments)
+			emitContext.SetSyntheticLeadingComments(node, leadingComments)
+		}
+		if len(emitNode.TrailingComments) != 0 {
+			trailingComments := mapComments(emitNode.TrailingComments)
+			emitContext.SetSyntheticTrailingComments(node, trailingComments)
+		}
+	})
 	if err != nil {
-		return nil, fmt.Errorf("%w: failed to decode AST: %w", ErrClientError, err)
+		return nil, nil, fmt.Errorf("%w: failed to decode AST: %w", ErrClientError, err)
 	}
-	return node, nil
+	if usedEmitNodes != len(emitNodes) {
+		return nil, nil, fmt.Errorf("%w: emitNodes had indices outside of the actual parsed nodes", ErrClientError)
+	}
+	return node, emitContext, nil
 }
 
-func newPrinter(params *PrintNodeParams) *printer.Printer {
+func newPrinter(params *PrintNodeParams, emitContext *printer.EmitContext) *printer.Printer {
 	return printer.NewPrinter(printer.PrinterOptions{
 		PreserveSourceNewlines:        params.PreserveSourceNewlines,
 		NeverAsciiEscape:              params.NeverAsciiEscape,
 		TerminateUnterminatedLiterals: params.TerminateUnterminatedLiterals,
-	}, printer.PrintHandlers{}, nil)
+	}, printer.PrintHandlers{}, emitContext)
 }
 
 func (s *Session) handleEmit(ctx context.Context, params *EmitParams) (*EmitResponse, error) {

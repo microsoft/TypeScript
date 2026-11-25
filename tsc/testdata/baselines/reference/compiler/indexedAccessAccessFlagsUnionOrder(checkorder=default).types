@@ -1,0 +1,41 @@
+//// [tests/cases/compiler/indexedAccessAccessFlagsUnionOrder.ts] ////
+
+=== indexedAccessAccessFlagsUnionOrder.ts ===
+function f<T extends Record<string, string>, K extends keyof T>(obj: T, k: K, b: boolean) {
+>f : <T extends Record<string, string>, K extends keyof T>(obj: T, k: K, b: boolean) => void
+>obj : T
+>k : K
+>b : boolean
+
+    const x = b ? obj[k] : g<T, K>();
+>x : T[K]
+>b ? obj[k] : g<T, K>() : T[K]
+>b : boolean
+>obj[k] : T[K]
+>obj : T
+>k : K
+>g<T, K>() : T[K]
+>g : <T_1, K_1 extends keyof T_1>() => T_1[K_1]
+
+    const s1: string = x;
+>s1 : string
+>x : string | undefined
+
+    const y = b ? g<T, K>() : obj[k];
+>y : T[K]
+>b ? g<T, K>() : obj[k] : T[K]
+>b : boolean
+>g<T, K>() : T[K]
+>g : <T_1, K_1 extends keyof T_1>() => T_1[K_1]
+>obj[k] : T[K]
+>obj : T
+>k : K
+
+    const s2: string = y;
+>s2 : string
+>y : string | undefined
+}
+
+declare function g<T, K extends keyof T>(): T[K];
+>g : <T, K extends keyof T>() => T[K]
+

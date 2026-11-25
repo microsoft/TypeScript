@@ -132,7 +132,6 @@ export type KeywordSyntaxKind =
     | SyntaxKind.ConstructorKeyword
     | SyntaxKind.DeclareKeyword
     | SyntaxKind.GetKeyword
-    | SyntaxKind.ImmediateKeyword
     | SyntaxKind.InferKeyword
     | SyntaxKind.IntrinsicKeyword
     | SyntaxKind.IsKeyword
@@ -304,7 +303,6 @@ export type TokenSyntaxKind =
     | SyntaxKind.ConstructorKeyword
     | SyntaxKind.DeclareKeyword
     | SyntaxKind.GetKeyword
-    | SyntaxKind.ImmediateKeyword
     | SyntaxKind.InferKeyword
     | SyntaxKind.IntrinsicKeyword
     | SyntaxKind.IsKeyword

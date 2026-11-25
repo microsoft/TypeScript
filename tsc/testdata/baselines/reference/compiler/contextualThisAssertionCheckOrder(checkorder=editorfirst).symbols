@@ -1,0 +1,48 @@
+//// [tests/cases/compiler/contextualThisAssertionCheckOrder.ts] ////
+
+=== contextualThisAssertionCheckOrder.ts ===
+// A function expression's this is typed contextually, and calling an
+// assertion or never-returning method through it narrows the same way
+// whether or not the types in the call were requested first (42175).
+
+declare function makeContextualThisParameter<T>(cb: (this: T) => any): void;
+>makeContextualThisParameter : Symbol(makeContextualThisParameter, Decl(contextualThisAssertionCheckOrder.ts, 0, 0))
+>T : Symbol(T, Decl(contextualThisAssertionCheckOrder.ts, 4, 45))
+>cb : Symbol(cb, Decl(contextualThisAssertionCheckOrder.ts, 4, 48))
+>this : Symbol(this, Decl(contextualThisAssertionCheckOrder.ts, 4, 53))
+>T : Symbol(T, Decl(contextualThisAssertionCheckOrder.ts, 4, 45))
+
+makeContextualThisParameter<{ assert(v: any): asserts v }>(function () {
+>makeContextualThisParameter : Symbol(makeContextualThisParameter, Decl(contextualThisAssertionCheckOrder.ts, 0, 0))
+>assert : Symbol(assert, Decl(contextualThisAssertionCheckOrder.ts, 6, 29))
+>v : Symbol(v, Decl(contextualThisAssertionCheckOrder.ts, 6, 37))
+>v : Symbol(v, Decl(contextualThisAssertionCheckOrder.ts, 6, 37))
+
+    const v = Boolean();
+>v : Symbol(v, Decl(contextualThisAssertionCheckOrder.ts, 7, 9))
+>Boolean : Symbol(Boolean, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    this.assert(v);
+>this.assert : Symbol(assert, Decl(contextualThisAssertionCheckOrder.ts, 6, 29))
+>this : Symbol(__type, Decl(contextualThisAssertionCheckOrder.ts, 6, 28))
+>assert : Symbol(assert, Decl(contextualThisAssertionCheckOrder.ts, 6, 29))
+>v : Symbol(v, Decl(contextualThisAssertionCheckOrder.ts, 7, 9))
+
+    const w: true = v;
+>w : Symbol(w, Decl(contextualThisAssertionCheckOrder.ts, 9, 9))
+>v : Symbol(v, Decl(contextualThisAssertionCheckOrder.ts, 7, 9))
+
+});
+
+makeContextualThisParameter<{ returnNever(): never }>(function () {
+>makeContextualThisParameter : Symbol(makeContextualThisParameter, Decl(contextualThisAssertionCheckOrder.ts, 0, 0))
+>returnNever : Symbol(returnNever, Decl(contextualThisAssertionCheckOrder.ts, 12, 29))
+
+    this.returnNever();
+>this.returnNever : Symbol(returnNever, Decl(contextualThisAssertionCheckOrder.ts, 12, 29))
+>this : Symbol(this, Decl(contextualThisAssertionCheckOrder.ts, 4, 53))
+>returnNever : Symbol(returnNever, Decl(contextualThisAssertionCheckOrder.ts, 12, 29))
+
+    debugger;
+});
+

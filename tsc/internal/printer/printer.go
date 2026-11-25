@@ -741,7 +741,6 @@ func (p *Printer) writeCommentRangeWorker(text string, lineMap []core.TextPos, k
 
 func (p *Printer) shouldEmitComments(node *ast.Node) bool {
 	return !p.commentsDisabled &&
-		p.currentSourceFile != nil &&
 		!ast.IsSourceFile(node)
 }
 
@@ -2872,10 +2871,10 @@ func (p *Printer) getBinaryExpressionPrecedence(node *ast.BinaryExpression) (lef
 
 func (p *Printer) emitBinaryExpression(node *ast.BinaryExpression) {
 	leftPrec, rightPrec := p.getBinaryExpressionPrecedence(node)
-	if emittedLeft := ast.SkipPartiallyEmittedExpressions(node.Left); ast.NodeIsSynthesized(emittedLeft) && emittedLeft.Kind == ast.KindBinaryExpression && mixingBinaryOperatorsRequiresParentheses(node.OperatorToken.Kind, emittedLeft.AsBinaryExpression().OperatorToken.Kind) {
+	if emittedLeft := ast.SkipPartiallyEmittedExpressions(node.Left); isSynthesizedForEmit(emittedLeft) && emittedLeft.Kind == ast.KindBinaryExpression && mixingBinaryOperatorsRequiresParentheses(node.OperatorToken.Kind, emittedLeft.AsBinaryExpression().OperatorToken.Kind) {
 		leftPrec = ast.OperatorPrecedenceHighest
 	}
-	if emittedRight := ast.SkipPartiallyEmittedExpressions(node.Right); ast.NodeIsSynthesized(emittedRight) && emittedRight.Kind == ast.KindBinaryExpression && mixingBinaryOperatorsRequiresParentheses(node.OperatorToken.Kind, emittedRight.AsBinaryExpression().OperatorToken.Kind) {
+	if emittedRight := ast.SkipPartiallyEmittedExpressions(node.Right); isSynthesizedForEmit(emittedRight) && emittedRight.Kind == ast.KindBinaryExpression && mixingBinaryOperatorsRequiresParentheses(node.OperatorToken.Kind, emittedRight.AsBinaryExpression().OperatorToken.Kind) {
 		rightPrec = ast.OperatorPrecedenceHighest
 	}
 	state := p.enterNode(node.AsNode())
@@ -3059,37 +3058,42 @@ func (p *Printer) commentWillEmitNewLine(comment ast.CommentRange) bool {
 	return comment.Kind == ast.KindSingleLineCommentTrivia || comment.HasTrailingNewLine
 }
 
-func (p *Printer) syntheticCommentWillEmitNewLine(comment SynthesizedComment) bool {
-	return comment.Kind == ast.KindSingleLineCommentTrivia || comment.HasTrailingNewLine
+func (p *Printer) syntheticLeadingCommentWillEmitNewLine(comment SynthesizedComment) bool {
+	return comment.Kind == ast.KindSingleLineCommentTrivia ||
+		comment.HasLeadingNewLine || comment.HasTrailingNewLine ||
+		strings.ContainsFunc(comment.Text, stringutil.IsLineBreak)
+}
+
+func (p *Printer) hasSyntheticLeadingCommentIntroducingNewLine(node *ast.Expression) bool {
+	return slices.ContainsFunc(p.emitContext.GetSyntheticLeadingComments(node), p.syntheticLeadingCommentWillEmitNewLine)
 }
 
 func (p *Printer) willEmitLeadingNewLine(node *ast.Expression) bool {
-	if p.currentSourceFile == nil {
-		return false
-	}
-	hasLeadingCommentRanges := false
-	hasNewLineComment := false
-	for comment := range scanner.GetLeadingCommentRanges(p.emitContext.Factory.AsNodeFactory(), p.currentSourceFile.Text(), node.Pos()) {
-		hasLeadingCommentRanges = true
-		if p.commentWillEmitNewLine(comment) {
-			hasNewLineComment = true
+	if p.currentSourceFile != nil {
+		hasLeadingCommentRanges := false
+		hasNewLineComment := false
+		for comment := range scanner.GetLeadingCommentRanges(p.emitContext.Factory.AsNodeFactory(), p.currentSourceFile.Text(), node.Pos()) {
+			hasLeadingCommentRanges = true
+			if p.commentWillEmitNewLine(comment) {
+				hasNewLineComment = true
+			}
 		}
-	}
-	if hasLeadingCommentRanges {
-		parseNode := p.emitContext.ParseNode(node)
-		if parseNode != nil && ast.IsParenthesizedExpression(parseNode.Parent) {
+		if hasLeadingCommentRanges {
+			parseNode := p.emitContext.ParseNode(node)
+			if parseNode != nil && ast.IsParenthesizedExpression(parseNode.Parent) {
+				return true
+			}
+		}
+		if hasNewLineComment {
 			return true
 		}
 	}
-	if hasNewLineComment {
-		return true
-	}
-	if slices.ContainsFunc(p.emitContext.GetSyntheticLeadingComments(node), p.syntheticCommentWillEmitNewLine) {
+	if p.hasSyntheticLeadingCommentIntroducingNewLine(node) {
 		return true
 	}
 	if ast.IsPartiallyEmittedExpression(node) {
 		pee := node.AsPartiallyEmittedExpression()
-		if node.Pos() != pee.Expression.Pos() {
+		if p.currentSourceFile != nil && node.Pos() != pee.Expression.Pos() {
 			for comment := range scanner.GetTrailingCommentRanges(p.emitContext.Factory.AsNodeFactory(), p.currentSourceFile.Text(), pee.Expression.Pos()) {
 				if p.commentWillEmitNewLine(comment) {
 					return true
@@ -3105,6 +3109,9 @@ func (p *Printer) willEmitLeadingNewLine(node *ast.Expression) bool {
 // that would introduce a line separator between the node and its parent.
 func (p *Printer) parenthesizeExpressionForNoAsi(node *ast.Expression) *ast.Expression {
 	if !p.commentsDisabled {
+		if node.Kind != ast.KindPartiallyEmittedExpression && p.hasSyntheticLeadingCommentIntroducingNewLine(node) {
+			return p.emitContext.Factory.NewParenthesizedExpression(node)
+		}
 		switch node.Kind {
 		case ast.KindPartiallyEmittedExpression:
 			if p.willEmitLeadingNewLine(node) {
@@ -4872,6 +4879,10 @@ func (p *Printer) hasTrailingComma(parentNode *ast.Node, children *ast.NodeList)
 	return false
 }
 
+func isArrayHole(node *ast.Node) bool {
+	return ast.IsOmittedExpression(node) || ast.IsBindingElement(node) && node.Name() == nil
+}
+
 func (p *Printer) writeDelimiter(format ListFormat) {
 	switch format & LFDelimitersMask {
 	case LFNone:
@@ -4996,7 +5007,8 @@ func (p *Printer) emitListItems(
 
 	// Write a trailing comma, if requested.
 	skipTrailingComments := p.commentsDisabled || !p.shouldEmitTrailingComments(previousSibling)
-	emitTrailingComma := hasTrailingComma && format&LFAllowTrailingComma != 0 && format&LFCommaDelimited != 0
+	// A trailing hole is only an element if it is followed by a comma.
+	emitTrailingComma := (hasTrailingComma || previousSibling != nil && isArrayHole(previousSibling)) && format&LFAllowTrailingComma != 0 && format&LFCommaDelimited != 0
 	if emitTrailingComma {
 		if previousSibling != nil && !skipTrailingComments {
 			p.emitToken(ast.KindCommaToken, previousSibling.End(), WriteKindPunctuation, previousSibling)
@@ -5471,9 +5483,6 @@ func (p *Printer) emitTrailingCommentsOfNode(node *ast.Node, emitFlags EmitFlags
 }
 
 func (p *Printer) emitLeadingSyntheticCommentsOfNode(node *ast.Node, emitFlags EmitFlags) {
-	if emitFlags&EFNoLeadingComments != 0 {
-		return
-	}
 	synth := p.emitContext.GetSyntheticLeadingComments(node)
 	for _, c := range synth {
 		p.emitLeadingSynthesizedComment(c)
@@ -5493,9 +5502,6 @@ func (p *Printer) emitLeadingSynthesizedComment(comment SynthesizedComment) {
 }
 
 func (p *Printer) emitTrailingSyntheticCommentsOfNode(node *ast.Node, emitFlags EmitFlags) {
-	if emitFlags&EFNoTrailingComments != 0 {
-		return
-	}
 	synth := p.emitContext.GetSyntheticTrailingComments(node)
 	for _, c := range synth {
 		p.emitTrailingSynthesizedComment(c)
@@ -5503,11 +5509,14 @@ func (p *Printer) emitTrailingSyntheticCommentsOfNode(node *ast.Node, emitFlags 
 }
 
 func (p *Printer) emitTrailingSynthesizedComment(comment SynthesizedComment) {
-	if !p.writer.IsAtStartOfLine() {
+	if comment.HasLeadingNewLine {
+		p.writer.WriteLine()
+	} else if !p.writer.IsAtStartOfLine() {
 		p.writer.WriteSpace(" ")
 	}
 	p.writeSynthesizedComment(comment)
-	if comment.HasTrailingNewLine {
+	// A single-line comment must end the line, or it would comment out the code that follows it.
+	if comment.HasTrailingNewLine || comment.Kind == ast.KindSingleLineCommentTrivia {
 		p.writer.WriteLine()
 	}
 }

@@ -1,0 +1,53 @@
+//// [tests/cases/compiler/parameterBindingDefaultReferencesSiblingThroughCall.ts] ////
+
+=== parameterBindingDefaultReferencesSiblingThroughCall.ts ===
+// A default in a destructured parameter that references a sibling element
+// makes the sibling's type depend on itself: the type of 'a' comes from the
+// parameter initializer '{}', which is padded with the types of the defaults,
+// including 'b'. Main reports this cycle (TS7022 on 'a') for 'b = a', but not
+// for 'b = id(a)', where the padding reuses the signature resolved while 'a'
+// was treated as non-inferrable any during contextual typing of '{}', which
+// gives 'b' the type 'unknown' (see tldraw TldrawApp.test.ts).
+
+declare function id<T>(v: T): T;
+>id : Symbol(id, Decl(parameterBindingDefaultReferencesSiblingThroughCall.ts, 0, 0))
+>T : Symbol(T, Decl(parameterBindingDefaultReferencesSiblingThroughCall.ts, 8, 20))
+>v : Symbol(v, Decl(parameterBindingDefaultReferencesSiblingThroughCall.ts, 8, 23))
+>T : Symbol(T, Decl(parameterBindingDefaultReferencesSiblingThroughCall.ts, 8, 20))
+>T : Symbol(T, Decl(parameterBindingDefaultReferencesSiblingThroughCall.ts, 8, 20))
+
+function direct({ a = 1 as number | undefined, b = a } = {}) {
+>direct : Symbol(direct, Decl(parameterBindingDefaultReferencesSiblingThroughCall.ts, 8, 32))
+>a : Symbol(a, Decl(parameterBindingDefaultReferencesSiblingThroughCall.ts, 10, 17))
+>b : Symbol(b, Decl(parameterBindingDefaultReferencesSiblingThroughCall.ts, 10, 46))
+>a : Symbol(a, Decl(parameterBindingDefaultReferencesSiblingThroughCall.ts, 10, 17))
+
+    const n: string = b;
+>n : Symbol(n, Decl(parameterBindingDefaultReferencesSiblingThroughCall.ts, 11, 9))
+>b : Symbol(b, Decl(parameterBindingDefaultReferencesSiblingThroughCall.ts, 10, 46))
+}
+
+function viaCall({ a = 1 as number | undefined, b = id(a) } = {}) {
+>viaCall : Symbol(viaCall, Decl(parameterBindingDefaultReferencesSiblingThroughCall.ts, 12, 1))
+>a : Symbol(a, Decl(parameterBindingDefaultReferencesSiblingThroughCall.ts, 14, 18))
+>b : Symbol(b, Decl(parameterBindingDefaultReferencesSiblingThroughCall.ts, 14, 47))
+>id : Symbol(id, Decl(parameterBindingDefaultReferencesSiblingThroughCall.ts, 0, 0))
+>a : Symbol(a, Decl(parameterBindingDefaultReferencesSiblingThroughCall.ts, 14, 18))
+
+    const n: string = b;
+>n : Symbol(n, Decl(parameterBindingDefaultReferencesSiblingThroughCall.ts, 15, 9))
+>b : Symbol(b, Decl(parameterBindingDefaultReferencesSiblingThroughCall.ts, 14, 47))
+}
+
+function viaCallArray({ a = 1 as number | undefined, b = id([a]) } = {}) {
+>viaCallArray : Symbol(viaCallArray, Decl(parameterBindingDefaultReferencesSiblingThroughCall.ts, 16, 1))
+>a : Symbol(a, Decl(parameterBindingDefaultReferencesSiblingThroughCall.ts, 18, 23))
+>b : Symbol(b, Decl(parameterBindingDefaultReferencesSiblingThroughCall.ts, 18, 52))
+>id : Symbol(id, Decl(parameterBindingDefaultReferencesSiblingThroughCall.ts, 0, 0))
+>a : Symbol(a, Decl(parameterBindingDefaultReferencesSiblingThroughCall.ts, 18, 23))
+
+    const n: string = b;
+>n : Symbol(n, Decl(parameterBindingDefaultReferencesSiblingThroughCall.ts, 19, 9))
+>b : Symbol(b, Decl(parameterBindingDefaultReferencesSiblingThroughCall.ts, 18, 52))
+}
+

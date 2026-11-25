@@ -126,7 +126,8 @@ npx hereby build         # Build the native compiler into built/local/tsc
 npx hereby test          # Run compiler and language-service Go tests
 npx hereby test:all      # Also run benchmarks, tools, and API tests
 npx hereby test:codegen  # Run codegen tests without regenerating source outputs
-npx hereby lint          # Run custom golangci-lint for both Go modules
+npx hereby lint          # Lint both Go modules and the TypeScript package
+npx hereby lint:typescript # Lint the TypeScript package using the local compiler
 npx hereby generate:go   # Run the generators also exposed through go generate
 npx hereby generate      # Regenerate all sources, assets, localization, and vendored files
 npx hereby format        # Format Go, TypeScript, JSON, and YAML

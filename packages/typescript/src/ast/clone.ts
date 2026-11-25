@@ -12,6 +12,7 @@ import {
     createNumericLiteral,
     createStringLiteral,
 } from "./factory.generated.ts";
+import { setOriginalNode } from "./utils.ts";
 import { visitEachChild } from "./visitor.ts";
 
 function isArray(value: any): value is readonly unknown[] {
@@ -87,35 +88,23 @@ function setTextRange<T extends Node>(node: T, range: ReadonlyTextRange | undefi
 
 /**
  * Creates a deep clone of a node and its subtree, synthesizing new nodes for every child.
- * The resulting tree has fully set parent pointers.
- *
- * @param node The node to clone.
- * @param includeTrivia Whether to preserve the text range (pos/end) on the clone.
+ * Every cloned node keeps the text range of the node it was cloned from, and the resulting
+ * tree has fully set parent pointers.
  */
-export function getSynthesizedDeepClone<T extends Node>(node: T, includeTrivia?: boolean): T;
-export function getSynthesizedDeepClone<T extends Node>(node: T | undefined, includeTrivia?: boolean): T | undefined;
-export function getSynthesizedDeepClone<T extends Node>(node: T | undefined, includeTrivia = true): T | undefined {
-    const clone = node && getSynthesizedDeepCloneWorker(node);
-    if (clone && !includeTrivia) {
-        (clone as any).pos = -1;
-        (clone as any).end = -1;
-    }
-    return setParentRecursive(clone);
+export function getSynthesizedDeepClone<T extends Node>(node: T): T;
+export function getSynthesizedDeepClone<T extends Node>(node: T | undefined): T | undefined;
+export function getSynthesizedDeepClone<T extends Node>(node: T | undefined): T | undefined {
+    return setParentRecursive(node && getSynthesizedDeepCloneWorker(node));
 }
 
 /**
  * Creates deep clones of a NodeArray and all its elements.
  */
-export function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T>, includeTrivia?: boolean): NodeArray<T>;
-export function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T> | undefined, includeTrivia?: boolean): NodeArray<T> | undefined;
-export function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T> | undefined, includeTrivia = true): NodeArray<T> | undefined {
+export function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T>): NodeArray<T>;
+export function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T> | undefined): NodeArray<T> | undefined;
+export function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T> | undefined): NodeArray<T> | undefined {
     if (nodes) {
-        const cloned = createNodeArray(
-            nodes.map(n => getSynthesizedDeepClone(n, includeTrivia)),
-            nodes.pos,
-            nodes.end,
-        );
-        return cloned;
+        return createNodeArray(nodes.map(n => getSynthesizedDeepClone(n)), nodes.pos, nodes.end);
     }
     return nodes;
 }
@@ -131,7 +120,7 @@ function getSynthesizedDeepCloneWorker<T extends Node>(node: T): T {
             : node.kind === SyntaxKind.NumericLiteral
             ? createNumericLiteral((node as Node as NumericLiteral).text, (node as Node as NumericLiteral).tokenFlags) as Node as T
             : cloneNode(node);
-        return setTextRange(clone, node);
+        return setOriginalNode(setTextRange(clone, node), node);
     }
 
     // visitEachChild already created a new node with visited children.
