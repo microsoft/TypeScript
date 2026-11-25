@@ -1,0 +1,36 @@
+//// [tests/cases/compiler/distributedMappedTypeIndexSignature.ts] ////
+
+=== distributedMappedTypeIndexSignature.ts ===
+type Alias<T> = { [K in keyof T]: (state: T) => void };
+>Alias : Alias<T>
+>state : T
+
+type Check<T, X extends { [x: string]: (state: T) => void }> = X;
+>Check : X
+>x : string
+>state : T
+
+type Use1<T> = Check<T, Alias<T>>;
+>Use1 : Alias<T>
+
+type Use2<T> = Check<T, { [K in keyof T]: (state: T) => void }>;
+>Use2 : { [K in keyof T]: (state: T) => void; }
+>state : T
+
+function f<T>(alias: Alias<T>, inline: { [K in keyof T]: (state: T) => T[K] }) {
+>f : <T>(alias: Alias<T>, inline: { [K in keyof T]: (state: T) => T[K]; }) => void
+>alias : Alias<T>
+>inline : { [K in keyof T]: (state: T) => T[K]; }
+>state : T
+
+    const a: Record<string, (state: T) => unknown> = alias;
+>a : Record<string, (state: T) => unknown>
+>state : T
+>alias : Alias<T>
+
+    const b: Record<string, (state: T) => unknown> = inline;
+>b : Record<string, (state: T) => unknown>
+>state : T
+>inline : { [K in keyof T]: (state: T) => T[K]; }
+}
+

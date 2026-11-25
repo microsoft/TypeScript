@@ -1,0 +1,67 @@
+//// [tests/cases/compiler/distributedMappedTypeIndexSignature.ts] ////
+
+=== distributedMappedTypeIndexSignature.ts ===
+type Alias<T> = { [K in keyof T]: (state: T) => void };
+>Alias : Symbol(Alias, Decl(distributedMappedTypeIndexSignature.ts, 0, 0))
+>T : Symbol(T, Decl(distributedMappedTypeIndexSignature.ts, 0, 11))
+>K : Symbol(K, Decl(distributedMappedTypeIndexSignature.ts, 0, 19))
+>T : Symbol(T, Decl(distributedMappedTypeIndexSignature.ts, 0, 11))
+>state : Symbol(state, Decl(distributedMappedTypeIndexSignature.ts, 0, 35))
+>T : Symbol(T, Decl(distributedMappedTypeIndexSignature.ts, 0, 11))
+
+type Check<T, X extends { [x: string]: (state: T) => void }> = X;
+>Check : Symbol(Check, Decl(distributedMappedTypeIndexSignature.ts, 0, 55))
+>T : Symbol(T, Decl(distributedMappedTypeIndexSignature.ts, 1, 11))
+>X : Symbol(X, Decl(distributedMappedTypeIndexSignature.ts, 1, 13))
+>x : Symbol(x, Decl(distributedMappedTypeIndexSignature.ts, 1, 27))
+>state : Symbol(state, Decl(distributedMappedTypeIndexSignature.ts, 1, 40))
+>T : Symbol(T, Decl(distributedMappedTypeIndexSignature.ts, 1, 11))
+>X : Symbol(X, Decl(distributedMappedTypeIndexSignature.ts, 1, 13))
+
+type Use1<T> = Check<T, Alias<T>>;
+>Use1 : Symbol(Use1, Decl(distributedMappedTypeIndexSignature.ts, 1, 65))
+>T : Symbol(T, Decl(distributedMappedTypeIndexSignature.ts, 2, 10))
+>Check : Symbol(Check, Decl(distributedMappedTypeIndexSignature.ts, 0, 55))
+>T : Symbol(T, Decl(distributedMappedTypeIndexSignature.ts, 2, 10))
+>Alias : Symbol(Alias, Decl(distributedMappedTypeIndexSignature.ts, 0, 0))
+>T : Symbol(T, Decl(distributedMappedTypeIndexSignature.ts, 2, 10))
+
+type Use2<T> = Check<T, { [K in keyof T]: (state: T) => void }>;
+>Use2 : Symbol(Use2, Decl(distributedMappedTypeIndexSignature.ts, 2, 34))
+>T : Symbol(T, Decl(distributedMappedTypeIndexSignature.ts, 3, 10))
+>Check : Symbol(Check, Decl(distributedMappedTypeIndexSignature.ts, 0, 55))
+>T : Symbol(T, Decl(distributedMappedTypeIndexSignature.ts, 3, 10))
+>K : Symbol(K, Decl(distributedMappedTypeIndexSignature.ts, 3, 27))
+>T : Symbol(T, Decl(distributedMappedTypeIndexSignature.ts, 3, 10))
+>state : Symbol(state, Decl(distributedMappedTypeIndexSignature.ts, 3, 43))
+>T : Symbol(T, Decl(distributedMappedTypeIndexSignature.ts, 3, 10))
+
+function f<T>(alias: Alias<T>, inline: { [K in keyof T]: (state: T) => T[K] }) {
+>f : Symbol(f, Decl(distributedMappedTypeIndexSignature.ts, 3, 64))
+>T : Symbol(T, Decl(distributedMappedTypeIndexSignature.ts, 5, 11))
+>alias : Symbol(alias, Decl(distributedMappedTypeIndexSignature.ts, 5, 14))
+>Alias : Symbol(Alias, Decl(distributedMappedTypeIndexSignature.ts, 0, 0))
+>T : Symbol(T, Decl(distributedMappedTypeIndexSignature.ts, 5, 11))
+>inline : Symbol(inline, Decl(distributedMappedTypeIndexSignature.ts, 5, 30))
+>K : Symbol(K, Decl(distributedMappedTypeIndexSignature.ts, 5, 42))
+>T : Symbol(T, Decl(distributedMappedTypeIndexSignature.ts, 5, 11))
+>state : Symbol(state, Decl(distributedMappedTypeIndexSignature.ts, 5, 58))
+>T : Symbol(T, Decl(distributedMappedTypeIndexSignature.ts, 5, 11))
+>T : Symbol(T, Decl(distributedMappedTypeIndexSignature.ts, 5, 11))
+>K : Symbol(K, Decl(distributedMappedTypeIndexSignature.ts, 5, 42))
+
+    const a: Record<string, (state: T) => unknown> = alias;
+>a : Symbol(a, Decl(distributedMappedTypeIndexSignature.ts, 6, 9))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>state : Symbol(state, Decl(distributedMappedTypeIndexSignature.ts, 6, 29))
+>T : Symbol(T, Decl(distributedMappedTypeIndexSignature.ts, 5, 11))
+>alias : Symbol(alias, Decl(distributedMappedTypeIndexSignature.ts, 5, 14))
+
+    const b: Record<string, (state: T) => unknown> = inline;
+>b : Symbol(b, Decl(distributedMappedTypeIndexSignature.ts, 7, 9))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>state : Symbol(state, Decl(distributedMappedTypeIndexSignature.ts, 7, 29))
+>T : Symbol(T, Decl(distributedMappedTypeIndexSignature.ts, 5, 11))
+>inline : Symbol(inline, Decl(distributedMappedTypeIndexSignature.ts, 5, 30))
+}
+

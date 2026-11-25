@@ -4662,7 +4662,7 @@ func (r *Relater) indexSignaturesRelatedTo(source *Type, target *Type, sourceIsP
 		case r.relation != r.c.strictSubtypeRelation && !sourceIsPrimitive && targetHasStringIndex && targetInfo.valueType.flags&TypeFlagsAny != 0:
 			related = TernaryTrue
 		case r.c.isGenericMappedType(source) && targetHasStringIndex:
-			related = r.isRelatedTo(r.c.getTemplateTypeFromMappedType(source), targetInfo.valueType, RecursionFlagsBoth, reportErrors)
+			related = r.isRelatedTo(r.c.getTemplateTypeFromMappedType(r.c.getNonDistributedMappedType(source)), targetInfo.valueType, RecursionFlagsBoth, reportErrors)
 		default:
 			related = r.typeRelatedToIndexInfo(source, targetInfo, reportErrors, intersectionState)
 		}
