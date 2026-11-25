@@ -52,3 +52,21 @@ export default 0;`,
 		"/tsconfig.json": `{ "files": ["a.ts", "n'e\"w/b.ts"] }`,
 	}, nil /*preferences*/)
 }
+
+func TestGetEditsForFileRename_jsDocCommentTerminator(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @Filename: /tsconfig.json
+{ "compilerOptions": { "allowJs": true, "checkJs": true } }
+// @Filename: /pkg*/a.js
+export class Foo {}
+// @Filename: /src/index.js
+/** @type {import("../pkg*\/a.js").Foo} */
+const x = null;`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyWillRenameFilesEdits(t, "/src/index.js", "/src/sub/index.js", map[string]string{
+		"/src/sub/index.js": `/** @type {import("../../pkg*/a.js").Foo} */
+const x = null;`,
+	}, nil /*preferences*/)
+}
