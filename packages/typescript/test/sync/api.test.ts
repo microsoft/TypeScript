@@ -2133,6 +2133,55 @@ describe("BuildOrchestrator", () => {
         }]);
     });
 
+    test("runs content mappers when the API allows external code", {
+        skip: process.env.TS_API_TEST_WASM ? "WASM cannot spawn external content mapper processes" : false,
+    }, t => {
+        const directory = mkdtempSync(join(tmpdir(), "ts-build-content-mapper-"));
+        t.after(() => rmSync(directory, { recursive: true, force: true }));
+        const mapperDirectory = join(directory, "node_modules", "mapper");
+        mkdirSync(mapperDirectory, { recursive: true });
+        const mapperScript = `
+            import { createMessageConnection } from ${JSON.stringify(new URL("../../vendor/vscode-jsonrpc/lib/node/main.js", import.meta.url).href)};
+            const connection = createMessageConnection(process.stdin, process.stdout);
+            connection.onRequest("initialize", () => ({ positionEncoding: "utf-8", diagnosticSource: "mapper" }));
+            connection.onRequest("openProject", () => ({}));
+            connection.onRequest("closeProject", () => null);
+            connection.onRequest("transform", ({ content }) => ({
+                text: "export {};",
+                extension: ".ts",
+                supplemental: [{ text: content, extension: ".ts" }],
+            }));
+            connection.listen();
+        `;
+        writeFileSync(
+            join(mapperDirectory, "package.json"),
+            JSON.stringify({
+                name: "mapper",
+                version: "1.0.0",
+                typescript: { contentMapper: { exec: [process.execPath, "--input-type=module", "--eval", mapperScript] } },
+            }),
+        );
+        writeFileSync(
+            join(directory, "tsconfig.json"),
+            JSON.stringify({
+                compilerOptions: { noEmit: true, incremental: true },
+                files: ["app.box", "main.ts"],
+                contentMappers: [{ package: "mapper", extensions: [".box"] }],
+            }),
+        );
+        writeFileSync(join(directory, "app.box"), "declare const supplementalValue: number;");
+        writeFileSync(join(directory, "main.ts"), "const value: string = supplementalValue;");
+        using api = new API({ cwd: directory, runExternalCode: true });
+        const expected = [[2322, "Type 'number' is not assignable to type 'string'."]];
+        for (let i = 0; i < 2; i++) {
+            // @ts-ignore -- Internal API exercised by source tests.
+            using orchestrator = api.createBuildOrchestrator(["tsconfig.json"], {});
+            const response = orchestrator.build();
+            assert.deepEqual(response.diagnostics?.map((diagnostic: { code: number; text: string; }) => [diagnostic.code, diagnostic.text]), expected);
+            assert.ok(existsSync(join(directory, "tsconfig.tsbuildinfo")));
+        }
+    });
+
     test("returns build response information after clean", () => {
         const { api: disposableApi } = spawnAPIWithFS({ ...files });
         using api = disposableApi;
