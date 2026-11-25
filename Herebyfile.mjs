@@ -1463,7 +1463,9 @@ async function runLint() {
 }
 
 async function runLintTypeScript() {
-    const args = ["packages/typescript/{src,test,scripts}/**/*.ts"];
+    await run("./built/local/tsc", ["-p", "./packages/typescript/eslint/tsconfig.json"]);
+    await run("node", ["--test", "./packages/typescript/eslint/*.test.cjs"]);
+    const args = ["packages/typescript/{src,test,scripts}/**/*.ts", "packages/typescript/eslint/rules/**/*.ts"];
     if (options.fix) {
         args.push("--fix");
     }

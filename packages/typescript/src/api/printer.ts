@@ -1,7 +1,7 @@
 import { EmitFlags } from "../../enums/emitFlags.js";
 import type {
+    CommentKind,
     Node,
-    SyntaxKind,
 } from "../ast/index.ts";
 import {
     encodeNode,
@@ -14,8 +14,6 @@ export interface PrintNodeOptions {
     terminateUnterminatedLiterals?: boolean | undefined;
     emitContext?: EmitContext | undefined;
 }
-
-type CommentKind = SyntaxKind.MultiLineCommentTrivia | SyntaxKind.SingleLineCommentTrivia;
 
 export interface SynthesizedComment {
     kind: CommentKind;

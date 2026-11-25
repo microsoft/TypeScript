@@ -44,20 +44,20 @@ function markExecuted(generator: AnyAPIRequestGenerator): boolean {
     return true;
 }
 const allGeneratorMarker: unique symbol = Symbol();
-interface DeferredAPIRequest {
+export interface DeferredAPIRequest {
     readonly method: "__defer";
     readonly deferred: APIRequestGenerator;
 }
-interface AllAPIRequest {
+export interface AllAPIRequest {
     readonly method: "__all";
     readonly generators: readonly AnyAPIRequestGenerator[];
 }
-type APIRequestGeneratorYield = APIRequest | readonly APIRequest[] | DeferredAPIRequest | AllAPIRequest;
+export type APIRequestGeneratorYield = APIRequest | readonly APIRequest[] | DeferredAPIRequest | AllAPIRequest;
 export type APIRequestGenerator<Return = any> = Generator<APIRequestGeneratorYield, Return, any>;
 export type DeferredAPIRequestGenerator = Generator<DeferredAPIRequest, void, unknown> & { readonly [deferredGeneratorMarker]: true; };
 export type AllAPIRequestGenerator<Return = any> = Generator<AllAPIRequest, Return, Return>;
 export type AnyAPIRequestGenerator<Return = any> = APIRequestGenerator<Return> | DeferredAPIRequestGenerator | AllAPIRequestGenerator<Return>;
-type GeneratorReturn<T> = T extends Generator<any, infer R, any> ? R : never;
+export type GeneratorReturn<T> = T extends Generator<any, infer R, any> ? R : never;
 export type ExecutedGeneratorsResults<T extends readonly AnyAPIRequestGenerator[]> = number extends T["length"] ? GeneratorReturn<Exclude<T[number], DeferredAPIRequestGenerator>>[]
     : T extends readonly [infer Head extends AnyAPIRequestGenerator, ...infer Tail extends readonly AnyAPIRequestGenerator[]] ? Head extends DeferredAPIRequestGenerator ? ExecutedGeneratorsResults<Tail> : [GeneratorReturn<Head>, ...ExecutedGeneratorsResults<Tail>]
     : [];

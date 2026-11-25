@@ -205,10 +205,14 @@ import type {
     UnionType,
 } from "./types.ts";
 
+export type { RootedDirectoryPath, RootedFilePath, RootedPath } from "../../ast/index.ts";
+export { ModuleDetectionKind, NewLineKind, type PluginImport, ScriptTarget } from "../compilerOptions.generated.ts";
 export { flattenDiagnosticMessage, formatDiagnostics, formatDiagnosticsWithColorAndContext } from "../diagnosticFormatter.ts";
 export { sortAndDeduplicateDiagnostics } from "../diagnosticUtils.ts";
+export type { AsyncClientTransportOptions, TransportOptionsBase } from "../options.ts"; // @sync: export type { ClientTransportOptions, TransportOptionsBase } from "../options.ts";
 export { documentURIToFileName, fileNameToDocumentURI } from "../path.ts";
 export type { EmitContext, PrintNodeOptions, SynthesizedComment } from "../printer.ts";
+export type { CompletionEntryLabelDetails, ImportSymbolAction } from "./types.ts";
 export { CheckFlags, CompletionItemKind, DiagnosticCategory, ElementFlags, EmitFlags, EmitOnly, IndexKind, JsxEmit, ModifierFlags, ModuleKind, ModuleResolutionKind, NodeBuilderFlags, ObjectFlags, ScriptKind, SignatureFlags, SignatureKind, SymbolFlags, SymbolFormatFlags, SymbolOwnerKind, TypeFlags, TypeFormatFlags, TypePredicateKind };
 export type {
     APIImportAdderAction as ImportAdderAction,
@@ -364,7 +368,7 @@ export interface TranspileOutput {
 }
 
 // @sync-only-start
-// export { all, defer, type APIRequestGenerator, type AnyAPIRequestGenerator, type AllAPIRequestGenerator, type DeferredAPIRequestGenerator, type ExecutedGeneratorsResults } from "./generatorSupport.ts";
+// export { all, defer, type APIRequestGenerator, type APIRequestGeneratorYield, type AnyAPIRequestGenerator, type AllAPIRequest, type AllAPIRequestGenerator, type DeferredAPIRequest, type DeferredAPIRequestGenerator, type ExecutedGeneratorsResults, type GeneratorReturn } from "./generatorSupport.ts";
 // import {executeRequestGenerators, type ExecutedGeneratorsResults, type AnyAPIRequestGenerator} from "./generatorSupport.ts";
 // @sync-only-end
 
@@ -388,8 +392,8 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
     constructor(options: APIOptions | LSPConnectionOptions = {}) {
         this.client = createClient(options); // @sync: this.client = new Client(options);
         this.sourceFileCache = new SourceFileCache<Symbol>();
-        this.printer = new Printer(this.client);
-        this.debug = new DebugHandlers(this.client, () => this.ensureInitialized()); // @sync: this.debug = new DebugHandlers(this.client, this.ensureInitialized);
+        this.printer = Printer.create(this.client);
+        this.debug = DebugHandlers.create(this.client, () => this.ensureInitialized()); // @sync: this.debug = DebugHandlers.create(this.client, this.ensureInitialized);
     }
 
     /**
@@ -441,7 +445,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
             record,
             reference.file,
             reference.id,
-            () => new Symbol(data, { kind: SymbolOwnerKind.File, owner: fileOwner }),
+            () => Symbol.create(data, { kind: SymbolOwnerKind.File, owner: fileOwner }),
         );
         record.symbolsByDeclarationNodeIndex.set(index, symbol);
         return symbol;
@@ -522,7 +526,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
             rootNames,
         });
 
-        const orchestrator = new BuildOrchestrator(this.client, orchestratorResponse, () => {
+        const orchestrator = BuildOrchestrator.create(this.client, orchestratorResponse, () => {
             this.activeBuildOrchestrators.delete(orchestrator);
         });
         this.activeBuildOrchestrators.add(orchestrator);
@@ -647,7 +651,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
 
     private addSourceFileLease(sourceFile: RemoteSourceFile, lease: number): RetainedSourceFile {
         const cached = this.sourceFileCache.setForLease(sourceFile, lease);
-        const retained = new RetainedSourceFile(cached as unknown as SourceFile, lease, () => {
+        const retained = RetainedSourceFile.create(cached as unknown as SourceFile, lease, () => {
             this.activeSourceFileLeases.delete(lease);
             this.sourceFileCache.releaseLease(lease);
         });
@@ -686,7 +690,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         const requestParams = this.prepareCreateSnapshotParams(params);
         const data = await this.client.apiRequest("createSnapshot", requestParams);
 
-        const snapshot = new Snapshot(
+        const snapshot = Snapshot.create(
             data,
             this.toPath!,
             this,
@@ -717,7 +721,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
             return baseSnapshot;
         }
         this.sourceFileCache.retainForSnapshot(data.snapshot, baseSnapshot.id, data.changes);
-        const snapshot = new Snapshot(
+        const snapshot = Snapshot.create(
             data,
             this.toPath!,
             this,
@@ -807,7 +811,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
         if (baseSnapshot) {
             this.sourceFileCache.retainForSnapshot(data.snapshot, baseSnapshot.id, data.changes);
         }
-        const snapshot = new Snapshot(
+        const snapshot = Snapshot.create(
             data,
             this.toPath!,
             this,
@@ -869,7 +873,7 @@ export class API<FromLSP extends boolean = false> implements FormatDiagnosticsHo
                 moduleResolutions: options?.moduleResolutions,
                 resolveModuleNameCallback: callback?.name,
             });
-            return new ModuleResolver(id, this.client, callback?.dispose);
+            return ModuleResolver.create(id, this.client, callback?.dispose);
         }
         catch (error) {
             callback?.dispose();
@@ -1007,7 +1011,12 @@ export class RetainedSourceFile {
     private disposed = false;
     private disposePromise: Promise<void> | undefined;
 
-    constructor(sourceFile: SourceFile, lease: number, onDispose: () => void) {
+    /** @internal */
+    static create(sourceFile: SourceFile, lease: number, onDispose: () => void): RetainedSourceFile {
+        return new RetainedSourceFile(sourceFile, lease, onDispose);
+    }
+
+    private constructor(sourceFile: SourceFile, lease: number, onDispose: () => void) {
         this.sourceFile = sourceFile;
         this.lease = lease;
         this.onDispose = onDispose;
@@ -1039,7 +1048,12 @@ export class DebugHandlers {
     private client: Client;
     private ensureInitialized: EnsureInitialized;
 
-    constructor(client: Client, ensureInitialized: EnsureInitialized) {
+    /** @internal */
+    static create(client: Client, ensureInitialized: EnsureInitialized): DebugHandlers {
+        return new DebugHandlers(client, ensureInitialized);
+    }
+
+    private constructor(client: Client, ensureInitialized: EnsureInitialized) {
         this.client = client;
         this.ensureInitialized = ensureInitialized;
     }
@@ -1075,7 +1089,7 @@ export interface SnapshotOpenedFileOperation {
 }
 
 /** Replaces every element of a tuple while preserving its length and index structure. */
-type MapTupleTo<Tuple extends readonly unknown[], Result> = {
+export type MapTupleTo<Tuple extends readonly unknown[], Result> = {
     readonly [Index in keyof Tuple]: Result;
 };
 
@@ -1084,7 +1098,7 @@ type MapTupleTo<Tuple extends readonly unknown[], Result> = {
  * `Elements`. The mapped intersection supplies nested completions and excess-property
  * checks without widening an inferred tuple to an array.
  */
-type ContextualizeTuple<
+export type ContextualizeTuple<
     Tuple extends readonly unknown[] | undefined,
     Elements extends readonly unknown[] | undefined,
 > =
@@ -1094,7 +1108,7 @@ type ContextualizeTuple<
     };
 
 /** Substitutes the operation arrays with contextually typed, tuple-preserving versions. */
-type SnapshotOperationParams<
+export type SnapshotOperationParams<
     Params extends { createPrograms?: readonly unknown[] | undefined; openFiles?: readonly unknown[] | undefined; },
     CreatePrograms extends Params["createPrograms"],
     OpenFiles extends Params["openFiles"],
@@ -1107,7 +1121,7 @@ type SnapshotOperationParams<
  * Refines a snapshot's operation results to required tuples when the corresponding
  * operation arrays were supplied, preserving their lengths for indexed access.
  */
-type SnapshotForOperationResults<
+export type SnapshotForOperationResults<
     CreatePrograms extends readonly unknown[] | undefined,
     OpenFiles extends readonly unknown[] | undefined,
 > = Snapshot & {
@@ -1140,7 +1154,12 @@ export class Snapshot {
         return this.api.client;
     }
 
-    constructor(data: CreateSnapshotResponse, toPath: (fileName: string, basePath?: string) => PathKey, api: API<boolean>, onDispose: () => void, updateSnapshot: SnapshotUpdater, baseSnapshot?: Snapshot) {
+    /** @internal */
+    static create(data: CreateSnapshotResponse, toPath: (fileName: string, basePath?: string) => PathKey, api: API<boolean>, onDispose: () => void, updateSnapshot: SnapshotUpdater, baseSnapshot?: Snapshot): Snapshot {
+        return new Snapshot(data, toPath, api, onDispose, updateSnapshot, baseSnapshot);
+    }
+
+    private constructor(data: CreateSnapshotResponse, toPath: (fileName: string, basePath?: string) => PathKey, api: API<boolean>, onDispose: () => void, updateSnapshot: SnapshotUpdater, baseSnapshot?: Snapshot) {
         this.id = data.snapshot;
         this.api = api;
         this.toPath = toPath;
@@ -1158,7 +1177,7 @@ export class Snapshot {
         this.snapshotRegistry = new SnapshotObjectRegistry(this.id);
 
         for (const projData of this.projectDataMap.values()) {
-            const project = new Project(projData, this.id, toPath, api, this.snapshotRegistry);
+            const project = Project.create(projData, this.id, toPath, api, this.snapshotRegistry);
             this.projectMap.set(projData.id, project);
         }
 
@@ -1268,7 +1287,12 @@ export class ModuleResolver {
     private readonly disposeCallback: (() => void) | undefined;
     private disposed = false;
 
-    constructor(id: number, client: Client, disposeCallback: (() => void) | undefined) {
+    /** @internal */
+    static create(id: number, client: Client, disposeCallback: (() => void) | undefined): ModuleResolver {
+        return new ModuleResolver(id, client, disposeCallback);
+    }
+
+    private constructor(id: number, client: Client, disposeCallback: (() => void) | undefined) {
         this.id = id;
         this.client = client;
         this.disposeCallback = disposeCallback;
@@ -1357,7 +1381,7 @@ class SnapshotObjectRegistry {
             }
             const registry = this.projectRegistries.get(reference.project);
             if (!registry) throw new Error(`Symbol ${reference.id} references unknown project '${reference.project}'`);
-            symbol = new Symbol(data, { kind: SymbolOwnerKind.Snapshot, registry });
+            symbol = Symbol.create(data, { kind: SymbolOwnerKind.Snapshot, registry });
             this.symbols.set(reference.id, symbol);
         }
         return symbol;
@@ -1370,7 +1394,7 @@ class SnapshotObjectRegistry {
     getOrCreateNodeHandle<T extends Node>(handle: string, project: Project): NodeHandle<T> {
         let node = this.nodeHandles.get(handle);
         if (!node) {
-            node = new NodeHandle<T>(handle, project);
+            node = NodeHandle.create<T>(handle, project);
             if (!this.disposed) this.nodeHandles.set(handle, node);
         }
         return node as NodeHandle<T>;
@@ -1415,7 +1439,7 @@ class ProjectObjectRegistry {
         }
         const record = this.sourceFileCache.getOrCreateRecord(reference.file, this.snapshotId, this.project.id);
         return this.sourceFileCache.getOrCreateSymbol(record, reference.file, reference.id, () =>
-            new Symbol(data, {
+            Symbol.create(data, {
                 kind: SymbolOwnerKind.File,
                 owner: { record, api: this.project.api },
             }));
@@ -1455,7 +1479,7 @@ class ProjectObjectRegistry {
     getOrCreateSignature(data: SignatureResponse): Signature {
         let sig = this.signatures.get(data.id);
         if (!sig) {
-            sig = new Signature(data, this.project, this);
+            sig = Signature.create(data, this.project, this);
             this.signatures.set(data.id, sig);
         }
         return sig;
@@ -1669,7 +1693,12 @@ export class Project<Id extends ProjectId = ProjectId> {
     readonly checker: Checker;
     readonly languageService: LanguageService;
 
-    constructor(data: ProjectResponse, snapshotId: number, toPath: (fileName: string, basePath?: string) => PathKey, api: API<boolean>, snapshotRegistry: SnapshotObjectRegistry) {
+    /** @internal */
+    static create<Id extends ProjectId>(data: ProjectResponse, snapshotId: number, toPath: (fileName: string, basePath?: string) => PathKey, api: API<boolean>, snapshotRegistry: SnapshotObjectRegistry): Project<Id> {
+        return new Project<Id>(data, snapshotId, toPath, api, snapshotRegistry);
+    }
+
+    private constructor(data: ProjectResponse, snapshotId: number, toPath: (fileName: string, basePath?: string) => PathKey, api: API<boolean>, snapshotRegistry: SnapshotObjectRegistry) {
         this.id = data.id as Id;
         this.handle = data.handle;
         this.api = api;
@@ -1680,10 +1709,10 @@ export class Project<Id extends ProjectId = ProjectId> {
             throw new Error(`Project '${data.configFileName}' has no parsed command line`);
         }
         this.parsedCommandLine = data.parsedCommandLine;
-        this.program = new Program(snapshotId, this, toPath);
+        this.program = Program.create(snapshotId, this, toPath);
         const objectRegistry = new ProjectObjectRegistry(snapshotId, this, snapshotRegistry);
-        this.checker = new Checker(snapshotId, this, objectRegistry);
-        this.languageService = new LanguageService(snapshotId, this, objectRegistry);
+        this.checker = Checker.create(snapshotId, this, objectRegistry);
+        this.languageService = LanguageService.create(snapshotId, this, objectRegistry);
     }
 
     dispose(): void {
@@ -1700,7 +1729,12 @@ export class LanguageService {
         return this.project.api.client;
     }
 
-    constructor(snapshotId: number, project: Project, objectRegistry: ProjectObjectRegistry) {
+    /** @internal */
+    static create(snapshotId: number, project: Project, objectRegistry: ProjectObjectRegistry): LanguageService {
+        return new LanguageService(snapshotId, project, objectRegistry);
+    }
+
+    private constructor(snapshotId: number, project: Project, objectRegistry: ProjectObjectRegistry) {
         this.snapshotId = snapshotId;
         this.project = project;
         this.objectRegistry = objectRegistry;
@@ -1837,7 +1871,12 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
         return this.project.api.sourceFileCache;
     }
 
-    constructor(snapshotId: number, project: Project<Id>, toPath: (fileName: string, basePath?: string) => PathKey) {
+    /** @internal */
+    static create<Id extends ProjectId>(snapshotId: number, project: Project<Id>, toPath: (fileName: string, basePath?: string) => PathKey): Program<Id> {
+        return new Program<Id>(snapshotId, project, toPath);
+    }
+
+    private constructor(snapshotId: number, project: Project<Id>, toPath: (fileName: string, basePath?: string) => PathKey) {
         this.snapshotId = snapshotId;
         this.id = project.id;
         this.project = project;
@@ -2308,7 +2347,12 @@ export class BuildOrchestrator {
     private disposePromise: Promise<void> | undefined;
     private onDispose: () => void;
 
-    constructor(
+    /** @internal */
+    static create(client: Client, orchestratorResponse: CreateBuildOrchestratorResponse, onDispose: () => void): BuildOrchestrator {
+        return new BuildOrchestrator(client, orchestratorResponse, onDispose);
+    }
+
+    private constructor(
         client: Client,
         orchestratorResponse: CreateBuildOrchestratorResponse,
         onDispose: () => void,
@@ -2476,7 +2520,12 @@ export class Checker {
         return this.project.api.client;
     }
 
-    constructor(snapshotId: number, project: Project, objectRegistry: ProjectObjectRegistry) {
+    /** @internal */
+    static create(snapshotId: number, project: Project, objectRegistry: ProjectObjectRegistry): Checker {
+        return new Checker(snapshotId, project, objectRegistry);
+    }
+
+    private constructor(snapshotId: number, project: Project, objectRegistry: ProjectObjectRegistry) {
         this.snapshotId = snapshotId;
         this.project = project;
         this.objectRegistry = objectRegistry;
@@ -3556,7 +3605,12 @@ export class Checker {
 export class Printer {
     private client: Client;
 
-    constructor(client: Client) {
+    /** @internal */
+    static create(client: Client): Printer {
+        return new Printer(client);
+    }
+
+    private constructor(client: Client) {
         this.client = client;
     }
 
@@ -3594,7 +3648,12 @@ export class NodeHandle<out T extends Node = Node> {
     /** Retrieval metadata; never used to substitute a different source-file AST. */
     readonly path: PathKey;
 
-    constructor(handle: string, canonicalProject: Project | undefined, fileOwner?: SourceFileOwner) {
+    /** @internal */
+    static create<T extends Node = Node>(handle: string, canonicalProject: Project | undefined, fileOwner?: SourceFileOwner): NodeHandle<T> {
+        return new NodeHandle<T>(handle, canonicalProject, fileOwner);
+    }
+
+    private constructor(handle: string, canonicalProject: Project | undefined, fileOwner?: SourceFileOwner) {
         const parsed = parseNodeHandleFromCompiler(handle);
         this.index = parsed.index;
         this.kind = parsed.kind;
@@ -3697,7 +3756,12 @@ export class Symbol {
     private membersCache: Promise<ReadonlyMap<__String, Symbol>> | undefined;
     private exportsCache: Promise<ReadonlyMap<__String, Symbol>> | undefined;
 
-    constructor(data: SymbolResponse, storage: SymbolStorage) {
+    /** @internal */
+    static create(data: SymbolResponse, storage: SymbolStorage): Symbol {
+        return new Symbol(data, storage);
+    }
+
+    private constructor(data: SymbolResponse, storage: SymbolStorage) {
         if (data.reference.kind !== storage.kind) throw new Error(`Symbol ${data.reference.id} has mismatched ownership and storage`);
         this.storage = storage;
         this.reference = data.reference;
@@ -3730,7 +3794,7 @@ export class Symbol {
         // A file-owned symbol has no canonical project; its declarations resolve through its file.
         return this.storage.kind === SymbolOwnerKind.Snapshot
             ? this.storage.registry.createNodeHandle<Declaration>(handle)
-            : new NodeHandle<Declaration>(handle, /*canonicalProject*/ undefined, this.storage.owner);
+            : NodeHandle.create<Declaration>(handle, /*canonicalProject*/ undefined, this.storage.owner);
     }
 
     async getParent(): Promise<Symbol | undefined> {
@@ -3802,7 +3866,7 @@ export class Symbol {
         validateSymbolResponse(data);
         const reference = data.reference;
         if (reference.kind !== SymbolOwnerKind.File) throw new Error(`Symbol ${reference.id} is not file-owned`);
-        return fileOwner.api.sourceFileCache.getOrCreateSymbol(fileOwner.record, reference.file, reference.id, () => new Symbol(data, { kind: SymbolOwnerKind.File, owner: fileOwner }));
+        return fileOwner.api.sourceFileCache.getOrCreateSymbol(fileOwner.record, reference.file, reference.id, () => Symbol.create(data, { kind: SymbolOwnerKind.File, owner: fileOwner }));
     }
 }
 
@@ -4354,7 +4418,12 @@ export class Signature {
     private returnType: number | false;
     private typeArguments: readonly number[] | false;
 
-    constructor(data: SignatureResponse, project: Project, objectRegistry: ProjectObjectRegistry) {
+    /** @internal */
+    static create(data: SignatureResponse, project: Project, objectRegistry: ProjectObjectRegistry): Signature {
+        return new Signature(data, project, objectRegistry);
+    }
+
+    private constructor(data: SignatureResponse, project: Project, objectRegistry: ProjectObjectRegistry) {
         this.id = data.id;
         this.flags = data.flags ?? 0;
         this.objectRegistry = objectRegistry;

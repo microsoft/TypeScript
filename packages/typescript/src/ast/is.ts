@@ -206,7 +206,7 @@ export function isAutoAccessorPropertyDeclaration(node: Node): node is AutoAcces
         !!((node as PropertyDeclaration).modifierFlags & ModifierFlags.Accessor);
 }
 
-type JSDocNamespaceDeclaration = ModuleDeclaration;
+export type JSDocNamespaceDeclaration = ModuleDeclaration;
 
 type WrappedExpression<_T extends Expression> =
     | ParenthesizedExpression

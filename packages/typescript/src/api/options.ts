@@ -49,7 +49,7 @@ export function isSpawnOptions(options: ClientOptions): options is ClientSpawnOp
     return !(options as ClientSocketOptions).pipe;
 }
 
-interface TransportOptionsBase {
+export interface TransportOptionsBase {
     /** Maximum encoded byte size of each batch response page. Defaults to 300 million bytes. Individual responses can be larger than this size, but this controls where batch pages are cutoff. */
     maxResponseBytesPerPage?: number | undefined;
     /** Virtual filesystem callbacks used by transports that support them. */
