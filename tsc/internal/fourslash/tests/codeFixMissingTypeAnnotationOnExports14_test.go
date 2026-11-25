@@ -49,8 +49,8 @@ export const { 0: x, "a\\u0062": y } = foo();`
     return { 0: 1, "a\\u0062": 1 };
 }
 const dest = foo();
-export const x: number = dest.0;
-export const y: number = dest.a\u0062;`,
+export const x: number = dest[0];
+export const y: number = dest["a\\u0062"];`,
 		Index: 0,
 	})
 }

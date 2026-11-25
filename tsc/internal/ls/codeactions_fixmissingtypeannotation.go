@@ -759,9 +759,13 @@ func (f *isolatedDeclarationsFixer) extractBindingElements(
 				*newNodes = append(*newNodes, compVarStmt)
 				accessExpr = factory.NewElementAccessExpression(baseExpr, nil, identifierForComputedProperty.AsNode(), ast.NodeFlagsNone)
 			} else if be.PropertyName != nil {
-				// Use property name text (handles identifiers, string literals, numeric literals)
 				propText := be.PropertyName.Text()
-				accessExpr = factory.NewPropertyAccessExpression(baseExpr, nil, factory.NewIdentifier(propText), ast.NodeFlagsNone)
+				if ast.IsIdentifier(be.PropertyName) || scanner.IsIdentifierText(propText, core.LanguageVariantStandard) {
+					accessExpr = factory.NewPropertyAccessExpression(baseExpr, nil, factory.NewIdentifier(propText), ast.NodeFlagsNone)
+				} else {
+					// String and numeric literal names that aren't identifiers need an element access.
+					accessExpr = factory.NewElementAccessExpression(baseExpr, nil, factory.DeepCloneNode(be.PropertyName), ast.NodeFlagsNone)
+				}
 			} else if ast.IsIdentifier(name) {
 				accessExpr = factory.NewPropertyAccessExpression(baseExpr, nil, factory.NewIdentifier(name.Text()), ast.NodeFlagsNone)
 			} else {
