@@ -705,10 +705,12 @@ sourceFile:esDecorators-classDeclaration-sourceMap.ts
 2 >        ^
 3 >         ^^^^
 4 >             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-5 >                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-6 >                                                                                                           ^
-7 >                                                                                                            ^^^
-8 >                                                                                                               ^^^^^^^^^^^^^^^->
+5 >                                                                ^^
+6 >                                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+7 >                                                                                                           ^
+8 >                                                                                                            ^
+9 >                                                                                                             ^^
+10>                                                                                                               ^^^^^^^^^^^^^^^->
 1->
   >
   >    @dec
@@ -733,33 +735,43 @@ sourceFile:esDecorators-classDeclaration-sourceMap.ts
   >                                                                    @dec
   >                                                                    @dec
   >                                                                    y = 
-6 >                                                                                                           1
-7 >                                                                                                            ;
+6 >                                                                  
+7 >                                                                                                           1
+8 >                                                                                                            
+9 >                                                                                                             ;
 1->Emitted(118, 9) Source(20, 5) + SourceIndex(0)
 2 >Emitted(118, 10) Source(20, 6) + SourceIndex(0)
 3 >Emitted(118, 14) Source(5, 7) + SourceIndex(0)
 4 >Emitted(118, 65) Source(5, 8) + SourceIndex(0)
-5 >Emitted(118, 108) Source(20, 9) + SourceIndex(0)
-6 >Emitted(118, 109) Source(20, 10) + SourceIndex(0)
-7 >Emitted(118, 112) Source(20, 11) + SourceIndex(0)
+5 >Emitted(118, 67) Source(20, 9) + SourceIndex(0)
+6 >Emitted(118, 108) Source(20, 9) + SourceIndex(0)
+7 >Emitted(118, 109) Source(20, 10) + SourceIndex(0)
+8 >Emitted(118, 110) Source(20, 10) + SourceIndex(0)
+9 >Emitted(118, 112) Source(20, 11) + SourceIndex(0)
 ---
 >>>        #z_1_accessor_storage = (__runInitializers(this, _y_extraInitializers), __runInitializers(this, _z_initializers, 1));
 1->^^^^^^^^
-2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-3 >                                                                                                                         ^
-4 >                                                                                                                          ^^^
+2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+4 >                                                                                                                         ^
+5 >                                                                                                                          ^
+6 >                                                                                                                           ^^
 1->
   >
   >    @dec
   >    @dec
   >    
 2 >        accessor z = 
-3 >                                                                                                                         1
-4 >                                                                                                                          ;
+3 >                                                                                
+4 >                                                                                                                         1
+5 >                                                                                                                          
+6 >                                                                                                                           ;
 1->Emitted(119, 9) Source(24, 5) + SourceIndex(0)
-2 >Emitted(119, 122) Source(24, 18) + SourceIndex(0)
-3 >Emitted(119, 123) Source(24, 19) + SourceIndex(0)
-4 >Emitted(119, 126) Source(24, 20) + SourceIndex(0)
+2 >Emitted(119, 81) Source(24, 18) + SourceIndex(0)
+3 >Emitted(119, 122) Source(24, 18) + SourceIndex(0)
+4 >Emitted(119, 123) Source(24, 19) + SourceIndex(0)
+5 >Emitted(119, 124) Source(24, 19) + SourceIndex(0)
+6 >Emitted(119, 126) Source(24, 20) + SourceIndex(0)
 ---
 >>>        get z() { return this.#z_1_accessor_storage; }
 1 >^^^^^^^^
@@ -795,10 +807,12 @@ sourceFile:esDecorators-classDeclaration-sourceMap.ts
 1 >^^^^^^^^^^^^
 2 >            ^^^^^^^^^^^^^^^^^
 3 >                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-4 >                                                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-5 >                                                                                                                                                    ^
-6 >                                                                                                                                                     ^^^^
-7 >                                                                                                                                                         ^
+4 >                                                                                    ^^
+5 >                                                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+6 >                                                                                                                                                    ^
+7 >                                                                                                                                                     ^
+8 >                                                                                                                                                      ^^^
+9 >                                                                                                                                                         ^
 1 >
   >
   >    @dec
@@ -854,39 +868,49 @@ sourceFile:esDecorators-classDeclaration-sourceMap.ts
   >                                                                                        @dec
   >                                                                                        @dec
   >                                                                                        static #y = 
-5 >                                                                                                                                                    1
-6 >                                                                                                                                                     
-7 >                                                                                                                                                          = 1;
+5 >                                                                                      
+6 >                                                                                                                                                    1
+7 >                                                                                                                                                     
+8 >                                                                                                                                                      
+9 >                                                                                                                                                          = 1;
 1 >Emitted(123, 13) Source(40, 12) + SourceIndex(0)
 2 >Emitted(123, 30) Source(5, 7) + SourceIndex(0)
 3 >Emitted(123, 85) Source(5, 8) + SourceIndex(0)
-4 >Emitted(123, 149) Source(40, 17) + SourceIndex(0)
-5 >Emitted(123, 150) Source(40, 18) + SourceIndex(0)
-6 >Emitted(123, 154) Source(40, 14) + SourceIndex(0)
-7 >Emitted(123, 155) Source(40, 19) + SourceIndex(0)
+4 >Emitted(123, 87) Source(40, 17) + SourceIndex(0)
+5 >Emitted(123, 149) Source(40, 17) + SourceIndex(0)
+6 >Emitted(123, 150) Source(40, 18) + SourceIndex(0)
+7 >Emitted(123, 151) Source(40, 18) + SourceIndex(0)
+8 >Emitted(123, 154) Source(40, 14) + SourceIndex(0)
+9 >Emitted(123, 155) Source(40, 19) + SourceIndex(0)
 ---
 >>>        }
 >>>        static {
 >>>            _C_z_accessor_storage = { value: (__runInitializers(_classThis, _static_private_y_extraInitializers), __runInitializers(_classThis, _static_private_z_initializers, 1)) };
 1 >^^^^^^^^^^^^
-2 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-3 >                                                                                                                                                                                ^
-4 >                                                                                                                                                                                 ^^^^
-5 >                                                                                                                                                                                     ^
+2 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                                                                                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+4 >                                                                                                                                                                                ^
+5 >                                                                                                                                                                                 ^
+6 >                                                                                                                                                                                  ^^^
+7 >                                                                                                                                                                                     ^
 1 >
   >
   >    @dec
   >    @dec
   >    static accessor 
 2 >            #z = 
-3 >                                                                                                                                                                                1
-4 >                                                                                                                                                                                 
-5 >                                                                                                                                                                                      = 1;
+3 >                                                                                                                  
+4 >                                                                                                                                                                                1
+5 >                                                                                                                                                                                 
+6 >                                                                                                                                                                                  
+7 >                                                                                                                                                                                      = 1;
 1 >Emitted(126, 13) Source(44, 21) + SourceIndex(0)
-2 >Emitted(126, 177) Source(44, 26) + SourceIndex(0)
-3 >Emitted(126, 178) Source(44, 27) + SourceIndex(0)
-4 >Emitted(126, 182) Source(44, 23) + SourceIndex(0)
-5 >Emitted(126, 183) Source(44, 28) + SourceIndex(0)
+2 >Emitted(126, 115) Source(44, 26) + SourceIndex(0)
+3 >Emitted(126, 177) Source(44, 26) + SourceIndex(0)
+4 >Emitted(126, 178) Source(44, 27) + SourceIndex(0)
+5 >Emitted(126, 179) Source(44, 27) + SourceIndex(0)
+6 >Emitted(126, 182) Source(44, 23) + SourceIndex(0)
+7 >Emitted(126, 183) Source(44, 28) + SourceIndex(0)
 ---
 >>>        }
 >>>        constructor() {
