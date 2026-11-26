@@ -1,0 +1,44 @@
+promiseTry.ts(15,9): error TS2554: Expected 2 arguments, but got 1.
+promiseTry.ts(19,35): error TS2554: Expected 1 arguments, but got 2.
+promiseTry.ts(23,70): error TS2554: Expected 3 arguments, but got 4.
+promiseTry.ts(24,9): error TS2554: Expected 3 arguments, but got 2.
+
+
+==== promiseTry.ts (4 errors) ====
+    Promise.try(() => {
+        return "Sync result";
+    });
+    
+    Promise.try(async () => {
+        return "Async result";
+    });
+    
+    const a = Promise.try(() => "Sync result");
+    const b = Promise.try(async () => "Async result");
+    
+    // SINGLE PARAMETER
+    Promise.try((foo: string) => "Async result", "foo");
+    Promise.try((foo) => "Async result", "foo");
+    Promise.try((foo) => "Async result");
+            ~~~
+!!! error TS2554: Expected 2 arguments, but got 1.
+!!! related TS6236 lib.es2025.promise.d.ts:--:--: Arguments for the rest parameter 'args' were not provided.
+    Promise.try((foo: string | undefined) => "Async result", undefined);
+    Promise.try((foo: string | undefined) => "Async result", "foo");
+    Promise.try((foo) => "Async result", undefined);
+    Promise.try(() => "Async result", "foo");
+                                      ~~~~~
+!!! error TS2554: Expected 1 arguments, but got 2.
+    
+    // MULTIPLE PARAMETERS
+    Promise.try((foo: string, bar: number) => "Async result", "foo", 42);
+    Promise.try((foo: string, bar: number) => "Async result", "foo", 42, "baz");
+                                                                         ~~~~~
+!!! error TS2554: Expected 3 arguments, but got 4.
+    Promise.try((foo: string, bar: number) => "Async result", "foo");
+            ~~~
+!!! error TS2554: Expected 3 arguments, but got 2.
+    Promise.try((foo: string, bar?: number) => "Async result", "foo");
+    Promise.try((foo: string, bar?: number) => "Async result", "foo", undefined);
+    Promise.try((foo: string, bar?: number) => "Async result", "foo", 42);
+    
