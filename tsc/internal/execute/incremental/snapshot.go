@@ -400,6 +400,12 @@ func (s *snapshot) computeSignatureWithDiagnostics(file *ast.SourceFile, text st
 	var builder strings.Builder
 	builder.WriteString(getTextHandlingSourceMapForSignature(text, data))
 	for _, diag := range data.Diagnostics {
+		// A failed output write is not a diagnostic of the declaration's contents.
+		// Including it would change the signature once a later attempt writes
+		// successfully, marking unchanged declarations as changed.
+		if diag.Code() == diagnostics.Could_not_write_file_0_Colon_1.Code() {
+			continue
+		}
 		diagnosticToStringBuilder(diag, file, &builder)
 	}
 	return s.computeHash(builder.String())
@@ -410,15 +416,16 @@ func diagnosticToStringBuilder(diagnostic *ast.Diagnostic, file *ast.SourceFile,
 		return
 	}
 	builder.WriteString("\n")
-	if diagnostic.File() != file {
-		diagnosticFileName := diagnostic.File().FileName()
+	diagnosticFile := diagnostic.File()
+	if diagnosticFile != file && diagnosticFile != nil {
+		diagnosticFileName := diagnosticFile.FileName()
 		if relativePath, ok := tspath.CaseInsensitive.RelativePathFromFile(file.FileName(), diagnosticFileName); ok {
 			builder.WriteString(relativePath.AsModuleSpecifier().AsString())
 		} else {
 			builder.WriteString(diagnosticFileName.AsString())
 		}
 	}
-	if diagnostic.File() != nil {
+	if diagnosticFile != nil {
 		builder.WriteString(fmt.Sprintf("(%d,%d): ", diagnostic.Pos(), diagnostic.Len()))
 	}
 	builder.WriteString(diagnostic.Category().Name())
