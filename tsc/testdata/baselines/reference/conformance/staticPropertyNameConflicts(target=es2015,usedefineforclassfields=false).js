@@ -351,6 +351,10 @@ export class ExportedStaticArgumentsFn {
 }
 
 //// [staticPropertyNameConflicts.js]
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
 var _a, _b, _c, _d, _e;
 const FunctionPropertyNames = {
     name: 'name',
@@ -437,6 +441,7 @@ var StaticName_Anonymous2 = (_a = class {
     },
     FunctionPropertyNames.name,
     FunctionPropertyNames.name,
+    __setFunctionName(_a, "StaticName_Anonymous2"),
     _a);
 var StaticNameFn_Anonymous = class {
     static name() { } // error without useDefineForClassFields
@@ -453,6 +458,7 @@ var StaticLength_Anonymous2 = (_b = class {
     },
     FunctionPropertyNames.length,
     FunctionPropertyNames.length,
+    __setFunctionName(_b, "StaticLength_Anonymous2"),
     _b);
 var StaticLengthFn_Anonymous = class {
     static length() { } // error without useDefineForClassFields
@@ -469,6 +475,7 @@ var StaticPrototype_Anonymous2 = (_c = class {
     },
     FunctionPropertyNames.prototype,
     FunctionPropertyNames.prototype,
+    __setFunctionName(_c, "StaticPrototype_Anonymous2"),
     _c);
 var StaticPrototypeFn_Anonymous = class {
     static prototype() { } // always an error
@@ -485,6 +492,7 @@ var StaticCaller_Anonymous2 = (_d = class {
     },
     FunctionPropertyNames.caller,
     FunctionPropertyNames.caller,
+    __setFunctionName(_d, "StaticCaller_Anonymous2"),
     _d);
 var StaticCallerFn_Anonymous = class {
     static caller() { } // error without useDefineForClassFields
@@ -501,6 +509,7 @@ var StaticArguments_Anonymous2 = (_e = class {
     },
     FunctionPropertyNames.arguments,
     FunctionPropertyNames.arguments,
+    __setFunctionName(_e, "StaticArguments_Anonymous2"),
     _e);
 var StaticArgumentsFn_Anonymous = class {
     static arguments() { } // error without useDefineForClassFields

@@ -43,6 +43,10 @@ const P = class { m() {} };
 // An anonymous class gets its name from the position it is defined in (NamedEvaluation). When lowering its
 // members leaves expressions to evaluate outside the class body, the class is emitted through a temp
 // (`(_a = class { ... }, ..., _a)`) and must get its name explicitly instead of the temp's.
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
 var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {
     if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
     if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
@@ -54,13 +58,17 @@ var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (
     if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
     return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
 };
-var _A_p, _a, _B_instances, _B_m, _b, _C_instances, _C_a_get, _c, _d, _D_m, _E_a_accessor_storage, _e, _f, _g, _p, _h, _H_p, _j, _p_1, _k, _I_p, _l, _I_p_1, _m, _I_p_2, _o, _I_p_3, _q, _K_p, _r, _p_2, _s, _L_p, _t, _p_3, _u;
+var __propKey = (this && this.__propKey) || function (x) {
+    return typeof x === "symbol" ? x : "".concat(x);
+};
+var _a, _A_p, _B_instances, _b, _B_m, _C_instances, _c, _C_a_get, _d, _D_m, _e, _E_a_accessor_storage, _f, _g, _h, _G_p, _j, _H_p, _k, _l, _p, _m, _I_p, _o, _I_p_1, _q, _I_p_2, _r, _I_p_3, _s, _K_p, _t, _L_p, _u, _L_p_1, _v, _s_p;
 const A = (_a = class {
         constructor() {
             _A_p.set(this, 1);
         }
     },
     _A_p = new WeakMap(),
+    __setFunctionName(_a, "A"),
     _a);
 const B = (_b = class {
         constructor() {
@@ -69,6 +77,7 @@ const B = (_b = class {
     },
     _B_instances = new WeakSet(),
     _B_m = function _B_m() { },
+    __setFunctionName(_b, "B"),
     _b);
 const C = (_c = class {
         constructor() {
@@ -77,10 +86,12 @@ const C = (_c = class {
     },
     _C_instances = new WeakSet(),
     _C_a_get = function _C_a_get() { return 1; },
+    __setFunctionName(_c, "C"),
     _c);
 const D = (_d = class {
     },
     _D_m = function _D_m() { },
+    __setFunctionName(_d, "D"),
     _d);
 const E = (_e = class {
         constructor() {
@@ -90,10 +101,11 @@ const E = (_e = class {
         set a(value) { __classPrivateFieldSet(this, _E_a_accessor_storage, value, "f"); }
     },
     _E_a_accessor_storage = new WeakMap(),
+    __setFunctionName(_e, "E"),
     _e);
-const F = (_g = class {
+const F = (_f = class {
         constructor() {
-            Object.defineProperty(this, _f, {
+            Object.defineProperty(this, _g, {
                 enumerable: true,
                 configurable: true,
                 writable: true,
@@ -101,14 +113,16 @@ const F = (_g = class {
             });
         }
     },
-    _f = k,
-    _g);
+    _g = k,
+    __setFunctionName(_f, "F"),
+    _f);
 const G = (_h = class {
         constructor() {
-            _p.set(this, 1);
+            _G_p.set(this, 1);
         }
     },
-    _p = new WeakMap(),
+    _G_p = new WeakMap(),
+    __setFunctionName(_h, "G"),
     _h);
 const o = { H: (_j = class {
             constructor() {
@@ -116,84 +130,95 @@ const o = { H: (_j = class {
             }
         },
         _H_p = new WeakMap(),
-        _j), [k]: (_k = class {
+        __setFunctionName(_j, "H"),
+        _j), [_k = __propKey(k)]: (_l = class {
             constructor() {
-                _p_1.set(this, 1);
+                _p.set(this, 1);
             }
         },
-        _p_1 = new WeakMap(),
-        _k) };
+        _p = new WeakMap(),
+        __setFunctionName(_l, _k),
+        _l) };
 let I;
-I ??= (_l = class {
+I ??= (_m = class {
         constructor() {
             _I_p.set(this, 1);
         }
     },
     _I_p = new WeakMap(),
-    _l);
-I ||= (_m = class {
+    __setFunctionName(_m, "I"),
+    _m);
+I ||= (_o = class {
         constructor() {
             _I_p_1.set(this, 1);
         }
     },
     _I_p_1 = new WeakMap(),
-    _m);
-I &&= (_o = class {
+    __setFunctionName(_o, "I"),
+    _o);
+I &&= (_q = class {
         constructor() {
             _I_p_2.set(this, 1);
         }
     },
     _I_p_2 = new WeakMap(),
-    _o);
-I = (_q = class {
+    __setFunctionName(_q, "I"),
+    _q);
+I = (_r = class {
         constructor() {
             _I_p_3.set(this, 1);
         }
     },
     _I_p_3 = new WeakMap(),
-    _q);
-function f(J) { var _p_4, _v; if (J === void 0) { J = (_v = class {
+    __setFunctionName(_r, "I"),
+    _r);
+function f(J) { var _w, _J_p; if (J === void 0) { J = (_w = class {
         constructor() {
-            _p_4.set(this, 1);
+            _J_p.set(this, 1);
         }
     },
-    _p_4 = new WeakMap(),
-    _v); } }
-const { K = (_r = class {
+    _J_p = new WeakMap(),
+    __setFunctionName(_w, "J"),
+    _w); } }
+const { K = (_s = class {
         constructor() {
             _K_p.set(this, 1);
         }
     },
     _K_p = new WeakMap(),
-    _r) } = {};
+    __setFunctionName(_s, "K"),
+    _s) } = {};
 let L;
-({ L = (_s = class {
-            constructor() {
-                _p_2.set(this, 1);
-            }
-        },
-        _p_2 = new WeakMap(),
-        _s) } = {});
-[L = (_t = class {
+({ L = (_t = class {
             constructor() {
                 _L_p.set(this, 1);
             }
         },
         _L_p = new WeakMap(),
-        _t)] = [];
+        __setFunctionName(_t, "L"),
+        _t) } = {});
+[L = (_u = class {
+            constructor() {
+                _L_p_1.set(this, 1);
+            }
+        },
+        _L_p_1 = new WeakMap(),
+        __setFunctionName(_u, "L"),
+        _u)] = [];
 class M {
 }
 Object.defineProperty(M, "s", {
     enumerable: true,
     configurable: true,
     writable: true,
-    value: (_u = class {
+    value: (_v = class {
             constructor() {
-                _p_3.set(this, 1);
+                _s_p.set(this, 1);
             }
         },
-        _p_3 = new WeakMap(),
-        _u)
+        _s_p = new WeakMap(),
+        __setFunctionName(_v, "s"),
+        _v)
 });
 // No member is emitted outside the class body, so the class keeps its name without help.
 const P = class {

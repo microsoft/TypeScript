@@ -1440,6 +1440,9 @@ func (tx *classFieldsTransformer) isAnonymousClassNeedingAssignedNameWorker(node
 		}) {
 			return false
 		}
+		if declaresStaticNameMethodOrAccessor(node) {
+			return false
+		}
 		hasTransformableStatics := (tx.shouldTransformPrivateElementsOrClassStaticBlocks ||
 			tx.nodeHasTransformPrivateStaticElementsFlag(node)) &&
 			core.Some(staticPropertiesOrClassStaticBlocks, func(n *ast.Node) bool {
@@ -1447,7 +1450,56 @@ func (tx *classFieldsTransformer) isAnonymousClassNeedingAssignedNameWorker(node
 					ast.IsPrivateIdentifierClassElementDeclaration(n) ||
 					tx.shouldTransformInitializers && ast.IsInitializedProperty(n)
 			})
-		return hasTransformableStatics
+		return hasTransformableStatics || tx.classMayEvaluateMembersOutsideClassBody(node)
+	}
+	return false
+}
+
+// declaresStaticNameMethodOrAccessor reports whether a class defines its own static `name` with a method or an
+// accessor. The class defines its methods and accessors before it runs its static initializers, so that member
+// replaces the name the class is given; an explicitly assigned name would replace that member instead.
+func declaresStaticNameMethodOrAccessor(node *ast.ClassLikeDeclaration) bool {
+	return core.Some(node.Members(), func(member *ast.Node) bool {
+		if !ast.HasStaticModifier(member) ||
+			!(ast.IsMethodDeclaration(member) || ast.IsAccessor(member) || ast.IsAutoAccessorPropertyDeclaration(member)) {
+			return false
+		}
+		text, ok := ast.TryGetTextOfPropertyName(member.Name())
+		return ok && text == "name"
+	})
+}
+
+// classMayEvaluateMembersOutsideClassBody reports whether lowering the members of a class expression may leave
+// expressions to evaluate next to the class: WeakMap and WeakSet initializers, hoisted private methods and accessors,
+// and relocated computed property names. The class is then emitted as `(_a = class { ... }, ..., _a)`, or as
+// `(_b = () => { ... }, class { ... })` when a relocated name references `this` or `super`, and no longer stands in
+// its NamedEvaluation position.
+//
+// A relocated computed property name can still be folded into the computed name of a later member that stays in
+// the class. The class is then named explicitly although it would have kept its name.
+func (tx *classFieldsTransformer) classMayEvaluateMembersOutsideClassBody(node *ast.ClassLikeDeclaration) bool {
+	for _, member := range node.Members() {
+		switch {
+		case ast.IsPrivateIdentifierClassElementDeclaration(member):
+			// Static private fields are static initializers, which the caller already accounts for.
+			if tx.shouldTransformClassElementToWeakMap(member) && !(ast.IsPropertyDeclaration(member) && ast.HasStaticModifier(member)) {
+				return true
+			}
+		case ast.IsAutoAccessorPropertyDeclaration(member):
+			// The backing field of an instance auto-accessor is a private field.
+			if tx.shouldTransformPrivateElementsOrClassStaticBlocks && !ast.HasStaticModifier(member) {
+				return true
+			}
+		case ast.IsPropertyDeclaration(member) && ast.IsComputedPropertyName(member.Name()):
+			if !tx.shouldTransformInitializers || transformers.IsSimpleInlineableExpression(member.Name().Expression()) {
+				continue
+			}
+			// When class static blocks are not transformed, relocated names are evaluated in one, unless they
+			// reference `this` or `super`.
+			if tx.shouldTransformPrivateElementsOrClassStaticBlocks || member.Name().SubtreeFacts()&ast.SubtreeContainsLexicalThisOrSuper != 0 {
+				return true
+			}
+		}
 	}
 	return false
 }

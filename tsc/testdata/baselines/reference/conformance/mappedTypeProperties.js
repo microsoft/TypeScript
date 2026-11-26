@@ -45,6 +45,10 @@ const E = class {
 
 
 //// [mappedTypeProperties.js]
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
 var _a, _b;
 class C {
 }
@@ -52,10 +56,12 @@ P in PlaceType;
 const D = (_a = class {
     },
     P in PlaceType,
+    __setFunctionName(_a, "D"),
     _a);
 const E = (_b = class {
     },
     P in 'a' | 'b',
+    __setFunctionName(_b, "E"),
     _b);
 export {};
 
