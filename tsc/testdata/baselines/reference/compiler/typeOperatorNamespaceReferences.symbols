@@ -1,0 +1,76 @@
+//// [tests/cases/compiler/typeOperatorNamespaceReferences.ts] ////
+
+=== typeOperatorNamespaceReferences.ts ===
+declare namespace keyof {
+>keyof : Symbol(keyof, Decl(typeOperatorNamespaceReferences.ts, 0, 0))
+
+    export interface Option {
+>Option : Symbol(Option, Decl(typeOperatorNamespaceReferences.ts, 0, 25))
+
+        name: string;
+>name : Symbol(Option.name, Decl(typeOperatorNamespaceReferences.ts, 1, 29))
+    }
+}
+
+declare namespace unique {
+>unique : Symbol(unique, Decl(typeOperatorNamespaceReferences.ts, 4, 1))
+
+    export type Option<T> = { value: T };
+>Option : Symbol(Option, Decl(typeOperatorNamespaceReferences.ts, 6, 26))
+>T : Symbol(T, Decl(typeOperatorNamespaceReferences.ts, 7, 23))
+>value : Symbol(value, Decl(typeOperatorNamespaceReferences.ts, 7, 29))
+>T : Symbol(T, Decl(typeOperatorNamespaceReferences.ts, 7, 23))
+}
+
+declare namespace readonly {
+>readonly : Symbol(readonly, Decl(typeOperatorNamespaceReferences.ts, 8, 1))
+
+    export type Option = "readonly";
+>Option : Symbol(Option, Decl(typeOperatorNamespaceReferences.ts, 10, 28))
+}
+
+declare namespace infer {
+>infer : Symbol(infer, Decl(typeOperatorNamespaceReferences.ts, 12, 1))
+
+    export type Option = [number];
+>Option : Symbol(Option, Decl(typeOperatorNamespaceReferences.ts, 14, 25))
+}
+
+type KeyofOption = keyof.Option;
+>KeyofOption : Symbol(KeyofOption, Decl(typeOperatorNamespaceReferences.ts, 16, 1))
+>keyof : Symbol(keyof, Decl(typeOperatorNamespaceReferences.ts, 0, 0))
+>Option : Symbol(keyof.Option, Decl(typeOperatorNamespaceReferences.ts, 0, 25))
+
+type UniqueOption = unique.Option<number>;
+>UniqueOption : Symbol(UniqueOption, Decl(typeOperatorNamespaceReferences.ts, 18, 32))
+>unique : Symbol(unique, Decl(typeOperatorNamespaceReferences.ts, 4, 1))
+>Option : Symbol(unique.Option, Decl(typeOperatorNamespaceReferences.ts, 6, 26))
+
+type ReadonlyOption = readonly.Option;
+>ReadonlyOption : Symbol(ReadonlyOption, Decl(typeOperatorNamespaceReferences.ts, 19, 42))
+>readonly : Symbol(readonly, Decl(typeOperatorNamespaceReferences.ts, 8, 1))
+>Option : Symbol(readonly.Option, Decl(typeOperatorNamespaceReferences.ts, 10, 28))
+
+type OptionKeys = keyof keyof.Option;
+>OptionKeys : Symbol(OptionKeys, Decl(typeOperatorNamespaceReferences.ts, 20, 38))
+>keyof : Symbol(keyof, Decl(typeOperatorNamespaceReferences.ts, 0, 0))
+>Option : Symbol(keyof.Option, Decl(typeOperatorNamespaceReferences.ts, 0, 25))
+
+type OptionElement = infer.Option extends [infer T] ? T : never;
+>OptionElement : Symbol(OptionElement, Decl(typeOperatorNamespaceReferences.ts, 21, 37))
+>infer : Symbol(infer, Decl(typeOperatorNamespaceReferences.ts, 12, 1))
+>Option : Symbol(infer.Option, Decl(typeOperatorNamespaceReferences.ts, 14, 25))
+>T : Symbol(T, Decl(typeOperatorNamespaceReferences.ts, 22, 48))
+>T : Symbol(T, Decl(typeOperatorNamespaceReferences.ts, 22, 48))
+
+type TupleKeys = keyof [number];
+>TupleKeys : Symbol(TupleKeys, Decl(typeOperatorNamespaceReferences.ts, 22, 64))
+
+type ReadonlyOptions = readonly readonly.Option[];
+>ReadonlyOptions : Symbol(ReadonlyOptions, Decl(typeOperatorNamespaceReferences.ts, 24, 32))
+>readonly : Symbol(readonly, Decl(typeOperatorNamespaceReferences.ts, 8, 1))
+>Option : Symbol(readonly.Option, Decl(typeOperatorNamespaceReferences.ts, 10, 28))
+
+declare const tag: unique symbol;
+>tag : Symbol(tag, Decl(typeOperatorNamespaceReferences.ts, 26, 13))
+
