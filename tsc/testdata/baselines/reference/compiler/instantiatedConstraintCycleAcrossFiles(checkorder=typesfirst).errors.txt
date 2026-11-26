@@ -1,0 +1,23 @@
+main.ts(5,33): error TS7006: Parameter 'el' implicitly has an 'any' type.
+
+
+==== lib.d.ts (0 errors) ====
+    type NoStrayRuleKeys<R> = { [K in keyof R]: unknown };
+    type StrictRules<R, T> = ([keyof R] extends [never] ? Required<T> : NoStrayRuleKeys<R>) & {
+      [K in R extends unknown ? Exclude<keyof R, keyof T> : never]?: never;
+    };
+    export declare class Deriver<T> {
+      derive<R extends T & StrictRules<R, T>>(build: () => R): void;
+      plain<R extends T>(build: () => R): void;
+    }
+==== main.ts (1 errors) ====
+    import type { Deriver } from "./lib.js";
+    declare const key: string;
+    declare const indexed: Deriver<{ [x: string]: (el: number) => unknown }>;
+    declare const literal: Deriver<{ rows?: (el: number) => unknown }>;
+    indexed.derive(() => ({ [key]: (el) => el }));
+                                    ~~
+!!! error TS7006: Parameter 'el' implicitly has an 'any' type.
+    literal.derive(() => ({ rows: (el) => el }));
+    indexed.plain(() => ({ [key]: (el) => el }));
+    

@@ -1,4 +1,4 @@
-keyofIndexSignatureCycleCheckOrder.ts(6,6): error TS2456: Type alias 'S' circularly references itself.
+keyofIndexSignatureCycleCheckOrder.ts(7,7): error TS2322: Type '123' is not assignable to type 'never'.
 
 
 ==== keyofIndexSignatureCycleCheckOrder.ts (1 errors) ====
@@ -8,7 +8,7 @@ keyofIndexSignatureCycleCheckOrder.ts(6,6): error TS2456: Type alias 'S' circula
     
     interface C { [k: string]: S; }
     type S = keyof C;
-         ~
-!!! error TS2456: Type alias 'S' circularly references itself.
     const k: S = 123;
+          ~
+!!! error TS2322: Type '123' is not assignable to type 'never'.
     

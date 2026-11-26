@@ -1,0 +1,150 @@
+//// [tests/cases/compiler/deferredConditionalConstraintInterning.ts] ////
+
+=== deferredConditionalConstraintInterning.ts ===
+// Deferred conditional types created while computing constraints, which may
+// resolve to their true branch, are interned apart from ordinary deferred
+// conditional types. Relating this reduced form of type-fest's SetOptional to
+// an index signature type must not exceed the instantiation depth limit.
+
+type KeysOf<T> = T extends infer U ? keyof U : never;
+>KeysOf : Symbol(KeysOf, Decl(deferredConditionalConstraintInterning.ts, 0, 0))
+>T : Symbol(T, Decl(deferredConditionalConstraintInterning.ts, 5, 12))
+>T : Symbol(T, Decl(deferredConditionalConstraintInterning.ts, 5, 12))
+>U : Symbol(U, Decl(deferredConditionalConstraintInterning.ts, 5, 32))
+>U : Symbol(U, Decl(deferredConditionalConstraintInterning.ts, 5, 32))
+
+type SelectKey<Key> = Key extends unknown
+>SelectKey : Symbol(SelectKey, Decl(deferredConditionalConstraintInterning.ts, 5, 53))
+>Key : Symbol(Key, Decl(deferredConditionalConstraintInterning.ts, 7, 15))
+>Key : Symbol(Key, Decl(deferredConditionalConstraintInterning.ts, 7, 15))
+
+    ? {} extends Record<Key & PropertyKey, never>
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Key : Symbol(Key, Decl(deferredConditionalConstraintInterning.ts, 7, 15))
+>PropertyKey : Symbol(PropertyKey, Decl(lib.es5.d.ts, --, --))
+
+        ? Key
+>Key : Symbol(Key, Decl(deferredConditionalConstraintInterning.ts, 7, 15))
+
+        : Key extends number ? `${Key}` : Key
+>Key : Symbol(Key, Decl(deferredConditionalConstraintInterning.ts, 7, 15))
+>Key : Symbol(Key, Decl(deferredConditionalConstraintInterning.ts, 7, 15))
+>Key : Symbol(Key, Decl(deferredConditionalConstraintInterning.ts, 7, 15))
+
+    : never;
+type SelectedKeys<Type, Keys> = SelectKey<Keys> & keyof Type | Extract<SelectKey<Keys>, string>;
+>SelectedKeys : Symbol(SelectedKeys, Decl(deferredConditionalConstraintInterning.ts, 11, 12))
+>Type : Symbol(Type, Decl(deferredConditionalConstraintInterning.ts, 12, 18))
+>Keys : Symbol(Keys, Decl(deferredConditionalConstraintInterning.ts, 12, 23))
+>SelectKey : Symbol(SelectKey, Decl(deferredConditionalConstraintInterning.ts, 5, 53))
+>Keys : Symbol(Keys, Decl(deferredConditionalConstraintInterning.ts, 12, 23))
+>Type : Symbol(Type, Decl(deferredConditionalConstraintInterning.ts, 12, 18))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>SelectKey : Symbol(SelectKey, Decl(deferredConditionalConstraintInterning.ts, 5, 53))
+>Keys : Symbol(Keys, Decl(deferredConditionalConstraintInterning.ts, 12, 23))
+
+type UnionMember<T> = [T] extends [never]
+>UnionMember : Symbol(UnionMember, Decl(deferredConditionalConstraintInterning.ts, 12, 96))
+>T : Symbol(T, Decl(deferredConditionalConstraintInterning.ts, 14, 17))
+>T : Symbol(T, Decl(deferredConditionalConstraintInterning.ts, 14, 17))
+
+    ? never
+    : (T extends unknown ? [T] : never) extends infer Wrapped
+>T : Symbol(T, Decl(deferredConditionalConstraintInterning.ts, 14, 17))
+>T : Symbol(T, Decl(deferredConditionalConstraintInterning.ts, 14, 17))
+>Wrapped : Symbol(Wrapped, Decl(deferredConditionalConstraintInterning.ts, 16, 53))
+
+        ? Wrapped extends [infer Member] ? Member : never
+>Wrapped : Symbol(Wrapped, Decl(deferredConditionalConstraintInterning.ts, 16, 53))
+>Member : Symbol(Member, Decl(deferredConditionalConstraintInterning.ts, 17, 32))
+>Member : Symbol(Member, Decl(deferredConditionalConstraintInterning.ts, 17, 32))
+
+        : never;
+type RemoveAllTags<T> = T extends object ? RemoveAllTags<UnionMember<{[K in keyof T]: 1}[keyof T] | 1>> : T;
+>RemoveAllTags : Symbol(RemoveAllTags, Decl(deferredConditionalConstraintInterning.ts, 18, 16))
+>T : Symbol(T, Decl(deferredConditionalConstraintInterning.ts, 19, 19))
+>T : Symbol(T, Decl(deferredConditionalConstraintInterning.ts, 19, 19))
+>RemoveAllTags : Symbol(RemoveAllTags, Decl(deferredConditionalConstraintInterning.ts, 18, 16))
+>UnionMember : Symbol(UnionMember, Decl(deferredConditionalConstraintInterning.ts, 12, 96))
+>K : Symbol(K, Decl(deferredConditionalConstraintInterning.ts, 19, 71))
+>T : Symbol(T, Decl(deferredConditionalConstraintInterning.ts, 19, 19))
+>T : Symbol(T, Decl(deferredConditionalConstraintInterning.ts, 19, 19))
+>T : Symbol(T, Decl(deferredConditionalConstraintInterning.ts, 19, 19))
+
+type CollapseLiterals<T> = T extends string ? T extends infer Collapsed & {} ? Collapsed : T : T;
+>CollapseLiterals : Symbol(CollapseLiterals, Decl(deferredConditionalConstraintInterning.ts, 19, 108))
+>T : Symbol(T, Decl(deferredConditionalConstraintInterning.ts, 20, 22))
+>T : Symbol(T, Decl(deferredConditionalConstraintInterning.ts, 20, 22))
+>T : Symbol(T, Decl(deferredConditionalConstraintInterning.ts, 20, 22))
+>Collapsed : Symbol(Collapsed, Decl(deferredConditionalConstraintInterning.ts, 20, 61))
+>Collapsed : Symbol(Collapsed, Decl(deferredConditionalConstraintInterning.ts, 20, 61))
+>T : Symbol(T, Decl(deferredConditionalConstraintInterning.ts, 20, 22))
+>T : Symbol(T, Decl(deferredConditionalConstraintInterning.ts, 20, 22))
+
+type UnwrapProperties<T> = T extends infer Unwrapped & {} ? Unwrapped : T;
+>UnwrapProperties : Symbol(UnwrapProperties, Decl(deferredConditionalConstraintInterning.ts, 20, 97))
+>T : Symbol(T, Decl(deferredConditionalConstraintInterning.ts, 21, 22))
+>T : Symbol(T, Decl(deferredConditionalConstraintInterning.ts, 21, 22))
+>Unwrapped : Symbol(Unwrapped, Decl(deferredConditionalConstraintInterning.ts, 21, 42))
+>Unwrapped : Symbol(Unwrapped, Decl(deferredConditionalConstraintInterning.ts, 21, 42))
+>T : Symbol(T, Decl(deferredConditionalConstraintInterning.ts, 21, 22))
+
+type UnwrapKey<Key> = Key extends unknown
+>UnwrapKey : Symbol(UnwrapKey, Decl(deferredConditionalConstraintInterning.ts, 21, 74))
+>Key : Symbol(Key, Decl(deferredConditionalConstraintInterning.ts, 22, 15))
+>Key : Symbol(Key, Decl(deferredConditionalConstraintInterning.ts, 22, 15))
+
+    ? Key extends string ? UnwrapProperties<CollapseLiterals<RemoveAllTags<Key>>> : Key
+>Key : Symbol(Key, Decl(deferredConditionalConstraintInterning.ts, 22, 15))
+>UnwrapProperties : Symbol(UnwrapProperties, Decl(deferredConditionalConstraintInterning.ts, 20, 97))
+>CollapseLiterals : Symbol(CollapseLiterals, Decl(deferredConditionalConstraintInterning.ts, 19, 108))
+>RemoveAllTags : Symbol(RemoveAllTags, Decl(deferredConditionalConstraintInterning.ts, 18, 16))
+>Key : Symbol(Key, Decl(deferredConditionalConstraintInterning.ts, 22, 15))
+>Key : Symbol(Key, Decl(deferredConditionalConstraintInterning.ts, 22, 15))
+
+    : never;
+
+type Simplify<T> = {[K in keyof T]: T[K]};
+>Simplify : Symbol(Simplify, Decl(deferredConditionalConstraintInterning.ts, 24, 12))
+>T : Symbol(T, Decl(deferredConditionalConstraintInterning.ts, 26, 14))
+>K : Symbol(K, Decl(deferredConditionalConstraintInterning.ts, 26, 21))
+>T : Symbol(T, Decl(deferredConditionalConstraintInterning.ts, 26, 14))
+>T : Symbol(T, Decl(deferredConditionalConstraintInterning.ts, 26, 14))
+>K : Symbol(K, Decl(deferredConditionalConstraintInterning.ts, 26, 21))
+
+type SetOptional<Base, Keys extends keyof Base> = Simplify<{
+>SetOptional : Symbol(SetOptional, Decl(deferredConditionalConstraintInterning.ts, 26, 42))
+>Base : Symbol(Base, Decl(deferredConditionalConstraintInterning.ts, 27, 17))
+>Keys : Symbol(Keys, Decl(deferredConditionalConstraintInterning.ts, 27, 22))
+>Base : Symbol(Base, Decl(deferredConditionalConstraintInterning.ts, 27, 17))
+>Simplify : Symbol(Simplify, Decl(deferredConditionalConstraintInterning.ts, 24, 12))
+
+    [K in keyof Base as K extends SelectedKeys<Base, UnwrapKey<Keys>> ? K : never]?: Base[K];
+>K : Symbol(K, Decl(deferredConditionalConstraintInterning.ts, 28, 5))
+>Base : Symbol(Base, Decl(deferredConditionalConstraintInterning.ts, 27, 17))
+>K : Symbol(K, Decl(deferredConditionalConstraintInterning.ts, 28, 5))
+>SelectedKeys : Symbol(SelectedKeys, Decl(deferredConditionalConstraintInterning.ts, 11, 12))
+>Base : Symbol(Base, Decl(deferredConditionalConstraintInterning.ts, 27, 17))
+>UnwrapKey : Symbol(UnwrapKey, Decl(deferredConditionalConstraintInterning.ts, 21, 74))
+>Keys : Symbol(Keys, Decl(deferredConditionalConstraintInterning.ts, 27, 22))
+>K : Symbol(K, Decl(deferredConditionalConstraintInterning.ts, 28, 5))
+>Base : Symbol(Base, Decl(deferredConditionalConstraintInterning.ts, 27, 17))
+>K : Symbol(K, Decl(deferredConditionalConstraintInterning.ts, 28, 5))
+
+}>;
+
+function f<T extends object>(value: SetOptional<T, KeysOf<T> & keyof T>): Record<string, unknown> {
+>f : Symbol(f, Decl(deferredConditionalConstraintInterning.ts, 29, 3))
+>T : Symbol(T, Decl(deferredConditionalConstraintInterning.ts, 31, 11))
+>value : Symbol(value, Decl(deferredConditionalConstraintInterning.ts, 31, 29))
+>SetOptional : Symbol(SetOptional, Decl(deferredConditionalConstraintInterning.ts, 26, 42))
+>T : Symbol(T, Decl(deferredConditionalConstraintInterning.ts, 31, 11))
+>KeysOf : Symbol(KeysOf, Decl(deferredConditionalConstraintInterning.ts, 0, 0))
+>T : Symbol(T, Decl(deferredConditionalConstraintInterning.ts, 31, 11))
+>T : Symbol(T, Decl(deferredConditionalConstraintInterning.ts, 31, 11))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+    return value;
+>value : Symbol(value, Decl(deferredConditionalConstraintInterning.ts, 31, 29))
+}
+

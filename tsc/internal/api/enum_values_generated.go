@@ -243,9 +243,7 @@ func main() {
 			"ContainsSpread":                    toInt32(checker.ObjectFlagsContainsSpread),
 			"ObjectRestType":                    toInt32(checker.ObjectFlagsObjectRestType),
 			"IsClassInstanceClone":              toInt32(checker.ObjectFlagsIsClassInstanceClone),
-			"IdenticalBaseTypeCalculated":       toInt32(checker.ObjectFlagsIdenticalBaseTypeCalculated),
 			"IdenticalBaseTypeExists":           toInt32(checker.ObjectFlagsIdenticalBaseTypeExists),
-			"FromTypeNode":                      toInt32(checker.ObjectFlagsFromTypeNode),
 			"IsGenericTypeComputed":             toInt32(checker.ObjectFlagsIsGenericTypeComputed),
 			"IsGenericObjectType":               toInt32(checker.ObjectFlagsIsGenericObjectType),
 			"IsGenericIndexType":                toInt32(checker.ObjectFlagsIsGenericIndexType),
@@ -258,6 +256,7 @@ func main() {
 			"IsNeverIntersectionComputed":       toInt32(checker.ObjectFlagsIsNeverIntersectionComputed),
 			"IsNeverIntersection":               toInt32(checker.ObjectFlagsIsNeverIntersection),
 			"IsConstrainedTypeVariable":         toInt32(checker.ObjectFlagsIsConstrainedTypeVariable),
+			"ConditionalForConstraint":          toInt32(checker.ObjectFlagsConditionalForConstraint),
 		},
 		"SignatureFlags": {
 			"None":                                   toInt32(checker.SignatureFlagsNone),

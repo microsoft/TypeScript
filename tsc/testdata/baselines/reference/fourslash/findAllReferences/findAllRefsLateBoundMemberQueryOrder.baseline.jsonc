@@ -1,0 +1,25 @@
+// === findAllReferences ===
+// === /findAllRefsLateBoundMemberQueryOrder.ts ===
+// --- (line: 4) skipped ---
+//     [i1.x]: "b";
+// }
+// declare const i2: I<"b">;
+// export const v1 = i2.[|a|];
+// export const v2 = i1.[|a|];
+// export const o1: I<"b"> = { x: "b", /*FIND ALL REFS*/[|a|]: "b" };
+// 
+// declare const j1: J<"c">;
+// j1.x;
+// --- (line: 14) skipped ---
+
+
+
+// === findAllReferences ===
+// === /findAllRefsLateBoundMemberQueryOrder.ts ===
+// --- (line: 15) skipped ---
+//     [j1.x]: "d";
+// }
+// declare const j2: J<"d">;
+// export const w1 = j2.[|c|];
+// export const w2 = j1.[|c|];
+// export const o2: J<"d"> = { x: "d", /*FIND ALL REFS*/[|c|]: "d" };

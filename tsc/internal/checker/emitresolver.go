@@ -22,8 +22,16 @@ type JSXLinks struct {
 
 // Links for declarations
 
+// DeclarationLinks hold whether a declaration is visible. Declaration emit
+// makes the declarations it depends on visible as it goes, so that is kept
+// apart from what the rules of the declaration say, which is all that is
+// cached: a declaration found invisible before emit made it or its container
+// visible is still found visible afterwards.
 type DeclarationLinks struct {
-	isVisible core.Tristate // if declaration is depended upon by exported declarations
+	madeVisible      bool      // Declaration emit depends on the declaration
+	ruleKnown        bool      // Whether ruleVisible and ruleInheritsFrom are known
+	ruleVisible      bool      // Whether the declaration is visible by its own rules
+	ruleInheritsFrom *ast.Node // A declaration it is as visible as, if any
 }
 
 type DeclarationFileLinks struct {
@@ -186,7 +194,7 @@ func (r *EmitResolver) markLinkedAliases(node *ast.Node) {
 
 		var nextSymbol *ast.Symbol
 		for _, declaration := range exportSymbol.Declarations() {
-			r.checker.emitResolverLinks.declarationLinks.Get(declaration).isVisible = core.TSTrue
+			r.checker.emitResolverLinks.declarationLinks.Get(declaration).madeVisible = true
 
 			if ast.IsInternalModuleImportEqualsDeclaration(declaration) {
 				// Add the referenced top container visible
@@ -398,11 +406,12 @@ func (r *EmitResolver) IsReferencedAliasDeclaration(node *ast.Node) bool {
 			if aliasLinks.referenced {
 				return true
 			}
-			target := aliasLinks.aliasTarget
-			if target != nil && node.ModifierFlags()&ast.ModifierFlagsExport != 0 &&
-				c.getSymbolFlags(target)&ast.SymbolFlagsValue != 0 &&
-				(c.compilerOptions.ShouldPreserveConstEnums() || !isConstEnumOrConstEnumOnlyModule(target)) {
-				return true
+			if node.ModifierFlags()&ast.ModifierFlagsExport != 0 {
+				target := c.resolveAlias(symbol)
+				if target != c.unknownSymbol && c.getSymbolFlags(target)&ast.SymbolFlagsValue != 0 &&
+					(c.compilerOptions.ShouldPreserveConstEnums() || !isConstEnumOrConstEnumOnlyModule(target)) {
+					return true
+				}
 			}
 		}
 	}
@@ -502,6 +511,8 @@ func (r *EmitResolver) MarkLinkedReferencesRecursively(file *ast.SourceFile) {
 	defer r.checkerMu.Unlock()
 
 	if file != nil {
+		r.checker.markingForEmit = true
+		defer func() { r.checker.markingForEmit = false }()
 		var visit ast.Visitor
 		visit = func(n *ast.Node) bool {
 			if ast.IsImportEqualsDeclaration(n) && n.ModifierFlags()&ast.ModifierFlagsExport == 0 {
@@ -532,7 +543,7 @@ func (r *EmitResolver) getReferenceResolver() binder.ReferenceResolver {
 	if r.referenceResolver == nil {
 		r.referenceResolver = binder.NewReferenceResolver(r.checker.compilerOptions, binder.ReferenceResolverHooks{
 			ResolveName:                            r.checker.resolveName,
-			GetResolvedSymbol:                      r.checker.getResolvedSymbolOrNil,
+			GetResolvedSymbol:                      r.checker.getSymbolOfReferenceForEmit,
 			GetMergedSymbol:                        r.checker.getMergedSymbol,
 			GetParentOfSymbol:                      r.checker.getParentOfSymbol,
 			GetSymbolOfDeclaration:                 r.checker.getSymbolOfDeclaration,

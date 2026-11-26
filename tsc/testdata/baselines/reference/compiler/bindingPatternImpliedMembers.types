@@ -1,0 +1,91 @@
+//// [tests/cases/compiler/bindingPatternImpliedMembers.ts] ////
+
+=== bindingPatternImpliedMembers.ts ===
+// Two function parameters are object binding patterns with the same
+// property name. Indexing the parameter list with number unions those
+// parameter types.
+
+function f({ a }, { a: b }) {}
+>f : ({ a }: { a: any; }, { a: b }: { a: any; }) => void
+>a : any
+>a : any
+>b : any
+
+type Params<T extends (...args: any) => any> = T extends (...args: infer P) => any ? P : never;
+>Params : Params<T>
+>args : any
+>args : P
+
+export type Both = Params<typeof f>[number];
+>Both : { a: any; } | { a: any; }
+>f : ({ a }: { a: any; }, { a: b }: { a: any; }) => void
+
+// The parameter types of f1 and f2 differ only in their member symbols.
+// An array literal of a value of each keeps one of the two types, and a
+// union with the type of p1 shows which one it keeps. The namespaces
+// resolve the parameter types in opposite orders.
+
+namespace First {
+>First : typeof First
+
+    declare const p1: Params<typeof f1>[0];
+>p1 : { a: any; }
+>f1 : ({ a }: { a: any; }) => void
+
+    declare const p2: Params<typeof f2>[0];
+>p2 : { a: any; }
+>f2 : ({ a: b }: { a: any; }) => void
+
+    function f1({ a }) {}
+>f1 : ({ a }: { a: any; }) => void
+>a : any
+
+    function f2({ a: b }) {}
+>f2 : ({ a: b }: { a: any; }) => void
+>a : any
+>b : any
+
+    const arr = [p1, p2];
+>arr : { a: any; }[]
+>[p1, p2] : { a: any; }[]
+>p1 : { a: any; }
+>p2 : { a: any; }
+
+    declare const u: typeof arr[number] | typeof p1;
+>u : { a: any; }
+>arr : { a: any; }[]
+>p1 : { a: any; }
+}
+
+namespace Second {
+>Second : typeof Second
+
+    declare const p2: Params<typeof f2>[0];
+>p2 : { a: any; }
+>f2 : ({ a: b }: { a: any; }) => void
+
+    declare const p1: Params<typeof f1>[0];
+>p1 : { a: any; }
+>f1 : ({ a }: { a: any; }) => void
+
+    function f1({ a }) {}
+>f1 : ({ a }: { a: any; }) => void
+>a : any
+
+    function f2({ a: b }) {}
+>f2 : ({ a: b }: { a: any; }) => void
+>a : any
+>b : any
+
+    const arr = [p1, p2];
+>arr : { a: any; }[]
+>[p1, p2] : { a: any; }[]
+>p1 : { a: any; }
+>p2 : { a: any; }
+
+    declare const u: typeof arr[number] | typeof p1;
+>u : { a: any; }
+>arr : { a: any; }[]
+>p1 : { a: any; }
+}
+

@@ -1,0 +1,93 @@
+//// [tests/cases/compiler/instantiatedConstraintCycleAcrossFiles.ts] ////
+
+=== lib.d.ts ===
+type NoStrayRuleKeys<R> = { [K in keyof R]: unknown };
+>NoStrayRuleKeys : Symbol(NoStrayRuleKeys, Decl(lib.d.ts, --, --))
+>R : Symbol(R, Decl(lib.d.ts, --, --))
+>K : Symbol(K, Decl(lib.d.ts, --, --))
+>R : Symbol(R, Decl(lib.d.ts, --, --))
+
+type StrictRules<R, T> = ([keyof R] extends [never] ? Required<T> : NoStrayRuleKeys<R>) & {
+>StrictRules : Symbol(StrictRules, Decl(lib.d.ts, --, --))
+>R : Symbol(R, Decl(lib.d.ts, --, --))
+>T : Symbol(T, Decl(lib.d.ts, --, --))
+>R : Symbol(R, Decl(lib.d.ts, --, --))
+>Required : Symbol(Required, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(lib.d.ts, --, --))
+>NoStrayRuleKeys : Symbol(NoStrayRuleKeys, Decl(lib.d.ts, --, --))
+>R : Symbol(R, Decl(lib.d.ts, --, --))
+
+  [K in R extends unknown ? Exclude<keyof R, keyof T> : never]?: never;
+>K : Symbol(K, Decl(lib.d.ts, --, --))
+>R : Symbol(R, Decl(lib.d.ts, --, --))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>R : Symbol(R, Decl(lib.d.ts, --, --))
+>T : Symbol(T, Decl(lib.d.ts, --, --))
+
+};
+export declare class Deriver<T> {
+>Deriver : Symbol(Deriver, Decl(lib.d.ts, --, --))
+>T : Symbol(T, Decl(lib.d.ts, --, --))
+
+  derive<R extends T & StrictRules<R, T>>(build: () => R): void;
+>derive : Symbol(Deriver.derive, Decl(lib.d.ts, --, --))
+>R : Symbol(R, Decl(lib.d.ts, --, --))
+>T : Symbol(T, Decl(lib.d.ts, --, --))
+>StrictRules : Symbol(StrictRules, Decl(lib.d.ts, --, --))
+>R : Symbol(R, Decl(lib.d.ts, --, --))
+>T : Symbol(T, Decl(lib.d.ts, --, --))
+>build : Symbol(build, Decl(lib.d.ts, --, --))
+>R : Symbol(R, Decl(lib.d.ts, --, --))
+
+  plain<R extends T>(build: () => R): void;
+>plain : Symbol(Deriver.plain, Decl(lib.d.ts, --, --))
+>R : Symbol(R, Decl(lib.d.ts, --, --))
+>T : Symbol(T, Decl(lib.d.ts, --, --))
+>build : Symbol(build, Decl(lib.d.ts, --, --))
+>R : Symbol(R, Decl(lib.d.ts, --, --))
+}
+=== main.ts ===
+import type { Deriver } from "./lib.js";
+>Deriver : Symbol(Deriver, Decl(main.ts, 0, 13))
+
+declare const key: string;
+>key : Symbol(key, Decl(main.ts, 1, 13))
+
+declare const indexed: Deriver<{ [x: string]: (el: number) => unknown }>;
+>indexed : Symbol(indexed, Decl(main.ts, 2, 13))
+>Deriver : Symbol(Deriver, Decl(main.ts, 0, 13))
+>x : Symbol(x, Decl(main.ts, 2, 34))
+>el : Symbol(el, Decl(main.ts, 2, 47))
+
+declare const literal: Deriver<{ rows?: (el: number) => unknown }>;
+>literal : Symbol(literal, Decl(main.ts, 3, 13))
+>Deriver : Symbol(Deriver, Decl(main.ts, 0, 13))
+>rows : Symbol(rows, Decl(main.ts, 3, 32))
+>el : Symbol(el, Decl(main.ts, 3, 41))
+
+indexed.derive(() => ({ [key]: (el) => el }));
+>indexed.derive : Symbol(Deriver.derive, Decl(lib.d.ts, --, --))
+>indexed : Symbol(indexed, Decl(main.ts, 2, 13))
+>derive : Symbol(Deriver.derive, Decl(lib.d.ts, --, --))
+>[key] : Symbol([key], Decl(main.ts, 4, 23))
+>key : Symbol(key, Decl(main.ts, 1, 13))
+>el : Symbol(el, Decl(main.ts, 4, 32))
+>el : Symbol(el, Decl(main.ts, 4, 32))
+
+literal.derive(() => ({ rows: (el) => el }));
+>literal.derive : Symbol(Deriver.derive, Decl(lib.d.ts, --, --))
+>literal : Symbol(literal, Decl(main.ts, 3, 13))
+>derive : Symbol(Deriver.derive, Decl(lib.d.ts, --, --))
+>rows : Symbol(rows, Decl(main.ts, 5, 23))
+>el : Symbol(el, Decl(main.ts, 5, 31))
+>el : Symbol(el, Decl(main.ts, 5, 31))
+
+indexed.plain(() => ({ [key]: (el) => el }));
+>indexed.plain : Symbol(Deriver.plain, Decl(lib.d.ts, --, --))
+>indexed : Symbol(indexed, Decl(main.ts, 2, 13))
+>plain : Symbol(Deriver.plain, Decl(lib.d.ts, --, --))
+>[key] : Symbol([key], Decl(main.ts, 6, 22))
+>key : Symbol(key, Decl(main.ts, 1, 13))
+>el : Symbol(el, Decl(main.ts, 6, 31))
+>el : Symbol(el, Decl(main.ts, 6, 31))
+

@@ -1,0 +1,187 @@
+//// [tests/cases/compiler/typeLiteralInLoopCycleIdentity.ts] ////
+
+=== a.js ===
+/** @param {unknown[]} sources */
+function f(sources) {
+>f : Symbol(f, Decl(a.js, 0, 0))
+>sources : Symbol(sources, Decl(a.js, 1, 11))
+
+    const differences = [];
+>differences : Symbol(differences, Decl(a.js, 2, 9))
+
+    for (const source of sources) {
+>source : Symbol(source, Decl(a.js, 3, 14))
+>sources : Symbol(sources, Decl(a.js, 1, 11))
+
+        differences.push({ source });
+>differences.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>differences : Symbol(differences, Decl(a.js, 2, 9))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>source : Symbol(source, Decl(a.js, 4, 26))
+
+        const expected = /** @type {{ tokens?: unknown[] }} */ (source);
+>expected : Symbol(expected, Decl(a.js, 5, 13))
+>source : Symbol(source, Decl(a.js, 3, 14))
+
+        for (const x of sources) {
+>x : Symbol(x, Decl(a.js, 6, 18))
+>sources : Symbol(sources, Decl(a.js, 1, 11))
+
+            const wanted = expected.tokens ? { tokens: expected.tokens } : expected;
+>wanted : Symbol(wanted, Decl(a.js, 7, 17))
+>expected.tokens : Symbol(tokens, Decl(a.js, 5, 37))
+>expected : Symbol(expected, Decl(a.js, 5, 13))
+>tokens : Symbol(tokens, Decl(a.js, 5, 37))
+>tokens : Symbol(tokens, Decl(a.js, 7, 46))
+>expected.tokens : Symbol(tokens, Decl(a.js, 5, 37))
+>expected : Symbol(expected, Decl(a.js, 5, 13))
+>tokens : Symbol(tokens, Decl(a.js, 5, 37))
+>expected : Symbol(expected, Decl(a.js, 5, 13))
+
+            differences.push({ theirs: wanted });
+>differences.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>differences : Symbol(differences, Decl(a.js, 2, 9))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>theirs : Symbol(theirs, Decl(a.js, 8, 30))
+>wanted : Symbol(wanted, Decl(a.js, 7, 17))
+        }
+    }
+    return differences;
+>differences : Symbol(differences, Decl(a.js, 2, 9))
+}
+
+/** @param {unknown[]} sources */
+function g(sources) {
+>g : Symbol(g, Decl(a.js, 12, 1))
+>sources : Symbol(sources, Decl(a.js, 15, 11))
+
+    const differences = [];
+>differences : Symbol(differences, Decl(a.js, 16, 9))
+
+    for (const source of sources) {
+>source : Symbol(source, Decl(a.js, 17, 14))
+>sources : Symbol(sources, Decl(a.js, 15, 11))
+
+        differences.push({ source });
+>differences.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>differences : Symbol(differences, Decl(a.js, 16, 9))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>source : Symbol(source, Decl(a.js, 18, 26))
+
+        const expected = /** @type {{ [K in "tokens"]?: unknown[] }} */ (source);
+>expected : Symbol(expected, Decl(a.js, 19, 13))
+>source : Symbol(source, Decl(a.js, 17, 14))
+
+        for (const x of sources) {
+>x : Symbol(x, Decl(a.js, 20, 18))
+>sources : Symbol(sources, Decl(a.js, 15, 11))
+
+            const wanted = source ? { tokens: [] } : expected;
+>wanted : Symbol(wanted, Decl(a.js, 21, 17))
+>source : Symbol(source, Decl(a.js, 17, 14))
+>tokens : Symbol(tokens, Decl(a.js, 21, 37))
+>expected : Symbol(expected, Decl(a.js, 19, 13))
+
+            differences.push({ theirs: wanted });
+>differences.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>differences : Symbol(differences, Decl(a.js, 16, 9))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>theirs : Symbol(theirs, Decl(a.js, 22, 30))
+>wanted : Symbol(wanted, Decl(a.js, 21, 17))
+        }
+    }
+    return differences;
+>differences : Symbol(differences, Decl(a.js, 16, 9))
+}
+
+/** @param {unknown[]} sources */
+function h(sources) {
+>h : Symbol(h, Decl(a.js, 26, 1))
+>sources : Symbol(sources, Decl(a.js, 29, 11))
+
+    const differences = [];
+>differences : Symbol(differences, Decl(a.js, 30, 9))
+
+    for (const source of sources) {
+>source : Symbol(source, Decl(a.js, 31, 14))
+>sources : Symbol(sources, Decl(a.js, 29, 11))
+
+        differences.push({ source });
+>differences.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>differences : Symbol(differences, Decl(a.js, 30, 9))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>source : Symbol(source, Decl(a.js, 32, 26))
+
+        const expected = /** @type {() => unknown[]} */ (source);
+>expected : Symbol(expected, Decl(a.js, 33, 13))
+>source : Symbol(source, Decl(a.js, 31, 14))
+
+        for (const x of sources) {
+>x : Symbol(x, Decl(a.js, 34, 18))
+>sources : Symbol(sources, Decl(a.js, 29, 11))
+
+            const wanted = source ? { tokens: [] } : expected;
+>wanted : Symbol(wanted, Decl(a.js, 35, 17))
+>source : Symbol(source, Decl(a.js, 31, 14))
+>tokens : Symbol(tokens, Decl(a.js, 35, 37))
+>expected : Symbol(expected, Decl(a.js, 33, 13))
+
+            differences.push({ theirs: wanted });
+>differences.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>differences : Symbol(differences, Decl(a.js, 30, 9))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>theirs : Symbol(theirs, Decl(a.js, 36, 30))
+>wanted : Symbol(wanted, Decl(a.js, 35, 17))
+        }
+    }
+    return differences;
+>differences : Symbol(differences, Decl(a.js, 30, 9))
+}
+
+/**
+ * @template T
+ * @param {T[]} sources
+ */
+function k(sources) {
+>k : Symbol(k, Decl(a.js, 40, 1))
+>sources : Symbol(sources, Decl(a.js, 46, 11))
+
+    const differences = [];
+>differences : Symbol(differences, Decl(a.js, 47, 9))
+
+    for (const source of sources) {
+>source : Symbol(source, Decl(a.js, 48, 14))
+>sources : Symbol(sources, Decl(a.js, 46, 11))
+
+        differences.push({ source });
+>differences.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>differences : Symbol(differences, Decl(a.js, 47, 9))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>source : Symbol(source, Decl(a.js, 49, 26))
+
+        const expected = /** @type {T extends string ? { a: 1 } : { b: 2 }} */ (/** @type {unknown} */ (source));
+>expected : Symbol(expected, Decl(a.js, 50, 13))
+>source : Symbol(source, Decl(a.js, 48, 14))
+
+        for (const x of sources) {
+>x : Symbol(x, Decl(a.js, 51, 18))
+>sources : Symbol(sources, Decl(a.js, 46, 11))
+
+            const wanted = source ? { tokens: [] } : expected;
+>wanted : Symbol(wanted, Decl(a.js, 52, 17))
+>source : Symbol(source, Decl(a.js, 48, 14))
+>tokens : Symbol(tokens, Decl(a.js, 52, 37))
+>expected : Symbol(expected, Decl(a.js, 50, 13))
+
+            differences.push({ theirs: wanted });
+>differences.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>differences : Symbol(differences, Decl(a.js, 47, 9))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>theirs : Symbol(theirs, Decl(a.js, 53, 30))
+>wanted : Symbol(wanted, Decl(a.js, 52, 17))
+        }
+    }
+    return differences;
+>differences : Symbol(differences, Decl(a.js, 47, 9))
+}
+

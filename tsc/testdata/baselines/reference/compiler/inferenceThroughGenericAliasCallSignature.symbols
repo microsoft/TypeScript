@@ -213,6 +213,8 @@ declare function firstMessageInline<M>(thread: { conversations: Array<{ messages
 
 const viaAlias: string = firstMessageViaAlias(thread).body; 
 >viaAlias : Symbol(viaAlias, Decl(inferenceThroughGenericAliasCallSignature.ts, 53, 5))
+>firstMessageViaAlias(thread).body : Symbol(body, Decl(inferenceThroughGenericAliasCallSignature.ts, 45, 60))
 >firstMessageViaAlias : Symbol(firstMessageViaAlias, Decl(inferenceThroughGenericAliasCallSignature.ts, 48, 69))
 >thread : Symbol(thread, Decl(inferenceThroughGenericAliasCallSignature.ts, 44, 5))
+>body : Symbol(body, Decl(inferenceThroughGenericAliasCallSignature.ts, 45, 60))
 

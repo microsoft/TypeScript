@@ -1,0 +1,194 @@
+//// [tests/cases/compiler/baseConstraintNestingOfWrittenTypes.ts] ////
+
+=== indexedAccessChain.ts ===
+// From trpc's CreateContextCallback.
+type Router<T> = { _def: { _config: { $types: { ctx: T } } } };
+>Router : Symbol(Router, Decl(indexedAccessChain.ts, 0, 0))
+>T : Symbol(T, Decl(indexedAccessChain.ts, 1, 12))
+>_def : Symbol(_def, Decl(indexedAccessChain.ts, 1, 18))
+>_config : Symbol(_config, Decl(indexedAccessChain.ts, 1, 26))
+>$types : Symbol($types, Decl(indexedAccessChain.ts, 1, 37))
+>ctx : Symbol(ctx, Decl(indexedAccessChain.ts, 1, 47))
+>T : Symbol(T, Decl(indexedAccessChain.ts, 1, 12))
+
+type Ctx<R extends Router<any>> = R["_def"]["_config"]["$types"]["ctx"];
+>Ctx : Symbol(Ctx, Decl(indexedAccessChain.ts, 1, 63))
+>R : Symbol(R, Decl(indexedAccessChain.ts, 2, 9))
+>Router : Symbol(Router, Decl(indexedAccessChain.ts, 0, 0))
+>R : Symbol(R, Decl(indexedAccessChain.ts, 2, 9))
+
+type PartialIf<C extends boolean, T> = C extends true ? Partial<T> : T;
+>PartialIf : Symbol(PartialIf, Decl(indexedAccessChain.ts, 2, 72))
+>C : Symbol(C, Decl(indexedAccessChain.ts, 3, 15))
+>T : Symbol(T, Decl(indexedAccessChain.ts, 3, 33))
+>C : Symbol(C, Decl(indexedAccessChain.ts, 3, 15))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(indexedAccessChain.ts, 3, 33))
+>T : Symbol(T, Decl(indexedAccessChain.ts, 3, 33))
+
+type CreateContextCallback<TContext> = PartialIf<object extends TContext ? true : false, { createContext: () => TContext }>;
+>CreateContextCallback : Symbol(CreateContextCallback, Decl(indexedAccessChain.ts, 3, 71))
+>TContext : Symbol(TContext, Decl(indexedAccessChain.ts, 4, 27))
+>PartialIf : Symbol(PartialIf, Decl(indexedAccessChain.ts, 2, 72))
+>TContext : Symbol(TContext, Decl(indexedAccessChain.ts, 4, 27))
+>createContext : Symbol(createContext, Decl(indexedAccessChain.ts, 4, 90))
+>TContext : Symbol(TContext, Decl(indexedAccessChain.ts, 4, 27))
+
+function g<R extends Router<any>>(o: CreateContextCallback<Ctx<R>>) {
+>g : Symbol(g, Decl(indexedAccessChain.ts, 4, 124))
+>R : Symbol(R, Decl(indexedAccessChain.ts, 6, 11))
+>Router : Symbol(Router, Decl(indexedAccessChain.ts, 0, 0))
+>o : Symbol(o, Decl(indexedAccessChain.ts, 6, 34))
+>CreateContextCallback : Symbol(CreateContextCallback, Decl(indexedAccessChain.ts, 3, 71))
+>Ctx : Symbol(Ctx, Decl(indexedAccessChain.ts, 1, 63))
+>R : Symbol(R, Decl(indexedAccessChain.ts, 6, 11))
+
+    o.createContext;
+>o.createContext : Symbol(createContext, Decl(indexedAccessChain.ts, 4, 90))
+>o : Symbol(o, Decl(indexedAccessChain.ts, 6, 34))
+>createContext : Symbol(createContext, Decl(indexedAccessChain.ts, 4, 90))
+}
+
+type Box<X> = X extends string ? { a: 1 } : { a: 2 };
+>Box : Symbol(Box, Decl(indexedAccessChain.ts, 8, 1))
+>X : Symbol(X, Decl(indexedAccessChain.ts, 10, 9))
+>X : Symbol(X, Decl(indexedAccessChain.ts, 10, 9))
+>a : Symbol(a, Decl(indexedAccessChain.ts, 10, 34))
+>a : Symbol(a, Decl(indexedAccessChain.ts, 10, 45))
+
+function f<R extends { a: { b: { c: { d: string } } } }>(o: Box<R["a"]["b"]["c"]["d"]>) {
+>f : Symbol(f, Decl(indexedAccessChain.ts, 10, 53))
+>R : Symbol(R, Decl(indexedAccessChain.ts, 12, 11))
+>a : Symbol(a, Decl(indexedAccessChain.ts, 12, 22))
+>b : Symbol(b, Decl(indexedAccessChain.ts, 12, 27))
+>c : Symbol(c, Decl(indexedAccessChain.ts, 12, 32))
+>d : Symbol(d, Decl(indexedAccessChain.ts, 12, 37))
+>o : Symbol(o, Decl(indexedAccessChain.ts, 12, 57))
+>Box : Symbol(Box, Decl(indexedAccessChain.ts, 8, 1))
+>R : Symbol(R, Decl(indexedAccessChain.ts, 12, 11))
+
+    o.a;
+>o.a : Symbol(a, Decl(indexedAccessChain.ts, 10, 34))
+>o : Symbol(o, Decl(indexedAccessChain.ts, 12, 57))
+>a : Symbol(a, Decl(indexedAccessChain.ts, 10, 34))
+}
+export {};
+
+=== nestedReferences.ts ===
+// From ariakit, whose recipes nest recipes made by function calls.
+interface Box<T> {
+>Box : Symbol(Box, Decl(nestedReferences.ts, 0, 0))
+>T : Symbol(T, Decl(nestedReferences.ts, 1, 14))
+
+    value: T;
+>value : Symbol(Box.value, Decl(nestedReferences.ts, 1, 18))
+>T : Symbol(T, Decl(nestedReferences.ts, 1, 14))
+}
+declare function box<T>(value: T): Box<T>;
+>box : Symbol(box, Decl(nestedReferences.ts, 3, 1))
+>T : Symbol(T, Decl(nestedReferences.ts, 4, 21))
+>value : Symbol(value, Decl(nestedReferences.ts, 4, 24))
+>T : Symbol(T, Decl(nestedReferences.ts, 4, 21))
+>Box : Symbol(Box, Decl(nestedReferences.ts, 0, 0))
+>T : Symbol(T, Decl(nestedReferences.ts, 4, 21))
+
+const box5 = box(box(box(box(box("")))));
+>box5 : Symbol(box5, Decl(nestedReferences.ts, 6, 5))
+>box : Symbol(box, Decl(nestedReferences.ts, 3, 1))
+>box : Symbol(box, Decl(nestedReferences.ts, 3, 1))
+>box : Symbol(box, Decl(nestedReferences.ts, 3, 1))
+>box : Symbol(box, Decl(nestedReferences.ts, 3, 1))
+>box : Symbol(box, Decl(nestedReferences.ts, 3, 1))
+
+type Like<Base, Candidate> = keyof Base extends keyof Candidate ? Base : never;
+>Like : Symbol(Like, Decl(nestedReferences.ts, 6, 41))
+>Base : Symbol(Base, Decl(nestedReferences.ts, 8, 10))
+>Candidate : Symbol(Candidate, Decl(nestedReferences.ts, 8, 15))
+>Base : Symbol(Base, Decl(nestedReferences.ts, 8, 10))
+>Candidate : Symbol(Candidate, Decl(nestedReferences.ts, 8, 15))
+>Base : Symbol(Base, Decl(nestedReferences.ts, 8, 10))
+
+function nested<R extends Like<typeof box5, R>>(r: R) {
+>nested : Symbol(nested, Decl(nestedReferences.ts, 8, 79))
+>R : Symbol(R, Decl(nestedReferences.ts, 10, 16))
+>Like : Symbol(Like, Decl(nestedReferences.ts, 6, 41))
+>box5 : Symbol(box5, Decl(nestedReferences.ts, 6, 5))
+>R : Symbol(R, Decl(nestedReferences.ts, 10, 16))
+>r : Symbol(r, Decl(nestedReferences.ts, 10, 48))
+>R : Symbol(R, Decl(nestedReferences.ts, 10, 16))
+
+    r.value;
+>r.value : Symbol(Box.value, Decl(nestedReferences.ts, 1, 18))
+>r : Symbol(r, Decl(nestedReferences.ts, 10, 48))
+>value : Symbol(Box.value, Decl(nestedReferences.ts, 1, 18))
+}
+export {};
+
+=== nestedObjectLiterals.ts ===
+// From react-navigation, whose screen parameters nest navigators.
+type Wrap<T> = { value: T };
+>Wrap : Symbol(Wrap, Decl(nestedObjectLiterals.ts, 0, 0))
+>T : Symbol(T, Decl(nestedObjectLiterals.ts, 1, 10))
+>value : Symbol(value, Decl(nestedObjectLiterals.ts, 1, 16))
+>T : Symbol(T, Decl(nestedObjectLiterals.ts, 1, 10))
+
+type Two<T> = { a: T; b: number };
+>Two : Symbol(Two, Decl(nestedObjectLiterals.ts, 1, 28))
+>T : Symbol(T, Decl(nestedObjectLiterals.ts, 2, 9))
+>a : Symbol(a, Decl(nestedObjectLiterals.ts, 2, 15))
+>T : Symbol(T, Decl(nestedObjectLiterals.ts, 2, 9))
+>b : Symbol(b, Decl(nestedObjectLiterals.ts, 2, 21))
+
+interface Nav<P> {
+>Nav : Symbol(Nav, Decl(nestedObjectLiterals.ts, 2, 34))
+>P : Symbol(P, Decl(nestedObjectLiterals.ts, 4, 14))
+
+    navigate<K extends keyof P>(...args: K extends unknown ? [key: K, value: P[K]] : never): K;
+>navigate : Symbol(Nav.navigate, Decl(nestedObjectLiterals.ts, 4, 18))
+>K : Symbol(K, Decl(nestedObjectLiterals.ts, 5, 13))
+>P : Symbol(P, Decl(nestedObjectLiterals.ts, 4, 14))
+>args : Symbol(args, Decl(nestedObjectLiterals.ts, 5, 32))
+>K : Symbol(K, Decl(nestedObjectLiterals.ts, 5, 13))
+>K : Symbol(K, Decl(nestedObjectLiterals.ts, 5, 13))
+>P : Symbol(P, Decl(nestedObjectLiterals.ts, 4, 14))
+>K : Symbol(K, Decl(nestedObjectLiterals.ts, 5, 13))
+>K : Symbol(K, Decl(nestedObjectLiterals.ts, 5, 13))
+}
+
+declare const deep: Nav<Two<Wrap<Wrap<Wrap<Wrap<Wrap<string>>>>>>>;
+>deep : Symbol(deep, Decl(nestedObjectLiterals.ts, 8, 13))
+>Nav : Symbol(Nav, Decl(nestedObjectLiterals.ts, 2, 34))
+>Two : Symbol(Two, Decl(nestedObjectLiterals.ts, 1, 28))
+>Wrap : Symbol(Wrap, Decl(nestedObjectLiterals.ts, 0, 0))
+>Wrap : Symbol(Wrap, Decl(nestedObjectLiterals.ts, 0, 0))
+>Wrap : Symbol(Wrap, Decl(nestedObjectLiterals.ts, 0, 0))
+>Wrap : Symbol(Wrap, Decl(nestedObjectLiterals.ts, 0, 0))
+>Wrap : Symbol(Wrap, Decl(nestedObjectLiterals.ts, 0, 0))
+
+const key = deep.navigate("a", { value: { value: { value: { value: { value: "" } } } } });
+>key : Symbol(key, Decl(nestedObjectLiterals.ts, 9, 5))
+>deep.navigate : Symbol(Nav.navigate, Decl(nestedObjectLiterals.ts, 4, 18))
+>deep : Symbol(deep, Decl(nestedObjectLiterals.ts, 8, 13))
+>navigate : Symbol(Nav.navigate, Decl(nestedObjectLiterals.ts, 4, 18))
+>value : Symbol(value, Decl(nestedObjectLiterals.ts, 9, 32))
+>value : Symbol(value, Decl(nestedObjectLiterals.ts, 9, 41))
+>value : Symbol(value, Decl(nestedObjectLiterals.ts, 9, 50))
+>value : Symbol(value, Decl(nestedObjectLiterals.ts, 9, 59))
+>value : Symbol(value, Decl(nestedObjectLiterals.ts, 9, 68))
+
+const a: "a" = key;
+>a : Symbol(a, Decl(nestedObjectLiterals.ts, 10, 5))
+>key : Symbol(key, Decl(nestedObjectLiterals.ts, 9, 5))
+
+deep.navigate("a", { value: { value: { value: { value: { value: 0 } } } } });
+>deep.navigate : Symbol(Nav.navigate, Decl(nestedObjectLiterals.ts, 4, 18))
+>deep : Symbol(deep, Decl(nestedObjectLiterals.ts, 8, 13))
+>navigate : Symbol(Nav.navigate, Decl(nestedObjectLiterals.ts, 4, 18))
+>value : Symbol(value, Decl(nestedObjectLiterals.ts, 12, 20))
+>value : Symbol(value, Decl(nestedObjectLiterals.ts, 12, 29))
+>value : Symbol(value, Decl(nestedObjectLiterals.ts, 12, 38))
+>value : Symbol(value, Decl(nestedObjectLiterals.ts, 12, 47))
+>value : Symbol(value, Decl(nestedObjectLiterals.ts, 12, 56))
+
+export {};
+

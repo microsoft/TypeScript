@@ -1,0 +1,39 @@
+//// [tests/cases/compiler/assertionCallCycleCheckOrder.ts] ////
+
+=== assertionCallCycleCheckOrder.ts ===
+// Analyzing the flow of handlers checks whether the call to setHandler is an
+// assertion, which needs the type of theClass, which needs the type of
+// handlers. The same members are circular whichever is checked first (50200).
+
+class GenericClass<T> {
+>GenericClass : Symbol(GenericClass, Decl(assertionCallCycleCheckOrder.ts, 0, 0))
+>T : Symbol(T, Decl(assertionCallCycleCheckOrder.ts, 4, 19))
+
+    setHandler(handler: (date: T) => void) {
+>setHandler : Symbol(GenericClass.setHandler, Decl(assertionCallCycleCheckOrder.ts, 4, 23))
+>handler : Symbol(handler, Decl(assertionCallCycleCheckOrder.ts, 5, 15))
+>date : Symbol(date, Decl(assertionCallCycleCheckOrder.ts, 5, 25))
+>T : Symbol(T, Decl(assertionCallCycleCheckOrder.ts, 4, 19))
+    }
+}
+
+const theClass: GenericClass<typeof handlers> = new GenericClass();
+>theClass : Symbol(theClass, Decl(assertionCallCycleCheckOrder.ts, 9, 5))
+>GenericClass : Symbol(GenericClass, Decl(assertionCallCycleCheckOrder.ts, 0, 0))
+>handlers : Symbol(handlers, Decl(assertionCallCycleCheckOrder.ts, 12, 5))
+>GenericClass : Symbol(GenericClass, Decl(assertionCallCycleCheckOrder.ts, 0, 0))
+
+theClass.setHandler(() => {});
+>theClass : Symbol(theClass, Decl(assertionCallCycleCheckOrder.ts, 9, 5))
+
+const handlers = {
+>handlers : Symbol(handlers, Decl(assertionCallCycleCheckOrder.ts, 12, 5))
+
+    thisDoesnt: console.log,
+>thisDoesnt : Symbol(thisDoesnt, Decl(assertionCallCycleCheckOrder.ts, 12, 18))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+
+};
+

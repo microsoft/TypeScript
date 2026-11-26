@@ -1,0 +1,23 @@
+// @strict: true
+// @noEmit: true
+// @checkOrder: default, typesfirst, editorfirst, reverse, isolated
+
+// The return type of 'm' is a union reduced by relating 'Box<string>' to
+// 'Box<number>', which measures the variances of 'Box', which resolves 'm'
+// again inside the measurement while it is incomplete. Whichever of 'm' or
+// the measurement is entered first, 'm' returns 'Box<string>'.
+
+declare const cond: boolean;
+declare let a1: Box<string>;
+declare let a2: Box<number>;
+class Box<T> {
+    value!: T;
+    m() {
+        if (cond) return a1;
+        return a2;
+    }
+}
+const r = new Box<boolean>().m();
+declare let b1: Box<string>;
+declare let b2: Box<number>;
+b1 = b2;

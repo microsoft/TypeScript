@@ -1,0 +1,99 @@
+//// [tests/cases/compiler/inferenceThroughAliasStrippedRecursiveIntersection.ts] ////
+
+=== inferenceThroughAliasStrippedRecursiveIntersection.ts ===
+// Inference reduces the intersection target, which strips the alias from the
+// source intersection. The recursive `children` member then leads back to the
+// aliased source, from which `BSchema` is inferred. The alias-stripped copy and
+// the aliased type are the same level of nesting.
+
+type BlockConfig = { type: string; content: "inline" | "none" };
+>BlockConfig : Symbol(BlockConfig, Decl(inferenceThroughAliasStrippedRecursiveIntersection.ts, 0, 0))
+>type : Symbol(type, Decl(inferenceThroughAliasStrippedRecursiveIntersection.ts, 5, 20))
+>content : Symbol(content, Decl(inferenceThroughAliasStrippedRecursiveIntersection.ts, 5, 34))
+
+type BlockSchema = Record<string, BlockConfig>;
+>BlockSchema : Symbol(BlockSchema, Decl(inferenceThroughAliasStrippedRecursiveIntersection.ts, 5, 64))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>BlockConfig : Symbol(BlockConfig, Decl(inferenceThroughAliasStrippedRecursiveIntersection.ts, 0, 0))
+
+type NoChildren<B extends BlockConfig, I> = { id?: string; type?: B["type"]; content?: B["content"] extends "inline" ? I[] : undefined };
+>NoChildren : Symbol(NoChildren, Decl(inferenceThroughAliasStrippedRecursiveIntersection.ts, 6, 47))
+>B : Symbol(B, Decl(inferenceThroughAliasStrippedRecursiveIntersection.ts, 7, 16))
+>BlockConfig : Symbol(BlockConfig, Decl(inferenceThroughAliasStrippedRecursiveIntersection.ts, 0, 0))
+>I : Symbol(I, Decl(inferenceThroughAliasStrippedRecursiveIntersection.ts, 7, 38))
+>id : Symbol(id, Decl(inferenceThroughAliasStrippedRecursiveIntersection.ts, 7, 45))
+>type : Symbol(type, Decl(inferenceThroughAliasStrippedRecursiveIntersection.ts, 7, 58))
+>B : Symbol(B, Decl(inferenceThroughAliasStrippedRecursiveIntersection.ts, 7, 16))
+>content : Symbol(content, Decl(inferenceThroughAliasStrippedRecursiveIntersection.ts, 7, 76))
+>B : Symbol(B, Decl(inferenceThroughAliasStrippedRecursiveIntersection.ts, 7, 16))
+>I : Symbol(I, Decl(inferenceThroughAliasStrippedRecursiveIntersection.ts, 7, 38))
+
+type WithoutChildren<BSchema extends BlockSchema, I> = { [K in keyof BSchema]: NoChildren<BSchema[K], I> };
+>WithoutChildren : Symbol(WithoutChildren, Decl(inferenceThroughAliasStrippedRecursiveIntersection.ts, 7, 137))
+>BSchema : Symbol(BSchema, Decl(inferenceThroughAliasStrippedRecursiveIntersection.ts, 8, 21))
+>BlockSchema : Symbol(BlockSchema, Decl(inferenceThroughAliasStrippedRecursiveIntersection.ts, 5, 64))
+>I : Symbol(I, Decl(inferenceThroughAliasStrippedRecursiveIntersection.ts, 8, 49))
+>K : Symbol(K, Decl(inferenceThroughAliasStrippedRecursiveIntersection.ts, 8, 58))
+>BSchema : Symbol(BSchema, Decl(inferenceThroughAliasStrippedRecursiveIntersection.ts, 8, 21))
+>NoChildren : Symbol(NoChildren, Decl(inferenceThroughAliasStrippedRecursiveIntersection.ts, 6, 47))
+>BSchema : Symbol(BSchema, Decl(inferenceThroughAliasStrippedRecursiveIntersection.ts, 8, 21))
+>K : Symbol(K, Decl(inferenceThroughAliasStrippedRecursiveIntersection.ts, 8, 58))
+>I : Symbol(I, Decl(inferenceThroughAliasStrippedRecursiveIntersection.ts, 8, 49))
+
+type PartialBlockNoDefaults<BSchema extends BlockSchema, I, S> =
+>PartialBlockNoDefaults : Symbol(PartialBlockNoDefaults, Decl(inferenceThroughAliasStrippedRecursiveIntersection.ts, 8, 107))
+>BSchema : Symbol(BSchema, Decl(inferenceThroughAliasStrippedRecursiveIntersection.ts, 9, 28))
+>BlockSchema : Symbol(BlockSchema, Decl(inferenceThroughAliasStrippedRecursiveIntersection.ts, 5, 64))
+>I : Symbol(I, Decl(inferenceThroughAliasStrippedRecursiveIntersection.ts, 9, 56))
+>S : Symbol(S, Decl(inferenceThroughAliasStrippedRecursiveIntersection.ts, 9, 59))
+
+    WithoutChildren<BSchema, I>[keyof WithoutChildren<BSchema, I>] & Partial<{ children: PartialBlockNoDefaults<BSchema, I, S>[] }>;
+>WithoutChildren : Symbol(WithoutChildren, Decl(inferenceThroughAliasStrippedRecursiveIntersection.ts, 7, 137))
+>BSchema : Symbol(BSchema, Decl(inferenceThroughAliasStrippedRecursiveIntersection.ts, 9, 28))
+>I : Symbol(I, Decl(inferenceThroughAliasStrippedRecursiveIntersection.ts, 9, 56))
+>WithoutChildren : Symbol(WithoutChildren, Decl(inferenceThroughAliasStrippedRecursiveIntersection.ts, 7, 137))
+>BSchema : Symbol(BSchema, Decl(inferenceThroughAliasStrippedRecursiveIntersection.ts, 9, 28))
+>I : Symbol(I, Decl(inferenceThroughAliasStrippedRecursiveIntersection.ts, 9, 56))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>children : Symbol(children, Decl(inferenceThroughAliasStrippedRecursiveIntersection.ts, 10, 78))
+>PartialBlockNoDefaults : Symbol(PartialBlockNoDefaults, Decl(inferenceThroughAliasStrippedRecursiveIntersection.ts, 8, 107))
+>BSchema : Symbol(BSchema, Decl(inferenceThroughAliasStrippedRecursiveIntersection.ts, 9, 28))
+>I : Symbol(I, Decl(inferenceThroughAliasStrippedRecursiveIntersection.ts, 9, 56))
+>S : Symbol(S, Decl(inferenceThroughAliasStrippedRecursiveIntersection.ts, 9, 59))
+
+type PartialBlock<BSchema extends BlockSchema = { paragraph: { type: "paragraph"; content: "inline" } }, I = string, S = unknown> =
+>PartialBlock : Symbol(PartialBlock, Decl(inferenceThroughAliasStrippedRecursiveIntersection.ts, 10, 132))
+>BSchema : Symbol(BSchema, Decl(inferenceThroughAliasStrippedRecursiveIntersection.ts, 11, 18))
+>BlockSchema : Symbol(BlockSchema, Decl(inferenceThroughAliasStrippedRecursiveIntersection.ts, 5, 64))
+>paragraph : Symbol(paragraph, Decl(inferenceThroughAliasStrippedRecursiveIntersection.ts, 11, 49))
+>type : Symbol(type, Decl(inferenceThroughAliasStrippedRecursiveIntersection.ts, 11, 62))
+>content : Symbol(content, Decl(inferenceThroughAliasStrippedRecursiveIntersection.ts, 11, 81))
+>I : Symbol(I, Decl(inferenceThroughAliasStrippedRecursiveIntersection.ts, 11, 104))
+>S : Symbol(S, Decl(inferenceThroughAliasStrippedRecursiveIntersection.ts, 11, 116))
+
+    PartialBlockNoDefaults<BSchema, I, S>;
+>PartialBlockNoDefaults : Symbol(PartialBlockNoDefaults, Decl(inferenceThroughAliasStrippedRecursiveIntersection.ts, 8, 107))
+>BSchema : Symbol(BSchema, Decl(inferenceThroughAliasStrippedRecursiveIntersection.ts, 11, 18))
+>I : Symbol(I, Decl(inferenceThroughAliasStrippedRecursiveIntersection.ts, 11, 104))
+>S : Symbol(S, Decl(inferenceThroughAliasStrippedRecursiveIntersection.ts, 11, 116))
+
+declare function updateBlock<BSchema extends BlockSchema, I, S>(block: PartialBlock<BSchema, I, S>): void;
+>updateBlock : Symbol(updateBlock, Decl(inferenceThroughAliasStrippedRecursiveIntersection.ts, 12, 42))
+>BSchema : Symbol(BSchema, Decl(inferenceThroughAliasStrippedRecursiveIntersection.ts, 14, 29))
+>BlockSchema : Symbol(BlockSchema, Decl(inferenceThroughAliasStrippedRecursiveIntersection.ts, 5, 64))
+>I : Symbol(I, Decl(inferenceThroughAliasStrippedRecursiveIntersection.ts, 14, 57))
+>S : Symbol(S, Decl(inferenceThroughAliasStrippedRecursiveIntersection.ts, 14, 60))
+>block : Symbol(block, Decl(inferenceThroughAliasStrippedRecursiveIntersection.ts, 14, 64))
+>PartialBlock : Symbol(PartialBlock, Decl(inferenceThroughAliasStrippedRecursiveIntersection.ts, 10, 132))
+>BSchema : Symbol(BSchema, Decl(inferenceThroughAliasStrippedRecursiveIntersection.ts, 14, 29))
+>I : Symbol(I, Decl(inferenceThroughAliasStrippedRecursiveIntersection.ts, 14, 57))
+>S : Symbol(S, Decl(inferenceThroughAliasStrippedRecursiveIntersection.ts, 14, 60))
+
+declare const replacement: PartialBlockNoDefaults<any, any, any>;
+>replacement : Symbol(replacement, Decl(inferenceThroughAliasStrippedRecursiveIntersection.ts, 15, 13))
+>PartialBlockNoDefaults : Symbol(PartialBlockNoDefaults, Decl(inferenceThroughAliasStrippedRecursiveIntersection.ts, 8, 107))
+
+updateBlock(replacement);
+>updateBlock : Symbol(updateBlock, Decl(inferenceThroughAliasStrippedRecursiveIntersection.ts, 12, 42))
+>replacement : Symbol(replacement, Decl(inferenceThroughAliasStrippedRecursiveIntersection.ts, 15, 13))
+

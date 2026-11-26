@@ -31,8 +31,13 @@ func (s *nodeLinkStore[V]) Has(node *ast.Node) bool {
 	return s.TryGet(node) != nil
 }
 
+// TryGet returns the links of node, or nil if it has none. A node without
+// an id has no links, and looking it up does not give it one.
 func (s *nodeLinkStore[V]) TryGet(node *ast.Node) *V {
-	id := uint64(s.gen.GetNodeId(node))
+	id := uint64(ast.PeekNodeId(node))
+	if id == 0 {
+		return nil
+	}
 	if id >= ast.BlockIdOffset && id < ast.BlockIdOffset+maxPageLinkCount {
 		return s.pages.TryGet(id - ast.BlockIdOffset)
 	}
@@ -57,8 +62,13 @@ func (s *symbolLinkStore[V]) Has(symbol *ast.Symbol) bool {
 	return s.TryGet(symbol) != nil
 }
 
+// TryGet returns the links of symbol, or nil if it has none. A symbol
+// without an id has no links, and looking it up does not give it one.
 func (s *symbolLinkStore[V]) TryGet(symbol *ast.Symbol) *V {
-	id := uint64(s.gen.GetSymbolId(symbol))
+	id := uint64(ast.PeekSymbolId(symbol))
+	if id == 0 {
+		return nil
+	}
 	if id >= ast.BlockIdOffset && id < ast.BlockIdOffset+maxPageLinkCount {
 		return s.pages.TryGet(id - ast.BlockIdOffset)
 	}
