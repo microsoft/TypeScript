@@ -46,8 +46,8 @@ declare let f: Fz, g: Gz, wp: WP, wq: WQ;
 >wq : WQ
 
 let a1 = [f, g];
->a1 : (Fz | Gz)[]
->[f, g] : (Fz | Gz)[]
+>a1 : Gz[]
+>[f, g] : Gz[]
 >f : Fz
 >g : Gz
 

@@ -1,6 +1,6 @@
-relationCycleNonMonotoneCheckOrder.ts(43,9): error TS2322: Type 'S2' is not assignable to type 'G2'.
-  Type '"d" | undefined' is not assignable to type '"d" | G1'.
-    Type 'undefined' is not assignable to type '"d" | G1'.
+relationCycleNonMonotoneCheckOrder.ts(42,9): error TS2322: Type 'S1' is not assignable to type 'G1'.
+  Type '"c" | undefined' is not assignable to type '"c" | G2'.
+    Type 'undefined' is not assignable to type '"c" | G2'.
 
 
 ==== relationCycleNonMonotoneCheckOrder.ts (1 errors) ====
@@ -46,11 +46,11 @@ relationCycleNonMonotoneCheckOrder.ts(43,9): error TS2322: Type 'S2' is not assi
         declare let s1: S1;
         declare let s2: S2;
         let g1: G1 = s1;
-        let g2: G2 = s2;
             ~~
-!!! error TS2322: Type 'S2' is not assignable to type 'G2'.
-!!! error TS2322:   Type '"d" | undefined' is not assignable to type '"d" | G1'.
-!!! error TS2322:     Type 'undefined' is not assignable to type '"d" | G1'.
+!!! error TS2322: Type 'S1' is not assignable to type 'G1'.
+!!! error TS2322:   Type '"c" | undefined' is not assignable to type '"c" | G2'.
+!!! error TS2322:     Type 'undefined' is not assignable to type '"c" | G2'.
+        let g2: G2 = s2;
         declare let r1: S1 extends G1 ? true : false;
         declare let r2: S2 extends G2 ? true : false;
     }

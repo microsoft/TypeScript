@@ -1,6 +1,7 @@
 package checker
 
 import (
+	"cmp"
 	"math/bits"
 	"slices"
 	"strconv"
@@ -80,6 +81,13 @@ const (
 	RelationComparisonResultReportsIncomplete RelationComparisonResult = 1 << 6
 	RelationComparisonResultReportsMask                                = RelationComparisonResultReportsUnmeasurable | RelationComparisonResultReportsUnreliable
 	RelationComparisonResultOverflow                                   = RelationComparisonResultComplexityOverflow
+)
+
+type (
+	relationTarget struct {
+		source, target    *Type
+		intersectionState IntersectionState
+	}
 )
 
 type DiagnosticAndArguments struct {
@@ -3247,6 +3255,10 @@ type Relater struct {
 	chargedKeys *[chargedKeySlots]chargedKey
 	chargeStamp uint32
 	next        *Relater
+	// State for non-monotone assumption cycles.
+	assumed           uint64
+	hasAssumedFailure bool
+	canonicalTargets  []relationTarget
 }
 
 type maybeKey struct {
@@ -3256,6 +3268,11 @@ type maybeKey struct {
 	low       int
 	result    Ternary
 	truncated bool
+	// Fields for assumption tracking.
+	cached    bool
+	assumed   uint64
+	flags     RelationComparisonResult
+	minTarget relationTarget
 }
 
 // beginTop makes the outermost comparison a computation of its own, so that
@@ -3316,6 +3333,8 @@ func (c *Checker) putRelater(r *Relater) {
 	r.sourceStack, r.targetStack = r.sourceStack[:0], r.targetStack[:0]
 	r.sourceDepths, r.targetDepths = r.sourceDepths[:0], r.targetDepths[:0]
 	r.depth, r.low, r.truncated = 0, 0, false
+	// The relater that lent its guard to this one still uses it.
+	r.assumed, r.hasAssumedFailure, r.canonicalTargets = 0, false, nil
 	r.topSource, r.topTarget = nil, nil
 	r.topKey, r.topConstrained = CacheHashKey{}, false
 	r.topEntry, r.topEntryValid, r.topHasKey, r.topBegun, r.topEntryRead = RelationComparisonResultNone, false, false, false, false
@@ -3871,20 +3890,26 @@ func (r *Relater) recursiveTypeRelatedTo(source *Type, target *Type, reportError
 			return core.IfElse(related, TernaryTrue, TernaryFalse)
 		}
 	}
+	recomputing := entry != RelationComparisonResultNone
 	if r.relationCount <= 0 {
 		r.overflow = true
 		return TernaryFalse
 	}
 	// If source and target are already being compared, consider them related with assumptions
 	if i, ok := r.maybeKeysSet[id]; ok {
-		return r.assume(i)
+		if reportErrors && r.maybeKeys[i].result == TernaryFalse {
+			delete(r.maybeKeysSet, id)
+			r.maybeKeys[i].key = CacheHashKey{}
+		} else {
+			return r.assume(i)
+		}
 	}
 	// A constrained key indicates that we have type references that reference constrained
 	// type parameters. For such keys we also check against the key we would have gotten if all type parameters
 	// were unconstrained.
 	if constrained {
 		broadestEquivalentId, _ := r.c.getRelationKey(source, target, intersectionState, r.relation == r.c.identityRelation, true /*ignoreConstraints*/)
-		if i, ok := r.maybeKeysSet[broadestEquivalentId]; ok {
+		if i, ok := r.maybeKeysSet[broadestEquivalentId]; ok && r.maybeKeys[i].result != TernaryFalse {
 			return r.assume(i)
 		}
 		// What relates with unconstrained type parameters also relates with
@@ -3912,14 +3937,18 @@ func (r *Relater) recursiveTypeRelatedTo(source *Type, target *Type, reportError
 	depth := r.depth
 	r.depth++
 	startCount := r.relationCount
+	minTarget := relationTarget{source: source, target: target, intersectionState: intersectionState}
+	bit, own := depthBits(depth)
 	maybeStart := len(r.maybeKeys)
-	r.maybeKeys = append(r.maybeKeys, maybeKey{key: id, low: depth, result: TernaryMaybe})
+	r.maybeKeys = append(r.maybeKeys, maybeKey{key: id, minTarget: minTarget, assumed: bit, low: depth, result: TernaryMaybe, cached: recomputing})
 	if r.maybeKeysSet == nil {
 		r.maybeKeysSet = make(map[CacheHashKey]int)
 	}
 	r.maybeKeysSet[id] = maybeStart
 	saveLow, saveTruncated := r.low, r.truncated
 	r.low, r.truncated = depth, false
+	saveAssumed, saveHasAssumedFailure := r.assumed, r.hasAssumedFailure
+	r.assumed, r.hasAssumedFailure = 0, false
 	saveExpandingFlags, saveExpandingSourceDepth, saveExpandingTargetDepth := r.expandingFlags, r.expandingSourceDepth, r.expandingTargetDepth
 	if recursionFlags&RecursionFlagsSource != 0 {
 		r.sourceStack = append(r.sourceStack, source)
@@ -3976,76 +4005,87 @@ func (r *Relater) recursiveTypeRelatedTo(source *Type, target *Type, reportError
 	r.depth--
 	low, truncated := r.low, r.truncated
 	r.low, r.truncated = saveLow, saveTruncated
+	assumed, hasAssumedFailure := r.assumed&^own, r.hasAssumedFailure
+	r.assumed, r.hasAssumedFailure = saveAssumed, saveHasAssumedFailure
 	// The results computing this comparison cached, and its own.
 	cost := startCount - r.relationCount + 1
-	switch {
-	case r.overflow:
-		// The comparison was cut short, so its result and those of the
-		// comparisons that completed assuming it are not what computing them
-		// from scratch would give. Only the overflow is cached.
-		r.resetMaybeStack(maybeStart, propagatingVarianceFlags, false, cost)
-		result = TernaryFalse
-	case incomplete && low >= depth:
-		// The result observed incomplete variances, so it is not what
-		// comparing from scratch would give (see getRecursiveVariances).
-		r.resetMaybeStack(maybeStart, propagatingVarianceFlags, false, cost)
-		if result == TernaryMaybe {
-			result = TernaryTrue
-		}
-	case incomplete:
-		// As above, once the outermost comparison this one assumed completes.
-		r.low = min(r.low, low)
-		r.truncated = r.truncated || truncated
-	case result == TernaryFalse:
-		// A false result goes straight into global cache (when something is false under
-		// assumptions it will also be false without assumptions)
-		r.setEntry(id, RelationComparisonResultFailed|propagatingVarianceFlags, cost)
-		r.relationCount--
-		r.resetMaybeStack(maybeStart, propagatingVarianceFlags, false, cost)
-	case low >= depth:
-		// The result depends on no comparison outside of this one, so it is the
-		// same from scratch. Comparisons that completed assuming this one hold
-		// as well, unless they relied on truncation, which may not happen from
-		// scratch. Ternary.Unknown results are never recorded.
-		switch {
-		case result == TernaryUnknown:
-			r.resetMaybeStack(maybeStart, propagatingVarianceFlags, false, cost)
-		case truncated:
-			r.resetMaybeStack(maybeStart, propagatingVarianceFlags, false, cost)
-			r.setEntry(id, RelationComparisonResultSucceeded|propagatingVarianceFlags, cost)
-			r.relationCount--
-		default:
-			r.resetMaybeStack(maybeStart, propagatingVarianceFlags, true, cost)
-		}
-		// The result no longer depends on any comparison in progress, so it
-		// is reported as related, the same as when it is read from the cache.
-		if result == TernaryMaybe {
-			result = TernaryTrue
-		}
-	default:
-		// The result holds while the comparisons it depends on are in progress,
-		// so it is kept until the outermost of them completes. Until then, the
-		// same comparison elsewhere in this one relates the same way.
-		for i := maybeStart; i < len(r.maybeKeys); i++ {
-			m := &r.maybeKeys[i]
-			m.low = min(m.low, low)
-			m.truncated = m.truncated || truncated
-			if result == TernaryTrue {
-				m.result = TernaryTrue
+	succeeded := !r.overflow && !incomplete && result != TernaryFalse && result != TernaryUnknown
+	if result == TernaryFalse || hasAssumedFailure {
+		for _, m := range r.maybeKeys[maybeStart+1:] {
+			if m.key != (CacheHashKey{}) && m.assumed&bit != 0 && r.compareTargets(m.minTarget, minTarget) < 0 {
+				minTarget = m.minTarget
 			}
 		}
-		r.low = min(r.low, low)
-		r.truncated = r.truncated || truncated
+	}
+	outerTruncated := truncated && low < depth && (result != TernaryFalse || incomplete)
+	if !r.overflow && !incomplete && !reportErrors && assumed == 0 && !outerTruncated && minTarget != r.maybeKeys[maybeStart].minTarget && !slices.Contains(r.canonicalTargets, minTarget) {
+		// A cycle that failed or held a failure is answered as if its least
+		// member were compared first, from scratch in a relater that continues
+		// the outermost comparison, and this comparison again. canonicalTargets
+		// holds the members compared this way until this one completes.
+		r.resetMaybeStack(maybeStart, depth, false, false, false, 0)
+		n := len(r.canonicalTargets)
+		r.canonicalTargets = append(r.canonicalTargets, minTarget)
+		r2 := r.c.getRelater()
+		r2.relation, r2.uncharged, r2.relationCount, r2.scratch, r2.topBegun, r2.topSource = r.relation, r.uncharged, r.relationCount, r.scratch, true, r.topSource
+		r2.canonicalTargets = r.canonicalTargets
+		r2.nextChargeStamp()
+		r.c.reliabilityFlags = 0
+		r2.recursiveTypeRelatedTo(minTarget.source, minTarget.target, false, minTarget.intersectionState, RecursionFlagsBoth)
+		r.c.reliabilityFlags = saveReliabilityFlags
+		r.relationCount, r.overflow, r.overflowExact, r.charged = r2.relationCount, r2.overflow, r.overflowExact || r2.overflowExact, r.charged || r2.charged
+		r.c.putRelater(r2)
+		var res Ternary
+		if !r.overflow {
+			res = r.recursiveTypeRelatedTo(source, target, reportErrors, intersectionState, recursionFlags)
+		}
+		r.canonicalTargets = r.canonicalTargets[:n]
+		return res
+	}
+	m := &r.maybeKeys[maybeStart]
+	m.minTarget, m.assumed, m.low, m.truncated, m.result, m.flags = minTarget, assumed, low, outerTruncated, result, propagatingVarianceFlags
+	r.resetMaybeStack(maybeStart, depth, !r.overflow && !incomplete && result != TernaryUnknown, succeeded, truncated, cost)
+	if r.overflow {
+		return TernaryFalse
+	}
+	r.assumed |= assumed
+	if outerTruncated {
+		r.truncate(low)
+	}
+	if !incomplete && assumed != 0 {
+		r.hasAssumedFailure = r.hasAssumedFailure || hasAssumedFailure || result == TernaryFalse
+	}
+	if !incomplete && assumed == 0 && !outerTruncated && (result == TernaryFalse || succeeded) && !recomputing {
+		r.setEntry(id, core.IfElse(result == TernaryFalse, RelationComparisonResultFailed, RelationComparisonResultSucceeded)|propagatingVarianceFlags, cost)
+		r.relationCount--
+	}
+	if assumed == 0 && !outerTruncated && result == TernaryMaybe {
+		result = TernaryTrue
 	}
 	return result
+}
+
+func (r *Relater) compareTargets(a, b relationTarget) int {
+	if r.relation == r.c.identityRelation {
+		if CompareTypes(a.source, a.target) > 0 {
+			a.source, a.target = a.target, a.source
+		}
+		if CompareTypes(b.source, b.target) > 0 {
+			b.source, b.target = b.target, b.source
+		}
+	}
+	return cmp.Or(CompareTypes(a.source, b.source), CompareTypes(a.target, b.target), cmp.Compare(a.intersectionState, b.intersectionState))
 }
 
 // assume relates a comparison in progress, or one that completed assuming one
 // in progress, as it was related so far.
 func (r *Relater) assume(i int) Ternary {
 	m := &r.maybeKeys[i]
-	r.low = min(r.low, m.low)
-	r.truncated = r.truncated || m.truncated
+	r.assumed |= m.assumed
+	if m.truncated {
+		r.truncate(m.low)
+	}
+	r.c.reliabilityFlags |= m.flags & RelationComparisonResultReportsMask
 	return m.result
 }
 
@@ -4115,18 +4155,49 @@ func (r *Relater) truncate(depth int) {
 	r.truncated = true
 }
 
-func (r *Relater) resetMaybeStack(maybeStart int, propagatingVarianceFlags RelationComparisonResult, markAllAsSucceeded bool, cost int) {
+// depthBits returns the bit that results assuming the comparison at depth
+// carry, and the bits that completing it clears. Depths from 63 on share the
+// last bit, which only the comparison at depth 63 clears, so results that
+// depend on any of them stay provisional until it completes.
+func depthBits(depth int) (bit, own uint64) {
+	bit = 1 << min(depth, 63)
+	return bit, core.IfElse(depth <= 63, bit, 0)
+}
+
+func (r *Relater) resetMaybeStack(maybeStart, depth int, keep, succeeded, parentTruncated bool, cost int) {
+	bit, own := depthBits(depth)
+	parent := r.maybeKeys[maybeStart]
+	commit := succeeded && parent.assumed == 0 && !parentTruncated && parent.flags == 0
+	w := maybeStart
 	for i := maybeStart; i < len(r.maybeKeys); i++ {
-		key := r.maybeKeys[i].key
-		delete(r.maybeKeysSet, key)
-		if markAllAsSucceeded {
-			// Each comparison completed assuming the first compares the first
-			// again from scratch, so it costs no more than the first.
-			r.setEntry(key, RelationComparisonResultSucceeded|propagatingVarianceFlags, cost)
-			r.relationCount--
+		m := r.maybeKeys[i]
+		if m.key == (CacheHashKey{}) {
+			continue
 		}
+		if !keep || m.assumed&bit != 0 && !succeeded {
+			delete(r.maybeKeysSet, m.key)
+			continue
+		}
+		if m.assumed&bit != 0 {
+			m.assumed = m.assumed&^own | parent.assumed
+			if parentTruncated {
+				m.low, m.truncated = min(m.low, parent.low), true
+			}
+		}
+		if m.assumed == 0 {
+			if !m.truncated && !m.cached && i != maybeStart && (m.result == TernaryFalse || commit) {
+				r.setEntry(m.key, core.IfElse(m.result == TernaryFalse, RelationComparisonResultFailed, RelationComparisonResultSucceeded)|m.flags, cost)
+				r.relationCount--
+			}
+			if !m.truncated || m.low >= depth {
+				delete(r.maybeKeysSet, m.key)
+				continue
+			}
+		}
+		r.maybeKeys[w], r.maybeKeysSet[m.key] = m, w
+		w++
 	}
-	r.maybeKeys = r.maybeKeys[:maybeStart]
+	r.maybeKeys = r.maybeKeys[:w]
 }
 
 func (r *Relater) getErrorState() errorState {

@@ -1,10 +1,9 @@
 relationCycleNonMonotoneCheckOrder.ts(42,9): error TS2322: Type 'S1' is not assignable to type 'G1'.
   Type '"c" | undefined' is not assignable to type '"c" | G2'.
     Type 'undefined' is not assignable to type '"c" | G2'.
-relationCycleNonMonotoneCheckOrder.ts(74,30): error TS2353: Object literal may only specify known properties, and 'w' does not exist in type '{ e: Src; }'.
 
 
-==== relationCycleNonMonotoneCheckOrder.ts (2 errors) ====
+==== relationCycleNonMonotoneCheckOrder.ts (1 errors) ====
     // 'S' relates to 'G' only if inferring 'T' from 'A' fails the constraint
     // 'C', so that 'T' falls back to 'C'. Relating 'A' to 'C' compares 'S' to
     // 'G' again, but 'A' fails 'C' on 'z' regardless. 'S' must relate to 'G'
@@ -83,8 +82,6 @@ relationCycleNonMonotoneCheckOrder.ts(74,30): error TS2353: Object literal may o
     
         declare let src: Src;
         let o: Outer = { e: src, w: 1 };
-                                 ~
-!!! error TS2353: Object literal may only specify known properties, and 'w' does not exist in type '{ e: Src; }'.
         declare let r2: X extends Y ? true : false;
     }
     

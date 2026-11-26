@@ -134,12 +134,12 @@ namespace inferenceConstraintMutual {
 >s2 : S2
 
     declare let r1: S1 extends G1 ? true : false;
->r1 : true
+>r1 : false
 >true : true
 >false : false
 
     declare let r2: S2 extends G2 ? true : false;
->r2 : false
+>r2 : true
 >true : true
 >false : false
 }
@@ -325,7 +325,7 @@ namespace discriminatedAssumedFirst {
 >false : false
 
     declare let r1: Src extends Tgt ? true : false;
->r1 : false
+>r1 : true
 >true : true
 >false : false
 }
@@ -363,7 +363,7 @@ namespace inferenceConstraintAssumedFirst {
 >false : false
 
     declare let r1: S extends G ? true : false;
->r1 : false
+>r1 : true
 >true : true
 >false : false
 }

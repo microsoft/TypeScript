@@ -19,8 +19,8 @@ declare let a1: { a: N3; b: string }, a2: { a: T3 };
 >a : T3
 
 let a = [a1, a2];
->a : ({ a: N3; b: string; } | { a: T3; })[]
->[a1, a2] : ({ a: N3; b: string; } | { a: T3; })[]
+>a : { a: T3; }[]
+>[a1, a2] : { a: T3; }[]
 >a1 : { a: N3; b: string; }
 >a2 : { a: T3; }
 
