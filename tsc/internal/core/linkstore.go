@@ -12,14 +12,17 @@ type LinkStore[K comparable, V any] struct {
 }
 
 func (s *LinkStore[K, V]) Get(key K) *V {
-	value := s.entries[key]
-	if value != nil {
+	if value := s.entries[key]; value != nil {
 		return value
 	}
+	return s.getSlow(key)
+}
+
+func (s *LinkStore[K, V]) getSlow(key K) *V {
 	if s.entries == nil {
 		s.entries = make(map[K]*V)
 	}
-	value = s.arena.New()
+	value := s.arena.New()
 	s.entries[key] = value
 	return value
 }
@@ -49,6 +52,13 @@ type PagedLinkStore[V any] struct {
 }
 
 func (s *PagedLinkStore[V]) Get(key uint64) *V {
+	if link := s.TryGet(key); link != nil {
+		return link
+	}
+	return s.getSlow(key)
+}
+
+func (s *PagedLinkStore[V]) getSlow(key uint64) *V {
 	pageIndex := key >> LinkPageShift
 	if int(pageIndex) >= len(s.pages) {
 		// Grow the length of the list to pageIndex+1
