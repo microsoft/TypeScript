@@ -2610,7 +2610,7 @@ func (b *NodeBuilderImpl) addPropertyToElementList(propertySymbol *ast.Symbol, t
 			if b.ch.hasLateBindableName(decl) {
 				if ast.IsBinaryExpression(decl) {
 					name := ast.GetNameOfDeclaration(decl)
-					if name != nil && ast.IsElementAccessExpression(name) && ast.IsPropertyAccessEntityNameExpression(name.AsElementAccessExpression().ArgumentExpression, false /*allowJs*/) {
+					if name != nil && ast.IsElementAccessExpression(name) && ast.IsEntityNameExpression(name.AsElementAccessExpression().ArgumentExpression) {
 						b.trackComputedName(name.AsElementAccessExpression().ArgumentExpression, saveEnclosingDeclaration)
 					}
 				} else {

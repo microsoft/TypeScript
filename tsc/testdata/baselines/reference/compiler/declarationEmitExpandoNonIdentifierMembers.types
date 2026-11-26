@@ -1,0 +1,251 @@
+//// [tests/cases/compiler/declarationEmitExpandoNonIdentifierMembers.ts] ////
+
+=== lib.ts ===
+export const handler = () => 0;
+>handler : { (): number; retries: number; "x-request-id": string; }
+>() => 0 : { (): number; retries: number; "x-request-id": string; }
+>0 : 0
+
+handler.retries = 3;
+>handler.retries = 3 : 3
+>handler.retries : number
+>handler : { (): number; retries: number; "x-request-id": string; }
+>retries : number
+>3 : 3
+
+handler["x-request-id"] = "abc";
+>handler["x-request-id"] = "abc" : "abc"
+>handler["x-request-id"] : string
+>handler : { (): number; retries: number; "x-request-id": string; }
+>"x-request-id" : "x-request-id"
+>"abc" : "abc"
+
+export const numeric = () => {};
+>numeric : { (): void; a: number; 3: string; }
+>() => {} : { (): void; a: number; 3: string; }
+
+numeric.a = 1;
+>numeric.a = 1 : 1
+>numeric.a : number
+>numeric : { (): void; a: number; 3: string; }
+>a : number
+>1 : 1
+
+numeric[3] = "n";
+>numeric[3] = "n" : "n"
+>numeric[3] : string
+>numeric : { (): void; a: number; 3: string; }
+>3 : 3
+>"n" : "n"
+
+export const spaced = function () {};
+>spaced : { (): void; a: number; "a b": number; }
+>function () {} : { (): void; a: number; "a b": number; }
+
+spaced.a = 1;
+>spaced.a = 1 : 1
+>spaced.a : number
+>spaced : { (): void; a: number; "a b": number; }
+>a : number
+>1 : 1
+
+spaced["a b"] = 2;
+>spaced["a b"] = 2 : 2
+>spaced["a b"] : number
+>spaced : { (): void; a: number; "a b": number; }
+>"a b" : "a b"
+>2 : 2
+
+const sym = Symbol();
+>sym : unique symbol
+>Symbol() : unique symbol
+>Symbol : SymbolConstructor
+
+export const withSymbol = () => {};
+>withSymbol : { (): void; a: number; [sym]: boolean; }
+>() => {} : { (): void; a: number; [sym]: boolean; }
+
+withSymbol.a = 1;
+>withSymbol.a = 1 : 1
+>withSymbol.a : number
+>withSymbol : { (): void; a: number; [sym]: boolean; }
+>a : number
+>1 : 1
+
+withSymbol[sym] = true;
+>withSymbol[sym] = true : true
+>withSymbol[sym] : boolean
+>withSymbol : { (): void; a: number; [sym]: boolean; }
+>sym : unique symbol
+>true : true
+
+export const reservedAndNonIdentifier = () => {};
+>reservedAndNonIdentifier : { (): void; default: number; "b-c": number; }
+>() => {} : { (): void; default: number; "b-c": number; }
+
+reservedAndNonIdentifier.default = 1;
+>reservedAndNonIdentifier.default = 1 : 1
+>reservedAndNonIdentifier.default : number
+>reservedAndNonIdentifier : { (): void; default: number; "b-c": number; }
+>default : number
+>1 : 1
+
+reservedAndNonIdentifier["b-c"] = 2;
+>reservedAndNonIdentifier["b-c"] = 2 : 2
+>reservedAndNonIdentifier["b-c"] : number
+>reservedAndNonIdentifier : { (): void; default: number; "b-c": number; }
+>"b-c" : "b-c"
+>2 : 2
+
+const key = "d-e";
+>key : "d-e"
+>"d-e" : "d-e"
+
+export const constKey = () => {};
+>constKey : { (): void; a: number; "d-e": number; }
+>() => {} : { (): void; a: number; "d-e": number; }
+
+constKey.a = 1;
+>constKey.a = 1 : 1
+>constKey.a : number
+>constKey : { (): void; a: number; "d-e": number; }
+>a : number
+>1 : 1
+
+constKey[key] = 2;
+>constKey[key] = 2 : 2
+>constKey[key] : number
+>constKey : { (): void; a: number; "d-e": number; }
+>key : "d-e"
+>2 : 2
+
+const local = () => {};
+>local : { (): void; a: number; "f-g": number; }
+>() => {} : { (): void; a: number; "f-g": number; }
+
+local.a = 1;
+>local.a = 1 : 1
+>local.a : number
+>local : { (): void; a: number; "f-g": number; }
+>a : number
+>1 : 1
+
+local["f-g"] = 2;
+>local["f-g"] = 2 : 2
+>local["f-g"] : number
+>local : { (): void; a: number; "f-g": number; }
+>"f-g" : "f-g"
+>2 : 2
+
+export default local;
+>local : { (): void; a: number; "f-g": number; }
+
+export const identifiersOnly = () => {};
+>identifiersOnly : { (): void; a: number; b: number; }
+>() => {} : { (): void; a: number; b: number; }
+
+identifiersOnly.a = 1;
+>identifiersOnly.a = 1 : 1
+>identifiersOnly.a : number
+>identifiersOnly : { (): void; a: number; b: number; }
+>a : number
+>1 : 1
+
+identifiersOnly["b"] = 2;
+>identifiersOnly["b"] = 2 : 2
+>identifiersOnly["b"] : number
+>identifiersOnly : { (): void; a: number; b: number; }
+>"b" : "b"
+>2 : 2
+
+=== lib2.js ===
+export const handler = () => 0;
+>handler : { (): number; retries: number; "x-request-id": string; }
+>() => 0 : { (): number; retries: number; "x-request-id": string; }
+>0 : 0
+
+handler.retries = 3;
+>handler.retries = 3 : 3
+>handler.retries : number
+>handler : { (): number; retries: number; "x-request-id": string; }
+>retries : number
+>3 : 3
+
+handler["x-request-id"] = "abc";
+>handler["x-request-id"] = "abc" : "abc"
+>handler["x-request-id"] : string
+>handler : { (): number; retries: number; "x-request-id": string; }
+>"x-request-id" : "x-request-id"
+>"abc" : "abc"
+
+=== use.ts ===
+import local, { handler, numeric, spaced, withSymbol, reservedAndNonIdentifier, constKey, identifiersOnly } from "./lib";
+>local : { (): void; a: number; "f-g": number; }
+>handler : { (): number; retries: number; "x-request-id": string; }
+>numeric : { (): void; a: number; 3: string; }
+>spaced : { (): void; a: number; "a b": number; }
+>withSymbol : { (): void; a: number; [sym]: boolean; }
+>reservedAndNonIdentifier : { (): void; default: number; "b-c": number; }
+>constKey : { (): void; a: number; "d-e": number; }
+>identifiersOnly : { (): void; a: number; b: number; }
+
+const s1: string = handler["x-request-id"];
+>s1 : string
+>handler["x-request-id"] : string
+>handler : { (): number; retries: number; "x-request-id": string; }
+>"x-request-id" : "x-request-id"
+
+const n1: number = handler.retries;
+>n1 : number
+>handler.retries : number
+>handler : { (): number; retries: number; "x-request-id": string; }
+>retries : number
+
+const s2: string = numeric[3];
+>s2 : string
+>numeric[3] : string
+>numeric : { (): void; a: number; 3: string; }
+>3 : 3
+
+const n2: number = spaced["a b"];
+>n2 : number
+>spaced["a b"] : number
+>spaced : { (): void; a: number; "a b": number; }
+>"a b" : "a b"
+
+const n3: number = reservedAndNonIdentifier["b-c"] + reservedAndNonIdentifier.default;
+>n3 : number
+>reservedAndNonIdentifier["b-c"] + reservedAndNonIdentifier.default : number
+>reservedAndNonIdentifier["b-c"] : number
+>reservedAndNonIdentifier : { (): void; default: number; "b-c": number; }
+>"b-c" : "b-c"
+>reservedAndNonIdentifier.default : number
+>reservedAndNonIdentifier : { (): void; default: number; "b-c": number; }
+>default : number
+
+const n4: number = constKey["d-e"];
+>n4 : number
+>constKey["d-e"] : number
+>constKey : { (): void; a: number; "d-e": number; }
+>"d-e" : "d-e"
+
+const n5: number = local["f-g"] + local.a;
+>n5 : number
+>local["f-g"] + local.a : number
+>local["f-g"] : number
+>local : { (): void; a: number; "f-g": number; }
+>"f-g" : "f-g"
+>local.a : number
+>local : { (): void; a: number; "f-g": number; }
+>a : number
+
+const n6: number = identifiersOnly.a + identifiersOnly.b;
+>n6 : number
+>identifiersOnly.a + identifiersOnly.b : number
+>identifiersOnly.a : number
+>identifiersOnly : { (): void; a: number; b: number; }
+>a : number
+>identifiersOnly.b : number
+>identifiersOnly : { (): void; a: number; b: number; }
+>b : number
+

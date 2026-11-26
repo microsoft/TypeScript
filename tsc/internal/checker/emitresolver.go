@@ -367,6 +367,22 @@ func (r *EmitResolver) IsExpandoFunctionDeclaration(node *ast.Node) bool {
 	return r.IsExpandoFunctionDeclarationUnsafe(node)
 }
 
+// GetExpandoPropertyAssignments returns the assignment that declares each expando property of a function-like declaration
+func (r *EmitResolver) GetExpandoPropertyAssignments(node *ast.Node) []*ast.Node {
+	if !ast.IsParseTreeNode(node) {
+		return nil
+	}
+	r.checkerMu.Lock()
+	defer r.checkerMu.Unlock()
+	var assignments []*ast.Node
+	for _, p := range r.GetPropertiesOfContainerFunction(node) {
+		if ast.IsExpandoPropertyDeclaration(p.ValueDeclaration()) {
+			assignments = append(assignments, p.ValueDeclaration())
+		}
+	}
+	return assignments
+}
+
 func (r *EmitResolver) isSymbolAccessible(symbol *ast.Symbol, enclosingDeclaration *ast.Node, meaning ast.SymbolFlags, shouldComputeAliasToMarkVisible bool) printer.SymbolAccessibilityResult {
 	return r.checker.IsSymbolAccessible(symbol, enclosingDeclaration, meaning, shouldComputeAliasToMarkVisible)
 }

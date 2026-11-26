@@ -79,6 +79,7 @@ type DeclarationTransformer struct {
 	expandoHosts                     map[ast.NodeId]*ast.Node               // store the result of transforming expando hosts so they can be inserted later if the host is actually referenced
 	expandoMembers                   map[ast.NodeId][]*ast.Node             // store any found expando _members_ after transforming them so *if* the host is referenced, they can be emitted alongside it
 	deferredExpandoAssignments       map[ast.NodeId][]*ast.BinaryExpression // expando assignments whose host wasn't visible when collected, processed if the host is late-marked visible
+	expandoHostsWithNamespaceMembers map[ast.NodeId]bool                    // whether each variable expando host has only members that a namespace can declare
 	seenProperties                   collections.Set[thisPropertyAssignmentKey]
 	thisPropertyAssignmentsCollected []*ast.Node
 	rawReferencedFiles               []ReferencedFilePair
@@ -295,6 +296,7 @@ func (tx *DeclarationTransformer) visitSourceFile(node *ast.SourceFile) *ast.Nod
 	tx.expandoHosts = make(map[ast.NodeId]*ast.Node)
 	tx.expandoMembers = make(map[ast.NodeId][]*ast.Node)
 	tx.deferredExpandoAssignments = make(map[ast.NodeId][]*ast.BinaryExpression)
+	tx.expandoHostsWithNamespaceMembers = make(map[ast.NodeId]bool)
 	tx.rawReferencedFiles = make([]ReferencedFilePair, 0)
 	tx.rawTypeReferenceDirectives = make([]*ast.FileReference, 0)
 	tx.rawLibReferenceDirectives = make([]*ast.FileReference, 0)
@@ -2870,13 +2872,17 @@ func (tx *DeclarationTransformer) transformExpandoAssignment(node *ast.BinaryExp
 		return
 	}
 
-	name := tx.Factory().NewIdentifier(ns.Text())
-	property := tx.tryGetPropertyName(left)
-	if property == "" || !scanner.IsIdentifierText(property, core.LanguageVariantStandard) {
-		return
+	hostId := tx.getExpandoHostId(declaration)
+
+	if ast.IsVariableDeclaration(declaration) && !tx.canDeclareExpandoMembersInNamespace(hostId, declaration) {
+		return // The variable keeps its type, which lists every member, so no namespace is needed
 	}
 
-	hostId := tx.getExpandoHostId(declaration)
+	name := tx.Factory().NewIdentifier(ns.Text())
+	property := tx.tryGetPropertyName(left)
+	if !isNamespaceMemberName(property) {
+		return
+	}
 
 	if ast.IsDeclaration(declaration) && isDeclarationAndNotVisible(tx.EmitContext(), tx.resolver, declaration) {
 		// The host isn't visible (yet) - printing the type of a visible declaration may still
@@ -3109,4 +3115,23 @@ func (tx *DeclarationTransformer) tryGetPropertyName(node *ast.Node) string {
 		return node.Name().Text()
 	}
 	return ""
+}
+
+// isNamespaceMemberName reports whether an expando property can be declared as a member of a namespace
+func isNamespaceMemberName(property string) bool {
+	return property != "" && scanner.IsIdentifierText(property, core.LanguageVariantStandard)
+}
+
+// canDeclareExpandoMembersInNamespace reports whether every expando property of a variable host can be
+// declared in a namespace. When one can't (a string, numeric or unique symbol key that isn't an identifier),
+// the host stays a variable, whose type keeps every member, instead of a function and a namespace without it.
+func (tx *DeclarationTransformer) canDeclareExpandoMembersInNamespace(hostId ast.NodeId, declaration *ast.Declaration) bool {
+	if result, ok := tx.expandoHostsWithNamespaceMembers[hostId]; ok {
+		return result
+	}
+	result := core.Every(tx.resolver.GetExpandoPropertyAssignments(declaration), func(assignment *ast.Node) bool {
+		return isNamespaceMemberName(tx.tryGetPropertyName(assignment.AsBinaryExpression().Left))
+	})
+	tx.expandoHostsWithNamespaceMembers[hostId] = result
+	return result
 }
