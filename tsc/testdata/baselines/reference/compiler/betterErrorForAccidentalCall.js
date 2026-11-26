@@ -16,6 +16,10 @@ foo()
 foo()
     (<number>1).toString();
 
+foo() (1 as number).toString();
+
+foo() (1 as number).toString();
+
 
 //// [betterErrorForAccidentalCall.js]
 "use strict";
@@ -23,4 +27,6 @@ foo()(1).toString();
 foo()(1).toString();
 foo()(1).toString();
 foo()(1 + 2).toString();
+foo()(1).toString();
+foo()(1).toString();
 foo()(1).toString();
