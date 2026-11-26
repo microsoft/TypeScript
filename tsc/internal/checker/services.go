@@ -357,6 +357,7 @@ func (c *Checker) runWithInferenceBlockedFromSourceNode[T any](node *ast.Node, f
 	c.isInferencePartiallyBlocked = false
 
 	c.skipDirectInferenceNodes.Clear()
+	c.skipDirectInferenceTypes.Clear()
 	return result
 }
 
