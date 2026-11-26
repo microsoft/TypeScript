@@ -258,6 +258,7 @@ func main() {
 			"IsNeverIntersectionComputed":       toInt32(checker.ObjectFlagsIsNeverIntersectionComputed),
 			"IsNeverIntersection":               toInt32(checker.ObjectFlagsIsNeverIntersection),
 			"IsConstrainedTypeVariable":         toInt32(checker.ObjectFlagsIsConstrainedTypeVariable),
+			"ConditionalForConstraint":          toInt32(checker.ObjectFlagsConditionalForConstraint),
 		},
 		"SignatureFlags": {
 			"None":                                   toInt32(checker.SignatureFlagsNone),

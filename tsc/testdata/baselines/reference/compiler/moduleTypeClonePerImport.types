@@ -1,0 +1,89 @@
+//// [tests/cases/compiler/moduleTypeClonePerImport.ts] ////
+
+=== main.ts ===
+type Pair<A, B> = [A, B];
+>Pair : Pair<A, B>
+
+declare const flag: boolean;
+>flag : boolean
+
+declare const p2: Pair<typeof y2, "y2">;
+>p2 : Pair<typeof y2, "y2">
+>y2 : typeof y2
+
+declare const p1: Pair<typeof y1, "y1">;
+>p1 : Pair<typeof y1, "y1">
+>y1 : typeof y1
+
+export const y = flag ? p2 : p1;
+>y : Pair<typeof y1, "y1"> | Pair<typeof y2, "y2">
+>flag ? p2 : p1 : Pair<typeof y1, "y1"> | Pair<typeof y2, "y2">
+>flag : boolean
+>p2 : Pair<typeof y2, "y2">
+>p1 : Pair<typeof y1, "y1">
+
+import * as a from "./reexport";
+>a : typeof a
+
+import b = require("./reexport");
+>b : typeof b
+
+import * as x1 from "./reexport";
+>x1 : typeof x1
+
+import * as x2 from "./reexport";
+>x2 : typeof x2
+
+import * as y1 from "./reexport";
+>y1 : typeof y1
+
+import * as y2 from "./reexport";
+>y2 : typeof y2
+
+export const all = [a, b];
+>all : (typeof b | typeof a)[]
+>[a, b] : (typeof b | typeof a)[]
+>a : typeof a
+>b : typeof b
+
+export async function g() { return [await import("./reexport"), a]; }
+>g : () => Promise<(typeof a)[]>
+>[await import("./reexport"), a] : (typeof a)[]
+>await import("./reexport") : { p: number; default: typeof b; }
+>import("./reexport") : Promise<{ p: number; default: typeof b; }>
+>"./reexport" : "./reexport"
+>a : typeof a
+
+declare const q1: Pair<typeof x1, "x1">;
+>q1 : Pair<typeof x1, "x1">
+>x1 : typeof x1
+
+declare const q2: Pair<typeof x2, "x2">;
+>q2 : Pair<typeof x2, "x2">
+>x2 : typeof x2
+
+export const x = flag ? q2 : q1;
+>x : Pair<typeof x1, "x1"> | Pair<typeof x2, "x2">
+>flag ? q2 : q1 : Pair<typeof x1, "x1"> | Pair<typeof x2, "x2">
+>flag : boolean
+>q2 : Pair<typeof x2, "x2">
+>q1 : Pair<typeof x1, "x1">
+
+=== base.d.ts ===
+declare function f(): void;
+>f : typeof f
+
+declare namespace f { const p: number }
+>f : typeof f
+>p : number
+
+export = f;
+>f : typeof f
+
+=== reexport.d.ts ===
+import * as o from "./base";
+>o : typeof o
+
+export = o;
+>o : typeof o
+

@@ -1,0 +1,91 @@
+//// [tests/cases/compiler/moduleTypeClonePerImport.ts] ////
+
+=== main.ts ===
+type Pair<A, B> = [A, B];
+>Pair : Symbol(Pair, Decl(main.ts, 0, 0))
+>A : Symbol(A, Decl(main.ts, 0, 10))
+>B : Symbol(B, Decl(main.ts, 0, 12))
+>A : Symbol(A, Decl(main.ts, 0, 10))
+>B : Symbol(B, Decl(main.ts, 0, 12))
+
+declare const flag: boolean;
+>flag : Symbol(flag, Decl(main.ts, 1, 13))
+
+declare const p2: Pair<typeof y2, "y2">;
+>p2 : Symbol(p2, Decl(main.ts, 2, 13))
+>Pair : Symbol(Pair, Decl(main.ts, 0, 0))
+>y2 : Symbol(y2, Decl(main.ts, 11, 6))
+
+declare const p1: Pair<typeof y1, "y1">;
+>p1 : Symbol(p1, Decl(main.ts, 3, 13))
+>Pair : Symbol(Pair, Decl(main.ts, 0, 0))
+>y1 : Symbol(y1, Decl(main.ts, 10, 6))
+
+export const y = flag ? p2 : p1;
+>y : Symbol(y, Decl(main.ts, 4, 12))
+>flag : Symbol(flag, Decl(main.ts, 1, 13))
+>p2 : Symbol(p2, Decl(main.ts, 2, 13))
+>p1 : Symbol(p1, Decl(main.ts, 3, 13))
+
+import * as a from "./reexport";
+>a : Symbol(a, Decl(main.ts, 6, 6))
+
+import b = require("./reexport");
+>b : Symbol(b, Decl(main.ts, 6, 32))
+
+import * as x1 from "./reexport";
+>x1 : Symbol(x1, Decl(main.ts, 8, 6))
+
+import * as x2 from "./reexport";
+>x2 : Symbol(x2, Decl(main.ts, 9, 6))
+
+import * as y1 from "./reexport";
+>y1 : Symbol(y1, Decl(main.ts, 10, 6))
+
+import * as y2 from "./reexport";
+>y2 : Symbol(y2, Decl(main.ts, 11, 6))
+
+export const all = [a, b];
+>all : Symbol(all, Decl(main.ts, 12, 12))
+>a : Symbol(a, Decl(main.ts, 6, 6))
+>b : Symbol(b, Decl(main.ts, 6, 32))
+
+export async function g() { return [await import("./reexport"), a]; }
+>g : Symbol(g, Decl(main.ts, 12, 26))
+>"./reexport" : Symbol("./reexport", Decl(reexport.d.ts, 0, 0))
+>a : Symbol(a, Decl(main.ts, 6, 6))
+
+declare const q1: Pair<typeof x1, "x1">;
+>q1 : Symbol(q1, Decl(main.ts, 15, 13))
+>Pair : Symbol(Pair, Decl(main.ts, 0, 0))
+>x1 : Symbol(x1, Decl(main.ts, 8, 6))
+
+declare const q2: Pair<typeof x2, "x2">;
+>q2 : Symbol(q2, Decl(main.ts, 16, 13))
+>Pair : Symbol(Pair, Decl(main.ts, 0, 0))
+>x2 : Symbol(x2, Decl(main.ts, 9, 6))
+
+export const x = flag ? q2 : q1;
+>x : Symbol(x, Decl(main.ts, 17, 12))
+>flag : Symbol(flag, Decl(main.ts, 1, 13))
+>q2 : Symbol(q2, Decl(main.ts, 16, 13))
+>q1 : Symbol(q1, Decl(main.ts, 15, 13))
+
+=== base.d.ts ===
+declare function f(): void;
+>f : Symbol(f, Decl(base.d.ts, 0, 0), Decl(base.d.ts, 0, 27))
+
+declare namespace f { const p: number }
+>f : Symbol(f, Decl(base.d.ts, 0, 0), Decl(base.d.ts, 0, 27))
+>p : Symbol(p, Decl(base.d.ts, 1, 27))
+
+export = f;
+>f : Symbol(f, Decl(base.d.ts, 0, 0), Decl(base.d.ts, 0, 27))
+
+=== reexport.d.ts ===
+import * as o from "./base";
+>o : Symbol(o, Decl(reexport.d.ts, 0, 6))
+
+export = o;
+>o : Symbol(o, Decl(reexport.d.ts, 0, 6))
+

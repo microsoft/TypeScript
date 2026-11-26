@@ -1,0 +1,87 @@
+//// [tests/cases/compiler/spreadOfInstantiatedMappedMember.ts] ////
+
+=== spreadOfInstantiatedMappedMember.ts ===
+// Two instantiations of a generic function each return a spread of the
+// same mapped type member. Spreading a union of those return types orders
+// the resulting object types by their members.
+
+type Member = { [F in "text"]: { filter: F } }["text"];
+>Member : Symbol(Member, Decl(spreadOfInstantiatedMappedMember.ts, 0, 0))
+>F : Symbol(F, Decl(spreadOfInstantiatedMappedMember.ts, 4, 17))
+>filter : Symbol(filter, Decl(spreadOfInstantiatedMappedMember.ts, 4, 32))
+>F : Symbol(F, Decl(spreadOfInstantiatedMappedMember.ts, 4, 17))
+
+function wrap<T extends "text" | "other">() {
+>wrap : Symbol(wrap, Decl(spreadOfInstantiatedMappedMember.ts, 4, 55))
+>T : Symbol(T, Decl(spreadOfInstantiatedMappedMember.ts, 6, 14))
+
+    return { ...({ filter: "text" } as Member) };
+>filter : Symbol(filter, Decl(spreadOfInstantiatedMappedMember.ts, 7, 18))
+>Member : Symbol(Member, Decl(spreadOfInstantiatedMappedMember.ts, 0, 0))
+}
+
+declare const token: ReturnType<typeof wrap> | ReturnType<typeof wrap<"text">>;
+>token : Symbol(token, Decl(spreadOfInstantiatedMappedMember.ts, 10, 13))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>wrap : Symbol(wrap, Decl(spreadOfInstantiatedMappedMember.ts, 4, 55))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>wrap : Symbol(wrap, Decl(spreadOfInstantiatedMappedMember.ts, 4, 55))
+
+export const spread = { ...token };
+>spread : Symbol(spread, Decl(spreadOfInstantiatedMappedMember.ts, 11, 12))
+>token : Symbol(token, Decl(spreadOfInstantiatedMappedMember.ts, 10, 13))
+
+// An object rest of a union of two instantiations of `boxed` takes the member
+// `p` of each. Each is `p` of `Box<T>` instantiated a second time, with `T` as
+// one of two literal types. `restD` takes the rest of the instantiation with
+// "d" before `restCD` takes the rest of both, and `restAB` and `restCD` list
+// their constituents in the same order.
+
+interface Box<A> { p: A }
+>Box : Symbol(Box, Decl(spreadOfInstantiatedMappedMember.ts, 11, 35))
+>A : Symbol(A, Decl(spreadOfInstantiatedMappedMember.ts, 19, 14))
+>p : Symbol(Box.p, Decl(spreadOfInstantiatedMappedMember.ts, 19, 18))
+>A : Symbol(A, Decl(spreadOfInstantiatedMappedMember.ts, 19, 14))
+
+function boxed<T>(b: Box<T>) {
+>boxed : Symbol(boxed, Decl(spreadOfInstantiatedMappedMember.ts, 19, 25))
+>T : Symbol(T, Decl(spreadOfInstantiatedMappedMember.ts, 21, 15))
+>b : Symbol(b, Decl(spreadOfInstantiatedMappedMember.ts, 21, 18))
+>Box : Symbol(Box, Decl(spreadOfInstantiatedMappedMember.ts, 11, 35))
+>T : Symbol(T, Decl(spreadOfInstantiatedMappedMember.ts, 21, 15))
+
+    return { ...b };
+>b : Symbol(b, Decl(spreadOfInstantiatedMappedMember.ts, 21, 18))
+}
+
+declare const ab: ReturnType<typeof boxed<"a">> | ReturnType<typeof boxed<"b">>;
+>ab : Symbol(ab, Decl(spreadOfInstantiatedMappedMember.ts, 25, 13))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>boxed : Symbol(boxed, Decl(spreadOfInstantiatedMappedMember.ts, 19, 25))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>boxed : Symbol(boxed, Decl(spreadOfInstantiatedMappedMember.ts, 19, 25))
+
+export const { ...restAB } = ab;
+>restAB : Symbol(restAB, Decl(spreadOfInstantiatedMappedMember.ts, 26, 14))
+>ab : Symbol(ab, Decl(spreadOfInstantiatedMappedMember.ts, 25, 13))
+
+declare const d: ReturnType<typeof boxed<"d">>;
+>d : Symbol(d, Decl(spreadOfInstantiatedMappedMember.ts, 28, 13))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>boxed : Symbol(boxed, Decl(spreadOfInstantiatedMappedMember.ts, 19, 25))
+
+export const { ...restD } = d;
+>restD : Symbol(restD, Decl(spreadOfInstantiatedMappedMember.ts, 29, 14))
+>d : Symbol(d, Decl(spreadOfInstantiatedMappedMember.ts, 28, 13))
+
+declare const cd: ReturnType<typeof boxed<"c">> | ReturnType<typeof boxed<"d">>;
+>cd : Symbol(cd, Decl(spreadOfInstantiatedMappedMember.ts, 30, 13))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>boxed : Symbol(boxed, Decl(spreadOfInstantiatedMappedMember.ts, 19, 25))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>boxed : Symbol(boxed, Decl(spreadOfInstantiatedMappedMember.ts, 19, 25))
+
+export const { ...restCD } = cd;
+>restCD : Symbol(restCD, Decl(spreadOfInstantiatedMappedMember.ts, 31, 14))
+>cd : Symbol(cd, Decl(spreadOfInstantiatedMappedMember.ts, 30, 13))
+
