@@ -733,7 +733,7 @@ type Mid = I60 extends J60 ? true : false;
 >false : false
 
 type All = I0 extends J0 ? true : false;
->All : true
+>All : false
 >true : true
 >false : false
 

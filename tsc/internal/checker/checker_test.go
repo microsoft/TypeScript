@@ -771,6 +771,8 @@ var unmemoizedCacheFields = map[string]string{
 	"memoStore.deferredDiagnosticCallbacks":             unmemoizedChecking,
 	"memoStore.baseConstraintRepeats":                   "Set with the resolved base constraint whose walk it describes; see \"Base constraint walks\"",
 	"memoStore.typeNestings":                            unmemoizedDerived,
+	"memoStore.relationGens":                            unmemoizedDerived,
+	"memoStore.relationNestings":                        unmemoizedDerived,
 	"typeNesting.own":                                   unmemoizedDerived,
 	"typeNesting.most":                                  unmemoizedDerived,
 	"SymbolReferenceLinks.referenceKinds":               unmemoizedChecking,

@@ -893,6 +893,8 @@ type memoStore struct {
 	substitutionTypes                      internMap[SubstitutionTypeKey, *Type]
 	baseConstraintRepeats                  map[*Type][]baseConstraintRepeat // Repeats of the walks of kept base constraints; see "Base constraint walks"
 	typeNestings                           map[*Type]typeNesting
+	relationGens                           map[*Type]uint16
+	relationNestings                       map[*Type]typeNesting
 	reverseMappedCache                     memoMap[ReverseMappedTypeKey, *Type]
 	reverseHomomorphicMappedCache          memoMap[ReverseMappedTypeKey, *Type]
 	iterationTypesCache                    memoMap[IterationTypesKey, IterationTypes]

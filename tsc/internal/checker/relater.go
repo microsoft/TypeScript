@@ -2,6 +2,7 @@ package checker
 
 import (
 	"cmp"
+	"math"
 	"math/bits"
 	"slices"
 	"strconv"
@@ -434,7 +435,7 @@ func (c *Checker) checkTypeRelatedToWithKey(
 	}
 	if r.overflow {
 		if tr := c.tracer; tr != nil {
-			tr.Instant(tracing.PhaseCheckTypes, "checkTypeRelatedTo_DepthLimit", map[string]any{"sourceId": source.id, "targetId": target.id, "depth": len(r.sourceStack), "targetDepth": len(r.targetStack)})
+			tr.Instant(tracing.PhaseCheckTypes, "checkTypeRelatedTo_DepthLimit", map[string]any{"sourceId": source.id, "targetId": target.id, "depth": r.depth})
 		}
 		message, sourceString, targetString := diagnostics.Excessive_complexity_comparing_types_0_and_1, c.TypeToString(source), c.TypeToString(target)
 		switch {
@@ -1143,6 +1144,114 @@ func (c *Checker) visitTypeSources(t *Type, f func(*Type)) bool {
 	return true
 }
 
+func (c *Checker) visitRelationSources(t *Type, f func(*Type)) {
+	switch {
+	case t.flags&TypeFlagsObject != 0 && t.objectFlags&ObjectFlagsReverseMapped != 0:
+		rm := t.AsReverseMappedType()
+		f(rm.source)
+		f(rm.mappedType)
+		f(rm.constraintType)
+		return
+	case t.flags&TypeFlagsObject != 0 && t.objectFlags&ObjectFlagsReference != 0 && t.AsTypeReference().node != nil:
+		if m := t.AsObjectType().mapper; m != nil {
+			c.visitMapperTargets(m, f)
+		}
+		return
+	case t.flags&TypeFlagsUnionOrIntersection != 0:
+		for _, u := range t.Types() {
+			f(u)
+		}
+		if t.alias != nil {
+			for _, a := range t.alias.typeArguments {
+				f(a)
+			}
+		}
+		return
+	case t.flags&TypeFlagsTypeParameter != 0:
+		tp := t.AsTypeParameter()
+		if tp.origin != nil {
+			f(tp.origin)
+		}
+		if tp.mapper != nil {
+			c.visitTypeParameterMapperTargets(tp.mapper, tp.mapper, f)
+		}
+		return
+	}
+	c.visitTypeSources(t, f)
+}
+
+func (c *Checker) visitTypeParameterMapperTargets(m *TypeMapper, owner *TypeMapper, f func(*Type)) bool {
+	visit := func(u *Type) {
+		if u.flags&TypeFlagsTypeParameter != 0 && u.AsTypeParameter().mapper == owner {
+			return
+		}
+		f(u)
+	}
+	switch m.kind {
+	case TypeMapperKindSimple:
+		visit(castTypeMapper[SimpleTypeMapper](m, TypeMapperKindSimple).target)
+		return true
+	case TypeMapperKindArray:
+		for _, t := range castTypeMapper[ArrayTypeMapper](m, TypeMapperKindArray).targets {
+			visit(t)
+		}
+		return true
+	case TypeMapperKindArrayToSingle:
+		visit(castTypeMapper[ArrayToSingleTypeMapper](m, TypeMapperKindArrayToSingle).target)
+		return true
+	case TypeMapperKindMerged:
+		d := castTypeMapper[MergedTypeMapper](m, TypeMapperKindMerged)
+		known1 := c.visitTypeParameterMapperTargets(d.m1, owner, f)
+		known2 := c.visitTypeParameterMapperTargets(d.m2, owner, f)
+		return known1 && known2
+	case TypeMapperKindComposite:
+		d := castTypeMapper[CompositeTypeMapper](m, TypeMapperKindComposite)
+		known1 := c.visitTypeParameterMapperTargets(d.m1, owner, f)
+		known2 := c.visitTypeParameterMapperTargets(d.m2, owner, f)
+		return known1 && known2
+	}
+	return false
+}
+
+func (c *Checker) relationGeneration(t *Type) int {
+	switch {
+	case t.flags&TypeFlagsStringLiteral != 0:
+		return min(len(t.AsLiteralType().value.(string))/32, maxTypeGeneration)
+	case t.flags&TypeFlagsStructuredOrInstantiable == 0:
+		return 0
+	case t.flags&TypeFlagsObject != 0 && t.objectFlags&(ObjectFlagsReference|ObjectFlagsInstantiated|ObjectFlagsReverseMapped) == 0 &&
+		t.AsObjectType().mapper == nil && (t.symbol == nil || t.symbol.Flags()&ast.SymbolFlagsObjectLiteral == 0):
+		return 0
+	}
+	if g, ok := c.relationGens[t]; ok {
+		debug.Assert(g != typeGenerationInProgress, "relation types are only built from existing types")
+		return int(g) - 1
+	}
+	if c.relationGens == nil {
+		c.relationGens = make(map[*Type]uint16)
+	}
+	c.relationGens[t] = typeGenerationInProgress
+	generation := 0
+	switch {
+	case t.flags&TypeFlagsTemplateLiteral != 0:
+		total := 0
+		for _, text := range t.AsTemplateLiteralType().texts {
+			total += len(text)
+		}
+		generation = total / 32
+	case t.flags&TypeFlagsObject != 0 && t.objectFlags&ObjectFlagsReference != 0 && t.AsTypeReference().node == nil && isTupleType(t):
+		generation = len(t.AsTypeReference().typeArgumentsOfCreation()) / 4
+	case t.flags&TypeFlagsIntersection != 0:
+		generation = len(t.Types())
+	}
+	c.visitRelationSources(t, func(s *Type) {
+		generation = max(generation, c.relationGeneration(s)+1)
+	})
+	generation = min(generation, maxTypeGeneration)
+	c.relationGens[t] = uint16(generation + 1)
+	return generation
+}
+
 // visitMapperTargets calls f with each type m maps to, as far as they are
 // known without computing them, and reports whether those are all known.
 func (c *Checker) visitMapperTargets(m *TypeMapper, f func(*Type)) bool {
@@ -1172,19 +1281,256 @@ func (c *Checker) visitMapperTargets(m *TypeMapper, f func(*Type)) bool {
 	return false
 }
 
-// deeplyNestedStart returns the highest index in stack from which t is still
-// deeply nested, or -1 if it is not deeply nested. Comparisons starting at or
-// below that index would be truncated the same way.
-func (c *Checker) deeplyNestedStart(t *Type, stack []*Type, maxDepth int) int {
-	if !c.isDeeplyNestedType(t, stack, maxDepth) {
-		return -1
+const (
+	relationCutoffNestBoth    = 3
+	relationCutoffSameGenBoth = 4
+	relationCutoffGenBoth     = 24
+	relationCutoffNestOne     = 6
+	relationCutoffSameGenOne  = 10
+	relationCutoffGenOne      = 24
+	relationCutoffRawGen      = 50
+)
+
+// shouldCutoffRelationEdge reports whether stepping from (parentSource, parentTarget)
+// to (source, target) crosses an edge-local growth cutoff. Because this depends solely
+// on the four types and the program, cached relation results remain valid at every depth.
+func (c *Checker) shouldCutoffRelationEdge(parentSource, parentTarget, source, target *Type, pSGen, pTGen int) (bool, int, int) {
+	sGen := c.relationGeneration(source)
+	tGen := c.relationGeneration(target)
+	sRawGrows := sGen > pSGen
+	tRawGrows := tGen > pTGen
+	sSameGen := !sRawGrows && sGen == pSGen && pSGen >= relationCutoffNestBoth && source != parentSource &&
+		source.flags&TypeFlagsIntersection != 0 && source.alias != nil && len(source.alias.typeArguments) > 0
+	tSameGen := !tRawGrows && tGen == pTGen && pTGen >= relationCutoffNestBoth && target != parentTarget &&
+		target.flags&TypeFlagsIntersection != 0 && target.alias != nil && len(target.alias.typeArguments) > 0
+	if !sRawGrows && !tRawGrows && !sSameGen && !tSameGen {
+		return false, sGen, tGen
 	}
-	for k := len(stack) - maxDepth; k > 0; k-- {
-		if c.isDeeplyNestedType(t, stack[k:], maxDepth) {
-			return k
+	if (!sRawGrows || pSGen+1 < relationCutoffNestBoth) && (!tRawGrows || pTGen+1 < relationCutoffNestBoth) && !sSameGen && !tSameGen {
+		return false, sGen, tGen
+	}
+	if sRawGrows && pSGen >= relationCutoffRawGen || tRawGrows && pTGen >= relationCutoffRawGen {
+		return true, sGen, tGen
+	}
+	effPS, effS, effPSGen, effSGen := c.effectiveRelationEdge(parentSource, source, pSGen, sGen)
+	effPT, effT, effPTGen, effTGen := c.effectiveRelationEdge(parentTarget, target, pTGen, tGen)
+	sGrows := effSGen > effPSGen
+	tGrows := effTGen > effPTGen
+	sCheckNest := !sGrows && effSGen == effPSGen && effPSGen >= relationCutoffNestBoth && effS != effPS
+	tCheckNest := !tGrows && effTGen == effPTGen && effPTGen >= relationCutoffNestBoth && effT != effPT
+	if !sGrows && !tGrows && !sCheckNest && !tCheckNest {
+		return false, sGen, tGen
+	}
+	const objOrInter = TypeFlagsObject | TypeFlagsIntersection
+	sIsCondStep := parentSource.flags&TypeFlagsConditional != 0 && source.flags&TypeFlagsConditional != 0
+	tIsCondStep := parentTarget.flags&TypeFlagsConditional != 0 && target.flags&TypeFlagsConditional != 0
+	sAdv := sGrows || sCheckNest
+	tAdv := tGrows || tCheckNest
+	bothActive := sAdv && tAdv ||
+		sAdv && !sIsCondStep && target == parentTarget && target.flags&objOrInter != 0 ||
+		tAdv && !tIsCondStep && source == parentSource && source.flags&objOrInter != 0
+	nestLimit, sameGenLimit, genLimit := relationCutoffNestOne, relationCutoffSameGenOne, relationCutoffGenOne
+	if bothActive {
+		nestLimit, sameGenLimit, genLimit = relationCutoffNestBoth, relationCutoffSameGenBoth, relationCutoffGenBoth
+	}
+	if sGrows && c.sideGrowsPastCutoff(effPS, effS, effPSGen, nestLimit, sameGenLimit, genLimit) {
+		return true, sGen, tGen
+	}
+	if tGrows && c.sideGrowsPastCutoff(effPT, effT, effPTGen, nestLimit, sameGenLimit, genLimit) {
+		return true, sGen, tGen
+	}
+	if sCheckNest && c.sideNestingGrows(effPS, effS, nestLimit) {
+		return true, sGen, tGen
+	}
+	if tCheckNest && c.sideNestingGrows(effPT, effT, nestLimit) {
+		return true, sGen, tGen
+	}
+	return false, sGen, tGen
+}
+
+func (c *Checker) sideNestingGrows(parent, child *Type, nestLimit int) bool {
+	_, pMost := c.computeRelationNesting(parent)
+	if pMost >= nestLimit {
+		_, cMost := c.computeRelationNesting(child)
+		if cMost > pMost {
+			return true
 		}
 	}
-	return 0
+	return false
+}
+
+func (c *Checker) effectiveRelationEdge(parent, child *Type, parentGen, childGen int) (*Type, *Type, int, int) {
+	if parent.objectFlags&ObjectFlagsInstantiatedMapped == ObjectFlagsInstantiatedMapped ||
+		child.objectFlags&ObjectFlagsInstantiatedMapped == ObjectFlagsInstantiatedMapped {
+		pTarget := c.getRecursionIdentityTarget(parent)
+		cTarget := c.getRecursionIdentityTarget(child)
+		if (pTarget != parent || cTarget != child) && pTarget != cTarget {
+			return pTarget, cTarget, c.relationGeneration(pTarget), c.relationGeneration(cTarget)
+		}
+	}
+	return parent, child, parentGen, childGen
+}
+
+func (c *Checker) sideGrowsPastCutoff(parent, child *Type, parentGen, nestLimit, sameGenLimit, genLimit int) bool {
+	if parentGen >= genLimit {
+		return true
+	}
+	if parentGen >= sameGenLimit && c.hasSameRelationIdentity(parent, child, parentGen >= 11) {
+		return true
+	}
+	if parentGen+1 >= nestLimit {
+		_, pMost := c.computeRelationNesting(parent)
+		if pMost >= nestLimit {
+			_, cMost := c.computeRelationNesting(child)
+			if cMost > pMost {
+				return true
+			}
+		}
+		if parent.flags&TypeFlagsObject != 0 && parent.objectFlags&ObjectFlagsReference != 0 && parent.AsTypeReference().node == nil &&
+			child.flags&TypeFlagsObject != 0 && child.objectFlags&ObjectFlagsReference != 0 && child.AsTypeReference().node == nil &&
+			parent.Target() == child.Target() {
+			pArgs := parent.AsTypeReference().typeArgumentsOfCreation()
+			cArgs := child.AsTypeReference().typeArgumentsOfCreation()
+			if len(pArgs) == len(cArgs) {
+				for i, pArg := range pArgs {
+					cArg := cArgs[i]
+					if pArg != cArg && c.relationGeneration(cArg) > c.relationGeneration(pArg) && c.relationGeneration(pArg)+1 >= nestLimit {
+						pOwn, _ := c.computeRelationNesting(pArg)
+						if pOwn >= nestLimit {
+							cOwn, _ := c.computeRelationNesting(cArg)
+							if cOwn > pOwn {
+								return true
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	return false
+}
+
+var indexedAccessRecursionIdMarker Type
+
+func (c *Checker) relationIdentity(t *Type) RecursionId {
+	if t.flags&TypeFlagsIndexedAccess != 0 {
+		return asRecursionId(&indexedAccessRecursionIdMarker)
+	}
+	if t.flags&TypeFlagsUnionOrIntersection != 0 && t.alias != nil && len(t.alias.typeArguments) > 0 {
+		return asRecursionId(t.alias.symbol)
+	}
+	return c.getRecursionIdentityFromTarget(c.getRecursionIdentityTarget(t))
+}
+
+func (c *Checker) hasSameRelationIdentity(parent, child *Type, matchDeferredTarget bool) bool {
+	pId := c.relationIdentity(parent)
+	if pId != asRecursionId(parent) && c.matchesRelationIdentity(child, pId) {
+		return true
+	}
+	// A deferred TypeReference inside an unnormalized constituent (e.g. an
+	// intersection member) has an AST-node identity, while its normalized
+	// counterpart in child uses the target symbol. Only match across that
+	// boundary once parent is already deeply nested, so first-time unwrapping
+	// of a shallow deferred reference is not treated as recursive growth.
+	if matchDeferredTarget && parent.flags&TypeFlagsObject != 0 && parent.objectFlags&ObjectFlagsReference != 0 && parent.AsTypeReference().node != nil {
+		if refTarget := parent.Target(); refTarget != nil && refTarget.symbol != nil && c.matchesRelationIdentity(child, asRecursionId(refTarget.symbol)) {
+			return true
+		}
+	}
+	if parent.flags&TypeFlagsIntersection != 0 {
+		for _, u := range parent.Types() {
+			if c.hasSameRelationIdentity(u, child, matchDeferredTarget) {
+				return true
+			}
+		}
+	}
+	if parent.symbol != nil {
+		if container := parent.symbol.Parent(); container != nil && c.matchesRelationIdentity(child, asRecursionId(container)) {
+			return true
+		}
+	}
+	return parent == child
+}
+
+func (c *Checker) matchesRelationIdentity(t *Type, id RecursionId) bool {
+	if c.relationIdentity(t) == id {
+		return true
+	}
+	target := c.getRecursionIdentityTarget(t)
+	if target.flags&TypeFlagsUnionOrIntersection != 0 {
+		for _, u := range target.Types() {
+			if c.matchesRelationIdentity(u, id) {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+func (c *Checker) computeRelationNesting(t *Type) (int, int) {
+	if n, ok := c.relationNestings[t]; ok {
+		return int(n.own), int(n.most)
+	}
+	most := 0
+	c.visitRelationSources(t, func(s *Type) {
+		_, m := c.computeRelationNesting(s)
+		most = max(most, m)
+	})
+	identity := c.relationIdentity(t)
+	below := 0
+	if most > 0 && identity != asRecursionId(t) {
+		visited := &c.typeNestingVisited
+		var visit func(t *Type)
+		visit = func(t *Type) {
+			c.visitRelationSources(t, func(s *Type) {
+				if visited.Has(s) {
+					return
+				}
+				visited.Add(s)
+				own, m := c.computeRelationNesting(s)
+				if m <= below {
+					return
+				}
+				if c.relationIdentity(s) == identity {
+					below = max(below, own)
+				} else {
+					visit(s)
+				}
+			})
+		}
+		visit(t)
+		visited.Clear()
+	}
+	own := min(below+1, math.MaxUint8)
+	switch {
+	case t.flags&TypeFlagsStringLiteral != 0:
+		own = max(own, min(len(t.AsLiteralType().value.(string))/32, math.MaxUint8))
+	case t.flags&TypeFlagsTemplateLiteral != 0:
+		total := 0
+		for _, text := range t.AsTemplateLiteralType().texts {
+			total += len(text)
+		}
+		own = max(own, min(total/32, math.MaxUint8))
+	case t.flags&TypeFlagsObject != 0 && t.objectFlags&ObjectFlagsReference != 0 && t.AsTypeReference().node == nil && isTupleType(t):
+		own = max(own, min(len(t.AsTypeReference().typeArgumentsOfCreation())/4, math.MaxUint8))
+	case t.flags&TypeFlagsIntersection != 0 && t.alias != nil && len(t.alias.typeArguments) > 0:
+		for _, a := range t.alias.typeArguments {
+			if a.flags&TypeFlagsIntersection != 0 && a.alias != nil && len(a.alias.typeArguments) > 0 {
+				aOwn, _ := c.computeRelationNesting(a)
+				own = max(own, min(aOwn+1, math.MaxUint8))
+			}
+		}
+	}
+	most = max(most, own)
+	return c.setRelationNesting(t, own, most)
+}
+
+func (c *Checker) setRelationNesting(t *Type, own int, most int) (int, int) {
+	if c.relationNestings == nil {
+		c.relationNestings = make(map[*Type]typeNesting)
+	}
+	c.relationNestings[t] = typeNesting{own: uint8(own), most: uint8(most)}
+	return own, most
 }
 
 func (c *Checker) hasMatchingRecursionIdentity(t *Type, identity RecursionId) bool {
@@ -3217,28 +3563,14 @@ type Relater struct {
 	topEntryRead         bool                     // Whether the caller read topEntry, when the relation had topEntryWrites writes
 	topEntryWrites       uint32
 	topBegun             bool // Whether the comparison began its computation; see beginTop
-	sourceStack          []*Type
-	targetStack          []*Type
-	// sourceDepths and targetDepths are the depths of the comparisons that
-	// pushed each entry of sourceStack and targetStack.
-	sourceDepths []int
-	targetDepths []int
+	parentSource         *Type
+	parentTarget         *Type
+	parentSourceGen      int
+	parentTargetGen      int
 	// depth is the number of comparisons in progress.
-	depth int
-	// low is the lowest depth that the result of the innermost comparison in
-	// progress depends on, through assumptions or truncation. Results that
-	// depend on no comparison below their own are the same from scratch.
-	low int
-	// truncated is set if that result depends on a truncation that would not
-	// happen from scratch.
-	truncated      bool
-	expandingFlags ExpandingFlags
-	// expandingSourceDepth and expandingTargetDepth are the highest depths
-	// from which the expanding flags would still be set.
-	expandingSourceDepth int
-	expandingTargetDepth int
-	overflow             bool
-	relationCount        int
+	depth         int
+	overflow      bool
+	relationCount int
 	// scratch, if not nil, caches the results of a comparison counting the
 	// results it caches from scratch, instead of the relation; see
 	// relationCountLimit.
@@ -3262,13 +3594,8 @@ type Relater struct {
 }
 
 type maybeKey struct {
-	key CacheHashKey
-	// low is the lowest depth that the comparison depends on, which is its
-	// own while it is in progress.
-	low       int
+	key       CacheHashKey
 	result    Ternary
-	truncated bool
-	// Fields for assumption tracking.
 	cached    bool
 	assumed   uint64
 	flags     RelationComparisonResult
@@ -3330,15 +3657,14 @@ func (c *Checker) putRelater(r *Relater) {
 	r.errorChain = nil
 	r.relatedInfo = nil
 	r.maybeKeys = r.maybeKeys[:0]
-	r.sourceStack, r.targetStack = r.sourceStack[:0], r.targetStack[:0]
-	r.sourceDepths, r.targetDepths = r.sourceDepths[:0], r.targetDepths[:0]
-	r.depth, r.low, r.truncated = 0, 0, false
+	r.parentSource, r.parentTarget = nil, nil
+	r.parentSourceGen, r.parentTargetGen = 0, 0
+	r.depth = 0
 	// The relater that lent its guard to this one still uses it.
 	r.assumed, r.hasAssumedFailure, r.canonicalTargets = 0, false, nil
 	r.topSource, r.topTarget = nil, nil
 	r.topKey, r.topConstrained = CacheHashKey{}, false
 	r.topEntry, r.topEntryValid, r.topHasKey, r.topBegun, r.topEntryRead = RelationComparisonResultNone, false, false, false, false
-	r.expandingFlags, r.expandingSourceDepth, r.expandingTargetDepth = ExpandingFlagsNone, 0, 0
 	r.overflow = false
 	r.relationCount = 0
 	r.scratch, r.charged, r.overflowExact, r.uncharged = nil, false, false, false
@@ -3856,6 +4182,17 @@ func (r *Relater) recursiveTypeRelatedTo(source *Type, target *Type, reportError
 	if !r.topBegun && !r.beginTop() {
 		return TernaryFalse
 	}
+	sGen, tGen := -1, -1
+	if r.parentSource != nil {
+		var cutoff bool
+		cutoff, sGen, tGen = r.c.shouldCutoffRelationEdge(r.parentSource, r.parentTarget, source, target, r.parentSourceGen, r.parentTargetGen)
+		if cutoff {
+			if tr := r.c.tracer; tr != nil {
+				tr.Instant(tracing.PhaseCheckTypes, "recursiveTypeRelatedTo_DepthLimit", map[string]any{"sourceId": source.id, "targetId": target.id, "depth": r.depth})
+			}
+			return TernaryTrue
+		}
+	}
 	var id CacheHashKey
 	var constrained bool
 	var entry RelationComparisonResult
@@ -3920,91 +4257,44 @@ func (r *Relater) recursiveTypeRelatedTo(source *Type, target *Type, reportError
 			return TernaryTrue
 		}
 	}
-	if len(r.sourceStack) == 100 || len(r.targetStack) == 100 {
-		// We stop relating if we reach 100 levels of nesting. This is a backstop to catch infinite recursion
-		// that wasn't caught by isDeeplyNestedType. It will also stop relating types that truly are over 100
-		// levels deep, but those are exceedingly rare.
-		depth := r.depth
-		if len(r.sourceStack) == 100 {
-			depth = min(depth, r.sourceDepths[0])
-		}
-		if len(r.targetStack) == 100 {
-			depth = min(depth, r.targetDepths[0])
-		}
-		r.truncate(depth)
-		return TernaryMaybe
-	}
 	depth := r.depth
 	r.depth++
 	startCount := r.relationCount
 	minTarget := relationTarget{source: source, target: target, intersectionState: intersectionState}
 	bit, own := depthBits(depth)
 	maybeStart := len(r.maybeKeys)
-	r.maybeKeys = append(r.maybeKeys, maybeKey{key: id, minTarget: minTarget, assumed: bit, low: depth, result: TernaryMaybe, cached: recomputing})
+	r.maybeKeys = append(r.maybeKeys, maybeKey{key: id, minTarget: minTarget, assumed: bit, result: TernaryMaybe, cached: recomputing})
 	if r.maybeKeysSet == nil {
 		r.maybeKeysSet = make(map[CacheHashKey]int)
 	}
 	r.maybeKeysSet[id] = maybeStart
-	saveLow, saveTruncated := r.low, r.truncated
-	r.low, r.truncated = depth, false
 	saveAssumed, saveHasAssumedFailure := r.assumed, r.hasAssumedFailure
 	r.assumed, r.hasAssumedFailure = 0, false
-	saveExpandingFlags, saveExpandingSourceDepth, saveExpandingTargetDepth := r.expandingFlags, r.expandingSourceDepth, r.expandingTargetDepth
-	if recursionFlags&RecursionFlagsSource != 0 {
-		r.sourceStack = append(r.sourceStack, source)
-		r.sourceDepths = append(r.sourceDepths, depth)
-		if r.expandingFlags&ExpandingFlagsSource == 0 {
-			if k := r.c.deeplyNestedStart(source, r.sourceStack, 3); k >= 0 {
-				r.expandingFlags |= ExpandingFlagsSource
-				r.expandingSourceDepth = r.sourceDepths[k]
-			}
-		}
+	saveParentSource, saveParentTarget := r.parentSource, r.parentTarget
+	saveParentSourceGen, saveParentTargetGen := r.parentSourceGen, r.parentTargetGen
+	if sGen < 0 {
+		sGen = r.c.relationGeneration(source)
+		tGen = r.c.relationGeneration(target)
 	}
-	if recursionFlags&RecursionFlagsTarget != 0 {
-		r.targetStack = append(r.targetStack, target)
-		r.targetDepths = append(r.targetDepths, depth)
-		if r.expandingFlags&ExpandingFlagsTarget == 0 {
-			if k := r.c.deeplyNestedStart(target, r.targetStack, 3); k >= 0 {
-				r.expandingFlags |= ExpandingFlagsTarget
-				r.expandingTargetDepth = r.targetDepths[k]
-			}
-		}
-	}
+	r.parentSource, r.parentTarget = source, target
+	r.parentSourceGen, r.parentTargetGen = sGen, tGen
 	saveReliabilityFlags := r.c.reliabilityFlags
 	r.c.reliabilityFlags = 0
-	var result Ternary
-	if r.expandingFlags == ExpandingFlagsBoth {
-		if tr := r.c.tracer; tr != nil {
-			tr.Instant(tracing.PhaseCheckTypes, "recursiveTypeRelatedTo_DepthLimit", map[string]any{"sourceId": source.id, "targetId": target.id, "depth": len(r.sourceStack), "targetDepth": len(r.targetStack)})
-		}
-		r.truncate(min(r.expandingSourceDepth, r.expandingTargetDepth))
-		result = TernaryMaybe
-	} else {
-		if tr := r.c.tracer; tr != nil {
-			defer tr.Push(tracing.PhaseCheckTypes, "structuredTypeRelatedTo", map[string]any{"sourceId": source.id, "targetId": target.id}, false)()
-		}
-		// The result is cached, so instantiations it needs count against
-		// the depth limit from here, not from wherever it is first compared
-		// (see "Instantiation limits" in memo.go).
-		r.c.beginResolution(nil, 0)
-		result = r.structuredTypeRelatedTo(source, target, reportErrors, intersectionState)
-		r.c.endResolution()
+	if tr := r.c.tracer; tr != nil {
+		defer tr.Push(tracing.PhaseCheckTypes, "structuredTypeRelatedTo", map[string]any{"sourceId": source.id, "targetId": target.id}, false)()
 	}
+	// The result is cached, so instantiations it needs count against
+	// the depth limit from here, not from wherever it is first compared
+	// (see "Instantiation limits" in memo.go).
+	r.c.beginResolution(nil, 0)
+	result := r.structuredTypeRelatedTo(source, target, reportErrors, intersectionState)
+	r.c.endResolution()
 	propagatingVarianceFlags := r.c.reliabilityFlags & RelationComparisonResultReportsMask
 	incomplete := r.c.reliabilityFlags&RelationComparisonResultReportsIncomplete != 0
 	r.c.reliabilityFlags |= saveReliabilityFlags
-	if recursionFlags&RecursionFlagsSource != 0 {
-		r.sourceStack = r.sourceStack[:len(r.sourceStack)-1]
-		r.sourceDepths = r.sourceDepths[:len(r.sourceDepths)-1]
-	}
-	if recursionFlags&RecursionFlagsTarget != 0 {
-		r.targetStack = r.targetStack[:len(r.targetStack)-1]
-		r.targetDepths = r.targetDepths[:len(r.targetDepths)-1]
-	}
-	r.expandingFlags, r.expandingSourceDepth, r.expandingTargetDepth = saveExpandingFlags, saveExpandingSourceDepth, saveExpandingTargetDepth
+	r.parentSource, r.parentTarget = saveParentSource, saveParentTarget
+	r.parentSourceGen, r.parentTargetGen = saveParentSourceGen, saveParentTargetGen
 	r.depth--
-	low, truncated := r.low, r.truncated
-	r.low, r.truncated = saveLow, saveTruncated
 	assumed, hasAssumedFailure := r.assumed&^own, r.hasAssumedFailure
 	r.assumed, r.hasAssumedFailure = saveAssumed, saveHasAssumedFailure
 	// The results computing this comparison cached, and its own.
@@ -4017,13 +4307,12 @@ func (r *Relater) recursiveTypeRelatedTo(source *Type, target *Type, reportError
 			}
 		}
 	}
-	outerTruncated := truncated && low < depth && (result != TernaryFalse || incomplete)
-	if !r.overflow && !incomplete && !reportErrors && assumed == 0 && !outerTruncated && minTarget != r.maybeKeys[maybeStart].minTarget && !slices.Contains(r.canonicalTargets, minTarget) {
+	if !r.overflow && !incomplete && !reportErrors && assumed == 0 && minTarget != r.maybeKeys[maybeStart].minTarget && !slices.Contains(r.canonicalTargets, minTarget) {
 		// A cycle that failed or held a failure is answered as if its least
 		// member were compared first, from scratch in a relater that continues
 		// the outermost comparison, and this comparison again. canonicalTargets
 		// holds the members compared this way until this one completes.
-		r.resetMaybeStack(maybeStart, depth, false, false, false, 0)
+		r.resetMaybeStack(maybeStart, depth, false, false, 0)
 		n := len(r.canonicalTargets)
 		r.canonicalTargets = append(r.canonicalTargets, minTarget)
 		r2 := r.c.getRelater()
@@ -4043,23 +4332,20 @@ func (r *Relater) recursiveTypeRelatedTo(source *Type, target *Type, reportError
 		return res
 	}
 	m := &r.maybeKeys[maybeStart]
-	m.minTarget, m.assumed, m.low, m.truncated, m.result, m.flags = minTarget, assumed, low, outerTruncated, result, propagatingVarianceFlags
-	r.resetMaybeStack(maybeStart, depth, !r.overflow && !incomplete && result != TernaryUnknown, succeeded, truncated, cost)
+	m.minTarget, m.assumed, m.result, m.flags = minTarget, assumed, result, propagatingVarianceFlags
+	r.resetMaybeStack(maybeStart, depth, !r.overflow && !incomplete && result != TernaryUnknown, succeeded, cost)
 	if r.overflow {
 		return TernaryFalse
 	}
 	r.assumed |= assumed
-	if outerTruncated {
-		r.truncate(low)
-	}
 	if !incomplete && assumed != 0 {
 		r.hasAssumedFailure = r.hasAssumedFailure || hasAssumedFailure || result == TernaryFalse
 	}
-	if !incomplete && assumed == 0 && !outerTruncated && (result == TernaryFalse || succeeded) && !recomputing {
+	if !incomplete && assumed == 0 && (result == TernaryFalse || succeeded) && !recomputing {
 		r.setEntry(id, core.IfElse(result == TernaryFalse, RelationComparisonResultFailed, RelationComparisonResultSucceeded)|propagatingVarianceFlags, cost)
 		r.relationCount--
 	}
-	if assumed == 0 && !outerTruncated && result == TernaryMaybe {
+	if assumed == 0 && result == TernaryMaybe {
 		result = TernaryTrue
 	}
 	return result
@@ -4082,9 +4368,6 @@ func (r *Relater) compareTargets(a, b relationTarget) int {
 func (r *Relater) assume(i int) Ternary {
 	m := &r.maybeKeys[i]
 	r.assumed |= m.assumed
-	if m.truncated {
-		r.truncate(m.low)
-	}
 	r.c.reliabilityFlags |= m.flags & RelationComparisonResultReportsMask
 	return m.result
 }
@@ -4148,13 +4431,6 @@ func (r *Relater) nextChargeStamp() {
 	}
 }
 
-// truncate records that the comparison in progress was cut short in a way
-// that depends on depth and the depths above it.
-func (r *Relater) truncate(depth int) {
-	r.low = min(r.low, depth)
-	r.truncated = true
-}
-
 // depthBits returns the bit that results assuming the comparison at depth
 // carry, and the bits that completing it clears. Depths from 63 on share the
 // last bit, which only the comparison at depth 63 clears, so results that
@@ -4164,10 +4440,10 @@ func depthBits(depth int) (bit, own uint64) {
 	return bit, core.IfElse(depth <= 63, bit, 0)
 }
 
-func (r *Relater) resetMaybeStack(maybeStart, depth int, keep, succeeded, parentTruncated bool, cost int) {
+func (r *Relater) resetMaybeStack(maybeStart, depth int, keep, succeeded bool, cost int) {
 	bit, own := depthBits(depth)
 	parent := r.maybeKeys[maybeStart]
-	commit := succeeded && parent.assumed == 0 && !parentTruncated && parent.flags == 0
+	commit := succeeded && parent.assumed == 0 && parent.flags == 0
 	w := maybeStart
 	for i := maybeStart; i < len(r.maybeKeys); i++ {
 		m := r.maybeKeys[i]
@@ -4180,19 +4456,14 @@ func (r *Relater) resetMaybeStack(maybeStart, depth int, keep, succeeded, parent
 		}
 		if m.assumed&bit != 0 {
 			m.assumed = m.assumed&^own | parent.assumed
-			if parentTruncated {
-				m.low, m.truncated = min(m.low, parent.low), true
-			}
 		}
 		if m.assumed == 0 {
-			if !m.truncated && !m.cached && i != maybeStart && (m.result == TernaryFalse || commit) {
+			if !m.cached && i != maybeStart && (m.result == TernaryFalse || commit) {
 				r.setEntry(m.key, core.IfElse(m.result == TernaryFalse, RelationComparisonResultFailed, RelationComparisonResultSucceeded)|m.flags, cost)
 				r.relationCount--
 			}
-			if !m.truncated || m.low >= depth {
-				delete(r.maybeKeysSet, m.key)
-				continue
-			}
+			delete(r.maybeKeysSet, m.key)
+			continue
 		}
 		r.maybeKeys[w], r.maybeKeysSet[m.key] = m, w
 		w++
@@ -4580,12 +4851,6 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 			}
 		}
 	case target.flags&TypeFlagsConditional != 0:
-		// If we reach 10 levels of nesting for the same conditional type, assume it is an infinitely expanding recursive
-		// conditional type and bail out with a Ternary.Maybe result.
-		if k := r.c.deeplyNestedStart(target, r.targetStack, 10); k >= 0 {
-			r.truncate(r.targetDepths[k])
-			return TernaryMaybe
-		}
 		c := target.AsConditionalType()
 		// We check for a relationship to a conditional type target only when the conditional type has no
 		// 'infer' positions, is not distributive or is distributive but doesn't reference the check type
@@ -4762,12 +5027,6 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 			}
 		}
 	case source.flags&TypeFlagsConditional != 0:
-		// If we reach 10 levels of nesting for the same conditional type, assume it is an infinitely expanding recursive
-		// conditional type and bail out with a Ternary.Maybe result.
-		if k := r.c.deeplyNestedStart(source, r.sourceStack, 10); k >= 0 {
-			r.truncate(r.sourceDepths[k])
-			return TernaryMaybe
-		}
 		if target.flags&TypeFlagsConditional != 0 {
 			// The constituent types of an uninstantiated distributive conditional type reference the distributed
 			// form of the check type parameter. Normalize both sides to their non-distributed form such that the
