@@ -32,6 +32,10 @@ class C {
     @dec #n = 14
     /** doc o */
     #o = 15
+    @dec p =
+        /* leading comment of p on its own line */ 16;
+    @dec #q =
+        /* leading comment of q on its own line */ 17;
 }
 
 
@@ -67,6 +71,12 @@ let C = (() => {
     let _private_n_decorators;
     let _private_n_initializers = [];
     let _private_n_extraInitializers = [];
+    let _p_decorators;
+    let _p_initializers = [];
+    let _p_extraInitializers = [];
+    let _private_q_decorators;
+    let _private_q_initializers = [];
+    let _private_q_extraInitializers = [];
     return class C {
         static {
             const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : void 0;
@@ -79,6 +89,8 @@ let C = (() => {
             _private_l_decorators = [dec];
             _private_m_decorators = [dec];
             _private_n_decorators = [dec];
+            _p_decorators = [dec];
+            _private_q_decorators = [dec];
             __esDecorate(null, null, _static_j_decorators, { kind: "field", name: "j", static: true, private: false, access: { has: obj => "j" in obj, get: obj => obj.j, set: (obj, value) => { obj.j = value; } }, metadata: _metadata }, _static_j_initializers, _static_j_extraInitializers);
             __esDecorate(null, null, _a_decorators, { kind: "field", name: "a", static: false, private: false, access: { has: obj => "a" in obj, get: obj => obj.a, set: (obj, value) => { obj.a = value; } }, metadata: _metadata }, _a_initializers, _a_extraInitializers);
             __esDecorate(null, null, _b_decorators, { kind: "field", name: "b", static: false, private: false, access: { has: obj => "b" in obj, get: obj => obj.b, set: (obj, value) => { obj.b = value; } }, metadata: _metadata }, _b_initializers, _b_extraInitializers);
@@ -88,6 +100,8 @@ let C = (() => {
             __esDecorate(null, null, _private_l_decorators, { kind: "field", name: "#l", static: false, private: true, access: { has: obj => #l in obj, get: obj => obj.#l, set: (obj, value) => { obj.#l = value; } }, metadata: _metadata }, _private_l_initializers, _private_l_extraInitializers);
             __esDecorate(null, null, _private_m_decorators, { kind: "field", name: "#m", static: false, private: true, access: { has: obj => #m in obj, get: obj => obj.#m, set: (obj, value) => { obj.#m = value; } }, metadata: _metadata }, _private_m_initializers, _private_m_extraInitializers);
             __esDecorate(null, null, _private_n_decorators, { kind: "field", name: "#n", static: false, private: true, access: { has: obj => #n in obj, get: obj => obj.#n, set: (obj, value) => { obj.#n = value; } }, metadata: _metadata }, _private_n_initializers, _private_n_extraInitializers);
+            __esDecorate(null, null, _p_decorators, { kind: "field", name: "p", static: false, private: false, access: { has: obj => "p" in obj, get: obj => obj.p, set: (obj, value) => { obj.p = value; } }, metadata: _metadata }, _p_initializers, _p_extraInitializers);
+            __esDecorate(null, null, _private_q_decorators, { kind: "field", name: "#q", static: false, private: true, access: { has: obj => #q in obj, get: obj => obj.#q, set: (obj, value) => { obj.#q = value; } }, metadata: _metadata }, _private_q_initializers, _private_q_extraInitializers);
             if (_metadata) Object.defineProperty(this, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
         }
         a = __runInitializers(this, _a_initializers, 1);
@@ -116,5 +130,12 @@ let C = (() => {
         #n = (__runInitializers(this, _private_m_extraInitializers), __runInitializers(this, _private_n_initializers, 14));
         /** doc o */
         #o = (__runInitializers(this, _private_n_extraInitializers), 15);
+        p = __runInitializers(this, _p_initializers, 
+        /* leading comment of p on its own line */ 16);
+        #q = (__runInitializers(this, _p_extraInitializers), __runInitializers(this, _private_q_initializers, 
+        /* leading comment of q on its own line */ 17));
+        constructor() {
+            __runInitializers(this, _private_q_extraInitializers);
+        }
     };
 })();

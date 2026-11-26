@@ -1620,8 +1620,10 @@ func (tx *esDecoratorTransformer) visitPropertyDeclaration(node *ast.Node) *ast.
 		// next class member, which then get emitted twice.
 		call.Loc = initializer.Loc
 		// The initializer still emits the comments that precede it, so the call must not
-		// emit them as well.
-		ec.AddEmitFlags(call, printer.EFNoLeadingComments)
+		// emit them as well. A synthesized start keeps the printer from claiming those
+		// comments for the call, which would stop the initializer from emitting them
+		// when they do not share a line with the `=` token.
+		ec.SetCommentRange(call, core.NewTextRange(-1, initializer.End()))
 		initializer = call
 	}
 

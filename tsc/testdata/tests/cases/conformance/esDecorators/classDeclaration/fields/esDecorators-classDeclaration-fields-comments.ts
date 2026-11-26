@@ -33,4 +33,8 @@ class C {
     @dec #n = 14
     /** doc o */
     #o = 15
+    @dec p =
+        /* leading comment of p on its own line */ 16;
+    @dec #q =
+        /* leading comment of q on its own line */ 17;
 }
