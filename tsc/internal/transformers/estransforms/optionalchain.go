@@ -7,31 +7,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/transformers"
 )
 
-type optionalChainTransformer struct {
-	transformers.Transformer
-}
-
-func (ch *optionalChainTransformer) visit(node *ast.Node) *ast.Node {
-	if node.SubtreeFacts()&ast.SubtreeContainsOptionalChaining == 0 {
-		return node
-	}
-	switch node.Kind {
-	case ast.KindCallExpression:
-		return ch.visitCallExpression(node.AsCallExpression(), false)
-	case ast.KindPropertyAccessExpression,
-		ast.KindElementAccessExpression:
-		if node.Flags&ast.NodeFlagsOptionalChain != 0 {
-			return ch.visitOptionalExpression(node, false, false)
-		}
-		return ch.Visitor().VisitEachChild(node)
-	case ast.KindDeleteExpression:
-		return ch.visitDeleteExpression(node.AsDeleteExpression())
-	default:
-		return ch.Visitor().VisitEachChild(node)
-	}
-}
-
-func (ch *optionalChainTransformer) visitCallExpression(node *ast.CallExpression, captureThisArg bool) *ast.Node {
+func (ch *syntaxTransformer) visitCallExpression(node *ast.CallExpression, captureThisArg bool) *ast.Node {
 	if node.Flags&ast.NodeFlagsOptionalChain != 0 {
 		// If `node` is an optional chain, then it is the outermost chain of an optional expression.
 		return ch.visitOptionalExpression(node.AsNode(), captureThisArg, false)
@@ -54,7 +30,7 @@ func (ch *optionalChainTransformer) visitCallExpression(node *ast.CallExpression
 	return ch.Visitor().VisitEachChild(node.AsNode())
 }
 
-func (ch *optionalChainTransformer) visitParenthesizedExpression(node *ast.ParenthesizedExpression, captureThisArg bool, isDelete bool) *ast.Node {
+func (ch *syntaxTransformer) visitParenthesizedExpression(node *ast.ParenthesizedExpression, captureThisArg bool, isDelete bool) *ast.Node {
 	expr := ch.visitNonOptionalExpression(node.Expression, captureThisArg, isDelete)
 	if ast.IsSyntheticReferenceExpression(expr) {
 		// `(a.b)` -> { expression `((_a = a).b)`, thisArg: `_a` }
@@ -67,7 +43,7 @@ func (ch *optionalChainTransformer) visitParenthesizedExpression(node *ast.Paren
 	return ch.Factory().UpdateParenthesizedExpression(node, expr)
 }
 
-func (ch *optionalChainTransformer) visitPropertyOrElementAccessExpression(node *ast.Expression, captureThisArg bool, isDelete bool) *ast.Expression {
+func (ch *syntaxTransformer) visitPropertyOrElementAccessExpression(node *ast.Expression, captureThisArg bool, isDelete bool) *ast.Expression {
 	if node.Flags&ast.NodeFlagsOptionalChain != 0 {
 		// If `node` is an optional chain, then it is the outermost chain of an optional expression.
 		return ch.visitOptionalExpression(node.AsNode(), captureThisArg, isDelete)
@@ -102,7 +78,7 @@ func (ch *optionalChainTransformer) visitPropertyOrElementAccessExpression(node 
 	return expression
 }
 
-func (ch *optionalChainTransformer) visitDeleteExpression(node *ast.DeleteExpression) *ast.Node {
+func (ch *syntaxTransformer) visitDeleteExpression(node *ast.DeleteExpression) *ast.Node {
 	unwrapped := ast.SkipParentheses(node.Expression)
 	if unwrapped.Flags&ast.NodeFlagsOptionalChain != 0 {
 		return ch.visitNonOptionalExpression(node.Expression, false, true)
@@ -110,7 +86,7 @@ func (ch *optionalChainTransformer) visitDeleteExpression(node *ast.DeleteExpres
 	return ch.Visitor().VisitEachChild(node.AsNode())
 }
 
-func (ch *optionalChainTransformer) visitNonOptionalExpression(node *ast.Expression, captureThisArg bool, isDelete bool) *ast.Expression {
+func (ch *syntaxTransformer) visitNonOptionalExpression(node *ast.Expression, captureThisArg bool, isDelete bool) *ast.Expression {
 	switch node.Kind {
 	case ast.KindParenthesizedExpression:
 		return ch.visitParenthesizedExpression(node.AsParenthesizedExpression(), captureThisArg, isDelete)
@@ -147,7 +123,7 @@ func isCallChain(node *ast.Node) bool {
 	return ast.IsCallExpression(node) && node.Flags&ast.NodeFlagsOptionalChain != 0
 }
 
-func (ch *optionalChainTransformer) visitOptionalExpression(node *ast.Node, captureThisArg bool, isDelete bool) *ast.Node {
+func (ch *syntaxTransformer) visitOptionalExpression(node *ast.Node, captureThisArg bool, isDelete bool) *ast.Node {
 	r := flattenChain(node)
 	expression := r.expression
 	chain := r.chain
@@ -232,9 +208,4 @@ func (ch *optionalChainTransformer) visitOptionalExpression(node *ast.Node, capt
 	}
 	ch.EmitContext().SetOriginal(target, node.AsNode())
 	return target
-}
-
-func newOptionalChainTransformer(opts *transformers.TransformOptions) *transformers.Transformer {
-	tx := &optionalChainTransformer{}
-	return tx.NewTransformer(tx.visit, opts.Context)
 }

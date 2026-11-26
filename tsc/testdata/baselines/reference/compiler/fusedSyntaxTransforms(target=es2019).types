@@ -1,0 +1,150 @@
+//// [tests/cases/compiler/fusedSyntaxTransforms.ts] ////
+
+=== fusedSyntaxTransforms.ts ===
+declare function receiver(): { value?: number, method?(): number };
+>receiver : () => { value?: number; method?(): number; }
+>value : number | undefined
+>method : (() => number) | undefined
+
+declare function key(): "value";
+>key : () => "value"
+
+declare function fallback(): number;
+>fallback : () => number
+
+export function assignments() {
+>assignments : () => void
+
+    receiver()[key()] ??= receiver().method?.() ?? fallback();
+>receiver()[key()] ??= receiver().method?.() ?? fallback() : number
+>receiver()[key()] : number | undefined
+>receiver() : { value?: number; method?(): number; }
+>receiver : () => { value?: number; method?(): number; }
+>key() : "value"
+>key : () => "value"
+>receiver().method?.() ?? fallback() : number
+>receiver().method?.() : number | undefined
+>receiver().method : (() => number) | undefined
+>receiver() : { value?: number; method?(): number; }
+>receiver : () => { value?: number; method?(): number; }
+>method : (() => number) | undefined
+>fallback() : number
+>fallback : () => number
+
+    receiver().value ||= receiver()?.value ?? fallback();
+>receiver().value ||= receiver()?.value ?? fallback() : number
+>receiver().value : number | undefined
+>receiver() : { value?: number; method?(): number; }
+>receiver : () => { value?: number; method?(): number; }
+>value : number | undefined
+>receiver()?.value ?? fallback() : number
+>receiver()?.value : number | undefined
+>receiver() : { value?: number; method?(): number; }
+>receiver : () => { value?: number; method?(): number; }
+>value : number | undefined
+>fallback() : number
+>fallback : () => number
+
+    receiver().value &&= receiver()?.method?.();
+>receiver().value &&= receiver()?.method?.() : number | undefined
+>receiver().value : number | undefined
+>receiver() : { value?: number; method?(): number; }
+>receiver : () => { value?: number; method?(): number; }
+>value : number | undefined
+>receiver()?.method?.() : number | undefined
+>receiver()?.method : (() => number) | undefined
+>receiver() : { value?: number; method?(): number; }
+>receiver : () => { value?: number; method?(): number; }
+>method : (() => number) | undefined
+}
+
+export function defaults(
+>defaults : (value?: number, next?: () => number) => number | boolean
+
+    value = receiver()?.value ?? fallback(),
+>value : number
+>receiver()?.value ?? fallback() : number
+>receiver()?.value : number | undefined
+>receiver() : { value?: number; method?(): number; }
+>receiver : () => { value?: number; method?(): number; }
+>value : number | undefined
+>fallback() : number
+>fallback : () => number
+
+    next = () => receiver().value ??= value,
+>next : () => number
+>() => receiver().value ??= value : () => number
+>receiver().value ??= value : number
+>receiver().value : number | undefined
+>receiver() : { value?: number; method?(): number; }
+>receiver : () => { value?: number; method?(): number; }
+>value : number | undefined
+>value : number
+
+) {
+    try {
+        return next() ?? value;
+>next() ?? value : number
+>next() : number
+>next : () => number
+>value : number
+    }
+    catch {
+        return delete receiver()?.value;
+>delete receiver()?.value : boolean
+>receiver()?.value : number | undefined
+>receiver() : { value?: number; method?(): number; }
+>receiver : () => { value?: number; method?(): number; }
+>value : number | undefined
+    }
+}
+
+export function calls() {
+>calls : () => number | undefined
+
+    return (receiver()?.method)?.() ?? (receiver().method)?.();
+>(receiver()?.method)?.() ?? (receiver().method)?.() : number | undefined
+>(receiver()?.method)?.() : number | undefined
+>(receiver()?.method) : (() => number) | undefined
+>receiver()?.method : (() => number) | undefined
+>receiver() : { value?: number; method?(): number; }
+>receiver : () => { value?: number; method?(): number; }
+>method : (() => number) | undefined
+>(receiver().method)?.() : number | undefined
+>(receiver().method) : (() => number) | undefined
+>receiver().method : (() => number) | undefined
+>receiver() : { value?: number; method?(): number; }
+>receiver : () => { value?: number; method?(): number; }
+>method : (() => number) | undefined
+}
+
+export async function asyncBody(values: AsyncIterable<number>) {
+>asyncBody : (values: AsyncIterable<number>) => Promise<void>
+>values : AsyncIterable<number>
+
+    for await (const value of values) {
+>value : number
+>values : AsyncIterable<number>
+
+        const { method, ...rest } = receiver();
+>method : (() => number) | undefined
+>rest : { value?: number; }
+>receiver() : { value?: number; method?(): number; }
+>receiver : () => { value?: number; method?(): number; }
+
+        rest.value ??= (await method?.()) ?? value ** 2;
+>rest.value ??= (await method?.()) ?? value ** 2 : number
+>rest.value : number | undefined
+>rest : { value?: number; }
+>value : number | undefined
+>(await method?.()) ?? value ** 2 : number
+>(await method?.()) : number | undefined
+>await method?.() : number | undefined
+>method?.() : number | undefined
+>method : (() => number) | undefined
+>value ** 2 : number
+>value : number
+>2 : 2
+    }
+}
+
