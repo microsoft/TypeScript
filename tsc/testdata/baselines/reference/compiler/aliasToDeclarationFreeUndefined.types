@@ -1,0 +1,26 @@
+//// [tests/cases/compiler/aliasToDeclarationFreeUndefined.ts] ////
+
+=== target.cjs ===
+module.exports = undefined;
+>module.exports = undefined : undefined
+>module.exports : undefined
+>module : { exports: undefined; }
+>exports : undefined
+>undefined : undefined
+
+=== bridge.mjs ===
+import * as ns from "./target.cjs";
+>ns : { default: undefined; }
+
+export function read() { return ns; }
+>read : () => { default: undefined; }
+>ns : { default: undefined; }
+
+=== main.ts ===
+import { read } from "./bridge.mjs";
+>read : () => { default: undefined; }
+
+read();
+>read() : { default: undefined; }
+>read : () => { default: undefined; }
+
