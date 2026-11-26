@@ -699,6 +699,7 @@ func (c *Checker) inferToTemplateLiteralType(n *InferenceState, source *Type, ta
 func (c *Checker) inferFromGenericMappedTypes(n *InferenceState, source *Type, target *Type) {
 	// The source and target types are generic types { [P in S]: X } and { [P in T]: Y }, so we infer
 	// from S to T and from X to Y.
+	source = c.getNonDistributedMappedType(source)
 	c.inferFromTypes(n, c.getConstraintTypeFromMappedType(source), c.getConstraintTypeFromMappedType(target))
 	c.inferFromTypes(n, c.getTemplateTypeFromMappedType(source), c.getTemplateTypeFromMappedType(target))
 	sourceNameType := c.getNameTypeFromMappedType(source)
@@ -970,7 +971,7 @@ func (c *Checker) inferToMappedType(n *InferenceState, source *Type, target *Typ
 		// where T is a type variable. Use inferTypeForHomomorphicMappedType to infer a suitable source
 		// type and then make a secondary inference from that type to T. We make a secondary inference
 		// such that direct inferences to T get priority over inferences to Partial<T>, for example.
-		inference := getInferenceInfoForType(n, constraintType.AsIndexType().target)
+		inference := getInferenceInfoForType(n, c.getActualTypeVariable(constraintType.AsIndexType().target))
 		if inference != nil && !inference.isFixed && !c.isFromInferenceBlockedSource(source) {
 			inferredType := c.inferTypeForHomomorphicMappedType(source, target, constraintType)
 			if inferredType != nil {
@@ -1101,7 +1102,7 @@ func (c *Checker) inferReverseMappedType(source *Type, target *Type, constraint 
 }
 
 func (c *Checker) inferReverseMappedTypeWorker(source *Type, target *Type, constraint *Type) *Type {
-	typeParameter := c.getIndexedAccessType(constraint.AsIndexType().target, c.getTypeParameterFromMappedType(target))
+	typeParameter := c.getIndexedAccessType(c.getActualTypeVariable(constraint.AsIndexType().target), c.getTypeParameterFromMappedType(target))
 	templateType := c.getTemplateTypeFromMappedType(target)
 	inference := newInferenceInfo(typeParameter)
 	c.inferTypes([]*InferenceInfo{inference}, source, templateType, InferencePriorityNone, false)
@@ -1196,7 +1197,10 @@ func (c *Checker) replaceIndexedAccess(instantiable *Type, t *Type, replacement 
 	// map type.indexType to 0
 	// map type.objectType to `[TReplacement]`
 	// thus making the indexed access `[TReplacement][0]` or `TReplacement`
-	return c.instantiateType(instantiable, newTypeMapper([]*Type{t.AsIndexedAccessType().indexType, t.AsIndexedAccessType().objectType}, []*Type{c.getNumberLiteralType(0), c.createTupleType([]*Type{replacement})}))
+	// Mappers look up distributed type parameters by their non-distributed form, so the sources must use that form too.
+	indexType := getNonDistributedTypeParameter(t.AsIndexedAccessType().indexType)
+	objectType := getNonDistributedTypeParameter(t.AsIndexedAccessType().objectType)
+	return c.instantiateType(instantiable, newTypeMapper([]*Type{indexType, objectType}, []*Type{c.getNumberLiteralType(0), c.createTupleType([]*Type{replacement})}))
 }
 
 func (c *Checker) typesDefinitelyUnrelated(source *Type, target *Type) bool {

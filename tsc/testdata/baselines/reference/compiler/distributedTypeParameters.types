@@ -91,6 +91,88 @@ type T5<A extends number, B extends A> =
     Show<A, B> :
     never;
 
+type M1<A, B extends A> = {
+>M1 : M1<A, B>
+
+  [K in keyof A]: Show<A, B>;  // Error
+};
+
+type M2<A, B extends A> = {
+>M2 : M2<A, B>
+
+  [K in keyof A as K]: Show<A, B>;  // Error
+};
+
+type M3<A, B extends A> = {
+>M3 : M3<A, B>
+
+  [K in keyof A & string]: Show<A, B>;
+};
+
+type X5 = M1<{ a: 0 } | { b: 1 }, { a: 0 }>;
+>X5 : X5
+>a : 0
+>b : 1
+>a : 0
+
+type X6 = M2<{ a: 0 } | { b: 1 }, { a: 0 }>;
+>X6 : X6
+>a : 0
+>b : 1
+>a : 0
+
+type ShowResult<T, U extends T> = U extends T ? true : false;
+>ShowResult : ShowResult<T, U>
+>true : true
+>false : false
+
+declare function conditionalIndexedAccess<T, U extends T>(y: U):
+>conditionalIndexedAccess : <T, U extends T>(y: U) => T extends unknown ? ShowResult<T[keyof T], U[keyof T]> : never
+>y : U
+
+  T extends unknown ? ShowResult<T[keyof T], U[keyof T]> : never;  // Error
+
+const conditionalIndexedAccessResult = conditionalIndexedAccess<
+>conditionalIndexedAccessResult : boolean
+>conditionalIndexedAccess<  { a: 1 } | { b: 2 },  { a: 1 }>({ a: 1 }) : boolean
+>conditionalIndexedAccess : <T, U extends T>(y: U) => T extends unknown ? ShowResult<T[keyof T], U[keyof T]> : never
+
+  { a: 1 } | { b: 2 },
+>a : 1
+>b : 2
+
+  { a: 1 }
+>a : 1
+
+>({ a: 1 });
+>{ a: 1 } : { a: 1; }
+>a : 1
+>1 : 1
+
+declare function mappedIndexedAccess<T, U extends T>(y: U): {
+>mappedIndexedAccess : <T, U extends T>(y: U) => { [P in keyof T]: ShowResult<T[P], U[P]>; }
+>y : U
+
+  [P in keyof T]: ShowResult<T[P], U[P]>;  // Error
+};
+
+const mappedIndexedAccessResult = mappedIndexedAccess<
+>mappedIndexedAccessResult : { a: true; } | { b: false; }
+>mappedIndexedAccess<  { a: 1 } | { b: 2 },  { a: 1 }>({ a: 1 }) : { a: true; } | { b: false; }
+>mappedIndexedAccess : <T, U extends T>(y: U) => { [P in keyof T]: ShowResult<T[P], U[P]>; }
+
+  { a: 1 } | { b: 2 },
+>a : 1
+>b : 2
+
+  { a: 1 }
+>a : 1
+
+>({ a: 1 });
+>{ a: 1 } : { a: 1; }
+>a : 1
+>1 : 1
+
 // Ensure mapped type modifiers are computed correctly, example from type-fest
 
 type IsReadonlyKeyOf<Type extends object, Key extends keyof Type> =
@@ -143,4 +225,84 @@ type T10 = IsReadonlyKeyOf<{ a: string }, 'a'>;  // false
 type T11 = IsReadonlyKeyOf<{ readonly b: string }, 'b'>;  // true
 >T11 : true
 >b : string
+
+// Repro from triggerdotdev/trigger.dev
+
+type Exact<P, I extends P> =
+>Exact : Exact<P, I>
+
+  P extends unknown ?
+    { [K in keyof P]: Exact<P[K], I[K]> } :  // Error
+    never;
+
+type X7 = Exact<{ a: 0 } | { b: 1 }, { a: 0 }>;
+>X7 : X7
+>a : 0
+>b : 1
+>a : 0
+
+// Homomorphic mapped types instantiated for a distributed type parameter keep its distributed form
+
+type Mutable<T> = { -readonly [K in keyof T]: T[K] };
+>Mutable : Mutable<T>
+
+type C1<T, U extends T> = T extends unknown ? Show<Mutable<T>, U> : never;  // Error
+>C1 : C1<T, U>
+
+type C2<T, U extends T> = T extends unknown ? Show<Partial<T>, U> : never;  // Error
+>C2 : C2<T, U>
+
+type C3<T, U extends T> = T extends unknown ? Show<Mutable<T>, Mutable<U>> : never;  // Error
+>C3 : C3<T, U>
+
+type C4<T, U extends T> = T extends unknown ? Show<{ [K in keyof T]: T[K] }, U> : never;  // Error
+>C4 : C4<T, U>
+
+type M4<T, U extends T> = { [K in keyof T]: Show<Mutable<T>, U> };  // Error
+>M4 : M4<T, U>
+
+// Normalization doesn't depend on whether the template was resolved before
+
+declare function inferFromMappedGetter<U>(u: { [K in keyof U]: () => U }): () => U;
+>inferFromMappedGetter : <U>(u: { [K in keyof U]: () => U; }) => () => U
+>u : { [K in keyof U]: () => U; }
+
+function f1<T>(getter: () => T) {
+>f1 : <T>(getter: () => T) => void
+>getter : () => T
+
+  let r = inferFromMappedGetter(get());
+>r : () => T
+>inferFromMappedGetter(get()) : () => T
+>inferFromMappedGetter : <U>(u: { [K in keyof U]: () => U; }) => () => U
+>get() : { [K in keyof T]: () => T; }
+>get : () => { [K in keyof T]: () => T; }
+
+  r = getter;
+>r = getter : () => T
+>r : () => T
+>getter : () => T
+
+  function get(): { [K in keyof T]: () => T } { return null!; }
+>get : () => { [K in keyof T]: () => T; }
+>null! : never
+}
+
+type M5<A, B extends A> = { [K in keyof A]: { [J in keyof B]: Show<A, B> } };
+>M5 : M5<A, B>
+
+type M6<A, B extends A> = { [K in keyof B]: { [J in keyof A]: Show<A, B> } };
+>M6 : M6<A, B>
+
+type M7<A, B extends A, C extends B> = { [K in keyof A]: Show<A, C> };
+>M7 : M7<A, B, C>
+
+type M8<A, B extends A, C extends B> = { [K in keyof A]: { [J in keyof B]: [Show<A, C>, Show<B, C>] } };
+>M8 : M8<A, B, C>
+
+type M9<A, B extends A> = { [K in keyof A as Show<A, B> extends never ? never : K]: 0 };
+>M9 : M9<A, B>
+
+type M10<A, B extends A> = { [K in keyof [A]]: Show<A, B> };
+>M10 : M10<A, B>
 

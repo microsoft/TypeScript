@@ -893,3 +893,415 @@ type GenericSettingsResult2 = GenericSettingsAccess<"audio" | "video">;
 >GenericSettingsResult2 : Symbol(GenericSettingsResult2, Decl(mappedTypeRelationships.ts, 207, 61))
 >GenericSettingsAccess : Symbol(GenericSettingsAccess, Decl(mappedTypeRelationships.ts, 205, 74))
 
+function mappedRelations1<T>(x: { [K in keyof T]: [T, T[K]] }, y: { [K in keyof T]: [T, T[K]] }) {
+>mappedRelations1 : Symbol(mappedRelations1, Decl(mappedTypeRelationships.ts, 208, 71))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 209, 26))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 209, 29))
+>K : Symbol(K, Decl(mappedTypeRelationships.ts, 209, 35))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 209, 26))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 209, 26))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 209, 26))
+>K : Symbol(K, Decl(mappedTypeRelationships.ts, 209, 35))
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 209, 62))
+>K : Symbol(K, Decl(mappedTypeRelationships.ts, 209, 69))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 209, 26))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 209, 26))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 209, 26))
+>K : Symbol(K, Decl(mappedTypeRelationships.ts, 209, 69))
+
+    x = y;
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 209, 29))
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 209, 62))
+
+    y = x;
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 209, 62))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 209, 29))
+}
+
+function mappedRelations2<T>(x: { [K in keyof T]: { t: T, k: T[K] } }, y: { [K in keyof T]: { t: T, k: T[K] } }) {
+>mappedRelations2 : Symbol(mappedRelations2, Decl(mappedTypeRelationships.ts, 212, 1))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 214, 26))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 214, 29))
+>K : Symbol(K, Decl(mappedTypeRelationships.ts, 214, 35))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 214, 26))
+>t : Symbol(t, Decl(mappedTypeRelationships.ts, 214, 51))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 214, 26))
+>k : Symbol(k, Decl(mappedTypeRelationships.ts, 214, 57))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 214, 26))
+>K : Symbol(K, Decl(mappedTypeRelationships.ts, 214, 35))
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 214, 70))
+>K : Symbol(K, Decl(mappedTypeRelationships.ts, 214, 77))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 214, 26))
+>t : Symbol(t, Decl(mappedTypeRelationships.ts, 214, 93))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 214, 26))
+>k : Symbol(k, Decl(mappedTypeRelationships.ts, 214, 99))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 214, 26))
+>K : Symbol(K, Decl(mappedTypeRelationships.ts, 214, 77))
+
+    x = y;
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 214, 29))
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 214, 70))
+
+    y = x;
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 214, 70))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 214, 29))
+}
+
+function mappedRelations3<T>(x: { [K in keyof T]: (t: T) => T[K] }, y: { [K in keyof T]: (t: T) => T[K] }) {
+>mappedRelations3 : Symbol(mappedRelations3, Decl(mappedTypeRelationships.ts, 217, 1))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 219, 26))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 219, 29))
+>K : Symbol(K, Decl(mappedTypeRelationships.ts, 219, 35))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 219, 26))
+>t : Symbol(t, Decl(mappedTypeRelationships.ts, 219, 51))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 219, 26))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 219, 26))
+>K : Symbol(K, Decl(mappedTypeRelationships.ts, 219, 35))
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 219, 67))
+>K : Symbol(K, Decl(mappedTypeRelationships.ts, 219, 74))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 219, 26))
+>t : Symbol(t, Decl(mappedTypeRelationships.ts, 219, 90))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 219, 26))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 219, 26))
+>K : Symbol(K, Decl(mappedTypeRelationships.ts, 219, 74))
+
+    x = y;
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 219, 29))
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 219, 67))
+
+    y = x;
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 219, 67))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 219, 29))
+}
+
+function mappedRelations4<T>(
+>mappedRelations4 : Symbol(mappedRelations4, Decl(mappedTypeRelationships.ts, 222, 1))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 224, 26))
+
+    x: { [K in keyof T]: T[K] extends string ? { t: T } : { u: T } },
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 224, 29))
+>K : Symbol(K, Decl(mappedTypeRelationships.ts, 225, 10))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 224, 26))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 224, 26))
+>K : Symbol(K, Decl(mappedTypeRelationships.ts, 225, 10))
+>t : Symbol(t, Decl(mappedTypeRelationships.ts, 225, 48))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 224, 26))
+>u : Symbol(u, Decl(mappedTypeRelationships.ts, 225, 59))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 224, 26))
+
+    y: { [K in keyof T]: T[K] extends string ? { t: T } : { u: T } },
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 225, 69))
+>K : Symbol(K, Decl(mappedTypeRelationships.ts, 226, 10))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 224, 26))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 224, 26))
+>K : Symbol(K, Decl(mappedTypeRelationships.ts, 226, 10))
+>t : Symbol(t, Decl(mappedTypeRelationships.ts, 226, 48))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 224, 26))
+>u : Symbol(u, Decl(mappedTypeRelationships.ts, 226, 59))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 224, 26))
+
+) {
+    x = y;
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 224, 29))
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 225, 69))
+
+    y = x;
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 225, 69))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 224, 29))
+}
+
+function mappedRelations5<T>(x: { [K in keyof T]: { t: T } }) {
+>mappedRelations5 : Symbol(mappedRelations5, Decl(mappedTypeRelationships.ts, 230, 1))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 232, 26))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 232, 29))
+>K : Symbol(K, Decl(mappedTypeRelationships.ts, 232, 35))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 232, 26))
+>t : Symbol(t, Decl(mappedTypeRelationships.ts, 232, 51))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 232, 26))
+
+    const make = <V>(v: V): { [K in keyof T]: { t: T, v: V } } => null!;
+>make : Symbol(make, Decl(mappedTypeRelationships.ts, 233, 9))
+>V : Symbol(V, Decl(mappedTypeRelationships.ts, 233, 18))
+>v : Symbol(v, Decl(mappedTypeRelationships.ts, 233, 21))
+>V : Symbol(V, Decl(mappedTypeRelationships.ts, 233, 18))
+>K : Symbol(K, Decl(mappedTypeRelationships.ts, 233, 31))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 232, 26))
+>t : Symbol(t, Decl(mappedTypeRelationships.ts, 233, 47))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 232, 26))
+>v : Symbol(v, Decl(mappedTypeRelationships.ts, 233, 53))
+>V : Symbol(V, Decl(mappedTypeRelationships.ts, 233, 18))
+
+    x = make(1);
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 232, 29))
+>make : Symbol(make, Decl(mappedTypeRelationships.ts, 233, 9))
+}
+
+function mappedRelations6<T>(x: T extends object ? { inner: { [K in keyof T]: T } } : never, y: { [K in keyof T]: T }) {
+>mappedRelations6 : Symbol(mappedRelations6, Decl(mappedTypeRelationships.ts, 235, 1))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 237, 26))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 237, 29))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 237, 26))
+>inner : Symbol(inner, Decl(mappedTypeRelationships.ts, 237, 52))
+>K : Symbol(K, Decl(mappedTypeRelationships.ts, 237, 63))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 237, 26))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 237, 26))
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 237, 92))
+>K : Symbol(K, Decl(mappedTypeRelationships.ts, 237, 99))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 237, 26))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 237, 26))
+
+    x.inner = y;
+>x.inner : Symbol(inner, Decl(mappedTypeRelationships.ts, 237, 52))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 237, 29))
+>inner : Symbol(inner, Decl(mappedTypeRelationships.ts, 237, 52))
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 237, 92))
+
+    y = x.inner;
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 237, 92))
+>x.inner : Symbol(inner, Decl(mappedTypeRelationships.ts, 237, 52))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 237, 29))
+>inner : Symbol(inner, Decl(mappedTypeRelationships.ts, 237, 52))
+}
+
+interface MappedBox<X> { value: X }
+>MappedBox : Symbol(MappedBox, Decl(mappedTypeRelationships.ts, 240, 1))
+>X : Symbol(X, Decl(mappedTypeRelationships.ts, 242, 20))
+>value : Symbol(MappedBox.value, Decl(mappedTypeRelationships.ts, 242, 24))
+>X : Symbol(X, Decl(mappedTypeRelationships.ts, 242, 20))
+
+function mappedRelations7<T>(x: MappedBox<{ [K in keyof T]: { t: T } }>, y: MappedBox<{ [K in keyof T]: { t: T } }>) {
+>mappedRelations7 : Symbol(mappedRelations7, Decl(mappedTypeRelationships.ts, 242, 35))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 243, 26))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 243, 29))
+>MappedBox : Symbol(MappedBox, Decl(mappedTypeRelationships.ts, 240, 1))
+>K : Symbol(K, Decl(mappedTypeRelationships.ts, 243, 45))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 243, 26))
+>t : Symbol(t, Decl(mappedTypeRelationships.ts, 243, 61))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 243, 26))
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 243, 72))
+>MappedBox : Symbol(MappedBox, Decl(mappedTypeRelationships.ts, 240, 1))
+>K : Symbol(K, Decl(mappedTypeRelationships.ts, 243, 89))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 243, 26))
+>t : Symbol(t, Decl(mappedTypeRelationships.ts, 243, 105))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 243, 26))
+
+    x = y;
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 243, 29))
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 243, 72))
+
+    y = x;
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 243, 72))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 243, 29))
+}
+
+type MappedAlias<T> = { [K in keyof T]: { t: T, k: T[K] } };
+>MappedAlias : Symbol(MappedAlias, Decl(mappedTypeRelationships.ts, 246, 1))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 248, 17))
+>K : Symbol(K, Decl(mappedTypeRelationships.ts, 248, 25))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 248, 17))
+>t : Symbol(t, Decl(mappedTypeRelationships.ts, 248, 41))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 248, 17))
+>k : Symbol(k, Decl(mappedTypeRelationships.ts, 248, 47))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 248, 17))
+>K : Symbol(K, Decl(mappedTypeRelationships.ts, 248, 25))
+
+type MappedRecursive<T> = { [K in keyof T]: { next: MappedRecursive<T>, t: T } };
+>MappedRecursive : Symbol(MappedRecursive, Decl(mappedTypeRelationships.ts, 248, 60))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 249, 21))
+>K : Symbol(K, Decl(mappedTypeRelationships.ts, 249, 29))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 249, 21))
+>next : Symbol(next, Decl(mappedTypeRelationships.ts, 249, 45))
+>MappedRecursive : Symbol(MappedRecursive, Decl(mappedTypeRelationships.ts, 248, 60))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 249, 21))
+>t : Symbol(t, Decl(mappedTypeRelationships.ts, 249, 71))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 249, 21))
+
+function mappedRelations8<T>(x: MappedAlias<T>, y: { [K in keyof T]: { t: T, k: T[K] } }) {
+>mappedRelations8 : Symbol(mappedRelations8, Decl(mappedTypeRelationships.ts, 249, 81))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 250, 26))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 250, 29))
+>MappedAlias : Symbol(MappedAlias, Decl(mappedTypeRelationships.ts, 246, 1))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 250, 26))
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 250, 47))
+>K : Symbol(K, Decl(mappedTypeRelationships.ts, 250, 54))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 250, 26))
+>t : Symbol(t, Decl(mappedTypeRelationships.ts, 250, 70))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 250, 26))
+>k : Symbol(k, Decl(mappedTypeRelationships.ts, 250, 76))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 250, 26))
+>K : Symbol(K, Decl(mappedTypeRelationships.ts, 250, 54))
+
+    x = y;
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 250, 29))
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 250, 47))
+
+    y = x;
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 250, 47))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 250, 29))
+
+    const make = <V>(v: V): MappedAlias<T> => null!;
+>make : Symbol(make, Decl(mappedTypeRelationships.ts, 253, 9))
+>V : Symbol(V, Decl(mappedTypeRelationships.ts, 253, 18))
+>v : Symbol(v, Decl(mappedTypeRelationships.ts, 253, 21))
+>V : Symbol(V, Decl(mappedTypeRelationships.ts, 253, 18))
+>MappedAlias : Symbol(MappedAlias, Decl(mappedTypeRelationships.ts, 246, 1))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 250, 26))
+
+    x = make(1);
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 250, 29))
+>make : Symbol(make, Decl(mappedTypeRelationships.ts, 253, 9))
+}
+
+function mappedRelations9<T>(x: MappedRecursive<T>, y: { [K in keyof T]: { next: MappedRecursive<T>, t: T } }) {
+>mappedRelations9 : Symbol(mappedRelations9, Decl(mappedTypeRelationships.ts, 255, 1))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 257, 26))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 257, 29))
+>MappedRecursive : Symbol(MappedRecursive, Decl(mappedTypeRelationships.ts, 248, 60))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 257, 26))
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 257, 51))
+>K : Symbol(K, Decl(mappedTypeRelationships.ts, 257, 58))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 257, 26))
+>next : Symbol(next, Decl(mappedTypeRelationships.ts, 257, 74))
+>MappedRecursive : Symbol(MappedRecursive, Decl(mappedTypeRelationships.ts, 248, 60))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 257, 26))
+>t : Symbol(t, Decl(mappedTypeRelationships.ts, 257, 100))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 257, 26))
+
+    x = y;
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 257, 29))
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 257, 51))
+
+    y = x;
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 257, 51))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 257, 29))
+}
+
+function mappedRelations10<T, U>(x: { [K in keyof T]: T }, y: T, z: { [K in keyof T]: U }) {
+>mappedRelations10 : Symbol(mappedRelations10, Decl(mappedTypeRelationships.ts, 260, 1))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 262, 27))
+>U : Symbol(U, Decl(mappedTypeRelationships.ts, 262, 29))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 262, 33))
+>K : Symbol(K, Decl(mappedTypeRelationships.ts, 262, 39))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 262, 27))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 262, 27))
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 262, 58))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 262, 27))
+>z : Symbol(z, Decl(mappedTypeRelationships.ts, 262, 64))
+>K : Symbol(K, Decl(mappedTypeRelationships.ts, 262, 71))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 262, 27))
+>U : Symbol(U, Decl(mappedTypeRelationships.ts, 262, 29))
+
+    x = y;
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 262, 33))
+>y : Symbol(y, Decl(mappedTypeRelationships.ts, 262, 58))
+
+    x = z;
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 262, 33))
+>z : Symbol(z, Decl(mappedTypeRelationships.ts, 262, 64))
+
+    z = x;
+>z : Symbol(z, Decl(mappedTypeRelationships.ts, 262, 64))
+>x : Symbol(x, Decl(mappedTypeRelationships.ts, 262, 33))
+}
+
+declare let mappedSignature1: <A>(m: A, r: (a: { [K in keyof A]: A }) => void) => void;
+>mappedSignature1 : Symbol(mappedSignature1, Decl(mappedTypeRelationships.ts, 268, 11))
+>A : Symbol(A, Decl(mappedTypeRelationships.ts, 268, 31))
+>m : Symbol(m, Decl(mappedTypeRelationships.ts, 268, 34))
+>A : Symbol(A, Decl(mappedTypeRelationships.ts, 268, 31))
+>r : Symbol(r, Decl(mappedTypeRelationships.ts, 268, 39))
+>a : Symbol(a, Decl(mappedTypeRelationships.ts, 268, 44))
+>K : Symbol(K, Decl(mappedTypeRelationships.ts, 268, 50))
+>A : Symbol(A, Decl(mappedTypeRelationships.ts, 268, 31))
+>A : Symbol(A, Decl(mappedTypeRelationships.ts, 268, 31))
+
+let mappedSignature2: <A>(m: A, r: (a: { [K in keyof A]: A }) => void) => void = mappedSignature1;
+>mappedSignature2 : Symbol(mappedSignature2, Decl(mappedTypeRelationships.ts, 269, 3))
+>A : Symbol(A, Decl(mappedTypeRelationships.ts, 269, 23))
+>m : Symbol(m, Decl(mappedTypeRelationships.ts, 269, 26))
+>A : Symbol(A, Decl(mappedTypeRelationships.ts, 269, 23))
+>r : Symbol(r, Decl(mappedTypeRelationships.ts, 269, 31))
+>a : Symbol(a, Decl(mappedTypeRelationships.ts, 269, 36))
+>K : Symbol(K, Decl(mappedTypeRelationships.ts, 269, 42))
+>A : Symbol(A, Decl(mappedTypeRelationships.ts, 269, 23))
+>A : Symbol(A, Decl(mappedTypeRelationships.ts, 269, 23))
+>mappedSignature1 : Symbol(mappedSignature1, Decl(mappedTypeRelationships.ts, 268, 11))
+
+type MappedSigA = { m<T, U extends { [K in keyof T]: T }>(u: U): void };
+>MappedSigA : Symbol(MappedSigA, Decl(mappedTypeRelationships.ts, 269, 98))
+>m : Symbol(m, Decl(mappedTypeRelationships.ts, 271, 19))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 271, 22))
+>U : Symbol(U, Decl(mappedTypeRelationships.ts, 271, 24))
+>K : Symbol(K, Decl(mappedTypeRelationships.ts, 271, 38))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 271, 22))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 271, 22))
+>u : Symbol(u, Decl(mappedTypeRelationships.ts, 271, 58))
+>U : Symbol(U, Decl(mappedTypeRelationships.ts, 271, 24))
+
+type MappedSigB = { m<T, U extends { [K in keyof T]: T }>(u: U): void };
+>MappedSigB : Symbol(MappedSigB, Decl(mappedTypeRelationships.ts, 271, 72))
+>m : Symbol(m, Decl(mappedTypeRelationships.ts, 272, 19))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 272, 22))
+>U : Symbol(U, Decl(mappedTypeRelationships.ts, 272, 24))
+>K : Symbol(K, Decl(mappedTypeRelationships.ts, 272, 38))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 272, 22))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 272, 22))
+>u : Symbol(u, Decl(mappedTypeRelationships.ts, 272, 58))
+>U : Symbol(U, Decl(mappedTypeRelationships.ts, 272, 24))
+
+declare const mappedSigs: MappedSigA | MappedSigB;
+>mappedSigs : Symbol(mappedSigs, Decl(mappedTypeRelationships.ts, 273, 13))
+>MappedSigA : Symbol(MappedSigA, Decl(mappedTypeRelationships.ts, 269, 98))
+>MappedSigB : Symbol(MappedSigB, Decl(mappedTypeRelationships.ts, 271, 72))
+
+mappedSigs.m({});
+>mappedSigs.m : Symbol(m, Decl(mappedTypeRelationships.ts, 271, 19), Decl(mappedTypeRelationships.ts, 272, 19))
+>mappedSigs : Symbol(mappedSigs, Decl(mappedTypeRelationships.ts, 273, 13))
+>m : Symbol(m, Decl(mappedTypeRelationships.ts, 271, 19), Decl(mappedTypeRelationships.ts, 272, 19))
+
+function mappedRelations11<T>() {
+>mappedRelations11 : Symbol(mappedRelations11, Decl(mappedTypeRelationships.ts, 274, 17))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 276, 27))
+
+    type M<X> = { [K in keyof X]: X };
+>M : Symbol(M, Decl(mappedTypeRelationships.ts, 276, 33))
+>X : Symbol(X, Decl(mappedTypeRelationships.ts, 277, 11))
+>K : Symbol(K, Decl(mappedTypeRelationships.ts, 277, 19))
+>X : Symbol(X, Decl(mappedTypeRelationships.ts, 277, 11))
+>X : Symbol(X, Decl(mappedTypeRelationships.ts, 277, 11))
+
+    var a: { [K in keyof T]: T };
+>a : Symbol(a, Decl(mappedTypeRelationships.ts, 278, 7), Decl(mappedTypeRelationships.ts, 279, 7))
+>K : Symbol(K, Decl(mappedTypeRelationships.ts, 278, 14))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 276, 27))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 276, 27))
+
+    var a: M<T>;
+>a : Symbol(a, Decl(mappedTypeRelationships.ts, 278, 7), Decl(mappedTypeRelationships.ts, 279, 7))
+>M : Symbol(M, Decl(mappedTypeRelationships.ts, 276, 33))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 276, 27))
+}
+
+class MappedCallbacks {
+>MappedCallbacks : Symbol(MappedCallbacks, Decl(mappedTypeRelationships.ts, 280, 1))
+
+    m<T>(item: T, callbacks: { [K in keyof T]: (item: T) => void }, key: keyof T): void {
+>m : Symbol(MappedCallbacks.m, Decl(mappedTypeRelationships.ts, 282, 23))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 283, 6))
+>item : Symbol(item, Decl(mappedTypeRelationships.ts, 283, 9))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 283, 6))
+>callbacks : Symbol(callbacks, Decl(mappedTypeRelationships.ts, 283, 17))
+>K : Symbol(K, Decl(mappedTypeRelationships.ts, 283, 32))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 283, 6))
+>item : Symbol(item, Decl(mappedTypeRelationships.ts, 283, 48))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 283, 6))
+>key : Symbol(key, Decl(mappedTypeRelationships.ts, 283, 67))
+>T : Symbol(T, Decl(mappedTypeRelationships.ts, 283, 6))
+
+        callbacks[key](item);
+>callbacks : Symbol(callbacks, Decl(mappedTypeRelationships.ts, 283, 17))
+>key : Symbol(key, Decl(mappedTypeRelationships.ts, 283, 67))
+>item : Symbol(item, Decl(mappedTypeRelationships.ts, 283, 9))
+    }
+}
+

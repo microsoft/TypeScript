@@ -618,3 +618,413 @@ const o2: { foo: any; bar: any } = getProps(myAny, ['foo', 'bar']);
 >getProps : Symbol(getProps, Decl(isomorphicMappedTypeInference.ts, 165, 40))
 >myAny : Symbol(myAny, Decl(isomorphicMappedTypeInference.ts, 173, 5))
 
+// Inference between homomorphic mapped types should infer the original type
+// parameter, not its distributed representation.
+declare function inferFromMapped<T>(value: { [P in keyof T]: T[P] }): T;
+>inferFromMapped : Symbol(inferFromMapped, Decl(isomorphicMappedTypeInference.ts, 177, 67))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 181, 33))
+>value : Symbol(value, Decl(isomorphicMappedTypeInference.ts, 181, 36))
+>P : Symbol(P, Decl(isomorphicMappedTypeInference.ts, 181, 46))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 181, 33))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 181, 33))
+>P : Symbol(P, Decl(isomorphicMappedTypeInference.ts, 181, 46))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 181, 33))
+
+function f30<U>(value: { [P in keyof U]: U[P] }, ordinary: U) {
+>f30 : Symbol(f30, Decl(isomorphicMappedTypeInference.ts, 181, 72))
+>U : Symbol(U, Decl(isomorphicMappedTypeInference.ts, 183, 13))
+>value : Symbol(value, Decl(isomorphicMappedTypeInference.ts, 183, 16))
+>P : Symbol(P, Decl(isomorphicMappedTypeInference.ts, 183, 26))
+>U : Symbol(U, Decl(isomorphicMappedTypeInference.ts, 183, 13))
+>U : Symbol(U, Decl(isomorphicMappedTypeInference.ts, 183, 13))
+>P : Symbol(P, Decl(isomorphicMappedTypeInference.ts, 183, 26))
+>ordinary : Symbol(ordinary, Decl(isomorphicMappedTypeInference.ts, 183, 48))
+>U : Symbol(U, Decl(isomorphicMappedTypeInference.ts, 183, 13))
+
+    const inferred = inferFromMapped(value);
+>inferred : Symbol(inferred, Decl(isomorphicMappedTypeInference.ts, 184, 9))
+>inferFromMapped : Symbol(inferFromMapped, Decl(isomorphicMappedTypeInference.ts, 177, 67))
+>value : Symbol(value, Decl(isomorphicMappedTypeInference.ts, 183, 16))
+
+    const accept: typeof inferred = ordinary;
+>accept : Symbol(accept, Decl(isomorphicMappedTypeInference.ts, 185, 9))
+>inferred : Symbol(inferred, Decl(isomorphicMappedTypeInference.ts, 184, 9))
+>ordinary : Symbol(ordinary, Decl(isomorphicMappedTypeInference.ts, 183, 48))
+}
+
+// Inference to homomorphic mapped types nested in conditional types
+
+declare function inferInNonDistributive<T>(x: [T] extends [object] ? { [K in keyof T]: () => T[K] } : never): T;
+>inferInNonDistributive : Symbol(inferInNonDistributive, Decl(isomorphicMappedTypeInference.ts, 186, 1))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 190, 40))
+>x : Symbol(x, Decl(isomorphicMappedTypeInference.ts, 190, 43))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 190, 40))
+>K : Symbol(K, Decl(isomorphicMappedTypeInference.ts, 190, 72))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 190, 40))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 190, 40))
+>K : Symbol(K, Decl(isomorphicMappedTypeInference.ts, 190, 72))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 190, 40))
+
+const inferredInNonDistributive = inferInNonDistributive({ a: () => 1 });
+>inferredInNonDistributive : Symbol(inferredInNonDistributive, Decl(isomorphicMappedTypeInference.ts, 191, 5))
+>inferInNonDistributive : Symbol(inferInNonDistributive, Decl(isomorphicMappedTypeInference.ts, 186, 1))
+>a : Symbol(a, Decl(isomorphicMappedTypeInference.ts, 191, 58))
+
+declare function inferInDistributive<T>(x: T extends unknown ? { [K in keyof T]: () => T[K] } : never): T;
+>inferInDistributive : Symbol(inferInDistributive, Decl(isomorphicMappedTypeInference.ts, 191, 73))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 193, 37))
+>x : Symbol(x, Decl(isomorphicMappedTypeInference.ts, 193, 40))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 193, 37))
+>K : Symbol(K, Decl(isomorphicMappedTypeInference.ts, 193, 66))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 193, 37))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 193, 37))
+>K : Symbol(K, Decl(isomorphicMappedTypeInference.ts, 193, 66))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 193, 37))
+
+const inferredInDistributive = inferInDistributive({ a: () => 1 });
+>inferredInDistributive : Symbol(inferredInDistributive, Decl(isomorphicMappedTypeInference.ts, 194, 5))
+>inferInDistributive : Symbol(inferInDistributive, Decl(isomorphicMappedTypeInference.ts, 191, 73))
+>a : Symbol(a, Decl(isomorphicMappedTypeInference.ts, 194, 52))
+
+declare function inferFromMappedSelf<T>(value: { [P in keyof T]: T }): T;
+>inferFromMappedSelf : Symbol(inferFromMappedSelf, Decl(isomorphicMappedTypeInference.ts, 194, 67))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 196, 37))
+>value : Symbol(value, Decl(isomorphicMappedTypeInference.ts, 196, 40))
+>P : Symbol(P, Decl(isomorphicMappedTypeInference.ts, 196, 50))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 196, 37))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 196, 37))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 196, 37))
+
+function f40<U>(value: { [P in keyof U]: U }, ordinary: U) {
+>f40 : Symbol(f40, Decl(isomorphicMappedTypeInference.ts, 196, 73))
+>U : Symbol(U, Decl(isomorphicMappedTypeInference.ts, 197, 13))
+>value : Symbol(value, Decl(isomorphicMappedTypeInference.ts, 197, 16))
+>P : Symbol(P, Decl(isomorphicMappedTypeInference.ts, 197, 26))
+>U : Symbol(U, Decl(isomorphicMappedTypeInference.ts, 197, 13))
+>U : Symbol(U, Decl(isomorphicMappedTypeInference.ts, 197, 13))
+>ordinary : Symbol(ordinary, Decl(isomorphicMappedTypeInference.ts, 197, 45))
+>U : Symbol(U, Decl(isomorphicMappedTypeInference.ts, 197, 13))
+
+    const inferred = inferFromMappedSelf(value);
+>inferred : Symbol(inferred, Decl(isomorphicMappedTypeInference.ts, 198, 9))
+>inferFromMappedSelf : Symbol(inferFromMappedSelf, Decl(isomorphicMappedTypeInference.ts, 194, 67))
+>value : Symbol(value, Decl(isomorphicMappedTypeInference.ts, 197, 16))
+
+    const accept: typeof inferred = ordinary;
+>accept : Symbol(accept, Decl(isomorphicMappedTypeInference.ts, 199, 9))
+>inferred : Symbol(inferred, Decl(isomorphicMappedTypeInference.ts, 198, 9))
+>ordinary : Symbol(ordinary, Decl(isomorphicMappedTypeInference.ts, 197, 45))
+}
+
+declare function inferFromMappedBox<X, T>(value: { [P in keyof X]: Box<T> }): T;
+>inferFromMappedBox : Symbol(inferFromMappedBox, Decl(isomorphicMappedTypeInference.ts, 200, 1))
+>X : Symbol(X, Decl(isomorphicMappedTypeInference.ts, 202, 36))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 202, 38))
+>value : Symbol(value, Decl(isomorphicMappedTypeInference.ts, 202, 42))
+>P : Symbol(P, Decl(isomorphicMappedTypeInference.ts, 202, 52))
+>X : Symbol(X, Decl(isomorphicMappedTypeInference.ts, 202, 36))
+>Box : Symbol(Box, Decl(isomorphicMappedTypeInference.ts, 0, 0))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 202, 38))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 202, 38))
+
+function f41<U>(value: { [P in keyof U]: Box<U> }, ordinary: U) {
+>f41 : Symbol(f41, Decl(isomorphicMappedTypeInference.ts, 202, 80))
+>U : Symbol(U, Decl(isomorphicMappedTypeInference.ts, 203, 13))
+>value : Symbol(value, Decl(isomorphicMappedTypeInference.ts, 203, 16))
+>P : Symbol(P, Decl(isomorphicMappedTypeInference.ts, 203, 26))
+>U : Symbol(U, Decl(isomorphicMappedTypeInference.ts, 203, 13))
+>Box : Symbol(Box, Decl(isomorphicMappedTypeInference.ts, 0, 0))
+>U : Symbol(U, Decl(isomorphicMappedTypeInference.ts, 203, 13))
+>ordinary : Symbol(ordinary, Decl(isomorphicMappedTypeInference.ts, 203, 50))
+>U : Symbol(U, Decl(isomorphicMappedTypeInference.ts, 203, 13))
+
+    const inferred = inferFromMappedBox(value);
+>inferred : Symbol(inferred, Decl(isomorphicMappedTypeInference.ts, 204, 9))
+>inferFromMappedBox : Symbol(inferFromMappedBox, Decl(isomorphicMappedTypeInference.ts, 200, 1))
+>value : Symbol(value, Decl(isomorphicMappedTypeInference.ts, 203, 16))
+
+    const accept: typeof inferred = ordinary;
+>accept : Symbol(accept, Decl(isomorphicMappedTypeInference.ts, 205, 9))
+>inferred : Symbol(inferred, Decl(isomorphicMappedTypeInference.ts, 204, 9))
+>ordinary : Symbol(ordinary, Decl(isomorphicMappedTypeInference.ts, 203, 50))
+}
+
+declare function inferFromMappedInlineObject<X, T>(value: { [P in keyof X]: { value: T } }): T;
+>inferFromMappedInlineObject : Symbol(inferFromMappedInlineObject, Decl(isomorphicMappedTypeInference.ts, 206, 1))
+>X : Symbol(X, Decl(isomorphicMappedTypeInference.ts, 208, 45))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 208, 47))
+>value : Symbol(value, Decl(isomorphicMappedTypeInference.ts, 208, 51))
+>P : Symbol(P, Decl(isomorphicMappedTypeInference.ts, 208, 61))
+>X : Symbol(X, Decl(isomorphicMappedTypeInference.ts, 208, 45))
+>value : Symbol(value, Decl(isomorphicMappedTypeInference.ts, 208, 77))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 208, 47))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 208, 47))
+
+function f42<U>(value: { [P in keyof U]: { value: U } }, ordinary: U) {
+>f42 : Symbol(f42, Decl(isomorphicMappedTypeInference.ts, 208, 95))
+>U : Symbol(U, Decl(isomorphicMappedTypeInference.ts, 209, 13))
+>value : Symbol(value, Decl(isomorphicMappedTypeInference.ts, 209, 16))
+>P : Symbol(P, Decl(isomorphicMappedTypeInference.ts, 209, 26))
+>U : Symbol(U, Decl(isomorphicMappedTypeInference.ts, 209, 13))
+>value : Symbol(value, Decl(isomorphicMappedTypeInference.ts, 209, 42))
+>U : Symbol(U, Decl(isomorphicMappedTypeInference.ts, 209, 13))
+>ordinary : Symbol(ordinary, Decl(isomorphicMappedTypeInference.ts, 209, 56))
+>U : Symbol(U, Decl(isomorphicMappedTypeInference.ts, 209, 13))
+
+    const inferred = inferFromMappedInlineObject(value);
+>inferred : Symbol(inferred, Decl(isomorphicMappedTypeInference.ts, 210, 9))
+>inferFromMappedInlineObject : Symbol(inferFromMappedInlineObject, Decl(isomorphicMappedTypeInference.ts, 206, 1))
+>value : Symbol(value, Decl(isomorphicMappedTypeInference.ts, 209, 16))
+
+    const accept: typeof inferred = ordinary;
+>accept : Symbol(accept, Decl(isomorphicMappedTypeInference.ts, 211, 9))
+>inferred : Symbol(inferred, Decl(isomorphicMappedTypeInference.ts, 210, 9))
+>ordinary : Symbol(ordinary, Decl(isomorphicMappedTypeInference.ts, 209, 56))
+}
+
+declare function inferFromMappedInlineFunction<X, T>(value: { [P in keyof X]: (arg: T) => T }): T;
+>inferFromMappedInlineFunction : Symbol(inferFromMappedInlineFunction, Decl(isomorphicMappedTypeInference.ts, 212, 1))
+>X : Symbol(X, Decl(isomorphicMappedTypeInference.ts, 214, 47))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 214, 49))
+>value : Symbol(value, Decl(isomorphicMappedTypeInference.ts, 214, 53))
+>P : Symbol(P, Decl(isomorphicMappedTypeInference.ts, 214, 63))
+>X : Symbol(X, Decl(isomorphicMappedTypeInference.ts, 214, 47))
+>arg : Symbol(arg, Decl(isomorphicMappedTypeInference.ts, 214, 79))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 214, 49))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 214, 49))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 214, 49))
+
+function f43<U>(value: { [P in keyof U]: (arg: U) => U }, ordinary: U) {
+>f43 : Symbol(f43, Decl(isomorphicMappedTypeInference.ts, 214, 98))
+>U : Symbol(U, Decl(isomorphicMappedTypeInference.ts, 215, 13))
+>value : Symbol(value, Decl(isomorphicMappedTypeInference.ts, 215, 16))
+>P : Symbol(P, Decl(isomorphicMappedTypeInference.ts, 215, 26))
+>U : Symbol(U, Decl(isomorphicMappedTypeInference.ts, 215, 13))
+>arg : Symbol(arg, Decl(isomorphicMappedTypeInference.ts, 215, 42))
+>U : Symbol(U, Decl(isomorphicMappedTypeInference.ts, 215, 13))
+>U : Symbol(U, Decl(isomorphicMappedTypeInference.ts, 215, 13))
+>ordinary : Symbol(ordinary, Decl(isomorphicMappedTypeInference.ts, 215, 57))
+>U : Symbol(U, Decl(isomorphicMappedTypeInference.ts, 215, 13))
+
+    const inferred = inferFromMappedInlineFunction(value);
+>inferred : Symbol(inferred, Decl(isomorphicMappedTypeInference.ts, 216, 9))
+>inferFromMappedInlineFunction : Symbol(inferFromMappedInlineFunction, Decl(isomorphicMappedTypeInference.ts, 212, 1))
+>value : Symbol(value, Decl(isomorphicMappedTypeInference.ts, 215, 16))
+
+    const accept: typeof inferred = ordinary;
+>accept : Symbol(accept, Decl(isomorphicMappedTypeInference.ts, 217, 9))
+>inferred : Symbol(inferred, Decl(isomorphicMappedTypeInference.ts, 216, 9))
+>ordinary : Symbol(ordinary, Decl(isomorphicMappedTypeInference.ts, 215, 57))
+}
+
+declare function inferFromMappedInlineIntersection<X, T>(value: { [P in keyof X]: { a: T } & { b: T } }): T;
+>inferFromMappedInlineIntersection : Symbol(inferFromMappedInlineIntersection, Decl(isomorphicMappedTypeInference.ts, 218, 1))
+>X : Symbol(X, Decl(isomorphicMappedTypeInference.ts, 220, 51))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 220, 53))
+>value : Symbol(value, Decl(isomorphicMappedTypeInference.ts, 220, 57))
+>P : Symbol(P, Decl(isomorphicMappedTypeInference.ts, 220, 67))
+>X : Symbol(X, Decl(isomorphicMappedTypeInference.ts, 220, 51))
+>a : Symbol(a, Decl(isomorphicMappedTypeInference.ts, 220, 83))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 220, 53))
+>b : Symbol(b, Decl(isomorphicMappedTypeInference.ts, 220, 94))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 220, 53))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 220, 53))
+
+function f44<U>(value: { [P in keyof U]: { a: U } & { b: U } }, ordinary: U) {
+>f44 : Symbol(f44, Decl(isomorphicMappedTypeInference.ts, 220, 108))
+>U : Symbol(U, Decl(isomorphicMappedTypeInference.ts, 221, 13))
+>value : Symbol(value, Decl(isomorphicMappedTypeInference.ts, 221, 16))
+>P : Symbol(P, Decl(isomorphicMappedTypeInference.ts, 221, 26))
+>U : Symbol(U, Decl(isomorphicMappedTypeInference.ts, 221, 13))
+>a : Symbol(a, Decl(isomorphicMappedTypeInference.ts, 221, 42))
+>U : Symbol(U, Decl(isomorphicMappedTypeInference.ts, 221, 13))
+>b : Symbol(b, Decl(isomorphicMappedTypeInference.ts, 221, 53))
+>U : Symbol(U, Decl(isomorphicMappedTypeInference.ts, 221, 13))
+>ordinary : Symbol(ordinary, Decl(isomorphicMappedTypeInference.ts, 221, 63))
+>U : Symbol(U, Decl(isomorphicMappedTypeInference.ts, 221, 13))
+
+    const inferred = inferFromMappedInlineIntersection(value);
+>inferred : Symbol(inferred, Decl(isomorphicMappedTypeInference.ts, 222, 9))
+>inferFromMappedInlineIntersection : Symbol(inferFromMappedInlineIntersection, Decl(isomorphicMappedTypeInference.ts, 218, 1))
+>value : Symbol(value, Decl(isomorphicMappedTypeInference.ts, 221, 16))
+
+    const accept: typeof inferred = ordinary;
+>accept : Symbol(accept, Decl(isomorphicMappedTypeInference.ts, 223, 9))
+>inferred : Symbol(inferred, Decl(isomorphicMappedTypeInference.ts, 222, 9))
+>ordinary : Symbol(ordinary, Decl(isomorphicMappedTypeInference.ts, 221, 63))
+}
+
+declare function inferFromMappedConditional<X, T>(value: { [P in keyof X]: X[P] extends string ? { value: T } : never }): T;
+>inferFromMappedConditional : Symbol(inferFromMappedConditional, Decl(isomorphicMappedTypeInference.ts, 224, 1))
+>X : Symbol(X, Decl(isomorphicMappedTypeInference.ts, 226, 44))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 226, 46))
+>value : Symbol(value, Decl(isomorphicMappedTypeInference.ts, 226, 50))
+>P : Symbol(P, Decl(isomorphicMappedTypeInference.ts, 226, 60))
+>X : Symbol(X, Decl(isomorphicMappedTypeInference.ts, 226, 44))
+>X : Symbol(X, Decl(isomorphicMappedTypeInference.ts, 226, 44))
+>P : Symbol(P, Decl(isomorphicMappedTypeInference.ts, 226, 60))
+>value : Symbol(value, Decl(isomorphicMappedTypeInference.ts, 226, 98))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 226, 46))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 226, 46))
+
+function f45<U>(value: { [P in keyof U]: U[P] extends string ? { value: U } : never }, ordinary: U) {
+>f45 : Symbol(f45, Decl(isomorphicMappedTypeInference.ts, 226, 124))
+>U : Symbol(U, Decl(isomorphicMappedTypeInference.ts, 227, 13))
+>value : Symbol(value, Decl(isomorphicMappedTypeInference.ts, 227, 16))
+>P : Symbol(P, Decl(isomorphicMappedTypeInference.ts, 227, 26))
+>U : Symbol(U, Decl(isomorphicMappedTypeInference.ts, 227, 13))
+>U : Symbol(U, Decl(isomorphicMappedTypeInference.ts, 227, 13))
+>P : Symbol(P, Decl(isomorphicMappedTypeInference.ts, 227, 26))
+>value : Symbol(value, Decl(isomorphicMappedTypeInference.ts, 227, 64))
+>U : Symbol(U, Decl(isomorphicMappedTypeInference.ts, 227, 13))
+>ordinary : Symbol(ordinary, Decl(isomorphicMappedTypeInference.ts, 227, 86))
+>U : Symbol(U, Decl(isomorphicMappedTypeInference.ts, 227, 13))
+
+    const inferred = inferFromMappedConditional(value);
+>inferred : Symbol(inferred, Decl(isomorphicMappedTypeInference.ts, 228, 9))
+>inferFromMappedConditional : Symbol(inferFromMappedConditional, Decl(isomorphicMappedTypeInference.ts, 224, 1))
+>value : Symbol(value, Decl(isomorphicMappedTypeInference.ts, 227, 16))
+
+    const accept: typeof inferred = ordinary;
+>accept : Symbol(accept, Decl(isomorphicMappedTypeInference.ts, 229, 9))
+>inferred : Symbol(inferred, Decl(isomorphicMappedTypeInference.ts, 228, 9))
+>ordinary : Symbol(ordinary, Decl(isomorphicMappedTypeInference.ts, 227, 86))
+}
+
+declare function inferFromPlainTargetOfMapped<T>(value: { a: { value: T } }): T;
+>inferFromPlainTargetOfMapped : Symbol(inferFromPlainTargetOfMapped, Decl(isomorphicMappedTypeInference.ts, 230, 1))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 232, 46))
+>value : Symbol(value, Decl(isomorphicMappedTypeInference.ts, 232, 49))
+>a : Symbol(a, Decl(isomorphicMappedTypeInference.ts, 232, 57))
+>value : Symbol(value, Decl(isomorphicMappedTypeInference.ts, 232, 62))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 232, 46))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 232, 46))
+
+function f46<U extends { a: unknown }>(value: { [P in keyof U]: { value: U } }, ordinary: U) {
+>f46 : Symbol(f46, Decl(isomorphicMappedTypeInference.ts, 232, 80))
+>U : Symbol(U, Decl(isomorphicMappedTypeInference.ts, 233, 13))
+>a : Symbol(a, Decl(isomorphicMappedTypeInference.ts, 233, 24))
+>value : Symbol(value, Decl(isomorphicMappedTypeInference.ts, 233, 39))
+>P : Symbol(P, Decl(isomorphicMappedTypeInference.ts, 233, 49))
+>U : Symbol(U, Decl(isomorphicMappedTypeInference.ts, 233, 13))
+>value : Symbol(value, Decl(isomorphicMappedTypeInference.ts, 233, 65))
+>U : Symbol(U, Decl(isomorphicMappedTypeInference.ts, 233, 13))
+>ordinary : Symbol(ordinary, Decl(isomorphicMappedTypeInference.ts, 233, 79))
+>U : Symbol(U, Decl(isomorphicMappedTypeInference.ts, 233, 13))
+
+    const inferred = inferFromPlainTargetOfMapped(value);
+>inferred : Symbol(inferred, Decl(isomorphicMappedTypeInference.ts, 234, 9))
+>inferFromPlainTargetOfMapped : Symbol(inferFromPlainTargetOfMapped, Decl(isomorphicMappedTypeInference.ts, 230, 1))
+>value : Symbol(value, Decl(isomorphicMappedTypeInference.ts, 233, 39))
+
+    const accept: typeof inferred = ordinary;
+>accept : Symbol(accept, Decl(isomorphicMappedTypeInference.ts, 235, 9))
+>inferred : Symbol(inferred, Decl(isomorphicMappedTypeInference.ts, 234, 9))
+>ordinary : Symbol(ordinary, Decl(isomorphicMappedTypeInference.ts, 233, 79))
+}
+
+declare function inferFromWrappedMapped<X, T>(value: { wrap: { [P in keyof X]: { value: T } } }): T;
+>inferFromWrappedMapped : Symbol(inferFromWrappedMapped, Decl(isomorphicMappedTypeInference.ts, 236, 1))
+>X : Symbol(X, Decl(isomorphicMappedTypeInference.ts, 238, 40))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 238, 42))
+>value : Symbol(value, Decl(isomorphicMappedTypeInference.ts, 238, 46))
+>wrap : Symbol(wrap, Decl(isomorphicMappedTypeInference.ts, 238, 54))
+>P : Symbol(P, Decl(isomorphicMappedTypeInference.ts, 238, 64))
+>X : Symbol(X, Decl(isomorphicMappedTypeInference.ts, 238, 40))
+>value : Symbol(value, Decl(isomorphicMappedTypeInference.ts, 238, 80))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 238, 42))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 238, 42))
+
+function f47<U>(value: { wrap: { [P in keyof U]: { value: U } } }, ordinary: U) {
+>f47 : Symbol(f47, Decl(isomorphicMappedTypeInference.ts, 238, 100))
+>U : Symbol(U, Decl(isomorphicMappedTypeInference.ts, 239, 13))
+>value : Symbol(value, Decl(isomorphicMappedTypeInference.ts, 239, 16))
+>wrap : Symbol(wrap, Decl(isomorphicMappedTypeInference.ts, 239, 24))
+>P : Symbol(P, Decl(isomorphicMappedTypeInference.ts, 239, 34))
+>U : Symbol(U, Decl(isomorphicMappedTypeInference.ts, 239, 13))
+>value : Symbol(value, Decl(isomorphicMappedTypeInference.ts, 239, 50))
+>U : Symbol(U, Decl(isomorphicMappedTypeInference.ts, 239, 13))
+>ordinary : Symbol(ordinary, Decl(isomorphicMappedTypeInference.ts, 239, 66))
+>U : Symbol(U, Decl(isomorphicMappedTypeInference.ts, 239, 13))
+
+    const inferred = inferFromWrappedMapped(value);
+>inferred : Symbol(inferred, Decl(isomorphicMappedTypeInference.ts, 240, 9))
+>inferFromWrappedMapped : Symbol(inferFromWrappedMapped, Decl(isomorphicMappedTypeInference.ts, 236, 1))
+>value : Symbol(value, Decl(isomorphicMappedTypeInference.ts, 239, 16))
+
+    const accept: typeof inferred = ordinary;
+>accept : Symbol(accept, Decl(isomorphicMappedTypeInference.ts, 241, 9))
+>inferred : Symbol(inferred, Decl(isomorphicMappedTypeInference.ts, 240, 9))
+>ordinary : Symbol(ordinary, Decl(isomorphicMappedTypeInference.ts, 239, 66))
+}
+
+declare function inferFromMappedCallbackParameter<X, T>(cb: (arg: { [P in keyof X]: { value: T } }) => void): T;
+>inferFromMappedCallbackParameter : Symbol(inferFromMappedCallbackParameter, Decl(isomorphicMappedTypeInference.ts, 242, 1))
+>X : Symbol(X, Decl(isomorphicMappedTypeInference.ts, 244, 50))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 244, 52))
+>cb : Symbol(cb, Decl(isomorphicMappedTypeInference.ts, 244, 56))
+>arg : Symbol(arg, Decl(isomorphicMappedTypeInference.ts, 244, 61))
+>P : Symbol(P, Decl(isomorphicMappedTypeInference.ts, 244, 69))
+>X : Symbol(X, Decl(isomorphicMappedTypeInference.ts, 244, 50))
+>value : Symbol(value, Decl(isomorphicMappedTypeInference.ts, 244, 85))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 244, 52))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 244, 52))
+
+function f48<U>(cb: (arg: { [P in keyof U]: { value: U } }) => void, ordinary: U) {
+>f48 : Symbol(f48, Decl(isomorphicMappedTypeInference.ts, 244, 112))
+>U : Symbol(U, Decl(isomorphicMappedTypeInference.ts, 245, 13))
+>cb : Symbol(cb, Decl(isomorphicMappedTypeInference.ts, 245, 16))
+>arg : Symbol(arg, Decl(isomorphicMappedTypeInference.ts, 245, 21))
+>P : Symbol(P, Decl(isomorphicMappedTypeInference.ts, 245, 29))
+>U : Symbol(U, Decl(isomorphicMappedTypeInference.ts, 245, 13))
+>value : Symbol(value, Decl(isomorphicMappedTypeInference.ts, 245, 45))
+>U : Symbol(U, Decl(isomorphicMappedTypeInference.ts, 245, 13))
+>ordinary : Symbol(ordinary, Decl(isomorphicMappedTypeInference.ts, 245, 68))
+>U : Symbol(U, Decl(isomorphicMappedTypeInference.ts, 245, 13))
+
+    const inferred = inferFromMappedCallbackParameter(cb);
+>inferred : Symbol(inferred, Decl(isomorphicMappedTypeInference.ts, 246, 9))
+>inferFromMappedCallbackParameter : Symbol(inferFromMappedCallbackParameter, Decl(isomorphicMappedTypeInference.ts, 242, 1))
+>cb : Symbol(cb, Decl(isomorphicMappedTypeInference.ts, 245, 16))
+
+    const accept: typeof inferred = ordinary;
+>accept : Symbol(accept, Decl(isomorphicMappedTypeInference.ts, 247, 9))
+>inferred : Symbol(inferred, Decl(isomorphicMappedTypeInference.ts, 246, 9))
+>ordinary : Symbol(ordinary, Decl(isomorphicMappedTypeInference.ts, 245, 68))
+}
+
+declare function inferFromDeeplyNestedMapped<X, T>(value: { [P in keyof X]: { a: { b: [() => T] } } }): T;
+>inferFromDeeplyNestedMapped : Symbol(inferFromDeeplyNestedMapped, Decl(isomorphicMappedTypeInference.ts, 248, 1))
+>X : Symbol(X, Decl(isomorphicMappedTypeInference.ts, 250, 45))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 250, 47))
+>value : Symbol(value, Decl(isomorphicMappedTypeInference.ts, 250, 51))
+>P : Symbol(P, Decl(isomorphicMappedTypeInference.ts, 250, 61))
+>X : Symbol(X, Decl(isomorphicMappedTypeInference.ts, 250, 45))
+>a : Symbol(a, Decl(isomorphicMappedTypeInference.ts, 250, 77))
+>b : Symbol(b, Decl(isomorphicMappedTypeInference.ts, 250, 82))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 250, 47))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 250, 47))
+
+function f49<U>(value: { [P in keyof U]: { a: { b: [() => U] } } }, ordinary: U) {
+>f49 : Symbol(f49, Decl(isomorphicMappedTypeInference.ts, 250, 106))
+>U : Symbol(U, Decl(isomorphicMappedTypeInference.ts, 251, 13))
+>value : Symbol(value, Decl(isomorphicMappedTypeInference.ts, 251, 16))
+>P : Symbol(P, Decl(isomorphicMappedTypeInference.ts, 251, 26))
+>U : Symbol(U, Decl(isomorphicMappedTypeInference.ts, 251, 13))
+>a : Symbol(a, Decl(isomorphicMappedTypeInference.ts, 251, 42))
+>b : Symbol(b, Decl(isomorphicMappedTypeInference.ts, 251, 47))
+>U : Symbol(U, Decl(isomorphicMappedTypeInference.ts, 251, 13))
+>ordinary : Symbol(ordinary, Decl(isomorphicMappedTypeInference.ts, 251, 67))
+>U : Symbol(U, Decl(isomorphicMappedTypeInference.ts, 251, 13))
+
+    const inferred = inferFromDeeplyNestedMapped(value);
+>inferred : Symbol(inferred, Decl(isomorphicMappedTypeInference.ts, 252, 9))
+>inferFromDeeplyNestedMapped : Symbol(inferFromDeeplyNestedMapped, Decl(isomorphicMappedTypeInference.ts, 248, 1))
+>value : Symbol(value, Decl(isomorphicMappedTypeInference.ts, 251, 16))
+
+    const accept: typeof inferred = ordinary;
+>accept : Symbol(accept, Decl(isomorphicMappedTypeInference.ts, 253, 9))
+>inferred : Symbol(inferred, Decl(isomorphicMappedTypeInference.ts, 252, 9))
+>ordinary : Symbol(ordinary, Decl(isomorphicMappedTypeInference.ts, 251, 67))
+}
+

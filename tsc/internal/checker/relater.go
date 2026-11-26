@@ -3655,6 +3655,7 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 		}
 	case r.c.isGenericMappedType(target) && r.relation != r.c.identityRelation:
 		// Check if source type `S` is related to target type `{ [P in Q]: T }` or `{ [P in Q as R]: T}`.
+		target := r.c.getNonDistributedMappedType(target)
 		keysRemapped := target.AsMappedType().declaration.NameType != nil
 		templateType := r.c.getTemplateTypeFromMappedType(target)
 		modifiers := getMappedTypeModifiers(target)
@@ -4042,6 +4043,11 @@ func (r *Relater) mappedTypeRelatedTo(source *Type, target *Type, reportErrors b
 		r.relation == r.c.identityRelation && getMappedTypeModifiers(source) == getMappedTypeModifiers(target) ||
 		r.relation != r.c.identityRelation && r.c.getCombinedMappedTypeOptionality(source) <= r.c.getCombinedMappedTypeOptionality(target)
 	if modifiersRelated {
+		// The constituent types of a homomorphic mapped type reference the distributed form of its type
+		// variable. The source constituents are instantiated below, which maps them back to the non-distributed
+		// form, but the target ones are related as is, so normalize the target to make the comparison not
+		// depend on whether it has been instantiated.
+		target := r.c.getNonDistributedMappedType(target)
 		targetConstraint := r.c.getConstraintTypeFromMappedType(target)
 		sourceConstraint := r.c.instantiateType(r.c.getConstraintTypeFromMappedType(source), core.IfElse(r.c.getCombinedMappedTypeOptionality(source) < 0, r.c.reportUnmeasurableMapper, r.c.reportUnreliableMapper))
 		if result := r.isRelatedTo(targetConstraint, sourceConstraint, RecursionFlagsBoth, reportErrors); result != TernaryFalse {
@@ -4656,7 +4662,7 @@ func (r *Relater) indexSignaturesRelatedTo(source *Type, target *Type, sourceIsP
 		case r.relation != r.c.strictSubtypeRelation && !sourceIsPrimitive && targetHasStringIndex && targetInfo.valueType.flags&TypeFlagsAny != 0:
 			related = TernaryTrue
 		case r.c.isGenericMappedType(source) && targetHasStringIndex:
-			related = r.isRelatedTo(r.c.getTemplateTypeFromMappedType(source), targetInfo.valueType, RecursionFlagsBoth, reportErrors)
+			related = r.isRelatedTo(r.c.getTemplateTypeFromMappedType(r.c.getNonDistributedMappedType(source)), targetInfo.valueType, RecursionFlagsBoth, reportErrors)
 		default:
 			related = r.typeRelatedToIndexInfo(source, targetInfo, reportErrors, intersectionState)
 		}
