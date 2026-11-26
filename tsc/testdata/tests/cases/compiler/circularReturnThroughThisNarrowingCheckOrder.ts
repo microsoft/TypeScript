@@ -4,7 +4,8 @@
 
 // Narrowing this by a type guard in a method relates the class to a
 // derived class, whose members include the method being inferred. The
-// circularity is reported whether the class or its methods are typed first
+// relation only observes the method's return type in progress, so the
+// method is not circular, whether the class or its methods are typed first
 // (55069).
 
 declare function isDerived(p: Base): p is Derived;

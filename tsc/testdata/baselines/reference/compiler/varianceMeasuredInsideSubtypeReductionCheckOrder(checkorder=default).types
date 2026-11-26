@@ -1,0 +1,53 @@
+//// [tests/cases/compiler/varianceMeasuredInsideSubtypeReductionCheckOrder.ts] ////
+
+=== varianceMeasuredInsideSubtypeReductionCheckOrder.ts ===
+// The return type of 'm' is a union reduced by relating 'Box<string>' to
+// 'Box<number>', which measures the variances of 'Box', which resolves 'm'
+// again inside the measurement while it is incomplete. Whichever of 'm' or
+// the measurement is entered first, 'm' returns 'Box<string>'.
+
+declare const cond: boolean;
+>cond : boolean
+
+declare let a1: Box<string>;
+>a1 : Box<string>
+
+declare let a2: Box<number>;
+>a2 : Box<number>
+
+class Box<T> {
+>Box : Box<T>
+
+    value!: T;
+>value : T
+
+    m() {
+>m : () => Box<string>
+
+        if (cond) return a1;
+>cond : boolean
+>a1 : Box<string>
+
+        return a2;
+>a2 : Box<number>
+    }
+}
+const r = new Box<boolean>().m();
+>r : Box<string>
+>new Box<boolean>().m() : Box<string>
+>new Box<boolean>().m : () => Box<string>
+>new Box<boolean>() : Box<boolean>
+>Box : typeof Box
+>m : () => Box<string>
+
+declare let b1: Box<string>;
+>b1 : Box<string>
+
+declare let b2: Box<number>;
+>b2 : Box<number>
+
+b1 = b2;
+>b1 = b2 : Box<number>
+>b1 : Box<string>
+>b2 : Box<number>
+

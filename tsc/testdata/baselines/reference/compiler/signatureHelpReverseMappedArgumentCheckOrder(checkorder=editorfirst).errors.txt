@@ -1,11 +1,8 @@
 signatureHelpReverseMappedArgumentCheckOrder.ts(17,3): error TS2322: Type 'Selector<State, boolean>' is not assignable to type 'Selector<unknown, boolean>'.
   Type 'unknown' is not assignable to type 'State'.
-signatureHelpReverseMappedArgumentCheckOrder.ts(21,3): error TS2322: Type '(state: State) => boolean' is not assignable to type 'Selector<unknown, boolean>'.
-  Types of parameters 'state' and 'state' are incompatible.
-    Type 'unknown' is not assignable to type 'State'.
 
 
-==== signatureHelpReverseMappedArgumentCheckOrder.ts (2 errors) ====
+==== signatureHelpReverseMappedArgumentCheckOrder.ts (1 errors) ====
     // Printing the candidates of signature help computes the members of the
     // reverse mapped type inferred for the call, which resolves the call
     // again. That happens within the request, and does not change what
@@ -31,11 +28,6 @@ signatureHelpReverseMappedArgumentCheckOrder.ts(21,3): error TS2322: Type '(stat
     
     const result2 = createStructuredSelector({
       mySelector: (state: State) => true,
-      ~~~~~~~~~~
-!!! error TS2322: Type '(state: State) => boolean' is not assignable to type 'Selector<unknown, boolean>'.
-!!! error TS2322:   Types of parameters 'state' and 'state' are incompatible.
-!!! error TS2322:     Type 'unknown' is not assignable to type 'State'.
-!!! related TS6500 signatureHelpReverseMappedArgumentCheckOrder.ts:21:3: The expected type comes from property 'mySelector' which is declared here on type '{ mySelector: Selector<unknown, boolean>; }'
     });
     
     result2;

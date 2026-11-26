@@ -41,9 +41,9 @@ export const checkA: 0 = oxa.pb;
 
 export const checkB: 0 = oxb.pa;
 >checkB : 0
->oxb.pa : any
+>oxb.pa : 0
 >oxb : O
->pa : any
+>pa : 0
 
 === /ambient.d.ts ===
 declare module "ma" {

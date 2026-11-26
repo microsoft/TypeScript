@@ -1,5 +1,5 @@
 /main.ts(7,14): error TS2322: Type '{ pb: 0; readonly mb: 1; v: 0; }' is not assignable to type 'never'.
-/main.ts(8,14): error TS2322: Type '{ v: 0; }' is not assignable to type 'never'.
+/main.ts(8,14): error TS2322: Type '{ pa: 0; readonly ma: 1; v: 0; }' is not assignable to type 'never'.
 
 
 ==== /main.ts (2 errors) ====
@@ -14,7 +14,7 @@
 !!! error TS2322: Type '{ pb: 0; readonly mb: 1; v: 0; }' is not assignable to type 'never'.
     export const obsB: never = expand<typeof oxb>();
                  ~~~~
-!!! error TS2322: Type '{ v: 0; }' is not assignable to type 'never'.
+!!! error TS2322: Type '{ pa: 0; readonly ma: 1; v: 0; }' is not assignable to type 'never'.
     
 ==== /ambient.d.ts (0 errors) ====
     declare module "ma" {

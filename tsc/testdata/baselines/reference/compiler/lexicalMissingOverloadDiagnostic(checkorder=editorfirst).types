@@ -1,0 +1,64 @@
+//// [tests/cases/compiler/lexicalMissingOverloadDiagnostic.ts] ////
+
+=== lexicalMissingOverloadDiagnostic.ts ===
+// Relating Nested to Inline reads the return type of the call being resolved.
+// A hidden re-entry of that call still reports that no overload matches, and
+// the call has the type of the last overload tried.
+
+interface ConfigValue<T> {
+  children?: 'inline';
+>children : "inline" | undefined
+
+  json?: (n: T) => void;
+>json : ((n: T) => void) | undefined
+>n : T
+}
+declare class Base {
+>Base : Base
+
+  describe(): {};
+>describe : () => {}
+
+  config<Config extends ConfigValue<this>>(type: symbol, config: Config): {};
+>config : { <Config extends ConfigValue<this>>(type: symbol, config: Config): {}; <Config_1 extends ConfigValue<this>>(type: string, config: Config_1): { kind?: Config_1; }; }
+>type : symbol
+>config : Config
+
+  config<Config extends ConfigValue<this>>(type: string, config: Config): { kind?: Config };
+>config : { <Config_1 extends ConfigValue<this>>(type: symbol, config: Config_1): {}; <Config extends ConfigValue<this>>(type: string, config: Config): { kind?: Config; }; }
+>type : string
+>config : Config
+>kind : Config | undefined
+}
+declare const pinSchema: (n: Inline) => void;
+>pinSchema : (n: Inline) => void
+>n : Inline
+
+declare class Inline extends Base {
+>Inline : Inline
+>Base : Base
+
+  describe(): { kind?: { children: 'inline' } };
+>describe : () => { kind?: { children: 'inline'; }; }
+>kind : { children: 'inline'; } | undefined
+>children : "inline"
+}
+class Nested extends Base {
+>Nested : Nested
+>Base : Base
+
+  describe() {
+>describe : () => { kind?: { json: (n: Inline) => void; } | undefined; }
+
+    return this.config('kind', { json: pinSchema }); // error
+>this.config('kind', { json: pinSchema }) : {}
+>this.config : { <Config extends ConfigValue<this>>(type: symbol, config: Config): {}; <Config extends ConfigValue<this>>(type: string, config: Config): { kind?: Config | undefined; }; }
+>this : this
+>config : { <Config extends ConfigValue<this>>(type: symbol, config: Config): {}; <Config extends ConfigValue<this>>(type: string, config: Config): { kind?: Config | undefined; }; }
+>'kind' : "kind"
+>{ json: pinSchema } : { json: (n: Inline) => void; }
+>json : (n: Inline) => void
+>pinSchema : (n: Inline) => void
+  }
+}
+

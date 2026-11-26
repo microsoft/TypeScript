@@ -10,10 +10,14 @@ declare let z: Derived2;
 >Derived2 : Symbol(Derived2, Decl(circularBaseTypesCheckOrder.ts, 14, 1))
 
 z.x;
+>z.x : Symbol(Base.x, Decl(circularBaseTypesCheckOrder.ts, 8, 33))
 >z : Symbol(z, Decl(circularBaseTypesCheckOrder.ts, 4, 11))
+>x : Symbol(Base.x, Decl(circularBaseTypesCheckOrder.ts, 8, 33))
 
 z.y;
+>z.y : Symbol(Derived.y, Decl(circularBaseTypesCheckOrder.ts, 12, 32))
 >z : Symbol(z, Decl(circularBaseTypesCheckOrder.ts, 4, 11))
+>y : Symbol(Derived.y, Decl(circularBaseTypesCheckOrder.ts, 12, 32))
 
 interface Base extends Derived2 {
 >Base : Symbol(Base, Decl(circularBaseTypesCheckOrder.ts, 6, 4))

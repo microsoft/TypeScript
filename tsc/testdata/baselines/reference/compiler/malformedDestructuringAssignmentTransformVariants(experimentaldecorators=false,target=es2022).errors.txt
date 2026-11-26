@@ -5,11 +5,13 @@ malformedDestructuringAssignmentTransformVariants.ts(17,19): error TS2364: The l
 malformedDestructuringAssignmentTransformVariants.ts(21,24): error TS1136: Property assignment expected.
 malformedDestructuringAssignmentTransformVariants.ts(22,28): error TS1136: Property assignment expected.
 malformedDestructuringAssignmentTransformVariants.ts(23,28): error TS1136: Property assignment expected.
+malformedDestructuringAssignmentTransformVariants.ts(23,28): error TS7032: Property 's' implicitly has type 'any', because its set accessor lacks a parameter type annotation.
+malformedDestructuringAssignmentTransformVariants.ts(23,30): error TS7006: Parameter 'v' implicitly has an 'any' type.
 malformedDestructuringAssignmentTransformVariants.ts(24,25): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
 malformedDestructuringAssignmentTransformVariants.ts(24,38): error TS1136: Property assignment expected.
 
 
-==== malformedDestructuringAssignmentTransformVariants.ts (9 errors) ====
+==== malformedDestructuringAssignmentTransformVariants.ts (11 errors) ====
     declare function dec(...args: any[]): any;
     declare const value: any;
     
@@ -47,6 +49,10 @@ malformedDestructuringAssignmentTransformVariants.ts(24,38): error TS1136: Prope
             ({ x: super.x, set s(v) {}, private: this.#x } = value);
                                ~
 !!! error TS1136: Property assignment expected.
+                               ~
+!!! error TS7032: Property 's' implicitly has type 'any', because its set accessor lacks a parameter type annotation.
+                                 ~
+!!! error TS7006: Parameter 'v' implicitly has an 'any' type.
             ({ x: [super.x, 0, this.#x], m() {} } = value);
                             ~
 !!! error TS2364: The left-hand side of an assignment expression must be a variable or a property access.

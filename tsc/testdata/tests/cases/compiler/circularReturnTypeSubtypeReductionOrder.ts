@@ -4,9 +4,10 @@
 
 // @filename: expression.ts
 // Subtype reduction of rebuild's return type relates the class to A,
-// which needs b's return type, which needs rebuild's: a cycle. Both
-// members report it, whichever return type is requested first, as if
-// rebuild's, declared first, were requested first.
+// which needs b's return type, which needs rebuild's: a cycle. The
+// relation only observes b's return type in progress, so resolving b's
+// first does not fail, and neither member is circular, whichever return
+// type is requested first.
 interface A {
     b(): A;
     c: A;
@@ -39,4 +40,20 @@ class K {
     }
 }
 const B: new () => B = K;
+export {};
+
+// @filename: declaredLater.ts
+// The same, with the member the relation requests declared first.
+interface D {
+    b(): D;
+}
+declare const flag: boolean;
+const D: new () => D = class {
+    b() {
+        return this.rebuild();
+    }
+    rebuild() {
+        return flag ? this : new D();
+    }
+};
 export {};

@@ -1,0 +1,58 @@
+//// [tests/cases/compiler/callResolvedAgainInFlowLoop.ts] ////
+
+=== callResolvedAgainInFlowLoop.ts ===
+// Destructuring func in the loop reads its declared type, which reaches the
+// assignment of the call below it, so the call is resolved again while it
+// is being resolved, from flow analysis of the loop (seen in a repro of
+// 60130).
+
+declare function inferStuff<T>(arg: T, checkStuff?: boolean): T;
+>inferStuff : Symbol(inferStuff, Decl(callResolvedAgainInFlowLoop.ts, 0, 0))
+>T : Symbol(T, Decl(callResolvedAgainInFlowLoop.ts, 5, 28))
+>arg : Symbol(arg, Decl(callResolvedAgainInFlowLoop.ts, 5, 31))
+>T : Symbol(T, Decl(callResolvedAgainInFlowLoop.ts, 5, 28))
+>checkStuff : Symbol(checkStuff, Decl(callResolvedAgainInFlowLoop.ts, 5, 38))
+>T : Symbol(T, Decl(callResolvedAgainInFlowLoop.ts, 5, 28))
+
+export function test(lines: string[]): string[] {
+>test : Symbol(test, Decl(callResolvedAgainInFlowLoop.ts, 5, 64))
+>lines : Symbol(lines, Decl(callResolvedAgainInFlowLoop.ts, 7, 21))
+
+    let func: { name: string } | null = null;
+>func : Symbol(func, Decl(callResolvedAgainInFlowLoop.ts, 8, 7))
+>name : Symbol(name, Decl(callResolvedAgainInFlowLoop.ts, 8, 15))
+
+    for (const _ of lines) {
+>_ : Symbol(_, Decl(callResolvedAgainInFlowLoop.ts, 10, 14))
+>lines : Symbol(lines, Decl(callResolvedAgainInFlowLoop.ts, 7, 21))
+
+        if (Math.random() < 0.5) {
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2025.float16.d.ts, --, --) ... and 1 more)
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+            func = { name: "qwer" };
+>func : Symbol(func, Decl(callResolvedAgainInFlowLoop.ts, 8, 7))
+>name : Symbol(name, Decl(callResolvedAgainInFlowLoop.ts, 12, 20))
+
+        } else {
+            if (func) {
+>func : Symbol(func, Decl(callResolvedAgainInFlowLoop.ts, 8, 7))
+
+                const { name } = func;
+>name : Symbol(name, Decl(callResolvedAgainInFlowLoop.ts, 15, 23))
+>func : Symbol(func, Decl(callResolvedAgainInFlowLoop.ts, 8, 7))
+
+                func = inferStuff({ name: "other" }, name === "abc");
+>func : Symbol(func, Decl(callResolvedAgainInFlowLoop.ts, 8, 7))
+>inferStuff : Symbol(inferStuff, Decl(callResolvedAgainInFlowLoop.ts, 0, 0))
+>name : Symbol(name, Decl(callResolvedAgainInFlowLoop.ts, 16, 35))
+>name : Symbol(name, Decl(callResolvedAgainInFlowLoop.ts, 15, 23))
+            }
+        }
+    }
+
+    return lines;
+>lines : Symbol(lines, Decl(callResolvedAgainInFlowLoop.ts, 7, 21))
+}
+

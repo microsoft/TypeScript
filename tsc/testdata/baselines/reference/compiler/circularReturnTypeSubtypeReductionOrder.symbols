@@ -2,50 +2,51 @@
 
 === expression.ts ===
 // Subtype reduction of rebuild's return type relates the class to A,
-// which needs b's return type, which needs rebuild's: a cycle. Both
-// members report it, whichever return type is requested first, as if
-// rebuild's, declared first, were requested first.
+// which needs b's return type, which needs rebuild's: a cycle. The
+// relation only observes b's return type in progress, so resolving b's
+// first does not fail, and neither member is circular, whichever return
+// type is requested first.
 interface A {
->A : Symbol(A, Decl(expression.ts, 0, 0), Decl(expression.ts, 9, 5))
+>A : Symbol(A, Decl(expression.ts, 0, 0), Decl(expression.ts, 10, 5))
 
     b(): A;
->b : Symbol(A.b, Decl(expression.ts, 4, 13))
->A : Symbol(A, Decl(expression.ts, 0, 0), Decl(expression.ts, 9, 5))
+>b : Symbol(A.b, Decl(expression.ts, 5, 13))
+>A : Symbol(A, Decl(expression.ts, 0, 0), Decl(expression.ts, 10, 5))
 
     c: A;
->c : Symbol(A.c, Decl(expression.ts, 5, 11))
->A : Symbol(A, Decl(expression.ts, 0, 0), Decl(expression.ts, 9, 5))
+>c : Symbol(A.c, Decl(expression.ts, 6, 11))
+>A : Symbol(A, Decl(expression.ts, 0, 0), Decl(expression.ts, 10, 5))
 }
 declare const flag: boolean;
->flag : Symbol(flag, Decl(expression.ts, 8, 13))
+>flag : Symbol(flag, Decl(expression.ts, 9, 13))
 
 const A: new () => A = class {
->A : Symbol(A, Decl(expression.ts, 0, 0), Decl(expression.ts, 9, 5))
->A : Symbol(A, Decl(expression.ts, 0, 0), Decl(expression.ts, 9, 5))
+>A : Symbol(A, Decl(expression.ts, 0, 0), Decl(expression.ts, 10, 5))
+>A : Symbol(A, Decl(expression.ts, 0, 0), Decl(expression.ts, 10, 5))
 
     rebuild() {
->rebuild : Symbol(A.rebuild, Decl(expression.ts, 9, 30))
+>rebuild : Symbol(A.rebuild, Decl(expression.ts, 10, 30))
 
         return flag ? this : new A();
->flag : Symbol(flag, Decl(expression.ts, 8, 13))
->this : Symbol(A, Decl(expression.ts, 9, 22))
->A : Symbol(A, Decl(expression.ts, 0, 0), Decl(expression.ts, 9, 5))
+>flag : Symbol(flag, Decl(expression.ts, 9, 13))
+>this : Symbol(A, Decl(expression.ts, 10, 22))
+>A : Symbol(A, Decl(expression.ts, 0, 0), Decl(expression.ts, 10, 5))
     }
     b() {
->b : Symbol(A.b, Decl(expression.ts, 12, 5))
+>b : Symbol(A.b, Decl(expression.ts, 13, 5))
 
         return this.rebuild();
->this.rebuild : Symbol(A.rebuild, Decl(expression.ts, 9, 30))
->this : Symbol(A, Decl(expression.ts, 9, 22))
->rebuild : Symbol(A.rebuild, Decl(expression.ts, 9, 30))
+>this.rebuild : Symbol(A.rebuild, Decl(expression.ts, 10, 30))
+>this : Symbol(A, Decl(expression.ts, 10, 22))
+>rebuild : Symbol(A.rebuild, Decl(expression.ts, 10, 30))
     }
     c() {
->c : Symbol(A.c, Decl(expression.ts, 15, 5))
+>c : Symbol(A.c, Decl(expression.ts, 16, 5))
 
         return this.rebuild;
->this.rebuild : Symbol(A.rebuild, Decl(expression.ts, 9, 30))
->this : Symbol(A, Decl(expression.ts, 9, 22))
->rebuild : Symbol(A.rebuild, Decl(expression.ts, 9, 30))
+>this.rebuild : Symbol(A.rebuild, Decl(expression.ts, 10, 30))
+>this : Symbol(A, Decl(expression.ts, 10, 22))
+>rebuild : Symbol(A.rebuild, Decl(expression.ts, 10, 30))
     }
 };
 export {};
@@ -86,5 +87,40 @@ const B: new () => B = K;
 >B : Symbol(B, Decl(declaration.ts, 0, 0), Decl(declaration.ts, 12, 5))
 >K : Symbol(K, Decl(declaration.ts, 3, 28))
 
+export {};
+
+=== declaredLater.ts ===
+// The same, with the member the relation requests declared first.
+interface D {
+>D : Symbol(D, Decl(declaredLater.ts, 0, 0), Decl(declaredLater.ts, 5, 5))
+
+    b(): D;
+>b : Symbol(D.b, Decl(declaredLater.ts, 1, 13))
+>D : Symbol(D, Decl(declaredLater.ts, 0, 0), Decl(declaredLater.ts, 5, 5))
+}
+declare const flag: boolean;
+>flag : Symbol(flag, Decl(declaredLater.ts, 4, 13))
+
+const D: new () => D = class {
+>D : Symbol(D, Decl(declaredLater.ts, 0, 0), Decl(declaredLater.ts, 5, 5))
+>D : Symbol(D, Decl(declaredLater.ts, 0, 0), Decl(declaredLater.ts, 5, 5))
+
+    b() {
+>b : Symbol(D.b, Decl(declaredLater.ts, 5, 30))
+
+        return this.rebuild();
+>this.rebuild : Symbol(D.rebuild, Decl(declaredLater.ts, 8, 5))
+>this : Symbol(D, Decl(declaredLater.ts, 5, 22))
+>rebuild : Symbol(D.rebuild, Decl(declaredLater.ts, 8, 5))
+    }
+    rebuild() {
+>rebuild : Symbol(D.rebuild, Decl(declaredLater.ts, 8, 5))
+
+        return flag ? this : new D();
+>flag : Symbol(flag, Decl(declaredLater.ts, 4, 13))
+>this : Symbol(D, Decl(declaredLater.ts, 5, 22))
+>D : Symbol(D, Decl(declaredLater.ts, 0, 0), Decl(declaredLater.ts, 5, 5))
+    }
+};
 export {};
 
