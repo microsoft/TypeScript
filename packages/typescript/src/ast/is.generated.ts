@@ -329,8 +329,8 @@ import type {
     WithStatement,
     YieldExpression,
 } from "./ast.ts";
-type NodeHandleLike<out T extends Node> = { kind: SyntaxKind; resolve(...args: any): any; };
-type SpecializeNodeHandle<T extends NodeHandleLike<Node>, U extends Node> = T extends AsyncNodeHandle<any> ? AsyncNodeHandle<U> & T : SyncNodeHandle<U> & T;
+export type NodeHandleLike<out T extends Node> = { kind: SyntaxKind; resolve(...args: any): any; };
+export type SpecializeNodeHandle<T extends NodeHandleLike<Node>, U extends Node> = T extends AsyncNodeHandle<any> ? AsyncNodeHandle<U> & T : SyncNodeHandle<U> & T;
 
 export function isToken(node: Node): node is Token {
     return isTokenKind(node.kind);

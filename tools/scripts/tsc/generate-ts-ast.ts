@@ -1553,9 +1553,9 @@ function generateIsGenerated(): string {
     out.push(`} from "./ast.ts";`);
     out.push(`import type { NodeHandle as AsyncNodeHandle } from "../api/async/api.ts";`);
     out.push(`import type { NodeHandle as SyncNodeHandle } from "../api/sync/api.ts";`);
-    out.push(`type NodeHandleLike<out T extends Node> = { kind: SyntaxKind; resolve(...args: any): any; };`);
+    out.push(`export type NodeHandleLike<out T extends Node> = { kind: SyntaxKind; resolve(...args: any): any; };`);
     // Note that we must `& T` to satisfy the requirements of a type guard, and it must be _second_ so the narrowed `resolve` overload from the specialization is selected (order matters)
-    out.push(`type SpecializeNodeHandle<T extends NodeHandleLike<Node>, U extends Node> = T extends AsyncNodeHandle<any> ? AsyncNodeHandle<U> & T : SyncNodeHandle<U> & T;`);
+    out.push(`export type SpecializeNodeHandle<T extends NodeHandleLike<Node>, U extends Node> = T extends AsyncNodeHandle<any> ? AsyncNodeHandle<U> & T : SyncNodeHandle<U> & T;`);
     out.push(``);
 
     // ── Simple guards ──

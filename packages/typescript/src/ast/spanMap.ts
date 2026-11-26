@@ -11,8 +11,8 @@ import type {
 export { SpanMapFeature, SpanMapFidelity, SpanMapKind };
 export type { MappedPosition, MappedRange, SpanMapSegment, SpanMapSegmentTuple } from "./spanMapTypes.generated.ts";
 
-/** Internal segment representation after omitted features have been normalized to `All`. */
-type NormalizedSpanMapSegment = SpanMapSegment & { readonly features: SpanMapFeature; };
+/** A segment whose omitted features have been normalized to `All`. */
+export type NormalizedSpanMapSegment = SpanMapSegment & { readonly features: SpanMapFeature; };
 
 /** Lazily built interval index for original-to-virtual lookups. */
 interface OriginalIndex {

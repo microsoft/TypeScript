@@ -13,7 +13,6 @@ const rules = Object.fromEntries(
         .filter(file => file.endsWith(".cjs") && file !== "utils.cjs")
         .map(file => [file.slice(0, -4), require(path.join(rulesDir, file))]),
 );
-
 export default tseslint.config(
     {
         ignores: [

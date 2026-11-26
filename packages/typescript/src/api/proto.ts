@@ -15,6 +15,7 @@ import type {
     TypeResponse,
 } from "./proto.generated.ts";
 export type { ConfigFileResponse as ParsedCommandLine, DiagnosticResponse as Diagnostic } from "./proto.generated.ts";
+export type { CreateBuildOrchestratorParams as ProtocolCreateBuildOrchestratorParams, CreateSnapshotParams as ProtocolCreateSnapshotParams, SymbolOwner as ProtocolSymbolOwner, SymbolReference as ProtocolSymbolReference } from "./proto.generated.ts";
 export type { ProtocolSymbolResponse };
 
 export * from "./proto.generated.ts";
@@ -71,7 +72,7 @@ export type TypePropertyMethod = Exclude<APIMethodsReturning<TypeResponse>, Intr
 export type TypesPropertyMethod = APIMethodsReturning<TypeResponse[]>;
 export type IntrinsicTypeMethod = "getAnyType" | "getBigIntType" | "getBooleanType" | "getESSymbolType" | "getFalseType" | "getNeverType" | "getNonPrimitiveType" | "getNullType" | "getNumberType" | "getStringType" | "getTrueType" | "getUndefinedType" | "getUnknownType" | "getVoidType";
 
-type BatchableAPIMethod = Exclude<keyof APIMethodInfo, "batchRequests">;
+export type BatchableAPIMethod = Exclude<keyof APIMethodInfo, "batchRequests">;
 export type APIRequest = { [K in BatchableAPIMethod]: { method: K; params: APIMethodInfo[K]["params"]; }; }[BatchableAPIMethod];
 export type APIResponse<Request extends APIRequest = APIRequest> = Request extends APIRequest ?
         & {

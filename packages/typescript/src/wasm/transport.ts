@@ -1,4 +1,4 @@
-export { instantiateWasm, type InstantiateWasmOptions, instantiateWasmSync } from "./wasi.ts";
+export { instantiateWasm, type InstantiateWasmOptions, instantiateWasmSync, type WebAssembly } from "./wasi.ts";
 import type { FileSystemCallbacks } from "../api/fs.ts";
 import {
     configureFileSystemCallbacks,
@@ -47,7 +47,7 @@ export interface WasmTransportOptions {
     fs?: FileSystemCallbacks | undefined;
 }
 
-type TransportCallback = (name: string, payload: string) => string | PromiseLike<string>;
+export type TransportCallback = (name: string, payload: string) => string | PromiseLike<string>;
 
 const MessageType = {
     Request: 1,

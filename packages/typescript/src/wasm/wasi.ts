@@ -23,6 +23,8 @@ declare namespace WebAssembly {
     function instantiate(module: Module, imports?: Imports): Promise<Instance>;
 }
 
+export type { WebAssembly };
+
 interface StreamingTextDecoder {
     decode(
         input?: Uint8Array<ArrayBufferLike>,
