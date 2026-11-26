@@ -78,8 +78,14 @@ func (s *superAccessState) visitSuperAccessNode(node *ast.Node) *ast.Node {
 	switch node.Kind {
 	case ast.KindCallExpression:
 		call := node.AsCallExpression()
-		if ast.IsSuperProperty(call.Expression) {
+		if ast.IsSuperProperty(ast.SkipOuterExpressions(call.Expression, ast.OEKAll)) {
 			return s.substituteCallExpressionWithSuperAccess(call, s.superAccessVisitor)
+		}
+		return s.superAccessVisitor.VisitEachChild(node)
+	case ast.KindTaggedTemplateExpression:
+		tagged := node.AsTaggedTemplateExpression()
+		if ast.IsSuperProperty(ast.SkipOuterExpressions(tagged.Tag, ast.OEKAll)) {
+			return s.substituteTaggedTemplateWithSuperAccess(tagged, s.superAccessVisitor)
 		}
 		return s.superAccessVisitor.VisitEachChild(node)
 	case ast.KindPropertyAccessExpression:
@@ -112,28 +118,31 @@ func (s *superAccessState) substituteSuperAccessesInBody(body *ast.Node) *ast.No
 	return s.superAccessVisitor.VisitNode(body)
 }
 
-// substituteCallExpressionWithSuperAccess handles super.x(args) and super[x](args).
-func (s *superAccessState) substituteCallExpressionWithSuperAccess(call *ast.CallExpression, visitor *ast.NodeVisitor) *ast.Node {
-	expression := call.Expression
+// createSuperCallTarget replaces the super property in `expression`, which may be wrapped in
+// parentheses or type assertions, with its _super/_superIndex reference and keeps the wrappers.
+func (s *superAccessState) createSuperCallTarget(expression *ast.Expression) *ast.Expression {
+	superProperty := ast.SkipOuterExpressions(expression, ast.OEKAll)
 	var target *ast.Node
-
-	if ast.IsPropertyAccessExpression(expression) {
-		// super.x(args) → _super.x.call(this, args)
+	if ast.IsPropertyAccessExpression(superProperty) {
 		target = s.factory.NewPropertyAccessExpression(
 			s.superBinding, nil,
-			expression.AsPropertyAccessExpression().Name(), ast.NodeFlagsNone,
-		)
-	} else if ast.IsElementAccessExpression(expression) {
-		// super[x](args) → _superIndex(x).call(this, args) or _superIndex(x).value.call(this, args)
-		target = s.createSuperElementAccessInAsyncMethod(
-			expression.AsElementAccessExpression().ArgumentExpression,
+			superProperty.AsPropertyAccessExpression().Name(), ast.NodeFlagsNone,
 		)
 	} else {
-		return visitor.VisitEachChild(call.AsNode())
+		target = s.createSuperElementAccessInAsyncMethod(
+			superProperty.AsElementAccessExpression().ArgumentExpression,
+		)
 	}
+	return s.factory.RestoreOuterExpressions(expression, target, ast.OEKAll)
+}
 
+// substituteCallExpressionWithSuperAccess handles super.x(args) and super[x](args), including
+// a callee wrapped in parentheses or type assertions such as (super.x as any)(args).
+func (s *superAccessState) substituteCallExpressionWithSuperAccess(call *ast.CallExpression, visitor *ast.NodeVisitor) *ast.Node {
+	// super.x(args) → _super.x.call(this, args)
+	// super[x](args) → _superIndex(x).call(this, args) or _superIndex(x).value.call(this, args)
 	callTarget := s.factory.NewPropertyAccessExpression(
-		target, nil,
+		s.createSuperCallTarget(call.Expression), nil,
 		s.factory.NewIdentifier("call"), ast.NodeFlagsNone,
 	)
 
@@ -154,11 +163,35 @@ func (s *superAccessState) substituteCallExpressionWithSuperAccess(call *ast.Cal
 	return result
 }
 
+// substituteTaggedTemplateWithSuperAccess handles super.x`...` and super[x]`...`, binding the
+// tag to `this` the way a call through `.call(this, ...)` would.
+func (s *superAccessState) substituteTaggedTemplateWithSuperAccess(node *ast.TaggedTemplateExpression, visitor *ast.NodeVisitor) *ast.Node {
+	// super.x`t` → _super.x.bind(this)`t`
+	bindTarget := s.factory.NewCallExpression(
+		s.factory.NewPropertyAccessExpression(
+			s.createSuperCallTarget(node.Tag), nil,
+			s.factory.NewIdentifier("bind"), ast.NodeFlagsNone,
+		),
+		nil, nil,
+		s.factory.NewNodeList([]*ast.Node{s.factory.NewThisExpression()}),
+		ast.NodeFlagsNone,
+	)
+	return s.factory.UpdateTaggedTemplateExpression(
+		node,
+		bindTarget,
+		node.QuestionDotToken,
+		nil, /*typeArguments*/
+		visitor.VisitNode(node.Template),
+		node.Flags,
+	)
+}
+
 // createSuperElementAccessInAsyncMethod creates _superIndex(x) or _superIndex(x).value.
+// The argument is visited too, since it may itself contain super accesses (super[super.k]).
 func (s *superAccessState) createSuperElementAccessInAsyncMethod(argumentExpression *ast.Node) *ast.Node {
 	superIndexCall := s.factory.NewCallExpression(
 		s.superIndexBinding, nil, nil,
-		s.factory.NewNodeList([]*ast.Node{argumentExpression}),
+		s.factory.NewNodeList([]*ast.Node{s.superAccessVisitor.VisitNode(argumentExpression)}),
 		ast.NodeFlagsNone,
 	)
 	if s.hasSuperPropertyAssignment {

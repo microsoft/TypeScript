@@ -897,11 +897,12 @@ func (tx *asyncTransformer) transformAsyncFunctionBodyWorker(body *ast.Node) *as
 // This avoids relying on parent pointers (IsAssignmentTarget) which may not be set
 // on synthesized AST nodes from prior transforms.
 func assignmentTargetContainsSuperProperty(node *ast.Node) bool {
+	// An assignment target may be wrapped in parentheses, `!`, `as`, `satisfies` or `<T>`;
+	// the type eraser has already turned the assertions into partially emitted expressions.
+	node = ast.SkipOuterExpressions(node, ast.OEKAll)
 	switch node.Kind {
 	case ast.KindPropertyAccessExpression, ast.KindElementAccessExpression:
 		return node.Expression().Kind == ast.KindSuperKeyword
-	case ast.KindParenthesizedExpression:
-		return assignmentTargetContainsSuperProperty(node.AsParenthesizedExpression().Expression)
 	case ast.KindArrayLiteralExpression:
 		return slices.ContainsFunc(node.AsArrayLiteralExpression().Elements.Nodes, assignmentTargetContainsSuperProperty)
 	case ast.KindObjectLiteralExpression:
