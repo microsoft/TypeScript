@@ -1791,7 +1791,7 @@ func (tx *CommonJSModuleTransformer) visitPostfixUnaryExpression(node *ast.Postf
 				tx.EmitContext().AssignCommentAndSourceMapRanges(expression, node.AsNode())
 			}
 
-			expression = tx.Factory().NewCommaExpression(expression, node.Operand.Clone(tx.Factory()))
+			expression = tx.Factory().NewCommaExpression(expression, tx.Visitor().VisitNode(node.Operand.Clone(tx.Factory())))
 			tx.EmitContext().AssignCommentAndSourceMapRanges(expression, node.AsNode())
 
 			for _, exportName := range exportedNames {
