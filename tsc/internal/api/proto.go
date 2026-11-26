@@ -313,6 +313,7 @@ type InitializeResponse struct {
 
 // DocumentIdentifier identifies a document by either a file name (plain string) or a URI object.
 // On the wire it is string | { uri: string }.
+// URI inputs use the language server's URI normalization and validation.
 //
 // @example
 //
@@ -358,14 +359,16 @@ func (d *DocumentIdentifier) UnmarshalJSONFrom(dec *json.Decoder) error {
 				if foundURI {
 					return fmt.Errorf("DocumentIdentifier: duplicate field %q", key.String())
 				}
-				val, err := dec.ReadToken()
+				val, err := dec.ReadValue()
 				if err != nil {
 					return err
 				}
-				if val.Kind() != '"' || val.String() == "" {
+				if val.Kind() != '"' || string(val) == `""` {
 					return errors.New("DocumentIdentifier: uri must be a non-empty string")
 				}
-				d.URI = lsproto.DocumentUri(val.String())
+				if err := json.Unmarshal(val, &d.URI); err != nil {
+					return err
+				}
 				foundURI = true
 			} else if err := dec.SkipValue(); err != nil {
 				return err

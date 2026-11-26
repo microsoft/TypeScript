@@ -44,8 +44,12 @@ func unmarshalURI(dec *json.Decoder) (string, error) {
 		parsed.Scheme = "file"
 	}
 	if parsed.Scheme == "file" {
+		parsed.OmitHost = false
 		if parsed.Opaque != "" {
-			parsed.Path = parsed.Opaque
+			parsed.Path, err = url.PathUnescape(parsed.Opaque)
+			if err != nil {
+				return "", fmt.Errorf("invalid URI %q", value)
+			}
 			parsed.Opaque = ""
 		}
 		if parsed.Path == "" {
