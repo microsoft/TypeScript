@@ -121,31 +121,31 @@ exports.z = "z";
 try {
     throw {};
 }
-catch ({ a = x }) {
+catch ({ a = a_1.x }) {
     console.log(a);
 }
 try {
     throw {};
 }
-catch ({ a = z }) {
+catch ({ a = exports.z }) {
     console.log(a);
 }
 try {
     throw { a: {} };
 }
-catch ({ a: { b = y } }) {
+catch ({ a: { b = a_1.default } }) {
     console.log(b);
 }
 try {
     throw { x: 1, z: 2 };
 }
-catch ({ [x]: a, [z]: b }) {
+catch ({ [a_1.x]: a, [exports.z]: b }) {
     console.log(a, b);
 }
 try {
     throw [];
 }
-catch ([a = x, b = y, c = z]) {
+catch ([a = a_1.x, b = a_1.default, c = exports.z]) {
     console.log(a, b, c);
 }
 try {
@@ -169,7 +169,7 @@ catch {
 try {
     throw {};
 }
-catch ({ a = x }) {
+catch ({ a = a_1.x }) {
     var w = a;
     exports.w = w;
 }
