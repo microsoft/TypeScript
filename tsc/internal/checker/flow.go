@@ -11,6 +11,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/internal/evaluator"
+	"github.com/microsoft/TypeScript/tsc/internal/jsnum"
 	"github.com/microsoft/TypeScript/tsc/internal/scanner"
 	"github.com/microsoft/TypeScript/tsc/internal/tracing"
 	"github.com/zeebo/xxh3"
@@ -886,6 +887,7 @@ func (c *Checker) getNarrowedTypeWorker(t *Type, candidate *Type, assumeTrue boo
 	if t.flags&TypeFlagsUnion != 0 {
 		keyPropertyName = c.getKeyPropertyName(t)
 	}
+	var literalIndex *literalKeyIndex
 	narrowedType := c.mapType(candidate, func(n *Type) *Type {
 		// If a discriminant property is available, use that to reduce the type.
 		matching := t
@@ -901,6 +903,7 @@ func (c *Checker) getNarrowedTypeWorker(t *Type, candidate *Type, assumeTrue boo
 		// because that is the asserted type, but t for `instanceof` because generics aren't reflected in
 		// prototype object types.
 		var mapType func(*Type) *Type
+		var directlyRelated *Type
 		if checkDerived {
 			mapType = func(t *Type) *Type {
 				switch {
@@ -912,7 +915,15 @@ func (c *Checker) getNarrowedTypeWorker(t *Type, candidate *Type, assumeTrue boo
 				return c.neverType
 			}
 		} else {
+			nKey := c.getLiteralKeyOfType(n)
 			mapType = func(t *Type) *Type {
+				// Literal-keyed types with different values are unrelated in both directions, so we skip
+				// the (potentially expensive) relationship checks.
+				if nKey != nil {
+					if tKey := c.getLiteralKeyOfType(t); tKey != nil && tKey.AsLiteralType().value != nKey.AsLiteralType().value {
+						return c.neverType
+					}
+				}
 				switch {
 				case c.isTypeStrictSubtypeOf(t, n):
 					return t
@@ -925,8 +936,21 @@ func (c *Checker) getNarrowedTypeWorker(t *Type, candidate *Type, assumeTrue boo
 				}
 				return c.neverType
 			}
+			// When the current type is a union with literal-keyed constituents, only the constituents without
+			// a literal key or with the same literal key value as the candidate constituent can be related. Use
+			// an index to find them, avoiding quadratic work when narrowing large unions of literals.
+			if nKey != nil && matching == t && t.flags&TypeFlagsUnion != 0 {
+				if literalIndex == nil {
+					literalIndex = c.newLiteralKeyIndex(t)
+				}
+				if related, ok := literalIndex.mapRelated(c, nKey, mapType); ok {
+					directlyRelated = related
+				}
+			}
 		}
-		directlyRelated := c.mapType(matching, mapType)
+		if directlyRelated == nil {
+			directlyRelated = c.mapType(matching, mapType)
+		}
 		if directlyRelated.flags&TypeFlagsNever == 0 {
 			return directlyRelated
 		}
@@ -961,6 +985,79 @@ func (c *Checker) getNarrowedTypeWorker(t *Type, candidate *Type, assumeTrue boo
 		return candidate
 	}
 	return c.getIntersectionType([]*Type{t, candidate})
+}
+
+type literalKeyIndex struct {
+	byValue map[any][]*Type
+	unkeyed []*Type
+}
+
+func (c *Checker) newLiteralKeyIndex(t *Type) *literalKeyIndex {
+	index := &literalKeyIndex{byValue: make(map[any][]*Type)}
+	for _, constituent := range t.Types() {
+		if key := c.getLiteralKeyOfType(constituent); key != nil {
+			value := key.AsLiteralType().value
+			index.byValue[value] = append(index.byValue[value], constituent)
+		} else {
+			index.unkeyed = append(index.unkeyed, constituent)
+		}
+	}
+	return index
+}
+
+// mapRelated applies f to the constituents of the indexed union that may be related to a type with the given
+// literal key; f is assumed to map all other constituents to never. When the constituents map to at most one
+// distinct non-never type, mapRelated returns that type (or never) and true, which is what mapping f over the
+// entire union produces. Otherwise, it returns false and the caller should map over the entire union.
+func (index *literalKeyIndex) mapRelated(c *Checker, key *Type, f func(*Type) *Type) (*Type, bool) {
+	var result *Type
+	for _, constituents := range [2][]*Type{index.byValue[key.AsLiteralType().value], index.unkeyed} {
+		for _, constituent := range constituents {
+			if mapped := f(constituent); mapped.flags&TypeFlagsNever == 0 && mapped != result {
+				if result != nil {
+					return nil, false
+				}
+				result = mapped
+			}
+		}
+	}
+	if result == nil {
+		return c.neverType, true
+	}
+	return result, true
+}
+
+// getLiteralKeyOfType returns the string, number, or bigint literal type of t if t is such a literal type or an
+// irreducible intersection of exactly one such literal type and object types (e.g. a branded literal type). In the
+// subtype and strict subtype relations, types with literal keys of different values are never related. NaN is equal
+// to no value, itself included, so a NaN literal type has no literal key.
+func (c *Checker) getLiteralKeyOfType(t *Type) *Type {
+	if isLiteralWithKey(t) {
+		return t
+	}
+	if t.flags&TypeFlagsIntersection == 0 || c.getReducedType(t) != t {
+		return nil
+	}
+	var key *Type
+	for _, constituent := range t.Types() {
+		switch {
+		case isLiteralWithKey(constituent) && key == nil:
+			key = constituent
+		case constituent.flags&TypeFlagsObject == 0:
+			return nil
+		}
+	}
+	return key
+}
+
+func isLiteralWithKey(t *Type) bool {
+	switch {
+	case t.flags&(TypeFlagsStringLiteral|TypeFlagsBigIntLiteral) != 0:
+		return true
+	case t.flags&TypeFlagsNumberLiteral != 0:
+		return !t.AsLiteralType().value.(jsnum.Number).IsNaN()
+	}
+	return false
 }
 
 func (c *Checker) getInstanceType(constructorType *Type) *Type {

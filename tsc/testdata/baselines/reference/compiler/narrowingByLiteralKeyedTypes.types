@@ -1,0 +1,159 @@
+//// [tests/cases/compiler/narrowingByLiteralKeyedTypes.ts] ////
+
+=== narrowingByLiteralKeyedTypes.ts ===
+declare function isBranded<T>(t: T): t is T & { __brand: true };
+>isBranded : <T>(t: T) => t is T & { __brand: true; }
+>t : T
+>__brand : true
+>true : true
+
+declare function isType<T>(x: unknown): x is T;
+>isType : <T>(x: unknown) => x is T
+>x : unknown
+
+declare const s1: "a" | "b" | "c" | undefined;
+>s1 : "a" | "b" | "c" | undefined
+
+if (isBranded(s1)) {
+>isBranded(s1) : boolean
+>isBranded : <T>(t: T) => t is T & { __brand: true; }
+>s1 : "a" | "b" | "c" | undefined
+
+    s1;
+>s1 : ("a" | "b" | "c" | undefined) & { __brand: true; }
+}
+
+declare const s2: "a" | "b" | string;
+>s2 : string
+
+if (isType<"a" & { tag: 1 }>(s2)) {
+>isType<"a" & { tag: 1 }>(s2) : boolean
+>isType : <T>(x: unknown) => x is T
+>tag : 1
+>s2 : string
+
+    s2;
+>s2 : "a" & { tag: 1; }
+}
+
+declare const n1: 1 | 2 | 3 | -0 | 1n | 2n;
+>n1 : 0 | 1 | 2 | 3 | 1n | 2n
+>-0 : 0
+>0 : 0
+
+if (isType<(1 & { tag: 1 }) | (0 & { tag: 0 }) | (2n & { tag: 2 })>(n1)) {
+>isType<(1 & { tag: 1 }) | (0 & { tag: 0 }) | (2n & { tag: 2 })>(n1) : boolean
+>isType : <T>(x: unknown) => x is T
+>tag : 1
+>tag : 0
+>tag : 2
+>n1 : 0 | 1 | 2 | 3 | 1n | 2n
+
+    n1;
+>n1 : (0 & { tag: 0; }) | (1 & { tag: 1; }) | (2n & { tag: 2; })
+}
+
+enum E { A = "a", B = "b" }
+>E : E
+>A : E.A
+>"a" : "a"
+>B : E.B
+>"b" : "b"
+
+declare const e1: E | "a" | "c";
+>e1 : "a" | "c" | E
+
+if (isType<"a" & { tag: 1 }>(e1)) {
+>isType<"a" & { tag: 1 }>(e1) : boolean
+>isType : <T>(x: unknown) => x is T
+>tag : 1
+>e1 : "a" | "c" | E
+
+    e1;
+>e1 : "a" & { tag: 1; }
+}
+if (isType<E.B & { tag: 1 }>(e1)) {
+>isType<E.B & { tag: 1 }>(e1) : boolean
+>isType : <T>(x: unknown) => x is T
+>E : any
+>tag : 1
+>e1 : "a" | "c" | E
+
+    e1;
+>e1 : E.B & { tag: 1; }
+}
+
+declare const b1: ("a" & { x: 1 }) | ("b" & { x: 2 }) | ("c" & { y: 1 }) | "d";
+>b1 : "d" | ("a" & { x: 1; }) | ("b" & { x: 2; }) | ("c" & { y: 1; })
+>x : 1
+>x : 2
+>y : 1
+
+if (isType<("a" & { y: 1 }) | ("b" & { x: 2 }) | "c" | "d">(b1)) {
+>isType<("a" & { y: 1 }) | ("b" & { x: 2 }) | "c" | "d">(b1) : boolean
+>isType : <T>(x: unknown) => x is T
+>y : 1
+>x : 2
+>b1 : "d" | ("a" & { x: 1; }) | ("b" & { x: 2; }) | ("c" & { y: 1; })
+
+    b1;
+>b1 : "d" | ("b" & { x: 2; }) | ("c" & { y: 1; })
+}
+
+function f<T extends "a" | "b">(x: "a" | "b" | "c" | T) {
+>f : <T extends "a" | "b">(x: "a" | "b" | "c" | T) => void
+>x : "a" | "b" | "c" | T
+
+    if (isType<("a" & T) | ("b" & { tag: 1 })>(x)) {
+>isType<("a" & T) | ("b" & { tag: 1 })>(x) : boolean
+>isType : <T_1>(x: unknown) => x is T_1
+>tag : 1
+>x : "a" | "b" | "c"
+
+        x;
+>x : ("a" & T) | ("b" & { tag: 1; })
+    }
+    else {
+        x;
+>x : "a" | "b" | "c" | T
+    }
+}
+
+declare const o1: "a" | "b" | { kind: "a" } | { kind: "b" };
+>o1 : "a" | "b" | { kind: "a"; } | { kind: "b"; }
+>kind : "a"
+>kind : "b"
+
+if (isType<"a" & { kind: "a" }>(o1)) {
+>isType<"a" & { kind: "a" }>(o1) : boolean
+>isType : <T>(x: unknown) => x is T
+>kind : "a"
+>o1 : "a" | "b" | { kind: "a"; } | { kind: "b"; }
+
+    o1;
+>o1 : "a" & { kind: "a"; }
+}
+
+enum N { A = NaN, B = 1, C = 2 }
+>N : N
+>A : N.A
+>NaN : number
+>B : N.B
+>1 : 1
+>C : N.C
+>2 : 2
+
+declare const n2: N;
+>n2 : N
+
+if (isType<N.A | N.B>(n2)) {
+>isType<N.A | N.B>(n2) : boolean
+>isType : <T>(x: unknown) => x is T
+>N : any
+>N : any
+>n2 : N
+
+    n2;
+>n2 : N.A | N.B
+}
+
