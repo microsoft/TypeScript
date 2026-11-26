@@ -47,6 +47,57 @@ func TestProgramSourceFileIncludesSupplementalFile(t *testing.T) {
 	assert.Assert(t, sourceFile != nil)
 }
 
+// A file name with a trailing slash names the same source file.
+// ToFileName normalizes the name and removes the trailing slash.
+func TestProgramSourceFileNameWithTrailingSlash(t *testing.T) {
+	t.Parallel()
+
+	const fileName = "/home/projects/p/a.ts"
+	projectSession, _ := projecttestutil.Setup(map[string]any{
+		fileName: `export const a: number = "1";`,
+	})
+	defer projectSession.Close()
+	session := NewLSPSession(projectSession, nil)
+	defer session.Close()
+	response, err := session.handleCreateSnapshot(context.Background(), &CreateSnapshotParams{
+		CreatePrograms: []*CreateSnapshotProgramParams{{
+			RootFiles:       []DocumentIdentifier{{FileName: fileName}},
+			CompilerOptions: core.CompilerOptions{NoLib: core.TSTrue},
+		}},
+	})
+	assert.NilError(t, err)
+	file := DocumentIdentifier{FileName: fileName + "/"}
+
+	metadata, err := session.handleGetSourceFileMetadata(context.Background(), &GetSourceFileParams{
+		Snapshot: response.Snapshot,
+		Project:  response.Projects[0].Handle,
+		File:     file,
+	})
+	assert.NilError(t, err)
+	assert.Assert(t, metadata != nil)
+
+	// Position 13 is in the name `a`.
+	symbol, err := session.handleGetSymbolAtPosition(context.Background(), &GetSymbolAtPositionParams{
+		Snapshot: response.Snapshot,
+		Project:  response.Projects[0].Handle,
+		File:     file,
+		Position: 13,
+	})
+	assert.NilError(t, err)
+	assert.Assert(t, symbol != nil)
+	assert.Equal(t, symbol.Name, "a")
+
+	diagnostics, err := session.handleGetSemanticDiagnostics(context.Background(), &GetDiagnosticsParams{
+		Snapshot: response.Snapshot,
+		Project:  response.Projects[0].Handle,
+		Files:    []DocumentIdentifier{file},
+	})
+	assert.NilError(t, err)
+	assert.Equal(t, len(diagnostics), 1)
+	assert.Equal(t, diagnostics[0].Code, int32(2322))
+	assert.Equal(t, diagnostics[0].FileName.AsString(), fileName)
+}
+
 func TestProgramStatisticsUseAPIChecker(t *testing.T) {
 	t.Parallel()
 

@@ -119,6 +119,19 @@ func TestGetBuildInfoFileNameAcrossRoots(t *testing.T) {
 			expected:       "c:/out/...tsbuildinfo",
 		},
 		{
+			name:           "drive-like filename stem without rootDir",
+			outDir:         "c:/out",
+			configFilePath: "c:/src/project/c:.json",
+			expected:       "c:/out/c:.tsbuildinfo",
+		},
+		{
+			name:           "drive-like filename stem in rootDir",
+			rootDir:        "c:/src",
+			outDir:         "c:/out",
+			configFilePath: "c:/src/c:.json",
+			expected:       "c:/out/c:.tsbuildinfo",
+		},
+		{
 			name:           "empty filename stem without outDir",
 			configFilePath: "c:/src/project/.json",
 			expected:       "c:/src/project/.tsbuildinfo",

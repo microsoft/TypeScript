@@ -1,0 +1,10 @@
+//// [tests/cases/compiler/tripleSlashReferenceDriveRoot.ts] ////
+
+//// [a.ts]
+/// <reference path="C:" />
+/// <reference path="c:" />
+export {};
+
+
+//// [a.js]
+export {};

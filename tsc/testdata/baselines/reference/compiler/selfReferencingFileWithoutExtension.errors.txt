@@ -1,0 +1,9 @@
+/a.ts(1,22): error TS1006: A file cannot have a reference to itself.
+
+
+==== /a.ts (1 errors) ====
+    /// <reference path="a" />
+                         ~
+!!! error TS1006: A file cannot have a reference to itself.
+    export const a = 1;
+    

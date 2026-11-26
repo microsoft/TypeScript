@@ -76,6 +76,7 @@ func TestGetFileNamesExtensionPriority(t *testing.T) {
 			{files: []string{"A.ts", "a.d.ts"}, include: []string{"**/*"}, expected: []string{"/p/A.ts", "/p/a.d.ts"}},
 			{files: []string{"a.d.ts", "a.ts"}, include: []string{"**/*"}, literals: []string{"a.d.ts"}, expected: []string{"/p/a.d.ts", "/p/a.ts"}},
 			{files: []string{"a.ts", "a.d.ts"}, include: []string{"**/*"}, literals: []string{"a.ts"}, expected: []string{"/p/a.ts"}},
+			{files: []string{"a.ts", "a.d.ts"}, include: []string{"*.d.ts"}, literals: []string{"a.ts"}, expected: []string{"/p/a.ts"}},
 		}
 		for _, c := range cases {
 			got, want := runGetFileNames(c.files, c.include, c.literals, c.allowJs, c.insens, nil, pattern, basePath)

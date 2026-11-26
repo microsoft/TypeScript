@@ -1,0 +1,6 @@
+======== Resolving type reference directive '../pkg/', containing file '/app/src/a.ts', root directory '/types'. ========
+Resolving with primary search path '/types'.
+File '/pkg/package.json' does not exist.
+File '/pkg/index.d.ts' exists - use it as a name resolution result.
+Resolving real path for '/pkg/index.d.ts', result '/pkg/index.d.ts'.
+======== Type reference directive '../pkg/' was successfully resolved to '/pkg/index.d.ts', primary: true. ========

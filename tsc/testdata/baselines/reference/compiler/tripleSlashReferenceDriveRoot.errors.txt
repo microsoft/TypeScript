@@ -1,0 +1,13 @@
+/a.ts(1,22): error TS6231: Could not resolve the path 'C:' with the extensions: '.ts', '.tsx', '.d.ts', '.cts', '.d.cts', '.mts', '.d.mts'.
+/a.ts(2,22): error TS6231: Could not resolve the path 'c:' with the extensions: '.ts', '.tsx', '.d.ts', '.cts', '.d.cts', '.mts', '.d.mts'.
+
+
+==== /a.ts (2 errors) ====
+    /// <reference path="C:" />
+                         ~~
+!!! error TS6231: Could not resolve the path 'C:' with the extensions: '.ts', '.tsx', '.d.ts', '.cts', '.d.cts', '.mts', '.d.mts'.
+    /// <reference path="c:" />
+                         ~~
+!!! error TS6231: Could not resolve the path 'c:' with the extensions: '.ts', '.tsx', '.d.ts', '.cts', '.d.cts', '.mts', '.d.mts'.
+    export {};
+    

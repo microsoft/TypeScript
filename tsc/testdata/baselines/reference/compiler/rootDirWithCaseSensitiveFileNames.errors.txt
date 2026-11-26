@@ -1,0 +1,14 @@
+error TS6059: File '/proj/SRC/b.ts' is not under 'rootDir' '/proj/src'. 'rootDir' is expected to contain all source files.
+  The file is in the program because:
+    Root file specified for compilation
+
+
+!!! error TS6059: File '/proj/SRC/b.ts' is not under 'rootDir' '/proj/src'. 'rootDir' is expected to contain all source files.
+!!! error TS6059:   The file is in the program because:
+!!! error TS6059:     Root file specified for compilation
+==== /proj/src/a.ts (0 errors) ====
+    export const a = 1;
+    
+==== /proj/SRC/b.ts (0 errors) ====
+    export const b = 2;
+    

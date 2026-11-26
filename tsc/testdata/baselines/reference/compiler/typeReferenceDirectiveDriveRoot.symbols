@@ -1,0 +1,7 @@
+//// [tests/cases/compiler/typeReferenceDirectiveDriveRoot.ts] ////
+
+=== /a.ts ===
+
+/// <reference types="C:" />
+export {};
+

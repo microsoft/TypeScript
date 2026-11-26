@@ -5,8 +5,10 @@ import (
 	"testing"
 
 	"github.com/microsoft/TypeScript/tsc/internal/fourslash"
+	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
+	"gotest.tools/v3/assert"
 )
 
 func TestRenameFilePackageJson(t *testing.T) {
@@ -48,6 +50,46 @@ import { value } from ".//*rename*/%s.js";`, fileName, tspath.RemoveFileExtensio
 				"/src/main.ts":             `import { value } from "./renamed.js";`,
 				"/src/renamed" + extension: `export declare const value: number;`,
 			})
+		})
+	}
+}
+
+func TestRenameFileNewNameIsNormalized(t *testing.T) {
+	t.Parallel()
+
+	// The new URI of the file rename is a normalized path. It has no "." segment,
+	// no ".." segment, and no empty segment.
+	for _, test := range []struct {
+		name    string
+		newName string
+		newURI  lsproto.DocumentUri
+	}{
+		{name: "dot segment", newName: "./b", newURI: "file:///src/b.ts"},
+		{name: "dot dot segment", newName: "x/../b", newURI: "file:///src/b.ts"},
+		{name: "empty segment", newName: "x//b", newURI: "file:///src/x/b.ts"},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+			defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+			const content = `// @Filename: /src/a.ts
+export {};
+// @Filename: /src/main.ts
+import ".//*rename*/a";`
+
+			f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+			defer done()
+			f.GoToMarker(t, "rename")
+			result := f.RenameAtCaret(t, test.newName)
+			if result.WorkspaceEdit == nil || result.WorkspaceEdit.DocumentChanges == nil {
+				t.Fatal("rename returned no document changes")
+			}
+			for _, change := range *result.WorkspaceEdit.DocumentChanges {
+				if change.RenameFile != nil {
+					assert.Equal(t, change.RenameFile.NewUri, test.newURI)
+					return
+				}
+			}
+			t.Fatal("rename returned no file rename")
 		})
 	}
 }

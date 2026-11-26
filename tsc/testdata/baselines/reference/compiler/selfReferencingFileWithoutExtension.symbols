@@ -1,0 +1,7 @@
+//// [tests/cases/compiler/selfReferencingFileWithoutExtension.ts] ////
+
+=== /a.ts ===
+/// <reference path="a" />
+export const a = 1;
+>a : Symbol(a, Decl(a.ts, 1, 12))
+

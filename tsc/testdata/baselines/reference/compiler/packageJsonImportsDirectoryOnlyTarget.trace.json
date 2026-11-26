@@ -1,0 +1,13 @@
+======== Resolving module '#js/' from '/index.ts'. ========
+Module resolution kind is not specified, using 'NodeNext'.
+Resolving in ESM mode with conditions 'import', 'types', 'node'.
+Found 'package.json' at '/package.json'.
+Using 'imports' subpath '#js/' with target './dist.js/'.
+Import specifier '#js/' does not exist in package.json scope at path '/'.
+File '/package.json' exists according to earlier cached lookups.
+Loading module '#js/' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
+Directory '/node_modules' does not exist, skipping all lookups in it.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
+Directory '/node_modules' does not exist, skipping all lookups in it.
+======== Module name '#js/' was not resolved. ========

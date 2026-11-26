@@ -1,0 +1,18 @@
+/a.ts(1,25): error TS2305: Module '"lib/"' has no exported member 'fromFile'.
+
+
+==== /a.ts (1 errors) ====
+    import { fromDirectory, fromFile } from "lib/";
+                            ~~~~~~~~
+!!! error TS2305: Module '"lib/"' has no exported member 'fromFile'.
+    export const values = [fromDirectory, fromFile];
+    
+==== /types/lib.d.ts (0 errors) ====
+    export declare const fromFile: number;
+    
+==== /types/lib/.d.ts (0 errors) ====
+    export declare const fromFile: number;
+    
+==== /types/lib/index.d.ts (0 errors) ====
+    export declare const fromDirectory: number;
+    

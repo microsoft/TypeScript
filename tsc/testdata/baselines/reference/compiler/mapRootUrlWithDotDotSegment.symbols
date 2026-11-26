@@ -1,0 +1,6 @@
+//// [tests/cases/compiler/mapRootUrlWithDotDotSegment.ts] ////
+
+=== /a.ts ===
+export const a = 1;
+>a : Symbol(a, Decl(a.ts, 0, 12))
+

@@ -1,0 +1,23 @@
+//// [tests/cases/compiler/declarationEmitExportsTargetTrailingSlash.ts] ////
+
+=== /src/main.ts ===
+import { make } from "dep";
+>make : Symbol(make, Decl(main.ts, 0, 8))
+
+export const v = make();
+>v : Symbol(v, Decl(main.ts, 1, 12))
+>make : Symbol(make, Decl(main.ts, 0, 8))
+
+=== /node_modules/pkg/index.d.ts ===
+export interface L { x: number }
+>L : Symbol(L, Decl(index.d.ts, 0, 0))
+>x : Symbol(L.x, Decl(index.d.ts, 0, 20))
+
+=== /node_modules/dep/index.d.ts ===
+import type { L } from "../pkg/index";
+>L : Symbol(L, Decl(index.d.ts, 0, 13))
+
+export declare function make(): L;
+>make : Symbol(make, Decl(index.d.ts, 0, 38))
+>L : Symbol(L, Decl(index.d.ts, 0, 13))
+

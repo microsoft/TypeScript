@@ -1,0 +1,22 @@
+/src/main.ts(2,14): error TS2883: The inferred type of 'v' cannot be named without a reference to 'L' from '../node_modules/pkg'. This is likely not portable. A type annotation is necessary.
+
+
+==== /src/main.ts (1 errors) ====
+    import { make } from "dep";
+    export const v = make();
+                 ~
+!!! error TS2883: The inferred type of 'v' cannot be named without a reference to 'L' from '../node_modules/pkg'. This is likely not portable. A type annotation is necessary.
+    
+==== /node_modules/pkg/package.json (0 errors) ====
+    { "name": "pkg", "exports": { ".": "./index.js/" } }
+    
+==== /node_modules/pkg/index.d.ts (0 errors) ====
+    export interface L { x: number }
+    
+==== /node_modules/dep/package.json (0 errors) ====
+    { "name": "dep" }
+    
+==== /node_modules/dep/index.d.ts (0 errors) ====
+    import type { L } from "../pkg/index";
+    export declare function make(): L;
+    

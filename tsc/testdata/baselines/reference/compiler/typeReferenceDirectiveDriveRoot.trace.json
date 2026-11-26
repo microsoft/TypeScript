@@ -1,0 +1,6 @@
+======== Resolving type reference directive 'C:', containing file '/a.ts', root directory '/types'. ========
+Resolving with primary search path '/types'.
+Looking up in 'node_modules' folder, initial location '/'.
+Loading module as file / folder, candidate module location 'C:/', target file types: Declaration.
+Directory 'C:/' does not exist, skipping all lookups in it.
+======== Type reference directive 'C:' was not resolved. ========

@@ -1,0 +1,12 @@
+======== Resolving module 'lib/' from '/a.ts'. ========
+Explicitly specified module resolution kind: 'Bundler'.
+Resolving in CJS mode with conditions 'import', 'types'.
+File '/package.json' does not exist.
+Loading module 'lib/' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
+Directory '/node_modules' does not exist, skipping all lookups in it.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
+Directory '/node_modules' does not exist, skipping all lookups in it.
+File '/types/lib/package.json' does not exist.
+File '/types/lib/index.d.ts' exists - use it as a name resolution result.
+======== Module name 'lib/' was successfully resolved to '/types/lib/index.d.ts'. ========

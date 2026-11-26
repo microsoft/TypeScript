@@ -1,0 +1,22 @@
+/app/src/a.ts(3,1): error TS2304: Cannot find name 'fromFile'.
+
+
+==== /app/src/a.ts (1 errors) ====
+    /// <reference types="../pkg/" />
+    fromDirectory;
+    fromFile;
+    ~~~~~~~~
+!!! error TS2304: Cannot find name 'fromFile'.
+    
+==== /types/README.md (0 errors) ====
+    The type root.
+    
+==== /pkg.d.ts (0 errors) ====
+    declare const fromFile: number;
+    
+==== /pkg/.d.ts (0 errors) ====
+    declare const fromFile: number;
+    
+==== /pkg/index.d.ts (0 errors) ====
+    declare const fromDirectory: number;
+    
