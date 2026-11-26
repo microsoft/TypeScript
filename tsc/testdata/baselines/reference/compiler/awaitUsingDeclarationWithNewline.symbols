@@ -1,0 +1,36 @@
+//// [tests/cases/compiler/awaitUsingDeclarationWithNewline.ts] ////
+
+=== awaitUsingDeclarationWithNewline.ts ===
+declare const resource: AsyncDisposable;
+>resource : Symbol(resource, Decl(awaitUsingDeclarationWithNewline.ts, 0, 13))
+>AsyncDisposable : Symbol(AsyncDisposable, Decl(lib.esnext.disposable.d.ts, --, --))
+
+declare const resources: Iterable<AsyncDisposable>;
+>resources : Symbol(resources, Decl(awaitUsingDeclarationWithNewline.ts, 1, 13))
+>Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+>AsyncDisposable : Symbol(AsyncDisposable, Decl(lib.esnext.disposable.d.ts, --, --))
+
+async function statement() {
+>statement : Symbol(statement, Decl(awaitUsingDeclarationWithNewline.ts, 1, 51))
+
+    await
+    using x = resource;
+>resource : Symbol(resource, Decl(awaitUsingDeclarationWithNewline.ts, 0, 13))
+}
+
+async function forStatement() {
+>forStatement : Symbol(forStatement, Decl(awaitUsingDeclarationWithNewline.ts, 6, 1))
+
+    for (await
+        using x = resource; ;) {}
+>resource : Symbol(resource, Decl(awaitUsingDeclarationWithNewline.ts, 0, 13))
+}
+
+async function forOfStatement() {
+>forOfStatement : Symbol(forOfStatement, Decl(awaitUsingDeclarationWithNewline.ts, 11, 1))
+
+    for (await
+        using x of resources) {}
+>resources : Symbol(resources, Decl(awaitUsingDeclarationWithNewline.ts, 1, 13))
+}
+
