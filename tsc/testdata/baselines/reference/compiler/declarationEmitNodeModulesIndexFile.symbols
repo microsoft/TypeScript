@@ -1,0 +1,23 @@
+//// [tests/cases/compiler/declarationEmitNodeModulesIndexFile.ts] ////
+
+=== /a.ts ===
+import { make } from "./re";
+>make : Symbol(make, Decl(a.ts, 0, 8))
+
+export const v = make();
+>v : Symbol(v, Decl(a.ts, 1, 12))
+>make : Symbol(make, Decl(a.ts, 0, 8))
+
+=== /node_modules/index.d.ts ===
+export interface T { v: number }
+>T : Symbol(T, Decl(index.d.ts, 0, 0))
+>v : Symbol(T.v, Decl(index.d.ts, 0, 20))
+
+export declare function make(): T;
+>make : Symbol(make, Decl(index.d.ts, 0, 32))
+>T : Symbol(T, Decl(index.d.ts, 0, 0))
+
+=== /re.ts ===
+export { make } from "./node_modules/index";
+>make : Symbol(make, Decl(re.ts, 0, 8))
+

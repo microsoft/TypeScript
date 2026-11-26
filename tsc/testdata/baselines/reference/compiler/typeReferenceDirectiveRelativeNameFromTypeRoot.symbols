@@ -1,0 +1,12 @@
+//// [tests/cases/compiler/typeReferenceDirectiveRelativeNameFromTypeRoot.ts] ////
+
+=== /a.ts ===
+/// <reference types="../pkg" />
+export const a: number = pkg;
+>a : Symbol(a, Decl(a.ts, 1, 12))
+>pkg : Symbol(pkg, Decl(index.d.ts, 0, 13))
+
+=== /pkg/index.d.ts ===
+declare const pkg: number;
+>pkg : Symbol(pkg, Decl(index.d.ts, 0, 13))
+

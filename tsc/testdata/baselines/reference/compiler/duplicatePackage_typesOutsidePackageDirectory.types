@@ -1,0 +1,42 @@
+//// [tests/cases/compiler/duplicatePackage_typesOutsidePackageDirectory.ts] ////
+
+=== /index.ts ===
+import { a } from "a";
+>a : import("a/node_modules/pkg-x").C
+
+import { b } from "b";
+>b : import("b/node_modules/pkg").C
+
+let x = a;
+>x : import("a/node_modules/pkg-x").C
+>a : import("a/node_modules/pkg-x").C
+
+x = b;
+>x = b : import("b/node_modules/pkg").C
+>x : import("a/node_modules/pkg-x").C
+>b : import("b/node_modules/pkg").C
+
+=== /node_modules/a/index.d.ts ===
+import { C } from "pkg";
+>C : typeof C
+
+export declare const a: C;
+>a : C
+
+=== /node_modules/a/node_modules/pkg-x/index.d.ts ===
+export declare class C { private p; }
+>C : C
+>p : any
+
+=== /node_modules/b/index.d.ts ===
+import { C } from "pkg";
+>C : typeof C
+
+export declare const b: C;
+>b : C
+
+=== /node_modules/b/node_modules/pkg/x/index.d.ts ===
+export declare class C { private p; }
+>C : C
+>p : any
+
