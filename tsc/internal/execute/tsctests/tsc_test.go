@@ -5519,6 +5519,29 @@ func TestTscContentMapperOptionDiagnostics(t *testing.T) {
 	}).run(t, "contentMapperOptionDiagnostics")
 }
 
+func TestTscContentMapperOptionDiagnosticsFromExtendedConfig(t *testing.T) {
+	t.Parallel()
+	(&tscInput{
+		subScenario: "mapper option diagnostic from extended config in another directory",
+		files: FileMap{
+			"/home/src/workspaces/base/tsconfig.base.json": stringtestutil.Dedent(`
+			{
+				"contentMappers": [
+					{
+						"package": "mapper",
+						"extensions": [".vue"],
+						"options": { "plugins": [{ "name": 1 }] }
+					}
+				]
+			}`),
+			"/home/src/workspaces/project/tsconfig.json":            `{ "extends": "../base/tsconfig.base.json" }`,
+			"/home/src/workspaces/project/app.vue":                  `export const value = 1;`,
+			"/home/src/workspaces/node_modules/mapper/package.json": contentmappertest.PackageJSON(contentmappertest.DynamicVerbatimMapper),
+		},
+		commandLineArgs: []string{"--runExternalCode", "--pretty", "false"},
+	}).run(t, "contentMapperOptionDiagnostics")
+}
+
 func TestTscContentMapperFailures(t *testing.T) {
 	t.Parallel()
 	failMapperPackageJSON := stringtestutil.Dedent(`
