@@ -1,0 +1,110 @@
+//// [tests/cases/compiler/relationCycleNestedRestartCheckOrder.ts] ////
+
+=== relationCycleNestedRestartCheckOrder.ts ===
+// Tests a relation cycle compared again from its least member, which finds a
+// lesser member while it is compared.
+//
+// The optional parameter of 'Af' relates to the parameter of 'Ag' only if
+// 'Cs' is not a strict subtype of 'Ct', and likewise for 'Bf' and 'Bg' with
+// 'Ds' and 'Dt'. 'Cs' relates to 'Ct' only if 'Bf' relates to 'Bg', and 'Ds'
+// relates to 'Dt' only if 'Cs' relates to 'Ct' and 'Af' relates to 'Ag'. No
+// answer is consistent for these four comparisons, so each is answered as if
+// the least of them, 'Af' to 'Ag', were compared first, wherever the cycle
+// is entered. Subtype reduction drops 'Af' if it is a strict subtype of 'Ag'.
+type Cs = { c0: Bf | Bg };
+>Cs : Symbol(Cs, Decl(relationCycleNestedRestartCheckOrder.ts, 0, 0))
+>c0 : Symbol(c0, Decl(relationCycleNestedRestartCheckOrder.ts, 10, 11))
+>Bf : Symbol(Bf, Decl(relationCycleNestedRestartCheckOrder.ts, 13, 53))
+>Bg : Symbol(Bg, Decl(relationCycleNestedRestartCheckOrder.ts, 14, 42))
+
+type Ct = { c0: Bg };
+>Ct : Symbol(Ct, Decl(relationCycleNestedRestartCheckOrder.ts, 10, 26))
+>c0 : Symbol(c0, Decl(relationCycleNestedRestartCheckOrder.ts, 11, 11))
+>Bg : Symbol(Bg, Decl(relationCycleNestedRestartCheckOrder.ts, 14, 42))
+
+type Af = (w: { k: number }, x?: Cs) => 1;
+>Af : Symbol(Af, Decl(relationCycleNestedRestartCheckOrder.ts, 11, 21))
+>w : Symbol(w, Decl(relationCycleNestedRestartCheckOrder.ts, 12, 11))
+>k : Symbol(k, Decl(relationCycleNestedRestartCheckOrder.ts, 12, 15))
+>x : Symbol(x, Decl(relationCycleNestedRestartCheckOrder.ts, 12, 28))
+>Cs : Symbol(Cs, Decl(relationCycleNestedRestartCheckOrder.ts, 0, 0))
+
+type Ag = (w: { k: 1 }, x: Ct | undefined) => number;
+>Ag : Symbol(Ag, Decl(relationCycleNestedRestartCheckOrder.ts, 12, 42))
+>w : Symbol(w, Decl(relationCycleNestedRestartCheckOrder.ts, 13, 11))
+>k : Symbol(k, Decl(relationCycleNestedRestartCheckOrder.ts, 13, 15))
+>x : Symbol(x, Decl(relationCycleNestedRestartCheckOrder.ts, 13, 23))
+>Ct : Symbol(Ct, Decl(relationCycleNestedRestartCheckOrder.ts, 10, 26))
+
+type Bf = (w: { k: number }, x?: Ds) => 1;
+>Bf : Symbol(Bf, Decl(relationCycleNestedRestartCheckOrder.ts, 13, 53))
+>w : Symbol(w, Decl(relationCycleNestedRestartCheckOrder.ts, 14, 11))
+>k : Symbol(k, Decl(relationCycleNestedRestartCheckOrder.ts, 14, 15))
+>x : Symbol(x, Decl(relationCycleNestedRestartCheckOrder.ts, 14, 28))
+>Ds : Symbol(Ds, Decl(relationCycleNestedRestartCheckOrder.ts, 15, 53))
+
+type Bg = (w: { k: 1 }, x: Dt | undefined) => number;
+>Bg : Symbol(Bg, Decl(relationCycleNestedRestartCheckOrder.ts, 14, 42))
+>w : Symbol(w, Decl(relationCycleNestedRestartCheckOrder.ts, 15, 11))
+>k : Symbol(k, Decl(relationCycleNestedRestartCheckOrder.ts, 15, 15))
+>x : Symbol(x, Decl(relationCycleNestedRestartCheckOrder.ts, 15, 23))
+>Dt : Symbol(Dt, Decl(relationCycleNestedRestartCheckOrder.ts, 16, 39))
+
+type Ds = { c0: Cs | Ct; c1: Af | Ag };
+>Ds : Symbol(Ds, Decl(relationCycleNestedRestartCheckOrder.ts, 15, 53))
+>c0 : Symbol(c0, Decl(relationCycleNestedRestartCheckOrder.ts, 16, 11))
+>Cs : Symbol(Cs, Decl(relationCycleNestedRestartCheckOrder.ts, 0, 0))
+>Ct : Symbol(Ct, Decl(relationCycleNestedRestartCheckOrder.ts, 10, 26))
+>c1 : Symbol(c1, Decl(relationCycleNestedRestartCheckOrder.ts, 16, 24))
+>Af : Symbol(Af, Decl(relationCycleNestedRestartCheckOrder.ts, 11, 21))
+>Ag : Symbol(Ag, Decl(relationCycleNestedRestartCheckOrder.ts, 12, 42))
+
+type Dt = { c0: Ct; c1: Ag };
+>Dt : Symbol(Dt, Decl(relationCycleNestedRestartCheckOrder.ts, 16, 39))
+>c0 : Symbol(c0, Decl(relationCycleNestedRestartCheckOrder.ts, 17, 11))
+>Ct : Symbol(Ct, Decl(relationCycleNestedRestartCheckOrder.ts, 10, 26))
+>c1 : Symbol(c1, Decl(relationCycleNestedRestartCheckOrder.ts, 17, 19))
+>Ag : Symbol(Ag, Decl(relationCycleNestedRestartCheckOrder.ts, 12, 42))
+
+type WA = { a: Af; b: string };
+>WA : Symbol(WA, Decl(relationCycleNestedRestartCheckOrder.ts, 17, 29))
+>a : Symbol(a, Decl(relationCycleNestedRestartCheckOrder.ts, 19, 11))
+>Af : Symbol(Af, Decl(relationCycleNestedRestartCheckOrder.ts, 11, 21))
+>b : Symbol(b, Decl(relationCycleNestedRestartCheckOrder.ts, 19, 18))
+
+type VA = { a: Ag };
+>VA : Symbol(VA, Decl(relationCycleNestedRestartCheckOrder.ts, 19, 31))
+>a : Symbol(a, Decl(relationCycleNestedRestartCheckOrder.ts, 20, 11))
+>Ag : Symbol(Ag, Decl(relationCycleNestedRestartCheckOrder.ts, 12, 42))
+
+type WD = { a: Ds; b: string };
+>WD : Symbol(WD, Decl(relationCycleNestedRestartCheckOrder.ts, 20, 20))
+>a : Symbol(a, Decl(relationCycleNestedRestartCheckOrder.ts, 21, 11))
+>Ds : Symbol(Ds, Decl(relationCycleNestedRestartCheckOrder.ts, 15, 53))
+>b : Symbol(b, Decl(relationCycleNestedRestartCheckOrder.ts, 21, 18))
+
+type VD = { a: Dt };
+>VD : Symbol(VD, Decl(relationCycleNestedRestartCheckOrder.ts, 21, 31))
+>a : Symbol(a, Decl(relationCycleNestedRestartCheckOrder.ts, 22, 11))
+>Dt : Symbol(Dt, Decl(relationCycleNestedRestartCheckOrder.ts, 16, 39))
+
+declare let wa: WA, va: VA, wd: WD, vd: VD;
+>wa : Symbol(wa, Decl(relationCycleNestedRestartCheckOrder.ts, 23, 11))
+>WA : Symbol(WA, Decl(relationCycleNestedRestartCheckOrder.ts, 17, 29))
+>va : Symbol(va, Decl(relationCycleNestedRestartCheckOrder.ts, 23, 19))
+>VA : Symbol(VA, Decl(relationCycleNestedRestartCheckOrder.ts, 19, 31))
+>wd : Symbol(wd, Decl(relationCycleNestedRestartCheckOrder.ts, 23, 27))
+>WD : Symbol(WD, Decl(relationCycleNestedRestartCheckOrder.ts, 20, 20))
+>vd : Symbol(vd, Decl(relationCycleNestedRestartCheckOrder.ts, 23, 35))
+>VD : Symbol(VD, Decl(relationCycleNestedRestartCheckOrder.ts, 21, 31))
+
+let oa = [wa, va];
+>oa : Symbol(oa, Decl(relationCycleNestedRestartCheckOrder.ts, 24, 3))
+>wa : Symbol(wa, Decl(relationCycleNestedRestartCheckOrder.ts, 23, 11))
+>va : Symbol(va, Decl(relationCycleNestedRestartCheckOrder.ts, 23, 19))
+
+let od = [wd, vd];
+>od : Symbol(od, Decl(relationCycleNestedRestartCheckOrder.ts, 25, 3))
+>wd : Symbol(wd, Decl(relationCycleNestedRestartCheckOrder.ts, 23, 27))
+>vd : Symbol(vd, Decl(relationCycleNestedRestartCheckOrder.ts, 23, 35))
+

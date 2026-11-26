@@ -1,0 +1,68 @@
+//// [tests/cases/compiler/relationCycleHeadFailureCheckOrder.ts] ////
+
+=== relationCycleHeadFailureCheckOrder.ts ===
+// Tests the canonical answer of a non-monotone relation cycle whose first
+// comparison fails.
+//
+// Subtype reduction drops 'Fz' if it is a strict subtype of 'Gz'. Its
+// optional parameter relates only if 'Ap' is not a strict subtype of 'Aq',
+// and relating 'Ap' to 'Aq' compares 'Fz' to 'Gz' again. Nothing else can
+// fail, so no answer is consistent for both comparisons. Each is answered as
+// if the least of them, 'Ap' to 'Aq', were compared first, wherever the cycle
+// is entered. 'Gz' is not a subtype of 'Fz' because of the first parameter.
+type Ap = { f: Fz | Gz };
+>Ap : Symbol(Ap, Decl(relationCycleHeadFailureCheckOrder.ts, 0, 0))
+>f : Symbol(f, Decl(relationCycleHeadFailureCheckOrder.ts, 9, 11))
+>Fz : Symbol(Fz, Decl(relationCycleHeadFailureCheckOrder.ts, 10, 20))
+>Gz : Symbol(Gz, Decl(relationCycleHeadFailureCheckOrder.ts, 11, 42))
+
+type Aq = { f: Gz };
+>Aq : Symbol(Aq, Decl(relationCycleHeadFailureCheckOrder.ts, 9, 25))
+>f : Symbol(f, Decl(relationCycleHeadFailureCheckOrder.ts, 10, 11))
+>Gz : Symbol(Gz, Decl(relationCycleHeadFailureCheckOrder.ts, 11, 42))
+
+type Fz = (w: { k: number }, x?: Ap) => 1;
+>Fz : Symbol(Fz, Decl(relationCycleHeadFailureCheckOrder.ts, 10, 20))
+>w : Symbol(w, Decl(relationCycleHeadFailureCheckOrder.ts, 11, 11))
+>k : Symbol(k, Decl(relationCycleHeadFailureCheckOrder.ts, 11, 15))
+>x : Symbol(x, Decl(relationCycleHeadFailureCheckOrder.ts, 11, 28))
+>Ap : Symbol(Ap, Decl(relationCycleHeadFailureCheckOrder.ts, 0, 0))
+
+type Gz = (w: { k: 1 }, x: Aq | undefined) => number;
+>Gz : Symbol(Gz, Decl(relationCycleHeadFailureCheckOrder.ts, 11, 42))
+>w : Symbol(w, Decl(relationCycleHeadFailureCheckOrder.ts, 12, 11))
+>k : Symbol(k, Decl(relationCycleHeadFailureCheckOrder.ts, 12, 15))
+>x : Symbol(x, Decl(relationCycleHeadFailureCheckOrder.ts, 12, 23))
+>Aq : Symbol(Aq, Decl(relationCycleHeadFailureCheckOrder.ts, 9, 25))
+
+type WP = { a: Ap; b: string };
+>WP : Symbol(WP, Decl(relationCycleHeadFailureCheckOrder.ts, 12, 53))
+>a : Symbol(a, Decl(relationCycleHeadFailureCheckOrder.ts, 13, 11))
+>Ap : Symbol(Ap, Decl(relationCycleHeadFailureCheckOrder.ts, 0, 0))
+>b : Symbol(b, Decl(relationCycleHeadFailureCheckOrder.ts, 13, 18))
+
+type WQ = { a: Aq };
+>WQ : Symbol(WQ, Decl(relationCycleHeadFailureCheckOrder.ts, 13, 31))
+>a : Symbol(a, Decl(relationCycleHeadFailureCheckOrder.ts, 14, 11))
+>Aq : Symbol(Aq, Decl(relationCycleHeadFailureCheckOrder.ts, 9, 25))
+
+declare let f: Fz, g: Gz, wp: WP, wq: WQ;
+>f : Symbol(f, Decl(relationCycleHeadFailureCheckOrder.ts, 16, 11))
+>Fz : Symbol(Fz, Decl(relationCycleHeadFailureCheckOrder.ts, 10, 20))
+>g : Symbol(g, Decl(relationCycleHeadFailureCheckOrder.ts, 16, 18))
+>Gz : Symbol(Gz, Decl(relationCycleHeadFailureCheckOrder.ts, 11, 42))
+>wp : Symbol(wp, Decl(relationCycleHeadFailureCheckOrder.ts, 16, 25))
+>WP : Symbol(WP, Decl(relationCycleHeadFailureCheckOrder.ts, 12, 53))
+>wq : Symbol(wq, Decl(relationCycleHeadFailureCheckOrder.ts, 16, 33))
+>WQ : Symbol(WQ, Decl(relationCycleHeadFailureCheckOrder.ts, 13, 31))
+
+let a1 = [f, g];
+>a1 : Symbol(a1, Decl(relationCycleHeadFailureCheckOrder.ts, 17, 3))
+>f : Symbol(f, Decl(relationCycleHeadFailureCheckOrder.ts, 16, 11))
+>g : Symbol(g, Decl(relationCycleHeadFailureCheckOrder.ts, 16, 18))
+
+let a2 = [wp, wq];
+>a2 : Symbol(a2, Decl(relationCycleHeadFailureCheckOrder.ts, 18, 3))
+>wp : Symbol(wp, Decl(relationCycleHeadFailureCheckOrder.ts, 16, 25))
+>wq : Symbol(wq, Decl(relationCycleHeadFailureCheckOrder.ts, 16, 33))
+

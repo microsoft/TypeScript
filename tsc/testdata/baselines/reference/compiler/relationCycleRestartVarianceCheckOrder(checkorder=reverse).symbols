@@ -1,0 +1,73 @@
+//// [tests/cases/compiler/relationCycleRestartVarianceCheckOrder.ts] ////
+
+=== relationCycleRestartVarianceCheckOrder.ts ===
+// Tests a relation cycle compared again from its least member while a
+// superseded variance measurement is in progress.
+//
+// Measuring the variances of B measures those of A, which reaches B again;
+// A sorts before B, so the measurement of B is superseded. Measuring A then
+// resolves typeof functions, whose subtype reduction enters the cycle
+// F -> G, P | undefined -> Q | undefined, P -> Q at a member other than its
+// smallest one and restarts from F -> G with a relater of its own.
+declare let b1: B<string>, b2: B<number>;
+>b1 : Symbol(b1, Decl(relationCycleRestartVarianceCheckOrder.ts, 8, 11))
+>B : Symbol(B, Decl(relationCycleRestartVarianceCheckOrder.ts, 18, 53))
+>b2 : Symbol(b2, Decl(relationCycleRestartVarianceCheckOrder.ts, 8, 26))
+>B : Symbol(B, Decl(relationCycleRestartVarianceCheckOrder.ts, 18, 53))
+
+b1 = b2;
+>b1 : Symbol(b1, Decl(relationCycleRestartVarianceCheckOrder.ts, 8, 11))
+>b2 : Symbol(b2, Decl(relationCycleRestartVarianceCheckOrder.ts, 8, 26))
+
+type P = { f: F | G };
+>P : Symbol(P, Decl(relationCycleRestartVarianceCheckOrder.ts, 9, 8))
+>f : Symbol(f, Decl(relationCycleRestartVarianceCheckOrder.ts, 11, 10))
+>F : Symbol(F, Decl(relationCycleRestartVarianceCheckOrder.ts, 12, 18))
+>G : Symbol(G, Decl(relationCycleRestartVarianceCheckOrder.ts, 13, 22))
+
+type Q = { f: G };
+>Q : Symbol(Q, Decl(relationCycleRestartVarianceCheckOrder.ts, 11, 22))
+>f : Symbol(f, Decl(relationCycleRestartVarianceCheckOrder.ts, 12, 10))
+>G : Symbol(G, Decl(relationCycleRestartVarianceCheckOrder.ts, 13, 22))
+
+type F = (x?: P) => 1;
+>F : Symbol(F, Decl(relationCycleRestartVarianceCheckOrder.ts, 12, 18))
+>x : Symbol(x, Decl(relationCycleRestartVarianceCheckOrder.ts, 13, 10))
+>P : Symbol(P, Decl(relationCycleRestartVarianceCheckOrder.ts, 9, 8))
+
+type G = (x: Q | undefined) => number;
+>G : Symbol(G, Decl(relationCycleRestartVarianceCheckOrder.ts, 13, 22))
+>x : Symbol(x, Decl(relationCycleRestartVarianceCheckOrder.ts, 14, 10))
+>Q : Symbol(Q, Decl(relationCycleRestartVarianceCheckOrder.ts, 11, 22))
+
+declare let f: F, g: G;
+>f : Symbol(f, Decl(relationCycleRestartVarianceCheckOrder.ts, 15, 11))
+>F : Symbol(F, Decl(relationCycleRestartVarianceCheckOrder.ts, 12, 18))
+>g : Symbol(g, Decl(relationCycleRestartVarianceCheckOrder.ts, 15, 17))
+>G : Symbol(G, Decl(relationCycleRestartVarianceCheckOrder.ts, 13, 22))
+
+let functions = [f, g];
+>functions : Symbol(functions, Decl(relationCycleRestartVarianceCheckOrder.ts, 16, 3))
+>f : Symbol(f, Decl(relationCycleRestartVarianceCheckOrder.ts, 15, 11))
+>g : Symbol(g, Decl(relationCycleRestartVarianceCheckOrder.ts, 15, 17))
+
+interface A<T> { v: B<T>; c: typeof functions; t: T }
+>A : Symbol(A, Decl(relationCycleRestartVarianceCheckOrder.ts, 16, 23))
+>T : Symbol(T, Decl(relationCycleRestartVarianceCheckOrder.ts, 18, 12))
+>v : Symbol(A.v, Decl(relationCycleRestartVarianceCheckOrder.ts, 18, 16))
+>B : Symbol(B, Decl(relationCycleRestartVarianceCheckOrder.ts, 18, 53))
+>T : Symbol(T, Decl(relationCycleRestartVarianceCheckOrder.ts, 18, 12))
+>c : Symbol(A.c, Decl(relationCycleRestartVarianceCheckOrder.ts, 18, 25))
+>functions : Symbol(functions, Decl(relationCycleRestartVarianceCheckOrder.ts, 16, 3))
+>t : Symbol(A.t, Decl(relationCycleRestartVarianceCheckOrder.ts, 18, 46))
+>T : Symbol(T, Decl(relationCycleRestartVarianceCheckOrder.ts, 18, 12))
+
+interface B<T> { a: A<T>; t: T }
+>B : Symbol(B, Decl(relationCycleRestartVarianceCheckOrder.ts, 18, 53))
+>T : Symbol(T, Decl(relationCycleRestartVarianceCheckOrder.ts, 19, 12))
+>a : Symbol(B.a, Decl(relationCycleRestartVarianceCheckOrder.ts, 19, 16))
+>A : Symbol(A, Decl(relationCycleRestartVarianceCheckOrder.ts, 16, 23))
+>T : Symbol(T, Decl(relationCycleRestartVarianceCheckOrder.ts, 19, 12))
+>t : Symbol(B.t, Decl(relationCycleRestartVarianceCheckOrder.ts, 19, 25))
+>T : Symbol(T, Decl(relationCycleRestartVarianceCheckOrder.ts, 19, 12))
+

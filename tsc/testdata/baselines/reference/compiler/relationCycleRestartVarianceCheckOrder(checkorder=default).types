@@ -1,0 +1,56 @@
+//// [tests/cases/compiler/relationCycleRestartVarianceCheckOrder.ts] ////
+
+=== relationCycleRestartVarianceCheckOrder.ts ===
+// Tests a relation cycle compared again from its least member while a
+// superseded variance measurement is in progress.
+//
+// Measuring the variances of B measures those of A, which reaches B again;
+// A sorts before B, so the measurement of B is superseded. Measuring A then
+// resolves typeof functions, whose subtype reduction enters the cycle
+// F -> G, P | undefined -> Q | undefined, P -> Q at a member other than its
+// smallest one and restarts from F -> G with a relater of its own.
+declare let b1: B<string>, b2: B<number>;
+>b1 : B<string>
+>b2 : B<number>
+
+b1 = b2;
+>b1 = b2 : B<number>
+>b1 : B<string>
+>b2 : B<number>
+
+type P = { f: F | G };
+>P : P
+>f : F | G
+
+type Q = { f: G };
+>Q : Q
+>f : G
+
+type F = (x?: P) => 1;
+>F : F
+>x : P | undefined
+
+type G = (x: Q | undefined) => number;
+>G : G
+>x : Q | undefined
+
+declare let f: F, g: G;
+>f : F
+>g : G
+
+let functions = [f, g];
+>functions : (F | G)[]
+>[f, g] : (F | G)[]
+>f : F
+>g : G
+
+interface A<T> { v: B<T>; c: typeof functions; t: T }
+>v : B<T>
+>c : (F | G)[]
+>functions : (F | G)[]
+>t : T
+
+interface B<T> { a: A<T>; t: T }
+>a : A<T>
+>t : T
+

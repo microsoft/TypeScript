@@ -32,8 +32,8 @@ relationCycleNonMonotoneCheckOrder.ts(74,30): error TS2353: Object literal may o
     
     // 'S1' relates to 'G1' only if 'S2' does not relate to 'G2', and the
     // reverse, so no answer is consistent for both. Each is answered as if
-    // compared first, assuming itself while relating the other, regardless
-    // of which assignment is checked first.
+    // the least comparison of the cycle were compared first, regardless of
+    // which assignment is checked first.
     namespace inferenceConstraintMutual {
         type A1 = { k?: "c"; f: S2 | G2 };
         type C1 = { [s: string]: "c" | G2; f: G2 };
@@ -103,5 +103,33 @@ relationCycleNonMonotoneCheckOrder.ts(74,30): error TS2353: Object literal may o
         declare let f: F, g: G, wp: WP, wq: WQ;
         let a1 = [f, g];
         let a2 = [wp, wq];
+    }
+    
+    // As 'discriminated', with 'X' compared to 'Y' first, which compares 'Src'
+    // to 'Tgt' assuming that 'X' relates to 'Y'. That matches '{ d: Y; y:
+    // number }', so 'Src' fails to relate to 'Tgt' while 'X' is assumed to
+    // relate to 'Y', and relates once compared on its own.
+    namespace discriminatedAssumedFirst {
+        interface X { p: Src; q: number }
+        interface Y { p: Tgt; q: 1 }
+        type Src = { d: "a" | X; y: string };
+        type Tgt = { d: "a"; y: string } | { d: X; y: string } | { d: Y; y: number };
+    
+        declare let r2: X extends Y ? true : false;
+        declare let r1: Src extends Tgt ? true : false;
+    }
+    
+    // As 'inferenceConstraint', with 'A' compared to 'C' first, which compares
+    // 'S' to 'G' assuming that 'A' relates to 'C'. That keeps 'A' as the
+    // inferred type argument, so 'S' fails to relate to 'G' while 'A' is
+    // assumed to relate to 'C', and relates once compared on its own.
+    namespace inferenceConstraintAssumedFirst {
+        type A = { k?: "c"; f: S | G; z: number };
+        type C = { [s: string]: "c" | G | number; f: G; z: 1 };
+        type S = <T extends C>(x: T) => T["k"];
+        type G = (x: A) => "c" | G | number;
+    
+        declare let r2: A extends C ? true : false;
+        declare let r1: S extends G ? true : false;
     }
     

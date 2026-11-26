@@ -78,8 +78,8 @@ namespace inferenceConstraintMethod {
 
 // 'S1' relates to 'G1' only if 'S2' does not relate to 'G2', and the
 // reverse, so no answer is consistent for both. Each is answered as if
-// compared first, assuming itself while relating the other, regardless
-// of which assignment is checked first.
+// the least comparison of the cycle were compared first, regardless of
+// which assignment is checked first.
 namespace inferenceConstraintMutual {
 >inferenceConstraintMutual : typeof inferenceConstraintMutual
 
@@ -288,5 +288,83 @@ namespace strictArity {
 >[wp, wq] : (WP | WQ)[]
 >wp : WP
 >wq : WQ
+}
+
+// As 'discriminated', with 'X' compared to 'Y' first, which compares 'Src'
+// to 'Tgt' assuming that 'X' relates to 'Y'. That matches '{ d: Y; y:
+// number }', so 'Src' fails to relate to 'Tgt' while 'X' is assumed to
+// relate to 'Y', and relates once compared on its own.
+namespace discriminatedAssumedFirst {
+>discriminatedAssumedFirst : typeof discriminatedAssumedFirst
+
+    interface X { p: Src; q: number }
+>p : Src
+>q : number
+
+    interface Y { p: Tgt; q: 1 }
+>p : Tgt
+>q : 1
+
+    type Src = { d: "a" | X; y: string };
+>Src : Src
+>d : "a" | X
+>y : string
+
+    type Tgt = { d: "a"; y: string } | { d: X; y: string } | { d: Y; y: number };
+>Tgt : Tgt
+>d : "a"
+>y : string
+>d : X
+>y : string
+>d : Y
+>y : number
+
+    declare let r2: X extends Y ? true : false;
+>r2 : false
+>true : true
+>false : false
+
+    declare let r1: Src extends Tgt ? true : false;
+>r1 : false
+>true : true
+>false : false
+}
+
+// As 'inferenceConstraint', with 'A' compared to 'C' first, which compares
+// 'S' to 'G' assuming that 'A' relates to 'C'. That keeps 'A' as the
+// inferred type argument, so 'S' fails to relate to 'G' while 'A' is
+// assumed to relate to 'C', and relates once compared on its own.
+namespace inferenceConstraintAssumedFirst {
+>inferenceConstraintAssumedFirst : typeof inferenceConstraintAssumedFirst
+
+    type A = { k?: "c"; f: S | G; z: number };
+>A : A
+>k : "c" | undefined
+>f : G | S
+>z : number
+
+    type C = { [s: string]: "c" | G | number; f: G; z: 1 };
+>C : C
+>s : string
+>f : G
+>z : 1
+
+    type S = <T extends C>(x: T) => T["k"];
+>S : S
+>x : T
+
+    type G = (x: A) => "c" | G | number;
+>G : G
+>x : A
+
+    declare let r2: A extends C ? true : false;
+>r2 : false
+>true : true
+>false : false
+
+    declare let r1: S extends G ? true : false;
+>r1 : false
+>true : true
+>false : false
 }
 

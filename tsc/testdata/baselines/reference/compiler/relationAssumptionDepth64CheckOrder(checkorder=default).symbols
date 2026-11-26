@@ -1,0 +1,683 @@
+//// [tests/cases/compiler/relationAssumptionDepth64CheckOrder.ts] ////
+
+=== relationAssumptionDepth64CheckOrder.ts ===
+// Tests relation results that assume a comparison at depth 64 or deeper,
+// whose assumption bits are shared.
+//
+// 'I0' reaches 'I64' through 64 nested properties, so 'I64' is compared
+// against 'J64' at depth 64. 'I65' compares back to 'I64' and assumes it
+// related, and 'I64' then fails on 'b'. 'I65' relates to 'J65' only through
+// 'I64', so it fails, whether or not 'I0' was compared to 'J0' first.
+
+interface I0 { a: I1 }
+>I0 : Symbol(I0, Decl(relationAssumptionDepth64CheckOrder.ts, 0, 0))
+>a : Symbol(I0.a, Decl(relationAssumptionDepth64CheckOrder.ts, 8, 14))
+>I1 : Symbol(I1, Decl(relationAssumptionDepth64CheckOrder.ts, 8, 22))
+
+interface I1 { a: I2 }
+>I1 : Symbol(I1, Decl(relationAssumptionDepth64CheckOrder.ts, 8, 22))
+>a : Symbol(I1.a, Decl(relationAssumptionDepth64CheckOrder.ts, 9, 14))
+>I2 : Symbol(I2, Decl(relationAssumptionDepth64CheckOrder.ts, 9, 22))
+
+interface I2 { a: I3 }
+>I2 : Symbol(I2, Decl(relationAssumptionDepth64CheckOrder.ts, 9, 22))
+>a : Symbol(I2.a, Decl(relationAssumptionDepth64CheckOrder.ts, 10, 14))
+>I3 : Symbol(I3, Decl(relationAssumptionDepth64CheckOrder.ts, 10, 22))
+
+interface I3 { a: I4 }
+>I3 : Symbol(I3, Decl(relationAssumptionDepth64CheckOrder.ts, 10, 22))
+>a : Symbol(I3.a, Decl(relationAssumptionDepth64CheckOrder.ts, 11, 14))
+>I4 : Symbol(I4, Decl(relationAssumptionDepth64CheckOrder.ts, 11, 22))
+
+interface I4 { a: I5 }
+>I4 : Symbol(I4, Decl(relationAssumptionDepth64CheckOrder.ts, 11, 22))
+>a : Symbol(I4.a, Decl(relationAssumptionDepth64CheckOrder.ts, 12, 14))
+>I5 : Symbol(I5, Decl(relationAssumptionDepth64CheckOrder.ts, 12, 22))
+
+interface I5 { a: I6 }
+>I5 : Symbol(I5, Decl(relationAssumptionDepth64CheckOrder.ts, 12, 22))
+>a : Symbol(I5.a, Decl(relationAssumptionDepth64CheckOrder.ts, 13, 14))
+>I6 : Symbol(I6, Decl(relationAssumptionDepth64CheckOrder.ts, 13, 22))
+
+interface I6 { a: I7 }
+>I6 : Symbol(I6, Decl(relationAssumptionDepth64CheckOrder.ts, 13, 22))
+>a : Symbol(I6.a, Decl(relationAssumptionDepth64CheckOrder.ts, 14, 14))
+>I7 : Symbol(I7, Decl(relationAssumptionDepth64CheckOrder.ts, 14, 22))
+
+interface I7 { a: I8 }
+>I7 : Symbol(I7, Decl(relationAssumptionDepth64CheckOrder.ts, 14, 22))
+>a : Symbol(I7.a, Decl(relationAssumptionDepth64CheckOrder.ts, 15, 14))
+>I8 : Symbol(I8, Decl(relationAssumptionDepth64CheckOrder.ts, 15, 22))
+
+interface I8 { a: I9 }
+>I8 : Symbol(I8, Decl(relationAssumptionDepth64CheckOrder.ts, 15, 22))
+>a : Symbol(I8.a, Decl(relationAssumptionDepth64CheckOrder.ts, 16, 14))
+>I9 : Symbol(I9, Decl(relationAssumptionDepth64CheckOrder.ts, 16, 22))
+
+interface I9 { a: I10 }
+>I9 : Symbol(I9, Decl(relationAssumptionDepth64CheckOrder.ts, 16, 22))
+>a : Symbol(I9.a, Decl(relationAssumptionDepth64CheckOrder.ts, 17, 14))
+>I10 : Symbol(I10, Decl(relationAssumptionDepth64CheckOrder.ts, 17, 23))
+
+interface I10 { a: I11 }
+>I10 : Symbol(I10, Decl(relationAssumptionDepth64CheckOrder.ts, 17, 23))
+>a : Symbol(I10.a, Decl(relationAssumptionDepth64CheckOrder.ts, 18, 15))
+>I11 : Symbol(I11, Decl(relationAssumptionDepth64CheckOrder.ts, 18, 24))
+
+interface I11 { a: I12 }
+>I11 : Symbol(I11, Decl(relationAssumptionDepth64CheckOrder.ts, 18, 24))
+>a : Symbol(I11.a, Decl(relationAssumptionDepth64CheckOrder.ts, 19, 15))
+>I12 : Symbol(I12, Decl(relationAssumptionDepth64CheckOrder.ts, 19, 24))
+
+interface I12 { a: I13 }
+>I12 : Symbol(I12, Decl(relationAssumptionDepth64CheckOrder.ts, 19, 24))
+>a : Symbol(I12.a, Decl(relationAssumptionDepth64CheckOrder.ts, 20, 15))
+>I13 : Symbol(I13, Decl(relationAssumptionDepth64CheckOrder.ts, 20, 24))
+
+interface I13 { a: I14 }
+>I13 : Symbol(I13, Decl(relationAssumptionDepth64CheckOrder.ts, 20, 24))
+>a : Symbol(I13.a, Decl(relationAssumptionDepth64CheckOrder.ts, 21, 15))
+>I14 : Symbol(I14, Decl(relationAssumptionDepth64CheckOrder.ts, 21, 24))
+
+interface I14 { a: I15 }
+>I14 : Symbol(I14, Decl(relationAssumptionDepth64CheckOrder.ts, 21, 24))
+>a : Symbol(I14.a, Decl(relationAssumptionDepth64CheckOrder.ts, 22, 15))
+>I15 : Symbol(I15, Decl(relationAssumptionDepth64CheckOrder.ts, 22, 24))
+
+interface I15 { a: I16 }
+>I15 : Symbol(I15, Decl(relationAssumptionDepth64CheckOrder.ts, 22, 24))
+>a : Symbol(I15.a, Decl(relationAssumptionDepth64CheckOrder.ts, 23, 15))
+>I16 : Symbol(I16, Decl(relationAssumptionDepth64CheckOrder.ts, 23, 24))
+
+interface I16 { a: I17 }
+>I16 : Symbol(I16, Decl(relationAssumptionDepth64CheckOrder.ts, 23, 24))
+>a : Symbol(I16.a, Decl(relationAssumptionDepth64CheckOrder.ts, 24, 15))
+>I17 : Symbol(I17, Decl(relationAssumptionDepth64CheckOrder.ts, 24, 24))
+
+interface I17 { a: I18 }
+>I17 : Symbol(I17, Decl(relationAssumptionDepth64CheckOrder.ts, 24, 24))
+>a : Symbol(I17.a, Decl(relationAssumptionDepth64CheckOrder.ts, 25, 15))
+>I18 : Symbol(I18, Decl(relationAssumptionDepth64CheckOrder.ts, 25, 24))
+
+interface I18 { a: I19 }
+>I18 : Symbol(I18, Decl(relationAssumptionDepth64CheckOrder.ts, 25, 24))
+>a : Symbol(I18.a, Decl(relationAssumptionDepth64CheckOrder.ts, 26, 15))
+>I19 : Symbol(I19, Decl(relationAssumptionDepth64CheckOrder.ts, 26, 24))
+
+interface I19 { a: I20 }
+>I19 : Symbol(I19, Decl(relationAssumptionDepth64CheckOrder.ts, 26, 24))
+>a : Symbol(I19.a, Decl(relationAssumptionDepth64CheckOrder.ts, 27, 15))
+>I20 : Symbol(I20, Decl(relationAssumptionDepth64CheckOrder.ts, 27, 24))
+
+interface I20 { a: I21 }
+>I20 : Symbol(I20, Decl(relationAssumptionDepth64CheckOrder.ts, 27, 24))
+>a : Symbol(I20.a, Decl(relationAssumptionDepth64CheckOrder.ts, 28, 15))
+>I21 : Symbol(I21, Decl(relationAssumptionDepth64CheckOrder.ts, 28, 24))
+
+interface I21 { a: I22 }
+>I21 : Symbol(I21, Decl(relationAssumptionDepth64CheckOrder.ts, 28, 24))
+>a : Symbol(I21.a, Decl(relationAssumptionDepth64CheckOrder.ts, 29, 15))
+>I22 : Symbol(I22, Decl(relationAssumptionDepth64CheckOrder.ts, 29, 24))
+
+interface I22 { a: I23 }
+>I22 : Symbol(I22, Decl(relationAssumptionDepth64CheckOrder.ts, 29, 24))
+>a : Symbol(I22.a, Decl(relationAssumptionDepth64CheckOrder.ts, 30, 15))
+>I23 : Symbol(I23, Decl(relationAssumptionDepth64CheckOrder.ts, 30, 24))
+
+interface I23 { a: I24 }
+>I23 : Symbol(I23, Decl(relationAssumptionDepth64CheckOrder.ts, 30, 24))
+>a : Symbol(I23.a, Decl(relationAssumptionDepth64CheckOrder.ts, 31, 15))
+>I24 : Symbol(I24, Decl(relationAssumptionDepth64CheckOrder.ts, 31, 24))
+
+interface I24 { a: I25 }
+>I24 : Symbol(I24, Decl(relationAssumptionDepth64CheckOrder.ts, 31, 24))
+>a : Symbol(I24.a, Decl(relationAssumptionDepth64CheckOrder.ts, 32, 15))
+>I25 : Symbol(I25, Decl(relationAssumptionDepth64CheckOrder.ts, 32, 24))
+
+interface I25 { a: I26 }
+>I25 : Symbol(I25, Decl(relationAssumptionDepth64CheckOrder.ts, 32, 24))
+>a : Symbol(I25.a, Decl(relationAssumptionDepth64CheckOrder.ts, 33, 15))
+>I26 : Symbol(I26, Decl(relationAssumptionDepth64CheckOrder.ts, 33, 24))
+
+interface I26 { a: I27 }
+>I26 : Symbol(I26, Decl(relationAssumptionDepth64CheckOrder.ts, 33, 24))
+>a : Symbol(I26.a, Decl(relationAssumptionDepth64CheckOrder.ts, 34, 15))
+>I27 : Symbol(I27, Decl(relationAssumptionDepth64CheckOrder.ts, 34, 24))
+
+interface I27 { a: I28 }
+>I27 : Symbol(I27, Decl(relationAssumptionDepth64CheckOrder.ts, 34, 24))
+>a : Symbol(I27.a, Decl(relationAssumptionDepth64CheckOrder.ts, 35, 15))
+>I28 : Symbol(I28, Decl(relationAssumptionDepth64CheckOrder.ts, 35, 24))
+
+interface I28 { a: I29 }
+>I28 : Symbol(I28, Decl(relationAssumptionDepth64CheckOrder.ts, 35, 24))
+>a : Symbol(I28.a, Decl(relationAssumptionDepth64CheckOrder.ts, 36, 15))
+>I29 : Symbol(I29, Decl(relationAssumptionDepth64CheckOrder.ts, 36, 24))
+
+interface I29 { a: I30 }
+>I29 : Symbol(I29, Decl(relationAssumptionDepth64CheckOrder.ts, 36, 24))
+>a : Symbol(I29.a, Decl(relationAssumptionDepth64CheckOrder.ts, 37, 15))
+>I30 : Symbol(I30, Decl(relationAssumptionDepth64CheckOrder.ts, 37, 24))
+
+interface I30 { a: I31 }
+>I30 : Symbol(I30, Decl(relationAssumptionDepth64CheckOrder.ts, 37, 24))
+>a : Symbol(I30.a, Decl(relationAssumptionDepth64CheckOrder.ts, 38, 15))
+>I31 : Symbol(I31, Decl(relationAssumptionDepth64CheckOrder.ts, 38, 24))
+
+interface I31 { a: I32 }
+>I31 : Symbol(I31, Decl(relationAssumptionDepth64CheckOrder.ts, 38, 24))
+>a : Symbol(I31.a, Decl(relationAssumptionDepth64CheckOrder.ts, 39, 15))
+>I32 : Symbol(I32, Decl(relationAssumptionDepth64CheckOrder.ts, 39, 24))
+
+interface I32 { a: I33 }
+>I32 : Symbol(I32, Decl(relationAssumptionDepth64CheckOrder.ts, 39, 24))
+>a : Symbol(I32.a, Decl(relationAssumptionDepth64CheckOrder.ts, 40, 15))
+>I33 : Symbol(I33, Decl(relationAssumptionDepth64CheckOrder.ts, 40, 24))
+
+interface I33 { a: I34 }
+>I33 : Symbol(I33, Decl(relationAssumptionDepth64CheckOrder.ts, 40, 24))
+>a : Symbol(I33.a, Decl(relationAssumptionDepth64CheckOrder.ts, 41, 15))
+>I34 : Symbol(I34, Decl(relationAssumptionDepth64CheckOrder.ts, 41, 24))
+
+interface I34 { a: I35 }
+>I34 : Symbol(I34, Decl(relationAssumptionDepth64CheckOrder.ts, 41, 24))
+>a : Symbol(I34.a, Decl(relationAssumptionDepth64CheckOrder.ts, 42, 15))
+>I35 : Symbol(I35, Decl(relationAssumptionDepth64CheckOrder.ts, 42, 24))
+
+interface I35 { a: I36 }
+>I35 : Symbol(I35, Decl(relationAssumptionDepth64CheckOrder.ts, 42, 24))
+>a : Symbol(I35.a, Decl(relationAssumptionDepth64CheckOrder.ts, 43, 15))
+>I36 : Symbol(I36, Decl(relationAssumptionDepth64CheckOrder.ts, 43, 24))
+
+interface I36 { a: I37 }
+>I36 : Symbol(I36, Decl(relationAssumptionDepth64CheckOrder.ts, 43, 24))
+>a : Symbol(I36.a, Decl(relationAssumptionDepth64CheckOrder.ts, 44, 15))
+>I37 : Symbol(I37, Decl(relationAssumptionDepth64CheckOrder.ts, 44, 24))
+
+interface I37 { a: I38 }
+>I37 : Symbol(I37, Decl(relationAssumptionDepth64CheckOrder.ts, 44, 24))
+>a : Symbol(I37.a, Decl(relationAssumptionDepth64CheckOrder.ts, 45, 15))
+>I38 : Symbol(I38, Decl(relationAssumptionDepth64CheckOrder.ts, 45, 24))
+
+interface I38 { a: I39 }
+>I38 : Symbol(I38, Decl(relationAssumptionDepth64CheckOrder.ts, 45, 24))
+>a : Symbol(I38.a, Decl(relationAssumptionDepth64CheckOrder.ts, 46, 15))
+>I39 : Symbol(I39, Decl(relationAssumptionDepth64CheckOrder.ts, 46, 24))
+
+interface I39 { a: I40 }
+>I39 : Symbol(I39, Decl(relationAssumptionDepth64CheckOrder.ts, 46, 24))
+>a : Symbol(I39.a, Decl(relationAssumptionDepth64CheckOrder.ts, 47, 15))
+>I40 : Symbol(I40, Decl(relationAssumptionDepth64CheckOrder.ts, 47, 24))
+
+interface I40 { a: I41 }
+>I40 : Symbol(I40, Decl(relationAssumptionDepth64CheckOrder.ts, 47, 24))
+>a : Symbol(I40.a, Decl(relationAssumptionDepth64CheckOrder.ts, 48, 15))
+>I41 : Symbol(I41, Decl(relationAssumptionDepth64CheckOrder.ts, 48, 24))
+
+interface I41 { a: I42 }
+>I41 : Symbol(I41, Decl(relationAssumptionDepth64CheckOrder.ts, 48, 24))
+>a : Symbol(I41.a, Decl(relationAssumptionDepth64CheckOrder.ts, 49, 15))
+>I42 : Symbol(I42, Decl(relationAssumptionDepth64CheckOrder.ts, 49, 24))
+
+interface I42 { a: I43 }
+>I42 : Symbol(I42, Decl(relationAssumptionDepth64CheckOrder.ts, 49, 24))
+>a : Symbol(I42.a, Decl(relationAssumptionDepth64CheckOrder.ts, 50, 15))
+>I43 : Symbol(I43, Decl(relationAssumptionDepth64CheckOrder.ts, 50, 24))
+
+interface I43 { a: I44 }
+>I43 : Symbol(I43, Decl(relationAssumptionDepth64CheckOrder.ts, 50, 24))
+>a : Symbol(I43.a, Decl(relationAssumptionDepth64CheckOrder.ts, 51, 15))
+>I44 : Symbol(I44, Decl(relationAssumptionDepth64CheckOrder.ts, 51, 24))
+
+interface I44 { a: I45 }
+>I44 : Symbol(I44, Decl(relationAssumptionDepth64CheckOrder.ts, 51, 24))
+>a : Symbol(I44.a, Decl(relationAssumptionDepth64CheckOrder.ts, 52, 15))
+>I45 : Symbol(I45, Decl(relationAssumptionDepth64CheckOrder.ts, 52, 24))
+
+interface I45 { a: I46 }
+>I45 : Symbol(I45, Decl(relationAssumptionDepth64CheckOrder.ts, 52, 24))
+>a : Symbol(I45.a, Decl(relationAssumptionDepth64CheckOrder.ts, 53, 15))
+>I46 : Symbol(I46, Decl(relationAssumptionDepth64CheckOrder.ts, 53, 24))
+
+interface I46 { a: I47 }
+>I46 : Symbol(I46, Decl(relationAssumptionDepth64CheckOrder.ts, 53, 24))
+>a : Symbol(I46.a, Decl(relationAssumptionDepth64CheckOrder.ts, 54, 15))
+>I47 : Symbol(I47, Decl(relationAssumptionDepth64CheckOrder.ts, 54, 24))
+
+interface I47 { a: I48 }
+>I47 : Symbol(I47, Decl(relationAssumptionDepth64CheckOrder.ts, 54, 24))
+>a : Symbol(I47.a, Decl(relationAssumptionDepth64CheckOrder.ts, 55, 15))
+>I48 : Symbol(I48, Decl(relationAssumptionDepth64CheckOrder.ts, 55, 24))
+
+interface I48 { a: I49 }
+>I48 : Symbol(I48, Decl(relationAssumptionDepth64CheckOrder.ts, 55, 24))
+>a : Symbol(I48.a, Decl(relationAssumptionDepth64CheckOrder.ts, 56, 15))
+>I49 : Symbol(I49, Decl(relationAssumptionDepth64CheckOrder.ts, 56, 24))
+
+interface I49 { a: I50 }
+>I49 : Symbol(I49, Decl(relationAssumptionDepth64CheckOrder.ts, 56, 24))
+>a : Symbol(I49.a, Decl(relationAssumptionDepth64CheckOrder.ts, 57, 15))
+>I50 : Symbol(I50, Decl(relationAssumptionDepth64CheckOrder.ts, 57, 24))
+
+interface I50 { a: I51 }
+>I50 : Symbol(I50, Decl(relationAssumptionDepth64CheckOrder.ts, 57, 24))
+>a : Symbol(I50.a, Decl(relationAssumptionDepth64CheckOrder.ts, 58, 15))
+>I51 : Symbol(I51, Decl(relationAssumptionDepth64CheckOrder.ts, 58, 24))
+
+interface I51 { a: I52 }
+>I51 : Symbol(I51, Decl(relationAssumptionDepth64CheckOrder.ts, 58, 24))
+>a : Symbol(I51.a, Decl(relationAssumptionDepth64CheckOrder.ts, 59, 15))
+>I52 : Symbol(I52, Decl(relationAssumptionDepth64CheckOrder.ts, 59, 24))
+
+interface I52 { a: I53 }
+>I52 : Symbol(I52, Decl(relationAssumptionDepth64CheckOrder.ts, 59, 24))
+>a : Symbol(I52.a, Decl(relationAssumptionDepth64CheckOrder.ts, 60, 15))
+>I53 : Symbol(I53, Decl(relationAssumptionDepth64CheckOrder.ts, 60, 24))
+
+interface I53 { a: I54 }
+>I53 : Symbol(I53, Decl(relationAssumptionDepth64CheckOrder.ts, 60, 24))
+>a : Symbol(I53.a, Decl(relationAssumptionDepth64CheckOrder.ts, 61, 15))
+>I54 : Symbol(I54, Decl(relationAssumptionDepth64CheckOrder.ts, 61, 24))
+
+interface I54 { a: I55 }
+>I54 : Symbol(I54, Decl(relationAssumptionDepth64CheckOrder.ts, 61, 24))
+>a : Symbol(I54.a, Decl(relationAssumptionDepth64CheckOrder.ts, 62, 15))
+>I55 : Symbol(I55, Decl(relationAssumptionDepth64CheckOrder.ts, 62, 24))
+
+interface I55 { a: I56 }
+>I55 : Symbol(I55, Decl(relationAssumptionDepth64CheckOrder.ts, 62, 24))
+>a : Symbol(I55.a, Decl(relationAssumptionDepth64CheckOrder.ts, 63, 15))
+>I56 : Symbol(I56, Decl(relationAssumptionDepth64CheckOrder.ts, 63, 24))
+
+interface I56 { a: I57 }
+>I56 : Symbol(I56, Decl(relationAssumptionDepth64CheckOrder.ts, 63, 24))
+>a : Symbol(I56.a, Decl(relationAssumptionDepth64CheckOrder.ts, 64, 15))
+>I57 : Symbol(I57, Decl(relationAssumptionDepth64CheckOrder.ts, 64, 24))
+
+interface I57 { a: I58 }
+>I57 : Symbol(I57, Decl(relationAssumptionDepth64CheckOrder.ts, 64, 24))
+>a : Symbol(I57.a, Decl(relationAssumptionDepth64CheckOrder.ts, 65, 15))
+>I58 : Symbol(I58, Decl(relationAssumptionDepth64CheckOrder.ts, 65, 24))
+
+interface I58 { a: I59 }
+>I58 : Symbol(I58, Decl(relationAssumptionDepth64CheckOrder.ts, 65, 24))
+>a : Symbol(I58.a, Decl(relationAssumptionDepth64CheckOrder.ts, 66, 15))
+>I59 : Symbol(I59, Decl(relationAssumptionDepth64CheckOrder.ts, 66, 24))
+
+interface I59 { a: I60 }
+>I59 : Symbol(I59, Decl(relationAssumptionDepth64CheckOrder.ts, 66, 24))
+>a : Symbol(I59.a, Decl(relationAssumptionDepth64CheckOrder.ts, 67, 15))
+>I60 : Symbol(I60, Decl(relationAssumptionDepth64CheckOrder.ts, 67, 24))
+
+interface I60 { a: I61 }
+>I60 : Symbol(I60, Decl(relationAssumptionDepth64CheckOrder.ts, 67, 24))
+>a : Symbol(I60.a, Decl(relationAssumptionDepth64CheckOrder.ts, 68, 15))
+>I61 : Symbol(I61, Decl(relationAssumptionDepth64CheckOrder.ts, 68, 24))
+
+interface I61 { a: I62 }
+>I61 : Symbol(I61, Decl(relationAssumptionDepth64CheckOrder.ts, 68, 24))
+>a : Symbol(I61.a, Decl(relationAssumptionDepth64CheckOrder.ts, 69, 15))
+>I62 : Symbol(I62, Decl(relationAssumptionDepth64CheckOrder.ts, 69, 24))
+
+interface I62 { a: I63 }
+>I62 : Symbol(I62, Decl(relationAssumptionDepth64CheckOrder.ts, 69, 24))
+>a : Symbol(I62.a, Decl(relationAssumptionDepth64CheckOrder.ts, 70, 15))
+>I63 : Symbol(I63, Decl(relationAssumptionDepth64CheckOrder.ts, 70, 24))
+
+interface I63 { a: I64 }
+>I63 : Symbol(I63, Decl(relationAssumptionDepth64CheckOrder.ts, 70, 24))
+>a : Symbol(I63.a, Decl(relationAssumptionDepth64CheckOrder.ts, 71, 15))
+>I64 : Symbol(I64, Decl(relationAssumptionDepth64CheckOrder.ts, 71, 24))
+
+interface I64 { a: I65; b: string }
+>I64 : Symbol(I64, Decl(relationAssumptionDepth64CheckOrder.ts, 71, 24))
+>a : Symbol(I64.a, Decl(relationAssumptionDepth64CheckOrder.ts, 72, 15))
+>I65 : Symbol(I65, Decl(relationAssumptionDepth64CheckOrder.ts, 72, 35))
+>b : Symbol(I64.b, Decl(relationAssumptionDepth64CheckOrder.ts, 72, 23))
+
+interface I65 { back: I64 }
+>I65 : Symbol(I65, Decl(relationAssumptionDepth64CheckOrder.ts, 72, 35))
+>back : Symbol(I65.back, Decl(relationAssumptionDepth64CheckOrder.ts, 73, 15))
+>I64 : Symbol(I64, Decl(relationAssumptionDepth64CheckOrder.ts, 71, 24))
+
+interface J0 { a: J1 }
+>J0 : Symbol(J0, Decl(relationAssumptionDepth64CheckOrder.ts, 73, 27))
+>a : Symbol(J0.a, Decl(relationAssumptionDepth64CheckOrder.ts, 75, 14))
+>J1 : Symbol(J1, Decl(relationAssumptionDepth64CheckOrder.ts, 75, 22))
+
+interface J1 { a: J2 }
+>J1 : Symbol(J1, Decl(relationAssumptionDepth64CheckOrder.ts, 75, 22))
+>a : Symbol(J1.a, Decl(relationAssumptionDepth64CheckOrder.ts, 76, 14))
+>J2 : Symbol(J2, Decl(relationAssumptionDepth64CheckOrder.ts, 76, 22))
+
+interface J2 { a: J3 }
+>J2 : Symbol(J2, Decl(relationAssumptionDepth64CheckOrder.ts, 76, 22))
+>a : Symbol(J2.a, Decl(relationAssumptionDepth64CheckOrder.ts, 77, 14))
+>J3 : Symbol(J3, Decl(relationAssumptionDepth64CheckOrder.ts, 77, 22))
+
+interface J3 { a: J4 }
+>J3 : Symbol(J3, Decl(relationAssumptionDepth64CheckOrder.ts, 77, 22))
+>a : Symbol(J3.a, Decl(relationAssumptionDepth64CheckOrder.ts, 78, 14))
+>J4 : Symbol(J4, Decl(relationAssumptionDepth64CheckOrder.ts, 78, 22))
+
+interface J4 { a: J5 }
+>J4 : Symbol(J4, Decl(relationAssumptionDepth64CheckOrder.ts, 78, 22))
+>a : Symbol(J4.a, Decl(relationAssumptionDepth64CheckOrder.ts, 79, 14))
+>J5 : Symbol(J5, Decl(relationAssumptionDepth64CheckOrder.ts, 79, 22))
+
+interface J5 { a: J6 }
+>J5 : Symbol(J5, Decl(relationAssumptionDepth64CheckOrder.ts, 79, 22))
+>a : Symbol(J5.a, Decl(relationAssumptionDepth64CheckOrder.ts, 80, 14))
+>J6 : Symbol(J6, Decl(relationAssumptionDepth64CheckOrder.ts, 80, 22))
+
+interface J6 { a: J7 }
+>J6 : Symbol(J6, Decl(relationAssumptionDepth64CheckOrder.ts, 80, 22))
+>a : Symbol(J6.a, Decl(relationAssumptionDepth64CheckOrder.ts, 81, 14))
+>J7 : Symbol(J7, Decl(relationAssumptionDepth64CheckOrder.ts, 81, 22))
+
+interface J7 { a: J8 }
+>J7 : Symbol(J7, Decl(relationAssumptionDepth64CheckOrder.ts, 81, 22))
+>a : Symbol(J7.a, Decl(relationAssumptionDepth64CheckOrder.ts, 82, 14))
+>J8 : Symbol(J8, Decl(relationAssumptionDepth64CheckOrder.ts, 82, 22))
+
+interface J8 { a: J9 }
+>J8 : Symbol(J8, Decl(relationAssumptionDepth64CheckOrder.ts, 82, 22))
+>a : Symbol(J8.a, Decl(relationAssumptionDepth64CheckOrder.ts, 83, 14))
+>J9 : Symbol(J9, Decl(relationAssumptionDepth64CheckOrder.ts, 83, 22))
+
+interface J9 { a: J10 }
+>J9 : Symbol(J9, Decl(relationAssumptionDepth64CheckOrder.ts, 83, 22))
+>a : Symbol(J9.a, Decl(relationAssumptionDepth64CheckOrder.ts, 84, 14))
+>J10 : Symbol(J10, Decl(relationAssumptionDepth64CheckOrder.ts, 84, 23))
+
+interface J10 { a: J11 }
+>J10 : Symbol(J10, Decl(relationAssumptionDepth64CheckOrder.ts, 84, 23))
+>a : Symbol(J10.a, Decl(relationAssumptionDepth64CheckOrder.ts, 85, 15))
+>J11 : Symbol(J11, Decl(relationAssumptionDepth64CheckOrder.ts, 85, 24))
+
+interface J11 { a: J12 }
+>J11 : Symbol(J11, Decl(relationAssumptionDepth64CheckOrder.ts, 85, 24))
+>a : Symbol(J11.a, Decl(relationAssumptionDepth64CheckOrder.ts, 86, 15))
+>J12 : Symbol(J12, Decl(relationAssumptionDepth64CheckOrder.ts, 86, 24))
+
+interface J12 { a: J13 }
+>J12 : Symbol(J12, Decl(relationAssumptionDepth64CheckOrder.ts, 86, 24))
+>a : Symbol(J12.a, Decl(relationAssumptionDepth64CheckOrder.ts, 87, 15))
+>J13 : Symbol(J13, Decl(relationAssumptionDepth64CheckOrder.ts, 87, 24))
+
+interface J13 { a: J14 }
+>J13 : Symbol(J13, Decl(relationAssumptionDepth64CheckOrder.ts, 87, 24))
+>a : Symbol(J13.a, Decl(relationAssumptionDepth64CheckOrder.ts, 88, 15))
+>J14 : Symbol(J14, Decl(relationAssumptionDepth64CheckOrder.ts, 88, 24))
+
+interface J14 { a: J15 }
+>J14 : Symbol(J14, Decl(relationAssumptionDepth64CheckOrder.ts, 88, 24))
+>a : Symbol(J14.a, Decl(relationAssumptionDepth64CheckOrder.ts, 89, 15))
+>J15 : Symbol(J15, Decl(relationAssumptionDepth64CheckOrder.ts, 89, 24))
+
+interface J15 { a: J16 }
+>J15 : Symbol(J15, Decl(relationAssumptionDepth64CheckOrder.ts, 89, 24))
+>a : Symbol(J15.a, Decl(relationAssumptionDepth64CheckOrder.ts, 90, 15))
+>J16 : Symbol(J16, Decl(relationAssumptionDepth64CheckOrder.ts, 90, 24))
+
+interface J16 { a: J17 }
+>J16 : Symbol(J16, Decl(relationAssumptionDepth64CheckOrder.ts, 90, 24))
+>a : Symbol(J16.a, Decl(relationAssumptionDepth64CheckOrder.ts, 91, 15))
+>J17 : Symbol(J17, Decl(relationAssumptionDepth64CheckOrder.ts, 91, 24))
+
+interface J17 { a: J18 }
+>J17 : Symbol(J17, Decl(relationAssumptionDepth64CheckOrder.ts, 91, 24))
+>a : Symbol(J17.a, Decl(relationAssumptionDepth64CheckOrder.ts, 92, 15))
+>J18 : Symbol(J18, Decl(relationAssumptionDepth64CheckOrder.ts, 92, 24))
+
+interface J18 { a: J19 }
+>J18 : Symbol(J18, Decl(relationAssumptionDepth64CheckOrder.ts, 92, 24))
+>a : Symbol(J18.a, Decl(relationAssumptionDepth64CheckOrder.ts, 93, 15))
+>J19 : Symbol(J19, Decl(relationAssumptionDepth64CheckOrder.ts, 93, 24))
+
+interface J19 { a: J20 }
+>J19 : Symbol(J19, Decl(relationAssumptionDepth64CheckOrder.ts, 93, 24))
+>a : Symbol(J19.a, Decl(relationAssumptionDepth64CheckOrder.ts, 94, 15))
+>J20 : Symbol(J20, Decl(relationAssumptionDepth64CheckOrder.ts, 94, 24))
+
+interface J20 { a: J21 }
+>J20 : Symbol(J20, Decl(relationAssumptionDepth64CheckOrder.ts, 94, 24))
+>a : Symbol(J20.a, Decl(relationAssumptionDepth64CheckOrder.ts, 95, 15))
+>J21 : Symbol(J21, Decl(relationAssumptionDepth64CheckOrder.ts, 95, 24))
+
+interface J21 { a: J22 }
+>J21 : Symbol(J21, Decl(relationAssumptionDepth64CheckOrder.ts, 95, 24))
+>a : Symbol(J21.a, Decl(relationAssumptionDepth64CheckOrder.ts, 96, 15))
+>J22 : Symbol(J22, Decl(relationAssumptionDepth64CheckOrder.ts, 96, 24))
+
+interface J22 { a: J23 }
+>J22 : Symbol(J22, Decl(relationAssumptionDepth64CheckOrder.ts, 96, 24))
+>a : Symbol(J22.a, Decl(relationAssumptionDepth64CheckOrder.ts, 97, 15))
+>J23 : Symbol(J23, Decl(relationAssumptionDepth64CheckOrder.ts, 97, 24))
+
+interface J23 { a: J24 }
+>J23 : Symbol(J23, Decl(relationAssumptionDepth64CheckOrder.ts, 97, 24))
+>a : Symbol(J23.a, Decl(relationAssumptionDepth64CheckOrder.ts, 98, 15))
+>J24 : Symbol(J24, Decl(relationAssumptionDepth64CheckOrder.ts, 98, 24))
+
+interface J24 { a: J25 }
+>J24 : Symbol(J24, Decl(relationAssumptionDepth64CheckOrder.ts, 98, 24))
+>a : Symbol(J24.a, Decl(relationAssumptionDepth64CheckOrder.ts, 99, 15))
+>J25 : Symbol(J25, Decl(relationAssumptionDepth64CheckOrder.ts, 99, 24))
+
+interface J25 { a: J26 }
+>J25 : Symbol(J25, Decl(relationAssumptionDepth64CheckOrder.ts, 99, 24))
+>a : Symbol(J25.a, Decl(relationAssumptionDepth64CheckOrder.ts, 100, 15))
+>J26 : Symbol(J26, Decl(relationAssumptionDepth64CheckOrder.ts, 100, 24))
+
+interface J26 { a: J27 }
+>J26 : Symbol(J26, Decl(relationAssumptionDepth64CheckOrder.ts, 100, 24))
+>a : Symbol(J26.a, Decl(relationAssumptionDepth64CheckOrder.ts, 101, 15))
+>J27 : Symbol(J27, Decl(relationAssumptionDepth64CheckOrder.ts, 101, 24))
+
+interface J27 { a: J28 }
+>J27 : Symbol(J27, Decl(relationAssumptionDepth64CheckOrder.ts, 101, 24))
+>a : Symbol(J27.a, Decl(relationAssumptionDepth64CheckOrder.ts, 102, 15))
+>J28 : Symbol(J28, Decl(relationAssumptionDepth64CheckOrder.ts, 102, 24))
+
+interface J28 { a: J29 }
+>J28 : Symbol(J28, Decl(relationAssumptionDepth64CheckOrder.ts, 102, 24))
+>a : Symbol(J28.a, Decl(relationAssumptionDepth64CheckOrder.ts, 103, 15))
+>J29 : Symbol(J29, Decl(relationAssumptionDepth64CheckOrder.ts, 103, 24))
+
+interface J29 { a: J30 }
+>J29 : Symbol(J29, Decl(relationAssumptionDepth64CheckOrder.ts, 103, 24))
+>a : Symbol(J29.a, Decl(relationAssumptionDepth64CheckOrder.ts, 104, 15))
+>J30 : Symbol(J30, Decl(relationAssumptionDepth64CheckOrder.ts, 104, 24))
+
+interface J30 { a: J31 }
+>J30 : Symbol(J30, Decl(relationAssumptionDepth64CheckOrder.ts, 104, 24))
+>a : Symbol(J30.a, Decl(relationAssumptionDepth64CheckOrder.ts, 105, 15))
+>J31 : Symbol(J31, Decl(relationAssumptionDepth64CheckOrder.ts, 105, 24))
+
+interface J31 { a: J32 }
+>J31 : Symbol(J31, Decl(relationAssumptionDepth64CheckOrder.ts, 105, 24))
+>a : Symbol(J31.a, Decl(relationAssumptionDepth64CheckOrder.ts, 106, 15))
+>J32 : Symbol(J32, Decl(relationAssumptionDepth64CheckOrder.ts, 106, 24))
+
+interface J32 { a: J33 }
+>J32 : Symbol(J32, Decl(relationAssumptionDepth64CheckOrder.ts, 106, 24))
+>a : Symbol(J32.a, Decl(relationAssumptionDepth64CheckOrder.ts, 107, 15))
+>J33 : Symbol(J33, Decl(relationAssumptionDepth64CheckOrder.ts, 107, 24))
+
+interface J33 { a: J34 }
+>J33 : Symbol(J33, Decl(relationAssumptionDepth64CheckOrder.ts, 107, 24))
+>a : Symbol(J33.a, Decl(relationAssumptionDepth64CheckOrder.ts, 108, 15))
+>J34 : Symbol(J34, Decl(relationAssumptionDepth64CheckOrder.ts, 108, 24))
+
+interface J34 { a: J35 }
+>J34 : Symbol(J34, Decl(relationAssumptionDepth64CheckOrder.ts, 108, 24))
+>a : Symbol(J34.a, Decl(relationAssumptionDepth64CheckOrder.ts, 109, 15))
+>J35 : Symbol(J35, Decl(relationAssumptionDepth64CheckOrder.ts, 109, 24))
+
+interface J35 { a: J36 }
+>J35 : Symbol(J35, Decl(relationAssumptionDepth64CheckOrder.ts, 109, 24))
+>a : Symbol(J35.a, Decl(relationAssumptionDepth64CheckOrder.ts, 110, 15))
+>J36 : Symbol(J36, Decl(relationAssumptionDepth64CheckOrder.ts, 110, 24))
+
+interface J36 { a: J37 }
+>J36 : Symbol(J36, Decl(relationAssumptionDepth64CheckOrder.ts, 110, 24))
+>a : Symbol(J36.a, Decl(relationAssumptionDepth64CheckOrder.ts, 111, 15))
+>J37 : Symbol(J37, Decl(relationAssumptionDepth64CheckOrder.ts, 111, 24))
+
+interface J37 { a: J38 }
+>J37 : Symbol(J37, Decl(relationAssumptionDepth64CheckOrder.ts, 111, 24))
+>a : Symbol(J37.a, Decl(relationAssumptionDepth64CheckOrder.ts, 112, 15))
+>J38 : Symbol(J38, Decl(relationAssumptionDepth64CheckOrder.ts, 112, 24))
+
+interface J38 { a: J39 }
+>J38 : Symbol(J38, Decl(relationAssumptionDepth64CheckOrder.ts, 112, 24))
+>a : Symbol(J38.a, Decl(relationAssumptionDepth64CheckOrder.ts, 113, 15))
+>J39 : Symbol(J39, Decl(relationAssumptionDepth64CheckOrder.ts, 113, 24))
+
+interface J39 { a: J40 }
+>J39 : Symbol(J39, Decl(relationAssumptionDepth64CheckOrder.ts, 113, 24))
+>a : Symbol(J39.a, Decl(relationAssumptionDepth64CheckOrder.ts, 114, 15))
+>J40 : Symbol(J40, Decl(relationAssumptionDepth64CheckOrder.ts, 114, 24))
+
+interface J40 { a: J41 }
+>J40 : Symbol(J40, Decl(relationAssumptionDepth64CheckOrder.ts, 114, 24))
+>a : Symbol(J40.a, Decl(relationAssumptionDepth64CheckOrder.ts, 115, 15))
+>J41 : Symbol(J41, Decl(relationAssumptionDepth64CheckOrder.ts, 115, 24))
+
+interface J41 { a: J42 }
+>J41 : Symbol(J41, Decl(relationAssumptionDepth64CheckOrder.ts, 115, 24))
+>a : Symbol(J41.a, Decl(relationAssumptionDepth64CheckOrder.ts, 116, 15))
+>J42 : Symbol(J42, Decl(relationAssumptionDepth64CheckOrder.ts, 116, 24))
+
+interface J42 { a: J43 }
+>J42 : Symbol(J42, Decl(relationAssumptionDepth64CheckOrder.ts, 116, 24))
+>a : Symbol(J42.a, Decl(relationAssumptionDepth64CheckOrder.ts, 117, 15))
+>J43 : Symbol(J43, Decl(relationAssumptionDepth64CheckOrder.ts, 117, 24))
+
+interface J43 { a: J44 }
+>J43 : Symbol(J43, Decl(relationAssumptionDepth64CheckOrder.ts, 117, 24))
+>a : Symbol(J43.a, Decl(relationAssumptionDepth64CheckOrder.ts, 118, 15))
+>J44 : Symbol(J44, Decl(relationAssumptionDepth64CheckOrder.ts, 118, 24))
+
+interface J44 { a: J45 }
+>J44 : Symbol(J44, Decl(relationAssumptionDepth64CheckOrder.ts, 118, 24))
+>a : Symbol(J44.a, Decl(relationAssumptionDepth64CheckOrder.ts, 119, 15))
+>J45 : Symbol(J45, Decl(relationAssumptionDepth64CheckOrder.ts, 119, 24))
+
+interface J45 { a: J46 }
+>J45 : Symbol(J45, Decl(relationAssumptionDepth64CheckOrder.ts, 119, 24))
+>a : Symbol(J45.a, Decl(relationAssumptionDepth64CheckOrder.ts, 120, 15))
+>J46 : Symbol(J46, Decl(relationAssumptionDepth64CheckOrder.ts, 120, 24))
+
+interface J46 { a: J47 }
+>J46 : Symbol(J46, Decl(relationAssumptionDepth64CheckOrder.ts, 120, 24))
+>a : Symbol(J46.a, Decl(relationAssumptionDepth64CheckOrder.ts, 121, 15))
+>J47 : Symbol(J47, Decl(relationAssumptionDepth64CheckOrder.ts, 121, 24))
+
+interface J47 { a: J48 }
+>J47 : Symbol(J47, Decl(relationAssumptionDepth64CheckOrder.ts, 121, 24))
+>a : Symbol(J47.a, Decl(relationAssumptionDepth64CheckOrder.ts, 122, 15))
+>J48 : Symbol(J48, Decl(relationAssumptionDepth64CheckOrder.ts, 122, 24))
+
+interface J48 { a: J49 }
+>J48 : Symbol(J48, Decl(relationAssumptionDepth64CheckOrder.ts, 122, 24))
+>a : Symbol(J48.a, Decl(relationAssumptionDepth64CheckOrder.ts, 123, 15))
+>J49 : Symbol(J49, Decl(relationAssumptionDepth64CheckOrder.ts, 123, 24))
+
+interface J49 { a: J50 }
+>J49 : Symbol(J49, Decl(relationAssumptionDepth64CheckOrder.ts, 123, 24))
+>a : Symbol(J49.a, Decl(relationAssumptionDepth64CheckOrder.ts, 124, 15))
+>J50 : Symbol(J50, Decl(relationAssumptionDepth64CheckOrder.ts, 124, 24))
+
+interface J50 { a: J51 }
+>J50 : Symbol(J50, Decl(relationAssumptionDepth64CheckOrder.ts, 124, 24))
+>a : Symbol(J50.a, Decl(relationAssumptionDepth64CheckOrder.ts, 125, 15))
+>J51 : Symbol(J51, Decl(relationAssumptionDepth64CheckOrder.ts, 125, 24))
+
+interface J51 { a: J52 }
+>J51 : Symbol(J51, Decl(relationAssumptionDepth64CheckOrder.ts, 125, 24))
+>a : Symbol(J51.a, Decl(relationAssumptionDepth64CheckOrder.ts, 126, 15))
+>J52 : Symbol(J52, Decl(relationAssumptionDepth64CheckOrder.ts, 126, 24))
+
+interface J52 { a: J53 }
+>J52 : Symbol(J52, Decl(relationAssumptionDepth64CheckOrder.ts, 126, 24))
+>a : Symbol(J52.a, Decl(relationAssumptionDepth64CheckOrder.ts, 127, 15))
+>J53 : Symbol(J53, Decl(relationAssumptionDepth64CheckOrder.ts, 127, 24))
+
+interface J53 { a: J54 }
+>J53 : Symbol(J53, Decl(relationAssumptionDepth64CheckOrder.ts, 127, 24))
+>a : Symbol(J53.a, Decl(relationAssumptionDepth64CheckOrder.ts, 128, 15))
+>J54 : Symbol(J54, Decl(relationAssumptionDepth64CheckOrder.ts, 128, 24))
+
+interface J54 { a: J55 }
+>J54 : Symbol(J54, Decl(relationAssumptionDepth64CheckOrder.ts, 128, 24))
+>a : Symbol(J54.a, Decl(relationAssumptionDepth64CheckOrder.ts, 129, 15))
+>J55 : Symbol(J55, Decl(relationAssumptionDepth64CheckOrder.ts, 129, 24))
+
+interface J55 { a: J56 }
+>J55 : Symbol(J55, Decl(relationAssumptionDepth64CheckOrder.ts, 129, 24))
+>a : Symbol(J55.a, Decl(relationAssumptionDepth64CheckOrder.ts, 130, 15))
+>J56 : Symbol(J56, Decl(relationAssumptionDepth64CheckOrder.ts, 130, 24))
+
+interface J56 { a: J57 }
+>J56 : Symbol(J56, Decl(relationAssumptionDepth64CheckOrder.ts, 130, 24))
+>a : Symbol(J56.a, Decl(relationAssumptionDepth64CheckOrder.ts, 131, 15))
+>J57 : Symbol(J57, Decl(relationAssumptionDepth64CheckOrder.ts, 131, 24))
+
+interface J57 { a: J58 }
+>J57 : Symbol(J57, Decl(relationAssumptionDepth64CheckOrder.ts, 131, 24))
+>a : Symbol(J57.a, Decl(relationAssumptionDepth64CheckOrder.ts, 132, 15))
+>J58 : Symbol(J58, Decl(relationAssumptionDepth64CheckOrder.ts, 132, 24))
+
+interface J58 { a: J59 }
+>J58 : Symbol(J58, Decl(relationAssumptionDepth64CheckOrder.ts, 132, 24))
+>a : Symbol(J58.a, Decl(relationAssumptionDepth64CheckOrder.ts, 133, 15))
+>J59 : Symbol(J59, Decl(relationAssumptionDepth64CheckOrder.ts, 133, 24))
+
+interface J59 { a: J60 }
+>J59 : Symbol(J59, Decl(relationAssumptionDepth64CheckOrder.ts, 133, 24))
+>a : Symbol(J59.a, Decl(relationAssumptionDepth64CheckOrder.ts, 134, 15))
+>J60 : Symbol(J60, Decl(relationAssumptionDepth64CheckOrder.ts, 134, 24))
+
+interface J60 { a: J61 }
+>J60 : Symbol(J60, Decl(relationAssumptionDepth64CheckOrder.ts, 134, 24))
+>a : Symbol(J60.a, Decl(relationAssumptionDepth64CheckOrder.ts, 135, 15))
+>J61 : Symbol(J61, Decl(relationAssumptionDepth64CheckOrder.ts, 135, 24))
+
+interface J61 { a: J62 }
+>J61 : Symbol(J61, Decl(relationAssumptionDepth64CheckOrder.ts, 135, 24))
+>a : Symbol(J61.a, Decl(relationAssumptionDepth64CheckOrder.ts, 136, 15))
+>J62 : Symbol(J62, Decl(relationAssumptionDepth64CheckOrder.ts, 136, 24))
+
+interface J62 { a: J63 }
+>J62 : Symbol(J62, Decl(relationAssumptionDepth64CheckOrder.ts, 136, 24))
+>a : Symbol(J62.a, Decl(relationAssumptionDepth64CheckOrder.ts, 137, 15))
+>J63 : Symbol(J63, Decl(relationAssumptionDepth64CheckOrder.ts, 137, 24))
+
+interface J63 { a: J64 }
+>J63 : Symbol(J63, Decl(relationAssumptionDepth64CheckOrder.ts, 137, 24))
+>a : Symbol(J63.a, Decl(relationAssumptionDepth64CheckOrder.ts, 138, 15))
+>J64 : Symbol(J64, Decl(relationAssumptionDepth64CheckOrder.ts, 138, 24))
+
+interface J64 { a: J65; b: number }
+>J64 : Symbol(J64, Decl(relationAssumptionDepth64CheckOrder.ts, 138, 24))
+>a : Symbol(J64.a, Decl(relationAssumptionDepth64CheckOrder.ts, 139, 15))
+>J65 : Symbol(J65, Decl(relationAssumptionDepth64CheckOrder.ts, 139, 35))
+>b : Symbol(J64.b, Decl(relationAssumptionDepth64CheckOrder.ts, 139, 23))
+
+interface J65 { back: J64 }
+>J65 : Symbol(J65, Decl(relationAssumptionDepth64CheckOrder.ts, 139, 35))
+>back : Symbol(J65.back, Decl(relationAssumptionDepth64CheckOrder.ts, 140, 15))
+>J64 : Symbol(J64, Decl(relationAssumptionDepth64CheckOrder.ts, 138, 24))
+
+declare let r0: I0 extends J0 ? true : false;
+>r0 : Symbol(r0, Decl(relationAssumptionDepth64CheckOrder.ts, 142, 11))
+>I0 : Symbol(I0, Decl(relationAssumptionDepth64CheckOrder.ts, 0, 0))
+>J0 : Symbol(J0, Decl(relationAssumptionDepth64CheckOrder.ts, 73, 27))
+
+declare let r65: I65 extends J65 ? true : false;
+>r65 : Symbol(r65, Decl(relationAssumptionDepth64CheckOrder.ts, 143, 11))
+>I65 : Symbol(I65, Decl(relationAssumptionDepth64CheckOrder.ts, 72, 35))
+>J65 : Symbol(J65, Decl(relationAssumptionDepth64CheckOrder.ts, 139, 35))
+

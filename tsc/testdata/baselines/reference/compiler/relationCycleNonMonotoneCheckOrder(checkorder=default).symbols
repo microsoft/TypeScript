@@ -98,8 +98,8 @@ namespace inferenceConstraintMethod {
 
 // 'S1' relates to 'G1' only if 'S2' does not relate to 'G2', and the
 // reverse, so no answer is consistent for both. Each is answered as if
-// compared first, assuming itself while relating the other, regardless
-// of which assignment is checked first.
+// the least comparison of the cycle were compared first, regardless of
+// which assignment is checked first.
 namespace inferenceConstraintMutual {
 >inferenceConstraintMutual : Symbol(inferenceConstraintMutual, Decl(relationCycleNonMonotoneCheckOrder.ts, 23, 1))
 
@@ -357,5 +357,100 @@ namespace strictArity {
 >a2 : Symbol(a2, Decl(relationCycleNonMonotoneCheckOrder.ts, 91, 7))
 >wp : Symbol(wp, Decl(relationCycleNonMonotoneCheckOrder.ts, 89, 27))
 >wq : Symbol(wq, Decl(relationCycleNonMonotoneCheckOrder.ts, 89, 35))
+}
+
+// As 'discriminated', with 'X' compared to 'Y' first, which compares 'Src'
+// to 'Tgt' assuming that 'X' relates to 'Y'. That matches '{ d: Y; y:
+// number }', so 'Src' fails to relate to 'Tgt' while 'X' is assumed to
+// relate to 'Y', and relates once compared on its own.
+namespace discriminatedAssumedFirst {
+>discriminatedAssumedFirst : Symbol(discriminatedAssumedFirst, Decl(relationCycleNonMonotoneCheckOrder.ts, 92, 1))
+
+    interface X { p: Src; q: number }
+>X : Symbol(X, Decl(relationCycleNonMonotoneCheckOrder.ts, 98, 37))
+>p : Symbol(X.p, Decl(relationCycleNonMonotoneCheckOrder.ts, 99, 17))
+>Src : Symbol(Src, Decl(relationCycleNonMonotoneCheckOrder.ts, 100, 32))
+>q : Symbol(X.q, Decl(relationCycleNonMonotoneCheckOrder.ts, 99, 25))
+
+    interface Y { p: Tgt; q: 1 }
+>Y : Symbol(Y, Decl(relationCycleNonMonotoneCheckOrder.ts, 99, 37))
+>p : Symbol(Y.p, Decl(relationCycleNonMonotoneCheckOrder.ts, 100, 17))
+>Tgt : Symbol(Tgt, Decl(relationCycleNonMonotoneCheckOrder.ts, 101, 41))
+>q : Symbol(Y.q, Decl(relationCycleNonMonotoneCheckOrder.ts, 100, 25))
+
+    type Src = { d: "a" | X; y: string };
+>Src : Symbol(Src, Decl(relationCycleNonMonotoneCheckOrder.ts, 100, 32))
+>d : Symbol(d, Decl(relationCycleNonMonotoneCheckOrder.ts, 101, 16))
+>X : Symbol(X, Decl(relationCycleNonMonotoneCheckOrder.ts, 98, 37))
+>y : Symbol(y, Decl(relationCycleNonMonotoneCheckOrder.ts, 101, 28))
+
+    type Tgt = { d: "a"; y: string } | { d: X; y: string } | { d: Y; y: number };
+>Tgt : Symbol(Tgt, Decl(relationCycleNonMonotoneCheckOrder.ts, 101, 41))
+>d : Symbol(d, Decl(relationCycleNonMonotoneCheckOrder.ts, 102, 16))
+>y : Symbol(y, Decl(relationCycleNonMonotoneCheckOrder.ts, 102, 24))
+>d : Symbol(d, Decl(relationCycleNonMonotoneCheckOrder.ts, 102, 40))
+>X : Symbol(X, Decl(relationCycleNonMonotoneCheckOrder.ts, 98, 37))
+>y : Symbol(y, Decl(relationCycleNonMonotoneCheckOrder.ts, 102, 46))
+>d : Symbol(d, Decl(relationCycleNonMonotoneCheckOrder.ts, 102, 62))
+>Y : Symbol(Y, Decl(relationCycleNonMonotoneCheckOrder.ts, 99, 37))
+>y : Symbol(y, Decl(relationCycleNonMonotoneCheckOrder.ts, 102, 68))
+
+    declare let r2: X extends Y ? true : false;
+>r2 : Symbol(r2, Decl(relationCycleNonMonotoneCheckOrder.ts, 104, 15))
+>X : Symbol(X, Decl(relationCycleNonMonotoneCheckOrder.ts, 98, 37))
+>Y : Symbol(Y, Decl(relationCycleNonMonotoneCheckOrder.ts, 99, 37))
+
+    declare let r1: Src extends Tgt ? true : false;
+>r1 : Symbol(r1, Decl(relationCycleNonMonotoneCheckOrder.ts, 105, 15))
+>Src : Symbol(Src, Decl(relationCycleNonMonotoneCheckOrder.ts, 100, 32))
+>Tgt : Symbol(Tgt, Decl(relationCycleNonMonotoneCheckOrder.ts, 101, 41))
+}
+
+// As 'inferenceConstraint', with 'A' compared to 'C' first, which compares
+// 'S' to 'G' assuming that 'A' relates to 'C'. That keeps 'A' as the
+// inferred type argument, so 'S' fails to relate to 'G' while 'A' is
+// assumed to relate to 'C', and relates once compared on its own.
+namespace inferenceConstraintAssumedFirst {
+>inferenceConstraintAssumedFirst : Symbol(inferenceConstraintAssumedFirst, Decl(relationCycleNonMonotoneCheckOrder.ts, 106, 1))
+
+    type A = { k?: "c"; f: S | G; z: number };
+>A : Symbol(A, Decl(relationCycleNonMonotoneCheckOrder.ts, 112, 43))
+>k : Symbol(k, Decl(relationCycleNonMonotoneCheckOrder.ts, 113, 14))
+>f : Symbol(f, Decl(relationCycleNonMonotoneCheckOrder.ts, 113, 23))
+>S : Symbol(S, Decl(relationCycleNonMonotoneCheckOrder.ts, 114, 59))
+>G : Symbol(G, Decl(relationCycleNonMonotoneCheckOrder.ts, 115, 43))
+>z : Symbol(z, Decl(relationCycleNonMonotoneCheckOrder.ts, 113, 33))
+
+    type C = { [s: string]: "c" | G | number; f: G; z: 1 };
+>C : Symbol(C, Decl(relationCycleNonMonotoneCheckOrder.ts, 113, 46))
+>s : Symbol(s, Decl(relationCycleNonMonotoneCheckOrder.ts, 114, 16))
+>G : Symbol(G, Decl(relationCycleNonMonotoneCheckOrder.ts, 115, 43))
+>f : Symbol(f, Decl(relationCycleNonMonotoneCheckOrder.ts, 114, 45))
+>G : Symbol(G, Decl(relationCycleNonMonotoneCheckOrder.ts, 115, 43))
+>z : Symbol(z, Decl(relationCycleNonMonotoneCheckOrder.ts, 114, 51))
+
+    type S = <T extends C>(x: T) => T["k"];
+>S : Symbol(S, Decl(relationCycleNonMonotoneCheckOrder.ts, 114, 59))
+>T : Symbol(T, Decl(relationCycleNonMonotoneCheckOrder.ts, 115, 14))
+>C : Symbol(C, Decl(relationCycleNonMonotoneCheckOrder.ts, 113, 46))
+>x : Symbol(x, Decl(relationCycleNonMonotoneCheckOrder.ts, 115, 27))
+>T : Symbol(T, Decl(relationCycleNonMonotoneCheckOrder.ts, 115, 14))
+>T : Symbol(T, Decl(relationCycleNonMonotoneCheckOrder.ts, 115, 14))
+
+    type G = (x: A) => "c" | G | number;
+>G : Symbol(G, Decl(relationCycleNonMonotoneCheckOrder.ts, 115, 43))
+>x : Symbol(x, Decl(relationCycleNonMonotoneCheckOrder.ts, 116, 14))
+>A : Symbol(A, Decl(relationCycleNonMonotoneCheckOrder.ts, 112, 43))
+>G : Symbol(G, Decl(relationCycleNonMonotoneCheckOrder.ts, 115, 43))
+
+    declare let r2: A extends C ? true : false;
+>r2 : Symbol(r2, Decl(relationCycleNonMonotoneCheckOrder.ts, 118, 15))
+>A : Symbol(A, Decl(relationCycleNonMonotoneCheckOrder.ts, 112, 43))
+>C : Symbol(C, Decl(relationCycleNonMonotoneCheckOrder.ts, 113, 46))
+
+    declare let r1: S extends G ? true : false;
+>r1 : Symbol(r1, Decl(relationCycleNonMonotoneCheckOrder.ts, 119, 15))
+>S : Symbol(S, Decl(relationCycleNonMonotoneCheckOrder.ts, 114, 59))
+>G : Symbol(G, Decl(relationCycleNonMonotoneCheckOrder.ts, 115, 43))
 }
 

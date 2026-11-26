@@ -1,0 +1,100 @@
+//// [tests/cases/compiler/relationCycleRestartPoolCheckOrder.ts] ////
+
+=== relationCycleRestartPoolCheckOrder.ts ===
+// Tests that a relation cycle compared again from its least member keeps its
+// guard while nested comparisons take relaters from the pool.
+//
+// Under the strict subtype relation, N4 -> G4 holds when N2 -> T2 fails and
+// N1 -> G1 holds when N0 -> T0 fails (strict arity rejects an optional
+// parameter whose type relates to the required one). N3 -> T3 holds when
+// N4 -> G4 and N1 -> G1 hold; N2 -> T2 and N0 -> T0 hold when N3 -> T3 holds.
+// Entered at N3 -> T3, the cycle restarts from N2 -> T2 and computes N3 -> T3
+// again, which reaches N0 -> T0. Comparing N0 -> T0 resolves typeof functions,
+// whose subtype reduction restarts a cycle of its own on relaters from the pool.
+declare let a1: { a: N3; b: string }, a2: { a: T3 };
+>a1 : { a: N3; b: string; }
+>a : N3
+>b : string
+>a2 : { a: T3; }
+>a : T3
+
+let a = [a1, a2];
+>a : ({ a: N3; b: string; } | { a: T3; })[]
+>[a1, a2] : ({ a: N3; b: string; } | { a: T3; })[]
+>a1 : { a: N3; b: string; }
+>a2 : { a: T3; }
+
+type N3 = { b: N4; c: N1 };
+>N3 : N3
+>b : N4
+>c : N1
+
+type T3 = { b: G4; c: G1 };
+>T3 : T3
+>b : G4
+>c : G1
+
+type N2 = { a: N3 };
+>N2 : N2
+>a : N3
+
+type T2 = { a: T3 };
+>T2 : T2
+>a : T3
+
+type N0 = { l: typeof functions; a: N3 };
+>N0 : N0
+>l : (F | G)[]
+>functions : (F | G)[]
+>a : N3
+
+type T0 = { l: typeof functions; a: T3 };
+>T0 : T0
+>l : (F | G)[]
+>functions : (F | G)[]
+>a : T3
+
+type N4 = (x?: N2 | T2) => 1;
+>N4 : N4
+>x : N2 | T2 | undefined
+
+type G4 = (x: T2 | undefined, y: unknown) => number;
+>G4 : G4
+>x : T2 | undefined
+>y : unknown
+
+type N1 = (x?: N0 | T0) => 1;
+>N1 : N1
+>x : N0 | T0 | undefined
+
+type G1 = (x: T0 | undefined, y: unknown) => number;
+>G1 : G1
+>x : T0 | undefined
+>y : unknown
+
+type P = { f: F | G };
+>P : P
+>f : F | G
+
+type Q = { f: G };
+>Q : Q
+>f : G
+
+type F = (x?: P) => 1;
+>F : F
+>x : P | undefined
+
+type G = (x: Q | undefined) => number;
+>G : G
+>x : Q | undefined
+
+declare let f: F, g: G;
+>f : F
+>g : G
+
+let functions = [f, g];
+>functions : (F | G)[]
+>[f, g] : (F | G)[]
+>f : F
+>g : G
+

@@ -1,0 +1,148 @@
+// @strict: true
+// @noEmit: true
+// @checkOrder: default, typesfirst, editorfirst, reverse, isolated
+
+// Tests relation results that assume a comparison at depth 64 or deeper,
+// whose assumption bits are shared.
+//
+// 'I0' reaches 'I64' through 64 nested properties, so 'I64' is compared
+// against 'J64' at depth 64. 'I65' compares back to 'I64' and assumes it
+// related, and 'I64' then fails on 'b'. 'I65' relates to 'J65' only through
+// 'I64', so it fails, whether or not 'I0' was compared to 'J0' first.
+
+interface I0 { a: I1 }
+interface I1 { a: I2 }
+interface I2 { a: I3 }
+interface I3 { a: I4 }
+interface I4 { a: I5 }
+interface I5 { a: I6 }
+interface I6 { a: I7 }
+interface I7 { a: I8 }
+interface I8 { a: I9 }
+interface I9 { a: I10 }
+interface I10 { a: I11 }
+interface I11 { a: I12 }
+interface I12 { a: I13 }
+interface I13 { a: I14 }
+interface I14 { a: I15 }
+interface I15 { a: I16 }
+interface I16 { a: I17 }
+interface I17 { a: I18 }
+interface I18 { a: I19 }
+interface I19 { a: I20 }
+interface I20 { a: I21 }
+interface I21 { a: I22 }
+interface I22 { a: I23 }
+interface I23 { a: I24 }
+interface I24 { a: I25 }
+interface I25 { a: I26 }
+interface I26 { a: I27 }
+interface I27 { a: I28 }
+interface I28 { a: I29 }
+interface I29 { a: I30 }
+interface I30 { a: I31 }
+interface I31 { a: I32 }
+interface I32 { a: I33 }
+interface I33 { a: I34 }
+interface I34 { a: I35 }
+interface I35 { a: I36 }
+interface I36 { a: I37 }
+interface I37 { a: I38 }
+interface I38 { a: I39 }
+interface I39 { a: I40 }
+interface I40 { a: I41 }
+interface I41 { a: I42 }
+interface I42 { a: I43 }
+interface I43 { a: I44 }
+interface I44 { a: I45 }
+interface I45 { a: I46 }
+interface I46 { a: I47 }
+interface I47 { a: I48 }
+interface I48 { a: I49 }
+interface I49 { a: I50 }
+interface I50 { a: I51 }
+interface I51 { a: I52 }
+interface I52 { a: I53 }
+interface I53 { a: I54 }
+interface I54 { a: I55 }
+interface I55 { a: I56 }
+interface I56 { a: I57 }
+interface I57 { a: I58 }
+interface I58 { a: I59 }
+interface I59 { a: I60 }
+interface I60 { a: I61 }
+interface I61 { a: I62 }
+interface I62 { a: I63 }
+interface I63 { a: I64 }
+interface I64 { a: I65; b: string }
+interface I65 { back: I64 }
+
+interface J0 { a: J1 }
+interface J1 { a: J2 }
+interface J2 { a: J3 }
+interface J3 { a: J4 }
+interface J4 { a: J5 }
+interface J5 { a: J6 }
+interface J6 { a: J7 }
+interface J7 { a: J8 }
+interface J8 { a: J9 }
+interface J9 { a: J10 }
+interface J10 { a: J11 }
+interface J11 { a: J12 }
+interface J12 { a: J13 }
+interface J13 { a: J14 }
+interface J14 { a: J15 }
+interface J15 { a: J16 }
+interface J16 { a: J17 }
+interface J17 { a: J18 }
+interface J18 { a: J19 }
+interface J19 { a: J20 }
+interface J20 { a: J21 }
+interface J21 { a: J22 }
+interface J22 { a: J23 }
+interface J23 { a: J24 }
+interface J24 { a: J25 }
+interface J25 { a: J26 }
+interface J26 { a: J27 }
+interface J27 { a: J28 }
+interface J28 { a: J29 }
+interface J29 { a: J30 }
+interface J30 { a: J31 }
+interface J31 { a: J32 }
+interface J32 { a: J33 }
+interface J33 { a: J34 }
+interface J34 { a: J35 }
+interface J35 { a: J36 }
+interface J36 { a: J37 }
+interface J37 { a: J38 }
+interface J38 { a: J39 }
+interface J39 { a: J40 }
+interface J40 { a: J41 }
+interface J41 { a: J42 }
+interface J42 { a: J43 }
+interface J43 { a: J44 }
+interface J44 { a: J45 }
+interface J45 { a: J46 }
+interface J46 { a: J47 }
+interface J47 { a: J48 }
+interface J48 { a: J49 }
+interface J49 { a: J50 }
+interface J50 { a: J51 }
+interface J51 { a: J52 }
+interface J52 { a: J53 }
+interface J53 { a: J54 }
+interface J54 { a: J55 }
+interface J55 { a: J56 }
+interface J56 { a: J57 }
+interface J57 { a: J58 }
+interface J58 { a: J59 }
+interface J59 { a: J60 }
+interface J60 { a: J61 }
+interface J61 { a: J62 }
+interface J62 { a: J63 }
+interface J63 { a: J64 }
+interface J64 { a: J65; b: number }
+interface J65 { back: J64 }
+
+declare let r0: I0 extends J0 ? true : false;
+declare let r65: I65 extends J65 ? true : false;

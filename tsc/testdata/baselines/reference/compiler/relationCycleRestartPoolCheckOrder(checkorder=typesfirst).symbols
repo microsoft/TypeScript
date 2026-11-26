@@ -1,0 +1,121 @@
+//// [tests/cases/compiler/relationCycleRestartPoolCheckOrder.ts] ////
+
+=== relationCycleRestartPoolCheckOrder.ts ===
+// Tests that a relation cycle compared again from its least member keeps its
+// guard while nested comparisons take relaters from the pool.
+//
+// Under the strict subtype relation, N4 -> G4 holds when N2 -> T2 fails and
+// N1 -> G1 holds when N0 -> T0 fails (strict arity rejects an optional
+// parameter whose type relates to the required one). N3 -> T3 holds when
+// N4 -> G4 and N1 -> G1 hold; N2 -> T2 and N0 -> T0 hold when N3 -> T3 holds.
+// Entered at N3 -> T3, the cycle restarts from N2 -> T2 and computes N3 -> T3
+// again, which reaches N0 -> T0. Comparing N0 -> T0 resolves typeof functions,
+// whose subtype reduction restarts a cycle of its own on relaters from the pool.
+declare let a1: { a: N3; b: string }, a2: { a: T3 };
+>a1 : Symbol(a1, Decl(relationCycleRestartPoolCheckOrder.ts, 10, 11))
+>a : Symbol(a, Decl(relationCycleRestartPoolCheckOrder.ts, 10, 17))
+>N3 : Symbol(N3, Decl(relationCycleRestartPoolCheckOrder.ts, 11, 17))
+>b : Symbol(b, Decl(relationCycleRestartPoolCheckOrder.ts, 10, 24))
+>a2 : Symbol(a2, Decl(relationCycleRestartPoolCheckOrder.ts, 10, 37))
+>a : Symbol(a, Decl(relationCycleRestartPoolCheckOrder.ts, 10, 43))
+>T3 : Symbol(T3, Decl(relationCycleRestartPoolCheckOrder.ts, 13, 27))
+
+let a = [a1, a2];
+>a : Symbol(a, Decl(relationCycleRestartPoolCheckOrder.ts, 11, 3))
+>a1 : Symbol(a1, Decl(relationCycleRestartPoolCheckOrder.ts, 10, 11))
+>a2 : Symbol(a2, Decl(relationCycleRestartPoolCheckOrder.ts, 10, 37))
+
+type N3 = { b: N4; c: N1 };
+>N3 : Symbol(N3, Decl(relationCycleRestartPoolCheckOrder.ts, 11, 17))
+>b : Symbol(b, Decl(relationCycleRestartPoolCheckOrder.ts, 13, 11))
+>N4 : Symbol(N4, Decl(relationCycleRestartPoolCheckOrder.ts, 18, 41))
+>c : Symbol(c, Decl(relationCycleRestartPoolCheckOrder.ts, 13, 18))
+>N1 : Symbol(N1, Decl(relationCycleRestartPoolCheckOrder.ts, 20, 52))
+
+type T3 = { b: G4; c: G1 };
+>T3 : Symbol(T3, Decl(relationCycleRestartPoolCheckOrder.ts, 13, 27))
+>b : Symbol(b, Decl(relationCycleRestartPoolCheckOrder.ts, 14, 11))
+>G4 : Symbol(G4, Decl(relationCycleRestartPoolCheckOrder.ts, 19, 29))
+>c : Symbol(c, Decl(relationCycleRestartPoolCheckOrder.ts, 14, 18))
+>G1 : Symbol(G1, Decl(relationCycleRestartPoolCheckOrder.ts, 21, 29))
+
+type N2 = { a: N3 };
+>N2 : Symbol(N2, Decl(relationCycleRestartPoolCheckOrder.ts, 14, 27))
+>a : Symbol(a, Decl(relationCycleRestartPoolCheckOrder.ts, 15, 11))
+>N3 : Symbol(N3, Decl(relationCycleRestartPoolCheckOrder.ts, 11, 17))
+
+type T2 = { a: T3 };
+>T2 : Symbol(T2, Decl(relationCycleRestartPoolCheckOrder.ts, 15, 20))
+>a : Symbol(a, Decl(relationCycleRestartPoolCheckOrder.ts, 16, 11))
+>T3 : Symbol(T3, Decl(relationCycleRestartPoolCheckOrder.ts, 13, 27))
+
+type N0 = { l: typeof functions; a: N3 };
+>N0 : Symbol(N0, Decl(relationCycleRestartPoolCheckOrder.ts, 16, 20))
+>l : Symbol(l, Decl(relationCycleRestartPoolCheckOrder.ts, 17, 11))
+>functions : Symbol(functions, Decl(relationCycleRestartPoolCheckOrder.ts, 29, 3))
+>a : Symbol(a, Decl(relationCycleRestartPoolCheckOrder.ts, 17, 32))
+>N3 : Symbol(N3, Decl(relationCycleRestartPoolCheckOrder.ts, 11, 17))
+
+type T0 = { l: typeof functions; a: T3 };
+>T0 : Symbol(T0, Decl(relationCycleRestartPoolCheckOrder.ts, 17, 41))
+>l : Symbol(l, Decl(relationCycleRestartPoolCheckOrder.ts, 18, 11))
+>functions : Symbol(functions, Decl(relationCycleRestartPoolCheckOrder.ts, 29, 3))
+>a : Symbol(a, Decl(relationCycleRestartPoolCheckOrder.ts, 18, 32))
+>T3 : Symbol(T3, Decl(relationCycleRestartPoolCheckOrder.ts, 13, 27))
+
+type N4 = (x?: N2 | T2) => 1;
+>N4 : Symbol(N4, Decl(relationCycleRestartPoolCheckOrder.ts, 18, 41))
+>x : Symbol(x, Decl(relationCycleRestartPoolCheckOrder.ts, 19, 11))
+>N2 : Symbol(N2, Decl(relationCycleRestartPoolCheckOrder.ts, 14, 27))
+>T2 : Symbol(T2, Decl(relationCycleRestartPoolCheckOrder.ts, 15, 20))
+
+type G4 = (x: T2 | undefined, y: unknown) => number;
+>G4 : Symbol(G4, Decl(relationCycleRestartPoolCheckOrder.ts, 19, 29))
+>x : Symbol(x, Decl(relationCycleRestartPoolCheckOrder.ts, 20, 11))
+>T2 : Symbol(T2, Decl(relationCycleRestartPoolCheckOrder.ts, 15, 20))
+>y : Symbol(y, Decl(relationCycleRestartPoolCheckOrder.ts, 20, 29))
+
+type N1 = (x?: N0 | T0) => 1;
+>N1 : Symbol(N1, Decl(relationCycleRestartPoolCheckOrder.ts, 20, 52))
+>x : Symbol(x, Decl(relationCycleRestartPoolCheckOrder.ts, 21, 11))
+>N0 : Symbol(N0, Decl(relationCycleRestartPoolCheckOrder.ts, 16, 20))
+>T0 : Symbol(T0, Decl(relationCycleRestartPoolCheckOrder.ts, 17, 41))
+
+type G1 = (x: T0 | undefined, y: unknown) => number;
+>G1 : Symbol(G1, Decl(relationCycleRestartPoolCheckOrder.ts, 21, 29))
+>x : Symbol(x, Decl(relationCycleRestartPoolCheckOrder.ts, 22, 11))
+>T0 : Symbol(T0, Decl(relationCycleRestartPoolCheckOrder.ts, 17, 41))
+>y : Symbol(y, Decl(relationCycleRestartPoolCheckOrder.ts, 22, 29))
+
+type P = { f: F | G };
+>P : Symbol(P, Decl(relationCycleRestartPoolCheckOrder.ts, 22, 52))
+>f : Symbol(f, Decl(relationCycleRestartPoolCheckOrder.ts, 24, 10))
+>F : Symbol(F, Decl(relationCycleRestartPoolCheckOrder.ts, 25, 18))
+>G : Symbol(G, Decl(relationCycleRestartPoolCheckOrder.ts, 26, 22))
+
+type Q = { f: G };
+>Q : Symbol(Q, Decl(relationCycleRestartPoolCheckOrder.ts, 24, 22))
+>f : Symbol(f, Decl(relationCycleRestartPoolCheckOrder.ts, 25, 10))
+>G : Symbol(G, Decl(relationCycleRestartPoolCheckOrder.ts, 26, 22))
+
+type F = (x?: P) => 1;
+>F : Symbol(F, Decl(relationCycleRestartPoolCheckOrder.ts, 25, 18))
+>x : Symbol(x, Decl(relationCycleRestartPoolCheckOrder.ts, 26, 10))
+>P : Symbol(P, Decl(relationCycleRestartPoolCheckOrder.ts, 22, 52))
+
+type G = (x: Q | undefined) => number;
+>G : Symbol(G, Decl(relationCycleRestartPoolCheckOrder.ts, 26, 22))
+>x : Symbol(x, Decl(relationCycleRestartPoolCheckOrder.ts, 27, 10))
+>Q : Symbol(Q, Decl(relationCycleRestartPoolCheckOrder.ts, 24, 22))
+
+declare let f: F, g: G;
+>f : Symbol(f, Decl(relationCycleRestartPoolCheckOrder.ts, 28, 11))
+>F : Symbol(F, Decl(relationCycleRestartPoolCheckOrder.ts, 25, 18))
+>g : Symbol(g, Decl(relationCycleRestartPoolCheckOrder.ts, 28, 17))
+>G : Symbol(G, Decl(relationCycleRestartPoolCheckOrder.ts, 26, 22))
+
+let functions = [f, g];
+>functions : Symbol(functions, Decl(relationCycleRestartPoolCheckOrder.ts, 29, 3))
+>f : Symbol(f, Decl(relationCycleRestartPoolCheckOrder.ts, 28, 11))
+>g : Symbol(g, Decl(relationCycleRestartPoolCheckOrder.ts, 28, 17))
+
