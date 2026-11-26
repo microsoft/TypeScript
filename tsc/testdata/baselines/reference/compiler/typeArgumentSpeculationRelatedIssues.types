@@ -1,0 +1,178 @@
+//// [tests/cases/compiler/typeArgumentSpeculationRelatedIssues.ts] ////
+
+=== issue37760.ts ===
+// https://github.com/microsoft/TypeScript/issues/37760
+export {};
+function alignof<T>(): number {
+>alignof : <T>() => number
+
+    return 1;
+>1 : 1
+}
+
+// A right shift already parsed correctly.
+function foo<T>(): number {
+>foo : <T>() => number
+
+    return 1 >> alignof<T[]>();
+>1 >> alignof<T[]>() : number
+>1 : 1
+>alignof<T[]>() : number
+>alignof : <T_1>() => number
+}
+
+// A left shift must not become two type-argument openers.
+function bar<T>(): number {
+>bar : <T>() => number
+
+    return 1 << alignof<T[]>();
+>1 << alignof<T[]>() : number
+>1 : 1
+>alignof<T[]>() : number
+>alignof : <T_1>() => number
+}
+
+function baz<T>(): number {
+>baz : <T>() => number
+
+    // @ts-ignore
+    return 1 << alignof<T[]>();
+>1 << alignof<T[]>() : number
+>1 : 1
+>alignof<T[]>() : number
+>alignof : <T_1>() => number
+}
+
+=== issue43720.ts ===
+// https://github.com/microsoft/TypeScript/issues/43720
+export {};
+declare const res: any;
+>res : any
+
+for (let i = 0; i < (<any[]>(<any>res).Data).length; i++) { }
+>i : number
+>0 : 0
+>i < (<any[]>(<any>res).Data).length : boolean
+>i : number
+>(<any[]>(<any>res).Data).length : number
+>(<any[]>(<any>res).Data) : any[]
+><any[]>(<any>res).Data : any[]
+>(<any>res).Data : any
+>(<any>res) : any
+><any>res : any
+>res : any
+>Data : any
+>length : number
+>i++ : number
+>i : number
+
+// The original report's extracted-condition workaround remains equivalent.
+let ln = (<any[]>(<any>res).Data).length;
+>ln : number
+>(<any[]>(<any>res).Data).length : number
+>(<any[]>(<any>res).Data) : any[]
+><any[]>(<any>res).Data : any[]
+>(<any>res).Data : any
+>(<any>res) : any
+><any>res : any
+>res : any
+>Data : any
+>length : number
+
+for (let i = 0; i < ln; i++) { }
+>i : number
+>0 : 0
+>i < ln : boolean
+>i : number
+>ln : number
+>i++ : number
+>i : number
+
+=== issue61975.ts ===
+// https://github.com/microsoft/TypeScript/issues/61975
+export {};
+class Pantries<A> {
+>Pantries : Pantries<A>
+
+    constructor(precise: A) {
+>precise : A
+
+        this.precise = precise;
+>this.precise = precise : A
+>this.precise : A
+>this : this
+>precise : A
+>precise : A
+    }
+    precise: A;
+>precise : A
+}
+
+function sparrow(): boolean {
+>sparrow : () => boolean
+
+    const sobbed: boolean = true;
+>sobbed : boolean
+>true : true
+
+    return "abc" < (sobbed ? new Pantries<string>("a") : new Pantries<string>("b")).precise;
+>"abc" < (sobbed ? new Pantries<string>("a") : new Pantries<string>("b")).precise : boolean
+>"abc" : "abc"
+>(sobbed ? new Pantries<string>("a") : new Pantries<string>("b")).precise : string
+>(sobbed ? new Pantries<string>("a") : new Pantries<string>("b")) : Pantries<string>
+>sobbed ? new Pantries<string>("a") : new Pantries<string>("b") : Pantries<string>
+>sobbed : true
+>new Pantries<string>("a") : Pantries<string>
+>Pantries : typeof Pantries
+>"a" : "a"
+>new Pantries<string>("b") : Pantries<string>
+>Pantries : typeof Pantries
+>"b" : "b"
+>precise : string
+}
+
+function sparrow1(): string {
+>sparrow1 : () => string
+
+    const sobbed: boolean = true;
+>sobbed : boolean
+>true : true
+
+    return (sobbed ? new Pantries<string>("a") : new Pantries<string>("b")).precise;
+>(sobbed ? new Pantries<string>("a") : new Pantries<string>("b")).precise : string
+>(sobbed ? new Pantries<string>("a") : new Pantries<string>("b")) : Pantries<string>
+>sobbed ? new Pantries<string>("a") : new Pantries<string>("b") : Pantries<string>
+>sobbed : true
+>new Pantries<string>("a") : Pantries<string>
+>Pantries : typeof Pantries
+>"a" : "a"
+>new Pantries<string>("b") : Pantries<string>
+>Pantries : typeof Pantries
+>"b" : "b"
+>precise : string
+}
+
+function sparrow2(): boolean {
+>sparrow2 : () => boolean
+
+    const sobbed: boolean = true;
+>sobbed : boolean
+>true : true
+
+    return "abc" < (sobbed ? (new Pantries<string>("a")) : new Pantries<string>("b")).precise;
+>"abc" < (sobbed ? (new Pantries<string>("a")) : new Pantries<string>("b")).precise : boolean
+>"abc" : "abc"
+>(sobbed ? (new Pantries<string>("a")) : new Pantries<string>("b")).precise : string
+>(sobbed ? (new Pantries<string>("a")) : new Pantries<string>("b")) : Pantries<string>
+>sobbed ? (new Pantries<string>("a")) : new Pantries<string>("b") : Pantries<string>
+>sobbed : true
+>(new Pantries<string>("a")) : Pantries<string>
+>new Pantries<string>("a") : Pantries<string>
+>Pantries : typeof Pantries
+>"a" : "a"
+>new Pantries<string>("b") : Pantries<string>
+>Pantries : typeof Pantries
+>"b" : "b"
+>precise : string
+}
+
