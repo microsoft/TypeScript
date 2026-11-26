@@ -1,0 +1,36 @@
+// === findAllReferences ===
+// === /main.ts ===
+// class SomeBase<A, B, C> {
+//     a!: A; b!: B; c!: C;
+// }
+// class SomeDerived</*FIND ALL REFS*/[|T|]> extends SomeBase<number, string, [|T|]> {
+//     constructor() {
+//         super<number, string, [|T|]> `hello world`;
+//     }
+// }
+
+
+
+// === findAllReferences ===
+// === /main.ts ===
+// class SomeBase<A, B, C> {
+//     a!: A; b!: B; c!: C;
+// }
+// class SomeDerived<T> extends SomeBase<number, string, T> {
+//     constructor() {
+//         /*FIND ALL REFS*/[|super|]<number, string, T> `hello world`;
+//     }
+// }
+
+
+
+// === findAllReferences ===
+// === /main.ts ===
+// class SomeBase<A, B, C> {
+//     a!: A; b!: B; c!: C;
+// }
+// class SomeDerived<[|T|]> extends SomeBase<number, string, [|T|]> {
+//     constructor() {
+//         super<number, string, /*FIND ALL REFS*/[|T|]> `hello world`;
+//     }
+// }

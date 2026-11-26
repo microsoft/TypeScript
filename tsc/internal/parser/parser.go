@@ -5408,9 +5408,17 @@ func (p *Parser) parseSuperExpression() *ast.Expression {
 		typeArguments := p.tryParseTypeArgumentsInExpression()
 		if typeArguments != nil {
 			p.parseErrorAt(startPos, p.nodePos(), diagnostics.X_super_may_not_use_type_arguments)
-			if !p.isTemplateStartOfTaggedTemplate() {
-				expression = p.finishNode(p.factory.NewExpressionWithTypeArguments(expression, typeArguments), pos)
+			if p.isTemplateStartOfTaggedTemplate() {
+				// `super<T>` followed by a template is a tagged template whose tag is `super.` with a missing name.
+				// The property access ends at `super`, and the type arguments are wrapped around it so that
+				// parseMemberExpressionRest moves them onto the tagged template, which keeps them out of the
+				// range of the property access.
+				p.parseErrorAtCurrentToken(diagnostics.X_super_must_be_followed_by_an_argument_list_or_member_access)
+				name := p.finishNodeWithEnd(p.newIdentifier(""), startPos, startPos)
+				access := p.finishNodeWithEnd(p.factory.NewPropertyAccessExpression(expression, nil /*questionDotToken*/, name, ast.NodeFlagsNone), pos, startPos)
+				return p.finishNode(p.factory.NewExpressionWithTypeArguments(access, typeArguments), pos)
 			}
+			expression = p.finishNode(p.factory.NewExpressionWithTypeArguments(expression, typeArguments), pos)
 		}
 	}
 	if p.token == ast.KindOpenParenToken || p.token == ast.KindDotToken || p.token == ast.KindOpenBracketToken {
