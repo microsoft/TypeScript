@@ -1880,6 +1880,10 @@ func isAsyncModifier(modifier *ast.Node) bool {
 	return modifier.Kind == ast.KindAsyncKeyword
 }
 
+func isAccessorModifier(modifier *ast.Node) bool {
+	return modifier.Kind == ast.KindAccessorKeyword
+}
+
 func (p *Parser) parseHeritageClauses(isInterface bool) *ast.NodeList {
 	// ClassTail[Yield,Await] : (Modified) See 14.5
 	//      ClassHeritage[?Yield,?Await]opt { ClassBody[?Yield,?Await]opt }
@@ -1963,10 +1967,11 @@ func (p *Parser) parseClassElement() *ast.Node {
 	if p.token == ast.KindStaticKeyword && p.lookAhead((*Parser).nextTokenIsOpenBrace) {
 		return p.parseClassStaticBlockDeclaration(pos, jsdoc, modifiers)
 	}
-	if p.parseContextualModifier(ast.KindGetKeyword) {
+	isAutoAccessor := modifiers != nil && core.Some(modifiers.Nodes, isAccessorModifier)
+	if p.parseGetOrSetKeyword(ast.KindGetKeyword, isAutoAccessor) {
 		return p.parseAccessorDeclaration(pos, jsdoc, modifiers, ast.KindGetAccessor, ParseFlagsNone)
 	}
-	if p.parseContextualModifier(ast.KindSetKeyword) {
+	if p.parseGetOrSetKeyword(ast.KindSetKeyword, isAutoAccessor) {
 		return p.parseAccessorDeclaration(pos, jsdoc, modifiers, ast.KindSetAccessor, ParseFlagsNone)
 	}
 	if p.token == ast.KindConstructorKeyword || p.token == ast.KindStringLiteral {
@@ -2003,6 +2008,15 @@ func (p *Parser) parseClassElement() *ast.Node {
 	}
 	// 'isClassMemberStart' should have hinted not to attempt parsing.
 	panic("Should not have attempted to parse class member declaration.")
+}
+
+func (p *Parser) parseGetOrSetKeyword(kind ast.Kind, requireNameOnSameLine bool) bool {
+	state := p.mark()
+	if p.parseContextualModifier(kind) && (!requireNameOnSameLine || !p.hasPrecedingLineBreak()) {
+		return true
+	}
+	p.rewind(state)
+	return false
 }
 
 func (p *Parser) parseClassStaticBlockDeclaration(pos int, jsdoc jsdocScannerInfo, modifiers *ast.ModifierList) *ast.Node {
