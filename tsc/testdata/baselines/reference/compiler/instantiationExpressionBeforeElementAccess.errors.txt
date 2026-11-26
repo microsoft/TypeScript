@@ -1,0 +1,30 @@
+instantiationExpressionBeforeElementAccess.ts(4,2): error TS1477: An instantiation expression cannot be followed by a property access.
+instantiationExpressionBeforeElementAccess.ts(7,5): error TS1477: An instantiation expression cannot be followed by a property access.
+instantiationExpressionBeforeElementAccess.ts(10,5): error TS1477: An instantiation expression cannot be followed by a property access.
+
+
+==== instantiationExpressionBeforeElementAccess.ts (3 errors) ====
+    declare const f: { <T>(): T; label: string };
+    declare const a: { f: typeof f };
+    
+    f<number>
+     ~~~~~~~~
+!!! error TS1477: An instantiation expression cannot be followed by a property access.
+    ["label"];
+    
+    a?.f<number>
+        ~~~~~~~~
+!!! error TS1477: An instantiation expression cannot be followed by a property access.
+    ["label"];
+    
+    a?.f<number> /*
+        ~~~~~~~~
+!!! error TS1477: An instantiation expression cannot be followed by a property access.
+    */ ["label"];
+    
+    (f<number>)
+    ["label"];
+    
+    (a?.f<number>)["label"];
+    a?.f<number>?.["label"];
+    

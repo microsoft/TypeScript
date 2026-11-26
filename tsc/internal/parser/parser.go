@@ -5589,6 +5589,11 @@ func (p *Parser) parsePropertyAccessExpressionRest(pos int, expression *ast.Expr
 	if isOptionalChain && ast.IsPrivateIdentifier(name) {
 		p.parseErrorAtRange(p.skipRangeTrivia(name.Loc), diagnostics.An_optional_chain_cannot_contain_private_identifiers)
 	}
+	p.checkInstantiationExpressionBeforePropertyAccess(expression)
+	return p.finishNode(propertyAccess, pos)
+}
+
+func (p *Parser) checkInstantiationExpressionBeforePropertyAccess(expression *ast.Expression) {
 	if ast.IsExpressionWithTypeArguments(expression) {
 		typeArguments := expression.TypeArgumentList()
 		if typeArguments != nil {
@@ -5596,7 +5601,6 @@ func (p *Parser) parsePropertyAccessExpressionRest(pos int, expression *ast.Expr
 			p.parseErrorAtRange(loc, diagnostics.An_instantiation_expression_cannot_be_followed_by_a_property_access)
 		}
 	}
-	return p.finishNode(propertyAccess, pos)
 }
 
 func (p *Parser) tryReparseOptionalChain(node *ast.Expression) bool {
@@ -5629,6 +5633,11 @@ func (p *Parser) parseElementAccessExpressionRest(pos int, expression *ast.Expre
 		argumentExpression = p.parseExpressionAllowIn()
 	}
 	p.parseExpected(ast.KindCloseBracketToken)
+	if questionDotToken == nil {
+		// A line break can make `<T>` an instantiation rather than a comparison.
+		// Require parentheses before a regular element access, like for a dot access.
+		p.checkInstantiationExpressionBeforePropertyAccess(expression)
+	}
 	isOptionalChain := questionDotToken != nil || p.tryReparseOptionalChain(expression)
 	return p.finishNode(p.factory.NewElementAccessExpression(expression, questionDotToken, argumentExpression, core.IfElse(isOptionalChain, ast.NodeFlagsOptionalChain, ast.NodeFlagsNone)), pos)
 }
