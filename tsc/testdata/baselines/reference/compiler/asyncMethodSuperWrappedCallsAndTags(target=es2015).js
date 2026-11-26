@@ -107,17 +107,17 @@ class C extends B {
         });
         return __awaiter(this, void 0, void 0, function* () {
             _super.m.call(this);
-            (_super.m)();
-            ((_super.m))();
-            _super.m();
-            _super.m();
-            _super.m();
-            _super.m();
-            _super.m(yield 0);
+            (_super.m).call(this);
+            ((_super.m)).call(this);
+            _super.m.call(this);
+            _super.m.call(this);
+            _super.m.call(this);
+            _super.m.call(this);
+            _super.m.call(this, yield 0);
             _superIndex("m").call(this);
-            (_superIndex("m"))();
-            _superIndex("m")();
-            _superIndex("m")();
+            (_superIndex("m")).call(this);
+            _superIndex("m").call(this);
+            _superIndex("m").call(this);
         });
     }
     tags() {
@@ -126,17 +126,17 @@ class C extends B {
             m: { get: () => super.m }
         });
         return __awaiter(this, void 0, void 0, function* () {
-            _super.m `t`;
-            (_super.m) `t`;
-            _super.m `t${yield 0}`;
-            _super.m `t`;
-            _superIndex("m") `t`;
-            _superIndex("m") `t`;
+            _super.m.bind(this) `t`;
+            (_super.m).bind(this) `t`;
+            _super.m.bind(this) `t${yield 0}`;
+            _super.m.bind(this) `t`;
+            _superIndex("m").bind(this) `t`;
+            _superIndex("m").bind(this) `t`;
         });
     }
     assignAs() {
         const _super = Object.create(null, {
-            x: { get: () => super.x }
+            x: { get: () => super.x, set: v => super.x = v }
         });
         return __awaiter(this, void 0, void 0, function* () {
             _super.x = 1;
@@ -144,7 +144,7 @@ class C extends B {
     }
     assignSatisfies() {
         const _super = Object.create(null, {
-            x: { get: () => super.x }
+            x: { get: () => super.x, set: v => super.x = v }
         });
         return __awaiter(this, void 0, void 0, function* () {
             _super.x = 1;
@@ -152,7 +152,7 @@ class C extends B {
     }
     assignNonNull() {
         const _super = Object.create(null, {
-            x: { get: () => super.x }
+            x: { get: () => super.x, set: v => super.x = v }
         });
         return __awaiter(this, void 0, void 0, function* () {
             _super.x = 1;
@@ -160,7 +160,7 @@ class C extends B {
     }
     assignTypeAssertion() {
         const _super = Object.create(null, {
-            x: { get: () => super.x }
+            x: { get: () => super.x, set: v => super.x = v }
         });
         return __awaiter(this, void 0, void 0, function* () {
             _super.x = 1;
@@ -168,7 +168,7 @@ class C extends B {
     }
     compoundAs() {
         const _super = Object.create(null, {
-            x: { get: () => super.x }
+            x: { get: () => super.x, set: v => super.x = v }
         });
         return __awaiter(this, void 0, void 0, function* () {
             _super.x += 1;
@@ -176,7 +176,7 @@ class C extends B {
     }
     incrementNonNull() {
         const _super = Object.create(null, {
-            x: { get: () => super.x }
+            x: { get: () => super.x, set: v => super.x = v }
         });
         return __awaiter(this, void 0, void 0, function* () {
             _super.x++;
@@ -184,7 +184,7 @@ class C extends B {
     }
     destructuringWrapped() {
         const _super = Object.create(null, {
-            x: { get: () => super.x }
+            x: { get: () => super.x, set: v => super.x = v }
         });
         return __awaiter(this, void 0, void 0, function* () {
             [_super.x] = [1];
@@ -192,9 +192,12 @@ class C extends B {
         });
     }
     elementAssignAs() {
-        const _superIndex = name => super[name];
+        const _superIndex = (function (geti, seti) {
+            const cache = Object.create(null);
+            return name => cache[name] || (cache[name] = { get value() { return geti(name); }, set value(v) { seti(name, v); } });
+        })(name => super[name], (name, value) => super[name] = value);
         return __awaiter(this, void 0, void 0, function* () {
-            _superIndex("x") = 1;
+            _superIndex("x").value = 1;
         });
     }
     asyncGenerator() {
@@ -202,13 +205,13 @@ class C extends B {
             m: { get: () => super.m }
         });
         return __asyncGenerator(this, arguments, function* asyncGenerator_1() {
-            _super.m();
-            _super.m `t`;
+            _super.m.call(this);
+            _super.m.bind(this) `t`;
         });
     }
     assignAsyncGenerator() {
         const _super = Object.create(null, {
-            x: { get: () => super.x }
+            x: { get: () => super.x, set: v => super.x = v }
         });
         return __asyncGenerator(this, arguments, function* assignAsyncGenerator_1() {
             _super.x = 1;
@@ -219,8 +222,8 @@ class C extends B {
             sm: { get: () => super.sm }
         });
         return __awaiter(this, void 0, void 0, function* () {
-            _super.sm();
-            _super.sm `t`;
+            _super.sm.call(this);
+            _super.sm.bind(this) `t`;
         });
     }
 }

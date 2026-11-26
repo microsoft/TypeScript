@@ -152,13 +152,13 @@ class C extends B {
             m: { get: () => super.m }
         });
         return __asyncGenerator(this, arguments, function* asyncGenerator_1() {
-            _super.m();
-            _super.m `t`;
+            _super.m.call(this);
+            _super.m.bind(this) `t`;
         });
     }
     assignAsyncGenerator() {
         const _super = Object.create(null, {
-            x: { get: () => super.x }
+            x: { get: () => super.x, set: v => super.x = v }
         });
         return __asyncGenerator(this, arguments, function* assignAsyncGenerator_1() {
             _super.x = 1;
