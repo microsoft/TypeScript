@@ -1,0 +1,495 @@
+//// [tests/cases/compiler/effectiveConstraintChaseDuringVarianceMeasurement.ts] ////
+
+=== effectiveConstraintChaseDuringVarianceMeasurement.ts ===
+// Regression test for microsoft/TypeScript#64423.
+//
+// Distilled from the three.js TSL node types. `Node<TNodeType>` is a generic type
+// alias that resolves to an intersection whose constituents include deferred
+// conditional types selecting between sets of generic "extension" interfaces.
+// Resolving `uv().div(vec2())` measures the variances of those extension
+// interfaces, and while the variance stack is non-empty the combined-constraint
+// comparison in `structuredTypeRelatedTo` repeatedly hoists the constraints of
+// the intersection source into a structurally new and ever larger intersection
+// (each round peels a branch off the deferred conditional chain, producing new
+// type identities the relation cache never recognizes as recursive). Without a
+// guard this chase grows without bound until the process runs out of memory;
+// checking this file must terminate with no diagnostics instead.
+
+export type NumType = "float" | "int" | "uint";
+>NumType : Symbol(NumType, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 0, 0))
+
+export type IntegerType = "int" | "uint";
+>IntegerType : Symbol(IntegerType, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 14, 47))
+
+export type NumOrBoolType = NumType | "bool";
+>NumOrBoolType : Symbol(NumOrBoolType, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 15, 41))
+>NumType : Symbol(NumType, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 0, 0))
+
+export type FloatVecType = "vec2" | "vec3" | "vec4";
+>FloatVecType : Symbol(FloatVecType, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 16, 45))
+
+export type MatType = "mat2" | "mat3" | "mat4";
+>MatType : Symbol(MatType, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 17, 52))
+
+interface NumberToVec {
+>NumberToVec : Symbol(NumberToVec, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 18, 47))
+
+    float: "vec";
+>float : Symbol(NumberToVec.float, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 20, 23))
+
+    int: "ivec";
+>int : Symbol(NumberToVec.int, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 21, 17))
+
+    uint: "uvec";
+>uint : Symbol(NumberToVec.uint, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 22, 16))
+}
+
+type NumberToVec2<TNum extends NumType> = `${NumberToVec[TNum]}2`;
+>NumberToVec2 : Symbol(NumberToVec2, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 24, 1))
+>TNum : Symbol(TNum, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 26, 18))
+>NumType : Symbol(NumType, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 0, 0))
+>NumberToVec : Symbol(NumberToVec, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 18, 47))
+>TNum : Symbol(TNum, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 26, 18))
+
+type Number<TNum extends NumType> = Node<TNum> | number;
+>Number : Symbol(Number, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 26, 66))
+>TNum : Symbol(TNum, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 28, 12))
+>NumType : Symbol(NumType, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 0, 0))
+>Node : Symbol(Node, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 111, 1))
+>TNum : Symbol(TNum, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 28, 12))
+
+type Vec2OrLessOrNumber<TNum extends NumType> = Number<TNum> | Node<NumberToVec2<TNum>>;
+>Vec2OrLessOrNumber : Symbol(Vec2OrLessOrNumber, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 28, 56))
+>TNum : Symbol(TNum, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 30, 24))
+>NumType : Symbol(NumType, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 0, 0))
+>Number : Symbol(Number, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 26, 66))
+>TNum : Symbol(TNum, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 30, 24))
+>Node : Symbol(Node, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 111, 1))
+>NumberToVec2 : Symbol(NumberToVec2, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 24, 1))
+>TNum : Symbol(TNum, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 30, 24))
+
+declare class NodeClass {
+>NodeClass : Symbol(NodeClass, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 30, 88))
+}
+
+interface NodeExtensions<TNodeType> {
+>NodeExtensions : Symbol(NodeExtensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 33, 1), Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 179, 62))
+>TNodeType : Symbol(TNodeType, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 35, 25), Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 181, 25))
+}
+
+interface FloatExtensions {
+>FloatExtensions : Symbol(FloatExtensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 36, 1))
+}
+
+interface IntExtensions {
+>IntExtensions : Symbol(IntExtensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 39, 1))
+}
+
+interface UintExtensions {
+>UintExtensions : Symbol(UintExtensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 42, 1))
+}
+
+interface BoolExtensions {
+>BoolExtensions : Symbol(BoolExtensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 45, 1))
+}
+
+interface NumExtensions<TNum extends NumType> {
+>NumExtensions : Symbol(NumExtensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 48, 1), Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 165, 23))
+>TNum : Symbol(TNum, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 50, 24), Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 167, 24))
+>NumType : Symbol(NumType, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 0, 0))
+}
+
+interface IntegerExtensions<TInteger extends IntegerType> {
+>IntegerExtensions : Symbol(IntegerExtensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 51, 1))
+>TInteger : Symbol(TInteger, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 53, 28))
+>IntegerType : Symbol(IntegerType, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 14, 47))
+}
+
+interface NumOrBoolExtensions<TNumOrBool extends NumOrBoolType> {
+>NumOrBoolExtensions : Symbol(NumOrBoolExtensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 54, 1))
+>TNumOrBool : Symbol(TNumOrBool, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 56, 30))
+>NumOrBoolType : Symbol(NumOrBoolType, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 15, 41))
+}
+
+interface NumVec2Extensions<TNum extends NumType> {
+>NumVec2Extensions : Symbol(NumVec2Extensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 57, 1), Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 169, 1))
+>TNum : Symbol(TNum, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 59, 28), Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 171, 28))
+>NumType : Symbol(NumType, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 0, 0))
+}
+
+interface NumVec3Extensions<TNum extends NumType> {
+>NumVec3Extensions : Symbol(NumVec3Extensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 60, 1))
+>TNum : Symbol(TNum, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 62, 28))
+>NumType : Symbol(NumType, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 0, 0))
+}
+
+interface NumVec4Extensions<TNum extends NumType> {
+>NumVec4Extensions : Symbol(NumVec4Extensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 63, 1))
+>TNum : Symbol(TNum, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 65, 28))
+>NumType : Symbol(NumType, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 0, 0))
+}
+
+interface NumOrBoolVec2Extensions<TNumOrBool extends NumOrBoolType> {
+>NumOrBoolVec2Extensions : Symbol(NumOrBoolVec2Extensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 66, 1))
+>TNumOrBool : Symbol(TNumOrBool, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 68, 34))
+>NumOrBoolType : Symbol(NumOrBoolType, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 15, 41))
+}
+
+interface NumOrBoolVec3Extensions<TNumOrBool extends NumOrBoolType> {
+>NumOrBoolVec3Extensions : Symbol(NumOrBoolVec3Extensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 69, 1))
+>TNumOrBool : Symbol(TNumOrBool, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 71, 34))
+>NumOrBoolType : Symbol(NumOrBoolType, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 15, 41))
+}
+
+interface NumOrBoolVec4Extensions<TNumOrBool extends NumOrBoolType> {
+>NumOrBoolVec4Extensions : Symbol(NumOrBoolVec4Extensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 72, 1))
+>TNumOrBool : Symbol(TNumOrBool, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 74, 34))
+>NumOrBoolType : Symbol(NumOrBoolType, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 15, 41))
+}
+
+interface Vec2Extensions {
+>Vec2Extensions : Symbol(Vec2Extensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 75, 1))
+}
+
+interface Vec3Extensions {
+>Vec3Extensions : Symbol(Vec3Extensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 78, 1))
+}
+
+interface Vec4Extensions {
+>Vec4Extensions : Symbol(Vec4Extensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 81, 1))
+}
+
+interface ColorExtensions {
+>ColorExtensions : Symbol(ColorExtensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 84, 1))
+}
+
+interface FloatVecExtensions<TVec extends FloatVecType> {
+>FloatVecExtensions : Symbol(FloatVecExtensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 87, 1))
+>TVec : Symbol(TVec, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 89, 29))
+>FloatVecType : Symbol(FloatVecType, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 16, 45))
+}
+
+interface FloatOrVecExtensions<TNodeType> {
+>FloatOrVecExtensions : Symbol(FloatOrVecExtensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 90, 1))
+>TNodeType : Symbol(TNodeType, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 92, 31))
+}
+
+interface IntOrVecExtensions<TNodeType> {
+>IntOrVecExtensions : Symbol(IntOrVecExtensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 93, 1))
+>TNodeType : Symbol(TNodeType, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 95, 29))
+}
+
+interface BoolOrVecExtensions<TNodeType> {
+>BoolOrVecExtensions : Symbol(BoolOrVecExtensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 96, 1))
+>TNodeType : Symbol(TNodeType, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 98, 30))
+}
+
+interface Mat2Extensions {
+>Mat2Extensions : Symbol(Mat2Extensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 99, 1))
+}
+
+interface Mat3Extensions {
+>Mat3Extensions : Symbol(Mat3Extensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 102, 1))
+}
+
+interface Mat4Extensions {
+>Mat4Extensions : Symbol(Mat4Extensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 105, 1))
+}
+
+interface MatExtensions<TMat extends MatType> {
+>MatExtensions : Symbol(MatExtensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 108, 1))
+>TMat : Symbol(TMat, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 110, 24))
+>MatType : Symbol(MatType, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 17, 52))
+}
+
+type Node<TNodeType = unknown> =
+>Node : Symbol(Node, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 111, 1))
+>TNodeType : Symbol(TNodeType, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 113, 10))
+
+    & NodeClass
+>NodeClass : Symbol(NodeClass, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 30, 88))
+
+    & (unknown extends TNodeType ? {} : NodeExtensions<TNodeType>)
+>TNodeType : Symbol(TNodeType, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 113, 10))
+>NodeExtensions : Symbol(NodeExtensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 33, 1), Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 179, 62))
+>TNodeType : Symbol(TNodeType, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 113, 10))
+
+    & (TNodeType extends "float"
+>TNodeType : Symbol(TNodeType, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 113, 10))
+
+        ? NumOrBoolExtensions<"float"> & FloatExtensions & NumExtensions<"float"> & FloatOrVecExtensions<"float">
+>NumOrBoolExtensions : Symbol(NumOrBoolExtensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 54, 1))
+>FloatExtensions : Symbol(FloatExtensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 36, 1))
+>NumExtensions : Symbol(NumExtensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 48, 1), Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 165, 23))
+>FloatOrVecExtensions : Symbol(FloatOrVecExtensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 90, 1))
+
+        : TNodeType extends "int"
+>TNodeType : Symbol(TNodeType, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 113, 10))
+
+            ? NumOrBoolExtensions<"int"> & IntExtensions & NumExtensions<"int"> & IntegerExtensions<"int"> & IntOrVecExtensions<"int">
+>NumOrBoolExtensions : Symbol(NumOrBoolExtensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 54, 1))
+>IntExtensions : Symbol(IntExtensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 39, 1))
+>NumExtensions : Symbol(NumExtensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 48, 1), Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 165, 23))
+>IntegerExtensions : Symbol(IntegerExtensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 51, 1))
+>IntOrVecExtensions : Symbol(IntOrVecExtensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 93, 1))
+
+        : TNodeType extends "uint"
+>TNodeType : Symbol(TNodeType, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 113, 10))
+
+            ? NumOrBoolExtensions<"uint"> & UintExtensions & NumExtensions<"uint"> & IntegerExtensions<"uint"> & IntOrVecExtensions<"uint">
+>NumOrBoolExtensions : Symbol(NumOrBoolExtensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 54, 1))
+>UintExtensions : Symbol(UintExtensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 42, 1))
+>NumExtensions : Symbol(NumExtensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 48, 1), Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 165, 23))
+>IntegerExtensions : Symbol(IntegerExtensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 51, 1))
+>IntOrVecExtensions : Symbol(IntOrVecExtensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 93, 1))
+
+        : TNodeType extends "bool" ? NumOrBoolExtensions<"bool"> & BoolExtensions & BoolOrVecExtensions<"bool">
+>TNodeType : Symbol(TNodeType, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 113, 10))
+>NumOrBoolExtensions : Symbol(NumOrBoolExtensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 54, 1))
+>BoolExtensions : Symbol(BoolExtensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 45, 1))
+>BoolOrVecExtensions : Symbol(BoolOrVecExtensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 96, 1))
+
+        : TNodeType extends "vec2"
+>TNodeType : Symbol(TNodeType, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 113, 10))
+
+            ? NumOrBoolVec2Extensions<"float"> & Vec2Extensions & NumVec2Extensions<"float"> & FloatVecExtensions<"vec2"> & FloatOrVecExtensions<"vec2">
+>NumOrBoolVec2Extensions : Symbol(NumOrBoolVec2Extensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 66, 1))
+>Vec2Extensions : Symbol(Vec2Extensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 75, 1))
+>NumVec2Extensions : Symbol(NumVec2Extensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 57, 1), Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 169, 1))
+>FloatVecExtensions : Symbol(FloatVecExtensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 87, 1))
+>FloatOrVecExtensions : Symbol(FloatOrVecExtensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 90, 1))
+
+        : TNodeType extends "ivec2"
+>TNodeType : Symbol(TNodeType, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 113, 10))
+
+            ? NumOrBoolVec2Extensions<"int"> & NumVec2Extensions<"int"> & IntOrVecExtensions<"ivec2">
+>NumOrBoolVec2Extensions : Symbol(NumOrBoolVec2Extensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 66, 1))
+>NumVec2Extensions : Symbol(NumVec2Extensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 57, 1), Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 169, 1))
+>IntOrVecExtensions : Symbol(IntOrVecExtensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 93, 1))
+
+        : TNodeType extends "uvec2"
+>TNodeType : Symbol(TNodeType, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 113, 10))
+
+            ? NumOrBoolVec2Extensions<"uint"> & NumVec2Extensions<"uint"> & IntOrVecExtensions<"uvec2">
+>NumOrBoolVec2Extensions : Symbol(NumOrBoolVec2Extensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 66, 1))
+>NumVec2Extensions : Symbol(NumVec2Extensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 57, 1), Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 169, 1))
+>IntOrVecExtensions : Symbol(IntOrVecExtensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 93, 1))
+
+        : TNodeType extends "bvec2" ? NumOrBoolVec2Extensions<"bool"> & BoolOrVecExtensions<"bvec2">
+>TNodeType : Symbol(TNodeType, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 113, 10))
+>NumOrBoolVec2Extensions : Symbol(NumOrBoolVec2Extensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 66, 1))
+>BoolOrVecExtensions : Symbol(BoolOrVecExtensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 96, 1))
+
+        : TNodeType extends "vec3"
+>TNodeType : Symbol(TNodeType, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 113, 10))
+
+            ? NumOrBoolVec3Extensions<"float"> & Vec3Extensions & NumVec3Extensions<"float"> & FloatVecExtensions<"vec3"> & FloatOrVecExtensions<"vec3">
+>NumOrBoolVec3Extensions : Symbol(NumOrBoolVec3Extensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 69, 1))
+>Vec3Extensions : Symbol(Vec3Extensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 78, 1))
+>NumVec3Extensions : Symbol(NumVec3Extensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 60, 1))
+>FloatVecExtensions : Symbol(FloatVecExtensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 87, 1))
+>FloatOrVecExtensions : Symbol(FloatOrVecExtensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 90, 1))
+
+        : TNodeType extends "ivec3"
+>TNodeType : Symbol(TNodeType, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 113, 10))
+
+            ? NumOrBoolVec3Extensions<"int"> & NumVec3Extensions<"int"> & IntOrVecExtensions<"ivec3">
+>NumOrBoolVec3Extensions : Symbol(NumOrBoolVec3Extensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 69, 1))
+>NumVec3Extensions : Symbol(NumVec3Extensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 60, 1))
+>IntOrVecExtensions : Symbol(IntOrVecExtensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 93, 1))
+
+        : TNodeType extends "uvec3"
+>TNodeType : Symbol(TNodeType, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 113, 10))
+
+            ? NumOrBoolVec3Extensions<"uint"> & NumVec3Extensions<"uint"> & IntOrVecExtensions<"uvec3">
+>NumOrBoolVec3Extensions : Symbol(NumOrBoolVec3Extensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 69, 1))
+>NumVec3Extensions : Symbol(NumVec3Extensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 60, 1))
+>IntOrVecExtensions : Symbol(IntOrVecExtensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 93, 1))
+
+        : TNodeType extends "bvec3" ? NumOrBoolVec3Extensions<"bool"> & BoolOrVecExtensions<"bvec3">
+>TNodeType : Symbol(TNodeType, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 113, 10))
+>NumOrBoolVec3Extensions : Symbol(NumOrBoolVec3Extensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 69, 1))
+>BoolOrVecExtensions : Symbol(BoolOrVecExtensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 96, 1))
+
+        : TNodeType extends "vec4"
+>TNodeType : Symbol(TNodeType, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 113, 10))
+
+            ? NumOrBoolVec4Extensions<"float"> & Vec4Extensions & NumVec4Extensions<"float"> & FloatVecExtensions<"vec4"> & FloatOrVecExtensions<"vec4">
+>NumOrBoolVec4Extensions : Symbol(NumOrBoolVec4Extensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 72, 1))
+>Vec4Extensions : Symbol(Vec4Extensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 81, 1))
+>NumVec4Extensions : Symbol(NumVec4Extensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 63, 1))
+>FloatVecExtensions : Symbol(FloatVecExtensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 87, 1))
+>FloatOrVecExtensions : Symbol(FloatOrVecExtensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 90, 1))
+
+        : TNodeType extends "ivec4"
+>TNodeType : Symbol(TNodeType, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 113, 10))
+
+            ? NumOrBoolVec4Extensions<"int"> & NumVec4Extensions<"int"> & IntOrVecExtensions<"ivec4">
+>NumOrBoolVec4Extensions : Symbol(NumOrBoolVec4Extensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 72, 1))
+>NumVec4Extensions : Symbol(NumVec4Extensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 63, 1))
+>IntOrVecExtensions : Symbol(IntOrVecExtensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 93, 1))
+
+        : TNodeType extends "uvec4"
+>TNodeType : Symbol(TNodeType, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 113, 10))
+
+            ? NumOrBoolVec4Extensions<"uint"> & NumVec4Extensions<"uint"> & IntOrVecExtensions<"uvec4">
+>NumOrBoolVec4Extensions : Symbol(NumOrBoolVec4Extensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 72, 1))
+>NumVec4Extensions : Symbol(NumVec4Extensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 63, 1))
+>IntOrVecExtensions : Symbol(IntOrVecExtensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 93, 1))
+
+        : TNodeType extends "bvec4" ? NumOrBoolVec4Extensions<"bool"> & BoolOrVecExtensions<"bvec4">
+>TNodeType : Symbol(TNodeType, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 113, 10))
+>NumOrBoolVec4Extensions : Symbol(NumOrBoolVec4Extensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 72, 1))
+>BoolOrVecExtensions : Symbol(BoolOrVecExtensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 96, 1))
+
+        : TNodeType extends "color" ? ColorExtensions
+>TNodeType : Symbol(TNodeType, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 113, 10))
+>ColorExtensions : Symbol(ColorExtensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 84, 1))
+
+        : TNodeType extends "mat2" ? Mat2Extensions & MatExtensions<"mat2">
+>TNodeType : Symbol(TNodeType, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 113, 10))
+>Mat2Extensions : Symbol(Mat2Extensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 99, 1))
+>MatExtensions : Symbol(MatExtensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 108, 1))
+
+        : TNodeType extends "mat3" ? Mat3Extensions & MatExtensions<"mat3">
+>TNodeType : Symbol(TNodeType, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 113, 10))
+>Mat3Extensions : Symbol(Mat3Extensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 102, 1))
+>MatExtensions : Symbol(MatExtensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 108, 1))
+
+        : TNodeType extends "mat4" ? Mat4Extensions & MatExtensions<"mat4">
+>TNodeType : Symbol(TNodeType, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 113, 10))
+>Mat4Extensions : Symbol(Mat4Extensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 105, 1))
+>MatExtensions : Symbol(MatExtensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 108, 1))
+
+        : {});
+
+interface AddSubMulDivNumberVec<TNum extends NumType> {
+>AddSubMulDivNumberVec : Symbol(AddSubMulDivNumberVec, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 148, 14))
+>TNum : Symbol(TNum, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 150, 32))
+>NumType : Symbol(NumType, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 0, 0))
+
+    (a: Vec2OrLessOrNumber<TNum>, b: Vec2OrLessOrNumber<TNum>, ...params: Vec2OrLessOrNumber<TNum>[]): Node<NumberToVec2<TNum>>;
+>a : Symbol(a, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 151, 5))
+>Vec2OrLessOrNumber : Symbol(Vec2OrLessOrNumber, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 28, 56))
+>TNum : Symbol(TNum, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 150, 32))
+>b : Symbol(b, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 151, 33))
+>Vec2OrLessOrNumber : Symbol(Vec2OrLessOrNumber, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 28, 56))
+>TNum : Symbol(TNum, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 150, 32))
+>params : Symbol(params, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 151, 62))
+>Vec2OrLessOrNumber : Symbol(Vec2OrLessOrNumber, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 28, 56))
+>TNum : Symbol(TNum, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 150, 32))
+>Node : Symbol(Node, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 111, 1))
+>NumberToVec2 : Symbol(NumberToVec2, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 24, 1))
+>TNum : Symbol(TNum, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 150, 32))
+}
+
+interface AddSubMulDivNumberVecNumExtensions<TNum extends NumType> {
+>AddSubMulDivNumberVecNumExtensions : Symbol(AddSubMulDivNumberVecNumExtensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 152, 1))
+>TNum : Symbol(TNum, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 154, 45))
+>NumType : Symbol(NumType, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 0, 0))
+
+    (b: Vec2OrLessOrNumber<TNum>, ...params: Vec2OrLessOrNumber<TNum>[]): Node<NumberToVec2<TNum>>;
+>b : Symbol(b, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 155, 5))
+>Vec2OrLessOrNumber : Symbol(Vec2OrLessOrNumber, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 28, 56))
+>TNum : Symbol(TNum, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 154, 45))
+>params : Symbol(params, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 155, 33))
+>Vec2OrLessOrNumber : Symbol(Vec2OrLessOrNumber, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 28, 56))
+>TNum : Symbol(TNum, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 154, 45))
+>Node : Symbol(Node, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 111, 1))
+>NumberToVec2 : Symbol(NumberToVec2, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 24, 1))
+>TNum : Symbol(TNum, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 154, 45))
+}
+
+interface AddSubMulDivNumberVecVec2Extensions<TNum extends NumType> {
+>AddSubMulDivNumberVecVec2Extensions : Symbol(AddSubMulDivNumberVecVec2Extensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 156, 1))
+>TNum : Symbol(TNum, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 158, 46))
+>NumType : Symbol(NumType, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 0, 0))
+
+    (b: Vec2OrLessOrNumber<TNum>, ...params: Vec2OrLessOrNumber<TNum>[]): Node<NumberToVec2<TNum>>;
+>b : Symbol(b, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 159, 5))
+>Vec2OrLessOrNumber : Symbol(Vec2OrLessOrNumber, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 28, 56))
+>TNum : Symbol(TNum, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 158, 46))
+>params : Symbol(params, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 159, 33))
+>Vec2OrLessOrNumber : Symbol(Vec2OrLessOrNumber, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 28, 56))
+>TNum : Symbol(TNum, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 158, 46))
+>Node : Symbol(Node, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 111, 1))
+>NumberToVec2 : Symbol(NumberToVec2, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 24, 1))
+>TNum : Symbol(TNum, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 158, 46))
+}
+
+interface Div extends AddSubMulDivNumberVec<"float">, AddSubMulDivNumberVec<"int">, AddSubMulDivNumberVec<"uint"> {
+>Div : Symbol(Div, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 160, 1))
+>AddSubMulDivNumberVec : Symbol(AddSubMulDivNumberVec, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 148, 14))
+>AddSubMulDivNumberVec : Symbol(AddSubMulDivNumberVec, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 148, 14))
+>AddSubMulDivNumberVec : Symbol(AddSubMulDivNumberVec, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 148, 14))
+}
+
+declare const div: Div;
+>div : Symbol(div, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 165, 13))
+>Div : Symbol(Div, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 160, 1))
+
+interface NumExtensions<TNum extends NumType> {
+>NumExtensions : Symbol(NumExtensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 48, 1), Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 165, 23))
+>TNum : Symbol(TNum, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 50, 24), Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 167, 24))
+>NumType : Symbol(NumType, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 0, 0))
+
+    div: AddSubMulDivNumberVecNumExtensions<TNum>;
+>div : Symbol(NumExtensions.div, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 167, 47))
+>AddSubMulDivNumberVecNumExtensions : Symbol(AddSubMulDivNumberVecNumExtensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 152, 1))
+>TNum : Symbol(TNum, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 50, 24), Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 167, 24))
+}
+
+interface NumVec2Extensions<TNum extends NumType> {
+>NumVec2Extensions : Symbol(NumVec2Extensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 57, 1), Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 169, 1))
+>TNum : Symbol(TNum, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 59, 28), Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 171, 28))
+>NumType : Symbol(NumType, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 0, 0))
+
+    div: AddSubMulDivNumberVecVec2Extensions<TNum>;
+>div : Symbol(NumVec2Extensions.div, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 171, 51))
+>AddSubMulDivNumberVecVec2Extensions : Symbol(AddSubMulDivNumberVecVec2Extensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 156, 1))
+>TNum : Symbol(TNum, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 59, 28), Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 171, 28))
+}
+
+declare class ContextNodeInterface<TNodeType> extends NodeClass {
+>ContextNodeInterface : Symbol(ContextNodeInterface, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 173, 1))
+>TNodeType : Symbol(TNodeType, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 175, 35))
+>NodeClass : Symbol(NodeClass, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 30, 88))
+
+    node: Node<TNodeType> | null;
+>node : Symbol(ContextNodeInterface.node, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 175, 65))
+>Node : Symbol(Node, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 111, 1))
+>TNodeType : Symbol(TNodeType, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 175, 35))
+}
+
+type ContextNode<TNodeType> = ContextNodeInterface<TNodeType>;
+>ContextNode : Symbol(ContextNode, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 177, 1))
+>TNodeType : Symbol(TNodeType, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 179, 17))
+>ContextNodeInterface : Symbol(ContextNodeInterface, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 173, 1))
+>TNodeType : Symbol(TNodeType, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 179, 17))
+
+interface NodeExtensions<TNodeType> {
+>NodeExtensions : Symbol(NodeExtensions, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 33, 1), Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 179, 62))
+>TNodeType : Symbol(TNodeType, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 35, 25), Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 181, 25))
+
+    context: (context?: unknown) => ContextNode<TNodeType>;
+>context : Symbol(NodeExtensions.context, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 181, 37))
+>context : Symbol(context, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 182, 14))
+>ContextNode : Symbol(ContextNode, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 177, 1))
+>TNodeType : Symbol(TNodeType, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 35, 25), Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 181, 25))
+}
+
+declare const uv: () => Node<"vec2">;
+>uv : Symbol(uv, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 185, 13))
+>Node : Symbol(Node, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 111, 1))
+
+declare const vec2: () => Node<"vec2">;
+>vec2 : Symbol(vec2, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 187, 13))
+>Node : Symbol(Node, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 111, 1))
+
+export const x = uv().div(vec2());
+>x : Symbol(x, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 189, 12))
+>uv().div : Symbol(NumVec2Extensions.div, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 171, 51))
+>uv : Symbol(uv, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 185, 13))
+>div : Symbol(NumVec2Extensions.div, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 171, 51))
+>vec2 : Symbol(vec2, Decl(effectiveConstraintChaseDuringVarianceMeasurement.ts, 187, 13))
+
