@@ -73,7 +73,7 @@ class B {
 class C extends B {
     forOfProperty() {
         const _super = Object.create(null, {
-            x: { get: () => super.x }
+            x: { get: () => super.x, set: v => super.x = v }
         });
         return __awaiter(this, void 0, void 0, function* () {
             for (_super.x of [1])
@@ -82,7 +82,7 @@ class C extends B {
     }
     forInProperty() {
         const _super = Object.create(null, {
-            x: { get: () => super.x }
+            x: { get: () => super.x, set: v => super.x = v }
         });
         return __awaiter(this, void 0, void 0, function* () {
             for (_super.x in { k: 0 })
@@ -90,22 +90,28 @@ class C extends B {
         });
     }
     forOfElement() {
-        const _superIndex = name => super[name];
+        const _superIndex = (function (geti, seti) {
+            const cache = Object.create(null);
+            return name => cache[name] || (cache[name] = { get value() { return geti(name); }, set value(v) { seti(name, v); } });
+        })(name => super[name], (name, value) => super[name] = value);
         return __awaiter(this, void 0, void 0, function* () {
-            for (_superIndex("x") of [1])
+            for (_superIndex("x").value of [1])
                 ;
         });
     }
     forInElement() {
-        const _superIndex = name => super[name];
+        const _superIndex = (function (geti, seti) {
+            const cache = Object.create(null);
+            return name => cache[name] || (cache[name] = { get value() { return geti(name); }, set value(v) { seti(name, v); } });
+        })(name => super[name], (name, value) => super[name] = value);
         return __awaiter(this, void 0, void 0, function* () {
-            for (_superIndex("x") in { k: 0 })
+            for (_superIndex("x").value in { k: 0 })
                 ;
         });
     }
     forOfParenthesized() {
         const _super = Object.create(null, {
-            x: { get: () => super.x }
+            x: { get: () => super.x, set: v => super.x = v }
         });
         return __awaiter(this, void 0, void 0, function* () {
             for ((_super.x) of [1])
@@ -114,7 +120,7 @@ class C extends B {
     }
     forOfArrayPattern() {
         const _super = Object.create(null, {
-            x: { get: () => super.x }
+            x: { get: () => super.x, set: v => super.x = v }
         });
         return __awaiter(this, void 0, void 0, function* () {
             for ([_super.x] of [[1]])
@@ -123,7 +129,7 @@ class C extends B {
     }
     forOfObjectPattern() {
         const _super = Object.create(null, {
-            x: { get: () => super.x }
+            x: { get: () => super.x, set: v => super.x = v }
         });
         return __awaiter(this, void 0, void 0, function* () {
             for ({ a: _super.x } of [{ a: 1 }])
@@ -132,7 +138,7 @@ class C extends B {
     }
     forInAsyncArrow() {
         const _super = Object.create(null, {
-            x: { get: () => super.x }
+            x: { get: () => super.x, set: v => super.x = v }
         });
         return __awaiter(this, void 0, void 0, function* () {
             return () => __awaiter(this, void 0, void 0, function* () { for (_super.x in { k: 0 })
@@ -141,7 +147,7 @@ class C extends B {
     }
     forOfAsyncGenerator() {
         const _super = Object.create(null, {
-            x: { get: () => super.x }
+            x: { get: () => super.x, set: v => super.x = v }
         });
         return __asyncGenerator(this, arguments, function* forOfAsyncGenerator_1() {
             for (_super.x of [1])
@@ -149,15 +155,18 @@ class C extends B {
         });
     }
     forInElementAsyncGenerator() {
-        const _superIndex = name => super[name];
+        const _superIndex = (function (geti, seti) {
+            const cache = Object.create(null);
+            return name => cache[name] || (cache[name] = { get value() { return geti(name); }, set value(v) { seti(name, v); } });
+        })(name => super[name], (name, value) => super[name] = value);
         return __asyncGenerator(this, arguments, function* forInElementAsyncGenerator_1() {
-            for (_superIndex("x") in { k: 0 })
+            for (_superIndex("x").value in { k: 0 })
                 ;
         });
     }
     static forOfStatic() {
         const _super = Object.create(null, {
-            x: { get: () => super.x }
+            x: { get: () => super.x, set: v => super.x = v }
         });
         return __awaiter(this, void 0, void 0, function* () {
             for (_super.x of [1])

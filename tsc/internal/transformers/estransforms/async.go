@@ -164,6 +164,9 @@ func (tx *asyncTransformer) visit(node *ast.Node) *ast.Node {
 
 func (tx *asyncTransformer) visitAsyncBodyNode(node *ast.Node) *ast.Node {
 	if isNodeWithPossibleHoistedDeclaration(node) {
+		// These statements bypass `visit`, so their own super accesses are recorded here:
+		// the initializer of a `for-in` or `for-of` statement is an assignment target.
+		tx.trackSuperAccess(node)
 		switch node.Kind {
 		case ast.KindVariableStatement:
 			return tx.visitVariableStatementInAsyncBody(node)

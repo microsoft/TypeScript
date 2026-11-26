@@ -105,7 +105,7 @@ class C extends B {
     }
     forOfAsyncGenerator() {
         const _super = Object.create(null, {
-            x: { get: () => super.x }
+            x: { get: () => super.x, set: v => super.x = v }
         });
         return __asyncGenerator(this, arguments, function* forOfAsyncGenerator_1() {
             for (_super.x of [1])
@@ -113,9 +113,12 @@ class C extends B {
         });
     }
     forInElementAsyncGenerator() {
-        const _superIndex = name => super[name];
+        const _superIndex = (function (geti, seti) {
+            const cache = Object.create(null);
+            return name => cache[name] || (cache[name] = { get value() { return geti(name); }, set value(v) { seti(name, v); } });
+        })(name => super[name], (name, value) => super[name] = value);
         return __asyncGenerator(this, arguments, function* forInElementAsyncGenerator_1() {
-            for (_superIndex("x") in { k: 0 })
+            for (_superIndex("x").value in { k: 0 })
                 ;
         });
     }
