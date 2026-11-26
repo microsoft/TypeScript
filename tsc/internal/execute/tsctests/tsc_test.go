@@ -5306,6 +5306,32 @@ func TestGenerateTrace(t *testing.T) {
 			commandLineArgs: []string{"--generateTrace", "/home/src/workspaces/project/trace", "--singleThreaded"},
 		},
 		{
+			// Display text is only computed for anonymous object types and literal types. Printing other types,
+			// such as a template literal type over a deferred conditional type, makes the checker resolve types
+			// that checking never needed.
+			subScenario: "generateTrace computes display text only for anonymous and literal types",
+			files: FileMap{
+				"/home/src/workspaces/project/tsconfig.json": stringtestutil.Dedent(`
+				{
+					"compilerOptions": {
+						"strict": true,
+						"noEmit": true
+					}
+				}`),
+				"/home/src/workspaces/project/a.ts": stringtestutil.Dedent(`
+				type Unwrap<T> = T extends infer U & { readonly brand: unknown } ? U : T;
+				export type Absolute<N extends number | bigint> = AbsoluteWorker<N extends object ? Unwrap<N> : N>;
+				type AbsoluteWorker<N extends number | bigint> = N extends bigint
+					? ` + "`${N}` extends `-${infer Magnitude extends bigint}`" + ` ? Magnitude : N
+					: ` + "`${N}` extends `-${infer Magnitude extends number}`" + ` ? Magnitude : N;
+				export type Result = Absolute<-5>;
+				export const literal = "text";
+				export const anonymous = { a: 1 };
+				`),
+			},
+			commandLineArgs: []string{"--generateTrace", "/home/src/workspaces/project/trace", "--singleThreaded"},
+		},
+		{
 			// Type ids are creation order. Each part of this project makes the checker create types while it
 			// iterates a symbol table with more than eight entries (whose iteration order varies from run to run):
 			// the infer type parameters of a conditional type in a declaration file, a namespace import whose
