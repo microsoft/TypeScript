@@ -430,6 +430,7 @@ func (b *NodeBuilderImpl) pseudoTypeEquivalentToType(t *pseudochecker.PseudoType
 		if len(pt.Elements) != targetDeclCount {
 			return false
 		}
+		isConst := len(pt.Elements) > 0 && b.ch.isConstContext(pt.Elements[0].Name.Parent.Parent)
 		for _, e := range pt.Elements {
 			var targetProp *ast.Symbol
 			elemSymbol := e.Name.Parent.Symbol()
@@ -446,6 +447,17 @@ func (b *NodeBuilderImpl) pseudoTypeEquivalentToType(t *pseudochecker.PseudoType
 					}
 				}
 				if targetProp == nil {
+					if reportErrors {
+						b.ctx.tracker.ReportInferenceFallback(e.Name.Parent)
+					}
+					return false
+				}
+			}
+			if e.Kind == pseudochecker.PseudoObjectElementKindPropertyAssignment || e.Kind == pseudochecker.PseudoObjectElementKindMethod {
+				// Const inference can mark symbols readonly even when the resolved contextual type is no longer const.
+				// Only reuse syntax if it will preserve the checker's readonly state.
+				isReadonly := isConst || e.Kind == pseudochecker.PseudoObjectElementKindPropertyAssignment && e.AsPseudoPropertyAssignment().Readonly
+				if isReadonly != b.ch.isReadonlySymbol(targetProp) {
 					if reportErrors {
 						b.ctx.tracker.ReportInferenceFallback(e.Name.Parent)
 					}
