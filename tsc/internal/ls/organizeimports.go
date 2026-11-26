@@ -3,6 +3,7 @@ package ls
 import (
 	"context"
 	"slices"
+	"strconv"
 	"strings"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
@@ -371,12 +372,10 @@ func getImportAttributesKey(attributes *ast.ImportAttributesNode) string {
 
 	for _, attrNode := range attrNodes {
 		attr := attrNode.AsImportAttribute()
-		key.WriteString(attr.Name().Text())
+		key.WriteString(strconv.Quote(attr.Name().Text()))
 		key.WriteString(":")
 		if ast.IsStringLiteralLike(attr.Value.AsNode()) {
-			key.WriteString(`"`)
-			key.WriteString(attr.Value.Text())
-			key.WriteString(`"`)
+			key.WriteString(strconv.Quote(attr.Value.Text()))
 		} else {
 			key.WriteString(attr.Value.AsNode().Text())
 		}

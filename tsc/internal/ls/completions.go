@@ -2142,13 +2142,14 @@ func completionNameForLiteral(
 
 func getInsertTextAndReplacementSpanForImportCompletion(fix *autoimport.Fix, importKind lsproto.ImportKind, importStatementCompletion *importStatementCompletionInfo, useSemicolons bool, file *ast.SourceFile, preferences lsutil.UserPreferences, isSnippet bool) (insertText string, replacementSpan *lsproto.Range) {
 	quotedModuleSpecifier := quote(file, preferences, fix.ModuleSpecifier)
+	name := fix.Name
 	if isSnippet {
-		quotedModuleSpecifier = escapeSnippetText(strings.ReplaceAll(quotedModuleSpecifier, `\`, `\\`))
+		quotedModuleSpecifier = escapeSnippetText(quotedModuleSpecifier)
+		name = escapeSnippetText(name)
 	}
 	tabStop := core.IfElse(isSnippet, "$1", "")
 	suffix := core.IfElse(useSemicolons, ";", "")
 	topLevelTypeOnlyText := core.IfElse(importStatementCompletion.isTopLevelTypeOnly, " "+scanner.TokenToString(ast.KindTypeKeyword)+" ", " ")
-	name := escapeSnippetText(fix.Name)
 	replacementSpan = importStatementCompletion.replacementSpan
 
 	switch importKind {
@@ -2214,7 +2215,7 @@ func (l *LanguageService) createCompletionItem(
 	var labelDetails *lsproto.CompletionItemLabelDetails
 	preferences := l.UserPreferences()
 	if data.completionKind == CompletionKindString {
-		escaped := printer.EscapeString(name, stringCompletionQuoteChar(contextToken))
+		escaped := escapeStringForNode(name, stringCompletionQuoteChar(contextToken), contextToken)
 		if escaped != name {
 			insertText = escaped
 		}
@@ -2492,13 +2493,12 @@ type memberCompletionEntry struct {
 }
 
 func (l *LanguageService) getEntryForObjectLiteralMethodCompletion(ctx context.Context, typeChecker *checker.Checker, symbol *ast.Symbol, enclosingDeclaration *ast.Node, file *ast.SourceFile) *symbolOriginInfoObjectLiteralMethod {
+	isSnippet := clientSupportsItemSnippet(ctx)
 	snippetPrinter := createSnippetPrinter(printer.PrinterOptions{
 		RemoveComments: true,
 		NewLine:        core.GetNewLineKind(l.FormatOptions().NewLineCharacter),
 		Target:         l.GetProgram().Options().GetEmitScriptTarget(),
-	}, nil /*emitContext*/)
-
-	isSnippet := clientSupportsItemSnippet(ctx)
+	}, nil /*emitContext*/, isSnippet)
 	method := l.createObjectLiteralMethod(snippetPrinter, typeChecker, symbol, enclosingDeclaration, file, isSnippet)
 	if method == nil {
 		return nil
@@ -2747,7 +2747,7 @@ func (l *LanguageService) getEntryForMemberCompletion(ctx context.Context, typeC
 		RemoveComments: true,
 		NewLine:        core.GetNewLineKind(newLine),
 		Target:         l.GetProgram().Options().GetEmitScriptTarget(),
-	}, changeTracker.EmitContext)
+	}, changeTracker.EmitContext, isSnippet)
 
 	var decoratedNode *ast.Node
 	if len(presentModifiers.decorators) > 0 {
@@ -3750,8 +3750,10 @@ func areIntersectedTypesAvoidingStringReduction(typeChecker *checker.Checker, t1
 	return t1.IsString() && typeChecker.IsEmptyAnonymousObjectType(t2)
 }
 
+var snippetTextEscaper = strings.NewReplacer(`\`, `\\`, `$`, `\$`)
+
 func escapeSnippetText(text string) string {
-	return strings.ReplaceAll(text, `$`, `\$`)
+	return snippetTextEscaper.Replace(text)
 }
 
 func isNamedImportsOrExports(node *ast.Node) bool {
@@ -6348,7 +6350,9 @@ func getJSDocParamAnnotation(
 							// Target: options.Target,
 						}, printer.PrintHandlers{}, *emitContext)
 						(*emitContext).SetEmitFlags(typeNode, printer.EFSingleLine)
-						t = p.Emit(typeNode, file)
+						if typeText := p.Emit(typeNode, file); isSafeInJSDocTag(typeText) {
+							t = typeText
+						}
 					}
 				}
 			}
@@ -6377,9 +6381,15 @@ func getJSDocParamAnnotation(
 	}
 }
 
+// isSafeInJSDocTag reports whether text can be written into a single-line
+// JSDoc tag without ending the comment or breaking the line.
+func isSafeInJSDocTag(text string) bool {
+	return !strings.Contains(text, "*/") && !strings.ContainsAny(text, "\r\n\u2028\u2029")
+}
+
 func getJSDocParamNameWithInitializer(paramName string, initializer *ast.Expression) string {
 	initializerText := strings.TrimSpace(scanner.GetTextOfNode(initializer))
-	if strings.Contains(initializerText, "\n") || len(initializerText) > 80 {
+	if !isSafeInJSDocTag(initializerText) || len(initializerText) > 80 {
 		return fmt.Sprintf("[%s]", paramName)
 	}
 	return fmt.Sprintf("[%s=%s]", paramName, initializerText)
@@ -6521,7 +6531,7 @@ func jsDocParamElementWorker(
 		} else {
 			propertyName = element.Name().Text()
 		}
-		if propertyName == "" {
+		if propertyName == "" || !isSafeInJSDocTag(propertyName) {
 			return nil
 		}
 		paramName := fmt.Sprintf("%s.%s", path, propertyName)
@@ -6542,7 +6552,7 @@ func jsDocParamElementWorker(
 		}
 	} else if element.PropertyName() != nil { // `{ b: {...} }` or `{ b: [...] }`
 		propertyName, _ := ast.TryGetTextOfPropertyName(element.PropertyName())
-		if propertyName == "" {
+		if propertyName == "" || !isSafeInJSDocTag(propertyName) {
 			return nil
 		}
 		return jsDocParamPatternWorker(
@@ -6701,7 +6711,7 @@ func (l *LanguageService) getExhaustiveCaseSnippets(
 		printer := createSnippetPrinter(printer.PrinterOptions{
 			RemoveComments: true,
 			NewLine:        core.GetNewLineKind(newLineChar),
-		}, nil /*emitContext*/)
+		}, nil /*emitContext*/, true /*escapeText*/)
 		printNode := func(node *ast.Node) string { return printer.printAndFormatNode(ctx, node, file) }
 		insertText := strings.Join(core.MapIndex(newClauses, func(clause *ast.Node, i int) string {
 			if clientSupportsItemSnippet(ctx) {
@@ -6863,7 +6873,9 @@ func (p *snippetPrinter) printAndFormatNodeWithSettings(ctx context.Context, nod
 	return core.ApplyBulkEdits(syntheticFile.Text(), allChanges)
 }
 
-func createSnippetPrinter(options printer.PrinterOptions, emitContext *printer.EmitContext) *snippetPrinter {
+// createSnippetPrinter creates a printer whose output is snippet-escaped when
+// escapeText is set. Tab stops from snippet elements are written either way.
+func createSnippetPrinter(options printer.PrinterOptions, emitContext *printer.EmitContext, escapeText bool) *snippetPrinter {
 	if emitContext == nil {
 		emitContext = printer.NewEmitContext()
 	}
@@ -6871,6 +6883,7 @@ func createSnippetPrinter(options printer.PrinterOptions, emitContext *printer.E
 	printer := printer.NewPrinter(options, baseWriter.GetPrintHandlers(), emitContext)
 	writer := &snippetEmitTextWriter{
 		ChangeTrackerWriter: baseWriter,
+		escapeText:          escapeText,
 	}
 	return &snippetPrinter{
 		baseWriter:  baseWriter,
@@ -6884,7 +6897,8 @@ func createSnippetPrinter(options printer.PrinterOptions, emitContext *printer.E
 // Override base writer methods to perform snippet escaping.
 type snippetEmitTextWriter struct {
 	*printer.ChangeTrackerWriter
-	escapes []core.TextChange
+	escapeText bool
+	escapes    []core.TextChange
 }
 
 func (w *snippetEmitTextWriter) Write(s string) {
@@ -6916,6 +6930,10 @@ func (w *snippetEmitTextWriter) WriteSymbol(text string, symbol *ast.Symbol) {
 // generate a set of changes that can be applied to the unescaped text
 // to escape it post-formatting.
 func (w *snippetEmitTextWriter) escapingWrite(s string, write func()) {
+	if !w.escapeText {
+		write()
+		return
+	}
 	escaped := escapeSnippetText(s)
 	if escaped != s {
 		start := w.GetTextPos()

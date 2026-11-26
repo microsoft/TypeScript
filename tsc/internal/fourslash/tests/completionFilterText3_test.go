@@ -151,3 +151,31 @@ if (true) {
 		},
 	})
 }
+
+func TestCompletionPropertyAccessLineSeparator(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = "declare const o: { \"a\\u2028b\": number };\no[|.|]/*1*/"
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyCompletions(t, "1", &fourslash.CompletionsExpectedList{
+		IsIncomplete: false,
+		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
+			CommitCharacters: &DefaultCommitCharacters,
+		},
+		Items: &fourslash.CompletionsExpectedItems{
+			Includes: []fourslash.CompletionsExpectedItem{
+				&lsproto.CompletionItem{
+					Label:      "a\u2028b",
+					InsertText: new(`["a\u2028b"]`),
+					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
+						TextEdit: &lsproto.TextEdit{
+							NewText: `["a\u2028b"]`,
+							Range:   f.Ranges()[0].LSRange,
+						},
+					},
+				},
+			},
+		},
+	})
+}

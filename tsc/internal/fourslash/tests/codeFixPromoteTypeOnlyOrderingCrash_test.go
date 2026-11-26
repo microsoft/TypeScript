@@ -38,3 +38,23 @@ let x: AAA = new BBB()`
 let x: AAA = new BBB()`,
 	}, nil /*preferences*/)
 }
+
+func TestCodeFixPromoteTypeOnlyStringName(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @module: esnext
+// @Filename: /m.ts
+class K {}
+export { K as "a\\u0062" };
+export const b = 1;
+// @Filename: /a.ts
+import { b, type "a\\u0062" as A } from "./m";
+b;
+new A();`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.GoToFile(t, "/a.ts")
+	f.VerifyImportFixAtPosition(t, []string{`import { "a\\u0062" as A, b } from "./m";
+b;
+new A();`}, nil /*preferences*/)
+}

@@ -180,7 +180,7 @@ Config File Names::
       "line": 0,
       "character": 13
     },
-    "newName": "?"
+    "newName": "RENAME_PLACEHOLDER"
   }
 }
 

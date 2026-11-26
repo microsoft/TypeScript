@@ -71,3 +71,16 @@ const x = <p>
 		"9": new("</div>"),
 	})
 }
+
+func TestAutoCloseTagEscapedName(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @noLib: true
+// @Filename: /a.tsx
+const x = <div\u0024bar>/*0*/;`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyJsxClosingTag(t, map[string]*string{
+		"0": new(`</div\\u0024bar>`),
+	})
+}

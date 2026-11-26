@@ -1,0 +1,52 @@
+//// [tests/cases/compiler/declarationEmitNonIdentifierExportNameNamespaceImport.ts] ////
+
+=== /dep.ts ===
+interface A { x: number }
+>x : number
+
+interface C { y: number }
+>y : number
+
+export { A as "a b", C as "a c", C as Ok };
+>A : any
+>"a b" : any
+>C : any
+>"a c" : any
+>C : any
+>Ok : any
+
+=== /mid.ts ===
+import { "a b" as B, "a c" as C } from "./dep";
+>B : any
+>C : any
+
+export declare function f(): B;
+>f : () => B
+
+export declare function g(): C;
+>g : () => C
+
+=== /main1.ts ===
+import * as dep from "./dep";
+>dep : typeof dep
+
+import { f } from "./mid";
+>f : () => A
+
+export const v = f();
+>v : A
+>f() : A
+>f : () => A
+
+=== /main2.ts ===
+import * as dep from "./dep";
+>dep : typeof dep
+
+import { g } from "./mid";
+>g : () => dep.Ok
+
+export const w = g();
+>w : dep.Ok
+>g() : dep.Ok
+>g : () => dep.Ok
+

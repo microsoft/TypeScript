@@ -1,0 +1,20 @@
+main.ts(2,14): error TS4023: Exported variable 'v' has or is using name 'A' from external module "dep" but cannot be named.
+
+
+==== dep.ts (0 errors) ====
+    interface A { x: number }
+    interface C { y: number }
+    export { A as "a b", C as "a c", C as Ok };
+    
+==== mid.ts (0 errors) ====
+    import { "a b" as B, "a c" as C } from "./dep";
+    export declare function f(): B;
+    export declare function g(): C;
+    
+==== main.ts (1 errors) ====
+    import { f, g } from "./mid";
+    export const v = f();
+                 ~
+!!! error TS4023: Exported variable 'v' has or is using name 'A' from external module "dep" but cannot be named.
+    export const w = g();
+    

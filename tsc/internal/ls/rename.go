@@ -16,6 +16,8 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/module"
+	"github.com/microsoft/TypeScript/tsc/internal/printer"
+	"github.com/microsoft/TypeScript/tsc/internal/scanner"
 	"github.com/microsoft/TypeScript/tsc/internal/spanmap"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
@@ -110,18 +112,40 @@ func (l *LanguageService) symbolAndEntriesToRename(ctx context.Context, params *
 		return lsproto.WorkspaceEditOrNull{}, nil
 	}
 
-	entries := core.FlatMap(data.SymbolsAndEntries, func(s *SymbolAndEntries) []*ReferenceEntry { return s.references })
 	var mappedEdits []mappedRenameEdit
 	ch, done := program.GetTypeChecker(ctx)
 	defer done()
 
 	quotePreference := lsutil.GetQuotePreference(sourceFile, l.UserPreferences())
 	useAliasesForRename := l.UserPreferences().ProvidePrefixAndSuffixTextForRename.IsTrueOrUnknown()
+	renameToNonIdentifier := useAliasesForRename && !scanner.IsIdentifierText(params.NewName, core.LanguageVariantStandard)
+
+	var entries []*ReferenceEntry
+	for _, symbolAndEntries := range data.SymbolsAndEntries {
+		// A non-identifier name cannot be bound as a local, so `import { foo }` becomes
+		// `import { "new-name" as foo }` and uses of the local `foo` are left alone.
+		if renameToNonIdentifier && symbolAndEntries.definition != nil && symbolAndEntries.definition.symbol != nil {
+			if spec := ast.GetDeclarationOfKind(symbolAndEntries.definition.symbol, ast.KindImportSpecifier); spec != nil && spec.PropertyName() == nil && !isRenamingImportSpecifierLocal(data.OriginalNode, spec, ch) {
+				for _, entry := range symbolAndEntries.references {
+					if entry.kind != entryKindRange && entry.node != nil && ast.GetReparsedNodeForNode(entry.node) == spec.Name() {
+						entries = append(entries, entry)
+					}
+				}
+				continue
+			}
+		}
+		entries = append(entries, symbolAndEntries.references...)
+	}
 
 	for _, entry := range entries {
 		uri := l.getFileNameOfEntry(entry)
 		if l.UserPreferences().AllowRenameOfImportPath != core.TSTrue && entry.node != nil && ast.IsStringLiteralLike(entry.node) && ast.TryGetImportFromModuleSpecifier(entry.node) != nil {
 			continue
+		}
+		var jsxAttributeText string
+		if entry.kind != entryKindRange && entry.node != nil && ast.IsStringLiteral(entry.node) && ast.IsJsxAttribute(entry.node.Parent) {
+			// JSX attribute strings have no escapes, so the edit replaces the whole initializer.
+			jsxAttributeText = l.getJsxAttributeTextForRename(entry, params.NewName)
 		}
 		rng, ok := l.renameEditRange(entry)
 		if !ok {
@@ -129,9 +153,13 @@ func (l *LanguageService) symbolAndEntriesToRename(ctx context.Context, params *
 			// written back to the original text. Skip it and keep renaming the remaining occurrences.
 			continue
 		}
+		newText := jsxAttributeText
+		if newText == "" {
+			newText = l.getTextForRename(data.OriginalNode, entry, params.NewName, ch, quotePreference, useAliasesForRename)
+		}
 		textEdit := &lsproto.TextEdit{
 			Range:   rng,
-			NewText: l.getTextForRename(data.OriginalNode, entry, params.NewName, ch, quotePreference, useAliasesForRename),
+			NewText: newText,
 		}
 		mappedEdits = append(mappedEdits, mappedRenameEdit{uri: uri, edit: textEdit})
 	}
@@ -144,6 +172,22 @@ func (l *LanguageService) symbolAndEntriesToRename(ctx context.Context, params *
 			Changes: &changes,
 		},
 	}, nil
+}
+
+// getJsxAttributeTextForRename returns the text for a renamed JSX attribute string, keeping its
+// quotes when they can contain the new name, and widens the entry's range to the whole string.
+func (l *LanguageService) getJsxAttributeTextForRename(entry *ReferenceEntry, newName string) string {
+	sourceFile := ast.GetSourceFileOfNode(entry.node)
+	start := scanner.GetTokenPosOfNode(entry.node, sourceFile, false /*includeJSDoc*/)
+	textRange := core.NewTextRange(start, entry.node.End())
+	entry.sourceFile = sourceFile
+	entry.textRange = &textRange
+	entry.lspRange = nil
+	quoteChar := sourceFile.Text()[start]
+	if jsxAttributeStringCanContain(newName, quoteChar) {
+		return string(quoteChar) + newName + string(quoteChar)
+	}
+	return jsxAttributeInitializerText(sourceFile, l.UserPreferences(), newName)
 }
 
 // renameEditRange returns the LSP range at which a rename occurrence should be edited. For occurrences in
@@ -380,6 +424,7 @@ func (l *LanguageService) getTextForRename(originalNode *ast.Node, entry *Refere
 		kind := entry.kind
 		parent := node.Parent
 		name := originalNode.Text()
+		propertyText := quoteNonIdentifierName(newText, quotePreference, entry.node)
 		isShorthandAssignment := ast.IsShorthandPropertyAssignment(parent)
 		switch {
 		case isShorthandAssignment || (isObjectBindingElementWithoutPropertyName(parent) && parent.Name() == node && parent.AsBindingElement().DotDotDotToken == nil):
@@ -387,7 +432,7 @@ func (l *LanguageService) getTextForRename(originalNode *ast.Node, entry *Refere
 				return name + ": " + newText
 			}
 			if kind == entryKindSearchedPropertyFoundLocal {
-				return newText + ": " + name
+				return propertyText + ": " + name
 			}
 			// In `const o = { x }; o.x`, symbolAtLocation at `x` in `{ x }` is the property symbol.
 			// For a binding element `const { x } = o;`, symbolAtLocation at `x` is the property symbol.
@@ -396,44 +441,120 @@ func (l *LanguageService) getTextForRename(originalNode *ast.Node, entry *Refere
 				if ast.IsObjectLiteralExpression(grandParent) && ast.IsBinaryExpression(grandParent.Parent) && ast.IsModuleExportsAccessExpression(grandParent.Parent.AsBinaryExpression().Left) {
 					return name + ": " + newText
 				}
-				return newText + ": " + name
+				return propertyText + ": " + name
 			}
 			return name + ": " + newText
 		case ast.IsImportSpecifier(parent) && parent.PropertyName() == nil:
 			// If the original symbol was using this alias, just rename the alias.
-			var originalSymbol *ast.Symbol
-			if ast.IsExportSpecifier(originalNode.Parent) {
-				originalSymbol = ch.GetExportSpecifierLocalTargetSymbol(originalNode.Parent)
-			} else {
-				originalSymbol = ch.GetSymbolAtLocation(originalNode)
-			}
-			if originalSymbol != nil && slices.Contains(originalSymbol.Declarations(), parent) {
+			if isRenamingImportSpecifierLocal(originalNode, parent, ch) {
 				return name + " as " + newText
+			}
+			if propertyText != newText {
+				return propertyText + " as " + name
 			}
 			return newText
 		case ast.IsExportSpecifier(parent) && parent.PropertyName() == nil:
 			// If the symbol for the node is same as declared node symbol use prefix text
-			if originalNode == entry.node || ch.GetSymbolAtLocation(originalNode) == ch.GetSymbolAtLocation(entry.node) {
-				return name + " as " + newText
+			usePrefix := originalNode == entry.node || ch.GetSymbolAtLocation(originalNode) == ch.GetSymbolAtLocation(entry.node)
+			if ast.IsStringLiteralLike(node) {
+				// For `export { "a b" } from "m"`, the edit range covers the literal's contents
+				// between its quotes.
+				sourceFile := ast.GetSourceFileOfNode(node)
+				quoteChar := getStringLiteralQuoteChar(sourceFile, node)
+				quote := func(s string) string {
+					return string(quoteChar) + printer.EscapeString(s, quoteChar) + string(quoteChar)
+				}
+				text := quote(newText) + " as " + quote(name)
+				if usePrefix {
+					text = quote(name) + " as " + quote(newText)
+				}
+				if node.End()-scanner.GetTokenPosOfNode(node, sourceFile, false /*includeJSDoc*/) <= 2 {
+					return text
+				}
+				return text[1 : len(text)-1]
 			}
-			return newText + " as " + name
+			if usePrefix {
+				return name + " as " + propertyText
+			}
+			return propertyText + " as " + name
 		}
+	}
+
+	if entry.kind != entryKindRange && ast.IsStringLiteralLike(entry.node) {
+		sourceFile := ast.GetSourceFileOfNode(entry.node)
+		quoteChar := getStringLiteralQuoteChar(sourceFile, entry.node)
+		escaped := escapeStringForNode(newText, quoteChar, entry.node)
+		// The rename range of an empty string literal includes its quotes.
+		if entry.node.End()-scanner.GetTokenPosOfNode(entry.node, sourceFile, false /*includeJSDoc*/) <= 2 {
+			return string(quoteChar) + escaped + string(quoteChar)
+		}
+		return escaped
 	}
 
 	// If the node is a numerical indexing literal, then add quotes around the property access.
 	if entry.kind != entryKindRange && ast.IsNumericLiteral(entry.node) && ast.IsAccessExpression(entry.node.Parent) {
-		quote := getQuoteFromPreference(quotePreference)
-		return quote + newText + quote
+		quoteChar := getQuoteFromPreference(quotePreference)
+		return string(quoteChar) + escapeStringForNode(newText, quoteChar, entry.node) + string(quoteChar)
+	}
+
+	// A numeric property name, as in `{ 0: x }`, must be quoted when the new name is not an identifier.
+	if entry.kind != entryKindRange && ast.IsNumericLiteral(entry.node) && ast.IsDeclarationName(entry.node) {
+		return quoteNonIdentifierName(newText, quotePreference, entry.node)
+	}
+
+	if entry.kind != entryKindRange && ast.IsIdentifier(entry.node) && isModuleExportNameOfSpecifier(entry.node) {
+		return quoteNonIdentifierName(newText, quotePreference, entry.node)
 	}
 
 	return newText
 }
 
-func getQuoteFromPreference(quotePreference lsutil.QuotePreference) string {
-	if quotePreference == lsutil.QuotePreferenceSingle {
-		return "'"
+func isRenamingImportSpecifierLocal(originalNode *ast.Node, importSpecifier *ast.Node, ch *checker.Checker) bool {
+	var originalSymbol *ast.Symbol
+	if ast.IsExportSpecifier(originalNode.Parent) {
+		originalSymbol = ch.GetExportSpecifierLocalTargetSymbol(originalNode.Parent)
+	} else {
+		originalSymbol = ch.GetSymbolAtLocation(originalNode)
 	}
-	return `"`
+	return originalSymbol != nil && slices.Contains(originalSymbol.Declarations(), importSpecifier)
+}
+
+// isModuleExportNameOfSpecifier reports whether node names a module export, which may be
+// written as a string literal: `a` in `import { a as b }` and `export { b as a }`, and both
+// names in `export { a as b } from "m"`.
+func isModuleExportNameOfSpecifier(node *ast.Node) bool {
+	parent := node.Parent
+	switch {
+	case ast.IsImportSpecifier(parent):
+		return parent.PropertyName() == node
+	case ast.IsExportSpecifier(parent):
+		return parent.Name() == node || parent.Parent.Parent.AsExportDeclaration().ModuleSpecifier != nil
+	case ast.IsNamespaceExport(parent):
+		return true
+	}
+	return false
+}
+
+func quoteNonIdentifierName(name string, quotePreference lsutil.QuotePreference, node *ast.Node) string {
+	if scanner.IsIdentifierText(name, core.LanguageVariantStandard) {
+		return name
+	}
+	quoteChar := getQuoteFromPreference(quotePreference)
+	return string(quoteChar) + escapeStringForNode(name, quoteChar, node) + string(quoteChar)
+}
+
+func escapeStringForNode(s string, quoteChar printer.QuoteChar, node *ast.Node) string {
+	if node.Flags&ast.NodeFlagsJSDoc != 0 {
+		return lsutil.EscapeStringInComment(s, quoteChar)
+	}
+	return printer.EscapeString(s, quoteChar)
+}
+
+func getQuoteFromPreference(quotePreference lsutil.QuotePreference) printer.QuoteChar {
+	if quotePreference == lsutil.QuotePreferenceSingle {
+		return printer.QuoteCharSingleQuote
+	}
+	return printer.QuoteCharDoubleQuote
 }
 
 func getRenameInfoError(ctx context.Context, message *diagnostics.Message) RenameInfo {

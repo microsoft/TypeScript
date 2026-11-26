@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"slices"
 	"strings"
-	"unicode"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/astnav"
@@ -152,7 +151,7 @@ func addImportType(f *Fix, file *ast.SourceFile, preferences lsutil.UserPreferen
 	if quotePreference == lsutil.QuotePreferenceSingle {
 		quoteChar = printer.QuoteCharSingleQuote
 	}
-	importTypePrefix := fmt.Sprintf("import(%c%s%c).", quoteChar, printer.EscapeString(f.ModuleSpecifier, quoteChar), quoteChar)
+	importTypePrefix := fmt.Sprintf("import(%c%s%c).", quoteChar, lsutil.EscapeStringInComment(f.ModuleSpecifier, quoteChar), quoteChar)
 	tracker.InsertText(file, *f.UsagePosition, importTypePrefix)
 	return diagnostics.Change_0_to_1.Localize(locale, f.Name, importTypePrefix+f.Name)
 }
@@ -603,10 +602,9 @@ func (v *View) GetFixes(export *Export, forJSX bool, isValidTypeOnlyUseSite bool
 	addAsTypeOnly := getAddAsTypeOnly(isValidTypeOnlyUseSite, export, v.program.Options())
 
 	name := export.Name()
-	startsWithUpper := unicode.IsUpper(rune(name[0]))
-	if forJSX && !startsWithUpper {
+	if forJSX && scanner.IsIntrinsicJsxName(name) {
 		if export.IsRenameable() {
-			name = fmt.Sprintf("%c%s", unicode.ToUpper(rune(name[0])), name[1:])
+			name = strings.ToUpper(name[:1]) + name[1:]
 		} else {
 			return nil
 		}
@@ -1134,7 +1132,7 @@ func promoteFromTypeOnly(
 					// Create a synthetic specifier with isTypeOnly=false to compute sorted position
 					var propertyName *ast.Node
 					if spec.PropertyName != nil {
-						propertyName = changes.NodeFactory.NewIdentifier(spec.PropertyName.Text()).AsIdentifier().AsNode()
+						propertyName = changes.NodeFactory.DeepCloneNode(spec.PropertyName)
 					}
 					newSpecifier := changes.NodeFactory.NewImportSpecifier(
 						false, // isTypeOnly = false

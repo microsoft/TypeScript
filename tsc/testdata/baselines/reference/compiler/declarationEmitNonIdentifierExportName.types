@@ -1,0 +1,43 @@
+//// [tests/cases/compiler/declarationEmitNonIdentifierExportName.ts] ////
+
+=== dep.ts ===
+interface A { x: number }
+>x : number
+
+interface C { y: number }
+>y : number
+
+export { A as "a b", C as "a c", C as Ok };
+>A : any
+>"a b" : any
+>C : any
+>"a c" : any
+>C : any
+>Ok : any
+
+=== mid.ts ===
+import { "a b" as B, "a c" as C } from "./dep";
+>B : any
+>C : any
+
+export declare function f(): B;
+>f : () => B
+
+export declare function g(): C;
+>g : () => C
+
+=== main.ts ===
+import { f, g } from "./mid";
+>f : () => A
+>g : () => import("./dep.js").Ok
+
+export const v = f();
+>v : A
+>f() : A
+>f : () => A
+
+export const w = g();
+>w : import("./dep").Ok
+>g() : import("./dep").Ok
+>g : () => import("./dep").Ok
+

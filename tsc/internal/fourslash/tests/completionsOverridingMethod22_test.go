@@ -39,7 +39,7 @@ abstract class ExtBase implements ExtShape {
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:               "$returnPromise",
-					TextEdit:            InsertReplaceTextEdit("public \\$returnPromise(id: number): Promise<C> {\n}", f.Ranges()[0].LSRange),
+					TextEdit:            InsertReplaceTextEdit("public $returnPromise(id: number): Promise<C> {\n}", f.Ranges()[0].LSRange),
 					FilterText:          new("$returnPromise"),
 					SortText:            new(string(ls.SortTextLocationPriority)),
 					AdditionalTextEdits: fourslash.AnyTextEdits,

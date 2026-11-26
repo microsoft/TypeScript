@@ -34,3 +34,22 @@ export type G = A | B | C | D | E | F | Y | Z;`,
 		nil,
 	)
 }
+
+func TestOrganizeImportsAttributesWithQuotes(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `import { A } from "./a" with { type: "x\" z:\"y" };
+import { B } from "./a" with { type: "x", z: "y" };
+
+export type C = A | B;`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.VerifyOrganizeImports(t,
+		`import { A } from "./a" with { type: "x\" z:\"y" };
+import { B } from "./a" with { type: "x", z: "y" };
+
+export type C = A | B;`,
+		lsproto.CodeActionKindSourceOrganizeImportsTs,
+		nil,
+	)
+}

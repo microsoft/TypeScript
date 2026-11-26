@@ -3,6 +3,7 @@ package ls
 import (
 	"context"
 	"slices"
+	"strings"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/checker"
@@ -11,8 +12,10 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/debug"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/change"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
+	"github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/modulespecifiers"
+	"github.com/microsoft/TypeScript/tsc/internal/printer"
 	"github.com/microsoft/TypeScript/tsc/internal/scanner"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
@@ -196,7 +199,8 @@ func tryUpdateConfigString(configFile *ast.SourceFile, configDir tspath.RootedDi
 	textRange := core.NewTextRange(scanner.GetTokenPosOfNode(element, configFile, false)+1, element.End()-1)
 	lspRange, fidelity := converters.ToLSPRange(configFile, textRange)
 	debug.Assert(fidelity.IsExact(), "config files are not content-mapped")
-	changeTracker.ReplaceRangeWithText(configFile, lspRange, relativePathFromDirectory(configDir, updated, caseSensitivity).AsString())
+	newText := escapeJSONString(relativePathFromDirectory(configDir, updated, caseSensitivity).AsString(), getStringLiteralQuoteChar(configFile, element))
+	changeTracker.ReplaceRangeWithText(configFile, lspRange, newText)
 	return true
 }
 
@@ -236,14 +240,23 @@ func (l *LanguageService) updateImportsForFileRename(program *compiler.Program, 
 			}
 			updated := l.updateRelativePath(oldToNew, oldFileName, newImportFromPath, tspath.ToModuleSpecifier(ref.FileName))
 			if updated.AsString() != ref.FileName {
-				changeTracker.ReplaceTextRangeWithText(sourceFile, ref.TextRange, updated.AsString())
+				if textRange, newText, ok := getReferencePathEdit(sourceFile, ref, updated.AsString()); ok {
+					changeTracker.ReplaceTextRangeWithText(sourceFile, textRange, newText)
+				}
 			}
 		}
 
 		for _, importStringLiteral := range sourceFile.Imports() {
 			updated := l.getUpdatedImportSpecifier(program, checker, sourceFile, importStringLiteral, oldToNew, movedFiles, newImportFromPath, fileMoved, moduleSpecifierPreferences)
 			if updated != "" && updated != importStringLiteral.Text() {
-				changeTracker.ReplaceTextRangeWithText(sourceFile, createStringTextRange(sourceFile, importStringLiteral), updated)
+				quoteChar := getStringLiteralQuoteChar(sourceFile, importStringLiteral)
+				var newText string
+				if importStringLiteral.Flags&ast.NodeFlagsJSDoc != 0 {
+					newText = lsutil.EscapeStringInComment(updated, quoteChar)
+				} else {
+					newText = printer.EscapeString(updated, quoteChar)
+				}
+				changeTracker.ReplaceTextRangeWithText(sourceFile, createStringTextRange(sourceFile, importStringLiteral), newText)
 			}
 		}
 	}
@@ -356,6 +369,39 @@ func getUpdatedImportSpecifierFromMovedSourceFiles(program *compiler.Program, so
 
 func createStringTextRange(sourceFile *ast.SourceFile, node *ast.LiteralLikeNode) core.TextRange {
 	return core.NewTextRange(scanner.GetTokenPosOfNode(node, sourceFile, false)+1, node.End()-1)
+}
+
+func getStringLiteralQuoteChar(sourceFile *ast.SourceFile, node *ast.LiteralLikeNode) printer.QuoteChar {
+	switch sourceFile.Text()[scanner.GetTokenPosOfNode(node, sourceFile, false)] {
+	case '\'':
+		return printer.QuoteCharSingleQuote
+	case '`':
+		return printer.QuoteCharBacktick
+	default:
+		return printer.QuoteCharDoubleQuote
+	}
+}
+
+// Reference directive paths have no escape syntax. A path containing the
+// directive's quote is written with the other quote character instead, and a
+// path containing both quotes or a line terminator cannot be written at all.
+func getReferencePathEdit(sourceFile *ast.SourceFile, ref *ast.FileReference, path string) (core.TextRange, string, bool) {
+	if strings.ContainsAny(path, "\r\n\u2028\u2029") {
+		return core.TextRange{}, "", false
+	}
+	text := sourceFile.Text()
+	quote := text[ref.Pos()-1]
+	if !strings.ContainsRune(path, rune(quote)) {
+		return ref.TextRange, path, true
+	}
+	otherQuote := byte('"')
+	if quote == '"' {
+		otherQuote = '\''
+	}
+	if strings.ContainsRune(path, rune(otherQuote)) || ref.End() >= len(text) || text[ref.End()] != quote {
+		return core.TextRange{}, "", false
+	}
+	return core.NewTextRange(ref.Pos()-1, ref.End()+1), string(otherQuote) + path + string(otherQuote), true
 }
 
 func getTsConfigObjectLiteralExpression(tsConfigSourceFile *ast.SourceFile) *ast.ObjectLiteralExpression {
