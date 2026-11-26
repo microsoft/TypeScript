@@ -2908,12 +2908,18 @@ func (tx *DeclarationTransformer) transformExpandoAssignment(node *ast.BinaryExp
 
 	preexistingExpandoHasExport := core.Some(tx.expandoMembers[hostId], ast.IsExportDeclaration)
 
-	if ast.IsIdentifier(node.Right) {
+	// The namespace is declared next to the host, so the alias must mean the same thing there
+	hostContainer := core.IfElse(ast.IsVariableDeclaration(declaration), declaration.Parent.Parent, declaration).Parent
+	if ast.IsIdentifier(node.Right) && tx.resolver.CanDeclareExpandoAssignmentAsAlias(node.AsNode(), hostContainer) {
 		if !preexistingExpandoHasExport {
 			tx.addExportModifierToExpandoMembers(hostId)
 		}
 		// alias-like, emit an `export {name}` or `export {name as alias}`
+		// Expando members are collected from the source file, so make the aliased name visible from the host's scope
+		oldEnclosing := tx.enclosingDeclaration
+		tx.enclosingDeclaration = hostContainer
 		result := tx.transformBinaryExpressionToExportDeclaration(node.AsNode(), exportName)
+		tx.enclosingDeclaration = oldEnclosing
 		tx.expandoMembers[hostId] = append(tx.expandoMembers[hostId], result)
 		return
 	}
