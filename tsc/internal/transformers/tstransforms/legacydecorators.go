@@ -1,6 +1,8 @@
 package tstransforms
 
 import (
+	"slices"
+
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/binder"
 	"github.com/microsoft/TypeScript/tsc/internal/collections"
@@ -20,6 +22,8 @@ type LegacyDecoratorsTransformer struct {
 	 */
 	classAliases     map[*ast.Node]*ast.Node
 	enclosingClasses []*ast.ClassDeclaration
+	// Class aliases that should not be substituted while visiting a direct computed member name.
+	excludedClassAliases []*ast.Node
 }
 
 func NewLegacyDecoratorsTransformer(opt *transformers.TransformOptions) *transformers.Transformer {
@@ -60,10 +64,12 @@ func (tx *LegacyDecoratorsTransformer) visit(node *ast.Node) *ast.Node {
 	case ast.KindSourceFile:
 		tx.classAliases = make(map[*ast.Node]*ast.Node)
 		tx.enclosingClasses = nil
+		tx.excludedClassAliases = nil
 		result := tx.Visitor().VisitEachChild(node)
 		tx.EmitContext().AddEmitHelper(result, tx.EmitContext().ReadEmitHelpers()...)
 		tx.classAliases = nil
 		tx.enclosingClasses = nil
+		tx.excludedClassAliases = nil
 		return result
 	default:
 		return tx.Visitor().VisitEachChild(node)
@@ -73,7 +79,7 @@ func (tx *LegacyDecoratorsTransformer) visit(node *ast.Node) *ast.Node {
 func (tx *LegacyDecoratorsTransformer) visitIdentifier(node *ast.Identifier) *ast.Node {
 	// takes the place of `substituteIdentifier` in the strada transform
 	for _, d := range tx.enclosingClasses {
-		if _, ok := tx.classAliases[d.AsNode()]; ok && tx.referenceResolver.GetReferencedValueDeclaration(tx.EmitContext().MostOriginal(node.AsNode())) == tx.EmitContext().MostOriginal(d.AsNode()) {
+		if _, ok := tx.classAliases[d.AsNode()]; ok && !slices.Contains(tx.excludedClassAliases, d.AsNode()) && tx.referenceResolver.GetReferencedValueDeclaration(tx.EmitContext().MostOriginal(node.AsNode())) == tx.EmitContext().MostOriginal(d.AsNode()) {
 			return tx.classAliases[d.AsNode()]
 		}
 	}
@@ -152,6 +158,20 @@ func (tx *LegacyDecoratorsTransformer) visitParamerDeclaration(node *ast.Paramet
 // with decorators, a temporary value is stored for later use.
 func (tx *LegacyDecoratorsTransformer) visitPropertyNameOfClassElement(member *ast.Node) *ast.Node {
 	name := member.Name()
+	if ast.IsComputedPropertyName(name) {
+		// A direct computed name is evaluated before its class alias is assigned. Exclude only
+		// that class so references to aliases of enclosing classes are still substituted.
+		for i := len(tx.enclosingClasses) - 1; i >= 0; i-- {
+			class := tx.enclosingClasses[i]
+			if slices.Contains(class.Members.Nodes, member) {
+				tx.excludedClassAliases = append(tx.excludedClassAliases, class.AsNode())
+				defer func() {
+					tx.excludedClassAliases = tx.excludedClassAliases[:len(tx.excludedClassAliases)-1]
+				}()
+				break
+			}
+		}
+	}
 	if ast.IsComputedPropertyName(name) && ast.HasDecorators(member) {
 		expression := tx.Visitor().VisitNode(name.AsComputedPropertyName().Expression)
 		innerExpression := ast.SkipPartiallyEmittedExpressions(expression)
@@ -511,8 +531,18 @@ func (tx *LegacyDecoratorsTransformer) transformClassDeclarationWithClassDecorat
 
 func (tx *LegacyDecoratorsTransformer) hasInternalStaticReference(node *ast.ClassDeclaration) bool {
 	classNode := tx.EmitContext().MostOriginal(node.AsNode())
+	computedNames := make(map[*ast.Node]struct{})
+	for _, member := range node.Members.Nodes {
+		if name := member.Name(); name != nil && ast.IsComputedPropertyName(name) {
+			// Direct computed names are evaluated before the class alias can be assigned.
+			computedNames[name] = struct{}{}
+		}
+	}
 	var isOrContainsStaticSelfReference func(n *ast.Node) bool
 	isOrContainsStaticSelfReference = func(n *ast.Node) bool {
+		if _, ok := computedNames[n]; ok {
+			return false
+		}
 		if ast.IsIdentifier(n) && tx.referenceResolver.GetReferencedValueDeclaration(tx.EmitContext().MostOriginal(n)) == classNode {
 			return true
 		}
