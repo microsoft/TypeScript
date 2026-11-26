@@ -5,6 +5,7 @@ import (
 	"io"
 	"testing"
 
+	"github.com/google/go-cmp/cmp/cmpopts"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/testutil/lsptestutil"
@@ -24,6 +25,7 @@ func TestDocumentHighlightsWithEquivalentFileURIs(t *testing.T) {
 	}{
 		{"Windows drive", "c:/Project", "file:///C:/Project/main.ts", tspath.CaseInsensitive},
 		{"escaped filename", "/Project", "file:///Project/%6Dain.ts", tspath.CaseSensitive},
+		{"unescaped @ in directory", "/tmp/a@b/proj", "file:///tmp/a@b/proj/main.ts", tspath.CaseSensitive},
 	} {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
@@ -74,7 +76,7 @@ func TestDocumentHighlightsWithEquivalentFileURIs(t *testing.T) {
 				{Start: lsproto.Position{Line: 0, Character: 9}, End: lsproto.Position{Line: 0, Character: 14}},
 				{Start: lsproto.Position{Line: 1, Character: 0}, End: lsproto.Position{Line: 1, Character: 5}},
 				{Start: lsproto.Position{Line: 2, Character: 0}, End: lsproto.Position{Line: 2, Character: 5}},
-			})
+			}, cmpopts.SortSlices(lsproto.CompareRanges))
 		})
 	}
 }
