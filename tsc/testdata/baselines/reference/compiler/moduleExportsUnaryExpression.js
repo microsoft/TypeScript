@@ -73,20 +73,20 @@ exports.y1 = exports.x1;
 exports.default = exports.x1;
 exports["a b"] = exports.x1;
 function f1() {
-    return exports["a b"] = exports.default = exports.y1 = (_e = exports.x1++, x1), _e;
+    return exports["a b"] = exports.default = exports.y1 = (_e = exports.x1++, exports.x1), _e;
 }
 function f2() {
-    return exports["a b"] = exports.default = exports.y1 = (_f = exports.x1--, x1), _f;
+    return exports["a b"] = exports.default = exports.y1 = (_f = exports.x1--, exports.x1), _f;
 }
-exports["a b"] = exports.default = exports.y1 = (exports.x1++, x1);
-exports["a b"] = exports.default = exports.y1 = (exports.x1--, x1);
-for (let i = 0; i < 2; exports["a b"] = exports.default = exports.y1 = (exports.x1++, x1)) {
+exports["a b"] = exports.default = exports.y1 = (exports.x1++, exports.x1);
+exports["a b"] = exports.default = exports.y1 = (exports.x1--, exports.x1);
+for (let i = 0; i < 2; exports["a b"] = exports.default = exports.y1 = (exports.x1++, exports.x1)) {
     i++;
 }
-const f3 = () => { var _a; return exports["a b"] = exports.default = exports.y1 = (_a = exports.x1++, x1), _a; };
+const f3 = () => { var _a; return exports["a b"] = exports.default = exports.y1 = (_a = exports.x1++, exports.x1), _a; };
 exports.f3 = f3;
 exports.x2 = 0;
 exports.y2 = exports.x2;
-exports.y2 = (exports.x2++, x2);
-const f4 = () => { var _a; return exports.y2 = (_a = exports.x2--, x2), _a; };
+exports.y2 = (exports.x2++, exports.x2);
+const f4 = () => { var _a; return exports.y2 = (_a = exports.x2--, exports.x2), _a; };
 exports.f4 = f4;
