@@ -1815,6 +1815,7 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
     private readonly toPath: (fileName: string, basePath?: string) => PathKey;
     private readonly decoder = new Wtf8Decoder();
     private readonly sourceFileMetadataCache = new Map<PathKey, Promise<SourceFileMetadata | undefined>>();
+    private readonly pendingSourceFiles = new Map<PathKey, Promise<SourceFile | undefined>>(); // @sync-skip
     private ownedSnapshot: Snapshot | undefined;
     private disposePromise: Promise<void> | undefined;
 
@@ -1905,6 +1906,20 @@ export class Program<Id extends ProjectId = ProjectId> implements FormatDiagnost
             return retained as unknown as SourceFile;
         }
 
+        // @sync-skip-block-start
+        let pending = this.pendingSourceFiles.get(path);
+        if (!pending) {
+            pending = this.fetchSourceFile(file).finally(() => this.pendingSourceFiles.delete(path));
+            this.pendingSourceFiles.set(path, pending);
+        }
+        return pending;
+        // @sync-skip-block-end
+        // @sync-only-start
+        // return this.fetchSourceFile(file);
+        // @sync-only-end
+    }
+
+    private async fetchSourceFile(file: DocumentIdentifier): Promise<SourceFile | undefined> {
         // Fetch from server
         const binaryData = await this.client.apiRequestBinary("getSourceFile", {
             snapshot: this.snapshotId,
