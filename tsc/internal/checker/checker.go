@@ -21092,7 +21092,11 @@ func (c *Checker) checkAndAggregateYieldOperandTypes(fn *ast.Node, checkMode Che
 		if yieldExpr.Expression() != nil && c.isConstContext(yieldExpr.Expression()) {
 			yieldExprType = c.getRegularTypeOfLiteralType(yieldExprType)
 		}
-		yieldTypes = core.AppendIfUnique(yieldTypes, c.getYieldedTypeOfYieldExpression(yieldExpr, yieldExprType, c.anyType, isAsync))
+		// https://github.com/oxc-project/tsrs/pull/1091 `yieldedType` can be nil if
+		// the type could not be inferred
+		if yieldedType := c.getYieldedTypeOfYieldExpression(yieldExpr, yieldExprType, c.anyType, isAsync); yieldedType != nil {
+			yieldTypes = core.AppendIfUnique(yieldTypes, yieldedType)
+		}
 		var nextType *Type
 		if yieldExpr.AsYieldExpression().AsteriskToken != nil {
 			iterationTypes := c.getIterationTypesOfIterable(yieldExprType, core.IfElse(isAsync, IterationUseAsyncYieldStar, IterationUseYieldStar), yieldExpr.Expression())

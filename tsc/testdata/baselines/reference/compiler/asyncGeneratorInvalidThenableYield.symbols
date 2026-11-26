@@ -1,0 +1,86 @@
+//// [tests/cases/compiler/asyncGeneratorInvalidThenableYield.ts] ////
+
+=== asyncGeneratorInvalidThenableYield.ts ===
+async function* one() {
+>one : Symbol(one, Decl(asyncGeneratorInvalidThenableYield.ts, 0, 0))
+
+    yield { then() {} };
+>then : Symbol(then, Decl(asyncGeneratorInvalidThenableYield.ts, 1, 11))
+}
+
+async function* twice() {
+>twice : Symbol(twice, Decl(asyncGeneratorInvalidThenableYield.ts, 2, 1))
+
+    yield { then() {} };
+>then : Symbol(then, Decl(asyncGeneratorInvalidThenableYield.ts, 5, 11))
+
+    yield { then() {} };
+>then : Symbol(then, Decl(asyncGeneratorInvalidThenableYield.ts, 6, 11))
+}
+
+const contextual: () => AsyncGenerator<number> = async function* () {
+>contextual : Symbol(contextual, Decl(asyncGeneratorInvalidThenableYield.ts, 9, 5))
+>AsyncGenerator : Symbol(AsyncGenerator, Decl(lib.es2018.asyncgenerator.d.ts, --, --))
+
+    yield { then() {} };
+>then : Symbol(then, Decl(asyncGeneratorInvalidThenableYield.ts, 10, 11))
+
+};
+
+interface SelfThenable {
+>SelfThenable : Symbol(SelfThenable, Decl(asyncGeneratorInvalidThenableYield.ts, 11, 2))
+
+    then(onfulfilled: (value: SelfThenable) => void): void;
+>then : Symbol(SelfThenable.then, Decl(asyncGeneratorInvalidThenableYield.ts, 13, 24))
+>onfulfilled : Symbol(onfulfilled, Decl(asyncGeneratorInvalidThenableYield.ts, 14, 9))
+>value : Symbol(value, Decl(asyncGeneratorInvalidThenableYield.ts, 14, 23))
+>SelfThenable : Symbol(SelfThenable, Decl(asyncGeneratorInvalidThenableYield.ts, 11, 2))
+}
+declare const selfThenable: SelfThenable;
+>selfThenable : Symbol(selfThenable, Decl(asyncGeneratorInvalidThenableYield.ts, 16, 13))
+>SelfThenable : Symbol(SelfThenable, Decl(asyncGeneratorInvalidThenableYield.ts, 11, 2))
+
+async function* circular() {
+>circular : Symbol(circular, Decl(asyncGeneratorInvalidThenableYield.ts, 16, 41))
+
+    yield selfThenable;
+>selfThenable : Symbol(selfThenable, Decl(asyncGeneratorInvalidThenableYield.ts, 16, 13))
+}
+
+declare const thenables: AsyncIterable<{ then(): void }>;
+>thenables : Symbol(thenables, Decl(asyncGeneratorInvalidThenableYield.ts, 21, 13))
+>AsyncIterable : Symbol(AsyncIterable, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>then : Symbol(then, Decl(asyncGeneratorInvalidThenableYield.ts, 21, 40))
+
+async function* delegated() {
+>delegated : Symbol(delegated, Decl(asyncGeneratorInvalidThenableYield.ts, 21, 57))
+
+    yield* thenables;
+>thenables : Symbol(thenables, Decl(asyncGeneratorInvalidThenableYield.ts, 21, 13))
+}
+
+async function* mixed() {
+>mixed : Symbol(mixed, Decl(asyncGeneratorInvalidThenableYield.ts, 24, 1))
+
+    yield { then() {} };
+>then : Symbol(then, Decl(asyncGeneratorInvalidThenableYield.ts, 27, 11))
+
+    yield 1;
+}
+
+const inferred: string = one();
+>inferred : Symbol(inferred, Decl(asyncGeneratorInvalidThenableYield.ts, 31, 5))
+>one : Symbol(one, Decl(asyncGeneratorInvalidThenableYield.ts, 0, 0))
+
+const inferredCircular: string = circular();
+>inferredCircular : Symbol(inferredCircular, Decl(asyncGeneratorInvalidThenableYield.ts, 32, 5))
+>circular : Symbol(circular, Decl(asyncGeneratorInvalidThenableYield.ts, 16, 41))
+
+const inferredDelegated: string = delegated();
+>inferredDelegated : Symbol(inferredDelegated, Decl(asyncGeneratorInvalidThenableYield.ts, 33, 5))
+>delegated : Symbol(delegated, Decl(asyncGeneratorInvalidThenableYield.ts, 21, 57))
+
+const inferredMixed: string = mixed();
+>inferredMixed : Symbol(inferredMixed, Decl(asyncGeneratorInvalidThenableYield.ts, 34, 5))
+>mixed : Symbol(mixed, Decl(asyncGeneratorInvalidThenableYield.ts, 24, 1))
+
