@@ -1,0 +1,129 @@
+//// [tests/cases/compiler/declarationEmitUnusedAliasTypeParameter.ts] ////
+
+=== types.ts ===
+export type Labeled<Label> = { id: number } & { name: string };
+>Labeled : Labeled<Label>
+>id : number
+>name : string
+
+export type MaybeLabel<Label> = undefined | "x";
+>MaybeLabel : MaybeLabel<Label>
+
+export type Branded<Label> = number & {};
+>Branded : Branded<Label>
+
+export type Loose<Label> = string & {};
+>Loose : Loose<Label>
+
+export type Relabeled<Label> = Branded<Label>;
+>Relabeled : Relabeled<Label>
+
+export type UsesSecond<Label, Value> = { id: number } & { value: Value };
+>UsesSecond : UsesSecond<Label, Value>
+>id : number
+>value : Value
+
+=== main.ts ===
+import type { Labeled, MaybeLabel, Branded, Loose, Relabeled, UsesSecond } from "./types";
+>Labeled : Labeled<Label>
+>MaybeLabel : MaybeLabel<Label>
+>Branded : Branded<Label>
+>Loose : Loose<Label>
+>Relabeled : Relabeled<Label>
+>UsesSecond : UsesSecond<Label, Value>
+
+declare function id<T>(value: T): T;
+>id : <T>(value: T) => T
+>value : T
+
+declare function label<L>(value: L): Labeled<L>;
+>label : <L>(value: L) => Labeled<L>
+>value : L
+
+declare const item: Labeled<"user">;
+>item : Labeled<"user">
+
+declare const maybe: MaybeLabel<"user">;
+>maybe : MaybeLabel<"user">
+
+declare const branded: Branded<"user">;
+>branded : Branded<"user">
+
+declare const names: "alice" | "bob" | Loose<"user">;
+>names : "alice" | "bob" | Loose<"user">
+
+declare const relabeled: Relabeled<"user">;
+>relabeled : Relabeled<"user">
+
+declare const partly: UsesSecond<"user", 1>;
+>partly : UsesSecond<"user", 1>
+
+export const copy = item;
+>copy : Labeled<"user">
+>item : Labeled<"user">
+
+export const inferred = id(item);
+>inferred : Labeled<"user">
+>id(item) : Labeled<"user">
+>id : <T>(value: T) => T
+>item : Labeled<"user">
+
+export const fromCall = label<"admin">("admin");
+>fromCall : Labeled<"admin">
+>label<"admin">("admin") : Labeled<"admin">
+>label : <L>(value: L) => Labeled<L>
+>"admin" : "admin"
+
+export const maybeCopy = maybe;
+>maybeCopy : MaybeLabel<"user">
+>maybe : MaybeLabel<"user">
+
+export const brandedCopy = branded;
+>brandedCopy : Branded<"user">
+>branded : Branded<"user">
+
+export const namesCopy = names;
+>namesCopy : "alice" | "bob" | Loose<"user">
+>names : "alice" | "bob" | Loose<"user">
+
+export const relabeledCopy = relabeled;
+>relabeledCopy : Relabeled<"user">
+>relabeled : Relabeled<"user">
+
+export const partlyCopy = partly;
+>partlyCopy : UsesSecond<"user", 1>
+>partly : UsesSecond<"user", 1>
+
+=== local.ts ===
+type LocalLabeled<Label> = { id: number } & { name: string };
+>LocalLabeled : LocalLabeled<Label>
+>id : number
+>name : string
+
+type LocalBranded<Label> = number & {};
+>LocalBranded : LocalBranded<Label>
+
+type LocalLoose<Label> = string & {};
+>LocalLoose : LocalLoose<Label>
+
+declare const localItem: LocalLabeled<"user">;
+>localItem : LocalLabeled<"user">
+
+declare const localBranded: LocalBranded<"user">;
+>localBranded : LocalBranded<"user">
+
+declare const localNames: "alice" | "bob" | LocalLoose<"user">;
+>localNames : "alice" | "bob" | LocalLoose<"user">
+
+export const localItemCopy = localItem;
+>localItemCopy : LocalLabeled<"user">
+>localItem : LocalLabeled<"user">
+
+export const localBrandedCopy = localBranded;
+>localBrandedCopy : LocalBranded<"user">
+>localBranded : LocalBranded<"user">
+
+export const localNamesCopy = localNames;
+>localNamesCopy : "alice" | "bob" | LocalLoose<"user">
+>localNames : "alice" | "bob" | LocalLoose<"user">
+

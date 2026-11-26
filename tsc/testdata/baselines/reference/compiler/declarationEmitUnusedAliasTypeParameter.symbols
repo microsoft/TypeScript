@@ -1,0 +1,155 @@
+//// [tests/cases/compiler/declarationEmitUnusedAliasTypeParameter.ts] ////
+
+=== types.ts ===
+export type Labeled<Label> = { id: number } & { name: string };
+>Labeled : Symbol(Labeled, Decl(types.ts, 0, 0))
+>Label : Symbol(Label, Decl(types.ts, 0, 20))
+>id : Symbol(id, Decl(types.ts, 0, 30))
+>name : Symbol(name, Decl(types.ts, 0, 47))
+
+export type MaybeLabel<Label> = undefined | "x";
+>MaybeLabel : Symbol(MaybeLabel, Decl(types.ts, 0, 63))
+>Label : Symbol(Label, Decl(types.ts, 1, 23))
+
+export type Branded<Label> = number & {};
+>Branded : Symbol(Branded, Decl(types.ts, 1, 48))
+>Label : Symbol(Label, Decl(types.ts, 2, 20))
+
+export type Loose<Label> = string & {};
+>Loose : Symbol(Loose, Decl(types.ts, 2, 41))
+>Label : Symbol(Label, Decl(types.ts, 3, 18))
+
+export type Relabeled<Label> = Branded<Label>;
+>Relabeled : Symbol(Relabeled, Decl(types.ts, 3, 39))
+>Label : Symbol(Label, Decl(types.ts, 4, 22))
+>Branded : Symbol(Branded, Decl(types.ts, 1, 48))
+>Label : Symbol(Label, Decl(types.ts, 4, 22))
+
+export type UsesSecond<Label, Value> = { id: number } & { value: Value };
+>UsesSecond : Symbol(UsesSecond, Decl(types.ts, 4, 46))
+>Label : Symbol(Label, Decl(types.ts, 5, 23))
+>Value : Symbol(Value, Decl(types.ts, 5, 29))
+>id : Symbol(id, Decl(types.ts, 5, 40))
+>value : Symbol(value, Decl(types.ts, 5, 57))
+>Value : Symbol(Value, Decl(types.ts, 5, 29))
+
+=== main.ts ===
+import type { Labeled, MaybeLabel, Branded, Loose, Relabeled, UsesSecond } from "./types";
+>Labeled : Symbol(Labeled, Decl(main.ts, 0, 13))
+>MaybeLabel : Symbol(MaybeLabel, Decl(main.ts, 0, 22))
+>Branded : Symbol(Branded, Decl(main.ts, 0, 34))
+>Loose : Symbol(Loose, Decl(main.ts, 0, 43))
+>Relabeled : Symbol(Relabeled, Decl(main.ts, 0, 50))
+>UsesSecond : Symbol(UsesSecond, Decl(main.ts, 0, 61))
+
+declare function id<T>(value: T): T;
+>id : Symbol(id, Decl(main.ts, 0, 90))
+>T : Symbol(T, Decl(main.ts, 2, 20))
+>value : Symbol(value, Decl(main.ts, 2, 23))
+>T : Symbol(T, Decl(main.ts, 2, 20))
+>T : Symbol(T, Decl(main.ts, 2, 20))
+
+declare function label<L>(value: L): Labeled<L>;
+>label : Symbol(label, Decl(main.ts, 2, 36))
+>L : Symbol(L, Decl(main.ts, 3, 23))
+>value : Symbol(value, Decl(main.ts, 3, 26))
+>L : Symbol(L, Decl(main.ts, 3, 23))
+>Labeled : Symbol(Labeled, Decl(main.ts, 0, 13))
+>L : Symbol(L, Decl(main.ts, 3, 23))
+
+declare const item: Labeled<"user">;
+>item : Symbol(item, Decl(main.ts, 5, 13))
+>Labeled : Symbol(Labeled, Decl(main.ts, 0, 13))
+
+declare const maybe: MaybeLabel<"user">;
+>maybe : Symbol(maybe, Decl(main.ts, 6, 13))
+>MaybeLabel : Symbol(MaybeLabel, Decl(main.ts, 0, 22))
+
+declare const branded: Branded<"user">;
+>branded : Symbol(branded, Decl(main.ts, 7, 13))
+>Branded : Symbol(Branded, Decl(main.ts, 0, 34))
+
+declare const names: "alice" | "bob" | Loose<"user">;
+>names : Symbol(names, Decl(main.ts, 8, 13))
+>Loose : Symbol(Loose, Decl(main.ts, 0, 43))
+
+declare const relabeled: Relabeled<"user">;
+>relabeled : Symbol(relabeled, Decl(main.ts, 9, 13))
+>Relabeled : Symbol(Relabeled, Decl(main.ts, 0, 50))
+
+declare const partly: UsesSecond<"user", 1>;
+>partly : Symbol(partly, Decl(main.ts, 10, 13))
+>UsesSecond : Symbol(UsesSecond, Decl(main.ts, 0, 61))
+
+export const copy = item;
+>copy : Symbol(copy, Decl(main.ts, 12, 12))
+>item : Symbol(item, Decl(main.ts, 5, 13))
+
+export const inferred = id(item);
+>inferred : Symbol(inferred, Decl(main.ts, 13, 12))
+>id : Symbol(id, Decl(main.ts, 0, 90))
+>item : Symbol(item, Decl(main.ts, 5, 13))
+
+export const fromCall = label<"admin">("admin");
+>fromCall : Symbol(fromCall, Decl(main.ts, 14, 12))
+>label : Symbol(label, Decl(main.ts, 2, 36))
+
+export const maybeCopy = maybe;
+>maybeCopy : Symbol(maybeCopy, Decl(main.ts, 15, 12))
+>maybe : Symbol(maybe, Decl(main.ts, 6, 13))
+
+export const brandedCopy = branded;
+>brandedCopy : Symbol(brandedCopy, Decl(main.ts, 16, 12))
+>branded : Symbol(branded, Decl(main.ts, 7, 13))
+
+export const namesCopy = names;
+>namesCopy : Symbol(namesCopy, Decl(main.ts, 17, 12))
+>names : Symbol(names, Decl(main.ts, 8, 13))
+
+export const relabeledCopy = relabeled;
+>relabeledCopy : Symbol(relabeledCopy, Decl(main.ts, 18, 12))
+>relabeled : Symbol(relabeled, Decl(main.ts, 9, 13))
+
+export const partlyCopy = partly;
+>partlyCopy : Symbol(partlyCopy, Decl(main.ts, 19, 12))
+>partly : Symbol(partly, Decl(main.ts, 10, 13))
+
+=== local.ts ===
+type LocalLabeled<Label> = { id: number } & { name: string };
+>LocalLabeled : Symbol(LocalLabeled, Decl(local.ts, 0, 0))
+>Label : Symbol(Label, Decl(local.ts, 0, 18))
+>id : Symbol(id, Decl(local.ts, 0, 28))
+>name : Symbol(name, Decl(local.ts, 0, 45))
+
+type LocalBranded<Label> = number & {};
+>LocalBranded : Symbol(LocalBranded, Decl(local.ts, 0, 61))
+>Label : Symbol(Label, Decl(local.ts, 1, 18))
+
+type LocalLoose<Label> = string & {};
+>LocalLoose : Symbol(LocalLoose, Decl(local.ts, 1, 39))
+>Label : Symbol(Label, Decl(local.ts, 2, 16))
+
+declare const localItem: LocalLabeled<"user">;
+>localItem : Symbol(localItem, Decl(local.ts, 4, 13))
+>LocalLabeled : Symbol(LocalLabeled, Decl(local.ts, 0, 0))
+
+declare const localBranded: LocalBranded<"user">;
+>localBranded : Symbol(localBranded, Decl(local.ts, 5, 13))
+>LocalBranded : Symbol(LocalBranded, Decl(local.ts, 0, 61))
+
+declare const localNames: "alice" | "bob" | LocalLoose<"user">;
+>localNames : Symbol(localNames, Decl(local.ts, 6, 13))
+>LocalLoose : Symbol(LocalLoose, Decl(local.ts, 1, 39))
+
+export const localItemCopy = localItem;
+>localItemCopy : Symbol(localItemCopy, Decl(local.ts, 8, 12))
+>localItem : Symbol(localItem, Decl(local.ts, 4, 13))
+
+export const localBrandedCopy = localBranded;
+>localBrandedCopy : Symbol(localBrandedCopy, Decl(local.ts, 9, 12))
+>localBranded : Symbol(localBranded, Decl(local.ts, 5, 13))
+
+export const localNamesCopy = localNames;
+>localNamesCopy : Symbol(localNamesCopy, Decl(local.ts, 10, 12))
+>localNames : Symbol(localNames, Decl(local.ts, 6, 13))
+
