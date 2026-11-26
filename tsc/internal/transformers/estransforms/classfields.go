@@ -379,8 +379,12 @@ func (tx *classFieldsTransformer) visitDestructuringAssignmentTarget(node *ast.N
 	if ast.IsObjectLiteralExpression(node) || ast.IsArrayLiteralExpression(node) {
 		return tx.visitAssignmentPattern(node)
 	}
-	if ast.IsPropertyAccessExpression(node) && ast.IsPrivateIdentifier(node.AsPropertyAccessExpression().Name()) {
-		return tx.wrapPrivateIdentifierForDestructuringTarget(node)
+	// A target wrapped in parentheses or in a type assertion, `!` or `satisfies` (all erased to partially emitted
+	// expressions by now) is still the same reference, so it is lowered like the bare target.
+	target := ast.SkipOuterExpressions(node, ast.OEKPartiallyEmittedExpressions|ast.OEKParentheses)
+	if ast.IsPropertyAccessExpression(target) && ast.IsPrivateIdentifier(target.AsPropertyAccessExpression().Name()) &&
+		tx.accessPrivateIdentifier(target.AsPropertyAccessExpression().Name()) != nil {
+		return tx.wrapPrivateIdentifierForDestructuringTarget(target)
 	}
 	if tx.shouldTransformSuperInStaticInitializers && tx.currentClassElement != nil &&
 		ast.IsSuperProperty(node) &&
@@ -1149,7 +1153,7 @@ func (tx *classFieldsTransformer) visitPreOrPostfixUnaryExpression(node *ast.Nod
 	}
 
 	if operator == ast.KindPlusPlusToken || operator == ast.KindMinusMinusToken {
-		operandSkipped := ast.SkipParentheses(operand)
+		operandSkipped := ast.SkipOuterExpressions(operand, ast.OEKPartiallyEmittedExpressions|ast.OEKParentheses)
 
 		// Private identifier property access
 		if ast.IsPropertyAccessExpression(operandSkipped) && ast.IsPrivateIdentifier(operandSkipped.Name()) {
@@ -3275,7 +3279,8 @@ func (tx *classFieldsTransformer) visitAssignmentRestElement(node *ast.Node) *as
 }
 
 func (tx *classFieldsTransformer) visitArrayAssignmentElement(node *ast.Node) *ast.Node {
-	if ast.IsArrayBindingOrAssignmentElement(node) {
+	// A wrapped element such as `(this.#x)` or `super.x!` is a target too.
+	if ast.IsArrayBindingOrAssignmentElement(node) || ast.IsOuterExpression(node, ast.OEKPartiallyEmittedExpressions|ast.OEKParentheses) {
 		if ast.IsSpreadElement(node) {
 			return tx.visitAssignmentRestElement(node)
 		}
