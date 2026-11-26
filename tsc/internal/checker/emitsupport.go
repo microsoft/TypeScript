@@ -5,7 +5,6 @@ import (
 	"slices"
 
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
-	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/printer"
 )
 
@@ -17,27 +16,40 @@ func (c *Checker) isDeclarationVisible(node *ast.Node) bool {
 		return false
 	}
 
-	links := c.emitResolverLinks.declarationLinks.Get(node)
-	if links.isVisible == core.TSUnknown {
-		if c.determineIfDeclarationIsVisible(node) {
-			links.isVisible = core.TSTrue
-		} else {
-			links.isVisible = core.TSFalse
+	for {
+		links := c.emitResolverLinks.declarationLinks.Get(node)
+		if links.madeVisible {
+			return true
+		}
+		if !links.ruleKnown {
+			links.ruleVisible, links.ruleInheritsFrom = c.determineIfDeclarationIsVisible(node)
+			links.ruleKnown = true
+		}
+		if links.ruleInheritsFrom == nil {
+			return links.ruleVisible
+		}
+		node = links.ruleInheritsFrom
+		if !ast.IsParseTreeNode(node) {
+			return false
 		}
 	}
-	return links.isVisible == core.TSTrue
 }
 
-func (c *Checker) determineIfDeclarationIsVisible(node *ast.Node) bool {
+// determineIfDeclarationIsVisible returns whether node is visible by the rules
+// of its declaration alone, or, if those make it as visible as another
+// declaration, that declaration. Which declarations are visible depends on
+// what declaration emit makes visible (see DeclarationLinks), so whether
+// another declaration is visible is not part of the result.
+func (c *Checker) determineIfDeclarationIsVisible(node *ast.Node) (visible bool, inheritsFrom *ast.Node) {
 	switch node.Kind {
 	case ast.KindJSDocCallbackTag,
 		// ast.KindJSDocEnumTag, // !!! TODO: JSDoc @enum support?
 		ast.KindJSDocTypedefTag:
 		// Top-level jsdoc type aliases are considered exported
 		// First parent is comment node, second is hosting declaration or token; we only care about those tokens or declarations whose parent is a source file
-		return node.Parent != nil && node.Parent.Parent != nil && node.Parent.Parent.Parent != nil && ast.IsSourceFile(node.Parent.Parent.Parent)
+		return node.Parent != nil && node.Parent.Parent != nil && node.Parent.Parent.Parent != nil && ast.IsSourceFile(node.Parent.Parent.Parent), nil
 	case ast.KindBindingElement:
-		return c.isDeclarationVisible(node.Parent.Parent)
+		return false, node.Parent.Parent
 	case ast.KindVariableDeclaration,
 		ast.KindModuleDeclaration,
 		ast.KindClassDeclaration,
@@ -51,23 +63,23 @@ func (c *Checker) determineIfDeclarationIsVisible(node *ast.Node) bool {
 			if ast.IsBindingPattern(node.Name()) &&
 				len(node.Name().Elements()) == 0 {
 				// If the binding pattern is empty, this variable declaration is not visible
-				return false
+				return false, nil
 			}
 			// falls through
 		}
 		// External module augmentation is always visible
 		// A @typedef at top-level in an external module is always visible
 		if ast.IsExternalModuleAugmentation(node) || ast.IsImplicitlyExportedJSDocDeclaration(node) {
-			return true
+			return true, nil
 		}
 		parent := ast.GetDeclarationContainer(node)
 		// If the node is not exported or it is not ambient module element (except import declaration)
 		if c.getCombinedModifierFlagsCached(node)&ast.ModifierFlagsExport == 0 &&
 			!(node.Kind != ast.KindImportEqualsDeclaration && parent.Kind != ast.KindSourceFile && parent.Flags&ast.NodeFlagsAmbient != 0) {
-			return ast.IsGlobalSourceFile(parent)
+			return ast.IsGlobalSourceFile(parent), nil
 		}
 		// Exported members/ambient module elements (exception import declaration) are visible if parent is visible
-		return c.isDeclarationVisible(parent)
+		return false, parent
 
 	case ast.KindPropertyDeclaration,
 		ast.KindPropertySignature,
@@ -77,10 +89,10 @@ func (c *Checker) determineIfDeclarationIsVisible(node *ast.Node) bool {
 		ast.KindMethodSignature:
 		if c.GetEffectiveDeclarationFlags(node, ast.ModifierFlagsPrivate|ast.ModifierFlagsProtected) != 0 {
 			// Private/protected properties/methods are not visible
-			return false
+			return false, nil
 		}
 		// Public properties/methods are visible if its parents are visible, so:
-		return c.isDeclarationVisible(node.Parent)
+		return false, node.Parent
 
 	case ast.KindConstructor,
 		ast.KindConstructSignature,
@@ -98,38 +110,38 @@ func (c *Checker) determineIfDeclarationIsVisible(node *ast.Node) bool {
 		ast.KindIntersectionType,
 		ast.KindParenthesizedType,
 		ast.KindNamedTupleMember:
-		return c.isDeclarationVisible(node.Parent)
+		return false, node.Parent
 
 	// Default binding, import specifier and namespace import is visible
 	// only on demand so by default it is not visible
 	case ast.KindImportClause,
 		ast.KindNamespaceImport,
 		ast.KindImportSpecifier:
-		return false
+		return false, nil
 
 	// Type parameters are always visible
 	case ast.KindTypeParameter:
-		return true
+		return true, nil
 	// Source file and namespace export are always visible
 	case ast.KindSourceFile,
 		ast.KindNamespaceExportDeclaration:
-		return true
+		return true, nil
 
 	// Export assignments do not create name bindings outside the module
 	case ast.KindExportAssignment:
-		return false
+		return false, nil
 
 	// An `export {X}` (without a module specifier) is itself a visible re-export of
 	// the named binding; it contributes to the symbol's external visibility.
 	case ast.KindExportSpecifier:
 		exportDecl := node.Parent.Parent
 		if ast.IsExportDeclaration(exportDecl) && exportDecl.AsExportDeclaration().ModuleSpecifier == nil {
-			return c.isDeclarationVisible(exportDecl.Parent)
+			return false, exportDecl.Parent
 		}
-		return false
+		return false, nil
 
 	default:
-		return false
+		return false, nil
 	}
 }
 
@@ -205,7 +217,7 @@ func (c *Checker) hasVisibleDeclarations(symbol *ast.Symbol, shouldComputeAliasT
 	var addVisibleAlias func(declaration *ast.Node, aliasingStatement *ast.Node)
 	if shouldComputeAliasToMakeVisible {
 		addVisibleAlias = func(declaration *ast.Node, aliasingStatement *ast.Node) {
-			c.emitResolverLinks.declarationLinks.Get(declaration).isVisible = core.TSTrue
+			c.emitResolverLinks.declarationLinks.Get(declaration).madeVisible = true
 			if aliasesToMakeVisibleSet == nil {
 				aliasesToMakeVisibleSet = make(map[ast.NodeId]*ast.Node)
 			}

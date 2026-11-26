@@ -30,10 +30,10 @@ export class C2 {
         }
         return new C().test1(this);
 >new C().test1(this) : number
->new C().test1 : (a: C2) => number
+>new C().test1 : (a: C2) => typeof a.#a
 >new C() : C
 >C : typeof C
->test1 : (a: C2) => number
+>test1 : (a: C2) => typeof a.#a
 >this : this
     }
 }

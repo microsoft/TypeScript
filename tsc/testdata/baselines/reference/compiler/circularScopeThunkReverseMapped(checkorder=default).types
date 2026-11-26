@@ -27,8 +27,8 @@ declare function type<T>(x: T): Type<T>;
 >x : T
 
 export const $ = scope({
->$ : Scope<{ a: Type<number>; b: unknown; }>
->scope({    a: type("string").pipe(function (s) { return s.length; }),    b: () => $.type("a").pipe(function (n) { return n === 0; }),}) : Scope<{ a: Type<number>; b: unknown; }>
+>$ : Scope<{ readonly a: Type<number>; readonly b: () => Type<boolean>; }>
+>scope({    a: type("string").pipe(function (s) { return s.length; }),    b: () => $.type("a").pipe(function (n) { return n === 0; }),}) : Scope<{ readonly a: Type<number>; readonly b: () => Type<boolean>; }>
 >scope : <const def>(def: Validate<def>) => Scope<def>
 >{    a: type("string").pipe(function (s) { return s.length; }),    b: () => $.type("a").pipe(function (n) { return n === 0; }),} : { a: Type<number>; b: () => Type<boolean>; }
 
@@ -52,9 +52,9 @@ export const $ = scope({
 >$.type("a").pipe(function (n) { return n === 0; }) : Type<boolean>
 >$.type("a").pipe : <U>(f: (x: number) => U) => Type<U>
 >$.type("a") : Type<number>
->$.type : <k_1 extends "a" | "b">(k: k_1) => Resolve<{ a: Type<number>; b: unknown; }[k_1]>
->$ : Scope<{ a: Type<number>; b: unknown; }>
->type : <k_1 extends "a" | "b">(k: k_1) => Resolve<{ a: Type<number>; b: unknown; }[k_1]>
+>$.type : <k_1 extends "a" | "b">(k: k_1) => Resolve<{ readonly a: Type<number>; readonly b: () => Type<boolean>; }[k_1]>
+>$ : Scope<{ readonly a: Type<number>; readonly b: () => Type<boolean>; }>
+>type : <k_1 extends "a" | "b">(k: k_1) => Resolve<{ readonly a: Type<number>; readonly b: () => Type<boolean>; }[k_1]>
 >"a" : "a"
 >pipe : <U>(f: (x: number) => U) => Type<U>
 >function (n) { return n === 0; } : (n: number) => n is 0
@@ -67,8 +67,8 @@ export const $ = scope({
 
 // Entered from the function in the first property when queried in reverse
 export const $2 = scope({
->$2 : Scope<{ a: Type<number>; b: unknown; }>
->scope({    a: type("string").pipe(function (s) { return s.length; }),    b: () => $2.type("a").pipe((n: number) => n === 0),}) : Scope<{ a: Type<number>; b: unknown; }>
+>$2 : Scope<{ readonly a: Type<number>; readonly b: () => Type<boolean>; }>
+>scope({    a: type("string").pipe(function (s) { return s.length; }),    b: () => $2.type("a").pipe((n: number) => n === 0),}) : Scope<{ readonly a: Type<number>; readonly b: () => Type<boolean>; }>
 >scope : <const def>(def: Validate<def>) => Scope<def>
 >{    a: type("string").pipe(function (s) { return s.length; }),    b: () => $2.type("a").pipe((n: number) => n === 0),} : { a: Type<number>; b: () => Type<boolean>; }
 
@@ -92,9 +92,9 @@ export const $2 = scope({
 >$2.type("a").pipe((n: number) => n === 0) : Type<boolean>
 >$2.type("a").pipe : <U>(f: (x: number) => U) => Type<U>
 >$2.type("a") : Type<number>
->$2.type : <k_1 extends "a" | "b">(k: k_1) => Resolve<{ a: Type<number>; b: unknown; }[k_1]>
->$2 : Scope<{ a: Type<number>; b: unknown; }>
->type : <k_1 extends "a" | "b">(k: k_1) => Resolve<{ a: Type<number>; b: unknown; }[k_1]>
+>$2.type : <k_1 extends "a" | "b">(k: k_1) => Resolve<{ readonly a: Type<number>; readonly b: () => Type<boolean>; }[k_1]>
+>$2 : Scope<{ readonly a: Type<number>; readonly b: () => Type<boolean>; }>
+>type : <k_1 extends "a" | "b">(k: k_1) => Resolve<{ readonly a: Type<number>; readonly b: () => Type<boolean>; }[k_1]>
 >"a" : "a"
 >pipe : <U>(f: (x: number) => U) => Type<U>
 >(n: number) => n === 0 : (n: number) => n is 0
