@@ -1,0 +1,285 @@
+//// [tests/cases/compiler/declarationEmitExpandoIdentifierValue.ts] ////
+
+=== dep.ts ===
+export const imported = 1;
+>imported : Symbol(imported, Decl(dep.ts, 0, 12))
+
+export let importedLet = "s";
+>importedLet : Symbol(importedLet, Decl(dep.ts, 1, 10))
+
+=== lib.ts ===
+import { imported, importedLet } from "./dep";
+>imported : Symbol(imported, Decl(lib.ts, 0, 8))
+>importedLet : Symbol(importedLet, Decl(lib.ts, 0, 18))
+
+// Not an alias: the identifier means something else, or has another type, where the namespace is declared
+
+export function loop() {}
+>loop : Symbol(loop, Decl(lib.ts, 0, 46))
+
+for (const k of ["a", "b"]) {
+>k : Symbol(k, Decl(lib.ts, 5, 10))
+
+    loop.last = k;
+>loop.last : Symbol(loop.last, Decl(lib.ts, 5, 29))
+>loop : Symbol(loop, Decl(lib.ts, 0, 46))
+>last : Symbol(loop.last, Decl(lib.ts, 5, 29))
+>k : Symbol(k, Decl(lib.ts, 5, 10))
+}
+
+const shadowed = 1;
+>shadowed : Symbol(shadowed, Decl(lib.ts, 9, 5))
+
+export function shadow() {}
+>shadow : Symbol(shadow, Decl(lib.ts, 9, 19))
+{
+    const shadowed = "s";
+>shadowed : Symbol(shadowed, Decl(lib.ts, 12, 9))
+
+    shadow.v = shadowed;
+>shadow.v : Symbol(shadow.v, Decl(lib.ts, 12, 25))
+>shadow : Symbol(shadow, Decl(lib.ts, 9, 19))
+>v : Symbol(shadow.v, Decl(lib.ts, 12, 25))
+>shadowed : Symbol(shadowed, Decl(lib.ts, 12, 9))
+}
+
+declare const wide: string | number;
+>wide : Symbol(wide, Decl(lib.ts, 16, 13))
+
+export function narrowed() {}
+>narrowed : Symbol(narrowed, Decl(lib.ts, 16, 36))
+
+if (typeof wide === "string") {
+>wide : Symbol(wide, Decl(lib.ts, 16, 13))
+
+    narrowed.s = wide;
+>narrowed.s : Symbol(narrowed.s, Decl(lib.ts, 18, 31))
+>narrowed : Symbol(narrowed, Decl(lib.ts, 16, 36))
+>s : Symbol(narrowed.s, Decl(lib.ts, 18, 31))
+>wide : Symbol(wide, Decl(lib.ts, 16, 13))
+}
+
+const VERSION = "1.2.3";
+>VERSION : Symbol(VERSION, Decl(lib.ts, 22, 5))
+
+export function literal() {}
+>literal : Symbol(literal, Decl(lib.ts, 22, 24))
+
+literal.version = VERSION;
+>literal.version : Symbol(literal.version, Decl(lib.ts, 23, 28))
+>literal : Symbol(literal, Decl(lib.ts, 22, 24))
+>version : Symbol(literal.version, Decl(lib.ts, 23, 28))
+>VERSION : Symbol(VERSION, Decl(lib.ts, 22, 5))
+
+const initial: number = 1;
+>initial : Symbol(initial, Decl(lib.ts, 26, 5))
+
+export function reassigned() {}
+>reassigned : Symbol(reassigned, Decl(lib.ts, 26, 26))
+
+reassigned.n = initial;
+>reassigned.n : Symbol(reassigned.n, Decl(lib.ts, 27, 31), Decl(lib.ts, 28, 23))
+>reassigned : Symbol(reassigned, Decl(lib.ts, 26, 26))
+>n : Symbol(reassigned.n, Decl(lib.ts, 27, 31), Decl(lib.ts, 28, 23))
+>initial : Symbol(initial, Decl(lib.ts, 26, 5))
+
+reassigned.n = 5;
+>reassigned.n : Symbol(reassigned.n, Decl(lib.ts, 27, 31), Decl(lib.ts, 28, 23))
+>reassigned : Symbol(reassigned, Decl(lib.ts, 26, 26))
+>n : Symbol(reassigned.n, Decl(lib.ts, 27, 31), Decl(lib.ts, 28, 23))
+
+export function fromImport() {}
+>fromImport : Symbol(fromImport, Decl(lib.ts, 29, 17))
+
+fromImport.literal = imported;
+>fromImport.literal : Symbol(fromImport.literal, Decl(lib.ts, 31, 31))
+>fromImport : Symbol(fromImport, Decl(lib.ts, 29, 17))
+>literal : Symbol(fromImport.literal, Decl(lib.ts, 31, 31))
+>imported : Symbol(imported, Decl(lib.ts, 0, 8))
+
+// Still an alias
+
+export function keepsImport() {}
+>keepsImport : Symbol(keepsImport, Decl(lib.ts, 32, 30))
+
+keepsImport.value = importedLet;
+>keepsImport.value : Symbol(keepsImport.value, Decl(lib.ts, 36, 32))
+>keepsImport : Symbol(keepsImport, Decl(lib.ts, 32, 30))
+>value : Symbol(keepsImport.value, Decl(lib.ts, 36, 32))
+>importedLet : Symbol(importedLet, Decl(lib.ts, 0, 18))
+
+let mutable = 1;
+>mutable : Symbol(mutable, Decl(lib.ts, 39, 3))
+
+export function keepsLet() {}
+>keepsLet : Symbol(keepsLet, Decl(lib.ts, 39, 16))
+
+keepsLet.m = mutable;
+>keepsLet.m : Symbol(keepsLet.m, Decl(lib.ts, 40, 29))
+>keepsLet : Symbol(keepsLet, Decl(lib.ts, 39, 16))
+>m : Symbol(keepsLet.m, Decl(lib.ts, 40, 29))
+>mutable : Symbol(mutable, Decl(lib.ts, 39, 3))
+
+class C {
+>C : Symbol(C, Decl(lib.ts, 41, 21))
+
+    x = 1;
+>x : Symbol(C.x, Decl(lib.ts, 43, 9))
+}
+export function keepsClass() {}
+>keepsClass : Symbol(keepsClass, Decl(lib.ts, 45, 1))
+
+keepsClass.C = C;
+>keepsClass.C : Symbol(keepsClass.C, Decl(lib.ts, 46, 31))
+>keepsClass : Symbol(keepsClass, Decl(lib.ts, 45, 1))
+>C : Symbol(keepsClass.C, Decl(lib.ts, 46, 31))
+>C : Symbol(C, Decl(lib.ts, 41, 21))
+
+function helper() {
+>helper : Symbol(helper, Decl(lib.ts, 47, 17))
+
+    return 1;
+}
+export function keepsFunction() {}
+>keepsFunction : Symbol(keepsFunction, Decl(lib.ts, 51, 1))
+
+keepsFunction.helper = helper;
+>keepsFunction.helper : Symbol(keepsFunction.helper, Decl(lib.ts, 52, 34))
+>keepsFunction : Symbol(keepsFunction, Decl(lib.ts, 51, 1))
+>helper : Symbol(keepsFunction.helper, Decl(lib.ts, 52, 34))
+>helper : Symbol(helper, Decl(lib.ts, 47, 17))
+
+export const arrowHost = () => {};
+>arrowHost : Symbol(arrowHost, Decl(lib.ts, 55, 12))
+
+const arrowValue: string = "x";
+>arrowValue : Symbol(arrowValue, Decl(lib.ts, 56, 5))
+
+arrowHost.v = arrowValue;
+>arrowHost.v : Symbol(arrowHost.v, Decl(lib.ts, 56, 31))
+>arrowHost : Symbol(arrowHost, Decl(lib.ts, 55, 12))
+>v : Symbol(arrowHost.v, Decl(lib.ts, 56, 31))
+>arrowValue : Symbol(arrowValue, Decl(lib.ts, 56, 5))
+
+export namespace N {
+>N : Symbol(N, Decl(lib.ts, 57, 25))
+
+    const k: number = 1;
+>k : Symbol(k, Decl(lib.ts, 60, 9))
+
+    export function f() {}
+>f : Symbol(f, Decl(lib.ts, 60, 24))
+
+    f.k = k;
+>f.k : Symbol(f.k, Decl(lib.ts, 61, 26))
+>f : Symbol(f, Decl(lib.ts, 60, 24))
+>k : Symbol(f.k, Decl(lib.ts, 61, 26))
+>k : Symbol(k, Decl(lib.ts, 60, 9))
+    {
+        const k = "s";
+>k : Symbol(k, Decl(lib.ts, 64, 13))
+
+        f.inner = k;
+>f.inner : Symbol(f.inner, Decl(lib.ts, 64, 22))
+>f : Symbol(f, Decl(lib.ts, 60, 24))
+>inner : Symbol(f.inner, Decl(lib.ts, 64, 22))
+>k : Symbol(k, Decl(lib.ts, 64, 13))
+    }
+}
+
+=== use.ts ===
+import { loop, shadow, narrowed, literal, reassigned, fromImport, keepsImport, keepsLet, keepsClass, keepsFunction, arrowHost, N } from "./lib";
+>loop : Symbol(loop, Decl(use.ts, 0, 8))
+>shadow : Symbol(shadow, Decl(use.ts, 0, 14))
+>narrowed : Symbol(narrowed, Decl(use.ts, 0, 22))
+>literal : Symbol(literal, Decl(use.ts, 0, 32))
+>reassigned : Symbol(reassigned, Decl(use.ts, 0, 41))
+>fromImport : Symbol(fromImport, Decl(use.ts, 0, 53))
+>keepsImport : Symbol(keepsImport, Decl(use.ts, 0, 65))
+>keepsLet : Symbol(keepsLet, Decl(use.ts, 0, 78))
+>keepsClass : Symbol(keepsClass, Decl(use.ts, 0, 88))
+>keepsFunction : Symbol(keepsFunction, Decl(use.ts, 0, 100))
+>arrowHost : Symbol(arrowHost, Decl(use.ts, 0, 115))
+>N : Symbol(N, Decl(use.ts, 0, 126))
+
+const s1: string = loop.last;
+>s1 : Symbol(s1, Decl(use.ts, 1, 5))
+>loop.last : Symbol(loop.last, Decl(lib.ts, 5, 29))
+>loop : Symbol(loop, Decl(use.ts, 0, 8))
+>last : Symbol(loop.last, Decl(lib.ts, 5, 29))
+
+const s2: string = shadow.v;
+>s2 : Symbol(s2, Decl(use.ts, 2, 5))
+>shadow.v : Symbol(shadow.v, Decl(lib.ts, 12, 25))
+>shadow : Symbol(shadow, Decl(use.ts, 0, 14))
+>v : Symbol(shadow.v, Decl(lib.ts, 12, 25))
+
+const s3: string = narrowed.s;
+>s3 : Symbol(s3, Decl(use.ts, 3, 5))
+>narrowed.s : Symbol(narrowed.s, Decl(lib.ts, 18, 31))
+>narrowed : Symbol(narrowed, Decl(use.ts, 0, 22))
+>s : Symbol(narrowed.s, Decl(lib.ts, 18, 31))
+
+literal.version = "2.0.0";
+>literal.version : Symbol(literal.version, Decl(lib.ts, 23, 28))
+>literal : Symbol(literal, Decl(use.ts, 0, 32))
+>version : Symbol(literal.version, Decl(lib.ts, 23, 28))
+
+reassigned.n = 6;
+>reassigned.n : Symbol(reassigned.n, Decl(lib.ts, 27, 31), Decl(lib.ts, 28, 23))
+>reassigned : Symbol(reassigned, Decl(use.ts, 0, 41))
+>n : Symbol(reassigned.n, Decl(lib.ts, 27, 31), Decl(lib.ts, 28, 23))
+
+fromImport.literal = 2;
+>fromImport.literal : Symbol(fromImport.literal, Decl(lib.ts, 31, 31))
+>fromImport : Symbol(fromImport, Decl(use.ts, 0, 53))
+>literal : Symbol(fromImport.literal, Decl(lib.ts, 31, 31))
+
+const s4: string = keepsImport.value;
+>s4 : Symbol(s4, Decl(use.ts, 7, 5))
+>keepsImport.value : Symbol(keepsImport.value, Decl(lib.ts, 36, 32))
+>keepsImport : Symbol(keepsImport, Decl(use.ts, 0, 65))
+>value : Symbol(keepsImport.value, Decl(lib.ts, 36, 32))
+
+const n1: number = keepsLet.m;
+>n1 : Symbol(n1, Decl(use.ts, 8, 5))
+>keepsLet.m : Symbol(keepsLet.m, Decl(lib.ts, 40, 29))
+>keepsLet : Symbol(keepsLet, Decl(use.ts, 0, 78))
+>m : Symbol(keepsLet.m, Decl(lib.ts, 40, 29))
+
+const n0: number = new keepsClass.C().x;
+>n0 : Symbol(n0, Decl(use.ts, 9, 5))
+>new keepsClass.C().x : Symbol(C.x, Decl(lib.ts, 43, 9))
+>keepsClass.C : Symbol(keepsClass.C, Decl(lib.ts, 46, 31))
+>keepsClass : Symbol(keepsClass, Decl(use.ts, 0, 88))
+>C : Symbol(keepsClass.C, Decl(lib.ts, 46, 31))
+>x : Symbol(C.x, Decl(lib.ts, 43, 9))
+
+const n2: number = keepsFunction.helper();
+>n2 : Symbol(n2, Decl(use.ts, 10, 5))
+>keepsFunction.helper : Symbol(keepsFunction.helper, Decl(lib.ts, 52, 34))
+>keepsFunction : Symbol(keepsFunction, Decl(use.ts, 0, 100))
+>helper : Symbol(keepsFunction.helper, Decl(lib.ts, 52, 34))
+
+const s5: string = arrowHost.v;
+>s5 : Symbol(s5, Decl(use.ts, 11, 5))
+>arrowHost.v : Symbol(arrowHost.v, Decl(lib.ts, 56, 31))
+>arrowHost : Symbol(arrowHost, Decl(use.ts, 0, 115))
+>v : Symbol(arrowHost.v, Decl(lib.ts, 56, 31))
+
+const n3: number = N.f.k;
+>n3 : Symbol(n3, Decl(use.ts, 12, 5))
+>N.f.k : Symbol(N.f.k, Decl(lib.ts, 61, 26))
+>N.f : Symbol(N.f, Decl(lib.ts, 60, 24))
+>N : Symbol(N, Decl(use.ts, 0, 126))
+>f : Symbol(N.f, Decl(lib.ts, 60, 24))
+>k : Symbol(N.f.k, Decl(lib.ts, 61, 26))
+
+const s6: string = N.f.inner;
+>s6 : Symbol(s6, Decl(use.ts, 13, 5))
+>N.f.inner : Symbol(N.f.inner, Decl(lib.ts, 64, 22))
+>N.f : Symbol(N.f, Decl(lib.ts, 60, 24))
+>N : Symbol(N, Decl(use.ts, 0, 126))
+>f : Symbol(N.f, Decl(lib.ts, 60, 24))
+>inner : Symbol(N.f.inner, Decl(lib.ts, 64, 22))
+

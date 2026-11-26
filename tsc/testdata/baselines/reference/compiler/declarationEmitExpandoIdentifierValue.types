@@ -1,0 +1,327 @@
+//// [tests/cases/compiler/declarationEmitExpandoIdentifierValue.ts] ////
+
+=== dep.ts ===
+export const imported = 1;
+>imported : 1
+>1 : 1
+
+export let importedLet = "s";
+>importedLet : string
+>"s" : "s"
+
+=== lib.ts ===
+import { imported, importedLet } from "./dep";
+>imported : 1
+>importedLet : string
+
+// Not an alias: the identifier means something else, or has another type, where the namespace is declared
+
+export function loop() {}
+>loop : { (): void; last: string; }
+
+for (const k of ["a", "b"]) {
+>k : string
+>["a", "b"] : string[]
+>"a" : "a"
+>"b" : "b"
+
+    loop.last = k;
+>loop.last = k : string
+>loop.last : string
+>loop : { (): void; last: string; }
+>last : string
+>k : string
+}
+
+const shadowed = 1;
+>shadowed : 1
+>1 : 1
+
+export function shadow() {}
+>shadow : { (): void; v: string; }
+{
+    const shadowed = "s";
+>shadowed : "s"
+>"s" : "s"
+
+    shadow.v = shadowed;
+>shadow.v = shadowed : "s"
+>shadow.v : string
+>shadow : { (): void; v: string; }
+>v : string
+>shadowed : "s"
+}
+
+declare const wide: string | number;
+>wide : string | number
+
+export function narrowed() {}
+>narrowed : { (): void; s: string; }
+
+if (typeof wide === "string") {
+>typeof wide === "string" : boolean
+>typeof wide : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>wide : string | number
+>"string" : "string"
+
+    narrowed.s = wide;
+>narrowed.s = wide : string
+>narrowed.s : string
+>narrowed : { (): void; s: string; }
+>s : string
+>wide : string
+}
+
+const VERSION = "1.2.3";
+>VERSION : "1.2.3"
+>"1.2.3" : "1.2.3"
+
+export function literal() {}
+>literal : { (): void; version: string; }
+
+literal.version = VERSION;
+>literal.version = VERSION : "1.2.3"
+>literal.version : string
+>literal : { (): void; version: string; }
+>version : string
+>VERSION : "1.2.3"
+
+const initial: number = 1;
+>initial : number
+>1 : 1
+
+export function reassigned() {}
+>reassigned : { (): void; n: number; }
+
+reassigned.n = initial;
+>reassigned.n = initial : number
+>reassigned.n : number
+>reassigned : { (): void; n: number; }
+>n : number
+>initial : number
+
+reassigned.n = 5;
+>reassigned.n = 5 : 5
+>reassigned.n : number
+>reassigned : { (): void; n: number; }
+>n : number
+>5 : 5
+
+export function fromImport() {}
+>fromImport : { (): void; literal: number; }
+
+fromImport.literal = imported;
+>fromImport.literal = imported : 1
+>fromImport.literal : number
+>fromImport : { (): void; literal: number; }
+>literal : number
+>imported : 1
+
+// Still an alias
+
+export function keepsImport() {}
+>keepsImport : { (): void; value: string; }
+
+keepsImport.value = importedLet;
+>keepsImport.value = importedLet : string
+>keepsImport.value : string
+>keepsImport : { (): void; value: string; }
+>value : string
+>importedLet : string
+
+let mutable = 1;
+>mutable : number
+>1 : 1
+
+export function keepsLet() {}
+>keepsLet : { (): void; m: number; }
+
+keepsLet.m = mutable;
+>keepsLet.m = mutable : number
+>keepsLet.m : number
+>keepsLet : { (): void; m: number; }
+>m : number
+>mutable : number
+
+class C {
+>C : C
+
+    x = 1;
+>x : number
+>1 : 1
+}
+export function keepsClass() {}
+>keepsClass : { (): void; C: typeof C; }
+
+keepsClass.C = C;
+>keepsClass.C = C : typeof C
+>keepsClass.C : typeof C
+>keepsClass : { (): void; C: typeof C; }
+>C : typeof C
+>C : typeof C
+
+function helper() {
+>helper : () => number
+
+    return 1;
+>1 : 1
+}
+export function keepsFunction() {}
+>keepsFunction : { (): void; helper: () => number; }
+
+keepsFunction.helper = helper;
+>keepsFunction.helper = helper : () => number
+>keepsFunction.helper : () => number
+>keepsFunction : { (): void; helper: () => number; }
+>helper : () => number
+>helper : () => number
+
+export const arrowHost = () => {};
+>arrowHost : { (): void; v: string; }
+>() => {} : { (): void; v: string; }
+
+const arrowValue: string = "x";
+>arrowValue : string
+>"x" : "x"
+
+arrowHost.v = arrowValue;
+>arrowHost.v = arrowValue : string
+>arrowHost.v : string
+>arrowHost : { (): void; v: string; }
+>v : string
+>arrowValue : string
+
+export namespace N {
+>N : typeof N
+
+    const k: number = 1;
+>k : number
+>1 : 1
+
+    export function f() {}
+>f : { (): void; k: number; inner: string; }
+
+    f.k = k;
+>f.k = k : number
+>f.k : number
+>f : { (): void; k: number; inner: string; }
+>k : number
+>k : number
+    {
+        const k = "s";
+>k : "s"
+>"s" : "s"
+
+        f.inner = k;
+>f.inner = k : "s"
+>f.inner : string
+>f : { (): void; k: number; inner: string; }
+>inner : string
+>k : "s"
+    }
+}
+
+=== use.ts ===
+import { loop, shadow, narrowed, literal, reassigned, fromImport, keepsImport, keepsLet, keepsClass, keepsFunction, arrowHost, N } from "./lib";
+>loop : { (): void; last: string; }
+>shadow : { (): void; v: string; }
+>narrowed : { (): void; s: string; }
+>literal : { (): void; version: string; }
+>reassigned : { (): void; n: number; }
+>fromImport : { (): void; literal: number; }
+>keepsImport : { (): void; value: string; }
+>keepsLet : { (): void; m: number; }
+>keepsClass : { (): void; C: typeof C; }
+>keepsFunction : { (): void; helper: () => number; }
+>arrowHost : { (): void; v: string; }
+>N : typeof N
+
+const s1: string = loop.last;
+>s1 : string
+>loop.last : string
+>loop : { (): void; last: string; }
+>last : string
+
+const s2: string = shadow.v;
+>s2 : string
+>shadow.v : string
+>shadow : { (): void; v: string; }
+>v : string
+
+const s3: string = narrowed.s;
+>s3 : string
+>narrowed.s : string
+>narrowed : { (): void; s: string; }
+>s : string
+
+literal.version = "2.0.0";
+>literal.version = "2.0.0" : "2.0.0"
+>literal.version : string
+>literal : { (): void; version: string; }
+>version : string
+>"2.0.0" : "2.0.0"
+
+reassigned.n = 6;
+>reassigned.n = 6 : 6
+>reassigned.n : number
+>reassigned : { (): void; n: number; }
+>n : number
+>6 : 6
+
+fromImport.literal = 2;
+>fromImport.literal = 2 : 2
+>fromImport.literal : number
+>fromImport : { (): void; literal: number; }
+>literal : number
+>2 : 2
+
+const s4: string = keepsImport.value;
+>s4 : string
+>keepsImport.value : string
+>keepsImport : { (): void; value: string; }
+>value : string
+
+const n1: number = keepsLet.m;
+>n1 : number
+>keepsLet.m : number
+>keepsLet : { (): void; m: number; }
+>m : number
+
+const n0: number = new keepsClass.C().x;
+>n0 : number
+>new keepsClass.C().x : number
+>new keepsClass.C() : C
+>keepsClass.C : typeof C
+>keepsClass : { (): void; C: typeof C; }
+>C : typeof C
+>x : number
+
+const n2: number = keepsFunction.helper();
+>n2 : number
+>keepsFunction.helper() : number
+>keepsFunction.helper : () => number
+>keepsFunction : { (): void; helper: () => number; }
+>helper : () => number
+
+const s5: string = arrowHost.v;
+>s5 : string
+>arrowHost.v : string
+>arrowHost : { (): void; v: string; }
+>v : string
+
+const n3: number = N.f.k;
+>n3 : number
+>N.f.k : number
+>N.f : { (): void; k: number; inner: string; }
+>N : typeof N
+>f : { (): void; k: number; inner: string; }
+>k : number
+
+const s6: string = N.f.inner;
+>s6 : string
+>N.f.inner : string
+>N.f : { (): void; k: number; inner: string; }
+>N : typeof N
+>f : { (): void; k: number; inner: string; }
+>inner : string
+
