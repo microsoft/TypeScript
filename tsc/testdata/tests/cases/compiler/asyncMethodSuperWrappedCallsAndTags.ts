@@ -6,12 +6,14 @@
 // https://github.com/microsoft/TypeScript/issues/65641
 // Inside a lowered async body, a `super` member call or tag keeps `this` as its receiver,
 // and a `super` member written through any outer expression gets a setter, whatever
-// parentheses, type assertions or non-null assertions wrap the reference.
+// parentheses, type assertions or non-null assertions wrap the reference. A super access
+// inside the argument of `super[...]` is replaced too.
 
 class B {
     m(..._: unknown[]): any { }
     get x(): any { return 0; }
     set x(v: any) { }
+    get k(): "m" { return "m"; }
     static sm(..._: unknown[]): any { }
 }
 
@@ -71,6 +73,12 @@ class C extends B {
 
     async elementAssignAs() {
         (super["x"] as any) = 1;
+    }
+
+    async elementArgumentWithSuper() {
+        super[super.k]();
+        super[super.k]`t`;
+        return super[(super.k as "m")];
     }
 
     async *asyncGenerator() {

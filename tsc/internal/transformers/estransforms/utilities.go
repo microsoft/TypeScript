@@ -187,10 +187,11 @@ func (s *superAccessState) substituteTaggedTemplateWithSuperAccess(node *ast.Tag
 }
 
 // createSuperElementAccessInAsyncMethod creates _superIndex(x) or _superIndex(x).value.
+// The argument is visited too, since it may itself contain super accesses (super[super.k]).
 func (s *superAccessState) createSuperElementAccessInAsyncMethod(argumentExpression *ast.Node) *ast.Node {
 	superIndexCall := s.factory.NewCallExpression(
 		s.superIndexBinding, nil, nil,
-		s.factory.NewNodeList([]*ast.Node{argumentExpression}),
+		s.factory.NewNodeList([]*ast.Node{s.superAccessVisitor.VisitNode(argumentExpression)}),
 		ast.NodeFlagsNone,
 	)
 	if s.hasSuperPropertyAssignment {
