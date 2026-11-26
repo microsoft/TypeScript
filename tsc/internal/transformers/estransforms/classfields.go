@@ -2342,10 +2342,15 @@ func (tx *classFieldsTransformer) transformClassMembers(node *ast.Node) (members
 
 	members = tx.classElementVisitor.VisitNodes(node.MemberList())
 
-	// Create a synthetic constructor if necessary
+	// Create a synthetic constructor if necessary. The class element around this class (such as the static field
+	// of an outer class whose initializer is this class) does not apply to the constructor and its field
+	// initializers: `this` there is the instance, not the class.
 	var syntheticConstructor *ast.Node
 	if !core.Some(members.Nodes, ast.IsConstructorDeclaration) {
+		savedCurrentClassElement := tx.currentClassElement
+		tx.currentClassElement = nil
 		syntheticConstructor = tx.transformConstructor(nil, node)
+		tx.currentClassElement = savedCurrentClassElement
 	}
 
 	// If there are pending expressions create a class static block in which to evaluate them, but only if
