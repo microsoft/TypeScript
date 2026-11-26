@@ -1,0 +1,184 @@
+//// [tests/cases/compiler/declarationEmitExpandoNonIdentifierMembers.ts] ////
+
+=== lib.ts ===
+export const handler = () => 0;
+>handler : Symbol(handler, Decl(lib.ts, 0, 12))
+
+handler.retries = 3;
+>handler.retries : Symbol(handler.retries, Decl(lib.ts, 0, 31))
+>handler : Symbol(handler, Decl(lib.ts, 0, 12))
+>retries : Symbol(handler.retries, Decl(lib.ts, 0, 31))
+
+handler["x-request-id"] = "abc";
+>handler : Symbol(handler, Decl(lib.ts, 0, 12))
+>"x-request-id" : Symbol(handler["x-request-id"], Decl(lib.ts, 1, 20))
+
+export const numeric = () => {};
+>numeric : Symbol(numeric, Decl(lib.ts, 4, 12))
+
+numeric.a = 1;
+>numeric.a : Symbol(numeric.a, Decl(lib.ts, 4, 32))
+>numeric : Symbol(numeric, Decl(lib.ts, 4, 12))
+>a : Symbol(numeric.a, Decl(lib.ts, 4, 32))
+
+numeric[3] = "n";
+>numeric : Symbol(numeric, Decl(lib.ts, 4, 12))
+>3 : Symbol(numeric[3], Decl(lib.ts, 5, 14))
+
+export const spaced = function () {};
+>spaced : Symbol(spaced, Decl(lib.ts, 8, 12))
+
+spaced.a = 1;
+>spaced.a : Symbol(spaced.a, Decl(lib.ts, 8, 37))
+>spaced : Symbol(spaced, Decl(lib.ts, 8, 12))
+>a : Symbol(spaced.a, Decl(lib.ts, 8, 37))
+
+spaced["a b"] = 2;
+>spaced : Symbol(spaced, Decl(lib.ts, 8, 12))
+>"a b" : Symbol(spaced["a b"], Decl(lib.ts, 9, 13))
+
+const sym = Symbol();
+>sym : Symbol(sym, Decl(lib.ts, 12, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+
+export const withSymbol = () => {};
+>withSymbol : Symbol(withSymbol, Decl(lib.ts, 13, 12))
+
+withSymbol.a = 1;
+>withSymbol.a : Symbol(withSymbol.a, Decl(lib.ts, 13, 35))
+>withSymbol : Symbol(withSymbol, Decl(lib.ts, 13, 12))
+>a : Symbol(withSymbol.a, Decl(lib.ts, 13, 35))
+
+withSymbol[sym] = true;
+>withSymbol : Symbol(withSymbol, Decl(lib.ts, 13, 12))
+>sym : Symbol(sym, Decl(lib.ts, 12, 5))
+
+export const reservedAndNonIdentifier = () => {};
+>reservedAndNonIdentifier : Symbol(reservedAndNonIdentifier, Decl(lib.ts, 17, 12))
+
+reservedAndNonIdentifier.default = 1;
+>reservedAndNonIdentifier.default : Symbol(reservedAndNonIdentifier.default, Decl(lib.ts, 17, 49))
+>reservedAndNonIdentifier : Symbol(reservedAndNonIdentifier, Decl(lib.ts, 17, 12))
+>default : Symbol(reservedAndNonIdentifier.default, Decl(lib.ts, 17, 49))
+
+reservedAndNonIdentifier["b-c"] = 2;
+>reservedAndNonIdentifier : Symbol(reservedAndNonIdentifier, Decl(lib.ts, 17, 12))
+>"b-c" : Symbol(reservedAndNonIdentifier["b-c"], Decl(lib.ts, 18, 37))
+
+const key = "d-e";
+>key : Symbol(key, Decl(lib.ts, 21, 5))
+
+export const constKey = () => {};
+>constKey : Symbol(constKey, Decl(lib.ts, 22, 12))
+
+constKey.a = 1;
+>constKey.a : Symbol(constKey.a, Decl(lib.ts, 22, 33))
+>constKey : Symbol(constKey, Decl(lib.ts, 22, 12))
+>a : Symbol(constKey.a, Decl(lib.ts, 22, 33))
+
+constKey[key] = 2;
+>constKey : Symbol(constKey, Decl(lib.ts, 22, 12))
+>key : Symbol(key, Decl(lib.ts, 21, 5))
+
+const local = () => {};
+>local : Symbol(local, Decl(lib.ts, 26, 5))
+
+local.a = 1;
+>local.a : Symbol(local.a, Decl(lib.ts, 26, 23))
+>local : Symbol(local, Decl(lib.ts, 26, 5))
+>a : Symbol(local.a, Decl(lib.ts, 26, 23))
+
+local["f-g"] = 2;
+>local : Symbol(local, Decl(lib.ts, 26, 5))
+>"f-g" : Symbol(local["f-g"], Decl(lib.ts, 27, 12))
+
+export default local;
+>local : Symbol(local, Decl(lib.ts, 26, 5))
+
+export const identifiersOnly = () => {};
+>identifiersOnly : Symbol(identifiersOnly, Decl(lib.ts, 31, 12))
+
+identifiersOnly.a = 1;
+>identifiersOnly.a : Symbol(identifiersOnly.a, Decl(lib.ts, 31, 40))
+>identifiersOnly : Symbol(identifiersOnly, Decl(lib.ts, 31, 12))
+>a : Symbol(identifiersOnly.a, Decl(lib.ts, 31, 40))
+
+identifiersOnly["b"] = 2;
+>identifiersOnly : Symbol(identifiersOnly, Decl(lib.ts, 31, 12))
+>"b" : Symbol(identifiersOnly["b"], Decl(lib.ts, 32, 22))
+
+=== lib2.js ===
+export const handler = () => 0;
+>handler : Symbol(handler, Decl(lib2.js, 0, 12))
+
+handler.retries = 3;
+>handler.retries : Symbol(handler.retries, Decl(lib2.js, 0, 31))
+>handler : Symbol(handler, Decl(lib2.js, 0, 12))
+>retries : Symbol(handler.retries, Decl(lib2.js, 0, 31))
+
+handler["x-request-id"] = "abc";
+>handler : Symbol(handler, Decl(lib2.js, 0, 12))
+>"x-request-id" : Symbol(handler["x-request-id"], Decl(lib2.js, 1, 20))
+
+=== use.ts ===
+import local, { handler, numeric, spaced, withSymbol, reservedAndNonIdentifier, constKey, identifiersOnly } from "./lib";
+>local : Symbol(local, Decl(use.ts, 0, 6))
+>handler : Symbol(handler, Decl(use.ts, 0, 15))
+>numeric : Symbol(numeric, Decl(use.ts, 0, 24))
+>spaced : Symbol(spaced, Decl(use.ts, 0, 33))
+>withSymbol : Symbol(withSymbol, Decl(use.ts, 0, 41))
+>reservedAndNonIdentifier : Symbol(reservedAndNonIdentifier, Decl(use.ts, 0, 53))
+>constKey : Symbol(constKey, Decl(use.ts, 0, 79))
+>identifiersOnly : Symbol(identifiersOnly, Decl(use.ts, 0, 89))
+
+const s1: string = handler["x-request-id"];
+>s1 : Symbol(s1, Decl(use.ts, 1, 5))
+>handler : Symbol(handler, Decl(use.ts, 0, 15))
+>"x-request-id" : Symbol(handler["x-request-id"], Decl(lib.ts, 1, 20))
+
+const n1: number = handler.retries;
+>n1 : Symbol(n1, Decl(use.ts, 2, 5))
+>handler.retries : Symbol(handler.retries, Decl(lib.ts, 0, 31))
+>handler : Symbol(handler, Decl(use.ts, 0, 15))
+>retries : Symbol(handler.retries, Decl(lib.ts, 0, 31))
+
+const s2: string = numeric[3];
+>s2 : Symbol(s2, Decl(use.ts, 3, 5))
+>numeric : Symbol(numeric, Decl(use.ts, 0, 24))
+>3 : Symbol(numeric[3], Decl(lib.ts, 5, 14))
+
+const n2: number = spaced["a b"];
+>n2 : Symbol(n2, Decl(use.ts, 4, 5))
+>spaced : Symbol(spaced, Decl(use.ts, 0, 33))
+>"a b" : Symbol(spaced["a b"], Decl(lib.ts, 9, 13))
+
+const n3: number = reservedAndNonIdentifier["b-c"] + reservedAndNonIdentifier.default;
+>n3 : Symbol(n3, Decl(use.ts, 5, 5))
+>reservedAndNonIdentifier : Symbol(reservedAndNonIdentifier, Decl(use.ts, 0, 53))
+>"b-c" : Symbol(reservedAndNonIdentifier["b-c"], Decl(lib.ts, 18, 37))
+>reservedAndNonIdentifier.default : Symbol(reservedAndNonIdentifier.default, Decl(lib.ts, 17, 49))
+>reservedAndNonIdentifier : Symbol(reservedAndNonIdentifier, Decl(use.ts, 0, 53))
+>default : Symbol(reservedAndNonIdentifier.default, Decl(lib.ts, 17, 49))
+
+const n4: number = constKey["d-e"];
+>n4 : Symbol(n4, Decl(use.ts, 6, 5))
+>constKey : Symbol(constKey, Decl(use.ts, 0, 79))
+>"d-e" : Symbol(constKey[constKey[key]], Decl(lib.ts, 23, 15))
+
+const n5: number = local["f-g"] + local.a;
+>n5 : Symbol(n5, Decl(use.ts, 7, 5))
+>local : Symbol(local, Decl(use.ts, 0, 6))
+>"f-g" : Symbol(local["f-g"], Decl(lib.ts, 27, 12))
+>local.a : Symbol(local.a, Decl(lib.ts, 26, 23))
+>local : Symbol(local, Decl(use.ts, 0, 6))
+>a : Symbol(local.a, Decl(lib.ts, 26, 23))
+
+const n6: number = identifiersOnly.a + identifiersOnly.b;
+>n6 : Symbol(n6, Decl(use.ts, 8, 5))
+>identifiersOnly.a : Symbol(identifiersOnly.a, Decl(lib.ts, 31, 40))
+>identifiersOnly : Symbol(identifiersOnly, Decl(use.ts, 0, 89))
+>a : Symbol(identifiersOnly.a, Decl(lib.ts, 31, 40))
+>identifiersOnly.b : Symbol(identifiersOnly["b"], Decl(lib.ts, 32, 22))
+>identifiersOnly : Symbol(identifiersOnly, Decl(use.ts, 0, 89))
+>b : Symbol(identifiersOnly["b"], Decl(lib.ts, 32, 22))
+
