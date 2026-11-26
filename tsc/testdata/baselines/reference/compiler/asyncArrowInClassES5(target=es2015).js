@@ -15,4 +15,4 @@ class Test {
 // Should capture `this`
 class Test {
 }
-Test.member = (x) => __awaiter(void 0, void 0, void 0, function* () { });
+Test.member = __setFunctionName((x) => __awaiter(void 0, void 0, void 0, function* () { }), "member");

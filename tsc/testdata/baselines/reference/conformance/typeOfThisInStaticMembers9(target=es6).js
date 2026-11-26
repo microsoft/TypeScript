@@ -25,20 +25,26 @@ class D extends C {
 
 //// [typeOfThisInStaticMembers9.js]
 "use strict";
-var _a, _b;
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
+var _a, _b, _c;
 class C {
 }
 C.f = 1;
 class D extends (_b = C) {
 }
 _a = D;
-D.arrowFunctionBoundary = () => Reflect.get(_b, "f", _a) + 1;
-D.functionExprBoundary = function () { return super.f + 2; };
-D.classExprBoundary = class {
-    constructor() {
-        this.a = super.f + 3;
-    }
-};
+D.arrowFunctionBoundary = __setFunctionName(() => Reflect.get(_b, "f", _a) + 1, "arrowFunctionBoundary");
+D.functionExprBoundary = __setFunctionName(function () { return super.f + 2; }, "functionExprBoundary");
+D.classExprBoundary = (_c = class {
+        constructor() {
+            this.a = super.f + 3;
+        }
+    },
+    __setFunctionName(_c, "classExprBoundary"),
+    _c);
 D.functionAndClassDeclBoundary = (() => {
     function foo() {
         return super.f + 4;

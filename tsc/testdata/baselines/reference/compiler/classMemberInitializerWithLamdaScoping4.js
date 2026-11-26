@@ -21,14 +21,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.field1 = void 0;
 //// [classMemberInitializerWithLamdaScoping3_1.js]
 "use strict";
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Test1 = void 0;
 class Test1 {
     constructor(field1) {
         this.field1 = field1;
-        this.messageHandler = () => {
+        this.messageHandler = __setFunctionName(() => {
             console.log(field1); // Should be error that couldnt find symbol field1
-        };
+        }, "messageHandler");
     }
 }
 exports.Test1 = Test1;

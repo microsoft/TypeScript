@@ -20,13 +20,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
 var NS;
 (function (NS) {
     var _a;
     class C {
     }
     _a = C;
-    C.h = () => __awaiter(void 0, void 0, void 0, function* () { return 1; });
-    C.i = () => __awaiter(void 0, void 0, void 0, function* () { return _a.h; });
+    C.h = __setFunctionName(() => __awaiter(void 0, void 0, void 0, function* () { return 1; }), "h");
+    C.i = __setFunctionName(() => __awaiter(void 0, void 0, void 0, function* () { return _a.h; }), "i");
     NS.C = C;
 })(NS || (NS = {}));

@@ -351,6 +351,10 @@ export class ExportedStaticArgumentsFn {
 }
 
 //// [staticPropertyNameConflicts.js]
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
 var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10;
 const FunctionPropertyNames = {
     name: 'name',
@@ -521,9 +525,9 @@ var StaticName_Anonymous = class {
         }); // ok
     }
 };
-var StaticName_Anonymous2 = (_o = class {
+var StaticName_Anonymous2 = (_l = class {
         constructor() {
-            Object.defineProperty(this, _m, {
+            Object.defineProperty(this, _o, {
                 enumerable: true,
                 configurable: true,
                 writable: true,
@@ -531,9 +535,10 @@ var StaticName_Anonymous2 = (_o = class {
             }); // ok
         }
     },
-    _l = FunctionPropertyNames.name,
     _m = FunctionPropertyNames.name,
-    _o);
+    _o = FunctionPropertyNames.name,
+    __setFunctionName(_l, "StaticName_Anonymous2"),
+    _l);
 var StaticNameFn_Anonymous = class {
     static name() { } // error without useDefineForClassFields
     name() { } // ok
@@ -553,9 +558,9 @@ var StaticLength_Anonymous = class {
         }); // ok
     }
 };
-var StaticLength_Anonymous2 = (_r = class {
+var StaticLength_Anonymous2 = (_p = class {
         constructor() {
-            Object.defineProperty(this, _q, {
+            Object.defineProperty(this, _r, {
                 enumerable: true,
                 configurable: true,
                 writable: true,
@@ -563,9 +568,10 @@ var StaticLength_Anonymous2 = (_r = class {
             }); // ok
         }
     },
-    _p = FunctionPropertyNames.length,
     _q = FunctionPropertyNames.length,
-    _r);
+    _r = FunctionPropertyNames.length,
+    __setFunctionName(_p, "StaticLength_Anonymous2"),
+    _p);
 var StaticLengthFn_Anonymous = class {
     static length() { } // error without useDefineForClassFields
     length() { } // ok
@@ -585,9 +591,9 @@ var StaticPrototype_Anonymous = class {
         }); // ok
     }
 };
-var StaticPrototype_Anonymous2 = (_u = class {
+var StaticPrototype_Anonymous2 = (_s = class {
         constructor() {
-            Object.defineProperty(this, _t, {
+            Object.defineProperty(this, _u, {
                 enumerable: true,
                 configurable: true,
                 writable: true,
@@ -595,9 +601,10 @@ var StaticPrototype_Anonymous2 = (_u = class {
             }); // ok
         }
     },
-    _s = FunctionPropertyNames.prototype,
     _t = FunctionPropertyNames.prototype,
-    _u);
+    _u = FunctionPropertyNames.prototype,
+    __setFunctionName(_s, "StaticPrototype_Anonymous2"),
+    _s);
 var StaticPrototypeFn_Anonymous = class {
     static prototype() { } // always an error
     prototype() { } // ok
@@ -617,9 +624,9 @@ var StaticCaller_Anonymous = class {
         }); // ok
     }
 };
-var StaticCaller_Anonymous2 = (_x = class {
+var StaticCaller_Anonymous2 = (_v = class {
         constructor() {
-            Object.defineProperty(this, _w, {
+            Object.defineProperty(this, _x, {
                 enumerable: true,
                 configurable: true,
                 writable: true,
@@ -627,9 +634,10 @@ var StaticCaller_Anonymous2 = (_x = class {
             }); // ok
         }
     },
-    _v = FunctionPropertyNames.caller,
     _w = FunctionPropertyNames.caller,
-    _x);
+    _x = FunctionPropertyNames.caller,
+    __setFunctionName(_v, "StaticCaller_Anonymous2"),
+    _v);
 var StaticCallerFn_Anonymous = class {
     static caller() { } // error without useDefineForClassFields
     caller() { } // ok
@@ -649,9 +657,9 @@ var StaticArguments_Anonymous = class {
         }); // ok
     }
 };
-var StaticArguments_Anonymous2 = (_0 = class {
+var StaticArguments_Anonymous2 = (_y = class {
         constructor() {
-            Object.defineProperty(this, _z, {
+            Object.defineProperty(this, _0, {
                 enumerable: true,
                 configurable: true,
                 writable: true,
@@ -659,9 +667,10 @@ var StaticArguments_Anonymous2 = (_0 = class {
             }); // ok
         }
     },
-    _y = FunctionPropertyNames.arguments,
     _z = FunctionPropertyNames.arguments,
-    _0);
+    _0 = FunctionPropertyNames.arguments,
+    __setFunctionName(_y, "StaticArguments_Anonymous2"),
+    _y);
 var StaticArgumentsFn_Anonymous = class {
     static arguments() { } // error without useDefineForClassFields
     arguments() { } // ok

@@ -13,6 +13,10 @@ for (const row of ['1', '2', '3', '4', '5']) {
 
 //// [classInConvertedLoopES5.js]
 "use strict";
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
 const classesByRow = {};
 for (const row of ['1', '2', '3', '4', '5']) {
     class RowClass {
@@ -20,6 +24,6 @@ for (const row of ['1', '2', '3', '4', '5']) {
             this.row = row;
         }
     }
-    RowClass.factory = () => new RowClass();
+    RowClass.factory = __setFunctionName(() => new RowClass(), "factory");
     classesByRow[row] = RowClass;
 }

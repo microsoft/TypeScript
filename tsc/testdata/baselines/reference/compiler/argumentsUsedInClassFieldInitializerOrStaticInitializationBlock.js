@@ -117,6 +117,10 @@ function D7() {
 
 //// [argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.js]
 "use strict";
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
 function A() {
     return class T {
         constructor() {
@@ -148,21 +152,21 @@ function B1() {
 function C() {
     return class T {
         constructor() {
-            this.a = function () { arguments; };
+            this.a = __setFunctionName(function () { arguments; }, "a");
         }
     };
 }
 function D() {
     return class T {
         constructor() {
-            this.a = () => arguments; // should error
+            this.a = __setFunctionName(() => arguments, "a"); // should error
         }
     };
 }
 function D1() {
     return class T {
         constructor() {
-            this.a = () => {
+            this.a = __setFunctionName(() => {
                 arguments; // should error
                 const b = () => {
                     return arguments; // should error
@@ -170,7 +174,7 @@ function D1() {
                 function f() {
                     return arguments; // ok
                 }
-            };
+            }, "a");
         }
     };
 }
@@ -226,7 +230,7 @@ function D5() {
 function D6() {
     return class T {
         constructor() {
-            this.a = (x = arguments) => { }; // should error
+            this.a = __setFunctionName((x = arguments) => { }, "a"); // should error
         }
     };
 }

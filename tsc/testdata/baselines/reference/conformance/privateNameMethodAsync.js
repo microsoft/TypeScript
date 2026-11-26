@@ -18,12 +18,16 @@ new C().foo().then(console.log);
 
 //// [privateNameMethodAsync.js]
 "use strict";
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
 var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {
     if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
     if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
     return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
 };
-var _C_instances, _C_bar, _C_baz, _C_qux, _a;
+var _C_instances, _a, _C_bar, _C_baz, _C_qux;
 const C = (_a = class {
         constructor() {
             _C_instances.add(this);
@@ -39,5 +43,6 @@ const C = (_a = class {
     _C_qux = async function* _C_qux() {
         yield (await Promise.resolve(42));
     },
+    __setFunctionName(_a, "C"),
     _a);
 new C().foo().then(console.log);

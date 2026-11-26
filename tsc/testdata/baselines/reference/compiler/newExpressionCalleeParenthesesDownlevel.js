@@ -38,16 +38,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
 var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {
     if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
     if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
     return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
 };
-var _a, _A_plugins, _A_staticPlugins;
+var _a, _b, _A_plugins, _A_staticPlugins;
 class Plugins {
 }
-Plugins.Linker = class {
-};
+Plugins.Linker = (_a = class {
+    },
+    __setFunctionName(_a, "Linker"),
+    _a);
 class A {
     constructor() {
         _A_plugins.set(this, Plugins);
@@ -55,10 +61,10 @@ class A {
     m() {
         new (__classPrivateFieldGet(this, _A_plugins, "f").Linker)();
         new (__classPrivateFieldGet(this, _A_plugins, "f")["Linker"])();
-        new (__classPrivateFieldGet(_a, _a, "f", _A_staticPlugins).Linker)();
+        new (__classPrivateFieldGet(_b, _b, "f", _A_staticPlugins).Linker)();
     }
 }
-_a = A, _A_plugins = new WeakMap();
+_b = A, _A_plugins = new WeakMap();
 _A_staticPlugins = { value: Plugins };
 class B {
 }

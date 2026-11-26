@@ -28,11 +28,15 @@ const O = {
 
 //// [invalidNewTarget.es5.js]
 "use strict";
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
 const a = new.target;
 const b = () => new.target;
 class C {
     constructor() {
-        this.f = () => new.target;
+        this.f = __setFunctionName(() => new.target, "f");
     }
     [new.target]() { }
     c() { return new.target; }
@@ -43,7 +47,7 @@ class C {
     static get h() { return new.target; }
     static set i(_) { _ = new.target; }
 }
-C.j = () => new.target;
+C.j = __setFunctionName(() => new.target, "j");
 const O = {
     [new.target]: undefined,
     k() { return new.target; },

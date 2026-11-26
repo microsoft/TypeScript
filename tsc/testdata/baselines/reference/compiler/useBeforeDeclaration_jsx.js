@@ -19,6 +19,10 @@ class C {
 
 //// [useBeforeDeclaration_jsx.jsx]
 "use strict";
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
 class C {
 }
 C.a = <C.z></C.z>;
@@ -28,4 +32,4 @@ C.d = <span id={C.y}></span>;
 C.e = <span>{C.y}</span>;
 C.x = {};
 C.y = '';
-C.z = () => <b></b>;
+C.z = __setFunctionName(() => <b></b>, "z");

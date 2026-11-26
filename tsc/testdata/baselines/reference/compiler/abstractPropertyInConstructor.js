@@ -97,10 +97,14 @@ class C2 {
 
 //// [abstractPropertyInConstructor.js]
 "use strict";
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
 class AbstractClass {
     constructor(str, other) {
         this.other = this.prop;
-        this.fn = () => this.prop;
+        this.fn = __setFunctionName(() => this.prop, "fn");
         this.method(parseInt(str));
         let val = this.prop.toLowerCase();
         if (!str) {
@@ -121,7 +125,7 @@ class AbstractClass {
 class DerivedAbstractClass extends AbstractClass {
     constructor(str, other, yetAnother) {
         super(str, other);
-        this.cb = (s) => { };
+        this.cb = __setFunctionName((s) => { }, "cb");
         // there is no implementation of 'prop' in any base class
         this.cb(this.prop.toLowerCase());
         this.method(1);
@@ -134,7 +138,7 @@ class Implementation extends DerivedAbstractClass {
     constructor(str, other, yetAnother) {
         super(str, other, yetAnother);
         this.prop = "";
-        this.cb = (s) => { };
+        this.cb = __setFunctionName((s) => { }, "cb");
         this.cb(this.prop);
     }
     method(n) {

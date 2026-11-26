@@ -38,12 +38,13 @@ function foo(y, x, z) {
 }
 function foo2(y, x) {
     var _a, _b;
-    if (y === void 0) { y = (_b = class {
+    if (y === void 0) { y = (_a = class {
             constructor() {
-                this[_a] = x;
+                this[_b] = x;
             }
         },
-        _a = x,
-        _b); }
+        _b = x,
+        __setFunctionName(_a, "y"),
+        _a); }
     if (x === void 0) { x = 1; }
 }

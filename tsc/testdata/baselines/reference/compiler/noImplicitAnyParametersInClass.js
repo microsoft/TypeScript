@@ -95,32 +95,36 @@ class C {
 
 //// [noImplicitAnyParametersInClass.js]
 "use strict";
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
 class C {
     constructor() {
         // No implicit-'any' errors.
-        this.pub_f9 = () => "";
+        this.pub_f9 = __setFunctionName(() => "", "pub_f9");
         // Implicit-'any' errors for x.
-        this.pub_f10 = (x) => "";
+        this.pub_f10 = __setFunctionName((x) => "", "pub_f10");
         // Implicit-'any' errors for x, y, and z.
-        this.pub_f11 = (x, y, z) => "";
+        this.pub_f11 = __setFunctionName((x, y, z) => "", "pub_f11");
         // Implicit-'any' errors for x and z.
-        this.pub_f12 = (x, y, z) => "";
+        this.pub_f12 = __setFunctionName((x, y, z) => "", "pub_f12");
         // Implicit-'any[]' error for r.
-        this.pub_f13 = (...r) => "";
+        this.pub_f13 = __setFunctionName((...r) => "", "pub_f13");
         // Implicit-'any'/'any[]' errors for x, r.
-        this.pub_f14 = (x, ...r) => "";
+        this.pub_f14 = __setFunctionName((x, ...r) => "", "pub_f14");
         // No implicit-'any' errors.
-        this.priv_f9 = () => "";
+        this.priv_f9 = __setFunctionName(() => "", "priv_f9");
         // Implicit-'any' errors for x.
-        this.priv_f10 = (x) => "";
+        this.priv_f10 = __setFunctionName((x) => "", "priv_f10");
         // Implicit-'any' errors for x, y, and z.
-        this.priv_f11 = (x, y, z) => "";
+        this.priv_f11 = __setFunctionName((x, y, z) => "", "priv_f11");
         // Implicit-'any' errors for x and z.
-        this.priv_f12 = (x, y, z) => "";
+        this.priv_f12 = __setFunctionName((x, y, z) => "", "priv_f12");
         // Implicit-'any[]' error for r.
-        this.priv_f13 = (...r) => "";
+        this.priv_f13 = __setFunctionName((...r) => "", "priv_f13");
         // Implicit-'any'/'any[]' errors for x, r.
-        this.priv_f14 = (x, ...r) => "";
+        this.priv_f14 = __setFunctionName((x, ...r) => "", "priv_f14");
     }
     // No implicit-'any' errors.
     pub_f1() { }

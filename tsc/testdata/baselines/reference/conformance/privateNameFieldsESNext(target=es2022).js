@@ -24,12 +24,16 @@ class C {
 
 //// [privateNameFieldsESNext.js]
 "use strict";
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
 class C {
     constructor() {
         this.a = 123;
         this.#a = 10;
         this.c = "hello";
-        this.#something = () => 1234;
+        this.#something = __setFunctionName(() => 1234, "#something");
     }
     #a;
     #b;

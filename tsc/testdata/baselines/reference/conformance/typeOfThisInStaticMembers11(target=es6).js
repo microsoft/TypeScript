@@ -58,6 +58,10 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
 var _a, _b, _c;
 let C = class C {
 };
@@ -109,13 +113,13 @@ Object.defineProperty(D, "f", {
     enumerable: true,
     configurable: true,
     writable: true,
-    value: () => (void 0).c + 1
+    value: __setFunctionName(() => (void 0).c + 1, "f")
 });
 Object.defineProperty(D, "ff", {
     enumerable: true,
     configurable: true,
     writable: true,
-    value: function () { this.c + 1; }
+    value: __setFunctionName(function () { this.c + 1; }, "ff")
 });
 D = __decorate([
     foo
@@ -169,11 +173,11 @@ Object.defineProperty(DD, "f", {
     enumerable: true,
     configurable: true,
     writable: true,
-    value: () => _b.c + 1
+    value: __setFunctionName(() => _b.c + 1, "f")
 });
 Object.defineProperty(DD, "ff", {
     enumerable: true,
     configurable: true,
     writable: true,
-    value: function () { this.c + 1; }
+    value: __setFunctionName(function () { this.c + 1; }, "ff")
 });

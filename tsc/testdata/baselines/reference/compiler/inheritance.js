@@ -38,6 +38,10 @@ class Baad extends Good {
 
 //// [inheritance.js]
 "use strict";
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
 class B1 {
 }
 class B2 {
@@ -52,7 +56,7 @@ class ND extends N {
 }
 class Good {
     constructor() {
-        this.f = function () { return 0; };
+        this.f = __setFunctionName(function () { return 0; }, "f");
     }
     g() { return 0; }
 }

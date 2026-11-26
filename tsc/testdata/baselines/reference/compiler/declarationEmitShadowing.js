@@ -16,14 +16,18 @@ export function needsRenameForShadowing<T>() {
 
 //// [declarationEmitShadowing.js]
 "use strict";
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.A = void 0;
 exports.needsRenameForShadowing = needsRenameForShadowing;
 class A {
     constructor() {
-        this.ShadowedButDoesNotRequireRenaming = () => {
+        this.ShadowedButDoesNotRequireRenaming = __setFunctionName(() => {
             return null;
-        };
+        }, "ShadowedButDoesNotRequireRenaming");
     }
 }
 exports.A = A;

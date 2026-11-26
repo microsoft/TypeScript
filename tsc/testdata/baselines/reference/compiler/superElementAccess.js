@@ -39,9 +39,13 @@ class MyDerived extends MyBase {
 
 //// [superElementAccess.js]
 "use strict";
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
 class MyBase {
     constructor() {
-        this.m2 = function () { };
+        this.m2 = __setFunctionName(function () { }, "m2");
         this.d1 = 42;
         this.d2 = 42;
     }

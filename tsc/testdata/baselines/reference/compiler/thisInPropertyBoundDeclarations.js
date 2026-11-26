@@ -71,6 +71,10 @@ class B {
 
 //// [thisInPropertyBoundDeclarations.js]
 "use strict";
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
 class Bug {
     foo(name) {
         this.name = name;
@@ -84,35 +88,35 @@ Bug.func = [
 // Valid use of this in a property bound decl
 class A {
     constructor() {
-        this.prop1 = function () {
+        this.prop1 = __setFunctionName(function () {
             this;
-        };
-        this.prop2 = function () {
+        }, "prop1");
+        this.prop2 = __setFunctionName(function () {
             function inner() {
                 this;
             }
             () => this;
-        };
-        this.prop3 = () => {
+        }, "prop2");
+        this.prop3 = __setFunctionName(() => {
             function inner() {
                 this;
             }
-        };
+        }, "prop3");
         this.prop4 = {
             a: function () { return this; },
         };
-        this.prop5 = () => {
+        this.prop5 = __setFunctionName(() => {
             return {
                 a: function () { return this; },
             };
-        };
+        }, "prop5");
     }
 }
 class B {
     constructor() {
         this.prop1 = this;
-        this.prop2 = () => this;
-        this.prop3 = () => () => () => () => this;
+        this.prop2 = __setFunctionName(() => this, "prop2");
+        this.prop3 = __setFunctionName(() => () => () => () => this, "prop3");
         this.prop4 = '  ' +
             function () {
             } +
@@ -121,10 +125,10 @@ class B {
         this.prop5 = {
             a: () => { return this; }
         };
-        this.prop6 = () => {
+        this.prop6 = __setFunctionName(() => {
             return {
                 a: () => { return this; }
             };
-        };
+        }, "prop6");
     }
 }

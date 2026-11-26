@@ -51,8 +51,13 @@ class Test {
 
 //// [classUsedBeforeInitializedVariables.js]
 "use strict";
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
 class Test {
     constructor() {
+        var _a;
         this.p1 = 0;
         this.p2 = this.p1;
         this.p3 = this.p4;
@@ -61,10 +66,10 @@ class Test {
             hello: (this.p6 = "string"),
         };
         this.directlyAssigned = this.directlyAssigned;
-        this.withinArrowFunction = () => this.withinArrowFunction;
-        this.withinFunction = function () {
+        this.withinArrowFunction = __setFunctionName(() => this.withinArrowFunction, "withinArrowFunction");
+        this.withinFunction = __setFunctionName(function () {
             return this.withinFunction;
-        };
+        }, "withinFunction");
         this.withinObjectLiteral = {
             [this.withinObjectLiteral]: true,
         };
@@ -76,8 +81,10 @@ class Test {
         this.withinObjectLiteralSetterName = {
             set [this.withinObjectLiteralSetterName](_) { }
         };
-        this.withinClassDeclarationExtension = (class extends this.withinClassDeclarationExtension {
-        });
+        this.withinClassDeclarationExtension = (_a = class extends this.withinClassDeclarationExtension {
+            },
+            __setFunctionName(_a, "withinClassDeclarationExtension"),
+            _a);
         this.fromOptional = this.p5;
         // These error cases are ignored (not checked by control flow analysis)
         this.assignedByArrowFunction = (() => this.assignedByFunction)();

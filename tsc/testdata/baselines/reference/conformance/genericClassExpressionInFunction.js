@@ -35,6 +35,10 @@ s.genericVar = 12;
 
 //// [genericClassExpressionInFunction.js]
 "use strict";
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
 class A {
 }
 function B1() {
@@ -44,8 +48,11 @@ function B1() {
 }
 class B2 {
     constructor() {
-        this.anon = class extends A {
-        };
+        var _a;
+        this.anon = (_a = class extends A {
+            },
+            __setFunctionName(_a, "anon"),
+            _a);
     }
 }
 function B3() {

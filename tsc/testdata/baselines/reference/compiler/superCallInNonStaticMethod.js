@@ -54,6 +54,10 @@ class Other extends Doing {
 
 //// [superCallInNonStaticMethod.js]
 "use strict";
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
 class Doing {
     instanceMethod() {
     }
@@ -90,7 +94,7 @@ class Other extends Doing {
     constructor() {
         super();
         this.propertyInitializer = super.instanceMethod();
-        this.functionProperty = () => { super.instanceMethod(); };
+        this.functionProperty = __setFunctionName(() => { super.instanceMethod(); }, "functionProperty");
         super.instanceMethod();
     }
 }

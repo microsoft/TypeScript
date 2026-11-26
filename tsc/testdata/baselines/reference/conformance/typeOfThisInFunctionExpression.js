@@ -50,6 +50,10 @@ namespace M {
 //// [typeOfThisInFunctionExpression.js]
 "use strict";
 // type of 'this' in FunctionExpression is Any
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
 function fn() {
     var p = this;
     var p;
@@ -64,10 +68,10 @@ var t2 = function f() {
 };
 class C {
     constructor() {
-        this.x = function () {
+        this.x = __setFunctionName(function () {
             var q;
             var q = this;
-        };
+        }, "x");
         this.y = function ff() {
             var q;
             var q = this;

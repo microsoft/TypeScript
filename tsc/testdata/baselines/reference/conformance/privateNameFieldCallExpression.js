@@ -38,11 +38,15 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
     if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
     return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
 };
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
 var _A_fieldFunc, _A_fieldFunc2;
 class A {
     constructor() {
-        _A_fieldFunc.set(this, function () { this.x = 10; });
-        _A_fieldFunc2.set(this, function (a, ...b) { });
+        _A_fieldFunc.set(this, __setFunctionName(function () { this.x = 10; }, "#fieldFunc"));
+        _A_fieldFunc2.set(this, __setFunctionName(function (a, ...b) { }, "#fieldFunc2"));
         this.x = 1;
     }
     test() {

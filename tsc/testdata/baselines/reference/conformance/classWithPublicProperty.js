@@ -25,16 +25,20 @@ var r8: string = C.g();
 
 //// [classWithPublicProperty.js]
 "use strict";
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
 class C {
     constructor() {
         this.a = '';
         this.b = '';
-        this.d = () => '';
+        this.d = __setFunctionName(() => '', "d");
     }
     c() { return ''; }
     static f() { return ''; }
 }
-C.g = () => '';
+C.g = __setFunctionName(() => '', "g");
 // all of these are valid
 var c = new C();
 var r1 = c.x;

@@ -13,13 +13,17 @@ arr.forEach(C => console.log(C.y()));
 
 //// [classExpressionWithStaticPropertiesES63.js]
 "use strict";
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
 var _a;
 const arr = [];
 for (let i = 0; i < 3; i++) {
     arr.push((_a = class C {
         },
         _a.x = i,
-        _a.y = () => _a.x * 2,
+        _a.y = __setFunctionName(() => _a.x * 2, "y"),
         _a));
 }
 arr.forEach(C => console.log(C.y()));

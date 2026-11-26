@@ -135,11 +135,15 @@ namespace GenericSignaturesValid {
 //// [assignmentCompatWithGenericCallSignaturesWithOptionalParameters.js]
 "use strict";
 // call signatures in derived types must have the same or fewer optional parameters as the target for assignment
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
 var ClassTypeParam;
 (function (ClassTypeParam) {
     class Base {
         constructor() {
-            this.init = () => {
+            this.init = __setFunctionName(() => {
                 this.a = () => null; // ok, same T of required params
                 this.a = (x) => null; // ok, same T of required params
                 this.a = (x) => null; // error, too many required params
@@ -158,7 +162,7 @@ var ClassTypeParam;
                 this.a5 = (x, y) => null; // ok, fewer required params
                 this.a5 = (x) => null; // ok, all present params match
                 this.a5 = (x, y) => null; // ok, same number of params
-            };
+            }, "init");
         }
     }
 })(ClassTypeParam || (ClassTypeParam = {}));
@@ -203,7 +207,7 @@ var GenericSignaturesValid;
 (function (GenericSignaturesValid) {
     class Base2 {
         constructor() {
-            this.init = () => {
+            this.init = __setFunctionName(() => {
                 this.a = () => null; // ok, same T of required params
                 this.a = (x) => null; // ok, same T of required params
                 this.a = (x) => null; // error, too many required params
@@ -222,7 +226,7 @@ var GenericSignaturesValid;
                 this.a5 = (x, y) => null; // ok, fewer required params
                 this.a5 = (x) => null; // ok, all present params match
                 this.a5 = (x, y) => null; // ok, same number of params
-            };
+            }, "init");
         }
     }
 })(GenericSignaturesValid || (GenericSignaturesValid = {}));

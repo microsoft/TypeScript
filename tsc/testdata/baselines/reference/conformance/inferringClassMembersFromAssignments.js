@@ -134,17 +134,21 @@ var stringOrNumberOrUndefined = C.inStaticNestedArrowFunction;
 
 //// [a.js]
 "use strict";
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
 var _a;
 class C {
     constructor() {
-        this.prop = () => {
+        this.prop = __setFunctionName(() => {
             if (Math.random()) {
                 this.inPropertyDeclaration = 0;
             }
             else {
                 this.inPropertyDeclaration = "string";
             }
-        };
+        }, "prop");
         if (Math.random()) {
             this.inConstructor = 0;
         }
@@ -225,14 +229,14 @@ class C {
     }
 }
 _a = C;
-C.prop = () => {
+C.prop = __setFunctionName(() => {
     if (Math.random()) {
         _a.inStaticPropertyDeclaration = 0;
     }
     else {
         _a.inStaticPropertyDeclaration = "string";
     }
-};
+}, "prop");
 //// [b.js]
 "use strict";
 var c = new C();

@@ -27,10 +27,14 @@ namespace M {
 
 //// [lambdaPropSelf.js]
 "use strict";
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
 class Person {
     constructor(name, children) {
         this.name = name;
-        this.addChild = () => this.children.push("New child");
+        this.addChild = __setFunctionName(() => this.children.push("New child"), "addChild");
         this.children = ko.observableArray(children);
     }
 }

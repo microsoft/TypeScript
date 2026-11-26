@@ -19,17 +19,18 @@ var __setFunctionName = (this && this.__setFunctionName) || function (f, name, p
     if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
     return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
 };
-var _instances, _context, _method, _a, _b, _ClassExpressionStatic_staticPrivate, _ClassExpressionStatic_instancePrivate;
+var _ClassExpression_instances, _a, _ClassExpression_context, _ClassExpression_method, _b, _ClassExpressionStatic_staticPrivate, _ClassExpressionStatic_instancePrivate;
 export const ClassExpression = (_a = class {
         constructor() {
-            _instances.add(this);
-            _context.set(this, 0);
+            _ClassExpression_instances.add(this);
+            _ClassExpression_context.set(this, 0);
             this.value = 1;
         }
     },
-    _context = new WeakMap(),
-    _instances = new WeakSet(),
-    _method = function _method() { return 42; },
+    _ClassExpression_context = new WeakMap(),
+    _ClassExpression_instances = new WeakSet(),
+    _ClassExpression_method = function _ClassExpression_method() { return 42; },
+    __setFunctionName(_a, "ClassExpression"),
     _a);
 // Additional test with static private fields
 export const ClassExpressionStatic = (_b = class {

@@ -58,6 +58,10 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
 let C = class C {
     static { this.a = 1; }
     static { this.b = this.a + 1; }
@@ -69,8 +73,8 @@ let D = class D extends C {
     static { this.c = 2; }
     static { this.d = this.c + 1; }
     static { this.e = super.a + this.c + 1; }
-    static { this.f = () => this.c + 1; }
-    static { this.ff = function () { this.c + 1; }; }
+    static { this.f = __setFunctionName(() => this.c + 1, "f"); }
+    static { this.ff = __setFunctionName(function () { this.c + 1; }, "ff"); }
     static foo() {
         return this.c + 1;
     }
@@ -92,8 +96,8 @@ class DD extends CC {
     static { this.c = 2; }
     static { this.d = this.c + 1; }
     static { this.e = super.a + this.c + 1; }
-    static { this.f = () => this.c + 1; }
-    static { this.ff = function () { this.c + 1; }; }
+    static { this.f = __setFunctionName(() => this.c + 1, "f"); }
+    static { this.ff = __setFunctionName(function () { this.c + 1; }, "ff"); }
     static foo() {
         return this.c + 1;
     }

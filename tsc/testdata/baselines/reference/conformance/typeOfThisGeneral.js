@@ -181,13 +181,17 @@ this.spaaaaace = 4;
 
 //// [typeOfThisGeneral.js]
 "use strict";
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
 class MyTestClass {
     constructor() {
-        this.someFunc = () => {
+        this.someFunc = __setFunctionName(() => {
             //type of 'this' in member variable initializer is the class instance type
             var t = this;
             var t;
-        };
+        }, "someFunc");
         //type of 'this' in constructor body is the class instance type
         var p = this.canary;
         var p;
@@ -241,11 +245,11 @@ class MyTestClass {
 }
 class MyGenericTestClass {
     constructor() {
-        this.someFunc = () => {
+        this.someFunc = __setFunctionName(() => {
             //type of 'this' in member variable initializer is the class instance type
             var t = this;
             var t;
-        };
+        }, "someFunc");
         //type of 'this' in constructor body is the class instance type
         var p = this.canary;
         var p;

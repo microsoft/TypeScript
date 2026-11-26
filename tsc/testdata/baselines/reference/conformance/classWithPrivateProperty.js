@@ -27,16 +27,20 @@ var r8: string = C.g();
 //// [classWithPrivateProperty.js]
 "use strict";
 // accessing any private outside the class is an error
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
 class C {
     constructor() {
         this.a = '';
         this.b = '';
-        this.d = () => '';
+        this.d = __setFunctionName(() => '', "d");
     }
     c() { return ''; }
     static f() { return ''; }
 }
-C.g = () => '';
+C.g = __setFunctionName(() => '', "g");
 var c = new C();
 var r1 = c.x;
 var r2 = c.a;

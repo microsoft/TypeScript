@@ -15,10 +15,14 @@ class Greeter {
 
 //// [classMemberInitializerWithLamdaScoping5.js]
 "use strict";
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
 class Greeter {
     constructor(message) {
-        this.messageHandler = (message) => {
+        this.messageHandler = __setFunctionName((message) => {
             console.log(message); // This shouldnt be error
-        };
+        }, "messageHandler");
     }
 }
