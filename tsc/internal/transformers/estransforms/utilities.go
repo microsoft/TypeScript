@@ -273,6 +273,11 @@ func (s *superAccessState) trackSuperAccess(node *ast.Node) {
 		if isUpdateExpression(node) && assignmentTargetContainsSuperProperty(node.AsPostfixUnaryExpression().Operand) {
 			s.hasSuperPropertyAssignment = true
 		}
+	case ast.KindForInStatement, ast.KindForOfStatement:
+		// `for (super.x in ...)` and `for (super.x of ...)` assign to the initializer on each iteration.
+		if assignmentTargetContainsSuperProperty(node.Initializer()) {
+			s.hasSuperPropertyAssignment = true
+		}
 	}
 }
 
