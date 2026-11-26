@@ -17,13 +17,13 @@ function scale(left: number, right: number) {
 
         left *= -1.5;
 >left *= -1.5 : number
->left : number
+>left : number & not 0
 >-1.5 : -1.5
 >1.5 : 1.5
 
         right *= -1.5;
 >right *= -1.5 : number
->right : number
+>right : number & not 0
 >-1.5 : -1.5
 >1.5 : 1.5
 
@@ -34,7 +34,7 @@ function scale(left: number, right: number) {
 
         left *= -2;
 >left *= -2 : number
->left : number
+>left : number & not 0
 >-2 : -2
 >2 : 2
 
@@ -45,7 +45,7 @@ function scale(left: number, right: number) {
 
         right *= -2;
 >right *= -2 : number
->right : number
+>right : number & not 0
 >-2 : -2
 >2 : 2
     }

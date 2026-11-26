@@ -1,0 +1,166 @@
+//// [tests/cases/conformance/types/negated/negatedDiscriminantIntersectionSimplifies.ts] ////
+
+=== negatedDiscriminantIntersectionSimplifies.ts ===
+// When an intersection 'C & not A' has non-negated part 'C' that is mutually exclusive with the
+// negated base 'A' by virtue of a shared discriminant property (a property present on both whose
+// literal types are disjoint), the 'not A' member is redundant and is dropped, leaving 'C'.
+
+interface A {
+    kind: "a";
+>kind : "a"
+
+    field: string;
+>field : string
+}
+interface B {
+    kind: "b";
+>kind : "b"
+
+    field: number;
+>field : number
+}
+interface C {
+    kind: "c";
+>kind : "c"
+
+    field: object;
+>field : object
+}
+
+declare function wantsC(x: C): void;
+>wantsC : (x: C) => void
+>x : C
+
+// 'C & not A' -> 'C' because C.kind ("c") is disjoint from A.kind ("a").
+declare const c1: C & not A;
+>c1 : C
+
+c1; // C
+>c1 : C
+
+wantsC(c1);
+>wantsC(c1) : void
+>wantsC : (x: C) => void
+>c1 : C
+
+// Multiple negations, each mutually exclusive with C: 'C & not A & not B' -> 'C'.
+declare const c2: C & not A & not B;
+>c2 : C
+
+c2; // C
+>c2 : C
+
+wantsC(c2);
+>wantsC(c2) : void
+>wantsC : (x: C) => void
+>c2 : C
+
+// Non-discriminant negation is retained: 'C & not { other: number }' shares no disjoint discriminant.
+declare const c3: C & not { other: number };
+>c3 : C & not { other: number; }
+>other : number
+
+c3; // C & not { other: number; }
+>c3 : C & not { other: number; }
+
+// A negation whose shared property has the SAME discriminant value is retained (not disjoint):
+// C.kind and the negated base's kind are both "c", so they are not mutually exclusive.
+declare const c4: C & not { kind: "c"; other: number };
+>c4 : C & not { kind: "c"; other: number; }
+>kind : "c"
+>other : number
+
+c4; // C & not { kind: "c"; other: number; }
+>c4 : C & not { kind: "c"; other: number; }
+
+// Enum discriminants: two distinct string-enum members are mutually exclusive.
+enum E {
+>E : E
+
+    A = "a",
+>A : E.A
+>"a" : "a"
+
+    B = "b",
+>B : E.B
+>"b" : "b"
+}
+interface EA {
+    tag: E.A;
+>tag : E.A
+>E : any
+
+    payload: string;
+>payload : string
+}
+interface EB {
+    tag: E.B;
+>tag : E.B
+>E : any
+
+    payload: number;
+>payload : number
+}
+declare function wantsEA(x: EA): void;
+>wantsEA : (x: EA) => void
+>x : EA
+
+// 'EA & not EB' -> 'EA' because E.A and E.B are disjoint enum members.
+declare const e1: EA & not EB;
+>e1 : EA
+
+e1; // EA
+>e1 : EA
+
+wantsEA(e1);
+>wantsEA(e1) : void
+>wantsEA : (x: EA) => void
+>e1 : EA
+
+// A string-enum member is a *distinct* type from the bare string literal of its value: 'E.A' and
+// '"a"' have an empty intersection ('E.A & "a"' is never), so they are mutually exclusive and the
+// negation is dropped. This is precisely the case a by-identity comparison of the property types
+// would get wrong -- the regular literal type of 'E.A' is the same '"a"', so identity would treat
+// them as overlapping and wrongly keep the negation. The intersection-based check gets it right.
+declare const e2: EA & not { tag: "a"; payload: number };
+>e2 : EA
+>tag : "a"
+>payload : number
+
+e2; // EA
+>e2 : EA
+
+wantsEA(e2);
+>wantsEA(e2) : void
+>wantsEA : (x: EA) => void
+>e2 : EA
+
+// The same enum member on both sides is NOT disjoint, so the negation is retained.
+declare const e3: EA & not { tag: E.A; extra: number };
+>e3 : EA & not { tag: E.A; extra: number; }
+>tag : E.A
+>E : any
+>extra : number
+
+e3; // EA & not { tag: E.A; extra: number; }
+>e3 : EA & not { tag: E.A; extra: number; }
+
+// A union-of-literals discriminant: '"a" | "b"' is disjoint from '"c" | "d"', so the negation is
+// dropped even though neither side is a single unit type (a by-identity check would miss this).
+interface P {
+    kind: "a" | "b";
+>kind : "a" | "b"
+
+    p: string;
+>p : string
+}
+declare const u1: P & not { kind: "c" | "d"; p: number };
+>u1 : P
+>kind : "c" | "d"
+>p : number
+
+u1; // P
+>u1 : P
+
+
+

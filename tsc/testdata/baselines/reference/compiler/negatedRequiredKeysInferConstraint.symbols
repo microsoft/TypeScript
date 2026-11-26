@@ -1,0 +1,102 @@
+//// [tests/cases/compiler/negatedRequiredKeysInferConstraint.ts] ////
+
+=== negatedRequiredKeysInferConstraint.ts ===
+type MyExclude<T, U> = T & not U;
+>MyExclude : Symbol(MyExclude, Decl(negatedRequiredKeysInferConstraint.ts, 0, 0))
+>T : Symbol(T, Decl(negatedRequiredKeysInferConstraint.ts, 0, 15))
+>U : Symbol(U, Decl(negatedRequiredKeysInferConstraint.ts, 0, 17))
+>T : Symbol(T, Decl(negatedRequiredKeysInferConstraint.ts, 0, 15))
+>U : Symbol(U, Decl(negatedRequiredKeysInferConstraint.ts, 0, 17))
+
+type Simplify<T> = { [Key in keyof T]: T[Key] };
+>Simplify : Symbol(Simplify, Decl(negatedRequiredKeysInferConstraint.ts, 0, 33))
+>T : Symbol(T, Decl(negatedRequiredKeysInferConstraint.ts, 1, 14))
+>Key : Symbol(Key, Decl(negatedRequiredKeysInferConstraint.ts, 1, 22))
+>T : Symbol(T, Decl(negatedRequiredKeysInferConstraint.ts, 1, 14))
+>T : Symbol(T, Decl(negatedRequiredKeysInferConstraint.ts, 1, 14))
+>Key : Symbol(Key, Decl(negatedRequiredKeysInferConstraint.ts, 1, 22))
+
+type OptionalKeys<T extends object> = {
+>OptionalKeys : Symbol(OptionalKeys, Decl(negatedRequiredKeysInferConstraint.ts, 1, 48))
+>T : Symbol(T, Decl(negatedRequiredKeysInferConstraint.ts, 2, 18))
+
+    [Key in keyof T]: undefined extends T[Key] ? Key : never;
+>Key : Symbol(Key, Decl(negatedRequiredKeysInferConstraint.ts, 3, 5))
+>T : Symbol(T, Decl(negatedRequiredKeysInferConstraint.ts, 2, 18))
+>T : Symbol(T, Decl(negatedRequiredKeysInferConstraint.ts, 2, 18))
+>Key : Symbol(Key, Decl(negatedRequiredKeysInferConstraint.ts, 3, 5))
+>Key : Symbol(Key, Decl(negatedRequiredKeysInferConstraint.ts, 3, 5))
+
+}[keyof T];
+>T : Symbol(T, Decl(negatedRequiredKeysInferConstraint.ts, 2, 18))
+
+type RequiredKeys<T extends object> = MyExclude<keyof T, OptionalKeys<T>>;
+>RequiredKeys : Symbol(RequiredKeys, Decl(negatedRequiredKeysInferConstraint.ts, 4, 11))
+>T : Symbol(T, Decl(negatedRequiredKeysInferConstraint.ts, 5, 18))
+>MyExclude : Symbol(MyExclude, Decl(negatedRequiredKeysInferConstraint.ts, 0, 0))
+>T : Symbol(T, Decl(negatedRequiredKeysInferConstraint.ts, 5, 18))
+>OptionalKeys : Symbol(OptionalKeys, Decl(negatedRequiredKeysInferConstraint.ts, 1, 48))
+>T : Symbol(T, Decl(negatedRequiredKeysInferConstraint.ts, 5, 18))
+
+interface Schema<Output> {
+>Schema : Symbol(Schema, Decl(negatedRequiredKeysInferConstraint.ts, 5, 74))
+>Output : Symbol(Output, Decl(negatedRequiredKeysInferConstraint.ts, 7, 17))
+
+    output: Output;
+>output : Symbol(Schema.output, Decl(negatedRequiredKeysInferConstraint.ts, 7, 26))
+>Output : Symbol(Output, Decl(negatedRequiredKeysInferConstraint.ts, 7, 17))
+}
+
+type Shape = { [key: string]: Schema<any> };
+>Shape : Symbol(Shape, Decl(negatedRequiredKeysInferConstraint.ts, 9, 1))
+>key : Symbol(key, Decl(negatedRequiredKeysInferConstraint.ts, 11, 16))
+>Schema : Symbol(Schema, Decl(negatedRequiredKeysInferConstraint.ts, 5, 74))
+
+interface ObjectSchema<
+>ObjectSchema : Symbol(ObjectSchema, Decl(negatedRequiredKeysInferConstraint.ts, 11, 44))
+
+    T extends Shape,
+>T : Symbol(T, Decl(negatedRequiredKeysInferConstraint.ts, 13, 23))
+>Shape : Symbol(Shape, Decl(negatedRequiredKeysInferConstraint.ts, 9, 1))
+
+    Output = Simplify<
+>Output : Symbol(Output, Decl(negatedRequiredKeysInferConstraint.ts, 14, 20))
+>Simplify : Symbol(Simplify, Decl(negatedRequiredKeysInferConstraint.ts, 0, 33))
+
+        { [Key in OptionalKeys<T>]?: T[Key] } &
+>Key : Symbol(Key, Decl(negatedRequiredKeysInferConstraint.ts, 16, 11))
+>OptionalKeys : Symbol(OptionalKeys, Decl(negatedRequiredKeysInferConstraint.ts, 1, 48))
+>T : Symbol(T, Decl(negatedRequiredKeysInferConstraint.ts, 13, 23))
+>T : Symbol(T, Decl(negatedRequiredKeysInferConstraint.ts, 13, 23))
+>Key : Symbol(Key, Decl(negatedRequiredKeysInferConstraint.ts, 16, 11))
+
+        { [Key in RequiredKeys<T>]: T[Key] }
+>Key : Symbol(Key, Decl(negatedRequiredKeysInferConstraint.ts, 17, 11))
+>RequiredKeys : Symbol(RequiredKeys, Decl(negatedRequiredKeysInferConstraint.ts, 4, 11))
+>T : Symbol(T, Decl(negatedRequiredKeysInferConstraint.ts, 13, 23))
+>T : Symbol(T, Decl(negatedRequiredKeysInferConstraint.ts, 13, 23))
+>Key : Symbol(Key, Decl(negatedRequiredKeysInferConstraint.ts, 17, 11))
+
+    >
+> extends Schema<Output> {
+>Schema : Symbol(Schema, Decl(negatedRequiredKeysInferConstraint.ts, 5, 74))
+>Output : Symbol(Output, Decl(negatedRequiredKeysInferConstraint.ts, 14, 20))
+
+    shape: T;
+>shape : Symbol(ObjectSchema.shape, Decl(negatedRequiredKeysInferConstraint.ts, 19, 26))
+>T : Symbol(T, Decl(negatedRequiredKeysInferConstraint.ts, 13, 23))
+}
+
+type InferShape<T> = T extends ObjectSchema<infer Result>
+>InferShape : Symbol(InferShape, Decl(negatedRequiredKeysInferConstraint.ts, 21, 1))
+>T : Symbol(T, Decl(negatedRequiredKeysInferConstraint.ts, 23, 16))
+>T : Symbol(T, Decl(negatedRequiredKeysInferConstraint.ts, 23, 16))
+>ObjectSchema : Symbol(ObjectSchema, Decl(negatedRequiredKeysInferConstraint.ts, 11, 44))
+>Result : Symbol(Result, Decl(negatedRequiredKeysInferConstraint.ts, 23, 49))
+
+    ? Result extends Shape ? Result : never
+>Result : Symbol(Result, Decl(negatedRequiredKeysInferConstraint.ts, 23, 49))
+>Shape : Symbol(Shape, Decl(negatedRequiredKeysInferConstraint.ts, 9, 1))
+>Result : Symbol(Result, Decl(negatedRequiredKeysInferConstraint.ts, 23, 49))
+
+    : never;

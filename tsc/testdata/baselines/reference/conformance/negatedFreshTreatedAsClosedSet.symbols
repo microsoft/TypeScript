@@ -1,0 +1,176 @@
+//// [tests/cases/conformance/types/negated/negatedFreshTreatedAsClosedSet.ts] ////
+
+=== negatedFreshTreatedAsClosedSet.ts ===
+// from https://github.com/Microsoft/TypeScript/issues/4183
+type Distinct<A, B> = (A | B) & not (A & B);
+>Distinct : Symbol(Distinct, Decl(negatedFreshTreatedAsClosedSet.ts, 0, 0))
+>A : Symbol(A, Decl(negatedFreshTreatedAsClosedSet.ts, 1, 14))
+>B : Symbol(B, Decl(negatedFreshTreatedAsClosedSet.ts, 1, 16))
+>A : Symbol(A, Decl(negatedFreshTreatedAsClosedSet.ts, 1, 14))
+>B : Symbol(B, Decl(negatedFreshTreatedAsClosedSet.ts, 1, 16))
+>A : Symbol(A, Decl(negatedFreshTreatedAsClosedSet.ts, 1, 14))
+>B : Symbol(B, Decl(negatedFreshTreatedAsClosedSet.ts, 1, 16))
+
+declare var o1: {x: any};
+>o1 : Symbol(o1, Decl(negatedFreshTreatedAsClosedSet.ts, 2, 11))
+>x : Symbol(x, Decl(negatedFreshTreatedAsClosedSet.ts, 2, 17))
+
+declare var o2: {y: any};
+>o2 : Symbol(o2, Decl(negatedFreshTreatedAsClosedSet.ts, 3, 11))
+>y : Symbol(y, Decl(negatedFreshTreatedAsClosedSet.ts, 3, 17))
+
+declare function f1(x: Distinct<typeof o1, typeof o2>): void;
+>f1 : Symbol(f1, Decl(negatedFreshTreatedAsClosedSet.ts, 3, 25))
+>x : Symbol(x, Decl(negatedFreshTreatedAsClosedSet.ts, 5, 20))
+>Distinct : Symbol(Distinct, Decl(negatedFreshTreatedAsClosedSet.ts, 0, 0))
+>o1 : Symbol(o1, Decl(negatedFreshTreatedAsClosedSet.ts, 2, 11))
+>o2 : Symbol(o2, Decl(negatedFreshTreatedAsClosedSet.ts, 3, 11))
+
+f1({x: 0}); // OK
+>f1 : Symbol(f1, Decl(negatedFreshTreatedAsClosedSet.ts, 3, 25))
+>x : Symbol(x, Decl(negatedFreshTreatedAsClosedSet.ts, 7, 4))
+
+f1({y: 0}); // OK
+>f1 : Symbol(f1, Decl(negatedFreshTreatedAsClosedSet.ts, 3, 25))
+>y : Symbol(y, Decl(negatedFreshTreatedAsClosedSet.ts, 8, 4))
+
+f1({x: 0, y: 0}); // Should error
+>f1 : Symbol(f1, Decl(negatedFreshTreatedAsClosedSet.ts, 3, 25))
+>x : Symbol(x, Decl(negatedFreshTreatedAsClosedSet.ts, 9, 4))
+>y : Symbol(y, Decl(negatedFreshTreatedAsClosedSet.ts, 9, 9))
+
+type A = { kind: "a" };
+>A : Symbol(A, Decl(negatedFreshTreatedAsClosedSet.ts, 9, 17))
+>kind : Symbol(kind, Decl(negatedFreshTreatedAsClosedSet.ts, 11, 10))
+
+type B = { kind: "b" };
+>B : Symbol(B, Decl(negatedFreshTreatedAsClosedSet.ts, 11, 23))
+>kind : Symbol(kind, Decl(negatedFreshTreatedAsClosedSet.ts, 12, 10))
+
+declare const ab: "a" | "b";
+>ab : Symbol(ab, Decl(negatedFreshTreatedAsClosedSet.ts, 13, 13))
+
+const aOrB: A | B = { kind: ab }; // OK
+>aOrB : Symbol(aOrB, Decl(negatedFreshTreatedAsClosedSet.ts, 15, 5))
+>A : Symbol(A, Decl(negatedFreshTreatedAsClosedSet.ts, 9, 17))
+>B : Symbol(B, Decl(negatedFreshTreatedAsClosedSet.ts, 11, 23))
+>kind : Symbol(kind, Decl(negatedFreshTreatedAsClosedSet.ts, 15, 21))
+>ab : Symbol(ab, Decl(negatedFreshTreatedAsClosedSet.ts, 13, 13))
+
+const notAOrB: not (A | B) = { kind: ab }; // Should error
+>notAOrB : Symbol(notAOrB, Decl(negatedFreshTreatedAsClosedSet.ts, 16, 5))
+>A : Symbol(A, Decl(negatedFreshTreatedAsClosedSet.ts, 9, 17))
+>B : Symbol(B, Decl(negatedFreshTreatedAsClosedSet.ts, 11, 23))
+>kind : Symbol(kind, Decl(negatedFreshTreatedAsClosedSet.ts, 16, 30))
+>ab : Symbol(ab, Decl(negatedFreshTreatedAsClosedSet.ts, 13, 13))
+
+type KindNotAOrB = { kind: not ("a" | "b") };
+>KindNotAOrB : Symbol(KindNotAOrB, Decl(negatedFreshTreatedAsClosedSet.ts, 16, 42))
+>kind : Symbol(kind, Decl(negatedFreshTreatedAsClosedSet.ts, 18, 20))
+
+type KindNotAAndNotB = { kind: not "a" } & { kind: not "b" };
+>KindNotAAndNotB : Symbol(KindNotAAndNotB, Decl(negatedFreshTreatedAsClosedSet.ts, 18, 45))
+>kind : Symbol(kind, Decl(negatedFreshTreatedAsClosedSet.ts, 19, 24))
+>kind : Symbol(kind, Decl(negatedFreshTreatedAsClosedSet.ts, 19, 44))
+
+declare let kindNotAOrB: KindNotAOrB;
+>kindNotAOrB : Symbol(kindNotAOrB, Decl(negatedFreshTreatedAsClosedSet.ts, 20, 11))
+>KindNotAOrB : Symbol(KindNotAOrB, Decl(negatedFreshTreatedAsClosedSet.ts, 16, 42))
+
+declare let kindNotAAndNotB: KindNotAAndNotB;
+>kindNotAAndNotB : Symbol(kindNotAAndNotB, Decl(negatedFreshTreatedAsClosedSet.ts, 21, 11))
+>KindNotAAndNotB : Symbol(KindNotAAndNotB, Decl(negatedFreshTreatedAsClosedSet.ts, 18, 45))
+
+kindNotAOrB = kindNotAAndNotB; // OK
+>kindNotAOrB : Symbol(kindNotAOrB, Decl(negatedFreshTreatedAsClosedSet.ts, 20, 11))
+>kindNotAAndNotB : Symbol(kindNotAAndNotB, Decl(negatedFreshTreatedAsClosedSet.ts, 21, 11))
+
+kindNotAAndNotB = kindNotAOrB; // OK
+>kindNotAAndNotB : Symbol(kindNotAAndNotB, Decl(negatedFreshTreatedAsClosedSet.ts, 21, 11))
+>kindNotAOrB : Symbol(kindNotAOrB, Decl(negatedFreshTreatedAsClosedSet.ts, 20, 11))
+
+declare const stringOrNumber: string | number;
+>stringOrNumber : Symbol(stringOrNumber, Decl(negatedFreshTreatedAsClosedSet.ts, 26, 13))
+
+const notNumberProperty: not { value: number } = { value: "x" }; // OK
+>notNumberProperty : Symbol(notNumberProperty, Decl(negatedFreshTreatedAsClosedSet.ts, 28, 5))
+>value : Symbol(value, Decl(negatedFreshTreatedAsClosedSet.ts, 28, 30))
+>value : Symbol(value, Decl(negatedFreshTreatedAsClosedSet.ts, 28, 50))
+
+const overlappingNumberProperty: not { value: number } = { value: stringOrNumber }; // Should error
+>overlappingNumberProperty : Symbol(overlappingNumberProperty, Decl(negatedFreshTreatedAsClosedSet.ts, 29, 5))
+>value : Symbol(value, Decl(negatedFreshTreatedAsClosedSet.ts, 29, 38))
+>value : Symbol(value, Decl(negatedFreshTreatedAsClosedSet.ts, 29, 58))
+>stringOrNumber : Symbol(stringOrNumber, Decl(negatedFreshTreatedAsClosedSet.ts, 26, 13))
+
+type NumberIndex = { [key: string]: number };
+>NumberIndex : Symbol(NumberIndex, Decl(negatedFreshTreatedAsClosedSet.ts, 29, 83))
+>key : Symbol(key, Decl(negatedFreshTreatedAsClosedSet.ts, 31, 22))
+
+const notNumberIndex: not NumberIndex = { value: "x" }; // OK
+>notNumberIndex : Symbol(notNumberIndex, Decl(negatedFreshTreatedAsClosedSet.ts, 33, 5))
+>NumberIndex : Symbol(NumberIndex, Decl(negatedFreshTreatedAsClosedSet.ts, 29, 83))
+>value : Symbol(value, Decl(negatedFreshTreatedAsClosedSet.ts, 33, 41))
+
+const overlappingNumberIndex: not NumberIndex = { value: stringOrNumber }; // Should error
+>overlappingNumberIndex : Symbol(overlappingNumberIndex, Decl(negatedFreshTreatedAsClosedSet.ts, 34, 5))
+>NumberIndex : Symbol(NumberIndex, Decl(negatedFreshTreatedAsClosedSet.ts, 29, 83))
+>value : Symbol(value, Decl(negatedFreshTreatedAsClosedSet.ts, 34, 49))
+>stringOrNumber : Symbol(stringOrNumber, Decl(negatedFreshTreatedAsClosedSet.ts, 26, 13))
+
+declare const dynamicKey: string;
+>dynamicKey : Symbol(dynamicKey, Decl(negatedFreshTreatedAsClosedSet.ts, 36, 13))
+
+const notComputedNumberProperty: not { value: number } = { [dynamicKey]: "x" }; // OK
+>notComputedNumberProperty : Symbol(notComputedNumberProperty, Decl(negatedFreshTreatedAsClosedSet.ts, 38, 5))
+>value : Symbol(value, Decl(negatedFreshTreatedAsClosedSet.ts, 38, 38))
+>[dynamicKey] : Symbol([dynamicKey], Decl(negatedFreshTreatedAsClosedSet.ts, 38, 58))
+>dynamicKey : Symbol(dynamicKey, Decl(negatedFreshTreatedAsClosedSet.ts, 36, 13))
+
+const overlappingComputedNumberProperty: not { value: number } = { [dynamicKey]: stringOrNumber }; // Should error
+>overlappingComputedNumberProperty : Symbol(overlappingComputedNumberProperty, Decl(negatedFreshTreatedAsClosedSet.ts, 39, 5))
+>value : Symbol(value, Decl(negatedFreshTreatedAsClosedSet.ts, 39, 46))
+>[dynamicKey] : Symbol([dynamicKey], Decl(negatedFreshTreatedAsClosedSet.ts, 39, 66))
+>dynamicKey : Symbol(dynamicKey, Decl(negatedFreshTreatedAsClosedSet.ts, 36, 13))
+>stringOrNumber : Symbol(stringOrNumber, Decl(negatedFreshTreatedAsClosedSet.ts, 26, 13))
+
+interface RecursiveA {
+>RecursiveA : Symbol(RecursiveA, Decl(negatedFreshTreatedAsClosedSet.ts, 39, 98))
+
+	next: RecursiveA;
+>next : Symbol(RecursiveA.next, Decl(negatedFreshTreatedAsClosedSet.ts, 41, 22))
+>RecursiveA : Symbol(RecursiveA, Decl(negatedFreshTreatedAsClosedSet.ts, 39, 98))
+
+	kind: "a";
+>kind : Symbol(RecursiveA.kind, Decl(negatedFreshTreatedAsClosedSet.ts, 42, 18))
+}
+interface RecursiveB {
+>RecursiveB : Symbol(RecursiveB, Decl(negatedFreshTreatedAsClosedSet.ts, 44, 1))
+
+	next: RecursiveB;
+>next : Symbol(RecursiveB.next, Decl(negatedFreshTreatedAsClosedSet.ts, 45, 22))
+>RecursiveB : Symbol(RecursiveB, Decl(negatedFreshTreatedAsClosedSet.ts, 44, 1))
+
+	kind: "b";
+>kind : Symbol(RecursiveB.kind, Decl(negatedFreshTreatedAsClosedSet.ts, 46, 18))
+}
+interface RecursiveAB {
+>RecursiveAB : Symbol(RecursiveAB, Decl(negatedFreshTreatedAsClosedSet.ts, 48, 1))
+
+	next: RecursiveAB;
+>next : Symbol(RecursiveAB.next, Decl(negatedFreshTreatedAsClosedSet.ts, 49, 23))
+>RecursiveAB : Symbol(RecursiveAB, Decl(negatedFreshTreatedAsClosedSet.ts, 48, 1))
+
+	kind: "a" | "b";
+>kind : Symbol(RecursiveAB.kind, Decl(negatedFreshTreatedAsClosedSet.ts, 50, 19))
+}
+declare const recursiveAB: RecursiveAB;
+>recursiveAB : Symbol(recursiveAB, Decl(negatedFreshTreatedAsClosedSet.ts, 53, 13))
+>RecursiveAB : Symbol(RecursiveAB, Decl(negatedFreshTreatedAsClosedSet.ts, 48, 1))
+
+const notRecursiveAOrB: not (RecursiveA | RecursiveB) = { ...recursiveAB }; // Should error
+>notRecursiveAOrB : Symbol(notRecursiveAOrB, Decl(negatedFreshTreatedAsClosedSet.ts, 55, 5))
+>RecursiveA : Symbol(RecursiveA, Decl(negatedFreshTreatedAsClosedSet.ts, 39, 98))
+>RecursiveB : Symbol(RecursiveB, Decl(negatedFreshTreatedAsClosedSet.ts, 44, 1))
+>recursiveAB : Symbol(recursiveAB, Decl(negatedFreshTreatedAsClosedSet.ts, 53, 13))
+

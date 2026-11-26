@@ -1,0 +1,93 @@
+//// [tests/cases/conformance/types/negated/negatedNarrowingAssertion.ts] ////
+
+=== negatedNarrowingAssertion.ts ===
+// Assertion signatures narrow only the (single) continuation after the call. Because there is no
+// `false` branch, no fresh CFA negation is introduced; a negation only appears when the assertion
+// predicate itself is written with `not`.
+
+interface Cat {
+>Cat : Symbol(Cat, Decl(negatedNarrowingAssertion.ts, 0, 0))
+
+    meow(): void;
+>meow : Symbol(Cat.meow, Decl(negatedNarrowingAssertion.ts, 4, 15))
+}
+
+declare function assertCat(x: unknown): asserts x is Cat;
+>assertCat : Symbol(assertCat, Decl(negatedNarrowingAssertion.ts, 6, 1))
+>x : Symbol(x, Decl(negatedNarrowingAssertion.ts, 8, 27))
+>x : Symbol(x, Decl(negatedNarrowingAssertion.ts, 8, 27))
+>Cat : Symbol(Cat, Decl(negatedNarrowingAssertion.ts, 0, 0))
+
+declare function assertNotCat(x: unknown): asserts x is not Cat;
+>assertNotCat : Symbol(assertNotCat, Decl(negatedNarrowingAssertion.ts, 8, 57))
+>x : Symbol(x, Decl(negatedNarrowingAssertion.ts, 9, 30))
+>x : Symbol(x, Decl(negatedNarrowingAssertion.ts, 9, 30))
+>Cat : Symbol(Cat, Decl(negatedNarrowingAssertion.ts, 0, 0))
+
+declare function assertDefined<T>(x: T): asserts x is NonNullable<T>;
+>assertDefined : Symbol(assertDefined, Decl(negatedNarrowingAssertion.ts, 9, 64))
+>T : Symbol(T, Decl(negatedNarrowingAssertion.ts, 10, 31))
+>x : Symbol(x, Decl(negatedNarrowingAssertion.ts, 10, 34))
+>T : Symbol(T, Decl(negatedNarrowingAssertion.ts, 10, 31))
+>x : Symbol(x, Decl(negatedNarrowingAssertion.ts, 10, 34))
+>NonNullable : Symbol(NonNullable, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(negatedNarrowingAssertion.ts, 10, 31))
+
+declare function assertTruthy(x: unknown): asserts x;
+>assertTruthy : Symbol(assertTruthy, Decl(negatedNarrowingAssertion.ts, 10, 69))
+>x : Symbol(x, Decl(negatedNarrowingAssertion.ts, 11, 30))
+>x : Symbol(x, Decl(negatedNarrowingAssertion.ts, 11, 30))
+
+declare function wantsNotCat(x: not Cat): void;
+>wantsNotCat : Symbol(wantsNotCat, Decl(negatedNarrowingAssertion.ts, 11, 53))
+>x : Symbol(x, Decl(negatedNarrowingAssertion.ts, 13, 29))
+>Cat : Symbol(Cat, Decl(negatedNarrowingAssertion.ts, 0, 0))
+
+// `asserts x is Cat` narrows to Cat.
+declare const a: {};
+>a : Symbol(a, Decl(negatedNarrowingAssertion.ts, 16, 13))
+
+assertCat(a);
+>assertCat : Symbol(assertCat, Decl(negatedNarrowingAssertion.ts, 6, 1))
+>a : Symbol(a, Decl(negatedNarrowingAssertion.ts, 16, 13))
+
+a; // {} & Cat
+>a : Symbol(a, Decl(negatedNarrowingAssertion.ts, 16, 13))
+
+// `asserts x is not Cat` narrows to `not Cat` (the negation comes from the annotation).
+declare const b: {};
+>b : Symbol(b, Decl(negatedNarrowingAssertion.ts, 21, 13))
+
+assertNotCat(b);
+>assertNotCat : Symbol(assertNotCat, Decl(negatedNarrowingAssertion.ts, 8, 57))
+>b : Symbol(b, Decl(negatedNarrowingAssertion.ts, 21, 13))
+
+b; // {} & not Cat
+>b : Symbol(b, Decl(negatedNarrowingAssertion.ts, 21, 13))
+
+wantsNotCat(b);
+>wantsNotCat : Symbol(wantsNotCat, Decl(negatedNarrowingAssertion.ts, 11, 53))
+>b : Symbol(b, Decl(negatedNarrowingAssertion.ts, 21, 13))
+
+// `asserts x is NonNullable<T>` removes null/undefined without introducing a negation.
+declare const c: string | undefined;
+>c : Symbol(c, Decl(negatedNarrowingAssertion.ts, 27, 13))
+
+assertDefined(c);
+>assertDefined : Symbol(assertDefined, Decl(negatedNarrowingAssertion.ts, 9, 64))
+>c : Symbol(c, Decl(negatedNarrowingAssertion.ts, 27, 13))
+
+c; // string
+>c : Symbol(c, Decl(negatedNarrowingAssertion.ts, 27, 13))
+
+// `asserts x` (truthiness assertion) removes falsy constituents, no negation.
+declare const d: {} | undefined | 0;
+>d : Symbol(d, Decl(negatedNarrowingAssertion.ts, 32, 13))
+
+assertTruthy(d);
+>assertTruthy : Symbol(assertTruthy, Decl(negatedNarrowingAssertion.ts, 10, 69))
+>d : Symbol(d, Decl(negatedNarrowingAssertion.ts, 32, 13))
+
+d; // {}
+>d : Symbol(d, Decl(negatedNarrowingAssertion.ts, 32, 13))
+

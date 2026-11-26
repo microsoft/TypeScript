@@ -1,0 +1,100 @@
+//// [tests/cases/conformance/types/negated/negatedTypesContravariantInference.ts] ////
+
+=== negatedTypesContravariantInference.ts ===
+// Demonstrates why inference through the `not` operator must be contravariant.
+//
+// `T` appears only in `not T` positions and receives one candidate from each argument:
+// `{ a: number }` and `{ a: number; b: number }`. Note the second is a *subtype* of the
+// first.
+//
+// For the call to be well-typed, both `Box<not A>` and `Box<not B>` must be assignable to
+// `Box<not T>`. Since `not` reverses subtyping, `not A <: not T` requires `T <: A`, and
+// likewise `T <: B`. So `T` must be a common *subtype* of the two operands, i.e. the more
+// specific `{ a: number; b: number }`. Contravariant inference produces exactly this by
+// combining candidates with `getCommonSubtype`.
+//
+// Covariant inference would instead combine them with `getCommonSupertype`, yielding the
+// wider `{ a: number }`. That `T` is not assignable back into the `Box<not { a; b }>`
+// parameter (it would require `{ a } <: { a; b }`, which is false), so the call would fail
+// and `r.b` would be inaccessible.
+
+interface Box<T> { value: T; }
+>Box : Symbol(Box, Decl(negatedTypesContravariantInference.ts, 0, 0))
+>T : Symbol(T, Decl(negatedTypesContravariantInference.ts, 17, 14))
+>value : Symbol(Box.value, Decl(negatedTypesContravariantInference.ts, 17, 18))
+>T : Symbol(T, Decl(negatedTypesContravariantInference.ts, 17, 14))
+
+declare function combine<T>(x: Box<not T>, y: Box<not T>): T;
+>combine : Symbol(combine, Decl(negatedTypesContravariantInference.ts, 17, 30))
+>T : Symbol(T, Decl(negatedTypesContravariantInference.ts, 19, 25))
+>x : Symbol(x, Decl(negatedTypesContravariantInference.ts, 19, 28))
+>Box : Symbol(Box, Decl(negatedTypesContravariantInference.ts, 0, 0))
+>T : Symbol(T, Decl(negatedTypesContravariantInference.ts, 19, 25))
+>y : Symbol(y, Decl(negatedTypesContravariantInference.ts, 19, 42))
+>Box : Symbol(Box, Decl(negatedTypesContravariantInference.ts, 0, 0))
+>T : Symbol(T, Decl(negatedTypesContravariantInference.ts, 19, 25))
+>T : Symbol(T, Decl(negatedTypesContravariantInference.ts, 19, 25))
+
+declare const boxNotA: Box<not { a: number }>;
+>boxNotA : Symbol(boxNotA, Decl(negatedTypesContravariantInference.ts, 21, 13))
+>Box : Symbol(Box, Decl(negatedTypesContravariantInference.ts, 0, 0))
+>a : Symbol(a, Decl(negatedTypesContravariantInference.ts, 21, 32))
+
+declare const boxNotAB: Box<not { a: number; b: number }>;
+>boxNotAB : Symbol(boxNotAB, Decl(negatedTypesContravariantInference.ts, 22, 13))
+>Box : Symbol(Box, Decl(negatedTypesContravariantInference.ts, 0, 0))
+>a : Symbol(a, Decl(negatedTypesContravariantInference.ts, 22, 33))
+>b : Symbol(b, Decl(negatedTypesContravariantInference.ts, 22, 44))
+
+// Contravariant inference: T = { a: number; b: number } (the common subtype).
+const r = combine(boxNotA, boxNotAB);
+>r : Symbol(r, Decl(negatedTypesContravariantInference.ts, 25, 5))
+>combine : Symbol(combine, Decl(negatedTypesContravariantInference.ts, 17, 30))
+>boxNotA : Symbol(boxNotA, Decl(negatedTypesContravariantInference.ts, 21, 13))
+>boxNotAB : Symbol(boxNotAB, Decl(negatedTypesContravariantInference.ts, 22, 13))
+
+r.a; // ok
+>r.a : Symbol(a, Decl(negatedTypesContravariantInference.ts, 22, 33))
+>r : Symbol(r, Decl(negatedTypesContravariantInference.ts, 25, 5))
+>a : Symbol(a, Decl(negatedTypesContravariantInference.ts, 22, 33))
+
+r.b; // ok only because contravariant inference chose the subtype; covariant would pick { a } and error here
+>r.b : Symbol(b, Decl(negatedTypesContravariantInference.ts, 22, 44))
+>r : Symbol(r, Decl(negatedTypesContravariantInference.ts, 25, 5))
+>b : Symbol(b, Decl(negatedTypesContravariantInference.ts, 22, 44))
+
+// The same effect with plain (non-wrapped) negated parameters.
+declare function combineBare<T>(x: not T, y: not T): T;
+>combineBare : Symbol(combineBare, Decl(negatedTypesContravariantInference.ts, 28, 4))
+>T : Symbol(T, Decl(negatedTypesContravariantInference.ts, 31, 29))
+>x : Symbol(x, Decl(negatedTypesContravariantInference.ts, 31, 32))
+>T : Symbol(T, Decl(negatedTypesContravariantInference.ts, 31, 29))
+>y : Symbol(y, Decl(negatedTypesContravariantInference.ts, 31, 41))
+>T : Symbol(T, Decl(negatedTypesContravariantInference.ts, 31, 29))
+>T : Symbol(T, Decl(negatedTypesContravariantInference.ts, 31, 29))
+
+declare const notA: not { a: number };
+>notA : Symbol(notA, Decl(negatedTypesContravariantInference.ts, 32, 13))
+>a : Symbol(a, Decl(negatedTypesContravariantInference.ts, 32, 25))
+
+declare const notAB: not { a: number; b: number };
+>notAB : Symbol(notAB, Decl(negatedTypesContravariantInference.ts, 33, 13))
+>a : Symbol(a, Decl(negatedTypesContravariantInference.ts, 33, 26))
+>b : Symbol(b, Decl(negatedTypesContravariantInference.ts, 33, 37))
+
+const r2 = combineBare(notA, notAB); // T = { a: number; b: number }
+>r2 : Symbol(r2, Decl(negatedTypesContravariantInference.ts, 35, 5))
+>combineBare : Symbol(combineBare, Decl(negatedTypesContravariantInference.ts, 28, 4))
+>notA : Symbol(notA, Decl(negatedTypesContravariantInference.ts, 32, 13))
+>notAB : Symbol(notAB, Decl(negatedTypesContravariantInference.ts, 33, 13))
+
+r2.a; // ok
+>r2.a : Symbol(a, Decl(negatedTypesContravariantInference.ts, 33, 26))
+>r2 : Symbol(r2, Decl(negatedTypesContravariantInference.ts, 35, 5))
+>a : Symbol(a, Decl(negatedTypesContravariantInference.ts, 33, 26))
+
+r2.b; // ok only with contravariant inference
+>r2.b : Symbol(b, Decl(negatedTypesContravariantInference.ts, 33, 37))
+>r2 : Symbol(r2, Decl(negatedTypesContravariantInference.ts, 35, 5))
+>b : Symbol(b, Decl(negatedTypesContravariantInference.ts, 33, 37))
+

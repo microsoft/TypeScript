@@ -14,7 +14,7 @@ if (nonNull === "foo") {
 }
 else {
   nonNull;
->nonNull : {}
+>nonNull : {} & not "foo"
 }
 
 declare let obj: { a: string };

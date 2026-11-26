@@ -1,0 +1,60 @@
+//// [tests/cases/compiler/negatedRecursiveTree.ts] ////
+
+=== negatedRecursiveTree.ts ===
+type Tree<Label> = Top<Label> | Leaf<Label>;
+>Tree : Symbol(Tree, Decl(negatedRecursiveTree.ts, 0, 0))
+>Label : Symbol(Label, Decl(negatedRecursiveTree.ts, 0, 10))
+>Top : Symbol(Top, Decl(negatedRecursiveTree.ts, 4, 1))
+>Label : Symbol(Label, Decl(negatedRecursiveTree.ts, 0, 10))
+>Leaf : Symbol(Leaf, Decl(negatedRecursiveTree.ts, 7, 1))
+>Label : Symbol(Label, Decl(negatedRecursiveTree.ts, 0, 10))
+
+type SubTree<Label> = Tree<Label> & not Top<Label>;
+>SubTree : Symbol(SubTree, Decl(negatedRecursiveTree.ts, 0, 44))
+>Label : Symbol(Label, Decl(negatedRecursiveTree.ts, 1, 13))
+>Tree : Symbol(Tree, Decl(negatedRecursiveTree.ts, 0, 0))
+>Label : Symbol(Label, Decl(negatedRecursiveTree.ts, 1, 13))
+>Top : Symbol(Top, Decl(negatedRecursiveTree.ts, 4, 1))
+>Label : Symbol(Label, Decl(negatedRecursiveTree.ts, 1, 13))
+
+interface Base<Label> {
+>Base : Symbol(Base, Decl(negatedRecursiveTree.ts, 1, 51))
+>Label : Symbol(Label, Decl(negatedRecursiveTree.ts, 2, 15))
+
+    children: SubTree<Label>[];
+>children : Symbol(Base.children, Decl(negatedRecursiveTree.ts, 2, 23))
+>SubTree : Symbol(SubTree, Decl(negatedRecursiveTree.ts, 0, 44))
+>Label : Symbol(Label, Decl(negatedRecursiveTree.ts, 2, 15))
+}
+interface Top<Label> extends Base<Label> {
+>Top : Symbol(Top, Decl(negatedRecursiveTree.ts, 4, 1))
+>Label : Symbol(Label, Decl(negatedRecursiveTree.ts, 5, 14))
+>Base : Symbol(Base, Decl(negatedRecursiveTree.ts, 1, 51))
+>Label : Symbol(Label, Decl(negatedRecursiveTree.ts, 5, 14))
+
+    kind: "top";
+>kind : Symbol(Top.kind, Decl(negatedRecursiveTree.ts, 5, 42))
+}
+interface Leaf<Label> extends Base<Label> {
+>Leaf : Symbol(Leaf, Decl(negatedRecursiveTree.ts, 7, 1))
+>Label : Symbol(Label, Decl(negatedRecursiveTree.ts, 8, 15))
+>Base : Symbol(Base, Decl(negatedRecursiveTree.ts, 1, 51))
+>Label : Symbol(Label, Decl(negatedRecursiveTree.ts, 8, 15))
+
+    kind: "leaf";
+>kind : Symbol(Leaf.kind, Decl(negatedRecursiveTree.ts, 8, 43))
+
+    label: Label;
+>label : Symbol(Leaf.label, Decl(negatedRecursiveTree.ts, 9, 17))
+>Label : Symbol(Label, Decl(negatedRecursiveTree.ts, 8, 15))
+}
+declare const child: SubTree<string>;
+>child : Symbol(child, Decl(negatedRecursiveTree.ts, 12, 13))
+>SubTree : Symbol(SubTree, Decl(negatedRecursiveTree.ts, 0, 44))
+
+const label: string = child.label;
+>label : Symbol(label, Decl(negatedRecursiveTree.ts, 13, 5))
+>child.label : Symbol(Leaf.label, Decl(negatedRecursiveTree.ts, 9, 17))
+>child : Symbol(child, Decl(negatedRecursiveTree.ts, 12, 13))
+>label : Symbol(Leaf.label, Decl(negatedRecursiveTree.ts, 9, 17))
+

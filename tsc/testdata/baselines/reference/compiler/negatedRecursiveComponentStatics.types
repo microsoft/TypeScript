@@ -1,0 +1,48 @@
+//// [tests/cases/compiler/negatedRecursiveComponentStatics.ts] ////
+
+=== negatedRecursiveComponentStatics.ts ===
+type Component = (props: any) => any;
+>Component : Component
+>props : any
+
+type Statics<Value> = {
+>Statics : Statics<Value>
+
+    [Key in keyof Value & not (Value extends { kind: "memo" } ? "kind" : "name")]: Value[Key];
+>kind : "memo"
+
+};
+type Styled<Value extends Component> = string & StyledBase<Value> & Statics<Value>;
+>Styled : Styled<Value>
+
+interface StyledBase<Value extends Component> {
+    (props: Parameters<Value>[0]): void;
+>props : Parameters<Value>[0]
+
+    withComponent<Other extends Styled<any>>(other: Other): Styled<Inner<Other>>;
+>withComponent : <Other extends Styled<any>>(other: Other) => Styled<Inner<Other>>
+>other : Other
+}
+type Inner<Value extends Component> = Value extends Styled<infer Result> ? Result : Value;
+>Inner : Inner<Value>
+
+declare const component: Styled<(props: { count: number }) => void>;
+>component : Styled<(props: { count: number; }) => void>
+>props : { count: number; }
+>count : number
+
+component({ count: 1 });
+>component({ count: 1 }) : void
+>component : Styled<(props: { count: number; }) => void>
+>{ count: 1 } : { count: number; }
+>count : number
+>1 : 1
+
+// Error: The original component parameter type must be preserved.
+component({ count: "wrong" });
+>component({ count: "wrong" }) : void
+>component : Styled<(props: { count: number; }) => void>
+>{ count: "wrong" } : { count: string; }
+>count : string
+>"wrong" : "wrong"
+

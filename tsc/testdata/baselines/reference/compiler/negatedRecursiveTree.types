@@ -1,0 +1,33 @@
+//// [tests/cases/compiler/negatedRecursiveTree.ts] ////
+
+=== negatedRecursiveTree.ts ===
+type Tree<Label> = Top<Label> | Leaf<Label>;
+>Tree : Tree<Label>
+
+type SubTree<Label> = Tree<Label> & not Top<Label>;
+>SubTree : Leaf<Label>
+
+interface Base<Label> {
+    children: SubTree<Label>[];
+>children : Leaf<Label>[]
+}
+interface Top<Label> extends Base<Label> {
+    kind: "top";
+>kind : "top"
+}
+interface Leaf<Label> extends Base<Label> {
+    kind: "leaf";
+>kind : "leaf"
+
+    label: Label;
+>label : Label
+}
+declare const child: SubTree<string>;
+>child : Leaf<string>
+
+const label: string = child.label;
+>label : string
+>child.label : string
+>child : Leaf<string>
+>label : string
+

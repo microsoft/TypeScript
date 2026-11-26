@@ -1,0 +1,94 @@
+//// [tests/cases/conformance/types/negated/negatedNarrowingEquality.ts] ////
+
+=== negatedNarrowingEquality.ts ===
+// Direct equality comparisons (`===`, `!==`, `==`, `!=`) to `undefined`, `null`, and literal values
+// narrow via type facts and constituent filtering. They do NOT introduce fresh `not` negations, so
+// these baselines act as a guard that negations only come from typeof / instanceof / type guards.
+
+declare function wantsNotUndef(x: not undefined): void;
+>wantsNotUndef : (x: not undefined) => void
+>x : not undefined
+
+// `=== undefined` removes undefined; the else branch is just `{}` (no `not undefined`).
+declare const a: {} | undefined;
+>a : {} | undefined
+
+if (a === undefined) {
+>a === undefined : boolean
+>a : {} | undefined
+>undefined : undefined
+
+    a; // undefined
+>a : undefined
+
+} else {
+    a; // {}
+>a : {}
+}
+
+// `!== null` in strict mode.
+declare const b: {} | null;
+>b : {} | null
+
+if (b !== null) {
+>b !== null : boolean
+>b : {} | null
+
+    b; // {}
+>b : {}
+
+} else {
+    b; // null
+>b : null
+}
+
+// Literal comparison filters the matching constituent; the else branch keeps the rest unchanged.
+declare const c: "foo" | "bar" | {};
+>c : "bar" | "foo" | {}
+
+if (c === "foo") {
+>c === "foo" : boolean
+>c : "bar" | "foo" | {}
+>"foo" : "foo"
+
+    c; // "foo"
+>c : "foo"
+
+} else {
+    c; // "bar" | {}
+>c : "bar" | ({} & not "foo")
+}
+
+// `== null` (double equals) removes both null and undefined.
+declare const d: {} | null | undefined;
+>d : {} | null | undefined
+
+if (d == null) {
+>d == null : boolean
+>d : {} | null | undefined
+
+    d; // null | undefined
+>d : null | undefined
+
+} else {
+    d; // {}
+>d : {}
+}
+
+// Numeric literal comparison on a `{}` base leaves `{}` unrefined in the else branch.
+declare const e: {};
+>e : {}
+
+if (e === 0) {
+>e === 0 : boolean
+>e : {}
+>0 : 0
+
+    e; // {} (0 is comparable to {})
+>e : 0
+
+} else {
+    e; // {}
+>e : {} & not 0
+}
+

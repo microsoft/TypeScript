@@ -1,0 +1,81 @@
+//// [tests/cases/conformance/types/negated/negatedNarrowingSwitchTypeof.ts] ////
+
+=== negatedNarrowingSwitchTypeof.ts ===
+// `switch (typeof x)` narrowing. Each case narrows to the primitive; the `default` clause is the
+// negation of all handled primitives.
+
+declare function wantsNotStr(x: not string): void;
+>wantsNotStr : (x: not string) => void
+>x : not string
+
+declare const a: {};
+>a : {}
+
+switch (typeof a) {
+>typeof a : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>a : {}
+
+    case "string":
+>"string" : "string"
+
+        a; // string
+>a : string
+
+        break;
+    case "number":
+>"number" : "number"
+
+        a; // number
+>a : number
+
+        break;
+    default:
+        a; // {} & not string & not number (default excludes handled primitives)
+>a : {} & not string & not number
+}
+
+// A single handled case: default excludes just that primitive.
+declare const b: {};
+>b : {}
+
+switch (typeof b) {
+>typeof b : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>b : {}
+
+    case "string":
+>"string" : "string"
+
+        b; // string
+>b : string
+
+        break;
+    default:
+        b; // {} & not string
+>b : {} & not string
+
+        wantsNotStr(b);
+>wantsNotStr(b) : void
+>wantsNotStr : (x: not string) => void
+>b : {} & not string
+}
+
+// Disjoint union: default reduces to the unhandled constituents with no lingering negation.
+declare const c: string | number | boolean;
+>c : string | number | boolean
+
+switch (typeof c) {
+>typeof c : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>c : string | number | boolean
+
+    case "string":
+>"string" : "string"
+
+        c; // string
+>c : string
+
+        break;
+    default:
+        c; // number | boolean
+>c : number | boolean
+}
+

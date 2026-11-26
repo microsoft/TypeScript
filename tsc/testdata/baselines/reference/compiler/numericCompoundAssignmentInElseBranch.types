@@ -20,7 +20,7 @@ function accumulate(total: number, width: number, kernedWidth: number) {
     } else {
         total += kernedWidth;
 >total += kernedWidth : number
->total : number
+>total : number & not 0
 >kernedWidth : number
     }
 }

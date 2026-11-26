@@ -1,0 +1,139 @@
+//// [tests/cases/conformance/types/negated/negatedTypesContextualLiteralTypes.ts] ////
+
+=== negatedTypesContextualLiteralTypes.ts ===
+declare const excludedSymbol: unique symbol;
+>excludedSymbol : unique symbol
+
+declare const allowedSymbol: unique symbol;
+>allowedSymbol : unique symbol
+
+const excludedNumberProperty: { value: not 0 } = { value: 0 };
+>excludedNumberProperty : { value: not 0; }
+>value : not 0
+>{ value: 0 } : { value: 0; }
+>value : 0
+>0 : 0
+
+const allowedNumberProperty: { value: not 0 } = { value: 1 };
+>allowedNumberProperty : { value: not 0; }
+>value : not 0
+>{ value: 1 } : { value: 1; }
+>value : 1
+>1 : 1
+
+const excludedStringProperty: { value: not "reserved" } = { value: "reserved" };
+>excludedStringProperty : { value: not "reserved"; }
+>value : not "reserved"
+>{ value: "reserved" } : { value: "reserved"; }
+>value : "reserved"
+>"reserved" : "reserved"
+
+const allowedStringProperty: { value: not "reserved" } = { value: "allowed" };
+>allowedStringProperty : { value: not "reserved"; }
+>value : not "reserved"
+>{ value: "allowed" } : { value: "allowed"; }
+>value : "allowed"
+>"allowed" : "allowed"
+
+const excludedBigIntProperty: { value: not 0n } = { value: 0n };
+>excludedBigIntProperty : { value: not 0n; }
+>value : not 0n
+>{ value: 0n } : { value: 0n; }
+>value : 0n
+>0n : 0n
+
+const allowedBigIntProperty: { value: not 0n } = { value: 1n };
+>allowedBigIntProperty : { value: not 0n; }
+>value : not 0n
+>{ value: 1n } : { value: 1n; }
+>value : 1n
+>1n : 1n
+
+const excludedBooleanProperty: { value: not false } = { value: false };
+>excludedBooleanProperty : { value: not false; }
+>value : not false
+>false : false
+>{ value: false } : { value: false; }
+>value : false
+>false : false
+
+const allowedBooleanProperty: { value: not false } = { value: true };
+>allowedBooleanProperty : { value: not false; }
+>value : not false
+>false : false
+>{ value: true } : { value: true; }
+>value : true
+>true : true
+
+const excludedSymbolProperty: { value: not typeof excludedSymbol } = { value: excludedSymbol };
+>excludedSymbolProperty : { value: not typeof excludedSymbol; }
+>value : not unique symbol
+>excludedSymbol : unique symbol
+>{ value: excludedSymbol } : { value: unique symbol; }
+>value : unique symbol
+>excludedSymbol : unique symbol
+
+const allowedSymbolProperty: { value: not typeof excludedSymbol } = { value: allowedSymbol };
+>allowedSymbolProperty : { value: not typeof excludedSymbol; }
+>value : not unique symbol
+>excludedSymbol : unique symbol
+>{ value: allowedSymbol } : { value: unique symbol; }
+>value : unique symbol
+>allowedSymbol : unique symbol
+
+const excludedUnionProperty: { value: not (0 | 1) } = { value: 0 };
+>excludedUnionProperty : { value: not (0 | 1); }
+>value : not 0 & not 1
+>{ value: 0 } : { value: 0; }
+>value : 0
+>0 : 0
+
+const allowedUnionProperty: { value: not (0 | 1) } = { value: 2 };
+>allowedUnionProperty : { value: not (0 | 1); }
+>value : not 0 & not 1
+>{ value: 2 } : { value: 2; }
+>value : 2
+>2 : 2
+
+const excludedIntersectedProperty: { value: number & not 0 } = { value: 0 };
+>excludedIntersectedProperty : { value: number & not 0; }
+>value : number & not 0
+>{ value: 0 } : { value: 0; }
+>value : 0
+>0 : 0
+
+const allowedIntersectedProperty: { value: number & not 0 } = { value: 1 };
+>allowedIntersectedProperty : { value: number & not 0; }
+>value : number & not 0
+>{ value: 1 } : { value: 1; }
+>value : 1
+>1 : 1
+
+declare function acceptTuple(value: [not "reserved", not 0]): void;
+>acceptTuple : (value: [not "reserved", not 0]) => void
+>value : [not "reserved", not 0]
+
+acceptTuple(["reserved", 0]);
+>acceptTuple(["reserved", 0]) : void
+>acceptTuple : (value: [not "reserved", not 0]) => void
+>["reserved", 0] : ["reserved", 0]
+>"reserved" : "reserved"
+>0 : 0
+
+acceptTuple(["allowed", 1]);
+>acceptTuple(["allowed", 1]) : void
+>acceptTuple : (value: [not "reserved", not 0]) => void
+>["allowed", 1] : ["allowed", 1]
+>"allowed" : "allowed"
+>1 : 1
+
+const excludedArray: (not 0)[] = [0];
+>excludedArray : (not 0)[]
+>[0] : 0[]
+>0 : 0
+
+const allowedArray: (not 0)[] = [1];
+>allowedArray : (not 0)[]
+>[1] : 1[]
+>1 : 1
+

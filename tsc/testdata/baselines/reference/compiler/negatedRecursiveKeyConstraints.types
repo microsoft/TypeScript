@@ -1,0 +1,68 @@
+//// [tests/cases/compiler/negatedRecursiveKeyConstraints.ts] ////
+
+=== negatedRecursiveKeyConstraints.ts ===
+type MyExclude<T, U> = T & not U;
+>MyExclude : MyExclude<T, U>
+
+type MyExtract<T, U> = T & U;
+>MyExtract : MyExtract<T, U>
+
+type Recursive<Shape extends {
+>Recursive : Shape
+
+    [Key in keyof Shape]: MyExtract<Shape[MyExclude<keyof Shape, Key>], { value: string }>["value"];
+>value : string
+
+}> = Shape;
+
+type Value<Text extends string = string> = { value: Text };
+>Value : Value<Text>
+>value : Text
+
+declare function value<Text extends string>(text: Text): Value<Text>;
+>value : <Text extends string>(text: Text) => Value<Text>
+>text : Text
+
+declare function uniqueValues<Shape extends {
+>uniqueValues : <Shape extends { [Key in keyof Shape]: MyExtract<Shape[Key], Value>["value"] extends MyExtract<Shape[MyExclude<keyof Shape, Key>], Value>["value"] ? never : unknown; }>(shape: Shape) => void
+
+    [Key in keyof Shape]: MyExtract<Shape[Key], Value>["value"] extends
+        MyExtract<Shape[MyExclude<keyof Shape, Key>], Value>["value"] ? never : unknown;
+}>(shape: Shape): void;
+>shape : Shape
+
+uniqueValues({ first: value("one"), second: value("two") });
+>uniqueValues({ first: value("one"), second: value("two") }) : void
+>uniqueValues : <Shape extends { [Key in keyof Shape]: MyExtract<Shape[Key], Value>["value"] extends MyExtract<Shape[MyExclude<keyof Shape, Key>], Value>["value"] ? never : unknown; }>(shape: Shape) => void
+>{ first: value("one"), second: value("two") } : { first: Value<"one">; second: Value<"two">; }
+>first : Value<"one">
+>value("one") : Value<"one">
+>value : <Text extends string>(text: Text) => Value<Text>
+>"one" : "one"
+>second : Value<"two">
+>value("two") : Value<"two">
+>value : <Text extends string>(text: Text) => Value<Text>
+>"two" : "two"
+
+uniqueValues({ first: value("one") });
+>uniqueValues({ first: value("one") }) : void
+>uniqueValues : <Shape extends { [Key in keyof Shape]: MyExtract<Shape[Key], Value>["value"] extends MyExtract<Shape[MyExclude<keyof Shape, Key>], Value>["value"] ? never : unknown; }>(shape: Shape) => void
+>{ first: value("one") } : { first: Value<"one">; }
+>first : Value<"one">
+>value("one") : Value<"one">
+>value : <Text extends string>(text: Text) => Value<Text>
+>"one" : "one"
+
+uniqueValues({ first: value("same"), second: value("same") });
+>uniqueValues({ first: value("same"), second: value("same") }) : void
+>uniqueValues : <Shape extends { [Key in keyof Shape]: MyExtract<Shape[Key], Value>["value"] extends MyExtract<Shape[MyExclude<keyof Shape, Key>], Value>["value"] ? never : unknown; }>(shape: Shape) => void
+>{ first: value("same"), second: value("same") } : { first: Value<"same">; second: Value<"same">; }
+>first : Value<"same">
+>value("same") : Value<"same">
+>value : <Text extends string>(text: Text) => Value<Text>
+>"same" : "same"
+>second : Value<"same">
+>value("same") : Value<"same">
+>value : <Text extends string>(text: Text) => Value<Text>
+>"same" : "same"
+

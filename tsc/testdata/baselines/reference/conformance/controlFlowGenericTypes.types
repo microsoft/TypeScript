@@ -190,7 +190,7 @@ export function bounceAndTakeIfA<AB extends 'A' | 'B'>(value: AB): AB {
     }
     else {
         return value;
->value : AB
+>value : AB & not "A"
     }
 }
 

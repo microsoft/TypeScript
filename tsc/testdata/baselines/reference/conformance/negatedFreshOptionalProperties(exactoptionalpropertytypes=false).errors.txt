@@ -1,0 +1,9 @@
+negatedFreshOptionalProperties.ts(3,7): error TS2322: Type '{ value?: string; }' is not assignable to type 'not { value?: number | undefined; }'.
+
+
+==== negatedFreshOptionalProperties.ts (1 errors) ====
+    declare const optionalStringProperty: { value?: string };
+    
+    const overlappingOptionalProperties: not { value?: number } = { ...optionalStringProperty }; // Should error
+          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ value?: string; }' is not assignable to type 'not { value?: number | undefined; }'.

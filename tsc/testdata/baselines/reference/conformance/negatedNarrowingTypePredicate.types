@@ -1,0 +1,110 @@
+//// [tests/cases/conformance/types/negated/negatedNarrowingTypePredicate.ts] ////
+
+=== negatedNarrowingTypePredicate.ts ===
+// User-defined guards do not introduce negations in the false branch because they may
+// only recognize a subset of the declared predicate type.
+
+interface Cat {
+    meow(): void;
+>meow : () => void
+}
+
+declare function isCat(x: unknown): x is Cat;
+>isCat : (x: unknown) => x is Cat
+>x : unknown
+
+declare function wantsNotCat(x: not Cat): void;
+>wantsNotCat : (x: not Cat) => void
+>x : not Cat
+
+// `{}` base overlaps Cat.
+declare const a: {};
+>a : {}
+
+if (isCat(a)) {
+>isCat(a) : boolean
+>isCat : (x: unknown) => x is Cat
+>a : {}
+
+    a; // {} & Cat
+>a : Cat
+
+} else {
+    a; // {}
+>a : {}
+
+    wantsNotCat(a);
+>wantsNotCat(a) : void
+>wantsNotCat : (x: not Cat) => void
+>a : {}
+}
+
+// A bare type parameter.
+function generic<T>(x: T) {
+>generic : <T>(x: T) => void
+>x : T
+
+    if (isCat(x)) {
+>isCat(x) : boolean
+>isCat : (x: unknown) => x is Cat
+>x : T
+
+        x; // T & Cat
+>x : T & Cat
+
+    } else {
+        x; // T
+>x : T
+    }
+}
+
+// Existing false-branch union constituent filtering is preserved.
+interface Dog {
+    bark(): void;
+>bark : () => void
+
+    meow?: undefined;
+>meow : undefined
+}
+declare const b: Cat | Dog;
+>b : Cat | Dog
+
+if (isCat(b)) {
+>isCat(b) : boolean
+>isCat : (x: unknown) => x is Cat
+>b : Cat | Dog
+
+    b; // Cat
+>b : Cat
+
+} else {
+    b; // Dog
+>b : Dog
+}
+
+// A negated type guard `x is not Cat` narrows the *true* branch to `not Cat`.
+declare function isNotCat(x: unknown): x is not Cat;
+>isNotCat : (x: unknown) => x is not Cat
+>x : unknown
+
+declare const c: {};
+>c : {}
+
+if (isNotCat(c)) {
+>isNotCat(c) : boolean
+>isNotCat : (x: unknown) => x is not Cat
+>c : {}
+
+    c; // {} & not Cat
+>c : {} & not Cat
+
+    wantsNotCat(c);
+>wantsNotCat(c) : void
+>wantsNotCat : (x: not Cat) => void
+>c : {} & not Cat
+
+} else {
+    c; // {}
+>c : {}
+}
+

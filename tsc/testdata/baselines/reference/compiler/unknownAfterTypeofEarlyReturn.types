@@ -27,7 +27,7 @@ function coerce(value: unknown) {
     if (typeof value === "string") return fromString(value);
 >typeof value === "string" : boolean
 >typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
->value : unknown
+>value : not false & not true
 >"string" : "string"
 >fromString(value) : number
 >fromString : (value: string) => number
@@ -36,7 +36,7 @@ function coerce(value: unknown) {
     if (typeof value === "bigint") return fromBigint(value);
 >typeof value === "bigint" : boolean
 >typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
->value : unknown
+>value : not false & not true & not string
 >"bigint" : "bigint"
 >fromBigint(value) : number
 >fromBigint : (value: bigint) => number
@@ -45,7 +45,7 @@ function coerce(value: unknown) {
     if (typeof value === "number") return fromNumber(value);
 >typeof value === "number" : boolean
 >typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
->value : unknown
+>value : not false & not true & not string & not bigint
 >"number" : "number"
 >fromNumber(value) : boolean
 >fromNumber : (value: number) => boolean

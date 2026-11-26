@@ -1,0 +1,28 @@
+negatedRecursiveKeyConstraints.ts(17,16): error TS2322: Type 'Value<"same">' is not assignable to type 'never'.
+negatedRecursiveKeyConstraints.ts(17,38): error TS2322: Type 'Value<"same">' is not assignable to type 'never'.
+
+
+==== negatedRecursiveKeyConstraints.ts (2 errors) ====
+    type MyExclude<T, U> = T & not U;
+    type MyExtract<T, U> = T & U;
+    
+    type Recursive<Shape extends {
+        [Key in keyof Shape]: MyExtract<Shape[MyExclude<keyof Shape, Key>], { value: string }>["value"];
+    }> = Shape;
+    
+    type Value<Text extends string = string> = { value: Text };
+    declare function value<Text extends string>(text: Text): Value<Text>;
+    declare function uniqueValues<Shape extends {
+        [Key in keyof Shape]: MyExtract<Shape[Key], Value>["value"] extends
+            MyExtract<Shape[MyExclude<keyof Shape, Key>], Value>["value"] ? never : unknown;
+    }>(shape: Shape): void;
+    
+    uniqueValues({ first: value("one"), second: value("two") });
+    uniqueValues({ first: value("one") });
+    uniqueValues({ first: value("same"), second: value("same") });
+                   ~~~~~
+!!! error TS2322: Type 'Value<"same">' is not assignable to type 'never'.
+!!! related TS6500 negatedRecursiveKeyConstraints.ts:17:16: The expected type comes from property 'first' which is declared here on type '{ first: never; second: never; }'
+                                         ~~~~~~
+!!! error TS2322: Type 'Value<"same">' is not assignable to type 'never'.
+!!! related TS6500 negatedRecursiveKeyConstraints.ts:17:38: The expected type comes from property 'second' which is declared here on type '{ first: never; second: never; }'

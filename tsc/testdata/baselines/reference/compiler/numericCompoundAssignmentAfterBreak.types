@@ -13,7 +13,7 @@ function drain(count: number) {
 
         count -= 1;
 >count -= 1 : number
->count : number
+>count : number & not 0
 >1 : 1
     }
 }

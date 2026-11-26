@@ -1,0 +1,66 @@
+//// [tests/cases/conformance/types/negated/negatedNarrowingTruthiness.ts] ////
+
+=== negatedNarrowingTruthiness.ts ===
+// Truthiness narrowing removes falsy constituents (0, "", null, undefined, false, NaN) via type
+// facts. It does not introduce fresh `not` negations.
+
+declare const a: {} | undefined | null;
+>a : {} | null | undefined
+
+if (a) {
+>a : {} | null | undefined
+
+    a; // {}
+>a : {}
+
+} else {
+    a; // undefined | null
+>a : {} | null | undefined
+}
+
+declare const b: string | 0 | undefined;
+>b : string | 0 | undefined
+
+if (b) {
+>b : string | 0 | undefined
+
+    b; // string (definitely-falsy 0 and undefined removed; no negation introduced)
+>b : string
+
+} else {
+    b; // string | 0 | undefined (no `not` synthesized)
+>b : string | 0 | undefined
+}
+
+// Truthiness on a bare `{}` leaves it unchanged on both branches: the empty object type includes
+// falsy primitives (0, "", false, ...), so it is not reduced to `never` in the else branch.
+declare const c: {};
+>c : {}
+
+if (c) {
+>c : {}
+
+    c; // {}
+>c : {}
+
+} else {
+    c; // {}
+>c : {}
+}
+
+// Negation via `!` flips the branches.
+declare const d: number | undefined;
+>d : number | undefined
+
+if (!d) {
+>!d : boolean
+>d : number | undefined
+
+    d; // 0 | undefined
+>d : number | undefined
+
+} else {
+    d; // number
+>d : number
+}
+

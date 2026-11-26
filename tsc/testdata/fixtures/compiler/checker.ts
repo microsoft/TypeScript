@@ -4953,7 +4953,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (emitModuleKindIsNonNodeESM(moduleKind) || mode === ModuleKind.ESNext) {
                 const preferTs = isDeclarationFileName(moduleReference) && shouldAllowImportingTsExtension(compilerOptions);
                 const ext = tsExtension === Extension.Mts || tsExtension === Extension.Dmts ? preferTs ? ".mts" : ".mjs" :
-                    tsExtension === Extension.Cts || tsExtension === Extension.Dmts ? preferTs ? ".cts" : ".cjs" :
+                    tsExtension === Extension.Cts || tsExtension === Extension.Dcts ? preferTs ? ".cts" : ".cjs" :
                     preferTs ? ".ts" : ".js";
                 return importSourceWithoutExtension + ext;
             }

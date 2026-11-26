@@ -1,0 +1,159 @@
+//// [tests/cases/compiler/negatedDoubleExclusion.ts] ////
+
+=== negatedDoubleExclusion.ts ===
+type Difference<T, U> = T & not U;
+>Difference : Symbol(Difference, Decl(negatedDoubleExclusion.ts, 0, 0))
+>T : Symbol(T, Decl(negatedDoubleExclusion.ts, 0, 16))
+>U : Symbol(U, Decl(negatedDoubleExclusion.ts, 0, 18))
+>T : Symbol(T, Decl(negatedDoubleExclusion.ts, 0, 16))
+>U : Symbol(U, Decl(negatedDoubleExclusion.ts, 0, 18))
+
+type Product = { kind: "a"; value: 0 } | { kind: "b"; value: 1 };
+>Product : Symbol(Product, Decl(negatedDoubleExclusion.ts, 0, 34))
+>kind : Symbol(kind, Decl(negatedDoubleExclusion.ts, 1, 16))
+>value : Symbol(value, Decl(negatedDoubleExclusion.ts, 1, 27))
+>kind : Symbol(kind, Decl(negatedDoubleExclusion.ts, 1, 42))
+>value : Symbol(value, Decl(negatedDoubleExclusion.ts, 1, 53))
+
+type DoubleExcluded = {
+>DoubleExcluded : Symbol(DoubleExcluded, Decl(negatedDoubleExclusion.ts, 1, 65))
+
+    [Kind in Product["kind"]]: Difference<Product, Difference<Product, { kind: Kind }>>;
+>Kind : Symbol(Kind, Decl(negatedDoubleExclusion.ts, 3, 5))
+>Product : Symbol(Product, Decl(negatedDoubleExclusion.ts, 0, 34))
+>Difference : Symbol(Difference, Decl(negatedDoubleExclusion.ts, 0, 0))
+>Product : Symbol(Product, Decl(negatedDoubleExclusion.ts, 0, 34))
+>Difference : Symbol(Difference, Decl(negatedDoubleExclusion.ts, 0, 0))
+>Product : Symbol(Product, Decl(negatedDoubleExclusion.ts, 0, 34))
+>kind : Symbol(kind, Decl(negatedDoubleExclusion.ts, 3, 72))
+>Kind : Symbol(Kind, Decl(negatedDoubleExclusion.ts, 3, 5))
+
+};
+const productA: DoubleExcluded["a"] = { kind: "a", value: 0 };
+>productA : Symbol(productA, Decl(negatedDoubleExclusion.ts, 5, 5))
+>DoubleExcluded : Symbol(DoubleExcluded, Decl(negatedDoubleExclusion.ts, 1, 65))
+>kind : Symbol(kind, Decl(negatedDoubleExclusion.ts, 5, 39))
+>value : Symbol(value, Decl(negatedDoubleExclusion.ts, 5, 50))
+
+const productB: DoubleExcluded["b"] = { kind: "b", value: 1 };
+>productB : Symbol(productB, Decl(negatedDoubleExclusion.ts, 6, 5))
+>DoubleExcluded : Symbol(DoubleExcluded, Decl(negatedDoubleExclusion.ts, 1, 65))
+>kind : Symbol(kind, Decl(negatedDoubleExclusion.ts, 6, 39))
+>value : Symbol(value, Decl(negatedDoubleExclusion.ts, 6, 50))
+
+const wrongKind: DoubleExcluded["a"] = { kind: "b", value: 1 };
+>wrongKind : Symbol(wrongKind, Decl(negatedDoubleExclusion.ts, 8, 5))
+>DoubleExcluded : Symbol(DoubleExcluded, Decl(negatedDoubleExclusion.ts, 1, 65))
+>kind : Symbol(kind, Decl(negatedDoubleExclusion.ts, 8, 40))
+>value : Symbol(value, Decl(negatedDoubleExclusion.ts, 8, 51))
+
+const wrongValue: DoubleExcluded["b"] = { kind: "b", value: 0 };
+>wrongValue : Symbol(wrongValue, Decl(negatedDoubleExclusion.ts, 9, 5))
+>DoubleExcluded : Symbol(DoubleExcluded, Decl(negatedDoubleExclusion.ts, 1, 65))
+>kind : Symbol(kind, Decl(negatedDoubleExclusion.ts, 9, 41))
+>value : Symbol(value, Decl(negatedDoubleExclusion.ts, 9, 52))
+
+type Selected<Kind extends Product["kind"]> = Difference<Product, Difference<Product, { kind: Kind }>>;
+>Selected : Symbol(Selected, Decl(negatedDoubleExclusion.ts, 9, 64))
+>Kind : Symbol(Kind, Decl(negatedDoubleExclusion.ts, 11, 14))
+>Product : Symbol(Product, Decl(negatedDoubleExclusion.ts, 0, 34))
+>Difference : Symbol(Difference, Decl(negatedDoubleExclusion.ts, 0, 0))
+>Product : Symbol(Product, Decl(negatedDoubleExclusion.ts, 0, 34))
+>Difference : Symbol(Difference, Decl(negatedDoubleExclusion.ts, 0, 0))
+>Product : Symbol(Product, Decl(negatedDoubleExclusion.ts, 0, 34))
+>kind : Symbol(kind, Decl(negatedDoubleExclusion.ts, 11, 87))
+>Kind : Symbol(Kind, Decl(negatedDoubleExclusion.ts, 11, 14))
+
+const selectedA: Selected<"a"> = productA;
+>selectedA : Symbol(selectedA, Decl(negatedDoubleExclusion.ts, 12, 5))
+>Selected : Symbol(Selected, Decl(negatedDoubleExclusion.ts, 9, 64))
+>productA : Symbol(productA, Decl(negatedDoubleExclusion.ts, 5, 5))
+
+const selectedB: Selected<"b"> = productB;
+>selectedB : Symbol(selectedB, Decl(negatedDoubleExclusion.ts, 13, 5))
+>Selected : Symbol(Selected, Decl(negatedDoubleExclusion.ts, 9, 64))
+>productB : Symbol(productB, Decl(negatedDoubleExclusion.ts, 6, 5))
+
+const selectedBoth: Selected<"a" | "b"> = productA;
+>selectedBoth : Symbol(selectedBoth, Decl(negatedDoubleExclusion.ts, 14, 5))
+>Selected : Symbol(Selected, Decl(negatedDoubleExclusion.ts, 9, 64))
+>productA : Symbol(productA, Decl(negatedDoubleExclusion.ts, 5, 5))
+
+type Tagged = { kind: "a" } | { kind: "b" };
+>Tagged : Symbol(Tagged, Decl(negatedDoubleExclusion.ts, 14, 51))
+>kind : Symbol(kind, Decl(negatedDoubleExclusion.ts, 16, 15))
+>kind : Symbol(kind, Decl(negatedDoubleExclusion.ts, 16, 31))
+
+interface Blocked { blocked: true; }
+>Blocked : Symbol(Blocked, Decl(negatedDoubleExclusion.ts, 16, 44))
+>blocked : Symbol(Blocked.blocked, Decl(negatedDoubleExclusion.ts, 17, 19))
+
+type Allowed = Difference<Tagged, Blocked>;
+>Allowed : Symbol(Allowed, Decl(negatedDoubleExclusion.ts, 17, 36))
+>Difference : Symbol(Difference, Decl(negatedDoubleExclusion.ts, 0, 0))
+>Tagged : Symbol(Tagged, Decl(negatedDoubleExclusion.ts, 14, 51))
+>Blocked : Symbol(Blocked, Decl(negatedDoubleExclusion.ts, 16, 44))
+
+declare const excluded: { kind: "a" | "b"; blocked: true };
+>excluded : Symbol(excluded, Decl(negatedDoubleExclusion.ts, 19, 13))
+>kind : Symbol(kind, Decl(negatedDoubleExclusion.ts, 19, 25))
+>blocked : Symbol(blocked, Decl(negatedDoubleExclusion.ts, 19, 42))
+
+const rejected: Allowed = excluded;
+>rejected : Symbol(rejected, Decl(negatedDoubleExclusion.ts, 20, 5))
+>Allowed : Symbol(Allowed, Decl(negatedDoubleExclusion.ts, 17, 36))
+>excluded : Symbol(excluded, Decl(negatedDoubleExclusion.ts, 19, 13))
+
+declare const allowed: { kind: "a" | "b" } & not Blocked;
+>allowed : Symbol(allowed, Decl(negatedDoubleExclusion.ts, 22, 13))
+>kind : Symbol(kind, Decl(negatedDoubleExclusion.ts, 22, 24))
+>Blocked : Symbol(Blocked, Decl(negatedDoubleExclusion.ts, 16, 44))
+
+const accepted: Allowed = allowed;
+>accepted : Symbol(accepted, Decl(negatedDoubleExclusion.ts, 23, 5))
+>Allowed : Symbol(Allowed, Decl(negatedDoubleExclusion.ts, 17, 36))
+>allowed : Symbol(allowed, Decl(negatedDoubleExclusion.ts, 22, 13))
+
+declare const ordinary: { kind: "a" | "b" };
+>ordinary : Symbol(ordinary, Decl(negatedDoubleExclusion.ts, 25, 13))
+>kind : Symbol(kind, Decl(negatedDoubleExclusion.ts, 25, 25))
+
+const plain: Tagged = ordinary;
+>plain : Symbol(plain, Decl(negatedDoubleExclusion.ts, 26, 5))
+>Tagged : Symbol(Tagged, Decl(negatedDoubleExclusion.ts, 14, 51))
+>ordinary : Symbol(ordinary, Decl(negatedDoubleExclusion.ts, 25, 13))
+
+const partiallyExcluded: (Tagged & not Blocked) | { kind: "a" } = excluded;
+>partiallyExcluded : Symbol(partiallyExcluded, Decl(negatedDoubleExclusion.ts, 27, 5))
+>Tagged : Symbol(Tagged, Decl(negatedDoubleExclusion.ts, 14, 51))
+>Blocked : Symbol(Blocked, Decl(negatedDoubleExclusion.ts, 16, 44))
+>kind : Symbol(kind, Decl(negatedDoubleExclusion.ts, 27, 51))
+>excluded : Symbol(excluded, Decl(negatedDoubleExclusion.ts, 19, 13))
+
+declare const alternative: { kind: "a"; blocked: true };
+>alternative : Symbol(alternative, Decl(negatedDoubleExclusion.ts, 28, 13))
+>kind : Symbol(kind, Decl(negatedDoubleExclusion.ts, 28, 28))
+>blocked : Symbol(blocked, Decl(negatedDoubleExclusion.ts, 28, 39))
+
+const acceptedAlternative: (Tagged & not Blocked) | { kind: "a" } = alternative;
+>acceptedAlternative : Symbol(acceptedAlternative, Decl(negatedDoubleExclusion.ts, 29, 5))
+>Tagged : Symbol(Tagged, Decl(negatedDoubleExclusion.ts, 14, 51))
+>Blocked : Symbol(Blocked, Decl(negatedDoubleExclusion.ts, 16, 44))
+>kind : Symbol(kind, Decl(negatedDoubleExclusion.ts, 29, 53))
+>alternative : Symbol(alternative, Decl(negatedDoubleExclusion.ts, 28, 13))
+
+function generic<Kind extends "a" | "b">(value: { kind: "a"; value: 0 }) {
+>generic : Symbol(generic, Decl(negatedDoubleExclusion.ts, 29, 80))
+>Kind : Symbol(Kind, Decl(negatedDoubleExclusion.ts, 31, 17))
+>value : Symbol(value, Decl(negatedDoubleExclusion.ts, 31, 41))
+>kind : Symbol(kind, Decl(negatedDoubleExclusion.ts, 31, 49))
+>value : Symbol(value, Decl(negatedDoubleExclusion.ts, 31, 60))
+
+    const rejected: Difference<Product, { kind: Kind }> = value;
+>rejected : Symbol(rejected, Decl(negatedDoubleExclusion.ts, 32, 9))
+>Difference : Symbol(Difference, Decl(negatedDoubleExclusion.ts, 0, 0))
+>Product : Symbol(Product, Decl(negatedDoubleExclusion.ts, 0, 34))
+>kind : Symbol(kind, Decl(negatedDoubleExclusion.ts, 32, 41))
+>Kind : Symbol(Kind, Decl(negatedDoubleExclusion.ts, 31, 17))
+>value : Symbol(value, Decl(negatedDoubleExclusion.ts, 31, 41))
+}

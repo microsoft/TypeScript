@@ -1,0 +1,194 @@
+//// [tests/cases/compiler/negatedRealWorldControlFlowRegressions.ts] ////
+
+=== negatedRealWorldControlFlowRegressions.ts ===
+function parseCommand(command: string): "start" | "stop" {
+>parseCommand : (command: string) => "start" | "stop"
+>command : string
+
+    if (command !== "start" && command !== "stop") {
+>command !== "start" && command !== "stop" : boolean
+>command !== "start" : boolean
+>command : string
+>"start" : "start"
+>command !== "stop" : boolean
+>command : string & not "start"
+>"stop" : "stop"
+
+        throw new Error("Invalid command");
+>new Error("Invalid command") : Error
+>Error : ErrorConstructor
+>"Invalid command" : "Invalid command"
+    }
+    return command;
+>command : "start" | "stop"
+}
+
+interface HandlerOptions {
+    message?: string;
+>message : string | undefined
+}
+
+declare const handler: string | HandlerOptions | ((value: number) => void) | undefined;
+>handler : string | HandlerOptions | ((value: number) => void) | undefined
+>value : number
+
+if (typeof handler !== "string" && handler !== undefined && typeof handler === "function") {
+>typeof handler !== "string" && handler !== undefined && typeof handler === "function" : boolean
+>typeof handler !== "string" && handler !== undefined : boolean
+>typeof handler !== "string" : boolean
+>typeof handler : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>handler : string | HandlerOptions | ((value: number) => void) | undefined
+>"string" : "string"
+>handler !== undefined : boolean
+>handler : HandlerOptions | ((value: number) => void) | undefined
+>undefined : undefined
+>typeof handler === "function" : boolean
+>typeof handler : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>handler : HandlerOptions | ((value: number) => void)
+>"function" : "function"
+
+    handler(0);
+>handler(0) : void
+>handler : (value: number) => void
+>0 : 0
+}
+
+let count = 1 as number;
+>count : number
+>1 as number : number
+>1 : 1
+
+if (count !== 0) {
+>count !== 0 : boolean
+>count : number
+>0 : 0
+
+    count--;
+>count-- : number
+>count : number & not 0
+
+    if (count === 0) {
+>count === 0 : boolean
+>count : number
+>0 : 0
+
+        count;
+>count : 0
+    }
+}
+
+let offset = 1 as number;
+>offset : number
+>1 as number : number
+>1 : 1
+
+if (offset !== 0) {
+>offset !== 0 : boolean
+>offset : number
+>0 : 0
+
+    offset = 0;
+>offset = 0 : 0
+>offset : number
+>0 : 0
+}
+
+let total = 1 as number;
+>total : number
+>1 as number : number
+>1 : 1
+
+if (total !== 0) {
+>total !== 0 : boolean
+>total : number
+>0 : 0
+
+    total -= 1;
+>total -= 1 : number
+>total : number & not 0
+>1 : 1
+}
+
+declare let constrainedTotal: number & not 0;
+>constrainedTotal : number & not 0
+
+constrainedTotal -= 1;
+>constrainedTotal -= 1 : number
+>constrainedTotal : number & not 0
+>1 : 1
+
+declare const values: Map<string, string>;
+>values : Map<string, string>
+
+if (values.size !== 0) {
+>values.size !== 0 : boolean
+>values.size : number
+>values : Map<string, string>
+>size : number
+>0 : 0
+
+    values.delete("key");
+>values.delete("key") : boolean
+>values.delete : (key: string) => boolean
+>values : Map<string, string>
+>delete : (key: string) => boolean
+>"key" : "key"
+
+    if (values.size === 0) {
+>values.size === 0 : boolean
+>values.size : number
+>values : Map<string, string>
+>size : number
+>0 : 0
+
+        values;
+>values : Map<string, string>
+    }
+}
+
+interface Options {
+    enabled?: boolean;
+>enabled : boolean | undefined
+
+    threshold?: number;
+>threshold : number | undefined
+}
+
+declare const rawOptions: boolean | Options;
+>rawOptions : boolean | Options
+
+const options = typeof rawOptions === "boolean" ? { enabled: rawOptions } : rawOptions;
+>options : Options
+>typeof rawOptions === "boolean" ? { enabled: rawOptions } : rawOptions : Options
+>typeof rawOptions === "boolean" : boolean
+>typeof rawOptions : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>rawOptions : boolean | Options
+>"boolean" : "boolean"
+>{ enabled: rawOptions } : { enabled: boolean; }
+>enabled : boolean
+>rawOptions : boolean
+>rawOptions : Options
+
+options.threshold;
+>options.threshold : number | undefined
+>options : Options
+>threshold : number | undefined
+
+declare const input: unknown;
+>input : unknown
+
+const normalized = typeof input === "bigint" ? Number(input) : input;
+>normalized : unknown
+>typeof input === "bigint" ? Number(input) : input : number | not bigint
+>typeof input === "bigint" : boolean
+>typeof input : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>input : unknown
+>"bigint" : "bigint"
+>Number(input) : number
+>Number : NumberConstructor
+>input : bigint
+>input : not bigint
+
+normalized;
+>normalized : unknown
+

@@ -1,0 +1,189 @@
+//// [tests/cases/conformance/types/negated/negatedDiscriminantIntersectionSimplifies.ts] ////
+
+=== negatedDiscriminantIntersectionSimplifies.ts ===
+// When an intersection 'C & not A' has non-negated part 'C' that is mutually exclusive with the
+// negated base 'A' by virtue of a shared discriminant property (a property present on both whose
+// literal types are disjoint), the 'not A' member is redundant and is dropped, leaving 'C'.
+
+interface A {
+>A : Symbol(A, Decl(negatedDiscriminantIntersectionSimplifies.ts, 0, 0))
+
+    kind: "a";
+>kind : Symbol(A.kind, Decl(negatedDiscriminantIntersectionSimplifies.ts, 4, 13))
+
+    field: string;
+>field : Symbol(A.field, Decl(negatedDiscriminantIntersectionSimplifies.ts, 5, 14))
+}
+interface B {
+>B : Symbol(B, Decl(negatedDiscriminantIntersectionSimplifies.ts, 7, 1))
+
+    kind: "b";
+>kind : Symbol(B.kind, Decl(negatedDiscriminantIntersectionSimplifies.ts, 8, 13))
+
+    field: number;
+>field : Symbol(B.field, Decl(negatedDiscriminantIntersectionSimplifies.ts, 9, 14))
+}
+interface C {
+>C : Symbol(C, Decl(negatedDiscriminantIntersectionSimplifies.ts, 11, 1))
+
+    kind: "c";
+>kind : Symbol(C.kind, Decl(negatedDiscriminantIntersectionSimplifies.ts, 12, 13))
+
+    field: object;
+>field : Symbol(C.field, Decl(negatedDiscriminantIntersectionSimplifies.ts, 13, 14))
+}
+
+declare function wantsC(x: C): void;
+>wantsC : Symbol(wantsC, Decl(negatedDiscriminantIntersectionSimplifies.ts, 15, 1))
+>x : Symbol(x, Decl(negatedDiscriminantIntersectionSimplifies.ts, 17, 24))
+>C : Symbol(C, Decl(negatedDiscriminantIntersectionSimplifies.ts, 11, 1))
+
+// 'C & not A' -> 'C' because C.kind ("c") is disjoint from A.kind ("a").
+declare const c1: C & not A;
+>c1 : Symbol(c1, Decl(negatedDiscriminantIntersectionSimplifies.ts, 20, 13))
+>C : Symbol(C, Decl(negatedDiscriminantIntersectionSimplifies.ts, 11, 1))
+>A : Symbol(A, Decl(negatedDiscriminantIntersectionSimplifies.ts, 0, 0))
+
+c1; // C
+>c1 : Symbol(c1, Decl(negatedDiscriminantIntersectionSimplifies.ts, 20, 13))
+
+wantsC(c1);
+>wantsC : Symbol(wantsC, Decl(negatedDiscriminantIntersectionSimplifies.ts, 15, 1))
+>c1 : Symbol(c1, Decl(negatedDiscriminantIntersectionSimplifies.ts, 20, 13))
+
+// Multiple negations, each mutually exclusive with C: 'C & not A & not B' -> 'C'.
+declare const c2: C & not A & not B;
+>c2 : Symbol(c2, Decl(negatedDiscriminantIntersectionSimplifies.ts, 25, 13))
+>C : Symbol(C, Decl(negatedDiscriminantIntersectionSimplifies.ts, 11, 1))
+>A : Symbol(A, Decl(negatedDiscriminantIntersectionSimplifies.ts, 0, 0))
+>B : Symbol(B, Decl(negatedDiscriminantIntersectionSimplifies.ts, 7, 1))
+
+c2; // C
+>c2 : Symbol(c2, Decl(negatedDiscriminantIntersectionSimplifies.ts, 25, 13))
+
+wantsC(c2);
+>wantsC : Symbol(wantsC, Decl(negatedDiscriminantIntersectionSimplifies.ts, 15, 1))
+>c2 : Symbol(c2, Decl(negatedDiscriminantIntersectionSimplifies.ts, 25, 13))
+
+// Non-discriminant negation is retained: 'C & not { other: number }' shares no disjoint discriminant.
+declare const c3: C & not { other: number };
+>c3 : Symbol(c3, Decl(negatedDiscriminantIntersectionSimplifies.ts, 30, 13))
+>C : Symbol(C, Decl(negatedDiscriminantIntersectionSimplifies.ts, 11, 1))
+>other : Symbol(other, Decl(negatedDiscriminantIntersectionSimplifies.ts, 30, 27))
+
+c3; // C & not { other: number; }
+>c3 : Symbol(c3, Decl(negatedDiscriminantIntersectionSimplifies.ts, 30, 13))
+
+// A negation whose shared property has the SAME discriminant value is retained (not disjoint):
+// C.kind and the negated base's kind are both "c", so they are not mutually exclusive.
+declare const c4: C & not { kind: "c"; other: number };
+>c4 : Symbol(c4, Decl(negatedDiscriminantIntersectionSimplifies.ts, 35, 13))
+>C : Symbol(C, Decl(negatedDiscriminantIntersectionSimplifies.ts, 11, 1))
+>kind : Symbol(kind, Decl(negatedDiscriminantIntersectionSimplifies.ts, 35, 27))
+>other : Symbol(other, Decl(negatedDiscriminantIntersectionSimplifies.ts, 35, 38))
+
+c4; // C & not { kind: "c"; other: number; }
+>c4 : Symbol(c4, Decl(negatedDiscriminantIntersectionSimplifies.ts, 35, 13))
+
+// Enum discriminants: two distinct string-enum members are mutually exclusive.
+enum E {
+>E : Symbol(E, Decl(negatedDiscriminantIntersectionSimplifies.ts, 36, 3))
+
+    A = "a",
+>A : Symbol(E.A, Decl(negatedDiscriminantIntersectionSimplifies.ts, 39, 8))
+
+    B = "b",
+>B : Symbol(E.B, Decl(negatedDiscriminantIntersectionSimplifies.ts, 40, 12))
+}
+interface EA {
+>EA : Symbol(EA, Decl(negatedDiscriminantIntersectionSimplifies.ts, 42, 1))
+
+    tag: E.A;
+>tag : Symbol(EA.tag, Decl(negatedDiscriminantIntersectionSimplifies.ts, 43, 14))
+>E : Symbol(E, Decl(negatedDiscriminantIntersectionSimplifies.ts, 36, 3))
+>A : Symbol(E.A, Decl(negatedDiscriminantIntersectionSimplifies.ts, 39, 8))
+
+    payload: string;
+>payload : Symbol(EA.payload, Decl(negatedDiscriminantIntersectionSimplifies.ts, 44, 13))
+}
+interface EB {
+>EB : Symbol(EB, Decl(negatedDiscriminantIntersectionSimplifies.ts, 46, 1))
+
+    tag: E.B;
+>tag : Symbol(EB.tag, Decl(negatedDiscriminantIntersectionSimplifies.ts, 47, 14))
+>E : Symbol(E, Decl(negatedDiscriminantIntersectionSimplifies.ts, 36, 3))
+>B : Symbol(E.B, Decl(negatedDiscriminantIntersectionSimplifies.ts, 40, 12))
+
+    payload: number;
+>payload : Symbol(EB.payload, Decl(negatedDiscriminantIntersectionSimplifies.ts, 48, 13))
+}
+declare function wantsEA(x: EA): void;
+>wantsEA : Symbol(wantsEA, Decl(negatedDiscriminantIntersectionSimplifies.ts, 50, 1))
+>x : Symbol(x, Decl(negatedDiscriminantIntersectionSimplifies.ts, 51, 25))
+>EA : Symbol(EA, Decl(negatedDiscriminantIntersectionSimplifies.ts, 42, 1))
+
+// 'EA & not EB' -> 'EA' because E.A and E.B are disjoint enum members.
+declare const e1: EA & not EB;
+>e1 : Symbol(e1, Decl(negatedDiscriminantIntersectionSimplifies.ts, 54, 13))
+>EA : Symbol(EA, Decl(negatedDiscriminantIntersectionSimplifies.ts, 42, 1))
+>EB : Symbol(EB, Decl(negatedDiscriminantIntersectionSimplifies.ts, 46, 1))
+
+e1; // EA
+>e1 : Symbol(e1, Decl(negatedDiscriminantIntersectionSimplifies.ts, 54, 13))
+
+wantsEA(e1);
+>wantsEA : Symbol(wantsEA, Decl(negatedDiscriminantIntersectionSimplifies.ts, 50, 1))
+>e1 : Symbol(e1, Decl(negatedDiscriminantIntersectionSimplifies.ts, 54, 13))
+
+// A string-enum member is a *distinct* type from the bare string literal of its value: 'E.A' and
+// '"a"' have an empty intersection ('E.A & "a"' is never), so they are mutually exclusive and the
+// negation is dropped. This is precisely the case a by-identity comparison of the property types
+// would get wrong -- the regular literal type of 'E.A' is the same '"a"', so identity would treat
+// them as overlapping and wrongly keep the negation. The intersection-based check gets it right.
+declare const e2: EA & not { tag: "a"; payload: number };
+>e2 : Symbol(e2, Decl(negatedDiscriminantIntersectionSimplifies.ts, 63, 13))
+>EA : Symbol(EA, Decl(negatedDiscriminantIntersectionSimplifies.ts, 42, 1))
+>tag : Symbol(tag, Decl(negatedDiscriminantIntersectionSimplifies.ts, 63, 28))
+>payload : Symbol(payload, Decl(negatedDiscriminantIntersectionSimplifies.ts, 63, 38))
+
+e2; // EA
+>e2 : Symbol(e2, Decl(negatedDiscriminantIntersectionSimplifies.ts, 63, 13))
+
+wantsEA(e2);
+>wantsEA : Symbol(wantsEA, Decl(negatedDiscriminantIntersectionSimplifies.ts, 50, 1))
+>e2 : Symbol(e2, Decl(negatedDiscriminantIntersectionSimplifies.ts, 63, 13))
+
+// The same enum member on both sides is NOT disjoint, so the negation is retained.
+declare const e3: EA & not { tag: E.A; extra: number };
+>e3 : Symbol(e3, Decl(negatedDiscriminantIntersectionSimplifies.ts, 68, 13))
+>EA : Symbol(EA, Decl(negatedDiscriminantIntersectionSimplifies.ts, 42, 1))
+>tag : Symbol(tag, Decl(negatedDiscriminantIntersectionSimplifies.ts, 68, 28))
+>E : Symbol(E, Decl(negatedDiscriminantIntersectionSimplifies.ts, 36, 3))
+>A : Symbol(E.A, Decl(negatedDiscriminantIntersectionSimplifies.ts, 39, 8))
+>extra : Symbol(extra, Decl(negatedDiscriminantIntersectionSimplifies.ts, 68, 38))
+
+e3; // EA & not { tag: E.A; extra: number; }
+>e3 : Symbol(e3, Decl(negatedDiscriminantIntersectionSimplifies.ts, 68, 13))
+
+// A union-of-literals discriminant: '"a" | "b"' is disjoint from '"c" | "d"', so the negation is
+// dropped even though neither side is a single unit type (a by-identity check would miss this).
+interface P {
+>P : Symbol(P, Decl(negatedDiscriminantIntersectionSimplifies.ts, 69, 3))
+
+    kind: "a" | "b";
+>kind : Symbol(P.kind, Decl(negatedDiscriminantIntersectionSimplifies.ts, 73, 13))
+
+    p: string;
+>p : Symbol(P.p, Decl(negatedDiscriminantIntersectionSimplifies.ts, 74, 20))
+}
+declare const u1: P & not { kind: "c" | "d"; p: number };
+>u1 : Symbol(u1, Decl(negatedDiscriminantIntersectionSimplifies.ts, 77, 13))
+>P : Symbol(P, Decl(negatedDiscriminantIntersectionSimplifies.ts, 69, 3))
+>kind : Symbol(kind, Decl(negatedDiscriminantIntersectionSimplifies.ts, 77, 27))
+>p : Symbol(p, Decl(negatedDiscriminantIntersectionSimplifies.ts, 77, 44))
+
+u1; // P
+>u1 : Symbol(u1, Decl(negatedDiscriminantIntersectionSimplifies.ts, 77, 13))
+
+
+

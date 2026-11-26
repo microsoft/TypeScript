@@ -2791,6 +2791,11 @@ export class Checker {
         return type.getNonNullableType();
     }
 
+    /** Get the negation of a type. Always returns a type. */
+    async getNegatedType(type: Type): Promise<Type> {
+        return type.getNegatedType();
+    }
+
     /**
      * Add `undefined` and/or `null` to a type, as indicated by `flags` (a combination of
      * {@link TypeFlags.Undefined} and {@link TypeFlags.Null}). Always returns a type.
@@ -3843,6 +3848,7 @@ class TypeObject implements Type {
     private constraint: number | false;
     private default: number | false;
     private nonNullableType: number | false;
+    private negatedType: number | false;
     private apparentType: number | false;
     private reducedType: number | false;
     private properties: readonly Symbol[] | false;
@@ -3923,6 +3929,7 @@ class TypeObject implements Type {
         this.constraint = false;
         this.default = false;
         this.nonNullableType = false;
+        this.negatedType = false;
         this.apparentType = false;
         this.reducedType = false;
         this.properties = false;
@@ -3975,6 +3982,12 @@ class TypeObject implements Type {
     async getNonNullableType(): Promise<Type> {
         const result = await this.objectRegistry.fetchType(this, "getNonNullableType", this.nonNullableType);
         this.nonNullableType = result.id;
+        return result;
+    }
+
+    async getNegatedType(): Promise<Type> {
+        const result = await this.objectRegistry.fetchType(this, "getNegatedType", this.negatedType);
+        this.negatedType = result.id;
         return result;
     }
 

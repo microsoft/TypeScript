@@ -1,0 +1,97 @@
+//// [tests/cases/compiler/negatedMappedIntersectionInference.ts] ////
+
+=== negatedMappedIntersectionInference.ts ===
+type MyExclude<T, U> = T & not U;
+>MyExclude : Symbol(MyExclude, Decl(negatedMappedIntersectionInference.ts, 0, 0))
+>T : Symbol(T, Decl(negatedMappedIntersectionInference.ts, 0, 15))
+>U : Symbol(U, Decl(negatedMappedIntersectionInference.ts, 0, 17))
+>T : Symbol(T, Decl(negatedMappedIntersectionInference.ts, 0, 15))
+>U : Symbol(U, Decl(negatedMappedIntersectionInference.ts, 0, 17))
+
+type MyExtract<T, U> = T & U;
+>MyExtract : Symbol(MyExtract, Decl(negatedMappedIntersectionInference.ts, 0, 33))
+>T : Symbol(T, Decl(negatedMappedIntersectionInference.ts, 1, 15))
+>U : Symbol(U, Decl(negatedMappedIntersectionInference.ts, 1, 17))
+>T : Symbol(T, Decl(negatedMappedIntersectionInference.ts, 1, 15))
+>U : Symbol(U, Decl(negatedMappedIntersectionInference.ts, 1, 17))
+
+interface Config<Values> {
+>Config : Symbol(Config, Decl(negatedMappedIntersectionInference.ts, 1, 29))
+>Values : Symbol(Values, Decl(negatedMappedIntersectionInference.ts, 3, 17))
+
+    initialValues: Values;
+>initialValues : Symbol(Config.initialValues, Decl(negatedMappedIntersectionInference.ts, 3, 26))
+>Values : Symbol(Values, Decl(negatedMappedIntersectionInference.ts, 3, 17))
+
+    validate?: (values: Values) => void;
+>validate : Symbol(Config.validate, Decl(negatedMappedIntersectionInference.ts, 4, 26))
+>values : Symbol(values, Decl(negatedMappedIntersectionInference.ts, 5, 16))
+>Values : Symbol(Values, Decl(negatedMappedIntersectionInference.ts, 3, 17))
+
+    validateOnChange?: boolean;
+>validateOnChange : Symbol(Config.validateOnChange, Decl(negatedMappedIntersectionInference.ts, 5, 40))
+}
+
+declare function configure<Values = object, Extra = {}>(options:
+>configure : Symbol(configure, Decl(negatedMappedIntersectionInference.ts, 7, 1))
+>Values : Symbol(Values, Decl(negatedMappedIntersectionInference.ts, 9, 27))
+>Extra : Symbol(Extra, Decl(negatedMappedIntersectionInference.ts, 9, 43))
+>options : Symbol(options, Decl(negatedMappedIntersectionInference.ts, 9, 56))
+
+    string extends "validate" | "initialValues" | keyof Extra
+>Extra : Symbol(Extra, Decl(negatedMappedIntersectionInference.ts, 9, 43))
+
+        ? Readonly<Config<Values> & Extra>
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>Config : Symbol(Config, Decl(negatedMappedIntersectionInference.ts, 1, 29))
+>Values : Symbol(Values, Decl(negatedMappedIntersectionInference.ts, 9, 27))
+>Extra : Symbol(Extra, Decl(negatedMappedIntersectionInference.ts, 9, 43))
+
+        : Pick<Readonly<Config<Values> & Extra>, "validate" | "initialValues" | MyExclude<keyof Extra, "validateOnChange">>
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>Config : Symbol(Config, Decl(negatedMappedIntersectionInference.ts, 1, 29))
+>Values : Symbol(Values, Decl(negatedMappedIntersectionInference.ts, 9, 27))
+>Extra : Symbol(Extra, Decl(negatedMappedIntersectionInference.ts, 9, 43))
+>MyExclude : Symbol(MyExclude, Decl(negatedMappedIntersectionInference.ts, 0, 0))
+>Extra : Symbol(Extra, Decl(negatedMappedIntersectionInference.ts, 9, 43))
+
+            & Partial<Pick<Readonly<Config<Values> & Extra>, "validateOnChange" | MyExtract<keyof Extra, "validateOnChange">>>
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>Config : Symbol(Config, Decl(negatedMappedIntersectionInference.ts, 1, 29))
+>Values : Symbol(Values, Decl(negatedMappedIntersectionInference.ts, 9, 27))
+>Extra : Symbol(Extra, Decl(negatedMappedIntersectionInference.ts, 9, 43))
+>MyExtract : Symbol(MyExtract, Decl(negatedMappedIntersectionInference.ts, 0, 33))
+>Extra : Symbol(Extra, Decl(negatedMappedIntersectionInference.ts, 9, 43))
+
+): Values;
+>Values : Symbol(Values, Decl(negatedMappedIntersectionInference.ts, 9, 27))
+
+const inferred = configure({
+>inferred : Symbol(inferred, Decl(negatedMappedIntersectionInference.ts, 16, 5))
+>configure : Symbol(configure, Decl(negatedMappedIntersectionInference.ts, 7, 1))
+
+    initialValues: { count: 1 },
+>initialValues : Symbol(initialValues, Decl(negatedMappedIntersectionInference.ts, 16, 28))
+>count : Symbol(count, Decl(negatedMappedIntersectionInference.ts, 17, 20))
+
+    validate: values => {
+>validate : Symbol(validate, Decl(negatedMappedIntersectionInference.ts, 17, 32))
+>values : Symbol(values, Decl(negatedMappedIntersectionInference.ts, 18, 13))
+
+        const count: number = values.count;
+>count : Symbol(count, Decl(negatedMappedIntersectionInference.ts, 19, 13))
+>values.count : Symbol(count, Decl(negatedMappedIntersectionInference.ts, 17, 20))
+>values : Symbol(values, Decl(negatedMappedIntersectionInference.ts, 18, 13))
+>count : Symbol(count, Decl(negatedMappedIntersectionInference.ts, 17, 20))
+
+    },
+});
+const count: number = inferred.count;
+>count : Symbol(count, Decl(negatedMappedIntersectionInference.ts, 22, 5))
+>inferred.count : Symbol(count, Decl(negatedMappedIntersectionInference.ts, 17, 20))
+>inferred : Symbol(inferred, Decl(negatedMappedIntersectionInference.ts, 16, 5))
+>count : Symbol(count, Decl(negatedMappedIntersectionInference.ts, 17, 20))
+

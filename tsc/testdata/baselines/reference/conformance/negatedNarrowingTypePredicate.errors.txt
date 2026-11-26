@@ -1,0 +1,56 @@
+negatedNarrowingTypePredicate.ts(17,17): error TS2345: Argument of type '{}' is not assignable to parameter of type 'not Cat'.
+
+
+==== negatedNarrowingTypePredicate.ts (1 errors) ====
+    // User-defined guards do not introduce negations in the false branch because they may
+    // only recognize a subset of the declared predicate type.
+    
+    interface Cat {
+        meow(): void;
+    }
+    
+    declare function isCat(x: unknown): x is Cat;
+    declare function wantsNotCat(x: not Cat): void;
+    
+    // `{}` base overlaps Cat.
+    declare const a: {};
+    if (isCat(a)) {
+        a; // {} & Cat
+    } else {
+        a; // {}
+        wantsNotCat(a);
+                    ~
+!!! error TS2345: Argument of type '{}' is not assignable to parameter of type 'not Cat'.
+    }
+    
+    // A bare type parameter.
+    function generic<T>(x: T) {
+        if (isCat(x)) {
+            x; // T & Cat
+        } else {
+            x; // T
+        }
+    }
+    
+    // Existing false-branch union constituent filtering is preserved.
+    interface Dog {
+        bark(): void;
+        meow?: undefined;
+    }
+    declare const b: Cat | Dog;
+    if (isCat(b)) {
+        b; // Cat
+    } else {
+        b; // Dog
+    }
+    
+    // A negated type guard `x is not Cat` narrows the *true* branch to `not Cat`.
+    declare function isNotCat(x: unknown): x is not Cat;
+    declare const c: {};
+    if (isNotCat(c)) {
+        c; // {} & not Cat
+        wantsNotCat(c);
+    } else {
+        c; // {}
+    }
+    

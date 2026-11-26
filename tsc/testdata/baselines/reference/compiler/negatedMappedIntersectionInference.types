@@ -1,0 +1,62 @@
+//// [tests/cases/compiler/negatedMappedIntersectionInference.ts] ////
+
+=== negatedMappedIntersectionInference.ts ===
+type MyExclude<T, U> = T & not U;
+>MyExclude : MyExclude<T, U>
+
+type MyExtract<T, U> = T & U;
+>MyExtract : MyExtract<T, U>
+
+interface Config<Values> {
+    initialValues: Values;
+>initialValues : Values
+
+    validate?: (values: Values) => void;
+>validate : ((values: Values) => void) | undefined
+>values : Values
+
+    validateOnChange?: boolean;
+>validateOnChange : boolean | undefined
+}
+
+declare function configure<Values = object, Extra = {}>(options:
+>configure : <Values = object, Extra = {}>(options: string extends "validate" | "initialValues" | keyof Extra ? Readonly<Config<Values> & Extra> : Pick<Readonly<Config<Values> & Extra>, "validate" | "initialValues" | MyExclude<keyof Extra, "validateOnChange">> & Partial<Pick<Readonly<Config<Values> & Extra>, "validateOnChange" | MyExtract<keyof Extra, "validateOnChange">>>) => Values
+>options : string extends "initialValues" | "validate" | keyof Extra ? Readonly<Config<Values> & Extra> : Pick<Readonly<Config<Values> & Extra>, "initialValues" | "validate" | MyExclude<keyof Extra, "validateOnChange">> & Partial<Pick<Readonly<Config<Values> & Extra>, "validateOnChange" | MyExtract<keyof Extra, "validateOnChange">>>
+
+    string extends "validate" | "initialValues" | keyof Extra
+        ? Readonly<Config<Values> & Extra>
+        : Pick<Readonly<Config<Values> & Extra>, "validate" | "initialValues" | MyExclude<keyof Extra, "validateOnChange">>
+            & Partial<Pick<Readonly<Config<Values> & Extra>, "validateOnChange" | MyExtract<keyof Extra, "validateOnChange">>>
+): Values;
+
+const inferred = configure({
+>inferred : { count: number; }
+>configure({    initialValues: { count: 1 },    validate: values => {        const count: number = values.count;    },}) : { count: number; }
+>configure : <Values = object, Extra = {}>(options: string extends "validate" | "initialValues" | keyof Extra ? Readonly<Config<Values> & Extra> : Pick<Readonly<Config<Values> & Extra>, "validate" | "initialValues" | MyExclude<keyof Extra, "validateOnChange">> & Partial<Pick<Readonly<Config<Values> & Extra>, "validateOnChange" | MyExtract<keyof Extra, "validateOnChange">>>) => Values
+>{    initialValues: { count: 1 },    validate: values => {        const count: number = values.count;    },} : { initialValues: { count: number; }; validate: (values: { count: number; }) => void; }
+
+    initialValues: { count: 1 },
+>initialValues : { count: number; }
+>{ count: 1 } : { count: number; }
+>count : number
+>1 : 1
+
+    validate: values => {
+>validate : (values: { count: number; }) => void
+>values => {        const count: number = values.count;    } : (values: { count: number; }) => void
+>values : { count: number; }
+
+        const count: number = values.count;
+>count : number
+>values.count : number
+>values : { count: number; }
+>count : number
+
+    },
+});
+const count: number = inferred.count;
+>count : number
+>inferred.count : number
+>inferred : { count: number; }
+>count : number
+

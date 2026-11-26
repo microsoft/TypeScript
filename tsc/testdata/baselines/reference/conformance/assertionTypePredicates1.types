@@ -81,7 +81,7 @@ function f01(x: unknown) {
 >"boolean" : "boolean"
 >typeof x === "number" : boolean
 >typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
->x : unknown
+>x : not false & not true
 >"number" : "number"
 
         x.toLocaleString;

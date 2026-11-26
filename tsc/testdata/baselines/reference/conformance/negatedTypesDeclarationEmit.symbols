@@ -1,0 +1,52 @@
+//// [tests/cases/conformance/types/negated/negatedTypesDeclarationEmit.ts] ////
+
+=== negatedTypesDeclarationEmit.ts ===
+// Declaration emit round-trip for negated types.
+// Each exported declaration should print its `not` type faithfully in the .d.ts.
+
+export type NotString = not string;
+>NotString : Symbol(NotString, Decl(negatedTypesDeclarationEmit.ts, 0, 0))
+
+export type NotUnionOfLiterals = not ("a" | "b" | "c");
+>NotUnionOfLiterals : Symbol(NotUnionOfLiterals, Decl(negatedTypesDeclarationEmit.ts, 3, 35))
+
+export type NotObject = not { x: number };
+>NotObject : Symbol(NotObject, Decl(negatedTypesDeclarationEmit.ts, 5, 55))
+>x : Symbol(x, Decl(negatedTypesDeclarationEmit.ts, 7, 29))
+
+export declare let notNumber: not number;
+>notNumber : Symbol(notNumber, Decl(negatedTypesDeclarationEmit.ts, 9, 18))
+
+export declare function accept(x: not null): void;
+>accept : Symbol(accept, Decl(negatedTypesDeclarationEmit.ts, 9, 41))
+>x : Symbol(x, Decl(negatedTypesDeclarationEmit.ts, 11, 31))
+
+export declare function make<T extends not undefined>(value: T): T;
+>make : Symbol(make, Decl(negatedTypesDeclarationEmit.ts, 11, 50))
+>T : Symbol(T, Decl(negatedTypesDeclarationEmit.ts, 13, 29))
+>value : Symbol(value, Decl(negatedTypesDeclarationEmit.ts, 13, 54))
+>T : Symbol(T, Decl(negatedTypesDeclarationEmit.ts, 13, 29))
+>T : Symbol(T, Decl(negatedTypesDeclarationEmit.ts, 13, 29))
+
+export interface Holder {
+>Holder : Symbol(Holder, Decl(negatedTypesDeclarationEmit.ts, 13, 67))
+
+    value: not boolean;
+>value : Symbol(Holder.value, Decl(negatedTypesDeclarationEmit.ts, 15, 25))
+
+    readonly tag: string & not "reserved";
+>tag : Symbol(Holder.tag, Decl(negatedTypesDeclarationEmit.ts, 16, 23))
+}
+
+export type IndexNoMethod = {
+>IndexNoMethod : Symbol(IndexNoMethod, Decl(negatedTypesDeclarationEmit.ts, 18, 1))
+
+    [idx: string & not "method"]: number;
+>idx : Symbol(idx, Decl(negatedTypesDeclarationEmit.ts, 21, 5))
+
+};
+
+export declare const nested: not (string | { y: not number });
+>nested : Symbol(nested, Decl(negatedTypesDeclarationEmit.ts, 24, 20))
+>y : Symbol(y, Decl(negatedTypesDeclarationEmit.ts, 24, 44))
+

@@ -1,0 +1,56 @@
+//// [tests/cases/compiler/negatedComplementCircularReduction.ts] ////
+
+=== negatedComplementCircularReduction.ts ===
+type Keys<Value> = Value extends unknown ? keyof Value : never;
+>Keys : Keys<Value>
+
+type Recursive =
+>Recursive : Recursive
+
+    | { next: Recursive; value: string }
+>next : Recursive
+>value : string
+
+    | ({ next: unknown } & not { value: string })
+>next : unknown
+>value : string
+
+    | { next: unknown; value: string };
+>next : unknown
+>value : string
+
+// The first query encounters a reduction cycle and distributes over the unreduced union.
+type Early = Keys<Recursive>;
+>Early : Early
+
+// Use a separate conditional alias so the later query does not reuse the first instantiation.
+type LaterKeys<Value> = Value extends unknown ? keyof Value : never;
+>LaterKeys : LaterKeys<Value>
+
+declare const early: Early;
+>early : Early
+
+declare const later: LaterKeys<Recursive>;
+>later : "next" | "value"
+
+const consistent: typeof early = later;
+>consistent : Early
+>early : Early
+>later : "next" | "value"
+
+const reverseConsistent: typeof later = early;
+>reverseConsistent : "next" | "value"
+>later : "next" | "value"
+>early : Early
+
+// Retrying reduction used to remove "value" from only the later query.
+const earlyValue: typeof early = "value";
+>earlyValue : Early
+>early : Early
+>"value" : "value"
+
+const laterValue: typeof later = "value";
+>laterValue : "next" | "value"
+>later : "next" | "value"
+>"value" : "value"
+

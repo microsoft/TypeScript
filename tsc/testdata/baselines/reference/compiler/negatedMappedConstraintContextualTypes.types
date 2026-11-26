@@ -1,0 +1,153 @@
+//// [tests/cases/compiler/negatedMappedConstraintContextualTypes.ts] ////
+
+=== negatedMappedConstraintContextualTypes.ts ===
+type MyExtract<T, U> = T & U;
+>MyExtract : MyExtract<T, U>
+
+type MyExclude<T, U> = T & not U;
+>MyExclude : MyExclude<T, U>
+
+type MyOmit<T, K extends keyof any> = Pick<T, MyExclude<keyof T, K>>;
+>MyOmit : MyOmit<T, K>
+
+type Tags<Value> = Value extends { tag: infer Tag } ? Tag : never;
+>Tags : Tags<Value>
+>tag : Tag
+
+declare function cases<Value>(): <
+>cases : <Value>() => <Handlers extends { [Tag in Tags<Value> & string]: (value: MyExtract<Value, { tag: Tag; }>) => unknown; } & { [Tag in MyExclude<keyof Handlers, Tags<Value>>]: never; }>(handlers: Handlers) => void
+
+    Handlers extends {
+        [Tag in Tags<Value> & string]: (value: MyExtract<Value, { tag: Tag }>) => unknown;
+>value : MyExtract<Value, { tag: Tag; }>
+>tag : Tag
+
+    } & { [Tag in MyExclude<keyof Handlers, Tags<Value>>]: never }
+>(handlers: Handlers) => void;
+>handlers : Handlers
+
+type Value = { tag: "a"; count: number } | { tag: "b"; text: string };
+>Value : Value
+>tag : "a"
+>count : number
+>tag : "b"
+>text : string
+
+const match = cases<Value>();
+>match : <Handlers extends { [Tag in Tags<Value> & string]: (value: MyExtract<Value, { tag: Tag; }>) => unknown; } & { [Tag in MyExclude<keyof Handlers, Tags<Value>>]: never; }>(handlers: Handlers) => void
+>cases<Value>() : <Handlers extends { [Tag in Tags<Value> & string]: (value: MyExtract<Value, { tag: Tag; }>) => unknown; } & { [Tag in MyExclude<keyof Handlers, Tags<Value>>]: never; }>(handlers: Handlers) => void
+>cases : <Value>() => <Handlers extends { [Tag in Tags<Value> & string]: (value: MyExtract<Value, { tag: Tag; }>) => unknown; } & { [Tag in MyExclude<keyof Handlers, Tags<Value>>]: never; }>(handlers: Handlers) => void
+
+match({
+>match({    a: value => value.count,    b: value => value.text,}) : void
+>match : <Handlers extends { [Tag in Tags<Value> & string]: (value: MyExtract<Value, { tag: Tag; }>) => unknown; } & { [Tag in MyExclude<keyof Handlers, Tags<Value>>]: never; }>(handlers: Handlers) => void
+>{    a: value => value.count,    b: value => value.text,} : { a: (value: { tag: "a"; count: number; } & { tag: "a"; }) => number; b: (value: { tag: "b"; text: string; } & { tag: "b"; }) => string; }
+
+    a: value => value.count,
+>a : (value: { tag: "a"; count: number; } & { tag: "a"; }) => number
+>value => value.count : (value: { tag: "a"; count: number; } & { tag: "a"; }) => number
+>value : { tag: "a"; count: number; } & { tag: "a"; }
+>value.count : number
+>value : { tag: "a"; count: number; } & { tag: "a"; }
+>count : number
+
+    b: value => value.text,
+>b : (value: { tag: "b"; text: string; } & { tag: "b"; }) => string
+>value => value.text : (value: { tag: "b"; text: string; } & { tag: "b"; }) => string
+>value : { tag: "b"; text: string; } & { tag: "b"; }
+>value.text : string
+>value : { tag: "b"; text: string; } & { tag: "b"; }
+>text : string
+
+});
+
+match({
+>match({    a: value => value.count,    b: value => value.text,    // Error: Additional handlers are excluded.    extra: () => 0,}) : void
+>match : <Handlers extends { [Tag in Tags<Value> & string]: (value: MyExtract<Value, { tag: Tag; }>) => unknown; } & { [Tag in MyExclude<keyof Handlers, Tags<Value>>]: never; }>(handlers: Handlers) => void
+>{    a: value => value.count,    b: value => value.text,    // Error: Additional handlers are excluded.    extra: () => 0,} : { a: (value: { tag: "a"; count: number; } & { tag: "a"; }) => number; b: (value: { tag: "b"; text: string; } & { tag: "b"; }) => string; extra: () => number; }
+
+    a: value => value.count,
+>a : (value: { tag: "a"; count: number; } & { tag: "a"; }) => number
+>value => value.count : (value: { tag: "a"; count: number; } & { tag: "a"; }) => number
+>value : { tag: "a"; count: number; } & { tag: "a"; }
+>value.count : number
+>value : { tag: "a"; count: number; } & { tag: "a"; }
+>count : number
+
+    b: value => value.text,
+>b : (value: { tag: "b"; text: string; } & { tag: "b"; }) => string
+>value => value.text : (value: { tag: "b"; text: string; } & { tag: "b"; }) => string
+>value : { tag: "b"; text: string; } & { tag: "b"; }
+>value.text : string
+>value : { tag: "b"; text: string; } & { tag: "b"; }
+>text : string
+
+    // Error: Additional handlers are excluded.
+    extra: () => 0,
+>extra : () => number
+>() => 0 : () => number
+>0 : 0
+
+});
+
+type Elements = {
+>Elements : Elements
+
+    div: { onChange: (event: Event) => void };
+>div : { onChange: (event: Event) => void; }
+>onChange : (event: Event) => void
+>event : Event
+
+    span: { onChange: (event: Event) => void };
+>span : { onChange: (event: Event) => void; }
+>onChange : (event: Event) => void
+>event : Event
+
+};
+type Props<Tag extends keyof Elements> = MyOmit<Elements[Tag], "onChange"> & {
+>Props : Props<Tag>
+
+    onChange: (index: number) => void;
+>onChange : (index: number) => void
+>index : number
+
+};
+declare function component<Tag extends keyof Elements = "div">(props: Props<Tag>): void;
+>component : <Tag extends keyof Elements = "div">(props: Props<Tag>) => void
+>props : Props<Tag>
+
+component({ onChange: index => { const numeric: number = index; } });
+>component({ onChange: index => { const numeric: number = index; } }) : void
+>component : <Tag extends keyof Elements = "div">(props: Props<Tag>) => void
+>{ onChange: index => { const numeric: number = index; } } : { onChange: (index: number) => void; }
+>onChange : (index: number) => void
+>index => { const numeric: number = index; } : (index: number) => void
+>index : number
+>numeric : number
+>index : number
+
+type RemappedOmit<T, Keys> = { [Key in keyof T as MyExclude<Key, Keys>]: T[Key] };
+>RemappedOmit : RemappedOmit<T, Keys>
+
+type RemappedProps<Tag extends keyof Elements> = RemappedOmit<Elements[Tag], "onChange"> & {
+>RemappedProps : RemappedProps<Tag>
+
+    onChange: (index: number) => void;
+>onChange : (index: number) => void
+>index : number
+
+};
+declare function remappedComponent<Tag extends keyof Elements = "div">(props: RemappedProps<Tag>): void;
+>remappedComponent : <Tag extends keyof Elements = "div">(props: RemappedProps<Tag>) => void
+>props : RemappedProps<Tag>
+
+remappedComponent({ onChange: index => { const numeric: number = index; } });
+>remappedComponent({ onChange: index => { const numeric: number = index; } }) : void
+>remappedComponent : <Tag extends keyof Elements = "div">(props: RemappedProps<Tag>) => void
+>{ onChange: index => { const numeric: number = index; } } : { onChange: (index: number) => void; }
+>onChange : (index: number) => void
+>index => { const numeric: number = index; } : (index: number) => void
+>index : number
+>numeric : number
+>index : number
+

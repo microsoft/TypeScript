@@ -1,0 +1,79 @@
+//// [tests/cases/conformance/types/negated/negatedTypesInPatternLiterals.ts] ////
+
+=== negatedTypesInPatternLiterals.ts ===
+// Negated types used as placeholders inside template/pattern literal types.
+
+// A negated string literal as a placeholder.
+type NotBar = `foo${not "bar"}`;
+>NotBar : Symbol(NotBar, Decl(negatedTypesInPatternLiterals.ts, 0, 0))
+
+// A negated primitive as a placeholder.
+type NotString = `foo${not string}`;
+>NotString : Symbol(NotString, Decl(negatedTypesInPatternLiterals.ts, 3, 32))
+
+type NotNumber = `id-${not 0}`;
+>NotNumber : Symbol(NotNumber, Decl(negatedTypesInPatternLiterals.ts, 6, 36))
+
+// A negated union as a placeholder.
+type NotAB = `x-${not ("a" | "b")}`;
+>NotAB : Symbol(NotAB, Decl(negatedTypesInPatternLiterals.ts, 7, 31))
+
+// A negated type intersected with a string, which restricts to string values.
+type StringNotBar = `foo${string & not "bar"}`;
+>StringNotBar : Symbol(StringNotBar, Decl(negatedTypesInPatternLiterals.ts, 10, 36))
+
+// A generic negated placeholder.
+type Wrap<T> = `foo${T & not "bar"}`;
+>Wrap : Symbol(Wrap, Decl(negatedTypesInPatternLiterals.ts, 13, 47))
+>T : Symbol(T, Decl(negatedTypesInPatternLiterals.ts, 16, 10))
+>T : Symbol(T, Decl(negatedTypesInPatternLiterals.ts, 16, 10))
+
+type WrapString = Wrap<string>;
+>WrapString : Symbol(WrapString, Decl(negatedTypesInPatternLiterals.ts, 16, 37))
+>Wrap : Symbol(Wrap, Decl(negatedTypesInPatternLiterals.ts, 13, 47))
+
+type WrapLiteral = Wrap<"baz">;
+>WrapLiteral : Symbol(WrapLiteral, Decl(negatedTypesInPatternLiterals.ts, 17, 31))
+>Wrap : Symbol(Wrap, Decl(negatedTypesInPatternLiterals.ts, 13, 47))
+
+type WrapBar = Wrap<"bar">;
+>WrapBar : Symbol(WrapBar, Decl(negatedTypesInPatternLiterals.ts, 18, 31))
+>Wrap : Symbol(Wrap, Decl(negatedTypesInPatternLiterals.ts, 13, 47))
+
+// Assignability against a plainly-typed string.
+declare let notBar: NotBar;
+>notBar : Symbol(notBar, Decl(negatedTypesInPatternLiterals.ts, 22, 11))
+>NotBar : Symbol(NotBar, Decl(negatedTypesInPatternLiterals.ts, 0, 0))
+
+declare let stringNotBar: StringNotBar;
+>stringNotBar : Symbol(stringNotBar, Decl(negatedTypesInPatternLiterals.ts, 23, 11))
+>StringNotBar : Symbol(StringNotBar, Decl(negatedTypesInPatternLiterals.ts, 10, 36))
+
+notBar = "foobaz";      // depends on representation
+>notBar : Symbol(notBar, Decl(negatedTypesInPatternLiterals.ts, 22, 11))
+
+notBar = "foobar";      // depends on representation
+>notBar : Symbol(notBar, Decl(negatedTypesInPatternLiterals.ts, 22, 11))
+
+stringNotBar = "foobaz"; // depends on representation
+>stringNotBar : Symbol(stringNotBar, Decl(negatedTypesInPatternLiterals.ts, 23, 11))
+
+stringNotBar = "foobar"; // depends on representation
+>stringNotBar : Symbol(stringNotBar, Decl(negatedTypesInPatternLiterals.ts, 23, 11))
+
+// Inference from a template literal pattern with a negated placeholder.
+declare function parse<T extends string>(s: `foo${T & not "bar"}`): T;
+>parse : Symbol(parse, Decl(negatedTypesInPatternLiterals.ts, 28, 24))
+>T : Symbol(T, Decl(negatedTypesInPatternLiterals.ts, 31, 23))
+>s : Symbol(s, Decl(negatedTypesInPatternLiterals.ts, 31, 41))
+>T : Symbol(T, Decl(negatedTypesInPatternLiterals.ts, 31, 23))
+>T : Symbol(T, Decl(negatedTypesInPatternLiterals.ts, 31, 23))
+
+const p1 = parse("foobaz");
+>p1 : Symbol(p1, Decl(negatedTypesInPatternLiterals.ts, 32, 5))
+>parse : Symbol(parse, Decl(negatedTypesInPatternLiterals.ts, 28, 24))
+
+const p2 = parse("foobar");
+>p2 : Symbol(p2, Decl(negatedTypesInPatternLiterals.ts, 33, 5))
+>parse : Symbol(parse, Decl(negatedTypesInPatternLiterals.ts, 28, 24))
+

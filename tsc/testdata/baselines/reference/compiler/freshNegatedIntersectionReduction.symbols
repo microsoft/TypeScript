@@ -1,0 +1,145 @@
+//// [tests/cases/compiler/freshNegatedIntersectionReduction.ts] ////
+
+=== freshNegatedIntersectionReduction.ts ===
+export function narrowedArray<Value extends unknown[] | undefined>(value: Value) {
+>narrowedArray : Symbol(narrowedArray, Decl(freshNegatedIntersectionReduction.ts, 0, 0))
+>Value : Symbol(Value, Decl(freshNegatedIntersectionReduction.ts, 0, 30))
+>value : Symbol(value, Decl(freshNegatedIntersectionReduction.ts, 0, 67))
+>Value : Symbol(Value, Decl(freshNegatedIntersectionReduction.ts, 0, 30))
+
+    if (typeof value !== "undefined") {
+>value : Symbol(value, Decl(freshNegatedIntersectionReduction.ts, 0, 67))
+
+        for (const element of value) {}
+>element : Symbol(element, Decl(freshNegatedIntersectionReduction.ts, 2, 18))
+>value : Symbol(value, Decl(freshNegatedIntersectionReduction.ts, 0, 67))
+
+        return [...value];
+>value : Symbol(value, Decl(freshNegatedIntersectionReduction.ts, 0, 67))
+    }
+    return [];
+}
+
+export function explicitUndefined<Value>(value: Value & not undefined) {
+>explicitUndefined : Symbol(explicitUndefined, Decl(freshNegatedIntersectionReduction.ts, 6, 1))
+>Value : Symbol(Value, Decl(freshNegatedIntersectionReduction.ts, 8, 34))
+>value : Symbol(value, Decl(freshNegatedIntersectionReduction.ts, 8, 41))
+>Value : Symbol(Value, Decl(freshNegatedIntersectionReduction.ts, 8, 34))
+
+    if (typeof value !== "undefined") {
+>value : Symbol(value, Decl(freshNegatedIntersectionReduction.ts, 8, 41))
+
+        const retained = value;
+>retained : Symbol(retained, Decl(freshNegatedIntersectionReduction.ts, 10, 13))
+>value : Symbol(value, Decl(freshNegatedIntersectionReduction.ts, 8, 41))
+
+        return retained;
+>retained : Symbol(retained, Decl(freshNegatedIntersectionReduction.ts, 10, 13))
+    }
+    throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+
+export function explicitNull<Value>(value: Value & not null) {
+>explicitNull : Symbol(explicitNull, Decl(freshNegatedIntersectionReduction.ts, 14, 1))
+>Value : Symbol(Value, Decl(freshNegatedIntersectionReduction.ts, 16, 29))
+>value : Symbol(value, Decl(freshNegatedIntersectionReduction.ts, 16, 36))
+>Value : Symbol(Value, Decl(freshNegatedIntersectionReduction.ts, 16, 29))
+
+    if (value !== null) {
+>value : Symbol(value, Decl(freshNegatedIntersectionReduction.ts, 16, 36))
+
+        const retained = value;
+>retained : Symbol(retained, Decl(freshNegatedIntersectionReduction.ts, 18, 13))
+>value : Symbol(value, Decl(freshNegatedIntersectionReduction.ts, 16, 36))
+
+        return retained;
+>retained : Symbol(retained, Decl(freshNegatedIntersectionReduction.ts, 18, 13))
+    }
+    throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+
+export function freshOnly<Value>(value: Value) {
+>freshOnly : Symbol(freshOnly, Decl(freshNegatedIntersectionReduction.ts, 22, 1))
+>Value : Symbol(Value, Decl(freshNegatedIntersectionReduction.ts, 24, 26))
+>value : Symbol(value, Decl(freshNegatedIntersectionReduction.ts, 24, 33))
+>Value : Symbol(Value, Decl(freshNegatedIntersectionReduction.ts, 24, 26))
+
+    if (typeof value !== "string") {
+>value : Symbol(value, Decl(freshNegatedIntersectionReduction.ts, 24, 33))
+
+        const widened = value;
+>widened : Symbol(widened, Decl(freshNegatedIntersectionReduction.ts, 26, 13))
+>value : Symbol(value, Decl(freshNegatedIntersectionReduction.ts, 24, 33))
+
+        return widened;
+>widened : Symbol(widened, Decl(freshNegatedIntersectionReduction.ts, 26, 13))
+    }
+    throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+
+export function explicitString<Value>(value: Value & not string) {
+>explicitString : Symbol(explicitString, Decl(freshNegatedIntersectionReduction.ts, 30, 1))
+>Value : Symbol(Value, Decl(freshNegatedIntersectionReduction.ts, 32, 31))
+>value : Symbol(value, Decl(freshNegatedIntersectionReduction.ts, 32, 38))
+>Value : Symbol(Value, Decl(freshNegatedIntersectionReduction.ts, 32, 31))
+
+    if (typeof value !== "string") {
+>value : Symbol(value, Decl(freshNegatedIntersectionReduction.ts, 32, 38))
+
+        const retained = value;
+>retained : Symbol(retained, Decl(freshNegatedIntersectionReduction.ts, 34, 13))
+>value : Symbol(value, Decl(freshNegatedIntersectionReduction.ts, 32, 38))
+
+        return retained;
+>retained : Symbol(retained, Decl(freshNegatedIntersectionReduction.ts, 34, 13))
+    }
+    throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+
+export function unionFreshFirst(value: unknown, regular: not string, choose: boolean) {
+>unionFreshFirst : Symbol(unionFreshFirst, Decl(freshNegatedIntersectionReduction.ts, 38, 1))
+>value : Symbol(value, Decl(freshNegatedIntersectionReduction.ts, 40, 32))
+>regular : Symbol(regular, Decl(freshNegatedIntersectionReduction.ts, 40, 47))
+>choose : Symbol(choose, Decl(freshNegatedIntersectionReduction.ts, 40, 68))
+
+    if (typeof value !== "string") {
+>value : Symbol(value, Decl(freshNegatedIntersectionReduction.ts, 40, 32))
+
+        const merged = choose ? value : regular;
+>merged : Symbol(merged, Decl(freshNegatedIntersectionReduction.ts, 42, 13))
+>choose : Symbol(choose, Decl(freshNegatedIntersectionReduction.ts, 40, 68))
+>value : Symbol(value, Decl(freshNegatedIntersectionReduction.ts, 40, 32))
+>regular : Symbol(regular, Decl(freshNegatedIntersectionReduction.ts, 40, 47))
+
+        return merged;
+>merged : Symbol(merged, Decl(freshNegatedIntersectionReduction.ts, 42, 13))
+    }
+    throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+
+export function unionRegularFirst(value: unknown, regular: not string, choose: boolean) {
+>unionRegularFirst : Symbol(unionRegularFirst, Decl(freshNegatedIntersectionReduction.ts, 46, 1))
+>value : Symbol(value, Decl(freshNegatedIntersectionReduction.ts, 48, 34))
+>regular : Symbol(regular, Decl(freshNegatedIntersectionReduction.ts, 48, 49))
+>choose : Symbol(choose, Decl(freshNegatedIntersectionReduction.ts, 48, 70))
+
+    if (typeof value !== "string") {
+>value : Symbol(value, Decl(freshNegatedIntersectionReduction.ts, 48, 34))
+
+        const merged = choose ? regular : value;
+>merged : Symbol(merged, Decl(freshNegatedIntersectionReduction.ts, 50, 13))
+>choose : Symbol(choose, Decl(freshNegatedIntersectionReduction.ts, 48, 70))
+>regular : Symbol(regular, Decl(freshNegatedIntersectionReduction.ts, 48, 49))
+>value : Symbol(value, Decl(freshNegatedIntersectionReduction.ts, 48, 34))
+
+        return merged;
+>merged : Symbol(merged, Decl(freshNegatedIntersectionReduction.ts, 50, 13))
+    }
+    throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}

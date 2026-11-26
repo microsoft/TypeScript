@@ -1,0 +1,165 @@
+//// [tests/cases/compiler/negatedComplementEqualityNarrowing.ts] ////
+
+=== negatedComplementEqualityNarrowing.ts ===
+type Full = string | not string;
+>Full : Symbol(Full, Decl(negatedComplementEqualityNarrowing.ts, 0, 0))
+
+function complementEquality(value: Full) {
+>complementEquality : Symbol(complementEquality, Decl(negatedComplementEqualityNarrowing.ts, 0, 32))
+>value : Symbol(value, Decl(negatedComplementEqualityNarrowing.ts, 2, 28))
+>Full : Symbol(Full, Decl(negatedComplementEqualityNarrowing.ts, 0, 0))
+
+    if (value == 42 && typeof value === "string") {
+>value : Symbol(value, Decl(negatedComplementEqualityNarrowing.ts, 2, 28))
+>value : Symbol(value, Decl(negatedComplementEqualityNarrowing.ts, 2, 28))
+
+        const text: string = value;
+>text : Symbol(text, Decl(negatedComplementEqualityNarrowing.ts, 4, 13))
+>value : Symbol(value, Decl(negatedComplementEqualityNarrowing.ts, 2, 28))
+
+        // Error: "42" reaches this branch through coercion.
+        const impossible: never = value;
+>impossible : Symbol(impossible, Decl(negatedComplementEqualityNarrowing.ts, 6, 13))
+>value : Symbol(value, Decl(negatedComplementEqualityNarrowing.ts, 2, 28))
+    }
+    if (42 != value) {
+>value : Symbol(value, Decl(negatedComplementEqualityNarrowing.ts, 2, 28))
+
+    } else if (typeof value === "string") {
+>value : Symbol(value, Decl(negatedComplementEqualityNarrowing.ts, 2, 28))
+
+        const text: string = value;
+>text : Symbol(text, Decl(negatedComplementEqualityNarrowing.ts, 10, 13))
+>value : Symbol(value, Decl(negatedComplementEqualityNarrowing.ts, 2, 28))
+
+        // Error: Reversing the operands and negating the comparison still allows strings.
+        const impossible: never = value;
+>impossible : Symbol(impossible, Decl(negatedComplementEqualityNarrowing.ts, 12, 13))
+>value : Symbol(value, Decl(negatedComplementEqualityNarrowing.ts, 2, 28))
+    }
+    if (value === 42) {
+>value : Symbol(value, Decl(negatedComplementEqualityNarrowing.ts, 2, 28))
+
+        const literal: 42 = value;
+>literal : Symbol(literal, Decl(negatedComplementEqualityNarrowing.ts, 15, 13))
+>value : Symbol(value, Decl(negatedComplementEqualityNarrowing.ts, 2, 28))
+    }
+    if (value !== 42) {
+>value : Symbol(value, Decl(negatedComplementEqualityNarrowing.ts, 2, 28))
+
+        const excluded: not 42 = value;
+>excluded : Symbol(excluded, Decl(negatedComplementEqualityNarrowing.ts, 18, 13))
+>value : Symbol(value, Decl(negatedComplementEqualityNarrowing.ts, 2, 28))
+    }
+}
+
+function unknownEquality(value: unknown) {
+>unknownEquality : Symbol(unknownEquality, Decl(negatedComplementEqualityNarrowing.ts, 20, 1))
+>value : Symbol(value, Decl(negatedComplementEqualityNarrowing.ts, 22, 25))
+
+    if (value == 42 && typeof value === "string") {
+>value : Symbol(value, Decl(negatedComplementEqualityNarrowing.ts, 22, 25))
+>value : Symbol(value, Decl(negatedComplementEqualityNarrowing.ts, 22, 25))
+
+        const text: string = value;
+>text : Symbol(text, Decl(negatedComplementEqualityNarrowing.ts, 24, 13))
+>value : Symbol(value, Decl(negatedComplementEqualityNarrowing.ts, 22, 25))
+
+        // Error: "42" reaches this branch through coercion.
+        const impossible: never = value;
+>impossible : Symbol(impossible, Decl(negatedComplementEqualityNarrowing.ts, 26, 13))
+>value : Symbol(value, Decl(negatedComplementEqualityNarrowing.ts, 22, 25))
+    }
+    if (42 != value) {
+>value : Symbol(value, Decl(negatedComplementEqualityNarrowing.ts, 22, 25))
+
+    } else if (typeof value === "string") {
+>value : Symbol(value, Decl(negatedComplementEqualityNarrowing.ts, 22, 25))
+
+        const text: string = value;
+>text : Symbol(text, Decl(negatedComplementEqualityNarrowing.ts, 30, 13))
+>value : Symbol(value, Decl(negatedComplementEqualityNarrowing.ts, 22, 25))
+
+        // Error: Reversing the operands and negating the comparison still allows strings.
+        const impossible: never = value;
+>impossible : Symbol(impossible, Decl(negatedComplementEqualityNarrowing.ts, 32, 13))
+>value : Symbol(value, Decl(negatedComplementEqualityNarrowing.ts, 22, 25))
+    }
+    if (value === 42) {
+>value : Symbol(value, Decl(negatedComplementEqualityNarrowing.ts, 22, 25))
+
+        const literal: 42 = value;
+>literal : Symbol(literal, Decl(negatedComplementEqualityNarrowing.ts, 35, 13))
+>value : Symbol(value, Decl(negatedComplementEqualityNarrowing.ts, 22, 25))
+    }
+    if (value !== 42) {
+>value : Symbol(value, Decl(negatedComplementEqualityNarrowing.ts, 22, 25))
+
+        const excluded: not 42 = value;
+>excluded : Symbol(excluded, Decl(negatedComplementEqualityNarrowing.ts, 38, 13))
+>value : Symbol(value, Decl(negatedComplementEqualityNarrowing.ts, 22, 25))
+    }
+}
+
+function complementPropertyEquality(value: { full: Full }) {
+>complementPropertyEquality : Symbol(complementPropertyEquality, Decl(negatedComplementEqualityNarrowing.ts, 40, 1))
+>value : Symbol(value, Decl(negatedComplementEqualityNarrowing.ts, 42, 36))
+>full : Symbol(full, Decl(negatedComplementEqualityNarrowing.ts, 42, 44))
+>Full : Symbol(Full, Decl(negatedComplementEqualityNarrowing.ts, 0, 0))
+
+    if (value.full == 42 && typeof value.full === "string") {
+>value.full : Symbol(full, Decl(negatedComplementEqualityNarrowing.ts, 42, 44))
+>value : Symbol(value, Decl(negatedComplementEqualityNarrowing.ts, 42, 36))
+>full : Symbol(full, Decl(negatedComplementEqualityNarrowing.ts, 42, 44))
+>value.full : Symbol(full, Decl(negatedComplementEqualityNarrowing.ts, 42, 44))
+>value : Symbol(value, Decl(negatedComplementEqualityNarrowing.ts, 42, 36))
+>full : Symbol(full, Decl(negatedComplementEqualityNarrowing.ts, 42, 44))
+
+        const text: string = value.full;
+>text : Symbol(text, Decl(negatedComplementEqualityNarrowing.ts, 44, 13))
+>value.full : Symbol(full, Decl(negatedComplementEqualityNarrowing.ts, 42, 44))
+>value : Symbol(value, Decl(negatedComplementEqualityNarrowing.ts, 42, 36))
+>full : Symbol(full, Decl(negatedComplementEqualityNarrowing.ts, 42, 44))
+
+        // Error: A property can also contain the coerced string.
+        const impossible: never = value.full;
+>impossible : Symbol(impossible, Decl(negatedComplementEqualityNarrowing.ts, 46, 13))
+>value.full : Symbol(full, Decl(negatedComplementEqualityNarrowing.ts, 42, 44))
+>value : Symbol(value, Decl(negatedComplementEqualityNarrowing.ts, 42, 36))
+>full : Symbol(full, Decl(negatedComplementEqualityNarrowing.ts, 42, 44))
+    }
+    if (42 != value.full) {
+>value.full : Symbol(full, Decl(negatedComplementEqualityNarrowing.ts, 42, 44))
+>value : Symbol(value, Decl(negatedComplementEqualityNarrowing.ts, 42, 36))
+>full : Symbol(full, Decl(negatedComplementEqualityNarrowing.ts, 42, 44))
+
+    } else if (typeof value.full === "string") {
+>value.full : Symbol(full, Decl(negatedComplementEqualityNarrowing.ts, 42, 44))
+>value : Symbol(value, Decl(negatedComplementEqualityNarrowing.ts, 42, 36))
+>full : Symbol(full, Decl(negatedComplementEqualityNarrowing.ts, 42, 44))
+
+        const text: string = value.full;
+>text : Symbol(text, Decl(negatedComplementEqualityNarrowing.ts, 50, 13))
+>value.full : Symbol(full, Decl(negatedComplementEqualityNarrowing.ts, 42, 44))
+>value : Symbol(value, Decl(negatedComplementEqualityNarrowing.ts, 42, 36))
+>full : Symbol(full, Decl(negatedComplementEqualityNarrowing.ts, 42, 44))
+
+        // Error: The false inequality branch still allows strings.
+        const impossible: never = value.full;
+>impossible : Symbol(impossible, Decl(negatedComplementEqualityNarrowing.ts, 52, 13))
+>value.full : Symbol(full, Decl(negatedComplementEqualityNarrowing.ts, 42, 44))
+>value : Symbol(value, Decl(negatedComplementEqualityNarrowing.ts, 42, 36))
+>full : Symbol(full, Decl(negatedComplementEqualityNarrowing.ts, 42, 44))
+    }
+}
+
+complementEquality("42");
+>complementEquality : Symbol(complementEquality, Decl(negatedComplementEqualityNarrowing.ts, 0, 32))
+
+unknownEquality("42");
+>unknownEquality : Symbol(unknownEquality, Decl(negatedComplementEqualityNarrowing.ts, 20, 1))
+
+complementPropertyEquality({ full: "42" });
+>complementPropertyEquality : Symbol(complementPropertyEquality, Decl(negatedComplementEqualityNarrowing.ts, 40, 1))
+>full : Symbol(full, Decl(negatedComplementEqualityNarrowing.ts, 58, 28))
+

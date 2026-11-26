@@ -153,7 +153,7 @@ function test3(foo: unknown) {
 >Array.isArray : (arg: any) => arg is any[]
 >Array : ArrayConstructor
 >isArray : (arg: any) => arg is any[]
->foo : unknown
+>foo : not string
 >false : false
 
         throw new Error('Not a string or an array');
