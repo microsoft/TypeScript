@@ -1,0 +1,51 @@
+//// [tests/cases/compiler/spreadUnionOfObjectAndEmptyObjectOrder.ts] ////
+
+=== spreadUnionOfObjectAndEmptyObjectOrder.ts ===
+// Spreading a union of an object type and `undefined` synthesizes an anonymous
+// object type with optional properties and interns it by the object type and
+// readonly flag, so checking the same spread expression in context-free and
+// normal modes yields the same type in every check order.
+
+interface Pair<A, B> { a: A; b: B }
+>a : A
+>b : B
+
+declare const u: { a: number } | undefined;
+>u : { a: number; } | undefined
+>a : number
+
+declare const cond: boolean;
+>cond : boolean
+
+let x;
+>x : any
+
+const arr = [];
+>arr : any[]
+>[] : never[]
+
+arr.push(x = { ...u });
+>arr.push(x = { ...u }) : number
+>arr.push : (...items: any[]) => number
+>arr : any[]
+>push : (...items: any[]) => number
+>x = { ...u } : { a?: number | undefined; }
+>x : any
+>{ ...u } : { a?: number | undefined; }
+>u : { a: number; } | undefined
+
+declare const a: Pair<(typeof arr)[number], 1>;
+>a : Pair<{ a?: number | undefined; }, 1>
+>arr : { a?: number | undefined; }[]
+
+declare const b: Pair<typeof x, 2>;
+>b : Pair<{ a?: number | undefined; }, 2>
+>x : { a?: number | undefined; }
+
+const z = cond ? a : b;
+>z : Pair<{ a?: number | undefined; }, 1> | Pair<{ a?: number | undefined; }, 2>
+>cond ? a : b : Pair<{ a?: number | undefined; }, 1> | Pair<{ a?: number | undefined; }, 2>
+>cond : boolean
+>a : Pair<{ a?: number | undefined; }, 1>
+>b : Pair<{ a?: number | undefined; }, 2>
+

@@ -1,0 +1,101 @@
+//// [tests/cases/compiler/deeplyNestedConditionalChain.ts] ////
+
+=== deeplyNestedConditionalChain.ts ===
+// Checking that IsTwo<Unwrap<T>> satisfies the `boolean` constraint relates a chain of
+// distributive conditional types wrapped around the recursive conditional type UnwrapTag.
+// This must not report TS2589 (type instantiation is excessively deep and possibly infinite).
+// The reproduction depends on the name UnwrapTagStep sorting after UnwrapTag.
+
+type Test<T> = RequireBoolean<IsTwo<Unwrap<T>>>;
+>Test : Symbol(Test, Decl(deeplyNestedConditionalChain.ts, 0, 0))
+>T : Symbol(T, Decl(deeplyNestedConditionalChain.ts, 5, 10))
+>RequireBoolean : Symbol(RequireBoolean, Decl(deeplyNestedConditionalChain.ts, 5, 48))
+>IsTwo : Symbol(IsTwo, Decl(deeplyNestedConditionalChain.ts, 7, 43))
+>Unwrap : Symbol(Unwrap, Decl(deeplyNestedConditionalChain.ts, 14, 16))
+>T : Symbol(T, Decl(deeplyNestedConditionalChain.ts, 5, 10))
+
+type RequireBoolean<B extends boolean> = B;
+>RequireBoolean : Symbol(RequireBoolean, Decl(deeplyNestedConditionalChain.ts, 5, 48))
+>B : Symbol(B, Decl(deeplyNestedConditionalChain.ts, 7, 20))
+>B : Symbol(B, Decl(deeplyNestedConditionalChain.ts, 7, 20))
+
+type IsTwo<N> =
+>IsTwo : Symbol(IsTwo, Decl(deeplyNestedConditionalChain.ts, 7, 43))
+>N : Symbol(N, Decl(deeplyNestedConditionalChain.ts, 9, 11))
+
+    N extends 2
+>N : Symbol(N, Decl(deeplyNestedConditionalChain.ts, 9, 11))
+
+        ? N extends 2
+>N : Symbol(N, Decl(deeplyNestedConditionalChain.ts, 9, 11))
+
+            ? true
+            : false
+        : false;
+
+type Unwrap<T> =
+>Unwrap : Symbol(Unwrap, Decl(deeplyNestedConditionalChain.ts, 14, 16))
+>T : Symbol(T, Decl(deeplyNestedConditionalChain.ts, 16, 12))
+
+    T extends 2
+>T : Symbol(T, Decl(deeplyNestedConditionalChain.ts, 16, 12))
+
+        ? Distribute<KeepTwo<UnwrapTag<T>>>
+>Distribute : Symbol(Distribute, Decl(deeplyNestedConditionalChain.ts, 19, 12))
+>KeepTwo : Symbol(KeepTwo, Decl(deeplyNestedConditionalChain.ts, 21, 47))
+>UnwrapTag : Symbol(UnwrapTag, Decl(deeplyNestedConditionalChain.ts, 26, 12))
+>T : Symbol(T, Decl(deeplyNestedConditionalChain.ts, 16, 12))
+
+        : 1;
+
+type Distribute<T> = T extends unknown ? T : 1;
+>Distribute : Symbol(Distribute, Decl(deeplyNestedConditionalChain.ts, 19, 12))
+>T : Symbol(T, Decl(deeplyNestedConditionalChain.ts, 21, 16))
+>T : Symbol(T, Decl(deeplyNestedConditionalChain.ts, 21, 16))
+>T : Symbol(T, Decl(deeplyNestedConditionalChain.ts, 21, 16))
+
+type KeepTwo<T> =
+>KeepTwo : Symbol(KeepTwo, Decl(deeplyNestedConditionalChain.ts, 21, 47))
+>T : Symbol(T, Decl(deeplyNestedConditionalChain.ts, 23, 13))
+
+    T extends 2
+>T : Symbol(T, Decl(deeplyNestedConditionalChain.ts, 23, 13))
+
+        ? Distribute<T>
+>Distribute : Symbol(Distribute, Decl(deeplyNestedConditionalChain.ts, 19, 12))
+>T : Symbol(T, Decl(deeplyNestedConditionalChain.ts, 23, 13))
+
+        : 1;
+
+type UnwrapTag<T> =
+>UnwrapTag : Symbol(UnwrapTag, Decl(deeplyNestedConditionalChain.ts, 26, 12))
+>T : Symbol(T, Decl(deeplyNestedConditionalChain.ts, 28, 15))
+
+    T extends { tag: object }
+>T : Symbol(T, Decl(deeplyNestedConditionalChain.ts, 28, 15))
+>tag : Symbol(tag, Decl(deeplyNestedConditionalChain.ts, 29, 15))
+
+        ? UnwrapTag<UnwrapTagStep<keyof T["tag"] | "">>
+>UnwrapTag : Symbol(UnwrapTag, Decl(deeplyNestedConditionalChain.ts, 26, 12))
+>UnwrapTagStep : Symbol(UnwrapTagStep, Decl(deeplyNestedConditionalChain.ts, 31, 12))
+>T : Symbol(T, Decl(deeplyNestedConditionalChain.ts, 28, 15))
+
+        : T;
+>T : Symbol(T, Decl(deeplyNestedConditionalChain.ts, 28, 15))
+
+type UnwrapTagStep<T> =
+>UnwrapTagStep : Symbol(UnwrapTagStep, Decl(deeplyNestedConditionalChain.ts, 31, 12))
+>T : Symbol(T, Decl(deeplyNestedConditionalChain.ts, 33, 19))
+
+    [T] extends [T]
+>T : Symbol(T, Decl(deeplyNestedConditionalChain.ts, 33, 19))
+>T : Symbol(T, Decl(deeplyNestedConditionalChain.ts, 33, 19))
+
+        ? never
+        : [T] extends [T]
+>T : Symbol(T, Decl(deeplyNestedConditionalChain.ts, 33, 19))
+>T : Symbol(T, Decl(deeplyNestedConditionalChain.ts, 33, 19))
+
+            ? never
+            : never;
+

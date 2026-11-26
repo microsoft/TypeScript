@@ -1,0 +1,32 @@
+//// [tests/cases/compiler/unresolvedQualifiedNamesSharingName.ts] ////
+
+=== unresolvedQualifiedNamesSharingName.ts ===
+// Unresolved qualified names with the same final identifier create distinct
+// unresolved symbols under their qualifying names. Tuples of those names keep
+// both constituents in a union.
+
+import type * as Bidi from "missing-a";
+>Bidi : Symbol(Bidi, Decl(unresolvedQualifiedNamesSharingName.ts, 4, 11))
+
+import type { Protocol } from "missing-b";
+>Protocol : Symbol(Protocol, Decl(unresolvedQualifiedNamesSharingName.ts, 5, 13))
+
+type CdpEvent = Protocol.Cdp.Event;
+>CdpEvent : Symbol(CdpEvent, Decl(unresolvedQualifiedNamesSharingName.ts, 5, 42))
+>Protocol : Symbol(Protocol, Decl(unresolvedQualifiedNamesSharingName.ts, 5, 13))
+>Cdp : Symbol(Protocol.Cdp)
+>Event : Symbol(Protocol.Cdp.Event)
+
+export function f(event: [Bidi.Event] | [CdpEvent], other: [Bidi.Other] | [Protocol.Cdp.Other]) {}
+>f : Symbol(f, Decl(unresolvedQualifiedNamesSharingName.ts, 7, 35))
+>event : Symbol(event, Decl(unresolvedQualifiedNamesSharingName.ts, 8, 18))
+>Bidi : Symbol(Bidi, Decl(unresolvedQualifiedNamesSharingName.ts, 4, 11))
+>Event : Symbol(Bidi.Event)
+>CdpEvent : Symbol(CdpEvent, Decl(unresolvedQualifiedNamesSharingName.ts, 5, 42))
+>other : Symbol(other, Decl(unresolvedQualifiedNamesSharingName.ts, 8, 51))
+>Bidi : Symbol(Bidi, Decl(unresolvedQualifiedNamesSharingName.ts, 4, 11))
+>Other : Symbol(Bidi.Other)
+>Protocol : Symbol(Protocol, Decl(unresolvedQualifiedNamesSharingName.ts, 5, 13))
+>Cdp : Symbol(Protocol.Cdp)
+>Other : Symbol(Protocol.Cdp.Other)
+

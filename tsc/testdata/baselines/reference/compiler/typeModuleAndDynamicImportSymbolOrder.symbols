@@ -1,0 +1,15 @@
+//// [tests/cases/compiler/typeModuleAndDynamicImportSymbolOrder.ts] ////
+
+=== /pkg.d.mts ===
+
+export default 0;
+
+=== /main.mts ===
+import type * as packageTypes from "./pkg.mjs";
+>packageTypes : Symbol(packageTypes, Decl(main.mts, 0, 11))
+
+const packageModule = true ? packageTypes : await import("./pkg.mjs");
+>packageModule : Symbol(packageModule, Decl(main.mts, 2, 5))
+>packageTypes : Symbol(packageTypes, Decl(main.mts, 0, 11))
+>"./pkg.mjs" : Symbol("./pkg.mjs", Decl(pkg.d.mts, 0, 0))
+

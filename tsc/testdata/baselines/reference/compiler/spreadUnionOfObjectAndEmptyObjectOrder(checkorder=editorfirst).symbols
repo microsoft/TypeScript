@@ -1,0 +1,53 @@
+//// [tests/cases/compiler/spreadUnionOfObjectAndEmptyObjectOrder.ts] ////
+
+=== spreadUnionOfObjectAndEmptyObjectOrder.ts ===
+// Spreading a union of an object type and `undefined` synthesizes an anonymous
+// object type with optional properties and interns it by the object type and
+// readonly flag, so checking the same spread expression in context-free and
+// normal modes yields the same type in every check order.
+
+interface Pair<A, B> { a: A; b: B }
+>Pair : Symbol(Pair, Decl(spreadUnionOfObjectAndEmptyObjectOrder.ts, 0, 0))
+>A : Symbol(A, Decl(spreadUnionOfObjectAndEmptyObjectOrder.ts, 5, 15))
+>B : Symbol(B, Decl(spreadUnionOfObjectAndEmptyObjectOrder.ts, 5, 17))
+>a : Symbol(Pair.a, Decl(spreadUnionOfObjectAndEmptyObjectOrder.ts, 5, 22))
+>A : Symbol(A, Decl(spreadUnionOfObjectAndEmptyObjectOrder.ts, 5, 15))
+>b : Symbol(Pair.b, Decl(spreadUnionOfObjectAndEmptyObjectOrder.ts, 5, 28))
+>B : Symbol(B, Decl(spreadUnionOfObjectAndEmptyObjectOrder.ts, 5, 17))
+
+declare const u: { a: number } | undefined;
+>u : Symbol(u, Decl(spreadUnionOfObjectAndEmptyObjectOrder.ts, 6, 13))
+>a : Symbol(a, Decl(spreadUnionOfObjectAndEmptyObjectOrder.ts, 6, 18))
+
+declare const cond: boolean;
+>cond : Symbol(cond, Decl(spreadUnionOfObjectAndEmptyObjectOrder.ts, 7, 13))
+
+let x;
+>x : Symbol(x, Decl(spreadUnionOfObjectAndEmptyObjectOrder.ts, 9, 3))
+
+const arr = [];
+>arr : Symbol(arr, Decl(spreadUnionOfObjectAndEmptyObjectOrder.ts, 10, 5))
+
+arr.push(x = { ...u });
+>arr.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>arr : Symbol(arr, Decl(spreadUnionOfObjectAndEmptyObjectOrder.ts, 10, 5))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(spreadUnionOfObjectAndEmptyObjectOrder.ts, 9, 3))
+>u : Symbol(u, Decl(spreadUnionOfObjectAndEmptyObjectOrder.ts, 6, 13))
+
+declare const a: Pair<(typeof arr)[number], 1>;
+>a : Symbol(a, Decl(spreadUnionOfObjectAndEmptyObjectOrder.ts, 13, 13))
+>Pair : Symbol(Pair, Decl(spreadUnionOfObjectAndEmptyObjectOrder.ts, 0, 0))
+>arr : Symbol(arr, Decl(spreadUnionOfObjectAndEmptyObjectOrder.ts, 10, 5))
+
+declare const b: Pair<typeof x, 2>;
+>b : Symbol(b, Decl(spreadUnionOfObjectAndEmptyObjectOrder.ts, 14, 13))
+>Pair : Symbol(Pair, Decl(spreadUnionOfObjectAndEmptyObjectOrder.ts, 0, 0))
+>x : Symbol(x, Decl(spreadUnionOfObjectAndEmptyObjectOrder.ts, 9, 3))
+
+const z = cond ? a : b;
+>z : Symbol(z, Decl(spreadUnionOfObjectAndEmptyObjectOrder.ts, 15, 5))
+>cond : Symbol(cond, Decl(spreadUnionOfObjectAndEmptyObjectOrder.ts, 7, 13))
+>a : Symbol(a, Decl(spreadUnionOfObjectAndEmptyObjectOrder.ts, 13, 13))
+>b : Symbol(b, Decl(spreadUnionOfObjectAndEmptyObjectOrder.ts, 14, 13))
+

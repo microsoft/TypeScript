@@ -22,12 +22,11 @@ dependentDestructuredVariablesReferenceInDeclaration1.ts(25,14): error TS2339: P
 dependentDestructuredVariablesReferenceInDeclaration1.ts(25,17): error TS2339: Property 'f' does not exist on type 'string | number'.
 dependentDestructuredVariablesReferenceInDeclaration1.ts(30,14): error TS7022: 'f' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
 dependentDestructuredVariablesReferenceInDeclaration1.ts(30,71): error TS2448: Block-scoped variable 'f' used before its declaration.
-dependentDestructuredVariablesReferenceInDeclaration1.ts(35,14): error TS7022: 'f' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
 dependentDestructuredVariablesReferenceInDeclaration1.ts(58,14): error TS2451: Cannot redeclare block-scoped variable 'f'.
 dependentDestructuredVariablesReferenceInDeclaration1.ts(58,17): error TS2451: Cannot redeclare block-scoped variable 'f'.
 
 
-==== dependentDestructuredVariablesReferenceInDeclaration1.ts (27 errors) ====
+==== dependentDestructuredVariablesReferenceInDeclaration1.ts (26 errors) ====
     // https://github.com/microsoft/TypeScript/issues/62993
     
     {
@@ -113,8 +112,6 @@ dependentDestructuredVariablesReferenceInDeclaration1.ts(58,17): error TS2451: C
     
     {
       const { c, f }: { c: 0; f: () => unknown } | { c: 1; f: string } = {
-                 ~
-!!! error TS7022: 'f' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
         c: 0,
         f: () => f,
       };

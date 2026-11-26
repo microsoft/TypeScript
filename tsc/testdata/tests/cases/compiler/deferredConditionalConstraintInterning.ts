@@ -1,0 +1,37 @@
+// @strict: true
+// @noEmit: true
+
+// Deferred conditional types created while computing constraints, which may
+// resolve to their true branch, are interned apart from ordinary deferred
+// conditional types. Relating this reduced form of type-fest's SetOptional to
+// an index signature type must not exceed the instantiation depth limit.
+
+type KeysOf<T> = T extends infer U ? keyof U : never;
+
+type SelectKey<Key> = Key extends unknown
+    ? {} extends Record<Key & PropertyKey, never>
+        ? Key
+        : Key extends number ? `${Key}` : Key
+    : never;
+type SelectedKeys<Type, Keys> = SelectKey<Keys> & keyof Type | Extract<SelectKey<Keys>, string>;
+
+type UnionMember<T> = [T] extends [never]
+    ? never
+    : (T extends unknown ? [T] : never) extends infer Wrapped
+        ? Wrapped extends [infer Member] ? Member : never
+        : never;
+type RemoveAllTags<T> = T extends object ? RemoveAllTags<UnionMember<{[K in keyof T]: 1}[keyof T] | 1>> : T;
+type CollapseLiterals<T> = T extends string ? T extends infer Collapsed & {} ? Collapsed : T : T;
+type UnwrapProperties<T> = T extends infer Unwrapped & {} ? Unwrapped : T;
+type UnwrapKey<Key> = Key extends unknown
+    ? Key extends string ? UnwrapProperties<CollapseLiterals<RemoveAllTags<Key>>> : Key
+    : never;
+
+type Simplify<T> = {[K in keyof T]: T[K]};
+type SetOptional<Base, Keys extends keyof Base> = Simplify<{
+    [K in keyof Base as K extends SelectedKeys<Base, UnwrapKey<Keys>> ? K : never]?: Base[K];
+}>;
+
+function f<T extends object>(value: SetOptional<T, KeysOf<T> & keyof T>): Record<string, unknown> {
+    return value;
+}

@@ -30,7 +30,7 @@ const y = x; // widened copy of the literal
 >x : { a: number; }
 
 const z = b ? (b ? arr[0] : y) : { c: 1 };
->z : { a: number; c?: undefined; } | { a?: undefined; c: number; }
+>z : { a: number; } | { c: number; }
 >b ? (b ? arr[0] : y) : { c: 1 } : { a: number; } | { c: number; }
 >b : boolean
 >(b ? arr[0] : y) : { a: number; }

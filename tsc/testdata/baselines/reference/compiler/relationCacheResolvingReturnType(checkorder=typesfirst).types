@@ -1,0 +1,106 @@
+//// [tests/cases/compiler/relationCacheResolvingReturnType.ts] ////
+
+=== relationCacheResolvingReturnType.ts ===
+// Relating PinnedNested to PinnedLine reads the return type of
+// PinnedNested.$config, which is being inferred from the call that relates
+// them. Results computed while that return type reads as any must not be
+// cached for the argument's object literal type.
+
+interface Schema<N> { readonly check?: (n: N) => void }
+>check : ((n: N) => void) | undefined
+>n : N
+
+interface ConfigValue<T, Type> {
+  readonly children?: 'inline';
+>children : "inline" | undefined
+
+  readonly extends?: abstract new () => LNode;
+>extends : (abstract new () => LNode) | undefined
+
+  readonly json?: Schema<T>;
+>json : Schema<T> | undefined
+}
+type BaseConfig = { readonly [K in string]?: ConfigValue<LNode, string> };
+>BaseConfig : BaseConfig
+
+type ConfigRecord<Type extends string, Config> =
+>ConfigRecord : ConfigRecord<Type, Config>
+
+  Config extends { extends: abstract new (...args: never) => infer Inst extends LNode }
+>extends : abstract new (...args: never) => infer Inst extends LNode
+>args : never
+
+    ? ReturnType<Inst['$config']> & { readonly [K in Type]?: Config }
+    : {};
+
+declare class LNode {
+>LNode : LNode
+
+  $config(): BaseConfig;
+>$config : () => BaseConfig
+
+  config<const Config extends ConfigValue<this, string>>(type: symbol, config: Config): {};
+>config : { <const Config extends ConfigValue<this, string>>(type: symbol, config: Config): {}; <Type extends string, const Config_1 extends ConfigValue<this, Type>>(type: Type, config: Config_1): ConfigRecord<Type, Config_1>; }
+>type : symbol
+>config : Config
+
+  config<Type extends string, const Config extends ConfigValue<this, Type>>(type: Type, config: Config): ConfigRecord<Type, Config>;
+>config : { <const Config_1 extends ConfigValue<this, string>>(type: symbol, config: Config_1): {}; <Type extends string, const Config extends ConfigValue<this, Type>>(type: Type, config: Config): ConfigRecord<Type, Config>; }
+>type : Type
+>config : Config
+}
+declare class ElementNode extends LNode {}
+>ElementNode : ElementNode
+>LNode : LNode
+
+declare function nodeSchema<N>(): Schema<N>;
+>nodeSchema : <N>() => Schema<N>
+
+const pinSchema = nodeSchema<PinnedLine>();
+>pinSchema : Schema<PinnedLine>
+>nodeSchema<PinnedLine>() : Schema<PinnedLine>
+>nodeSchema : <N>() => Schema<N>
+
+class PinnedLine extends ElementNode {
+>PinnedLine : PinnedLine
+>ElementNode : ElementNode
+
+  $config() {
+>$config : () => BaseConfig & { readonly pin_block?: { readonly children: "inline"; readonly extends: typeof ElementNode; readonly json: Schema<PinnedLine>; } | undefined; }
+
+    return this.config('pin_block', { children: 'inline', extends: ElementNode, json: pinSchema });
+>this.config('pin_block', { children: 'inline', extends: ElementNode, json: pinSchema }) : BaseConfig & { readonly pin_block?: { readonly children: "inline"; readonly extends: typeof ElementNode; readonly json: Schema<PinnedLine>; } | undefined; }
+>this.config : { <const Config extends ConfigValue<this, string>>(type: symbol, config: Config): {}; <Type extends string, const Config extends ConfigValue<this, Type>>(type: Type, config: Config): ConfigRecord<Type, Config>; }
+>this : this
+>config : { <const Config extends ConfigValue<this, string>>(type: symbol, config: Config): {}; <Type extends string, const Config extends ConfigValue<this, Type>>(type: Type, config: Config): ConfigRecord<Type, Config>; }
+>'pin_block' : "pin_block"
+>{ children: 'inline', extends: ElementNode, json: pinSchema } : { children: "inline"; extends: typeof ElementNode; json: Schema<PinnedLine>; }
+>children : "inline"
+>'inline' : "inline"
+>extends : typeof ElementNode
+>ElementNode : typeof ElementNode
+>json : Schema<PinnedLine>
+>pinSchema : Schema<PinnedLine>
+  }
+}
+class PinnedNested extends ElementNode {
+>PinnedNested : PinnedNested
+>ElementNode : ElementNode
+
+  $config() {
+>$config : () => BaseConfig & { readonly pin_block?: { readonly extends: typeof ElementNode; readonly json: Schema<PinnedLine>; } | undefined; }
+
+    return this.config('pin_block', { extends: ElementNode, json: pinSchema }); // error
+>this.config('pin_block', { extends: ElementNode, json: pinSchema }) : {}
+>this.config : { <const Config extends ConfigValue<this, string>>(type: symbol, config: Config): {}; <Type extends string, const Config extends ConfigValue<this, Type>>(type: Type, config: Config): ConfigRecord<Type, Config>; }
+>this : this
+>config : { <const Config extends ConfigValue<this, string>>(type: symbol, config: Config): {}; <Type extends string, const Config extends ConfigValue<this, Type>>(type: Type, config: Config): ConfigRecord<Type, Config>; }
+>'pin_block' : "pin_block"
+>{ extends: ElementNode, json: pinSchema } : { extends: typeof ElementNode; json: Schema<PinnedLine>; }
+>extends : typeof ElementNode
+>ElementNode : typeof ElementNode
+>json : Schema<PinnedLine>
+>pinSchema : Schema<PinnedLine>
+  }
+}
+

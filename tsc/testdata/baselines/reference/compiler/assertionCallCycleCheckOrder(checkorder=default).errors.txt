@@ -1,0 +1,25 @@
+assertionCallCycleCheckOrder.ts(10,7): error TS2502: 'theClass' is referenced directly or indirectly in its own type annotation.
+assertionCallCycleCheckOrder.ts(13,7): error TS7022: 'handlers' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+
+
+==== assertionCallCycleCheckOrder.ts (2 errors) ====
+    // Analyzing the flow of handlers checks whether the call to setHandler is an
+    // assertion, which needs the type of theClass, which needs the type of
+    // handlers. The same members are circular whichever is checked first (50200).
+    
+    class GenericClass<T> {
+        setHandler(handler: (date: T) => void) {
+        }
+    }
+    
+    const theClass: GenericClass<typeof handlers> = new GenericClass();
+          ~~~~~~~~
+!!! error TS2502: 'theClass' is referenced directly or indirectly in its own type annotation.
+    theClass.setHandler(() => {});
+    
+    const handlers = {
+          ~~~~~~~~
+!!! error TS7022: 'handlers' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+        thisDoesnt: console.log,
+    };
+    

@@ -1,0 +1,60 @@
+//// [tests/cases/compiler/jsdocTemplateDefaultPerTypedef.ts] ////
+
+=== jsdocTemplateDefaultPerTypedef.js ===
+// Each typedef in a JSDoc comment gets its own copy of the @template type
+// parameters of the comment, so the default type literal of T is copied
+// once per typedef, and the copies start at the same position. An array
+// literal of a value of each typedef keeps one of the two copies, and a
+// union with the first typedef shows which one it keeps. The groups use
+// their typedefs in opposite orders, before the typedefs are checked.
+
+/** @type {A1} */
+let a1;
+>a1 : { x: number; }
+
+/** @type {B1} */
+let b1;
+>b1 : { x: number; }
+
+const r1 = [a1, b1];
+>r1 : { x: number; }[]
+>[a1, b1] : { x: number; }[]
+>a1 : { x: number; }
+>b1 : { x: number; }
+
+/** @type {typeof r1[number] | A1} */
+let u1;
+>u1 : { x: number; }
+
+/** @type {B2} */
+let b2;
+>b2 : { x: number; }
+
+/** @type {A2} */
+let a2;
+>a2 : { x: number; }
+
+const r2 = [b2, a2];
+>r2 : { x: number; }[]
+>[b2, a2] : { x: number; }[]
+>b2 : { x: number; }
+>a2 : { x: number; }
+
+/** @type {typeof r2[number] | A2} */
+let u2;
+>u2 : { x: number; }
+
+/**
+ * @template [T={ x: number }]
+ * @typedef {T} A1
+ * @typedef {T} B1
+ */
+
+/**
+ * @template [T={ x: number }]
+ * @typedef {T} A2
+ * @typedef {T} B2
+ */
+let unused;
+>unused : any
+

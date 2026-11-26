@@ -2,9 +2,10 @@
 
 === expression.ts ===
 // Subtype reduction of rebuild's return type relates the class to A,
-// which needs b's return type, which needs rebuild's: a cycle. Both
-// members report it, whichever return type is requested first, as if
-// rebuild's, declared first, were requested first.
+// which needs b's return type, which needs rebuild's: a cycle. The
+// relation only observes b's return type in progress, so resolving b's
+// first does not fail, and neither member is circular, whichever return
+// type is requested first.
 interface A {
     b(): A;
 >b : () => A
@@ -61,28 +62,63 @@ class K {
 >K : K
 
     rebuild() {
->rebuild : () => this | B
+>rebuild : () => B
 
         return flag ? this : new B();
->flag ? this : new B() : this | B
+>flag ? this : new B() : B
 >flag : boolean
 >this : this
 >new B() : B
 >B : new () => B
     }
     b() {
->b : () => this | B
+>b : () => B
 
         return this.rebuild();
->this.rebuild() : this | B
->this.rebuild : () => this | B
+>this.rebuild() : B
+>this.rebuild : () => B
 >this : this
->rebuild : () => this | B
+>rebuild : () => B
     }
 }
 const B: new () => B = K;
 >B : new () => B
 >K : typeof K
 
+export {};
+
+=== declaredLater.ts ===
+// The same, with the member the relation requests declared first.
+interface D {
+    b(): D;
+>b : () => D
+}
+declare const flag: boolean;
+>flag : boolean
+
+const D: new () => D = class {
+>D : new () => D
+>class {    b() {        return this.rebuild();    }    rebuild() {        return flag ? this : new D();    }} : typeof D
+
+    b() {
+>b : () => D
+
+        return this.rebuild();
+>this.rebuild() : D
+>this.rebuild : () => D
+>this : this
+>rebuild : () => D
+    }
+    rebuild() {
+>rebuild : () => D
+
+        return flag ? this : new D();
+>flag ? this : new D() : D
+>flag : boolean
+>this : this
+>new D() : D
+>D : new () => D
+    }
+};
 export {};
 

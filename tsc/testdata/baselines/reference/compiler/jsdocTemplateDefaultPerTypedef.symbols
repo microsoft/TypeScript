@@ -1,0 +1,58 @@
+//// [tests/cases/compiler/jsdocTemplateDefaultPerTypedef.ts] ////
+
+=== jsdocTemplateDefaultPerTypedef.js ===
+// Each typedef in a JSDoc comment gets its own copy of the @template type
+// parameters of the comment, so the default type literal of T is copied
+// once per typedef, and the copies start at the same position. An array
+// literal of a value of each typedef keeps one of the two copies, and a
+// union with the first typedef shows which one it keeps. The groups use
+// their typedefs in opposite orders, before the typedefs are checked.
+
+/** @type {A1} */
+let a1;
+>a1 : Symbol(a1, Decl(jsdocTemplateDefaultPerTypedef.js, 8, 3))
+
+/** @type {B1} */
+let b1;
+>b1 : Symbol(b1, Decl(jsdocTemplateDefaultPerTypedef.js, 10, 3))
+
+const r1 = [a1, b1];
+>r1 : Symbol(r1, Decl(jsdocTemplateDefaultPerTypedef.js, 11, 5))
+>a1 : Symbol(a1, Decl(jsdocTemplateDefaultPerTypedef.js, 8, 3))
+>b1 : Symbol(b1, Decl(jsdocTemplateDefaultPerTypedef.js, 10, 3))
+
+/** @type {typeof r1[number] | A1} */
+let u1;
+>u1 : Symbol(u1, Decl(jsdocTemplateDefaultPerTypedef.js, 13, 3))
+
+/** @type {B2} */
+let b2;
+>b2 : Symbol(b2, Decl(jsdocTemplateDefaultPerTypedef.js, 16, 3))
+
+/** @type {A2} */
+let a2;
+>a2 : Symbol(a2, Decl(jsdocTemplateDefaultPerTypedef.js, 18, 3))
+
+const r2 = [b2, a2];
+>r2 : Symbol(r2, Decl(jsdocTemplateDefaultPerTypedef.js, 19, 5))
+>b2 : Symbol(b2, Decl(jsdocTemplateDefaultPerTypedef.js, 16, 3))
+>a2 : Symbol(a2, Decl(jsdocTemplateDefaultPerTypedef.js, 18, 3))
+
+/** @type {typeof r2[number] | A2} */
+let u2;
+>u2 : Symbol(u2, Decl(jsdocTemplateDefaultPerTypedef.js, 21, 3))
+
+/**
+ * @template [T={ x: number }]
+ * @typedef {T} A1
+ * @typedef {T} B1
+ */
+
+/**
+ * @template [T={ x: number }]
+ * @typedef {T} A2
+ * @typedef {T} B2
+ */
+let unused;
+>unused : Symbol(unused, Decl(jsdocTemplateDefaultPerTypedef.js, 34, 3))
+

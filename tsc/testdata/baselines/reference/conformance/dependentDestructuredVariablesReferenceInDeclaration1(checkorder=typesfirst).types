@@ -103,7 +103,7 @@
 {
   const { c, f }: { c: 0; f: () => unknown } | { c: 1; f: string } = {
 >c : 0 | 1
->f : any
+>f : string | (() => unknown)
 >c : 0
 >f : () => unknown
 >c : 1

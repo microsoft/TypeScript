@@ -1,4 +1,4 @@
-first.ts(3,7): error TS2322: Type 'unknown[]' is not assignable to type 'null'.
+first.ts(3,7): error TS2322: Type 'string[]' is not assignable to type 'null'.
 second.ts(6,7): error TS2322: Type 'number[]' is not assignable to type 'null'.
 
 
@@ -7,7 +7,7 @@ second.ts(6,7): error TS2322: Type 'number[]' is not assignable to type 'null'.
     declare const lists1: string[][];
     const flat1: null = flatten1(lists1);
           ~~~~~
-!!! error TS2322: Type 'unknown[]' is not assignable to type 'null'.
+!!! error TS2322: Type 'string[]' is not assignable to type 'null'.
     
     declare const items1: string[];
     for (const item of items1) {}

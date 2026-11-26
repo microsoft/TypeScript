@@ -1,0 +1,156 @@
+//// [tests/cases/compiler/baseConstraintNestingOfWrittenTypes.ts] ////
+
+=== indexedAccessChain.ts ===
+// From trpc's CreateContextCallback.
+type Router<T> = { _def: { _config: { $types: { ctx: T } } } };
+>Router : Router<T>
+>_def : { _config: { $types: { ctx: T; }; }; }
+>_config : { $types: { ctx: T; }; }
+>$types : { ctx: T; }
+>ctx : T
+
+type Ctx<R extends Router<any>> = R["_def"]["_config"]["$types"]["ctx"];
+>Ctx : Ctx<R>
+
+type PartialIf<C extends boolean, T> = C extends true ? Partial<T> : T;
+>PartialIf : PartialIf<C, T>
+>true : true
+
+type CreateContextCallback<TContext> = PartialIf<object extends TContext ? true : false, { createContext: () => TContext }>;
+>CreateContextCallback : CreateContextCallback<TContext>
+>true : true
+>false : false
+>createContext : () => TContext
+
+function g<R extends Router<any>>(o: CreateContextCallback<Ctx<R>>) {
+>g : <R extends Router<any>>(o: CreateContextCallback<Ctx<R>>) => void
+>o : PartialIf<object extends Ctx<R> ? true : false, { createContext: () => Ctx<R>; }>
+
+    o.createContext;
+>o.createContext : (() => Ctx<R>) | undefined
+>o : Partial<{ createContext: () => Ctx<R>; }> | { createContext: () => Ctx<R>; }
+>createContext : (() => Ctx<R>) | undefined
+}
+
+type Box<X> = X extends string ? { a: 1 } : { a: 2 };
+>Box : Box<X>
+>a : 1
+>a : 2
+
+function f<R extends { a: { b: { c: { d: string } } } }>(o: Box<R["a"]["b"]["c"]["d"]>) {
+>f : <R extends { a: { b: { c: { d: string; }; }; }; }>(o: Box<R["a"]["b"]["c"]["d"]>) => void
+>a : { b: { c: { d: string; }; }; }
+>b : { c: { d: string; }; }
+>c : { d: string; }
+>d : string
+>o : Box<R["a"]["b"]["c"]["d"]>
+
+    o.a;
+>o.a : 1
+>o : Box<R["a"]["b"]["c"]["d"]>
+>a : 1
+}
+export {};
+
+=== nestedReferences.ts ===
+// From ariakit, whose recipes nest recipes made by function calls.
+interface Box<T> {
+    value: T;
+>value : T
+}
+declare function box<T>(value: T): Box<T>;
+>box : <T>(value: T) => Box<T>
+>value : T
+
+const box5 = box(box(box(box(box("")))));
+>box5 : Box<Box<Box<Box<Box<string>>>>>
+>box(box(box(box(box(""))))) : Box<Box<Box<Box<Box<string>>>>>
+>box : <T>(value: T) => Box<T>
+>box(box(box(box("")))) : Box<Box<Box<Box<string>>>>
+>box : <T>(value: T) => Box<T>
+>box(box(box(""))) : Box<Box<Box<string>>>
+>box : <T>(value: T) => Box<T>
+>box(box("")) : Box<Box<string>>
+>box : <T>(value: T) => Box<T>
+>box("") : Box<string>
+>box : <T>(value: T) => Box<T>
+>"" : ""
+
+type Like<Base, Candidate> = keyof Base extends keyof Candidate ? Base : never;
+>Like : Like<Base, Candidate>
+
+function nested<R extends Like<typeof box5, R>>(r: R) {
+>nested : <R extends Like<typeof box5, R>>(r: R) => void
+>box5 : Box<Box<Box<Box<Box<string>>>>>
+>r : R
+
+    r.value;
+>r.value : Box<Box<Box<Box<string>>>>
+>r : R
+>value : Box<Box<Box<Box<string>>>>
+}
+export {};
+
+=== nestedObjectLiterals.ts ===
+// From react-navigation, whose screen parameters nest navigators.
+type Wrap<T> = { value: T };
+>Wrap : Wrap<T>
+>value : T
+
+type Two<T> = { a: T; b: number };
+>Two : Two<T>
+>a : T
+>b : number
+
+interface Nav<P> {
+    navigate<K extends keyof P>(...args: K extends unknown ? [key: K, value: P[K]] : never): K;
+>navigate : <K extends keyof P>(...args: K extends unknown ? [key: K, value: P[K]] : never) => K
+>args : K extends unknown ? [key: K, value: P[K]] : never
+}
+
+declare const deep: Nav<Two<Wrap<Wrap<Wrap<Wrap<Wrap<string>>>>>>>;
+>deep : Nav<Two<Wrap<Wrap<Wrap<Wrap<Wrap<string>>>>>>>
+
+const key = deep.navigate("a", { value: { value: { value: { value: { value: "" } } } } });
+>key : "a"
+>deep.navigate("a", { value: { value: { value: { value: { value: "" } } } } }) : "a"
+>deep.navigate : <K extends keyof Two<Wrap<Wrap<Wrap<Wrap<Wrap<string>>>>>>>(...args: K extends unknown ? [key: K, value: Two<Wrap<Wrap<Wrap<Wrap<Wrap<string>>>>>>[K]] : never) => K
+>deep : Nav<Two<Wrap<Wrap<Wrap<Wrap<Wrap<string>>>>>>>
+>navigate : <K extends keyof Two<Wrap<Wrap<Wrap<Wrap<Wrap<string>>>>>>>(...args: K extends unknown ? [key: K, value: Two<Wrap<Wrap<Wrap<Wrap<Wrap<string>>>>>>[K]] : never) => K
+>"a" : "a"
+>{ value: { value: { value: { value: { value: "" } } } } } : { value: { value: { value: { value: { value: string; }; }; }; }; }
+>value : { value: { value: { value: { value: string; }; }; }; }
+>{ value: { value: { value: { value: "" } } } } : { value: { value: { value: { value: string; }; }; }; }
+>value : { value: { value: { value: string; }; }; }
+>{ value: { value: { value: "" } } } : { value: { value: { value: string; }; }; }
+>value : { value: { value: string; }; }
+>{ value: { value: "" } } : { value: { value: string; }; }
+>value : { value: string; }
+>{ value: "" } : { value: string; }
+>value : string
+>"" : ""
+
+const a: "a" = key;
+>a : "a"
+>key : "a"
+
+deep.navigate("a", { value: { value: { value: { value: { value: 0 } } } } });
+>deep.navigate("a", { value: { value: { value: { value: { value: 0 } } } } }) : "a"
+>deep.navigate : <K extends keyof Two<Wrap<Wrap<Wrap<Wrap<Wrap<string>>>>>>>(...args: K extends unknown ? [key: K, value: Two<Wrap<Wrap<Wrap<Wrap<Wrap<string>>>>>>[K]] : never) => K
+>deep : Nav<Two<Wrap<Wrap<Wrap<Wrap<Wrap<string>>>>>>>
+>navigate : <K extends keyof Two<Wrap<Wrap<Wrap<Wrap<Wrap<string>>>>>>>(...args: K extends unknown ? [key: K, value: Two<Wrap<Wrap<Wrap<Wrap<Wrap<string>>>>>>[K]] : never) => K
+>"a" : "a"
+>{ value: { value: { value: { value: { value: 0 } } } } } : { value: { value: { value: { value: { value: number; }; }; }; }; }
+>value : { value: { value: { value: { value: number; }; }; }; }
+>{ value: { value: { value: { value: 0 } } } } : { value: { value: { value: { value: number; }; }; }; }
+>value : { value: { value: { value: number; }; }; }
+>{ value: { value: { value: 0 } } } : { value: { value: { value: number; }; }; }
+>value : { value: { value: number; }; }
+>{ value: { value: 0 } } : { value: { value: number; }; }
+>value : { value: number; }
+>{ value: 0 } : { value: number; }
+>value : number
+>0 : 0
+
+export {};
+

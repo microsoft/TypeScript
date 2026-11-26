@@ -151,7 +151,7 @@ func (c *Checker) ForEachExportAndPropertyOfModule(moduleSymbol *ast.Symbol, cb 
 	if reducedType.flags&TypeFlagsStructuredType == 0 {
 		return
 	}
-	for name, symbol := range c.resolveStructuredTypeMembers(reducedType).getMembers().All() {
+	for name, symbol := range c.resolveStructuredTypeMembers(reducedType).getMembers(c).All() {
 		if c.isNamedMember(symbol, name) {
 			cb(symbol, name)
 		}
@@ -334,71 +334,103 @@ func (c *Checker) shouldTreatPropertiesOfExternalModuleAsExports(resolvedExterna
 
 func (c *Checker) GetContextualType(node *ast.Expression, contextFlags ContextFlags) *Type {
 	if contextFlags&ContextFlagsIgnoreNodeInferences != 0 {
-		return c.runWithInferenceBlockedFromSourceNode(node, func() *Type { return c.getContextualType(node, contextFlags) })
+		return runEditorRequest(c, node, c.inferenceBlockedFrom(node), func() *Type { return c.getContextualType(node, contextFlags) })
 	}
 	return c.getContextualType(node, contextFlags)
 }
 
-func (c *Checker) runWithInferenceBlockedFromSourceNode[T any](node *ast.Node, fn func() T) T {
-	containingCall := ast.FindAncestor(node, ast.IsCallLikeExpression)
-	if containingCall != nil {
-		toMarkSkip := node
-		for {
-			c.skipDirectInferenceNodes.Add(toMarkSkip)
-			toMarkSkip = toMarkSkip.Parent
-			if toMarkSkip == nil || toMarkSkip == containingCall {
+// An editorRequest is state of an editor request that what the checker
+// computes for it depends on, but is not cached under, such as the number of
+// arguments typed so far. It exists only while runEditorRequest runs the
+// request, discarding whatever the request caches.
+type editorRequest struct {
+	argumentCount *int // The number of arguments to resolve a call with, if not those it has
+	// Inference from these nodes, the one being edited and its ancestors up
+	// to the call, is skipped, and call resolution reports no errors.
+	skipDirectInferenceNodes  collections.Set[*ast.Node]
+	inferencePartiallyBlocked bool
+	// Restores results the request cached that discarding a cycle keeps,
+	// such as the types at loop junctions, run in reverse once it ends.
+	undo []func()
+}
+
+// inferenceBlockedFrom returns a request that blocks inference from node, an
+// argument being edited, and its ancestors up to the call.
+func (c *Checker) inferenceBlockedFrom(node *ast.Node) *editorRequest {
+	request := &editorRequest{inferencePartiallyBlocked: true}
+	if containingCall := ast.FindAncestor(node, ast.IsCallLikeExpression); containingCall != nil {
+		for n := node; ; {
+			request.skipDirectInferenceNodes.Add(n)
+			n = n.Parent
+			if n == nil || n == containingCall {
 				break
 			}
 		}
 	}
-
-	c.isInferencePartiallyBlocked = true
-	result := c.runWithoutResolvedSignatureCaching(node, fn)
-	c.isInferencePartiallyBlocked = false
-
-	c.skipDirectInferenceNodes.Clear()
-	return result
+	return request
 }
 
-func GetResolvedSignatureForSignatureHelp(node *ast.Node, argumentCount int, c *Checker) (*Signature, []*Signature) {
-	type result struct {
-		signature  *Signature
-		candidates []*Signature
-	}
-	res := c.runWithoutResolvedSignatureCaching(node, func() result {
-		signature, candidates := c.getResolvedSignatureWorker(node, CheckModeIsForSignatureHelp, argumentCount)
-		return result{signature, candidates}
+// RunSignatureHelp answers a signature help request for the call at node,
+// with argumentCount arguments typed so far. fn is given the signature the
+// call resolves to and its candidates, which are computed in the state of
+// the request, so fn runs within it, and whatever it computes from them is
+// discarded with them.
+func RunSignatureHelp[T any](c *Checker, node *ast.Node, argumentCount int, fn func(resolvedSignature *Signature, candidates []*Signature) T) T {
+	return runEditorRequest(c, node, &editorRequest{argumentCount: &argumentCount}, func() T {
+		signature, candidates := c.getResolvedSignatureWithCandidates(node, CheckModeIsForSignatureHelp)
+		return fn(signature, candidates)
 	})
-	return res.signature, res.candidates
 }
 
-func (c *Checker) runWithoutResolvedSignatureCaching[T any](node *ast.Node, fn func() T) T {
+// runEditorRequest runs fn, which answers an editor request at node in the
+// state of request. The calls and functions enclosing node are resolved
+// again in that state, and whatever fn caches is discarded once it returns.
+func runEditorRequest[T any](c *Checker, node *ast.Node, request *editorRequest, fn func() T) T {
 	ancestorNode := ast.FindAncestor(node, ast.IsCallLikeOrFunctionLikeExpression)
 	if ancestorNode != nil {
 		cachedResolvedSignatures := make(map[*SignatureLinks]*Signature)
 		cachedTypes := make(map[*ValueSymbolLinks]*Type)
 		for ancestorNode != nil {
 			signatureLinks := c.signatureLinks.Get(ancestorNode)
-			cachedResolvedSignatures[signatureLinks] = signatureLinks.resolvedSignature
-			signatureLinks.resolvedSignature = nil
+			cachedResolvedSignatures[signatureLinks] = signatureLinks.resolvedSignature.swap(nil)
 			if ast.IsFunctionExpressionOrArrowFunction(ancestorNode) {
 				symbolLinks := c.valueSymbolLinks.Get(c.getSymbolOfDeclaration(ancestorNode))
-				resolvedType := symbolLinks.resolvedType
-				cachedTypes[symbolLinks] = resolvedType
-				symbolLinks.resolvedType = nil
+				cachedTypes[symbolLinks] = symbolLinks.resolvedType.swap(nil)
 			}
 			ancestorNode = ast.FindAncestor(ancestorNode.Parent, ast.IsCallLikeOrFunctionLikeExpression)
 		}
-		result := fn()
+		result := runDiscardingCaches(c, request, fn)
 		for signatureLinks, resolvedSignature := range cachedResolvedSignatures {
-			signatureLinks.resolvedSignature = resolvedSignature
+			signatureLinks.resolvedSignature.swap(resolvedSignature)
 		}
 		for symbolLinks, resolvedType := range cachedTypes {
-			symbolLinks.resolvedType = resolvedType
+			symbolLinks.resolvedType.swap(resolvedType)
 		}
 		return result
 	}
-	return fn()
+	return runDiscardingCaches(c, request, fn)
+}
+
+// runDiscardingCaches runs fn in the state of request, and discards whatever
+// it caches: it all happens in a cycle headed below every computation, which
+// ends with the request.
+func runDiscardingCaches[T any](c *Checker, request *editorRequest, fn func() T) T {
+	debug.Assert(len(c.resolutions) == 1 && c.circularityStart == 0 && c.request == nil, "editor request inside a computation")
+	mark := len(c.discardLog)
+	c.markCircular(0)
+	c.request = request
+	result := fn()
+	c.request = nil
+	// Not even the results of the participants of cycles inside the request
+	// are kept, nor the effects of the computations discarded, which a
+	// result computed again outside the request would otherwise replay.
+	c.cycleParticipants = nil
+	c.discardLogSince(mark)
+	c.endCyclesAt(0)
+	for _, undo := range slices.Backward(request.undo) {
+		undo()
+	}
+	return result
 }
 
 func (c *Checker) SkipAlias(symbol *ast.Symbol) *ast.Symbol {
@@ -662,7 +694,12 @@ func (c *Checker) GetTypeArgumentConstraint(node *ast.Node) *Type {
 func (c *Checker) getUninstantiatedSignatures(node *ast.Node) []*Signature {
 	switch node.Kind {
 	case ast.KindCallExpression, ast.KindDecorator:
-		return c.getSignaturesOfType(c.getTypeOfExpression(node.Expression()), SignatureKindCall)
+		expression := node.Expression()
+		if ast.IsDecorator(node) && ast.IsExpressionWithTypeArguments(expression) {
+			// The type arguments of a decorator are part of its expression.
+			expression = expression.Expression()
+		}
+		return c.getSignaturesOfType(c.getTypeOfExpression(expression), SignatureKindCall)
 	case ast.KindNewExpression:
 		return c.getSignaturesOfType(c.getTypeOfExpression(node.Expression()), SignatureKindConstruct)
 	case ast.KindJsxSelfClosingElement, ast.KindJsxOpeningElement:
@@ -826,10 +863,7 @@ func (c *Checker) GetConstantValue(node *ast.Node) any {
 		return c.getEnumMemberValue(node).Value
 	}
 
-	if c.symbolNodeLinks.Get(node).resolvedSymbol == nil {
-		c.checkExpressionCached(node) // ensure cached resolved symbol is set
-	}
-	symbol := c.symbolNodeLinks.Get(node).resolvedSymbol
+	symbol := c.getSymbolOfExpression(node)
 	if symbol == nil && ast.IsEntityNameExpression(node) {
 		symbol = c.resolveEntityName(
 			node,
@@ -850,28 +884,29 @@ func (c *Checker) GetConstantValue(node *ast.Node) any {
 	return nil
 }
 
-func (c *Checker) getResolvedSignatureWorker(node *ast.Node, checkMode CheckMode, argumentCount int) (*Signature, []*Signature) {
-	c.apparentArgumentCount = &argumentCount
+func (c *Checker) getResolvedSignatureWithCandidates(node *ast.Node, checkMode CheckMode) (*Signature, []*Signature) {
 	candidatesOutArray := &[]*Signature{}
 	var res *Signature
 	if node != nil && ast.IsParseTreeNode(node) {
 		res = c.getResolvedSignature(node, candidatesOutArray, checkMode)
 	}
-	c.apparentArgumentCount = nil
 	return res, *candidatesOutArray
 }
 
 func (c *Checker) GetCandidateSignaturesForStringLiteralCompletions(call *ast.CallLikeExpression, editingArgument *ast.Node) []*Signature {
 	// first, get candidates when inference is blocked from the source node.
-	candidates := c.runWithInferenceBlockedFromSourceNode(editingArgument, func() []*Signature {
-		_, blockedInferenceCandidates := c.getResolvedSignatureWorker(call, CheckModeNormal, 0)
+	noArguments := 0
+	blocked := c.inferenceBlockedFrom(editingArgument)
+	blocked.argumentCount = &noArguments
+	candidates := runEditorRequest(c, editingArgument, blocked, func() []*Signature {
+		_, blockedInferenceCandidates := c.getResolvedSignatureWithCandidates(call, CheckModeNormal)
 		return blockedInferenceCandidates
 	})
 	candidatesSet := collections.NewSetFromItems(candidates...)
 
 	// next, get candidates where the source node is considered for inference.
-	otherCandidates := c.runWithoutResolvedSignatureCaching(editingArgument, func() []*Signature {
-		_, inferenceCandidates := c.getResolvedSignatureWorker(call, CheckModeNormal, 0)
+	otherCandidates := runEditorRequest(c, editingArgument, &editorRequest{argumentCount: &noArguments}, func() []*Signature {
+		_, inferenceCandidates := c.getResolvedSignatureWithCandidates(call, CheckModeNormal)
 		return inferenceCandidates
 	})
 

@@ -1,9 +1,8 @@
-inferenceThroughGenericAliasCallSignature.ts(25,7): error TS2322: Type '[unknown]' is not assignable to type '[1]'.
-  Type 'unknown' is not assignable to type '1'.
-inferenceThroughGenericAliasCallSignature.ts(54,26): error TS2571: Object is of type 'unknown'.
+inferenceThroughGenericAliasCallSignature.ts(25,7): error TS2322: Type '[Req]' is not assignable to type '[1]'.
+  Type 'Req' is not assignable to type '1'.
 
 
-==== inferenceThroughGenericAliasCallSignature.ts (2 errors) ====
+==== inferenceThroughGenericAliasCallSignature.ts (1 errors) ====
     // R is inferred from the return type of a function passed through a call
     // signature of a generic type alias, and M from a recursive mapped result
     // (64757).
@@ -30,8 +29,8 @@ inferenceThroughGenericAliasCallSignature.ts(54,26): error TS2571: Object is of 
     })));
     const check: [1] = r; // error message shows what R was inferred as
           ~~~~~
-!!! error TS2322: Type '[unknown]' is not assignable to type '[1]'.
-!!! error TS2322:   Type 'unknown' is not assignable to type '1'.
+!!! error TS2322: Type '[Req]' is not assignable to type '[1]'.
+!!! error TS2322:   Type 'Req' is not assignable to type '1'.
     
     type Payload = { scalars: object; objects: object };
     
@@ -61,6 +60,4 @@ inferenceThroughGenericAliasCallSignature.ts(54,26): error TS2571: Object is of 
     declare function firstMessageInline<M>(thread: { conversations: Array<{ messages: Array<M> }> }): M;
     
     const viaAlias: string = firstMessageViaAlias(thread).body; 
-                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2571: Object is of type 'unknown'.
     

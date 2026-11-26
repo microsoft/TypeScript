@@ -1,0 +1,67 @@
+//// [tests/cases/compiler/callResolvedAgainInFlowLoop.ts] ////
+
+=== callResolvedAgainInFlowLoop.ts ===
+// Destructuring func in the loop reads its declared type, which reaches the
+// assignment of the call below it, so the call is resolved again while it
+// is being resolved, from flow analysis of the loop (seen in a repro of
+// 60130).
+
+declare function inferStuff<T>(arg: T, checkStuff?: boolean): T;
+>inferStuff : <T>(arg: T, checkStuff?: boolean) => T
+>arg : T
+>checkStuff : boolean | undefined
+
+export function test(lines: string[]): string[] {
+>test : (lines: string[]) => string[]
+>lines : string[]
+
+    let func: { name: string } | null = null;
+>func : { name: string; } | null
+>name : string
+
+    for (const _ of lines) {
+>_ : string
+>lines : string[]
+
+        if (Math.random() < 0.5) {
+>Math.random() < 0.5 : boolean
+>Math.random() : number
+>Math.random : () => number
+>Math : Math
+>random : () => number
+>0.5 : 0.5
+
+            func = { name: "qwer" };
+>func = { name: "qwer" } : { name: string; }
+>func : { name: string; } | null
+>{ name: "qwer" } : { name: string; }
+>name : string
+>"qwer" : "qwer"
+
+        } else {
+            if (func) {
+>func : { name: string; } | null
+
+                const { name } = func;
+>name : any
+>func : { name: string; }
+
+                func = inferStuff({ name: "other" }, name === "abc");
+>func = inferStuff({ name: "other" }, name === "abc") : { name: string; }
+>func : { name: string; } | null
+>inferStuff({ name: "other" }, name === "abc") : { name: string; }
+>inferStuff : <T>(arg: T, checkStuff?: boolean) => T
+>{ name: "other" } : { name: string; }
+>name : string
+>"other" : "other"
+>name === "abc" : boolean
+>name : any
+>"abc" : "abc"
+            }
+        }
+    }
+
+    return lines;
+>lines : string[]
+}
+

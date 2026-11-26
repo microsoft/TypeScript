@@ -1,0 +1,80 @@
+//// [tests/cases/compiler/instantiatedConstraintCycleAcrossFiles.ts] ////
+
+=== lib.d.ts ===
+type NoStrayRuleKeys<R> = { [K in keyof R]: unknown };
+>NoStrayRuleKeys : NoStrayRuleKeys<R>
+
+type StrictRules<R, T> = ([keyof R] extends [never] ? Required<T> : NoStrayRuleKeys<R>) & {
+>StrictRules : StrictRules<R, T>
+
+  [K in R extends unknown ? Exclude<keyof R, keyof T> : never]?: never;
+};
+export declare class Deriver<T> {
+>Deriver : Deriver<T>
+
+  derive<R extends T & StrictRules<R, T>>(build: () => R): void;
+>derive : <R extends T & StrictRules<R, T>>(build: () => R) => void
+>build : () => R
+
+  plain<R extends T>(build: () => R): void;
+>plain : <R extends T>(build: () => R) => void
+>build : () => R
+}
+=== main.ts ===
+import type { Deriver } from "./lib.js";
+>Deriver : Deriver<T>
+
+declare const key: string;
+>key : string
+
+declare const indexed: Deriver<{ [x: string]: (el: number) => unknown }>;
+>indexed : Deriver<{ [x: string]: (el: number) => unknown; }>
+>x : string
+>el : number
+
+declare const literal: Deriver<{ rows?: (el: number) => unknown }>;
+>literal : Deriver<{ rows?: (el: number) => unknown; }>
+>rows : ((el: number) => unknown) | undefined
+>el : number
+
+indexed.derive(() => ({ [key]: (el) => el }));
+>indexed.derive(() => ({ [key]: (el) => el })) : void
+>indexed.derive : <R extends { [x: string]: (el: number) => unknown; } & import("./lib.js").StrictRules<R, { [x: string]: (el: number) => unknown; }>>(build: () => R) => void
+>indexed : Deriver<{ [x: string]: (el: number) => unknown; }>
+>derive : <R extends { [x: string]: (el: number) => unknown; } & import("./lib.js").StrictRules<R, { [x: string]: (el: number) => unknown; }>>(build: () => R) => void
+>() => ({ [key]: (el) => el }) : () => { [key]: (el: any) => any; }
+>({ [key]: (el) => el }) : { [key]: (el: any) => any; }
+>{ [key]: (el) => el } : { [key]: (el: any) => any; }
+>[key] : (el: any) => any
+>key : string
+>(el) => el : (el: any) => any
+>el : any
+>el : any
+
+literal.derive(() => ({ rows: (el) => el }));
+>literal.derive(() => ({ rows: (el) => el })) : void
+>literal.derive : <R extends { rows?: (el: number) => unknown; } & import("./lib.js").StrictRules<R, { rows?: (el: number) => unknown; }>>(build: () => R) => void
+>literal : Deriver<{ rows?: (el: number) => unknown; }>
+>derive : <R extends { rows?: (el: number) => unknown; } & import("./lib.js").StrictRules<R, { rows?: (el: number) => unknown; }>>(build: () => R) => void
+>() => ({ rows: (el) => el }) : () => { rows: (el: number) => number; }
+>({ rows: (el) => el }) : { rows: (el: number) => number; }
+>{ rows: (el) => el } : { rows: (el: number) => number; }
+>rows : (el: number) => number
+>(el) => el : (el: number) => number
+>el : number
+>el : number
+
+indexed.plain(() => ({ [key]: (el) => el }));
+>indexed.plain(() => ({ [key]: (el) => el })) : void
+>indexed.plain : <R extends { [x: string]: (el: number) => unknown; }>(build: () => R) => void
+>indexed : Deriver<{ [x: string]: (el: number) => unknown; }>
+>plain : <R extends { [x: string]: (el: number) => unknown; }>(build: () => R) => void
+>() => ({ [key]: (el) => el }) : () => { [key]: (el: number) => number; }
+>({ [key]: (el) => el }) : { [key]: (el: number) => number; }
+>{ [key]: (el) => el } : { [key]: (el: number) => number; }
+>[key] : (el: number) => number
+>key : string
+>(el) => el : (el: number) => number
+>el : number
+>el : number
+

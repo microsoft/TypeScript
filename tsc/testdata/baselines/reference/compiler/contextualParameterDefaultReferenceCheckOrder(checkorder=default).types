@@ -11,7 +11,7 @@ const f: (g: () => number, x: 1) => void = (g = () => x, x = 0) => {};
 >x : 1
 >(g = () => x, x = 0) => {} : (g?: () => number, x?: number) => void
 >g : () => number
->() => x : () => 1
+>() => x : () => number
 >x : number
 >x : number
 >0 : 0

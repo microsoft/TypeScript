@@ -1,0 +1,17 @@
+/main.mts(3,30): error TS1361: 'packageTypes' cannot be used as a value because it was imported using 'import type'.
+/pkg.d.mts(1,16): error TS2714: The expression of an export assignment must be an identifier or qualified name in an ambient context.
+
+
+==== /pkg.d.mts (1 errors) ====
+    export default 0;
+                   ~
+!!! error TS2714: The expression of an export assignment must be an identifier or qualified name in an ambient context.
+    
+==== /main.mts (1 errors) ====
+    import type * as packageTypes from "./pkg.mjs";
+    
+    const packageModule = true ? packageTypes : await import("./pkg.mjs");
+                                 ~~~~~~~~~~~~
+!!! error TS1361: 'packageTypes' cannot be used as a value because it was imported using 'import type'.
+!!! related TS1376 /main.mts:1:18: 'packageTypes' was imported here.
+    

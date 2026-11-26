@@ -1,0 +1,48 @@
+lexicalMissingOverloadDiagnostic.ts(20,34): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Type '(n: Inline) => void' is not assignable to type '(n: this) => void'.
+      Types of parameters 'n' and 'n' are incompatible.
+        Type 'this' is not assignable to type 'Inline'.
+          Type 'Nested' is not assignable to type 'Inline'.
+            The types returned by 'describe().kind' are incompatible between these types.
+              Type '{ json: (n: Inline) => void; } | undefined' is not assignable to type '{ children: "inline"; } | undefined'.
+                Property 'children' is missing in type '{ json: (n: Inline) => void; }' but required in type '{ children: "inline"; }'.
+
+
+==== lexicalMissingOverloadDiagnostic.ts (1 errors) ====
+    // Relating Nested to Inline reads the return type of the call being resolved.
+    // A hidden re-entry of that call still reports that no overload matches, and
+    // the call has the type of the last overload tried.
+    
+    interface ConfigValue<T> {
+      children?: 'inline';
+      json?: (n: T) => void;
+    }
+    declare class Base {
+      describe(): {};
+      config<Config extends ConfigValue<this>>(type: symbol, config: Config): {};
+      config<Config extends ConfigValue<this>>(type: string, config: Config): { kind?: Config };
+    }
+    declare const pinSchema: (n: Inline) => void;
+    declare class Inline extends Base {
+      describe(): { kind?: { children: 'inline' } };
+    }
+    class Nested extends Base {
+      describe() {
+        return this.config('kind', { json: pinSchema }); // error
+                                     ~~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   The last overload gave the following error.
+!!! error TS2769:     Type '(n: Inline) => void' is not assignable to type '(n: this) => void'.
+!!! error TS2769:       Types of parameters 'n' and 'n' are incompatible.
+!!! error TS2769:         Type 'this' is not assignable to type 'Inline'.
+!!! error TS2769:           Type 'Nested' is not assignable to type 'Inline'.
+!!! error TS2769:             The types returned by 'describe().kind' are incompatible between these types.
+!!! error TS2769:               Type '{ json: (n: Inline) => void; } | undefined' is not assignable to type '{ children: "inline"; } | undefined'.
+!!! error TS2769:                 Property 'children' is missing in type '{ json: (n: Inline) => void; }' but required in type '{ children: "inline"; }'.
+!!! related TS2728 lexicalMissingOverloadDiagnostic.ts:16:26: 'children' is declared here.
+!!! related TS6500 lexicalMissingOverloadDiagnostic.ts:7:3: The expected type comes from property 'json' which is declared here on type 'ConfigValue<this>'
+!!! related TS2771 lexicalMissingOverloadDiagnostic.ts:12:3: The last overload is declared here.
+      }
+    }
+    
