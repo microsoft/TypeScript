@@ -226,8 +226,13 @@ func (r *EmitResolver) IsImplementationOfOverload(node *ast.SignatureDeclaration
 		//       function foo(a: any) { // This is implementation of the overloads
 		//           return a;
 		//       }
+		// A function can also have multiple signatures because it is declared more than once with a body each
+		// time, which JavaScript allows. Without a declaration that lacks a body, none of them is an
+		// implementation of overloads.
 		if len(signaturesOfSymbol) > 1 {
-			return true
+			return core.Some(symbol.Declarations(), func(declaration *ast.Node) bool {
+				return ast.IsFunctionLike(declaration) && ast.NodeIsMissing(declaration.Body())
+			})
 		}
 		// If there is single signature for the symbol, it is overload if that signature isn't coming from the node
 		// e.g.: function foo(a: string): string;
