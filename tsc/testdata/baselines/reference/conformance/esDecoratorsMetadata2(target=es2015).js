@@ -111,7 +111,7 @@ let D = (() => {
         },
         (() => {
             var _b;
-            const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create((_b = _classSuper[Symbol.metadata]) !== null && _b !== void 0 ? _b : null) : void 0;
+            const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create((_b = _classSuper === null || _classSuper === void 0 ? void 0 : _classSuper[Symbol.metadata]) !== null && _b !== void 0 ? _b : null) : void 0;
             _m_decorators = [meta('b', 'z')];
             __esDecorate(_a, null, _m_decorators, { kind: "method", name: "m", static: false, private: false, access: { has: obj => "m" in obj, get: obj => obj.m }, metadata: _metadata }, null, _instanceExtraInitializers);
             if (_metadata) Object.defineProperty(_a, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
