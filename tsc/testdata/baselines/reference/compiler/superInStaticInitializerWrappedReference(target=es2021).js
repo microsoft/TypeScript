@@ -45,7 +45,7 @@ class D extends B {
 "use strict";
 // A `super` property wrapped in parentheses, `!`, `as`, `satisfies` or a type assertion is still
 // the same reference: calls must keep `this` and assignments must still go through `Reflect.set`.
-var _a, _b;
+var _a, _b, _c;
 class B {
     static m() { return this; }
     static t(..._) { return this; }
@@ -69,80 +69,81 @@ Object.defineProperty(D, "b", {
     enumerable: true,
     configurable: true,
     writable: true,
-    value: (Reflect.get(_b, "m", _a))()
+    value: (Reflect.get(_b, "m", _a)).call(_a)
 });
 Object.defineProperty(D, "c", {
     enumerable: true,
     configurable: true,
     writable: true,
-    value: Reflect.get(_b, "m", _a)()
+    value: Reflect.get(_b, "m", _a).call(_a)
 });
 Object.defineProperty(D, "d", {
     enumerable: true,
     configurable: true,
     writable: true,
-    value: Reflect.get(_b, "m", _a)()
+    value: Reflect.get(_b, "m", _a).call(_a)
 });
 Object.defineProperty(D, "e", {
     enumerable: true,
     configurable: true,
     writable: true,
-    value: Reflect.get(_b, "m", _a)()
+    value: Reflect.get(_b, "m", _a).call(_a)
 });
 Object.defineProperty(D, "f", {
     enumerable: true,
     configurable: true,
     writable: true,
-    value: Reflect.get(_b, "m", _a)()
+    value: Reflect.get(_b, "m", _a).call(_a)
 });
 Object.defineProperty(D, "g", {
     enumerable: true,
     configurable: true,
     writable: true,
-    value: (Reflect.get(_b, "m", _a))?.()
+    value: (Reflect.get(_b, "m", _a))?.call(_a)
 });
 Object.defineProperty(D, "h", {
     enumerable: true,
     configurable: true,
     writable: true,
-    value: Reflect.get(_b, "m", _a).call(_a)
+    value: Reflect.get(_b, "m", _a)?.call(_a)
 });
 Object.defineProperty(D, "i", {
     enumerable: true,
     configurable: true,
     writable: true,
-    value: Reflect.get(_b, "m", _a)()
+    value: Reflect.get(_b, "m", _a).call(_a)
 });
 Object.defineProperty(D, "j", {
     enumerable: true,
     configurable: true,
     writable: true,
-    value: (Reflect.get(_b, "t", _a)) `x`
+    value: (Reflect.get(_b, "t", _a)).bind(_a) `x`
 });
 Object.defineProperty(D, "k", {
     enumerable: true,
     configurable: true,
     writable: true,
-    value: Reflect.get(_b, "t", _a) `x`
+    value: Reflect.get(_b, "t", _a).bind(_a) `x`
 });
 Object.defineProperty(D, "l", {
     enumerable: true,
     configurable: true,
     writable: true,
-    value: ((Reflect.get(_b, "x", _a)) = 1)
+    value: (Reflect.set(_b, "x", _c = 1, _a), _c)
 });
 (() => {
-    Reflect.get(_b, "x", _a) = 1;
-    Reflect.get(_b, "x", _a) = 2;
-    Reflect.get(_b, "x", _a) = 3;
-    Reflect.get(_b, "x", _a) += 1;
-    Reflect.get(_b, "x", _a)++;
-    --Reflect.get(_b, "x", _a);
-    [(Reflect.get(_b, "x", _a))] = [1];
-    [Reflect.get(_b, "x", _a)] = [2];
-    ({ a: Reflect.get(_b, "x", _a) } = { a: 3 });
-    [(Reflect.get(_b, "x", _a)) = 4] = [];
-    ({ a: Reflect.get(_b, "x", _a) = 5 } = {});
-    [, ...Reflect.get(_b, "x", _a)] = [0, 1];
-    ({ ...Reflect.get(_b, "x", _a) } = {});
+    var _c, _d;
+    Reflect.set(_b, "x", 1, _a);
+    Reflect.set(_b, "x", 2, _a);
+    Reflect.set(_b, "x", 3, _a);
+    Reflect.set(_b, "x", Reflect.get(_b, "x", _a) + 1, _a);
+    Reflect.set(_b, "x", (_c = Reflect.get(_b, "x", _a), _c++, _c), _a);
+    Reflect.set(_b, "x", (_d = Reflect.get(_b, "x", _a), --_d), _a);
+    [({ set value(_c) { Reflect.set(_b, "x", _c, _a); } }).value] = [1];
+    [({ set value(_c) { Reflect.set(_b, "x", _c, _a); } }).value] = [2];
+    ({ a: ({ set value(_c) { Reflect.set(_b, "x", _c, _a); } }).value } = { a: 3 });
+    [({ set value(_c) { Reflect.set(_b, "x", _c, _a); } }).value = 4] = [];
+    ({ a: ({ set value(_c) { Reflect.set(_b, "x", _c, _a); } }).value = 5 } = {});
+    [, ...({ set value(_c) { Reflect.set(_b, "x", _c, _a); } }).value] = [0, 1];
+    ({ ...({ set value(_c) { Reflect.set(_b, "x", _c, _a); } }).value } = {});
 })();

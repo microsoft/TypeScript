@@ -382,20 +382,23 @@ func (tx *classFieldsTransformer) visitDestructuringAssignmentTarget(node *ast.N
 	if ast.IsPropertyAccessExpression(node) && ast.IsPrivateIdentifier(node.AsPropertyAccessExpression().Name()) {
 		return tx.wrapPrivateIdentifierForDestructuringTarget(node)
 	}
+	// A target wrapped in parentheses or in a type assertion, `!` or `satisfies` (all erased to partially emitted
+	// expressions by now) is still the same reference, so it is lowered like the bare target.
+	target := ast.SkipOuterExpressions(node, ast.OEKPartiallyEmittedExpressions|ast.OEKParentheses)
 	if tx.shouldTransformSuperInStaticInitializers && tx.currentClassElement != nil &&
-		ast.IsSuperProperty(node) &&
+		ast.IsSuperProperty(target) &&
 		isStaticPropertyDeclarationOrClassStaticBlock(tx.currentClassElement) &&
 		tx.lexicalEnvironment != nil && tx.lexicalEnvironment.data != nil {
 		data := tx.lexicalEnvironment.data
 		if data.facts&classFactsClassWasDecorated != 0 {
-			return tx.visitInvalidSuperProperty(node)
+			return tx.visitInvalidSuperProperty(target)
 		}
 		if data.classConstructor != nil && data.superClassReference != nil {
 			var name *ast.Expression
-			if ast.IsElementAccessExpression(node) {
-				name = tx.Visitor().VisitNode(node.AsElementAccessExpression().ArgumentExpression)
-			} else if ast.IsPropertyAccessExpression(node) && ast.IsIdentifier(node.AsPropertyAccessExpression().Name()) {
-				name = tx.Factory().NewStringLiteralFromNode(node.AsPropertyAccessExpression().Name())
+			if ast.IsElementAccessExpression(target) {
+				name = tx.Visitor().VisitNode(target.AsElementAccessExpression().ArgumentExpression)
+			} else if ast.IsPropertyAccessExpression(target) && ast.IsIdentifier(target.AsPropertyAccessExpression().Name()) {
+				name = tx.Factory().NewStringLiteralFromNode(target.AsPropertyAccessExpression().Name())
 			}
 			if name != nil {
 				temp := tx.Factory().NewTempVariable()
@@ -1149,7 +1152,7 @@ func (tx *classFieldsTransformer) visitPreOrPostfixUnaryExpression(node *ast.Nod
 	}
 
 	if operator == ast.KindPlusPlusToken || operator == ast.KindMinusMinusToken {
-		operandSkipped := ast.SkipParentheses(operand)
+		operandSkipped := ast.SkipOuterExpressions(operand, ast.OEKPartiallyEmittedExpressions|ast.OEKParentheses)
 
 		// Private identifier property access
 		if ast.IsPropertyAccessExpression(operandSkipped) && ast.IsPrivateIdentifier(operandSkipped.Name()) {
@@ -1315,7 +1318,7 @@ func (tx *classFieldsTransformer) visitCallExpression(node *ast.CallExpression) 
 	}
 
 	if tx.shouldTransformSuperInStaticInitializers && tx.currentClassElement != nil &&
-		ast.IsSuperProperty(node.Expression) &&
+		ast.IsSuperProperty(expression) &&
 		isStaticPropertyDeclarationOrClassStaticBlock(tx.currentClassElement) &&
 		tx.lexicalEnvironment != nil && tx.lexicalEnvironment.data != nil &&
 		tx.lexicalEnvironment.data.classConstructor != nil {
@@ -1323,10 +1326,22 @@ func (tx *classFieldsTransformer) visitCallExpression(node *ast.CallExpression) 
 		// super[x]()
 
 		// converts `super.f(...)` into `Reflect.get(_baseTemp, "f", _classTemp).call(_classTemp, ...)`
-		invocation := tx.Factory().NewFunctionCallCall(
-			tx.Visitor().VisitNode(node.Expression),
-			tx.lexicalEnvironment.data.classConstructor,
-			tx.Visitor().VisitNodes(node.Arguments).Nodes,
+		// converts `super.f?.(...)` into `Reflect.get(_baseTemp, "f", _classTemp)?.call(_classTemp, ...)`
+		visitedTarget := tx.Factory().RestoreOuterExpressions(node.Expression, tx.Visitor().VisitNode(expression), ast.OEKAll)
+		visitedArgs := tx.Visitor().VisitNodes(node.Arguments)
+		allArgs := make([]*ast.Node, 0, 1+len(visitedArgs.Nodes))
+		allArgs = append(allArgs, tx.lexicalEnvironment.data.classConstructor)
+		allArgs = append(allArgs, visitedArgs.Nodes...)
+		flags := ast.NodeFlagsNone
+		if node.QuestionDotToken != nil {
+			flags = ast.NodeFlagsOptionalChain
+		}
+		invocation := tx.Factory().NewCallExpression(
+			tx.Factory().NewPropertyAccessExpression(visitedTarget, node.QuestionDotToken, tx.Factory().NewIdentifier("call"), flags),
+			nil, /*questionDotToken*/
+			nil, /*typeArguments*/
+			tx.Factory().NewNodeList(allArgs),
+			node.Flags,
 		)
 		tx.EmitContext().SetOriginal(invocation, node.AsNode())
 		invocation.Loc = node.Loc
@@ -1361,13 +1376,13 @@ func (tx *classFieldsTransformer) visitTaggedTemplateExpression(node *ast.Tagged
 	}
 
 	if tx.shouldTransformSuperInStaticInitializers && tx.currentClassElement != nil &&
-		ast.IsSuperProperty(node.Tag) &&
+		ast.IsSuperProperty(tag) &&
 		isStaticPropertyDeclarationOrClassStaticBlock(tx.currentClassElement) &&
 		tx.lexicalEnvironment != nil && tx.lexicalEnvironment.data != nil &&
 		tx.lexicalEnvironment.data.classConstructor != nil {
 		// converts `` super.f`x` `` into `` Reflect.get(_baseTemp, "f", _classTemp).bind(_classTemp)`x` ``
 		invocation := tx.Factory().NewFunctionBindCall(
-			tx.Visitor().VisitNode(node.Tag),
+			tx.Factory().RestoreOuterExpressions(node.Tag, tx.Visitor().VisitNode(tag), ast.OEKAll),
 			tx.lexicalEnvironment.data.classConstructor,
 			nil,
 		)
@@ -1521,7 +1536,7 @@ func (tx *classFieldsTransformer) visitBinaryExpression(node *ast.BinaryExpressi
 				return result
 			}
 		} else if tx.shouldTransformSuperInStaticInitializers && tx.currentClassElement != nil &&
-			ast.IsSuperProperty(node.Left) &&
+			ast.IsSuperProperty(left) &&
 			isStaticPropertyDeclarationOrClassStaticBlock(tx.currentClassElement) &&
 			tx.lexicalEnvironment != nil && tx.lexicalEnvironment.data != nil {
 			// super.x = ...
@@ -1533,7 +1548,7 @@ func (tx *classFieldsTransformer) visitBinaryExpression(node *ast.BinaryExpressi
 				return tx.Factory().UpdateBinaryExpression(
 					node,
 					nil,
-					tx.visitInvalidSuperProperty(node.Left),
+					tx.visitInvalidSuperProperty(left),
 					nil,
 					node.OperatorToken,
 					tx.Visitor().VisitNode(node.Right),
@@ -1541,10 +1556,10 @@ func (tx *classFieldsTransformer) visitBinaryExpression(node *ast.BinaryExpressi
 			}
 			if data.classConstructor != nil && data.superClassReference != nil {
 				var setterName *ast.Expression
-				if ast.IsElementAccessExpression(node.Left) {
-					setterName = tx.Visitor().VisitNode(node.Left.AsElementAccessExpression().ArgumentExpression)
-				} else if ast.IsPropertyAccessExpression(node.Left) && ast.IsIdentifier(node.Left.AsPropertyAccessExpression().Name()) {
-					setterName = tx.Factory().NewStringLiteralFromNode(node.Left.AsPropertyAccessExpression().Name())
+				if ast.IsElementAccessExpression(left) {
+					setterName = tx.Visitor().VisitNode(left.AsElementAccessExpression().ArgumentExpression)
+				} else if ast.IsPropertyAccessExpression(left) && ast.IsIdentifier(left.AsPropertyAccessExpression().Name()) {
+					setterName = tx.Factory().NewStringLiteralFromNode(left.AsPropertyAccessExpression().Name())
 				}
 				if setterName != nil {
 					// converts `super.x = 1` into `(Reflect.set(_baseTemp, "x", _a = 1, _classTemp), _a)`
@@ -1565,8 +1580,8 @@ func (tx *classFieldsTransformer) visitBinaryExpression(node *ast.BinaryExpressi
 							getterName,
 							data.classConstructor,
 						)
-						tx.EmitContext().SetOriginal(superPropertyGet, node.Left)
-						superPropertyGet.Loc = node.Left.Loc
+						tx.EmitContext().SetOriginal(superPropertyGet, left)
+						superPropertyGet.Loc = left.Loc
 						expression = tx.Factory().NewBinaryExpression(
 							nil,
 							superPropertyGet,
@@ -3275,7 +3290,8 @@ func (tx *classFieldsTransformer) visitAssignmentRestElement(node *ast.Node) *as
 }
 
 func (tx *classFieldsTransformer) visitArrayAssignmentElement(node *ast.Node) *ast.Node {
-	if ast.IsArrayBindingOrAssignmentElement(node) {
+	// A wrapped element such as `(this.#x)` or `super.x!` is a target too.
+	if ast.IsArrayBindingOrAssignmentElement(node) || ast.IsOuterExpression(node, ast.OEKPartiallyEmittedExpressions|ast.OEKParentheses) {
 		if ast.IsSpreadElement(node) {
 			return tx.visitAssignmentRestElement(node)
 		}

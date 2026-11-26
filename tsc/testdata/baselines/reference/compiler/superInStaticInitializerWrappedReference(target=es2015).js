@@ -56,8 +56,8 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
-var _a;
-var _b, _c;
+var _a, _b;
+var _c, _d, _e;
 class B {
     static m() { return this; }
     static t(..._) { return this; }
@@ -68,93 +68,94 @@ Object.defineProperty(B, "x", {
     writable: true,
     value: 0
 });
-class D extends (_c = B) {
+class D extends (_d = B) {
 }
-_b = D;
+_c = D;
 Object.defineProperty(D, "a", {
     enumerable: true,
     configurable: true,
     writable: true,
-    value: Reflect.get(_c, "m", _b).call(_b)
+    value: Reflect.get(_d, "m", _c).call(_c)
 });
 Object.defineProperty(D, "b", {
     enumerable: true,
     configurable: true,
     writable: true,
-    value: (Reflect.get(_c, "m", _b))()
+    value: (Reflect.get(_d, "m", _c)).call(_c)
 });
 Object.defineProperty(D, "c", {
     enumerable: true,
     configurable: true,
     writable: true,
-    value: Reflect.get(_c, "m", _b)()
+    value: Reflect.get(_d, "m", _c).call(_c)
 });
 Object.defineProperty(D, "d", {
     enumerable: true,
     configurable: true,
     writable: true,
-    value: Reflect.get(_c, "m", _b)()
+    value: Reflect.get(_d, "m", _c).call(_c)
 });
 Object.defineProperty(D, "e", {
     enumerable: true,
     configurable: true,
     writable: true,
-    value: Reflect.get(_c, "m", _b)()
+    value: Reflect.get(_d, "m", _c).call(_c)
 });
 Object.defineProperty(D, "f", {
     enumerable: true,
     configurable: true,
     writable: true,
-    value: Reflect.get(_c, "m", _b)()
+    value: Reflect.get(_d, "m", _c).call(_c)
 });
 Object.defineProperty(D, "g", {
     enumerable: true,
     configurable: true,
     writable: true,
-    value: (_a = (Reflect.get(_c, "m", _b))) === null || _a === void 0 ? void 0 : _a()
+    value: (_a = (Reflect.get(_d, "m", _c))) === null || _a === void 0 ? void 0 : _a.call(_c)
 });
 Object.defineProperty(D, "h", {
     enumerable: true,
     configurable: true,
     writable: true,
-    value: Reflect.get(_c, "m", _b).call(_b)
+    value: (_b = Reflect.get(_d, "m", _c)) === null || _b === void 0 ? void 0 : _b.call(_c)
 });
 Object.defineProperty(D, "i", {
     enumerable: true,
     configurable: true,
     writable: true,
-    value: Reflect.get(_c, "m", _b)()
+    value: Reflect.get(_d, "m", _c).call(_c)
 });
 Object.defineProperty(D, "j", {
     enumerable: true,
     configurable: true,
     writable: true,
-    value: (Reflect.get(_c, "t", _b)) `x`
+    value: (Reflect.get(_d, "t", _c)).bind(_c) `x`
 });
 Object.defineProperty(D, "k", {
     enumerable: true,
     configurable: true,
     writable: true,
-    value: Reflect.get(_c, "t", _b) `x`
+    value: Reflect.get(_d, "t", _c).bind(_c) `x`
 });
 Object.defineProperty(D, "l", {
     enumerable: true,
     configurable: true,
     writable: true,
-    value: ((Reflect.get(_c, "x", _b)) = 1)
+    value: (Reflect.set(_d, "x", _e = 1, _c), _e)
 });
 (() => {
-    Reflect.get(_c, "x", _b) = 1;
-    Reflect.get(_c, "x", _b) = 2;
-    Reflect.get(_c, "x", _b) = 3;
-    Reflect.get(_c, "x", _b) += 1;
-    Reflect.get(_c, "x", _b)++;
-    --Reflect.get(_c, "x", _b);
-    [(Reflect.get(_c, "x", _b))] = [1];
-    [Reflect.get(_c, "x", _b)] = [2];
-    ({ a: Reflect.get(_c, "x", _b) } = { a: 3 });
-    [(Reflect.get(_c, "x", _b)) = 4] = [];
-    ({ a: Reflect.get(_c, "x", _b) = 5 } = {});
-    [, ...Reflect.get(_c, "x", _b)] = [0, 1];
-    (Reflect.get(_c, "x", _b) = __rest({}, []));
+    var _a, _b;
+    Reflect.set(_d, "x", 1, _c);
+    Reflect.set(_d, "x", 2, _c);
+    Reflect.set(_d, "x", 3, _c);
+    Reflect.set(_d, "x", Reflect.get(_d, "x", _c) + 1, _c);
+    Reflect.set(_d, "x", (_a = Reflect.get(_d, "x", _c), _a++, _a), _c);
+    Reflect.set(_d, "x", (_b = Reflect.get(_d, "x", _c), --_b), _c);
+    [({ set value(_a) { Reflect.set(_d, "x", _a, _c); } }).value] = [1];
+    [({ set value(_a) { Reflect.set(_d, "x", _a, _c); } }).value] = [2];
+    ({ a: ({ set value(_a) { Reflect.set(_d, "x", _a, _c); } }).value } = { a: 3 });
+    [({ set value(_a) { Reflect.set(_d, "x", _a, _c); } }).value = 4] = [];
+    ({ a: ({ set value(_a) { Reflect.set(_d, "x", _a, _c); } }).value = 5 } = {});
+    [, ...({ set value(_a) { Reflect.set(_d, "x", _a, _c); } }).value] = [0, 1];
+    (({ set value(_a) { Reflect.set(_d, "x", _a, _c); } }).value = __rest({}, []));
 })();
