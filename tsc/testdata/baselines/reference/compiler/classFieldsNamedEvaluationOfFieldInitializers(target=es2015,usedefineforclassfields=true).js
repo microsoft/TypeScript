@@ -48,72 +48,74 @@ var __setFunctionName = (this && this.__setFunctionName) || function (f, name, p
 var _a, _C_p, _C_sp, _b, _c, _d, _e;
 class C {
     constructor() {
-        var _e, _f;
+        var _f, _g;
         Object.defineProperty(this, "f", {
             enumerable: true,
             configurable: true,
             writable: true,
-            value: function () { }
+            value: __setFunctionName(function () { }, "f")
         });
         Object.defineProperty(this, "g", {
             enumerable: true,
             configurable: true,
             writable: true,
-            value: () => { }
+            value: __setFunctionName(() => { }, "g")
         });
         Object.defineProperty(this, "c", {
             enumerable: true,
             configurable: true,
             writable: true,
-            value: class {
-            }
+            value: (_f = class {
+                },
+                __setFunctionName(_f, "c"),
+                _f)
         });
         Object.defineProperty(this, "s t", {
             enumerable: true,
             configurable: true,
             writable: true,
-            value: () => { }
+            value: __setFunctionName(() => { }, "s t")
         });
         Object.defineProperty(this, 1, {
             enumerable: true,
             configurable: true,
             writable: true,
-            value: () => { }
+            value: __setFunctionName(() => { }, "1")
         });
         Object.defineProperty(this, "lit", {
             enumerable: true,
             configurable: true,
             writable: true,
-            value: () => { }
+            value: __setFunctionName(() => { }, "lit")
         });
         Object.defineProperty(this, _b, {
             enumerable: true,
             configurable: true,
             writable: true,
-            value: () => { }
+            value: __setFunctionName(() => { }, _b)
         });
         Object.defineProperty(this, _c, {
             enumerable: true,
             configurable: true,
             writable: true,
-            value: function () { }
+            value: __setFunctionName(function () { }, _c)
         });
-        _C_p.set(this, () => { });
+        _C_p.set(this, __setFunctionName(() => { }, "#p"));
         // A computed key is evaluated once, when the class is defined.
         Object.defineProperty(this, _e, {
             enumerable: true,
             configurable: true,
             writable: true,
-            value: (_f = class {
+            value: (_g = class {
                 },
-                __setFunctionName(_f, _e),
-                Object.defineProperty(_f, "y", {
+                __setFunctionName(_g, _e),
+                Object.defineProperty(_g, "y", {
                     enumerable: true,
                     configurable: true,
                     writable: true,
                     value: 1
                 }),
-                _f)
+                _g)
         });
         // Not anonymous function definitions: nothing to name.
         Object.defineProperty(this, "named", {
@@ -130,17 +132,17 @@ class C {
         });
     }
 }
-_a = C, _C_p = new WeakMap(), _b = k, _c = sym, _d = j, _e = i;
+_a = C, _C_p = new WeakMap(), _b = __propKey(k), _c = __propKey(sym), _d = __propKey(j), _e = __propKey(i);
 Object.defineProperty(C, "s", {
     enumerable: true,
     configurable: true,
     writable: true,
-    value: function () { }
+    value: __setFunctionName(function () { }, "s")
 });
 Object.defineProperty(C, _d, {
     enumerable: true,
     configurable: true,
     writable: true,
-    value: () => { }
+    value: __setFunctionName(() => { }, _d)
 });
-_C_sp = { value: () => { } };
+_C_sp = { value: __setFunctionName(() => { }, "#sp") };

@@ -53,10 +53,14 @@ var b = {
 //// [duplicatePropertyNames.js]
 "use strict";
 // duplicate property names are an error in all types
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
 class C {
     constructor() {
-        this.baz = () => { };
-        this.baz = () => { };
+        this.baz = __setFunctionName(() => { }, "baz");
+        this.baz = __setFunctionName(() => { }, "baz");
     }
     bar(x) { }
     bar(x) { }

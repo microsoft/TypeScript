@@ -17,10 +17,14 @@ class MyDerived extends MyBase {
 
 //// [superAccess.js]
 "use strict";
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
 class MyBase {
     constructor() {
         this.S2 = "test";
-        this.f = () => 5;
+        this.f = __setFunctionName(() => 5, "f");
     }
 }
 MyBase.S1 = 5;

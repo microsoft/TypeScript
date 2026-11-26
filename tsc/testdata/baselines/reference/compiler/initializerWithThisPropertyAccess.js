@@ -37,10 +37,14 @@ class Bar {
 
 //// [initializerWithThisPropertyAccess.js]
 "use strict";
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
 class A {
     constructor() {
         this.b = this.a; // Error
-        this.c = () => this.a;
+        this.c = __setFunctionName(() => this.a, "c");
         this.d = (new A()).a;
         this.a = 1;
     }

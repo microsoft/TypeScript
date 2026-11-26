@@ -53,6 +53,10 @@ function getFoo3(): Foo {
 
 //// [contextuallyTypedClassExpressionMethodDeclaration02.js]
 "use strict";
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
 function getFoo1() {
     return class {
         method1(arg) {
@@ -66,24 +70,24 @@ function getFoo1() {
 function getFoo2() {
     return class {
         constructor() {
-            this.method1 = (arg) => {
+            this.method1 = __setFunctionName((arg) => {
                 arg.numProp = 10;
-            };
-            this.method2 = (arg) => {
+            }, "method1");
+            this.method2 = __setFunctionName((arg) => {
                 arg.strProp = "hello";
-            };
+            }, "method2");
         }
     };
 }
 function getFoo3() {
     return class {
         constructor() {
-            this.method1 = function (arg) {
+            this.method1 = __setFunctionName(function (arg) {
                 arg.numProp = 10;
-            };
-            this.method2 = function (arg) {
+            }, "method1");
+            this.method2 = __setFunctionName(function (arg) {
                 arg.strProp = "hello";
-            };
+            }, "method2");
         }
     };
 }

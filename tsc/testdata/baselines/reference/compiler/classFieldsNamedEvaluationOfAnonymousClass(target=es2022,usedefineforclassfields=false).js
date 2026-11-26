@@ -43,6 +43,10 @@ const P = class { m() {} };
 // An anonymous class gets its name from the position it is defined in (NamedEvaluation). When lowering its
 // members leaves expressions to evaluate outside the class body, the class is emitted through a temp
 // (`(_a = class { ... }, ..., _a)`) and must get its name explicitly instead of the temp's.
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
 var _a;
 const A = class {
     #p = 1;
@@ -103,6 +107,7 @@ let L;
     }] = [];
 class M {
     static { this.s = class {
+        static { __setFunctionName(this, "s"); }
         #p = 1;
     }; }
 }

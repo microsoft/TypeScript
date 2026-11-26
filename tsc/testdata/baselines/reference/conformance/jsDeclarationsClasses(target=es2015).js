@@ -198,6 +198,11 @@ export class ExtendsStatics extends HasStatics {
 
 //// [index.js]
 "use strict";
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
+var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ExtendsStatics = exports.HasStatics = exports.VariableBase = exports.O = exports.N = exports.M = exports.L = exports.K = exports.J = exports.JJ = exports.II = exports.I = exports.H = exports.G = exports.F = exports.E = exports.D = exports.C = exports.B = exports.A = void 0;
 class A {
@@ -210,8 +215,10 @@ B.cat = "cat";
 class C {
 }
 exports.C = C;
-C.Cls = class {
-};
+C.Cls = (_a = class {
+    },
+    __setFunctionName(_a, "Cls"),
+    _a);
 class D {
     /**
      * @param {number} a

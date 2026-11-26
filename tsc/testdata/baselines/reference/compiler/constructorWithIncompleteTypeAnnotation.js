@@ -283,6 +283,10 @@ TypeScriptAllInOne.Program.Main();
 
 //// [constructorWithIncompleteTypeAnnotation.js]
 "use strict";
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
 var fs = module;
 ("fs");
 var TypeScriptAllInOne;
@@ -477,7 +481,7 @@ class BasicFeatures {
 }
 class CLASS {
     constructor() {
-        this.d = () => { yield 0; };
+        this.d = __setFunctionName(() => { yield 0; }, "d");
     }
     get Property() { return 0; }
     Member() {

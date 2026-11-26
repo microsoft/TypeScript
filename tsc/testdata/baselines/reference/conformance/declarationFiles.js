@@ -51,6 +51,10 @@ class C4 {
 
 //// [declarationFiles.js]
 "use strict";
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
 class C1 {
     f(x) { return undefined; }
     constructor(x) { }
@@ -64,7 +68,7 @@ class C4 {
         this.x1 = { a: this };
         this.x2 = [this];
         this.x3 = [{ a: this }];
-        this.x4 = () => this;
+        this.x4 = __setFunctionName(() => this, "x4");
     }
     f1() {
         return { a: this };

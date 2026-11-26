@@ -37,6 +37,10 @@ class D extends C {
 
 //// [derivedClassConstructorWithExplicitReturns01.js]
 "use strict";
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
 class C {
     foo() { return "this never gets used."; }
     constructor(value) {
@@ -52,7 +56,7 @@ class C {
 class D extends C {
     constructor(a = 100) {
         super(a);
-        this.dProp = () => this;
+        this.dProp = __setFunctionName(() => this, "dProp");
         if (Math.random() < 0.5) {
             "You win!";
             return {

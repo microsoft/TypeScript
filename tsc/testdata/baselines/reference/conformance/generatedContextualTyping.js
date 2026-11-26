@@ -358,6 +358,10 @@ var x356 = function(n: Genric<Base>) { }; x356({ func: n => { return [d1, d2]; }
 
 //// [generatedContextualTyping.js]
 "use strict";
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
 class Base {
 }
 class Derived1 extends Base {
@@ -379,12 +383,12 @@ var x11 = n => { var n; return null; };
 var x12 = { func: n => { return [d1, d2]; } };
 class x13 {
     constructor() {
-        this.member = () => [d1, d2];
+        this.member = __setFunctionName(() => [d1, d2], "member");
     }
 }
 class x14 {
     constructor() {
-        this.member = function () { return [d1, d2]; };
+        this.member = __setFunctionName(function () { return [d1, d2]; }, "member");
     }
 }
 class x15 {
@@ -394,12 +398,12 @@ class x15 {
 }
 class x16 {
     constructor() {
-        this.member = () => [d1, d2];
+        this.member = __setFunctionName(() => [d1, d2], "member");
     }
 }
 class x17 {
     constructor() {
-        this.member = function () { return [d1, d2]; };
+        this.member = __setFunctionName(function () { return [d1, d2]; }, "member");
     }
 }
 class x18 {
@@ -429,7 +433,7 @@ class x22 {
 }
 class x23 {
     constructor() {
-        this.member = n => { var n; return null; };
+        this.member = __setFunctionName(n => { var n; return null; }, "member");
     }
 }
 class x24 {
@@ -439,12 +443,12 @@ class x24 {
 }
 class x25 {
     constructor() {
-        this.member = () => [d1, d2];
+        this.member = __setFunctionName(() => [d1, d2], "member");
     }
 }
 class x26 {
     constructor() {
-        this.member = function () { return [d1, d2]; };
+        this.member = __setFunctionName(function () { return [d1, d2]; }, "member");
     }
 }
 class x27 {
@@ -454,12 +458,12 @@ class x27 {
 }
 class x28 {
     constructor() {
-        this.member = () => [d1, d2];
+        this.member = __setFunctionName(() => [d1, d2], "member");
     }
 }
 class x29 {
     constructor() {
-        this.member = function () { return [d1, d2]; };
+        this.member = __setFunctionName(function () { return [d1, d2]; }, "member");
     }
 }
 class x30 {
@@ -489,7 +493,7 @@ class x34 {
 }
 class x35 {
     constructor() {
-        this.member = n => { var n; return null; };
+        this.member = __setFunctionName(n => { var n; return null; }, "member");
     }
 }
 class x36 {
@@ -499,12 +503,12 @@ class x36 {
 }
 class x37 {
     constructor() {
-        this.member = () => [d1, d2];
+        this.member = __setFunctionName(() => [d1, d2], "member");
     }
 }
 class x38 {
     constructor() {
-        this.member = function () { return [d1, d2]; };
+        this.member = __setFunctionName(function () { return [d1, d2]; }, "member");
     }
 }
 class x39 {
@@ -514,12 +518,12 @@ class x39 {
 }
 class x40 {
     constructor() {
-        this.member = () => [d1, d2];
+        this.member = __setFunctionName(() => [d1, d2], "member");
     }
 }
 class x41 {
     constructor() {
-        this.member = function () { return [d1, d2]; };
+        this.member = __setFunctionName(function () { return [d1, d2]; }, "member");
     }
 }
 class x42 {
@@ -549,7 +553,7 @@ class x46 {
 }
 class x47 {
     constructor() {
-        this.member = n => { var n; return null; };
+        this.member = __setFunctionName(n => { var n; return null; }, "member");
     }
 }
 class x48 {
@@ -559,19 +563,19 @@ class x48 {
 }
 class x49 {
 }
-x49.member = () => [d1, d2];
+x49.member = __setFunctionName(() => [d1, d2], "member");
 class x50 {
 }
-x50.member = function () { return [d1, d2]; };
+x50.member = __setFunctionName(function () { return [d1, d2]; }, "member");
 class x51 {
 }
 x51.member = function named() { return [d1, d2]; };
 class x52 {
 }
-x52.member = () => [d1, d2];
+x52.member = __setFunctionName(() => [d1, d2], "member");
 class x53 {
 }
-x53.member = function () { return [d1, d2]; };
+x53.member = __setFunctionName(function () { return [d1, d2]; }, "member");
 class x54 {
 }
 x54.member = function named() { return [d1, d2]; };
@@ -589,25 +593,25 @@ class x58 {
 x58.member = { n: [d1, d2] };
 class x59 {
 }
-x59.member = n => { var n; return null; };
+x59.member = __setFunctionName(n => { var n; return null; }, "member");
 class x60 {
 }
 x60.member = { func: n => { return [d1, d2]; } };
 class x61 {
 }
-x61.member = () => [d1, d2];
+x61.member = __setFunctionName(() => [d1, d2], "member");
 class x62 {
 }
-x62.member = function () { return [d1, d2]; };
+x62.member = __setFunctionName(function () { return [d1, d2]; }, "member");
 class x63 {
 }
 x63.member = function named() { return [d1, d2]; };
 class x64 {
 }
-x64.member = () => [d1, d2];
+x64.member = __setFunctionName(() => [d1, d2], "member");
 class x65 {
 }
-x65.member = function () { return [d1, d2]; };
+x65.member = __setFunctionName(function () { return [d1, d2]; }, "member");
 class x66 {
 }
 x66.member = function named() { return [d1, d2]; };
@@ -625,25 +629,25 @@ class x70 {
 x70.member = { n: [d1, d2] };
 class x71 {
 }
-x71.member = n => { var n; return null; };
+x71.member = __setFunctionName(n => { var n; return null; }, "member");
 class x72 {
 }
 x72.member = { func: n => { return [d1, d2]; } };
 class x73 {
 }
-x73.member = () => [d1, d2];
+x73.member = __setFunctionName(() => [d1, d2], "member");
 class x74 {
 }
-x74.member = function () { return [d1, d2]; };
+x74.member = __setFunctionName(function () { return [d1, d2]; }, "member");
 class x75 {
 }
 x75.member = function named() { return [d1, d2]; };
 class x76 {
 }
-x76.member = () => [d1, d2];
+x76.member = __setFunctionName(() => [d1, d2], "member");
 class x77 {
 }
-x77.member = function () { return [d1, d2]; };
+x77.member = __setFunctionName(function () { return [d1, d2]; }, "member");
 class x78 {
 }
 x78.member = function named() { return [d1, d2]; };
@@ -661,7 +665,7 @@ class x82 {
 x82.member = { n: [d1, d2] };
 class x83 {
 }
-x83.member = n => { var n; return null; };
+x83.member = __setFunctionName(n => { var n; return null; }, "member");
 class x84 {
 }
 x84.member = { func: n => { return [d1, d2]; } };

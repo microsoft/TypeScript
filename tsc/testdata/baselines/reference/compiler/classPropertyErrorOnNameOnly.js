@@ -42,10 +42,14 @@ const outsideClass: FuncType = function(val) { // compare to errors only on this
 
 //// [classPropertyErrorOnNameOnly.js]
 "use strict";
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
 // turn on strictNullChecks
 class Example {
     constructor() {
-        this.insideClass = function (val) {
+        this.insideClass = __setFunctionName(function (val) {
             switch (val) {
                 case 1:
                     return "1";
@@ -59,7 +63,7 @@ class Example {
                     return "5";
                 // forgot case 6
             }
-        }; // all the way to here
+        }, "insideClass"); // all the way to here
     }
 }
 const outsideClass = function (val) {

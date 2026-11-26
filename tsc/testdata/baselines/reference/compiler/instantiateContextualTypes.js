@@ -188,6 +188,10 @@ assignPartial(obj, { foo(...args) {} });  // args has type [string]
 
 //// [instantiateContextualTypes.js]
 // #6611
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
 function fn(values, value) {
 }
 fn(handlers, value => alert(value));
@@ -210,27 +214,27 @@ var N1;
 passContentsToFunc(outerBoxOfString, box => box.value);
 class Interesting {
     constructor() {
-        this.compiles = () => {
+        this.compiles = __setFunctionName(() => {
             return Promise.resolve().then(() => {
                 if (1 < 2) {
                     return 'SOMETHING';
                 }
                 return 'ELSE';
             });
-        };
-        this.doesnt = () => {
+        }, "compiles");
+        this.doesnt = __setFunctionName(() => {
             return Promise.resolve().then(() => {
                 return 'ELSE';
             });
-        };
-        this.slightlyDifferentErrorMessage = () => {
+        }, "doesnt");
+        this.slightlyDifferentErrorMessage = __setFunctionName(() => {
             return Promise.resolve().then(() => {
                 if (1 < 2) {
                     return 'SOMETHING';
                 }
                 return 'SOMETHING';
             });
-        };
+        }, "slightlyDifferentErrorMessage");
     }
 }
 let xx = invoke(() => 1);

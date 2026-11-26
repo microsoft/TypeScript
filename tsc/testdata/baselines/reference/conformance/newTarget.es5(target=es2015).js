@@ -36,14 +36,18 @@ const O = {
 
 //// [newTarget.es5.js]
 "use strict";
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
 class A {
     constructor() {
-        this.d = function () { return new.target; };
+        this.d = __setFunctionName(function () { return new.target; }, "d");
         const a = new.target;
         const b = () => new.target;
     }
 }
-A.c = function () { return new.target; };
+A.c = __setFunctionName(function () { return new.target; }, "c");
 class B extends A {
     constructor() {
         super();

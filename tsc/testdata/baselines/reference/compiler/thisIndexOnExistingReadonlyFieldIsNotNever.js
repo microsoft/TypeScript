@@ -26,17 +26,21 @@ class CoachMarkAnchorDecorator {
 
 //// [thisIndexOnExistingReadonlyFieldIsNotNever.js]
 "use strict";
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
 class CoachMarkAnchorDecorator {
     decorateComponent(anchor) {
         return class CoachMarkAnchor extends Component {
             constructor() {
                 super(...arguments);
-                this._onAnchorRef = (anchor) => {
+                this._onAnchorRef = __setFunctionName((anchor) => {
                     const anchorRef = this.props.anchorRef;
                     if (anchorRef) {
                         anchorRef(anchor);
                     }
-                };
+                }, "_onAnchorRef");
             }
         };
     }

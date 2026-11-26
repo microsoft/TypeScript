@@ -22,18 +22,24 @@ class C {
 
 //// [typeOfThisInStaticMembers8.js]
 "use strict";
-var _a;
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
+var _a, _b;
 class C {
 }
 _a = C;
 C.f = 1;
-C.arrowFunctionBoundary = () => _a.f + 1;
-C.functionExprBoundary = function () { return this.f + 2; };
-C.classExprBoundary = class {
-    constructor() {
-        this.a = this.f + 3;
-    }
-};
+C.arrowFunctionBoundary = __setFunctionName(() => _a.f + 1, "arrowFunctionBoundary");
+C.functionExprBoundary = __setFunctionName(function () { return this.f + 2; }, "functionExprBoundary");
+C.classExprBoundary = (_b = class {
+        constructor() {
+            this.a = this.f + 3;
+        }
+    },
+    __setFunctionName(_b, "classExprBoundary"),
+    _b);
 C.functionAndClassDeclBoundary = (() => {
     function foo() {
         return this.f + 4;

@@ -103,6 +103,10 @@ function tryCatchFn() {
 
 //// [arrowFunctionExpressions.js]
 "use strict";
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
 // ArrowFormalParameters => AssignmentExpression is equivalent to ArrowFormalParameters => { return AssignmentExpression; }
 var a = (p) => p.length;
 var a = (p) => { return p.length; };
@@ -129,8 +133,8 @@ var p10 = ([{ value, done }]) => { };
 // Arrow function used in class member function
 class MyClass {
     constructor() {
-        this.m = (n) => n + 1;
-        this.p = (n) => n && this;
+        this.m = __setFunctionName((n) => n + 1, "m");
+        this.p = __setFunctionName((n) => n && this, "p");
     }
     fn() {
         var m = (n) => n + 1;

@@ -262,6 +262,10 @@ function testFunctionThisParameter2(
 
 //// [assertionTypePredicates1.js]
 "use strict";
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
 const assert = value => { };
 function f01(x) {
     if (!!true) {
@@ -422,7 +426,7 @@ function example1(things) {
 }
 class TestPropertyDeclaration1 {
     constructor() {
-        this.assert = (value) => { };
+        this.assert = __setFunctionName((value) => { }, "assert");
     }
     other(x) {
         this.assert(x); // error
@@ -431,7 +435,7 @@ class TestPropertyDeclaration1 {
 }
 class TestPropertyDeclaration2 {
     constructor() {
-        this.assert = (value) => { };
+        this.assert = __setFunctionName((value) => { }, "assert");
     }
     other(x) {
         this.assert(x); // ok

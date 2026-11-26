@@ -47,6 +47,10 @@ c5<string>(1); // error
 
 //// [untypedFunctionCallsWithTypeParameters1.js]
 "use strict";
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
 // none of these function calls should be allowed
 var x = function () { return; };
 var r1 = x();
@@ -58,7 +62,7 @@ class C {
         this.prototype = null;
         this.length = 1;
         this.arguments = null;
-        this.caller = () => { };
+        this.caller = __setFunctionName(() => { }, "caller");
     }
 }
 var r4 = c2(); // should be an error

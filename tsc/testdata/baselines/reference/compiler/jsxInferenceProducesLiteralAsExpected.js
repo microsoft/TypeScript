@@ -21,6 +21,10 @@ const el2 = <Test<TestObject> model={model} foo="c" />;
 
 //// [jsxInferenceProducesLiteralAsExpected.js]
 "use strict";
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path="/.lib/react.d.ts" />
 const React = require("react");
@@ -28,7 +32,7 @@ class TestObject {
     constructor() {
         this.a = '';
         this.b = 1;
-        this.c = () => { };
+        this.c = __setFunctionName(() => { }, "c");
     }
 }
 function Test(props) { return React.createElement(React.Fragment, null); }

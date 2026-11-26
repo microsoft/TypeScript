@@ -73,15 +73,15 @@ async function asyncIIFE() {
 }
 class AsyncClass {
     constructor() {
-        this.asyncPropFunc = async function () {
+        this.asyncPropFunc = __setFunctionName(async function () {
             await 2;
-        };
+        }, "asyncPropFunc");
         this.asyncPropNamedFunc = async function namedFunc() {
             await 2;
         };
-        this.asyncPropArrowFunc = async () => {
+        this.asyncPropArrowFunc = __setFunctionName(async () => {
             await 2;
-        };
+        }, "asyncPropArrowFunc");
     }
     async asyncMethod() {
         await 2;

@@ -950,7 +950,10 @@ func (tx *classFieldsTransformer) transformPublicFieldInitializer(node *ast.Prop
 	if tx.shouldTransformInitializers && !ast.IsAutoAccessorPropertyDeclaration(node.AsNode()) {
 		// Elide the property declaration; the initializer will be moved to the constructor.
 		// For computed property names, we still need to emit the expression.
-		expr := tx.getPropertyNameExpressionIfNeeded(node.Name(), node.Initializer != nil || tx.compilerOptions.GetUseDefineForClassFields())
+		// A cached computed name is also the name of the function or class the initializer defines, so it is
+		// converted to a property key once, as the class would.
+		toPropertyKey := tx.isNamedEvaluationOfLoweredField(node)
+		expr := tx.getPropertyNameExpressionIfNeeded(node.Name(), node.Initializer != nil || tx.compilerOptions.GetUseDefineForClassFields(), toPropertyKey)
 		if expr != nil {
 			for e := range flattenCommaList(expr) {
 				tx.addPendingExpressions(e)
@@ -2804,12 +2807,54 @@ func (tx *classFieldsTransformer) transformProperty(property *ast.PropertyDeclar
 	return transformed
 }
 
+// isNamedEvaluationOfLoweredField reports whether the initializer of a field that is lowered to an assignment, an
+// `Object.defineProperty` call or a private-field initializer must be named explicitly. None of those perform the
+// NamedEvaluation of a class field, so this holds for every anonymous function definition, not only for an
+// anonymous class that is itself emitted through a temp. Auto-accessors keep the narrower check: their initializer
+// initializes the backing storage.
+func (tx *classFieldsTransformer) isNamedEvaluationOfLoweredField(property *ast.PropertyDeclaration) bool {
+	if ast.HasAccessorModifier(property.AsNode()) {
+		return isNamedEvaluationAnd(tx.EmitContext(), property.AsNode(), tx.isAnonymousClassNeedingAssignedName)
+	}
+	return isNamedEvaluationAnd(tx.EmitContext(), property.AsNode(), func(node *anonymousFunctionDefinition) bool {
+		return !ast.IsClassExpression(node) || !declaresStaticNameMethodOrAccessor(node)
+	})
+}
+
+// transformNamedEvaluationOfLoweredField assigns the field's name to the anonymous function definition in its
+// initializer. A computed name that is not inlined was evaluated when the class was defined and cached in the
+// generated name that the lowered field is written to (see transformPublicFieldInitializer), so that name is the
+// assigned name. Re-evaluating the computed name here would run its side effects again, and would cache it in a
+// variable of the constructor instead.
+func (tx *classFieldsTransformer) transformNamedEvaluationOfLoweredField(property *ast.PropertyDeclaration) *ast.PropertyDeclaration {
+	name := property.Name()
+	if !ast.IsComputedPropertyName(name) || ast.IsPropertyNameLiteral(name.Expression()) && !ast.IsIdentifier(name.Expression()) {
+		return transformNamedEvaluation(tx.EmitContext(), property.AsNode(), false /*ignoreEmptyStringLiteral*/, "" /*assignedName*/).AsPropertyDeclaration()
+	}
+
+	var assignedName *ast.Expression
+	if transformers.IsSimpleInlineableExpression(name.Expression()) {
+		assignedName = tx.Factory().NewPropKeyHelper(name.Expression().Clone(tx.Factory()))
+	} else {
+		assignedName = tx.Factory().NewGeneratedNameForNode(name)
+	}
+	initializer := finishTransformNamedEvaluation(tx.EmitContext(), property.Initializer, assignedName, false /*ignoreEmptyStringLiteral*/)
+	return tx.Factory().UpdatePropertyDeclaration(
+		property,
+		property.Modifiers(),
+		name,
+		nil, /*postfixToken*/
+		nil, /*typeNode*/
+		initializer,
+	).AsPropertyDeclaration()
+}
+
 func (tx *classFieldsTransformer) transformPropertyWorker(property *ast.PropertyDeclaration, receiver *ast.Expression) *ast.Expression {
 	// We generate a name here in order to reuse the value cached by the relocated computed name expression (which uses the same generated name)
 	emitAssignment := !tx.compilerOptions.GetUseDefineForClassFields()
 
-	if isNamedEvaluationAnd(tx.EmitContext(), property.AsNode(), tx.isAnonymousClassNeedingAssignedName) {
-		property = transformNamedEvaluation(tx.EmitContext(), property.AsNode(), false, "").AsPropertyDeclaration()
+	if tx.isNamedEvaluationOfLoweredField(property) {
+		property = tx.transformNamedEvaluationOfLoweredField(property)
 	}
 
 	propertyName := property.Name()
@@ -2951,7 +2996,8 @@ func (tx *classFieldsTransformer) visitInvalidSuperProperty(node *ast.Node) *ast
 // which caches the value of the result or the expression itself if the value is either unused or safe to
 // inline into multiple locations.
 // shouldHoist indicates whether the expression needs to be reused (i.e., for an initializer or a decorator).
-func (tx *classFieldsTransformer) getPropertyNameExpressionIfNeeded(name *ast.PropertyName, shouldHoist bool) *ast.Expression {
+// toPropertyKey indicates whether a cached value is converted to a property key.
+func (tx *classFieldsTransformer) getPropertyNameExpressionIfNeeded(name *ast.PropertyName, shouldHoist bool, toPropertyKey bool) *ast.Expression {
 	if !ast.IsComputedPropertyName(name) {
 		return nil
 	}
@@ -2976,6 +3022,9 @@ func (tx *classFieldsTransformer) getPropertyNameExpressionIfNeeded(name *ast.Pr
 			tx.EmitContext().AddLexicalDeclaration(generatedName)
 		} else {
 			tx.EmitContext().AddVariableDeclaration(generatedName)
+		}
+		if toPropertyKey {
+			expression = tx.Factory().NewPropKeyHelper(expression)
 		}
 		return tx.Factory().NewAssignmentExpression(generatedName, expression)
 	}

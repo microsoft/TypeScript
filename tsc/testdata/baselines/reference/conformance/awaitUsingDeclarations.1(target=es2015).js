@@ -172,6 +172,10 @@ var __disposeResources = (this && this.__disposeResources) || (function (Suppres
     var e = new Error(message);
     return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
 });
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
 var __await = (this && this.__await) || function (v) { return this instanceof __await ? (this.v = v, this) : new __await(v); }
 var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _arguments, generator) {
     if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
@@ -251,7 +255,7 @@ try {
     });
     C1 = class C1 {
         constructor() {
-            this.a = () => __awaiter(this, void 0, void 0, function* () {
+            this.a = __setFunctionName(() => __awaiter(this, void 0, void 0, function* () {
                 const env_21 = { stack: [], error: void 0, hasError: false };
                 try {
                     const d7 = __addDisposableResource(env_21, { [Symbol.asyncDispose]() {
@@ -267,7 +271,7 @@ try {
                     if (result_21)
                         yield result_21;
                 }
-            });
+            }), "a");
         }
         am() {
             return __awaiter(this, void 0, void 0, function* () {

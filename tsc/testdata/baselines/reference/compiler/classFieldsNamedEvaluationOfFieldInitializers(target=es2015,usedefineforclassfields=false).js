@@ -48,29 +48,31 @@ var __setFunctionName = (this && this.__setFunctionName) || function (f, name, p
 var _a, _C_p, _C_sp, _b, _c, _d, _e;
 class C {
     constructor() {
-        var _e, _f;
-        this.f = function () { };
-        this.g = () => { };
-        this.c = class {
-        };
-        this["s t"] = () => { };
-        this[1] = () => { };
-        this["lit"] = () => { };
-        this[_b] = () => { };
-        this[_c] = function () { };
-        _C_p.set(this, () => { });
-        // A computed key is evaluated once, when the class is defined.
-        this[_e] = (_f = class {
+        var _f, _g;
+        this.f = __setFunctionName(function () { }, "f");
+        this.g = __setFunctionName(() => { }, "g");
+        this.c = (_f = class {
             },
-            __setFunctionName(_f, _e),
-            _f.y = 1,
+            __setFunctionName(_f, "c"),
             _f);
+        this["s t"] = __setFunctionName(() => { }, "s t");
+        this[1] = __setFunctionName(() => { }, "1");
+        this["lit"] = __setFunctionName(() => { }, "lit");
+        this[_b] = __setFunctionName(() => { }, _b);
+        this[_c] = __setFunctionName(function () { }, _c);
+        _C_p.set(this, __setFunctionName(() => { }, "#p"));
+        // A computed key is evaluated once, when the class is defined.
+        this[_e] = (_g = class {
+            },
+            __setFunctionName(_g, _e),
+            _g.y = 1,
+            _g);
         // Not anonymous function definitions: nothing to name.
         this.named = function named() { };
         this.conditional = Math.random() ? () => { } : undefined;
     }
 }
-_a = C, _C_p = new WeakMap(), _b = k, _c = sym, _d = j, _e = i;
-C.s = function () { };
-C[_d] = () => { };
-_C_sp = { value: () => { } };
+_a = C, _C_p = new WeakMap(), _b = __propKey(k), _c = __propKey(sym), _d = __propKey(j), _e = __propKey(i);
+C.s = __setFunctionName(function () { }, "s");
+C[_d] = __setFunctionName(() => { }, _d);
+_C_sp = { value: __setFunctionName(() => { }, "#sp") };

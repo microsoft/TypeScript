@@ -34,26 +34,34 @@ export class Api<SecurityDataType = unknown> {
 
 //// [http-client.js]
 "use strict";
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.HttpClient = void 0;
 class HttpClient {
     constructor() {
-        this.request = () => {
+        this.request = __setFunctionName(() => {
             return '';
-        };
+        }, "request");
     }
 }
 exports.HttpClient = HttpClient;
 //// [Api.js]
 "use strict";
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Api = void 0;
 class Api {
     constructor(http) {
         this.http = http;
-        this.abc1 = () => this.http.request();
-        this.abc2 = () => this.http.request();
-        this.abc3 = () => this.http.request();
+        this.abc1 = __setFunctionName(() => this.http.request(), "abc1");
+        this.abc2 = __setFunctionName(() => this.http.request(), "abc2");
+        this.abc3 = __setFunctionName(() => this.http.request(), "abc3");
     }
 }
 exports.Api = Api;

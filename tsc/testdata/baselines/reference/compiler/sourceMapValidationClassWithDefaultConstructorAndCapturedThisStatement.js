@@ -8,10 +8,14 @@ class Greeter {
 
 //// [sourceMapValidationClassWithDefaultConstructorAndCapturedThisStatement.js]
 "use strict";
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
 class Greeter {
     constructor() {
         this.a = 10;
-        this.returnA = () => this.a;
+        this.returnA = __setFunctionName(() => this.a, "returnA");
     }
 }
 //# sourceMappingURL=sourceMapValidationClassWithDefaultConstructorAndCapturedThisStatement.js.map

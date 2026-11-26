@@ -12,6 +12,10 @@ class C {
 
 //// [typeOfThisInStaticMembers5.js]
 "use strict";
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
 var _a;
 class C {
     constructor(foo) {
@@ -19,4 +23,4 @@ class C {
     }
 }
 _a = C;
-C.create = () => new _a("yep");
+C.create = __setFunctionName(() => new _a("yep"), "create");

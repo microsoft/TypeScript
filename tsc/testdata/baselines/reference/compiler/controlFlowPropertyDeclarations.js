@@ -152,6 +152,10 @@ export class StyleParser {
 
 //// [controlFlowPropertyDeclarations.js]
 // Repro from ##8913
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
 var HTMLDOMPropertyConfig = require('react/lib/HTMLDOMPropertyConfig');
 // Populate property map with ReactJS's attribute and property mappings
 // TODO handle/use .Properties value eg: MUST_USE_PROPERTY is not HTML attr
@@ -242,7 +246,7 @@ export class HTMLtoJSX {
          *
          * @param {TextNode} node
          */
-        this._visitText = (node) => {
+        this._visitText = __setFunctionName((node) => {
             var parentTag = node.parentNode && node.parentNode.tagName.toLowerCase();
             if (parentTag === 'textarea' || parentTag === 'style') {
                 // Ignore text content of textareas and styles, as it will have already been moved
@@ -266,7 +270,7 @@ export class HTMLtoJSX {
                 }
             }
             this.output += text;
-        };
+        }, "_visitText");
     }
 }
 ;
@@ -276,11 +280,11 @@ export class HTMLtoJSX {
 export class StyleParser {
     constructor() {
         this.styles = {};
-        this.toJSXString = () => {
+        this.toJSXString = __setFunctionName(() => {
             for (var key in this.styles) {
                 if (!this.styles.hasOwnProperty(key)) {
                 }
             }
-        };
+        }, "toJSXString");
     }
 }

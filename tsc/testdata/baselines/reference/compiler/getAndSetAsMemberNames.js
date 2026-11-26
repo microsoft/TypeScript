@@ -25,6 +25,10 @@ class C5 {
 
 //// [getAndSetAsMemberNames.js]
 "use strict";
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
 class C1 {
     constructor() {
         this.get = 1;
@@ -44,7 +48,7 @@ class C4 {
 }
 class C5 {
     constructor() {
-        this.set = function () { return true; };
+        this.set = __setFunctionName(function () { return true; }, "set");
     }
     get() { return true; }
     set t(x) { }

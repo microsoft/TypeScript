@@ -60,11 +60,15 @@ var r4: typeof d;
 
 //// [typeQueryOnClass.js]
 "use strict";
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
 class C {
     constructor(x) {
         this.x = x;
         this.ia = 1;
-        this.ib = () => this.ia;
+        this.ib = __setFunctionName(() => this.ia, "ib");
     }
     static foo(x) { }
     static bar(x) { }
@@ -87,7 +91,7 @@ class C {
     }
 }
 C.sa = 1;
-C.sb = () => 1;
+C.sb = __setFunctionName(() => 1, "sb");
 var c;
 // BUG 820454
 var r1;

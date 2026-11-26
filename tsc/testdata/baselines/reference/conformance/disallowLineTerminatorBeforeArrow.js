@@ -78,6 +78,10 @@ namespace m {
 
 //// [disallowLineTerminatorBeforeArrow.js]
 "use strict";
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
 var f1 = () => { };
 var f2 = (x, y) => { };
 var f3 = (x, y, ...rest) => { };
@@ -109,7 +113,7 @@ var m;
 (function (m) {
     class City {
         constructor(x, thing = () => 100) {
-            this.m = () => 2 * 2 * 2;
+            this.m = __setFunctionName(() => 2 * 2 * 2, "m");
         }
     }
     let Enum;

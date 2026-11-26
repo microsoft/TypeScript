@@ -12,12 +12,16 @@ class Derived extends Base {
 
 //// [privateStaticMemberAccessibility.js]
 "use strict";
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
 class Base {
 }
 class Derived extends Base {
     constructor() {
         super(...arguments);
-        this.bing = () => Base.foo; // error
+        this.bing = __setFunctionName(() => Base.foo, "bing"); // error
     }
 }
 Derived.bar = Base.foo; // error

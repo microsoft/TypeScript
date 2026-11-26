@@ -30,6 +30,10 @@ class C<T extends Foo, U extends Foo> {
 //// [typeParameterAssignability3.js]
 "use strict";
 // type parameters are not assignable to one another unless directly or indirectly constrained to one another
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
 class Foo {
 }
 function foo(t, u) {
@@ -44,9 +48,9 @@ function foo(t, u) {
 }
 class C {
     constructor() {
-        this.r = () => {
+        this.r = __setFunctionName(() => {
             this.t = this.u; // error
             this.u = this.t; // error
-        };
+        }, "r");
     }
 }

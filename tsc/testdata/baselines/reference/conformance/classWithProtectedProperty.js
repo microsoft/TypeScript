@@ -32,16 +32,20 @@ class D extends C {
 //// [classWithProtectedProperty.js]
 "use strict";
 // accessing any protected outside the class is an error
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
 class C {
     constructor() {
         this.a = '';
         this.b = '';
-        this.d = () => '';
+        this.d = __setFunctionName(() => '', "d");
     }
     c() { return ''; }
     static f() { return ''; }
 }
-C.g = () => '';
+C.g = __setFunctionName(() => '', "g");
 class D extends C {
     method() {
         // No errors

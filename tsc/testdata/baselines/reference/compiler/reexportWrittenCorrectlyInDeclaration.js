@@ -41,11 +41,15 @@ var ThingB_1 = require("./ThingB");
 Object.defineProperty(exports, "ThingB", { enumerable: true, get: function () { return ThingB_1.ThingB; } });
 //// [Test.js]
 "use strict";
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Test = void 0;
 class Test {
     constructor() {
-        this.method = (input) => { };
+        this.method = __setFunctionName((input) => { }, "method");
     }
 }
 exports.Test = Test;

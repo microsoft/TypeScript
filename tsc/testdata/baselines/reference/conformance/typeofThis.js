@@ -147,6 +147,10 @@ class Tests12 {
 
 //// [typeofThis.js]
 "use strict";
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
 class Test {
     constructor() {
         this.data = {};
@@ -176,10 +180,10 @@ function Test4() {
 class Test5 {
     constructor() {
         this.no = 1;
-        this.f = () => {
+        this.f = __setFunctionName(() => {
             // should not capture this.
             let x = 1;
-        };
+        }, "f");
     }
 }
 var Test6;

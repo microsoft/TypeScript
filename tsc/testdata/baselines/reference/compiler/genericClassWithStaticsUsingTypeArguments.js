@@ -21,13 +21,17 @@ class Foo<T> {
 
 //// [genericClassWithStaticsUsingTypeArguments.js]
 "use strict";
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
 // Should be error to use 'T' in all declarations within Foo.
 class Foo {
     static f(xs) {
         return xs.reverse();
     }
 }
-Foo.a = (n) => { };
+Foo.a = __setFunctionName((n) => { }, "a");
 Foo.c = [];
 Foo.d = false || ((x) => x || undefined)(null);
-Foo.e = function (x) { return null; };
+Foo.e = __setFunctionName(function (x) { return null; }, "e");
