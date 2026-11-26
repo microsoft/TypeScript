@@ -190,35 +190,32 @@ const s6 = lib_1.N.f.inner;
 export declare const imported = 1;
 export declare let importedLet: string;
 //// [lib.d.ts]
-import { imported, importedLet } from "./dep";
+import { importedLet } from "./dep";
 export declare function loop(): void;
 export declare namespace loop {
-    export { k as last };
+    var last: string;
 }
-declare const shadowed = 1;
 export declare function shadow(): void;
 export declare namespace shadow {
-    export { shadowed as v };
+    var v: string;
 }
-declare const wide: string | number;
 export declare function narrowed(): void;
 export declare namespace narrowed {
-    export { wide as s };
+    var s: string;
 }
-declare const VERSION = "1.2.3";
 export declare function literal(): void;
 export declare namespace literal {
-    export { VERSION as version };
+    var version: string;
 }
-declare const initial: number;
 export declare function reassigned(): void;
 export declare namespace reassigned {
-    export { initial as n };
-    export var n: number;
+    var n: number;
+    var n: number;
 }
 export declare function fromImport(): void;
 export declare namespace fromImport {
-    export { imported as literal };
+    var _a: number;
+    export { _a as literal };
 }
 export declare function keepsImport(): void;
 export declare namespace keepsImport {
@@ -247,104 +244,14 @@ export declare namespace arrowHost {
 }
 declare const arrowValue: string;
 export declare namespace N {
-    function f(): void;
-    namespace f {
+    const k: number;
+    export function f(): void;
+    export namespace f {
         export { k };
-        export { k as inner };
+        export var inner: string;
     }
+    export {};
 }
 export {};
 //// [use.d.ts]
 export {};
-
-
-//// [DtsFileErrors]
-
-
-out/lib.d.ts(4,14): error TS2304: Cannot find name 'k'.
-out/lib.d.ts(24,14): error TS2484: Export declaration conflicts with exported declaration of 'n'.
-out/lib.d.ts(60,18): error TS2304: Cannot find name 'k'.
-out/lib.d.ts(61,18): error TS2304: Cannot find name 'k'.
-
-
-==== out/dep.d.ts (0 errors) ====
-    export declare const imported = 1;
-    export declare let importedLet: string;
-    
-==== out/lib.d.ts (4 errors) ====
-    import { imported, importedLet } from "./dep";
-    export declare function loop(): void;
-    export declare namespace loop {
-        export { k as last };
-                 ~
-!!! error TS2304: Cannot find name 'k'.
-    }
-    declare const shadowed = 1;
-    export declare function shadow(): void;
-    export declare namespace shadow {
-        export { shadowed as v };
-    }
-    declare const wide: string | number;
-    export declare function narrowed(): void;
-    export declare namespace narrowed {
-        export { wide as s };
-    }
-    declare const VERSION = "1.2.3";
-    export declare function literal(): void;
-    export declare namespace literal {
-        export { VERSION as version };
-    }
-    declare const initial: number;
-    export declare function reassigned(): void;
-    export declare namespace reassigned {
-        export { initial as n };
-                 ~~~~~~~~~~~~
-!!! error TS2484: Export declaration conflicts with exported declaration of 'n'.
-        export var n: number;
-    }
-    export declare function fromImport(): void;
-    export declare namespace fromImport {
-        export { imported as literal };
-    }
-    export declare function keepsImport(): void;
-    export declare namespace keepsImport {
-        export { importedLet as value };
-    }
-    declare let mutable: number;
-    export declare function keepsLet(): void;
-    export declare namespace keepsLet {
-        export { mutable as m };
-    }
-    declare class C {
-        x: number;
-    }
-    export declare function keepsClass(): void;
-    export declare namespace keepsClass {
-        export { C };
-    }
-    declare function helper(): number;
-    export declare function keepsFunction(): void;
-    export declare namespace keepsFunction {
-        export { helper };
-    }
-    export declare function arrowHost(): void;
-    export declare namespace arrowHost {
-        export { arrowValue as v };
-    }
-    declare const arrowValue: string;
-    export declare namespace N {
-        function f(): void;
-        namespace f {
-            export { k };
-                     ~
-!!! error TS2304: Cannot find name 'k'.
-            export { k as inner };
-                     ~
-!!! error TS2304: Cannot find name 'k'.
-        }
-    }
-    export {};
-    
-==== out/use.d.ts (0 errors) ====
-    export {};
-    

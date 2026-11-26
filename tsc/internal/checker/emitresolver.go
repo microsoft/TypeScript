@@ -367,6 +367,33 @@ func (r *EmitResolver) IsExpandoFunctionDeclaration(node *ast.Node) bool {
 	return r.IsExpandoFunctionDeclarationUnsafe(node)
 }
 
+// CanDeclareExpandoAssignmentAsAlias reports whether an expando assignment `host.name = id` can be declared
+// as `export { id as name }` in a namespace declared at location. That holds when the assignment is the only
+// declaration of the member, `id` resolves to the same symbol at location, and the declared type of that
+// symbol is the type of the member (it isn't narrowed, widened from a literal, or reassigned).
+func (r *EmitResolver) CanDeclareExpandoAssignmentAsAlias(node *ast.Node, location *ast.Node) bool {
+	if !ast.IsParseTreeNode(node) || !ast.IsBinaryExpression(node) || !ast.IsIdentifier(node.AsBinaryExpression().Right) {
+		return false
+	}
+	r.checkerMu.Lock()
+	defer r.checkerMu.Unlock()
+	c := r.checker
+	member := node.Symbol()
+	if member == nil || len(member.Declarations()) != 1 {
+		return false
+	}
+	right := node.AsBinaryExpression().Right
+	target := c.getResolvedSymbol(right)
+	if target == c.unknownSymbol {
+		return false
+	}
+	if c.resolveName(location, right.Text(), ast.SymbolFlagsValue|ast.SymbolFlagsExportValue, nil /*nameNotFoundMessage*/, false /*isUse*/, false /*excludeGlobals*/) != target {
+		return false
+	}
+	// An exported declaration resolves to its local symbol, which only carries ExportValue
+	return c.isTypeIdenticalTo(c.getTypeOfSymbol(member), c.getTypeOfSymbol(c.getExportSymbolOfValueSymbolIfExported(target)))
+}
+
 func (r *EmitResolver) isSymbolAccessible(symbol *ast.Symbol, enclosingDeclaration *ast.Node, meaning ast.SymbolFlags, shouldComputeAliasToMarkVisible bool) printer.SymbolAccessibilityResult {
 	return r.checker.IsSymbolAccessible(symbol, enclosingDeclaration, meaning, shouldComputeAliasToMarkVisible)
 }
