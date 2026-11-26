@@ -1,0 +1,211 @@
+//// [tests/cases/compiler/discriminatedUnionNonNullAccessNarrowing.ts] ////
+
+=== discriminatedUnionNonNullAccessNarrowing.ts ===
+// Discriminant narrowing should be consistent regardless of union size (#62511).
+// Large has enough constituents to be narrowed through a constituent map; Small does not.
+
+type Small =
+>Small : Small
+
+    | { type: "1" }
+>type : "1"
+
+    | { type: "2" };
+>type : "2"
+
+type Large =
+>Large : Large
+
+    | { type: "1" }
+>type : "1"
+
+    | { type: "2" }
+>type : "2"
+
+    | { type: "3" }
+>type : "3"
+
+    | { type: "4" }
+>type : "4"
+
+    | { type: "5" }
+>type : "5"
+
+    | { type: "6" }
+>type : "6"
+
+    | { type: "7" }
+>type : "7"
+
+    | { type: "8" }
+>type : "8"
+
+    | { type: "9" }
+>type : "9"
+
+    | { type: "10" };
+>type : "10"
+
+declare const small: Small | undefined;
+>small : Small | undefined
+
+declare const large: Large | undefined;
+>large : Large | undefined
+
+if (small!.type === "1") {
+>small!.type === "1" : boolean
+>small!.type : "1" | "2"
+>small! : Small
+>small : Small | undefined
+>type : "1" | "2"
+>"1" : "1"
+
+    small.type;
+>small.type : "1"
+>small : { type: "1"; } | undefined
+>type : "1"
+}
+if (large!.type === "1") {
+>large!.type === "1" : boolean
+>large!.type : "1" | "10" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
+>large! : Large
+>large : Large | undefined
+>type : "1" | "10" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
+>"1" : "1"
+
+    large.type;
+>large.type : "1"
+>large : { type: "1"; } | undefined
+>type : "1"
+}
+
+declare const smallNullOrVoid: Small | null | void;
+>smallNullOrVoid : void | Small | null
+
+declare const largeNullOrVoid: Large | null | void;
+>largeNullOrVoid : void | Large | null
+
+if (smallNullOrVoid!.type === "1" && smallNullOrVoid !== null) {
+>smallNullOrVoid!.type === "1" && smallNullOrVoid !== null : boolean
+>smallNullOrVoid!.type === "1" : boolean
+>smallNullOrVoid!.type : "1" | "2"
+>smallNullOrVoid! : Small
+>smallNullOrVoid : void | Small | null
+>type : "1" | "2"
+>"1" : "1"
+>smallNullOrVoid !== null : boolean
+>smallNullOrVoid : void | { type: "1"; } | null
+
+    smallNullOrVoid.type;
+>smallNullOrVoid.type : any
+>smallNullOrVoid : void | { type: "1"; }
+>type : any
+}
+if (largeNullOrVoid!.type === "1" && largeNullOrVoid !== null) {
+>largeNullOrVoid!.type === "1" && largeNullOrVoid !== null : boolean
+>largeNullOrVoid!.type === "1" : boolean
+>largeNullOrVoid!.type : "1" | "10" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
+>largeNullOrVoid! : Large
+>largeNullOrVoid : void | Large | null
+>type : "1" | "10" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
+>"1" : "1"
+>largeNullOrVoid !== null : boolean
+>largeNullOrVoid : void | { type: "1"; } | null
+
+    largeNullOrVoid.type;
+>largeNullOrVoid.type : any
+>largeNullOrVoid : void | { type: "1"; }
+>type : any
+}
+
+declare const smallWithUndefinedTag: Small | { type: undefined } | undefined;
+>smallWithUndefinedTag : { type: undefined; } | Small | undefined
+>type : undefined
+
+declare const largeWithUndefinedTag: Large | { type: undefined } | undefined;
+>largeWithUndefinedTag : { type: undefined; } | Large | undefined
+>type : undefined
+
+if (smallWithUndefinedTag?.type === undefined) {
+>smallWithUndefinedTag?.type === undefined : boolean
+>smallWithUndefinedTag?.type : "1" | "2" | undefined
+>smallWithUndefinedTag : { type: undefined; } | Small | undefined
+>type : "1" | "2" | undefined
+>undefined : undefined
+
+    smallWithUndefinedTag.type;
+>smallWithUndefinedTag.type : undefined
+>smallWithUndefinedTag : { type: undefined; } | undefined
+>type : undefined
+}
+if (largeWithUndefinedTag?.type === undefined) {
+>largeWithUndefinedTag?.type === undefined : boolean
+>largeWithUndefinedTag?.type : "1" | "10" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | undefined
+>largeWithUndefinedTag : { type: undefined; } | Large | undefined
+>type : "1" | "10" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | undefined
+>undefined : undefined
+
+    largeWithUndefinedTag.type;
+>largeWithUndefinedTag.type : undefined
+>largeWithUndefinedTag : { type: undefined; } | undefined
+>type : undefined
+}
+
+if (small?.type === "1") {
+>small?.type === "1" : boolean
+>small?.type : "1" | "2" | undefined
+>small : Small | undefined
+>type : "1" | "2" | undefined
+>"1" : "1"
+
+    small.type;
+>small.type : "1"
+>small : { type: "1"; }
+>type : "1"
+}
+if (large?.type === "1") {
+>large?.type === "1" : boolean
+>large?.type : "1" | "10" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | undefined
+>large : Large | undefined
+>type : "1" | "10" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | undefined
+>"1" : "1"
+
+    large.type;
+>large.type : "1"
+>large : { type: "1"; }
+>type : "1"
+}
+
+const smallTag = small?.type;
+>smallTag : "1" | "2" | undefined
+>small?.type : "1" | "2" | undefined
+>small : Small | undefined
+>type : "1" | "2" | undefined
+
+if (smallTag === "1") {
+>smallTag === "1" : boolean
+>smallTag : "1" | "2" | undefined
+>"1" : "1"
+
+    small.type;
+>small.type : "1"
+>small : { type: "1"; } | undefined
+>type : "1"
+}
+const largeTag = large?.type;
+>largeTag : "1" | "10" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | undefined
+>large?.type : "1" | "10" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | undefined
+>large : Large | undefined
+>type : "1" | "10" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | undefined
+
+if (largeTag === "1") {
+>largeTag === "1" : boolean
+>largeTag : "1" | "10" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | undefined
+>"1" : "1"
+
+    large.type;
+>large.type : "1"
+>large : { type: "1"; } | undefined
+>type : "1"
+}
+

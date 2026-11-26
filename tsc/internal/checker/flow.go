@@ -707,6 +707,14 @@ func (c *Checker) narrowTypeByDiscriminantProperty(t *Type, access *ast.Node, op
 				candidate := c.getConstituentTypeForKeyType(t, c.getTypeOfExpression(value))
 				if candidate != nil {
 					if assumeTrue && operator == ast.KindEqualsEqualsEqualsToken || !assumeTrue && operator == ast.KindExclamationEqualsEqualsToken {
+						// Nullable and void constituents have no key property, so they are absent from the constituent
+						// map, but the general discriminant narrowing logic keeps them. Preserve them as well, checking
+						// membership by binary search so that the fast path stays sublinear.
+						for _, nullableType := range []*Type{c.undefinedType, c.missingType, c.optionalType, c.nullType, c.voidType} {
+							if containsType(t.Types(), nullableType) {
+								candidate = c.getUnionType([]*Type{candidate, nullableType})
+							}
+						}
 						return candidate
 					}
 					if propType := c.getTypeOfPropertyOfType(candidate, keyPropertyName); propType != nil && isUnitType(propType) {
