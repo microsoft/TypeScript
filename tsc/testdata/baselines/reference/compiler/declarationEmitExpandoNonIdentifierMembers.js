@@ -98,35 +98,42 @@ const n6 = identifiersOnly.a + identifiersOnly.b;
 
 
 //// [lib.d.ts]
-export declare function handler(): number;
-export declare namespace handler {
-    var retries: number;
-}
-export declare function numeric(): void;
-export declare namespace numeric {
-    var a: number;
-}
-export declare function spaced(): void;
-export declare namespace spaced {
-    var a: number;
-}
-export declare function withSymbol(): void;
-export declare namespace withSymbol {
-    var a: number;
-}
-export declare function reservedAndNonIdentifier(): void;
-export declare namespace reservedAndNonIdentifier {
-    var _a: number;
-    export { _a as default };
-}
-export declare function constKey(): void;
-export declare namespace constKey {
-    var a: number;
-}
-declare function local(): void;
-declare namespace local {
-    var a: number;
-}
+export declare const handler: {
+    (): number;
+    retries: number;
+    "x-request-id": string;
+};
+export declare const numeric: {
+    (): void;
+    a: number;
+    3: string;
+};
+export declare const spaced: {
+    (): void;
+    a: number;
+    "a b": number;
+};
+declare const sym: unique symbol;
+export declare const withSymbol: {
+    (): void;
+    a: number;
+    [sym]: boolean;
+};
+export declare const reservedAndNonIdentifier: {
+    (): void;
+    default: number;
+    "b-c": number;
+};
+export declare const constKey: {
+    (): void;
+    a: number;
+    "d-e": number;
+};
+declare const local: {
+    (): void;
+    a: number;
+    "f-g": number;
+};
 export default local;
 export declare function identifiersOnly(): void;
 export declare namespace identifiersOnly {
@@ -134,9 +141,10 @@ export declare namespace identifiersOnly {
     var b: number;
 }
 //// [lib2.d.ts]
-export declare function handler(): number;
-export declare namespace handler {
-    var retries: number;
-}
+export declare const handler: {
+    (): number;
+    retries: number;
+    "x-request-id": string;
+};
 //// [use.d.ts]
 export {};
