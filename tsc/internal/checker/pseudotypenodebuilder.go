@@ -2,6 +2,7 @@ package checker
 
 import (
 	"github.com/microsoft/TypeScript/tsc/internal/ast"
+	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/debug"
 	"github.com/microsoft/TypeScript/tsc/internal/nodebuilder"
 	"github.com/microsoft/TypeScript/tsc/internal/printer"
@@ -421,16 +422,29 @@ func (b *NodeBuilderImpl) pseudoTypeEquivalentToType(t *pseudochecker.PseudoType
 			return false
 		}
 		targetProps := b.ch.getPropertiesOfType(undefinedStripped)
-		// Count total declarations across all target prop symbols to handle getter/setter pairs,
-		// which are two elements in pt.Elements but only one symbol in targetProps.
-		targetDeclCount := 0
+		// Index signature components also represent computed object members. Count each
+		// declaration once, since a numeric key can contribute to multiple indexes.
+		targetDeclarations := make(map[*ast.Node]bool)
 		for _, prop := range targetProps {
-			targetDeclCount += len(prop.Declarations())
+			for _, declaration := range prop.Declarations() {
+				targetDeclarations[declaration] = true
+			}
 		}
-		if len(pt.Elements) != targetDeclCount {
+		for _, info := range b.ch.getIndexInfosOfType(undefinedStripped) {
+			for _, declaration := range info.components {
+				targetDeclarations[declaration] = true
+			}
+		}
+		if len(pt.Elements) != len(targetDeclarations) {
 			return false
 		}
+		hasComputedNames := core.Some(pt.Elements, func(e *pseudochecker.PseudoObjectElement) bool {
+			return ast.IsComputedPropertyName(e.Name) && ast.IsEntityNameExpression(e.Name.Expression())
+		})
 		for _, e := range pt.Elements {
+			if ast.IsComputedPropertyName(e.Name) && ast.IsEntityNameExpression(e.Name.Expression()) && !b.isTriviallySerializableComputedName(e.Name.Parent) {
+				return false
+			}
 			var targetProp *ast.Symbol
 			elemSymbol := e.Name.Parent.Symbol()
 			if elemSymbol != nil {
@@ -440,10 +454,13 @@ func (b *NodeBuilderImpl) pseudoTypeEquivalentToType(t *pseudochecker.PseudoType
 				// Name lookup failed or returned no result; search target properties
 				// for one whose declaration name node matches the one we have
 				for _, prop := range targetProps {
-					if prop.ValueDeclaration() != nil && prop.ValueDeclaration().Name() == e.Name {
+					if core.Some(prop.Declarations(), func(d *ast.Node) bool { return d.Name() == e.Name }) {
 						targetProp = prop
 						break
 					}
+				}
+				if targetProp == nil && targetDeclarations[e.Name.Parent] && undefinedStripped.objectFlags&ObjectFlagsInstantiated == 0 {
+					targetProp = b.ch.getSymbolOfDeclaration(e.Name.Parent)
 				}
 				if targetProp == nil {
 					if reportErrors {
@@ -464,7 +481,7 @@ func (b *NodeBuilderImpl) pseudoTypeEquivalentToType(t *pseudochecker.PseudoType
 			switch e.Kind {
 			case pseudochecker.PseudoObjectElementKindPropertyAssignment:
 				d := e.AsPseudoPropertyAssignment()
-				if !b.pseudoTypeEquivalentToType(d.Type, propType, e.Optional, false) {
+				if hasComputedNames && d.Type.Kind == pseudochecker.PseudoTypeKindInferred && len(d.Type.AsPseudoTypeInferred().ErrorNodes) > 0 || !b.pseudoTypeEquivalentToType(d.Type, propType, e.Optional, false) {
 					if reportErrors {
 						if d.Type.Kind == pseudochecker.PseudoTypeKindInferred && len(d.Type.AsPseudoTypeInferred().ErrorNodes) > 0 {
 							// Re-report the fine-grained error nodes; the recursive call used reportErrors=false

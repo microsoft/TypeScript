@@ -25,7 +25,9 @@ export declare namespace Foo {
     }
 }
 export type Type = {
-    x?: {};
+    x?: {
+        [Foo.Enum]: 0;
+    };
 };
 //// [index.d.ts]
 export declare const foo: {

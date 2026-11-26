@@ -361,6 +361,14 @@ func (ch *PseudoChecker) typeFromObjectLiteral(node *ast.ObjectLiteralExpression
 
 // roughly analogous to typeFromObjectLiteralAccessor in strada
 func (ch *PseudoChecker) getAccessorMember(accessor *ast.Node, name *ast.Node) *PseudoObjectElement {
+	if ast.IsComputedPropertyName(name) && ast.IsEntityNameExpression(name.Expression()) {
+		// Computed accessors cannot be paired using their bound symbols alone. Preserve each
+		// accessor so the declaration checker can resolve the computed names and pair them.
+		if ast.IsGetAccessorDeclaration(accessor) {
+			return NewPseudoGetAccessor(accessor, name, false, ch.typeFromAccessor(accessor))
+		}
+		return NewPseudoSetAccessor(accessor, name, false, ch.cloneParameters(accessor.ParameterList())[0])
+	}
 	allAccessors := ast.GetAllAccessorDeclarationsForDeclaration(accessor, accessor.Symbol().Declarations()) // TODO: node preservation for late-bound accessor pairs?
 
 	// TODO: handle pseudo-annotations from get accessor return positions?
@@ -402,7 +410,7 @@ func (ch *PseudoChecker) getAccessorMember(accessor *ast.Node, name *ast.Node) *
 
 // canGetTypeFromObjectLiteral checks whether an object literal can be typed by the pseudochecker.
 // Returns nil if the object can be typed, or a slice of error nodes (shorthand/spread properties,
-// non-literal computed names) that prevent typing.
+// computed names that cannot be preserved) that prevent typing.
 func (ch *PseudoChecker) canGetTypeFromObjectLiteral(node *ast.ObjectLiteralExpression) []*ast.Node {
 	if node.Properties == nil || len(node.Properties.Nodes) == 0 {
 		return nil // empty object, ok
@@ -427,7 +435,7 @@ func (ch *PseudoChecker) canGetTypeFromObjectLiteral(node *ast.ObjectLiteralExpr
 		}
 		if e.Name().Kind == ast.KindComputedPropertyName {
 			expression := e.Name().Expression()
-			if !ast.IsPrimitiveLiteralValue(expression, false) {
+			if !ast.IsPrimitiveLiteralValue(expression, false) && !ast.IsEntityNameExpression(expression) {
 				errorNodes = append(errorNodes, e.Name())
 			}
 		}

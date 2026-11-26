@@ -29,7 +29,7 @@ export const Mixer = Mix(class {
 //// [classNonUniqueSymbolMethodHasSymbolIndexer.d.ts]
 declare const a: symbol;
 export declare class A {
-    [a]: () => number;
+    [a](): number;
 }
 export declare const Mixer: {
     new (): {
