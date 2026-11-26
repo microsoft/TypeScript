@@ -1330,7 +1330,7 @@ func (tx *CommonJSModuleTransformer) visitTopLevelNestedTryStatement(node *ast.T
 func (tx *CommonJSModuleTransformer) visitTopLevelNestedCatchClause(node *ast.CatchClause) *ast.Node {
 	return tx.Factory().UpdateCatchClause(
 		node,
-		node.VariableDeclaration,
+		tx.Visitor().VisitNode(node.VariableDeclaration),
 		tx.topLevelNestedVisitor.VisitNode(node.Block),
 	)
 }
