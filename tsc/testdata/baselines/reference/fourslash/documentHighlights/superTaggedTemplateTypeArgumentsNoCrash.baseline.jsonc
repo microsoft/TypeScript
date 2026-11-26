@@ -1,0 +1,36 @@
+// === documentHighlights ===
+// === /main.ts ===
+// class SomeBase<A, B, C> {
+//     a!: A; b!: B; c!: C;
+// }
+// class SomeDerived</*HIGHLIGHTS*/[|T|]> extends SomeBase<number, string, [|T|]> {
+//     constructor() {
+//         super<number, string, [|T|]> `hello world`;
+//     }
+// }
+
+
+
+// === documentHighlights ===
+// === /main.ts ===
+// class SomeBase<A, B, C> {
+//     a!: A; b!: B; c!: C;
+// }
+// class SomeDerived<T> extends SomeBase<number, string, T> {
+//     constructor() {
+//         /*HIGHLIGHTS*/[|super|]<number, string, T> `hello world`;
+//     }
+// }
+
+
+
+// === documentHighlights ===
+// === /main.ts ===
+// class SomeBase<A, B, C> {
+//     a!: A; b!: B; c!: C;
+// }
+// class SomeDerived<[|T|]> extends SomeBase<number, string, [|T|]> {
+//     constructor() {
+//         super<number, string, /*HIGHLIGHTS*/[|T|]> `hello world`;
+//     }
+// }
