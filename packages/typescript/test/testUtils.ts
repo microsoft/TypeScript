@@ -51,7 +51,8 @@ function createVDirectory(name: string): VDirectory {
     return {
         type: "directory",
         name,
-        children: Object.create(null) as Record<string, VNode>,
+        // eslint-disable-next-line no-restricted-syntax -- Directory entries need a null-prototype dictionary.
+        children: Object.create(/*o*/ null) as Record<string, VNode>,
     };
 }
 
@@ -64,7 +65,7 @@ export function createVirtualFileSystem(
     const content = new Map<string, string>();
 
     for (const [rawFilePath, data] of Object.entries(files)) {
-        const filePath = toRootedFilePath(rawFilePath, undefined);
+        const filePath = toRootedFilePath(rawFilePath, /*currentDirectory*/ undefined);
         const key = getKey(filePath);
         if (content.has(key)) {
             throw new Error(`Duplicate virtual filesystem path: ${filePath}`);
@@ -124,7 +125,7 @@ export function createVirtualFileSystem(
             else if (current.children[key].type !== "directory") {
                 throw new Error(`Cannot create directory: a file already exists at "/${segments.join("/")}"`);
             }
-            current = current.children[key] as VDirectory;
+            current = current.children[key];
         }
         return current;
     }

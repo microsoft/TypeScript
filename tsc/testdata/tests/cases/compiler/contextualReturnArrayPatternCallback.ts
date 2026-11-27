@@ -1,3 +1,4 @@
+// @checkOrder: default, typesfirst
 // @strict: true
 
 interface Matcher<Input, Value = unknown> {

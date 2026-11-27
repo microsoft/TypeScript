@@ -56,7 +56,7 @@ function makeSourceFileWithLargeList(elementCount: number): Uint8Array {
     const array = createArrayLiteralExpression(elements);
     const stmt: Statement = createExpressionStatement(array);
     const eof = createToken(SyntaxKind.EndOfFile);
-    const fileName = toRootedFilePath("/bench.ts", undefined);
+    const fileName = toRootedFilePath("/bench.ts", /*currentDirectory*/ undefined);
     const sf: SourceFile = createSourceFile(
         [stmt],
         eof,
@@ -100,6 +100,7 @@ export function runBenchmarks(options?: { filter?: string; size?: string; }): vo
         .add("index access (list[i])", () => {
             const list = getElementsList(encoded);
             let sum = 0;
+            // eslint-disable-next-line @typescript-eslint/prefer-for-of -- Benchmark indexed access.
             for (let i = 0; i < list.length; i++) {
                 sum += list[i].pos;
             }
@@ -109,7 +110,7 @@ export function runBenchmarks(options?: { filter?: string; size?: string; }): vo
             const list = getElementsList(encoded);
             let sum = 0;
             for (let i = 0; i < list.length; i++) {
-                sum += list.at(i)!.pos;
+                sum += list.at(i).pos;
             }
             if (sum < 0) throw new Error("unreachable");
         })

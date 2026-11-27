@@ -1771,7 +1771,7 @@ func (r *resolutionState) tryAddingExtensions(extensionless tspath.FileNameStem,
 		}
 		return continueSearching()
 	default:
-		isExtraExtension := slices.Contains(r.resolver.extraExtensions, originalExtension)
+		isExtraExtension := r.extensions&extensionsTypeScript != 0 && slices.Contains(r.resolver.extraExtensions, originalExtension)
 		if isExtraExtension {
 			// A fully specified import of an extraExtension resolves directly to the file.
 			if resolved := r.tryExtension(originalExtension, extensionless, false); !resolved.shouldContinueSearching() {

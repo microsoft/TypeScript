@@ -33,7 +33,7 @@ func (componentHandler) HandleRequest(ctx context.Context, method string, params
 	}
 }
 
-func transformComponent(content string) (string, json.Value, error) {
+func transformComponent(content string) (string, []contentmapper.SpanMapSegment, error) {
 	var virtual strings.Builder
 	var segments []spanmap.Segment
 
@@ -117,11 +117,7 @@ func transformComponent(content string) (string, json.Value, error) {
 	}
 	writeAnchored("export default {};\n", 0, spanmap.FeatureDefinition|spanmap.FeatureReferences)
 
-	mappings, err := spanmap.New(segments).Marshal()
-	if err != nil {
-		return "", nil, err
-	}
-	return virtual.String(), json.Value(mappings), nil
+	return virtual.String(), spanmap.New(segments).Tuples(), nil
 }
 
 func componentNameRange(content string) (start, end int, ok bool) {

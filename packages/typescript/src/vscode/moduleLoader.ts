@@ -10,6 +10,12 @@ export interface TypeScriptModuleLoader {
     importModule<K extends string>(exportPath: K): Promise<APIModules[K]>;
 }
 
+function hasPackageName(value: unknown): value is { readonly name: string; } {
+    return typeof value === "object" && value != undefined
+        && Object.hasOwn(value, "name")
+        && typeof (value as { readonly name?: unknown; }).name === "string";
+}
+
 /**
  * Loads the selected installation's API modules in this process.
  * Pass the SDK's packageJsonPath through your server's initialization options.
@@ -29,7 +35,7 @@ export function createTypeScriptModuleLoader(packageJsonPath: string): TypeScrip
 
         const manifestPath = await fs.realpath(packageJsonPath);
         const manifest: unknown = JSON.parse(await fs.readFile(manifestPath, "utf8"));
-        if (!manifest || typeof manifest !== "object" || !("name" in manifest) || typeof manifest.name !== "string") {
+        if (!hasPackageName(manifest)) {
             throw new Error(`TypeScript API package manifest at '${packageJsonPath}' does not contain a package name.`);
         }
         const require = createRequire(manifestPath);

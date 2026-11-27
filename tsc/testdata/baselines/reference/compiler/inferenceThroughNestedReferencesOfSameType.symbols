@@ -1,0 +1,66 @@
+//// [tests/cases/compiler/inferenceThroughNestedReferencesOfSameType.ts] ////
+
+=== inferenceThroughNestedReferencesOfSameType.ts ===
+// Inferring from Promise<C<{ a: 1 }>> to Promise<AsyncIterable<T>> reaches
+// Promise<IteratorResult<T>>, through the next method of AsyncIterator<T>.
+// That Promise is not built from the first one, so inference must not stop
+// there as though it were expanding without end.
+
+interface C<T> {
+>C : Symbol(C, Decl(inferenceThroughNestedReferencesOfSameType.ts, 0, 0))
+>T : Symbol(T, Decl(inferenceThroughNestedReferencesOfSameType.ts, 5, 12))
+
+    [Symbol.asyncIterator](): C<T>;
+>[Symbol.asyncIterator] : Symbol(C[Symbol.asyncIterator], Decl(inferenceThroughNestedReferencesOfSameType.ts, 5, 16))
+>Symbol.asyncIterator : Symbol(SymbolConstructor.asyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>asyncIterator : Symbol(SymbolConstructor.asyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>C : Symbol(C, Decl(inferenceThroughNestedReferencesOfSameType.ts, 0, 0))
+>T : Symbol(T, Decl(inferenceThroughNestedReferencesOfSameType.ts, 5, 12))
+
+    next(): Promise<IteratorResult<T>>;
+>next : Symbol(C.next, Decl(inferenceThroughNestedReferencesOfSameType.ts, 6, 35))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>IteratorResult : Symbol(IteratorResult, Decl(lib.es2015.iterable.d.ts, --, --))
+>T : Symbol(T, Decl(inferenceThroughNestedReferencesOfSameType.ts, 5, 12))
+}
+
+declare function g<T>(x: Promise<AsyncIterable<T>>): T;
+>g : Symbol(g, Decl(inferenceThroughNestedReferencesOfSameType.ts, 8, 1))
+>T : Symbol(T, Decl(inferenceThroughNestedReferencesOfSameType.ts, 10, 19))
+>x : Symbol(x, Decl(inferenceThroughNestedReferencesOfSameType.ts, 10, 22))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>AsyncIterable : Symbol(AsyncIterable, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>T : Symbol(T, Decl(inferenceThroughNestedReferencesOfSameType.ts, 10, 19))
+>T : Symbol(T, Decl(inferenceThroughNestedReferencesOfSameType.ts, 10, 19))
+
+declare const c: Promise<C<{ a: 1 }>>;
+>c : Symbol(c, Decl(inferenceThroughNestedReferencesOfSameType.ts, 11, 13))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>C : Symbol(C, Decl(inferenceThroughNestedReferencesOfSameType.ts, 0, 0))
+>a : Symbol(a, Decl(inferenceThroughNestedReferencesOfSameType.ts, 11, 28))
+
+const n = g(c);
+>n : Symbol(n, Decl(inferenceThroughNestedReferencesOfSameType.ts, 12, 5))
+>g : Symbol(g, Decl(inferenceThroughNestedReferencesOfSameType.ts, 8, 1))
+>c : Symbol(c, Decl(inferenceThroughNestedReferencesOfSameType.ts, 11, 13))
+
+declare function follow<T>(open: () => Promise<AsyncIterable<T>>, onFrame: (frame: T) => void): void;
+>follow : Symbol(follow, Decl(inferenceThroughNestedReferencesOfSameType.ts, 12, 15))
+>T : Symbol(T, Decl(inferenceThroughNestedReferencesOfSameType.ts, 14, 24))
+>open : Symbol(open, Decl(inferenceThroughNestedReferencesOfSameType.ts, 14, 27))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>AsyncIterable : Symbol(AsyncIterable, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>T : Symbol(T, Decl(inferenceThroughNestedReferencesOfSameType.ts, 14, 24))
+>onFrame : Symbol(onFrame, Decl(inferenceThroughNestedReferencesOfSameType.ts, 14, 65))
+>frame : Symbol(frame, Decl(inferenceThroughNestedReferencesOfSameType.ts, 14, 76))
+>T : Symbol(T, Decl(inferenceThroughNestedReferencesOfSameType.ts, 14, 24))
+
+follow(() => c, frame => frame.a);
+>follow : Symbol(follow, Decl(inferenceThroughNestedReferencesOfSameType.ts, 12, 15))
+>c : Symbol(c, Decl(inferenceThroughNestedReferencesOfSameType.ts, 11, 13))
+>frame : Symbol(frame, Decl(inferenceThroughNestedReferencesOfSameType.ts, 15, 15))
+>frame.a : Symbol(a, Decl(inferenceThroughNestedReferencesOfSameType.ts, 11, 28))
+>frame : Symbol(frame, Decl(inferenceThroughNestedReferencesOfSameType.ts, 15, 15))
+>a : Symbol(a, Decl(inferenceThroughNestedReferencesOfSameType.ts, 11, 28))
+

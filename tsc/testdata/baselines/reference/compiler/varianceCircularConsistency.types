@@ -1,0 +1,66 @@
+//// [tests/cases/compiler/varianceCircularConsistency.ts] ////
+
+=== varianceCircularConsistency.ts ===
+// Variances of these mutually recursive generics must not depend on values
+// measured mid-cycle. Assigning `e` to `EntryPoint<any, any>` must agree with
+// assigning `e.root` to `EntryPoint<any, any>["root"]`.
+
+interface Query {}
+type Component<P> = P | ((props: P) => void);
+>Component : Component<P>
+>props : P
+
+interface Ref<T> {
+    value: T;
+>value : T
+}
+interface Rep<Params, Queries extends Record<string, Query>, Nested, Runtime, Extra> extends Readonly<{
+    root: Ref<EntryPointComponent<Queries, Nested, Runtime>>;
+>root : Ref<EntryPointComponent<Queries, Nested, Runtime, {}>>
+
+}> {}
+type Preloaded<T> = T extends Record<string, Rep<any, any, any, any, any>> ? { [K in keyof T]: Unwrap<GetComponent<T>> } : never;
+>Preloaded : Preloaded<T>
+
+interface Props<Queries, Nested, Runtime, Extra> extends Readonly<{
+    nested: Preloaded<Nested>;
+>nested : Preloaded<Nested>
+
+    queries: Queries;
+>queries : Queries
+
+}> {}
+type EntryPointComponent<Queries extends Record<string, Query>, Nested, Runtime, Extra = {}> = Component<Props<Queries, Nested, Runtime, Extra>>;
+>EntryPointComponent : EntryPointComponent<Queries, Nested, Runtime, Extra>
+
+type Unwrap<C> = C extends EntryPointComponent<infer Q, infer N, infer R> ? Readonly<{}> : {};
+>Unwrap : Unwrap<C>
+
+type EntryPoint<C, Params> = Rep<Params, C extends EntryPointComponent<infer Q, any, any> ? Q : never, never, never, never>;
+>EntryPoint : EntryPoint<C, Params>
+
+type GetComponent<T> = T extends EntryPoint<infer C, infer P> ? C : never;
+>GetComponent : GetComponent<T>
+
+declare const c: EntryPointComponent<{ q: { readonly variables: { slug: string } } }, {}, { onClick: () => void }>;
+>c : EntryPointComponent<{ q: { readonly variables: { slug: string; }; }; }, {}, { onClick: () => void; }, {}>
+>q : { readonly variables: { slug: string; }; }
+>variables : { slug: string; }
+>slug : string
+>onClick : () => void
+
+declare const e: EntryPoint<typeof c, { slug: string }>;
+>e : EntryPoint<EntryPointComponent<{ q: { readonly variables: { slug: string; }; }; }, {}, { onClick: () => void; }, {}>, { slug: string; }>
+>c : EntryPointComponent<{ q: { readonly variables: { slug: string; }; }; }, {}, { onClick: () => void; }, {}>
+>slug : string
+
+const whole: EntryPoint<any, any> = e;
+>whole : EntryPoint<any, any>
+>e : EntryPoint<EntryPointComponent<{ q: { readonly variables: { slug: string; }; }; }, {}, { onClick: () => void; }, {}>, { slug: string; }>
+
+const root: EntryPoint<any, any>["root"] = e.root;
+>root : Ref<EntryPointComponent<Record<string, Query>, never, never, {}>>
+>e.root : Ref<EntryPointComponent<{ q: { readonly variables: { slug: string; }; }; }, never, never, {}>>
+>e : EntryPoint<EntryPointComponent<{ q: { readonly variables: { slug: string; }; }; }, {}, { onClick: () => void; }, {}>, { slug: string; }>
+>root : Ref<EntryPointComponent<{ q: { readonly variables: { slug: string; }; }; }, never, never, {}>>
+

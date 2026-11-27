@@ -6,16 +6,16 @@
 // Source: test/async/astnav.test.ts
 // Regenerate: npm run generate (from packages/typescript)
 //
+import type {
+    Node,
+    SourceFile,
+} from "@typescript/typescript/ast";
 import {
     findNextToken,
     findPrecedingToken,
     formatSyntaxKind,
     getTokenAtPosition,
     getTouchingPropertyName,
-} from "@typescript/typescript/ast";
-import type {
-    Node,
-    SourceFile,
 } from "@typescript/typescript/ast";
 import { API } from "@typescript/typescript/sync";
 import assert from "node:assert";
@@ -76,7 +76,7 @@ function toTokenInfo(node: Node): { kind: string; pos: number; end: number; } {
 // Test configuration
 // ---------------------------------------------------------------------------
 
-const repoRoot = resolve(import.meta.dirname!, "..", "..", "..", "..");
+const repoRoot = resolve(import.meta.dirname, "..", "..", "..", "..");
 const testFile = resolve(repoRoot, "tsc/testdata/fixtures/services/mapCode.ts");
 const baselineDir = resolve(repoRoot, "tsc/testdata/baselines/reference/astnav");
 

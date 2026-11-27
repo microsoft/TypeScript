@@ -59,7 +59,8 @@ function diagnosticPrefix(diagnostic: Diagnostic): string {
     return diagnostic.source || "TS";
 }
 
-function flattenDiagnosticMessage(diagnostic: Diagnostic, newLine: string, indentLevel = 0): string {
+/** Flattens a diagnostic and its message chain, indenting each nested message by two spaces. */
+export function flattenDiagnosticMessage(diagnostic: Diagnostic, newLine: string, indentLevel = 0): string {
     let result = "";
     if (indentLevel) {
         result += newLine + "  ".repeat(indentLevel);

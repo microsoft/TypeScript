@@ -134,7 +134,7 @@ func convertBindingElementToArrayAssignmentElement(emitContext *printer.EmitCont
 
 func convertBindingElementToObjectAssignmentElement(emitContext *printer.EmitContext, element *ast.BindingElement) *ast.ObjectLiteralElement {
 	if element.DotDotDotToken != nil {
-		spread := emitContext.Factory.NewSpreadAssignment(element.Name())
+		spread := emitContext.Factory.NewSpreadAssignment(convertBindingNameToAssignmentElementTarget(emitContext, element.Name()))
 		emitContext.SetOriginal(spread, element.AsNode())
 		emitContext.AssignCommentAndSourceMapRanges(spread, element.AsNode())
 		return spread

@@ -1,0 +1,33 @@
+//// [tests/cases/compiler/tupleTooLargeReportedAtUses.ts] ////
+
+=== tupleTooLargeReportedAtUses.ts ===
+// The tuple type the alias builds is too large to represent (64384). The
+// union type and its first constituent start at the same position, so they
+// report the error at the same location.
+
+type BuildTuple<L extends number, T extends any[] = [any]> =
+>BuildTuple : Symbol(BuildTuple, Decl(tupleTooLargeReportedAtUses.ts, 0, 0))
+>L : Symbol(L, Decl(tupleTooLargeReportedAtUses.ts, 4, 16))
+>T : Symbol(T, Decl(tupleTooLargeReportedAtUses.ts, 4, 33))
+
+    T['length'] extends L ? T : BuildTuple<L, [...T, ...T]>;
+>T : Symbol(T, Decl(tupleTooLargeReportedAtUses.ts, 4, 33))
+>L : Symbol(L, Decl(tupleTooLargeReportedAtUses.ts, 4, 16))
+>T : Symbol(T, Decl(tupleTooLargeReportedAtUses.ts, 4, 33))
+>BuildTuple : Symbol(BuildTuple, Decl(tupleTooLargeReportedAtUses.ts, 0, 0))
+>L : Symbol(L, Decl(tupleTooLargeReportedAtUses.ts, 4, 16))
+>T : Symbol(T, Decl(tupleTooLargeReportedAtUses.ts, 4, 33))
+>T : Symbol(T, Decl(tupleTooLargeReportedAtUses.ts, 4, 33))
+
+type A = BuildTuple<3>;
+>A : Symbol(A, Decl(tupleTooLargeReportedAtUses.ts, 5, 60))
+>BuildTuple : Symbol(BuildTuple, Decl(tupleTooLargeReportedAtUses.ts, 0, 0))
+
+export class C {
+>C : Symbol(C, Decl(tupleTooLargeReportedAtUses.ts, 6, 23))
+
+    p? = null! as A | string;
+>p : Symbol(C.p, Decl(tupleTooLargeReportedAtUses.ts, 8, 16))
+>A : Symbol(A, Decl(tupleTooLargeReportedAtUses.ts, 5, 60))
+}
+
