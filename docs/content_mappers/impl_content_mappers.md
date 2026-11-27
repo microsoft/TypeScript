@@ -41,7 +41,8 @@ In addition to the options above, a content mapper manifest can optionally speci
 
 This is useful when the original content mapped files will be emitted to a different format, rather than being left as-is.
 In the example above, the `.gts` files are Ember components that Ember will emit to `.js` files.
-With this information, TypeScript emits declaration files with the correct file extensions (i.e. `Component.gts` -> `Component.d.ts` instead of `Component.d.gts.ts`) and also permits `.gts` import paths to resolve to `.js` files at runtime via `--rewriteRelativeImportExtensions`.
+With this information, TypeScript emits declaration files with the correct file extensions (i.e. `Component.gts` -> `Component.d.ts` instead of `Component.d.gts.ts`).
+Relative imports of `.gts` files will also be emitted as `.js` imports (i.e. `import ... from "./Component.gts"` -> `import ... from "./Component.js"`) and therefore will resolve to the correct `.js` files; this is achieved by the TypeScript `--rewriteRelativeImportExtensions` flag, which is mandatory for projects using content mappers that specify output extensions.
 For more details, see [the implementation PR](https://github.com/microsoft/TypeScript/pull/64581).
 
 ## Protocol
@@ -395,8 +396,9 @@ export type SupplementalOutput = MappedOutput;
 
 ### `closeProject`
 
-TypeScript will send a `closeProject` notification containing the project handle of the project that should be closed.
-This means the content mapper can let go of information stored about that particular project.
+TypeScript will send a `closeProject` request containing the project handle of the project that should be closed.
+This request means the content mapper can let go of information stored about that particular project.
+The content mapper must respond with a null response.
 
 TypeScript will typically close a project if it doesn't need it anymore, if a project's relevant compiler options change, or, as mentioned in [`openProject`](#openproject), if the content mapper has dynamic configurations and a watched file changes.
 
@@ -504,7 +506,7 @@ A mapper should not assert an exact tuple length or read elements beyond ones it
 
 Span mappings also optionally contain a `features` mask specifying which language server features can use that mapping.
 This can be combined with the ability of mapping an original span to many virtual spans.
-Broadly speaking, when a language server request is received for a position in a content-mapped virtual file, TypeScript maps it to every original file projection whose features mask includes the requested operation, performs analysis on the transformed content, and maps visible results back through spans that participate in the same feature.
+Broadly speaking, when a language server request is received for a position in a content-mapped original file, TypeScript first maps it to positions in the virtual file through spans that participate in that language feature, then performs the language server operation on those positions of the transformed content, and then maps visible results back to the original file through spans that also participate in that feature.
 This lets a content mapper independently select, for example, one projection for hover and another for definitions or references.
 
 For instance:
@@ -631,7 +633,9 @@ In `--build` mode with project references, and in some instances in the language
 
 ## API integration
 
-Content-mapped SourceFiles can be inspected by the JavaScript API. For a content-mapped SourceFile, `file.text` is the transformed text, `file.originalText` is the original text, and `file.spanMap` exposes an API for mapping between the two. Regardless of the `positionEncoding` used by the content mapper, accessing the span map through the JavaScript API always yields UTF-16 positions.
+Content-mapped SourceFiles can be inspected by the JavaScript API.
+For a content-mapped SourceFile, `file.text` is the transformed text, `file.originalText` is the original text, and `file.spanMap` exposes an API for mapping between the two.
+Regardless of the `positionEncoding` used by the content mapper, accessing the span map through the JavaScript API always yields UTF-16 positions.
 
 ```ts
 const mapped = file.spanMap.virtualToOriginalPosition(10);
@@ -639,7 +643,7 @@ const mapped = file.spanMap.virtualToOriginalPosition(10);
 // See packages/typescript/src/ast/spanMap.ts for details.
 ```
 
-If the content mapper provided supplemental outputs for a file, the file names are set on `file.supplementalOutputs` and can be retrieved with `program.getSourceFile(fileName)`.
+If the content mapper provided supplemental outputs for a file, their file names are set on `file.supplementalSourceFileNames`, and those files can be retrieved with `program.getSourceFile(fileName)`.
 
 ## Debugging
 
