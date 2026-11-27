@@ -1,0 +1,57 @@
+//// [tests/cases/compiler/templateLiteralComplexityLimit.ts] ////
+
+=== templateLiteralComplexityLimit.ts ===
+// Once the cross product limit is reported, later expansions for the same node must bail out quickly.
+type A = "a0" | "a1" | "a2" | "a3" | "a4" | "a5" | "a6" | "a7" | "a8" | "a9" | "a10" | "a11" | "a12" | "a13" | "a14" | "a15" | "a16" | "a17" | "a18" | "a19" | "a20" | "a21" | "a22" | "a23" | "a24" | "a25" | "a26" | "a27" | "a28" | "a29" | "a30" | "a31" | "a32" | "a33" | "a34" | "a35" | "a36" | "a37" | "a38" | "a39" | "a40" | "a41" | "a42" | "a43" | "a44" | "a45" | "a46" | "a47" | "a48" | "a49";
+>A : A
+
+type B = "b0" | "b1" | "b2" | "b3" | "b4" | "b5" | "b6" | "b7" | "b8" | "b9" | "b10" | "b11" | "b12" | "b13" | "b14" | "b15" | "b16" | "b17" | "b18" | "b19" | "b20" | "b21" | "b22" | "b23" | "b24" | "b25" | "b26" | "b27" | "b28" | "b29" | "b30" | "b31" | "b32" | "b33" | "b34" | "b35" | "b36" | "b37" | "b38" | "b39" | "b40" | "b41" | "b42" | "b43" | "b44" | "b45" | "b46" | "b47" | "b48" | "b49";
+>B : B
+
+type C = "c0" | "c1" | "c2" | "c3" | "c4" | "c5" | "c6" | "c7" | "c8" | "c9" | "c10" | "c11" | "c12" | "c13" | "c14" | "c15" | "c16" | "c17" | "c18" | "c19" | "c20" | "c21" | "c22" | "c23" | "c24" | "c25" | "c26" | "c27" | "c28" | "c29" | "c30" | "c31" | "c32" | "c33" | "c34" | "c35" | "c36" | "c37" | "c38" | "c39" | "c40" | "c41" | "c42" | "c43" | "c44" | "c45" | "c46" | "c47" | "c48" | "c49";
+>C : C
+
+type TooBig = `${A}.${B}.${C}`;
+>TooBig : any
+
+declare function f<T extends string>(x: T): T;
+>f : <T extends string>(x: T) => T
+>x : T
+
+f<TooBig>("a0.b0.c0");
+>f<TooBig>("a0.b0.c0") : any
+>f : <T extends string>(x: T) => T
+>"a0.b0.c0" : "a0.b0.c0"
+
+type Nested = `${TooBig}.${A}`;
+>Nested : `${any}.a0` | `${any}.a1` | `${any}.a10` | `${any}.a11` | `${any}.a12` | `${any}.a13` | `${any}.a14` | `${any}.a15` | `${any}.a16` | `${any}.a17` | `${any}.a18` | `${any}.a19` | `${any}.a2` | `${any}.a20` | `${any}.a21` | `${any}.a22` | `${any}.a23` | `${any}.a24` | `${any}.a25` | `${any}.a26` | `${any}.a27` | `${any}.a28` | `${any}.a29` | `${any}.a3` | `${any}.a30` | `${any}.a31` | `${any}.a32` | `${any}.a33` | `${any}.a34` | `${any}.a35` | `${any}.a36` | `${any}.a37` | `${any}.a38` | `${any}.a39` | `${any}.a4` | `${any}.a40` | `${any}.a41` | `${any}.a42` | `${any}.a43` | `${any}.a44` | `${any}.a45` | `${any}.a46` | `${any}.a47` | `${any}.a48` | `${any}.a49` | `${any}.a5` | `${any}.a6` | `${any}.a7` | `${any}.a8` | `${any}.a9`
+
+declare const n: Nested;
+>n : `${any}.a0` | `${any}.a1` | `${any}.a10` | `${any}.a11` | `${any}.a12` | `${any}.a13` | `${any}.a14` | `${any}.a15` | `${any}.a16` | `${any}.a17` | `${any}.a18` | `${any}.a19` | `${any}.a2` | `${any}.a20` | `${any}.a21` | `${any}.a22` | `${any}.a23` | `${any}.a24` | `${any}.a25` | `${any}.a26` | `${any}.a27` | `${any}.a28` | `${any}.a29` | `${any}.a3` | `${any}.a30` | `${any}.a31` | `${any}.a32` | `${any}.a33` | `${any}.a34` | `${any}.a35` | `${any}.a36` | `${any}.a37` | `${any}.a38` | `${any}.a39` | `${any}.a4` | `${any}.a40` | `${any}.a41` | `${any}.a42` | `${any}.a43` | `${any}.a44` | `${any}.a45` | `${any}.a46` | `${any}.a47` | `${any}.a48` | `${any}.a49` | `${any}.a5` | `${any}.a6` | `${any}.a7` | `${any}.a8` | `${any}.a9`
+
+export const len = n.length;
+>len : number
+>n.length : number
+>n : `${any}.a0` | `${any}.a1` | `${any}.a10` | `${any}.a11` | `${any}.a12` | `${any}.a13` | `${any}.a14` | `${any}.a15` | `${any}.a16` | `${any}.a17` | `${any}.a18` | `${any}.a19` | `${any}.a2` | `${any}.a20` | `${any}.a21` | `${any}.a22` | `${any}.a23` | `${any}.a24` | `${any}.a25` | `${any}.a26` | `${any}.a27` | `${any}.a28` | `${any}.a29` | `${any}.a3` | `${any}.a30` | `${any}.a31` | `${any}.a32` | `${any}.a33` | `${any}.a34` | `${any}.a35` | `${any}.a36` | `${any}.a37` | `${any}.a38` | `${any}.a39` | `${any}.a4` | `${any}.a40` | `${any}.a41` | `${any}.a42` | `${any}.a43` | `${any}.a44` | `${any}.a45` | `${any}.a46` | `${any}.a47` | `${any}.a48` | `${any}.a49` | `${any}.a5` | `${any}.a6` | `${any}.a7` | `${any}.a8` | `${any}.a9`
+>length : number
+
+// A limit error for one alias must not leak into unrelated aliases resolved in the same context.
+type Force = Combined;
+>Force : any
+
+type Combined = TooBig2 | Small;
+>Combined : any
+
+type TooBig2 = `${A}.${B}.${C}`;
+>TooBig2 : any
+
+type Small = `${"x" | "y"}`;
+>Small : "x" | "y"
+
+declare const force: Force;
+>force : any
+
+let small: Small = 123;
+>small : "x" | "y"
+>123 : 123
+
