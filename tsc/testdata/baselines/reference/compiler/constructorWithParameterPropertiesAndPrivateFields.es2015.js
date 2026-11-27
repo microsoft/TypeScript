@@ -51,7 +51,7 @@ class A {
         var _a;
         this.exposedField = exposedField;
         _A_privateField.set(this, void 0);
-        (_a = this, { key: ({ set value(_b) { __classPrivateFieldSet(_a, _A_privateField, _b, "f"); } }).value } = arg);
+        ({ key: (_a = this, ({ set value(_b) { __classPrivateFieldSet(_a, _A_privateField, _b, "f"); } })).value } = arg);
     }
     log() {
         console.log(__classPrivateFieldGet(this, _A_privateField, "f"));
@@ -65,7 +65,7 @@ class B {
         var _a;
         this.exposedField = exposedField;
         _B_privateField.set(this, void 0);
-        (_a = this, { key: ({ set value(_b) { __classPrivateFieldSet(_a, _B_privateField, _b, "f"); } }).value } = arg);
+        ({ key: (_a = this, ({ set value(_b) { __classPrivateFieldSet(_a, _B_privateField, _b, "f"); } })).value } = arg);
     }
     log() {
         console.log(__classPrivateFieldGet(this, _B_privateField, "f"));

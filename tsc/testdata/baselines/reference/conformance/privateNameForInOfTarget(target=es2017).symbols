@@ -1,0 +1,400 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameForInOfTarget.ts] ////
+
+=== privateNameForInOfTarget.ts ===
+class A {
+>A : Symbol(A, Decl(privateNameForInOfTarget.ts, 0, 0))
+
+    #x: any = 0;
+>#x : Symbol(A.#x, Decl(privateNameForInOfTarget.ts, 0, 9))
+
+    #y: any = 0;
+>#y : Symbol(A.#y, Decl(privateNameForInOfTarget.ts, 1, 16))
+
+    set #accessor(value: any) { this.#y = value; }
+>#accessor : Symbol(A.#accessor, Decl(privateNameForInOfTarget.ts, 2, 16), Decl(privateNameForInOfTarget.ts, 3, 50))
+>value : Symbol(value, Decl(privateNameForInOfTarget.ts, 3, 18))
+>this.#y : Symbol(A.#y, Decl(privateNameForInOfTarget.ts, 1, 16))
+>this : Symbol(A, Decl(privateNameForInOfTarget.ts, 0, 0))
+>value : Symbol(value, Decl(privateNameForInOfTarget.ts, 3, 18))
+
+    get #accessor() { return this.#y; }
+>#accessor : Symbol(A.#accessor, Decl(privateNameForInOfTarget.ts, 2, 16), Decl(privateNameForInOfTarget.ts, 3, 50))
+>this.#y : Symbol(A.#y, Decl(privateNameForInOfTarget.ts, 1, 16))
+>this : Symbol(A, Decl(privateNameForInOfTarget.ts, 0, 0))
+
+    run(o: object) {
+>run : Symbol(A.run, Decl(privateNameForInOfTarget.ts, 4, 39))
+>o : Symbol(o, Decl(privateNameForInOfTarget.ts, 6, 8))
+
+        for (this.#x of [11]) {}
+>this.#x : Symbol(A.#x, Decl(privateNameForInOfTarget.ts, 0, 9))
+>this : Symbol(A, Decl(privateNameForInOfTarget.ts, 0, 0))
+
+        for (this.#x in o) {}
+>this.#x : Symbol(A.#x, Decl(privateNameForInOfTarget.ts, 0, 9))
+>this : Symbol(A, Decl(privateNameForInOfTarget.ts, 0, 0))
+>o : Symbol(o, Decl(privateNameForInOfTarget.ts, 6, 8))
+
+        return this.#x;
+>this.#x : Symbol(A.#x, Decl(privateNameForInOfTarget.ts, 0, 9))
+>this : Symbol(A, Decl(privateNameForInOfTarget.ts, 0, 0))
+    }
+
+    receiver(o: A) {
+>receiver : Symbol(A.receiver, Decl(privateNameForInOfTarget.ts, 10, 5))
+>o : Symbol(o, Decl(privateNameForInOfTarget.ts, 12, 13))
+>A : Symbol(A, Decl(privateNameForInOfTarget.ts, 0, 0))
+
+        let calls = 0;
+>calls : Symbol(calls, Decl(privateNameForInOfTarget.ts, 13, 11))
+
+        const get = () => { calls++; return o; };
+>get : Symbol(get, Decl(privateNameForInOfTarget.ts, 14, 13))
+>calls : Symbol(calls, Decl(privateNameForInOfTarget.ts, 13, 11))
+>o : Symbol(o, Decl(privateNameForInOfTarget.ts, 12, 13))
+
+        for (get().#x of [10, 20]) {}
+>get().#x : Symbol(A.#x, Decl(privateNameForInOfTarget.ts, 0, 9))
+>get : Symbol(get, Decl(privateNameForInOfTarget.ts, 14, 13))
+
+        for (o.#x in { k: 1 }) {}
+>o.#x : Symbol(A.#x, Decl(privateNameForInOfTarget.ts, 0, 9))
+>o : Symbol(o, Decl(privateNameForInOfTarget.ts, 12, 13))
+>k : Symbol(k, Decl(privateNameForInOfTarget.ts, 16, 22))
+
+        return { calls, value: o.#x };
+>calls : Symbol(calls, Decl(privateNameForInOfTarget.ts, 17, 16))
+>value : Symbol(value, Decl(privateNameForInOfTarget.ts, 17, 23))
+>o.#x : Symbol(A.#x, Decl(privateNameForInOfTarget.ts, 0, 9))
+>o : Symbol(o, Decl(privateNameForInOfTarget.ts, 12, 13))
+    }
+
+    accessor() {
+>accessor : Symbol(A.accessor, Decl(privateNameForInOfTarget.ts, 18, 5))
+
+        for (this.#accessor of [1, 2, 3]) {}
+>this.#accessor : Symbol(A.#accessor, Decl(privateNameForInOfTarget.ts, 2, 16), Decl(privateNameForInOfTarget.ts, 3, 50))
+>this : Symbol(A, Decl(privateNameForInOfTarget.ts, 0, 0))
+
+        return this.#accessor;
+>this.#accessor : Symbol(A.#accessor, Decl(privateNameForInOfTarget.ts, 2, 16), Decl(privateNameForInOfTarget.ts, 3, 50))
+>this : Symbol(A, Decl(privateNameForInOfTarget.ts, 0, 0))
+    }
+
+    pattern() {
+>pattern : Symbol(A.pattern, Decl(privateNameForInOfTarget.ts, 23, 5))
+
+        for ([this.#x, this.#y] of [[1, 2]]) {}
+>this.#x : Symbol(A.#x, Decl(privateNameForInOfTarget.ts, 0, 9))
+>this : Symbol(A, Decl(privateNameForInOfTarget.ts, 0, 0))
+>this.#y : Symbol(A.#y, Decl(privateNameForInOfTarget.ts, 1, 16))
+>this : Symbol(A, Decl(privateNameForInOfTarget.ts, 0, 0))
+
+        for ({ x: this.#x, y: this.#y } of [{ x: 3, y: 4 }]) {}
+>x : Symbol(x, Decl(privateNameForInOfTarget.ts, 27, 14))
+>this.#x : Symbol(A.#x, Decl(privateNameForInOfTarget.ts, 0, 9))
+>this : Symbol(A, Decl(privateNameForInOfTarget.ts, 0, 0))
+>y : Symbol(y, Decl(privateNameForInOfTarget.ts, 27, 26))
+>this.#y : Symbol(A.#y, Decl(privateNameForInOfTarget.ts, 1, 16))
+>this : Symbol(A, Decl(privateNameForInOfTarget.ts, 0, 0))
+>x : Symbol(x, Decl(privateNameForInOfTarget.ts, 27, 45))
+>y : Symbol(y, Decl(privateNameForInOfTarget.ts, 27, 51))
+
+        return [this.#x, this.#y];
+>this.#x : Symbol(A.#x, Decl(privateNameForInOfTarget.ts, 0, 9))
+>this : Symbol(A, Decl(privateNameForInOfTarget.ts, 0, 0))
+>this.#y : Symbol(A.#y, Decl(privateNameForInOfTarget.ts, 1, 16))
+>this : Symbol(A, Decl(privateNameForInOfTarget.ts, 0, 0))
+    }
+
+    async asyncTargets() {
+>asyncTargets : Symbol(A.asyncTargets, Decl(privateNameForInOfTarget.ts, 29, 5))
+
+        for await (this.#x of [1, 2]) {}
+>this.#x : Symbol(A.#x, Decl(privateNameForInOfTarget.ts, 0, 9))
+>this : Symbol(A, Decl(privateNameForInOfTarget.ts, 0, 0))
+
+        for await ([this.#x, this.#y] of [[3, 4]]) {}
+>this.#x : Symbol(A.#x, Decl(privateNameForInOfTarget.ts, 0, 9))
+>this : Symbol(A, Decl(privateNameForInOfTarget.ts, 0, 0))
+>this.#y : Symbol(A.#y, Decl(privateNameForInOfTarget.ts, 1, 16))
+>this : Symbol(A, Decl(privateNameForInOfTarget.ts, 0, 0))
+
+        for await ({ x: this.#x } of [{ x: 5 }]) {}
+>x : Symbol(x, Decl(privateNameForInOfTarget.ts, 34, 20))
+>this.#x : Symbol(A.#x, Decl(privateNameForInOfTarget.ts, 0, 9))
+>this : Symbol(A, Decl(privateNameForInOfTarget.ts, 0, 0))
+>x : Symbol(x, Decl(privateNameForInOfTarget.ts, 34, 39))
+
+        return [this.#x, this.#y];
+>this.#x : Symbol(A.#x, Decl(privateNameForInOfTarget.ts, 0, 9))
+>this : Symbol(A, Decl(privateNameForInOfTarget.ts, 0, 0))
+>this.#y : Symbol(A.#y, Decl(privateNameForInOfTarget.ts, 1, 16))
+>this : Symbol(A, Decl(privateNameForInOfTarget.ts, 0, 0))
+    }
+
+    shadow(o: A) {
+>shadow : Symbol(A.shadow, Decl(privateNameForInOfTarget.ts, 36, 5))
+>o : Symbol(o, Decl(privateNameForInOfTarget.ts, 38, 11))
+>A : Symbol(A, Decl(privateNameForInOfTarget.ts, 0, 0))
+
+        for (o.#x of [5]) {
+>o.#x : Symbol(A.#x, Decl(privateNameForInOfTarget.ts, 0, 9))
+>o : Symbol(o, Decl(privateNameForInOfTarget.ts, 38, 11))
+
+            let o: A;
+>o : Symbol(o, Decl(privateNameForInOfTarget.ts, 40, 15))
+>A : Symbol(A, Decl(privateNameForInOfTarget.ts, 0, 0))
+        }
+        for (o.#y in { k: 1 }) {
+>o.#y : Symbol(A.#y, Decl(privateNameForInOfTarget.ts, 1, 16))
+>o : Symbol(o, Decl(privateNameForInOfTarget.ts, 38, 11))
+>k : Symbol(k, Decl(privateNameForInOfTarget.ts, 42, 22))
+
+            let o: A;
+>o : Symbol(o, Decl(privateNameForInOfTarget.ts, 43, 15))
+>A : Symbol(A, Decl(privateNameForInOfTarget.ts, 0, 0))
+        }
+        return [o.#x, o.#y];
+>o.#x : Symbol(A.#x, Decl(privateNameForInOfTarget.ts, 0, 9))
+>o : Symbol(o, Decl(privateNameForInOfTarget.ts, 38, 11))
+>o.#y : Symbol(A.#y, Decl(privateNameForInOfTarget.ts, 1, 16))
+>o : Symbol(o, Decl(privateNameForInOfTarget.ts, 38, 11))
+    }
+}
+
+class B {
+>B : Symbol(B, Decl(privateNameForInOfTarget.ts, 47, 1))
+
+    static #x: any = 0;
+>#x : Symbol(B.#x, Decl(privateNameForInOfTarget.ts, 49, 9))
+
+    static run() {
+>run : Symbol(B.run, Decl(privateNameForInOfTarget.ts, 50, 23))
+
+        for (B.#x of [1, 2]) {}
+>B.#x : Symbol(B.#x, Decl(privateNameForInOfTarget.ts, 49, 9))
+>B : Symbol(B, Decl(privateNameForInOfTarget.ts, 47, 1))
+
+        return B.#x;
+>B.#x : Symbol(B.#x, Decl(privateNameForInOfTarget.ts, 49, 9))
+>B : Symbol(B, Decl(privateNameForInOfTarget.ts, 47, 1))
+    }
+}
+
+class Ordering {
+>Ordering : Symbol(Ordering, Decl(privateNameForInOfTarget.ts, 56, 1))
+
+    #x = 0;
+>#x : Symbol(Ordering.#x, Decl(privateNameForInOfTarget.ts, 58, 16))
+
+    static assignment() {
+>assignment : Symbol(Ordering.assignment, Decl(privateNameForInOfTarget.ts, 59, 11))
+
+        const a = new Ordering();
+>a : Symbol(a, Decl(privateNameForInOfTarget.ts, 62, 13))
+>Ordering : Symbol(Ordering, Decl(privateNameForInOfTarget.ts, 56, 1))
+
+        const b = new Ordering();
+>b : Symbol(b, Decl(privateNameForInOfTarget.ts, 63, 13))
+>Ordering : Symbol(Ordering, Decl(privateNameForInOfTarget.ts, 56, 1))
+
+        let o = a;
+>o : Symbol(o, Decl(privateNameForInOfTarget.ts, 64, 11))
+>a : Symbol(a, Decl(privateNameForInOfTarget.ts, 62, 13))
+
+        const get = () => o;
+>get : Symbol(get, Decl(privateNameForInOfTarget.ts, 65, 13))
+>o : Symbol(o, Decl(privateNameForInOfTarget.ts, 64, 11))
+
+        [o, get().#x] = [b, 7];
+>o : Symbol(o, Decl(privateNameForInOfTarget.ts, 64, 11))
+>get().#x : Symbol(Ordering.#x, Decl(privateNameForInOfTarget.ts, 58, 16))
+>get : Symbol(get, Decl(privateNameForInOfTarget.ts, 65, 13))
+>b : Symbol(b, Decl(privateNameForInOfTarget.ts, 63, 13))
+
+        return [a.#x, b.#x];
+>a.#x : Symbol(Ordering.#x, Decl(privateNameForInOfTarget.ts, 58, 16))
+>a : Symbol(a, Decl(privateNameForInOfTarget.ts, 62, 13))
+>b.#x : Symbol(Ordering.#x, Decl(privateNameForInOfTarget.ts, 58, 16))
+>b : Symbol(b, Decl(privateNameForInOfTarget.ts, 63, 13))
+    }
+
+    static loop() {
+>loop : Symbol(Ordering.loop, Decl(privateNameForInOfTarget.ts, 68, 5))
+
+        const a = new Ordering();
+>a : Symbol(a, Decl(privateNameForInOfTarget.ts, 71, 13))
+>Ordering : Symbol(Ordering, Decl(privateNameForInOfTarget.ts, 56, 1))
+
+        const b = new Ordering();
+>b : Symbol(b, Decl(privateNameForInOfTarget.ts, 72, 13))
+>Ordering : Symbol(Ordering, Decl(privateNameForInOfTarget.ts, 56, 1))
+
+        let o = a;
+>o : Symbol(o, Decl(privateNameForInOfTarget.ts, 73, 11))
+>a : Symbol(a, Decl(privateNameForInOfTarget.ts, 71, 13))
+
+        const get = () => o;
+>get : Symbol(get, Decl(privateNameForInOfTarget.ts, 74, 13))
+>o : Symbol(o, Decl(privateNameForInOfTarget.ts, 73, 11))
+
+        for ([o, get().#x] of [[b, 7] as [Ordering, number]]) {}
+>o : Symbol(o, Decl(privateNameForInOfTarget.ts, 73, 11))
+>get().#x : Symbol(Ordering.#x, Decl(privateNameForInOfTarget.ts, 58, 16))
+>get : Symbol(get, Decl(privateNameForInOfTarget.ts, 74, 13))
+>b : Symbol(b, Decl(privateNameForInOfTarget.ts, 72, 13))
+>Ordering : Symbol(Ordering, Decl(privateNameForInOfTarget.ts, 56, 1))
+
+        return [a.#x, b.#x];
+>a.#x : Symbol(Ordering.#x, Decl(privateNameForInOfTarget.ts, 58, 16))
+>a : Symbol(a, Decl(privateNameForInOfTarget.ts, 71, 13))
+>b.#x : Symbol(Ordering.#x, Decl(privateNameForInOfTarget.ts, 58, 16))
+>b : Symbol(b, Decl(privateNameForInOfTarget.ts, 72, 13))
+    }
+
+    static objectLoop() {
+>objectLoop : Symbol(Ordering.objectLoop, Decl(privateNameForInOfTarget.ts, 77, 5))
+
+        const a = new Ordering();
+>a : Symbol(a, Decl(privateNameForInOfTarget.ts, 80, 13))
+>Ordering : Symbol(Ordering, Decl(privateNameForInOfTarget.ts, 56, 1))
+
+        const b = new Ordering();
+>b : Symbol(b, Decl(privateNameForInOfTarget.ts, 81, 13))
+>Ordering : Symbol(Ordering, Decl(privateNameForInOfTarget.ts, 56, 1))
+
+        let o = a;
+>o : Symbol(o, Decl(privateNameForInOfTarget.ts, 82, 11))
+>a : Symbol(a, Decl(privateNameForInOfTarget.ts, 80, 13))
+
+        const get = () => o;
+>get : Symbol(get, Decl(privateNameForInOfTarget.ts, 83, 13))
+>o : Symbol(o, Decl(privateNameForInOfTarget.ts, 82, 11))
+
+        for ({ o, x: get().#x } of [{ o: b, x: 7 }]) {}
+>o : Symbol(o, Decl(privateNameForInOfTarget.ts, 84, 14))
+>x : Symbol(x, Decl(privateNameForInOfTarget.ts, 84, 17))
+>get().#x : Symbol(Ordering.#x, Decl(privateNameForInOfTarget.ts, 58, 16))
+>get : Symbol(get, Decl(privateNameForInOfTarget.ts, 83, 13))
+>o : Symbol(o, Decl(privateNameForInOfTarget.ts, 84, 37))
+>b : Symbol(b, Decl(privateNameForInOfTarget.ts, 81, 13))
+>x : Symbol(x, Decl(privateNameForInOfTarget.ts, 84, 43))
+
+        return [a.#x, b.#x];
+>a.#x : Symbol(Ordering.#x, Decl(privateNameForInOfTarget.ts, 58, 16))
+>a : Symbol(a, Decl(privateNameForInOfTarget.ts, 80, 13))
+>b.#x : Symbol(Ordering.#x, Decl(privateNameForInOfTarget.ts, 58, 16))
+>b : Symbol(b, Decl(privateNameForInOfTarget.ts, 81, 13))
+    }
+
+    static async asyncLoop() {
+>asyncLoop : Symbol(Ordering.asyncLoop, Decl(privateNameForInOfTarget.ts, 86, 5))
+
+        const a = new Ordering();
+>a : Symbol(a, Decl(privateNameForInOfTarget.ts, 89, 13))
+>Ordering : Symbol(Ordering, Decl(privateNameForInOfTarget.ts, 56, 1))
+
+        const b = new Ordering();
+>b : Symbol(b, Decl(privateNameForInOfTarget.ts, 90, 13))
+>Ordering : Symbol(Ordering, Decl(privateNameForInOfTarget.ts, 56, 1))
+
+        let o = a;
+>o : Symbol(o, Decl(privateNameForInOfTarget.ts, 91, 11))
+>a : Symbol(a, Decl(privateNameForInOfTarget.ts, 89, 13))
+
+        const get = () => o;
+>get : Symbol(get, Decl(privateNameForInOfTarget.ts, 92, 13))
+>o : Symbol(o, Decl(privateNameForInOfTarget.ts, 91, 11))
+
+        for await ([o, get().#x] of [[b, 7] as [Ordering, number]]) {}
+>o : Symbol(o, Decl(privateNameForInOfTarget.ts, 91, 11))
+>get().#x : Symbol(Ordering.#x, Decl(privateNameForInOfTarget.ts, 58, 16))
+>get : Symbol(get, Decl(privateNameForInOfTarget.ts, 92, 13))
+>b : Symbol(b, Decl(privateNameForInOfTarget.ts, 90, 13))
+>Ordering : Symbol(Ordering, Decl(privateNameForInOfTarget.ts, 56, 1))
+
+        return [a.#x, b.#x];
+>a.#x : Symbol(Ordering.#x, Decl(privateNameForInOfTarget.ts, 58, 16))
+>a : Symbol(a, Decl(privateNameForInOfTarget.ts, 89, 13))
+>b.#x : Symbol(Ordering.#x, Decl(privateNameForInOfTarget.ts, 58, 16))
+>b : Symbol(b, Decl(privateNameForInOfTarget.ts, 90, 13))
+    }
+}
+
+function assertResult(actual: unknown, expected: unknown) {
+>assertResult : Symbol(assertResult, Decl(privateNameForInOfTarget.ts, 96, 1))
+>actual : Symbol(actual, Decl(privateNameForInOfTarget.ts, 98, 22))
+>expected : Symbol(expected, Decl(privateNameForInOfTarget.ts, 98, 38))
+
+    if (JSON.stringify(actual) !== JSON.stringify(expected)) {
+>JSON.stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>actual : Symbol(actual, Decl(privateNameForInOfTarget.ts, 98, 22))
+>JSON.stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>expected : Symbol(expected, Decl(privateNameForInOfTarget.ts, 98, 38))
+
+        throw new Error(`Expected ${JSON.stringify(expected)}, got ${JSON.stringify(actual)}`);
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>JSON.stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>expected : Symbol(expected, Decl(privateNameForInOfTarget.ts, 98, 38))
+>JSON.stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>actual : Symbol(actual, Decl(privateNameForInOfTarget.ts, 98, 22))
+    }
+}
+
+assertResult(Ordering.assignment(), [0, 7]);
+>assertResult : Symbol(assertResult, Decl(privateNameForInOfTarget.ts, 96, 1))
+>Ordering.assignment : Symbol(Ordering.assignment, Decl(privateNameForInOfTarget.ts, 59, 11))
+>Ordering : Symbol(Ordering, Decl(privateNameForInOfTarget.ts, 56, 1))
+>assignment : Symbol(Ordering.assignment, Decl(privateNameForInOfTarget.ts, 59, 11))
+
+assertResult(Ordering.loop(), [0, 7]);
+>assertResult : Symbol(assertResult, Decl(privateNameForInOfTarget.ts, 96, 1))
+>Ordering.loop : Symbol(Ordering.loop, Decl(privateNameForInOfTarget.ts, 68, 5))
+>Ordering : Symbol(Ordering, Decl(privateNameForInOfTarget.ts, 56, 1))
+>loop : Symbol(Ordering.loop, Decl(privateNameForInOfTarget.ts, 68, 5))
+
+assertResult(Ordering.objectLoop(), [0, 7]);
+>assertResult : Symbol(assertResult, Decl(privateNameForInOfTarget.ts, 96, 1))
+>Ordering.objectLoop : Symbol(Ordering.objectLoop, Decl(privateNameForInOfTarget.ts, 77, 5))
+>Ordering : Symbol(Ordering, Decl(privateNameForInOfTarget.ts, 56, 1))
+>objectLoop : Symbol(Ordering.objectLoop, Decl(privateNameForInOfTarget.ts, 77, 5))
+
+Promise.all([new A().asyncTargets(), Ordering.asyncLoop()]).then(([targets, ordering]) => {
+>Promise.all([new A().asyncTargets(), Ordering.asyncLoop()]).then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>Promise.all : Symbol(PromiseConstructor.all, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>all : Symbol(PromiseConstructor.all, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>new A().asyncTargets : Symbol(A.asyncTargets, Decl(privateNameForInOfTarget.ts, 29, 5))
+>A : Symbol(A, Decl(privateNameForInOfTarget.ts, 0, 0))
+>asyncTargets : Symbol(A.asyncTargets, Decl(privateNameForInOfTarget.ts, 29, 5))
+>Ordering.asyncLoop : Symbol(Ordering.asyncLoop, Decl(privateNameForInOfTarget.ts, 86, 5))
+>Ordering : Symbol(Ordering, Decl(privateNameForInOfTarget.ts, 56, 1))
+>asyncLoop : Symbol(Ordering.asyncLoop, Decl(privateNameForInOfTarget.ts, 86, 5))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>targets : Symbol(targets, Decl(privateNameForInOfTarget.ts, 107, 67))
+>ordering : Symbol(ordering, Decl(privateNameForInOfTarget.ts, 107, 75))
+
+    assertResult(targets, [5, 4]);
+>assertResult : Symbol(assertResult, Decl(privateNameForInOfTarget.ts, 96, 1))
+>targets : Symbol(targets, Decl(privateNameForInOfTarget.ts, 107, 67))
+
+    assertResult(ordering, [0, 7]);
+>assertResult : Symbol(assertResult, Decl(privateNameForInOfTarget.ts, 96, 1))
+>ordering : Symbol(ordering, Decl(privateNameForInOfTarget.ts, 107, 75))
+
+    console.log("private loop targets: direct/destructured async and receiver ordering passed");
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+
+});
+

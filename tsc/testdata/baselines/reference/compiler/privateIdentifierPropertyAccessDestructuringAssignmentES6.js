@@ -39,7 +39,7 @@ class Example {
     }
     update(source) {
         var _a;
-        (_a = this, { value: ({ set value(_b) { tslib_1.__classPrivateFieldSet(_a, _Example_state, _b, "f"); } }).value } = source);
+        ({ value: (_a = this, ({ set value(_b) { tslib_1.__classPrivateFieldSet(_a, _Example_state, _b, "f"); } })).value } = source);
     }
 }
 _Example_state = new WeakMap();
