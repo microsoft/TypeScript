@@ -53,7 +53,7 @@ declare const _exports: {
             new (status: any): {
                 name: string;
                 message: string;
-                stack?: string;
+                stack?: string | undefined;
             };
         };
     };
