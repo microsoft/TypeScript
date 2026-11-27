@@ -20587,7 +20587,10 @@ func (c *Checker) getSignaturesOfSymbol(symbol *ast.Symbol) []*Signature {
 		}
 		// If this is a function or method declaration, get the signature from the @type tag for the sake of optional parameters.
 		// Exclude contextually-typed kinds because we already apply the @type tag to the context, plus applying it here to the initializer would suppress checks that the two are compatible.
-		sig := c.getSignatureOfFullSignatureType(decl)
+		var sig *Signature
+		if !ast.IsFunctionExpressionOrArrowFunction(decl) && !ast.IsObjectLiteralMethod(decl) {
+			sig = c.getSignatureOfFullSignatureType(decl)
+		}
 		if sig == nil {
 			sig = c.getSignatureFromDeclaration(decl)
 		}
@@ -20833,8 +20836,8 @@ func (c *Checker) getReturnTypeFromAnnotation(declaration *ast.Node) *Type {
 }
 
 func (c *Checker) getSignatureOfFullSignatureType(node *ast.Node) *Signature {
-	if ast.IsInJSFile(node) && (ast.IsFunctionDeclaration(node) || ast.IsMethodDeclaration(node) || ast.IsFunctionExpressionOrArrowFunction(node)) && node.FunctionLikeData().FullSignature != nil {
-		return c.getSingleCallSignature(c.getTypeFromTypeNode(node.FunctionLikeData().FullSignature))
+	if tagNode := c.getTypeTagTypeNode(node); tagNode != nil {
+		return c.getSingleCallSignature(c.getTypeFromTypeNode(tagNode))
 	}
 	return nil
 }

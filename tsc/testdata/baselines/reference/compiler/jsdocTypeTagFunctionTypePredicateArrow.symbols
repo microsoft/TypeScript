@@ -1,0 +1,169 @@
+//// [tests/cases/compiler/jsdocTypeTagFunctionTypePredicateArrow.ts] ////
+
+=== index.js ===
+/** @type {(el: Node) => el is HTMLElement} */
+const func1 = (el) => el instanceof HTMLElement && el.className === "foo";
+>func1 : Symbol(func1, Decl(index.js, 1, 5))
+>el : Symbol(el, Decl(index.js, 1, 15))
+>el : Symbol(el, Decl(index.js, 1, 15))
+>HTMLElement : Symbol(HTMLElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>el.className : Symbol(Element.className, Decl(lib.dom.d.ts, --, --))
+>el : Symbol(el, Decl(index.js, 1, 15))
+>className : Symbol(Element.className, Decl(lib.dom.d.ts, --, --))
+
+/** @type {(el: Node) => el is HTMLElement} */
+const func2 = (el) => el instanceof HTMLElement;
+>func2 : Symbol(func2, Decl(index.js, 4, 5))
+>el : Symbol(el, Decl(index.js, 4, 15))
+>el : Symbol(el, Decl(index.js, 4, 15))
+>HTMLElement : Symbol(HTMLElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+/**
+ * @param {Node} el
+ * @returns {el is HTMLElement}
+ */
+const func3 = (el) => el instanceof HTMLElement && el.className === "foo";
+>func3 : Symbol(func3, Decl(index.js, 10, 5))
+>el : Symbol(el, Decl(index.js, 10, 15))
+>el : Symbol(el, Decl(index.js, 10, 15))
+>HTMLElement : Symbol(HTMLElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>el.className : Symbol(Element.className, Decl(lib.dom.d.ts, --, --))
+>el : Symbol(el, Decl(index.js, 10, 15))
+>className : Symbol(Element.className, Decl(lib.dom.d.ts, --, --))
+
+/** @type {(el: Node) => el is HTMLElement} */
+function func4(el) {
+>func4 : Symbol(func4, Decl(index.js, 10, 74))
+>el : Symbol(el, Decl(index.js, 13, 15))
+
+    return el instanceof HTMLElement && el.className === "foo";
+>el : Symbol(el, Decl(index.js, 13, 15))
+>HTMLElement : Symbol(HTMLElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>el.className : Symbol(Element.className, Decl(lib.dom.d.ts, --, --))
+>el : Symbol(el, Decl(index.js, 13, 15))
+>className : Symbol(Element.className, Decl(lib.dom.d.ts, --, --))
+}
+
+/** @type {(el: Node) => el is HTMLElement} */
+const func5 = function(el) {
+>func5 : Symbol(func5, Decl(index.js, 18, 5))
+>el : Symbol(el, Decl(index.js, 18, 23))
+
+    return el instanceof HTMLElement && el.className === "foo";
+>el : Symbol(el, Decl(index.js, 18, 23))
+>HTMLElement : Symbol(HTMLElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>el.className : Symbol(Element.className, Decl(lib.dom.d.ts, --, --))
+>el : Symbol(el, Decl(index.js, 18, 23))
+>className : Symbol(Element.className, Decl(lib.dom.d.ts, --, --))
+
+};
+
+const obj = {
+>obj : Symbol(obj, Decl(index.js, 22, 5))
+
+    /** @type {(el: Node) => el is HTMLElement} */
+    isElement: (el) => el instanceof HTMLElement && el.className === "foo",
+>isElement : Symbol(isElement, Decl(index.js, 22, 13))
+>el : Symbol(el, Decl(index.js, 24, 16))
+>el : Symbol(el, Decl(index.js, 24, 16))
+>HTMLElement : Symbol(HTMLElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>el.className : Symbol(Element.className, Decl(lib.dom.d.ts, --, --))
+>el : Symbol(el, Decl(index.js, 24, 16))
+>className : Symbol(Element.className, Decl(lib.dom.d.ts, --, --))
+
+};
+
+class C {
+>C : Symbol(C, Decl(index.js, 25, 2))
+
+    /** @type {(el: Node) => el is HTMLElement} */
+    isElement = (el) => el instanceof HTMLElement && el.className === "foo";
+>isElement : Symbol(C.isElement, Decl(index.js, 27, 9))
+>el : Symbol(el, Decl(index.js, 29, 17))
+>el : Symbol(el, Decl(index.js, 29, 17))
+>HTMLElement : Symbol(HTMLElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>el.className : Symbol(Element.className, Decl(lib.dom.d.ts, --, --))
+>el : Symbol(el, Decl(index.js, 29, 17))
+>className : Symbol(Element.className, Decl(lib.dom.d.ts, --, --))
+}
+
+// Direct assignment with @type tag on the assignment expression
+let func8a;
+>func8a : Symbol(func8a, Decl(index.js, 33, 3))
+
+/** @type {(el: Node) => el is HTMLElement} */
+func8a = (el) => el instanceof HTMLElement && el.className === "foo";
+>func8a : Symbol(func8a, Decl(index.js, 33, 3))
+>el : Symbol(el, Decl(index.js, 35, 10))
+>el : Symbol(el, Decl(index.js, 35, 10))
+>HTMLElement : Symbol(HTMLElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>el.className : Symbol(Element.className, Decl(lib.dom.d.ts, --, --))
+>el : Symbol(el, Decl(index.js, 35, 10))
+>className : Symbol(Element.className, Decl(lib.dom.d.ts, --, --))
+
+// Tag on variable declaration, assignment separately: reports error matching TS 5/6
+/** @type {(el: Node) => el is HTMLElement} */
+let func8b;
+>func8b : Symbol(func8b, Decl(index.js, 39, 3))
+
+func8b = (el) => el instanceof HTMLElement && el.className === "foo";
+>func8b : Symbol(func8b, Decl(index.js, 39, 3))
+>el : Symbol(el, Decl(index.js, 40, 10))
+>el : Symbol(el, Decl(index.js, 40, 10))
+>HTMLElement : Symbol(HTMLElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>el.className : Symbol(Element.className, Decl(lib.dom.d.ts, --, --))
+>el : Symbol(el, Decl(index.js, 40, 10))
+>className : Symbol(Element.className, Decl(lib.dom.d.ts, --, --))
+
+/** @type {(el: Node) => el is HTMLElement} */
+module.exports = (el) => el instanceof HTMLElement && el.className === "foo";
+>module.exports : Symbol(exports, Decl(index.js, 0, 0))
+>module : Symbol(module, Decl(index.js, 0, 0))
+>exports : Symbol(exports, Decl(index.js, 0, 0))
+>el : Symbol(el, Decl(index.js, 43, 18))
+>el : Symbol(el, Decl(index.js, 43, 18))
+>HTMLElement : Symbol(HTMLElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>el.className : Symbol(Element.className, Decl(lib.dom.d.ts, --, --))
+>el : Symbol(el, Decl(index.js, 43, 18))
+>className : Symbol(Element.className, Decl(lib.dom.d.ts, --, --))
+
+/** @typedef {(el: Node) => el is HTMLElement} MyPredicate */
+/** @type {MyPredicate} */
+const func10 = (el) => el instanceof HTMLElement && el.className === "foo";
+>func10 : Symbol(func10, Decl(index.js, 47, 5))
+>el : Symbol(el, Decl(index.js, 47, 16))
+>el : Symbol(el, Decl(index.js, 47, 16))
+>HTMLElement : Symbol(HTMLElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>el.className : Symbol(Element.className, Decl(lib.dom.d.ts, --, --))
+>el : Symbol(el, Decl(index.js, 47, 16))
+>className : Symbol(Element.className, Decl(lib.dom.d.ts, --, --))
+
+/** @type {(el: Node) => asserts el is HTMLElement} */
+const func11 = (el) => {
+>func11 : Symbol(func11, Decl(index.js, 50, 5))
+>el : Symbol(el, Decl(index.js, 50, 16))
+
+    if (!(el instanceof HTMLElement)) throw new Error();
+>el : Symbol(el, Decl(index.js, 50, 16))
+>HTMLElement : Symbol(HTMLElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+
+};
+
+// Parameter name mismatch: should report an error because parameter 'element' does not match 'el'
+/** @type {(element: Node) => element is HTMLElement} */
+const mismatch = (el) => el instanceof HTMLElement && el.className === "foo";
+>mismatch : Symbol(mismatch, Decl(index.js, 56, 5))
+>el : Symbol(el, Decl(index.js, 56, 18))
+>el : Symbol(el, Decl(index.js, 56, 18))
+>HTMLElement : Symbol(HTMLElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>el.className : Symbol(Element.className, Decl(lib.dom.d.ts, --, --))
+>el : Symbol(el, Decl(index.js, 56, 18))
+>className : Symbol(Element.className, Decl(lib.dom.d.ts, --, --))
+
+// Non-boolean return: should report an error because number is not assignable to boolean
+/** @type {(el: Node) => el is HTMLElement} */
+const badReturn = (el) => 123;
+>badReturn : Symbol(badReturn, Decl(index.js, 60, 5))
+>el : Symbol(el, Decl(index.js, 60, 19))
+

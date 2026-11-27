@@ -1,0 +1,236 @@
+//// [tests/cases/compiler/jsdocTypeTagFunctionTypePredicateArrow.ts] ////
+
+=== index.js ===
+/** @type {(el: Node) => el is HTMLElement} */
+const func1 = (el) => el instanceof HTMLElement && el.className === "foo";
+>func1 : (el: Node) => el is HTMLElement
+>(el) => el instanceof HTMLElement && el.className === "foo" : (el: Node) => el is HTMLElement
+>el : Node
+>el instanceof HTMLElement && el.className === "foo" : boolean
+>el instanceof HTMLElement : boolean
+>el : Node
+>HTMLElement : { new (): HTMLElement; prototype: HTMLElement; }
+>el.className === "foo" : boolean
+>el.className : string
+>el : HTMLElement
+>className : string
+>"foo" : "foo"
+
+/** @type {(el: Node) => el is HTMLElement} */
+const func2 = (el) => el instanceof HTMLElement;
+>func2 : (el: Node) => el is HTMLElement
+>(el) => el instanceof HTMLElement : (el: Node) => el is HTMLElement
+>el : Node
+>el instanceof HTMLElement : boolean
+>el : Node
+>HTMLElement : { new (): HTMLElement; prototype: HTMLElement; }
+
+/**
+ * @param {Node} el
+ * @returns {el is HTMLElement}
+ */
+const func3 = (el) => el instanceof HTMLElement && el.className === "foo";
+>func3 : (el: Node) => el is HTMLElement
+>(el) => el instanceof HTMLElement && el.className === "foo" : (el: Node) => el is HTMLElement
+>el : Node
+>el instanceof HTMLElement && el.className === "foo" : boolean
+>el instanceof HTMLElement : boolean
+>el : Node
+>HTMLElement : { new (): HTMLElement; prototype: HTMLElement; }
+>el.className === "foo" : boolean
+>el.className : string
+>el : HTMLElement
+>className : string
+>"foo" : "foo"
+
+/** @type {(el: Node) => el is HTMLElement} */
+function func4(el) {
+>func4 : (el: Node) => el is HTMLElement
+>el : Node
+
+    return el instanceof HTMLElement && el.className === "foo";
+>el instanceof HTMLElement && el.className === "foo" : boolean
+>el instanceof HTMLElement : boolean
+>el : Node
+>HTMLElement : { new (): HTMLElement; prototype: HTMLElement; }
+>el.className === "foo" : boolean
+>el.className : string
+>el : HTMLElement
+>className : string
+>"foo" : "foo"
+}
+
+/** @type {(el: Node) => el is HTMLElement} */
+const func5 = function(el) {
+>func5 : (el: Node) => el is HTMLElement
+>function(el) {    return el instanceof HTMLElement && el.className === "foo";} : (el: Node) => el is HTMLElement
+>el : Node
+
+    return el instanceof HTMLElement && el.className === "foo";
+>el instanceof HTMLElement && el.className === "foo" : boolean
+>el instanceof HTMLElement : boolean
+>el : Node
+>HTMLElement : { new (): HTMLElement; prototype: HTMLElement; }
+>el.className === "foo" : boolean
+>el.className : string
+>el : HTMLElement
+>className : string
+>"foo" : "foo"
+
+};
+
+const obj = {
+>obj : { isElement: (el: Node) => el is HTMLElement; }
+>{    /** @type {(el: Node) => el is HTMLElement} */    isElement: (el) => el instanceof HTMLElement && el.className === "foo",} : { isElement: (el: Node) => el is HTMLElement; }
+
+    /** @type {(el: Node) => el is HTMLElement} */
+    isElement: (el) => el instanceof HTMLElement && el.className === "foo",
+>isElement : (el: Node) => el is HTMLElement
+>(el) => el instanceof HTMLElement && el.className === "foo" : (el: Node) => el is HTMLElement
+>el : Node
+>el instanceof HTMLElement && el.className === "foo" : boolean
+>el instanceof HTMLElement : boolean
+>el : Node
+>HTMLElement : { new (): HTMLElement; prototype: HTMLElement; }
+>el.className === "foo" : boolean
+>el.className : string
+>el : HTMLElement
+>className : string
+>"foo" : "foo"
+
+};
+
+class C {
+>C : C
+
+    /** @type {(el: Node) => el is HTMLElement} */
+    isElement = (el) => el instanceof HTMLElement && el.className === "foo";
+>isElement : (el: Node) => el is HTMLElement
+>(el) => el instanceof HTMLElement && el.className === "foo" : (el: Node) => el is HTMLElement
+>el : Node
+>el instanceof HTMLElement && el.className === "foo" : boolean
+>el instanceof HTMLElement : boolean
+>el : Node
+>HTMLElement : { new (): HTMLElement; prototype: HTMLElement; }
+>el.className === "foo" : boolean
+>el.className : string
+>el : HTMLElement
+>className : string
+>"foo" : "foo"
+}
+
+// Direct assignment with @type tag on the assignment expression
+let func8a;
+>func8a : any
+
+/** @type {(el: Node) => el is HTMLElement} */
+func8a = (el) => el instanceof HTMLElement && el.className === "foo";
+>func8a = (el) => el instanceof HTMLElement && el.className === "foo" : (el: Node) => el is HTMLElement
+>func8a : any
+>(el) => el instanceof HTMLElement && el.className === "foo" : (el: Node) => el is HTMLElement
+>el : Node
+>el instanceof HTMLElement && el.className === "foo" : boolean
+>el instanceof HTMLElement : boolean
+>el : Node
+>HTMLElement : { new (): HTMLElement; prototype: HTMLElement; }
+>el.className === "foo" : boolean
+>el.className : string
+>el : HTMLElement
+>className : string
+>"foo" : "foo"
+
+// Tag on variable declaration, assignment separately: reports error matching TS 5/6
+/** @type {(el: Node) => el is HTMLElement} */
+let func8b;
+>func8b : (el: Node) => el is HTMLElement
+
+func8b = (el) => el instanceof HTMLElement && el.className === "foo";
+>func8b = (el) => el instanceof HTMLElement && el.className === "foo" : (el: Node) => boolean
+>func8b : (el: Node) => el is HTMLElement
+>(el) => el instanceof HTMLElement && el.className === "foo" : (el: Node) => boolean
+>el : Node
+>el instanceof HTMLElement && el.className === "foo" : boolean
+>el instanceof HTMLElement : boolean
+>el : Node
+>HTMLElement : { new (): HTMLElement; prototype: HTMLElement; }
+>el.className === "foo" : boolean
+>el.className : string
+>el : HTMLElement
+>className : string
+>"foo" : "foo"
+
+/** @type {(el: Node) => el is HTMLElement} */
+module.exports = (el) => el instanceof HTMLElement && el.className === "foo";
+>module.exports = (el) => el instanceof HTMLElement && el.className === "foo" : (el: Node) => el is HTMLElement
+>module.exports : (el: Node) => el is HTMLElement
+>module : { exports: (el: Node) => el is HTMLElement; }
+>exports : (el: Node) => el is HTMLElement
+>(el) => el instanceof HTMLElement && el.className === "foo" : (el: Node) => el is HTMLElement
+>el : Node
+>el instanceof HTMLElement && el.className === "foo" : boolean
+>el instanceof HTMLElement : boolean
+>el : Node
+>HTMLElement : { new (): HTMLElement; prototype: HTMLElement; }
+>el.className === "foo" : boolean
+>el.className : string
+>el : HTMLElement
+>className : string
+>"foo" : "foo"
+
+/** @typedef {(el: Node) => el is HTMLElement} MyPredicate */
+/** @type {MyPredicate} */
+const func10 = (el) => el instanceof HTMLElement && el.className === "foo";
+>func10 : MyPredicate
+>(el) => el instanceof HTMLElement && el.className === "foo" : (el: Node) => el is HTMLElement
+>el : Node
+>el instanceof HTMLElement && el.className === "foo" : boolean
+>el instanceof HTMLElement : boolean
+>el : Node
+>HTMLElement : { new (): HTMLElement; prototype: HTMLElement; }
+>el.className === "foo" : boolean
+>el.className : string
+>el : HTMLElement
+>className : string
+>"foo" : "foo"
+
+/** @type {(el: Node) => asserts el is HTMLElement} */
+const func11 = (el) => {
+>func11 : (el: Node) => asserts el is HTMLElement
+>(el) => {    if (!(el instanceof HTMLElement)) throw new Error();} : (el: Node) => asserts el is HTMLElement
+>el : Node
+
+    if (!(el instanceof HTMLElement)) throw new Error();
+>!(el instanceof HTMLElement) : boolean
+>(el instanceof HTMLElement) : boolean
+>el instanceof HTMLElement : boolean
+>el : Node
+>HTMLElement : { new (): HTMLElement; prototype: HTMLElement; }
+>new Error() : Error
+>Error : ErrorConstructor
+
+};
+
+// Parameter name mismatch: should report an error because parameter 'element' does not match 'el'
+/** @type {(element: Node) => element is HTMLElement} */
+const mismatch = (el) => el instanceof HTMLElement && el.className === "foo";
+>mismatch : (element: Node) => element is HTMLElement
+>(el) => el instanceof HTMLElement && el.className === "foo" : (el: Node) => element is HTMLElement
+>el : Node
+>el instanceof HTMLElement && el.className === "foo" : boolean
+>el instanceof HTMLElement : boolean
+>el : Node
+>HTMLElement : { new (): HTMLElement; prototype: HTMLElement; }
+>el.className === "foo" : boolean
+>el.className : string
+>el : HTMLElement
+>className : string
+>"foo" : "foo"
+
+// Non-boolean return: should report an error because number is not assignable to boolean
+/** @type {(el: Node) => el is HTMLElement} */
+const badReturn = (el) => 123;
+>badReturn : (el: Node) => el is HTMLElement
+>(el) => 123 : (el: Node) => el is HTMLElement
+>el : Node
+>123 : 123
+

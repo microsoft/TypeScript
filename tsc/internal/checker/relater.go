@@ -2052,6 +2052,35 @@ func (c *Checker) getTupleElementLabelFromBindingElement(node *ast.Node, index i
 	return "arg_" + strconv.Itoa(index)
 }
 
+func (c *Checker) getTypeTagTypeNode(decl *ast.Node) *ast.Node {
+	if !ast.IsInJSFile(decl) || !ast.IsFunctionLike(decl) {
+		return nil
+	}
+	if data := decl.FunctionLikeData(); data != nil && data.FullSignature != nil {
+		return data.FullSignature
+	}
+	parent := decl.Parent
+	if parent == nil {
+		return nil
+	}
+	switch parent.Kind {
+	case ast.KindVariableDeclaration, ast.KindPropertyAssignment, ast.KindPropertyDeclaration:
+		if parent.Initializer() == decl {
+			return parent.Type()
+		}
+	case ast.KindBinaryExpression:
+		bin := parent.AsBinaryExpression()
+		if bin.Right == decl && ast.GetAssignmentDeclarationKind(parent) != ast.JSDeclarationKindNone {
+			return parent.Type()
+		}
+	case ast.KindExportAssignment:
+		if parent.Expression() == decl {
+			return parent.Type()
+		}
+	}
+	return nil
+}
+
 func (c *Checker) getTypePredicateOfSignature(sig *Signature) *TypePredicate {
 	if sig.getResolvedTypePredicate(c) == nil {
 		switch {
@@ -2065,11 +2094,27 @@ func (c *Checker) getTypePredicateOfSignature(sig *Signature) *TypePredicate {
 		default:
 			if sig.declaration != nil {
 				typeNode := sig.declaration.Type()
+				var jsdocPredicate *TypePredicate
+				if typeNode == nil && ast.IsInJSFile(sig.declaration) {
+					if tagNode := c.getTypeTagTypeNode(sig.declaration); tagNode != nil {
+						if tagNode.Kind == ast.KindFunctionType {
+							if retType := tagNode.AsFunctionTypeNode().Type; retType != nil && ast.IsTypePredicateNode(retType) {
+								typeNode = retType
+							}
+						} else {
+							if jsdocSig := c.getSingleCallSignature(c.getTypeFromTypeNode(tagNode)); jsdocSig != nil && jsdocSig != sig {
+								jsdocPredicate = c.getTypePredicateOfSignature(jsdocSig)
+							}
+						}
+					}
+				}
 				switch {
 				case typeNode != nil:
 					if ast.IsTypePredicateNode(typeNode) {
 						sig.setResolvedTypePredicate(c, c.createTypePredicateFromTypePredicateNode(typeNode, sig))
 					}
+				case jsdocPredicate != nil:
+					sig.setResolvedTypePredicate(c, jsdocPredicate)
 				case ast.IsFunctionLikeDeclaration(sig.declaration) && (sig.resolvedReturnType == nil || sig.resolvedReturnType.flags&TypeFlagsBoolean != 0) && c.getParameterCount(sig) > 0:
 					sig.setResolvedTypePredicate(c, c.noTypePredicate) // avoid infinite loop
 					sig.setResolvedTypePredicate(c, c.getTypePredicateFromBody(sig.declaration))

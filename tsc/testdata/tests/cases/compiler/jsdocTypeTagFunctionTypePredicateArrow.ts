@@ -1,0 +1,66 @@
+// @allowJs: true
+// @checkJs: true
+// @noEmit: true
+
+// @filename: index.js
+/** @type {(el: Node) => el is HTMLElement} */
+const func1 = (el) => el instanceof HTMLElement && el.className === "foo";
+
+/** @type {(el: Node) => el is HTMLElement} */
+const func2 = (el) => el instanceof HTMLElement;
+
+/**
+ * @param {Node} el
+ * @returns {el is HTMLElement}
+ */
+const func3 = (el) => el instanceof HTMLElement && el.className === "foo";
+
+/** @type {(el: Node) => el is HTMLElement} */
+function func4(el) {
+    return el instanceof HTMLElement && el.className === "foo";
+}
+
+/** @type {(el: Node) => el is HTMLElement} */
+const func5 = function(el) {
+    return el instanceof HTMLElement && el.className === "foo";
+};
+
+const obj = {
+    /** @type {(el: Node) => el is HTMLElement} */
+    isElement: (el) => el instanceof HTMLElement && el.className === "foo",
+};
+
+class C {
+    /** @type {(el: Node) => el is HTMLElement} */
+    isElement = (el) => el instanceof HTMLElement && el.className === "foo";
+}
+
+// Direct assignment with @type tag on the assignment expression
+let func8a;
+/** @type {(el: Node) => el is HTMLElement} */
+func8a = (el) => el instanceof HTMLElement && el.className === "foo";
+
+// Tag on variable declaration, assignment separately: reports error matching TS 5/6
+/** @type {(el: Node) => el is HTMLElement} */
+let func8b;
+func8b = (el) => el instanceof HTMLElement && el.className === "foo";
+
+/** @type {(el: Node) => el is HTMLElement} */
+module.exports = (el) => el instanceof HTMLElement && el.className === "foo";
+
+/** @typedef {(el: Node) => el is HTMLElement} MyPredicate */
+/** @type {MyPredicate} */
+const func10 = (el) => el instanceof HTMLElement && el.className === "foo";
+
+/** @type {(el: Node) => asserts el is HTMLElement} */
+const func11 = (el) => {
+    if (!(el instanceof HTMLElement)) throw new Error();
+};
+
+// Parameter name mismatch: should report an error because parameter 'element' does not match 'el'
+/** @type {(element: Node) => element is HTMLElement} */
+const mismatch = (el) => el instanceof HTMLElement && el.className === "foo";
+
+// Non-boolean return: should report an error because number is not assignable to boolean
+/** @type {(el: Node) => el is HTMLElement} */
+const badReturn = (el) => 123;
