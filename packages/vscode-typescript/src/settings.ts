@@ -1,4 +1,5 @@
 import * as vscode from "vscode";
+import { getExplicitConfigurationValue } from "./configurationPrecedence";
 
 export function needsExtHostRestartOnChange() {
     const majorVersion = parseInt(vscode.version.split(".")[0]);
@@ -17,9 +18,8 @@ export async function restartExtHostOnChangeIfNeeded(): Promise<void> {
  * `typescript.experimental.useTsgo`, using `inspect()` to only consider
  * explicitly set values (ignoring VS Code defaults).
  *
- * Each setting key is resolved using standard VS Code precedence (workspace
- * folder > workspace > global, with language-specific overrides taking
- * priority within each scope). When both keys are explicitly configured, the
+ * Each setting key is resolved using standard VS Code precedence (see
+ * `getExplicitConfigurationValue`). When both keys are explicitly configured, the
  * value set at the most specific scope wins, and `js/ts` wins over
  * `typescript` at the same scope. Returns `undefined` if neither setting has
  * been explicitly configured.
@@ -76,22 +76,7 @@ export function getWinningTsgoConfigKey(): ConfigName | undefined {
 
 function getExplicitUseTsgo(section: string): boolean | undefined {
     const config = vscode.workspace.getConfiguration(section);
-    const inspected = config.inspect<boolean>("experimental.useTsgo");
-    if (!inspected) return undefined;
-
-    const explicitValues: (boolean | undefined)[] = [
-        inspected.workspaceFolderLanguageValue,
-        inspected.workspaceLanguageValue,
-        inspected.globalLanguageValue,
-        inspected.workspaceFolderValue,
-        inspected.workspaceValue,
-        inspected.globalValue,
-    ];
-
-    for (const v of explicitValues) {
-        if (v !== undefined) return v;
-    }
-    return undefined;
+    return getExplicitConfigurationValue(config.inspect<boolean>("experimental.useTsgo"));
 }
 
 /**

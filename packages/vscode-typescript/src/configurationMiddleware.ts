@@ -2,6 +2,7 @@ import * as vscode from "vscode";
 
 import type { ConfigurationMiddleware } from "vscode-languageclient";
 import type { MessageSignature } from "vscode-languageserver-protocol";
+import { getExplicitConfigurationValue } from "./configurationPrecedence";
 
 /**
  * Configuration middleware for the TypeScript language server.
@@ -12,8 +13,8 @@ import type { MessageSignature } from "vscode-languageserver-protocol";
  * server from distinguishing user-set values from defaults.
  *
  * This module instead uses `inspect()` to retrieve both explicitly-set values (user/
- * workspace/workspace-folder settings) and VS Code default values from all three
- * configuration sections, then merges them with the correct precedence:
+ * workspace/workspace-folder settings, including language-specific overrides) and VS Code
+ * default values from all three configuration sections, then merges them with the correct precedence:
  *   sections: js/ts > typescript > javascript
  *   values:   explicit > default
  *
@@ -88,7 +89,11 @@ function getInspectedConfiguration(
     section: string,
     resource: vscode.Uri | undefined,
 ): { explicit: Record<string, any> | null; defaults: Record<string, any> | null; } {
-    const config = vscode.workspace.getConfiguration(section, resource);
+    // The server has one config for all files, so resolve `[typescript]`
+    // overrides the way the built-in extension does for TS/TSX. As a result,
+    // JS/JSX files also get `[typescript]` overrides, and `[javascript]`
+    // overrides are ignored.
+    const config = vscode.workspace.getConfiguration(section, { uri: resource, languageId: "typescript" });
     // Use Object.create(null) so these objects have no prototype to pollute.
     const explicit: Record<string, any> = Object.create(null);
     const defaults: Record<string, any> = Object.create(null);
@@ -103,22 +108,16 @@ function getInspectedConfiguration(
             continue;
         }
 
-        // Pick the most specific explicitly-set value.
-        // Language-specific overrides (e.g. [typescript]) take precedence
-        // over non-language values at the same scope.
-        const explicitValue = inspection.workspaceFolderLanguageValue
-            ?? inspection.workspaceFolderValue
-            ?? inspection.workspaceLanguageValue
-            ?? inspection.workspaceValue
-            ?? inspection.globalLanguageValue
-            ?? inspection.globalValue;
+        const explicitValue = getExplicitConfigurationValue(inspection);
+        // Language defaults stay defaults, as in `readUnifiedConfig`.
+        const defaultValue = inspection.defaultLanguageValue ?? inspection.defaultValue;
 
         if (explicitValue !== undefined) {
             setNestedValue(explicit, key, toJSONObject(explicitValue));
             hasExplicit = true;
         }
-        else if (inspection.defaultValue !== undefined) {
-            setNestedValue(defaults, key, toJSONObject(inspection.defaultValue));
+        else if (defaultValue !== undefined) {
+            setNestedValue(defaults, key, toJSONObject(defaultValue));
             hasDefaults = true;
         }
     }
