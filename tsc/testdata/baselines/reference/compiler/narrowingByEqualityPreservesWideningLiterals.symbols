@@ -1,0 +1,156 @@
+//// [tests/cases/compiler/narrowingByEqualityPreservesWideningLiterals.ts] ////
+
+=== narrowingByEqualityPreservesWideningLiterals.ts ===
+// https://github.com/microsoft/TypeScript/issues/64766
+
+declare const kind: string | undefined;
+>kind : Symbol(kind, Decl(narrowingByEqualityPreservesWideningLiterals.ts, 2, 13))
+
+if (kind === "a") {
+>kind : Symbol(kind, Decl(narrowingByEqualityPreservesWideningLiterals.ts, 2, 13))
+
+    let copy = kind;
+>copy : Symbol(copy, Decl(narrowingByEqualityPreservesWideningLiterals.ts, 5, 7))
+>kind : Symbol(kind, Decl(narrowingByEqualityPreservesWideningLiterals.ts, 2, 13))
+
+    copy = "b";
+>copy : Symbol(copy, Decl(narrowingByEqualityPreservesWideningLiterals.ts, 5, 7))
+
+    const obj = { kind };
+>obj : Symbol(obj, Decl(narrowingByEqualityPreservesWideningLiterals.ts, 8, 9))
+>kind : Symbol(kind, Decl(narrowingByEqualityPreservesWideningLiterals.ts, 8, 17))
+
+    obj.kind = "b";
+>obj.kind : Symbol(kind, Decl(narrowingByEqualityPreservesWideningLiterals.ts, 8, 17))
+>obj : Symbol(obj, Decl(narrowingByEqualityPreservesWideningLiterals.ts, 8, 9))
+>kind : Symbol(kind, Decl(narrowingByEqualityPreservesWideningLiterals.ts, 8, 17))
+
+    const arr = [kind];
+>arr : Symbol(arr, Decl(narrowingByEqualityPreservesWideningLiterals.ts, 11, 9))
+>kind : Symbol(kind, Decl(narrowingByEqualityPreservesWideningLiterals.ts, 2, 13))
+
+    arr.push("b");
+>arr.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>arr : Symbol(arr, Decl(narrowingByEqualityPreservesWideningLiterals.ts, 11, 9))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+}
+
+declare const count: number | undefined;
+>count : Symbol(count, Decl(narrowingByEqualityPreservesWideningLiterals.ts, 15, 13))
+
+if (count === 1) {
+>count : Symbol(count, Decl(narrowingByEqualityPreservesWideningLiterals.ts, 15, 13))
+
+    let copy = count;
+>copy : Symbol(copy, Decl(narrowingByEqualityPreservesWideningLiterals.ts, 18, 7))
+>count : Symbol(count, Decl(narrowingByEqualityPreservesWideningLiterals.ts, 15, 13))
+
+    copy = 2;
+>copy : Symbol(copy, Decl(narrowingByEqualityPreservesWideningLiterals.ts, 18, 7))
+}
+
+declare const big: bigint | null;
+>big : Symbol(big, Decl(narrowingByEqualityPreservesWideningLiterals.ts, 22, 13))
+
+if (big === 1n) {
+>big : Symbol(big, Decl(narrowingByEqualityPreservesWideningLiterals.ts, 22, 13))
+
+    let copy = big;
+>copy : Symbol(copy, Decl(narrowingByEqualityPreservesWideningLiterals.ts, 25, 7))
+>big : Symbol(big, Decl(narrowingByEqualityPreservesWideningLiterals.ts, 22, 13))
+
+    copy = 2n;
+>copy : Symbol(copy, Decl(narrowingByEqualityPreservesWideningLiterals.ts, 25, 7))
+}
+
+declare const constKind = "a";
+>constKind : Symbol(constKind, Decl(narrowingByEqualityPreservesWideningLiterals.ts, 29, 13))
+
+if (constKind === "a") {
+>constKind : Symbol(constKind, Decl(narrowingByEqualityPreservesWideningLiterals.ts, 29, 13))
+
+    let copy = constKind;
+>copy : Symbol(copy, Decl(narrowingByEqualityPreservesWideningLiterals.ts, 32, 7))
+>constKind : Symbol(constKind, Decl(narrowingByEqualityPreservesWideningLiterals.ts, 29, 13))
+
+    copy = "b";
+>copy : Symbol(copy, Decl(narrowingByEqualityPreservesWideningLiterals.ts, 32, 7))
+}
+
+declare const annotatedKind: "a";
+>annotatedKind : Symbol(annotatedKind, Decl(narrowingByEqualityPreservesWideningLiterals.ts, 36, 13))
+
+if (annotatedKind === "a") {
+>annotatedKind : Symbol(annotatedKind, Decl(narrowingByEqualityPreservesWideningLiterals.ts, 36, 13))
+
+    let copy = annotatedKind;
+>copy : Symbol(copy, Decl(narrowingByEqualityPreservesWideningLiterals.ts, 39, 7))
+>annotatedKind : Symbol(annotatedKind, Decl(narrowingByEqualityPreservesWideningLiterals.ts, 36, 13))
+
+    copy = "b";
+>copy : Symbol(copy, Decl(narrowingByEqualityPreservesWideningLiterals.ts, 39, 7))
+}
+
+declare const lit: "a" | "b" | undefined;
+>lit : Symbol(lit, Decl(narrowingByEqualityPreservesWideningLiterals.ts, 43, 13))
+
+if (lit === "a") {
+>lit : Symbol(lit, Decl(narrowingByEqualityPreservesWideningLiterals.ts, 43, 13))
+
+    let copy = lit;
+>copy : Symbol(copy, Decl(narrowingByEqualityPreservesWideningLiterals.ts, 46, 7))
+>lit : Symbol(lit, Decl(narrowingByEqualityPreservesWideningLiterals.ts, 43, 13))
+
+    copy = "b";
+>copy : Symbol(copy, Decl(narrowingByEqualityPreservesWideningLiterals.ts, 46, 7))
+}
+
+if (kind !== undefined) {
+>kind : Symbol(kind, Decl(narrowingByEqualityPreservesWideningLiterals.ts, 2, 13))
+>undefined : Symbol(undefined)
+
+    switch (kind) {
+>kind : Symbol(kind, Decl(narrowingByEqualityPreservesWideningLiterals.ts, 2, 13))
+
+        case "a":
+            let copy = kind;
+>copy : Symbol(copy, Decl(narrowingByEqualityPreservesWideningLiterals.ts, 53, 15))
+>kind : Symbol(kind, Decl(narrowingByEqualityPreservesWideningLiterals.ts, 2, 13))
+
+            copy = "b";
+>copy : Symbol(copy, Decl(narrowingByEqualityPreservesWideningLiterals.ts, 53, 15))
+    }
+}
+
+declare const requests: Array<{ parameterPath?: string }>;
+>requests : Symbol(requests, Decl(narrowingByEqualityPreservesWideningLiterals.ts, 58, 13))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>parameterPath : Symbol(parameterPath, Decl(narrowingByEqualityPreservesWideningLiterals.ts, 58, 31))
+
+requests.flatMap((request) => {
+>requests.flatMap : Symbol(Array.flatMap, Decl(lib.es2019.array.d.ts, --, --))
+>requests : Symbol(requests, Decl(narrowingByEqualityPreservesWideningLiterals.ts, 58, 13))
+>flatMap : Symbol(Array.flatMap, Decl(lib.es2019.array.d.ts, --, --))
+>request : Symbol(request, Decl(narrowingByEqualityPreservesWideningLiterals.ts, 59, 18))
+
+    if (request.parameterPath === "lookupFields") return [{ parameterPath: request.parameterPath }];
+>request.parameterPath : Symbol(parameterPath, Decl(narrowingByEqualityPreservesWideningLiterals.ts, 58, 31))
+>request : Symbol(request, Decl(narrowingByEqualityPreservesWideningLiterals.ts, 59, 18))
+>parameterPath : Symbol(parameterPath, Decl(narrowingByEqualityPreservesWideningLiterals.ts, 58, 31))
+>parameterPath : Symbol(parameterPath, Decl(narrowingByEqualityPreservesWideningLiterals.ts, 60, 59))
+>request.parameterPath : Symbol(parameterPath, Decl(narrowingByEqualityPreservesWideningLiterals.ts, 58, 31))
+>request : Symbol(request, Decl(narrowingByEqualityPreservesWideningLiterals.ts, 59, 18))
+>parameterPath : Symbol(parameterPath, Decl(narrowingByEqualityPreservesWideningLiterals.ts, 58, 31))
+
+    if (request.parameterPath === "recordFields") return [{ parameterPath: request.parameterPath }];
+>request.parameterPath : Symbol(parameterPath, Decl(narrowingByEqualityPreservesWideningLiterals.ts, 58, 31))
+>request : Symbol(request, Decl(narrowingByEqualityPreservesWideningLiterals.ts, 59, 18))
+>parameterPath : Symbol(parameterPath, Decl(narrowingByEqualityPreservesWideningLiterals.ts, 58, 31))
+>parameterPath : Symbol(parameterPath, Decl(narrowingByEqualityPreservesWideningLiterals.ts, 61, 59))
+>request.parameterPath : Symbol(parameterPath, Decl(narrowingByEqualityPreservesWideningLiterals.ts, 58, 31))
+>request : Symbol(request, Decl(narrowingByEqualityPreservesWideningLiterals.ts, 59, 18))
+>parameterPath : Symbol(parameterPath, Decl(narrowingByEqualityPreservesWideningLiterals.ts, 58, 31))
+
+    return [];
+});
+
