@@ -12,6 +12,9 @@ class Obj {
     x = 1;
 }
 exports.Obj = Obj;
+exports.b = { c: "hello" };
+exports.arr = [1];
+exports.a = "a";
 
 // @filename: b.js
 const key = "value";
@@ -33,3 +36,16 @@ exports.useObj = useObj;
 
 const {[key]: unusedDynamic, text: unusedText} = require("./a"), keep = 1;
 exports.keep = keep;
+
+// Case 1: Nested object destructuring
+const { b: { c } } = require("./a");
+exports.c = c;
+
+// Case 2: Nested array destructuring
+const { arr: [first] } = require("./a");
+exports.first = first;
+
+// Case 3: Mixed destructuring
+const { a, b: { c: c2 } } = require("./a");
+exports.a = a;
+exports.c2 = c2;

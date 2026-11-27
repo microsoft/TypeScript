@@ -887,11 +887,14 @@ func hasAnyBindingInitializers(bindingPattern *ast.BindingPattern) bool {
 
 func canTransformCjsRequireToImport(decl *ast.Node) bool {
 	name := decl.Name()
-	if !ast.IsObjectBindingPattern(name) {
+	if ast.IsIdentifier(name) {
 		return true
 	}
+	if !ast.IsObjectBindingPattern(name) {
+		return false
+	}
 	for _, elem := range name.AsBindingPattern().Elements.Nodes {
-		if propertyName := elem.PropertyName(); propertyName != nil && ast.IsDynamicName(propertyName) {
+		if !isCjsRequireImportableBinding(elem) {
 			return false
 		}
 	}
@@ -899,6 +902,9 @@ func canTransformCjsRequireToImport(decl *ast.Node) bool {
 }
 
 func isCjsRequireImportableBinding(elem *ast.Node) bool {
+	if !ast.IsBindingElement(elem) || elem.Parent == nil || !ast.IsObjectBindingPattern(elem.Parent) {
+		return false
+	}
 	propertyName := elem.PropertyName()
 	return ast.IsIdentifier(elem.Name()) && elem.AsBindingElement().DotDotDotToken == nil && (propertyName == nil || !ast.IsDynamicName(propertyName))
 }

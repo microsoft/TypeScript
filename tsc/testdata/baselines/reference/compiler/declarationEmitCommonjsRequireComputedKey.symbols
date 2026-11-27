@@ -102,6 +102,53 @@ exports.keep = keep;
 >keep : Symbol(keep, Decl(b.js, 17, 74))
 >keep : Symbol(keep, Decl(b.js, 17, 64))
 
+// Case 1: Nested object destructuring
+const { b: { c } } = require("./a");
+>b : Symbol(sibling.b, Decl(a.js, 7, 18))
+>c : Symbol(c, Decl(b.js, 21, 12))
+>require : Symbol(require)
+>"./a" : Symbol(sibling, Decl(a.js, 0, 0))
+
+exports.c = c;
+>exports.c : Symbol(c, Decl(b.js, 21, 36))
+>exports : Symbol(exports, Decl(b.js, 0, 0))
+>c : Symbol(c, Decl(b.js, 21, 36))
+>c : Symbol(c, Decl(b.js, 21, 12))
+
+// Case 2: Nested array destructuring
+const { arr: [first] } = require("./a");
+>arr : Symbol(sibling.arr, Decl(a.js, 8, 27))
+>first : Symbol(first, Decl(b.js, 25, 14))
+>require : Symbol(require)
+>"./a" : Symbol(sibling, Decl(a.js, 0, 0))
+
+exports.first = first;
+>exports.first : Symbol(first, Decl(b.js, 25, 40))
+>exports : Symbol(exports, Decl(b.js, 0, 0))
+>first : Symbol(first, Decl(b.js, 25, 40))
+>first : Symbol(first, Decl(b.js, 25, 14))
+
+// Case 3: Mixed destructuring
+const { a, b: { c: c2 } } = require("./a");
+>a : Symbol(a, Decl(b.js, 29, 7))
+>b : Symbol(sibling.b, Decl(a.js, 7, 18))
+>c : Symbol(c, Decl(a.js, 8, 13))
+>c2 : Symbol(c2, Decl(b.js, 29, 15))
+>require : Symbol(require)
+>"./a" : Symbol(sibling, Decl(a.js, 0, 0))
+
+exports.a = a;
+>exports.a : Symbol(a, Decl(b.js, 29, 43))
+>exports : Symbol(exports, Decl(b.js, 0, 0))
+>a : Symbol(a, Decl(b.js, 29, 43))
+>a : Symbol(a, Decl(b.js, 29, 7))
+
+exports.c2 = c2;
+>exports.c2 : Symbol(c2, Decl(b.js, 30, 14))
+>exports : Symbol(exports, Decl(b.js, 0, 0))
+>c2 : Symbol(c2, Decl(b.js, 30, 14))
+>c2 : Symbol(c2, Decl(b.js, 29, 15))
+
 === a.js ===
 exports.value = 123;
 >exports.value : Symbol(value, Decl(a.js, 0, 0))
@@ -135,4 +182,20 @@ exports.Obj = Obj;
 >exports : Symbol(exports, Decl(a.js, 0, 0))
 >Obj : Symbol(Obj, Decl(a.js, 6, 1))
 >Obj : Symbol(Obj, Decl(a.js, 3, 30))
+
+exports.b = { c: "hello" };
+>exports.b : Symbol(b, Decl(a.js, 7, 18))
+>exports : Symbol(exports, Decl(a.js, 0, 0))
+>b : Symbol(b, Decl(a.js, 7, 18))
+>c : Symbol(c, Decl(a.js, 8, 13))
+
+exports.arr = [1];
+>exports.arr : Symbol(arr, Decl(a.js, 8, 27))
+>exports : Symbol(exports, Decl(a.js, 0, 0))
+>arr : Symbol(arr, Decl(a.js, 8, 27))
+
+exports.a = "a";
+>exports.a : Symbol(a, Decl(a.js, 9, 18))
+>exports : Symbol(exports, Decl(a.js, 0, 0))
+>a : Symbol(a, Decl(a.js, 9, 18))
 

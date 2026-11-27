@@ -118,6 +118,60 @@ exports.keep = keep;
 >keep : 1
 >keep : 1
 
+// Case 1: Nested object destructuring
+const { b: { c } } = require("./a");
+>b : any
+>c : string
+>require("./a") : typeof sibling
+>require : any
+>"./a" : "./a"
+
+exports.c = c;
+>exports.c = c : string
+>exports.c : string
+>exports : typeof import("./b")
+>c : string
+>c : string
+
+// Case 2: Nested array destructuring
+const { arr: [first] } = require("./a");
+>arr : any
+>first : number
+>require("./a") : typeof sibling
+>require : any
+>"./a" : "./a"
+
+exports.first = first;
+>exports.first = first : number
+>exports.first : number
+>exports : typeof import("./b")
+>first : number
+>first : number
+
+// Case 3: Mixed destructuring
+const { a, b: { c: c2 } } = require("./a");
+>a : "a"
+>b : any
+>c : any
+>c2 : string
+>require("./a") : typeof sibling
+>require : any
+>"./a" : "./a"
+
+exports.a = a;
+>exports.a = a : "a"
+>exports.a : "a"
+>exports : typeof import("./b")
+>a : "a"
+>a : "a"
+
+exports.c2 = c2;
+>exports.c2 = c2 : string
+>exports.c2 : string
+>exports : typeof import("./b")
+>c2 : string
+>c2 : string
+
 === a.js ===
 exports.value = 123;
 >exports.value = 123 : 123
@@ -162,4 +216,28 @@ exports.Obj = Obj;
 >exports : typeof import("./a")
 >Obj : typeof Obj
 >Obj : typeof Obj
+
+exports.b = { c: "hello" };
+>exports.b = { c: "hello" } : { c: string; }
+>exports.b : { c: string; }
+>exports : typeof import("./a")
+>b : { c: string; }
+>{ c: "hello" } : { c: string; }
+>c : string
+>"hello" : "hello"
+
+exports.arr = [1];
+>exports.arr = [1] : number[]
+>exports.arr : number[]
+>exports : typeof import("./a")
+>arr : number[]
+>[1] : number[]
+>1 : 1
+
+exports.a = "a";
+>exports.a = "a" : "a"
+>exports.a : "a"
+>exports : typeof import("./a")
+>a : "a"
+>"a" : "a"
 
