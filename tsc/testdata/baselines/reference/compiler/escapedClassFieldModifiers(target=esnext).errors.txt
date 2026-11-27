@@ -1,0 +1,65 @@
+escapedClassFieldModifiers.ts(49,5): error TS1260: Keywords cannot contain escape characters.
+escapedClassFieldModifiers.ts(50,5): error TS1260: Keywords cannot contain escape characters.
+escapedClassFieldModifiers.ts(51,5): error TS1260: Keywords cannot contain escape characters.
+
+
+==== escapedClassFieldModifiers.ts (3 errors) ====
+    class UnicodeEscapes {
+        g\u0065t
+        getMethod() {}
+        s\u0065t
+        setField = 1;
+        st\u0061tic
+        staticMethod() {}
+    }
+    
+    class ExtendedUnicodeEscapes {
+        g\u{65}t
+        getMethod() {}
+        s\u{65}t
+        setField = 1;
+        st\u{61}tic
+        staticMethod() {}
+    }
+    
+    const unicode = new UnicodeEscapes();
+    unicode.get;
+    unicode.set;
+    unicode.static;
+    unicode.getMethod();
+    unicode.staticMethod();
+    
+    const extended = new ExtendedUnicodeEscapes();
+    extended.get;
+    extended.set;
+    extended.static;
+    extended.getMethod();
+    extended.staticMethod();
+    
+    class UnescapedModifiers {
+        get
+        value() { return 1; }
+        set
+        value(v: number) {}
+        static
+        method() {}
+    }
+    
+    class EscapedMemberNames {
+        g\u0065t() {}
+        s\u{65}t() {}
+        st\u0061tic() {}
+    }
+    
+    class InvalidEscapedModifiers {
+        g\u0065t value() { return 1; }
+        ~~~~~~~~
+!!! error TS1260: Keywords cannot contain escape characters.
+        s\u{65}t value(v: number) {}
+        ~~~~~~~~
+!!! error TS1260: Keywords cannot contain escape characters.
+        st\u0061tic method() {}
+        ~~~~~~~~~~~
+!!! error TS1260: Keywords cannot contain escape characters.
+    }
+    

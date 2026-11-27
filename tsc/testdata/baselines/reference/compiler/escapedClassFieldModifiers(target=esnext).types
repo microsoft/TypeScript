@@ -1,0 +1,159 @@
+//// [tests/cases/compiler/escapedClassFieldModifiers.ts] ////
+
+=== escapedClassFieldModifiers.ts ===
+class UnicodeEscapes {
+>UnicodeEscapes : UnicodeEscapes
+
+    g\u0065t
+>g\u0065t : any
+
+    getMethod() {}
+>getMethod : () => void
+
+    s\u0065t
+>s\u0065t : any
+
+    setField = 1;
+>setField : number
+>1 : 1
+
+    st\u0061tic
+>st\u0061tic : any
+
+    staticMethod() {}
+>staticMethod : () => void
+}
+
+class ExtendedUnicodeEscapes {
+>ExtendedUnicodeEscapes : ExtendedUnicodeEscapes
+
+    g\u{65}t
+>g\u{65}t : any
+
+    getMethod() {}
+>getMethod : () => void
+
+    s\u{65}t
+>s\u{65}t : any
+
+    setField = 1;
+>setField : number
+>1 : 1
+
+    st\u{61}tic
+>st\u{61}tic : any
+
+    staticMethod() {}
+>staticMethod : () => void
+}
+
+const unicode = new UnicodeEscapes();
+>unicode : UnicodeEscapes
+>new UnicodeEscapes() : UnicodeEscapes
+>UnicodeEscapes : typeof UnicodeEscapes
+
+unicode.get;
+>unicode.get : any
+>unicode : UnicodeEscapes
+>get : any
+
+unicode.set;
+>unicode.set : any
+>unicode : UnicodeEscapes
+>set : any
+
+unicode.static;
+>unicode.static : any
+>unicode : UnicodeEscapes
+>static : any
+
+unicode.getMethod();
+>unicode.getMethod() : void
+>unicode.getMethod : () => void
+>unicode : UnicodeEscapes
+>getMethod : () => void
+
+unicode.staticMethod();
+>unicode.staticMethod() : void
+>unicode.staticMethod : () => void
+>unicode : UnicodeEscapes
+>staticMethod : () => void
+
+const extended = new ExtendedUnicodeEscapes();
+>extended : ExtendedUnicodeEscapes
+>new ExtendedUnicodeEscapes() : ExtendedUnicodeEscapes
+>ExtendedUnicodeEscapes : typeof ExtendedUnicodeEscapes
+
+extended.get;
+>extended.get : any
+>extended : ExtendedUnicodeEscapes
+>get : any
+
+extended.set;
+>extended.set : any
+>extended : ExtendedUnicodeEscapes
+>set : any
+
+extended.static;
+>extended.static : any
+>extended : ExtendedUnicodeEscapes
+>static : any
+
+extended.getMethod();
+>extended.getMethod() : void
+>extended.getMethod : () => void
+>extended : ExtendedUnicodeEscapes
+>getMethod : () => void
+
+extended.staticMethod();
+>extended.staticMethod() : void
+>extended.staticMethod : () => void
+>extended : ExtendedUnicodeEscapes
+>staticMethod : () => void
+
+class UnescapedModifiers {
+>UnescapedModifiers : UnescapedModifiers
+
+    get
+    value() { return 1; }
+>value : number
+>1 : 1
+
+    set
+    value(v: number) {}
+>value : number
+>v : number
+
+    static
+    method() {}
+>method : () => void
+}
+
+class EscapedMemberNames {
+>EscapedMemberNames : EscapedMemberNames
+
+    g\u0065t() {}
+>g\u0065t : () => void
+
+    s\u{65}t() {}
+>s\u{65}t : () => void
+
+    st\u0061tic() {}
+>st\u0061tic : () => void
+}
+
+class InvalidEscapedModifiers {
+>InvalidEscapedModifiers : InvalidEscapedModifiers
+
+    g\u0065t value() { return 1; }
+>value : number
+>1 : 1
+
+    s\u{65}t value(v: number) {}
+>value : number
+>v : number
+
+    st\u0061tic method() {}
+>method : () => void
+}
+
