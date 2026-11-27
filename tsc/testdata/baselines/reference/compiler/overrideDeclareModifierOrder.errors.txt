@@ -1,0 +1,19 @@
+overrideDeclareModifierOrder.ts(7,13): error TS1243: 'override' modifier cannot be used with 'declare' modifier.
+overrideDeclareModifierOrder.ts(8,14): error TS1243: 'declare' modifier cannot be used with 'override' modifier.
+
+
+==== overrideDeclareModifierOrder.ts (2 errors) ====
+    class Base {
+        p1: number = 1;
+        p2: number = 2;
+    }
+    
+    class Derived extends Base {
+        declare override p1: number;
+                ~~~~~~~~
+!!! error TS1243: 'override' modifier cannot be used with 'declare' modifier.
+        override declare p2: number;
+                 ~~~~~~~
+!!! error TS1243: 'declare' modifier cannot be used with 'override' modifier.
+    }
+    
