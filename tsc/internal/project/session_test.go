@@ -135,6 +135,30 @@ func TestSession(t *testing.T) {
 			assert.Assert(t, file != nil)
 			assert.Equal(t, file.ScriptKind, core.ScriptKindTS)
 		})
+
+		t.Run("inferred project with URL imports containing query or fragment", func(t *testing.T) {
+			t.Parallel()
+			content := `import "https://esm.sh/preact?dev";
+import "https://esm.sh/preact#main";`
+			files := map[string]any{
+				"/home/projects/TS/p1/index.ts": content,
+				// The typings cache must exist for the extra typings-location resolution pass to run.
+				projecttestutil.TestTypingsLocation + "/node_modules/@types/somelib/index.d.ts": `export const x: number;`,
+			}
+			session, _ := projecttestutil.Setup(files)
+
+			session.DidOpenFile(context.Background(), "file:///home/projects/TS/p1/index.ts", 1, content, lsproto.LanguageKindTypeScript)
+
+			ls, err := session.GetLanguageService(context.Background(), "file:///home/projects/TS/p1/index.ts")
+			assert.NilError(t, err)
+			program := ls.GetProgram()
+			file := program.GetSourceFile("/home/projects/TS/p1/index.ts")
+			assert.Assert(t, file != nil)
+			assert.Equal(t, len(file.Imports()), 2)
+			for _, imp := range file.Imports() {
+				assert.Assert(t, !program.GetResolvedModuleFromModuleSpecifier(file, imp).IsResolved())
+			}
+		})
 	})
 
 	t.Run("watchChange and didOpen in same batch rebuilds program", func(t *testing.T) {
