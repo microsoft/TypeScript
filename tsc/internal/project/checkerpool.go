@@ -56,6 +56,7 @@ type checkerPool struct {
 	heldBy              []string                // heldBy[i] is the requestID holding checker i, checkerHeldAnonymous, or "" if not held
 	fileAssociations    map[*ast.SourceFile]int // file → query checker index (1+)
 	requestAssociations map[string]int          // requestID → checker index
+	diagnosticsRequests map[string]struct{}
 
 	// lastReleased tracks when each checker was last released.
 	lastReleased []time.Time
@@ -98,6 +99,7 @@ func newCheckerPool(opts CheckerPoolOptions, program *compiler.Program, log func
 		heldBy:                 make([]string, opts.MaxCheckers),
 		fileAssociations:       make(map[*ast.SourceFile]int),
 		requestAssociations:    make(map[string]int),
+		diagnosticsRequests:    make(map[string]struct{}),
 		lastReleased:           make([]time.Time, opts.MaxCheckers),
 		diagSem:                make(chan struct{}, 1),
 		querySem:               make(chan struct{}, querySlots),
@@ -135,6 +137,11 @@ func (p *checkerPool) GetChecker(ctx context.Context, file *ast.SourceFile) (*ch
 	switch lifetime {
 	case core.CheckerLifetimeDiagnostics:
 		return p.getDiagnosticsChecker(ctx, requestID)
+	case core.CheckerLifetimeCheckedFileQuery:
+		if c, release, ok := p.tryGetCheckedDiagnosticsChecker(requestID, file); ok {
+			return c, release
+		}
+		return p.getQueryChecker(ctx, requestID, file)
 	case core.CheckerLifetimeAPI:
 		return p.getPersistentChecker()
 	default:
@@ -216,8 +223,31 @@ func (p *checkerPool) getDiagnosticsChecker(ctx context.Context, requestID strin
 			p.requestAssociations[requestID] = diagIndex
 			p.registerRequestCleanup(ctx, requestID)
 		}
+		p.diagnosticsRequests[requestID] = struct{}{}
 	}
 	return c, p.createRelease(requestID, diagIndex, c)
+}
+
+func (p *checkerPool) tryGetCheckedDiagnosticsChecker(requestID string, file *ast.SourceFile) (*checker.Checker, func(), bool) {
+	const diagIndex = 0
+	if file == nil {
+		return nil, nil, false
+	}
+
+	p.mu.Lock()
+	defer p.mu.Unlock()
+	c := p.checkers[diagIndex]
+	if c == nil || p.heldBy[diagIndex] != "" || len(p.diagnosticsRequests) > 0 || !c.IsSourceFileChecked(file) {
+		return nil, nil, false
+	}
+	select {
+	case p.diagSem <- struct{}{}:
+		p.heldBy[diagIndex] = holdTag(requestID)
+		p.log("checkerpool: Lending diagnostics checker to query request " + holdTag(requestID))
+		return c, p.createRelease(requestID, diagIndex, c), true
+	default:
+		return nil, nil, false
+	}
 }
 
 // getQueryChecker returns an ephemeral query checker from indices 1+.
@@ -363,6 +393,7 @@ func (p *checkerPool) registerRequestCleanup(ctx context.Context, requestID stri
 		p.mu.Lock()
 		defer p.mu.Unlock()
 		delete(p.requestAssociations, requestID)
+		delete(p.diagnosticsRequests, requestID)
 	})
 }
 

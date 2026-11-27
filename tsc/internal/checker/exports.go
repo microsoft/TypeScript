@@ -227,6 +227,11 @@ func GetDeclarationModifierFlagsFromSymbol(s *ast.Symbol) ast.ModifierFlags {
 	return getDeclarationModifierFlagsFromSymbol(s)
 }
 
+func (c *Checker) IsSourceFileChecked(sourceFile *ast.SourceFile) bool {
+	links := c.sourceFileLinks.TryGet(sourceFile)
+	return links != nil && links.typeChecked && links.unusedChecked && !c.wasCanceled
+}
+
 func (c *Checker) WasCanceled() bool {
 	return c.wasCanceled
 }
