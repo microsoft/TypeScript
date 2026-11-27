@@ -48,3 +48,61 @@ export function foo(y: number) {
 export { x };
 >x : Symbol(x, Decl(moduleExportsUnaryExpression.ts, 14, 8))
 
+export let x1 = 0;
+>x1 : Symbol(x1, Decl(moduleExportsUnaryExpression.ts, 16, 10))
+
+export { x1 as y1, x1 as default, x1 as "a b" };
+>x1 : Symbol(x1, Decl(moduleExportsUnaryExpression.ts, 16, 10))
+>y1 : Symbol(y1, Decl(moduleExportsUnaryExpression.ts, 17, 8))
+>x1 : Symbol(x1, Decl(moduleExportsUnaryExpression.ts, 16, 10))
+>default : Symbol(default, Decl(moduleExportsUnaryExpression.ts, 17, 18))
+>x1 : Symbol(x1, Decl(moduleExportsUnaryExpression.ts, 16, 10))
+>"a b" : Symbol("a b", Decl(moduleExportsUnaryExpression.ts, 17, 33))
+
+export function f1() {
+>f1 : Symbol(f1, Decl(moduleExportsUnaryExpression.ts, 17, 48))
+
+    return x1++;
+>x1 : Symbol(x1, Decl(moduleExportsUnaryExpression.ts, 16, 10))
+}
+
+export function f2() {
+>f2 : Symbol(f2, Decl(moduleExportsUnaryExpression.ts, 21, 1))
+
+    return x1--;
+>x1 : Symbol(x1, Decl(moduleExportsUnaryExpression.ts, 16, 10))
+}
+
+x1++;
+>x1 : Symbol(x1, Decl(moduleExportsUnaryExpression.ts, 16, 10))
+
+x1--;
+>x1 : Symbol(x1, Decl(moduleExportsUnaryExpression.ts, 16, 10))
+
+for (let i = 0; i < 2; x1++) {
+>i : Symbol(i, Decl(moduleExportsUnaryExpression.ts, 30, 8))
+>i : Symbol(i, Decl(moduleExportsUnaryExpression.ts, 30, 8))
+>x1 : Symbol(x1, Decl(moduleExportsUnaryExpression.ts, 16, 10))
+
+    i++;
+>i : Symbol(i, Decl(moduleExportsUnaryExpression.ts, 30, 8))
+}
+
+export const f3 = () => x1++;
+>f3 : Symbol(f3, Decl(moduleExportsUnaryExpression.ts, 34, 12))
+>x1 : Symbol(x1, Decl(moduleExportsUnaryExpression.ts, 16, 10))
+
+export var x2 = 0;
+>x2 : Symbol(x2, Decl(moduleExportsUnaryExpression.ts, 36, 10))
+
+export { x2 as y2 };
+>x2 : Symbol(x2, Decl(moduleExportsUnaryExpression.ts, 36, 10))
+>y2 : Symbol(y2, Decl(moduleExportsUnaryExpression.ts, 37, 8))
+
+x2++;
+>x2 : Symbol(x2, Decl(moduleExportsUnaryExpression.ts, 36, 10))
+
+export const f4 = () => x2--;
+>f4 : Symbol(f4, Decl(moduleExportsUnaryExpression.ts, 40, 12))
+>x2 : Symbol(x2, Decl(moduleExportsUnaryExpression.ts, 36, 10))
+
