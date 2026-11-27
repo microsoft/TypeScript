@@ -240,10 +240,31 @@ func documentationFromSignature(getMappedLocation documentationLocationMapper, c
 	if declaration == nil {
 		return ""
 	}
-	if ast.IsCallSignatureDeclaration(declaration) || ast.IsConstructSignatureDeclaration(declaration) {
-		return getDocumentationFromDeclaration(getMappedLocation, c, symbol, declaration, location, contentFormat, commentOnly)
+	// Prefer the documentation of the declaration a function is assigned to, regardless of the name
+	// used to call it. The function itself may have separate JSDoc that would otherwise replace it.
+	if host := getInitializedDeclarationOfFunction(declaration); host != nil {
+		if documentation := getDocumentationFromDeclaration(getMappedLocation, c, symbol, host, location, contentFormat, commentOnly); documentation != "" {
+			return documentation
+		}
 	}
-	return ""
+	return getDocumentationFromDeclaration(getMappedLocation, c, symbol, declaration, location, contentFormat, commentOnly)
+}
+
+// getInitializedDeclarationOfFunction returns the variable or property declaration initialized by the
+// given function expression or arrow function, looking through outer expressions such as parentheses.
+func getInitializedDeclarationOfFunction(node *ast.Node) *ast.Node {
+	if !ast.IsFunctionExpressionOrArrowFunction(node) {
+		return nil
+	}
+	parent := node.Parent
+	for ast.IsOuterExpression(parent, ast.OEKAll) {
+		parent = parent.Parent
+	}
+	if (ast.IsVariableDeclaration(parent) || ast.IsPropertyDeclaration(parent) || ast.IsPropertyAssignment(parent)) &&
+		parent.Initializer() != nil && ast.SkipOuterExpressions(parent.Initializer(), ast.OEKAll) == node {
+		return parent
+	}
+	return nil
 }
 
 func documentationFromAlias(getMappedLocation documentationLocationMapper, c *checker.Checker, symbol *ast.Symbol, node *ast.Node, contentFormat lsproto.MarkupKind, commentOnly bool) string {
