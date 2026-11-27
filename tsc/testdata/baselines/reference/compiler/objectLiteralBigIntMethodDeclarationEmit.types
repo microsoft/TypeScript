@@ -1,0 +1,40 @@
+//// [tests/cases/compiler/objectLiteralBigIntMethodDeclarationEmit.ts] ////
+
+=== objectLiteralBigIntMethodDeclarationEmit.ts ===
+export const foo = {
+>foo : { 1n(): number; 2(): number; }
+>{    1n() {        return 1;    },    2() {        return 2;    }} : { 1n(): number; 2(): number; }
+
+    1n() {
+>1n : () => number
+
+        return 1;
+>1 : 1
+
+    },
+    2() {
+>2 : () => number
+
+        return 2;
+>2 : 2
+    }
+};
+
+export class Foo {
+>Foo : Foo
+
+    1n() {
+>1n : () => number
+
+        return 1;
+>1 : 1
+    }
+    2() {
+>2 : () => number
+
+        return 2;
+>2 : 2
+    }
+}
+
+

@@ -9,15 +9,16 @@ g.ts(8,5): error TS1539: A 'bigint' literal cannot be used as a property name.
 g.ts(15,17): error TS1539: A 'bigint' literal cannot be used as a property name.
 g.ts(17,3): error TS2538: Type 'bigint' cannot be used as an index type.
 g.ts(18,4): error TS2538: Type 'bigint' cannot be used as an index type.
-g.ts(20,7): error TS2741: Property '"3n"' is missing in type '{}' but required in type 'H'.
 g.ts(20,17): error TS1539: A 'bigint' literal cannot be used as a property name.
 g.ts(22,3): error TS2538: Type 'bigint' cannot be used as an index type.
 g.ts(23,4): error TS2538: Type 'bigint' cannot be used as an index type.
 g.ts(25,17): error TS1539: A 'bigint' literal cannot be used as a property name.
+g.ts(25,17): error TS2322: Type 'string' is not assignable to type 'number'.
+g.ts(26,18): error TS2322: Type 'string' is not assignable to type 'number'.
 g.ts(27,3): error TS2538: Type 'bigint' cannot be used as an index type.
 g.ts(28,4): error TS2538: Type 'bigint' cannot be used as an index type.
-g.ts(30,7): error TS2741: Property '"5n"' is missing in type '{}' but required in type 'L'.
 g.ts(30,17): error TS1539: A 'bigint' literal cannot be used as a property name.
+g.ts(30,17): error TS2322: Type 'string' is not assignable to type 'number'.
 g.ts(31,18): error TS2322: Type 'string' is not assignable to type 'number'.
 g.ts(32,3): error TS2538: Type 'bigint' cannot be used as an index type.
 g.ts(33,4): error TS2538: Type 'bigint' cannot be used as an index type.
@@ -56,7 +57,7 @@ q.ts(2,19): error TS2322: Type 'bigint' is not assignable to type 'string | numb
                 ~~
 !!! error TS1539: A 'bigint' literal cannot be used as a property name.
     
-==== g.ts (19 errors) ====
+==== g.ts (20 errors) ====
     interface G {
         2n: string;
         ~~
@@ -87,9 +88,6 @@ q.ts(2,19): error TS2322: Type 'bigint' is not assignable to type 'string | numb
 !!! error TS2538: Type 'bigint' cannot be used as an index type.
     
     const h : H = { 3n: "propertyNameErrorAndMissingProperty3" };
-          ~
-!!! error TS2741: Property '"3n"' is missing in type '{}' but required in type 'H'.
-!!! related TS2728 g.ts:5:5: '"3n"' is declared here.
                     ~~
 !!! error TS1539: A 'bigint' literal cannot be used as a property name.
     const h2 : H = { "3n": "ok3" };
@@ -103,7 +101,13 @@ q.ts(2,19): error TS2322: Type 'bigint' is not assignable to type 'string | numb
     const k : K = { 4n: "propertyNameError4" };
                     ~~
 !!! error TS1539: A 'bigint' literal cannot be used as a property name.
+                    ~~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+!!! related TS6500 g.ts:8:5: The expected type comes from property '4n' which is declared here on type 'K'
     const k2 : K = { "4n": "ok4" };
+                     ~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+!!! related TS6500 g.ts:8:5: The expected type comes from property '4n' which is declared here on type 'K'
     k[4n];
       ~~
 !!! error TS2538: Type 'bigint' cannot be used as an index type.
@@ -112,11 +116,11 @@ q.ts(2,19): error TS2322: Type 'bigint' is not assignable to type 'string | numb
 !!! error TS2538: Type 'bigint' cannot be used as an index type.
     
     const l : L = { 5n: "propertyNameErrorAndMissingProperty5" };
-          ~
-!!! error TS2741: Property '"5n"' is missing in type '{}' but required in type 'L'.
-!!! related TS2728 g.ts:12:5: '"5n"' is declared here.
                     ~~
 !!! error TS1539: A 'bigint' literal cannot be used as a property name.
+                    ~~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+!!! related TS6500 g.ts:12:5: The expected type comes from property '5n' which is declared here on type 'L'
     const l2 : L = { "5n": "ok4" };
                      ~~~~
 !!! error TS2322: Type 'string' is not assignable to type 'number'.

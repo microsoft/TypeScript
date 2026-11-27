@@ -2470,7 +2470,12 @@ const (
 	propertyNameNodeKindIdentifier propertyNameNodeKind = iota
 	propertyNameNodeKindNumericLiteral
 	propertyNameNodeKindStringLiteral
+	propertyNameNodeKindBigIntLiteral
 )
+
+func isBigIntLiteralName(name string) bool {
+	return len(name) >= 2 && name[0] != '-' && strings.HasSuffix(name, "n") && isValidBigIntString(name[:len(name)-1], true)
+}
 
 func classifyPropertyName(name string, stringNamed bool, isMethod bool) propertyNameNodeKind {
 	if isMethod && name == "new" {
@@ -2479,7 +2484,13 @@ func classifyPropertyName(name string, stringNamed bool, isMethod bool) property
 	if scanner.IsIdentifierText(name, core.LanguageVariantStandard) {
 		return propertyNameNodeKindIdentifier
 	}
-	return core.IfElse(!stringNamed && jsnum.IsNumericLiteralName(name) && jsnum.FromString(name) >= 0, propertyNameNodeKindNumericLiteral, propertyNameNodeKindStringLiteral)
+	if !stringNamed && jsnum.IsNumericLiteralName(name) && jsnum.FromString(name) >= 0 {
+		return propertyNameNodeKindNumericLiteral
+	}
+	if !stringNamed && isBigIntLiteralName(name) {
+		return propertyNameNodeKindBigIntLiteral
+	}
+	return propertyNameNodeKindStringLiteral
 }
 
 func (b *NodeBuilderImpl) createPropertyNameNodeForIdentifierOrLiteral(name string, singleQuote bool, stringNamed bool, isMethod bool, symbol *ast.Symbol) *ast.Node {
@@ -2488,6 +2499,8 @@ func (b *NodeBuilderImpl) createPropertyNameNodeForIdentifierOrLiteral(name stri
 		return b.newIdentifier(name, symbol)
 	case propertyNameNodeKindNumericLiteral:
 		return b.f.NewNumericLiteral(name, ast.TokenFlagsNone)
+	case propertyNameNodeKindBigIntLiteral:
+		return b.f.NewBigIntLiteral(name, ast.TokenFlagsNone)
 	default:
 		return b.f.NewStringLiteral(name, core.IfElse(singleQuote, ast.TokenFlagsSingleQuote, ast.TokenFlagsNone))
 	}
@@ -2584,6 +2597,10 @@ func (b *NodeBuilderImpl) getPropertyNameNodeForSymbolFromNameType(symbol *ast.S
 		if jsnum.IsNumericLiteralName(name) && name[0] == '-' {
 			return b.f.NewComputedPropertyName(b.f.NewPrefixUnaryExpression(ast.KindMinusToken, b.f.NewNumericLiteral(name[1:], ast.TokenFlagsNone)))
 		}
+		return b.createPropertyNameNodeForIdentifierOrLiteral(name, singleQuote, stringNamed, isMethod, symbol)
+	}
+	if nameType.flags&TypeFlagsBigIntLiteral != 0 {
+		name := pseudoBigIntToString(getBigIntLiteralValue(nameType)) + "n"
 		return b.createPropertyNameNodeForIdentifierOrLiteral(name, singleQuote, stringNamed, isMethod, symbol)
 	}
 	if nameType.flags&TypeFlagsUniqueESSymbol != 0 {
