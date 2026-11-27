@@ -26,9 +26,19 @@ func (ch *optionalChainTransformer) visit(node *ast.Node) *ast.Node {
 		return ch.Visitor().VisitEachChild(node)
 	case ast.KindDeleteExpression:
 		return ch.visitDeleteExpression(node.AsDeleteExpression())
+	case ast.KindTaggedTemplateExpression:
+		return ch.visitTaggedTemplateExpression(node.AsTaggedTemplateExpression())
 	default:
 		return ch.Visitor().VisitEachChild(node)
 	}
+}
+
+// Determines whether `node` is an optional chain wrapped in parentheses or erased type syntax, such as
+// `(a?.b)`, `(a?.b!)`, `(a?.b as T)`, or `(a?.b<T>)`. Calling such an expression, or using it as a
+// template tag, must preserve the `this` binding of the inner property or element access.
+func isWrappedOptionalChain(node *ast.Expression) bool {
+	unwrapped := ast.SkipOuterExpressions(node, ast.OEKAll)
+	return unwrapped != node && unwrapped.Flags&ast.NodeFlagsOptionalChain != 0
 }
 
 func (ch *optionalChainTransformer) visitCallExpression(node *ast.CallExpression, captureThisArg bool) *ast.Node {
@@ -36,35 +46,58 @@ func (ch *optionalChainTransformer) visitCallExpression(node *ast.CallExpression
 		// If `node` is an optional chain, then it is the outermost chain of an optional expression.
 		return ch.visitOptionalExpression(node.AsNode(), captureThisArg, false)
 	}
-	if ast.IsParenthesizedExpression(node.Expression) {
-		unwrapped := ast.SkipParentheses(node.Expression)
-		if unwrapped.Flags&ast.NodeFlagsOptionalChain != 0 {
-			// capture thisArg for calls of parenthesized optional chains like `(foo?.bar)()`
-			expression := ch.visitParenthesizedExpression(node.Expression.AsParenthesizedExpression(), true, false)
-			args := ch.Visitor().VisitNodes(node.Arguments)
-			if ast.IsSyntheticReferenceExpression(expression) {
-				res := ch.Factory().NewFunctionCallCall(expression.AsSyntheticReferenceExpression().Expression, expression.AsSyntheticReferenceExpression().ThisArg, args.Nodes)
-				res.Loc = node.Loc
-				ch.EmitContext().SetOriginal(res, node.AsNode())
-				return res
-			}
-			return ch.Factory().UpdateCallExpression(node, expression, nil /*questionDotToken*/, nil /*typeArguments*/, args, node.Flags)
+	if isWrappedOptionalChain(node.Expression) {
+		// capture thisArg for calls of parenthesized optional chains like `(foo?.bar)()`
+		expression := ch.visitNonOptionalExpression(node.Expression, true, false)
+		args := ch.Visitor().VisitNodes(node.Arguments)
+		if ast.IsSyntheticReferenceExpression(expression) {
+			res := ch.Factory().NewFunctionCallCall(expression.AsSyntheticReferenceExpression().Expression, expression.AsSyntheticReferenceExpression().ThisArg, args.Nodes)
+			res.Loc = node.Loc
+			ch.EmitContext().SetOriginal(res, node.AsNode())
+			return res
 		}
+		return ch.Factory().UpdateCallExpression(node, expression, nil /*questionDotToken*/, nil /*typeArguments*/, args, node.Flags)
 	}
 	return ch.Visitor().VisitEachChild(node.AsNode())
 }
 
-func (ch *optionalChainTransformer) visitParenthesizedExpression(node *ast.ParenthesizedExpression, captureThisArg bool, isDelete bool) *ast.Node {
-	expr := ch.visitNonOptionalExpression(node.Expression, captureThisArg, isDelete)
+func (ch *optionalChainTransformer) visitTaggedTemplateExpression(node *ast.TaggedTemplateExpression) *ast.Node {
+	if node.Flags&ast.NodeFlagsOptionalChain == 0 && isWrappedOptionalChain(node.Tag) {
+		// capture thisArg for tags of parenthesized optional chains like ``(foo?.bar)`x` ``
+		tag := ch.visitNonOptionalExpression(node.Tag, true, false)
+		if ast.IsSyntheticReferenceExpression(tag) {
+			synth := tag.AsSyntheticReferenceExpression()
+			tag = ch.Factory().NewFunctionBindCall(synth.Expression, synth.ThisArg, nil)
+		}
+		return ch.Factory().UpdateTaggedTemplateExpression(node, tag, nil /*questionDotToken*/, nil /*typeArguments*/, ch.Visitor().VisitNode(node.Template), node.Flags)
+	}
+	return ch.Visitor().VisitEachChild(node.AsNode())
+}
+
+func (ch *optionalChainTransformer) visitOuterExpression(node *ast.Expression, captureThisArg bool, isDelete bool) *ast.Node {
+	expr := ch.visitNonOptionalExpression(node.Expression(), captureThisArg, isDelete)
 	if ast.IsSyntheticReferenceExpression(expr) {
 		// `(a.b)` -> { expression `((_a = a).b)`, thisArg: `_a` }
 		// `(a[b])` -> { expression `((_a = a)[b])`, thisArg: `_a` }
 		synth := expr.AsSyntheticReferenceExpression()
-		res := ch.Factory().NewSyntheticReferenceExpression(ch.Factory().UpdateParenthesizedExpression(node, synth.Expression), synth.ThisArg)
-		ch.EmitContext().SetOriginal(res, node.AsNode())
+		res := ch.Factory().NewSyntheticReferenceExpression(ch.updateOuterExpression(node, synth.Expression), synth.ThisArg)
+		ch.EmitContext().SetOriginal(res, node)
 		return res
 	}
-	return ch.Factory().UpdateParenthesizedExpression(node, expr)
+	return ch.updateOuterExpression(node, expr)
+}
+
+func (ch *optionalChainTransformer) updateOuterExpression(node *ast.Expression, expression *ast.Expression) *ast.Expression {
+	switch node.Kind {
+	case ast.KindParenthesizedExpression:
+		return ch.Factory().UpdateParenthesizedExpression(node.AsParenthesizedExpression(), expression)
+	case ast.KindPartiallyEmittedExpression:
+		return ch.Factory().UpdatePartiallyEmittedExpression(node.AsPartiallyEmittedExpression(), expression)
+	case ast.KindExpressionWithTypeArguments:
+		return ch.Factory().UpdateExpressionWithTypeArguments(node.AsExpressionWithTypeArguments(), expression, ch.Visitor().VisitNodes(node.TypeArgumentList()))
+	default:
+		panic("Unexpected outer expression kind: " + node.Kind.String())
+	}
 }
 
 func (ch *optionalChainTransformer) visitPropertyOrElementAccessExpression(node *ast.Expression, captureThisArg bool, isDelete bool) *ast.Expression {
@@ -112,8 +145,10 @@ func (ch *optionalChainTransformer) visitDeleteExpression(node *ast.DeleteExpres
 
 func (ch *optionalChainTransformer) visitNonOptionalExpression(node *ast.Expression, captureThisArg bool, isDelete bool) *ast.Expression {
 	switch node.Kind {
-	case ast.KindParenthesizedExpression:
-		return ch.visitParenthesizedExpression(node.AsParenthesizedExpression(), captureThisArg, isDelete)
+	case ast.KindParenthesizedExpression,
+		ast.KindPartiallyEmittedExpression,
+		ast.KindExpressionWithTypeArguments:
+		return ch.visitOuterExpression(node, captureThisArg, isDelete)
 	case ast.KindElementAccessExpression, ast.KindPropertyAccessExpression:
 		return ch.visitPropertyOrElementAccessExpression(node, captureThisArg, isDelete)
 	case ast.KindCallExpression:
