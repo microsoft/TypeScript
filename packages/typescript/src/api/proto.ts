@@ -81,6 +81,7 @@ export type APIResponse<Request extends APIRequest = APIRequest> = Request exten
             result: APIMethodInfo[Request["method"]]["result"];
             error?: undefined;
         } | {
+            // eslint-disable-next-line no-restricted-syntax -- Failed batch responses carry a null result.
             result: null;
             error: string;
         }) :
@@ -107,8 +108,8 @@ export function resolveFileName(identifier: DocumentIdentifier): string {
     if (typeof identifier === "string") {
         return identifier;
     }
-    if (typeof identifier !== "object" || identifier === null || typeof identifier.uri !== "string") {
-        const received = typeof identifier === "object" && identifier !== null
+    if (typeof identifier !== "object" || identifier == undefined || typeof identifier.uri !== "string") {
+        const received = typeof identifier === "object" && identifier != undefined
             ? `an object with keys: ${Object.keys(identifier).join(", ")}`
             : String(identifier);
         throw new TypeError(`Expected a string or { uri } for the document, received ${received}`);
@@ -130,5 +131,6 @@ export function resolveDocumentURI(identifier: DocumentIdentifier): string {
 export type CreateSnapshotParams = CoreCreateSnapshotParams;
 
 export interface CreateBuildOrchestratorParams {
+    // eslint-disable-next-line no-restricted-syntax -- The protocol permits a null rootNames list.
     rootNames: readonly string[] | null;
 }

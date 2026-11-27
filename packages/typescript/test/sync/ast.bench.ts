@@ -212,7 +212,8 @@ export function runBenchmarks(options?: { filter?: string; singleIteration?: boo
 
     bench.runSync();
     for (const task of bench.tasks) {
-        if (task.result && "error" in task.result) throw task.result.error;
+        const error = (task.result as { error?: unknown; } | undefined)?.error;
+        if (error) throw error;
     }
     console.table(bench.table());
 }

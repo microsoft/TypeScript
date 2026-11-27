@@ -41,7 +41,7 @@ export class Client extends TransportClient {
         if (timingDump) {
             options = { ...options, collectTiming: true };
         }
-        const args = getAPIProcessArgs(options, false);
+        const args = getAPIProcessArgs(options, /*async*/ false);
         const fsConfiguration = configureFileSystemCallbacks(options.fs);
         if (fsConfiguration.arguments.length > 0) {
             args.push(`--callbacks=${fsConfiguration.arguments.join(",")}`);

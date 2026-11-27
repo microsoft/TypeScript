@@ -35,6 +35,7 @@ func TestUserPreferencesParsingEdgeCases(t *testing.T) {
 				"quotePreference": "SINGLE", "jsxAttributeCompletionStyle": "BRACES",
 				"organizeImportsCaseFirst": "LOWER", "includeInlayParameterNameHints": "ALL",
 				"organizeImportsTypeOrder": "FIRST", "workspaceSymbolsScope": "CURRENTPROJECT",
+				"indentStyle": "BLOCK",
 			},
 			expected: func(p *UserPreferences) {
 				p.QuotePreference = QuotePreferenceSingle
@@ -43,6 +44,7 @@ func TestUserPreferencesParsingEdgeCases(t *testing.T) {
 				p.InlayHintsPreferences.IncludeInlayParameterNameHints = IncludeInlayParameterNameHintsAll
 				p.OrganizeImportsTypeOrder = OrganizeImportsTypeOrderFirst
 				p.WorkspaceSymbolsScope = WorkspaceSymbolsScopeCurrentProject
+				p.IndentStyle = IndentStyleBlock
 			},
 		},
 		{
@@ -62,12 +64,11 @@ func TestUserPreferencesParsingEdgeCases(t *testing.T) {
 		{
 			name: "numeric conversion and array filtering",
 			config: map[string]any{
-				"maximumHoverLength": float64(9.8), "indentStyle": float64(1.7),
+				"maximumHoverLength":            float64(9.8),
 				"autoImportFileExcludePatterns": []any{"first", false, 3, "second"},
 			},
 			expected: func(p *UserPreferences) {
 				p.MaximumHoverLength = 9
-				p.IndentStyle = IndentStyleBlock
 				p.AutoImportFileExcludePatterns = []string{"first", "second"}
 			},
 		},
@@ -138,6 +139,8 @@ func getValidStringValue(t reflect.Type) string {
 		return string(IncludeInlayParameterNameHintsAll)
 	case "lsutil.SemicolonPreference":
 		return string(SemicolonPreferenceInsert)
+	case "lsutil.IndentStyle":
+		return string(IndentStyleBlock)
 	case "modulespecifiers.ImportModuleSpecifierPreference":
 		return string(modulespecifiers.ImportModuleSpecifierPreferenceRelative)
 	case "modulespecifiers.ImportModuleSpecifierEndingPreference":

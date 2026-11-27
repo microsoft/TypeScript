@@ -798,7 +798,7 @@ function createSyntaxListNode(nodes: NodeArray<Node>, parent: Node, sourceFile: 
     list.pos = nodes.pos;
     list.end = nodes.end;
     list.parent = parent;
-    return list as Node;
+    return list;
 }
 
 export function getFirstToken(node: Node, sourceFile: SourceFile = node.getSourceFile()): Node | undefined {

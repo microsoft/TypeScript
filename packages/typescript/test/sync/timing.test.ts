@@ -22,7 +22,7 @@ describe("sync IPC timing", () => {
                         nested = true;
                         api.parseCommandLine([nestedArgument]);
                     }
-                    return fs.readFile!(path);
+                    return fs.readFile(path);
                 },
             },
         });

@@ -1,0 +1,159 @@
+trigger: none
+pr: none
+
+parameters:
+  - name: bump
+    displayName: Version component to bump
+    type: string
+    values:
+      - patch
+      - minor
+      - major
+
+name: $(Date:yyyyMMdd)$(Rev:.r) ${{ parameters.bump }}
+
+variables:
+  - name: TYPESCRIPT_AUTOMATION_GITHUB_APP_CLIENT_ID
+    value: Iv23li4GolzJSEp1mzHI
+  - name: TYPESCRIPT_AUTOMATION_GITHUB_APP_KEY_ID
+    value: https://jststeam-passwords.vault.azure.net/keys/typescript-automation
+
+jobs:
+  - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
+      - job: Prepare
+        displayName: Prepare version bump
+        pool:
+          vmImage: ubuntu-latest
+
+        steps:
+          - checkout: self
+            fetchDepth: 1
+            fetchTags: false
+
+          - task: UseNode@1
+            displayName: Use Node 24.x
+            inputs:
+              version: 24.x
+
+          - bash: npm ci
+            displayName: npm ci
+
+          - bash: |
+              set -euo pipefail
+              currentVersion="$(jq -r '.version' packages/vscode-typescript/package.json)"
+              if [ "$currentVersion" = "0.0.0" ] && [ "$BUMP" != "major" ]; then
+                echo "The first extension release must use a major bump from 0.0.0 to 1.0.0." >&2
+                exit 1
+              fi
+
+              npm version "$BUMP" \
+                --workspace packages/vscode-typescript \
+                --no-git-tag-version \
+                --package-lock-only
+
+              packageVersion="$(jq -r '.version' packages/vscode-typescript/package.json)"
+              lockVersion="$(jq -r '.packages["packages/vscode-typescript"].version' package-lock.json)"
+              if [ "$packageVersion" != "$lockVersion" ]; then
+                echo "package.json version $packageVersion does not match package-lock.json version $lockVersion." >&2
+                exit 1
+              fi
+            displayName: Update extension version
+            env:
+              BUMP: ${{ parameters.bump }}
+
+          - bash: npm test -w packages/vscode-typescript
+            displayName: Test extension
+
+          - bash: npx hereby vscode-typescript:pack --forRelease --vscodeTypescriptRelease
+            displayName: Package extension
+
+          - bash: git diff --binary -- packages/vscode-typescript/package.json package-lock.json > "$BUILD_ARTIFACTSTAGINGDIRECTORY/vscode-typescript-bump.patch"
+            displayName: Create version bump patch
+
+          - publish: $(Build.ArtifactStagingDirectory)/vscode-typescript-bump.patch
+            artifact: vscode-typescript-bump
+            displayName: Publish version bump patch
+
+      # This job holds the GitHub token, so it applies the patch without running repository code.
+      - job: CreatePullRequest
+        displayName: Create pull request
+        dependsOn: Prepare
+        pool:
+          vmImage: ubuntu-latest
+
+        steps:
+          - checkout: self
+            fetchDepth: 0
+            fetchFilter: blob:none
+            fetchTags: false
+
+          - download: current
+            artifact: vscode-typescript-bump
+            displayName: Download version bump patch
+
+          - bash: |
+              set -euo pipefail
+              git apply --index "$PIPELINE_WORKSPACE/vscode-typescript-bump/vscode-typescript-bump.patch"
+
+              mapfile -t changedFiles < <(git diff --cached --name-only)
+              expectedFiles=("package-lock.json" "packages/vscode-typescript/package.json")
+              if [ "${changedFiles[*]}" != "${expectedFiles[*]}" ]; then
+                echo "Unexpected files in version bump: ${changedFiles[*]}" >&2
+                exit 1
+              fi
+            displayName: Apply version bump
+
+          - template: /tools/pipelines/steps/create-github-app-token.yml@self
+            parameters:
+              azureSubscription: typescript-automation-signing
+              repositories: TypeScript
+              permissions: contents:write,pull_requests:write
+              insertSteps:
+                - bash: |
+                    set -euo pipefail
+                    EXTENSION_VERSION="$(jq -r '.version' packages/vscode-typescript/package.json)"
+                    branch="vscode-typescript-release/v$EXTENSION_VERSION"
+                    git switch -c "$branch"
+                    git config user.email "290192711+typescript-automation[bot]@users.noreply.github.com"
+                    git config user.name "typescript-automation[bot]"
+                    git config core.hooksPath /dev/null
+                    git commit -m "Bump vscode-typescript to $EXTENSION_VERSION"
+
+                    basic_auth="$(node -e 'process.stdout.write(Buffer.from("x-access-token:" + process.env.GH_TOKEN).toString("base64"))')"
+                    echo "##vso[task.setsecret]$basic_auth"
+                    git remote set-url origin https://github.com/microsoft/TypeScript.git
+                    git config --local http.https://github.com/.extraheader "AUTHORIZATION: basic ${basic_auth}"
+
+                    if git ls-remote --exit-code --heads origin "$branch" >/dev/null; then
+                      git fetch origin "refs/heads/$branch:refs/remotes/origin/$branch"
+                      existingCommit="$(git rev-parse "origin/$branch")"
+                      existingParent="$(git rev-parse "origin/$branch^")"
+                      if [ "$existingParent" != "$SOURCE_SHA" ] || ! git diff --quiet HEAD "$existingCommit"; then
+                        echo "Existing branch $branch does not match this release bump." >&2
+                        exit 1
+                      fi
+                    else
+                      git push --set-upstream origin "$branch"
+                    fi
+
+                    existingPr="$(gh pr list \
+                      --repo microsoft/TypeScript \
+                      --base main \
+                      --head "$branch" \
+                      --state open \
+                      --json url \
+                      --jq '.[0].url // empty')"
+                    if [ -n "$existingPr" ]; then
+                      echo "Pull request already exists: $existingPr"
+                    else
+                      gh pr create \
+                        --repo microsoft/TypeScript \
+                        --base main \
+                        --head "$branch" \
+                        --title "Bump vscode-typescript to $EXTENSION_VERSION" \
+                        --body "Updates the vscode-typescript extension to $EXTENSION_VERSION."
+                    fi
+                  displayName: Commit, push, and open pull request
+                  env:
+                    GH_TOKEN: $(GH_TOKEN)
+                    SOURCE_SHA: $(Build.SourceVersion)

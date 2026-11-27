@@ -157,14 +157,14 @@ describe("API over WebAssembly in a browser", () => {
     test("runs the async and sync APIs in Chromium", async () => {
         const page = await browser.newPage();
         await page.goto(origin);
-        const result = await page.evaluate(() => Reflect.get(globalThis, "result"));
+        const result = await page.evaluate(() => (globalThis as { result?: unknown; }).result);
         assert.deepStrictEqual(result, ["42", "42", 1]);
     });
 
     test("runs the built async and sync API entries without bundling", async () => {
         const page = await browser.newPage();
         await page.goto(`${origin}/unbundled`);
-        const result = await page.evaluate(() => Reflect.get(globalThis, "result"));
+        const result = await page.evaluate(() => (globalThis as { result?: unknown; }).result);
         assert.deepStrictEqual(result, ["42", "42", 1]);
     });
 });

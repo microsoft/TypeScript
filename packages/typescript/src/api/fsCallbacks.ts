@@ -18,11 +18,11 @@ export const serverFS: {
     /** Panic if the configured operation, or current callback invocation, reaches the server filesystem. */
     readonly error: typeof error;
 } = {
-    useOS: useOS,
-    identity: identity,
-    fakeStat: fakeStat,
-    noop: noop,
-    error: error,
+    useOS,
+    identity,
+    fakeStat,
+    noop,
+    error,
 };
 
 type ServerFSSentinelName = keyof typeof serverFS;
@@ -111,7 +111,7 @@ export function encodeFileSystemCallbackResult(
             valid = typeof result === "boolean";
             break;
         case "getAccessibleEntries": {
-            const entries = result as { files?: unknown; directories?: unknown; symlinks?: unknown; } | null;
+            const entries = (result ?? undefined) as { files?: unknown; directories?: unknown; symlinks?: unknown; } | undefined;
             valid = !!entries
                 && isStringArray(entries.files)
                 && isStringArray(entries.directories)

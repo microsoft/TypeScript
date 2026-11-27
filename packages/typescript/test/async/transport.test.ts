@@ -7,13 +7,73 @@ import {
     describe,
     test,
 } from "node:test";
+import type { AsyncTransport } from "../../src/api/async/transport.ts";
 import { TransportClient } from "../../src/api/async/transportClient.ts";
+import { isSpawnOptions } from "../../src/api/options.ts";
 import type {
     BatchRequestsParams,
     BatchRequestsResponse,
 } from "../../src/api/proto.ts";
 
 describe("async transport", () => {
+    test("recognizes connection options inherited from the prototype", async () => {
+        class SocketOptions {
+            get pipe() {
+                return "/socket";
+            }
+        }
+        assert.strictEqual(isSpawnOptions(new SocketOptions()), /*expected*/ false);
+
+        let closed = false;
+        const transport: AsyncTransport = {
+            request() {
+                throw new Error("Unexpected request");
+            },
+            requestBinary() {
+                throw new Error("Unexpected binary request");
+            },
+            close() {
+                closed = true;
+            },
+        };
+        class TransportOptions {
+            get transport() {
+                return transport;
+            }
+        }
+        const api = new API(new TransportOptions());
+        await api.close();
+        assert.strictEqual(closed, /*expected*/ true);
+    });
+
+    test("handles callback results and promises with inherited then methods", async () => {
+        let invokeCallback = (_name: string, _payload: string): string | PromiseLike<string> => {
+            throw new Error("Callback not registered");
+        };
+        const client = new TransportClient({
+            request() {
+                throw new Error("Unexpected request");
+            },
+            requestBinary() {
+                throw new Error("Unexpected binary request");
+            },
+            registerCallback(_name, callback) {
+                invokeCallback = callback;
+            },
+            unregisterCallback() {},
+            close() {},
+        }, /*collectTiming*/ false);
+        client.registerCallback("test", () => Promise.resolve({ result: "ok" }));
+        assert.strictEqual(await invokeCallback("test", "{}"), '{"result":"ok"}');
+        client.registerCallback("test", value => value);
+        for (const json of ["null", "0", "false", '""']) {
+            assert.strictEqual(invokeCallback("test", json), json);
+        }
+        client.registerCallback("test", () => undefined);
+        assert.strictEqual(invokeCallback("test", "{}"), "");
+        await client.close();
+    });
+
     test("constructs an API over an injected transport", async () => {
         const methods: string[] = [];
         let batchParams: BatchRequestsParams | undefined;
@@ -137,7 +197,7 @@ describe("async transport", () => {
                 throw new Error("Unexpected binary request");
             },
             close() {},
-        }, false);
+        }, /*collectTiming*/ false);
         const text = client.apiRequest("parseCommandLine", { commandLine: [] });
         const binary = client.apiRequestBinary("getSourceFile", {
             snapshot: 1,
@@ -152,7 +212,7 @@ describe("async transport", () => {
     test("can close a process client while initialization is manually batched", async () => {
         const api = new API({ cwd: process.cwd() });
         // @ts-ignore -- Internal client transport is exercised by source tests.
-        await api["client"].connect();
+        await api.client.connect();
         const batch = api.batchContext();
         const request = api.parseCommandLine([]);
         const rejected = assert.rejects(request, /Client is closed/);
@@ -185,7 +245,7 @@ describe("async transport", () => {
                 throw new Error("Unexpected binary request");
             },
             close() {},
-        }, false);
+        }, /*collectTiming*/ false);
 
         const first = client.apiRequest("parseCommandLine", { commandLine: [] });
         const batch = client.batchContext();
@@ -219,7 +279,7 @@ describe("async transport", () => {
                 throw new Error("could not read file");
             },
             close() {},
-        }, false);
+        }, /*collectTiming*/ false);
 
         const batch = client.batchContext();
         const binary = client.apiRequestBinary("getSourceFile", {
@@ -248,7 +308,7 @@ describe("async transport", () => {
             close() {},
         };
 
-        const client = new TransportClient(neverResolves, false);
+        const client = new TransportClient(neverResolves, /*collectTiming*/ false);
         const request = client.apiRequest("parseCommandLine", { commandLine: [] });
         await Promise.resolve();
         await client.close();
@@ -273,7 +333,7 @@ describe("async transport", () => {
                 throw new Error("Unexpected binary request");
             },
             close() {},
-        }, true);
+        }, /*collectTiming*/ true);
 
         const timing = client.getTimingInfo();
         const reset = client.resetTimingInfo();

@@ -39,7 +39,7 @@ func TestDecodePrintNodeAppliesEmitNodes(t *testing.T) {
 	}
 	node, emitContext, err := decodePrintNode(encodePrintNodeForTest(t), map[int]*PrintEmitNode{
 		1: {EmitFlags: uint32(printer.EFSingleLine), LeadingComments: comments, TrailingComments: comments},
-	})
+	}, nil)
 	assert.NilError(t, err)
 	assert.Equal(t, node.Kind, ast.KindTypeAliasDeclaration)
 	assert.Equal(t, emitContext.EmitFlags(node), printer.EFSingleLine)
@@ -50,14 +50,14 @@ func TestDecodePrintNodeAppliesEmitNodes(t *testing.T) {
 func TestDecodePrintNodeRejectsNullEmitNode(t *testing.T) {
 	t.Parallel()
 
-	_, _, err := decodePrintNode(encodePrintNodeForTest(t), map[int]*PrintEmitNode{1: nil})
+	_, _, err := decodePrintNode(encodePrintNodeForTest(t), map[int]*PrintEmitNode{1: nil}, nil)
 	assert.ErrorIs(t, err, ErrClientError)
 }
 
 func TestDecodePrintNodeRejectsUnknownEmitNodeIndex(t *testing.T) {
 	t.Parallel()
 
-	_, _, err := decodePrintNode(encodePrintNodeForTest(t), map[int]*PrintEmitNode{1 << 20: {}})
+	_, _, err := decodePrintNode(encodePrintNodeForTest(t), map[int]*PrintEmitNode{1 << 20: {}}, nil)
 	assert.ErrorIs(t, err, ErrClientError)
 }
 
@@ -83,7 +83,7 @@ func TestDecodePrintNodeRejectsInvalidCommentKind(t *testing.T) {
 				} else {
 					emitNode.TrailingComments = comments
 				}
-				_, _, err := decodePrintNode(encodePrintNodeForTest(t), map[int]*PrintEmitNode{1: emitNode})
+				_, _, err := decodePrintNode(encodePrintNodeForTest(t), map[int]*PrintEmitNode{1: emitNode}, nil)
 				assert.ErrorIs(t, err, ErrClientError)
 			})
 		}
@@ -94,7 +94,7 @@ func TestDecodePrintNodeRejectsInvalidCommentKind(t *testing.T) {
 // attach synthetic comments to one of its nodes, and prints it without a source file.
 func printStatementWithComments(t *testing.T, text string, attach func(statement *ast.Node, emitContext *printer.EmitContext)) string {
 	t.Helper()
-	node, emitContext, err := decodePrintNode(encodeStatementForTest(t, text), nil)
+	node, emitContext, err := decodePrintNode(encodeStatementForTest(t, text), nil, nil)
 	assert.NilError(t, err)
 	attach(node, emitContext)
 	return newPrinter(&PrintNodeParams{}, emitContext).Emit(node, nil)

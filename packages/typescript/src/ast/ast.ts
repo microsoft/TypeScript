@@ -8,18 +8,25 @@ import type { NodeFlags } from "../../enums/nodeFlags.js";
 import type { ScriptKind } from "../../enums/scriptKind.js";
 import { SyntaxKind } from "../../enums/syntaxKind.js";
 import type {
+    ArrowFunction,
     AssertionExpression,
     BindingElement,
     BindingPattern,
     CallExpression,
     CaseClause,
+    ClassDeclaration,
+    ClassExpression,
     ComputedPropertyName,
+    ConstructorDeclaration,
+    ConstructorTypeNode,
     Decorator,
     DoStatement,
     ElementAccessExpression,
     EndOfFile,
     EntityName,
+    EnumDeclaration,
     EnumMember,
+    ExportAssignment,
     ExportDeclaration,
     ExportSpecifier,
     Expression,
@@ -27,17 +34,27 @@ import type {
     ForInStatement,
     ForOfStatement,
     ForStatement,
+    FunctionDeclaration,
+    FunctionExpression,
+    GetAccessorDeclaration,
     Identifier,
     IfStatement,
     ImportClause,
+    ImportDeclaration,
     ImportEqualsDeclaration,
     ImportSpecifier,
+    IndexSignatureDeclaration,
+    InterfaceDeclaration,
     JSDoc,
     JsxAttribute,
     JsxExpression,
     JsxSpreadAttribute,
     KeywordSyntaxKind,
+    MethodDeclaration,
+    MethodSignatureDeclaration,
+    Modifier,
     ModifierSyntaxKind,
+    ModuleDeclaration,
     NamedExports,
     NamedImports,
     NamespaceExport,
@@ -51,6 +68,7 @@ import type {
     PunctuationSyntaxKind,
     ReturnStatement,
     SatisfiesExpression,
+    SetAccessorDeclaration,
     ShorthandPropertyAssignment,
     SpreadAssignment,
     Statement,
@@ -59,7 +77,10 @@ import type {
     ThisExpression,
     ThrowStatement,
     Token,
+    TypeAliasDeclaration,
+    TypeParameterDeclaration,
     VariableDeclaration,
+    VariableStatement,
     WhileStatement,
     WithStatement,
 } from "./ast.generated.ts";
@@ -70,6 +91,43 @@ export { TokenFlags } from "../../enums/tokenFlags.js";
 
 export * from "./ast.generated.ts";
 export * as factory from "./factory.generated.ts";
+
+export type CanHaveDecorators =
+    | ParameterDeclaration
+    | PropertyDeclaration
+    | MethodDeclaration
+    | GetAccessorDeclaration
+    | SetAccessorDeclaration
+    | ClassExpression
+    | ClassDeclaration;
+
+export type CanHaveModifiers =
+    | TypeParameterDeclaration
+    | ParameterDeclaration
+    | PropertySignatureDeclaration
+    | PropertyDeclaration
+    | MethodSignatureDeclaration
+    | MethodDeclaration
+    | ConstructorDeclaration
+    | GetAccessorDeclaration
+    | SetAccessorDeclaration
+    | IndexSignatureDeclaration
+    | ConstructorTypeNode
+    | FunctionExpression
+    | ArrowFunction
+    | ClassExpression
+    | VariableStatement
+    | FunctionDeclaration
+    | ClassDeclaration
+    | InterfaceDeclaration
+    | TypeAliasDeclaration
+    | EnumDeclaration
+    | ModuleDeclaration
+    | ImportEqualsDeclaration
+    | ImportDeclaration
+    | (Omit<ImportDeclaration, "kind"> & { readonly kind: SyntaxKind.JSImportDeclaration; })
+    | ExportAssignment
+    | ExportDeclaration;
 
 declare const autoAccessorBrand: unique symbol;
 export interface AutoAccessorPropertyDeclaration extends PropertyDeclaration {
@@ -222,6 +280,8 @@ export interface Node extends ReadonlyTextRange {
     getChildren(sourceFile?: SourceFile): readonly Node[];
     getFirstToken(sourceFile?: SourceFile): Node | undefined;
     getLastToken(sourceFile?: SourceFile): Node | undefined;
+    /** Gets syntactic modifiers without decorators, or `undefined` if there are none. */
+    getModifiers(): readonly Modifier[] | undefined;
 }
 
 export interface FileReference extends TextRange {
