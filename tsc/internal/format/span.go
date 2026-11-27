@@ -689,8 +689,19 @@ func (w *formatSpanWorker) processPair(currentItem TextRangeWithKind, currentSta
 		trimTrailingWhitespaces = trimTrailingWhitespaces && currentItem.Kind != ast.KindEndOfFile
 	}
 
-	if currentStartLine != previousStartLine && trimTrailingWhitespaces {
-		// We need to trim trailing whitespace between the tokens if they were on different lines, and no rule was applied to put them on the same line
+	firstBlankLine, remainingLine := w.blankLinesToTrim(previousItem, currentItem, currentParent)
+	if firstBlankLine >= 0 {
+		if trimTrailingWhitespaces {
+			w.trimTrailingWhitespacesForLines(previousStartLine, firstBlankLine, previousItem)
+		}
+		lineStarts := scanner.GetECMALineStarts(w.sourceFile)
+		start := int(lineStarts[firstBlankLine])
+		end := int(lineStarts[remainingLine])
+		w.recordDelete(start, end-start)
+		if trimTrailingWhitespaces {
+			w.trimTrailingWhitespacesForLines(remainingLine, currentStartLine, previousItem)
+		}
+	} else if currentStartLine != previousStartLine && trimTrailingWhitespaces {
 		w.trimTrailingWhitespacesForLines(previousStartLine, currentStartLine, previousItem)
 	}
 
