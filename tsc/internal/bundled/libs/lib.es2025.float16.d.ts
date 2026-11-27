@@ -373,6 +373,9 @@ interface Float16ArrayConstructor {
     new <TArrayBuffer extends ArrayBufferLike = ArrayBuffer>(buffer: TArrayBuffer, byteOffset?: number, length?: number): Float16Array<TArrayBuffer>;
     new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Float16Array<ArrayBuffer>;
     new (array: ArrayLike<number> | ArrayBuffer): Float16Array<ArrayBuffer>;
+    new <TArrayBuffer extends ArrayBufferLike = ArrayBuffer>(length?: number): Float16Array<TArrayBuffer>;
+    new <TArrayBuffer extends ArrayBufferLike = ArrayBuffer>(array: ArrayLike<number> | Iterable<number>): Float16Array<TArrayBuffer>;
+    new <TArrayBuffer extends ArrayBufferLike = ArrayBuffer>(array: ArrayLike<number> | ArrayBuffer): Float16Array<TArrayBuffer>;
 
     /**
      * The size in bytes of each element in the array.

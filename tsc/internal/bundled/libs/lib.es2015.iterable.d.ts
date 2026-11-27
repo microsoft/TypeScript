@@ -290,6 +290,7 @@ interface Int8Array<TArrayBuffer extends ArrayBufferLike> {
 
 interface Int8ArrayConstructor {
     new (elements: Iterable<number>): Int8Array<ArrayBuffer>;
+    new <TArrayBuffer extends ArrayBufferLike = ArrayBuffer>(elements: Iterable<number>): Int8Array<TArrayBuffer>;
 
     /**
      * Creates an array from an array-like or iterable object.
@@ -327,6 +328,7 @@ interface Uint8Array<TArrayBuffer extends ArrayBufferLike> {
 
 interface Uint8ArrayConstructor {
     new (elements: Iterable<number>): Uint8Array<ArrayBuffer>;
+    new <TArrayBuffer extends ArrayBufferLike = ArrayBuffer>(elements: Iterable<number>): Uint8Array<TArrayBuffer>;
 
     /**
      * Creates an array from an array-like or iterable object.
@@ -364,6 +366,7 @@ interface Uint8ClampedArray<TArrayBuffer extends ArrayBufferLike> {
 
 interface Uint8ClampedArrayConstructor {
     new (elements: Iterable<number>): Uint8ClampedArray<ArrayBuffer>;
+    new <TArrayBuffer extends ArrayBufferLike = ArrayBuffer>(elements: Iterable<number>): Uint8ClampedArray<TArrayBuffer>;
 
     /**
      * Creates an array from an array-like or iterable object.
@@ -400,6 +403,7 @@ interface Int16Array<TArrayBuffer extends ArrayBufferLike> {
 
 interface Int16ArrayConstructor {
     new (elements: Iterable<number>): Int16Array<ArrayBuffer>;
+    new <TArrayBuffer extends ArrayBufferLike = ArrayBuffer>(elements: Iterable<number>): Int16Array<TArrayBuffer>;
 
     /**
      * Creates an array from an array-like or iterable object.
@@ -437,6 +441,7 @@ interface Uint16Array<TArrayBuffer extends ArrayBufferLike> {
 
 interface Uint16ArrayConstructor {
     new (elements: Iterable<number>): Uint16Array<ArrayBuffer>;
+    new <TArrayBuffer extends ArrayBufferLike = ArrayBuffer>(elements: Iterable<number>): Uint16Array<TArrayBuffer>;
 
     /**
      * Creates an array from an array-like or iterable object.
@@ -474,6 +479,7 @@ interface Int32Array<TArrayBuffer extends ArrayBufferLike> {
 
 interface Int32ArrayConstructor {
     new (elements: Iterable<number>): Int32Array<ArrayBuffer>;
+    new <TArrayBuffer extends ArrayBufferLike = ArrayBuffer>(elements: Iterable<number>): Int32Array<TArrayBuffer>;
 
     /**
      * Creates an array from an array-like or iterable object.
@@ -511,6 +517,7 @@ interface Uint32Array<TArrayBuffer extends ArrayBufferLike> {
 
 interface Uint32ArrayConstructor {
     new (elements: Iterable<number>): Uint32Array<ArrayBuffer>;
+    new <TArrayBuffer extends ArrayBufferLike = ArrayBuffer>(elements: Iterable<number>): Uint32Array<TArrayBuffer>;
 
     /**
      * Creates an array from an array-like or iterable object.
@@ -548,6 +555,7 @@ interface Float32Array<TArrayBuffer extends ArrayBufferLike> {
 
 interface Float32ArrayConstructor {
     new (elements: Iterable<number>): Float32Array<ArrayBuffer>;
+    new <TArrayBuffer extends ArrayBufferLike = ArrayBuffer>(elements: Iterable<number>): Float32Array<TArrayBuffer>;
 
     /**
      * Creates an array from an array-like or iterable object.
@@ -585,6 +593,7 @@ interface Float64Array<TArrayBuffer extends ArrayBufferLike> {
 
 interface Float64ArrayConstructor {
     new (elements: Iterable<number>): Float64Array<ArrayBuffer>;
+    new <TArrayBuffer extends ArrayBufferLike = ArrayBuffer>(elements: Iterable<number>): Float64Array<TArrayBuffer>;
 
     /**
      * Creates an array from an array-like or iterable object.
