@@ -1,0 +1,66 @@
+//// [tests/cases/compiler/iteratorFlatMapRejectsPrimitiveString.ts] ////
+
+=== iteratorFlatMapRejectsPrimitiveString.ts ===
+const numbers = Iterator.from([1]);
+>numbers : IteratorObject<number, undefined, unknown>
+>Iterator.from([1]) : IteratorObject<number, undefined, unknown>
+>Iterator.from : <T>(value: Iterator<T, unknown, undefined> | Iterable<T, unknown, undefined>) => IteratorObject<T, undefined, unknown>
+>Iterator : IteratorConstructor
+>from : <T>(value: Iterator<T, unknown, undefined> | Iterable<T, unknown, undefined>) => IteratorObject<T, undefined, unknown>
+>[1] : number[]
+>1 : 1
+
+const fromArray: string[] = numbers.flatMap(() => ["ab"]).toArray();
+>fromArray : string[]
+>numbers.flatMap(() => ["ab"]).toArray() : string[]
+>numbers.flatMap(() => ["ab"]).toArray : () => string[]
+>numbers.flatMap(() => ["ab"]) : IteratorObject<string, undefined, unknown>
+>numbers.flatMap : <U>(callback: (value: number, index: number) => (Iterable<U, unknown, undefined> | Iterator<U, unknown, undefined>) & object) => IteratorObject<U, undefined, unknown>
+>numbers : IteratorObject<number, undefined, unknown>
+>flatMap : <U>(callback: (value: number, index: number) => (Iterable<U, unknown, undefined> | Iterator<U, unknown, undefined>) & object) => IteratorObject<U, undefined, unknown>
+>() => ["ab"] : () => string[]
+>["ab"] : string[]
+>"ab" : "ab"
+>toArray : () => string[]
+
+const fromIterator: string[] = numbers.flatMap(() => Iterator.from("ab")).toArray();
+>fromIterator : string[]
+>numbers.flatMap(() => Iterator.from("ab")).toArray() : string[]
+>numbers.flatMap(() => Iterator.from("ab")).toArray : () => string[]
+>numbers.flatMap(() => Iterator.from("ab")) : IteratorObject<string, undefined, unknown>
+>numbers.flatMap : <U>(callback: (value: number, index: number) => (Iterable<U, unknown, undefined> | Iterator<U, unknown, undefined>) & object) => IteratorObject<U, undefined, unknown>
+>numbers : IteratorObject<number, undefined, unknown>
+>flatMap : <U>(callback: (value: number, index: number) => (Iterable<U, unknown, undefined> | Iterator<U, unknown, undefined>) & object) => IteratorObject<U, undefined, unknown>
+>() => Iterator.from("ab") : () => IteratorObject<string, undefined, unknown>
+>Iterator.from("ab") : IteratorObject<string, undefined, unknown>
+>Iterator.from : <T>(value: Iterator<T, unknown, undefined> | Iterable<T, unknown, undefined>) => IteratorObject<T, undefined, unknown>
+>Iterator : IteratorConstructor
+>from : <T>(value: Iterator<T, unknown, undefined> | Iterable<T, unknown, undefined>) => IteratorObject<T, undefined, unknown>
+>"ab" : "ab"
+>toArray : () => string[]
+
+const fromBoxedString: string[] = numbers.flatMap(() => new String("ab")).toArray();
+>fromBoxedString : string[]
+>numbers.flatMap(() => new String("ab")).toArray() : string[]
+>numbers.flatMap(() => new String("ab")).toArray : () => string[]
+>numbers.flatMap(() => new String("ab")) : IteratorObject<string, undefined, unknown>
+>numbers.flatMap : <U>(callback: (value: number, index: number) => (Iterable<U, unknown, undefined> | Iterator<U, unknown, undefined>) & object) => IteratorObject<U, undefined, unknown>
+>numbers : IteratorObject<number, undefined, unknown>
+>flatMap : <U>(callback: (value: number, index: number) => (Iterable<U, unknown, undefined> | Iterator<U, unknown, undefined>) & object) => IteratorObject<U, undefined, unknown>
+>() => new String("ab") : () => String
+>new String("ab") : String
+>String : StringConstructor
+>"ab" : "ab"
+>toArray : () => string[]
+
+numbers.flatMap(() => "ab").toArray();
+>numbers.flatMap(() => "ab").toArray() : string[]
+>numbers.flatMap(() => "ab").toArray : () => string[]
+>numbers.flatMap(() => "ab") : IteratorObject<string, undefined, unknown>
+>numbers.flatMap : <U>(callback: (value: number, index: number) => (Iterable<U, unknown, undefined> | Iterator<U, unknown, undefined>) & object) => IteratorObject<U, undefined, unknown>
+>numbers : IteratorObject<number, undefined, unknown>
+>flatMap : <U>(callback: (value: number, index: number) => (Iterable<U, unknown, undefined> | Iterator<U, unknown, undefined>) & object) => IteratorObject<U, undefined, unknown>
+>() => "ab" : () => string
+>"ab" : "ab"
+>toArray : () => string[]
+
