@@ -1,0 +1,72 @@
+arrayFromAsyncMapperInput.ts(19,45): error TS2339: Property 'toFixed' does not exist on type 'Promise<number>'.
+arrayFromAsyncMapperInput.ts(20,23): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type '(value: string) => string' is not assignable to parameter of type '(value: string | Promise<number>, index: number) => string'.
+      Types of parameters 'value' and 'value' are incompatible.
+        Type 'string | Promise<number>' is not assignable to type 'string'.
+          Type 'Promise<number>' is not assignable to type 'string'.
+arrayFromAsyncMapperInput.ts(21,24): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type '(value: number) => string' is not assignable to parameter of type '(value: number | Promise<number>, index: number) => string'.
+      Types of parameters 'value' and 'value' are incompatible.
+        Type 'number | Promise<number>' is not assignable to type 'number'.
+          Type 'Promise<number>' is not assignable to type 'number'.
+arrayFromAsyncMapperInput.ts(22,32): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type '(value: number) => string' is not assignable to parameter of type '(value: number | Promise<number>, index: number) => string'.
+      Types of parameters 'value' and 'value' are incompatible.
+        Type 'number | Promise<number>' is not assignable to type 'number'.
+          Type 'Promise<number>' is not assignable to type 'number'.
+
+
+==== arrayFromAsyncMapperInput.ts (4 errors) ====
+    declare const asyncSource: AsyncIterable<Promise<number>>;
+    declare const syncSource: Iterable<Promise<number>>;
+    declare const arrayLike: ArrayLike<Promise<number>>;
+    declare const mixed: typeof asyncSource | typeof syncSource;
+    declare const explicitMixed: AsyncIterable<number> | Iterable<number>;
+    declare const optionalAsync: typeof syncSource & Partial<typeof asyncSource>;
+    declare const dual: typeof asyncSource & Iterable<string>;
+    
+    const fromAsync: Promise<number[]> = Array.fromAsync(asyncSource, value => value);
+    const fromSync: Promise<string[]> = Array.fromAsync(syncSource, value => value.toFixed());
+    const fromArrayLike: Promise<string[]> = Array.fromAsync(arrayLike, value => value.toFixed());
+    const fromString: Promise<string[]> = Array.fromAsync("ab", value => value.toUpperCase());
+    const fromMixed: Promise<number[]> = Array.fromAsync(mixed, async value => (await value) + 1);
+    const fromExplicitMixed: Promise<string[]> = Array.fromAsync<number, string>(explicitMixed, value => value.toFixed());
+    const fromOptionalAsync: Promise<number[]> = Array.fromAsync(optionalAsync, async value => (await value) + 1);
+    const fromDual: Promise<number[]> = Array.fromAsync(dual, value => value);
+    const unmapped: Promise<Promise<number>[]> = Array.fromAsync(asyncSource);
+    
+    Array.fromAsync(asyncSource, value => value.toFixed());
+                                                ~~~~~~~
+!!! error TS2339: Property 'toFixed' does not exist on type 'Promise<number>'.
+!!! related TS2773 arrayFromAsyncMapperInput.ts:19:45: Did you forget to use 'await'?
+    Array.fromAsync(dual, (value: string) => value.toUpperCase());
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   The last overload gave the following error.
+!!! error TS2769:     Argument of type '(value: string) => string' is not assignable to parameter of type '(value: string | Promise<number>, index: number) => string'.
+!!! error TS2769:       Types of parameters 'value' and 'value' are incompatible.
+!!! error TS2769:         Type 'string | Promise<number>' is not assignable to type 'string'.
+!!! error TS2769:           Type 'Promise<number>' is not assignable to type 'string'.
+!!! related TS2771 lib.es2026.array.d.ts:--:--: The last overload is declared here.
+    Array.fromAsync(mixed, (value: number) => value.toFixed());
+                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   The last overload gave the following error.
+!!! error TS2769:     Argument of type '(value: number) => string' is not assignable to parameter of type '(value: number | Promise<number>, index: number) => string'.
+!!! error TS2769:       Types of parameters 'value' and 'value' are incompatible.
+!!! error TS2769:         Type 'number | Promise<number>' is not assignable to type 'number'.
+!!! error TS2769:           Type 'Promise<number>' is not assignable to type 'number'.
+!!! related TS2771 lib.es2026.array.d.ts:--:--: The last overload is declared here.
+    Array.fromAsync(optionalAsync, (value: number) => value.toFixed());
+                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   The last overload gave the following error.
+!!! error TS2769:     Argument of type '(value: number) => string' is not assignable to parameter of type '(value: number | Promise<number>, index: number) => string'.
+!!! error TS2769:       Types of parameters 'value' and 'value' are incompatible.
+!!! error TS2769:         Type 'number | Promise<number>' is not assignable to type 'number'.
+!!! error TS2769:           Type 'Promise<number>' is not assignable to type 'number'.
+!!! related TS2771 lib.es2026.array.d.ts:--:--: The last overload is declared here.
+    
