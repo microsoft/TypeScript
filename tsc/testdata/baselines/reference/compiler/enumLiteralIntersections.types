@@ -1,0 +1,90 @@
+//// [tests/cases/compiler/enumLiteralIntersections.ts] ////
+
+=== enumLiteralIntersections.ts ===
+enum A {
+>A : A
+
+    One = 1,
+>One : A.One
+>1 : 1
+
+    Two = "2",
+>Two : A.Two
+>"2" : "2"
+}
+
+const a: "2" = A.Two;
+>a : "2"
+>A.Two : A.Two
+>A : typeof A
+>Two : A.Two
+
+const b: 1 = A.One;
+>b : 1
+>A.One : A.One
+>A : typeof A
+>One : A.One
+
+type Extant1 = A.One & 1;
+>Extant1 : A.One
+>A : any
+
+type Extant2 = A.Two & "2";
+>Extant2 : A.Two
+>A : any
+
+type ExtantAny1 = A & 1;
+>ExtantAny1 : A.One
+
+type ExtantAny2 = A & "2";
+>ExtantAny2 : A.Two
+
+const numericMember: Extant1 = A.One;
+>numericMember : A.One
+>A.One : A.One
+>A : typeof A
+>One : A.One
+
+const stringMember: Extant2 = A.Two;
+>stringMember : A.Two
+>A.Two : A.Two
+>A : typeof A
+>Two : A.Two
+
+const numericEnum: ExtantAny1 = A.One;
+>numericEnum : A.One
+>A.One : A.One
+>A : typeof A
+>One : A.One
+
+const stringEnum: ExtantAny2 = A.Two;
+>stringEnum : A.Two
+>A.Two : A.Two
+>A : typeof A
+>Two : A.Two
+
+const literalFirst: "2" & A.Two = A.Two;
+>literalFirst : A.Two
+>A : any
+>A.Two : A.Two
+>A : typeof A
+>Two : A.Two
+
+const union: A & (0 | "2") = A.Two;
+>union : A.Two
+>A.Two : A.Two
+>A : typeof A
+>Two : A.Two
+
+// @ts-expect-error
+const mismatch: A & (0 | "2") = A.One;
+>mismatch : A.Two
+>A.One : A.One
+>A : typeof A
+>One : A.One
+
+// @ts-expect-error
+const plainString: ExtantAny2 = "2";
+>plainString : A.Two
+>"2" : "2"
+

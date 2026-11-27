@@ -652,6 +652,12 @@ func isBinaryOperation(node *ast.Node, token ast.Kind) bool {
 		node.AsBinaryExpression().OperatorToken.Kind == token
 }
 
+// Reports whether a node was not produced by the parser, either because it has no
+// source position or because a factory marked it as synthesized.
+func isSynthesizedForEmit(node *ast.Node) bool {
+	return ast.NodeIsSynthesized(node) || node.Flags&ast.NodeFlagsSynthesized != 0
+}
+
 func mixingBinaryOperatorsRequiresParentheses(a ast.Kind, b ast.Kind) bool {
 	if a == ast.KindQuestionQuestionToken {
 		return b == ast.KindAmpersandAmpersandToken || b == ast.KindBarBarToken

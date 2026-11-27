@@ -26,7 +26,7 @@ describe("sortAndDeduplicateDiagnostics", () => {
     const diagnostic: Diagnostic = { pos: -1, end: -1, code: 1, category: 1, text: "Error" };
 
     test("sorts by file, location, code, category, source, and text without mutating input", () => {
-        const firstFile = { ...diagnostic, fileName: toRootedFilePath("/A.ts", undefined), pos: 0, end: 1 };
+        const firstFile = { ...diagnostic, fileName: toRootedFilePath("/A.ts", /*currentDirectory*/ undefined), pos: 0, end: 1 };
         const expected = [
             diagnostic,
             firstFile,
@@ -36,7 +36,7 @@ describe("sortAndDeduplicateDiagnostics", () => {
             { ...firstFile, code: 2 },
             { ...firstFile, end: 2 },
             { ...firstFile, pos: 1, end: 2 },
-            { ...firstFile, fileName: toRootedFilePath("/a.ts", undefined) },
+            { ...firstFile, fileName: toRootedFilePath("/a.ts", /*currentDirectory*/ undefined) },
         ].map((item, index) => ({ ...item, index }));
         const input = Object.freeze([...expected].reverse());
         for (const sort of [sortAndDeduplicateDiagnostics, sortAndDeduplicateDiagnosticsSync]) {

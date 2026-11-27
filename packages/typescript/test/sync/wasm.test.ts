@@ -152,8 +152,10 @@ describe("API over WebAssembly", () => {
                 }
                 const output = await readFile(stdoutPath, "utf8");
                 assert.strictEqual(exitCode, 0, `tsc -p ${project} failed:\n${output}`);
+                const outputFiles = output.trim().split("\n");
+                outputFiles.sort();
                 assert.deepStrictEqual(
-                    output.trim().split("\n").sort(),
+                    outputFiles,
                     [`${project}/index.ts`, `${project}/node_modules/pkg/index.d.ts`],
                 );
             }
@@ -191,7 +193,7 @@ describe("API over WebAssembly", () => {
             stdio: ["pipe", "pipe", "pipe"],
         });
         t.after(() => {
-            if (child.exitCode === null && child.signalCode === null) child.kill("SIGKILL");
+            if (child.exitCode == undefined && child.signalCode == undefined) child.kill("SIGKILL");
         });
         let stdout = Buffer.alloc(0);
         let stderr = "";
@@ -210,14 +212,15 @@ describe("API over WebAssembly", () => {
                 if (stdout.length < bodyStart + length) return;
                 const message = JSON.parse(stdout.subarray(bodyStart, bodyStart + length).toString());
                 stdout = stdout.subarray(bodyStart + length);
-                if (!("method" in message)) responses.add(message.id);
-                else if ("id" in message) send({ id: message.id, result: null });
+                if (!message.method) responses.add(message.id);
+                // eslint-disable-next-line no-restricted-syntax -- JSON-RPC responses require a result.
+                else if (message.id != undefined) send({ id: message.id, result: null });
             }
         });
         child.stderr.setEncoding("utf8");
         child.stderr.on("data", chunk => stderr += chunk);
         const waitForResponse = async (id: number) => {
-            while (!responses.has(id) && child.exitCode === null && !t.signal.aborted) {
+            while (!responses.has(id) && child.exitCode == undefined && !t.signal.aborted) {
                 await new Promise(resolve => setTimeout(resolve, 10));
             }
             assert.ok(responses.has(id), `no response to request ${id}\n${stderr}`);
@@ -229,9 +232,12 @@ describe("API over WebAssembly", () => {
             id: 1,
             method: "initialize",
             params: {
+                // eslint-disable-next-line no-restricted-syntax -- LSP permits a null process ID.
                 processId: null,
                 capabilities: {},
+                // eslint-disable-next-line no-restricted-syntax -- LSP requires null for an absent root URI.
                 rootUri: null,
+                // eslint-disable-next-line no-restricted-syntax -- Null means no workspace folders are configured.
                 workspaceFolders: null,
             },
         });
@@ -241,6 +247,7 @@ describe("API over WebAssembly", () => {
         send({ id: 2, method: "shutdown" });
         await waitForResponse(2);
         child.stdin.end();
+        // eslint-disable-next-line no-restricted-syntax -- Node reports a null exit code when a process is killed by a signal.
         const exitCode = child.exitCode ?? await new Promise<number | null>(resolve => child.once("exit", resolve));
         assert.strictEqual(exitCode, 0, stderr);
     });
@@ -273,7 +280,7 @@ describe("API over WebAssembly", () => {
             stdio: ["pipe", "pipe", "pipe"],
         });
         t.after(() => {
-            if (child.exitCode === null && child.signalCode === null) child.kill("SIGKILL");
+            if (child.exitCode == undefined && child.signalCode == undefined) child.kill("SIGKILL");
         });
         let stderr = "";
         child.stderr.setEncoding("utf8");
@@ -281,6 +288,7 @@ describe("API over WebAssembly", () => {
 
         await new Promise(resolve => setTimeout(resolve, 250));
         child.stdin.end();
+        // eslint-disable-next-line no-restricted-syntax -- Node reports a null exit code when a process is killed by a signal.
         const exitCode = child.exitCode ?? await new Promise<number | null>(resolve => child.once("exit", resolve));
         assert.strictEqual(exitCode, 0, stderr);
     });

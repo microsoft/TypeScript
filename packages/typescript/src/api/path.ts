@@ -809,7 +809,7 @@ export function documentURIToFileName(uri: string): string {
     let encodedAuthority = authority;
     if (hasAuthority) {
         encodedAuthority = authority === "ts-nul-authority"
-            ? forceEncodeDynamicURIPathSegment(authority, false)
+            ? forceEncodeDynamicURIPathSegment(authority, /*preserveExtension*/ false)
             : encodeDynamicURIPath(authority);
     }
     const encodedPath = hasPath
@@ -839,7 +839,7 @@ function encodeDynamicURIPathWithSuffix(path: string, suffix: string): string {
         return encodeDynamicURIPath(path);
     }
     const slash = path.lastIndexOf("/");
-    const before = slash === -1 ? "" : encodeDynamicURIPath(path.substring(0, slash), false) + "/";
+    const before = slash === -1 ? "" : encodeDynamicURIPath(path.substring(0, slash), /*preserveFinalExtension*/ false) + "/";
     return before + forceEncodeDynamicURIPathSegmentWithSuffix(path.substring(slash + 1), suffix);
 }
 
@@ -890,7 +890,7 @@ function forceEncodeDynamicURIPathSegment(segment: string, preserveExtension: bo
 
 function forceEncodeDynamicURIPathSegmentWithSuffix(segment: string, suffix: string): string {
     const [base, extension] = splitDynamicURIFileExtension(segment);
-    return forceEncodeDynamicURIPathSegment(base + "\0" + suffix, false) + extension;
+    return forceEncodeDynamicURIPathSegment(base + "\0" + suffix, /*preserveExtension*/ false) + extension;
 }
 
 function splitDynamicURIFileExtension(segment: string): [base: string, extension: string] {

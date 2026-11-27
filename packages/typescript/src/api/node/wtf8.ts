@@ -7,6 +7,7 @@ const textEncoder = new TextEncoder();
 const replacementCharacterUtf8 = new Uint8Array([0xEF, 0xBF, 0xBD]);
 const loneSurrogateRegExp = /[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:^|[^\uD800-\uDBFF])[\uDC00-\uDFFF]/;
 const shortStringLength = 64;
+// eslint-disable-next-line no-restricted-syntax -- The decoder accepts null as empty input.
 type DecodeInput = ArrayBufferView | ArrayBufferLike | null;
 interface DecodeOptions {
     stream?: boolean | undefined;
@@ -38,7 +39,7 @@ function hasReplacementCharacter(bytes: Uint8Array): boolean {
     return false;
 }
 
-function toUint8Array(input: Exclude<DecodeInput, null | undefined>): Uint8Array {
+function toUint8Array(input: NonNullable<DecodeInput>): Uint8Array {
     if (input instanceof Uint8Array) {
         return input;
     }
@@ -120,8 +121,8 @@ export function encodeWtf8(text: string): Uint8Array {
 
 export class Wtf8Decoder extends TextDecoder {
     override decode(input?: DecodeInput, options?: DecodeOptions): string {
-        if (input == null) {
-            return super.decode(undefined, options);
+        if (input == undefined) {
+            return super.decode(/*input*/ undefined, options);
         }
 
         const bytes = toUint8Array(input);

@@ -19,7 +19,10 @@ import type {
     CompilerOptions,
     PluginImport,
 } from "./compilerOptions.generated.ts";
-import type { UserPreferences } from "./userPreferences.generated.ts";
+import type {
+    FormatCodeSettings,
+    UserPreferences,
+} from "./userPreferences.generated.ts";
 
 export { CaseSensitivity } from "../../enums/caseSensitivity.js";
 export { JsxEmit } from "../../enums/jsxEmit.js";
@@ -33,7 +36,7 @@ export { SymbolOwnerKind } from "../../enums/symbolOwnerKind.js";
 export type { PathKey, RootedDirectoryPath, RootedFilePath, RootedPath } from "../ast/index.ts";
 export type { CompilerOptions, PluginImport } from "./compilerOptions.generated.ts";
 export * from "./compilerOptions.generated.ts";
-export type { UserPreferences } from "./userPreferences.generated.ts";
+export type { FormatCodeSettings, UserPreferences } from "./userPreferences.generated.ts";
 
 export type APIMethod<TParams, TResult> = { params: TParams; result: TResult; };
 
@@ -42,9 +45,10 @@ export interface APIMethodInfo {
     releaseSourceFile: APIMethod<ReleaseSourceFileParams, unknown>;
     retainSourceFile: APIMethod<RetainSourceFileParams, RetainSourceFileResponse>;
     getCachedSourceFile: APIMethod<GetCachedSourceFileParams, SourceFileResponse>;
-    getSymbolOfDeclaration: APIMethod<GetSymbolOfDeclarationParams, SymbolResponse>;
+    getSymbolOfDeclaration: APIMethod<GetSymbolOfDeclarationParams, SymbolResponse | null>;
     batchRequests: APIMethod<BatchRequestsParams, BatchRequestsResponse>;
     initialize: APIMethod<null, InitializeResponse>;
+    getDefaultFormatCodeSettings: APIMethod<null, FormatCodeSettings>;
     createSnapshot: APIMethod<CreateSnapshotParams, CreateSnapshotResponse>;
     updateSnapshot: APIMethod<UpdateSnapshotParams, CreateSnapshotResponse>;
     getCurrentLanguageServerSnapshot: APIMethod<GetCurrentLanguageServerSnapshotParams, CreateSnapshotResponse>;
@@ -1234,6 +1238,10 @@ export interface PrintNodeParams {
     neverAsciiEscape?: boolean | undefined;
     terminateUnterminatedLiterals?: boolean | undefined;
     emitNodes?: Record<number, PrintEmitNode | null> | undefined;
+    /** OriginalFiles are the source files containing the nodes referenced by OriginalNodes. */
+    originalFiles?: readonly SourceFileDescriptor[] | undefined;
+    /** OriginalNodes maps encoded node indices to the parsed nodes they were created from. */
+    originalNodes?: Record<number, PrintOriginalNode | null> | undefined;
 }
 
 export interface EmitParams {
@@ -1366,6 +1374,7 @@ export interface BatchRequest {
         | "getDeclarationDiagnostics"
         | "getDeclarationEmit"
         | "getDeclaredTypeOfSymbol"
+        | "getDefaultFormatCodeSettings"
         | "getDefaultFromTypeParameter"
         | "getDefaultProjectForFile"
         | "getDocumentationComment"
@@ -1579,6 +1588,7 @@ export interface BatchResponse {
         | "getDeclarationDiagnostics"
         | "getDeclarationEmit"
         | "getDeclaredTypeOfSymbol"
+        | "getDefaultFormatCodeSettings"
         | "getDefaultFromTypeParameter"
         | "getDefaultProjectForFile"
         | "getDocumentationComment"
@@ -1949,6 +1959,15 @@ export interface PrintEmitNode {
     emitFlags?: number | undefined;
     leadingComments?: PrintSynthesizedComment[] | undefined;
     trailingComments?: PrintSynthesizedComment[] | undefined;
+}
+
+/**
+ * PrintOriginalNode identifies a parsed node by the index of its source file in
+ * PrintNodeParams.OriginalFiles and its index within that file.
+ */
+export interface PrintOriginalNode {
+    file: number;
+    index: number;
 }
 
 export interface EmitOutputFile {

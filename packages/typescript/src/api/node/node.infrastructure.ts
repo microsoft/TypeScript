@@ -1,7 +1,6 @@
 import {
     type FileReference,
     type Node,
-    type PathKey,
     SyntaxKind,
 } from "../../ast/index.ts";
 export { modifierToFlag } from "../../ast/modifiers.ts";
@@ -77,10 +76,10 @@ export interface SourceFileInfo {
  * Read the 128-bit content hash from a source file binary response as a hex string.
  */
 export function readSourceFileHash(data: DataView): string {
-    const lo0 = data.getUint32(HEADER_OFFSET_HASH_LO0, true);
-    const lo1 = data.getUint32(HEADER_OFFSET_HASH_LO1, true);
-    const hi0 = data.getUint32(HEADER_OFFSET_HASH_HI0, true);
-    const hi1 = data.getUint32(HEADER_OFFSET_HASH_HI1, true);
+    const lo0 = data.getUint32(HEADER_OFFSET_HASH_LO0, /*littleEndian*/ true);
+    const lo1 = data.getUint32(HEADER_OFFSET_HASH_LO1, /*littleEndian*/ true);
+    const hi0 = data.getUint32(HEADER_OFFSET_HASH_HI0, /*littleEndian*/ true);
+    const hi1 = data.getUint32(HEADER_OFFSET_HASH_HI1, /*littleEndian*/ true);
     return hex8(hi1) + hex8(hi0) + hex8(lo1) + hex8(lo0);
 }
 
@@ -90,11 +89,11 @@ export function readSourceFileHash(data: DataView): string {
  * allowing the client to distinguish files parsed with different options.
  */
 export function readParseOptionsKey(data: DataView): string {
-    return data.getUint32(HEADER_OFFSET_PARSE_OPTIONS, true).toString();
+    return data.getUint32(HEADER_OFFSET_PARSE_OPTIONS, /*littleEndian*/ true).toString();
 }
 
 export function readSourceFileLease(data: DataView): number {
-    const lease = data.getBigUint64(HEADER_OFFSET_SOURCE_FILE_LEASE, true);
+    const lease = data.getBigUint64(HEADER_OFFSET_SOURCE_FILE_LEASE, /*littleEndian*/ true);
     if (lease === 0n) {
         throw new Error("Source file response has no lease");
     }
@@ -105,7 +104,7 @@ export function readSourceFileLease(data: DataView): number {
 }
 
 export function readSourceFileNodeId(data: DataView): string {
-    const nodeId = data.getBigUint64(HEADER_OFFSET_SOURCE_FILE_ID, true);
+    const nodeId = data.getBigUint64(HEADER_OFFSET_SOURCE_FILE_ID, /*littleEndian*/ true);
     if (nodeId === 0n) {
         throw new Error("Source file response has no node ID");
     }
@@ -134,27 +133,27 @@ export class RemoteNodeBase {
     }
 
     get kind(): SyntaxKind {
-        return this.view.getUint32(this._byteIndex + NODE_OFFSET_KIND, true);
+        return this.view.getUint32(this._byteIndex + NODE_OFFSET_KIND, /*littleEndian*/ true);
     }
 
     get pos(): number {
-        return this.view.getInt32(this._byteIndex + NODE_OFFSET_POS, true);
+        return this.view.getInt32(this._byteIndex + NODE_OFFSET_POS, /*littleEndian*/ true);
     }
 
     get end(): number {
-        return this.view.getInt32(this._byteIndex + NODE_OFFSET_END, true);
+        return this.view.getInt32(this._byteIndex + NODE_OFFSET_END, /*littleEndian*/ true);
     }
 
     get next(): number {
-        return this.view.getUint32(this._byteIndex + NODE_OFFSET_NEXT, true);
+        return this.view.getUint32(this._byteIndex + NODE_OFFSET_NEXT, /*littleEndian*/ true);
     }
 
     protected get parentIndex(): number {
-        return this.view.getUint32(this._byteIndex + NODE_OFFSET_PARENT, true);
+        return this.view.getUint32(this._byteIndex + NODE_OFFSET_PARENT, /*littleEndian*/ true);
     }
 
     protected get data(): number {
-        return this.view.getUint32(this._byteIndex + NODE_OFFSET_DATA, true);
+        return this.view.getUint32(this._byteIndex + NODE_OFFSET_DATA, /*littleEndian*/ true);
     }
 
     protected get dataType(): NodeDataType {

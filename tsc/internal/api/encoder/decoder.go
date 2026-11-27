@@ -158,6 +158,23 @@ func (d *astDecoder) decode() (*ast.Node, error) {
 	// child at most once, so nodeCount is an upper bound on total child pointers.
 	d.nodeArena = make([]*ast.Node, 0, d.nodeCount)
 
+	// Encoded positions are UTF-16 offsets into the root source file's text.
+	positionMap, err := d.rootPositionMap()
+	if err != nil {
+		return nil, err
+	}
+	newTextRange := func(pos, end int32) core.TextRange {
+		if positionMap != nil {
+			if pos >= 0 {
+				pos = int32(positionMap.UTF16ToUTF8(int(pos)))
+			}
+			if end >= 0 {
+				end = int32(positionMap.UTF16ToUTF8(int(end)))
+			}
+		}
+		return core.NewTextRange(int(pos), int(end))
+	}
+
 	// Process bottom-up so children exist before parents.
 	for i := d.nodeCount - 1; i >= 1; i-- {
 		kind := d.nodeField(i, NodeOffsetKind)
@@ -174,7 +191,7 @@ func (d *astDecoder) decode() (*ast.Node, error) {
 				}
 			}
 			nl := d.factory.NewNodeList(childNodes)
-			nl.Loc = core.NewTextRange(int(pos), int(end))
+			nl.Loc = newTextRange(pos, end)
 			d.nodeLists[i] = nl
 			continue
 		}
@@ -183,7 +200,7 @@ func (d *astDecoder) decode() (*ast.Node, error) {
 		if err != nil {
 			return nil, fmt.Errorf("at node %d (kind %v): %w", i, ast.Kind(kind), err)
 		}
-		node.Loc = core.NewTextRange(int(pos), int(end))
+		node.Loc = newTextRange(pos, end)
 		node.Flags = ast.NodeFlags(d.nodeField(i, NodeOffsetFlags))
 		if kind == uint32(ast.KindSourceFile) {
 			node.AsSourceFile().IsDeclarationFile = node.Flags&ast.NodeFlagsAmbient != 0
@@ -195,6 +212,24 @@ func (d *astDecoder) decode() (*ast.Node, error) {
 	}
 
 	return d.nodes[1], nil
+}
+
+// rootPositionMap returns the position map of the root source file's text, or nil if the
+// root is not a source file or its UTF-16 and UTF-8 offsets are identical.
+func (d *astDecoder) rootPositionMap() (*ast.PositionMap, error) {
+	if d.nodeField(1, NodeOffsetKind) != uint32(ast.KindSourceFile) {
+		return nil, nil
+	}
+	extOff := int(d.extData) + int(d.nodeField(1, NodeOffsetData)&NodeDataStringIndexMask)
+	text, err := d.getString(readLE32(d.raw, extOff))
+	if err != nil {
+		return nil, err
+	}
+	positionMap := ast.ComputePositionMap(text)
+	if positionMap.IsAsciiOnly() {
+		return nil, nil
+	}
+	return positionMap, nil
 }
 
 // getModifierList creates a *ast.ModifierList from a child index that is a NodeList.

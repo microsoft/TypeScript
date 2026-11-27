@@ -45,9 +45,12 @@ interface EventSource {
     off(event: string, listener: (...args: any[]) => void): unknown;
 }
 
+// eslint-disable-next-line no-restricted-syntax -- Node writable callbacks may use null for no error.
+type WriteCallback = (error: Error | null | undefined) => void;
+
 interface WritableStream extends EventSource {
-    write(data: Uint8Array, callback: (error: Error | null | undefined) => void): unknown;
-    write(data: string, encoding: RAL.MessageBufferEncoding, callback: (error: Error | null | undefined) => void): unknown;
+    write(data: Uint8Array, callback: WriteCallback): unknown;
+    write(data: string, encoding: RAL.MessageBufferEncoding, callback: WriteCallback): unknown;
     end(): unknown;
 }
 
@@ -114,7 +117,7 @@ export function createStreamConnection(readable: EventSource, writable: Writable
         onEnd: listener => listen(writable, "end", listener),
         write: (data: Uint8Array | string, encoding?: RAL.MessageBufferEncoding) =>
             new Promise<void>((resolve, reject) => {
-                const callback = (error: Error | null | undefined) => error ? reject(error) : resolve();
+                const callback: WriteCallback = error => error ? reject(error) : resolve();
                 if (typeof data === "string") {
                     writable.write(data, encoding ?? "utf-8", callback);
                 }

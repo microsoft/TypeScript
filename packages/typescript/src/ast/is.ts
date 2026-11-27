@@ -17,6 +17,8 @@ import type {
     BooleanLiteral,
     CallChain,
     CallExpression,
+    CanHaveDecorators,
+    CanHaveModifiers,
     ClassElement,
     ComputedPropertyName,
     ConciseBody,
@@ -49,6 +51,7 @@ import type {
     JSDocTypeExpression,
     JSDocTypeLiteral,
     JsxAttributeLike,
+    JsxClosingElement,
     JsxExpression,
     JsxOpeningElement,
     JsxOpeningFragment,
@@ -59,6 +62,7 @@ import type {
     LiteralExpression,
     MetaProperty,
     MinusToken,
+    ModifiersBase,
     ModuleDeclaration,
     NewExpression,
     Node,
@@ -148,6 +152,55 @@ import {
 
 export * from "./is.generated.ts";
 
+export function canHaveDecorators(node: Node): node is CanHaveDecorators {
+    switch (node.kind) {
+        case SyntaxKind.Parameter:
+        case SyntaxKind.PropertyDeclaration:
+        case SyntaxKind.MethodDeclaration:
+        case SyntaxKind.GetAccessor:
+        case SyntaxKind.SetAccessor:
+        case SyntaxKind.ClassExpression:
+        case SyntaxKind.ClassDeclaration:
+            return true;
+        default:
+            return false;
+    }
+}
+
+export function canHaveModifiers(node: Node): node is CanHaveModifiers {
+    switch (node.kind) {
+        case SyntaxKind.TypeParameter:
+        case SyntaxKind.Parameter:
+        case SyntaxKind.PropertySignature:
+        case SyntaxKind.PropertyDeclaration:
+        case SyntaxKind.MethodSignature:
+        case SyntaxKind.MethodDeclaration:
+        case SyntaxKind.Constructor:
+        case SyntaxKind.GetAccessor:
+        case SyntaxKind.SetAccessor:
+        case SyntaxKind.IndexSignature:
+        case SyntaxKind.ConstructorType:
+        case SyntaxKind.FunctionExpression:
+        case SyntaxKind.ArrowFunction:
+        case SyntaxKind.ClassExpression:
+        case SyntaxKind.VariableStatement:
+        case SyntaxKind.FunctionDeclaration:
+        case SyntaxKind.ClassDeclaration:
+        case SyntaxKind.InterfaceDeclaration:
+        case SyntaxKind.TypeAliasDeclaration:
+        case SyntaxKind.EnumDeclaration:
+        case SyntaxKind.ModuleDeclaration:
+        case SyntaxKind.ImportEqualsDeclaration:
+        case SyntaxKind.ImportDeclaration:
+        case SyntaxKind.JSImportDeclaration:
+        case SyntaxKind.ExportAssignment:
+        case SyntaxKind.ExportDeclaration:
+            return true;
+        default:
+            return false;
+    }
+}
+
 export function isAutoAccessorPropertyDeclaration(node: Node): node is AutoAccessorPropertyDeclaration {
     return node.kind === SyntaxKind.PropertyDeclaration &&
         !!((node as PropertyDeclaration).modifierFlags & ModifierFlags.Accessor);
@@ -155,7 +208,7 @@ export function isAutoAccessorPropertyDeclaration(node: Node): node is AutoAcces
 
 type JSDocNamespaceDeclaration = ModuleDeclaration;
 
-type WrappedExpression<T extends Expression> =
+type WrappedExpression<_T extends Expression> =
     | ParenthesizedExpression
     | TypeAssertion
     | AsExpression
@@ -291,7 +344,7 @@ function isPartOfPossiblyValidTypeOrAbstractComputedPropertyName(node: Node): bo
     if (!isComputedPropertyName(node)) {
         return false;
     }
-    if (hasModifierFlags(node.parent) && node.parent.modifierFlags & ModifierFlags.Abstract) {
+    if ((node.parent as ModifiersBase).modifiers?.some(modifier => modifier.kind === SyntaxKind.AbstractKeyword)) {
         return true;
     }
     const containerKind = node.parent.parent.kind;
@@ -302,9 +355,12 @@ function isShorthandPropertyNameUseSite(useSite: Node): boolean {
     return isIdentifier(useSite) && isShorthandPropertyAssignment(useSite.parent) && useSite.parent.name === useSite;
 }
 
-type AncestorCallbackResult = boolean | "quit";
+export type AncestorCallbackResult = boolean | "quit";
 
-function findAncestor(node: Node, callback: (node: Node) => AncestorCallbackResult): Node | undefined {
+/** Searches a node and its ancestors, stopping if the callback returns `"quit"`. */
+export function findAncestor<T extends Node>(node: Node | undefined, callback: (node: Node) => node is T): T | undefined;
+export function findAncestor(node: Node | undefined, callback: (node: Node) => AncestorCallbackResult): Node | undefined;
+export function findAncestor(node: Node | undefined, callback: (node: Node) => AncestorCallbackResult): Node | undefined {
     while (node) {
         const result = callback(node);
         if (result === "quit") {
@@ -315,10 +371,6 @@ function findAncestor(node: Node, callback: (node: Node) => AncestorCallbackResu
         }
         node = node.parent;
     }
-}
-
-function hasModifierFlags(node: Node): node is Node & { readonly modifierFlags: ModifierFlags; } {
-    return "modifierFlags" in node;
 }
 
 function isExpressionNode(node: Node): boolean {
@@ -474,14 +526,10 @@ function isJSXTagName(node: Node): boolean {
         case SyntaxKind.JsxOpeningElement:
         case SyntaxKind.JsxSelfClosingElement:
         case SyntaxKind.JsxClosingElement:
-            return hasTagName(parent) && parent.tagName === node;
+            return (parent as JsxOpeningElement | JsxSelfClosingElement | JsxClosingElement).tagName === node;
         default:
             return false;
     }
-}
-
-function hasTagName(node: Node): node is Node & { readonly tagName: Node; } {
-    return "tagName" in node;
 }
 
 export function isBlockOrExpression(node: Node): node is BlockOrExpression {
@@ -744,7 +792,7 @@ export function isIterationStatement(node: Node, lookInLabeledStatements: boolea
         case SyntaxKind.WhileStatement:
             return true;
         case SyntaxKind.LabeledStatement:
-            return lookInLabeledStatements && isIterationStatement((node as LabeledStatement).statement, true);
+            return lookInLabeledStatements && isIterationStatement((node as LabeledStatement).statement, /*lookInLabeledStatements*/ true);
         default:
             return false;
     }

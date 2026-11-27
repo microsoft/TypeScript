@@ -595,7 +595,7 @@ Config::
           "convertTabsToSpaces": true,
           "enabled": true,
           "indentSize": 4,
-          "indentStyle": 2,
+          "indentStyle": "smart",
           "indentSwitchCase": true,
           "insertSpaceAfterCommaDelimiter": true,
           "insertSpaceAfterConstructor": false,
