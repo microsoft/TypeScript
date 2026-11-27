@@ -279,7 +279,7 @@ export function executeRequestGenerators<T extends readonly AnyAPIRequestGenerat
         if (parent) parent.group = group;
         while (parent && generators.length === 1) {
             const generator = generators[0];
-            if (!(allGeneratorMarker in generator)) break;
+            if (!(generator as AllRequestGenerator<unknown>)[allGeneratorMarker]) break;
             const wrapper = generator as AllRequestGenerator<unknown>;
             const pending = wrapper.generators;
             if (!pending) break;
@@ -331,7 +331,7 @@ export function executeRequestGenerators<T extends readonly AnyAPIRequestGenerat
         }
         if (!group.initializing) {
             if (!group.parent) throw error;
-            advanceGenerator(group.parent, undefined, { error });
+            advanceGenerator(group.parent, /*value*/ undefined, { error });
         }
     }
 
@@ -344,7 +344,7 @@ export function executeRequestGenerators<T extends readonly AnyAPIRequestGenerat
 }
 
 function isDeferredGenerator(generator: AnyAPIRequestGenerator): generator is DeferredAPIRequestGenerator {
-    return deferredGeneratorMarker in generator;
+    return !!(generator as DeferredAPIRequestGenerator)[deferredGeneratorMarker];
 }
 
 function isRequestGroup(request: APIRequestGeneratorYield): request is readonly APIRequest[] {
@@ -401,6 +401,6 @@ class DeferredRequestGenerator implements DeferredAPIRequestGenerator {
     }
 
     [Symbol.dispose](): void {
-        this.return(undefined);
+        this.return(/*value*/ undefined);
     }
 }

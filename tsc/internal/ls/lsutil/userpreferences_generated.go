@@ -201,12 +201,6 @@ func parsePreferenceIndentStyle(value any) IndentStyle {
 			return IndentStyleSmart
 		}
 	}
-	switch value := value.(type) {
-	case int:
-		return IndentStyle(value)
-	case float64:
-		return IndentStyle(value)
-	}
 	return IndentStyleSmart
 }
 
@@ -1061,8 +1055,8 @@ func (p *UserPreferences) MarshalJSONTo(enc *json.Encoder) error {
 	if p.FormatCodeSettings.EditorSettings.IndentSize != 0 {
 		setNestedValue(config, "format.indentSize", int(p.FormatCodeSettings.EditorSettings.IndentSize))
 	}
-	if p.FormatCodeSettings.EditorSettings.IndentStyle != 0 {
-		setNestedValue(config, "format.indentStyle", int(p.FormatCodeSettings.EditorSettings.IndentStyle))
+	if p.FormatCodeSettings.EditorSettings.IndentStyle != "" {
+		setNestedValue(config, "format.indentStyle", string(p.FormatCodeSettings.EditorSettings.IndentStyle))
 	}
 	if p.FormatCodeSettings.EditorSettings.NewLineCharacter != "" {
 		setNestedValue(config, "format.newLineCharacter", string(p.FormatCodeSettings.EditorSettings.NewLineCharacter))

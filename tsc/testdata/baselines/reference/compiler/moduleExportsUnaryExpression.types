@@ -69,3 +69,77 @@ export function foo(y: number) {
 export { x };
 >x : number
 
+export let x1 = 0;
+>x1 : number
+>0 : 0
+
+export { x1 as y1, x1 as default, x1 as "a b" };
+>x1 : number
+>y1 : number
+>x1 : number
+>default : number
+>x1 : number
+>"a b" : number
+
+export function f1() {
+>f1 : () => number
+
+    return x1++;
+>x1++ : number
+>x1 : number
+}
+
+export function f2() {
+>f2 : () => number
+
+    return x1--;
+>x1-- : number
+>x1 : number
+}
+
+x1++;
+>x1++ : number
+>x1 : number
+
+x1--;
+>x1-- : number
+>x1 : number
+
+for (let i = 0; i < 2; x1++) {
+>i : number
+>0 : 0
+>i < 2 : boolean
+>i : number
+>2 : 2
+>x1++ : number
+>x1 : number
+
+    i++;
+>i++ : number
+>i : number
+}
+
+export const f3 = () => x1++;
+>f3 : () => number
+>() => x1++ : () => number
+>x1++ : number
+>x1 : number
+
+export var x2 = 0;
+>x2 : number
+>0 : 0
+
+export { x2 as y2 };
+>x2 : number
+>y2 : number
+
+x2++;
+>x2++ : number
+>x2 : number
+
+export const f4 = () => x2--;
+>f4 : () => number
+>() => x2-- : () => number
+>x2-- : number
+>x2 : number
+

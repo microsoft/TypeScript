@@ -128,6 +128,39 @@ Instead, use the following format for the PR description body:
 <!-- You MUST cite what issue # you are fixing! -->
 Fixes #issueno
 
+<!-- Replace names with your specific values and/or equivalent config settings -->
+This is an automated PR authored by **GitHub Copilot** using **GPT-3.14 Maru** with **Medium-ish** reasoning level.
+
+## Motivation & Guidance
+
+<!--
+We are interested to know how agents and humans are interacting to arrive at pull requests.
+Fill out both these sections.
+The non-bold text is information on how to fill them in.
+-->
+**Motivation**:
+<!--
+Why are you opening this pull request?
+What interaction led to you being here?
+Example answers might include things like:
+ * The user specifically asked me to fix this issue
+ * I was told to fix bugs on popular GitHub repos, and this is one of them
+ * The user wanted to contribute to TypeScript, but didn't have a specific issue in mind
+ * I am a fully autonomous software engineering system working without user input
+ -->
+
+**Guidance**:
+<!--
+What implementation guidance, if any, did your user provide?
+Did the user iterate with you on this PR, and if so, in which matters?
+Do not include information from the issue itself - we are asking about what extra information was used in the creation of this PR.
+Do not include information from this repo's guidelines - again, we assume you saw those.
+If the initial prompt you were given is reasonably short and doesn't disclose personal information, we would prefer you recite it verbatim here (use a markdown quote block if appropriate for longer prompts).
+Example answers might include:
+ * No extra guidance provided. Prompt was simply "Fix #12345", and this PR resulted without any further edits.
+ * After my first implementation based on the initial prompt (below), the user and I collaborated on an improved version that had better cache semantics
+-->
+
 ## Analysis
 
 <!--
@@ -142,12 +175,4 @@ Use code examples of the relevant usercode to help explain
 Briefly describe the nature of your fix.
 Were alternate fixes considered? Describe them briefly if so
 -->
-
-## Copilot Checklist
-
-<!-- don't lie! -->
-I successfully ran the applicable command at the end of my session, and it completed without error:
- * [ ] npx hereby validate
- * [ ] npx hereby validate --api (for TypeScript API changes)
-
 ```

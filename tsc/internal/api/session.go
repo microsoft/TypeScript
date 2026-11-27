@@ -34,6 +34,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/ls"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/autoimport"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
+	"github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/internal/module"
 	"github.com/microsoft/TypeScript/tsc/internal/nodebuilder"
@@ -902,6 +903,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetSymbolOfDeclaration(parsed.(*GetSymbolOfDeclarationParams))
 	case string(MethodInitialize):
 		return s.handleInitialize(ctx)
+	case string(MethodGetDefaultFormatCodeSettings):
+		return s.handleGetDefaultFormatCodeSettings()
 	case string(MethodCreateSnapshot):
 		return s.handleCreateSnapshot(ctx, parsed.(*CreateSnapshotParams))
 	case string(MethodUpdateSnapshot):
@@ -1479,6 +1482,11 @@ func (s *Session) handleInitialize(ctx context.Context) (*InitializeResponse, er
 		CaseSensitivity:  s.caseSensitivity(),
 		CurrentDirectory: s.currentDirectory(),
 	}, nil
+}
+
+func (s *Session) handleGetDefaultFormatCodeSettings() (*lsutil.FormatCodeSettings, error) {
+	settings := lsutil.GetDefaultFormatCodeSettings()
+	return &settings, nil
 }
 
 // handleCreateSnapshot creates a new independent snapshot.
@@ -2284,6 +2292,7 @@ func (s *Session) handleGetCachedSourceFile(params *GetCachedSourceFileParams) (
 	return s.encodeSourceFileResponse(lease.SourceFile())
 }
 
+// @gen-proto-nullable
 func (s *Session) handleGetSymbolOfDeclaration(params *GetSymbolOfDeclarationParams) (*SymbolResponse, error) {
 	lease, err := s.acquireCachedSourceFile(params.File)
 	if err != nil {
@@ -2296,12 +2305,12 @@ func (s *Session) handleGetSymbolOfDeclaration(params *GetSymbolOfDeclarationPar
 		return nil, fmt.Errorf("%w: declaration node index %d is out of range", ErrClientError, params.Index)
 	}
 	node := table.Nodes[params.Index]
-	if node == nil || !ast.IsDeclaration(node) {
-		return nil, fmt.Errorf("%w: node index %d is not a declaration", ErrClientError, params.Index)
+	if node == nil {
+		return nil, fmt.Errorf("%w: node index %d is not a node", ErrClientError, params.Index)
 	}
 	symbol := node.Symbol()
 	if symbol == nil {
-		return nil, fmt.Errorf("%w: declaration node index %d has no binder symbol", ErrClientError, params.Index)
+		return nil, nil
 	}
 	return newFileSymbolResponse(symbol), nil
 }
@@ -4390,7 +4399,12 @@ func (s *Session) handleSymbolToString(ctx context.Context, params *SymbolToStri
 
 // handlePrintNode decodes a binary-encoded AST node and prints it to text.
 func (s *Session) handlePrintNode(_ context.Context, params *PrintNodeParams) (string, error) {
-	node, emitContext, err := decodePrintNode(params.Data, params.EmitNodes)
+	originals, release, err := s.resolvePrintOriginals(params.OriginalFiles, params.OriginalNodes)
+	if err != nil {
+		return "", err
+	}
+	defer release()
+	node, emitContext, err := decodePrintNode(params.Data, params.EmitNodes, originals)
 	if err != nil {
 		return "", err
 	}
@@ -4414,7 +4428,52 @@ func mapComments(comments []PrintSynthesizedComment) []printer.SynthesizedCommen
 	})
 }
 
-func decodePrintNode(encoded string, emitNodes map[int]*PrintEmitNode) (*ast.Node, *printer.EmitContext, error) {
+// resolvePrintOriginals finds the parsed nodes that printed nodes were created from. Originals
+// whose source files are no longer cached are skipped. The returned function releases the
+// source files and must be called once printing is finished.
+func (s *Session) resolvePrintOriginals(files []SourceFileDescriptor, nodes map[int]*PrintOriginalNode) (map[int]*ast.Node, func(), error) {
+	if len(nodes) == 0 {
+		return nil, func() {}, nil
+	}
+	leases := make([]*project.SourceFileLease, len(files))
+	release := func() {
+		for _, lease := range leases {
+			if lease != nil {
+				lease.Release()
+			}
+		}
+	}
+	acquired := make([]bool, len(files))
+	originals := make(map[int]*ast.Node, len(nodes))
+	for index, original := range nodes {
+		if original == nil {
+			continue
+		}
+		if int(original.File) >= len(files) {
+			release()
+			return nil, nil, fmt.Errorf("%w: original node %d references file %d outside of originalFiles", ErrClientError, index, original.File)
+		}
+		if !acquired[original.File] {
+			acquired[original.File] = true
+			if lease, err := s.acquireCachedSourceFile(files[original.File]); err == nil {
+				leases[original.File] = lease
+			}
+		}
+		lease := leases[original.File]
+		if lease == nil {
+			continue
+		}
+		table := encoder.GetNodeIndexTable(lease.SourceFile())
+		if original.Index != 0 && int(original.Index) < len(table.Nodes) {
+			if parsed := table.Nodes[original.Index]; parsed != nil {
+				originals[index] = parsed
+			}
+		}
+	}
+	return originals, release, nil
+}
+
+func decodePrintNode(encoded string, emitNodes map[int]*PrintEmitNode, originals map[int]*ast.Node) (*ast.Node, *printer.EmitContext, error) {
 	emitContext := printer.NewEmitContext()
 	data, err := base64.StdEncoding.DecodeString(encoded)
 	if err != nil {
@@ -4434,6 +4493,11 @@ func decodePrintNode(encoded string, emitNodes map[int]*PrintEmitNode) (*ast.Nod
 	}
 	usedEmitNodes := 0
 	node, err := encoder.DecodeNodesWithCallback(data, func(node *ast.Node, index int) {
+		// A decoded source file stays its own original so that emit flags set on it
+		// by the client are not hidden behind the cached file.
+		if original := originals[index]; original != nil && original.Kind == node.Kind && !ast.IsSourceFile(node) {
+			emitContext.SetOriginal(node, original)
+		}
 		emitNode, ok := emitNodes[index]
 		if !ok || emitNode == nil {
 			return

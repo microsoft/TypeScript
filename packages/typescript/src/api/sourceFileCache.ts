@@ -49,10 +49,10 @@ export interface CachedSourceFile<TSymbol> {
     refs: Set<string>;
     /** Binder symbols owned by this exact source-file incarnation. */
     readonly symbolsById: Map<number, TSymbol>;
-    /** Successfully resolved declaration symbols. */
-    readonly symbolsByDeclarationNodeIndex: Map<number, TSymbol>;
-    /** In-flight async declaration symbol lookups. */
-    readonly declarationSymbolRequests: Map<number, Promise<TSymbol>>;
+    /** Resolved binder symbol lookups, including nodes without symbols. */
+    readonly symbolsByDeclarationNodeIndex: Map<number, TSymbol | undefined>;
+    /** In-flight async binder symbol lookups. */
+    readonly declarationSymbolRequests: Map<number, Promise<TSymbol | undefined>>;
 }
 
 /**
@@ -290,7 +290,8 @@ export class SourceFileCache<TSymbol> {
         for (let i = entries.length - 1; i >= 0; i--) {
             entries[i].refs.delete(ref);
             if (entries[i].refs.size === 0) {
-                const [evicted] = entries.splice(i, 1);
+                const evicted = entries[i];
+                entries.splice(i, 1);
                 if (this.recordsByNodeId.get(evicted.descriptor.nodeId) === evicted) {
                     this.recordsByNodeId.delete(evicted.descriptor.nodeId);
                 }

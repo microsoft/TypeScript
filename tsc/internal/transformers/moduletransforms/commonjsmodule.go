@@ -1330,7 +1330,7 @@ func (tx *CommonJSModuleTransformer) visitTopLevelNestedTryStatement(node *ast.T
 func (tx *CommonJSModuleTransformer) visitTopLevelNestedCatchClause(node *ast.CatchClause) *ast.Node {
 	return tx.Factory().UpdateCatchClause(
 		node,
-		node.VariableDeclaration,
+		tx.Visitor().VisitNode(node.VariableDeclaration),
 		tx.topLevelNestedVisitor.VisitNode(node.Block),
 	)
 }
@@ -1791,7 +1791,7 @@ func (tx *CommonJSModuleTransformer) visitPostfixUnaryExpression(node *ast.Postf
 				tx.EmitContext().AssignCommentAndSourceMapRanges(expression, node.AsNode())
 			}
 
-			expression = tx.Factory().NewCommaExpression(expression, node.Operand.Clone(tx.Factory()))
+			expression = tx.Factory().NewCommaExpression(expression, tx.Visitor().VisitNode(node.Operand.Clone(tx.Factory())))
 			tx.EmitContext().AssignCommentAndSourceMapRanges(expression, node.AsNode())
 
 			for _, exportName := range exportedNames {

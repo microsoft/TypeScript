@@ -4,10 +4,10 @@ go 1.27
 
 require (
 	github.com/anchore/quill v0.7.1
-	github.com/blacktop/go-macho v1.1.296
+	github.com/blacktop/go-macho v1.1.298
 	github.com/golangci/plugin-module-register v0.1.2
-	golang.org/x/mod v0.42.0
-	golang.org/x/tools v0.52.0
+	golang.org/x/mod v0.43.0
+	golang.org/x/tools v0.53.0
 	gotest.tools/v3 v3.5.2
 )
 
@@ -30,11 +30,11 @@ require (
 	github.com/scylladb/go-set v1.0.3-0.20200225121959-cc7b2070d91e // indirect
 	github.com/sirupsen/logrus v1.10.2 // indirect
 	github.com/stretchr/testify v1.12.1 // indirect
-	golang.org/x/crypto v0.58.0 // indirect
-	golang.org/x/sync v0.24.0 // indirect
-	golang.org/x/sys v0.49.0 // indirect
-	golang.org/x/term v0.47.0 // indirect
-	golang.org/x/text v0.43.0 // indirect
+	golang.org/x/crypto v0.59.0 // indirect
+	golang.org/x/sync v0.25.0 // indirect
+	golang.org/x/sys v0.50.0 // indirect
+	golang.org/x/term v0.48.0 // indirect
+	golang.org/x/text v0.44.0 // indirect
 	gotest.tools/gotestsum v1.13.0 // indirect
 	software.sslmate.com/src/go-pkcs12 v0.7.2 // indirect
 )

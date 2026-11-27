@@ -24,9 +24,13 @@
         "setup-hooks": "node tools/scripts/link-hooks.mjs"
     },
     "devDependencies": {
-        "@dprint/json": "^0.25.2",
-        "@dprint/typescript": "^0.96.1",
+        "@dprint/json": "^0.26.0",
+        "@dprint/typescript": "^0.101.0",
+        "@eslint/js": "^9.39.5",
         "@jakebailey/dprint-plugin-gofumpt": "^0.0.20",
+        "@typescript-eslint/type-utils": "^8.73.0",
+        "@typescript-eslint/utils": "^8.73.0",
+        "@typescript/native": "file:./packages/typescript",
         "@types/node": "^22.20.5",
         "@unicode/unicode-15.1.0": "^2.1.0",
         "adm-zip": "^0.6.1",
@@ -34,10 +38,14 @@
         "chokidar": "^6.0.0",
         "dprint": "^0.64.3",
         "dprint-plugin-yaml": "^0.6.0",
+        "eslint": "^9.39.5",
+        "eslint-plugin-regexp": "^3.3.3",
+        "globals": "^17.14.0",
         "hereby": "^1.15.2",
-        "tar": "^7.5.22",
+        "tar": "^7.5.23",
         "tinyexec": "^1.3.1",
-        "typescript": "^6.0.3"
+        "typescript": "^6.0.3",
+        "typescript-eslint": "^8.73.0"
     },
     "overrides": {
         "@microsoft/applicationinsights-web-basic": "3.3.11",
@@ -52,6 +60,6 @@
     "allowScripts": {
         "dprint@0.64.3": true,
         "esbuild@0.28.2": true,
-        "@vscode/vsce-sign@2.1.0": true
+        "@vscode/vsce-sign@2.1.1": true
     }
 }

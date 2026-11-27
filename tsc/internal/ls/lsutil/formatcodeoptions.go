@@ -6,12 +6,12 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/printer"
 )
 
-type IndentStyle int
+type IndentStyle string
 
 const (
-	IndentStyleNone IndentStyle = iota
-	IndentStyleBlock
-	IndentStyleSmart
+	IndentStyleNone  IndentStyle = "none"
+	IndentStyleBlock IndentStyle = "block"
+	IndentStyleSmart IndentStyle = "smart"
 )
 
 type SemicolonPreference string

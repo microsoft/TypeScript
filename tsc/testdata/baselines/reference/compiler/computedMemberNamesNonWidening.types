@@ -1,0 +1,71 @@
+//// [tests/cases/compiler/computedMemberNamesNonWidening.ts] ////
+
+=== computedMemberNamesNonWidening.ts ===
+// https://github.com/microsoft/TypeScript/issues/64437
+
+const K1 = 'a', K2 = 'b';
+>K1 : "a"
+>'a' : "a"
+>K2 : "b"
+>'b' : "b"
+
+// Computed keys
+const Computed = {[K1]: 'x', [K2]: 'y'} as const;
+>Computed : { readonly a: 'x'; readonly b: 'y'; }
+>{[K1]: 'x', [K2]: 'y'} as const : { readonly a: 'x'; readonly b: 'y'; }
+>{[K1]: 'x', [K2]: 'y'} : { readonly a: 'x'; readonly b: 'y'; }
+>[K1] : "x"
+>K1 : "a"
+>'x' : "x"
+>[K2] : "y"
+>K2 : "b"
+>'y' : "y"
+
+declare function computedKey(): keyof typeof Computed;
+>computedKey : () => keyof typeof Computed
+>Computed : { readonly a: 'x'; readonly b: 'y'; }
+
+const wrapComputed = () => ({key: computedKey()});
+>wrapComputed : () => { key: "a" | "b"; }
+>() => ({key: computedKey()}) : () => { key: "a" | "b"; }
+>({key: computedKey()}) : { key: "a" | "b"; }
+>{key: computedKey()} : { key: "a" | "b"; }
+>key : "a" | "b"
+>computedKey() : "a" | "b"
+>computedKey : () => keyof typeof Computed
+
+export const fromComputed: {key: 'a' | 'b'} = wrapComputed();
+>fromComputed : { key: 'a' | 'b'; }
+>key : "a" | "b"
+>wrapComputed() : { key: "a" | "b"; }
+>wrapComputed : () => { key: "a" | "b"; }
+
+// Literal keys
+const Literal = {a: 'x', b: 'y'} as const;
+>Literal : { readonly a: 'x'; readonly b: 'y'; }
+>{a: 'x', b: 'y'} as const : { readonly a: 'x'; readonly b: 'y'; }
+>{a: 'x', b: 'y'} : { readonly a: 'x'; readonly b: 'y'; }
+>a : "x"
+>'x' : "x"
+>b : "y"
+>'y' : "y"
+
+declare function literalKey(): keyof typeof Literal;
+>literalKey : () => keyof typeof Literal
+>Literal : { readonly a: 'x'; readonly b: 'y'; }
+
+const wrapLiteral = () => ({key: literalKey()});
+>wrapLiteral : () => { key: "a" | "b"; }
+>() => ({key: literalKey()}) : () => { key: "a" | "b"; }
+>({key: literalKey()}) : { key: "a" | "b"; }
+>{key: literalKey()} : { key: "a" | "b"; }
+>key : "a" | "b"
+>literalKey() : "a" | "b"
+>literalKey : () => keyof typeof Literal
+
+export const fromLiteral: {key: 'a' | 'b'} = wrapLiteral();
+>fromLiteral : { key: 'a' | 'b'; }
+>key : "a" | "b"
+>wrapLiteral() : { key: "a" | "b"; }
+>wrapLiteral : () => { key: "a" | "b"; }
+

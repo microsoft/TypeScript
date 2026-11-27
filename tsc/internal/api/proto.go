@@ -76,6 +76,7 @@ const (
 
 	MethodBatchRequests                                  Method = "batchRequests"
 	MethodInitialize                                     Method = "initialize"
+	MethodGetDefaultFormatCodeSettings                   Method = "getDefaultFormatCodeSettings"
 	MethodCreateSnapshot                                 Method = "createSnapshot"
 	MethodUpdateSnapshot                                 Method = "updateSnapshot"
 	MethodGetCurrentLanguageServerSnapshot               Method = "getCurrentLanguageServerSnapshot"
@@ -653,6 +654,7 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodGetCachedSourceFile:                            unmarshallerFor[GetCachedSourceFileParams],
 	MethodGetSymbolOfDeclaration:                         unmarshallerFor[GetSymbolOfDeclarationParams],
 	MethodInitialize:                                     noParams,
+	MethodGetDefaultFormatCodeSettings:                   noParams,
 	MethodCreateSnapshot:                                 unmarshallerFor[CreateSnapshotParams],
 	MethodUpdateSnapshot:                                 unmarshallerFor[UpdateSnapshotParams],
 	MethodGetCurrentLanguageServerSnapshot:               unmarshallerFor[GetCurrentLanguageServerSnapshotParams],
@@ -2009,6 +2011,17 @@ type PrintNodeParams struct {
 	NeverAsciiEscape              bool                   `json:"neverAsciiEscape,omitempty"`
 	TerminateUnterminatedLiterals bool                   `json:"terminateUnterminatedLiterals,omitempty"`
 	EmitNodes                     map[int]*PrintEmitNode `json:"emitNodes,omitempty"`
+	// OriginalFiles are the source files containing the nodes referenced by OriginalNodes.
+	OriginalFiles []SourceFileDescriptor `json:"originalFiles,omitempty"`
+	// OriginalNodes maps encoded node indices to the parsed nodes they were created from.
+	OriginalNodes map[int]*PrintOriginalNode `json:"originalNodes,omitempty"`
+}
+
+// PrintOriginalNode identifies a parsed node by the index of its source file in
+// PrintNodeParams.OriginalFiles and its index within that file.
+type PrintOriginalNode struct {
+	File  uint32 `json:"file"`
+	Index uint32 `json:"index"`
 }
 
 type EmitParams struct {

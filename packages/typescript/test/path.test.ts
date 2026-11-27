@@ -43,11 +43,11 @@ type _PathKeyIsNotRootedFilePath = AssertFalse<IsAssignable<PathKey, RootedFileP
 type _PathKeyIsNotRootedDirectoryPath = AssertFalse<IsAssignable<PathKey, RootedDirectoryPath>>;
 
 test("path keys are constructed from rooted paths", () => {
-    const workspace = toRootedDirectoryPath("/workspace", undefined);
+    const workspace = toRootedDirectoryPath("/workspace", /*currentDirectory*/ undefined);
     assert.strictEqual(pathKey(toRootedPath("src/file.ts", workspace), CaseSensitivity.Sensitive), "/workspace/src/file.ts");
     assert.strictEqual(pathKey(toRootedPath("SRC/file.ts", workspace), CaseSensitivity.Insensitive), "/workspace/src/file.ts");
-    assert.strictEqual(pathKey(toRootedPath("^/untitled/file.ts", undefined), CaseSensitivity.Sensitive), "^/untitled/file.ts");
-    assert.throws(() => toRootedPath("src/file.ts", undefined), /Path is not rooted/);
+    assert.strictEqual(pathKey(toRootedPath("^/untitled/file.ts", /*currentDirectory*/ undefined), CaseSensitivity.Sensitive), "^/untitled/file.ts");
+    assert.throws(() => toRootedPath("src/file.ts", /*currentDirectory*/ undefined), /Path is not rooted/);
     const upperDynamic = tryRootedPathFromNormalized(documentURIToFileName("custom:~ts-uri-escape~Foo.ts"));
     const lowerDynamic = tryRootedPathFromNormalized(documentURIToFileName("custom:~ts-uri-escape~foo.ts"));
     assert.ok(upperDynamic);
@@ -90,14 +90,14 @@ test("tryRootedPathFromNormalized validates without transforming", () => {
             "file://server",
         ]
     ) {
-        assert.strictEqual(tryRootedPathFromNormalized(path), undefined);
+        assert.strictEqual(tryRootedPathFromNormalized(path), /*expected*/ undefined);
     }
 });
 
 test("local file URL roots are identified case-insensitively", () => {
-    assert.strictEqual(toRootedPath("FILE:///C:/../x.ts", undefined), "FILE:///C:/x.ts");
+    assert.strictEqual(toRootedPath("FILE:///C:/../x.ts", /*currentDirectory*/ undefined), "FILE:///C:/x.ts");
     assert.strictEqual(
-        toRootedPath("file://LOCALHOST/C%3A/../x.ts", undefined),
+        toRootedPath("file://LOCALHOST/C%3A/../x.ts", /*currentDirectory*/ undefined),
         "file://LOCALHOST/C%3A/x.ts",
     );
 });
@@ -163,12 +163,12 @@ test("non-file URIs round-trip through normalized file names", () => {
             "custom:~ts-uri-escape~file.ts",
         ]
     ) {
-        assert.strictEqual(documentURIToFileName(uri).endsWith(".ts"), true);
+        assert.strictEqual(documentURIToFileName(uri).endsWith(".ts"), /*expected*/ true);
     }
     for (const extension of [".d.ts", ".d.mts", ".d.css.ts"]) {
         assert.strictEqual(
             documentURIToFileName("custom:~ts-uri-escape~types" + extension).endsWith(extension),
-            true,
+            /*expected*/ true,
         );
     }
 
@@ -179,7 +179,7 @@ test("non-file URIs round-trip through normalized file names", () => {
         ordinarySibling.substring(0, ordinarySibling.lastIndexOf("/")),
     );
     const queryFile = documentURIToFileName("custom:path/file.ts?rev=a/b");
-    assert.strictEqual(queryFile.endsWith(".ts"), true);
+    assert.strictEqual(queryFile.endsWith(".ts"), /*expected*/ true);
     assert.strictEqual(
         queryFile.substring(0, queryFile.lastIndexOf("/")),
         documentURIToFileName("custom:path/other.ts").substring(
@@ -207,14 +207,14 @@ test("CaseSensitivity exposes explicit checks", () => {
     assert.strictEqual(canonicalize("/repo/\u0130project/file.ts", CaseSensitivity.Insensitive), "/repo/\u0130project/file.ts");
     assert.strictEqual(canonicalize("/repo/\u212A/file.ts", CaseSensitivity.Insensitive), "/repo/k/file.ts");
     assert.strictEqual(canonicalize("/repo/\u039F\u03A3.ts", CaseSensitivity.Insensitive), "/repo/\u03BF\u03C3.ts");
-    assert.strictEqual(isCaseSensitive(CaseSensitivity.Sensitive), true);
-    assert.strictEqual(isCaseSensitive(CaseSensitivity.Insensitive), false);
-    assert.strictEqual(isCaseInsensitive(CaseSensitivity.Insensitive), true);
-    assert.strictEqual(isCaseInsensitive(CaseSensitivity.Sensitive), false);
+    assert.strictEqual(isCaseSensitive(CaseSensitivity.Sensitive), /*expected*/ true);
+    assert.strictEqual(isCaseSensitive(CaseSensitivity.Insensitive), /*expected*/ false);
+    assert.strictEqual(isCaseInsensitive(CaseSensitivity.Insensitive), /*expected*/ true);
+    assert.strictEqual(isCaseInsensitive(CaseSensitivity.Sensitive), /*expected*/ false);
 });
 
 test("rooted path constructors enforce the type lattice", () => {
-    const workspace = toRootedDirectoryPath("/workspace", undefined);
+    const workspace = toRootedDirectoryPath("/workspace", /*currentDirectory*/ undefined);
     const rootedPath = toRootedPath("src/file.ts", workspace);
     const filePath = toRootedFilePath("src/file.ts", workspace);
     const directoryPath = toRootedDirectoryPath("src", workspace);
@@ -225,12 +225,12 @@ test("rooted path constructors enforce the type lattice", () => {
     assert.strictEqual(rootedFilePathFromPath(rootedPath), rootedPath);
     assert.strictEqual(rootedDirectoryPathFromPath(rootedPath), rootedPath);
     assert.strictEqual(pathKey(filePath, CaseSensitivity.Sensitive), filePath);
-    assert.strictEqual(toRootedFilePath("^/untitled/file.ts", undefined), "^/untitled/file.ts");
+    assert.strictEqual(toRootedFilePath("^/untitled/file.ts", /*currentDirectory*/ undefined), "^/untitled/file.ts");
     assert.strictEqual(toRootedFilePath("^/untitled/file.ts", workspace), "^/untitled/file.ts");
     assert.throws(() => toRootedPath("", workspace), /must not be empty/);
     assert.throws(() => toRootedFilePath("", workspace), /must not be empty/);
     assert.throws(() => toRootedDirectoryPath("", workspace), /must not be empty/);
-    assert.throws(() => toRootedFilePath("src/file.ts", undefined), /Path is not rooted/);
+    assert.throws(() => toRootedFilePath("src/file.ts", /*currentDirectory*/ undefined), /Path is not rooted/);
     for (
         const [input, expected] of [
             ["c:", "c:/"],
@@ -240,10 +240,10 @@ test("rooted path constructors enforce the type lattice", () => {
             ["^/~ts-uri~/custom/authority?query", "^/~ts-uri~/custom/authority?query/"],
         ] as const
     ) {
-        assert.strictEqual(toRootedPath(input, undefined), expected);
-        assert.strictEqual(toRootedFilePath(input, undefined), expected);
-        assert.strictEqual(toRootedDirectoryPath(input, undefined), expected);
-        assert.strictEqual(tryRootedPathFromNormalized(input), undefined);
+        assert.strictEqual(toRootedPath(input, /*currentDirectory*/ undefined), expected);
+        assert.strictEqual(toRootedFilePath(input, /*currentDirectory*/ undefined), expected);
+        assert.strictEqual(toRootedDirectoryPath(input, /*currentDirectory*/ undefined), expected);
+        assert.strictEqual(tryRootedPathFromNormalized(input), /*expected*/ undefined);
         assert.strictEqual(tryRootedPathFromNormalized(expected), expected);
     }
     for (
@@ -254,13 +254,13 @@ test("rooted path constructors enforce the type lattice", () => {
             "http://server/?query/",
         ]
     ) {
-        assert.throws(() => toRootedPath(input, undefined), /must not contain a URL query or fragment/);
-        assert.strictEqual(tryRootedPathFromNormalized(input), undefined);
+        assert.throws(() => toRootedPath(input, /*currentDirectory*/ undefined), /must not contain a URL query or fragment/);
+        assert.strictEqual(tryRootedPathFromNormalized(input), /*expected*/ undefined);
     }
-    const diskWithSchemeText = toRootedPath("/a://b?x/../y", undefined);
+    const diskWithSchemeText = toRootedPath("/a://b?x/../y", /*currentDirectory*/ undefined);
     assert.strictEqual(diskWithSchemeText, "/a:/y");
     assert.strictEqual(tryRootedPathFromNormalized(diskWithSchemeText), diskWithSchemeText);
-    const urlDirectory = toRootedDirectoryPath("http://server/base", undefined);
+    const urlDirectory = toRootedDirectoryPath("http://server/base", /*currentDirectory*/ undefined);
     assert.throws(() => toRootedPath("file.ts?query", urlDirectory), /query or fragment|Path is not rooted/);
     assert.throws(() => toRootedPath("file.ts?query/..", urlDirectory), /must not contain a query or fragment/);
 });
@@ -300,14 +300,14 @@ test("parseNodeHandleFromCompiler validates serialized fields", () => {
 
 test("tryPathKeyFromCanonical preserves producer canonicalization", () => {
     assert.strictEqual(tryPathKeyFromCanonical("/Workspace/src/File.ts"), "/Workspace/src/File.ts");
-    assert.strictEqual(tryPathKeyFromCanonical("/workspace/../src/file.ts"), undefined);
+    assert.strictEqual(tryPathKeyFromCanonical("/workspace/../src/file.ts"), /*expected*/ undefined);
 });
 
 test("createVirtualFileSystem normalizes raw input keys once", () => {
     const fs = createVirtualFileSystem({
         "/workspace/src/../file.ts": "content",
     });
-    assert.strictEqual(fs.readFile(toRootedFilePath("/workspace/file.ts", undefined)), "content");
+    assert.strictEqual(fs.readFile(toRootedFilePath("/workspace/file.ts", /*currentDirectory*/ undefined)), "content");
     assert.throws(() => createVirtualFileSystem({ "workspace/file.ts": "content" }), /Path is not rooted/);
 });
 
@@ -316,16 +316,14 @@ test("createVirtualFileSystem supports object prototype path components", () => 
         "/toString/file.ts": "toString",
         "/__proto__/constructor.ts": "constructor",
     });
-    assert.strictEqual(fs.readFile(toRootedFilePath("/toString/file.ts", undefined)), "toString");
-    assert.strictEqual(fs.readFile(toRootedFilePath("/__proto__/constructor.ts", undefined)), "constructor");
+    assert.strictEqual(fs.readFile(toRootedFilePath("/toString/file.ts", /*currentDirectory*/ undefined)), "toString");
+    assert.strictEqual(fs.readFile(toRootedFilePath("/__proto__/constructor.ts", /*currentDirectory*/ undefined)), "constructor");
 });
 
 test("createVirtualFileSystem respects case sensitivity", () => {
-    const fs = createVirtualFileSystem({
-        "/Workspace/Foo.ts": "content",
-    }, { caseSensitivity: CaseSensitivity.Insensitive });
-    assert.strictEqual(fs.readFile(toRootedFilePath("/workspace/foo.ts", undefined)), "content");
-    assert.deepStrictEqual(fs.getAccessibleEntries(toRootedDirectoryPath("/workspace", undefined)), {
+    const fs = createVirtualFileSystem({ "/Workspace/Foo.ts": "content" }, { caseSensitivity: CaseSensitivity.Insensitive });
+    assert.strictEqual(fs.readFile(toRootedFilePath("/workspace/foo.ts", /*currentDirectory*/ undefined)), "content");
+    assert.deepStrictEqual(fs.getAccessibleEntries(toRootedDirectoryPath("/workspace", /*currentDirectory*/ undefined)), {
         files: ["Foo.ts"],
         directories: [],
         symlinks: undefined,

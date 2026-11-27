@@ -17,6 +17,7 @@ test("close shuts down the API process cleanly", async () => {
     }
 });
 
+// eslint-disable-next-line no-restricted-syntax -- Node reports a null exit code when a process is killed by a signal.
 function runNode(script: string): Promise<{ status: number | null; stderr: string; }> {
     return new Promise((resolve, reject) => {
         const child = spawn(process.execPath, [
