@@ -1,0 +1,118 @@
+//// [tests/cases/compiler/isolatedDeclarationsRegExp.ts] ////
+
+=== regexp.ts ===
+export const re = /ab+c/gi;
+>re : RegExp
+>/ab+c/gi : RegExp
+
+export let reLet = /x/;
+>reLet : RegExp
+>/x/ : RegExp
+
+export var reVar = /y/d;
+>reVar : RegExp
+>/y/d : RegExp
+
+export const obj = {
+>obj : { pattern: RegExp; nested: { inner: RegExp; }; }
+>{    /** A pattern */    pattern: /\d+/,    nested: { inner: /[a-z]/u },} : { pattern: RegExp; nested: { inner: RegExp; }; }
+
+    /** A pattern */
+    pattern: /\d+/,
+>pattern : RegExp
+>/\d+/ : RegExp
+
+    nested: { inner: /[a-z]/u },
+>nested : { inner: RegExp; }
+>{ inner: /[a-z]/u } : { inner: RegExp; }
+>inner : RegExp
+>/[a-z]/u : RegExp
+
+};
+
+export const constObj = {
+>constObj : { readonly pattern: RegExp; readonly list: readonly [RegExp, RegExp]; }
+>{    pattern: /\d+/,    list: [/a/, /b/],} as const : { readonly pattern: RegExp; readonly list: readonly [RegExp, RegExp]; }
+>{    pattern: /\d+/,    list: [/a/, /b/],} : { readonly pattern: RegExp; readonly list: readonly [RegExp, RegExp]; }
+
+    pattern: /\d+/,
+>pattern : RegExp
+>/\d+/ : RegExp
+
+    list: [/a/, /b/],
+>list : readonly [RegExp, RegExp]
+>[/a/, /b/] : readonly [RegExp, RegExp]
+>/a/ : RegExp
+>/b/ : RegExp
+
+} as const;
+
+export function returnsRegExp() {
+>returnsRegExp : () => RegExp
+
+    return /ret/;
+>/ret/ : RegExp
+}
+
+export const arrow = () => /arrow/;
+>arrow : () => RegExp
+>() => /arrow/ : () => RegExp
+>/arrow/ : RegExp
+
+export class C {
+>C : C
+
+    field = /field/;
+>field : RegExp
+>/field/ : RegExp
+
+    optionalField? = /optional/;
+>optionalField : RegExp | undefined
+>/optional/ : RegExp
+
+    static staticField = /static/;
+>staticField : RegExp
+>/static/ : RegExp
+}
+
+export function withDefault(pattern = /default/, flags: string): void {}
+>withDefault : (pattern: RegExp | undefined, flags: string) => void
+>pattern : RegExp
+>/default/ : RegExp
+>flags : string
+
+export const arrowWithDefault = (pattern = /default/, count: number): void => {};
+>arrowWithDefault : (pattern: RegExp | undefined, count: number) => void
+>(pattern = /default/, count: number): void => {} : (pattern: RegExp | undefined, count: number) => void
+>pattern : RegExp
+>/default/ : RegExp
+>count : number
+
+=== shadowed.ts ===
+class RegExp {
+>RegExp : RegExp
+
+    exec(): void {}
+>exec : () => void
+}
+export const local: RegExp = new RegExp();
+>local : RegExp
+>new RegExp() : RegExp
+>RegExp : typeof RegExp
+
+export const global = /not the local class/;
+>global : globalThis.RegExp
+>/not the local class/ : globalThis.RegExp
+
+=== typeShadowed.ts ===
+type RegExp = string;
+>RegExp : string
+
+export const alias: RegExp = "";
+>alias : string
+>"" : ""
+
+export const globalType = /not the alias/;
+>globalType : globalThis.RegExp
+>/not the alias/ : globalThis.RegExp
+

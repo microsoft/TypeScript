@@ -1,0 +1,95 @@
+//// [tests/cases/compiler/isolatedDeclarationsRegExp.ts] ////
+
+=== regexp.ts ===
+export const re = /ab+c/gi;
+>re : Symbol(re, Decl(regexp.ts, 0, 12))
+
+export let reLet = /x/;
+>reLet : Symbol(reLet, Decl(regexp.ts, 1, 10))
+
+export var reVar = /y/d;
+>reVar : Symbol(reVar, Decl(regexp.ts, 2, 10))
+
+export const obj = {
+>obj : Symbol(obj, Decl(regexp.ts, 4, 12))
+
+    /** A pattern */
+    pattern: /\d+/,
+>pattern : Symbol(pattern, Decl(regexp.ts, 4, 20))
+
+    nested: { inner: /[a-z]/u },
+>nested : Symbol(nested, Decl(regexp.ts, 6, 19))
+>inner : Symbol(inner, Decl(regexp.ts, 7, 13))
+
+};
+
+export const constObj = {
+>constObj : Symbol(constObj, Decl(regexp.ts, 10, 12))
+
+    pattern: /\d+/,
+>pattern : Symbol(pattern, Decl(regexp.ts, 10, 25))
+
+    list: [/a/, /b/],
+>list : Symbol(list, Decl(regexp.ts, 11, 19))
+
+} as const;
+>const : Symbol(const)
+
+export function returnsRegExp() {
+>returnsRegExp : Symbol(returnsRegExp, Decl(regexp.ts, 13, 11))
+
+    return /ret/;
+}
+
+export const arrow = () => /arrow/;
+>arrow : Symbol(arrow, Decl(regexp.ts, 19, 12))
+
+export class C {
+>C : Symbol(C, Decl(regexp.ts, 19, 35))
+
+    field = /field/;
+>field : Symbol(C.field, Decl(regexp.ts, 21, 16))
+
+    optionalField? = /optional/;
+>optionalField : Symbol(C.optionalField, Decl(regexp.ts, 22, 20))
+
+    static staticField = /static/;
+>staticField : Symbol(C.staticField, Decl(regexp.ts, 23, 32))
+}
+
+export function withDefault(pattern = /default/, flags: string): void {}
+>withDefault : Symbol(withDefault, Decl(regexp.ts, 25, 1))
+>pattern : Symbol(pattern, Decl(regexp.ts, 27, 28))
+>flags : Symbol(flags, Decl(regexp.ts, 27, 48))
+
+export const arrowWithDefault = (pattern = /default/, count: number): void => {};
+>arrowWithDefault : Symbol(arrowWithDefault, Decl(regexp.ts, 28, 12))
+>pattern : Symbol(pattern, Decl(regexp.ts, 28, 33))
+>count : Symbol(count, Decl(regexp.ts, 28, 53))
+
+=== shadowed.ts ===
+class RegExp {
+>RegExp : Symbol(RegExp, Decl(shadowed.ts, 0, 0))
+
+    exec(): void {}
+>exec : Symbol(RegExp.exec, Decl(shadowed.ts, 0, 14))
+}
+export const local: RegExp = new RegExp();
+>local : Symbol(local, Decl(shadowed.ts, 3, 12))
+>RegExp : Symbol(RegExp, Decl(shadowed.ts, 0, 0))
+>RegExp : Symbol(RegExp, Decl(shadowed.ts, 0, 0))
+
+export const global = /not the local class/;
+>global : Symbol(global, Decl(shadowed.ts, 4, 12))
+
+=== typeShadowed.ts ===
+type RegExp = string;
+>RegExp : Symbol(RegExp, Decl(typeShadowed.ts, 0, 0))
+
+export const alias: RegExp = "";
+>alias : Symbol(alias, Decl(typeShadowed.ts, 1, 12))
+>RegExp : Symbol(RegExp, Decl(typeShadowed.ts, 0, 0))
+
+export const globalType = /not the alias/;
+>globalType : Symbol(globalType, Decl(typeShadowed.ts, 2, 12))
+
