@@ -22,3 +22,14 @@ obj.foo();`
 	f.GoToMarker(t, "")
 	f.VerifyBaselineCallHierarchy(t)
 }
+
+func TestCallHierarchyOutgoingInterfaceMethod(t *testing.T) {
+	t.Parallel()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `interface G { m(): void; }
+function /**/probe(g: G) { g.m(); }`
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+	f.GoToMarker(t, "")
+	f.VerifyBaselineCallHierarchy(t)
+}
