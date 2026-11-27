@@ -16,6 +16,7 @@ import (
 
 type RelationCacheSizes struct {
 	Assignable    int `json:"assignable"`
+	Variance      int `json:"variance"`
 	Identity      int `json:"identity"`
 	Subtype       int `json:"subtype"`
 	StrictSubtype int `json:"strictSubtype"`
