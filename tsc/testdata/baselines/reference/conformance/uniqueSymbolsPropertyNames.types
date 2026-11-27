@@ -81,8 +81,8 @@ const t0 = {
 };
 
 const t1 = {
->t1 : { [OpTypes.equal]: string; }
->{  [Op.equal]: "first",  [Op.equal]: "last",} : { [OpTypes.equal]: string; }
+>t1 : { [Op.equal]: string; }
+>{  [Op.equal]: "first",  [Op.equal]: "last",} : { [Op.equal]: string; }
 
   [Op.equal]: "first",
 >[Op.equal] : string

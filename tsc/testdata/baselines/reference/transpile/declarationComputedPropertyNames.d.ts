@@ -96,7 +96,7 @@ export declare const D: {
     [x: string]: number;
     [x: number]: number;
     [presentNs.a]: number;
-    [SymbolConstructor.toStringTag]: number;
+    [globalThis.Symbol.toStringTag]: number;
     1: number;
     "2": number;
 };

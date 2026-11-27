@@ -244,7 +244,7 @@ export declare const s2: typeof s0;
 export declare const o1: {
     a: number;
     1: string;
-    [s0]: boolean;
+    [s2]: boolean;
 };
 export declare const o1_c4: number;
 export declare const o1_c5: string;
