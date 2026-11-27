@@ -83,6 +83,12 @@ func (v JSONValue) AsString() string {
 	return v.Value.(string)
 }
 
+var _ json.MarshalerTo = JSONValue{}
+
+func (v JSONValue) MarshalJSONTo(enc *json.Encoder) error {
+	return json.MarshalEncode(enc, v.Value)
+}
+
 var _ json.UnmarshalerFrom = (*JSONValue)(nil)
 
 func (v *JSONValue) UnmarshalJSONFrom(dec *json.Decoder) error {
