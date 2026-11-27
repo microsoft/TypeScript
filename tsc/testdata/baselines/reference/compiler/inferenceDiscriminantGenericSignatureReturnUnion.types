@@ -1,0 +1,45 @@
+//// [tests/cases/compiler/inferenceDiscriminantGenericSignatureReturnUnion.ts] ////
+
+=== inferenceDiscriminantGenericSignatureReturnUnion.ts ===
+// https://github.com/microsoft/TypeScript/issues/63019
+
+type ReadA = <R>() => [false, R] | [true, R | undefined];
+>ReadA : ReadA
+>false : false
+>true : true
+
+type ReadB = <R>() => [false, R] | [true, R | undefined];
+>ReadB : ReadB
+>false : false
+>true : true
+
+const test = (_: ReadA): ReadB => _;
+>test : (_: ReadA) => ReadB
+>(_: ReadA): ReadB => _ : (_: ReadA) => ReadB
+>_ : ReadA
+>_ : ReadA
+
+type ReadObjA = <R>() => { done: false; value: R } | { done: true; value: R | undefined };
+>ReadObjA : ReadObjA
+>done : false
+>false : false
+>value : R
+>done : true
+>true : true
+>value : R | undefined
+
+type ReadObjB = <R>() => { done: false; value: R } | { done: true; value: R | undefined };
+>ReadObjB : ReadObjB
+>done : false
+>false : false
+>value : R
+>done : true
+>true : true
+>value : R | undefined
+
+const testObj = (_: ReadObjA): ReadObjB => _;
+>testObj : (_: ReadObjA) => ReadObjB
+>(_: ReadObjA): ReadObjB => _ : (_: ReadObjA) => ReadObjB
+>_ : ReadObjA
+>_ : ReadObjA
+

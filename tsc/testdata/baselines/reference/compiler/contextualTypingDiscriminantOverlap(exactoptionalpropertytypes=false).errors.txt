@@ -1,0 +1,51 @@
+contextualTypingDiscriminantOverlap.ts(21,16): error TS7006: Parameter 'value' implicitly has an 'any' type.
+contextualTypingDiscriminantOverlap.ts(40,16): error TS7006: Parameter 'value' implicitly has an 'any' type.
+
+
+==== contextualTypingDiscriminantOverlap.ts (2 errors) ====
+    type Handler<T> = (value: T) => T;
+    type IndexedHandler = {
+        [key: string]: "b" | Handler<"b">;
+        value: Handler<"b">;
+    };
+    type DeclaredOptionalHandler = {
+        [key: string]: "a" | "b" | undefined | Handler<"b">;
+        tag?: "a";
+        value: Handler<"b">;
+    };
+    type DeclaredRequiredHandler = {
+        [key: string]: "b" | Handler<"b">;
+        tag: "b";
+        value: Handler<"b">;
+    };
+    
+    const indexedOptional:
+        | { tag: "a"; value: Handler<"a"> }
+        | { tag?: "a"; value: Handler<"a"> }
+        | IndexedHandler = {
+            value: value => value, // error
+                   ~~~~~
+!!! error TS7006: Parameter 'value' implicitly has an 'any' type.
+        };
+    
+    const declaredOptional:
+        | { tag: "a"; value: Handler<"a"> }
+        | DeclaredOptionalHandler = {
+            value: value => value,
+        };
+    
+    const declaredRequired:
+        | { tag: "a"; value: Handler<"a"> }
+        | DeclaredRequiredHandler = {
+            tag: "a",
+            value: value => value,
+        };
+    
+    const indexedRequired:
+        | { tag: "a"; value: Handler<"a"> }
+        | IndexedHandler = {
+            value: value => value, // error
+                   ~~~~~
+!!! error TS7006: Parameter 'value' implicitly has an 'any' type.
+        };
+    

@@ -1,0 +1,143 @@
+//// [tests/cases/compiler/inferenceDiscriminantKeyProperty.ts] ////
+
+=== inferenceDiscriminantKeyProperty.ts ===
+type Tagged<T> =
+>Tagged : Symbol(Tagged, Decl(inferenceDiscriminantKeyProperty.ts, 0, 0))
+>T : Symbol(T, Decl(inferenceDiscriminantKeyProperty.ts, 0, 12))
+
+    | { kind: "k0"; value: T }
+>kind : Symbol(kind, Decl(inferenceDiscriminantKeyProperty.ts, 1, 7))
+>value : Symbol(value, Decl(inferenceDiscriminantKeyProperty.ts, 1, 19))
+>T : Symbol(T, Decl(inferenceDiscriminantKeyProperty.ts, 0, 12))
+
+    | { kind: "k1"; value: { nested: T } }
+>kind : Symbol(kind, Decl(inferenceDiscriminantKeyProperty.ts, 2, 7))
+>value : Symbol(value, Decl(inferenceDiscriminantKeyProperty.ts, 2, 19))
+>nested : Symbol(nested, Decl(inferenceDiscriminantKeyProperty.ts, 2, 28))
+>T : Symbol(T, Decl(inferenceDiscriminantKeyProperty.ts, 0, 12))
+
+    | { kind: "k2"; value: T[] }
+>kind : Symbol(kind, Decl(inferenceDiscriminantKeyProperty.ts, 3, 7))
+>value : Symbol(value, Decl(inferenceDiscriminantKeyProperty.ts, 3, 19))
+>T : Symbol(T, Decl(inferenceDiscriminantKeyProperty.ts, 0, 12))
+
+    | { kind: "k3"; value: number }
+>kind : Symbol(kind, Decl(inferenceDiscriminantKeyProperty.ts, 4, 7))
+>value : Symbol(value, Decl(inferenceDiscriminantKeyProperty.ts, 4, 19))
+
+    | { kind: "k4"; value: number }
+>kind : Symbol(kind, Decl(inferenceDiscriminantKeyProperty.ts, 5, 7))
+>value : Symbol(value, Decl(inferenceDiscriminantKeyProperty.ts, 5, 19))
+
+    | { kind: "k5"; value: number }
+>kind : Symbol(kind, Decl(inferenceDiscriminantKeyProperty.ts, 6, 7))
+>value : Symbol(value, Decl(inferenceDiscriminantKeyProperty.ts, 6, 19))
+
+    | { kind: "k6"; value: number }
+>kind : Symbol(kind, Decl(inferenceDiscriminantKeyProperty.ts, 7, 7))
+>value : Symbol(value, Decl(inferenceDiscriminantKeyProperty.ts, 7, 19))
+
+    | { kind: "k7"; value: number }
+>kind : Symbol(kind, Decl(inferenceDiscriminantKeyProperty.ts, 8, 7))
+>value : Symbol(value, Decl(inferenceDiscriminantKeyProperty.ts, 8, 19))
+
+    | { kind: "k8"; value: number }
+>kind : Symbol(kind, Decl(inferenceDiscriminantKeyProperty.ts, 9, 7))
+>value : Symbol(value, Decl(inferenceDiscriminantKeyProperty.ts, 9, 19))
+
+    | { kind: "k9"; value: number }
+>kind : Symbol(kind, Decl(inferenceDiscriminantKeyProperty.ts, 10, 7))
+>value : Symbol(value, Decl(inferenceDiscriminantKeyProperty.ts, 10, 19))
+
+    | { kind: "k10"; value: number };
+>kind : Symbol(kind, Decl(inferenceDiscriminantKeyProperty.ts, 11, 7))
+>value : Symbol(value, Decl(inferenceDiscriminantKeyProperty.ts, 11, 20))
+
+declare function fromTagged<T>(tagged: Tagged<T>): T;
+>fromTagged : Symbol(fromTagged, Decl(inferenceDiscriminantKeyProperty.ts, 11, 37))
+>T : Symbol(T, Decl(inferenceDiscriminantKeyProperty.ts, 13, 28))
+>tagged : Symbol(tagged, Decl(inferenceDiscriminantKeyProperty.ts, 13, 31))
+>Tagged : Symbol(Tagged, Decl(inferenceDiscriminantKeyProperty.ts, 0, 0))
+>T : Symbol(T, Decl(inferenceDiscriminantKeyProperty.ts, 13, 28))
+>T : Symbol(T, Decl(inferenceDiscriminantKeyProperty.ts, 13, 28))
+
+const direct = fromTagged({ kind: "k0", value: "a" });
+>direct : Symbol(direct, Decl(inferenceDiscriminantKeyProperty.ts, 15, 5))
+>fromTagged : Symbol(fromTagged, Decl(inferenceDiscriminantKeyProperty.ts, 11, 37))
+>kind : Symbol(kind, Decl(inferenceDiscriminantKeyProperty.ts, 15, 27))
+>value : Symbol(value, Decl(inferenceDiscriminantKeyProperty.ts, 15, 39))
+
+const nested = fromTagged({ kind: "k1", value: { nested: "a" } });
+>nested : Symbol(nested, Decl(inferenceDiscriminantKeyProperty.ts, 16, 5))
+>fromTagged : Symbol(fromTagged, Decl(inferenceDiscriminantKeyProperty.ts, 11, 37))
+>kind : Symbol(kind, Decl(inferenceDiscriminantKeyProperty.ts, 16, 27))
+>value : Symbol(value, Decl(inferenceDiscriminantKeyProperty.ts, 16, 39))
+>nested : Symbol(nested, Decl(inferenceDiscriminantKeyProperty.ts, 16, 48))
+
+const array = fromTagged({ kind: "k2", value: ["a"] });
+>array : Symbol(array, Decl(inferenceDiscriminantKeyProperty.ts, 17, 5))
+>fromTagged : Symbol(fromTagged, Decl(inferenceDiscriminantKeyProperty.ts, 11, 37))
+>kind : Symbol(kind, Decl(inferenceDiscriminantKeyProperty.ts, 17, 26))
+>value : Symbol(value, Decl(inferenceDiscriminantKeyProperty.ts, 17, 38))
+
+const unrelated = fromTagged({ kind: "k3", value: 1 });
+>unrelated : Symbol(unrelated, Decl(inferenceDiscriminantKeyProperty.ts, 18, 5))
+>fromTagged : Symbol(fromTagged, Decl(inferenceDiscriminantKeyProperty.ts, 11, 37))
+>kind : Symbol(kind, Decl(inferenceDiscriminantKeyProperty.ts, 18, 30))
+>value : Symbol(value, Decl(inferenceDiscriminantKeyProperty.ts, 18, 42))
+
+declare const k1Source: { kind: "k1"; value: { nested: boolean } };
+>k1Source : Symbol(k1Source, Decl(inferenceDiscriminantKeyProperty.ts, 20, 13))
+>kind : Symbol(kind, Decl(inferenceDiscriminantKeyProperty.ts, 20, 25))
+>value : Symbol(value, Decl(inferenceDiscriminantKeyProperty.ts, 20, 37))
+>nested : Symbol(nested, Decl(inferenceDiscriminantKeyProperty.ts, 20, 46))
+
+const fromDeclared = fromTagged(k1Source);
+>fromDeclared : Symbol(fromDeclared, Decl(inferenceDiscriminantKeyProperty.ts, 21, 5))
+>fromTagged : Symbol(fromTagged, Decl(inferenceDiscriminantKeyProperty.ts, 11, 37))
+>k1Source : Symbol(k1Source, Decl(inferenceDiscriminantKeyProperty.ts, 20, 13))
+
+declare const unknownKind: { kind: "missing"; value: { nested: boolean } };
+>unknownKind : Symbol(unknownKind, Decl(inferenceDiscriminantKeyProperty.ts, 23, 13))
+>kind : Symbol(kind, Decl(inferenceDiscriminantKeyProperty.ts, 23, 28))
+>value : Symbol(value, Decl(inferenceDiscriminantKeyProperty.ts, 23, 45))
+>nested : Symbol(nested, Decl(inferenceDiscriminantKeyProperty.ts, 23, 54))
+
+const fromUnknownKind = fromTagged(unknownKind); // error
+>fromUnknownKind : Symbol(fromUnknownKind, Decl(inferenceDiscriminantKeyProperty.ts, 24, 5))
+>fromTagged : Symbol(fromTagged, Decl(inferenceDiscriminantKeyProperty.ts, 11, 37))
+>unknownKind : Symbol(unknownKind, Decl(inferenceDiscriminantKeyProperty.ts, 23, 13))
+
+declare const broadKind: { kind: string; value: { nested: boolean } };
+>broadKind : Symbol(broadKind, Decl(inferenceDiscriminantKeyProperty.ts, 26, 13))
+>kind : Symbol(kind, Decl(inferenceDiscriminantKeyProperty.ts, 26, 26))
+>value : Symbol(value, Decl(inferenceDiscriminantKeyProperty.ts, 26, 40))
+>nested : Symbol(nested, Decl(inferenceDiscriminantKeyProperty.ts, 26, 49))
+
+const fromBroadKind = fromTagged(broadKind); // error
+>fromBroadKind : Symbol(fromBroadKind, Decl(inferenceDiscriminantKeyProperty.ts, 27, 5))
+>fromTagged : Symbol(fromTagged, Decl(inferenceDiscriminantKeyProperty.ts, 11, 37))
+>broadKind : Symbol(broadKind, Decl(inferenceDiscriminantKeyProperty.ts, 26, 13))
+
+type Concrete = Tagged<string>;
+>Concrete : Symbol(Concrete, Decl(inferenceDiscriminantKeyProperty.ts, 27, 44))
+>Tagged : Symbol(Tagged, Decl(inferenceDiscriminantKeyProperty.ts, 0, 0))
+
+declare const concrete: Concrete;
+>concrete : Symbol(concrete, Decl(inferenceDiscriminantKeyProperty.ts, 30, 13))
+>Concrete : Symbol(Concrete, Decl(inferenceDiscriminantKeyProperty.ts, 27, 44))
+
+declare function fromK2<T>(tagged: { kind: "k2"; value: T }): T;
+>fromK2 : Symbol(fromK2, Decl(inferenceDiscriminantKeyProperty.ts, 30, 33))
+>T : Symbol(T, Decl(inferenceDiscriminantKeyProperty.ts, 32, 24))
+>tagged : Symbol(tagged, Decl(inferenceDiscriminantKeyProperty.ts, 32, 27))
+>kind : Symbol(kind, Decl(inferenceDiscriminantKeyProperty.ts, 32, 36))
+>value : Symbol(value, Decl(inferenceDiscriminantKeyProperty.ts, 32, 48))
+>T : Symbol(T, Decl(inferenceDiscriminantKeyProperty.ts, 32, 24))
+>T : Symbol(T, Decl(inferenceDiscriminantKeyProperty.ts, 32, 24))
+
+const fromUnionSource = fromK2(concrete); // error
+>fromUnionSource : Symbol(fromUnionSource, Decl(inferenceDiscriminantKeyProperty.ts, 33, 5))
+>fromK2 : Symbol(fromK2, Decl(inferenceDiscriminantKeyProperty.ts, 30, 33))
+>concrete : Symbol(concrete, Decl(inferenceDiscriminantKeyProperty.ts, 30, 13))
+
