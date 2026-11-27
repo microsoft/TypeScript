@@ -861,6 +861,7 @@ type Checker struct {
 	reverseMappedSourceStack                    []*Type
 	reverseMappedTargetStack                    []*Type
 	resolvingObjectTypeStack                    []ResolvingObjectType
+	resolvingObjectTypes                        collections.Set[*Type]
 	reverseExpandingFlags                       ExpandingFlags
 	freeRelater                                 *Relater
 	subtypeRelation                             *Relation
@@ -19742,6 +19743,9 @@ func (c *Checker) resolveStructuredTypeMembers(t *Type) *StructuredType {
 }
 
 func (c *Checker) resolveObjectTypeMembers(t *Type) {
+	if c.resolvingObjectTypes.AddIfAbsent(t) {
+		defer c.resolvingObjectTypes.Delete(t)
+	}
 	var mapper *TypeMapper
 	var typeParameters []*Type
 	var typeArguments []*Type
@@ -28438,8 +28442,14 @@ func (c *Checker) getPropertyNameFromIndex(indexType *Type, accessNode *ast.Node
 }
 
 func (c *Checker) isStringIndexSignatureOnlyTypeWorker(t *Type) bool {
-	return t.flags&TypeFlagsObject != 0 && t.objectFlags&(ObjectFlagsClassOrInterface|ObjectFlagsReference) == 0 && !c.isGenericMappedType(t) && c.getPropertyCountOfType(t) == 0 && len(c.getIndexInfosOfType(t)) == 1 && c.getIndexInfoOfType(t, c.stringType) != nil ||
-		t.flags&TypeFlagsUnionOrIntersection != 0 && core.Every(t.Types(), c.isStringIndexSignatureOnlyType)
+	if t.flags&TypeFlagsObject != 0 {
+		// Inspecting all members while resolving a class, interface, or reference can introduce a cycle.
+		if t.objectFlags&(ObjectFlagsClassOrInterface|ObjectFlagsReference) != 0 && c.resolvingObjectTypes.Has(t) {
+			return false
+		}
+		return !c.isGenericMappedType(t) && c.getPropertyCountOfType(t) == 0 && len(c.getIndexInfosOfType(t)) == 1 && c.getIndexInfoOfType(t, c.stringType) != nil
+	}
+	return t.flags&TypeFlagsUnionOrIntersection != 0 && core.Every(t.Types(), c.isStringIndexSignatureOnlyType)
 }
 
 func (c *Checker) shouldDeferIndexedAccessType(objectType *Type, indexType *Type, accessNode *ast.Node) bool {
