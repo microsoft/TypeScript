@@ -1,0 +1,116 @@
+//// [tests/cases/compiler/asyncGeneratorInvalidThenable.ts] ////
+
+=== asyncGeneratorInvalidThenable.ts ===
+// https://github.com/microsoft/TypeScript/issues/65378
+async function* invalidThenableBeforeValue() {
+>invalidThenableBeforeValue : () => AsyncGenerator<number, void, unknown>
+
+    yield { then() {} };
+>yield { then() {} } : any
+>{ then() {} } : { then(): void; }
+>then : () => void
+
+    yield 1;
+>yield 1 : any
+>1 : 1
+}
+
+async function* invalidThenableAfterValue() {
+>invalidThenableAfterValue : () => AsyncGenerator<number, void, unknown>
+
+    yield 1;
+>yield 1 : any
+>1 : 1
+
+    yield { then() {} };
+>yield { then() {} } : any
+>{ then() {} } : { then(): void; }
+>then : () => void
+}
+
+async function* invalidThenableWithMultipleValues() {
+>invalidThenableWithMultipleValues : () => AsyncGenerator<"text" | 1, void, unknown>
+
+    yield { then() {} };
+>yield { then() {} } : any
+>{ then() {} } : { then(): void; }
+>then : () => void
+
+    yield 1;
+>yield 1 : any
+>1 : 1
+
+    yield "text";
+>yield "text" : any
+>"text" : "text"
+}
+
+async function* onlyInvalidThenables() {
+>onlyInvalidThenables : () => AsyncGenerator<never, void, unknown>
+
+    yield { then() {} };
+>yield { then() {} } : any
+>{ then() {} } : { then(): void; }
+>then : () => void
+
+    yield { then() {} };
+>yield { then() {} } : any
+>{ then() {} } : { then(): void; }
+>then : () => void
+}
+
+async function* singleInvalidThenable() {
+>singleInvalidThenable : () => AsyncGenerator<never, void, unknown>
+
+    yield { then() {} };
+>yield { then() {} } : any
+>{ then() {} } : { then(): void; }
+>then : () => void
+}
+
+async function* invalidThenableWithNext() {
+>invalidThenableWithNext : () => AsyncGenerator<number, boolean, boolean>
+
+    const next: boolean = yield { then() {} };
+>next : boolean
+>yield { then() {} } : any
+>{ then() {} } : { then(): void; }
+>then : () => void
+
+    yield 1;
+>yield 1 : any
+>1 : 1
+
+    return next;
+>next : boolean
+}
+
+async function* validYields() {
+>validYields : () => AsyncGenerator<number | "text", void, unknown>
+
+    yield Promise.resolve(1);
+>yield Promise.resolve(1) : any
+>Promise.resolve(1) : Promise<number>
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Promise : PromiseConstructor
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>1 : 1
+
+    yield "text";
+>yield "text" : any
+>"text" : "text"
+}
+
+function* synchronousThenable() {
+>synchronousThenable : () => Generator<1 | { then(): void; }, void, unknown>
+
+    yield { then() {} };
+>yield { then() {} } : any
+>{ then() {} } : { then(): void; }
+>then : () => void
+
+    yield 1;
+>yield 1 : any
+>1 : 1
+}
+
