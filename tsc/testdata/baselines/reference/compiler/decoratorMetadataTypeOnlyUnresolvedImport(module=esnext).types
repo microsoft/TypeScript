@@ -1,0 +1,46 @@
+//// [tests/cases/compiler/decoratorMetadataTypeOnlyUnresolvedImport.ts] ////
+
+=== decoratorMetadataTypeOnlyUnresolvedImport.ts ===
+import type Foo from "./missing-default";
+>Foo : any
+
+import { type Bar } from "./missing-named";
+>Bar : any
+
+import type { default as Baz } from "./missing-default-specifier";
+>default : any
+>Baz : any
+
+function dec(_target: unknown, _key: unknown) {}
+>dec : (_target: unknown, _key: unknown) => void
+>_target : unknown
+>_key : unknown
+
+class C {
+>C : C
+
+    @dec a!: Foo;
+>dec : (_target: unknown, _key: unknown) => void
+>a : Foo
+
+    @dec b!: Bar;
+>dec : (_target: unknown, _key: unknown) => void
+>b : Bar
+
+    @dec c!: Baz;
+>dec : (_target: unknown, _key: unknown) => void
+>c : Baz
+}
+
+const x = Foo;
+>x : any
+>Foo : any
+
+const y = Bar;
+>y : any
+>Bar : any
+
+const z = Baz;
+>z : any
+>Baz : any
+
