@@ -1,0 +1,29 @@
+//// [tests/cases/conformance/es6/mapConstruction/new-Map2.ts] ////
+
+=== new-Map2.ts ===
+const m1 = new Map([]);
+>m1 : Map<unknown, unknown>
+>new Map([]) : Map<unknown, unknown>
+>Map : MapConstructor
+>[] : never[]
+
+const a2: any[] = [];
+>a2 : any[]
+>[] : never[]
+
+const m2 = new Map(a2);
+>m2 : Map<any, any>
+>new Map(a2) : Map<any, any>
+>Map : MapConstructor
+>a2 : any[]
+
+const a3 = [];
+>a3 : any[]
+>[] : never[]
+
+const m3 = new Map(a3);
+>m3 : Map<any, any>
+>new Map(a3) : Map<any, any>
+>Map : MapConstructor
+>a3 : any[]
+
