@@ -62,6 +62,8 @@ type Binder struct {
 	currentReturnTarget     *ast.FlowLabel
 	currentTrueTarget       *ast.FlowLabel
 	currentFalseTarget      *ast.FlowLabel
+	currentNullishTarget    *ast.FlowLabel // Target of a nullish left operand of the ?? or ??= whose left operand is being bound
+	currentFalsyTarget      *ast.FlowLabel // Target of a falsy, non-nullish left operand of that ?? or ??=
 	currentExceptionTarget  *ast.FlowLabel
 	preSwitchCaseFlow       *ast.FlowNode
 	activeLabelList         *ActiveLabel
@@ -487,6 +489,12 @@ func (b *Binder) createFlowCondition(flags ast.FlowFlags, antecedent *ast.FlowNo
 			return antecedent
 		}
 		return b.unreachableFlow
+	}
+	if flags&ast.FlowFlagsNonNullish != 0 {
+		kind := ast.SkipParentheses(expression).Kind
+		if kind == ast.KindTrueKeyword || kind == ast.KindNullKeyword {
+			return b.unreachableFlow
+		}
 	}
 	if (expression.Kind == ast.KindTrueKeyword && flags&ast.FlowFlagsFalseCondition != 0 || expression.Kind == ast.KindFalseKeyword && flags&ast.FlowFlagsTrueCondition != 0) && !ast.IsExpressionOfOptionalChainRoot(expression) && !ast.IsNullishCoalesce(expression.Parent) {
 		return b.unreachableFlow
@@ -2301,6 +2309,8 @@ func (b *Binder) bindLogicalLikeExpression(node *ast.Node, trueTarget *ast.FlowL
 	preRightLabel := b.createBranchLabel()
 	if expr.OperatorToken.Kind == ast.KindAmpersandAmpersandToken || expr.OperatorToken.Kind == ast.KindAmpersandAmpersandEqualsToken {
 		b.bindCondition(expr.Left, preRightLabel, falseTarget)
+	} else if expr.OperatorToken.Kind == ast.KindQuestionQuestionToken || expr.OperatorToken.Kind == ast.KindQuestionQuestionEqualsToken {
+		b.bindNullishCoalescingLeft(node, trueTarget, falseTarget, preRightLabel)
 	} else {
 		b.bindCondition(expr.Left, trueTarget, preRightLabel)
 	}
@@ -2313,6 +2323,34 @@ func (b *Binder) bindLogicalLikeExpression(node *ast.Node, trueTarget *ast.FlowL
 		b.addAntecedent(falseTarget, b.createFlowCondition(ast.FlowFlagsFalseCondition, b.currentFlow, node))
 	} else {
 		b.bindCondition(expr.Right, trueTarget, falseTarget)
+	}
+}
+
+// A left operand of ?? or ??= that is falsy but not nullish makes the whole expression falsy without
+// evaluating the right operand, so we add a path from such a left operand to the false target.
+func (b *Binder) bindNullishCoalescingLeft(node *ast.Node, trueTarget *ast.FlowLabel, falseTarget *ast.FlowLabel, preRightLabel *ast.FlowLabel) {
+	left := node.AsBinaryExpression().Left
+	falsyTarget := falseTarget
+	if parent := ast.WalkUpParenthesizedExpressions(node.Parent); ast.IsOptionalChainRoot(parent) && ast.SkipParentheses(parent.Expression()) == node {
+		// In (a ?? b)?.c, a falsy, non-nullish a continues the chain
+		falsyTarget = trueTarget
+	} else if falseTarget == b.currentNullishTarget {
+		// In (a ?? b) ?? c, a falsy, non-nullish a makes the left operand of the outer ?? falsy and non-nullish
+		falsyTarget = b.currentFalsyTarget
+	}
+	saveNullishTarget := b.currentNullishTarget
+	saveFalsyTarget := b.currentFalsyTarget
+	b.currentNullishTarget = preRightLabel
+	b.currentFalsyTarget = falsyTarget
+	b.bindCondition(left, trueTarget, preRightLabel)
+	b.currentNullishTarget = saveNullishTarget
+	b.currentFalsyTarget = saveFalsyTarget
+	if isLogicalAssignmentExpression(left) || ast.IsLogicalExpression(left) {
+		// Conservatively assume that any falsy outcome of a logical left operand may be non-nullish
+		b.addAntecedent(falsyTarget, b.finishFlowLabel(preRightLabel))
+	} else if falsyTarget != trueTarget {
+		// When the targets are the same, the true condition of a non-nullish left operand already applies
+		b.addAntecedent(falsyTarget, b.createFlowCondition(ast.FlowFlagsFalseCondition|ast.FlowFlagsNonNullish, b.currentFlow, left))
 	}
 }
 
