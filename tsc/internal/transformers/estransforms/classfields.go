@@ -972,7 +972,10 @@ func (tx *classFieldsTransformer) transformPublicFieldInitializer(node *ast.Prop
 				tx.EmitContext().SetOriginal(staticBlock, node.AsNode())
 				tx.EmitContext().SetCommentRange(staticBlock, node.Loc)
 
+				// Drop comments from the statement to avoid printing them twice.
 				tx.EmitContext().AddEmitFlags(initializerStatement, printer.EFNoComments)
+				tx.EmitContext().SetSyntheticLeadingComments(initializerStatement, nil)
+				tx.EmitContext().SetSyntheticTrailingComments(initializerStatement, nil)
 				return staticBlock
 			}
 		}
