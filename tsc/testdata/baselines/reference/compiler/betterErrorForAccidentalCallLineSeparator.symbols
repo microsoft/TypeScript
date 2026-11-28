@@ -1,0 +1,18 @@
+//// [tests/cases/compiler/betterErrorForAccidentalCallLineSeparator.ts] ////
+
+=== betterErrorForAccidentalCallLineSeparator.ts ===
+declare function foo(): string;
+>foo : Symbol(foo, Decl(betterErrorForAccidentalCallLineSeparator.ts, 0, 0))
+
+const a = (x: number) => x
+>a : Symbol(a, Decl(betterErrorForAccidentalCallLineSeparator.ts, 2, 5))
+>x : Symbol(x, Decl(betterErrorForAccidentalCallLineSeparator.ts, 2, 11))
+>x : Symbol(x, Decl(betterErrorForAccidentalCallLineSeparator.ts, 2, 11))
+
+(1);
+
+foo()
+>foo : Symbol(foo, Decl(betterErrorForAccidentalCallLineSeparator.ts, 0, 0))
+
+(1 as number).toString();
+

@@ -2443,6 +2443,12 @@ func SkipTriviaEx(text string, pos int, options *SkipTriviaOptions) int {
 		default:
 			if ch > rune(maxAsciiCharacter) && stringutil.IsWhiteSpaceLike(ch) {
 				pos += size
+				// U+2028 / U+2029 are line terminators (ECMAScript 7.3). When asked to
+				// stop after a line break, treat them like LF/CR rather than continuing
+				// past them as ordinary whitespace (issue #65433).
+				if options.StopAfterLineBreak && stringutil.IsLineBreak(ch) {
+					return pos
+				}
 				continue
 			}
 		}
