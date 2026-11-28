@@ -212,3 +212,30 @@ func TestRegExpLiteralReplacementCharacterInClassRange(t *testing.T) {
 		})
 	}
 }
+
+func TestSkipTriviaStopsAfterUnicodeLineBreaks(t *testing.T) {
+	t.Parallel()
+
+	options := &SkipTriviaOptions{StopAfterLineBreak: true}
+	tests := []struct {
+		name string
+		text string
+	}{
+		{name: "LF", text: "x\n("},
+		{name: "CR", text: "x\r("},
+		{name: "CRLF", text: "x\r\n("},
+		{name: "line separator", text: "x\u2028("},
+		{name: "paragraph separator", text: "x\u2029("},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+			after := SkipTriviaEx(test.text, 1, options)
+			assert.Assert(t, after > 1)
+			prev, _ := utf8.DecodeLastRuneInString(test.text[:after])
+			assert.Assert(t, stringutil.IsLineBreak(prev), "expected previous rune to be a line break, got %U", prev)
+			assert.Equal(t, after, len(test.text)-1) // stopped before '('
+		})
+	}
+}
